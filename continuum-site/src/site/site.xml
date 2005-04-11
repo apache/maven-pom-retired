@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven">
+  <bannerLeft>
+    <name>Continuum</name>
+    <href>http://continuum.codehaus.org</href>
+  </bannerLeft>
+  <bannerRight>
+    <name>http://codehaus.org/codehaus-small.png</name>
+    <href>http://www.codehaus.org</href>
+  </bannerRight>
+  <body>
+    <links>
+      <item name="Continuum" href="http://continuum.codehaus.org"/>
+      <item name="The Codehaus" href="http://www.codehaus.org"/>
+    </links>
+    <menu name="Quick Links">
+      <item name="FAQ" href="faq.html"/>
+      <item name="Latest Release" href="/releases/1-0-alpha-1/index.html"/>
+    </menu>
+    <menu name="Overview">
+      <item name="Home" href="/index.html"/>
+      <item name="APT Test" href="/apt-test.html"/>
+    </menu>
+    <menu name="Developer Info">
+      <item name="Bugtracker" href="http://jira.codehaus.org/browse/CONTINUUM"/>
+      <item name="Mailing Lists" href="/developer-info/mailing-lists.html"/>
+      <item name="Building" href="/developer-info/building.html"/>
+      <item name="The Team" href="/developer-info/team.html"/>
+    </menu>
+  </body>
+</project>

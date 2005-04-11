@@ -1,0 +1,38 @@
+## Input
+##  $project ProjectModel
+##  $build ExternalMaven2BuildResultModel
+<div class="app">
+  <h3>Build result for $project.name</h3>
+  <p>
+    <table border="1" cellspacing="2" cellpadding="3">
+      <tr class="a">
+        <td>Start Time</td>
+        <td>$build.startTime</td>
+      </tr>
+      <tr class="b">
+        <td>End Time</td>
+        <td>$build.endTime</td>
+      </tr>
+      <tr class="a">
+        <td>State</td>
+        <td>$build.state</td>
+      </tr>
+      <tr class="a">
+        <td colspan="2">
+          <a href="$link.addQueryData( "action", "showProject" ).addQueryData( "id", "$project.id" ).setPage('projectDetails.vm')">Project Details</a> |
+          <a href="$link.addQueryData( "action", "showProjectBuilds" ).addQueryData( "id", "$project.id" ).setPage('projectBuilds.vm')">Builds</a>
+        </td>
+      </tr>
+    </table>
+  </p>
+
+  <h4>Standard Output</h4>
+  <p>
+    <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px"><code><pre>$build.result.standardOutput</pre></code></div>
+  </p>
+
+  <h4>Standard Error</h4>
+  <p>
+    <div style="width:100%; height:200px; overflow:auto; border-style: solid; border-width: 1px"><code><pre>$build.result.standardError</pre></code></div>
+  </p>
+</div>

@@ -1,0 +1,41 @@
+## Input
+##  $project ContinuumProject
+##  $builds List of BuildResults
+<div class="app">
+  <h3>Build results for $project.name</h3>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <tr>
+        <td>
+          <a href="$link.addQueryData( "action", "showProject" ).addQueryData( "id", "$project.id" ).setPage('projectDetails.vm')">Back to project details.</a>
+        </td>
+      </tr>
+    </table>
+  <p>
+    #set ( $class = "a" )
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <tr>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>State</th>
+        <th>Output</th>
+      </tr>
+      #foreach ( $build in $builds )
+      <tr class="$class">
+        <td>$build.startTime</td>
+        <td>$build.endTime</td>
+        <td>$build.state</td>
+###if( $build.state == "ok" || $build.state == "failed" || $build.state == "error" )
+##        <td><a href="$link.addQueryData( "action", "showExternalMaven2BuildResult" ).addQueryData( "buildId", "$build.id" ).setPage('ExternalMaven2BuildResult.vm')">Output</a></td>
+###else
+##        <td></td>
+###end
+      </tr>
+      #if ( $class == "a" )
+        #set ( $class = "b" )
+      #else
+        #set ( $class = "a" )
+      #end
+      #end
+    </table>
+  </p>
+</div>

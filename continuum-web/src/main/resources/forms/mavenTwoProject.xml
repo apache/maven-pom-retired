@@ -1,0 +1,18 @@
+<form>
+  <id>mavenTwoProject</id>
+  <elements>
+    <element>
+      <id>project.pomUrl</id>
+      <validator>default</validator>
+      <message-key>project.pomUrl.message</message-key>
+      <label-key>project.pomUrl.label</label-key>
+      <error-message-key>project.pomUrl.error</error-message-key>
+      <type>text</type>
+    </element>
+  </elements>
+  <add>
+    <title-key>project.title</title-key>
+    <action>addMavenOneProject</action>
+    <view>projectOverview.vm</view>
+  </add>
+</form>

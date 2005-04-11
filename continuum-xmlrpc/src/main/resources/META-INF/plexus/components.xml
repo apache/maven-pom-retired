@@ -1,0 +1,25 @@
+<component-set>
+  <components>
+
+    <component>
+      <role>org.apache.maven.continuum.xmlrpc.ContinuumXmlRpc</role>
+      <implementation>org.apache.maven.continuum.xmlrpc.DefaultContinuumXmlRpc</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.xmlrpc.XmlRpcHelper</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.xmlrpc.XmlRpcHelper</role>
+      <implementation>org.apache.maven.continuum.xmlrpc.DefaultXmlRpcHelper</implementation>
+    </component>
+  </components>
+</component-set>

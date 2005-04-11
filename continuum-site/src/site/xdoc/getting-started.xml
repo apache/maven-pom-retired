@@ -1,0 +1,18 @@
+<document>
+  <properties>
+    <title>Configuring Continuum</title>
+    <author email="trygvis@apache.org">Trygve Laugs&#248;l</author>
+  </properties>
+  <body>
+    <section name="Installing Continuum">
+      <p>
+        After you have downloaded and unpacked the bundle execute <code>bin/plexus.sh</code> if you are on a UNIX
+        platform or <code>bin/plexus.bat</code> if you are using Windows.
+      </p>
+      <p>
+        After starting Continuum you can access it with your browser on
+        <a href="http://localhost:8080">http://localhost:8080</a> or by using the XML-RPC interface on port 8000.
+      </p>
+    </section>
+  </body>
+</document>

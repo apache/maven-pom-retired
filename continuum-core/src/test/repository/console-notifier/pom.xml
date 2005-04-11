@@ -1,0 +1,18 @@
+<model>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>continuum</groupId>
+  <artifactId>console-notifier</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0</version>
+  <ciManagement>
+    <notifiers>
+      <notifier>
+        <type>mail</type>
+        <address>foo@bar</address>
+      </notifier>
+    </notifiers>
+  </ciManagement>
+  <scm>
+    <connection>scm:local:src/test/repository:console-notifier</connection>
+  </scm>
+</model>

@@ -1,0 +1,129 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
+    <version>1.0-alpha-1-SNAPSHOT</version>
+  </parent>
+  <artifactId>continuum-plexus-application</artifactId>
+  <name>Continuum Plexus Application</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-web</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-xmlrpc</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+    </dependency>
+    <!-- Version overrides -->
+    <dependency>
+      <groupId>classworlds</groupId>
+      <artifactId>classworlds</artifactId>
+      <version>1.1-alpha-1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>1.0-alpha-3-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-velocity</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <!--
+     |
+     | Plexus services
+     |
+     |-->
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-service-jetty</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+      <type>plexus-service</type>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-service-xmlrpc</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+      <type>plexus-service</type>
+    </dependency>
+
+    <!--
+     |
+     | Implementations of required services
+     |
+     |-->
+
+    <!-- Maven SCM Providers -->
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-cvs</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-svn</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Maven Wagons -->
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>wagon-http-lightweight</artifactId>
+      <version>1.0-alpha-2-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- -->
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-mail-sender-simple</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-plexus-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <goals>
+          <goal>
+            <id>app</id>
+          </goal>
+          <goal>
+            <id>bundle-application</id>
+          </goal>
+          <goal>
+            <id>test-runtime</id>
+          </goal>
+        </goals>
+        <configuration>
+          <applicationName>continuum</applicationName>
+          <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
+          <configurationProperties>app.properties</configurationProperties>
+          <configurationDirectory>src/conf</configurationDirectory>
+          <testRuntimeConfiguration>src/test/conf/testRuntimeConfiguration.xml</testRuntimeConfiguration>
+          <basedir>target</basedir>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <configuration>
+          <descriptor>src/assembly/bin.xml</descriptor>
+          <finalName>continuum-1.0-SNAPSHOT</finalName>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

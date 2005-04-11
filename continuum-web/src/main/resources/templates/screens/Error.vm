@@ -1,0 +1,14 @@
+<font face="verdana,geneva,helvetica">
+<table id="error">
+   <tr>
+      <td><h2>Error</h2></td>
+   </tr>
+   <tr>
+      <td>
+<pre>
+$exceptionStackTrace
+</pre>
+      </td>
+   </tr>
+</table>
+</font>

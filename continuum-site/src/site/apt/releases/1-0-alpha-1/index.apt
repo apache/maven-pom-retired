@@ -1,0 +1,75 @@
+ -----
+ Continuum 1.0 Alpha 1
+ -----
+ Trygve Laugst&oslash;l
+ -----
+
+Installing Continuum
+
+ Download a tarball: {{http://continuum.codehaus.org/downloads}}.
+
+Configuring Continuum
+
+ As Continuum is a plexus application all parts of Continuum is configured
+through a normal plexus container configuration file. It's located in
+<<<conf/plexus.conf>>>.
+
+*Configuring the mail setup
+
+ The mail notifier is configured in the <<< <configuration> >>> section of the
+<<<org.apache.maven.continuum.notification.mail.MailContinuumNotifier>>> component.
+
+ [<<< <smtp-host> >>>] The hostname of the SMTP server that will be used to
+send emails from continuum. Make sure that this SMTP server will relay emails
+from the host running continuum!
+
+ [<<< <smtp-port> >>>] The port to use on the SMTP server for sending emails.
+This will in most cases be the standard port for SMTP servers; 25.
+
+ [<<< <from> >>>] If set this value will be used as the from address for all
+notification mails sent. If not set the nag email address for the project
+will be used.
+
+ [<<< <to> >>>] If set this value will be used as the to address for all
+notification mails sent. If not set the nag email address for the project will
+be used. Setting this value can be useful while trying out and debugging
+continuum.
+
+*Configuring the alarm trigger
+
+ The alarm trigger will schedule all projects for a build on a specified
+interval. It has two parameters that can be configured:
+
+ [<<< <interval> >>>] The number of seconds to wait between each build. Setting it to "3600" will schedule a build every hour.
+
+ [<<< <delay> >>>] The number of seconds to wait after startup to start the interval.
+
+*Setting up the database
+
+ Continuum is using hibernate as it's persistence layer and the hibernate
+configuration is in <<<apps/continuumweb/resources/hibernate.cfg.xml>>>.
+
+ This is a normal hibernate configuration file and the different configuration
+options is documented in
+{{{http://www.hibernate.org/hib_docs/reference/en/html/}Hibernate documentation}}.
+
+ There is some tools for generating the DDL and setting up the database tables
+directly in <<<bin/>>>. Both of these scripts needs a path to the hibernate
+configuration file as a argument.
+
+ [<<<continuum-setupTables>>>] This util will connect to the database, drop all
+tables and create them again. This means that you will loose all data and will
+have to register all the projects all over again.
+
+ [<<<continuum-createDdl>>>] This util will simply create a file with both
+<<<DROP TABLE>>> and <<<CREATE TABLE>>> statements that will clean and recreate
+a database.
+
+Running Continuum
+
+ All Continuum requires <<<JAVA_HOME>>> to be set to a installation of a Java
+Runtime. At the console type:
+
++---------------------------------------------------------------------------+
+$ bin/plexus.sh
++---------------------------------------------------------------------------+

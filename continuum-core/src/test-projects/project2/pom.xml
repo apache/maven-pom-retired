@@ -1,0 +1,12 @@
+<model>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>plexus</groupId>
+  <artifactId>continuum-project2</artifactId>
+  <packaging>jar</packaging>
+  <name>Continuum Test Project 2</name>
+  <version>1.0</version>
+  <scm>
+    <connection>scm:cvs:local:ignores:/cvs/root:project2</connection>
+    <url>http://cvs.plexus.codehaus.org/plexus-components/native/continuum/src/test-projects/project2</url>
+  </scm>
+</model>

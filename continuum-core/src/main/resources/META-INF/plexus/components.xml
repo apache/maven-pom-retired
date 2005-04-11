@@ -1,0 +1,370 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.apache.maven.continuum.Continuum</role>
+      <implementation>org.apache.maven.continuum.DefaultContinuum</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.builder.manager.BuilderManager</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.buildcontroller.BuildController</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.buildqueue.BuildQueue</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.scm.ContinuumScm</role>
+        </requirement>
+      </requirements>
+      <configuration>
+        <app-home>${plexus.home}</app-home>
+        <working-directory>${plexus.home}/temp</working-directory>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.builder.manager.BuilderManager</role>
+      <implementation>org.apache.maven.continuum.builder.manager.DefaultBuilderManager</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.builder.ContinuumBuilder</role>
+          <field-name>builders</field-name>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.buildcontroller.BuildController</role>
+      <implementation>org.apache.maven.continuum.buildcontroller.DefaultBuildController</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.builder.manager.BuilderManager</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.notification.ContinuumNotificationDispatcher</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.scm.ContinuumScm</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.notification.ContinuumNotificationDispatcher</role>
+      <implementation>org.apache.maven.continuum.notification.DefaultContinuumNotificationDispatcher</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.notification.NotificationDispatcher</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.scm.ContinuumScm</role>
+      <implementation>org.apache.maven.continuum.scm.DefaultContinuumScm</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.scm.manager.ScmManager</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.buildqueue.BuildQueue</role>
+      <implementation>org.apache.maven.continuum.buildqueue.DefaultBuildQueue</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.store.ContinuumStore</role>
+      <implementation>org.apache.maven.continuum.store.ModelloJPoxContinuumStore</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.jdo.JdoFactory</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <!-- Triggers -->
+
+    <component>
+      <role>org.apache.maven.continuum.trigger.ContinuumTrigger</role>
+      <role-hint>alarm-clock</role-hint>
+      <implementation>org.apache.maven.continuum.trigger.alarmclock.AlarmClockTrigger</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.tx.StoreTransactionManager</role>
+        </requirement>
+      </requirements>
+      <configuration>
+        <interval>60000</interval>
+        <delay>3000</delay>
+      </configuration>
+    </component>
+
+    <!-- Connection factory  -->
+
+    <component>
+      <role>org.apache.maven.continuum.network.ConnectionFactory</role>
+      <role-hint>simple-socket-trigger-server</role-hint>
+      <implementation>org.apache.maven.continuum.network.SimpleServerSocketConnectionFactory</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
+          <role-hint>simple-socket-trigger</role-hint>
+        </requirement>
+      </requirements>
+      <configuration>
+        <port>6770</port>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.network.ConnectionFactory</role>
+      <role-hint>url-registrar-server</role-hint>
+      <implementation>org.apache.maven.continuum.network.SimpleServerSocketConnectionFactory</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
+          <role-hint>url-registrar</role-hint>
+        </requirement>
+      </requirements>
+      <configuration>
+        <port>6771</port>
+      </configuration>
+    </component>
+
+    <!-- ConnectionConsumer -->
+    <component>
+      <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
+      <role-hint>simple-socket-trigger</role-hint>
+      <implementation>org.apache.maven.continuum.trigger.socket.SimpleSocketTrigger</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
+      <role-hint>url-registrar</role-hint>
+      <implementation>org.apache.maven.continuum.registration.socket.UrlSocketRegistrar</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <!-- Notifier -->
+
+    <component>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>console</role-hint>
+      <implementation>org.apache.maven.continuum.notification.console.ConsoleNotifier</implementation>
+    </component>
+
+    <!-- Builder -->
+
+    <component>
+      <role>org.apache.maven.continuum.builder.ContinuumBuilder</role>
+      <role-hint>maven2</role-hint>
+      <implementation>org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder</implementation>
+      <configuration>
+        <executable>m2</executable>
+        <arguments>-N</arguments>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.builder.maven.m2.MavenBuilderHelper</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.builder.maven.m2.MavenBuilderHelper</role>
+      <implementation>org.apache.maven.continuum.builder.maven.m2.DefaultMavenBuilderHelper</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectBuilder</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.repository.ArtifactRepositoryFactory</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.settings.MavenSettingsBuilder</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout</role>
+          <role-hint>legacy</role-hint>
+        </requirement>
+      </requirements>
+      <configuration>
+        <local-repository>${plexus.home}/local-repository</local-repository>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.apache.maven.settings.MavenSettingsBuilder</role>
+      <implementation>org.apache.maven.settings.DefaultMavenSettingsBuilder</implementation>
+      <configuration>
+        <settings-path>${plexus.home}/conf/maven-settings.xml</settings-path>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.builder.ContinuumBuilder</role>
+      <role-hint>maven-1</role-hint>
+      <implementation>org.apache.maven.continuum.builder.maven.m1.Maven1Builder</implementation>
+      <configuration>
+        <maven-command>maven</maven-command>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
+      <implementation>org.apache.maven.continuum.builder.shell.DefaultShellCommandHelper</implementation>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.builder.ContinuumBuilder</role>
+      <role-hint>ant</role-hint>
+      <implementation>org.apache.maven.continuum.builder.ant.AntBuilder</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.builder.ContinuumBuilder</role>
+      <role-hint>shell</role-hint>
+      <implementation>org.apache.maven.continuum.builder.shell.ShellBuilder</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <!--
+     |
+     | Task Queue
+     |
+     |-->
+
+    <component>
+      <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+      <implementation>org.codehaus.plexus.taskqueue.DefaultTaskQueue</implementation>
+      <lifecycle-handler>plexus-configurable</lifecycle-handler>
+      <configuration>
+        <task-entry-evaluators>
+        </task-entry-evaluators>
+        <task-exit-evaluators>
+        </task-exit-evaluators>
+        <task-viability-evaluators>
+          <task-viability-evaluator>build-project</task-viability-evaluator>
+        </task-viability-evaluators>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.taskqueue.TaskViabilityEvaluator</role>
+      <role-hint>build-project</role-hint>
+      <implementation>org.apache.maven.continuum.buildqueue.evaluator.BuildProjectTaskViabilityEvaluator</implementation>
+      <configuration>
+        <required-buildInterval>1000</required-buildInterval>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.jdo.JdoFactory</role>
+      <implementation>org.codehaus.plexus.jdo.DefaultJdoFactory</implementation>
+      <configuration>
+        <properties>
+          <property>
+            <name>javax.jdo.PersistenceManagerFactoryClass</name>
+            <value>org.jpox.PersistenceManagerFactoryImpl</value>
+          </property>
+          <property>
+            <name>javax.jdo.option.ConnectionDriverName</name>
+            <value>org.hsqldb.jdbcDriver</value>
+          </property>
+          <property>
+            <name>javax.jdo.option.ConnectionURL</name>
+            <value>jdbc:hsqldb:${plexus.home}/database</value>
+          </property>
+          <property>
+            <name>javax.jdo.option.ConnectionUserName</name>
+            <value>sa</value>
+          </property>
+          <property>
+            <name>javax.jdo.option.ConnectionPassword</name>
+            <value></value>
+          </property>
+          <property>
+            <name>org.jpox.autoCreateSchema</name>
+            <value>true</value>
+          </property>
+          <property>
+            <name>org.jpox.autoStartMechanism</name>
+            <value>SchemaTable</value>
+          </property>
+          <property>
+            <name>org.jpox.autoStartMechanismMode</name>
+            <value>Quiet</value>
+          </property>
+        </properties>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.velocity.VelocityComponent</role>
+      <implementation>org.codehaus.plexus.velocity.DefaultVelocityComponent</implementation>
+      <configuration>
+        <properties>
+          <property>
+            <name>resource.loader</name>
+            <value>threadContext</value>
+          </property>
+          <property>
+            <name>threadContext.resource.loader.class</name>
+            <value>org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader</value>
+          </property>
+          <property>
+            <name>velocimacro.library</name>
+            <value>/org/apache/maven/continuum/notification/mail/templates/common.vm</value>
+          </property>
+        </properties>
+      </configuration>
+    </component>
+
+  </components>
+</component-set>

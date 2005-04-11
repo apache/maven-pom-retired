@@ -1,0 +1,48 @@
+<document>
+  <properties>
+    <title>Planned Features</title>
+    <author email="trygvis@apache.org">Trygve Laugs&#248;l</author>
+  </properties>
+  <body>
+    <section name="Planned Features for Continuum">
+      <p>
+        If you would like to see support for a particular feature that is not listed here please enter them in
+        <a href="issue-tracking.html">JIRA</a> or send a mail to the <a href="mail-lists.html">mailing lists</a>.
+      </p>
+      <subsection name="Notification">
+        Support for notification through these mechanisms is planned:
+        <ul>
+          <li><a href="http://jira.codehaus.org/browse/CONTINUUM-5">Jabber</a></li>
+          <li><a href="http://jira.codehaus.org/browse/CONTINUUM-33">IRC</a></li>
+        </ul>
+      </subsection>
+      <subsection name="SCM Support">
+        <p>
+          Continuum is using the Maven SCM library for checking out and getting updates from the SCM the project is
+          stored in. Continuum currently only supports CVS and Subversion but support for these SCM is planned:
+          <ul>
+            <li>ClearCase</li>
+            <li>Perforce</li>
+            <li>StarTeam</li>
+            <li>Visual Source Safe</li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="Build Scheduling">
+        Currently it only supports builds on a regular interval and Continuum definitely needs better build
+        scheduling. There are two major ways to do this:
+        <ul>
+          <li>
+            <b>Push</b>: something is triggering a build by telling Continuum to do so. Continuum already supports
+            this through the socket listener that is listening for build IDs to build and through the XML-RPC server.
+          </li>
+          <li>
+            <b>Pull</b>: Continuum is looking for changes and schedules a build when something has changed. This
+            is useful for several reasons: less resources used by useless builds and it's easier to use because
+            there is no need to configure your SCM to push events to Continuum.
+          </li>
+        </ul>
+      </subsection>
+    </section>
+  </body>
+</document>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<project>
+<!--
+  <extend>${maven.repo.local}/plexus/poms/plexus-components-1.0.pom</extend>
+-->
+  <artifactId>plexus-i18n</artifactId>
+  <name>Plexus I18N Component</name>
+  <currentVersion>1.0-beta-2-SNAPSHOT</currentVersion>
+  
+</project>

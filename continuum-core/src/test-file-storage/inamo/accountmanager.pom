@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project>
+    <pomVersion>3</pomVersion>
+    <artifactId>accountmanager</artifactId>
+    <name>inamo.no accountmanager</name>
+    <groupId>inamo</groupId>
+    <currentVersion>0.1.0-SNAPSHOT</currentVersion>
+    <organization>
+        <name>inamo</name>
+        <url>http://www.inamo.no</url>
+        <logo>http://www.inamo.no/local/img/logo.png</logo>
+    </organization>
+    <inceptionYear>2003</inceptionYear>
+    <package>no.inamo</package>
+    <logo>http://inamo-tools.inamo.no/images/logo.png</logo>
+    <shortDescription>
+        This is a accountmanager with ldap and inmemory implementations.
+    </shortDescription>
+    <url>http://home.inamo.no/~trygvis/inamo-tools/projects/accountmanager</url>
+    <issueTrackingUrl>http://jira.inamo.no</issueTrackingUrl>
+    <!--
+    <siteAddress>inamo-tools.inamo.no</siteAddress>
+    <siteDirectory>/var/local/projects/inamo-tools</siteDirectory>
+    -->
+    <siteAddress>home.inamo.no</siteAddress>
+    <siteDirectory>/home/users/t/trygvis/public_html/inamo-tools/projects/accountmanager</siteDirectory>
+    <distributionSite>dist.inamo.no</distributionSite>
+    <distributionDirectory>/var/local/projects/dist</distributionDirectory>
+    <repository>
+        <connection>scm:cvs:pserver:anoncvs@cvs.inamo.no:/var/local/cvs/inamo-tools:accountmanager</connection>
+        <developerConnection>scm:cvs:ext:user@cvs.inamo.no:/var/local/cvs/inamo-tools:accountmanager</developerConnection>
+        <url>http://cvs.inamo.no/viewcvs.cgi/accountmanager?cvsroot=Inamo+tools</url>
+    </repository>
+
+    <mailingLists>
+        <mailingList>
+            <name>inamo developers list</name>
+            <subscribe>http://lists.inamo.no/mailman/listinfo/inamo-tools-dev</subscribe>
+            <unsubscribe>http://lists.inamo.no/mailman/listinfo/inamo-tools-dev</unsubscribe>
+            <archive>http://lists.inamo.no/pipermail/inamo-tools-dev/</archive>
+        </mailingList>
+        <mailingList>
+            <name>inamo cvs commit list</name>
+            <subscribe>http://lists.inamo.no/mailman/listinfo/inamo-tools-cvs</subscribe>
+            <unsubscribe>http://lists.inamo.no/mailman/listinfo/inamo-tools-cvs</unsubscribe>
+            <archive>http://lists.inamo.no/pipermail/inamo-tools-cvs/</archive>
+        </mailingList>
+    </mailingLists>
+
+    <developers>
+        <developer>
+            <name>Trygve Laugstøl</name>
+            <id>trygvis</id>
+            <email>trygvela@ifi.uio.no</email>
+            <organization>Laugstøl consulting</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 1.1</name>
+            <url>http://cvs.inamo.no/viewcvs.cgi/accountmanager/LICENSE.txt?cvsroot=Inamo+tools</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <dependencies>
+        <dependency>
+            <artifactId>commons-lang</artifactId>
+            <groupId>commons-lang</groupId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <artifactId>log4j</artifactId>
+            <groupId>log4j</groupId>
+            <version>1.2.7</version>
+        </dependency>
+
+        <dependency>
+            <artifactId>utils</artifactId>
+            <groupId>inamo</groupId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>ldap-utils</artifactId>
+            <groupId>inamo</groupId>
+            <version>SNAPSHOT</version>
+        </dependency>
+
+        <!-- ASPECT STUFF -->
+        <dependency>
+            <artifactId>maven-aspectj-plugin</artifactId>
+            <groupId>maven</groupId>
+            <version>1.1</version>
+            <type>plugin</type>
+        </dependency>
+
+        <!-- ADAPTERS : XWORK -->
+        <dependency>
+            <artifactId>xwork</artifactId>
+            <groupId>xwork</groupId>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- ADAPTERS : PLEXUS -->
+        <dependency>
+            <artifactId>plexus</artifactId>
+            <groupId>plexus</groupId>
+            <version>0.10</version>
+            <!--
+            <version>0.13</version>
+            -->
+        </dependency>
+        <dependency>
+            <artifactId>avalon-framework</artifactId>
+            <groupId>avalon</groupId>
+            <version>4.1.4</version>
+        </dependency>
+        <dependency>
+            <artifactId>classworlds</artifactId>
+            <groupId>classworlds</groupId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <artifactId>classworlds</artifactId>
+            <groupId>classworlds</groupId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+             <groupId>xstream</groupId>
+             <artifactId>xstream</artifactId>
+             <version>0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>xpp3</groupId>
+            <artifactId>xpp3</artifactId>
+            <version>1.1.2a</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-graph</groupId>
+            <artifactId>commons-graph</artifactId>
+            <version>0.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>1.3.4</version>
+        </dependency>
+
+        <!-- TESTING -->
+        <dependency>
+            <artifactId>junit</artifactId>
+            <groupId>junit</groupId>
+            <version>3.8.1</version>
+        </dependency>
+        <dependency>
+            <artifactId>plexus-ldapserver</artifactId>
+            <groupId>plexus</groupId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xerces</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>inamo</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>1.0</version>
+            <type>xml</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <nagEmailAddress>inamo-tools-dev@lists.inamo.no</nagEmailAddress>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <aspectSourceDirectory>src/main/aspects</aspectSourceDirectory>
+        <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
+        <unitTest>
+            <!-- 
+                A general Abstract* exclude doesn't work as there are 
+                test that should be run that matches the pattern.
+            -->
+            <excludes>
+                <exclude>**/accountmanager/AbstractAccountManagerTest.java</exclude>
+            </excludes>
+            <includes>
+                <include>**/*Test.java</include>
+            </includes>
+            <resources>
+                <resource>
+                    <directory>src/test/resources</directory>
+                    <include>*.xml</include>
+                    <include>*.properties</include>
+                    <include>*.prop</include>
+                </resource>
+            </resources>
+        </unitTest>
+    </build>
+
+    <reports>
+        <report>maven-changelog-plugin</report>
+        <report>maven-changes-plugin</report>
+        <report>maven-checkstyle-plugin</report>
+        <report>maven-developer-activity-plugin</report>
+        <report>maven-file-activity-plugin</report>
+        <report>maven-javadoc-plugin</report>
+        <report>maven-jdepend-plugin</report>
+        <report>maven-junit-report-plugin</report>
+        <report>maven-jxr-plugin</report>
+        <report>maven-license-plugin</report>
+        <report>maven-linkcheck-plugin</report>
+        <report>maven-clover-plugin</report>
+    </reports>
+</project>

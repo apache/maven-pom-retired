@@ -1,0 +1,20 @@
+<plexus>
+  <components>
+    <component>
+      <role>org.apache.maven.continuum.network.ConnectionFactory</role>
+      <implementation>org.apache.maven.continuum.network.SimpleServerSocketConnectionFactory</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
+        </requirement>
+      </requirements>
+      <configuration>
+        <port>54321</port>
+      </configuration>
+    </component>
+    <component>
+      <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
+      <implementation>org.apache.maven.continuum.network.EchoingConnectionConsumer</implementation>
+    </component>
+  </components>
+</plexus>

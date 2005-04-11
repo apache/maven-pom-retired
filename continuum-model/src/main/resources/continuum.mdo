@@ -1,0 +1,452 @@
+<model>
+  <id>continuum</id>
+  <name>Continuum</name>
+  <description>Continuum's object model.</description>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.apache.maven.continuum.project</value>
+    </default>
+  </defaults>
+
+  <!--
+   |
+   | ContinuumProject.
+   |
+   |-->
+  <classes>
+    <class rootElement="true" stash.storable="true">
+      <name>ContinuumProject</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <required>true</required>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>scmUrl</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>nagEmailAddress</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>version</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>workingDirectory</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>state</name>
+          <version>1.0.0</version>
+          <type>int</type>
+          <!--
+          <association>
+            <type>ContinuumProjectState</type>
+          </association>
+          -->
+        </field>
+        <field>
+          <name>builderId</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>configuration</name>
+          <version>1.0.0</version>
+          <type>Properties</type>
+          <association xml.mapStyle="inline">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>builds</name>
+          <version>1.0.0</version>
+          <association>
+            <type>ContinuumBuild</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>MavenTwoProject</name>
+      <version>1.0.0</version>
+      <superClass>ContinuumProject</superClass>
+      <fields>
+        <field>
+          <name>goals</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>MavenOneProject</name>
+      <version>1.0.0</version>
+      <superClass>ContinuumProject</superClass>
+      <fields>
+        <field>
+          <name>goals</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>AntProject</name>
+      <version>1.0.0</version>
+      <superClass>ContinuumProject</superClass>
+      <fields>
+        <field>
+          <name>executable</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>targets</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ShellProject</name>
+      <version>1.0.0</version>
+      <superClass>ContinuumProject</superClass>
+      <fields>
+        <field>
+          <name>executable</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>arguments</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
+    <!--
+    |
+    | ContinuumBuild
+    |
+    -->
+    <class stash.storable="true">
+      <name>ContinuumBuild</name>
+      <version>1.0.0</version>
+      <description>
+        This class is a single continuum build.
+
+        It has a reference to a {@link BuilderBuildResult} which contains
+        any builder specific objects/variables.</description>
+      <fields>
+        <field>
+          <name>project</name>
+          <version>1.0.0</version>
+          <association>
+            <type>ContinuumProject</type>
+          </association>
+        </field>
+        <field>
+          <name>id</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>state</name>
+          <version>1.0.0</version>
+          <type>int</type>
+          <!--
+          <association>
+            <type>BuildResultState</type>
+          </association>
+          -->
+        </field>
+        <field>
+          <name>startTime</name>
+          <version>1.0.0</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>endTime</name>
+          <version>1.0.0</version>
+          <type>long</type>
+        </field>
+        <field stash.maxSize="8000">
+          <name>error</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <!--
+          <association>
+            <type>java.lang.Throwable</type>
+          </association>
+          -->
+        </field>
+
+        <!--
+         |
+         | Common fields for all builders
+         |
+         | -->
+
+        <!-- Experimental -->
+        <!--
+        <field>
+          <name>unitTests</name>
+          <version>1.0.0</version>
+          <association>
+            <type>UnitTest</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        -->
+        <field>
+          <name>buildResult</name>
+          <version>1.0.0</version>
+          <association>
+            <type>ContinuumBuildResult</type>
+          </association>
+          <description>
+            This field contains a builder specific object that the view will
+            know how to work with.
+          </description>
+        </field>
+        <!--
+        <field>
+          <name>builderBuildResult</name>
+          <version>1.0.0</version>
+          <association>
+            <type>BuilderBuildResult</type>
+          </association>
+          <description>
+            This field contains a builder specific object that the view will
+            know how to work with.
+          </description>
+        </field>
+        -->
+      </fields>
+    </class>
+
+    <!-- Experimental -->
+    <!--
+    <class>
+      <name>UnitTest</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>packageName</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>testCases</name>
+          <version>1.0.0</version>
+          <association>
+            <type>UnitTestCase</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+    -->
+
+    <!-- Experimental -->
+    <!--
+    <class>
+      <name>UnitTestCase</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        -->
+        <!-- passed, failed, error -->
+    <!--
+        <field>
+          <name>result</name>
+          <version>1.0.0</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>time</name>
+          <version>1.0.0</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>message</name>
+          <version>1.0.0</version>
+          <type>long</type>
+        </field>
+        <field>
+          <name>output</name>
+          <version>1.0.0</version>
+          <type>long</type>
+        </field>
+      </fields>
+    </class>
+    -->
+
+    <!--
+    |
+    | BuilderBuildResult
+    |
+    | This class should be abstract.
+    |
+    | -->
+    <class stash.storable="true">
+      <name>ContinuumBuildResult</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>build</name>
+          <version>1.0.0</version>
+          <association>
+            <type>ContinuumBuild</type>
+          </association>
+        </field>
+        <field>
+          <name>success</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>buildExecuted</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>changedFiles</name>
+          <version>1.0.0</version>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ShellBuildResult</name>
+      <packageName>org.apache.maven.continuum.builder.shell</packageName>
+      <superClass>ContinuumBuildResult</superClass>
+      <version>1.0.0</version>
+      <fields>
+        <field stash.maxSize="8000">
+          <name>standardOutput</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="8000">
+          <name>standardError</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>exitCode</name>
+          <version>1.0.0</version>
+          <type>int</type>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>Maven1BuildResult</name>
+      <packageName>org.apache.maven.continuum.builder.maven.m1</packageName>
+      <superClass>ContinuumBuildResult</superClass>
+      <version>1.0.0</version>
+      <fields>
+        <field stash.maxSize="8000">
+          <name>standardOutput</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="8000">
+          <name>standardError</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>exitCode</name>
+          <version>1.0.0</version>
+          <type>int</type>
+        </field>
+      </fields>
+    </class>
+<!--
+    <class>
+      <name>Maven2BuildResult</name>
+      <packageName>org.apache.maven.continuum.builder.maven.m2</packageName>
+      <superClass>ContinuumBuildResult</superClass>
+      <version>1.0.0</version>
+      <fields>
+        <field stash.maxSize="8000">
+          <name>standardOutput</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="8000">
+          <name>standardError</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>exitCode</name>
+          <version>1.0.0</version>
+          <type>int</type>
+        </field>
+      </fields>
+    </class>
+-->
+    <class>
+      <name>AntBuildResult</name>
+      <packageName>org.apache.maven.continuum.builder.ant</packageName>
+      <superClass>ContinuumBuildResult</superClass>
+      <version>1.0.0</version>
+      <fields>
+        <field stash.maxSize="8000">
+          <name>standardOutput</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="8000">
+          <name>standardError</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>exitCode</name>
+          <version>1.0.0</version>
+          <type>int</type>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

@@ -1,0 +1,187 @@
+<component-set>
+  <components>
+
+    <!--
+     |
+     | System components
+     |
+     |-->
+
+    <component>
+      <role>org.codehaus.plexus.summit.pipeline.Pipeline</role>
+      <implementation>org.codehaus.plexus.summit.pipeline.SummitPipeline</implementation>
+      <lifecycle-handler>plexus-configurable</lifecycle-handler>
+      <configuration>
+        <valves>
+          <valve>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextValve</valve>
+          <valve>org.apache.maven.continuum.web.pipeline.valve.LoginValve</valve>
+          <valve>org.codehaus.plexus.action.web.ActionValve</valve>
+          <valve>org.codehaus.plexus.summit.pipeline.valve.DetermineTargetValve</valve>
+          <valve>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextPopulatorValve</valve>
+          <valve>org.codehaus.plexus.summit.pipeline.valve.ResolverValve</valve>
+          <valve>org.codehaus.plexus.summit.pull.PullToolValve</valve>
+          <valve>org.codehaus.plexus.summit.pipeline.valve.DisplayValve</valve>
+        </valves>
+      </configuration>
+    </component>
+
+    <!--
+     |
+     | Customized PullTools Service
+     |
+     -->
+
+    <component>
+      <role>org.codehaus.plexus.summit.pull.PullService</role>
+      <implementation>org.codehaus.plexus.summit.pull.DefaultPullService</implementation>
+      <configuration>
+        <tools>
+          <tool>
+            <name>link</name>
+            <role>linktool</role>
+            <scope>request</scope>
+          </tool>
+          <tool>
+            <name>css</name>
+            <role>csstool</role>
+            <scope>request</scope>
+          </tool>
+          <tool>
+            <name>i18n</name>
+            <role>org.codehaus.plexus.i18n.I18N</role>
+            <scope>global</scope>
+          </tool>
+        </tools>
+      </configuration>
+    </component>
+
+    <component>
+      <role>csstool</role>
+      <implementation>org.apache.maven.continuum.web.tool.CssTool</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <configuration/>
+    </component>
+
+    <!--
+     |
+     | Valves
+     |
+     |-->
+
+    <component>
+      <role>org.apache.maven.continuum.web.context.ViewContextPopulator</role>
+      <implementation>org.apache.maven.continuum.web.context.DefaultViewContextPopulator</implementation>
+      <configuration>
+        <views>
+          <view>
+            <id>projectOverview</id>
+            <scalars>
+              <scalar>
+                <id>projects</id>
+                <expression>getProjects()</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <view>
+            <id>projectDetails</id>
+            <scalars>
+              <scalar>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
+              </scalar>
+              <scalar>
+                <id>latestBuild</id>
+                <expression>getLatestBuildForProject(#id)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <view>
+            <id>editProject</id>
+            <scalars>
+              <scalar>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <view>
+            <id>confirmRemoveProject</id>
+            <scalars>
+              <scalar>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
+              </scalar>
+            </scalars>
+          </view>
+        </views>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
+      <role-hint>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextPopulatorValve</role-hint>
+      <implementation>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextPopulatorValve</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.web.context.ViewContextPopulator</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
+      <role-hint>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextValve</role-hint>
+      <implementation>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextValve</implementation>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
+      <role-hint>org.apache.maven.continuum.web.pipeline.valve.LoginValve</role-hint>
+      <implementation>org.apache.maven.continuum.web.pipeline.valve.LoginValve</implementation>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
+      <role-hint>org.apache.maven.continuum.web.pipeline.valve.ActionValve</role-hint>
+      <implementation>org.apache.maven.continuum.web.pipeline.valve.ActionValve</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.web.action.ActionManager</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <!--
+     |
+     | Actions
+     |
+     |-->
+
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>login</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.Login</implementation>
+    </component>
+
+    <!--
+     |
+     | Validators
+     |
+     |-->
+
+    <component>
+      <role>org.codehaus.plexus.formica.validation.Validator</role>
+      <role-hint>scm-url</role-hint>
+      <implementation>org.codehaus.continuum.web.validation.ScmUrlValidator</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.scm.manager.ScmManager</role>
+        </requirement>
+      </requirements>
+    </component>
+
+  </components>
+</component-set>

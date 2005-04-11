@@ -1,0 +1,79 @@
+<document>
+  <properties>
+    <title>Configuring Continuum</title>
+    <author email="trygvis@apache.org">Trygve Laugs&#248;l</author>
+  </properties>
+  <body>
+    <section name="Configuring Continuum">
+      <p>
+        The configuration file for Continuum is inside the Plexus runtime under
+        <code>apps/continuum/conf/application.xml</code>.
+      </p>
+      <subsection name="Mail Notification">
+        There are three components that is the mail notification system in Continuum:
+        <ul>
+          <li>
+            The Mail notifier itself. There are three configurable properties:
+            <ul>
+              <li>
+                <code>from-mailbox</code> and <code>from-name</code>: The mailbox and name that will be set as the
+                <code>From</code> header for all mails sent. It's it important to ensure that the mailbox is a
+                real account as a lot of SMTP server check that the mailbox actually exists before accepting the
+                mail. If the from mailbox is empty or not specified the nag email address of the project will be
+                used as the from mailbox.
+              </li>
+              <li>
+                <code>timestamp-format</code>: This is the format string that is used to format the dates in the mails.
+              </li>
+            </ul>
+          </li>
+          <li>
+            The recipient source. This is the component that decides who should receive the mails. The only thing
+            that can be configured here is a address that will be used as the recipient for all mails sent. This
+            configuration is mostly useful for people who want to make sure all mails is sent to a specific account
+            during testing or development.
+          </li>
+          <li>
+            The mail sender is the component that will send the mails to the SMTP server. The two properties that can be configured are:
+            <ul>
+              <li>
+                <code>smtp-host</code>: The SMTP host. Make sure that this host will accept mails to and possibly
+                from the addresses configured for each project.
+              </li>
+              <li>
+                <code>smtp-port</code>: The port to use on the SMTP host.
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </subsection>
+      <subsection name="Alarm Trigger">
+        <p>
+          The alarm trigger will trigger a build of all the projects on a configured interval.
+          <ul>
+            <li>
+              <code>interval</code>: The number of seconds between each round of scheduling.
+            </li>
+            <li>
+              <code>delay</code>: The number of seconds to with with the first round of scheduling after startup.
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="Jetty Configuration">
+      </subsection>
+      <subsection name="Socket Listeners">
+        There are two services listening on sockets that can be configured:
+        <ul>
+          <li>
+            <code>url-registrar-server</code>: This registrar is reading POM URLs to Maven 2 projects to build.
+          </li>
+          <li>
+            <code>simple-socket-trigger-server</code>: This registrar is reading project IDs to schedule for build.
+          </li>
+        </ul>
+        The only
+      </subsection>
+    </section>
+  </body>
+</document>

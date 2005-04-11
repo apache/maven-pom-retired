@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<project>
+  <artifactId>plexus-bayesian</artifactId>
+  <name>Plexus Bayesian Component</name>
+  <currentVersion>1.0-alpha-1</currentVersion>
+
+  <dependencies>
+
+      <dependency>
+      <groupId>javamail</groupId>
+      <artifactId>javamail</artifactId>
+      <version>1.3.1</version>
+      <url>http://java.sun.com/products/javamail</url>
+    </dependency>
+
+  </dependencies>
+
+</project>
+

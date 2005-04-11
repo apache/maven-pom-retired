@@ -1,0 +1,36 @@
+Sequences
+---------
+
+-------------------------------------------------------------
+Adding project
+-------------------------------------------------------------
+
+pass in meta data
+
+create continuum project from meta data
+
+setup project
+
+-------------------------------------------------------------
+Setup project
+-------------------------------------------------------------
+
+checkout sources
+
+update the metadata from the checked out sources
+
+update the project
+
+-------------------------------------------------------------
+Build project
+-------------------------------------------------------------
+
+get continuum project
+
+get the builder
+
+build and collect the results
+
+build contains a result, but there would be many results ...
+
+Build <>---- BuildResult

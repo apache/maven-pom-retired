@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+  <groupId>maven</groupId>
+  <artifactId>maven-ajc-plugin</artifactId>
+  <version>1.0</version>
+  <name>Maven example projects</name>
+  <dependencies>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus</artifactId>
+      <version>0.14-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,16 @@
+<form>
+  <extend>continuumProject</extend>
+  <id>shellProject</id>
+  <target-class>org.apache.maven.continuum.project.ShellProject</target-class>  
+  <elements>
+    <element>
+      <id>project.executable</id>
+      <validator>required</validator>
+      <message-key>project.executable.message</message-key>
+      <label-key>project.executable.label</label-key>
+      <error-message-key>project.executable.error</error-message-key>
+      <expression>executable</expression>
+      <type>text</type>
+    </element>
+  </elements>
+</form>

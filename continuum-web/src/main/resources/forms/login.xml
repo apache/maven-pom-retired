@@ -1,0 +1,26 @@
+<form>
+  <id>login</id>
+  <elements>
+    <element>
+      <id>login.username</id>
+      <validator>default</validator>
+      <message-key>login.username.message</message-key>
+      <label-key>login.username.label</label-key>
+      <error-message-key>login.username.error</error-message-key>
+      <type>text</type>
+    </element>
+    <element>
+      <id>login.password</id>
+      <validator>default</validator>
+      <message-key>login.password.message</message-key>
+      <label-key>login.password.label</label-key>
+      <error-message-key>login.password.error</error-message-key>
+      <type>password</type>
+    </element>
+  </elements>
+  <add>
+    <title-key>login.title</title-key>
+    <action>login</action>
+    <view>Index.vm</view>
+  </add>
+</form>

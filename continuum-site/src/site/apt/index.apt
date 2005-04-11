@@ -1,0 +1,24 @@
+ -----
+ Continuum
+ -----
+ Trygve Laugst&oslash;l
+ -----
+
+What is it?
+
+ Continuum is a continous intergration server for building Java based
+projects. Currently it only supports Maven 2 projects.
+
+Contact us
+
+ There are several ways of contacting the Continuum developers:
+
+ * Either through {{{developer-info/mailing-lists.html}the mailinglists}}
+
+ * or IRC. We hang out on #maven at irc.codehaus.org.
+
+Releases
+
+ * {{{releases/1-0-alpha-1/index.html}1.0-alpha-1}}
+
+~~ * {{{releases/1.0-alpha-2/index.html}1.0-alpha-2}}

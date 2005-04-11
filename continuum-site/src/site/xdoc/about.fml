@@ -1,0 +1,94 @@
+<faqs title="About Continuum">
+  <part id="about">
+    <faq id="what-is-continuum">
+      <question>What is Continuum?</question>
+      <answer>
+        <p>
+          Continuum is a continous integration server that will ensure the health of your code base.
+        </p>
+        <p>
+          For more information on what continous integration is there are lots of articles on the internet:
+          <ul>
+            <li>Martin Fowler has a article called
+                <a href="http://www.martinfowler.com/articles/continuousIntegration.html">"Continuous Integration"</a>
+            </li>
+            <li>The C2 wiki has a page on
+              <a href="http://c2.com/cgi/wiki?ContinuousIntegration">ContinuousIntegration</a>
+            </li>
+          </ul>
+        </p>
+      </answer>
+    </faq>
+    <faq id="features">
+      <question>What are the features of Continuum?</question>
+      <answer>
+        <p>
+          Continuum has the following major features:
+        </p>
+        <ul>
+          <li>A easy to use web interface</li>
+          <li>A very easy way to add new projects, see the <a href="adding-projects.html">adding projects</a> page for
+              more information</li>
+          <li>A XML-RPC interface for automation and remoting</li>
+          <li>Mail notification</li>
+        </ul>
+      </answer>
+    </faq>
+<!--
+    <faq id="release-schedule">
+      <question>How often will Maven 2.0 be released?</question>
+      <answer>
+        <p>
+          We are working to a 4-5 week release cycle, meaning that there will be at least one release per month.
+        </p>
+        <p>
+          The first releases such as the technology preview will be designated "alpha" releases, indicating that
+          they are not yet feature complete and there are outstanding bugs. Following that, "beta" releases will be
+          made available where introduction of new features will be restricted and the focus on improving usability and
+          stability. Finally, one or more release candidates will be distributed for testing that are genuinely believed
+          to be final, with the expectation that a final release would be available shortly afterwards.
+        </p>
+        <p>
+          We will continue with the successful technique from Maven 1.0 of making plugins available on a separate
+          release schedule so that new features can be obtained as they are ready and tested.
+        </p>
+      </answer>
+    </faq>
+-->
+    <faq id="get-involved">
+      <question>Can I get involved?</question>
+      <answer>
+        <p>
+          The Apache Maven project welcomes anyone that wishes to contribute to do so by providing patches to the
+          source code, participating in design discussions, or to help out on the users mailing list by answering
+          questions.
+        </p>
+        <p>
+          Frequent contributors recognised by existing committers to the project may be asked if they would like to
+          join the project.
+        </p>
+        <p>
+          For more information, please see <a href="http://maven.apache.org/contributing/help.html">How to Help</a>.
+        </p>
+      </answer>
+    </faq>
+    <faq id="get-help">
+      <question>Where do I get help with Continuum?</question>
+      <answer>
+        <p>
+          Help for Continuum can be obtained by subscribing and posting to the
+          <a href="http://maven.apache.org/continuum/mail-lists.html">Continuum Users List</a>.
+        </p>
+        <p>
+          You can also join us on IRC at <code>irc.codehaus.org</code> on <code>#maven2</code>. This is available both
+          over <a href="irc://irc.codehaus.org/#maven">IRC</a> and <a href="http://irc.codehaus.org/">HTTP</a> for
+          those behind firewalls (enter <code>#maven</code> in the <i>Channel</i> box).
+        </p>
+        <p>
+          Please remember that is is a preview release, so please be patient with features that are not yet implemented,
+          and be prepared to do some research and to help out yourself wherever possible.
+        </p>
+      </answer>
+    </faq>
+  </part>
+</faqs>

@@ -1,0 +1,253 @@
+#macro ( keyField $entity $label $key $value $help )
+<tr>
+  <th>$label</th>
+  <td>
+    #if ( $entity )
+    $value
+    <input type="hidden" name="$key" value="$value" size="40"/>
+    #else
+    <input type="text" name="$key" value="$!value" size="40"/>
+    #end
+  </td>
+</tr>
+#end
+
+#macro ( field $label $key $value $help )
+<tr>
+  <th>$label</th>
+  <td>
+    <input type="text" name="$key" value="$!value" size="40"/>
+  </td>
+</tr>
+#end
+
+#macro ( help $message )
+<br/>
+<br/>
+<font size="-2">
+  $message
+</font>
+#end
+
+#macro ( addBar $path )
+<div class="functnbar3">
+  <a href="$link.setPage($path)">$i18n.getString('action.add')</a>
+</div>
+#end
+
+#macro ( viewField $label $value )
+<tr>
+<th>$label</th>
+<td>$!value</td>
+</tr>
+#end
+
+#macro ( renderSummary $sr $id $link )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>$sr.getTitle($id)</h3>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+
+      <tr>
+        #foreach ( $columnHeader in $sr.getHeaders($id) )
+        <th>$columnHeader</th>
+        #end
+        <th colspan ="3"></th>
+      </tr>
+
+      #set ( $deleteAction = "web-delete-${id}" )
+
+      #set ( $class = "a" )
+
+      #foreach ( $object in $sr.getCollection($id) )
+      <tr class="$class">
+        #set( $keyValue = $sr.getKeyValue( $id, $object ) )
+        #foreach ( $value in $sr.getValues( $id, $object ) )
+        <td>$value</td>
+        #end
+        <td><a href="$link.setPage("$id,${id}-view.vm").addQueryData('view',$id).addQueryData($id,$keyValue)">View<a/></td>
+        <td><a href="$link.setPage("$id,${id}-edit.vm").addQueryData('view',$id).addQueryData($id,$keyValue)">Edit<a/></td>
+        <td><a href="$link.setPage("$id,${id}-delete.vm").addQueryData('view',$id).addQueryData($id,$keyValue)">Delete<a/></td>
+      </tr>
+      #if ( $class == "a" )
+        #set ( $class = "b" )
+      #else
+        #set ( $class = "a" )
+      #end
+      #end
+
+    </table>
+
+    #addBar( "$id,${id}-edit.vm" )
+
+  </div>
+</div>
+#end
+
+#macro ( renderMessageSummary $sr $id $link )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>$sr.getTitle($id)</h3>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+
+      <tr>
+        #foreach ( $columnHeader in $sr.getHeaders($id) )
+        <th>$columnHeader</th>
+        #end
+        <th colspan ="3"></th>
+      </tr>
+
+      #set ( $deleteAction = "web-delete-${id}" )
+
+      #set ( $class = "a" )
+
+      #foreach ( $object in $sr.getCollection($id) )
+      <tr class="$class">
+        #set( $keyValue = $sr.getKeyValue( $id, $object ) )
+        #foreach ( $value in $sr.getValues( $id, $object ) )
+        <td>$value</td>
+        #end
+        <td><a href="$link.setPage("message,papinet,${id}-view.vm").addQueryData('view',$id).addQueryData($id,$keyValue)">View<a/></td>
+      </tr>
+      #if ( $class == "a" )
+        #set ( $class = "b" )
+      #else
+        #set ( $class = "a" )
+      #end
+      #end
+
+    </table>
+
+    <div class="functnbar3"/>
+
+  </div>
+</div>
+#end
+
+#macro ( renderUserSummary $sr $id $link )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>$sr.getTitle($id)</h3>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+
+      <tr>
+        #foreach ( $columnHeader in $sr.getHeaders($id) )
+        <th>$columnHeader</th>
+        #end
+        <th colspan ="4"></th>
+      </tr>
+
+      #set ( $deleteAction = "web-delete-${id}" )
+
+      #set ( $class = "a" )
+
+      #foreach ( $object in $sr.getCollection($id) )
+      <tr class="$class">
+        #set( $keyValue = $sr.getKeyValue( $id, $object ) )
+        #foreach ( $value in $sr.getValues( $id, $object ) )
+        <td>$value</td>
+        #end
+        <td><a href="$link.setPage("security,user-roles.vm").addQueryData('view','user-roles').addQueryData($id,$keyValue)">Roles<a/></td>
+        <td><a href="$link.setPage("$id,${id}-view.vm").addQueryData('view',$id).addQueryData($id,$keyValue)">View<a/></td>
+        <td><a href="$link.setPage("$id,${id}-edit.vm").addQueryData('view',$id).addQueryData($id,$keyValue)">Edit<a/></td>
+        <td><a href="$link.setPage("$id,${id}-delete.vm").addQueryData('view',$id).addQueryData($id,$keyValue)">Delete<a/></td>
+      </tr>
+      #if ( $class == "a" )
+        #set ( $class = "b" )
+      #else
+        #set ( $class = "a" )
+      #end
+      #end
+
+    </table>
+
+    #addBar( "$id,${id}-edit.vm" )
+
+  </div>
+</div>
+#end
+
+
+#macro ( renderEdit $id $fm $object $link )
+
+#set ( $form = $fm.getForm( $id ) )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>$fm.getTitle( $form )</h3>
+    <form action="$link.setPage("$id,${id}-summary.vm").addQueryData('action',"web-store-${id}")" method="post">
+      <div class="axial">
+        <table border="0" cellspacing="2" cellpadding="3">
+          #foreach ( $element in $form.formElements )
+            #if ( $velocityCount == 1 )
+              #keyField( $object $fm.getLabel( $element ) $element.id $fm.getValue( $element, $object ) $fm.getMessage( $element ) )
+            #else
+              #field( $fm.getLabel( $element ) $element.id $fm.getValue( $element, $object ) $fm.getMessage( $element ) )
+            #end
+          #end
+        </table>
+      </div>
+      <div class="functnbar3">
+        #if ( $tpi )
+        <input type="submit" name="f" value="Update"/>
+        #else
+        <input type="submit" name="f" value="Add"/>
+        #end
+      </div>
+    </form>
+  </div>
+</div>
+#end
+
+#macro ( renderView $id $fm $object $link )
+
+#set ( $form = $fm.getForm( $id ) )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>$fm.getTitle( $form )</h3>
+    <div class="axial">
+      <table border="0" cellspacing="2" cellpadding="3">
+        #foreach ( $element in $form.formElements )
+          #viewField( $fm.getLabel( $element ) $fm.getValue( $element, $object ) )
+        #end
+      </table>
+    </div>
+    <div class="functnbar3"/>
+  </div>
+</div>
+#end
+
+#macro ( verifyDelete $id $fm $object $link $keyValue)
+
+#set ( $form = $fm.getForm( $id ) )
+#set ( $deleteAction = "web-delete-${id}" )
+
+<div class="app">
+  <div id="axial" class="h3">
+
+    <div class="warningmessage">
+      <br/>
+      <strong>Are you really sure you want to delete this?</strong>
+    </div>
+
+    <h3>$fm.getTitle( $form )</h3>
+    <div class="axial">
+      <table border="0" cellspacing="2" cellpadding="3">
+        #foreach ( $element in $form.formElements )
+          #viewField( $fm.getLabel( $element ) $fm.getValue( $element, $object ) )
+        #end
+      </table>
+    </div>
+      <div class="functnbar3">
+        <form action="$link.setPage("$id,${id}-summary.vm").addQueryData('action',$deleteAction).addQueryData($id,$keyValue)" method="post">
+          <input type="submit" name="f" value="Delete"/>
+        </form>
+      </div>
+  </div>
+</div>
+#end
+

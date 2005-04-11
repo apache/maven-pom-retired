@@ -1,0 +1,126 @@
+<form>
+  <id>continuumProject</id>
+  <key-expression>id</key-expression>
+  <lookup-expression>getAntProject(#id)</lookup-expression>
+  <summary-collection-expression>getProjects()</summary-collection-expression>
+  <source-role>org.apache.maven.continuum.Continuum</source-role>
+  <type-expression>builderId</type-expression>
+  <elements>
+    <element>
+      <id>project.name</id>
+      <validator>required</validator>
+      <message-key>project.name.message</message-key>
+      <label-key>project.name.label</label-key>
+      <error-message-key>project.name.error</error-message-key>
+      <type>text</type>
+      <expression>name</expression>
+    </element>
+    <element>
+      <id>project.scmUrl</id>
+      <validator>required</validator>
+      <message-key>project.scmUrl.message</message-key>
+      <label-key>project.scmUrl.label</label-key>
+      <error-message-key>project.scmUrl.error</error-message-key>
+      <type>text</type>
+      <expression>scmUrl</expression>
+    </element>
+    <element>
+      <id>project.nagEmailAddress</id>
+      <validator>required</validator>
+      <message-key>project.nagEmailAddress.message</message-key>
+      <label-key>project.nagEmailAddress.label</label-key>
+      <error-message-key>project.nagEmailAddress.error</error-message-key>
+      <type>text</type>
+      <expression>nagEmailAddress</expression>
+    </element>
+    <element>
+      <id>project.version</id>
+      <validator>required</validator>
+      <message-key>project.version.message</message-key>
+      <label-key>project.version.label</label-key>
+      <error-message-key>project.version.error</error-message-key>
+      <type>text</type>
+      <expression>version</expression>
+    </element>
+    <!--
+    TODO:
+    This shouldn't be displayed for adding and updating but we want it in the summary view,
+    Need to hide it in the data entry pages. Could either hide in one place or allow summary
+    elements to be listed directly in the summary description.
+    -->
+    <element>
+      <id>project.type</id>
+      <validator>default</validator>
+      <message-key>project.type.message</message-key>
+      <label-key>project.type.label</label-key>
+      <error-message-key>project.type.error</error-message-key>
+      <type>text</type>
+      <expression>builderId</expression>
+      <immutable>true</immutable>
+    </element>
+    <element>
+      <id>project.state</id>
+      <validator>default</validator>
+      <type>text</type>
+      <expression>state</expression>
+      <immutable>true</immutable>
+    </element>
+  </elements>
+
+  <!-- Add -->
+  <add>
+    <title-key>project.title.add</title-key>
+    <action>addEntity</action>
+    <view>continuumProject.form?mode=summary</view>
+    <expression>addAntProject(#entity)</expression>
+  </add>
+
+  <!-- Update -->
+  <update>
+    <title-key>project.title.update</title-key>
+    <action>updateEntity</action>
+    <view>continuumProject.form?mode=summary</view>
+  </update>
+
+  <!-- View -->
+  <view>
+    <title-key>project.title</title-key>
+  </view>
+
+  <delete>
+    <title-key>project.title.delete</title-key>
+    <view>continuumProject.form?mode=summary</view>
+    <action>deleteEntity</action>
+    <expression>removeProject(#id)</expression>
+  </delete>
+
+  <!-- Summary -->
+  <summary>
+    <title-key>title.key</title-key>
+    <summary-elements>
+      <summary-element>
+        <id>project.state</id>
+      </summary-element>
+      <summary-element>
+        <id>project.name</id>
+      </summary-element>
+      <summary-element>
+        <id>project.type</id>
+      </summary-element>
+    </summary-elements>
+    <operations>
+      <operation>
+        <name>View</name>
+        <action>target/$type$Project.form?mode=view&amp;id=$id$</action>
+      </operation>
+      <operation>
+        <name>Details</name>
+        <action>target/$type$Project.form?mode=update&amp;id=$id$</action>
+      </operation>
+      <operation>
+        <name>Delete</name>
+        <action>target/$type$Project.form?mode=delete&amp;id=$id$</action>
+      </operation>
+    </operations>
+  </summary>
+</form>

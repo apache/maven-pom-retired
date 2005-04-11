@@ -1,0 +1,28 @@
+<div class="app">
+  <h3>Confirm removal of $project.name</h3>
+  <table border="0" cellspacing="2" cellpadding="3" width="100%">
+    <tr>
+      <td>
+        <table>
+          <tr>
+            <td>
+              <form action="$link.setPage('projectOverview.vm')" method="post">
+                <input type="hidden" name="action" value="removeProject"/>
+                <input type="hidden" name="id" value="$project.id"/>
+                <input type="hidden" name="remove" value="true"/>
+                <input type="submit" value="Remove"/>
+              </form>
+            </td>
+            <td>
+              <form action="$link.setPage('projectDetails.vm')" method="post">
+                <input type="hidden" name="action" value="showProject"/>
+                <input type="hidden" name="id" value="$project.id"/>
+                <input type="submit" value="Abort"/>
+              </form>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>

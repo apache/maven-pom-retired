@@ -1,0 +1,11 @@
+<div id="footer">
+  <table border="0" cellspacing="0" cellpadding="4">
+    <tr>
+      <td>
+        &copy; 2004
+        <a href="http://continuum.codehaus.org">Continuum</a> |
+        <a href="http://www.codehaus.org">Codehaus</a>
+      </td>
+    </tr>
+  </table>
+</div>
