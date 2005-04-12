@@ -28,7 +28,7 @@ Build statistics:
   Building machine hostname: $buildHost
 ****************************************************************************
 
-#if ( $buildResult.standardOutput )
+#if ( $buildResult.standardOutput && $buildResult.standardOutput != "" )
 ****************************************************************************
 Standard output:
 ****************************************************************************
@@ -38,7 +38,7 @@ $buildResult.standardOutput
 There was no content on standard output.
 #end
 
-#if( $buildResult.standardError )
+#if( $buildResult.standardError && $buildResult.standardError != "" )
 ****************************************************************************
 Standard error:
 ****************************************************************************
