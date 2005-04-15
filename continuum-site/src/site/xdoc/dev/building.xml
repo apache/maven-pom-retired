@@ -1,0 +1,60 @@
+<document>
+  <properties>
+    <title>Building Continuum</title>
+    <author email="trygvis@apache.org">Trygve Laugs&#248;l</author>
+  </properties>
+  <body>
+    <section name="Getting the sources">
+      <p>
+        To get the sources from the Subversion repository use this SVN url:
+        <source>http://svn.apache.org/repos/asf/maven/continuum/tags/alpha-1</source>
+      </p>
+      <p>
+        If you are using the <code>svn</code> command line Subversion client you can check out the sources with this
+        command:
+        <source>svn co http://svn.apache.org/repos/asf/maven/continuum/tags/alpha-1/ continuum</source>
+        All the Continuum Alpha 1 sources will be in a directory called <code>continuum</code>.
+      </p>
+      <p>
+        For more information on how to check out the sources see the information pages from Apache
+        <a href="http://apache.org/dev/version-control.html">here</a>.
+      </p>
+    </section>
+    <section name="Building Continuum">
+      <p>
+        <b>NOTE:</b> currently Continuum required Maven 2 alpha 1 to build.
+      </p>
+      <p>
+        Continuum consists of 6 Maven 2 projects:
+        <ul>
+          <li>
+            <i>continuum-model</i> is the object model that continuum uses.
+          </li>
+          <li>
+            <i>continuum-core</i> is Continuum's core. It contains all the code for checking out and building the
+            projects. It also contains the mail notifier and socket listeners.
+          </li>
+          <li>
+            <i>continuum-web</i> is the web interface for Continuum. It contains the form definitions used in the
+            web application and internationalization strings.
+          </li>
+          <li>
+            <i>continuum-xmlrpc</i> is the XML-RPC interface. It contains a single component that maps the XML-RPC
+            method calls to the core components.
+          </li>
+          <li>
+            <i>continuum-plexus-application</i> is a special project that mainly contains the configuration files for
+            Plexus when running Continuum as a Plexus application.
+          </li>
+          <li>
+            <i>continuum-core-it</i> is a integration tests written in Python. It uses the XML-RPC interface to
+            communicate with the Continuum instance.
+          </li>
+        </ul>
+        <!-- TODO: How to do this on windows? -->
+        The easiest way to build the entire Continuum project is to use the shell script from the root of the check out
+        like this: <source>$ sh build.sh</source>
+      </p>
+    </section>
+  </body>
+</document>

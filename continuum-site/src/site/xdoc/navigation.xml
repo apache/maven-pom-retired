@@ -16,5 +16,8 @@
       <item name="Getting Started" href="getting-started.html"/>
       <item name="Configuration" href="configuration.html"/>
     </menu>
+    <menu name="Developer's Guide">
+      <item name="Building" href="dev/building.html"/>
+    </menu>
   </body>
 </project>
