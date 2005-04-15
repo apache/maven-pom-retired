@@ -1,1 +1,1 @@
-m2 plexus:app plexus:bundle-application plexus:test-runtime
+m2 clean:clean plexus:app plexus:bundle-application plexus:test-runtime
