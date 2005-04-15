@@ -43,6 +43,14 @@
           </li>
         </ul>
       </subsection>
+      <subsection name="Asynchronous checkouts">
+        <p>
+          Currently all checkouts are done while the user presses the "add project" button which can take up to
+          several minutes to complete. Continuum need to do this in the background and show that the prjoect currently
+          are beeing checked out in the overview pages. For status updates on this issues take a look at the
+          <a href="http://jira.codehaus.org/browse/CONTINUUM-60">JIRA issue</a>.
+        </p>
+      </subsection>
     </section>
   </body>
 </document>

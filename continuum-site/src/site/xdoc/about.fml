@@ -10,7 +10,7 @@
           For more information on what continous integration is there are lots of articles on the internet:
           <ul>
             <li>Martin Fowler has a article called
-                <a href="http://www.martinfowler.com/articles/continuousIntegration.html">"Continuous Integration"</a>
+              <a href="http://www.martinfowler.com/articles/continuousIntegration.html">"Continuous Integration"</a>
             </li>
             <li>The C2 wiki has a page on
               <a href="http://c2.com/cgi/wiki?ContinuousIntegration">ContinuousIntegration</a>
@@ -27,8 +27,10 @@
         </p>
         <ul>
           <li>A easy to use web interface</li>
-          <li>A very easy way to add new projects, see the <a href="adding-projects.html">adding projects</a> page for
-              more information</li>
+          <li>A very easy way to add new projects, see the
+            <a href="getting-started.html#Adding_projects">adding projects</a> section page for
+              more information
+          </li>
           <li>A XML-RPC interface for automation and remoting</li>
           <li>Mail notification</li>
         </ul>
@@ -68,7 +70,8 @@
           join the project.
         </p>
         <p>
-          For more information, please see <a href="http://maven.apache.org/contributing/help.html">How to Help</a>.
+          For more information, please see
+          <a href="http://maven.apache.org/contributing/help.html">How to Help</a>.
         </p>
       </answer>
     </faq>

@@ -14,5 +14,64 @@
         <a href="http://localhost:8080">http://localhost:8080</a> or by using the XML-RPC interface on port 8000.
       </p>
     </section>
+    <section name="Adding Projects to Continuum">
+      <p>
+        When adding projects note that Continuum will check out the projects directly after you press the button and
+        will not return untill after the projects has been checked out either successfully or not. This is a known
+        issue with Continuum and asynchronous checkouts are
+        <a href="planned-features.html#Asynchronous_checkouts">planned</a>.
+      </p>
+      <subsection name="Adding Maven2 Projects">
+        <p>
+          When adding a Maven 2 project all you need is the URL to a POM. The POM has to include at least the SCM
+          information to be able to check out the project.
+        </p>
+      </subsection>
+      <subsection name="Adding Maven1 Projects">
+        <p>
+          Adding a Maven 1 it pretty much like adding a Maven 2 project, give it a URL to a POM with SCM information
+          and Continuum will add the projects.
+        </p>
+        <p>
+          There are is a caveat though: The POM cannot extend a parent POM. When Continuum is downloading the POM it
+          won't know how to find the parent POMs. The best way to use Continuum with Maven 1 projects is to
+          give Continuum the root POM of your projects only and then have a special goal in the root projects
+          <code>maven.xml</code> to build all of the projects. This is something that hopefully will be remedied in
+          Maven 1.1.
+        </p>
+      </subsection>
+      <subsection name="Adding Ant Projects">
+        <p>
+          When adding Ant projects you have to specify the projects name, scm url, nag email address and version and
+          the targets to execute.
+        </p>
+      </subsection>
+      <subsection name="Adding Shell Projects">
+        <p>
+          When adding Ant projects you have to specify the projects name, scm url, nag email address and version and
+          the shell script to execute. The working directory of the project will be prepended to the scripts path.
+        </p>
+      </subsection>
+    </section>
+    <section name="Building Projects">
+      <subsection name="Using the Web Interface">
+        <p>
+          To build a project with the web interface from the project list, simply press the "build" button and the
+          project will be enqueued on the build list. If Continuum isn't already building a project it will start the
+          build immediately.
+        </p>
+      </subsection>
+      <subsection name="Using the XML-RPC Interface">
+        <p>
+          By using the <code>continuum_cli.py</code> Python script you can remotely controll Continuum. Start the
+          script by executing <source>python continuum_cli.py</source> and write <code>help</code> to list all
+          available commands.
+        </p>
+        <p>
+          There is also a reusable Python library called <code>continuum.py</code> that can be used to integrate
+          remote control over Continuum into other Python applications.
+        </p>
+      </subsection>
+    </section>
   </body>
 </document>
