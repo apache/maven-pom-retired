@@ -1,7 +1,8 @@
 <form>
   <extend>continuumProject</extend>
   <id>shellProject</id>
-  <target-class>org.apache.maven.continuum.project.ShellProject</target-class>  
+  <target-class>org.apache.maven.continuum.project.ShellProject</target-class>
+  <lookup-expression>getShellProject(#id)</lookup-expression>    
   <elements>
     <element>
       <id>project.executable</id>

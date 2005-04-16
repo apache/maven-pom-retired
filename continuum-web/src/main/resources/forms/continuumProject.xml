@@ -1,7 +1,6 @@
 <form>
   <id>continuumProject</id>
   <key-expression>id</key-expression>
-  <lookup-expression>getAntProject(#id)</lookup-expression>
   <summary-collection-expression>getProjects()</summary-collection-expression>
   <source-role>org.apache.maven.continuum.Continuum</source-role>
   <type-expression>builderId</type-expression>

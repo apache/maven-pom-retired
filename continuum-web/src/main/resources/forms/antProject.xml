@@ -2,6 +2,7 @@
   <extend>shellProject</extend>
   <id>antProject</id>
   <target-class>org.apache.maven.continuum.project.AntProject</target-class>
+  <lookup-expression>getAntProject(#id)</lookup-expression>
   <elements>
     <element>
       <id>project.targets</id>

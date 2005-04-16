@@ -1,5 +1,7 @@
 <form>
   <id>mavenOneProject</id>
+  <target-class>org.apache.maven.continuum.project.MavenOneProject</target-class>
+  <lookup-expression>getMavenOneProject(#id)</lookup-expression>
   <elements>
     <element>
       <id>project.pomUrl</id>
