@@ -74,8 +74,8 @@
         </requirement>
       </requirements>
       <configuration>
-        <fromMailbox>@mail.override.from.mailbox@</fromMailbox>
-        <fromName>@mail.override.from.name@</fromName>
+        <fromMailbox></fromMailbox>
+        <fromName></fromName>
         <timestampFormat>EEE, d MMM yyyy HH:mm:ss Z</timestampFormat>
       </configuration>
     </component>
@@ -89,7 +89,7 @@
         this address instead the address specified in the project
         configuration
         -->
-        <toOverride>@mail.override.to.address@</toOverride>
+        <toOverride></toOverride>
       </configuration>
     </component>
 
@@ -125,36 +125,6 @@
         | The default value is one hour.
         |-->
         <delay>3600</delay>
-      </configuration>
-    </component>
-
-    <!--
-    | The servlet container
-    |-->
-    <component>
-      <role>org.codehaus.plexus.jetty.ServletContainer</role>
-      <implementation>org.codehaus.plexus.jetty.JettyServletContainer</implementation>
-      <configuration>
-        <socket-listeners>
-          <!--
-          | <host>: The hostname of the IP address to listen to. Use '*' for listening on all interfaces.
-          | <port>: The port to listen on.
-          |-->
-          <socket-listener>
-            <host>*</host>
-            <port>8000</port>
-          </socket-listener>
-        </socket-listeners>
-        <proxy-listeners>
-          <proxy-listener>
-            <host>localhost</host>
-            <port>8017</port>
-            <proxy-host>continuum.codehaus.org</proxy-host>
-            <proxy-port>80</proxy-port>
-          </proxy-listener>
-        </proxy-listeners>
-        <webapps-directory>${plexus.home}/apps/continuumweb/web</webapps-directory>
-        <extract-wars>true</extract-wars>
       </configuration>
     </component>
 
