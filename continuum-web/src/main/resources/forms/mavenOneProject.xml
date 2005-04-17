@@ -10,12 +10,25 @@
       <message-key>project.pomUrl.message</message-key>
       <label-key>project.pomUrl.label</label-key>
       <error-message-key>project.pomUrl.error</error-message-key>
+      <immutable>true</immutable>
       <type>text</type>
     </element>
   </elements>
+
+  <!-- Add -->
   <add>
-    <title-key>project.title</title-key>
-    <action>addMavenOneProject</action>
-    <view>projectOverview.vm</view>
+    <title-key>project.title.add</title-key>
+    <action>addEntity</action>
+    <view>continuumProject.form?mode=summary</view>
+    <expression>addMavenOneProject(#entity)</expression>
   </add>
+
+  <!-- Update -->
+  <update>
+    <title-key>project.title.update</title-key>
+    <action>updateEntity</action>
+    <view>continuumProject.form?mode=summary</view>
+    <expression>updateMavenOneProject(#entity)</expression>
+  </update>
+
 </form>

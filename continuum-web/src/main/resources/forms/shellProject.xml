@@ -14,4 +14,21 @@
       <type>text</type>
     </element>
   </elements>
+
+  <!-- Add -->
+  <add>
+    <title-key>project.title.add</title-key>
+    <action>addEntity</action>
+    <view>continuumProject.form?mode=summary</view>
+    <expression>addShellProject(#entity)</expression>
+  </add>
+
+  <!-- Update -->
+  <update>
+    <title-key>project.title.update</title-key>
+    <action>updateEntity</action>
+    <view>continuumProject.form?mode=summary</view>
+    <expression>updateShellProject(#entity)</expression>
+  </update>
+
 </form>

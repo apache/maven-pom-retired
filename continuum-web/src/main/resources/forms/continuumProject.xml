@@ -66,26 +66,12 @@
     </element>
   </elements>
 
-  <!-- Add -->
-  <add>
-    <title-key>project.title.add</title-key>
-    <action>addEntity</action>
-    <view>continuumProject.form?mode=summary</view>
-    <expression>addAntProject(#entity)</expression>
-  </add>
-
-  <!-- Update -->
-  <update>
-    <title-key>project.title.update</title-key>
-    <action>updateEntity</action>
-    <view>continuumProject.form?mode=summary</view>
-  </update>
-
   <!-- View -->
   <view>
     <title-key>project.title</title-key>
   </view>
 
+  <!-- Delete -->
   <delete>
     <title-key>project.title.delete</title-key>
     <view>continuumProject.form?mode=summary</view>
