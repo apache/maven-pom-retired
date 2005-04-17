@@ -258,11 +258,8 @@
         </requirement>
       </requirements>
       <configuration>
-        <!--
-        <forms-directory>${plexus.home}/apps/continuumweb/forms</forms-directory>
-        -->
         <forms>
-          <directory-configuration-resource source="${plexus.home}/webapp/forms"/>
+          <directory-configuration-resource source="@forms.directory@"/>
         </forms>
       </configuration>
     </component>
