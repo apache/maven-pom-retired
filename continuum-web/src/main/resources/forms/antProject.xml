@@ -7,9 +7,6 @@
     <element>
       <id>project.targets</id>
       <validator>required</validator>
-      <message-key>project.targets.message</message-key>
-      <label-key>project.targets.label</label-key>
-      <error-message-key>project.targets.error</error-message-key>
       <expression>targets</expression>
       <type>text</type>
     </element>

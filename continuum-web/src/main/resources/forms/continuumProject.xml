@@ -8,45 +8,30 @@
     <element>
       <id>project.name</id>
       <validator>required</validator>
-      <message-key>project.name.message</message-key>
-      <label-key>project.name.label</label-key>
-      <error-message-key>project.name.error</error-message-key>
       <type>text</type>
       <expression>name</expression>
     </element>
     <element>
       <id>project.scmUrl</id>
       <validator>required</validator>
-      <message-key>project.scmUrl.message</message-key>
-      <label-key>project.scmUrl.label</label-key>
-      <error-message-key>project.scmUrl.error</error-message-key>
       <type>text</type>
       <expression>scmUrl</expression>
     </element>
     <element>
       <id>project.nagEmailAddress</id>
       <validator>required</validator>
-      <message-key>project.nagEmailAddress.message</message-key>
-      <label-key>project.nagEmailAddress.label</label-key>
-      <error-message-key>project.nagEmailAddress.error</error-message-key>
       <type>text</type>
       <expression>nagEmailAddress</expression>
     </element>
     <element>
       <id>project.version</id>
       <validator>required</validator>
-      <message-key>project.version.message</message-key>
-      <label-key>project.version.label</label-key>
-      <error-message-key>project.version.error</error-message-key>
       <type>text</type>
       <expression>version</expression>
     </element>
     <element>
       <id>project.type</id>
       <validator>default</validator>
-      <message-key>project.type.message</message-key>
-      <label-key>project.type.label</label-key>
-      <error-message-key>project.type.error</error-message-key>
       <type>text</type>
       <expression>builderId</expression>
       <immutable>true</immutable>
