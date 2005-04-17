@@ -1,5 +1,6 @@
 <form>
-  <id>mavenTwoProject</id>
+  <extend>continuumProject</extend>  
+  <id>maven2Project</id>
   <target-class>org.apache.maven.continuum.project.MavenTwoProject</target-class>
   <lookup-expression>getMavenTwoProject(#id)</lookup-expression>
   <elements>
