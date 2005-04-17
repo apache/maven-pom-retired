@@ -99,6 +99,7 @@
     <summary-elements>
       <summary-element>
         <id>project.state</id>
+        <content-generator>continuum-state</content-generator>
       </summary-element>
       <summary-element>
         <id>project.name</id>

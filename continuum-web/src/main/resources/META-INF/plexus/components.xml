@@ -183,5 +183,17 @@
       </requirements>
     </component>
 
+    <!--
+     |
+     | Content Generators
+     |
+     |-->
+
+    <component>
+      <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
+      <role-hint>continuum-state</role-hint>
+      <implementation>org.codehaus.continuum.web.tool.ContinuumStateContentGenerator</implementation>
+    </component>
+
   </components>
 </component-set>
