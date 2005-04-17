@@ -41,12 +41,6 @@
       <type>text</type>
       <expression>version</expression>
     </element>
-    <!--
-    TODO:
-    This shouldn't be displayed for adding and updating but we want it in the summary view,
-    Need to hide it in the data entry pages. Could either hide in one place or allow summary
-    elements to be listed directly in the summary description.
-    -->
     <element>
       <id>project.type</id>
       <validator>default</validator>
