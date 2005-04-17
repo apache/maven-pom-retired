@@ -21,7 +21,7 @@
 
   <resources>
     <jar-repository>${plexus.home}/lib</jar-repository>
-    <directory>${plexus.home}/webapp/localization</directory>
+    <directory>@localization.directory@</directory>
   </resources>
 
   <services>
@@ -215,7 +215,7 @@
           </property>
           <property>
             <name>file.resource.loader.path</name>
-            <value>${plexus.home}/webapp/templates</value>
+            <value>@velocity.templates.directory@</value>
           </property>
           <property>
             <name>threadContext.resource.loader.class</name>
