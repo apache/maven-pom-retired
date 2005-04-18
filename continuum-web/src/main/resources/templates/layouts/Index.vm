@@ -32,7 +32,9 @@
     </td>
     <td valign="middle" style="vertical-align: middle">
       <a href="http://www.codehaus.org/">
+        <!--
         <img src="$data.getLink("images/codehaus-small.png")" align="right" alt="Codehaus" border="0" />
+        -->
        </a>
     </td>
    </tr>
@@ -41,8 +43,8 @@
 
  <div id="breadcrumbs">
   <div align="right">
-   <a href="http://www.codehaus.org/">Codehaus</a> |
-   <a href="http://maven.apache.org/">Maven</a>
+    <a href="http://maven.apache.org/">Maven</a>
+   <a href="http://www.apache.org/">Apache</a> |
   </div>
  </div>
 

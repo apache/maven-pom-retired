@@ -14,7 +14,9 @@
       <configuration>
         <valves>
           <valve>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextValve</valve>
+          <!--
           <valve>org.apache.maven.continuum.web.pipeline.valve.LoginValve</valve>
+          -->
           <valve>org.codehaus.plexus.action.web.ActionValve</valve>
           <valve>org.codehaus.plexus.summit.pipeline.valve.DetermineTargetValve</valve>
           <valve>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextPopulatorValve</valve>
