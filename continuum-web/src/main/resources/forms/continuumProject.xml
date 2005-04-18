@@ -42,6 +42,7 @@
       <type>text</type>
       <expression>state</expression>
       <immutable>true</immutable>
+      <content-generator>continuum-state</content-generator>
     </element>
   </elements>
 
@@ -64,7 +65,6 @@
     <summary-elements>
       <summary-element>
         <id>project.state</id>
-        <content-generator>continuum-state</content-generator>
       </summary-element>
       <summary-element>
         <id>project.name</id>
