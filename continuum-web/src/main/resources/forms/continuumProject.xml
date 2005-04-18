@@ -69,11 +69,17 @@
       <summary-element>
         <id>project.name</id>
       </summary-element>
+      <!--
       <summary-element>
         <id>project.type</id>
       </summary-element>
+      -->
     </summary-elements>
     <operations>
+      <operation>
+        <name>Builds</name>
+        <action>target/ProjectBuilds.vm?view=ProjectBuilds&amp;id=$id$</action>
+      </operation>
       <operation>
         <name>View</name>
         <action>target/$type$Project.form?mode=view&amp;id=$id$</action>

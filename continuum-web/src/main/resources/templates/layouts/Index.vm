@@ -43,8 +43,8 @@
 
  <div id="breadcrumbs">
   <div align="right">
-    <a href="http://maven.apache.org/">Maven</a>
-   <a href="http://www.apache.org/">Apache</a> |
+    <a href="http://maven.apache.org/">Maven</a> |
+    <a href="http://www.apache.org/">Apache</a>
   </div>
  </div>
 

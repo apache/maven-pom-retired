@@ -1,6 +1,3 @@
-## Input
-##  $project ContinuumProject
-##  $builds List of BuildResults
 <div class="app">
   <h3>Build results for $project.name</h3>
   <p>
@@ -17,6 +14,7 @@
         <td>$build.startTime</td>
         <td>$build.endTime</td>
         <td>$build.state</td>
+        <td><a href=""></a></td>
       </tr>
       #if ( $class == "a" )
         #set ( $class = "b" )

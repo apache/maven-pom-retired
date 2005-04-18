@@ -3,6 +3,24 @@
 
     <!--
      |
+     | Summit configuration
+     |
+     -->
+    <component>
+      <role>org.codehaus.plexus.summit.resolver.Resolver</role>
+      <role-hint>new</role-hint>
+      <implementation>org.codehaus.plexus.summit.resolver.NewResolver</implementation>
+      <configuration>
+        <default-view>Index.vm</default-view>
+        <!--
+        <default-view>continuumProject.form</default-view>
+        -->
+        <error-view>Error.vm</error-view>
+      </configuration>
+    </component>
+
+    <!--
+     |
      | System components
      |
      |-->
@@ -76,11 +94,11 @@
       <configuration>
         <views>
           <view>
-            <id>projectOverview</id>
+            <id>ProjectBuilds</id>
             <scalars>
               <scalar>
-                <id>projects</id>
-                <expression>getProjects()</expression>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
               </scalar>
             </scalars>
           </view>
@@ -94,24 +112,6 @@
               <scalar>
                 <id>latestBuild</id>
                 <expression>getLatestBuildForProject(#id)</expression>
-              </scalar>
-            </scalars>
-          </view>
-          <view>
-            <id>editProject</id>
-            <scalars>
-              <scalar>
-                <id>project</id>
-                <expression>getProject(#id)</expression>
-              </scalar>
-            </scalars>
-          </view>
-          <view>
-            <id>confirmRemoveProject</id>
-            <scalars>
-              <scalar>
-                <id>project</id>
-                <expression>getProject(#id)</expression>
               </scalar>
             </scalars>
           </view>
