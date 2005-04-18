@@ -45,7 +45,6 @@
  <table border="0" cellspacing="0" cellpadding="4" width="100%" id="main">
   <tr valign="top">
    <td id="leftcol" width="20%">
-    ##parse("navigations/Menu.vm")
    </td>
    <td>
     <div id="bodycol">

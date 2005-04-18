@@ -16,6 +16,8 @@ public class ContinuumStateContentGenerator
 
         int state = p.getState();
 
+        System.out.println( "state = " + state );
+
         if ( state == 1 )
         {
             return "New";

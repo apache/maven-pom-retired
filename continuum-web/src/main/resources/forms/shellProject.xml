@@ -7,12 +7,17 @@
     <element>
       <id>project.executable</id>
       <validator>required</validator>
-      <message-key>project.executable.message</message-key>
-      <label-key>project.executable.label</label-key>
-      <error-message-key>project.executable.error</error-message-key>
       <expression>executable</expression>
       <type>text</type>
     </element>
+    <!--
+    <element>
+      <id>project.arguments</id>
+      <validator>default</validator>
+      <expression>arguments</expression>
+      <type>text</type>
+    </element>
+    -->
   </elements>
 
   <!-- Add -->

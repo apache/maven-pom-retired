@@ -9,8 +9,8 @@
  <div id="projecttools" class="toolgroup">
   <div class="label">Add Project</div>
   <div class="body">
-    <div><a href="$link.setPage('mavenTwoProject.form')">M2 Project</a></div>
-    <div><a href="$link.setPage('mavenOneProject.form')">M1 Project</a></div>
+    <div><a href="$link.setPage('addMavenTwoProject.form')">M2 Project</a></div>
+    <div><a href="$link.setPage('addMavenOneProject.form')">M1 Project</a></div>
     <div><a href="$link.setPage('antProject.form')">Ant Project</a></div>
     <div><a href="$link.setPage('shellProject.form')">Shell Project</a></div>
   </div>

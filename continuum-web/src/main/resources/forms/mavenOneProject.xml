@@ -5,12 +5,6 @@
   <lookup-expression>getMavenOneProject(#id)</lookup-expression>
   <elements>
     <element>
-      <id>project.pomUrl</id>
-      <validator>default</validator>
-      <expression>scmUrl</expression>
-      <type>text</type>
-    </element>
-    <element>
       <id>project.goals</id>
       <validator>default</validator>
       <expression>goals</expression>
