@@ -1,6 +1,7 @@
+<META HTTP-EQUIV=REFRESH CONTENT="1; URL=$link.setPage('continuumProject.form').addQueryData('mode','summary')">
+
+<!--
 <div class="app">
   <h3>Welcome to Continuum!</h3>
-  <p>
-    Please visit the <a href="http://continuum.codehaus.org">continuum site</a> for more information.
-  </p>
 </div>
+-->
