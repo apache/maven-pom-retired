@@ -472,7 +472,11 @@ public class DefaultContinuum
     {
         updateProject( project );
 
-        updateProjectConfiguration( project.getId(), project.getConfiguration() );
+        Properties configuration = new Properties();
+
+        configuration.setProperty( Maven1Builder.CONFIGURATION_GOALS, project.getGoals() );
+
+        updateProjectConfiguration( project.getId(), configuration );
     }
 
     public void addMavenTwoProject( MavenTwoProject project )
@@ -509,7 +513,11 @@ public class DefaultContinuum
     {
         updateProject( project );
 
-        updateProjectConfiguration( project.getId(), project.getConfiguration() );
+        Properties configuration = new Properties();
+
+        configuration.setProperty( MavenShellBuilder.CONFIGURATION_GOALS, project.getGoals() );
+        
+        updateProjectConfiguration( project.getId(), configuration );
     }
 
     public void addShellProject( ShellProject project )
