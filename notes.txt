@@ -1,0 +1,57 @@
+Get these into JIRA
+
+o deploy/release all components i've modified
+  - plexus-i18n
+  - plexus-action
+  - plexus-formica
+  - plexus-formica-web
+  - plexus-summit
+  
+o move the configuration of summit into the webapp components.xml so that I 
+  can control the default view and error page better
+  
+o trigger the build from the summary
+
+o fix the layout selection so that the menu doesn't show up in the login
+
+o hookup scm validator
+
+o stackable validators
+
+o for complex validations like the scm validator we may want a better error
+  out put mechanism. or at least make the error output configurable because
+  lots of things could be wrong. need to return a i18n key for the given 
+  error message. this is the only way that you can get a meaningful message
+  back from validation. One per validator doesn't cut it.
+  
+o need to check if a project already exists
+
+o properties files for localization are horrible in order to easily
+  make language packs we need a tool to help show the keys for the target
+  language that need values.
+
+o check out the release documentation, it would be good to tell users what
+  they need to be installed in order to use the various builders
+
+x i18n the delete message
+x test update
+x need the content generator to be used in the view
+x separate add form for m1/m2 from the display and update
+  the add form should have the POM and goals/phase
+x formica needs to be able to call methods with parameters instead of using
+  a target object
+
+      add  / update / view / delete
+-----------------------------------
+m1    ok     ok       ok     ok
+-----------------------------------
+m2    ok     ok       ok     ok
+-----------------------------------
+ant   ok     ok       ok     ok
+-----------------------------------
+shell ok     ok       ok     ok
+-----------------------------------
+
+NOTE: delete only works when projects are added via the
+web interface. projects added to the continuum via xmlrpc
+can't be deleted.
