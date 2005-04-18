@@ -513,7 +513,7 @@ public class DefaultContinuum
         }
 
         addProjectFromScm( project.getScmUrl(),
-                           "maven2",
+                           "shell",
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
