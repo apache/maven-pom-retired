@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -134,6 +135,23 @@ public class DefaultContinuum
     // setup the project
     // -> check out from scm
     // -> update the project metadata
+
+    public String addProjectFromUrl( String url, String builderType )
+        throws ContinuumException
+    {
+        URL u;
+
+        try
+        {
+            u = new URL( url );
+        }
+        catch ( MalformedURLException e )
+        {
+            throw new ContinuumException( "Invalid URL", e );
+        }
+
+        return addProjectFromUrl( u, builderType );
+    }
 
     public String addProjectFromUrl( URL url, String builderType )
         throws ContinuumException
@@ -489,7 +507,10 @@ public class DefaultContinuum
 
         configuration.setProperty( ShellBuilder.CONFIGURATION_EXECUTABLE, project.getExecutable() );
 
-        configuration.setProperty( ShellBuilder.CONFIGURATION_ARGUMENTS, project.getArguments() );
+        if ( project.getArguments() != null )
+        {
+            configuration.setProperty( ShellBuilder.CONFIGURATION_ARGUMENTS, project.getArguments() );
+        }
 
         addProjectFromScm( project.getScmUrl(),
                            "maven2",
