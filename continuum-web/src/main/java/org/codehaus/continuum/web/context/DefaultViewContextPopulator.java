@@ -40,8 +40,6 @@ public class DefaultViewContextPopulator
 
     public Map getScalars( String viewId, Object model, Map parameters )
     {
-        System.out.println( "viewMap.size() = " + viewMap.size() );
-
         View view = (View) viewMap.get( viewId );
 
         Map contextScalars = new HashMap();
@@ -57,8 +55,6 @@ public class DefaultViewContextPopulator
                     Object value = Ognl.getValue( scalar.getExpression(), parameters, model );
 
                     contextScalars.put( scalar.getId(), value );
-
-                    System.out.println( scalar + " = " + value );
                 }
                 catch ( OgnlException e )
                 {
@@ -86,8 +82,6 @@ public class DefaultViewContextPopulator
         for ( Iterator i = views.iterator(); i.hasNext(); )
         {
             View view = (View) i.next();
-
-            System.out.println( "view.getId() = " + view.getId() );
 
             viewMap.put( view.getId(), view );
         }
