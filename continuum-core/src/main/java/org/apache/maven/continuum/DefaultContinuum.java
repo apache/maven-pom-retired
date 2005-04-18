@@ -553,7 +553,16 @@ public class DefaultContinuum
     {
         updateProject( project );
 
-        updateProjectConfiguration( project.getId(), project.getConfiguration() );
+        Properties configuration = new Properties();
+
+        configuration.setProperty( ShellBuilder.CONFIGURATION_EXECUTABLE, project.getExecutable() );
+
+        if ( project.getArguments() != null )
+        {
+            configuration.setProperty( ShellBuilder.CONFIGURATION_ARGUMENTS, project.getArguments() );
+        }
+
+        updateProjectConfiguration( project.getId(), configuration );
     }
 
     private void updateProject( ContinuumProject project )
