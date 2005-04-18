@@ -6,7 +6,7 @@
   <elements>
     <element>
       <id>project.phase</id>
-      <validator>default</validator>
+      <validator>required</validator>
       <expression>goals</expression>
       <type>text</type>
     </element>
