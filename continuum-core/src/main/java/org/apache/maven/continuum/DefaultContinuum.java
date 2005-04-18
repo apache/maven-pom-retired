@@ -423,7 +423,19 @@ public class DefaultContinuum
     {
         updateProject( project );
 
-        updateProjectConfiguration( project.getId(), project.getConfiguration() );
+        // ----------------------------------------------------------------------
+        // The configuration will be null here because the "executable" and
+        // "targets" fields in the AntProject are used to create the
+        // configuration. We probably don't even need the configuration.
+        // ----------------------------------------------------------------------
+
+        Properties configuration = new Properties();
+
+        configuration.setProperty( AntBuilder.CONFIGURATION_EXECUTABLE, project.getExecutable() );
+
+        configuration.setProperty( AntBuilder.CONFIGURATION_TARGETS, project.getTargets() );
+
+        updateProjectConfiguration( project.getId(), configuration );
     }
 
     public void addMavenOneProject( MavenOneProject project )
