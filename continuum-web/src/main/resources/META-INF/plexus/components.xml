@@ -168,6 +168,21 @@
       <implementation>org.apache.maven.continuum.web.action.Login</implementation>
     </component>
 
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>cam</role-hint>
+      <implementation>org.codehaus.continuum.web.action.CallApplicationModel</implementation>
+      <configuration>
+        <application-role>org.apache.maven.continuum.Continuum</application-role>
+        <calls>
+          <call>
+            <cid>buildProject</cid>
+            <expression>buildProject(#id)</expression>
+          </call>
+        </calls>
+      </configuration>
+    </component>
+
     <!--
      |
      | Validators

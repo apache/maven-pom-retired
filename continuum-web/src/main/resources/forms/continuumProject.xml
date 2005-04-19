@@ -60,6 +60,9 @@
   </delete>
 
   <!-- Summary -->
+
+  <!-- TODO: the headings here need to be i18n -->
+
   <summary>
     <title-key>title.key</title-key>
     <summary-elements>
@@ -69,13 +72,12 @@
       <summary-element>
         <id>project.name</id>
       </summary-element>
-      <!--
-      <summary-element>
-        <id>project.type</id>
-      </summary-element>
-      -->
     </summary-elements>
     <operations>
+      <operation>
+        <name>Build</name>
+        <action>target/continuumProject.form?mode=summary&amp;action=cam&amp;cid=buildProject&amp;id=$id$</action>
+      </operation>
       <operation>
         <name>Builds</name>
         <action>target/ProjectBuilds.vm?view=ProjectBuilds&amp;id=$id$</action>
@@ -85,7 +87,7 @@
         <action>target/$type$Project.form?mode=view&amp;id=$id$</action>
       </operation>
       <operation>
-        <name>Details</name>
+        <name>Edit</name>
         <action>target/$type$Project.form?mode=update&amp;id=$id$</action>
       </operation>
       <operation>
