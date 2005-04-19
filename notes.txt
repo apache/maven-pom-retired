@@ -5,34 +5,15 @@ o deploy/release all components i've modified
   - plexus-action
   - plexus-formica
   - plexus-formica-web
-  - plexus-summit
-  
-o move the configuration of summit into the webapp components.xml so that I 
-  can control the default view and error page better
-  
-o trigger the build from the summary
+  - plexus-summit  
 
-o fix the layout selection so that the menu doesn't show up in the login
-
-o hookup scm validator
-
-o stackable validators
-
-o for complex validations like the scm validator we may want a better error
-  out put mechanism. or at least make the error output configurable because
-  lots of things could be wrong. need to return a i18n key for the given 
-  error message. this is the only way that you can get a meaningful message
-  back from validation. One per validator doesn't cut it.
-  
 o need to check if a project already exists
-
-o properties files for localization are horrible in order to easily
-  make language packs we need a tool to help show the keys for the target
-  language that need values.
 
 o check out the release documentation, it would be good to tell users what
   they need to be installed in order to use the various builders
 
+x hookup scm validator
+x trigger the build from the summary
 x i18n the delete message
 x test update
 x need the content generator to be used in the view
@@ -55,3 +36,31 @@ shell ok     ok       ok     ok
 NOTE: delete only works when projects are added via the
 web interface. projects added to the continuum via xmlrpc
 can't be deleted.
+
+---
+
+alpha-2
+
+o fix the layout selection so that the menu doesn't show up in the login
+
+o need a way in summit to map an url to a page + any parameters required:
+  i want to set the default page to continuumProject.form?mode=summary, but
+  you can't set a target with parameters.
+
+o properties files for localization are horrible in order to easily
+  make language packs we need a tool to help show the keys for the target
+  language that need values.
+
+o move the configuration of summit into the webapp components.xml so that I 
+  can control the default view and error page better
+  
+o stackable validators
+
+o for complex validations like the scm validator we may want a better error
+  out put mechanism. or at least make the error output configurable because
+  lots of things could be wrong. need to return a i18n key for the given 
+  error message. this is the only way that you can get a meaningful message
+  back from validation. One per validator doesn't cut it.
+
+o need to make a paging mechanism, things like the number of builds adds
+  up pretty quickly.
