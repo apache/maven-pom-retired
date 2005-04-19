@@ -9,7 +9,7 @@
         <th>State</th>
         <th></th>
       </tr>
-      #foreach ( $build in $project.builds )
+      #foreach ( $build in $builds )
       <tr class="$class">
         <td>$build.startTime</td>
         <td>$build.endTime</td>

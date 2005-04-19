@@ -3,22 +3,12 @@
   <p>
     <table border="1" cellspacing="2" cellpadding="3">
       <tr class="a">
-        <td>Start Time</td>
+        <th>Start Time</th>
         <td>$build.startTime</td>
       </tr>
       <tr class="b">
-        <td>End Time</td>
+        <th>End Time</th>
         <td>$build.endTime</td>
-      </tr>
-      <tr class="a">
-        <td>State</td>
-        <td>$build.state</td>
-      </tr>
-      <tr class="a">
-        <td colspan="2">
-          <a href="$link.addQueryData( "action", "showProject" ).addQueryData( "id", "$project.id" ).setPage('projectDetails.vm')">Project Details</a> |
-          <a href="$link.addQueryData( "action", "showProjectBuilds" ).addQueryData( "id", "$project.id" ).setPage('projectBuilds.vm')">Builds</a>
-        </td>
       </tr>
     </table>
   </p>
