@@ -88,6 +88,13 @@ public interface Continuum
         throws ContinuumStoreException;
 
     // ----------------------------------------------------------------------
+    // Build information
+    // ----------------------------------------------------------------------
+
+    ContinuumBuild getBuild( String buildId )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
     // Different project types
     // ----------------------------------------------------------------------
 

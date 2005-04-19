@@ -197,7 +197,7 @@ public class DefaultContinuum
 
     public String addProjectFromScm( String scmUrl,
                                      String builderType,
-                                     String projectName, 
+                                     String projectName,
                                      String nagEmailAddress,
                                      String version,
                                      Properties configuration )
@@ -382,6 +382,23 @@ public class DefaultContinuum
             getLogger().error( "Error while enqueuing project.", e );
 
             throw new ContinuumException( "Error while creating enqueuing object.", e );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Build inforation
+    // ----------------------------------------------------------------------
+
+    public ContinuumBuild getBuild( String buildId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getBuild( buildId );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Unable to retrieve build with id = " + buildId, e );
         }
     }
 
