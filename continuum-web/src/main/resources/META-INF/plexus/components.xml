@@ -100,6 +100,10 @@
                 <id>project</id>
                 <expression>getProject(#id)</expression>
               </scalar>
+              <scalar>
+                <id>builds</id>
+                <expression>getBuildsForProject(#id)</expression>
+              </scalar>
             </scalars>
           </view>
           <view>
@@ -107,11 +111,11 @@
             <scalars>
               <scalar>
                 <id>build</id>
-                <expression>getProject(#id)</expression>
+                <expression>getBuild(#buildId)</expression>
               </scalar>
               <scalar>
-                <id>latestBuild</id>
-                <expression>getLatestBuildForProject(#id)</expression>
+                <id>project</id>
+                <expression>getProject(#projectId)</expression>
               </scalar>
             </scalars>
           </view>

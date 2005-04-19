@@ -14,7 +14,7 @@
         <td>$build.startTime</td>
         <td>$build.endTime</td>
         <td>$build.state</td>
-        <td><a href="$link.setPage('ProjectBuild.vm').addQueryData('id',$build.id)">Result</a></td>
+        <td><a href="$link.setPage('ProjectBuild.vm').addQueryData('view','ProjectBuild').addQueryData('buildId',$build.id).addQueryData('projectId',$project.id)">Result</a></td>
       </tr>
       #if ( $class == "a" )
         #set ( $class = "b" )
