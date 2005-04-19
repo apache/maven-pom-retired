@@ -64,3 +64,9 @@ o for complex validations like the scm validator we may want a better error
 
 o need to make a paging mechanism, things like the number of builds adds
   up pretty quickly.
+
+o start/stop scripts and supervise integration
+
+o debug mode that spits out sample urls to use for testing
+
+o whip up some quick tests using maxq
