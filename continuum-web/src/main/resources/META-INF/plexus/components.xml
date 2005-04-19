@@ -103,10 +103,10 @@
             </scalars>
           </view>
           <view>
-            <id>projectDetails</id>
+            <id>ProjectBuild</id>
             <scalars>
               <scalar>
-                <id>project</id>
+                <id>build</id>
                 <expression>getProject(#id)</expression>
               </scalar>
               <scalar>

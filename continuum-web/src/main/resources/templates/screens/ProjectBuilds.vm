@@ -7,14 +7,14 @@
         <th>Start Time</th>
         <th>End Time</th>
         <th>State</th>
-        <th>Output</th>
+        <th></th>
       </tr>
-      #foreach ( $build in $builds )
+      #foreach ( $build in $project.builds )
       <tr class="$class">
         <td>$build.startTime</td>
         <td>$build.endTime</td>
         <td>$build.state</td>
-        <td><a href=""></a></td>
+        <td><a href="$link.setPage('ProjectBuild.vm').addQueryData('id',$build.id)">Result</a></td>
       </tr>
       #if ( $class == "a" )
         #set ( $class = "b" )

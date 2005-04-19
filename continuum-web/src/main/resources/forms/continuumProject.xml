@@ -13,7 +13,7 @@
     </element>
     <element>
       <id>project.scmUrl</id>
-      <validator>required</validator>
+      <validator>scm-url</validator>
       <type>text</type>
       <expression>scmUrl</expression>
     </element>
@@ -79,7 +79,7 @@
         <action>target/continuumProject.form?mode=summary&amp;action=cam&amp;cid=buildProject&amp;id=$id$</action>
       </operation>
       <operation>
-        <name>Builds</name>
+        <name>Results</name>
         <action>target/ProjectBuilds.vm?view=ProjectBuilds&amp;id=$id$</action>
       </operation>
       <operation>
