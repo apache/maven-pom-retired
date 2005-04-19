@@ -67,6 +67,11 @@
             <scope>request</scope>
           </tool>
           <tool>
+            <name>date</name>
+            <role>datetool</role>
+            <scope>global</scope>
+          </tool>
+          <tool>
             <name>i18n</name>
             <role>org.codehaus.plexus.i18n.I18N</role>
             <scope>global</scope>
@@ -76,8 +81,14 @@
     </component>
 
     <component>
+      <role>datetool</role>
+      <implementation>org.codehaus.continuum.web.tool.DateTool</implementation>
+      <configuration/>
+    </component>
+
+    <component>
       <role>csstool</role>
-      <implementation>org.apache.maven.continuum.web.tool.CssTool</implementation>
+      <implementation>org.codehaus.continuum.web.tool.CssTool</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
       <configuration/>
     </component>

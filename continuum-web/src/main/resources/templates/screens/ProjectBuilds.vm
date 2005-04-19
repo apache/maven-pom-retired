@@ -11,8 +11,8 @@
       </tr>
       #foreach ( $build in $builds )
       <tr class="$class">
-        <td>$build.startTime</td>
-        <td>$build.endTime</td>
+        <td>$date.format('medium',$build.startTime)</td>
+        <td>$date.format('medium',$build.endTime)</td>
         <td>$build.state</td>
         <td><a href="$link.setPage('ProjectBuild.vm').addQueryData('view','ProjectBuild').addQueryData('buildId',$build.id).addQueryData('projectId',$project.id)">Result</a></td>
       </tr>

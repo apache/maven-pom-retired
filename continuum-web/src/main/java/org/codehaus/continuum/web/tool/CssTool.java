@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.web.tool;
+package org.codehaus.continuum.web.tool;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -15,12 +15,6 @@ package org.apache.maven.continuum.web.tool;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import org.codehaus.plexus.summit.pull.RequestTool;
-import org.codehaus.plexus.summit.rundata.RunData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
