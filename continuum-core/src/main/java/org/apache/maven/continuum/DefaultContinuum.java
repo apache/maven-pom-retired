@@ -24,6 +24,7 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.List;
 
 import org.apache.maven.continuum.buildcontroller.BuildController;
 import org.apache.maven.continuum.builder.ContinuumBuilder;
@@ -399,6 +400,19 @@ public class DefaultContinuum
         catch ( ContinuumStoreException e )
         {
             throw new ContinuumException( "Unable to retrieve build with id = " + buildId, e );
+        }
+    }
+
+    public Iterator getBuildsForProject( String projectId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getBuildsForProject( projectId, 0, 0 );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Cannot retrieve builds for project with id = " + projectId, e );
         }
     }
 

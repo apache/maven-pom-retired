@@ -19,6 +19,7 @@ package org.apache.maven.continuum;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.List;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -92,6 +93,9 @@ public interface Continuum
     // ----------------------------------------------------------------------
 
     ContinuumBuild getBuild( String buildId )
+        throws ContinuumException;
+
+    Iterator getBuildsForProject( String projectId )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
