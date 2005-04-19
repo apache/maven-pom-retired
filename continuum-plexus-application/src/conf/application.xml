@@ -74,9 +74,9 @@
         </requirement>
       </requirements>
       <configuration>
-        <fromMailbox></fromMailbox>
-        <fromName></fromName>
-        <timestampFormat>EEE, d MMM yyyy HH:mm:ss Z</timestampFormat>
+        <from-mailbox>@mail.override.from.mailbox@</from-mailbox>
+        <from-name>@mail.override.from.name@</from-name>
+        <timestamp-format>EEE, d MMM yyyy HH:mm:ss Z</timestamp-format>
       </configuration>
     </component>
 
@@ -89,7 +89,7 @@
         this address instead the address specified in the project
         configuration
         -->
-        <toOverride></toOverride>
+        <to-override>@mail.override.to.address@</to-override>
       </configuration>
     </component>
 
@@ -125,6 +125,36 @@
         | The default value is one hour.
         |-->
         <delay>3600</delay>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.network.ConnectionFactory</role>
+      <role-hint>simple-socket-trigger-server</role-hint>
+      <implementation>org.apache.maven.continuum.network.SimpleServerSocketConnectionFactory</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
+          <role-hint>simple-socket-trigger</role-hint>
+        </requirement>
+      </requirements>
+      <configuration>
+        <port>6770</port>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.network.ConnectionFactory</role>
+      <role-hint>url-registrar-server</role-hint>
+      <implementation>org.apache.maven.continuum.network.SimpleServerSocketConnectionFactory</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
+          <role-hint>url-registrar</role-hint>
+        </requirement>
+      </requirements>
+      <configuration>
+        <port>6771</port>
       </configuration>
     </component>
 
@@ -229,6 +259,7 @@
       </configuration>
     </component>
 
+    <!-- TODO: Move to continuum-web? -->
     <!-- forms -->
     <component>
       <role>org.codehaus.plexus.i18n.I18N</role>

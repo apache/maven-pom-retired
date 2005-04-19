@@ -119,38 +119,6 @@
       </configuration>
     </component>
 
-    <!-- Connection factory  -->
-
-    <component>
-      <role>org.apache.maven.continuum.network.ConnectionFactory</role>
-      <role-hint>simple-socket-trigger-server</role-hint>
-      <implementation>org.apache.maven.continuum.network.SimpleServerSocketConnectionFactory</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
-          <role-hint>simple-socket-trigger</role-hint>
-        </requirement>
-      </requirements>
-      <configuration>
-        <port>6770</port>
-      </configuration>
-    </component>
-
-    <component>
-      <role>org.apache.maven.continuum.network.ConnectionFactory</role>
-      <role-hint>url-registrar-server</role-hint>
-      <implementation>org.apache.maven.continuum.network.SimpleServerSocketConnectionFactory</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
-          <role-hint>url-registrar</role-hint>
-        </requirement>
-      </requirements>
-      <configuration>
-        <port>6771</port>
-      </configuration>
-    </component>
-
     <!-- ConnectionConsumer -->
     <component>
       <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
