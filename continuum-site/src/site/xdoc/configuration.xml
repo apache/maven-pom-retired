@@ -7,7 +7,9 @@
     <section name="Configuring Continuum">
       <p>
         The configuration file for Continuum is inside the Plexus runtime under
-        <code>apps/continuum/conf/application.xml</code>.
+        <code>apps/continuum/conf/application.xml</code>. <i>NOTE</i>: You have to start and stop the application at
+        least once before configuring Continuum. This is required because the application container has to unpack the
+        application.
       </p>
       <subsection name="Mail Notification">
         There are three components that is the mail notification system in Continuum:
