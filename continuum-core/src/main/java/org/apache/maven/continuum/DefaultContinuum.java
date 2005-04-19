@@ -20,24 +20,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.List;
 
 import org.apache.maven.continuum.buildcontroller.BuildController;
 import org.apache.maven.continuum.builder.ContinuumBuilder;
+import org.apache.maven.continuum.builder.ant.AntBuilder;
+import org.apache.maven.continuum.builder.manager.BuilderManager;
 import org.apache.maven.continuum.builder.maven.m1.Maven1Builder;
 import org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder;
 import org.apache.maven.continuum.builder.shell.ShellBuilder;
-import org.apache.maven.continuum.builder.ant.AntBuilder;
-import org.apache.maven.continuum.builder.manager.BuilderManager;
 import org.apache.maven.continuum.buildqueue.BuildQueue;
 import org.apache.maven.continuum.buildqueue.BuildQueueException;
-import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.AntProject;
+import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumBuildResult;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
@@ -413,6 +413,20 @@ public class DefaultContinuum
         catch ( ContinuumStoreException e )
         {
             throw new ContinuumException( "Cannot retrieve builds for project with id = " + projectId, e );
+        }
+    }
+
+    public ContinuumBuildResult getBuildResultForBuild( String buildId )
+        throws ContinuumException
+    {
+        try
+        {
+            getLogger().info( "getBuildResultForBuild( String buildId )" );
+            return store.getBuildResultForBuild( buildId );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Cannot retrieve build result for build with id = " + buildId, e );
         }
     }
 

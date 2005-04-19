@@ -1,13 +1,17 @@
 package org.codehaus.continuum.web.tool;
 
 import org.codehaus.plexus.formica.web.ContentGenerator;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id: StateContentGenerator.java,v 1.1 2005/04/04 14:05:38 jvanzyl Exp $
  */
 public class ContinuumStateContentGenerator
+    extends AbstractLogEnabled
     implements ContentGenerator
 {
     public String generate( Object item )
@@ -16,29 +20,35 @@ public class ContinuumStateContentGenerator
 
         int state = p.getState();
 
-        if ( state == 1 )
+        if ( state == ContinuumProjectState.NEW )
         {
             return "New";
         }
-        else if ( state == 2 )
+        else if ( state == ContinuumProjectState.OK )
         {
             return "<img src=\"/continuum/images/icon_success_sml.gif\" alt=\"Success\"/>";
         }
-        else if ( state == 3 )
+        else if ( state == ContinuumProjectState.FAILED )
         {
             return "<img src=\"/continuum/images/icon_error_sml.gif\" alt=\"Failed\"/>";
         }
-        else if ( state == 4 )
+        else if ( state == ContinuumProjectState.ERROR )
         {
             return "<img src=\"/continuum/images/icon_warning_sml.gif\" alt=\"Error\"/>";
         }
-        else if ( state == 5 )
+        else if ( state == ContinuumProjectState.BUILD_SIGNALED )
         {
             return "Build Queued";
         }
-        else
+        else if ( state == ContinuumProjectState.BUILDING )
         {
             return "Building";
+        }
+        else
+        {
+            getLogger().warn( "Unknown project state '" + state + "' Project id '" + p.getId() + "'." );
+
+            return "";
         }
     }
 }

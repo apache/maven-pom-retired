@@ -127,12 +127,16 @@
             <id>ProjectBuild</id>
             <scalars>
               <scalar>
+                <id>project</id>
+                <expression>getProject(#projectId)</expression>
+              </scalar>
+              <scalar>
                 <id>build</id>
                 <expression>getBuild(#buildId)</expression>
               </scalar>
               <scalar>
-                <id>project</id>
-                <expression>getProject(#projectId)</expression>
+                <id>buildResult</id>
+                <expression>getBuildResultForBuild(#buildId)</expression>
               </scalar>
             </scalars>
           </view>
