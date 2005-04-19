@@ -1,0 +1,28 @@
+<form>
+  <id>addMavenTwoProject</id>
+  <source-role>org.apache.maven.continuum.Continuum</source-role>
+  <elements>
+    <element>
+      <id>m2PomUrl</id>
+      <validator>default</validator>
+      <type>text</type>
+    </element>
+  </elements>
+
+  <!-- Add -->
+  <add>
+    <title-key>project.title.add</title-key>
+    <action>callMethod</action>
+    <view>continuumProject.form?mode=summary</view>
+    <expression>addProjectFromUrl(#m2PomUrl,"maven2")</expression>
+  </add>
+
+  <!-- Update -->
+  <update>
+    <title-key>project.title.update</title-key>
+    <action>updateEntity</action>
+    <view>continuumProject.form?mode=summary</view>
+    <expression>updateMavenTwoProject(#entity)</expression>
+  </update>
+
+</form>
