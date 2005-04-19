@@ -516,7 +516,7 @@ public class DefaultContinuum
         Properties configuration = new Properties();
 
         configuration.setProperty( MavenShellBuilder.CONFIGURATION_GOALS, project.getGoals() );
-        
+
         updateProjectConfiguration( project.getId(), configuration );
     }
 

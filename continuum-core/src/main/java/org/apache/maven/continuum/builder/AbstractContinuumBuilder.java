@@ -16,17 +16,16 @@ package org.apache.maven.continuum.builder;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.ContinuumException;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
-
-import org.apache.maven.continuum.ContinuumException;
-
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -38,7 +37,7 @@ public abstract class AbstractContinuumBuilder
 {
     protected String getConfigurationString( Properties configuration, String property )
         throws ContinuumException
-    {
+    {                
         String string = configuration.getProperty( property );
 
         if ( StringUtils.isEmpty( string ) )
