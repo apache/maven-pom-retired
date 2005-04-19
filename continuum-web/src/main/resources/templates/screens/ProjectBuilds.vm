@@ -13,7 +13,7 @@
       <tr class="$class">
         <td>$date.format('medium',$build.startTime)</td>
         <td>$date.format('medium',$build.endTime)</td>
-        <td>$build.state</td>
+        <td>$state.generate($project)</td>
         <td><a href="$link.setPage('ProjectBuild.vm').addQueryData('view','ProjectBuild').addQueryData('buildId',$build.id).addQueryData('projectId',$project.id)">Result</a></td>
       </tr>
       #if ( $class == "a" )

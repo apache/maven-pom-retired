@@ -76,6 +76,12 @@
             <role>org.codehaus.plexus.i18n.I18N</role>
             <scope>global</scope>
           </tool>
+          <tool>
+            <name>state</name>
+            <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
+            <role-hint>continuum-state</role-hint>
+            <scope>global</scope>
+          </tool>
         </tools>
       </configuration>
     </component>
