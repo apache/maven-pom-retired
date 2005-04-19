@@ -195,8 +195,12 @@ public class DefaultContinuum
         return project.getId();
     }
 
-    public String addProjectFromScm( String scmUrl, String builderType, String projectName, String nagEmailAddress,
-                                     String version, Properties configuration )
+    public String addProjectFromScm( String scmUrl,
+                                     String builderType,
+                                     String projectName, 
+                                     String nagEmailAddress,
+                                     String version,
+                                     Properties configuration )
         throws ContinuumException
     {
         // ----------------------------------------------------------------------
