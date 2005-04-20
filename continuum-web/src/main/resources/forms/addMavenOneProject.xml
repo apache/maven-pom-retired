@@ -8,7 +8,7 @@
     -->
     <element>
       <id>m1PomUrl</id>
-      <validator>default</validator>
+      <validator>required</validator>
       <expression>scmUrl</expression>
       <type>text</type>
     </element>
