@@ -63,6 +63,9 @@
         </p>
       </subsection>
       <subsection name="Jetty Configuration">
+        Jetty is configured in a special was as it's a service not a component. The only thing that should be
+        changed in the Jetty configuration is the port and that is done by changing the <code>port</code> tag in
+        the <code>services</code> section.
       </subsection>
       <subsection name="Socket Listeners">
         There are two services listening on sockets that can be configured:
