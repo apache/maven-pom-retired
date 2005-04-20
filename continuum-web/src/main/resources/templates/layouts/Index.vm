@@ -26,12 +26,12 @@
   <table border="1" cellspacing="0" cellpadding="8" width="100%">
    <tr>
     <td>
-      <a href="http://continuum.codehaus.org/">
+      <a href="http://maven.apache.org/continuum">
        <img src="$data.getLink("images/continuum_logo.png")" align="left" alt="Continuum" border="0"/>
       </a>
     </td>
     <td valign="middle" style="vertical-align: middle">
-      <a href="http://www.codehaus.org/">
+      <a href="http://www.apache.org/">
         <!--
         <img src="$data.getLink("images/codehaus-small.png")" align="right" alt="Codehaus" border="0" />
         -->
