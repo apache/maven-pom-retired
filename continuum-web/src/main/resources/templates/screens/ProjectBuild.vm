@@ -1,12 +1,12 @@
 <div class="app">
   <h3>Build result for $project.name</h3>
   <p>
-    <table border="1" cellspacing="2" cellpadding="3">
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
       <tr class="a">
         <th>Start Time</th>
         <td>$date.format('medium',$build.startTime)</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <th>End Time</th>
         <td>$date.format('medium',$build.endTime)</td>
       </tr>
@@ -15,9 +15,9 @@
 
   <h4>Changes</h4>
   <p>
-    <table border="1" cellspacing="2" cellpadding="3">
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
       #foreach ( $file in $buildResult.changedFiles )
-      <tr>
+      <tr class="a">
         <td>$file</td>
       </tr>
       #end
