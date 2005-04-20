@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2005 Your Corporation. All Rights Reserved.
+ */
 package org.codehaus.continuum.web.tool;
 
 import org.codehaus.plexus.formica.web.ContentGenerator;

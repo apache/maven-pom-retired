@@ -48,7 +48,7 @@ public class ContinuumStateContentGenerator
         {
             getLogger().warn( "Unknown project state '" + state + "' Project id '" + p.getId() + "'." );
 
-            return "";
+            return "Unknown";
         }
     }
 }
