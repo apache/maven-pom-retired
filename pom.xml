@@ -68,12 +68,12 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:cvs:pserver:anonymous@cvs.continuum.codehaus.org:/scm/continuum:continuum-apache</connection>
-    <url>http://cvs.continuum.codehaus.org/continuum-apache</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/trunk</url>
   </scm>
   <organization>
-    <name>Codehaus</name>
-    <url>http://www.codehaus.org/</url>
+    <name>Apache</name>
+    <url>http://www.apache.org/</url>
   </organization>
   <distributionManagement>
     <repository>
