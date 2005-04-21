@@ -5,6 +5,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.project.ContinuumBuild;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -16,9 +17,16 @@ public class ContinuumStateContentGenerator
 {
     public String generate( Object item )
     {
-        ContinuumProject p = (ContinuumProject) item;
+        int state;
 
-        int state = p.getState();
+        if ( item instanceof ContinuumProject )
+        {
+            state = ( (ContinuumProject) item ).getState();
+        }
+        else
+        {
+            state = ( (ContinuumBuild) item ).getState();
+        }
 
         if ( state == ContinuumProjectState.NEW )
         {
@@ -46,7 +54,7 @@ public class ContinuumStateContentGenerator
         }
         else
         {
-            getLogger().warn( "Unknown project state '" + state + "' Project id '" + p.getId() + "'." );
+            getLogger().warn( "Unknown state '" + state + "'." );
 
             return "Unknown";
         }
