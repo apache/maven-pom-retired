@@ -23,7 +23,7 @@ def assertEquals( message, expected, actual ):
 
     if( expected == actual ):
         return
-    
+
     print
     print "##############################################"
     print "ASSERTION FAILURE!"
@@ -110,6 +110,15 @@ def assertSuccessfulShellBuild( buildId, expectedStandardOutput ):
     assertEquals( "Standard output didn't contain the expected output.", expectedStandardOutput, buildResult.standardOutput )
     assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
 
+def removeProject( projectId ):
+    continuum.removeProject( projectId )
+
+    map = continuum.server.continuum.getProject( projectId )
+
+    if ( map[ "result" ] != "failure" ):
+        print map
+        fail( "Expected a failure when removing project." )
+
 def execute( workingDirectory, command ):
     cwd = os.getcwd()
     os.chdir( workingDirectory )
@@ -187,10 +196,10 @@ def initMaven1Project( basedir, scm, scmroot, artifactId ):
     <nagEmailAddress>%(email)s</nagEmailAddress>
   </build>
 </project>
-""" % { 
-        "artifactId" : artifactId, 
-        "scm" : scm, 
-        "scmUrl" : makeScmUrl( scm, scmroot, artifactId ), 
+""" % {
+        "artifactId" : artifactId,
+        "scm" : scm,
+        "scmUrl" : makeScmUrl( scm, scmroot, artifactId ),
         "email" : email
       } )
     pom.close()
@@ -270,9 +279,14 @@ do
     script.close()
     os.system( "chmod +x " + basedir + "/script.sh" )
 
-############################################################
-# Start
-############################################################
+print "############################################################"
+print "Running integration tests"
+print ""
+print "NOTE:"
+print "When running these integration tests you will get some"
+print "stacktraces related."
+print "############################################################"
+print ""
 
 # This is the email that will be used as the nag email address
 email = "trygvis@codehaus.org"
@@ -329,6 +343,8 @@ if 1:
     assertEquals( "The project name wasn't changed.", "Maven 1 Project - Changed", maven1.name )
     assertEquals( "The project version wasn't changed.", "1.1", maven1.version )
 
+    removeProject( maven1.id );
+
 if 1:
     progress( "Initializing Maven 2 CVS project" )
     initMaven2Project( maven2Project, cvsroot, "maven-2" )
@@ -345,16 +361,18 @@ if 1:
     build = continuum.buildProject( maven2.id )
     assertSuccessfulNoBuildPerformed( build )
 
+    removeProject( maven2Id )
+
 if 1:
     progress( "Initializing Ant SVN project" )
     initAntProject( antProject )
     svnImport( antProject, svnroot, "ant-svn" )
 
     progress( "Adding Ant SVN project" )
-    antSvnId = continuum.addProjectFromScm( "scm:svn:file://" + svnroot + "/ant-svn", "ant", "Ant SVN Project", email, "3.0", 
-                                            { 
-                                                "executable": "ant", 
-                                                "targets" : "clean, build" 
+    antSvnId = continuum.addProjectFromScm( "scm:svn:file://" + svnroot + "/ant-svn", "ant", "Ant SVN Project", email, "3.0",
+                                            {
+                                                "executable": "ant",
+                                                "targets" : "clean, build"
                                             } )
     antSvn = continuum.getProject( antSvnId )
     assertProject( antSvnId, "Ant SVN Project", email, continuum.STATE_NEW, "3.0", "ant", antSvn )
@@ -362,17 +380,20 @@ if 1:
     build = continuum.buildProject( antSvn.id )
     assertSuccessfulAntBuild( build )
 
+    removeProject( antSvnId )
+
 if 1:
     progress( "Initializing Ant CVS project" )
     initAntProject( antProject )
     cvsImport( antProject, cvsroot, "ant-cvs" )
-    antCvsId = continuum.addProjectFromScm( "scm:cvs:local:" + basedir + "/cvsroot:ant-cvs", "ant", "Ant CVS Project", email, "3.0", 
+    antCvsId = continuum.addProjectFromScm( "scm:cvs:local:" + basedir + "/cvsroot:ant-cvs", "ant", "Ant CVS Project", email, "3.0",
                                          { "executable": "ant", "targets" : "clean, build"} )
     antCvs = continuum.getProject( antCvsId )
     assertProject( antCvsId, "Ant CVS Project", email, continuum.STATE_NEW, "3.0", "ant", antCvs )
     progress( "Building CVS Ant project" )
     build = continuum.buildProject( antCvs.id )
     assertSuccessfulAntBuild( build )
+    removeProject( antCvsId )
 
 if 1:
     progress( "Initializing Shell CVS project" )
@@ -380,7 +401,7 @@ if 1:
     cvsImport( shellProject, cvsroot, "shell" )
 
     progress( "Adding CVS Shell project" )
-    shellId = continuum.addProjectFromScm( "scm:cvs:local:" + basedir + "/cvsroot:shell", "shell", "Shell Project", email, "3.0", 
+    shellId = continuum.addProjectFromScm( "scm:cvs:local:" + basedir + "/cvsroot:shell", "shell", "Shell Project", email, "3.0",
                                            { "executable": "script.sh", "arguments" : ""} )
 
     shell = continuum.getProject( shellId )
@@ -414,6 +435,7 @@ if 1:
     assertSuccessfulShellBuild( build, """a
 b
 """ )
+    removeProject( shellId )
 
 # TODO: Add project failure tests
 

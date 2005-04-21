@@ -24,12 +24,14 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManager;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.project.ScmFile;
 
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -112,10 +114,65 @@ public class ModelloJPoxContinuumStore
     {
         try
         {
+            store.begin();
+
+//            System.err.println( "**********************************" );
+//            System.err.println( "**********************************" );
+//            System.err.println( "**********************************" );
+
+//            System.err.println( "getProject()" );
+            ContinuumProject project = store.getContinuumProject( projectId, false );
+
+            // TODO: This is dumb.
+            PersistenceManager pm = store.getThreadState().getPersistenceManager();
+
+//            System.err.println( "getBuilds()" );
+            for ( Iterator it = project.getBuilds().iterator(); it.hasNext(); )
+            {
+                ContinuumBuild build = (ContinuumBuild) it.next();
+
+//                System.err.println( "getBuildResult()" );
+                ContinuumBuildResult result = build.getBuildResult();
+
+//                System.err.println( "result.getChangedFiles()" );
+                List changedFiles = result.getChangedFiles();
+
+//                System.err.println( "changedFiles.clear()" );
+                changedFiles.clear();
+
+//                System.err.println( "pm.deletePersistentAll( changedFiles )" );
+                pm.deletePersistentAll( changedFiles );
+
+//                System.err.println( "result.setBuild( null )" );
+                result.setBuild( null );
+
+//                System.err.println( "pm.deletePersistent( result )" );
+                pm.deletePersistent( result );
+            }
+
+//            System.err.println( "project.getBuilds()" );
+            List builds = new ArrayList( project.getBuilds() );
+
+            for ( Iterator it = builds.iterator(); it.hasNext(); )
+            {
+                ContinuumBuild build = (ContinuumBuild) it.next();
+
+//                System.err.println( "build.setProject( null )" );
+                build.setProject( null );
+            }
+
+//            System.err.println( "pm.deletePersistentAll( builds )" );
+            pm.deletePersistentAll( project.getBuilds() );
+
+//            System.err.println( "store.deleteContinuumProject( projectId )" );
             store.deleteContinuumProject( projectId );
+
+            store.commit();
         }
         catch ( Exception e )
         {
+            rollback( store );
+
             throw new ContinuumStoreException( "Error while removing project with id '" + projectId + "'.", e );
         }
     }

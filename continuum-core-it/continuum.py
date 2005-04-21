@@ -74,6 +74,9 @@ def getAllProjects():
 
     return result[ "projects" ]
 
+def removeProject( projectId ):
+    checkResult( server.continuum.removeProject( projectId ) )
+
 def buildProject( projectId ):
     result = checkResult( server.continuum.buildProject( projectId ) )
 

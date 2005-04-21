@@ -29,6 +29,7 @@ import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.project.ScmFile;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.jdo.JdoFactory;
@@ -342,6 +343,24 @@ public class ModelloJPoxContinuumStoreTest
         assertTrue( actual.containsKey( "key" ) );
 
         assertEquals( "value", actual.getProperty( "key" ) );
+    }
+
+    public void testRemoveProject()
+        throws Exception
+    {
+        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
+
+        String projectId = addProject( "Test Project" );
+
+        String buildId = store.createBuild( projectId );
+
+        ContinuumBuildResult result = new ShellBuildResult();
+
+        result.addChangedFile( new ScmFile( "foo" ) );
+
+        store.setBuildResult( buildId, ContinuumProjectState.OK, result, null );
+
+        store.removeProject( projectId );
     }
 
     // ----------------------------------------------------------------------

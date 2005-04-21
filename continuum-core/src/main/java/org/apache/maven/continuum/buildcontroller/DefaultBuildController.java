@@ -29,10 +29,10 @@ import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.project.ScmFile;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.scm.ScmFile;
 import org.apache.maven.scm.command.update.UpdateScmResult;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -266,9 +266,11 @@ public class DefaultBuildController
 
         for ( Iterator it = scmFiles.iterator(); it.hasNext(); )
         {
-            ScmFile file = (ScmFile) it.next();
+            org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
 
-            files.add( file.getPath() );
+            ScmFile file = new ScmFile( scmFile.getPath() );
+
+            files.add( file );
         }
 
         result.setChangedFiles( files );
