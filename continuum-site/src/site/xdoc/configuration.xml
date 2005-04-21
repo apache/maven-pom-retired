@@ -63,7 +63,7 @@
         </p>
       </subsection>
       <subsection name="Jetty Configuration">
-        Jetty is configured in a special was as it's a service not a component. The only thing that should be
+        Jetty is configured in a special way as it's a service, not a component. The only thing that should be
         changed in the Jetty configuration is the port and that is done by changing the <code>port</code> tag in
         the <code>services</code> section.
       </subsection>
@@ -77,7 +77,9 @@
             <code>simple-socket-trigger-server</code>: This registrar is reading project IDs to schedule for build.
           </li>
         </ul>
+        <!-- TODO: finish
         The only
+        -->
       </subsection>
     </section>
   </body>
