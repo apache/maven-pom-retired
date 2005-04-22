@@ -268,7 +268,9 @@ public class DefaultBuildController
         {
             org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
 
-            ScmFile file = new ScmFile( scmFile.getPath() );
+            ScmFile file = new ScmFile();
+
+            file.setPath( scmFile.getPath() );
 
             files.add( file );
         }

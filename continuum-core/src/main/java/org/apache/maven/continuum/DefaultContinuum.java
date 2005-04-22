@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.List;
 
 import org.apache.maven.continuum.buildcontroller.BuildController;
 import org.apache.maven.continuum.builder.ContinuumBuilder;
@@ -41,6 +42,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.ScmFile;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.store.ContinuumStore;
@@ -421,8 +423,20 @@ public class DefaultContinuum
     {
         try
         {
-            getLogger().info( "getBuildResultForBuild( String buildId )" );
             return store.getBuildResultForBuild( buildId );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Cannot retrieve build result for build with id = " + buildId, e );
+        }
+    }
+
+    public List getChangedFilesForBuild( String buildId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getChangedFilesForBuild( buildId );
         }
         catch ( ContinuumStoreException e )
         {

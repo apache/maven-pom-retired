@@ -363,25 +363,6 @@
           <type>String</type>
         </field>
       </fields>
-      <codeSegments>
-        <codeSegment>
-          <code>
-            public ScmFile()
-            {
-            }
-
-            public ScmFile( String path )
-            {
-              this.path = path;
-            }
-
-            public String toString()
-            {
-              return path;
-            }
-          </code>
-        </codeSegment>
-      </codeSegments>
     </class>
 
     <class>

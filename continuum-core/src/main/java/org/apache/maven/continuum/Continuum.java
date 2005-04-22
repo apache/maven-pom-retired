@@ -19,6 +19,7 @@ package org.apache.maven.continuum;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.List;
 
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -99,6 +100,9 @@ public interface Continuum
         throws ContinuumException;
 
     ContinuumBuildResult getBuildResultForBuild( String buildId )
+        throws ContinuumException;
+
+    public List getChangedFilesForBuild( String buildId )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------

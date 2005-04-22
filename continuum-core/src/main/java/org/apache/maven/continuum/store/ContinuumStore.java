@@ -18,6 +18,7 @@ package org.apache.maven.continuum.store;
 
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.List;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
@@ -92,5 +93,8 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     ContinuumBuildResult getBuildResultForBuild( String buildId )
+        throws ContinuumStoreException;
+
+    List getChangedFilesForBuild( String buildId )
         throws ContinuumStoreException;
 }

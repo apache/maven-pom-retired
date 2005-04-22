@@ -138,6 +138,10 @@
                 <id>buildResult</id>
                 <expression>getBuildResultForBuild(#buildId)</expression>
               </scalar>
+              <scalar>
+                <id>changedFiles</id>
+                <expression>getChangedFilesForBuild(#buildId)</expression>
+              </scalar>
             </scalars>
           </view>
         </views>

@@ -46,6 +46,7 @@ public class DefaultShellCommandHelper
         int exitCode;
 
         getLogger().info( "Executing: " + cl );
+        getLogger().info( "Working directory: " + workingDirectory.getAbsolutePath() );
 
         exitCode = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
 

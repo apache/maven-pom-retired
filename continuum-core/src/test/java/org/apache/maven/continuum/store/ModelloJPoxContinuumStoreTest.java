@@ -356,7 +356,11 @@ public class ModelloJPoxContinuumStoreTest
 
         ContinuumBuildResult result = new ShellBuildResult();
 
-        result.addChangedFile( new ScmFile( "foo" ) );
+        ScmFile file = new ScmFile();
+
+        file.setPath( "foo" );
+
+        result.addChangedFile( file );
 
         store.setBuildResult( buildId, ContinuumProjectState.OK, result, null );
 

@@ -134,6 +134,11 @@ public class ModelloJPoxContinuumStore
 //                System.err.println( "getBuildResult()" );
                 ContinuumBuildResult result = build.getBuildResult();
 
+                if ( result == null )
+                {
+                    continue;
+                }
+
 //                System.err.println( "result.getChangedFiles()" );
                 List changedFiles = result.getChangedFiles();
 
@@ -468,6 +473,52 @@ public class ModelloJPoxContinuumStore
             ContinuumBuildResult result = store.getContinuumBuildResultByJdoId( id, true );
 
             return result;
+        }
+        catch ( Exception e )
+        {
+            rollback( store );
+
+            throw new ContinuumStoreException( "Error while getting build result.", e );
+        }
+    }
+
+    public List getChangedFilesForBuild( String buildId )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            store.begin();
+
+            ContinuumBuild build = store.getContinuumBuild( buildId, false );
+
+            if ( build.getBuildResult() == null )
+            {
+                store.commit();
+
+                return null;
+            }
+
+            Object id = JDOHelper.getObjectId( build.getBuildResult() );
+
+            ContinuumBuildResult result = store.getContinuumBuildResultByJdoId( id, false );
+
+            // TODO: Having to copy the objects feels a /bit/ strange.
+            List changedFiles = new ArrayList();
+
+            for ( Iterator it = result.getChangedFiles().iterator(); it.hasNext(); )
+            {
+                ScmFile scmFile = (ScmFile) it.next();
+
+                ScmFile file = new ScmFile();
+
+                file.setPath( scmFile.getPath() );
+
+                changedFiles.add( file );
+            }
+
+            store.commit();
+
+            return changedFiles;
         }
         catch ( Exception e )
         {
