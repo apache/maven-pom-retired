@@ -72,19 +72,18 @@
       <summary-element>
         <id>project.name</id>
       </summary-element>
+      <summary-element>
+        <id>project.version</id>
+      </summary-element>
     </summary-elements>
     <operations>
       <operation>
-        <name>Build</name>
-        <action>target/continuumProject.form?mode=summary&amp;action=cam&amp;cid=buildProject&amp;id=$id$</action>
+        <name>View</name>
+        <action>target/$type$Project.form?mode=view&amp;id=$id$</action>
       </operation>
       <operation>
         <name>Results</name>
         <action>target/ProjectBuilds.vm?view=ProjectBuilds&amp;id=$id$</action>
-      </operation>
-      <operation>
-        <name>View</name>
-        <action>target/$type$Project.form?mode=view&amp;id=$id$</action>
       </operation>
       <operation>
         <name>Edit</name>
@@ -93,6 +92,10 @@
       <operation>
         <name>Delete</name>
         <action>target/$type$Project.form?mode=delete&amp;id=$id$</action>
+      </operation>
+      <operation>
+        <name>Build</name>
+        <action>target/continuumProject.form?mode=summary&amp;action=cam&amp;cid=buildProject&amp;id=$id$</action>
       </operation>
     </operations>
   </summary>
