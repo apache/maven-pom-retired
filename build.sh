@@ -3,6 +3,7 @@
 set -e
 set -x
 
+m2 clean:clean
 m2 -N install
 ( cd continuum-model && m2 install )
 ( cd continuum-core && m2 install )
