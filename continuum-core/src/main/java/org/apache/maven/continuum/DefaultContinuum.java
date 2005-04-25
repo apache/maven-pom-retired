@@ -66,7 +66,7 @@ public class DefaultContinuum
 {
     private final static String DATABASE_INITIALIZED = "database.initialized";
 
-    private final static String CONTINUUM_VERSION = "1.0-alpha-1-SNAPSHOT";
+    private final static String CONTINUUM_VERSION = "1.0-alpha-1";
 
     // ----------------------------------------------------------------------
     //

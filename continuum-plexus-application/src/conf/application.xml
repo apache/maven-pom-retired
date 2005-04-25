@@ -30,7 +30,7 @@
       <configuration>
         <webapps>
           <webapp>
-            <file>${plexus.home}/lib/continuum-web-1.0-alpha-1-SNAPSHOT.jar</file>
+            <file>${plexus.home}/lib/continuum-web-1.0-alpha-1.jar</file>
             <context>/continuum</context>
             <extractWar>true</extractWar>
             <extractionPath>${plexus.home}/webapp</extractionPath>
