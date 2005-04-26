@@ -12,7 +12,7 @@
         application.
       </p>
       <subsection name="Mail Notification">
-        There are three components that is the mail notification system in Continuum:
+        There are three components used by the mail notification system in Continuum:
         <ul>
           <li>
             The Mail notifier itself. There are three configurable properties:
@@ -30,13 +30,13 @@
             </ul>
           </li>
           <li>
-            The recipient source. This is the component that decides who should receive the mails. The only thing
-            that can be configured here is a address that will be used as the recipient for all mails sent. This
-            configuration is mostly useful for people who want to make sure all mails is sent to a specific account
+            The recipient source. This is the component that decides who should receive the email. The only thing
+            that can be configured here is a address that will be used as the recipient for all email sent. This
+            configuration is mostly useful for people who want to make sure all email is sent to a specific account
             during testing or development.
           </li>
           <li>
-            The mail sender is the component that will send the mails to the SMTP server. The two properties that can be configured are:
+            The mail sender is the component that will send the email to the SMTP server. The two properties that can be configured are:
             <ul>
               <li>
                 <code>smtp-host</code>: The SMTP host. Make sure that this host will accept mails to and possibly
@@ -51,13 +51,13 @@
       </subsection>
       <subsection name="Alarm Trigger">
         <p>
-          The alarm trigger will trigger a build of all the projects on a configured interval.
+          The alarm trigger will trigger a build of all the projects on a timed interval.
           <ul>
             <li>
               <code>interval</code>: The number of seconds between each round of scheduling.
             </li>
             <li>
-              <code>delay</code>: The number of seconds to with with the first round of scheduling after startup.
+              <code>delay</code>: The number of seconds to wait before starting the first round of scheduling post startup.
             </li>
           </ul>
         </p>
@@ -71,10 +71,10 @@
         There are two services listening on sockets that can be configured:
         <ul>
           <li>
-            <code>url-registrar-server</code>: This registrar is reading POM URLs to Maven 2 projects to build.
+            <code>url-registrar-server</code>: This registrar will read POM URLs for the Maven 1.x and 2.x project builders.
           </li>
           <li>
-            <code>simple-socket-trigger-server</code>: This registrar is reading project IDs to schedule for build.
+            <code>simple-socket-trigger-server</code>: This registrar will read project IDs off the wire and schedule a build for that project.
           </li>
         </ul>
         <!-- TODO: finish
