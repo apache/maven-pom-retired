@@ -42,14 +42,22 @@
       </subsection>
       <subsection name="Adding Ant Projects">
         <p>
-          When adding Ant projects you have to specify the project's name, scm url, nag email address, version and
-          the targets to execute.
+          When adding Ant projects you have to specify the project's name, SCM URL, nag email address, version and
+          the targets to execute.          
         </p>
+        <p>
+          NOTE: The SCM URL is a Maven SCM convention. Here's an example of
+          what an SCM URL looks like: <code>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk</code>
+        </p>        
       </subsection>
       <subsection name="Adding Shell Projects">
         <p>
-          When adding shell projects you have to specify the project's name, scm url, nag email address, version and
+          When adding shell projects you have to specify the project's name, SCM URL, nag email address, version and
           the shell script to execute. The working directory of the project will be prepended to the scripts path.
+        </p>
+        <p>
+          NOTE: The SCM URL is a Maven SCM convention. Here's an example of
+          what an SCM URL looks like: <code>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk</code>
         </p>
       </subsection>
     </section>
