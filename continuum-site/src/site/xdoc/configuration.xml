@@ -19,13 +19,12 @@
             <ul>
               <li>
                 <code>from-mailbox</code> and <code>from-name</code>: The mailbox and name that will be set as the
-                <code>From</code> header for all mails sent. It's it important to ensure that the mailbox is a
-                real account as a lot of SMTP server check that the mailbox actually exists before accepting the
-                mail. If the from mailbox is empty or not specified the nag email address of the project will be
-                used as the from mailbox.
+                <code>From</code> header for all mails sent. It is important to ensure that the mailbox is a
+                real account as most SMTP servers will verify that the mailbox actually exists before accepting the
+                mail. If the from mailbox is empty or not specified the nag email address for the project will be used.
               </li>
               <li>
-                <code>timestamp-format</code>: This is the format string that is used to format the dates in the mails.
+                <code>timestamp-format</code>: This is the timestamp format used for the dates in email messages.
               </li>
             </ul>
           </li>
@@ -39,8 +38,7 @@
             The mail sender is the component that will send the email to the SMTP server. The two properties that can be configured are:
             <ul>
               <li>
-                <code>smtp-host</code>: The SMTP host. Make sure that this host will accept mails to and possibly
-                from the addresses configured for each project.
+                <code>smtp-host</code>: The SMTP host. Make sure that this host will accept email.
               </li>
               <li>
                 <code>smtp-port</code>: The port to use on the SMTP host.
