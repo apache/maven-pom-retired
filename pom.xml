@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.continuum</groupId>
   <artifactId>continuum-parent</artifactId>
-  <version>1.0-alpha-1</version>
+  <version>1.0-alpha-2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
   <url>http://cvs.continuum.codehaus.org/</url>
