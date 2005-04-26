@@ -30,7 +30,7 @@
       </div>
       -->
       <p>
-        Continuum is a continous intergration server for building Java based projects. It supports a wide range of
+        Continuum is a continous integration server for building Java based projects. It supports a wide range of
         projects:
         <ul>
           <li><a href="http://maven.apache.org">Maven 1</a></li>
