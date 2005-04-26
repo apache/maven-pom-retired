@@ -7,12 +7,12 @@
     <section name="Getting the sources">
       <p>
         To get the sources from the Subversion repository use this SVN url:
-        <source>http://svn.apache.org/repos/asf/maven/continuum/tags/alpha-1</source>
+        <source>http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-alpha-1</source>
       </p>
       <p>
         If you are using the <code>svn</code> command line Subversion client you can check out the sources with this
         command:
-        <source>svn co http://svn.apache.org/repos/asf/maven/continuum/tags/alpha-1/ continuum</source>
+        <source>svn co http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-alpha-1/ continuum</source>
         All the Continuum Alpha 1 sources will be in a directory called <code>continuum</code>.
       </p>
       <p>
