@@ -36,19 +36,19 @@
           There are is a caveat though: The POM cannot extend a parent POM. When Continuum is downloading the POM it
           won't know how to find the parent POMs. The best way to use Continuum with Maven 1 projects is to
           give Continuum the root POM of your projects only and then have a special goal in the root projects
-          <code>maven.xml</code> to build all of the projects. This is something that hopefully will be remedied in
-          Maven 1.1.
+          <code>maven.xml</code> to build all of the projects. In subsequent versions of Continuum we
+          will deal with Maven 1.x projects in a cleaner way.
         </p>
       </subsection>
       <subsection name="Adding Ant Projects">
         <p>
-          When adding Ant projects you have to specify the projects name, scm url, nag email address and version and
+          When adding Ant projects you have to specify the project's name, scm url, nag email address, version and
           the targets to execute.
         </p>
       </subsection>
       <subsection name="Adding Shell Projects">
         <p>
-          When adding Ant projects you have to specify the projects name, scm url, nag email address and version and
+          When adding Ant projects you have to specify the project's name, scm url, nag email address, version and
           the shell script to execute. The working directory of the project will be prepended to the scripts path.
         </p>
       </subsection>
@@ -63,7 +63,7 @@
       </subsection>
       <subsection name="Using the XML-RPC Interface">
         <p>
-          By using the <code>continuum_cli.py</code> Python script you can remotely controll Continuum. Start the
+          By using the <code>continuum_cli.py</code> Python script you can remotely control Continuum. Start the
           script by executing <source>python continuum_cli.py</source> and write <code>help</code> to list all
           available commands.
         </p>
