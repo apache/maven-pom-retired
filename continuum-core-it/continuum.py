@@ -89,7 +89,7 @@ def getBuildsForProject( projectId, start, end ):
     for build in result[ "builds" ]:
         builds.append( Build( build ) )
 
-    return builds;
+    return builds
 
 def getBuild( buildId ):
     result = checkResult( server.continuum.getBuild( buildId ) )
@@ -116,6 +116,7 @@ class Project:
         self.version = map[ "version" ]
         self.builderId = map[ "builderId" ]
         self.configuration = map[ "configuration" ]
+        self.checkOutScmResult = CheckOutScmResult( map[ "checkOutScmResult" ] )
 
     def __str__( self ):
         str = "id: " + self.id + os.linesep +\
@@ -123,7 +124,8 @@ class Project:
               "nagEmailAddress: " + self.nagEmailAddress + os.linesep +\
               "state: " + self.state + os.linesep +\
               "version: " + self.version + os.linesep +\
-              "builder id: " + self.builderId + os.linesep
+              "builder id: " + self.builderId + os.linesep +\
+              "check out ok: " + self.checkOutResult.success + os.linesep
 
         if ( len( self.configuration.keys() ) > 0 ):
             conf = ""
@@ -147,6 +149,10 @@ class Build:
         self.totalTime = map[ "totalTime" ]
         self.error = map.get( "error" )
         self.map = map
+        if ( map.has_key( "updateScmResult" ) ):
+            self.updateScmResult = UpdateScmResult( map[ "updateScmResult" ] )
+        else:
+            self.updateScmResult = None
 
         if ( self.error == None ):
             self.error = ""
@@ -159,7 +165,9 @@ class Build:
 State: %(state)s
 Start time: %(startTime)s
 End time: %(endTime)s
-Build time: %(totalTime)ss""" % map
+Build time: %(totalTime)ss
+""" % map
+
         if ( self.error != "" ):
             value += "Error: %(error)s" % map
 
@@ -170,7 +178,7 @@ class BuildResult:
         # This is the common stuff between all ContinuumBuildResult objects
         self.success = map[ "success" ] == "true"
         self.buildExecuted = map[ "buildExecuted" ] == "true"
-        self.changedFiles = map[ "changedFiles" ]
+        #self.changedFiles = map[ "changedFiles" ]
 
         # These fields just happen to be the same for all the build results
         if ( self.buildExecuted ):
@@ -192,3 +200,69 @@ class BuildResult:
                    value += os.linesep + "Standard error: " + self.standardError
 
         return value
+
+class ScmResult:
+    def __init__( self, map ):
+        self.map = map
+        self.success = map[ "success" ] == "true"
+
+        if ( map.has_key( "providerMessage" ) ):
+            self.providerMessage = map[ "providerMessage" ]
+        else:
+            self.providerMessage = ""
+
+        if ( map.has_key( "commandOutput" ) ):
+            self.commandOutput = map[ "commandOutput" ]
+        else:
+            self.commandOutput = ""
+
+    def __str__( self ):
+        value = "Success: " + str( self.success ) + os.linesep +\
+                 "Provider Message: " + self.providerMessage + os.linesep +\
+                 "Command output: " + self.commandOutput
+
+        return value
+
+class CheckOutScmResult( ScmResult ):
+    def __init__( self, map ):
+        self.map = map
+        ScmResult.__init__( self, map )
+        self.checkedOutFiles = list()
+
+        for file in map[ "checkedOutFiles" ]:
+            self.checkedOutFiles.append( ScmFile( file ) )
+
+    def __str__( self ):
+        value = ScmResult.__str__( self ) + os.linesep
+
+        value += "Checked out files: " + os.linesep
+        for file in self.checkedOutFiles:
+            value += " " + file.path + os.linesep
+
+        return value
+
+class UpdateScmResult( ScmResult ):
+    def __init__( self, map ):
+        self.map = map
+        ScmResult.__init__( self, map )
+        self.updatedFiles = list()
+
+        for file in map[ "updatedFiles" ]:
+            self.updatedFiles.append( ScmFile( file ) )
+
+    def __str__( self ):
+        value = ScmResult.__str__( self ) + os.linesep
+
+        value += "Updated files: " + os.linesep
+        if ( len( self.updatedFiles ) > 0):
+            for file in self.updatedFiles:
+                value += " " + file.path + os.linesep
+        else:
+            value += " No files updated"
+
+        return value
+
+class ScmFile:
+    def __init__( self, map ):
+        self.map = map
+        self.path = map[ "path" ]

@@ -31,8 +31,8 @@ import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.project.ScmFile;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 
 import org.codehaus.plexus.jdo.JdoFactory;
@@ -142,13 +142,13 @@ public class ModelloJPoxContinuumStore
                 }
 
 //                System.err.println( "result.getChangedFiles()" );
-                List changedFiles = result.getChangedFiles();
+//                List changedFiles = result.getChangedFiles();
 
 //                System.err.println( "changedFiles.clear()" );
-                changedFiles.clear();
+//                changedFiles.clear();
 
 //                System.err.println( "pm.deletePersistentAll( changedFiles )" );
-                pm.deletePersistentAll( changedFiles );
+//                pm.deletePersistentAll( changedFiles );
 
 //                System.err.println( "result.setBuild( null )" );
                 result.setBuild( null );
@@ -344,6 +344,52 @@ public class ModelloJPoxContinuumStore
         }
     }
 
+    public CheckOutScmResult getCheckOutScmResultForProject( String projectId )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            store.begin();
+
+            ContinuumProject project = store.getContinuumProject( projectId, false );
+
+            if ( project.getCheckOutScmResult() == null )
+            {
+                store.commit();
+
+                return null;
+            }
+
+            PersistenceManager pm = JDOHelper.getPersistenceManager( project );
+
+            CheckOutScmResult result = project.getCheckOutScmResult();
+
+            pm.retrieve( result );
+
+            pm.makeTransient( result );
+
+            pm.retrieveAll( result.getCheckedOutFiles(), false );
+
+            pm.makeTransientAll( result.getCheckedOutFiles() );
+
+            store.commit();
+
+            for ( Iterator it = result.getCheckedOutFiles().iterator(); it.hasNext(); )
+            {
+                ScmFile scmFile = (ScmFile) it.next();
+                System.err.println( "scmfile.path: " + scmFile.getPath() );
+            }
+
+            return result;
+        }
+        catch ( Exception e )
+        {
+            rollback( store );
+
+            throw new ContinuumStoreException( "Error while getting build result.", e );
+        }
+    }
+
     // ----------------------------------------------------------------------
     // Build
     // ----------------------------------------------------------------------
@@ -526,9 +572,10 @@ public class ModelloJPoxContinuumStore
             ContinuumBuildResult result = store.getContinuumBuildResultByJdoId( id, false );
 
             // TODO: Having to copy the objects feels a /bit/ strange.
+
             List changedFiles = new ArrayList();
 
-            for ( Iterator it = result.getChangedFiles().iterator(); it.hasNext(); )
+            for ( Iterator it = build.getUpdateScmResult().getUpdatedFiles().iterator(); it.hasNext(); )
             {
                 ScmFile scmFile = (ScmFile) it.next();
 
@@ -560,7 +607,7 @@ public class ModelloJPoxContinuumStore
 
             ContinuumBuild build = store.getContinuumBuild( buildId, false );
 
-            build.setScmResult( scmResult );
+            build.setUpdateScmResult( scmResult );
 
             store.commit();
         }

@@ -23,6 +23,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.Collection;
+import java.util.Vector;
+import java.util.Iterator;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -135,6 +138,10 @@ public class DefaultXmlRpcHelper
             {
                 value = value.toString();
             }
+            else if ( value instanceof Collection )
+            {
+                value = collectionToVector( (Collection) value );
+            }
             else
             {
                 value = objectToHashtable( value );
@@ -148,5 +155,25 @@ public class DefaultXmlRpcHelper
         }
 
         return hashtable;
+    }
+
+    private Vector collectionToVector( Collection value )
+        throws IllegalAccessException, InvocationTargetException
+    {
+        if ( value instanceof Vector )
+        {
+            return (Vector) value;
+        }
+
+        Vector vector = new Vector( value.size() );
+
+        for ( Iterator it = value.iterator(); it.hasNext(); )
+        {
+            Object object = it.next();
+
+            vector.add( objectToHashtable( object ) );
+        }
+
+        return vector;
     }
 }

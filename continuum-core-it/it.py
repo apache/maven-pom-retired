@@ -62,6 +62,28 @@ def assertProject( projectId, name, nagEmailAddress, state, version, builderId, 
     assertEquals( "project.version", version, project.version )
     assertEquals( "project.builderId", builderId, project.builderId )
 
+def assertCheckedOutFiles( project, expectedCheckedOutFiles ):
+    actualCheckedOutFiles = project.checkOutScmResult.checkedOutFiles
+    if ( len( expectedCheckedOutFiles ) != len( actualCheckedOutFiles ) ):
+        print "Expected files: "
+        for expectedFile in expectedCheckedOutFiles:
+            print " " + expectedFile.path
+
+        print "Actual files: "
+        for actualFile in actualCheckedOutFiles:
+            print " " + actualFile.path
+
+    assertEquals( "The expected and actual lists of checked out files doesn't have the same length.", 
+                  len( expectedCheckedOutFiles ),
+                  len( actualCheckedOutFiles ) )
+
+    i = 0
+    for expectedFile in expectedCheckedOutFiles:
+        actualFile = actualCheckedOutFiles[ i ]
+        i += 1
+
+        assertEquals( "File #" + str( i ) + " doesn't match the expected path.", expectedFile, actualFile.path )
+
 def assertSuccessfulNoBuildPerformed( buildId ):
     build = waitForBuild( buildId )
     assertEquals( "The build wasn't successful.", continuum.STATE_OK, build.state )
@@ -111,6 +133,7 @@ def assertSuccessfulShellBuild( buildId, expectedStandardOutput ):
     assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
 
 def removeProject( projectId ):
+    return
     continuum.removeProject( projectId )
 
     map = continuum.server.continuum.getProject( projectId )
@@ -122,8 +145,6 @@ def removeProject( projectId ):
 def execute( workingDirectory, command ):
     cwd = os.getcwd()
     os.chdir( workingDirectory )
-#    print "workingDirectory: " + workingDirectory
-#    print "command: " + command
     file = os.popen( command )
     os.chdir( cwd )
 
@@ -317,6 +338,7 @@ if 1:
     maven1Id = continuum.addProjectFromUrl( "file:" + maven1Project + "/project.xml", "maven-1" )
     maven1 = continuum.getProject( maven1Id )
     assertProject( maven1Id, "Maven 1 Project", email, continuum.STATE_NEW, "1.0", "maven-1", maven1 )
+    assertCheckedOutFiles( maven1, [ "/project.xml", "/src/main/java/Foo.java" ] )
 
     progress( "Building Maven 1 project" )
     buildId = continuum.buildProject( maven1.id )

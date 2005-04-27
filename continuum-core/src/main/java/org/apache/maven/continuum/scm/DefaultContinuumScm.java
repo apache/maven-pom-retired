@@ -17,6 +17,7 @@ package org.apache.maven.continuum.scm;
  */
 
 import java.io.File;
+import java.util.Iterator;
 
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.scm.ScmException;
@@ -178,7 +179,16 @@ public class DefaultContinuumScm
 
         result.setProviderMessage( scmResult.getProviderMessage() );
 
-        result.setChekedOutFiles( scmResult.getCheckedOutFiles() );
+        for ( Iterator it = scmResult.getCheckedOutFiles().iterator(); it.hasNext(); )
+        {
+            org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
+
+            ScmFile file = new ScmFile();
+
+            file.setPath( scmFile.getPath() );
+
+            result.addCheckedOutFile( file );
+        }
 
         return result;
     }
@@ -193,7 +203,16 @@ public class DefaultContinuumScm
 
         result.setProviderMessage( scmResult.getProviderMessage() );
 
-        result.setUpdatedFiles( scmResult.getUpdatedFiles() );
+        for ( Iterator it = scmResult.getUpdatedFiles().iterator(); it.hasNext(); )
+        {
+            org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
+
+            ScmFile file = new ScmFile();
+
+            file.setPath( scmFile.getPath() );
+
+            result.addUpdatedFile( file );
+        }
 
         return result;
     }

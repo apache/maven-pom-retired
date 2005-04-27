@@ -17,9 +17,7 @@ package org.apache.maven.continuum.buildcontroller;
  */
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.builder.ContinuumBuilder;
@@ -29,7 +27,6 @@ import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.project.ScmFile;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
@@ -261,23 +258,6 @@ public class DefaultBuildController
 
             result.setBuildExecuted( false );
         }
-
-        List scmFiles = scmResult.getUpdatedFiles();
-
-        List files = new ArrayList( scmFiles.size() );
-
-        for ( Iterator it = scmFiles.iterator(); it.hasNext(); )
-        {
-            org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
-
-            ScmFile file = new ScmFile();
-
-            file.setPath( scmFile.getPath() );
-
-            files.add( file );
-        }
-
-        result.setChangedFiles( files );
 
         return result;
     }

@@ -29,7 +29,8 @@ import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.project.ScmFile;
+import org.apache.maven.continuum.scm.ScmFile;
+import org.apache.maven.continuum.scm.UpdateScmResult;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.jdo.JdoFactory;
@@ -354,13 +355,17 @@ public class ModelloJPoxContinuumStoreTest
 
         String buildId = store.createBuild( projectId );
 
-        ContinuumBuildResult result = new ShellBuildResult();
+        UpdateScmResult updateScmResult = new UpdateScmResult();
 
         ScmFile file = new ScmFile();
 
         file.setPath( "foo" );
 
-        result.addChangedFile( file );
+        updateScmResult.addUpdatedFile( file );
+
+        store.setBuildUpdateScmResult( buildId, updateScmResult );
+
+        ContinuumBuildResult result = new ShellBuildResult();
 
         store.setBuildResult( buildId, ContinuumProjectState.OK, result, null );
 

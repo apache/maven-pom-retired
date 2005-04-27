@@ -26,6 +26,9 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -73,8 +76,12 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-    public Hashtable addProjectFromScm( String scmUrl, String builderType, String projectName, String nagEmailAddress,
-                                     String version, Hashtable configuration )
+    public Hashtable addProjectFromScm( String scmUrl,
+                                        String builderType,
+                                        String projectName,
+                                        String nagEmailAddress,
+                                        String version,
+                                        Hashtable configuration )
     {
         try
         {
@@ -87,7 +94,11 @@ public class DefaultContinuumXmlRpc
                 configurationProperties.put( entry.getKey().toString(), entry.getValue().toString() );
             }
 
-            String projectId = continuum.addProjectFromScm( scmUrl, builderType, projectName, nagEmailAddress, version,
+            String projectId = continuum.addProjectFromScm( scmUrl,
+                                                            builderType,
+                                                            projectName,
+                                                            nagEmailAddress,
+                                                            version,
                                                             configurationProperties );
 
             return makeHashtable( "projectId", projectId );
@@ -122,6 +133,13 @@ public class DefaultContinuumXmlRpc
             }
 
             hashtable.put( "configuration", configurationHashtable );
+
+            CheckOutScmResult result = store.getCheckOutScmResultForProject( projectId );
+
+            if ( result != null )
+            {
+                hashtable.put( "checkOutScmResult", xmlRpcHelper.objectToHashtable( result ) );
+            }
 
             return makeHashtable( "project", hashtable );
         }
@@ -235,7 +253,16 @@ public class DefaultContinuumXmlRpc
             {
                 ContinuumBuild continuumBuild = (ContinuumBuild) it.next();
 
-                builds.add( xmlRpcHelper.objectToHashtable( continuumBuild, excludedProperties ) );
+                Hashtable build = xmlRpcHelper.objectToHashtable( continuumBuild, excludedProperties );
+
+                UpdateScmResult result = continuumBuild.getUpdateScmResult();
+
+                if ( result != null )
+                {
+                    build.put( "updateScmResult", xmlRpcHelper.objectToHashtable( result ) );
+                }
+
+                builds.add( build );
             }
 
             return makeHashtable( "builds", builds );
@@ -250,15 +277,23 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            ContinuumBuild build = store.getBuild( buildId );
+            ContinuumBuild continuumBuild = store.getBuild( buildId );
 
             Set excludedProperties = new HashSet();
 
             excludedProperties.add( "project" );
 
-            excludedProperties.add( "builds" );
+            Hashtable build = makeHashtable( "build",
+                                             xmlRpcHelper.objectToHashtable( continuumBuild, excludedProperties ) );
 
-            return makeHashtable( "build", xmlRpcHelper.objectToHashtable( build, excludedProperties ) );
+            UpdateScmResult result = continuumBuild.getUpdateScmResult();
+
+            if ( result != null )
+            {
+                build.put( "updateScmResult", xmlRpcHelper.objectToHashtable( result ) );
+            }
+
+            return build;
         }
         catch ( Throwable e )
         {

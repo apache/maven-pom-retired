@@ -58,7 +58,10 @@ Name: %(name)s
 Version: %(version)s
 Working directory: %(workingDirectory)s
 Builder type: %(builderId)s""" % project.map
+
         print ""
+        print "Checked out files:"
+        print project.checkOutScmResult
 
         print "Project Configuration:"
         for key in project.configuration.keys():
@@ -95,6 +98,11 @@ Builder type: %(builderId)s""" % project.map
         build = continuum.getBuild( args[ 0 ] );
 
         print build
+
+        if ( build.updateScmResult != None and len( build.updateScmResult.updatedFiles ) > 0 ):
+            print "Updated files:"
+            print build.updateScmResult
+        print ""
 
         buildResult = continuum.getBuildResult( args[ 0 ] );
 

@@ -78,6 +78,9 @@ public interface ContinuumStore
     ContinuumProject getProjectByBuild( String buildId )
         throws ContinuumStoreException;
 
+    CheckOutScmResult getCheckOutScmResultForProject( String projectId )
+        throws ContinuumStoreException;
+
     // ----------------------------------------------------------------------
     // Build
     // ----------------------------------------------------------------------

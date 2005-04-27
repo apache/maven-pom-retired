@@ -709,7 +709,9 @@ public class DefaultContinuum
 
             store.setWorkingDirectory( projectId, projectWorkingDirectory.getAbsolutePath() );
 
-            scm.checkOutProject( project );
+            CheckOutScmResult result = scm.checkOutProject( project );
+
+            store.setProjectCheckOutScmResult( projectId, result );
 
             project = store.getProject( projectId );
 
@@ -759,16 +761,10 @@ public class DefaultContinuum
         try
         {
             CheckOutScmResult result = scm.checkOut( project, checkoutDirectory);
-
-            store.setProjectCheckOutScmResult( project.getId(), result );
         }
         catch ( ContinuumScmException e )
         {
             throw new ContinuumException( "Error while checking out the project.", e );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new ContinuumException( "Error while storing the scm result.", e );
         }
     }
 
