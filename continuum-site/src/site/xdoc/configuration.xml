@@ -61,23 +61,24 @@
         </p>
       </subsection>
       <subsection name="Jetty Configuration">
-        Jetty is configured in a special way as it's a service, not a component. The only thing that should be
-        changed in the Jetty configuration is the port and that is done by changing the <code>port</code> tag in
-        the <code>services</code> section.
+        <p>
+          Jetty is configured in a special way as it's a service, not a component. The only thing that should be
+          changed in the Jetty configuration is the port and that is done by changing the <code>port</code> tag in
+          the <code>services</code> section.
+        </p>
       </subsection>
       <subsection name="Socket Listeners">
-        There are two services listening on sockets that can be configured:
-        <ul>
-          <li>
-            <code>url-registrar-server</code>: This registrar will read POM URLs for the Maven 1.x and 2.x project builders.
-          </li>
-          <li>
-            <code>simple-socket-trigger-server</code>: This registrar will read project IDs off the wire and schedule a build for that project.
-          </li>
-        </ul>
-        <!-- TODO: finish
-        The only
-        -->
+        <p>
+          There are two services listening on sockets that can be configured:
+          <ul>
+            <li>
+              <code>url-registrar-server</code>: This registrar will read POM URLs for the Maven 1.x and 2.x project builders.
+            </li>
+            <li>
+              <code>simple-socket-trigger-server</code>: This registrar will read project IDs off the wire and schedule a build for that project.
+            </li>
+          </ul>
+        </p>
       </subsection>
     </section>
   </body>
