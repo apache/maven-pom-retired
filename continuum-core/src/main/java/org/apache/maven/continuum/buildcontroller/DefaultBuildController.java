@@ -31,9 +31,9 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.ScmFile;
 import org.apache.maven.continuum.scm.ContinuumScm;
+import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.scm.command.update.UpdateScmResult;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
@@ -204,6 +204,8 @@ public class DefaultBuildController
             notifier.checkoutStarted( build );
 
             scmResult = scm.updateProject( project );
+
+            store.setBuildUpdateScmResult( build.getId(), scmResult );
         }
         finally
         {

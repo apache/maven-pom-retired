@@ -23,6 +23,8 @@ import java.util.List;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.UpdateScmResult;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -53,6 +55,9 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     void setWorkingDirectory( String projectId, String workingDirectory )
+        throws ContinuumStoreException;
+
+    void setProjectCheckOutScmResult( String projectId, CheckOutScmResult result )
         throws ContinuumStoreException;
 
     void updateProject( String projectId, String name, String scmUrl, String nagEmailAddress, String version )
@@ -96,5 +101,8 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     List getChangedFilesForBuild( String buildId )
+        throws ContinuumStoreException;
+
+    void setBuildUpdateScmResult( String buildId, UpdateScmResult scmResult )
         throws ContinuumStoreException;
 }

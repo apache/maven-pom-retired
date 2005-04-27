@@ -16,8 +16,6 @@ package org.apache.maven.continuum.scm;
  * limitations under the License.
  */
 
-import org.apache.maven.scm.ScmResult;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id: ContinuumScmException.java,v 1.1.1.1 2005/03/29 20:42:02 trygvis Exp $

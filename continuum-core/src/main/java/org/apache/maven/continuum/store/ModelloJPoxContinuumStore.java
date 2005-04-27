@@ -32,6 +32,8 @@ import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.ScmFile;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.UpdateScmResult;
 
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -200,6 +202,27 @@ public class ModelloJPoxContinuumStore
             rollback( store );
 
             throw new ContinuumStoreException( "Error while setting the working directory.", e );
+        }
+    }
+
+    public void setProjectCheckOutScmResult( String projectId, CheckOutScmResult result )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            store.begin();
+
+            ContinuumProject project = store.getContinuumProject( projectId, false );
+
+            project.setCheckOutScmResult( result );
+
+            store.commit();
+        }
+        catch ( Exception e )
+        {
+            rollback( store );
+
+            throw new ContinuumStoreException( "Error while setting scm check out result for project with id: '" + projectId + "'.", e );
         }
     }
 
@@ -525,6 +548,27 @@ public class ModelloJPoxContinuumStore
             rollback( store );
 
             throw new ContinuumStoreException( "Error while getting build result.", e );
+        }
+    }
+
+    public void setBuildUpdateScmResult( String buildId, UpdateScmResult scmResult )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            store.begin();
+
+            ContinuumBuild build = store.getContinuumBuild( buildId, false );
+
+            build.setScmResult( scmResult );
+
+            store.commit();
+        }
+        catch ( Exception e )
+        {
+            rollback( store );
+
+            throw new ContinuumStoreException( "Error while setting scm update result for build: '" + buildId + "'.", e );
         }
     }
 

@@ -42,9 +42,9 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.project.ScmFile;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.ContinuumScmException;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
@@ -758,11 +758,17 @@ public class DefaultContinuum
 
         try
         {
-            scm.checkOut( project, checkoutDirectory);
+            CheckOutScmResult result = scm.checkOut( project, checkoutDirectory);
+
+            store.setProjectCheckOutScmResult( project.getId(), result );
         }
-        catch ( ContinuumScmException ex )
+        catch ( ContinuumScmException e )
         {
-            throw new ContinuumException( "Error while checking out the project.", ex );
+            throw new ContinuumException( "Error while checking out the project.", e );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error while storing the scm result.", e );
         }
     }
 

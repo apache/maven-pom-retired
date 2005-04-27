@@ -19,7 +19,6 @@ package org.apache.maven.continuum.scm;
 import java.io.File;
 
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.scm.command.update.UpdateScmResult;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -29,10 +28,10 @@ public interface ContinuumScm
 {
     String ROLE = ContinuumScm.class.getName();
 
-    void checkOut( ContinuumProject project, File workingDirectory )
+    CheckOutScmResult checkOut( ContinuumProject project, File workingDirectory )
         throws ContinuumScmException;
 
-    void checkOutProject( ContinuumProject project )
+    CheckOutScmResult checkOutProject( ContinuumProject project )
         throws ContinuumScmException;
 
     UpdateScmResult updateProject( ContinuumProject project )
