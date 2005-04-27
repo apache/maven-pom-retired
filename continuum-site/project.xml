@@ -23,7 +23,7 @@
   <artifactId>continuum-site</artifactId>
   <groupId>org.apache.maven.continuum</groupId>
   <name>Continuum</name>
-  <currentVersion>1.0-alpha-1</currentVersion>
+  <currentVersion>1.0-alpha-2-SNAPSHOT</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://www.apache.org/</url>
