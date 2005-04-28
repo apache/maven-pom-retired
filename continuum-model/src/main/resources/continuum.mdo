@@ -229,7 +229,7 @@
           </description>
         </field>
         <field>
-          <name>scmResult</name>
+          <name>updateScmResult</name>
           <version>1.0.0</version>
           <association>
             <type>UpdateScmResult</type>
@@ -265,26 +265,6 @@
           <name>buildExecuted</name>
           <version>1.0.0</version>
           <type>boolean</type>
-        </field>
-        <field>
-          <name>changedFiles</name>
-          <version>1.0.0</version>
-          <association>
-            <type>ScmFile</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-      </fields>
-    </class>
-
-    <class>
-      <name>ScmFile</name>
-      <version>1.0.0</version>
-      <fields>
-        <field>
-          <name>path</name>
-          <version>1.0.0</version>
-          <type>String</type>
         </field>
       </fields>
     </class>
@@ -414,23 +394,43 @@
     </class>
 
     <class>
+      <name>ScmFile</name>
+      <packageName>org.apache.maven.continuum.scm</packageName>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>path</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+<!-- TODO: Use some form of enumeration
+        <field>
+          <name>status</name>
+          <version>1.0.0</version>
+          <type>ScmFileStatus</type>
+        </field>
+-->
+      </fields>
+    </class>
+
+    <class stash.storable="true">
       <name>CheckOutScmResult</name>
       <packageName>org.apache.maven.continuum.scm</packageName>
       <superClass>ScmResult</superClass>
       <version>1.0.0</version>
       <fields>
         <field>
-          <name>chekedOutFiles</name>
+          <name>checkedOutFiles</name>
           <version>1.0.0</version>
           <association>
-            <type>String</type>
+            <type>ScmFile</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
       </fields>
     </class>
 
-    <class>
+    <class stash.storable="true">
       <name>UpdateScmResult</name>
       <packageName>org.apache.maven.continuum.scm</packageName>
       <superClass>ScmResult</superClass>
@@ -440,7 +440,7 @@
           <name>updatedFiles</name>
           <version>1.0.0</version>
           <association>
-            <type>String</type>
+            <type>ScmFile</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
