@@ -42,6 +42,9 @@
           </goal>
           <goal>
             <id>jpox-jdo-mapping</id>
+            <configuration>
+              <outputDirectory>target/classes</outputDirectory>
+            </configuration>
           </goal>          
           <goal>
             <id>jpox-store</id>
