@@ -7,12 +7,26 @@
         <requirement>
           <role>org.apache.maven.continuum.builder.manager.BuilderManager</role>
         </requirement>
+<!--
         <requirement>
           <role>org.apache.maven.continuum.buildcontroller.BuildController</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.buildqueue.BuildQueue</role>
         </requirement>
+-->
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>build-project</role-hint>
+          <field-name>buildQueue</field-name>
+        </requirement>
+<!--
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>check-out-queue</role-hint>
+          <field-name>checkOutQueue</field-name>
+        </requirement>
+-->
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
@@ -78,13 +92,14 @@
         </requirement>
       </requirements>
     </component>
-
+<!-- TODO: remove -->
     <component>
       <role>org.apache.maven.continuum.buildqueue.BuildQueue</role>
       <implementation>org.apache.maven.continuum.buildqueue.DefaultBuildQueue</implementation>
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>build-project</role-hint>
         </requirement>
       </requirements>
     </component>
@@ -244,12 +259,13 @@
 
     <!--
      |
-     | Task Queue
+     | Build Task Queue
      |
      |-->
 
     <component>
       <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+      <role-hint>build-project</role-hint>
       <implementation>org.codehaus.plexus.taskqueue.DefaultTaskQueue</implementation>
       <lifecycle-handler>plexus-configurable</lifecycle-handler>
       <configuration>
@@ -272,6 +288,79 @@
       </configuration>
     </component>
 
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskExecutor</role>
+      <role-hint>build-project</role-hint>
+      <implementation>org.apache.maven.continuum.buildcontroller.BuildProjectTaskExecutor</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.buildcontroller.BuildController</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+      <role-hint>build-project</role-hint>
+      <implementation>org.codehaus.plexus.taskqueue.execution.ThreadedTaskQueueExecutor</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.execution.TaskExecutor</role>
+          <role-hint>build-project</role-hint>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>build-project</role-hint>
+        </requirement>
+      </requirements>
+      <configuration>
+        <name>build-project</name>
+      </configuration>
+    </component>
+
+    <!--
+     |
+     | Check Out Task Queue
+     |
+     |-->
+
+    <component>
+      <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+      <role-hint>check-out-project</role-hint>
+      <implementation>org.codehaus.plexus.taskqueue.DefaultTaskQueue</implementation>
+      <lifecycle-handler>plexus-configurable</lifecycle-handler>
+    </component>
+<!--
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskExecutor</role>
+      <role-hint>check-out-project</role-hint>
+      <implementation>org.apache.maven.continuum.buildcontroller.BuildProjectTaskExecutor</implementation>
+    </component>
+-->
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+      <role-hint>check-out-project</role-hint>
+      <implementation>org.codehaus.plexus.taskqueue.execution.ThreadedTaskQueueExecutor</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.execution.TaskExecutor</role>
+          <role-hint>check-out-project</role-hint>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>check-out-project</role-hint>
+        </requirement>
+      </requirements>
+      <configuration>
+        <name>check-out-project</name>
+      </configuration>
+    </component>
+
+    <!--
+     |
+     | Check Out Task Queue
+     |
+     |-->
     <component>
       <role>org.codehaus.plexus.jdo.JdoFactory</role>
       <implementation>org.codehaus.plexus.jdo.DefaultJdoFactory</implementation>

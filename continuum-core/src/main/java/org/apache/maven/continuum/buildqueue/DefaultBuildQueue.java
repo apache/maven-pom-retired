@@ -57,7 +57,7 @@ public class DefaultBuildQueue
     public void enqueue( String projectId, String buildId )
         throws BuildQueueException
     {
-        BuildProjectTask task = new BuildProjectTask( projectId, buildId, System.currentTimeMillis() );
+        BuildProjectTask task = new BuildProjectTask( projectId, buildId );
 
         try
         {

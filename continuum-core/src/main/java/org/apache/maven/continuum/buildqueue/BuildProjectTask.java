@@ -31,13 +31,13 @@ public class BuildProjectTask
 
     private long timestamp;
 
-    public BuildProjectTask( String projectId, String buildId, long timestamp )
+    public BuildProjectTask( String projectId, String buildId )
     {
         this.projectId = projectId;
 
         this.buildId = buildId;
 
-        this.timestamp = timestamp;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public String getProjectId()

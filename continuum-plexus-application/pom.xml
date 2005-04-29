@@ -98,22 +98,22 @@
         <goals>
           <goal>
             <id>app</id>
+            <configuration>
+              <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
+              <configurationProperties>app.properties</configurationProperties>
+              <applicationName>continuum</applicationName>
+            </configuration>
           </goal>
           <goal>
             <id>bundle-application</id>
           </goal>
           <goal>
             <id>test-runtime</id>
+            <configuration>
+              <testRuntimeConfiguration>src/test/conf/testRuntimeConfiguration.xml</testRuntimeConfiguration>
+            </configuration>
           </goal>
         </goals>
-        <configuration>
-          <applicationName>continuum</applicationName>
-          <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
-          <configurationProperties>app.properties</configurationProperties>
-          <configurationDirectory>src/conf</configurationDirectory>
-          <testRuntimeConfiguration>src/test/conf/testRuntimeConfiguration.xml</testRuntimeConfiguration>
-          <basedir>target</basedir>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>

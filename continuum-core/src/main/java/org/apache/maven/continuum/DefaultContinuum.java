@@ -23,18 +23,16 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.List;
+import java.util.Properties;
 
-import org.apache.maven.continuum.buildcontroller.BuildController;
 import org.apache.maven.continuum.builder.ContinuumBuilder;
 import org.apache.maven.continuum.builder.ant.AntBuilder;
 import org.apache.maven.continuum.builder.manager.BuilderManager;
 import org.apache.maven.continuum.builder.maven.m1.Maven1Builder;
 import org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder;
 import org.apache.maven.continuum.builder.shell.ShellBuilder;
-import org.apache.maven.continuum.buildqueue.BuildQueue;
-import org.apache.maven.continuum.buildqueue.BuildQueueException;
+import org.apache.maven.continuum.buildqueue.BuildProjectTask;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
@@ -42,15 +40,17 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.ContinuumScmException;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
+import org.codehaus.plexus.taskqueue.TaskQueue;
+import org.codehaus.plexus.taskqueue.TaskQueueException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
@@ -80,10 +80,16 @@ public class DefaultContinuum
     private BuilderManager builderManager;
 
     /** @requirement */
-    private BuildController buildController;
+//    private BuildController buildController;
 
     /** @requirement */
-    private BuildQueue buildQueue;
+//    private BuildQueue buildQueue;
+
+    /** @requirement */
+    private TaskQueue buildQueue;
+
+    /** @requirement */
+    private TaskQueue checkOutQueue;
 
     /** @requirement */
     private ContinuumStore store;
@@ -101,7 +107,7 @@ public class DefaultContinuum
     //
     // ----------------------------------------------------------------------
 
-    private BuilderThread builderThread;
+//    private BuilderThread builderThread;
 
     private Thread builderThreadThread;
 
@@ -370,7 +376,7 @@ public class DefaultContinuum
 
             getLogger().info( "Build id: '" + buildId + "'." );
 
-            buildQueue.enqueue( projectId, buildId );
+            buildQueue.put( new BuildProjectTask( projectId, buildId ) );
 
             return buildId;
         }
@@ -380,7 +386,7 @@ public class DefaultContinuum
 
             throw new ContinuumException( "Error while creating build object.", e );
         }
-        catch ( BuildQueueException e )
+        catch ( TaskQueueException e )
         {
             getLogger().error( "Error while enqueuing project.", e );
 
@@ -760,7 +766,7 @@ public class DefaultContinuum
 
         try
         {
-            CheckOutScmResult result = scm.checkOut( project, checkoutDirectory);
+            scm.checkOut( project, checkoutDirectory);
         }
         catch ( ContinuumScmException e )
         {
@@ -845,6 +851,7 @@ public class DefaultContinuum
         getLogger().info( "Starting Continuum." );
 
         // start the builder thread
+/*
         builderThread = new BuilderThread( buildController, buildQueue, getLogger() );
 
         builderThreadThread = new Thread( builderThread );
@@ -852,7 +859,7 @@ public class DefaultContinuum
         builderThreadThread.setDaemon( true );
 
         builderThreadThread.start();
-
+*/
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
@@ -900,11 +907,11 @@ public class DefaultContinuum
     public void stop()
         throws Exception
     {
+        getLogger().info( "Stopping Continuum." );
+/*
         int maxSleep = 10 * 1000; // 10 seconds
         int interval = 1000;
         int slept = 0;
-
-        getLogger().info( "Stopping Continuum." );
 
         // signal the thread to stop
         builderThread.shutdown();
@@ -937,7 +944,7 @@ public class DefaultContinuum
             // TODO: should use System.currentTimeMillis()
             slept += interval;
         }
-
+*/
         getLogger().info( "Continuum stopped." );
     }
 
