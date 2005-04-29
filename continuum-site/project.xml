@@ -68,19 +68,19 @@
       <name>Continuum User List</name>
       <subscribe>continuum-users-subscribe@maven.apache.org</subscribe>
       <unsubscribe>continuum-users-unsubscribe@maven.apache.org</unsubscribe>
-      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=continuum-users@maven.apache.org</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/maven-continuum-users/</archive>
     </mailingList>
     <mailingList>
       <name>Continuum Developer List</name>
       <subscribe>continuum-dev-subscribe@maven.apache.org</subscribe>
       <unsubscribe>continuum-dev-unsubscribe@maven.apache.org</unsubscribe>
-      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=continuum-dev@maven.apache.org</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/maven-continuum-dev/</archive>
     </mailingList>
     <mailingList>
       <name>Continuum Commits List</name>
       <subscribe>continuum-commits-subscribe@maven.apache.org</subscribe>
       <unsubscribe>continuum-commits-unsubscribe@maven.apache.org</unsubscribe>
-      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=continuum-commits@maven.apache.org</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/maven-continuum-commits/</archive>
     </mailingList>
   </mailingLists>
   <licenses>
