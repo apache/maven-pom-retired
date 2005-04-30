@@ -464,7 +464,7 @@ public class DefaultContinuum
         configuration.setProperty( AntBuilder.CONFIGURATION_TARGETS, project.getTargets() );
 
         addProjectFromScm( project.getScmUrl(),
-                           "ant",
+                           AntBuilder.ID,
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
@@ -515,7 +515,7 @@ public class DefaultContinuum
         configuration.setProperty( Maven1Builder.CONFIGURATION_GOALS, project.getGoals() );
 
         addProjectFromScm( project.getScmUrl(),
-                           "maven-1",
+                           Maven1Builder.ID,
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
@@ -556,7 +556,7 @@ public class DefaultContinuum
         configuration.setProperty( MavenShellBuilder.CONFIGURATION_GOALS, project.getGoals() );
 
         addProjectFromScm( project.getScmUrl(),
-                           "maven2",
+                           MavenShellBuilder.ID,
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
@@ -602,7 +602,7 @@ public class DefaultContinuum
         }
 
         addProjectFromScm( project.getScmUrl(),
-                           "shell",
+                           ShellBuilder.ID,
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),

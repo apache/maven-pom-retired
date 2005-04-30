@@ -33,6 +33,8 @@ public class MavenShellBuilder
 {
     public final static String CONFIGURATION_GOALS = "goals";
 
+    public final static String ID = "maven2";
+
     /** @requirement */
     private MavenBuilderHelper builderHelper;
 

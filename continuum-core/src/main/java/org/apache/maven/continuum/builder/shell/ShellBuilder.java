@@ -37,6 +37,8 @@ public class ShellBuilder
 
     public final static String CONFIGURATION_ARGUMENTS = "arguments";
 
+    public final static String ID = "shell";
+
     /** @requirement */
     private ShellCommandHelper shellCommandHelper;
 

@@ -43,6 +43,8 @@ public class Maven1Builder
 {
     public final static String CONFIGURATION_GOALS = "goals";
 
+    public final static String ID = "maven-1";
+
     /** @requirement */
     private ShellCommandHelper shellCommandHelper;
 

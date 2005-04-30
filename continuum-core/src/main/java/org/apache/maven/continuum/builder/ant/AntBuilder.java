@@ -40,6 +40,8 @@ public class AntBuilder
 
     public static final String CONFIGURATION_TARGETS = "targets";
 
+    public static final String ID = "ant";
+
     /** @requirement */
     private ShellCommandHelper shellCommandHelper;
 
