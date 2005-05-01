@@ -48,6 +48,14 @@ def decodeState( state ):
     else:
        return "UNKNOWN STATE (" + state + ")."
 
+   
+# Maven 2.x project
+
+def addMavenTwoProject( url ):
+    result = checkResult( server.continuum.addMavenTwoProject( url ) )
+
+    return result[ "projectId" ]
+
 def addProjectFromUrl( url, builderId ):
     result = checkResult( server.continuum.addProjectFromUrl( url, builderId ) )
 
