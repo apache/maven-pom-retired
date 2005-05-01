@@ -26,6 +26,10 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder;
+import org.apache.maven.continuum.builder.maven.m1.Maven1Builder;
+import org.apache.maven.continuum.builder.ant.AntBuilder;
+import org.apache.maven.continuum.builder.shell.ShellBuilder;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
@@ -55,14 +59,72 @@ public class DefaultContinuumXmlRpc
     private XmlRpcHelper xmlRpcHelper;
 
     // ----------------------------------------------------------------------
-    // ContinuumXmlRpc Implementation
+    // Maven 2.x projects
     // ----------------------------------------------------------------------
+
+    public Hashtable addMavenTwoProject( String url )
+    {
+        try
+        {
+            String projectId = continuum.addProjectFromUrl( url, MavenShellBuilder.ID );
+
+            return makeHashtable( "projectId", projectId );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.addProjectFromScm(): url: '" + url + "'.", e );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Maven 2.x projects
+    // ----------------------------------------------------------------------
+
+    public Hashtable addMavenOneProject( String url )
+    {
+        try
+        {
+            String projectId = continuum.addProjectFromUrl( url, Maven1Builder.ID );
+
+            return makeHashtable( "projectId", projectId );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.addProjectFromScm(): url: '" + url + "'.", e );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Ant projects
+    // ----------------------------------------------------------------------
+
+    public Hashtable addAntProject( String scmUrl,
+                                    String projectName,
+                                    String nagEmailAddress,
+                                    String version,
+                                    Hashtable configuration )
+    {
+        return addProjectFromScm( scmUrl, AntBuilder.ID, projectName, nagEmailAddress, version, configuration );
+    }
+
+    // ----------------------------------------------------------------------
+    // Shell projects
+    // ----------------------------------------------------------------------
+
+    public Hashtable addShellProject( String scmUrl,
+                                      String projectName,
+                                      String nagEmailAddress,
+                                      String version,
+                                      Hashtable configuration )
+    {
+        return addProjectFromScm( scmUrl, ShellBuilder.ID, projectName, nagEmailAddress, version, configuration );
+    }
 
     // ----------------------------------------------------------------------
     // Projects
     // ----------------------------------------------------------------------
 
-    public Hashtable addProjectFromUrl( String url, String builderType )
+    protected Hashtable addProjectFromUrl( String url, String builderType )
     {
         try
         {
@@ -76,12 +138,12 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-    public Hashtable addProjectFromScm( String scmUrl,
-                                        String builderType,
-                                        String projectName,
-                                        String nagEmailAddress,
-                                        String version,
-                                        Hashtable configuration )
+    protected Hashtable addProjectFromScm( String scmUrl,
+                                           String builderType,
+                                           String projectName,
+                                           String nagEmailAddress,
+                                           String version,
+                                           Hashtable configuration )
     {
         try
         {

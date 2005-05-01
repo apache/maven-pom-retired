@@ -27,13 +27,8 @@ public interface ContinuumXmlRpc
     String ROLE = ContinuumXmlRpc.class.getName();
 
     // ----------------------------------------------------------------------
-    //
+    // Project handling
     // ----------------------------------------------------------------------
-
-    Hashtable addProjectFromUrl( String url, String builderType );
-
-    Hashtable addProjectFromScm( String scmUrl, String builderType, String projectName, String nagEmailAddress,
-                                 String version, Hashtable configuration );
 
     Hashtable getProject( String projectId );
 
@@ -46,7 +41,7 @@ public interface ContinuumXmlRpc
     Hashtable removeProject( String projectId );
 
     // ----------------------------------------------------------------------
-    //
+    // Build handling
     // ----------------------------------------------------------------------
 
     Hashtable buildProject( String projectId );
@@ -56,4 +51,37 @@ public interface ContinuumXmlRpc
     Hashtable getBuild( String buildId );
 
     Hashtable getBuildResult( String buildId );
+
+    // ----------------------------------------------------------------------
+    // Maven 2.x projects
+    // ----------------------------------------------------------------------
+
+    Hashtable addMavenTwoProject( String url );
+
+    // ----------------------------------------------------------------------
+    // Maven 1.x projects
+    // ----------------------------------------------------------------------
+
+    Hashtable addMavenOneProject( String url );
+
+
+    // ----------------------------------------------------------------------
+    // Ant projects
+    // ----------------------------------------------------------------------
+
+    Hashtable addAntProject( String scmUrl,
+                             String projectName,
+                             String nagEmailAddress,
+                             String version,
+                             Hashtable configuration );
+
+    // ----------------------------------------------------------------------
+    // Shell projects
+    // ----------------------------------------------------------------------
+
+    Hashtable addShellProject( String scmUrl,
+                               String projectName,
+                               String nagEmailAddress,
+                               String version,
+                               Hashtable configuration );
 }
