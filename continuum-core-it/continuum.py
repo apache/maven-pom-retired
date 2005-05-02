@@ -48,23 +48,13 @@ def decodeState( state ):
     else:
        return "UNKNOWN STATE (" + state + ")."
 
-   
-# Maven 2.x project
+####################################################################
+# These methods correspods 1<=>1 with the ContinuumXmlRpc interface
+####################################################################
 
-def addMavenTwoProject( url ):
-    result = checkResult( server.continuum.addMavenTwoProject( url ) )
-
-    return result[ "projectId" ]
-
-def addProjectFromUrl( url, builderId ):
-    result = checkResult( server.continuum.addProjectFromUrl( url, builderId ) )
-
-    return result[ "projectId" ]
-
-def addProjectFromScm( scmUrl, builderId, name, nagEmailAddress, version, configuration ):
-    result = checkResult( server.continuum.addProjectFromScm( scmUrl, builderId, name, nagEmailAddress, version, configuration ) )
-
-    return result[ "projectId" ]
+####################################################################
+# Project handling
+####################################################################
 
 def getProject( projectId ):
     result = checkResult( server.continuum.getProject( projectId ) )
@@ -84,6 +74,10 @@ def getAllProjects():
 
 def removeProject( projectId ):
     checkResult( server.continuum.removeProject( projectId ) )
+
+####################################################################
+# Build handling
+####################################################################
 
 def buildProject( projectId ):
     result = checkResult( server.continuum.buildProject( projectId ) )
@@ -113,6 +107,42 @@ def getBuildResult( buildId ):
         return None
 
     return BuildResult( buildResult )
+
+####################################################################
+# Maven 2.x project
+####################################################################
+
+def addMavenTwoProject( url ):
+    result = checkResult( server.continuum.addMavenTwoProject( url ) )
+
+    return result[ "projectId" ]
+
+####################################################################
+# Maven 1.x project
+####################################################################
+
+def addMavenOneProject( url ):
+    result = checkResult( server.continuum.addMavenOneProject( url ) )
+
+    return result[ "projectId" ]
+
+####################################################################
+# Ant project
+####################################################################
+
+def addAntProject( scmUrl, projectName, nagEmailAddress, version, configuration ):
+    result = checkResult( server.continuum.addAntProject( scmUrl, projectName, nagEmailAddress, version, configuration ) )
+
+    return result[ "projectId" ]
+
+####################################################################
+# Shell project
+####################################################################
+
+def addShellProject( scmUrl, projectName, nagEmailAddress, version, configuration ):
+    result = checkResult( server.continuum.addShellProject( scmUrl, projectName, nagEmailAddress, version, configuration ) )
+
+    return result[ "projectId" ]
 
 class Project:
     def __init__( self, map ):

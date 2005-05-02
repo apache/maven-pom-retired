@@ -38,13 +38,22 @@ class ContinuumXmlRpcClient(cli.cli):
 
         print "Version 1.0"
 
-    def do_addProject(self, args):
-        """Add a Continuum project.
-        Use this command to add a project to Continuum."""
+    def do_addMavenTwoProject(self, args):
+        """Add a Maven 2.x project."""
 
-        projectId = continuum.addProjectFromUrl( args[0], args[1] )
+        projectId = continuum.addMavenTwoProject( args[0] )
 
         print "Added project, id: " + projectId
+
+    def do_addMavenOneProject(self, args):
+        """Add a Maven 1.x project."""
+
+        projectId = continuum.addMavenOneProject( args[0] )
+
+        print "Added project, id: " + projectId
+
+    # TODO: addAntProject
+    # TODO: addShellProject
 
     def do_showProject(self, args):
         """Shows Continuum project.
