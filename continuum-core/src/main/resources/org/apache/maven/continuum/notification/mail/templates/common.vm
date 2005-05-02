@@ -45,6 +45,6 @@ Standard error:
 $buildResult.standardError
 ****************************************************************************
 #else
-There was no content on standard output.
+There was no content on standard error.
 #end
 #end
