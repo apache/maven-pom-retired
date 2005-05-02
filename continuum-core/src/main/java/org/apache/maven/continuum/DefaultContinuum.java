@@ -40,9 +40,9 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.ContinuumScmException;
+import org.apache.maven.continuum.scm.queue.CheckOutTask;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
@@ -80,12 +80,6 @@ public class DefaultContinuum
     private BuilderManager builderManager;
 
     /** @requirement */
-//    private BuildController buildController;
-
-    /** @requirement */
-//    private BuildQueue buildQueue;
-
-    /** @requirement */
     private TaskQueue buildQueue;
 
     /** @requirement */
@@ -106,8 +100,6 @@ public class DefaultContinuum
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
-
-//    private BuilderThread builderThread;
 
     private Thread builderThreadThread;
 
@@ -293,9 +285,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException ex )
         {
-            getLogger().error( "Error while updating project.", ex );
-
-            throw new ContinuumException( "Error while updating project from SCM.", ex );
+            throw logAndCreateException( "Error while updating project from SCM.", ex );
         }
     }
 
@@ -308,9 +298,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException ex )
         {
-            getLogger().error( "Error while updating project configuration.", ex );
-
-            throw new ContinuumException( "Error while updating project configuration.", ex );
+            throw logAndCreateException( "Error while updating project configuration.", ex );
         }
     }
 
@@ -323,9 +311,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException ex )
         {
-            getLogger().error( "Error while updating project.", ex );
-
-            throw new ContinuumException( "Error while removing project.", ex );
+            logAndCreateException( "Error while removing project.", ex );
         }
     }
 
@@ -340,9 +326,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException ex )
         {
-            getLogger().error( "Error while finding all projects.", ex );
-
-            throw new ContinuumException( "Exception while getting all projects.", ex );
+            throw logAndCreateException( "Exception while getting all projects.", ex );
         }
     }
 
@@ -357,9 +341,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException ex )
         {
-            getLogger().error( "Error while finding all projects.", ex );
-
-            throw new ContinuumException( "Exception while getting all projects.", ex );
+            throw logAndCreateException( "Exception while getting all projects.", ex );
         }
     }
 
@@ -382,15 +364,11 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException e )
         {
-            getLogger().error( "Error while building project.", e );
-
-            throw new ContinuumException( "Error while creating build object.", e );
+            throw logAndCreateException( "Error while creating build object.", e );
         }
         catch ( TaskQueueException e )
         {
-            getLogger().error( "Error while enqueuing project.", e );
-
-            throw new ContinuumException( "Error while creating enqueuing object.", e );
+            throw logAndCreateException( "Error while creating enqueuing object.", e );
         }
     }
 
@@ -407,7 +385,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException e )
         {
-            throw new ContinuumException( "Unable to retrieve build with id = " + buildId, e );
+            throw logAndCreateException( "Unable to retrieve build with id = " + buildId, e );
         }
     }
 
@@ -420,7 +398,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException e )
         {
-            throw new ContinuumException( "Cannot retrieve builds for project with id = " + projectId, e );
+            throw logAndCreateException( "Cannot retrieve builds for project with id = " + projectId, e );
         }
     }
 
@@ -433,7 +411,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException e )
         {
-            throw new ContinuumException( "Cannot retrieve build result for build with id = " + buildId, e );
+            throw logAndCreateException( "Cannot retrieve build result for build with id = " + buildId, e );
         }
     }
 
@@ -446,7 +424,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException e )
         {
-            throw new ContinuumException( "Cannot retrieve build result for build with id = " + buildId, e );
+            throw logAndCreateException( "Cannot retrieve build result for build with id = " + buildId, e );
         }
     }
 
@@ -655,7 +633,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException e )
         {
-            throw new ContinuumException( "Error while updating the project.", e );
+            throw logAndCreateException( "Error while updating the project.", e );
         }
     }
 
@@ -681,26 +659,30 @@ public class DefaultContinuum
     private ContinuumProject addProjectAndCheckOutSources( ContinuumProject project, String builderType )
         throws ContinuumException
     {
+        String projectId;
+
+        File projectWorkingDirectory;
+
         try
         {
             // ----------------------------------------------------------------------
             // Store the project
             // ----------------------------------------------------------------------
 
-            String projectId = store.addProject( project.getName(),
-                                                 project.getScmUrl(),
-                                                 project.getNagEmailAddress(),
-                                                 project.getVersion(),
-                                                 builderType,
-                                                 null,
-                                                 project.getConfiguration() );
+            projectId = store.addProject( project.getName(),
+                                          project.getScmUrl(),
+                                          project.getNagEmailAddress(),
+                                          project.getVersion(),
+                                          builderType,
+                                          null,
+                                          project.getConfiguration() );
 
             // ----------------------------------------------------------------------
             // Set the working directory
             // ----------------------------------------------------------------------
 
 
-            File projectWorkingDirectory = new File( workingDirectory, projectId );
+            projectWorkingDirectory = new File( workingDirectory, projectId );
 
             if ( !projectWorkingDirectory.exists() && !projectWorkingDirectory.mkdirs() )
             {
@@ -714,27 +696,24 @@ public class DefaultContinuum
             // ----------------------------------------------------------------------
 
             store.setWorkingDirectory( projectId, projectWorkingDirectory.getAbsolutePath() );
-
-            CheckOutScmResult result = scm.checkOutProject( project );
-
-            store.setProjectCheckOutScmResult( projectId, result );
-
-            project = store.getProject( projectId );
-
-            return project;
-        }
-        catch ( ContinuumScmException ex )
-        {
-            getLogger().error( "Exception while checking out the project.", ex );
-
-            throw new ContinuumException( "Exception while checking out the project.", ex );
         }
         catch ( ContinuumStoreException ex )
         {
-            getLogger().error( "Exception while adding project.", ex );
-
-            throw new ContinuumException( "Exception while adding project.", ex );
+            throw logAndCreateException( "Exception while adding project.", ex );
         }
+
+        try
+        {
+            CheckOutTask checkOutTask = new CheckOutTask( projectId, projectWorkingDirectory );
+
+            checkOutQueue.put( checkOutTask );
+        }
+        catch ( TaskQueueException e )
+        {
+            throw logAndCreateException( "Exception while adding the project to the check out queue.", e );
+        }
+
+        return getProject( projectId );
     }
 
     private void doTempCheckOut( ContinuumProject project )
@@ -750,14 +729,14 @@ public class DefaultContinuum
             }
             catch ( IOException ex )
             {
-                throw new ContinuumException( "Error while cleaning out " + checkoutDirectory.getAbsolutePath() );
+                throw logAndCreateException( "Error while cleaning out " + checkoutDirectory.getAbsolutePath() );
             }
         }
         else
         {
             if ( !checkoutDirectory.mkdirs() )
             {
-                throw new ContinuumException( "Could not make the check out directory (" + checkoutDirectory.getAbsolutePath() + ")." );
+                throw logAndCreateException( "Could not make the check out directory (" + checkoutDirectory.getAbsolutePath() + ")." );
             }
         }
 
@@ -770,7 +749,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumScmException e )
         {
-            throw new ContinuumException( "Error while checking out the project.", e );
+            throw logAndCreateException( "Error while checking out the project.", e );
         }
     }
 
@@ -803,7 +782,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException e )
         {
-            throw new ContinuumException( "Error while storing the updated project.", e );
+            throw logAndCreateException( "Error while storing the updated project.", e );
         }
 
         getLogger().info( "Updated project: " + project.getName() );
@@ -824,14 +803,14 @@ public class DefaultContinuum
         {
             if ( !wdFile.isDirectory() )
             {
-                throw new ContinuumException( "The specified working directory isn't a directory: " + wdFile.getAbsolutePath() );
+                throw logAndCreateException( "The specified working directory isn't a directory: " + wdFile.getAbsolutePath() );
             }
         }
         else
         {
             if ( !wdFile.mkdirs() )
             {
-                throw new ContinuumException( "Could not making the working directory: " + wdFile.getAbsolutePath() );
+                throw logAndCreateException( "Could not making the working directory: " + wdFile.getAbsolutePath() );
             }
         }
 
@@ -849,20 +828,6 @@ public class DefaultContinuum
         throws Exception
     {
         getLogger().info( "Starting Continuum." );
-
-        // start the builder thread
-/*
-        builderThread = new BuilderThread( buildController, buildQueue, getLogger() );
-
-        builderThreadThread = new Thread( builderThread );
-
-        builderThreadThread.setDaemon( true );
-
-        builderThreadThread.start();
-*/
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
 
         // check to see if the tables exists or not.
         File file = new File( appHome, "continuum.properties" );
@@ -908,43 +873,7 @@ public class DefaultContinuum
         throws Exception
     {
         getLogger().info( "Stopping Continuum." );
-/*
-        int maxSleep = 10 * 1000; // 10 seconds
-        int interval = 1000;
-        int slept = 0;
 
-        // signal the thread to stop
-        builderThread.shutdown();
-
-        builderThreadThread.interrupt();
-
-        while ( !builderThread.isDone() )
-        {
-            if ( slept > maxSleep )
-            {
-                getLogger().warn( "Timeout, stopping Continuum." );
-
-                break;
-            }
-
-            getLogger().info( "Waiting until Continuum is idling..." );
-
-            try
-            {
-                synchronized ( builderThread )
-                {
-                    builderThread.wait( interval );
-                }
-            }
-            catch ( InterruptedException ex )
-            {
-                // ignore
-            }
-
-            // TODO: should use System.currentTimeMillis()
-            slept += interval;
-        }
-*/
         getLogger().info( "Continuum stopped." );
     }
 
@@ -960,5 +889,19 @@ public class DefaultContinuum
         properties.setProperty( DATABASE_INITIALIZED, "true" );
 
         properties.store( new FileOutputStream( file ), null );
+    }
+
+    private ContinuumException logAndCreateException( String message )
+    {
+        getLogger().error( message );
+
+        return new ContinuumException( message );
+    }
+
+    private ContinuumException logAndCreateException( String message, Throwable cause )
+    {
+        getLogger().error( message, cause );
+
+        return new ContinuumException( message, cause );
     }
 }

@@ -57,9 +57,6 @@ public interface ContinuumStore
     void setWorkingDirectory( String projectId, String workingDirectory )
         throws ContinuumStoreException;
 
-    void setProjectCheckOutScmResult( String projectId, CheckOutScmResult result )
-        throws ContinuumStoreException;
-
     void updateProject( String projectId, String name, String scmUrl, String nagEmailAddress, String version )
         throws ContinuumStoreException;
 
@@ -106,6 +103,16 @@ public interface ContinuumStore
     List getChangedFilesForBuild( String buildId )
         throws ContinuumStoreException;
 
-    void setBuildUpdateScmResult( String buildId, UpdateScmResult scmResult )
+    // ----------------------------------------------------------------------
+    // SCM
+    // ----------------------------------------------------------------------
+
+    void setCheckoutDone( String projectId, CheckOutScmResult scmResult )
+        throws ContinuumStoreException;
+
+    void setIsUpdating( String buildId )
+        throws ContinuumStoreException;
+
+    void setUpdateDone( String buildId, UpdateScmResult scmResult )
         throws ContinuumStoreException;
 }

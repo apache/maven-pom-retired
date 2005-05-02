@@ -21,6 +21,7 @@ import java.util.Properties;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ModelloJPoxContinuumStoreTest;
 
 import org.codehaus.plexus.PlexusTestCase;
 
@@ -39,7 +40,7 @@ public class ContinuumNotificationDispatcherTest
 
         ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
 
-        String projectId = store.addProject( "Test Project", "scm:local:foo", "foo@bar", "1.0", "ant", "/tmp", new Properties() );
+        String projectId = ModelloJPoxContinuumStoreTest.addProject( store, "Test Project" );
 
         String buildId = store.createBuild( projectId );
 

@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.buildcontroller;
+package org.apache.maven.continuum.scm.queue;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,30 +16,35 @@ package org.apache.maven.continuum.buildcontroller;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.buildqueue.BuildProjectTask;
+import java.io.File;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.Task;
-import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id:$
  */
-public class BuildProjectTaskExecutor
-    extends AbstractLogEnabled
-    implements TaskExecutor
+public class CheckOutTask
+    implements Task
 {
-    private BuildController controller;
+    private String projectId;
 
-    // ----------------------------------------------------------------------
-    // TaskExecutor Implementation
-    // ----------------------------------------------------------------------
+    private File workingDirectory;
 
-    public void executeTask( Task task )
+    public CheckOutTask( String projectId, File workingDirectory )
     {
-        BuildProjectTask buildProjectTask = (BuildProjectTask) task;
+        this.projectId = projectId;
 
-        controller.build( buildProjectTask.getBuildId() );
+        this.workingDirectory = workingDirectory;
+    }
+
+    public String getProjectId()
+    {
+        return projectId;
+    }
+
+    public File getWorkingDirectory()
+    {
+        return workingDirectory;
     }
 }

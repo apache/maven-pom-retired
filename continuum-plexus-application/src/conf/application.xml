@@ -17,6 +17,14 @@
       <role>org.apache.maven.continuum.trigger.ContinuumTrigger</role>
       <role-hint>alarm-clock</role-hint>
     </component>
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+      <role-hint>build-project</role-hint>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+      <role-hint>check-out-project</role-hint>
+    </component>
   </load-on-start>
 
   <resources>
@@ -165,6 +173,9 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.jdo.JdoFactory</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.project.state.ContinuumProjectStateGuard</role>
         </requirement>
       </requirements>
     </component>

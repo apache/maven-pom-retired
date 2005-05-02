@@ -11,6 +11,8 @@ STATE_FAILED = "failed"
 STATE_ERROR = "error"
 STATE_BUILD_SIGNALED = "build signaled"
 STATE_BUILDING = "building"
+STATE_CHECKING_OUT = "checking out"
+STATE_UPDATING = "updating"
 
 server = xmlrpclib.Server("http://localhost:8000")
 
@@ -45,8 +47,12 @@ def decodeState( state ):
         return STATE_BUILD_SIGNALED
     elif ( state == 6 ):
         return STATE_BUILDING
+    elif ( state == 7 ):
+        return STATE_CHECKING_OUT
+    elif ( state == 8 ):
+        return STATE_UPDATING
     else:
-       return "UNKNOWN STATE (" + state + ")."
+       return "UNKNOWN STATE (" + str( state ) + ")."
 
 ####################################################################
 # These methods correspods 1<=>1 with the ContinuumXmlRpc interface
@@ -154,7 +160,11 @@ class Project:
         self.version = map[ "version" ]
         self.builderId = map[ "builderId" ]
         self.configuration = map[ "configuration" ]
-        self.checkOutScmResult = CheckOutScmResult( map[ "checkOutScmResult" ] )
+
+        if ( map.has_key( "checkOutScmResult" ) ):
+            self.checkOutScmResult = CheckOutScmResult( map[ "checkOutScmResult" ] )
+        else:
+            self.checkOutScmResult = None
 
     def __str__( self ):
         str = "id: " + self.id + os.linesep +\

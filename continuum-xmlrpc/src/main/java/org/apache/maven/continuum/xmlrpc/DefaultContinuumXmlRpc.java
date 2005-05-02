@@ -405,7 +405,7 @@ public class DefaultContinuumXmlRpc
 
     private Hashtable handleException( String method, Throwable throwable )
     {
-        getLogger().error( "Error while executing '" + method + "'.", throwable );
+//        getLogger().error( "Error while executing '" + method + "'.", throwable );
 
         Hashtable hashtable = new Hashtable();
 

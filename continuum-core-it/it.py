@@ -165,7 +165,9 @@ def waitForBuild( buildId ):
 
     build = continuum.getBuild( buildId )
 
-    while( build.state == continuum.STATE_BUILD_SIGNALED or build.state == continuum.STATE_BUILDING ):
+    while( build.state == continuum.STATE_BUILD_SIGNALED or 
+           build.state == continuum.STATE_BUILDING or
+           build.state == continuum.STATE_UPDATING ):
         build = continuum.getBuild( buildId )
         time.sleep( sleepInterval )
         timeout -= sleepInterval
@@ -174,6 +176,24 @@ def waitForBuild( buildId ):
             fail( "Timeout while waiting for build (id=%(id)s) to complete" % { "id" : buildId } )
 
     return build
+
+def waitForCheckOut( projectId ):
+    timeout = 60
+    sleepInterval = 0.1
+
+    project = continuum.getProject( projectId )
+
+    while( project.state == continuum.STATE_CHECKING_OUT ):
+        project = continuum.getProject( projectId )
+        time.sleep( sleepInterval )
+        timeout -= sleepInterval
+
+        if ( timeout <= 0 ):
+            fail( "Timeout while waiting for checkout (project id=%(id)s) to complete" % { "id" : project.id } )
+
+    assertEquals( "The check out was not successful for project #" + project.id, continuum.STATE_NEW, project.state )
+
+    return project
 
 def cleanDirectory( dir ):
     if ( os.path.isdir( dir ) ):
@@ -336,6 +356,7 @@ if 1:
     initMaven1Project( maven1Project, "cvs", cvsroot, "maven-1" )
     progress( "Adding Maven 1 project" )
     maven1Id = continuum.addMavenOneProject( "file:" + maven1Project + "/project.xml" )
+    waitForCheckOut( maven1Id );
     maven1 = continuum.getProject( maven1Id )
     assertProject( maven1Id, "Maven 1 Project", email, continuum.STATE_NEW, "1.0", "maven-1", maven1 )
     assertCheckedOutFiles( maven1, [ "/project.xml", "/src/main/java/Foo.java" ] )
@@ -372,6 +393,7 @@ if 1:
     initMaven2Project( maven2Project, cvsroot, "maven-2" )
     progress( "Adding Maven 2 project" )
     maven2Id = continuum.addMavenTwoProject( "file:" + maven2Project + "/pom.xml" )
+    waitForCheckOut( maven2Id );
     maven2 = continuum.getProject( maven2Id )
     assertProject( maven2Id, "Maven 2 Project", email, continuum.STATE_NEW, "2.0-SNAPSHOT", "maven2", maven2 )
 
@@ -396,6 +418,7 @@ if 1:
                                             "executable": "ant",
                                             "targets" : "clean, build"
                                         } )
+    waitForCheckOut( antSvnId );
     antSvn = continuum.getProject( antSvnId )
     assertProject( antSvnId, "Ant SVN Project", email, continuum.STATE_NEW, "3.0", "ant", antSvn )
     progress( "Building SVN Ant project" )
@@ -410,6 +433,7 @@ if 1:
     cvsImport( antProject, cvsroot, "ant-cvs" )
     antCvsId = continuum.addAntProject( "scm:cvs:local:" + basedir + "/cvsroot:ant-cvs", "Ant CVS Project", email, "3.0",
                                       { "executable": "ant", "targets" : "clean, build"} )
+    waitForCheckOut( antCvsId );
     antCvs = continuum.getProject( antCvsId )
     assertProject( antCvsId, "Ant CVS Project", email, continuum.STATE_NEW, "3.0", "ant", antCvs )
     progress( "Building CVS Ant project" )
@@ -424,8 +448,11 @@ if 1:
 
     progress( "Adding CVS Shell project" )
     shellId = continuum.addShellProject( "scm:cvs:local:" + basedir + "/cvsroot:shell", "Shell Project", email, "3.0",
-                                         { "executable": "script.sh", "arguments" : ""} )
-
+                                         { 
+                                            "executable": "script.sh", 
+                                            "arguments" : ""
+                                         } )
+    waitForCheckOut( shellId );
     shell = continuum.getProject( shellId )
     assertProject( shellId, "Shell Project", email, continuum.STATE_NEW, "3.0", "shell", shell )
 

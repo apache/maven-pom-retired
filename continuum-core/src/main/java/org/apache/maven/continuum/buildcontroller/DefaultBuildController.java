@@ -60,17 +60,6 @@ public class DefaultBuildController
 
     public void build( String buildId )
     {
-        try
-        {
-            store.setBuildResult( buildId, ContinuumProjectState.BUILDING, null, null );
-        }
-        catch ( ContinuumStoreException ex )
-        {
-            getLogger().error( "Exception while setting the state flag.", ex );
-
-            return;
-        }
-
         ContinuumProject project;
 
         ContinuumBuild build;
@@ -198,11 +187,13 @@ public class DefaultBuildController
 
         try
         {
+            store.setIsUpdating( build.getId() );
+
             notifier.checkoutStarted( build );
 
             scmResult = scm.updateProject( project );
 
-            store.setBuildUpdateScmResult( build.getId(), scmResult );
+            store.setUpdateDone( build.getId(), scmResult );
         }
         finally
         {

@@ -19,6 +19,7 @@ package org.apache.maven.continuum.buildqueue;
 import java.util.Properties;
 
 import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ModelloJPoxContinuumStoreTest;
 
 import org.codehaus.plexus.PlexusTestCase;
 
@@ -48,7 +49,7 @@ public class BuildQueueTest
     {
         String name = "Project 1";
 
-        String project = createProject( name );
+        String project = ModelloJPoxContinuumStoreTest.addProject( store, name );
 
         String build = enqueue( project );
 
@@ -75,9 +76,9 @@ public class BuildQueueTest
 
         String name2 = "Project 2";
 
-        String project1 = createProject( name1 );
+        String project1 = ModelloJPoxContinuumStoreTest.addProject( store, name1 );
 
-        String project2 = createProject( name2 );
+        String project2 = ModelloJPoxContinuumStoreTest.addProject( store, name2 );
 
         String build1 = enqueue( project1 );
 
@@ -112,19 +113,6 @@ public class BuildQueueTest
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
-
-    private String createProject( String name )
-        throws Exception
-    {
-        String scmUrl = "scm:local:src/test/projects/project-1";
-        String nagEmailAddress = "foo@bar";
-        String version = "1.0";
-        String builderId = "test";
-        String workingDirectory = getTestPath( "target/checkouts" );
-        Properties properties = new Properties();
-
-        return store.addProject( name, scmUrl, nagEmailAddress, version, builderId, workingDirectory, properties );
-    }
 
     private String enqueue( String projectId )
         throws Exception

@@ -68,6 +68,10 @@ public class ContinuumProjectState
 //    public final static ContinuumProjectState BUILDING = new ContinuumProjectState( "building" );
     public final static int BUILDING = 6;
 
+    public final static int CHECKING_OUT = 7;
+
+    public final static int UPDATING = 8;
+
     private String name;
 
     protected ContinuumProjectState( String name )

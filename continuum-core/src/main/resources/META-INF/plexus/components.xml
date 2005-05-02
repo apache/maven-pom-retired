@@ -7,26 +7,16 @@
         <requirement>
           <role>org.apache.maven.continuum.builder.manager.BuilderManager</role>
         </requirement>
-<!--
-        <requirement>
-          <role>org.apache.maven.continuum.buildcontroller.BuildController</role>
-        </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.buildqueue.BuildQueue</role>
-        </requirement>
--->
         <requirement>
           <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
           <role-hint>build-project</role-hint>
           <field-name>buildQueue</field-name>
         </requirement>
-<!--
         <requirement>
           <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
-          <role-hint>check-out-queue</role-hint>
+          <role-hint>check-out-project</role-hint>
           <field-name>checkOutQueue</field-name>
         </requirement>
--->
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
@@ -111,7 +101,15 @@
         <requirement>
           <role>org.codehaus.plexus.jdo.JdoFactory</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.project.state.ContinuumProjectStateGuard</role>
+        </requirement>
       </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.project.state.ContinuumProjectStateGuard</role>
+      <implementation>org.apache.maven.continuum.project.state.DefaultContinuumProjectStateGuard</implementation>
     </component>
 
     <!-- Triggers -->
@@ -165,8 +163,11 @@
       <implementation>org.apache.maven.continuum.notification.console.ConsoleNotifier</implementation>
     </component>
 
-    <!-- Builder -->
-
+    <!--
+     |
+     | Builders
+     |
+     |-->
     <component>
       <role>org.apache.maven.continuum.builder.ContinuumBuilder</role>
       <role-hint>maven2</role-hint>
@@ -259,7 +260,7 @@
 
     <!--
      |
-     | Build Task Queue
+     | Build Project Task Queue
      |
      |-->
 
@@ -330,13 +331,20 @@
       <implementation>org.codehaus.plexus.taskqueue.DefaultTaskQueue</implementation>
       <lifecycle-handler>plexus-configurable</lifecycle-handler>
     </component>
-<!--
     <component>
       <role>org.codehaus.plexus.taskqueue.execution.TaskExecutor</role>
       <role-hint>check-out-project</role-hint>
-      <implementation>org.apache.maven.continuum.buildcontroller.BuildProjectTaskExecutor</implementation>
+      <implementation>org.apache.maven.continuum.scm.queue.CheckOutTaskExecutor</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.scm.ContinuumScm</role>
+        </requirement>
+      </requirements>
     </component>
--->
+
     <component>
       <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
       <role-hint>check-out-project</role-hint>
@@ -358,7 +366,7 @@
 
     <!--
      |
-     | Check Out Task Queue
+     | JDO
      |
      |-->
     <component>
@@ -402,6 +410,11 @@
       </configuration>
     </component>
 
+    <!--
+     |
+     | Velocity
+     |
+     |-->
     <component>
       <role>org.codehaus.plexus.velocity.VelocityComponent</role>
       <implementation>org.codehaus.plexus.velocity.DefaultVelocityComponent</implementation>

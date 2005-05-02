@@ -31,6 +31,7 @@ import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.project.state.ContinuumProjectStateGuard;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.UpdateScmResult;
@@ -48,6 +49,9 @@ public class ModelloJPoxContinuumStore
 {
     /** @requirement */
     private JdoFactory jdoFactory;
+
+    /** @requirement */
+    private ContinuumProjectStateGuard projectStateGuard;
 
     private ContinuumJPoxStore store;
 
@@ -94,7 +98,7 @@ public class ModelloJPoxContinuumStore
         project.setVersion( version );
         project.setBuilderId( builderId );
         project.setWorkingDirectory( workingDirectory );
-        project.setState( ContinuumProjectState.NEW );
+        project.setState( ContinuumProjectState.CHECKING_OUT );
         project.setConfiguration( configuration );
 
         try
@@ -125,11 +129,15 @@ public class ModelloJPoxContinuumStore
 //            System.err.println( "getProject()" );
             ContinuumProject project = store.getContinuumProject( projectId, false );
 
-            // TODO: This is dumb.
+            projectStateGuard.assertDeletable( project );
+
+            // TODO: This whole section is dumb.
             PersistenceManager pm = store.getThreadState().getPersistenceManager();
 
-//            System.err.println( "getBuilds()" );
-            for ( Iterator it = project.getBuilds().iterator(); it.hasNext(); )
+//            System.err.println( "project.getBuilds()" );
+            List builds = project.getBuilds();
+
+            for ( Iterator it = builds.iterator(); it.hasNext(); )
             {
                 ContinuumBuild build = (ContinuumBuild) it.next();
 
@@ -155,10 +163,10 @@ public class ModelloJPoxContinuumStore
 
 //                System.err.println( "pm.deletePersistent( result )" );
                 pm.deletePersistent( result );
-            }
 
-//            System.err.println( "project.getBuilds()" );
-            List builds = new ArrayList( project.getBuilds() );
+//                System.err.println( "build.setProject( null )" );
+                build.setProject( null );
+            }
 
             for ( Iterator it = builds.iterator(); it.hasNext(); )
             {
@@ -166,10 +174,12 @@ public class ModelloJPoxContinuumStore
 
 //                System.err.println( "build.setProject( null )" );
                 build.setProject( null );
+
+                pm.deletePersistent( build );
             }
 
 //            System.err.println( "pm.deletePersistentAll( builds )" );
-            pm.deletePersistentAll( project.getBuilds() );
+            pm.deletePersistentAll( builds );
 
 //            System.err.println( "store.deleteContinuumProject( projectId )" );
             store.deleteContinuumProject( projectId );
@@ -193,6 +203,8 @@ public class ModelloJPoxContinuumStore
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
 
+            projectStateGuard.assertCanChangeWorkingDirectory( project );
+
             project.setWorkingDirectory( workingDirectory );
 
             store.commit();
@@ -205,27 +217,6 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public void setProjectCheckOutScmResult( String projectId, CheckOutScmResult result )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            project.setCheckOutScmResult( result );
-
-            store.commit();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while setting scm check out result for project with id: '" + projectId + "'.", e );
-        }
-    }
-
     public void updateProject( String projectId, String name, String scmUrl, String nagEmailAddress, String version )
         throws ContinuumStoreException
     {
@@ -234,6 +225,8 @@ public class ModelloJPoxContinuumStore
             store.begin();
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
+
+            projectStateGuard.assertUpdatable( project );
 
             project.setName( name );
             project.setScmUrl( scmUrl );
@@ -258,6 +251,8 @@ public class ModelloJPoxContinuumStore
             store.begin();
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
+
+            projectStateGuard.assertUpdatable( project );
 
             project.setConfiguration( configuration );
 
@@ -374,12 +369,6 @@ public class ModelloJPoxContinuumStore
 
             store.commit();
 
-            for ( Iterator it = result.getCheckedOutFiles().iterator(); it.hasNext(); )
-            {
-                ScmFile scmFile = (ScmFile) it.next();
-                System.err.println( "scmfile.path: " + scmFile.getPath() );
-            }
-
             return result;
         }
         catch ( Exception e )
@@ -402,6 +391,8 @@ public class ModelloJPoxContinuumStore
             store.begin();
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
+
+            projectStateGuard.assertTransition( project, ContinuumProjectState.BUILD_SIGNALED );
 
             project.setState( ContinuumProjectState.BUILD_SIGNALED );
 
@@ -439,6 +430,8 @@ public class ModelloJPoxContinuumStore
             ContinuumBuild build = store.getContinuumBuild( buildId, false );
 
             ContinuumProject project = build.getProject();
+
+            projectStateGuard.assertTransition( project, state );
 
             project.setState( state );
 
@@ -598,7 +591,74 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public void setBuildUpdateScmResult( String buildId, UpdateScmResult scmResult )
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    public void setCheckoutDone( String projectId, CheckOutScmResult scmResult )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            store.begin();
+
+            ContinuumProject project = store.getContinuumProject( projectId, false );
+
+            int state;
+
+            if ( scmResult.isSuccess() )
+            {
+                state = ContinuumProjectState.NEW;
+            }
+            else
+            {
+                state = ContinuumProjectState.ERROR;
+            }
+
+            projectStateGuard.assertTransition( project, state );
+
+            project.setState( state );
+
+            project.setCheckOutScmResult( scmResult );
+
+            store.commit();
+        }
+        catch ( Exception e )
+        {
+            rollback( store );
+
+            throw new ContinuumStoreException( "Error while setting check out scm result.", e );
+        }
+    }
+
+    public void setIsUpdating( String buildId )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            store.begin();
+
+            ContinuumBuild build = store.getContinuumBuild( buildId, false );
+
+            ContinuumProject project = build.getProject();
+
+            projectStateGuard.assertTransition( project, ContinuumProjectState.UPDATING );
+
+            project.setState( ContinuumProjectState.UPDATING );
+
+            build.setState( ContinuumProjectState.UPDATING );
+
+            store.commit();
+        }
+        catch ( Exception e )
+        {
+            rollback( store );
+
+            throw new ContinuumStoreException( "Error while setting build state.", e );
+        }
+    }
+
+    public void setUpdateDone( String buildId, UpdateScmResult scmResult )
         throws ContinuumStoreException
     {
         try
@@ -609,13 +669,21 @@ public class ModelloJPoxContinuumStore
 
             build.setUpdateScmResult( scmResult );
 
+            ContinuumProject project = build.getProject();
+
+            projectStateGuard.assertTransition( project, ContinuumProjectState.BUILDING );
+
+            project.setState( ContinuumProjectState.BUILDING );
+
+            build.setState( ContinuumProjectState.BUILDING );
+
             store.commit();
         }
         catch ( Exception e )
         {
             rollback( store );
 
-            throw new ContinuumStoreException( "Error while setting scm update result for build: '" + buildId + "'.", e );
+            throw new ContinuumStoreException( "Error while setting update scm result.", e );
         }
     }
 
