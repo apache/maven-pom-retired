@@ -271,8 +271,8 @@
       </configuration>
     </component>
 
-    <!-- TODO: Move to continuum-web? -->
     <!-- forms -->
+    <!-- TODO: Move to continuum-web? -->
     <component>
       <role>org.codehaus.plexus.i18n.I18N</role>
       <implementation>org.codehaus.plexus.i18n.DefaultI18N</implementation>
@@ -281,6 +281,7 @@
       </configuration>
     </component>
 
+    <!-- TODO: Move to continuum-web? -->
     <component>
       <role>org.codehaus.plexus.formica.population.Populator</role>
       <implementation>org.codehaus.plexus.formica.population.OgnlPopulator</implementation>
