@@ -101,12 +101,6 @@ public class DefaultContinuum
     //
     // ----------------------------------------------------------------------
 
-    private Thread builderThreadThread;
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
     public Iterator getProjects()
         throws ContinuumStoreException
     {
