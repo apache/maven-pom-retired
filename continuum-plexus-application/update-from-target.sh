@@ -1,5 +1,13 @@
 #!/bin/bash
 
+set -e
+
+# If the application haven't ever been run and exploded, return silently
+if [ ! -d "target/plexus-test-runtime/apps/continuum/lib/" ]
+then
+  exit 0
+fi
+
 copy()
 {
   dir=$1
