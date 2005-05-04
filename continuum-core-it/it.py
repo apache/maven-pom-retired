@@ -332,6 +332,8 @@ print ""
 # This is the email that will be used as the nag email address
 email = "trygvis@codehaus.org"
 
+progress( "Initializing SCM repositories." )
+
 basedir = os.getcwd() + "/target"
 cvsroot = basedir + "/cvsroot"
 svnroot = basedir + "/svnroot"
