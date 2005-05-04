@@ -18,6 +18,7 @@ package org.apache.maven.continuum.buildqueue;
 
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ModelloJPoxContinuumStoreTest;
+import org.apache.maven.continuum.project.ContinuumProject;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.taskqueue.Task;
@@ -51,18 +52,18 @@ public class BuildQueueTest
 
         String project = ModelloJPoxContinuumStoreTest.addProject( store, name );
 
-        String build = enqueue( project );
+        String build = buildProject( project, false );
 
         assertNextBuildIs( build );
 
         assertNextBuildIsNull();
 
-        String buildX = enqueue( project );
+        String buildX = buildProject( project, false );
 
-        enqueue( project );
-        enqueue( project );
-        enqueue( project );
-        enqueue( project );
+        buildProject( project, false );
+        buildProject( project, false );
+        buildProject( project, false );
+        buildProject( project, false );
 
         assertNextBuildIs( buildX );
 
@@ -80,9 +81,9 @@ public class BuildQueueTest
 
         String project2 = ModelloJPoxContinuumStoreTest.addProject( store, name2 );
 
-        String build1 = enqueue( project1 );
+        String build1 = buildProject( project1, false );
 
-        String build2 = enqueue( project2 );
+        String build2 = buildProject( project2, false );
 
         assertNextBuildIs( build1 );
 
@@ -90,22 +91,49 @@ public class BuildQueueTest
 
         assertNextBuildIsNull();
 
-        String buildX1 = enqueue( project1 );
+        String buildX1 = buildProject( project1, false );
 
-        String buildX2 = enqueue( project2 );
+        String buildX2 = buildProject( project2, false );
 
-        enqueue( project1 );
-        enqueue( project2 );
-        enqueue( project1 );
-        enqueue( project2 );
-        enqueue( project1 );
-        enqueue( project2 );
-        enqueue( project1 );
-        enqueue( project2 );
+        buildProject( project1, false );
+        buildProject( project2, false );
+        buildProject( project1, false );
+        buildProject( project2, false );
+        buildProject( project1, false );
+        buildProject( project2, false );
+        buildProject( project1, false );
+        buildProject( project2, false );
 
         assertNextBuildIs( buildX1 );
-
         assertNextBuildIs( buildX2 );
+
+        assertNextBuildIsNull();
+    }
+
+    public void testTestTheQueueWithASingleProjectAndForcedBuilds()
+        throws Exception
+    {
+        String name = "Project 1";
+
+        String project = ModelloJPoxContinuumStoreTest.addProject( store, name );
+
+        String build = buildProject( project, true );
+
+        assertNextBuildIs( build );
+
+        assertNextBuildIsNull();
+
+        String build1 = buildProject( project, true );
+        String build2 = buildProject( project, true );
+        String build3 = buildProject( project, true );
+        String build4 = buildProject( project, true );
+        String build5 = buildProject( project, true );
+
+        assertNextBuildIs( build1 );
+        assertNextBuildIs( build2 );
+        assertNextBuildIs( build3 );
+        assertNextBuildIs( build4 );
+        assertNextBuildIs( build5 );
 
         assertNextBuildIsNull();
     }
@@ -114,12 +142,14 @@ public class BuildQueueTest
     //
     // ----------------------------------------------------------------------
 
-    private String enqueue( String projectId )
+    private String buildProject( String projectId, boolean force )
         throws Exception
     {
-        String buildId = store.createBuild( projectId );
+        ContinuumProject project = store.getProject( projectId );
 
-        buildQueue.put( new BuildProjectTask( projectId, buildId ) );
+        String buildId = store.createBuild( project.getId(), force );
+
+        buildQueue.put( new BuildProjectTask( projectId, buildId, force ) );
 
         return buildId;
     }

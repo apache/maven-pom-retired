@@ -24,6 +24,9 @@ def assertEquals( message, expected, actual ):
     if( expected == actual ):
         return
 
+    fail( message, expected, actual )
+
+def fail( message, expected, actual ):
     print
     print "##############################################"
     print "ASSERTION FAILURE!"
@@ -47,12 +50,10 @@ def assertFalse( message, condition ):
     assertEquals( message, False, condition )
 
 def assertNotNull( message, condition ):
-    if( condition != None ):
+    if ( condition != None ):
         return
 
-    print message
-
-    sys.exit( -1 )
+    fail( message, None, condition )
 
 def assertProject( projectId, name, nagEmailAddress, state, version, builderId, project ):
     assertNotNull( "project.id", projectId )
@@ -111,6 +112,8 @@ def assertSuccessfulMaven2Build( buildId ):
     assertTrue( "The build wasn't executed", buildResult.buildExecuted )
     assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", buildResult.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
     assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
+
+    return build
 
 def assertSuccessfulAntBuild( buildId ):
     build = waitForBuild( buildId )
@@ -406,6 +409,11 @@ if 1:
     progress( "Test that a build without any files changed won't execute the builder" )
     build = continuum.buildProject( maven2.id )
     assertSuccessfulNoBuildPerformed( build )
+
+    progress( "Test that a forced build without any files changed executes the builder" )
+    build = continuum.buildProject( maven2.id, True )
+    build = assertSuccessfulMaven2Build( build )
+    assertTrue( "The 'build forces' flag wasn't true", build.forced );
 
     removeProject( maven2Id )
 

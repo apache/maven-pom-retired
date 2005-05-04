@@ -286,11 +286,11 @@ public class DefaultContinuumXmlRpc
     // Builds
     // ----------------------------------------------------------------------
 
-    public Hashtable buildProject( String projectId )
+    public Hashtable buildProject( String projectId, boolean force )
     {
         try
         {
-            return makeHashtable( "buildId", continuum.buildProject( projectId ) );
+            return makeHashtable( "buildId", continuum.buildProject( projectId, force ) );
         }
         catch ( Throwable e )
         {

@@ -82,7 +82,7 @@ public interface ContinuumStore
     // Build
     // ----------------------------------------------------------------------
 
-    String createBuild( String projectId )
+    String createBuild( String projectId, boolean forced )
         throws ContinuumStoreException;
 
     void setBuildResult( String buildId, int state, ContinuumBuildResult result, Throwable error )

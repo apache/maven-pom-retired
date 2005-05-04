@@ -44,7 +44,7 @@ public interface ContinuumXmlRpc
     // Build handling
     // ----------------------------------------------------------------------
 
-    Hashtable buildProject( String projectId );
+    Hashtable buildProject( String projectId, boolean force );
 
     Hashtable getBuildsForProject( String projectId, int start, int end );
 

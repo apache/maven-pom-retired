@@ -102,6 +102,19 @@ public class BuildProjectTaskViabilityEvaluator
                 continue;
             }
 
+            // ----------------------------------------------------------------------
+            // If this build is forces, don't remove it
+            // ----------------------------------------------------------------------
+
+            if ( buildProjectTask.isForce() )
+            {
+                continue;
+            }
+
+            // ----------------------------------------------------------------------
+            //
+            // ----------------------------------------------------------------------
+
             long interval = buildProjectTask.getTimestamp() - okTask.getTimestamp();
 
             if ( interval < requiredBuildInterval )

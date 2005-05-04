@@ -383,7 +383,7 @@ public class ModelloJPoxContinuumStore
     // Build
     // ----------------------------------------------------------------------
 
-    public String createBuild( String projectId )
+    public String createBuild( String projectId, boolean forced )
         throws ContinuumStoreException
     {
         try
@@ -403,6 +403,8 @@ public class ModelloJPoxContinuumStore
             build.setState( ContinuumProjectState.BUILD_SIGNALED );
 
             build.setProject( project );
+
+            build.setForced( forced );
 
             Object id = store.addContinuumBuild( build );
 

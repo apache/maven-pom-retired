@@ -374,7 +374,7 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addProject( "Test Project" );
 
-        String buildId = store.createBuild( projectId );
+        String buildId = store.createBuild( projectId, false );
 
         store.setIsUpdating( buildId );
 
@@ -410,7 +410,7 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addProject( "Test Project" );
 
-        String buildId = store.createBuild( projectId );
+        String buildId = store.createBuild( projectId, false );
 
         Iterator it = store.getBuildsForProject( projectId, 0, 0 );
 
@@ -450,13 +450,13 @@ public class ModelloJPoxContinuumStoreTest
 
         for ( int i = 0; i < 10; i++ )
         {
-            expectedBuilds.add( 0, store.createBuild( projectId ) );
+            expectedBuilds.add( 0, store.createBuild( projectId, false ) );
 
-            store.createBuild( projectIdFoo );
+            store.createBuild( projectIdFoo, false );
 
-            store.createBuild( projectIdBar );
+            store.createBuild( projectIdBar, false );
 
-            store.createBuild( projectIdFoo );
+            store.createBuild( projectIdFoo, false );
         }
 
         // ----------------------------------------------------------------------
@@ -500,7 +500,7 @@ public class ModelloJPoxContinuumStoreTest
 
         long now = System.currentTimeMillis();
 
-        String buildId = store.createBuild( projectId );
+        String buildId = store.createBuild( projectId, false );
 
         assertIsCommitted( store );
 

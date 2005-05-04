@@ -105,7 +105,7 @@ public class AlarmClockTrigger
 
             try
             {
-                getContinuum().buildProject( project.getId() );
+                getContinuum().buildProject( project.getId(), false );
             }
             catch ( ContinuumException ex )
             {

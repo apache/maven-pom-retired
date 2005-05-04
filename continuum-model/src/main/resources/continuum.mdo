@@ -191,6 +191,11 @@
           -->
         </field>
         <field>
+          <name>forced</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+        </field>
+        <field>
           <name>startTime</name>
           <version>1.0.0</version>
           <type>long</type>

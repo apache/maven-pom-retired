@@ -203,25 +203,29 @@ public class DefaultBuildController
         ContinuumBuildResult result;
 
         // ----------------------------------------------------------------------
-        // Build the project if there was any updated files or if the project is
-        // new (never been built before)
+        // Build the project if
+        // * there was any updated files
+        // * the project is new (never been built before)
+        // * the build is "forced"
         // ----------------------------------------------------------------------
 
-        if ( scmResult.getUpdatedFiles().size() > 0 || isNew( project ) )
+        if ( scmResult.getUpdatedFiles().size() > 0 ||
+             isNew( project ) ||
+             build.isForced() )
         {
-            String id = project.getId();
-
             File workingDirectory = new File( project.getWorkingDirectory() );
 
             builder.updateProjectFromCheckOut( workingDirectory, project );
 
-            store.updateProject( id,
+            String projectId = project.getId();
+
+            store.updateProject( projectId,
                                  project.getName(),
                                  project.getScmUrl(),
                                  project.getNagEmailAddress(),
                                  project.getVersion() );
 
-//            store.updateProjectConfiguration( id, project.getConfiguration() );
+//            store.updateProjectConfiguration( projectId, project.getConfiguration() );
 
             try
             {
@@ -243,6 +247,8 @@ public class DefaultBuildController
         }
         else
         {
+            getLogger().info( "No files updated, not building. Build id '" + build.getId() + "'." );
+
             result = new ContinuumBuildResult();
 
             result.setSuccess( true );

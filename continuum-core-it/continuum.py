@@ -85,8 +85,8 @@ def removeProject( projectId ):
 # Build handling
 ####################################################################
 
-def buildProject( projectId ):
-    result = checkResult( server.continuum.buildProject( projectId ) )
+def buildProject( projectId, force=False ):
+    result = checkResult( server.continuum.buildProject( projectId, force ) )
 
     return result[ "buildId" ]
 
@@ -185,13 +185,15 @@ class Project:
 
 class Build:
     def __init__( self, map ):
+        map[ "state" ] = decodeState( int( map[ "state" ] ) )
+        map[ "forced" ] = bool( map[ "forced" ] )
         map[ "totalTime" ] = int( map[ "endTime" ] )/ 1000 - int( map[ "startTime" ] ) / 1000
         map[ "startTime" ] = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime( int( map[ "startTime" ] ) / 1000 ) )
         map[ "endTime" ] = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime( int( map[ "endTime" ] ) / 1000 ) )
-        map[ "state" ] = decodeState( int( map[ "state" ] ) )
 
         self.id = map[ "id" ]
         self.state = map[ "state" ]
+        self.forced = map[ "forced" ]
         self.startTime = map[ "startTime" ]
         self.endTime = map[ "endTime" ]
         self.totalTime = map[ "totalTime" ]

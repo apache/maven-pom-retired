@@ -77,7 +77,7 @@ public interface Continuum
     Iterator getAllProjects( int start, int end )
         throws ContinuumException;
 
-    String buildProject( String projectId )
+    String buildProject( String projectId, boolean force )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
