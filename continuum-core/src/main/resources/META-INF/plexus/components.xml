@@ -82,17 +82,6 @@
         </requirement>
       </requirements>
     </component>
-<!-- TODO: remove -->
-    <component>
-      <role>org.apache.maven.continuum.buildqueue.BuildQueue</role>
-      <implementation>org.apache.maven.continuum.buildqueue.DefaultBuildQueue</implementation>
-      <requirements>
-        <requirement>
-          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
-          <role-hint>build-project</role-hint>
-        </requirement>
-      </requirements>
-    </component>
 
     <component>
       <role>org.apache.maven.continuum.store.ContinuumStore</role>

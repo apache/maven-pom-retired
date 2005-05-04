@@ -16,12 +16,12 @@ package org.apache.maven.continuum.buildqueue;
  * limitations under the License.
  */
 
-import java.util.Properties;
-
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ModelloJPoxContinuumStoreTest;
 
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.taskqueue.Task;
+import org.codehaus.plexus.taskqueue.TaskQueue;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -30,7 +30,7 @@ import org.codehaus.plexus.PlexusTestCase;
 public class BuildQueueTest
     extends PlexusTestCase
 {
-    private BuildQueue buildQueue;
+    private TaskQueue buildQueue;
 
     private ContinuumStore store;
 
@@ -39,7 +39,7 @@ public class BuildQueueTest
     {
         super.setUp();
 
-        buildQueue = (BuildQueue) lookup( BuildQueue.ROLE );
+        buildQueue = (TaskQueue) lookup( TaskQueue.ROLE, "build-project" );
 
         store = (ContinuumStore) lookup( ContinuumStore.ROLE );
     }
@@ -119,7 +119,7 @@ public class BuildQueueTest
     {
         String buildId = store.createBuild( projectId );
 
-        buildQueue.enqueue( projectId, buildId );
+        buildQueue.put( new BuildProjectTask( projectId, buildId ) );
 
         return buildId;
     }
@@ -127,18 +127,23 @@ public class BuildQueueTest
     private void assertNextBuildIs( String expectedBuildId )
         throws Exception
     {
-        String actualBuildId = buildQueue.dequeue();
+        Task task = buildQueue.take();
 
-        assertNotNull( "Got a null build id returned.", actualBuildId );
+        assertEquals( BuildProjectTask.class.getName(), task.getClass().getName() );
 
-        assertEquals( "Didn't get the expected build id.", expectedBuildId, actualBuildId );
+        BuildProjectTask buildProjectTask = ( BuildProjectTask ) task;
+
+        assertEquals( "Didn't get the expected build id.", expectedBuildId, buildProjectTask.getBuildId() );
     }
 
     private void assertNextBuildIsNull()
         throws Exception
     {
-        String actualBuildId = buildQueue.dequeue();
+        Task task = buildQueue.take();
 
-        assertNull( "Got a non-null build id returned: " + actualBuildId, actualBuildId );
+        if ( task != null )
+        {
+            fail( "Got a non-null build id returned: " + (( BuildProjectTask ) task ).getBuildId() );
+        }
     }
 }
