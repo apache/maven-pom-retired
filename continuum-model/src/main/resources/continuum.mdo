@@ -15,7 +15,7 @@
    |
    |-->
   <classes>
-    <class rootElement="true" stash.storable="true">
+    <class rootElement="true" stash.storable="true"><!--  java.abstract="true" -->
       <name>ContinuumProject</name>
       <version>1.0.0</version>
       <fields>
@@ -247,10 +247,8 @@
     |
     | BuilderBuildResult
     |
-    | This class should be abstract.
-    |
     | -->
-    <class stash.storable="true">
+    <class stash.storable="true"> <!-- java.abstract="true"-->
       <name>ContinuumBuildResult</name>
       <version>1.0.0</version>
       <fields>
@@ -321,9 +319,9 @@
         </field>
       </fields>
     </class>
-<!--
+
     <class>
-      <name>Maven2BuildResult</name>
+      <name>MavenTwoBuildResult</name>
       <packageName>org.apache.maven.continuum.builder.maven.m2</packageName>
       <superClass>ContinuumBuildResult</superClass>
       <version>1.0.0</version>
@@ -345,7 +343,7 @@
         </field>
       </fields>
     </class>
--->
+
     <class>
       <name>AntBuildResult</name>
       <packageName>org.apache.maven.continuum.builder.ant</packageName>
@@ -375,7 +373,7 @@
      | Scm Result
      |
      |-->
-    <class><!-- abstract -->
+    <class java.abstract="true">
       <name>ScmResult</name>
       <packageName>org.apache.maven.continuum.scm</packageName>
       <version>1.0.0</version>

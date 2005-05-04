@@ -28,6 +28,7 @@ import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Notifier;
 import org.apache.maven.model.Repository;
@@ -74,7 +75,7 @@ public class DefaultMavenBuilderHelper
         // We need to roll the project data into a file so that we can use it
         // ----------------------------------------------------------------------
 
-        ContinuumProject project = new ContinuumProject();
+        MavenTwoProject project = new MavenTwoProject();
 
         try
         {

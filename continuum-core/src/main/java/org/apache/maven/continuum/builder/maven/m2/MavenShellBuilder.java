@@ -18,10 +18,13 @@ package org.apache.maven.continuum.builder.maven.m2;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.builder.shell.ShellBuilder;
+import org.apache.maven.continuum.builder.AbstractContinuumBuilder;
+import org.apache.maven.continuum.builder.ContinuumBuilder;
+import org.apache.maven.continuum.builder.shell.ExecutionResult;
+import org.apache.maven.continuum.builder.shell.ShellCommandHelper;
+import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
@@ -29,11 +32,15 @@ import org.apache.maven.continuum.project.ContinuumProject;
  * @version $Id: MavenShellBuilder.java,v 1.2 2005/04/07 23:27:39 trygvis Exp $
  */
 public class MavenShellBuilder
-    extends ShellBuilder
+    extends AbstractContinuumBuilder
+    implements ContinuumBuilder
 {
     public final static String CONFIGURATION_GOALS = "goals";
 
     public final static String ID = "maven2";
+
+    /** @requirement */
+    private ShellCommandHelper shellCommandHelper;
 
     /** @requirement */
     private MavenBuilderHelper builderHelper;
@@ -48,6 +55,41 @@ public class MavenShellBuilder
     // ContinuumBuilder Implementation
     // ----------------------------------------------------------------------
 
+    public ContinuumBuildResult build( ContinuumProject project )
+        throws ContinuumException
+    {
+        File workingDirectory = new File( project.getWorkingDirectory() );
+
+        ExecutionResult executionResult;
+
+        String[] arguments = getArguments( project );
+
+        try
+        {
+            executionResult = shellCommandHelper.executeShellCommand( workingDirectory,
+                                                                      executable,
+                                                                      arguments );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumException( "Error while executing shell command.", e );
+        }
+
+        boolean success = executionResult.getExitCode() == 0;
+
+        MavenTwoBuildResult result = new MavenTwoBuildResult();
+
+        result.setSuccess( success );
+
+        result.setStandardOutput( executionResult.getStandardOutput() );
+
+        result.setStandardError( executionResult.getStandardError() );
+
+        result.setExitCode( executionResult.getExitCode() );
+
+        return result;
+    }
+
     public ContinuumProject createProjectFromMetadata( URL metadata )
         throws ContinuumException
     {
@@ -58,21 +100,6 @@ public class MavenShellBuilder
         throws ContinuumException
     {
         builderHelper.updateProjectFromMetadata( workingDirectory, project );
-    }
-
-    // ----------------------------------------------------------------------
-    // ShellBuilder Implementation
-    // ----------------------------------------------------------------------
-
-    protected boolean prependWorkingDirectoryIfMissing()
-    {
-        return false;
-    }
-
-    protected String getExecutable( ContinuumProject project )
-        throws ContinuumException
-    {
-        return executable;
     }
 
     protected String[] getArguments( ContinuumProject project )
@@ -87,8 +114,6 @@ public class MavenShellBuilder
         System.arraycopy( a, 0, arguments, 0, a.length );
 
         System.arraycopy( goals, 0, arguments, a.length, goals.length );
-
-        System.err.println( "arguments: " + Arrays.asList( arguments ) );
 
         return arguments;
     }
