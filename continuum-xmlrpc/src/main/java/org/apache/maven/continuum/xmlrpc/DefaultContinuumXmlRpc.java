@@ -26,16 +26,15 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder;
-import org.apache.maven.continuum.builder.maven.m1.Maven1Builder;
 import org.apache.maven.continuum.builder.ant.AntBuilder;
+import org.apache.maven.continuum.builder.maven.m1.Maven1Builder;
+import org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder;
 import org.apache.maven.continuum.builder.shell.ShellBuilder;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
-import org.apache.maven.continuum.scm.UpdateScmResult;
-import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 
