@@ -27,21 +27,17 @@ public class BuildProjectTask
 {
     private String projectId;
 
-    private String buildId;
-
     private long timestamp;
 
-    private boolean force;
+    private boolean forced;
 
-    public BuildProjectTask( String projectId, String buildId, boolean force )
+    public BuildProjectTask( String projectId, boolean forced )
     {
         this.projectId = projectId;
 
-        this.buildId = buildId;
-
         this.timestamp = System.currentTimeMillis();
 
-        this.force = force;
+        this.forced = forced;
     }
 
     public String getProjectId()
@@ -49,18 +45,13 @@ public class BuildProjectTask
         return projectId;
     }
 
-    public String getBuildId()
-    {
-        return buildId;
-    }
-
     public long getTimestamp()
     {
         return timestamp;
     }
 
-    public boolean isForce()
+    public boolean isForced()
     {
-        return force;
+        return forced;
     }
 }

@@ -52,15 +52,15 @@ public class ConsoleNotifier
 
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_STARTED ) )
         {
-            buildStarted( project, build );
+            buildStarted( project );
         }
         else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_CHECKOUT_STARTED ) )
         {
-            checkoutStarted( project, build );
+            checkoutStarted( project );
         }
         else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_CHECKOUT_COMPLETE ) )
         {
-            checkoutComplete( project, build );
+            checkoutComplete( project );
         }
         else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_RUNNING_GOALS ) )
         {
@@ -84,19 +84,19 @@ public class ConsoleNotifier
     //
     // ----------------------------------------------------------------------
 
-    private void buildStarted( ContinuumProject project, ContinuumBuild build )
+    private void buildStarted( ContinuumProject project )
     {
-        out( project, build, "Build started." );
+        out( project, null, "Build started." );
     }
 
-    private void checkoutStarted( ContinuumProject project, ContinuumBuild build )
+    private void checkoutStarted( ContinuumProject project )
     {
-        out( project, build, "Checkout started." );
+        out( project, null, "Checkout started." );
     }
 
-    private void checkoutComplete( ContinuumProject project, ContinuumBuild build )
+    private void checkoutComplete( ContinuumProject project )
     {
-        out( project, build, "Checkout complete." );
+        out( project, null, "Checkout complete." );
     }
 
     private void runningGoals( ContinuumProject project, ContinuumBuild build )
@@ -132,7 +132,7 @@ public class ConsoleNotifier
     {
         System.out.println( "Build event for project '" + project.getName() + "':" + msg );
 
-        if ( !StringUtils.isEmpty( build.getError() ) )
+        if ( build != null && !StringUtils.isEmpty( build.getError() ) )
         {
             System.out.println( build.getError() );
         }

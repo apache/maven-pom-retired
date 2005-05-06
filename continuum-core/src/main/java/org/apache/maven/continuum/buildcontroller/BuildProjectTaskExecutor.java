@@ -17,10 +17,13 @@ package org.apache.maven.continuum.buildcontroller;
  */
 
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
+import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -30,16 +33,21 @@ public class BuildProjectTaskExecutor
     extends AbstractLogEnabled
     implements TaskExecutor
 {
+    /** @requirement */
     private BuildController controller;
+
+    /** @requirement */
+    private ContinuumStore store;
 
     // ----------------------------------------------------------------------
     // TaskExecutor Implementation
     // ----------------------------------------------------------------------
 
     public void executeTask( Task task )
+        throws TaskExecutionException
     {
         BuildProjectTask buildProjectTask = (BuildProjectTask) task;
 
-        controller.build( buildProjectTask.getBuildId() );
+        controller.build( buildProjectTask.getProjectId(), buildProjectTask.isForced() );
     }
 }

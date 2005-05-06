@@ -152,6 +152,19 @@ public class MailContinuumNotifier
 
         ContinuumBuildResult result = (ContinuumBuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD_RESULT );
 
+        // ----------------------------------------------------------------------
+        // If there wasn't any building done, don't notify
+        // ----------------------------------------------------------------------
+
+        if ( build == null )
+        {
+            return;
+        }
+
+        // ----------------------------------------------------------------------
+        // Generate and send email
+        // ----------------------------------------------------------------------
+
         try
         {
             if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
@@ -243,7 +256,7 @@ public class MailContinuumNotifier
         // Send the mail
         // ----------------------------------------------------------------------
 
-        String subject = generateSubject( project, build, buildResult );
+        String subject = generateSubject( project );
 
         sendMessage( project, recipients, subject, content );
     }
@@ -252,28 +265,27 @@ public class MailContinuumNotifier
     //
     // ----------------------------------------------------------------------
 
-    private static String generateSubject( ContinuumProject project, ContinuumBuild build, ContinuumBuildResult result )
+    private String generateSubject( ContinuumProject project )
     {
-        int state = build.getState();
+        int state = project.getState();
 
-        if ( state == ContinuumProjectState.ERROR )
+        if ( state == ContinuumProjectState.OK )
+        {
+            return "[continuum] BUILD SUCCESSFUL: " + project.getName();
+        }
+        else if ( state == ContinuumProjectState.FAILED )
+        {
+            return "[continuum] BUILD FAILURE: " + project.getName();
+        }
+        else if ( state == ContinuumProjectState.ERROR )
         {
             return "[continuum] BUILD ERROR: " + project.getName();
         }
-        else if ( state == ContinuumProjectState.OK || state == ContinuumProjectState.FAILED )
-        {
-            if ( !result.isSuccess() )
-            {
-                return "[continuum] BUILD FAILURE: " + project.getName();
-            }
-            else
-            {
-                return "[continuum] BUILD SUCCESSFUL: " + project.getName();
-            }
-        }
         else
         {
-            return "[continuum] ERROR: Unknown build state";
+            getLogger().warn( "Unknown build state " + project.getState() );
+
+            return "[continuum] ERROR: Unknown build state " + project.getState();
         }
     }
 
@@ -346,8 +358,14 @@ public class MailContinuumNotifier
 
     private boolean shouldNotify( ContinuumBuild build, ContinuumBuild previousBuild )
     {
+        if ( build == null )
+        {
+            return true;
+        }
+
         // Always send if the project failed
-        if ( build.getState() == ContinuumProjectState.FAILED )
+        if ( build.getState() == ContinuumProjectState.FAILED ||
+             build.getState() == ContinuumProjectState.ERROR)
         {
             return true;
         }
@@ -392,7 +410,7 @@ public class MailContinuumNotifier
 
         ContinuumBuild build = (ContinuumBuild) it.next();
 
-        if ( !build.getId().equals( currentBuild.getId() ) )
+        if ( currentBuild != null && !build.getId().equals( currentBuild.getId() ) )
         {
             throw new ContinuumException( "INTERNAL ERROR: The current build wasn't the first in the build list. " +
                                           "Current build: '" + currentBuild.getId() + "', " +

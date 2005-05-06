@@ -290,7 +290,9 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            return makeHashtable( "buildId", continuum.buildProject( projectId, force ) );
+            continuum.buildProject( projectId, force );
+
+            return makeHashtable();
         }
         catch ( Throwable e )
         {

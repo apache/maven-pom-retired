@@ -85,7 +85,7 @@ public interface ContinuumStore
     String createBuild( String projectId, boolean forced )
         throws ContinuumStoreException;
 
-    void setBuildResult( String buildId, int state, ContinuumBuildResult result, Throwable error )
+    void setBuildResult( String buildId, int state, ContinuumBuildResult result, UpdateScmResult scmResult, Throwable error )
         throws ContinuumStoreException;
 
     ContinuumBuild getBuild( String buildId )
@@ -104,15 +104,21 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     // ----------------------------------------------------------------------
-    // SCM
+    // Project and Build state transitions
     // ----------------------------------------------------------------------
+
+    void setBuildSignalled( String projectId )
+        throws ContinuumStoreException;
 
     void setCheckoutDone( String projectId, CheckOutScmResult scmResult )
         throws ContinuumStoreException;
 
-    void setIsUpdating( String buildId )
+    void setIsUpdating( String projectId )
         throws ContinuumStoreException;
 
-    void setUpdateDone( String buildId, UpdateScmResult scmResult )
+    void setUpdateDone( String projectId )
+        throws ContinuumStoreException;
+
+    void setBuildNotExecuted( String projectId )
         throws ContinuumStoreException;
 }

@@ -26,6 +26,9 @@ public interface ContinuumProjectStateGuard
 {
     String ROLE = ContinuumProjectStateGuard.class.getName();
 
+    void assertInState( ContinuumProject project, int state )
+        throws ContinuumProjectStateGuardException;
+
     void assertTransition( ContinuumProject project, int newState )
         throws ContinuumProjectStateGuardException;
 

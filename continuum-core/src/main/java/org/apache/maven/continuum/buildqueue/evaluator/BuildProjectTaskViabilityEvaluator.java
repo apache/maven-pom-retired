@@ -106,7 +106,7 @@ public class BuildProjectTaskViabilityEvaluator
             // If this build is forces, don't remove it
             // ----------------------------------------------------------------------
 
-            if ( buildProjectTask.isForce() )
+            if ( buildProjectTask.isForced() )
             {
                 continue;
             }

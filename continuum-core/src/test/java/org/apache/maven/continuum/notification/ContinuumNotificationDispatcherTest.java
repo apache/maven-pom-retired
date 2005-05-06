@@ -16,10 +16,6 @@ package org.apache.maven.continuum.notification;
  * limitations under the License.
  */
 
-import java.util.Properties;
-
-import org.apache.maven.continuum.project.AntProject;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ModelloJPoxContinuumStoreTest;
 
@@ -42,10 +38,14 @@ public class ContinuumNotificationDispatcherTest
 
         String projectId = ModelloJPoxContinuumStoreTest.addProject( store, "Test Project" );
 
+        store.setBuildSignalled( projectId );
+
+        store.setIsUpdating( projectId );
+
+        store.setUpdateDone( projectId );
+
         String buildId = store.createBuild( projectId, false );
 
-        ContinuumBuild build = store.getBuild( buildId );
-
-        notificationDispatcher.buildComplete( build );
+        notificationDispatcher.buildComplete( store.getProject( projectId ), store.getBuild( buildId ) );
     }
 }

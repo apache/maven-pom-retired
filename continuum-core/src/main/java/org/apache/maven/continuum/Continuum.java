@@ -29,7 +29,6 @@ import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.project.MavenProject;
 
 /**
  * This is the main entry point for Continuum. Projects are added to Continuum
@@ -77,7 +76,7 @@ public interface Continuum
     Iterator getAllProjects( int start, int end )
         throws ContinuumException;
 
-    String buildProject( String projectId, boolean force )
+    void buildProject( String projectId, boolean force )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------

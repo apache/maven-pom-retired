@@ -88,9 +88,7 @@ def removeProject( projectId ):
 def buildProject( projectId, force=False ):
     result = checkResult( server.continuum.buildProject( projectId, force ) )
 
-    return result[ "buildId" ]
-
-def getBuildsForProject( projectId, start, end ):
+def getBuildsForProject( projectId, start=0, end=0 ):
     result = checkResult( server.continuum.getBuildsForProject( projectId, start, end ) )
 
     builds = []
@@ -227,27 +225,21 @@ class BuildResult:
     def __init__( self, map ):
         # This is the common stuff between all ContinuumBuildResult objects
         self.success = map[ "success" ] == "true"
-        self.buildExecuted = map[ "buildExecuted" ] == "true"
-        #self.changedFiles = map[ "changedFiles" ]
 
-        # These fields just happen to be the same for all the build results
-        if ( self.buildExecuted ):
-            self.exitCode = int( map[ "exitCode" ] )
-            self.standardOutput = map[ "standardOutput" ]
-            self.standardError = map[ "standardError" ]
+        self.exitCode = int( map[ "exitCode" ] )
+        self.standardOutput = map[ "standardOutput" ]
+        self.standardError = map[ "standardError" ]
 
     def __str__( self ):
-        value = "Success: " + str( self.success ) + os.linesep +\
-                "Build executed: " + str( self.buildExecuted )
+        value = "Success: " + str( self.success )
 
-        if ( self.buildExecuted ):
-            value += os.linesep + "Exit code: " + str( self.exitCode )
+        value += os.linesep + "Exit code: " + str( self.exitCode )
 
-            if ( len( self.standardOutput ) > 0 ):
-                  value += os.linesep + "Standard output: " + self.standardOutput
+        if ( len( self.standardOutput ) > 0 ):
+              value += os.linesep + "Standard output: " + self.standardOutput
 
-            if ( len( self.standardError ) > 0 ):
-                   value += os.linesep + "Standard error: " + self.standardError
+        if ( len( self.standardError ) > 0 ):
+               value += os.linesep + "Standard error: " + self.standardError
 
         return value
 

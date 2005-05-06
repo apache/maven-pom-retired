@@ -20,8 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.scm.UpdateScmResult;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.notification.NotificationDispatcher;
@@ -45,51 +47,74 @@ public class DefaultContinuumNotificationDispatcher
     // ContinuumNotificationDispatcher Implementation
     // ----------------------------------------------------------------------
 
-    public void buildStarted( ContinuumBuild build )
+    public void buildStarted( ContinuumProject project )
     {
-        sendNotifiaction( MESSAGE_ID_BUILD_STARTED, build );
+        sendNotifiaction( MESSAGE_ID_BUILD_STARTED, project, null );
     }
 
-    public void checkoutStarted( ContinuumBuild build )
+    public void checkoutStarted( ContinuumProject project )
     {
-        sendNotifiaction( MESSAGE_ID_CHECKOUT_STARTED, build );
+        sendNotifiaction( MESSAGE_ID_CHECKOUT_STARTED, project, null );
     }
 
-    public void checkoutComplete( ContinuumBuild build )
+    public void checkoutComplete( ContinuumProject project, UpdateScmResult scmResult )
     {
-        sendNotifiaction( MESSAGE_ID_CHECKOUT_COMPLETE, build );
+        sendNotifiaction( MESSAGE_ID_CHECKOUT_COMPLETE, project, null );
     }
 
-    public void runningGoals( ContinuumBuild build )
+    public void runningGoals( ContinuumProject project, ContinuumBuild build )
     {
-        sendNotifiaction( MESSAGE_ID_RUNNING_GOALS, build );
+        sendNotifiaction( MESSAGE_ID_RUNNING_GOALS, project, build );
     }
 
-    public void goalsCompleted( ContinuumBuild build )
+    public void goalsCompleted( ContinuumProject project, ContinuumBuild build )
     {
-        sendNotifiaction( MESSAGE_ID_GOALS_COMPLETED, build );
+        sendNotifiaction( MESSAGE_ID_GOALS_COMPLETED, project, build );
     }
 
-    public void buildComplete( ContinuumBuild build )
+    public void buildComplete( ContinuumProject project, ContinuumBuild build )
     {
-        sendNotifiaction( MESSAGE_ID_BUILD_COMPLETE, build );
+        sendNotifiaction( MESSAGE_ID_BUILD_COMPLETE, project, build );
     }
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
-    private void sendNotifiaction( String messageId, ContinuumBuild build )
+
+    private void sendNotifiaction( String messageId,
+                                   ContinuumProject project,
+                                   ContinuumBuild build )
+    {
+        sendNotifiaction( messageId, project, build, null );
+    }
+
+    private void sendNotifiaction( String messageId,
+                                   ContinuumProject project,
+                                   ContinuumBuild build,
+                                   UpdateScmResult scmResult )
     {
         Map context = new HashMap();
 
+        // The objects are reread from the store to make sure they're getting the "final"
+        // state of the objects. Ideally this should be done on a pr notifier basis or the
+        // objects should be made read only.
+
         try
         {
-            context.put( CONTEXT_PROJECT, store.getProjectByBuild( build.getId() ) );
+            context.put( CONTEXT_PROJECT, store.getProject( project.getId() ) );
 
-            context.put( CONTEXT_BUILD, build );
+            if ( build != null )
+            {
+                context.put( CONTEXT_BUILD, store.getBuild( build.getId() ) );
 
-            context.put( CONTEXT_BUILD_RESULT, store.getBuildResultForBuild( build.getId() ) );
+                context.put( CONTEXT_BUILD_RESULT, store.getBuildResultForBuild( build.getId() ) );
+            }
+
+            if ( scmResult != null )
+            {
+                context.put( CONTEXT_UPDATE_SCM_RESULT, scmResult );
+            }
         }
         catch ( ContinuumStoreException e )
         {

@@ -84,6 +84,8 @@ public class DefaultContinuumScm
                 throw new ContinuumScmException( "Error while checking out the project.", result );
             }
 
+            getLogger().info( "Checked out " + result.getCheckedOutFiles().size() + " files." );
+
             return result;
         }
         catch ( ScmRepositoryException e )
@@ -152,6 +154,8 @@ public class DefaultContinuumScm
 
                 throw new ContinuumScmException( "Error while checking out the project.", result );
             }
+
+            getLogger().info( "Updated " + result.getUpdatedFiles().size() + " files." );
 
             return result;
         }

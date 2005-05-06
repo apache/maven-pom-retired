@@ -17,6 +17,8 @@ package org.apache.maven.continuum.notification;
  */
 
 import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.scm.UpdateScmResult;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -25,6 +27,10 @@ import org.apache.maven.continuum.project.ContinuumBuild;
 public interface ContinuumNotificationDispatcher
 {
     String ROLE = ContinuumNotificationDispatcher.class.getName();
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
 
     String MESSAGE_ID_BUILD_STARTED = "BuildStarted";
 
@@ -42,17 +48,23 @@ public interface ContinuumNotificationDispatcher
 
     String CONTEXT_PROJECT = "project";
 
-    Object CONTEXT_BUILD_RESULT = "result";
+    String CONTEXT_BUILD_RESULT = "result";
 
-    void buildStarted( ContinuumBuild build );
+    String CONTEXT_UPDATE_SCM_RESULT = "updateScmResult";
 
-    void checkoutStarted( ContinuumBuild build );
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
 
-    void checkoutComplete( ContinuumBuild build );
+    void buildStarted( ContinuumProject project );
 
-    void runningGoals( ContinuumBuild build );
+    void checkoutStarted( ContinuumProject project );
 
-    void goalsCompleted( ContinuumBuild build );
+    void checkoutComplete( ContinuumProject project, UpdateScmResult scmResult );
 
-    void buildComplete( ContinuumBuild build );
+    void runningGoals( ContinuumProject project, ContinuumBuild build );
+
+    void goalsCompleted( ContinuumProject project, ContinuumBuild build );
+
+    void buildComplete( ContinuumProject project, ContinuumBuild build );
 }

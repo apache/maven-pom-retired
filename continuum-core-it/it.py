@@ -6,7 +6,7 @@ import time
 import traceback
 
 def progress( message ):
-    print "* " + message
+    print "[" + time.strftime( "%c" ) + "] * " + message
 
 def fail( message ):
     print "FAILURE: " + message
@@ -24,9 +24,9 @@ def assertEquals( message, expected, actual ):
     if( expected == actual ):
         return
 
-    fail( message, expected, actual )
+    assertionFailed( message, expected, actual )
 
-def fail( message, expected, actual ):
+def assertionFailed( message, expected, actual ):
     print
     print "##############################################"
     print "ASSERTION FAILURE!"
@@ -53,7 +53,7 @@ def assertNotNull( message, condition ):
     if ( condition != None ):
         return
 
-    fail( message, None, condition )
+    assertionFailed( message, "Not None", condition )
 
 def assertProject( projectId, name, nagEmailAddress, state, version, builderId, project ):
     assertNotNull( "project.id", projectId )
@@ -91,7 +91,6 @@ def assertSuccessfulNoBuildPerformed( buildId ):
     buildResult = continuum.getBuildResult( buildId )
     assertNotNull( "Build result was null.", buildResult )
     assertTrue( "The build wasn't successful", buildResult.success )
-    assertFalse( "The build was executed", buildResult.buildExecuted )
 
 def assertSuccessfulMaven1Build( buildId ):
     build = waitForBuild( buildId )
@@ -99,7 +98,6 @@ def assertSuccessfulMaven1Build( buildId ):
     buildResult = continuum.getBuildResult( buildId )
     assertNotNull( "Build result was null.", buildResult )
     assertTrue( "The build wasn't successful", buildResult.success )
-    assertTrue( "The build wasn't executed", buildResult.buildExecuted )
     assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", buildResult.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
     assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
 
@@ -109,7 +107,6 @@ def assertSuccessfulMaven2Build( buildId ):
     buildResult = continuum.getBuildResult( buildId )
     assertNotNull( "Build result was null.", buildResult )
     assertTrue( "The build wasn't successful", buildResult.success )
-    assertTrue( "The build wasn't executed", buildResult.buildExecuted )
     assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", buildResult.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
     assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
 
@@ -121,7 +118,6 @@ def assertSuccessfulAntBuild( buildId ):
     buildResult = continuum.getBuildResult( buildId )
     assertNotNull( "Build result was null.", buildResult )
     assertTrue( "The build wasn't successful", buildResult.success )
-    assertTrue( "The build wasn't executed", buildResult.buildExecuted )
     assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", buildResult.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
     assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
 
@@ -131,12 +127,32 @@ def assertSuccessfulShellBuild( buildId, expectedStandardOutput ):
     buildResult = continuum.getBuildResult( buildId )
     assertNotNull( "Build result was null.", buildResult )
     assertTrue( "The build wasn't successful", buildResult.success )
-    assertTrue( "The build wasn't executed", buildResult.buildExecuted )
     assertEquals( "Standard output didn't contain the expected output.", expectedStandardOutput, buildResult.standardOutput )
     assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
 
+def buildProject( projectId, force=False ):
+    count = 600;
+
+    originalSize = len( continuum.getBuildsForProject( projectId ) )
+
+    continuum.buildProject( projectId, force )
+
+    while( True ):
+        builds = continuum.getBuildsForProject( projectId )
+
+        size = len( builds )
+
+        count = count - 1
+        if ( count == 0 ):
+            fail( "Timeout while waiting for build result." )
+
+        if ( size == originalSize ):
+            time.sleep( 0.1 )
+            continue
+
+        return builds[ 0 ]
+
 def removeProject( projectId ):
-    return
     continuum.removeProject( projectId )
 
     map = continuum.server.continuum.getProject( projectId )
@@ -163,20 +179,24 @@ def execute( workingDirectory, command ):
     return output
 
 def waitForBuild( buildId ):
-    timeout = 60
+    timeout = 120                # seconds
     sleepInterval = 0.1
 
+    print "waiting for build: " + buildId
     build = continuum.getBuild( buildId )
 
     while( build.state == continuum.STATE_BUILD_SIGNALED or 
-           build.state == continuum.STATE_BUILDING or
-           build.state == continuum.STATE_UPDATING ):
-        build = continuum.getBuild( buildId )
-        time.sleep( sleepInterval )
-        timeout -= sleepInterval
+           build.state == continuum.STATE_UPDATING or
+           build.state == continuum.STATE_BUILDING ):
 
         if ( timeout <= 0 ):
             fail( "Timeout while waiting for build (id=%(id)s) to complete" % { "id" : buildId } )
+
+        time.sleep( sleepInterval )
+
+        timeout -= sleepInterval
+
+        build = continuum.getBuild( buildId )
 
     return build
 
@@ -367,7 +387,7 @@ if 1:
     assertCheckedOutFiles( maven1, [ "/project.xml", "/src/main/java/Foo.java" ] )
 
     progress( "Building Maven 1 project" )
-    buildId = continuum.buildProject( maven1.id )
+    buildId = buildProject( maven1.id ).id
     assertSuccessfulMaven1Build( buildId )
 
     progress( "Testing that the POM is updated before each build." )
@@ -403,17 +423,24 @@ if 1:
     assertProject( maven2Id, "Maven 2 Project", email, continuum.STATE_NEW, "2.0-SNAPSHOT", "maven2", maven2 )
 
     progress( "Building Maven 2 project" )
-    build = continuum.buildProject( maven2.id )
-    assertSuccessfulMaven2Build( build )
+    buildId = buildProject( maven2.id ).id
+    print "original buildId: " + buildId
+    assertSuccessfulMaven2Build( buildId )
 
     progress( "Test that a build without any files changed won't execute the builder" )
-    build = continuum.buildProject( maven2.id )
-    assertSuccessfulNoBuildPerformed( build )
+    expectedSize = len( continuum.getBuildsForProject( maven2.id ) )
+    continuum.buildProject( maven2.id )
+    time.sleep( 3.0 )
+    actualSize = len( continuum.getBuildsForProject( maven2.id ) )
+    assertEquals( "A build has unexpectedly been executed.", expectedSize, actualSize )
 
     progress( "Test that a forced build without any files changed executes the builder" )
-    build = continuum.buildProject( maven2.id, True )
-    build = assertSuccessfulMaven2Build( build )
-    assertTrue( "The 'build forces' flag wasn't true", build.forced );
+    buildId = buildProject( maven2.id, True ).id
+    print "forced buildId: " + buildId
+    build = assertSuccessfulMaven2Build( buildId )
+    assertTrue( "The 'build forced' flag wasn't true", build.forced );
+    build = continuum.getBuild( buildId )
+    print "build.state: " + build.state
 
     removeProject( maven2Id )
 
@@ -432,8 +459,8 @@ if 1:
     antSvn = continuum.getProject( antSvnId )
     assertProject( antSvnId, "Ant SVN Project", email, continuum.STATE_NEW, "3.0", "ant", antSvn )
     progress( "Building SVN Ant project" )
-    build = continuum.buildProject( antSvn.id )
-    assertSuccessfulAntBuild( build )
+    buildId = buildProject( antSvn.id ).id
+    assertSuccessfulAntBuild( buildId )
 
     removeProject( antSvnId )
 
@@ -447,8 +474,8 @@ if 1:
     antCvs = continuum.getProject( antCvsId )
     assertProject( antCvsId, "Ant CVS Project", email, continuum.STATE_NEW, "3.0", "ant", antCvs )
     progress( "Building CVS Ant project" )
-    build = continuum.buildProject( antCvs.id )
-    assertSuccessfulAntBuild( build )
+    buildId = buildProject( antCvs.id ).id
+    assertSuccessfulAntBuild( buildId )
     removeProject( antCvsId )
 
 if 1:
@@ -467,8 +494,8 @@ if 1:
     assertProject( shellId, "Shell Project", email, continuum.STATE_NEW, "3.0", "shell", shell )
 
     progress( "Building Shell project" )
-    build = continuum.buildProject( shell.id )
-    assertSuccessfulShellBuild( build, "" )
+    buildId = buildProject( shell.id ).id
+    assertSuccessfulShellBuild( buildId, "" )
 
     # Test project reconfiguration
     # Test that a project will be built after a changed file is committed
@@ -490,8 +517,8 @@ if 1:
     configuration[ "arguments" ] = "a b";
     continuum.updateProjectConfiguration( shell.id, configuration );
     shell = continuum.getProject( shell.id )
-    build = continuum.buildProject( shell.id )
-    assertSuccessfulShellBuild( build, """a
+    buildId = buildProject( shell.id ).id
+    assertSuccessfulShellBuild( buildId, """a
 b
 """ )
     removeProject( shellId )

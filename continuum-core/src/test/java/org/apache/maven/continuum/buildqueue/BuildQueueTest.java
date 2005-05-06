@@ -18,7 +18,6 @@ package org.apache.maven.continuum.buildqueue;
 
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ModelloJPoxContinuumStoreTest;
-import org.apache.maven.continuum.project.ContinuumProject;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.taskqueue.Task;
@@ -50,22 +49,22 @@ public class BuildQueueTest
     {
         String name = "Project 1";
 
-        String project = ModelloJPoxContinuumStoreTest.addProject( store, name );
+        String projectId = ModelloJPoxContinuumStoreTest.addProject( store, name );
 
-        String build = buildProject( project, false );
+        buildProject( projectId, false );
 
-        assertNextBuildIs( build );
+        assertNextBuildIs( projectId );
 
         assertNextBuildIsNull();
 
-        String buildX = buildProject( project, false );
+        buildProject( projectId, false );
 
-        buildProject( project, false );
-        buildProject( project, false );
-        buildProject( project, false );
-        buildProject( project, false );
+        buildProject( projectId, false );
+        buildProject( projectId, false );
+        buildProject( projectId, false );
+        buildProject( projectId, false );
 
-        assertNextBuildIs( buildX );
+        assertNextBuildIs( projectId );
 
         assertNextBuildIsNull();
     }
@@ -77,35 +76,35 @@ public class BuildQueueTest
 
         String name2 = "Project 2";
 
-        String project1 = ModelloJPoxContinuumStoreTest.addProject( store, name1 );
+        String projectId1 = ModelloJPoxContinuumStoreTest.addProject( store, name1 );
 
-        String project2 = ModelloJPoxContinuumStoreTest.addProject( store, name2 );
+        String projectId2 = ModelloJPoxContinuumStoreTest.addProject( store, name2 );
 
-        String build1 = buildProject( project1, false );
+        buildProject( projectId1, false );
 
-        String build2 = buildProject( project2, false );
+        buildProject( projectId2, false );
 
-        assertNextBuildIs( build1 );
+        assertNextBuildIs( projectId1 );
 
-        assertNextBuildIs( build2 );
+        assertNextBuildIs( projectId2 );
 
         assertNextBuildIsNull();
 
-        String buildX1 = buildProject( project1, false );
+        buildProject( projectId1, false );
 
-        String buildX2 = buildProject( project2, false );
+        buildProject( projectId2, false );
 
-        buildProject( project1, false );
-        buildProject( project2, false );
-        buildProject( project1, false );
-        buildProject( project2, false );
-        buildProject( project1, false );
-        buildProject( project2, false );
-        buildProject( project1, false );
-        buildProject( project2, false );
+        buildProject( projectId1, false );
+        buildProject( projectId2, false );
+        buildProject( projectId1, false );
+        buildProject( projectId2, false );
+        buildProject( projectId1, false );
+        buildProject( projectId2, false );
+        buildProject( projectId1, false );
+        buildProject( projectId2, false );
 
-        assertNextBuildIs( buildX1 );
-        assertNextBuildIs( buildX2 );
+        assertNextBuildIs( projectId1 );
+        assertNextBuildIs( projectId2 );
 
         assertNextBuildIsNull();
     }
@@ -115,25 +114,25 @@ public class BuildQueueTest
     {
         String name = "Project 1";
 
-        String project = ModelloJPoxContinuumStoreTest.addProject( store, name );
+        String projectId = ModelloJPoxContinuumStoreTest.addProject( store, name );
 
-        String build = buildProject( project, true );
+        buildProject( projectId, true );
 
-        assertNextBuildIs( build );
+        assertNextBuildIs( projectId );
 
         assertNextBuildIsNull();
 
-        String build1 = buildProject( project, true );
-        String build2 = buildProject( project, true );
-        String build3 = buildProject( project, true );
-        String build4 = buildProject( project, true );
-        String build5 = buildProject( project, true );
+        buildProject( projectId, true );
+        buildProject( projectId, true );
+        buildProject( projectId, true );
+        buildProject( projectId, true );
+        buildProject( projectId, true );
 
-        assertNextBuildIs( build1 );
-        assertNextBuildIs( build2 );
-        assertNextBuildIs( build3 );
-        assertNextBuildIs( build4 );
-        assertNextBuildIs( build5 );
+        assertNextBuildIs( projectId );
+        assertNextBuildIs( projectId );
+        assertNextBuildIs( projectId );
+        assertNextBuildIs( projectId );
+        assertNextBuildIs( projectId );
 
         assertNextBuildIsNull();
     }
@@ -142,19 +141,13 @@ public class BuildQueueTest
     //
     // ----------------------------------------------------------------------
 
-    private String buildProject( String projectId, boolean force )
+    private void buildProject( String projectId, boolean force )
         throws Exception
     {
-        ContinuumProject project = store.getProject( projectId );
-
-        String buildId = store.createBuild( project.getId(), force );
-
-        buildQueue.put( new BuildProjectTask( projectId, buildId, force ) );
-
-        return buildId;
+        buildQueue.put( new BuildProjectTask( projectId, force ) );
     }
 
-    private void assertNextBuildIs( String expectedBuildId )
+    private void assertNextBuildIs( String expectedProjectId )
         throws Exception
     {
         Task task = buildQueue.take();
@@ -163,7 +156,7 @@ public class BuildQueueTest
 
         BuildProjectTask buildProjectTask = ( BuildProjectTask ) task;
 
-        assertEquals( "Didn't get the expected build id.", expectedBuildId, buildProjectTask.getBuildId() );
+        assertEquals( "Didn't get the expected project id.", expectedProjectId, buildProjectTask.getProjectId() );
     }
 
     private void assertNextBuildIsNull()
@@ -173,7 +166,7 @@ public class BuildQueueTest
 
         if ( task != null )
         {
-            fail( "Got a non-null build id returned: " + (( BuildProjectTask ) task ).getBuildId() );
+            fail( "Got a non-null build task returned. Project id: " + ( (BuildProjectTask) task ).getProjectId() );
         }
     }
 }

@@ -29,9 +29,9 @@ import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.UpdateScmResult;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.jdo.JdoFactory;
@@ -45,19 +45,25 @@ import org.codehaus.plexus.util.FileUtils;
 public class ModelloJPoxContinuumStoreTest
     extends PlexusTestCase
 {
+    private ContinuumStore store;
+
+    private JdoFactory jdoFactory;
+
     public void setUp()
         throws Exception
     {
         super.setUp();
 
         FileUtils.cleanDirectory( getTestPath( "target/plexus-home" ) );
+
+        jdoFactory = (JdoFactory) lookup( JdoFactory.ROLE );
+
+        store = (ContinuumStore) lookup( ContinuumStore.ROLE );
     }
 
     public void testTransactionHandling()
         throws Exception
     {
-        JdoFactory jdoFactory = (JdoFactory) lookup( JdoFactory.ROLE );
-
         ContinuumJPoxStore store = new ContinuumJPoxStore( jdoFactory.getPersistenceManagerFactory() );
 
         // ----------------------------------------------------------------------
@@ -172,15 +178,9 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = store.addProject( name, scmUrl, nagEmailAddress, version, builderId, workingDirectory, configuration );
 
-        System.err.println( "Added project, id: " + projectId );
-
         assertNotNull( "The project id is null.", projectId );
 
-        System.err.println( "Loading project" );
-
         ContinuumProject project = store.getProject( projectId );
-
-        System.err.println( "project.id: " + project.getId() );
 
         assertProjectEquals( projectId, name, scmUrl, nagEmailAddress, version, builderId, workingDirectory,
                              configuration, project );
@@ -298,9 +298,6 @@ public class ModelloJPoxContinuumStoreTest
 
         String id1 = store.addProject( name1, scmUrl1, nagEmailAddress1, version1, builderId1, workingDirectory1, configuration1 );
 
-        ContinuumProject a = store.getProject( id1 );
-        System.err.println( "a.name: " + a.getName() );
-
         String name2 = "Test Project 2";
         String scmUrl2 = "scm:local:src/test/repo";
         String nagEmailAddress2 = "foo@bar.com";
@@ -374,23 +371,25 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addProject( "Test Project" );
 
+        store.setBuildSignalled( projectId );
+
+        store.setIsUpdating( projectId );
+
+        store.setUpdateDone( projectId );
+
         String buildId = store.createBuild( projectId, false );
 
-        store.setIsUpdating( buildId );
-
-        UpdateScmResult updateScmResult = new UpdateScmResult();
+        UpdateScmResult scmResult = new UpdateScmResult();
 
         ScmFile file = new ScmFile();
 
         file.setPath( "foo" );
 
-        updateScmResult.addUpdatedFile( file );
-
-        store.setUpdateDone( buildId, updateScmResult );
+        scmResult.addUpdatedFile( file );
 
         ContinuumBuildResult result = new ShellBuildResult();
 
-        store.setBuildResult( buildId, ContinuumProjectState.OK, result, null );
+        store.setBuildResult( buildId, ContinuumProjectState.OK, result, scmResult, null );
 
         store.removeProject( projectId );
     }
@@ -409,6 +408,12 @@ public class ModelloJPoxContinuumStoreTest
         jdoFactory.getPersistenceManagerFactory().close();
 
         String projectId = addProject( "Test Project" );
+
+        store.setBuildSignalled( projectId );
+
+        store.setIsUpdating( projectId );
+
+        store.setUpdateDone( projectId );
 
         String buildId = store.createBuild( projectId, false );
 
@@ -437,14 +442,36 @@ public class ModelloJPoxContinuumStoreTest
         jdoFactory.getPersistenceManagerFactory().close();
 
         // ----------------------------------------------------------------------
-        //
+        // Set up projects
         // ----------------------------------------------------------------------
 
         String projectId = addProject( "Test Project" );
 
+        store.setBuildSignalled( projectId );
+
+        store.setIsUpdating( projectId );
+
+        store.setUpdateDone( projectId );
+
         String projectIdFoo = addProject( "Foo Project" );
 
+        store.setBuildSignalled( projectIdFoo );
+
+        store.setIsUpdating( projectIdFoo );
+
+        store.setUpdateDone( projectIdFoo );
+
         String projectIdBar = addProject( "Bar Project" );
+
+        store.setBuildSignalled( projectIdBar );
+
+        store.setIsUpdating( projectIdBar );
+
+        store.setUpdateDone( projectIdBar );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
 
         List expectedBuilds = new ArrayList();
 
@@ -498,23 +525,37 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addProject( "Test Project" );
 
+        store.setBuildSignalled( projectId );
+
+        assertInState( projectId, ContinuumProjectState.BUILD_SIGNALED );
+
+        store.setIsUpdating( projectId );
+
+        assertInState( projectId, ContinuumProjectState.UPDATING );
+
+        store.setUpdateDone( projectId );
+
+        assertInState( projectId, ContinuumProjectState.BUILDING );
+
         long now = System.currentTimeMillis();
 
         String buildId = store.createBuild( projectId, false );
+
+        assertInState( projectId, ContinuumProjectState.BUILDING );
 
         assertIsCommitted( store );
 
         assertNotNull( buildId );
 
         // ----------------------------------------------------------------------
-        // Check that the project's has been updated
+        // Check that the project's state has been updated
         // ----------------------------------------------------------------------
 
         ContinuumProject project = store.getProject( projectId );
 
         assertIsCommitted( store );
 
-        assertEquals( ContinuumProjectState.BUILD_SIGNALED, project.getState() );
+        assertEquals( ContinuumProjectState.BUILDING, project.getState() );
 
         // ----------------------------------------------------------------------
         // Check the build
@@ -532,11 +573,7 @@ public class ModelloJPoxContinuumStoreTest
 
         assertNull( build.getError() );
 
-        assertEquals( ContinuumProjectState.BUILD_SIGNALED, build.getState() );
-
-        store.setIsUpdating( buildId );
-
-        store.setUpdateDone( buildId, new UpdateScmResult() );
+        assertEquals( ContinuumProjectState.BUILDING, build.getState() );
 
         // ----------------------------------------------------------------------
         // Check the build result
@@ -548,6 +585,8 @@ public class ModelloJPoxContinuumStoreTest
 
         assertNull( result );
 
+        UpdateScmResult scmResult = new UpdateScmResult();
+
         ShellBuildResult shellBuildResult = new ShellBuildResult();
 
         shellBuildResult.setExitCode( 1 );
@@ -556,7 +595,7 @@ public class ModelloJPoxContinuumStoreTest
 
         shellBuildResult.setStandardError( "error" );
 
-        store.setBuildResult( buildId, ContinuumProjectState.OK, shellBuildResult, null );
+        store.setBuildResult( buildId, ContinuumProjectState.OK, shellBuildResult, scmResult, null );
 
         assertIsCommitted( store );
 
@@ -573,11 +612,19 @@ public class ModelloJPoxContinuumStoreTest
         assertEquals( "output", shellBuildResult.getStandardOutput() );
 
         assertEquals( "error", shellBuildResult.getStandardError() );
-   }
+    }
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
+
+    private void assertInState( String projectId, int state )
+        throws ContinuumStoreException
+    {
+        ContinuumProject project = store.getProject( projectId );
+
+        assertEquals( state, project.getState() );
+    }
 
     private void assertIsCommitted( ContinuumStore store )
     {

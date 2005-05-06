@@ -68,11 +68,9 @@ public class SimpleSocketTrigger
                 return;
             }
 
-            String buildId = getContinuum().buildProject( id, false );
+            getContinuum().buildProject( id, false );
 
             out( printer, "OK" );
-
-            out( printer, "id=" + buildId );
 
             out( printer, "Build of " + id + " scheduled." );
         }

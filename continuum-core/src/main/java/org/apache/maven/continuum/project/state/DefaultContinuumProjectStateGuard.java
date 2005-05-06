@@ -89,6 +89,18 @@ public class DefaultContinuumProjectStateGuard
     // ContinuumProjectStateGuard Implementation
     // ----------------------------------------------------------------------
 
+    public void assertInState( ContinuumProject project, int state )
+        throws ContinuumProjectStateGuardException
+    {
+        if ( project.getState() == state )
+        {
+            return;
+        }
+
+        throw new ContinuumProjectStateGuardException( "Expected project to be in state '" + decodeState( state ) + "', " +
+                                                       "but it was in the state '" + decodeState( project.getState() ) + "'." );
+    }
+
     public void assertTransition( ContinuumProject project, int newState )
         throws ContinuumProjectStateGuardException
     {

@@ -97,9 +97,9 @@ Builder type: %(builderId)s""" % project.map
         """Build a Continuum project.
         Use this command to signal a build for a Continuum project."""
 
-        buildId = continuum.buildProject( args[ 0 ] )
+        continuum.buildProject( args[ 0 ] )
 
-        print "Enqueued project, build id: " + buildId
+        print "Enqueued project"
 
     def do_showBuild( self, args ):
         """Shows the result of a build."""

@@ -339,22 +339,18 @@ public class DefaultContinuum
         }
     }
 
-    public String buildProject( String projectId, boolean force )
+    public void buildProject( String projectId, boolean force )
         throws ContinuumException
     {
         try
         {
             ContinuumProject project = store.getProject( projectId );
 
+            store.setBuildSignalled( projectId );
+
             getLogger().info( "Enqueuing '" + project.getName() + "'." );
 
-            String buildId = store.createBuild( project.getId(), force );
-
-            getLogger().info( "Build id: '" + buildId + "'." );
-
-            buildQueue.put( new BuildProjectTask( projectId, buildId, force ) );
-
-            return buildId;
+            buildQueue.put( new BuildProjectTask( projectId, force ) );
         }
         catch ( ContinuumStoreException e )
         {

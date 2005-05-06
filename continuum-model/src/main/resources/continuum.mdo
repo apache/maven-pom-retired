@@ -264,11 +264,6 @@
           <version>1.0.0</version>
           <type>boolean</type>
         </field>
-        <field>
-          <name>buildExecuted</name>
-          <version>1.0.0</version>
-          <type>boolean</type>
-        </field>
       </fields>
     </class>
 

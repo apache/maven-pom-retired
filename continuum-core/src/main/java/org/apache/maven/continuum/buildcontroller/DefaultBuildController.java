@@ -28,11 +28,13 @@ import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.ContinuumScm;
+import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.CollectionUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -55,20 +57,48 @@ public class DefaultBuildController
     private ContinuumScm scm;
 
     // ----------------------------------------------------------------------
-    // BuildController Implementation
+    //
     // ----------------------------------------------------------------------
 
-    public void build( String buildId )
+    private static class BuildContext
     {
         ContinuumProject project;
 
+        ContinuumBuilder builder;
+
+        boolean forced;
+
+        UpdateScmResult scmResult;
+
+        ContinuumBuildResult result;
+
+        int state;
+
+        Throwable cause;
+
         ContinuumBuild build;
+    }
+
+    // ----------------------------------------------------------------------
+    // BuildController Implementation
+    // ----------------------------------------------------------------------
+
+    public void build( String projectId, boolean forced )
+    {
+        BuildContext context = new BuildContext();
+
+        context.forced = forced;
+
+        // ----------------------------------------------------------------------
+        // Initialize the context
+        // ----------------------------------------------------------------------
+
+        // if these calls fail we're screwed anyway
+        // and it will only be logged through the logger.
 
         try
         {
-            project = store.getProjectByBuild( buildId );
-
-            build = store.getBuild( buildId );
+            context.project = store.getProject( projectId );
         }
         catch ( ContinuumStoreException ex )
         {
@@ -79,11 +109,61 @@ public class DefaultBuildController
 
         try
         {
-            notifier.buildStarted( build );
-
-            buildProject( project, build );
+            context.builder = builderManager.getBuilder( context.project.getBuilderId() );
         }
-        catch ( ContinuumException ex )
+        catch ( ContinuumException e )
+        {
+            getLogger().fatalError( "Error while getting builder '" + context.project.getBuilderId() + "'. " +
+                                    "Project Id: '" + projectId + "'.", e );
+
+            return;
+        }
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        try
+        {
+            notifier.buildStarted( context.project );
+
+            // ----------------------------------------------------------------------
+            // Update the project
+            //
+            // If this fails, create a build, store the scm result and set the
+            // build status to error.
+            // ----------------------------------------------------------------------
+
+            if ( !update( context ) )
+            {
+                return;
+            }
+
+            if ( !updateProjectMetadata( context ) )
+            {
+                return;
+            }
+
+            // ----------------------------------------------------------------------
+            // Figure out if the project needs to be built
+            // ----------------------------------------------------------------------
+
+            if ( context.scmResult.getUpdatedFiles().size() == 0 &&
+                 !forced &&
+                 !isNew( context.project ) )
+            {
+                getLogger().info( "No files updated, not building. Project id '" + context.project.getId() + "'." );
+
+                store.setBuildNotExecuted( projectId );
+
+                return;
+            }
+
+            makeBuild( context );
+
+            buildProject( context );
+        }
+        catch ( ContinuumStoreException ex )
         {
             if ( !Thread.interrupted() )
             {
@@ -94,17 +174,7 @@ public class DefaultBuildController
         }
         finally
         {
-            // Reload the build as setBuildResult() will update the build
-            try
-            {
-                build = store.getBuild( buildId );
-
-                notifier.buildComplete( build );
-            }
-            catch ( ContinuumStoreException e )
-            {
-                getLogger().error( "Error while loading the build. id: '" + buildId + "'." );
-            }
+            notifier.buildComplete( context.project, context.build );
         }
     }
 
@@ -112,169 +182,144 @@ public class DefaultBuildController
     //
     // ----------------------------------------------------------------------
 
-    /**
-     * This method shall not throw any exceptions unless there
-     * is something internally wrong. It shall NOT throw a exception when a build fails.
-     *
-     * @param project
-     * @param build
-     * @throws ContinuumException
-     */
-    private void buildProject( ContinuumProject project, ContinuumBuild build )
-        throws ContinuumException
+    private boolean update( BuildContext context )
+        throws ContinuumStoreException
     {
-        // if these calls fail we're screwed anyway
-        // and it will only be logged through the logger.
-
-        ContinuumBuilder builder = builderManager.getBuilder( project.getBuilderId() );
-
-        int state = -1;
-
-        ContinuumBuildResult result = null;
-
-        Throwable error = null;
-
-        // ----------------------------------------------------------------------
-        // Build the project
-        // ----------------------------------------------------------------------
-
         try
         {
-            result = build( builder, build );
+            store.setIsUpdating( context.project.getId() );
 
-            if ( result.isSuccess() )
-            {
-                state = ContinuumProjectState.OK;
-            }
-            else
-            {
-                state = ContinuumProjectState.FAILED;
-            }
+            notifier.checkoutStarted( context.project );
+
+            context.scmResult = scm.updateProject( context.project );
+
+            store.setUpdateDone( context.project.getId() );
+
+            return true;
         }
-        catch ( Throwable ex )
+        catch ( ContinuumScmException e )
         {
-            getLogger().fatalError( "Error building the project, build id: '" + build.getId() + "'.", ex );
+            getLogger().fatalError( "Error while updating from SCM. Project id '" + context.project.getId() + "'." );
 
-            error = ex;
+            makeAndSetErrorBuildResult( context, e );
 
-            state = ContinuumProjectState.ERROR;
+            return false;
         }
-
-        // ----------------------------------------------------------------------
-        // Store the result
-        // ----------------------------------------------------------------------
-
-        try
+        finally
         {
-            store.setBuildResult( build.getId(), state, result, error );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            getLogger().error( "Error while setting the build result.", e );
+            notifier.checkoutComplete( context.project, context.scmResult );
         }
     }
 
-    private ContinuumBuildResult build( ContinuumBuilder builder, ContinuumBuild build )
-        throws Exception
+    private boolean updateProjectMetadata( BuildContext context )
+        throws ContinuumStoreException
     {
-        ContinuumProject project = store.getProjectByBuild( build.getId() );
-
         // TODO: Update the metadata files and then update the project descriptor
         // before updating the project itself. This will make it possible to migrate
         // a project from one SCM to another.
 
-        UpdateScmResult scmResult;
+        ContinuumBuilder builder = context.builder;
+
+        ContinuumProject project = context.project;
+
+        File workingDirectory = new File( project.getWorkingDirectory() );
 
         try
         {
-            store.setIsUpdating( build.getId() );
-
-            notifier.checkoutStarted( build );
-
-            scmResult = scm.updateProject( project );
-
-            store.setUpdateDone( build.getId(), scmResult );
-        }
-        finally
-        {
-            notifier.checkoutComplete( build );
-        }
-
-        ContinuumBuildResult result;
-
-        // ----------------------------------------------------------------------
-        // Build the project if
-        // * there was any updated files
-        // * the project is new (never been built before)
-        // * the build is "forced"
-        // ----------------------------------------------------------------------
-
-        if ( scmResult.getUpdatedFiles().size() > 0 ||
-             isNew( project ) ||
-             build.isForced() )
-        {
-            File workingDirectory = new File( project.getWorkingDirectory() );
-
             builder.updateProjectFromCheckOut( workingDirectory, project );
+        }
+        catch ( ContinuumException e )
+        {
+            getLogger().fatalError( "Error while updating project metadata from check out.", e );
 
-            String projectId = project.getId();
+            makeAndSetErrorBuildResult( context, e );
 
-            store.updateProject( projectId,
-                                 project.getName(),
-                                 project.getScmUrl(),
-                                 project.getNagEmailAddress(),
-                                 project.getVersion() );
+            return false;
+        }
+
+        String projectId = project.getId();
+
+        store.updateProject( projectId,
+                             project.getName(),
+                             project.getScmUrl(),
+                             project.getNagEmailAddress(),
+                             project.getVersion() );
 
 //            store.updateProjectConfiguration( projectId, project.getConfiguration() );
 
-            try
-            {
-                notifier.runningGoals( build );
-
-                result = runGoals( builder, project );
-
-                if ( result == null )
-                {
-                    return null;
-                }
-
-                result.setBuildExecuted( true );
-            }
-            finally
-            {
-                notifier.goalsCompleted( build );
-            }
-        }
-        else
-        {
-            getLogger().info( "No files updated, not building. Build id '" + build.getId() + "'." );
-
-            result = new ContinuumBuildResult();
-
-            result.setSuccess( true );
-
-            result.setBuildExecuted( false );
-        }
-
-        return result;
+        return true;
     }
 
-    private ContinuumBuildResult runGoals( ContinuumBuilder builder, ContinuumProject project )
-        throws ContinuumException
+    private void buildProject( BuildContext context )
+        throws ContinuumStoreException
     {
-        ContinuumBuildResult result = builder.build( project );
-
-        if ( result == null )
+        try
         {
-            getLogger().fatalError( "Internal error: the builder returned null." );
-        }
+            notifier.runningGoals( context.project, context.build );
 
-        return result;
+            context.result = context.builder.build( context.project );
+
+            if ( context.result.isSuccess() )
+            {
+                context.state = ContinuumProjectState.OK;
+            }
+            else
+            {
+                context.state = ContinuumProjectState.FAILED;
+            }
+
+            setBuildResult( context.build.getId(), context.state, context.result, context.scmResult, null );
+        }
+        catch ( Throwable ex )
+        {
+            getLogger().fatalError( "Error building the project, project id: '" + context.project.getId() + "'.", ex );
+
+            makeAndSetErrorBuildResult( context, ex );
+        }
+        finally
+        {
+            notifier.goalsCompleted( context.project, context.build );
+        }
     }
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
+
+    private void makeAndSetErrorBuildResult( BuildContext context, Throwable e )
+        throws ContinuumStoreException
+    {
+        makeBuild( context );
+
+        context.result = new ContinuumBuildResult();
+
+        context.result.setSuccess( false );
+
+        context.state = ContinuumProjectState.ERROR;
+
+        setBuildResult( context.build.getId(), context.state, context.result, context.scmResult, e );
+    }
+
+    private void setBuildResult( String buildId, int state, ContinuumBuildResult result, UpdateScmResult scmResult,
+                                 Throwable e )
+        throws ContinuumStoreException
+    {
+        System.err.println( "Setting the build id '" + buildId + "' state to " + state );
+
+        store.setBuildResult( buildId, state, result, scmResult, e );
+    }
+
+    private void makeBuild( BuildContext context )
+        throws ContinuumStoreException
+    {
+        String buildId = store.createBuild( context.project.getId(), context.forced );
+
+        getLogger().info( "Build id: '" + buildId + "'." );
+
+        context.build = store.getBuild( buildId );
+
+        context.build.setUpdateScmResult( context.scmResult );
+    }
 
     // Check to see if there is only a single build in the builds list.
     public boolean isNew( ContinuumProject project )
@@ -282,18 +327,6 @@ public class DefaultBuildController
     {
         Iterator it = store.getBuildsForProject( project.getId(), 0, 0 );
 
-        if ( !it.hasNext() )
-        {
-            return true;
-        }
-
-        it.next();
-
-        if ( it.hasNext() )
-        {
-            return false;
-        }
-
-        return true;
+        return CollectionUtils.iteratorToList( it ).size() == 0;
     }
 }
