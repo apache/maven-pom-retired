@@ -18,8 +18,8 @@ package org.apache.maven.continuum;
 
 import java.net.URL;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -29,6 +29,7 @@ import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
 
 /**
  * This is the main entry point for Continuum. Projects are added to Continuum
@@ -74,6 +75,9 @@ public interface Continuum
         throws ContinuumException;
 
     Iterator getAllProjects( int start, int end )
+        throws ContinuumException;
+
+    CheckOutScmResult getCheckOutScmResultForProject( String projectId )
         throws ContinuumException;
 
     void buildProject( String projectId, boolean force )

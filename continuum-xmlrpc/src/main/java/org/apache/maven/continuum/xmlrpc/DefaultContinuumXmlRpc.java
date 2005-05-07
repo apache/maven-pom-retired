@@ -35,7 +35,6 @@ import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.UpdateScmResult;
-import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -50,9 +49,6 @@ public class DefaultContinuumXmlRpc
 {
     /** @requirement */
     private Continuum continuum;
-
-    /** @requirement */
-    private ContinuumStore store;
 
     /** @requirement */
     private XmlRpcHelper xmlRpcHelper;
@@ -178,7 +174,7 @@ public class DefaultContinuumXmlRpc
 
             excludedProperties.add( "configuration" );
 
-            ContinuumProject project = store.getProject( projectId );
+            ContinuumProject project = continuum.getProject( projectId );
 
             Hashtable hashtable = xmlRpcHelper.objectToHashtable( project, excludedProperties );
 
@@ -195,7 +191,7 @@ public class DefaultContinuumXmlRpc
 
             hashtable.put( "configuration", configurationHashtable );
 
-            CheckOutScmResult result = store.getCheckOutScmResultForProject( projectId );
+            CheckOutScmResult result = continuum.getCheckOutScmResultForProject( projectId );
 
             if ( result != null )
             {
@@ -253,7 +249,7 @@ public class DefaultContinuumXmlRpc
         {
             Vector projects = new Vector();
 
-            for ( Iterator it = store.getAllProjects(); it.hasNext(); )
+            for ( Iterator it = continuum.getAllProjects( 0, 0 ); it.hasNext(); )
             {
                 ContinuumProject project = (ContinuumProject) it.next();
 
@@ -272,7 +268,7 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            store.removeProject( projectId );
+            continuum.removeProject( projectId );
 
             return makeHashtable();
         }
@@ -304,7 +300,8 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            Iterator it = store.getBuildsForProject( projectId, start, end );
+            // TODO: use start and end
+            Iterator it = continuum.getBuildsForProject( projectId );
 
             Vector builds = new Vector();
 
@@ -340,7 +337,7 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            ContinuumBuild continuumBuild = store.getBuild( buildId );
+            ContinuumBuild continuumBuild = continuum.getBuild( buildId );
 
             Set excludedProperties = new HashSet();
 
@@ -368,7 +365,7 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            ContinuumBuildResult result = store.getBuildResultForBuild( buildId );
+            ContinuumBuildResult result = continuum.getBuildResultForBuild( buildId );
 
             Set excludedProperties = new HashSet();
 
@@ -406,8 +403,6 @@ public class DefaultContinuumXmlRpc
 
     private Hashtable handleException( String method, Throwable throwable )
     {
-//        getLogger().error( "Error while executing '" + method + "'.", throwable );
-
         Hashtable hashtable = new Hashtable();
 
         hashtable.put( "result", "failure" );

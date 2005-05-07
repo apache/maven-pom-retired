@@ -40,6 +40,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.queue.CheckOutTask;
@@ -91,7 +92,7 @@ public class DefaultContinuum
     /** @requirement */
     private ContinuumScm scm;
 
-    /** @configuration */
+    /** @requirement */
     private String appHome;
 
     /** @configuration */
@@ -181,7 +182,7 @@ public class DefaultContinuum
 
         ContinuumProject project = builder.createProjectFromMetadata( url );
 
-        getLogger().info( "done creating continuum project" );
+        getLogger().info( "Done creating continuum project" );
 
         // TODO: Update from metadata in the initial checkout?
 
@@ -221,7 +222,7 @@ public class DefaultContinuum
         // stuff out
         // ----------------------------------------------------------------------
 
-        if( !builderManager.hasBuilder( builderType ) )
+        if ( !builderManager.hasBuilder( builderType ) )
         {
             throw new ContinuumException( "No such builder '" + builderType + "'." );
         }
@@ -258,7 +259,8 @@ public class DefaultContinuum
 
                 if ( !workingDirectory.exists() )
                 {
-                    throw new ContinuumException( "Could not make missing working directory for project '" + project.getName() + "'." );
+                    throw new ContinuumException( "Could not make missing working directory for " +
+                                                  "project '" + project.getName() + "'." );
                 }
             }
 
@@ -336,6 +338,19 @@ public class DefaultContinuum
         catch ( ContinuumStoreException ex )
         {
             throw logAndCreateException( "Exception while getting all projects.", ex );
+        }
+    }
+
+    public CheckOutScmResult getCheckOutScmResultForProject( String projectId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getCheckOutScmResultForProject( projectId );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Exception while getting check out scm result for project.", ex );
         }
     }
 
@@ -671,12 +686,12 @@ public class DefaultContinuum
             // Set the working directory
             // ----------------------------------------------------------------------
 
-
             projectWorkingDirectory = new File( workingDirectory, projectId );
 
             if ( !projectWorkingDirectory.exists() && !projectWorkingDirectory.mkdirs() )
             {
-                throw new ContinuumException( "Could not make the working directory for the project (" + projectWorkingDirectory.getAbsolutePath() + ")." );
+                throw new ContinuumException( "Could not make the working directory for the project " +
+                                              "'" + projectWorkingDirectory.getAbsolutePath() + "'." );
             }
 
             project.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
@@ -726,7 +741,8 @@ public class DefaultContinuum
         {
             if ( !checkoutDirectory.mkdirs() )
             {
-                throw logAndCreateException( "Could not make the check out directory (" + checkoutDirectory.getAbsolutePath() + ")." );
+                throw logAndCreateException( "Could not make the check out directory " +
+                                             "'" + checkoutDirectory.getAbsolutePath() + "'." );
             }
         }
 
@@ -735,7 +751,7 @@ public class DefaultContinuum
 
         try
         {
-            scm.checkOut( project, checkoutDirectory);
+            scm.checkOut( project, checkoutDirectory );
         }
         catch ( ContinuumScmException e )
         {
@@ -793,14 +809,16 @@ public class DefaultContinuum
         {
             if ( !wdFile.isDirectory() )
             {
-                throw logAndCreateException( "The specified working directory isn't a directory: " + wdFile.getAbsolutePath() );
+                throw logAndCreateException( "The specified working directory isn't a directory: " +
+                                             "'" + wdFile.getAbsolutePath() + "'." );
             }
         }
         else
         {
             if ( !wdFile.mkdirs() )
             {
-                throw logAndCreateException( "Could not making the working directory: " + wdFile.getAbsolutePath() );
+                throw logAndCreateException( "Could not making the working directory: " +
+                                             "'" + wdFile.getAbsolutePath() + "'." );
             }
         }
 
