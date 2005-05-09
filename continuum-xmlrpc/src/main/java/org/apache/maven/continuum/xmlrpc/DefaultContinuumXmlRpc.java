@@ -249,7 +249,7 @@ public class DefaultContinuumXmlRpc
         {
             Vector projects = new Vector();
 
-            for ( Iterator it = continuum.getAllProjects( 0, 0 ); it.hasNext(); )
+            for ( Iterator it = continuum.getAllProjects( 0, 0 ).iterator(); it.hasNext(); )
             {
                 ContinuumProject project = (ContinuumProject) it.next();
 
@@ -301,7 +301,7 @@ public class DefaultContinuumXmlRpc
         try
         {
             // TODO: use start and end
-            Iterator it = continuum.getBuildsForProject( projectId );
+            Iterator it = continuum.getBuildsForProject( projectId ).iterator();
 
             Vector builds = new Vector();
 
