@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -46,7 +47,6 @@ import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.queue.CheckOutTask;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
@@ -102,7 +102,7 @@ public class DefaultContinuum
     //
     // ----------------------------------------------------------------------
 
-    public Iterator getProjects()
+    public Collection getProjects()
         throws ContinuumStoreException
     {
         return store.getAllProjects();
@@ -326,14 +326,12 @@ public class DefaultContinuum
         }
     }
 
-    public Iterator getAllProjects( int start, int end )
+    public Collection getAllProjects( int start, int end )
         throws ContinuumException
     {
         try
         {
-            Iterator it = store.getAllProjects();
-
-            return it;
+            return store.getAllProjects();
         }
         catch ( ContinuumStoreException ex )
         {
@@ -394,7 +392,7 @@ public class DefaultContinuum
         }
     }
 
-    public Iterator getBuildsForProject( String projectId )
+    public Collection getBuildsForProject( String projectId )
         throws ContinuumException
     {
         try
@@ -824,7 +822,7 @@ public class DefaultContinuum
 
         getLogger().info( "Showing all projects: " );
 
-        for ( Iterator it = store.getAllProjects(); it.hasNext(); )
+        for ( Iterator it = store.getAllProjects().iterator(); it.hasNext(); )
         {
             ContinuumProject project = (ContinuumProject) it.next();
 

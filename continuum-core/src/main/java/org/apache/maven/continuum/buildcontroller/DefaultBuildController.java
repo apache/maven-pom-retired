@@ -17,7 +17,7 @@ package org.apache.maven.continuum.buildcontroller;
  */
 
 import java.io.File;
-import java.util.Iterator;
+import java.util.Collection;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.builder.ContinuumBuilder;
@@ -32,9 +32,7 @@ import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.CollectionUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -325,8 +323,8 @@ public class DefaultBuildController
     public boolean isNew( ContinuumProject project )
         throws ContinuumStoreException
     {
-        Iterator it = store.getBuildsForProject( project.getId(), 0, 0 );
+        Collection builds = store.getBuildsForProject( project.getId(), 0, 0 );
 
-        return CollectionUtils.iteratorToList( it ).size() == 0;
+        return builds.size() == 0;
     }
 }

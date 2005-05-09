@@ -19,6 +19,7 @@ package org.apache.maven.continuum.notification.mail;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +34,6 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.exception.ResourceNotFoundException;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.mailsender.MailMessage;
 import org.codehaus.plexus.mailsender.MailSender;
@@ -392,23 +392,24 @@ public class MailContinuumNotifier
     private ContinuumBuild getPreviousBuild( ContinuumProject project, ContinuumBuild currentBuild )
         throws ContinuumException
     {
-        Iterator it;
+        Collection builds;
 
         try
         {
-            it = store.getBuildsForProject( project.getId(), 0, 0 );
+            builds = store.getBuildsForProject( project.getId(), 0, 0 );
         }
         catch ( ContinuumStoreException ex )
         {
             throw new ContinuumException( "Error while finding the last project build.", ex );
         }
 
-        if ( !it.hasNext() )
+        if ( builds.size() == 0 )
         {
             return null;
         }
 
-        ContinuumBuild build = (ContinuumBuild) it.next();
+        Iterator itr =  builds.iterator();
+        ContinuumBuild build = (ContinuumBuild) itr.next();
 
         if ( currentBuild != null && !build.getId().equals( currentBuild.getId() ) )
         {
@@ -417,11 +418,11 @@ public class MailContinuumNotifier
                                           "first build: '" + build.getId() + "'." );
         }
 
-        if ( !it.hasNext() )
+        if ( !itr.hasNext() )
         {
             return null;
         }
 
-        return (ContinuumBuild) it.next();
+        return (ContinuumBuild) itr.next();
     }
 }

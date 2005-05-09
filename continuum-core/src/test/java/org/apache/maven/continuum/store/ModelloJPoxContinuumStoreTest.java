@@ -17,6 +17,7 @@ package org.apache.maven.continuum.store;
  */
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,10 +33,8 @@ import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.UpdateScmResult;
-
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.util.CollectionUtils;
 import org.codehaus.plexus.util.FileUtils;
 
 /**
@@ -310,7 +309,7 @@ public class ModelloJPoxContinuumStoreTest
 
         Map projects = new HashMap();
 
-        for ( Iterator it = store.getAllProjects(); it.hasNext(); )
+        for ( Iterator it = store.getAllProjects().iterator(); it.hasNext(); )
         {
             ContinuumProject project = (ContinuumProject) it.next();
 
@@ -417,15 +416,13 @@ public class ModelloJPoxContinuumStoreTest
 
         String buildId = store.createBuild( projectId, false );
 
-        Iterator it = store.getBuildsForProject( projectId, 0, 0 );
+        Collection builds = store.getBuildsForProject( projectId, 0, 0 );
 
-        assertNotNull( "The iterator with all builds was null.", it );
-
-        List builds = CollectionUtils.iteratorToList( it );
+        assertNotNull( "The collection with all builds was null.", builds );
 
         assertEquals( "Expected the build set to contain a single build.", 1, builds.size() );
 
-        ContinuumBuild build = (ContinuumBuild) builds.get( 0 );
+        ContinuumBuild build = (ContinuumBuild) builds.iterator().next();
 
         assertNotNull( build );
 
@@ -490,21 +487,18 @@ public class ModelloJPoxContinuumStoreTest
         //
         // ----------------------------------------------------------------------
 
-        Iterator builds = store.getBuildsForProject( projectId, 0, 0 );
-
-        List actualBuilds = CollectionUtils.iteratorToList( builds );
+        Collection actualBuilds = store.getBuildsForProject( projectId, 0, 0 );
 
         assertEquals( "builds.size", expectedBuilds.size(), actualBuilds.size() );
 
-        Iterator it;
+        Iterator expectedIt = expectedBuilds.iterator();
+        Iterator actualIt = actualBuilds.iterator();
 
-        int i;
-
-        for ( it = expectedBuilds.iterator(), i = 0; it.hasNext(); i++ )
+        for ( int i = 0; expectedIt.hasNext(); i++ )
         {
-            String expectedBuildId = (String) it.next();
+            String expectedBuildId = (String) expectedIt.next();
 
-            String actualBuildId = ((ContinuumBuild) actualBuilds.get( i )).getId();
+            String actualBuildId = ((ContinuumBuild) actualIt.next()).getId();
 
             assertEquals( "builds[" + i + "]", expectedBuildId, actualBuildId );
         }

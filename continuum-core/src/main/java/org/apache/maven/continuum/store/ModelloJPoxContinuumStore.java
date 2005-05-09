@@ -266,14 +266,12 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public Iterator getAllProjects()
+    public Collection getAllProjects()
         throws ContinuumStoreException
     {
         try
         {
-            Collection projects = store.getContinuumProjectCollection( true, null, "name ascending" );
-
-            return projects.iterator();
+            return store.getContinuumProjectCollection( true, null, "name ascending" );
         }
         catch ( Exception e )
         {
@@ -281,10 +279,10 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public Iterator findProjectsByName( String nameSearchPattern )
+    public Collection findProjectsByName( String nameSearchPattern )
         throws ContinuumStoreException
     {
-        Iterator it = getAllProjects();
+        Iterator it = getAllProjects().iterator();
 
         List hits = new ArrayList();
 
@@ -298,7 +296,7 @@ public class ModelloJPoxContinuumStore
             }
         }
 
-        return hits.iterator();
+        return hits;
     }
 
     public ContinuumProject getProject( String projectId )
@@ -501,14 +499,12 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public Iterator getBuildsForProject( String projectId, int start, int end )
+    public Collection getBuildsForProject( String projectId, int start, int end )
         throws ContinuumStoreException
     {
         try
         {
-            Collection builds = store.getContinuumBuildCollection( true, "this.project.id == \"" + projectId + "\"", "startTime descending" );
-
-            return builds.iterator();
+            return store.getContinuumBuildCollection( true, "this.project.id == \"" + projectId + "\"", "startTime descending" );
         }
         catch ( Exception e )
         {

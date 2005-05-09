@@ -16,9 +16,9 @@ package org.apache.maven.continuum.store;
  * limitations under the License.
  */
 
-import java.util.Iterator;
-import java.util.Properties;
+import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
@@ -63,10 +63,10 @@ public interface ContinuumStore
     void updateProjectConfiguration( String projectId, Properties configuration )
         throws ContinuumStoreException;
 
-    Iterator getAllProjects()
+    Collection getAllProjects()
         throws ContinuumStoreException;
 
-    Iterator findProjectsByName( String nameSearchPattern )
+    Collection findProjectsByName( String nameSearchPattern )
         throws ContinuumStoreException;
 
     ContinuumProject getProject( String projectId )
@@ -94,7 +94,7 @@ public interface ContinuumStore
     ContinuumBuild getLatestBuildForProject( String projectId )
         throws ContinuumStoreException;
 
-    Iterator getBuildsForProject( String projectId, int start, int end )
+    Collection getBuildsForProject( String projectId, int start, int end )
         throws ContinuumStoreException;
 
     ContinuumBuildResult getBuildResultForBuild( String buildId )

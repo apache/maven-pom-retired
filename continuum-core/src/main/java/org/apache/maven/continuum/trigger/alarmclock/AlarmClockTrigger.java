@@ -90,7 +90,7 @@ public class AlarmClockTrigger
 
         try
         {
-            it = getContinuum().getAllProjects( 0, 0 );
+            it = getContinuum().getAllProjects( 0, 0 ).iterator();
         }
         catch ( Exception e )
         {

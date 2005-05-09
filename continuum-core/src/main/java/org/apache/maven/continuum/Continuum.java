@@ -17,7 +17,8 @@ package org.apache.maven.continuum;
  */
 
 import java.net.URL;
-import java.util.Iterator;
+import java.util.Collection;
+import java.util.List;
 import java.util.List;
 import java.util.Properties;
 
@@ -74,7 +75,7 @@ public interface Continuum
     ContinuumProject getProject( String projectId )
         throws ContinuumException;
 
-    Iterator getAllProjects( int start, int end )
+    Collection getAllProjects( int start, int end )
         throws ContinuumException;
 
     CheckOutScmResult getCheckOutScmResultForProject( String projectId )
@@ -87,7 +88,7 @@ public interface Continuum
     //
     // ----------------------------------------------------------------------
 
-    Iterator getProjects()
+    Collection getProjects()
         throws ContinuumStoreException;
 
     ContinuumBuild getLatestBuildForProject( String id )
@@ -100,7 +101,7 @@ public interface Continuum
     ContinuumBuild getBuild( String buildId )
         throws ContinuumException;
 
-    Iterator getBuildsForProject( String projectId )
+    Collection getBuildsForProject( String projectId )
         throws ContinuumException;
 
     ContinuumBuildResult getBuildResultForBuild( String buildId )
