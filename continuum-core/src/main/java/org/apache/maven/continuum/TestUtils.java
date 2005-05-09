@@ -73,10 +73,10 @@ public class TestUtils
 
             Assert.assertNotNull( result );
 
-            if ( result.getState() == ContinuumProjectState.BUILD_SIGNALED )
-            {
-                continue;
-            }
+//            if ( result.getState() == ContinuumProjectState.BUILD_SIGNALED )
+//            {
+//                continue;
+//            }
 
             if ( result.getState() != ContinuumProjectState.BUILDING )
             {

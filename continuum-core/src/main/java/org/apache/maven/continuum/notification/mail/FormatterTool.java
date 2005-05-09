@@ -55,10 +55,10 @@ public class FormatterTool
         {
             return "Error";
         }
-        else if ( state == ContinuumProjectState.BUILD_SIGNALED )
-        {
-            return "Build signaled";
-        }
+//        else if ( state == ContinuumProjectState.BUILD_SIGNALED )
+//        {
+//            return "Build signaled";
+//        }
         else if ( state == ContinuumProjectState.BUILDING )
         {
             return "Building";

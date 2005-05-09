@@ -359,7 +359,7 @@ public class DefaultContinuum
         {
             ContinuumProject project = store.getProject( projectId );
 
-            store.setBuildSignalled( projectId );
+//            store.setBuildSignalled( projectId );
 
             getLogger().info( "Enqueuing '" + project.getName() + "'." );
 

@@ -107,8 +107,8 @@ public interface ContinuumStore
     // Project and Build state transitions
     // ----------------------------------------------------------------------
 
-    void setBuildSignalled( String projectId )
-        throws ContinuumStoreException;
+//    void setBuildSignalled( String projectId )
+//        throws ContinuumStoreException;
 
     void setCheckoutDone( String projectId, CheckOutScmResult scmResult )
         throws ContinuumStoreException;

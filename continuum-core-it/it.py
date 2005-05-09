@@ -185,8 +185,7 @@ def waitForBuild( buildId ):
     print "waiting for build: " + buildId
     build = continuum.getBuild( buildId )
 
-    while( build.state == continuum.STATE_BUILD_SIGNALED or 
-           build.state == continuum.STATE_UPDATING or
+    while( build.state == continuum.STATE_UPDATING or
            build.state == continuum.STATE_BUILDING ):
 
         if ( timeout <= 0 ):

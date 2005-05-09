@@ -38,7 +38,7 @@ public class ContinuumNotificationDispatcherTest
 
         String projectId = ModelloJPoxContinuumStoreTest.addProject( store, "Test Project" );
 
-        store.setBuildSignalled( projectId );
+//        store.setBuildSignalled( projectId );
 
         store.setIsUpdating( projectId );
 

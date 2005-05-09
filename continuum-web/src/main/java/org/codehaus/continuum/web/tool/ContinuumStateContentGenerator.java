@@ -44,10 +44,11 @@ public class ContinuumStateContentGenerator
         {
             return "<img src=\"/continuum/images/icon_warning_sml.gif\" alt=\"Error\"/>";
         }
-        else if ( state == ContinuumProjectState.BUILD_SIGNALED )
-        {
-            return "Build Queued";
-        }
+        // TODO: Indicate in some way else
+//        else if ( state == ContinuumProjectState.BUILD_SIGNALED )
+//        {
+//            return "Build Queued";
+//        }
         else if ( state == ContinuumProjectState.BUILDING )
         {
             return "Building";

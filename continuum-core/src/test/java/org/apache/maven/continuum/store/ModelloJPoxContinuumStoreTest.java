@@ -370,7 +370,7 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addProject( "Test Project" );
 
-        store.setBuildSignalled( projectId );
+//        store.setBuildSignalled( projectId );
 
         store.setIsUpdating( projectId );
 
@@ -408,7 +408,7 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addProject( "Test Project" );
 
-        store.setBuildSignalled( projectId );
+//        store.setBuildSignalled( projectId );
 
         store.setIsUpdating( projectId );
 
@@ -444,7 +444,7 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addProject( "Test Project" );
 
-        store.setBuildSignalled( projectId );
+//        store.setBuildSignalled( projectId );
 
         store.setIsUpdating( projectId );
 
@@ -452,7 +452,7 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectIdFoo = addProject( "Foo Project" );
 
-        store.setBuildSignalled( projectIdFoo );
+//        store.setBuildSignalled( projectIdFoo );
 
         store.setIsUpdating( projectIdFoo );
 
@@ -460,7 +460,7 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectIdBar = addProject( "Bar Project" );
 
-        store.setBuildSignalled( projectIdBar );
+//        store.setBuildSignalled( projectIdBar );
 
         store.setIsUpdating( projectIdBar );
 
@@ -519,9 +519,9 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addProject( "Test Project" );
 
-        store.setBuildSignalled( projectId );
+//        store.setBuildSignalled( projectId );
 
-        assertInState( projectId, ContinuumProjectState.BUILD_SIGNALED );
+//        assertInState( projectId, ContinuumProjectState.BUILD_SIGNALED );
 
         store.setIsUpdating( projectId );
 

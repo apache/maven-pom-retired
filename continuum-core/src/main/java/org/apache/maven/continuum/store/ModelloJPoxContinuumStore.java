@@ -591,28 +591,28 @@ public class ModelloJPoxContinuumStore
     //
     // ----------------------------------------------------------------------
 
-    public void setBuildSignalled( String projectId )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            projectStateGuard.assertTransition( project, ContinuumProjectState.BUILD_SIGNALED );
-
-            project.setState( ContinuumProjectState.BUILD_SIGNALED );
-
-            store.commit();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while setting project state: '" + projectId + "'.", e );
-        }
-    }
+//    public void setBuildSignalled( String projectId )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumProject project = store.getContinuumProject( projectId, false );
+//
+//            projectStateGuard.assertTransition( project, ContinuumProjectState.BUILD_SIGNALED );
+//
+//            project.setState( ContinuumProjectState.BUILD_SIGNALED );
+//
+//            store.commit();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while setting project state: '" + projectId + "'.", e );
+//        }
+//    }
 
     public void setCheckoutDone( String projectId, CheckOutScmResult scmResult )
         throws ContinuumStoreException

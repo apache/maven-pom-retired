@@ -41,16 +41,20 @@ public class DefaultContinuumProjectStateGuard
         ContinuumProjectState.CHECKING_OUT,
     };
 
-    private final static int[] BUILD_SIGNALED_PREVIOUS_STATES = {
+//    private final static int[] BUILD_SIGNALED_PREVIOUS_STATES = {
+//        ContinuumProjectState.NEW,
+//        ContinuumProjectState.ERROR,
+//        ContinuumProjectState.OK,
+//        ContinuumProjectState.FAILED,
+//        ContinuumProjectState.BUILD_SIGNALED,
+//    };
+
+    private final static int[] UPDATING_PREVIOUS_STATES = {
+//        ContinuumProjectState.BUILD_SIGNALED,
         ContinuumProjectState.NEW,
         ContinuumProjectState.ERROR,
         ContinuumProjectState.OK,
         ContinuumProjectState.FAILED,
-        ContinuumProjectState.BUILD_SIGNALED,
-    };
-
-    private final static int[] UPDATING_PREVIOUS_STATES = {
-        ContinuumProjectState.BUILD_SIGNALED,
     };
 
     private final static int[] BUILDING_PREVIOUS_STATES = {
@@ -116,10 +120,10 @@ public class DefaultContinuumProjectStateGuard
         {
             assertInStates( project.getState(), UPDATING_PREVIOUS_STATES, "updating" );
         }
-        else if ( newState == ContinuumProjectState.BUILD_SIGNALED )
-        {
-            assertInStates( project.getState(), BUILD_SIGNALED_PREVIOUS_STATES, "build signaled" );
-        }
+//        else if ( newState == ContinuumProjectState.BUILD_SIGNALED )
+//        {
+//            assertInStates( project.getState(), BUILD_SIGNALED_PREVIOUS_STATES, "build signaled" );
+//        }
         else if ( newState == ContinuumProjectState.BUILDING )
         {
             assertInStates( project.getState(), BUILDING_PREVIOUS_STATES, "building" );
@@ -266,8 +270,8 @@ public class DefaultContinuumProjectStateGuard
                 return "failed";
             case ContinuumProjectState.ERROR:
                 return "error";
-            case ContinuumProjectState.BUILD_SIGNALED:
-                return "build signaled";
+//            case ContinuumProjectState.BUILD_SIGNALED:
+//                return "build signaled";
             case ContinuumProjectState.BUILDING:
                 return "building";
             case ContinuumProjectState.CHECKING_OUT:

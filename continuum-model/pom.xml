@@ -17,8 +17,8 @@
       <groupId>jpox</groupId>
       <artifactId>jpox-enhancer</artifactId>
       <version>1.0.4</version>
-    </dependency>    
-  </dependencies>  
+    </dependency>
+  </dependencies>
   <build>
     <plugins>
       <plugin>
@@ -33,20 +33,64 @@
           <version>1.0.0</version>
           <packageWithVersion>false</packageWithVersion>
           <model>src/main/resources/continuum.mdo</model>
+          <!--
+          -->
         </configuration>
         <goals>
           <goal>
             <id>java</id>
+            <!--
+            <configuration>
+              <models>
+                <mdo>
+                  <path>src/main/resources/continuum.mdo</path>
+                </mdo>
+                <mdo>
+                  <path>src/main/models/gump/repository.mdo.xml</path>
+                  <version>2.3</version>
+                </mdo>
+              </models>
+            </configuration>
+            -->
           </goal>
           <goal>
             <id>jpox-jdo-mapping</id>
             <configuration>
               <outputDirectory>target/classes</outputDirectory>
+              <!--
+              <models>
+                <mdo>
+                  <path>src/main/resources/continuum.mdo</path>
+                </mdo>
+              </models>
+              -->
             </configuration>
-          </goal>          
+          </goal>
           <goal>
             <id>jpox-store</id>
-          </goal>                    
+            <configuration>
+              <!--
+              <models>
+                <mdo>
+                  <path>src/main/resources/continuum.mdo</path>
+                </mdo>
+              </models>
+              -->
+            </configuration>
+          </goal>
+          <!--
+          <goal>
+            <id>xpp3-reader</id>
+            <configuration>
+              <models>
+                <mdo>
+                  <path>src/main/models/gump/repository.mdo.xml</path>
+                  <version>2.3</version>
+                </mdo>
+              </models>
+            </configuration>
+          </goal>
+          -->
         </goals>
       </plugin>
     </plugins>

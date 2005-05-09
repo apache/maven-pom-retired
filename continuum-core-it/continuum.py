@@ -9,7 +9,7 @@ STATE_NEW = "new"
 STATE_OK = "ok"
 STATE_FAILED = "failed"
 STATE_ERROR = "error"
-STATE_BUILD_SIGNALED = "build signaled"
+#STATE_BUILD_SIGNALED = "build signaled"
 STATE_BUILDING = "building"
 STATE_CHECKING_OUT = "checking out"
 STATE_UPDATING = "updating"
@@ -43,8 +43,8 @@ def decodeState( state ):
         return STATE_FAILED
     elif ( state == 4 ):
         return STATE_ERROR
-    elif ( state == 5 ):
-        return STATE_BUILD_SIGNALED
+#    elif ( state == 5 ):
+#        return STATE_BUILD_SIGNALED
     elif ( state == 6 ):
         return STATE_BUILDING
     elif ( state == 7 ):

@@ -60,7 +60,7 @@ public class ContinuumProjectState
      * the actual build starts to make.
      */
 //    public final static ContinuumProjectState BUILD_SIGNALED = new ContinuumProjectState( "signaled" );
-    public final static int BUILD_SIGNALED = 5;
+//    public final static int BUILD_SIGNALED = 5;
 
     /**
      * This state indicates that a project is currently beeing build.
