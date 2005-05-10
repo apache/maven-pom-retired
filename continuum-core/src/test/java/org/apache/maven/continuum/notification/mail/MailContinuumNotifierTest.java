@@ -23,10 +23,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.continuum.builder.shell.ShellBuildResult;
+import org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.mailsender.MailMessage;
@@ -68,7 +70,7 @@ public class MailContinuumNotifierTest
 
         project.setName( "Test Project" );
 
-        project.setBuilderId( "maven2" );
+        project.setExecutorId( MavenShellBuilder.ID );
 
         context.put( ContinuumNotificationDispatcher.CONTEXT_PROJECT, project );
 

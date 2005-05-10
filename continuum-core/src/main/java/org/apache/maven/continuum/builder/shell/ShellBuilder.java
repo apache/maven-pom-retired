@@ -17,7 +17,6 @@ package org.apache.maven.continuum.builder.shell;
  */
 
 import java.io.File;
-import java.net.URL;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.builder.AbstractContinuumBuilder;
@@ -109,12 +108,6 @@ public class ShellBuilder
         result.setExitCode( executionResult.getExitCode() );
 
         return result;
-    }
-
-    public ContinuumProject createProjectFromMetadata( URL metadata )
-        throws ContinuumException
-    {
-        throw new ContinuumException( "The Ant builder cannot create metadata from a URL." );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

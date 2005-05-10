@@ -672,7 +672,7 @@ public class ModelloJPoxContinuumStoreTest
 
         assertEquals( "project.version", version, project.getVersion() );
 
-        assertEquals( "project.builderId", builderId, project.getBuilderId() );
+        assertEquals( "project.executorId", builderId, project.getExecutorId() );
 
         assertEquals( "project.workingDirectory", workingDirectory, project.getWorkingDirectory() );
 

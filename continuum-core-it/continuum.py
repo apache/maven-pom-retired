@@ -113,22 +113,22 @@ def getBuildResult( buildId ):
     return BuildResult( buildResult )
 
 ####################################################################
-# Maven 2.x project
-####################################################################
-
-def addMavenTwoProject( url ):
-    result = checkResult( server.continuum.addMavenTwoProject( url ) )
-
-    return result[ "projectId" ]
-
-####################################################################
 # Maven 1.x project
 ####################################################################
 
 def addMavenOneProject( url ):
     result = checkResult( server.continuum.addMavenOneProject( url ) )
 
-    return result[ "projectId" ]
+    return result[ "projectIds" ]
+
+####################################################################
+# Maven 2.x project
+####################################################################
+
+def addMavenTwoProject( url ):
+    result = checkResult( server.continuum.addMavenTwoProject( url ) )
+
+    return result[ "projectIds" ]
 
 ####################################################################
 # Ant project
@@ -156,7 +156,7 @@ class Project:
         self.nagEmailAddress = map[ "nagEmailAddress" ]
         self.state = decodeState( int( map[ "state" ] ) )
         self.version = map[ "version" ]
-        self.builderId = map[ "builderId" ]
+        self.executorId = map[ "executorId" ]
         self.configuration = map[ "configuration" ]
 
         if ( map.has_key( "checkOutScmResult" ) ):
@@ -170,7 +170,7 @@ class Project:
               "nagEmailAddress: " + self.nagEmailAddress + os.linesep +\
               "state: " + self.state + os.linesep +\
               "version: " + self.version + os.linesep +\
-              "builder id: " + self.builderId + os.linesep +\
+              "executor id: " + self.executorId + os.linesep +\
               "check out ok: " + self.checkOutResult.success + os.linesep
 
         if ( len( self.configuration.keys() ) > 0 ):

@@ -16,10 +16,10 @@ package org.apache.maven.continuum.xmlrpc;
  * limitations under the License.
  */
 
-import java.net.URL;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -27,12 +27,12 @@ import java.util.Vector;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.builder.ant.AntBuilder;
-import org.apache.maven.continuum.builder.maven.m1.Maven1Builder;
-import org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder;
 import org.apache.maven.continuum.builder.shell.ShellBuilder;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
+import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.utils.ContinuumUtils;
@@ -54,20 +54,20 @@ public class DefaultContinuumXmlRpc
     private XmlRpcHelper xmlRpcHelper;
 
     // ----------------------------------------------------------------------
-    // Maven 2.x projects
+    // Maven 1.x projects
     // ----------------------------------------------------------------------
 
-    public Hashtable addMavenTwoProject( String url )
+    public Hashtable addMavenOneProject( String url )
     {
         try
         {
-            String projectId = continuum.addProjectFromUrl( url, MavenShellBuilder.ID );
+            List projectIds = continuum.addProjectsFromUrl( url, MavenOneContinuumProjectBuilder.ID );
 
-            return makeHashtable( "projectId", projectId );
+            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.addProjectFromScm(): url: '" + url + "'.", e );
+            return handleException( "ContinuumXmlRpc.addMavenOneProject(): url: '" + url + "'.", e );
         }
     }
 
@@ -75,17 +75,17 @@ public class DefaultContinuumXmlRpc
     // Maven 2.x projects
     // ----------------------------------------------------------------------
 
-    public Hashtable addMavenOneProject( String url )
+    public Hashtable addMavenTwoProject( String url )
     {
         try
         {
-            String projectId = continuum.addProjectFromUrl( url, Maven1Builder.ID );
+            List projectIds = continuum.addProjectsFromUrl( url, MavenTwoContinuumProjectBuilder.ID );
 
-            return makeHashtable( "projectId", projectId );
+            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.addProjectFromScm(): url: '" + url + "'.", e );
+            return handleException( "ContinuumXmlRpc.addMavenTwoProject(): url: '" + url + "'.", e );
         }
     }
 
@@ -119,26 +119,12 @@ public class DefaultContinuumXmlRpc
     // Projects
     // ----------------------------------------------------------------------
 
-    protected Hashtable addProjectFromUrl( String url, String builderType )
-    {
-        try
-        {
-            String projectId = continuum.addProjectFromUrl( new URL( url ), builderType );
-
-            return makeHashtable( "projectId", projectId );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.addProjectFromScm(): url: '" + url + "'.", e );
-        }
-    }
-
-    protected Hashtable addProjectFromScm( String scmUrl,
-                                           String builderType,
-                                           String projectName,
-                                           String nagEmailAddress,
-                                           String version,
-                                           Hashtable configuration )
+    private Hashtable addProjectFromScm( String scmUrl,
+                                         String executorId,
+                                         String projectName,
+                                         String nagEmailAddress,
+                                         String version,
+                                         Hashtable configuration )
     {
         try
         {
@@ -152,7 +138,7 @@ public class DefaultContinuumXmlRpc
             }
 
             String projectId = continuum.addProjectFromScm( scmUrl,
-                                                            builderType,
+                                                            executorId,
                                                             projectName,
                                                             nagEmailAddress,
                                                             version,

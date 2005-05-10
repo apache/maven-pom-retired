@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder;
+package org.apache.maven.continuum.builder.maven.m1;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -19,23 +19,16 @@ package org.apache.maven.continuum.builder;
 import java.io.File;
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumBuilder.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
+ * @version $Id:$
  */
-public interface ContinuumBuilder
+public interface MavenOneMetadataHelper
 {
-    String ROLE = ContinuumBuilder.class.getName();
+    String ROLE = MavenOneMetadataHelper.class.getName();
 
-    ContinuumBuildResult build( ContinuumProject project )
-        throws ContinuumException;
-
-//    ContinuumProject createProjectFromMetadata( URL metadata )
-//        throws ContinuumException;
-
-    void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
+    void mapMetadata( File metadata, ContinuumProject project )
         throws ContinuumException;
 }

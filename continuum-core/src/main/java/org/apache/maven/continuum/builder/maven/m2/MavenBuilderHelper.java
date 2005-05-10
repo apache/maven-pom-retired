@@ -17,7 +17,6 @@ package org.apache.maven.continuum.builder.maven.m2;
  */
 
 import java.io.File;
-import java.net.URL;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -30,9 +29,12 @@ public interface MavenBuilderHelper
 {
     String ROLE = MavenBuilderHelper.class.getName();
 
-    public ContinuumProject createProjectFromMetadata( URL metadata )
-        throws ContinuumException;
+//    public ContinuumProject createProjectFromMetadata( URL metadata )
+//        throws ContinuumException;
 
-    public void updateProjectFromMetadata( File workingDirectory, ContinuumProject project )
+//    public void updateProjectFromMetadata( File workingDirectory, ContinuumProject project )
+//        throws ContinuumException;
+
+    void mapMetadataToProject( File metadata, ContinuumProject project )
         throws ContinuumException;
 }

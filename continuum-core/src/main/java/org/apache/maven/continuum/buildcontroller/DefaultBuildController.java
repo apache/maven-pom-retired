@@ -19,6 +19,7 @@ package org.apache.maven.continuum.buildcontroller;
 import java.io.File;
 import java.util.Collection;
 
+import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.builder.ContinuumBuilder;
 import org.apache.maven.continuum.builder.manager.BuilderManager;
@@ -32,6 +33,7 @@ import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
@@ -50,6 +52,9 @@ public class DefaultBuildController
 
     /** @requirement */
     private ContinuumNotificationDispatcher notifier;
+
+    /** @requirement */
+    private Continuum continuum;
 
     /** @requirement */
     private ContinuumScm scm;
@@ -107,11 +112,11 @@ public class DefaultBuildController
 
         try
         {
-            context.builder = builderManager.getBuilder( context.project.getBuilderId() );
+            context.builder = builderManager.getBuilder( context.project.getExecutorId() );
         }
         catch ( ContinuumException e )
         {
-            getLogger().fatalError( "Error while getting builder '" + context.project.getBuilderId() + "'. " +
+            getLogger().fatalError( "Error while getting builder '" + context.project.getExecutorId() + "'. " +
                                     "Project Id: '" + projectId + "'.", e );
 
             return;
@@ -224,7 +229,8 @@ public class DefaultBuildController
 
         try
         {
-            builder.updateProjectFromCheckOut( workingDirectory, project );
+            continuum.updateProjectFromScm( project.getId() );
+//            builder.updateProjectFromCheckOut( workingDirectory, project );
         }
         catch ( ContinuumException e )
         {
@@ -234,15 +240,15 @@ public class DefaultBuildController
 
             return false;
         }
-
-        String projectId = project.getId();
-
-        store.updateProject( projectId,
-                             project.getName(),
-                             project.getScmUrl(),
-                             project.getNagEmailAddress(),
-                             project.getVersion() );
-
+//
+//        String projectId = project.getId();
+//
+//        store.updateProject( projectId,
+//                             project.getName(),
+//                             project.getScmUrl(),
+//                             project.getNagEmailAddress(),
+//                             project.getVersion() );
+//
 //            store.updateProjectConfiguration( projectId, project.getConfiguration() );
 
         return true;

@@ -8,6 +8,9 @@
           <role>org.apache.maven.continuum.builder.manager.BuilderManager</role>
         </requirement>
         <requirement>
+          <role>org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager</role>
+        </requirement>
+        <requirement>
           <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
           <role-hint>build-project</role-hint>
           <field-name>buildQueue</field-name>
@@ -42,6 +45,17 @@
     </component>
 
     <component>
+      <role>org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager</role>
+      <implementation>org.apache.maven.continuum.project.builder.manager.DefaultContinuumProjectBuilderManager</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.project.builder.ContinuumProjectBuilder</role>
+          <field-name>projectBuilders</field-name>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
       <role>org.apache.maven.continuum.buildcontroller.BuildController</role>
       <implementation>org.apache.maven.continuum.buildcontroller.DefaultBuildController</implementation>
       <requirements>
@@ -56,6 +70,9 @@
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.scm.ContinuumScm</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
         </requirement>
       </requirements>
     </component>
@@ -217,7 +234,15 @@
         <requirement>
           <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.builder.maven.m1.MavenOneMetadataHelper</role>
+        </requirement>
       </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.builder.maven.m1.MavenOneMetadataHelper</role>
+      <implementation>org.apache.maven.continuum.builder.maven.m1.DefaultMavenOneMetadataHelper</implementation>
     </component>
 
     <component>
@@ -243,6 +268,34 @@
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <!--
+     |
+     | Project Builders
+     |
+     |-->
+
+    <component>
+      <role>org.apache.maven.continuum.project.builder.ContinuumProjectBuilder</role>
+      <role-hint>maven-one-builder</role-hint>
+      <implementation>org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.builder.maven.m1.MavenOneMetadataHelper</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.project.builder.ContinuumProjectBuilder</role>
+      <role-hint>maven-two-builder</role-hint>
+      <implementation>org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.builder.maven.m2.MavenBuilderHelper</role>
         </requirement>
       </requirements>
     </component>

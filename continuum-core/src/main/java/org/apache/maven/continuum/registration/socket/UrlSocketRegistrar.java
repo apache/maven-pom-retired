@@ -20,8 +20,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.maven.continuum.network.ConnectionConsumer;
+import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.registration.AbstractContinuumRegistrar;
 import org.apache.maven.continuum.socket.SimpleSocket;
 import org.apache.maven.continuum.utils.ContinuumUtils;
@@ -49,11 +52,16 @@ public class UrlSocketRegistrar
 
             URL u = new URL( url );
 
-            String projectId = getContinuum().addProjectFromUrl( u, "maven2" );
+            List ids = getContinuum().addProjectsFromUrl( u, MavenTwoContinuumProjectBuilder.ID );
+
+            for ( Iterator it = ids.iterator(); it.hasNext(); )
+            {
+                String id = (String) it.next();
+
+                socket.writeLine( "id=" + id );
+            }
 
             socket.writeLine( "OK" );
-
-            socket.writeLine( "id=" + projectId );
         }
         catch( Exception ex )
         {

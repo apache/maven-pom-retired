@@ -19,6 +19,8 @@ package org.apache.maven.continuum.xmlrpc;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.Vector;
+import java.util.Collection;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -32,5 +34,8 @@ public interface XmlRpcHelper
         throws IllegalAccessException, InvocationTargetException;
 
     Hashtable objectToHashtable( Object object, Set excludedProperties )
+        throws IllegalAccessException, InvocationTargetException;
+
+    Vector collectionToVector( Collection value, boolean convertElements )
         throws IllegalAccessException, InvocationTargetException;
 }

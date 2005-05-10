@@ -55,13 +55,13 @@ def assertNotNull( message, condition ):
 
     assertionFailed( message, "Not None", condition )
 
-def assertProject( projectId, name, nagEmailAddress, state, version, builderId, project ):
+def assertProject( projectId, name, nagEmailAddress, state, version, executorId, project ):
     assertNotNull( "project.id", projectId )
     assertEquals( "project.name", name, project.name )
     assertEquals( "project.nagEmailAddress", nagEmailAddress, project.nagEmailAddress )
     assertEquals( "project.state", state, project.state )
     assertEquals( "project.version", version, project.version )
-    assertEquals( "project.builderId", builderId, project.builderId )
+    assertEquals( "project.executorId", executorId, project.executorId )
 
 def assertCheckedOutFiles( project, expectedCheckedOutFiles ):
     actualCheckedOutFiles = project.checkOutScmResult.checkedOutFiles
@@ -241,6 +241,12 @@ def makeScmUrl( scm, scmroot, artifactId ):
 
     raise Exception( "Unknown SCM type '" + scm + "'" )
 
+def getProjectId( projectIds ):
+    if ( len( projectIds ) != 1 ):
+        fail( "When adding a project only a single project was expected to be added." );
+
+    return projectIds[ 0 ]
+
 def initMaven1Project( basedir, scm, scmroot, artifactId ):
     cleanDirectory( basedir )
     os.makedirs( basedir )
@@ -379,7 +385,7 @@ if 1:
     progress( "Initializing Maven 1 CVS project" )
     initMaven1Project( maven1Project, "cvs", cvsroot, "maven-1" )
     progress( "Adding Maven 1 project" )
-    maven1Id = continuum.addMavenOneProject( "file:" + maven1Project + "/project.xml" )
+    maven1Id = getProjectId( continuum.addMavenOneProject( "file:" + maven1Project + "/project.xml" ) )
     waitForCheckOut( maven1Id );
     maven1 = continuum.getProject( maven1Id )
     assertProject( maven1Id, "Maven 1 Project", email, continuum.STATE_NEW, "1.0", "maven-1", maven1 )
@@ -416,7 +422,7 @@ if 1:
     progress( "Initializing Maven 2 CVS project" )
     initMaven2Project( maven2Project, cvsroot, "maven-2" )
     progress( "Adding Maven 2 project" )
-    maven2Id = continuum.addMavenTwoProject( "file:" + maven2Project + "/pom.xml" )
+    maven2Id = getProjectId( continuum.addMavenTwoProject( "file:" + maven2Project + "/pom.xml" ) )
     waitForCheckOut( maven2Id );
     maven2 = continuum.getProject( maven2Id )
     assertProject( maven2Id, "Maven 2 Project", email, continuum.STATE_NEW, "2.0-SNAPSHOT", "maven2", maven2 )
@@ -426,14 +432,14 @@ if 1:
     print "original buildId: " + buildId
     assertSuccessfulMaven2Build( buildId )
 
-    progress( "Test that a build without any files changed won't execute the builder" )
+    progress( "Test that a build without any files changed won't execute the executor" )
     expectedSize = len( continuum.getBuildsForProject( maven2.id ) )
     continuum.buildProject( maven2.id )
     time.sleep( 3.0 )
     actualSize = len( continuum.getBuildsForProject( maven2.id ) )
     assertEquals( "A build has unexpectedly been executed.", expectedSize, actualSize )
 
-    progress( "Test that a forced build without any files changed executes the builder" )
+    progress( "Test that a forced build without any files changed executes the executor" )
     buildId = buildProject( maven2.id, True ).id
     print "forced buildId: " + buildId
     build = assertSuccessfulMaven2Build( buildId )

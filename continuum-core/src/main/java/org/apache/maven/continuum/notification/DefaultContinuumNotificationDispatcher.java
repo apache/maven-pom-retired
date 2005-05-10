@@ -21,9 +21,9 @@ import java.util.Map;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.scm.UpdateScmResult;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.notification.NotificationDispatcher;

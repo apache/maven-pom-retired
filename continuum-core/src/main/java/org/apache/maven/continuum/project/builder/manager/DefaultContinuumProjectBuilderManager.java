@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.buildcontroller;
+package org.apache.maven.continuum.project.builder.manager;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,37 +16,37 @@ package org.apache.maven.continuum.buildcontroller;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.buildqueue.BuildProjectTask;
-import org.apache.maven.continuum.store.ContinuumStore;
+import java.util.Map;
+
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.taskqueue.Task;
-import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
-import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id:$
  */
-public class BuildProjectTaskExecutor
+public class DefaultContinuumProjectBuilderManager
     extends AbstractLogEnabled
-    implements TaskExecutor
+    implements ContinuumProjectBuilderManager
 {
     /** @requirement */
-    private BuildController controller;
-
-    /** @requirement */
-    private ContinuumStore store;
+    private Map projectBuilders;
 
     // ----------------------------------------------------------------------
-    // TaskExecutor Implementation
+    // ProjectCreatorManager Implementation
     // ----------------------------------------------------------------------
 
-    public void executeTask( Task task )
-        throws TaskExecutionException
+    public ContinuumProjectBuilder getProjectCreator( String id )
+        throws ContinuumProjectBuilderManagerException
     {
-        BuildProjectTask buildProjectTask = (BuildProjectTask) task;
+        ContinuumProjectBuilder projectBuilder = ( ContinuumProjectBuilder ) projectBuilders.get( id );
 
-        controller.build( buildProjectTask.getProjectId(), buildProjectTask.isForced() );
+        if ( projectBuilder == null )
+        {
+            throw new ContinuumProjectBuilderManagerException( "No such project creator with id '" + id + "'." );
+        }
+
+        return projectBuilder;
     }
 }

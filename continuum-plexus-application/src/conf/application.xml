@@ -168,19 +168,6 @@
     </component>
 
     <component>
-      <role>org.apache.maven.continuum.store.ContinuumStore</role>
-      <implementation>org.apache.maven.continuum.store.ModelloJPoxContinuumStore</implementation>
-      <requirements>
-        <requirement>
-          <role>org.codehaus.plexus.jdo.JdoFactory</role>
-        </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.project.state.ContinuumProjectStateGuard</role>
-        </requirement>
-      </requirements>
-    </component>
-
-    <component>
       <role>org.codehaus.plexus.jdo.JdoFactory</role>
       <implementation>org.codehaus.plexus.jdo.DefaultJdoFactory</implementation>
       <configuration>

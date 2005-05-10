@@ -32,40 +32,12 @@ import org.codehaus.plexus.util.FileUtils;
 public class Maven1BuilderTest
     extends PlexusTestCase
 {
-    public void testBuildingAProjectFromMetadataWithACompleteMaven1Pom()
-        throws Exception
-    {
-        BuilderManager builderManager = (BuilderManager) lookup( BuilderManager.ROLE );
-
-        Maven1Builder builder = (Maven1Builder) builderManager.getBuilder( "maven-1" );
-
-        ContinuumProject project = builder.createProjectFromMetadata( getTestFile( "src/test/resources/projects/maven-1.pom.xml" ).toURL() );
-
-        assertNotNull( project );
-
-        assertEquals( "Maven", project.getName() );
-
-        assertEquals( "scm:svn:http://svn.apache.org/repos/asf:maven/maven-1/core/trunk/", project.getScmUrl() );
-
-        assertEquals( "dev@maven.apache.org", project.getNagEmailAddress() );
-
-        assertEquals( "1.1-SNAPSHOT", project.getVersion() );
-
-        Properties configuration = project.getConfiguration();
-
-        assertNotNull( configuration );
-
-        assertEquals( 1, configuration.size() );
-
-        assertEquals( "clean:clean, jar:install", configuration.getProperty( Maven1Builder.CONFIGURATION_GOALS ) );
-    }
-
     public void testUpdatingAProjectFromScmWithAExistingProjectAndAEmptyMaven1Pom()
         throws Exception
     {
         BuilderManager builderManager = (BuilderManager) lookup( BuilderManager.ROLE );
 
-        Maven1Builder builder = (Maven1Builder) builderManager.getBuilder( "maven-1" );
+        Maven1Builder builder = (Maven1Builder) builderManager.getBuilder( Maven1Builder.ID );
 
         // ----------------------------------------------------------------------
         // Make a checkout

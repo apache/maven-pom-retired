@@ -17,7 +17,6 @@ package org.apache.maven.continuum.builder.maven.m2;
  */
 
 import java.io.File;
-import java.net.URL;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.builder.AbstractContinuumBuilder;
@@ -90,19 +89,25 @@ public class MavenShellBuilder
         return result;
     }
 
-    public ContinuumProject createProjectFromMetadata( URL metadata )
-        throws ContinuumException
-    {
-        return builderHelper.createProjectFromMetadata( metadata );
-    }
-
+//    public ContinuumProject createProjectFromMetadata( URL metadata )
+//        throws ContinuumException
+//    {
+//        return builderHelper.createProjectFromMetadata( metadata );
+//    }
+//
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
         throws ContinuumException
     {
-        builderHelper.updateProjectFromMetadata( workingDirectory, project );
+        File f = new File( workingDirectory, "pom.xml" );
+
+        builderHelper.mapMetadataToProject( f, project );
     }
 
-    protected String[] getArguments( ContinuumProject project )
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private String[] getArguments( ContinuumProject project )
         throws ContinuumException
     {
         String[] a = splitAndTrimString( this.arguments, " " );

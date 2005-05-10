@@ -19,7 +19,6 @@ package org.apache.maven.continuum;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.continuum.project.AntProject;
@@ -29,8 +28,8 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 
 /**
  * This is the main entry point for Continuum. Projects are added to Continuum
@@ -49,14 +48,14 @@ public interface Continuum
 
     //TODO: an URL converter in OGNL would be nice.
 
-    String addProjectFromUrl( String url, String builder )
+    List addProjectsFromUrl( String url, String projectBuilderId )
         throws ContinuumException;
 
-    String addProjectFromUrl( URL url, String builder )
+    List addProjectsFromUrl( URL url, String projectBuilderId )
         throws ContinuumException;
 
     String addProjectFromScm( String scmUrl,
-                              String builderType,
+                              String executorId,
                               String projectName,
                               String nagEmailAddress,
                               String version,

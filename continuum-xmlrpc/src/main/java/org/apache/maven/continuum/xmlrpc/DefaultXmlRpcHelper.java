@@ -140,7 +140,7 @@ public class DefaultXmlRpcHelper
             }
             else if ( value instanceof Collection )
             {
-                value = collectionToVector( (Collection) value );
+                value = collectionToVector( (Collection) value, true );
             }
             else
             {
@@ -157,7 +157,7 @@ public class DefaultXmlRpcHelper
         return hashtable;
     }
 
-    private Vector collectionToVector( Collection value )
+    public Vector collectionToVector( Collection value, boolean convertElements )
         throws IllegalAccessException, InvocationTargetException
     {
         if ( value instanceof Vector )
@@ -171,7 +171,14 @@ public class DefaultXmlRpcHelper
         {
             Object object = it.next();
 
-            vector.add( objectToHashtable( object ) );
+            if ( convertElements )
+            {
+                vector.add( objectToHashtable( object ) );
+            }
+            else
+            {
+                vector.add( object );
+            }
         }
 
         return vector;

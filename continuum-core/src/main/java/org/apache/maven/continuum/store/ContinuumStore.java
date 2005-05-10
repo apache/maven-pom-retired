@@ -48,7 +48,13 @@ public interface ContinuumStore
     // ContinuumProject
     // ----------------------------------------------------------------------
 
-    String addProject( String name, String scmUrl, String nagEmailAddress, String version, String builderId, String workingDirectory, Properties properties )
+    String addProject( String name,
+                       String scmUrl,
+                       String nagEmailAddress,
+                       String version,
+                       String executorId,
+                       String workingDirectory,
+                       Properties properties )
         throws ContinuumStoreException;
 
     void removeProject( String projectId )
@@ -57,7 +63,11 @@ public interface ContinuumStore
     void setWorkingDirectory( String projectId, String workingDirectory )
         throws ContinuumStoreException;
 
-    void updateProject( String projectId, String name, String scmUrl, String nagEmailAddress, String version )
+    void updateProject( String projectId,
+                        String name,
+                        String scmUrl,
+                        String nagEmailAddress,
+                        String version )
         throws ContinuumStoreException;
 
     void updateProjectConfiguration( String projectId, Properties configuration )
@@ -85,7 +95,11 @@ public interface ContinuumStore
     String createBuild( String projectId, boolean forced )
         throws ContinuumStoreException;
 
-    void setBuildResult( String buildId, int state, ContinuumBuildResult result, UpdateScmResult scmResult, Throwable error )
+    void setBuildResult( String buildId,
+                         int state,
+                         ContinuumBuildResult result,
+                         UpdateScmResult scmResult,
+                         Throwable error )
         throws ContinuumStoreException;
 
     ContinuumBuild getBuild( String buildId )

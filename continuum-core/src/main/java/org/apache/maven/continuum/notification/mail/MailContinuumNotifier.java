@@ -34,6 +34,7 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.exception.ResourceNotFoundException;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.mailsender.MailMessage;
 import org.codehaus.plexus.mailsender.MailSender;
@@ -199,7 +200,7 @@ public class MailContinuumNotifier
 
         String packageName = getClass().getPackage().getName().replace( '.', '/' );
 
-        String templateName = "/" + packageName + "/templates/" + project.getBuilderId() + "/" + source + ".vm";
+        String templateName = "/" + packageName + "/templates/" + project.getExecutorId() + "/" + source + ".vm";
 
         StringWriter writer = new StringWriter();
 

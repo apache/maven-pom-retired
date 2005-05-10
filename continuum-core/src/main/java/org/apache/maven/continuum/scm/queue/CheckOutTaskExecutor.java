@@ -18,17 +18,17 @@ package org.apache.maven.continuum.scm.queue;
 
 import java.io.File;
 
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.ContinuumScmException;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.project.ContinuumProject;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.Task;
-import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
+import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

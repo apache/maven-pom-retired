@@ -28,7 +28,6 @@ import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Notifier;
 import org.apache.maven.model.Repository;
@@ -68,35 +67,56 @@ public class DefaultMavenBuilderHelper
     // MavenBuilderHelper Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumProject createProjectFromMetadata( URL metadata )
+//    public ContinuumProject createProjectFromMetadata( URL metadata )
+//        throws ContinuumException
+//    {
+//        // ----------------------------------------------------------------------
+//        // We need to roll the project data into a file so that we can use it
+//        // ----------------------------------------------------------------------
+//
+//        MavenTwoProject project = new MavenTwoProject();
+//
+//        try
+//        {
+//            File file = createMetadataFile( metadata );
+//
+//            mapMetadataToProject( file, project );
+//        }
+//        catch ( Exception e )
+//        {
+//            throw new ContinuumException( "Cannot create continuum project:", e );
+//        }
+//
+//        return project;
+//    }
+//
+//    public void updateProjectFromMetadata( File workingDirectory, ContinuumProject project )
+//        throws ContinuumException
+//    {
+//        File f = new File( workingDirectory, "pom.xml" );
+//
+//        mapMetadataToProject( f, project );
+//    }
+
+    public void mapMetadataToProject( File metadata, ContinuumProject project )
         throws ContinuumException
     {
-        // ----------------------------------------------------------------------
-        // We need to roll the project data into a file so that we can use it
-        // ----------------------------------------------------------------------
+        MavenProject mavenProject = getProject( metadata );
 
-        MavenTwoProject project = new MavenTwoProject();
+        project.setNagEmailAddress( getNagEmailAddress( mavenProject ) );
 
-        try
+        project.setName( getProjectName( mavenProject ) );
+
+        project.setScmUrl( getScmUrl( mavenProject ) );
+
+        project.setVersion( getVersion( mavenProject ) );
+
+        Properties configuration = project.getConfiguration();
+
+        if ( !configuration.containsKey( MavenShellBuilder.CONFIGURATION_GOALS ) )
         {
-            File file = createMetadataFile( metadata );
-
-            mapMetadataToProject( file, project );
+            configuration.setProperty( MavenShellBuilder.CONFIGURATION_GOALS, "clean:clean, install" );
         }
-        catch ( Exception e )
-        {
-            throw new ContinuumException( "Cannot create continuum project:", e );
-        }
-
-        return project;
-    }
-
-    public void updateProjectFromMetadata( File workingDirectory, ContinuumProject project )
-        throws ContinuumException
-    {
-        File f = new File( workingDirectory, "pom.xml" );
-
-        mapMetadataToProject( f, project );
     }
 
     // ----------------------------------------------------------------------
@@ -166,27 +186,6 @@ public class DefaultMavenBuilderHelper
         catch ( Exception e )
         {
             throw new ContinuumException( "Cannot create metadata file:", e );
-        }
-    }
-
-    protected void mapMetadataToProject( File metadata, ContinuumProject project )
-        throws ContinuumException
-    {
-        MavenProject mavenProject = getProject( metadata );
-
-        project.setNagEmailAddress( getNagEmailAddress( mavenProject ) );
-
-        project.setName( getProjectName( mavenProject ) );
-
-        project.setScmUrl( getScmUrl( mavenProject ) );
-
-        project.setVersion( getVersion( mavenProject ) );
-
-        Properties configuration = project.getConfiguration();
-
-        if ( !configuration.containsKey( MavenShellBuilder.CONFIGURATION_GOALS ) )
-        {
-            configuration.setProperty( MavenShellBuilder.CONFIGURATION_GOALS, "clean:clean, install" );
         }
     }
 

@@ -86,8 +86,13 @@ public class ModelloJPoxContinuumStore
     // ContinuumProject
     // ----------------------------------------------------------------------
 
-    public String addProject( String name, String scmUrl, String nagEmailAddress, String version, String builderId,
-                              String workingDirectory, Properties configuration )
+    public String addProject( String name,
+                              String scmUrl,
+                              String nagEmailAddress,
+                              String version,
+                              String executorId,
+                              String workingDirectory,
+                              Properties configuration )
         throws ContinuumStoreException
     {
         ContinuumProject project = new ContinuumProject();
@@ -96,7 +101,7 @@ public class ModelloJPoxContinuumStore
         project.setScmUrl( scmUrl );
         project.setNagEmailAddress( nagEmailAddress );
         project.setVersion( version );
-        project.setBuilderId( builderId );
+        project.setExecutorId( executorId );
         project.setWorkingDirectory( workingDirectory );
         project.setState( ContinuumProjectState.CHECKING_OUT );
         project.setConfiguration( configuration );
@@ -121,6 +126,8 @@ public class ModelloJPoxContinuumStore
         try
         {
             store.begin();
+
+            getLogger().info( "Removing project with id '" + projectId + "'." );
 
 //            System.err.println( "**********************************" );
 //            System.err.println( "**********************************" );
@@ -185,6 +192,8 @@ public class ModelloJPoxContinuumStore
             store.deleteContinuumProject( projectId );
 
             store.commit();
+
+            getLogger().info( "Removed project with id '" + projectId + "'." );
         }
         catch ( Exception e )
         {
@@ -441,16 +450,16 @@ public class ModelloJPoxContinuumStore
 
             build.setUpdateScmResult( scmResult );
 
-            store.commit();
-
-            // ----------------------------------------------------------------------
-            // This double commit seems to be needed for some reason. Not having it
-            // seems to result in some foreign key constraint violation.
-            // ----------------------------------------------------------------------
-
-            store.begin();
-
-            build = store.getContinuumBuild( buildId, false );
+//            store.commit();
+//
+//            // ----------------------------------------------------------------------
+//            // This double commit seems to be needed for some reason. Not having it
+//            // seems to result in some foreign key constraint violation.
+//            // ----------------------------------------------------------------------
+//
+//            store.begin();
+//
+//            build = store.getContinuumBuild( buildId, false );
 
             build.setBuildResult( result );
 
