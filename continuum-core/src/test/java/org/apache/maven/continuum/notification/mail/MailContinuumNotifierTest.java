@@ -22,13 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.maven.continuum.builder.shell.ShellBuildResult;
 import org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder;
+import org.apache.maven.continuum.builder.shell.ShellBuildResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.mailsender.MailMessage;

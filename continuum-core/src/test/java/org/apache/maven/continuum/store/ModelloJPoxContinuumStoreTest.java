@@ -33,6 +33,7 @@ import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.UpdateScmResult;
+
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.util.FileUtils;
