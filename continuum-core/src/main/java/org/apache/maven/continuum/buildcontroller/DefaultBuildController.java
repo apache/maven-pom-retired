@@ -16,13 +16,12 @@ package org.apache.maven.continuum.buildcontroller;
  * limitations under the License.
  */
 
-import java.io.File;
 import java.util.Collection;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.builder.ContinuumBuilder;
-import org.apache.maven.continuum.builder.manager.BuilderManager;
+import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
@@ -45,7 +44,7 @@ public class DefaultBuildController
     implements BuildController
 {
     /** @requirement */
-    private BuilderManager builderManager;
+    private BuildExecutorManager buildExecutorManager;
 
     /** @requirement */
     private ContinuumStore store;
@@ -67,7 +66,7 @@ public class DefaultBuildController
     {
         ContinuumProject project;
 
-        ContinuumBuilder builder;
+        ContinuumBuildExecutor builder;
 
         boolean forced;
 
@@ -112,7 +111,7 @@ public class DefaultBuildController
 
         try
         {
-            context.builder = builderManager.getBuilder( context.project.getExecutorId() );
+            context.builder = buildExecutorManager.getBuilder( context.project.getExecutorId() );
         }
         catch ( ContinuumException e )
         {
@@ -172,8 +171,6 @@ public class DefaultBuildController
             {
                 getLogger().error( "Internal error while building the project.", ex );
             }
-
-            return;
         }
         finally
         {
@@ -221,16 +218,11 @@ public class DefaultBuildController
         // before updating the project itself. This will make it possible to migrate
         // a project from one SCM to another.
 
-        ContinuumBuilder builder = context.builder;
-
         ContinuumProject project = context.project;
-
-        File workingDirectory = new File( project.getWorkingDirectory() );
 
         try
         {
             continuum.updateProjectFromScm( project.getId() );
-//            builder.updateProjectFromCheckOut( workingDirectory, project );
         }
         catch ( ContinuumException e )
         {
@@ -240,16 +232,6 @@ public class DefaultBuildController
 
             return false;
         }
-//
-//        String projectId = project.getId();
-//
-//        store.updateProject( projectId,
-//                             project.getName(),
-//                             project.getScmUrl(),
-//                             project.getNagEmailAddress(),
-//                             project.getVersion() );
-//
-//            store.updateProjectConfiguration( projectId, project.getConfiguration() );
 
         return true;
     }

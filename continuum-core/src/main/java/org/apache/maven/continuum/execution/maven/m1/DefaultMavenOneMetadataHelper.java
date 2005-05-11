@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.maven.m1;
+package org.apache.maven.continuum.execution.maven.m1;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -131,9 +131,9 @@ public class DefaultMavenOneMetadataHelper
         // Goals
         Properties configuration = new Properties();
 
-        if ( !configuration.containsKey( Maven1Builder.CONFIGURATION_GOALS ) )
+        if ( !configuration.containsKey( MavenOneBuildExecutor.CONFIGURATION_GOALS ) )
         {
-            configuration.setProperty( Maven1Builder.CONFIGURATION_GOALS, "clean:clean, jar:install" );
+            configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean, jar:install" );
         }
 
         // ----------------------------------------------------------------------

@@ -28,12 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.maven.continuum.builder.ContinuumBuilder;
-import org.apache.maven.continuum.builder.ant.AntBuilder;
-import org.apache.maven.continuum.builder.manager.BuilderManager;
-import org.apache.maven.continuum.builder.maven.m1.Maven1Builder;
-import org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder;
-import org.apache.maven.continuum.builder.shell.ShellBuilder;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -53,6 +47,12 @@ import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.queue.CheckOutTask;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
+import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -85,7 +85,7 @@ public class DefaultContinuum
     //       that the database is properly initialized before starting the store.
 
     /** @requirement */
-    private BuilderManager builderManager;
+    private BuildExecutorManager buildExecutorManager;
 
     /** @requirement */
     private ContinuumProjectBuilderManager projectBuilderManager;
@@ -243,7 +243,7 @@ public class DefaultContinuum
         // stuff out
         // ----------------------------------------------------------------------
 
-        if ( !builderManager.hasBuilder( executorId ) )
+        if ( !buildExecutorManager.hasBuilder( executorId ) )
         {
             throw new ContinuumException( "No such executor with id '" + executorId + "'." );
         }
@@ -461,12 +461,12 @@ public class DefaultContinuum
     {
         Properties configuration = new Properties();
 
-        configuration.setProperty( AntBuilder.CONFIGURATION_EXECUTABLE, project.getExecutable() );
+        configuration.setProperty( AntBuildExecutor.CONFIGURATION_EXECUTABLE, project.getExecutable() );
 
-        configuration.setProperty( AntBuilder.CONFIGURATION_TARGETS, project.getTargets() );
+        configuration.setProperty( AntBuildExecutor.CONFIGURATION_TARGETS, project.getTargets() );
 
         addProjectFromScm( project.getScmUrl(),
-                           AntBuilder.ID,
+                           AntBuildExecutor.ID,
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
@@ -482,9 +482,9 @@ public class DefaultContinuum
 
         copyProject( p, ap );
 
-        ap.setTargets( p.getConfiguration().getProperty( AntBuilder.CONFIGURATION_TARGETS ) );
+        ap.setTargets( p.getConfiguration().getProperty( AntBuildExecutor.CONFIGURATION_TARGETS ) );
 
-        ap.setExecutable( p.getConfiguration().getProperty( AntBuilder.CONFIGURATION_EXECUTABLE ) );
+        ap.setExecutable( p.getConfiguration().getProperty( AntBuildExecutor.CONFIGURATION_EXECUTABLE ) );
 
         return ap;
     }
@@ -502,9 +502,9 @@ public class DefaultContinuum
 
         Properties configuration = new Properties();
 
-        configuration.setProperty( AntBuilder.CONFIGURATION_EXECUTABLE, project.getExecutable() );
+        configuration.setProperty( AntBuildExecutor.CONFIGURATION_EXECUTABLE, project.getExecutable() );
 
-        configuration.setProperty( AntBuilder.CONFIGURATION_TARGETS, project.getTargets() );
+        configuration.setProperty( AntBuildExecutor.CONFIGURATION_TARGETS, project.getTargets() );
 
         updateProjectConfiguration( project.getId(), configuration );
     }
@@ -514,10 +514,10 @@ public class DefaultContinuum
     {
         Properties configuration = new Properties();
 
-        configuration.setProperty( Maven1Builder.CONFIGURATION_GOALS, project.getGoals() );
+        configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, project.getGoals() );
 
         addProjectFromScm( project.getScmUrl(),
-                           Maven1Builder.ID,
+                           MavenOneBuildExecutor.ID,
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
@@ -533,7 +533,7 @@ public class DefaultContinuum
 
         copyProject( p, mp );
 
-        mp.setGoals( p.getConfiguration().getProperty( Maven1Builder.CONFIGURATION_GOALS ) );
+        mp.setGoals( p.getConfiguration().getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
 
         return mp;
     }
@@ -545,7 +545,7 @@ public class DefaultContinuum
 
         Properties configuration = new Properties();
 
-        configuration.setProperty( Maven1Builder.CONFIGURATION_GOALS, project.getGoals() );
+        configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, project.getGoals() );
 
         updateProjectConfiguration( project.getId(), configuration );
     }
@@ -555,10 +555,10 @@ public class DefaultContinuum
     {
         Properties configuration = new Properties();
 
-        configuration.setProperty( MavenShellBuilder.CONFIGURATION_GOALS, project.getGoals() );
+        configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, project.getGoals() );
 
         addProjectFromScm( project.getScmUrl(),
-                           MavenShellBuilder.ID,
+                           MavenTwoBuildExecutor.ID,
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
@@ -574,7 +574,7 @@ public class DefaultContinuum
 
         copyProject( p, mp );
 
-        mp.setGoals( p.getConfiguration().getProperty( MavenShellBuilder.CONFIGURATION_GOALS ) );
+        mp.setGoals( p.getConfiguration().getProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) );
 
         return mp;
     }
@@ -586,7 +586,7 @@ public class DefaultContinuum
 
         Properties configuration = new Properties();
 
-        configuration.setProperty( MavenShellBuilder.CONFIGURATION_GOALS, project.getGoals() );
+        configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, project.getGoals() );
 
         updateProjectConfiguration( project.getId(), configuration );
     }
@@ -596,15 +596,15 @@ public class DefaultContinuum
     {
         Properties configuration = new Properties();
 
-        configuration.setProperty( ShellBuilder.CONFIGURATION_EXECUTABLE, project.getExecutable() );
+        configuration.setProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE, project.getExecutable() );
 
         if ( project.getArguments() != null )
         {
-            configuration.setProperty( ShellBuilder.CONFIGURATION_ARGUMENTS, project.getArguments() );
+            configuration.setProperty( ShellBuildExecutor.CONFIGURATION_ARGUMENTS, project.getArguments() );
         }
 
         addProjectFromScm( project.getScmUrl(),
-                           ShellBuilder.ID,
+                           ShellBuildExecutor.ID,
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
@@ -620,9 +620,9 @@ public class DefaultContinuum
 
         copyProject( p, sp );
 
-        sp.setExecutable( p.getConfiguration().getProperty( ShellBuilder.CONFIGURATION_EXECUTABLE ) );
+        sp.setExecutable( p.getConfiguration().getProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE ) );
 
-        sp.setArguments( p.getConfiguration().getProperty( ShellBuilder.CONFIGURATION_ARGUMENTS ) );
+        sp.setArguments( p.getConfiguration().getProperty( ShellBuildExecutor.CONFIGURATION_ARGUMENTS ) );
 
         return sp;
     }
@@ -634,11 +634,11 @@ public class DefaultContinuum
 
         Properties configuration = new Properties();
 
-        configuration.setProperty( ShellBuilder.CONFIGURATION_EXECUTABLE, project.getExecutable() );
+        configuration.setProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE, project.getExecutable() );
 
         if ( project.getArguments() != null )
         {
-            configuration.setProperty( ShellBuilder.CONFIGURATION_ARGUMENTS, project.getArguments() );
+            configuration.setProperty( ShellBuildExecutor.CONFIGURATION_ARGUMENTS, project.getArguments() );
         }
 
         updateProjectConfiguration( project.getId(), configuration );
@@ -800,7 +800,7 @@ public class DefaultContinuum
         // Make a new descriptor
         // ----------------------------------------------------------------------
 
-        ContinuumBuilder builder = builderManager.getBuilder( project.getExecutorId() );
+        ContinuumBuildExecutor builder = buildExecutorManager.getBuilder( project.getExecutorId() );
 
         builder.updateProjectFromCheckOut( new File( project.getWorkingDirectory() ), project );
 

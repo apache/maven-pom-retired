@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.maven.m2;
+package org.apache.maven.continuum.execution.maven.m2;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -113,9 +113,9 @@ public class DefaultMavenBuilderHelper
 
         Properties configuration = project.getConfiguration();
 
-        if ( !configuration.containsKey( MavenShellBuilder.CONFIGURATION_GOALS ) )
+        if ( !configuration.containsKey( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) )
         {
-            configuration.setProperty( MavenShellBuilder.CONFIGURATION_GOALS, "clean:clean, install" );
+            configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, "clean:clean, install" );
         }
     }
 

@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.maven.m2;
+package org.apache.maven.continuum.execution.shell;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -19,49 +19,72 @@ package org.apache.maven.continuum.builder.maven.m2;
 import java.io.File;
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.builder.AbstractContinuumBuilder;
-import org.apache.maven.continuum.builder.ContinuumBuilder;
-import org.apache.maven.continuum.builder.shell.ExecutionResult;
-import org.apache.maven.continuum.builder.shell.ShellCommandHelper;
+import org.apache.maven.continuum.execution.AbstractBuildExecutor;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 
+import org.codehaus.plexus.util.cli.Commandline;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: MavenShellBuilder.java,v 1.2 2005/04/07 23:27:39 trygvis Exp $
+ * @version $Id: ShellBuilder.java,v 1.2 2005/04/07 23:27:40 trygvis Exp $
  */
-public class MavenShellBuilder
-    extends AbstractContinuumBuilder
-    implements ContinuumBuilder
+public class ShellBuildExecutor
+    extends AbstractBuildExecutor
+    implements ContinuumBuildExecutor
 {
-    public final static String CONFIGURATION_GOALS = "goals";
+    public static final String CONFIGURATION_EXECUTABLE = "executable";
 
-    public final static String ID = "maven2";
+    public final static String CONFIGURATION_ARGUMENTS = "arguments";
+
+    public final static String ID = "shell";
 
     /** @requirement */
     private ShellCommandHelper shellCommandHelper;
 
-    /** @requirement */
-    private MavenBuilderHelper builderHelper;
-
-    /** @configuration */
-    private String executable;
-
-    /** @configuration */
-    private String arguments;
-
     // ----------------------------------------------------------------------
-    // ContinuumBuilder Implementation
+    //
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildResult build( ContinuumProject project )
+    protected boolean prependWorkingDirectoryIfMissing()
+    {
+        return true;
+    }
+
+    protected String getExecutable( ContinuumProject project )
+        throws ContinuumException
+    {
+        return getConfigurationString( project.getConfiguration(), CONFIGURATION_EXECUTABLE );
+    }
+
+    protected String[] getArguments( ContinuumProject project )
+        throws ContinuumException
+    {
+        return getConfigurationStringArray( project.getConfiguration(), CONFIGURATION_ARGUMENTS, " ", new String[ 0 ] );
+    }
+
+    // ----------------------------------------------------------------------
+    // ContinuumBuilder implementation
+    // ----------------------------------------------------------------------
+
+    public synchronized ContinuumBuildResult build( ContinuumProject project )
         throws ContinuumException
     {
         File workingDirectory = new File( project.getWorkingDirectory() );
 
         ExecutionResult executionResult;
 
+        String executable = getExecutable( project );
+
         String[] arguments = getArguments( project );
+
+        if ( executable.charAt( 0 ) != '/' &&
+             executable.charAt( 0 ) != '\\' &&
+             prependWorkingDirectoryIfMissing() )
+        {
+            executable = workingDirectory + File.separator + executable;
+        }
 
         try
         {
@@ -76,7 +99,7 @@ public class MavenShellBuilder
 
         boolean success = executionResult.getExitCode() == 0;
 
-        MavenTwoBuildResult result = new MavenTwoBuildResult();
+        ShellBuildResult result = new ShellBuildResult();
 
         result.setSuccess( success );
 
@@ -89,37 +112,33 @@ public class MavenShellBuilder
         return result;
     }
 
-//    public ContinuumProject createProjectFromMetadata( URL metadata )
-//        throws ContinuumException
-//    {
-//        return builderHelper.createProjectFromMetadata( metadata );
-//    }
-//
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
         throws ContinuumException
     {
-        File f = new File( workingDirectory, "pom.xml" );
-
-        builderHelper.mapMetadataToProject( f, project );
+        // Not much to do.
     }
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
-    private String[] getArguments( ContinuumProject project )
-        throws ContinuumException
+    protected Commandline createCommandline( ContinuumProject project, String executable, String[] arguments )
     {
-        String[] a = splitAndTrimString( this.arguments, " " );
+        Commandline cl = new Commandline();
 
-        String[] goals = getConfigurationStringArray( project.getConfiguration(), CONFIGURATION_GOALS, "," );
+        cl.setExecutable( executable );
 
-        String[] arguments = new String[ a.length + goals.length ];
+        cl.setWorkingDirectory( new File( project.getWorkingDirectory() ).getAbsolutePath() );
 
-        System.arraycopy( a, 0, arguments, 0, a.length );
+        for ( int i = 1; i < arguments.length; i++ )
+        {
+            cl.createArgument().setValue( arguments[i] );
+        }
 
-        System.arraycopy( goals, 0, arguments, a.length, goals.length );
+        getLogger().warn( "Executing external command '" + executable + "'." );
 
-        return arguments;
+        getLogger().warn( "Executing external command. Working directory: " + cl.getWorkingDirectory().getAbsolutePath() );
+
+        return cl;
     }
 }

@@ -269,7 +269,7 @@
 
     <class>
       <name>ShellBuildResult</name>
-      <packageName>org.apache.maven.continuum.builder.shell</packageName>
+      <packageName>org.apache.maven.continuum.execution.shell</packageName>
       <superClass>ContinuumBuildResult</superClass>
       <version>1.0.0</version>
       <fields>
@@ -293,7 +293,7 @@
 
     <class>
       <name>Maven1BuildResult</name>
-      <packageName>org.apache.maven.continuum.builder.maven.m1</packageName>
+      <packageName>org.apache.maven.continuum.execution.maven.m1</packageName>
       <superClass>ContinuumBuildResult</superClass>
       <version>1.0.0</version>
       <fields>
@@ -317,7 +317,7 @@
 
     <class>
       <name>MavenTwoBuildResult</name>
-      <packageName>org.apache.maven.continuum.builder.maven.m2</packageName>
+      <packageName>org.apache.maven.continuum.execution.maven.m2</packageName>
       <superClass>ContinuumBuildResult</superClass>
       <version>1.0.0</version>
       <fields>
@@ -341,7 +341,7 @@
 
     <class>
       <name>AntBuildResult</name>
-      <packageName>org.apache.maven.continuum.builder.ant</packageName>
+      <packageName>org.apache.maven.continuum.execution.ant</packageName>
       <superClass>ContinuumBuildResult</superClass>
       <version>1.0.0</version>
       <fields>

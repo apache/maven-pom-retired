@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.maven.continuum.builder.shell.ShellBuildResult;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
@@ -33,6 +32,7 @@ import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.execution.shell.ShellBuildResult;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.jdo.JdoFactory;

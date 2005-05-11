@@ -19,13 +19,13 @@ package org.apache.maven.continuum.project.builder.maven;
 import java.io.File;
 import java.net.URL;
 
-import org.apache.maven.continuum.builder.AbstractContinuumBuilder;
-import org.apache.maven.continuum.builder.maven.m1.Maven1Builder;
-import org.apache.maven.continuum.builder.maven.m1.MavenOneMetadataHelper;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
+import org.apache.maven.continuum.execution.AbstractBuildExecutor;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
@@ -53,13 +53,13 @@ public class MavenOneContinuumProjectBuilder
 
         try
         {
-            File pomFile = AbstractContinuumBuilder.createMetadataFile( url );
+            File pomFile = AbstractBuildExecutor.createMetadataFile( url );
 
             MavenOneProject project = new MavenOneProject();
 
             metadataHelper.mapMetadata( pomFile, project );
 
-            project.setExecutorId( Maven1Builder.ID );
+            project.setExecutorId( MavenOneBuildExecutor.ID );
 
             result.addProject( project );
         }

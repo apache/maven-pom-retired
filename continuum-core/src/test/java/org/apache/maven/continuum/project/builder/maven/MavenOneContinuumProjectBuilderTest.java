@@ -18,10 +18,10 @@ package org.apache.maven.continuum.project.builder.maven;
 
 import java.util.Properties;
 
-import org.apache.maven.continuum.builder.maven.m1.Maven1Builder;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 
 import org.codehaus.plexus.PlexusTestCase;
 
@@ -61,6 +61,6 @@ public class MavenOneContinuumProjectBuilderTest
 
         assertEquals( 1, configuration.size() );
 
-        assertEquals( "clean:clean, jar:install", configuration.getProperty( Maven1Builder.CONFIGURATION_GOALS ) );
+        assertEquals( "clean:clean, jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
     }
 }

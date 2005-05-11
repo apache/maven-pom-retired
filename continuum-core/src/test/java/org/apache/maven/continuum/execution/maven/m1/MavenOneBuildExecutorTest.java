@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.maven.m1;
+package org.apache.maven.continuum.execution.maven.m1;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -19,7 +19,7 @@ package org.apache.maven.continuum.builder.maven.m1;
 import java.io.File;
 import java.util.Properties;
 
-import org.apache.maven.continuum.builder.manager.BuilderManager;
+import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumProject;
 
 import org.codehaus.plexus.PlexusTestCase;
@@ -29,15 +29,15 @@ import org.codehaus.plexus.util.FileUtils;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id: Maven1BuilderTest.java,v 1.3 2005/04/06 13:57:20 trygvis Exp $
  */
-public class Maven1BuilderTest
+public class MavenOneBuildExecutorTest
     extends PlexusTestCase
 {
     public void testUpdatingAProjectFromScmWithAExistingProjectAndAEmptyMaven1Pom()
         throws Exception
     {
-        BuilderManager builderManager = (BuilderManager) lookup( BuilderManager.ROLE );
+        BuildExecutorManager builderManager = (BuildExecutorManager) lookup( BuildExecutorManager.ROLE );
 
-        Maven1Builder builder = (Maven1Builder) builderManager.getBuilder( Maven1Builder.ID );
+        MavenOneBuildExecutor executor = (MavenOneBuildExecutor) builderManager.getBuilder( MavenOneBuildExecutor.ID );
 
         // ----------------------------------------------------------------------
         // Make a checkout
@@ -70,13 +70,13 @@ public class Maven1BuilderTest
 
         Properties expectedConfiguration = new Properties();
 
-        expectedConfiguration.put( Maven1Builder.CONFIGURATION_GOALS, "clean:clean, jar:install" );
+        expectedConfiguration.put( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean, jar:install" );
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        builder.updateProjectFromCheckOut( checkOut, project );
+        executor.updateProjectFromCheckOut( checkOut, project );
 
         // ----------------------------------------------------------------------
         //
@@ -98,6 +98,6 @@ public class Maven1BuilderTest
 
         assertEquals( 1, configuration.size() );
 
-        assertEquals( "clean:clean, jar:install", configuration.getProperty( Maven1Builder.CONFIGURATION_GOALS ) );
+        assertEquals( "clean:clean, jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
     }
 }

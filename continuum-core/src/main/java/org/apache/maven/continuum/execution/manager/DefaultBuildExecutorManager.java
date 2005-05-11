@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.manager;
+package org.apache.maven.continuum.execution.manager;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.builder.ContinuumBuilder;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -30,11 +30,11 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id: DefaultBuilderManager.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
  */
-public class DefaultBuilderManager
+public class DefaultBuildExecutorManager
     extends AbstractLogEnabled
-    implements BuilderManager, Initializable
+    implements BuildExecutorManager, Initializable
 {
-    private Map builders;
+    private Map executors;
 
     // ----------------------------------------------------------------------
     // Component Lifecycle
@@ -43,12 +43,12 @@ public class DefaultBuilderManager
     public void initialize()
         throws Exception
     {
-        if ( builders == null )
+        if ( executors == null )
         {
-            builders = new HashMap();
+            executors = new HashMap();
         }
 
-        if ( builders.size() == 0 )
+        if ( executors.size() == 0 )
         {
             getLogger().warn( "No builders defined." );
         }
@@ -56,7 +56,7 @@ public class DefaultBuilderManager
         {
             getLogger().info( "Builders:" );
 
-            for ( Iterator it = builders.keySet().iterator(); it.hasNext(); )
+            for ( Iterator it = executors.keySet().iterator(); it.hasNext(); )
             {
                 getLogger().info( "  " + it.next().toString() );
             }
@@ -67,10 +67,10 @@ public class DefaultBuilderManager
     // BuilderManager Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumBuilder getBuilder( String builderType )
+    public ContinuumBuildExecutor getBuilder( String builderType )
         throws ContinuumException
     {
-        ContinuumBuilder builder = (ContinuumBuilder) builders.get( builderType );
+        ContinuumBuildExecutor builder = (ContinuumBuildExecutor) executors.get( builderType );
 
         if ( builder == null )
         {
@@ -82,6 +82,6 @@ public class DefaultBuilderManager
 
     public boolean hasBuilder( String builderType )
     {
-        return builders.containsKey( builderType );
+        return executors.containsKey( builderType );
     }
 }

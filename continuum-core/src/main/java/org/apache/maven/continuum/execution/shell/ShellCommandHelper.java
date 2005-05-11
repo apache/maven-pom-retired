@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.manager;
+package org.apache.maven.continuum.execution.shell;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,18 +16,16 @@ package org.apache.maven.continuum.builder.manager;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import java.io.File;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id: ShellCommandHelper.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
  */
-public class DefaultBuilderManagerTest
-    extends PlexusTestCase
+public interface ShellCommandHelper
 {
-    public void testBasic()
-        throws Exception
-    {
-        lookup( BuilderManager.ROLE );
-    }
+    String ROLE = ShellCommandHelper.class.getName();
+
+    ExecutionResult executeShellCommand( File workingDirectory, String shellCommand, String[] arguments )
+        throws Exception;
 }

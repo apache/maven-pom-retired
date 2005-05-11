@@ -5,7 +5,7 @@
       <implementation>org.apache.maven.continuum.DefaultContinuum</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.builder.manager.BuilderManager</role>
+          <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager</role>
@@ -34,12 +34,12 @@
     </component>
 
     <component>
-      <role>org.apache.maven.continuum.builder.manager.BuilderManager</role>
-      <implementation>org.apache.maven.continuum.builder.manager.DefaultBuilderManager</implementation>
+      <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
+      <implementation>org.apache.maven.continuum.execution.manager.DefaultBuildExecutorManager</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.builder.ContinuumBuilder</role>
-          <field-name>builders</field-name>
+          <role>org.apache.maven.continuum.execution.ContinuumBuildExecutor</role>
+          <field-name>executors</field-name>
         </requirement>
       </requirements>
     </component>
@@ -60,7 +60,7 @@
       <implementation>org.apache.maven.continuum.buildcontroller.DefaultBuildController</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.builder.manager.BuilderManager</role>
+          <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
@@ -171,30 +171,30 @@
 
     <!--
      |
-     | Builders
+     | Executorss
      |
      |-->
     <component>
-      <role>org.apache.maven.continuum.builder.ContinuumBuilder</role>
+      <role>org.apache.maven.continuum.execution.ContinuumBuildExecutor</role>
       <role-hint>maven2</role-hint>
-      <implementation>org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder</implementation>
+      <implementation>org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor</implementation>
       <configuration>
         <executable>m2</executable>
         <arguments>-N</arguments>
       </configuration>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
+          <role>org.apache.maven.continuum.execution.shell.ShellCommandHelper</role>
         </requirement>
         <requirement>
-          <role>org.apache.maven.continuum.builder.maven.m2.MavenBuilderHelper</role>
+          <role>org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper</role>
         </requirement>
       </requirements>
     </component>
 
     <component>
-      <role>org.apache.maven.continuum.builder.maven.m2.MavenBuilderHelper</role>
-      <implementation>org.apache.maven.continuum.builder.maven.m2.DefaultMavenBuilderHelper</implementation>
+      <role>org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper</role>
+      <implementation>org.apache.maven.continuum.execution.maven.m2.DefaultMavenBuilderHelper</implementation>
       <requirements>
         <requirement>
           <role>org.apache.maven.project.MavenProjectBuilder</role>
@@ -224,50 +224,50 @@
     </component>
 
     <component>
-      <role>org.apache.maven.continuum.builder.ContinuumBuilder</role>
+      <role>org.apache.maven.continuum.execution.ContinuumBuildExecutor</role>
       <role-hint>maven-1</role-hint>
-      <implementation>org.apache.maven.continuum.builder.maven.m1.Maven1Builder</implementation>
+      <implementation>org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor</implementation>
       <configuration>
         <maven-command>maven</maven-command>
       </configuration>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
+          <role>org.apache.maven.continuum.execution.shell.ShellCommandHelper</role>
         </requirement>
         <requirement>
-          <role>org.apache.maven.continuum.builder.maven.m1.MavenOneMetadataHelper</role>
+          <role>org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper</role>
         </requirement>
       </requirements>
     </component>
 
     <component>
-      <role>org.apache.maven.continuum.builder.maven.m1.MavenOneMetadataHelper</role>
-      <implementation>org.apache.maven.continuum.builder.maven.m1.DefaultMavenOneMetadataHelper</implementation>
+      <role>org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper</role>
+      <implementation>org.apache.maven.continuum.execution.maven.m1.DefaultMavenOneMetadataHelper</implementation>
     </component>
 
     <component>
-      <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
-      <implementation>org.apache.maven.continuum.builder.shell.DefaultShellCommandHelper</implementation>
+      <role>org.apache.maven.continuum.execution.shell.ShellCommandHelper</role>
+      <implementation>org.apache.maven.continuum.execution.shell.DefaultShellCommandHelper</implementation>
     </component>
 
     <component>
-      <role>org.apache.maven.continuum.builder.ContinuumBuilder</role>
+      <role>org.apache.maven.continuum.execution.ContinuumBuildExecutor</role>
       <role-hint>ant</role-hint>
-      <implementation>org.apache.maven.continuum.builder.ant.AntBuilder</implementation>
+      <implementation>org.apache.maven.continuum.execution.ant.AntBuildExecutor</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
+          <role>org.apache.maven.continuum.execution.shell.ShellCommandHelper</role>
         </requirement>
       </requirements>
     </component>
 
     <component>
-      <role>org.apache.maven.continuum.builder.ContinuumBuilder</role>
+      <role>org.apache.maven.continuum.execution.ContinuumBuildExecutor</role>
       <role-hint>shell</role-hint>
-      <implementation>org.apache.maven.continuum.builder.shell.ShellBuilder</implementation>
+      <implementation>org.apache.maven.continuum.execution.shell.ShellBuildExecutor</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.builder.shell.ShellCommandHelper</role>
+          <role>org.apache.maven.continuum.execution.shell.ShellCommandHelper</role>
         </requirement>
       </requirements>
     </component>
@@ -284,7 +284,7 @@
       <implementation>org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.builder.maven.m1.MavenOneMetadataHelper</role>
+          <role>org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper</role>
         </requirement>
       </requirements>
     </component>
@@ -295,7 +295,7 @@
       <implementation>org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.builder.maven.m2.MavenBuilderHelper</role>
+          <role>org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper</role>
         </requirement>
       </requirements>
     </component>

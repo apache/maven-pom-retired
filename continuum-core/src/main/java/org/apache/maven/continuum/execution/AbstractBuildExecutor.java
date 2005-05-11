@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder;
+package org.apache.maven.continuum.execution;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -32,9 +32,9 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id: AbstractContinuumBuilder.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
  */
-public abstract class AbstractContinuumBuilder
+public abstract class AbstractBuildExecutor
     extends AbstractLogEnabled
-    implements ContinuumBuilder
+    implements ContinuumBuildExecutor
 {
     protected String getConfigurationString( Properties configuration, String property )
         throws ContinuumException

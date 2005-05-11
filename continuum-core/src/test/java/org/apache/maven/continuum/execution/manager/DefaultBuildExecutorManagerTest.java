@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.manager;
+package org.apache.maven.continuum.execution.manager;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,15 +16,20 @@ package org.apache.maven.continuum.builder.manager;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
+
+import org.codehaus.plexus.PlexusTestCase;
+
 /**
- * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: BuilderNotFoundException.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
+ * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @version $Id:$
  */
-public class BuilderNotFoundException
-    extends Exception
+public class DefaultBuildExecutorManagerTest
+    extends PlexusTestCase
 {
-    public BuilderNotFoundException( String message )
+    public void testBasic()
+        throws Exception
     {
-        super( message );
+        lookup( BuildExecutorManager.ROLE );
     }
 }

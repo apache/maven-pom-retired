@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.shell;
+package org.apache.maven.continuum.execution.maven.m1;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -18,14 +18,17 @@ package org.apache.maven.continuum.builder.shell;
 
 import java.io.File;
 
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.project.ContinuumProject;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ShellCommandHelper.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
+ * @version $Id:$
  */
-public interface ShellCommandHelper
+public interface MavenOneMetadataHelper
 {
-    String ROLE = ShellCommandHelper.class.getName();
+    String ROLE = MavenOneMetadataHelper.class.getName();
 
-    ExecutionResult executeShellCommand( File workingDirectory, String shellCommand, String[] arguments )
-        throws Exception;
+    void mapMetadata( File metadata, ContinuumProject project )
+        throws ContinuumException;
 }

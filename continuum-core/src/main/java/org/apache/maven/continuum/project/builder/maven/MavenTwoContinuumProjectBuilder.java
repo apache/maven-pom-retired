@@ -19,13 +19,13 @@ package org.apache.maven.continuum.project.builder.maven;
 import java.io.File;
 import java.net.URL;
 
-import org.apache.maven.continuum.builder.AbstractContinuumBuilder;
-import org.apache.maven.continuum.builder.maven.m2.MavenBuilderHelper;
-import org.apache.maven.continuum.builder.maven.m2.MavenShellBuilder;
-import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
+import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.execution.AbstractBuildExecutor;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
@@ -59,7 +59,7 @@ public class MavenTwoContinuumProjectBuilder
 
         try
         {
-            File file = AbstractContinuumBuilder.createMetadataFile( url );
+            File file = AbstractBuildExecutor.createMetadataFile( url );
 
             builderHelper.mapMetadataToProject( file, project );
         }
@@ -68,7 +68,7 @@ public class MavenTwoContinuumProjectBuilder
             throw new ContinuumProjectBuilderException( "Cannot create continuum project.", e );
         }
 
-        project.setExecutorId( MavenShellBuilder.ID );
+        project.setExecutorId( MavenTwoBuildExecutor.ID );
 
         result.addProject( project );
 

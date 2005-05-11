@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.maven.m1;
+package org.apache.maven.continuum.execution.manager;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,19 +16,15 @@ package org.apache.maven.continuum.builder.maven.m1;
  * limitations under the License.
  */
 
-import java.io.File;
-
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.project.ContinuumProject;
-
 /**
- * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
+ * @version $Id: BuilderNotFoundException.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
  */
-public interface MavenOneMetadataHelper
+public class BuildExecutorNotFoundException
+    extends Exception
 {
-    String ROLE = MavenOneMetadataHelper.class.getName();
-
-    void mapMetadata( File metadata, ContinuumProject project )
-        throws ContinuumException;
+    public BuildExecutorNotFoundException( String message )
+    {
+        super( message );
+    }
 }

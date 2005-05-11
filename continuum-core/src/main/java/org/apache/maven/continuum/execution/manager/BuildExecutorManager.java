@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.manager;
+package org.apache.maven.continuum.execution.manager;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -17,17 +17,17 @@ package org.apache.maven.continuum.builder.manager;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.builder.ContinuumBuilder;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id: BuilderManager.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
  */
-public interface BuilderManager
+public interface BuildExecutorManager
 {
-    String ROLE = BuilderManager.class.getName();
+    String ROLE = BuildExecutorManager.class.getName();
 
-    ContinuumBuilder getBuilder( String builderType )
+    ContinuumBuildExecutor getBuilder( String builderType )
         throws ContinuumException;
 
     boolean hasBuilder( String builderType );

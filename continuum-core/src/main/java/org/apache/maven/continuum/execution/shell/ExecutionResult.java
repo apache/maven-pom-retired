@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.shell;
+package org.apache.maven.continuum.execution.shell;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.

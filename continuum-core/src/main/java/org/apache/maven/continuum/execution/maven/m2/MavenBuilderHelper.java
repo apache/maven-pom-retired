@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.maven.m2;
+package org.apache.maven.continuum.execution.maven.m2;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.

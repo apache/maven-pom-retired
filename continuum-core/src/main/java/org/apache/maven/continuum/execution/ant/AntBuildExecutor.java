@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.builder.maven.m1;
+package org.apache.maven.continuum.execution.ant;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -20,52 +20,50 @@ import java.io.File;
 import java.util.Properties;
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.builder.AbstractContinuumBuilder;
-import org.apache.maven.continuum.builder.ContinuumBuilder;
-import org.apache.maven.continuum.builder.shell.ExecutionResult;
-import org.apache.maven.continuum.builder.shell.ShellCommandHelper;
+import org.apache.maven.continuum.execution.AbstractBuildExecutor;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
+import org.apache.maven.continuum.execution.shell.ExecutionResult;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: Maven1Builder.java,v 1.2 2005/04/03 21:27:17 trygvis Exp $
+ * @version $Id: AntBuilder.java,v 1.3 2005/04/07 23:27:39 trygvis Exp $
  */
-public class Maven1Builder
-    extends AbstractContinuumBuilder
-    implements ContinuumBuilder
+public class AntBuildExecutor
+    extends AbstractBuildExecutor
+    implements ContinuumBuildExecutor
 {
-    public final static String CONFIGURATION_GOALS = "goals";
+    public static final String CONFIGURATION_EXECUTABLE = "executable";
 
-    public final static String ID = "maven-1";
+    public static final String CONFIGURATION_TARGETS = "targets";
+
+    public static final String ID = "ant";
 
     /** @requirement */
     private ShellCommandHelper shellCommandHelper;
 
-    /** @requirement */
-    private MavenOneMetadataHelper metadataHelper;
-
-    /** @configuration */
-    private String mavenCommand;
-
     // ----------------------------------------------------------------------
-    // Builder Implementation
+    // ContinuumBuilder Implementation
     // ----------------------------------------------------------------------
 
     public ContinuumBuildResult build( ContinuumProject project )
         throws ContinuumException
     {
-        Properties configuration = project.getConfiguration();
-
         File workingDirectory = new File( project.getWorkingDirectory() );
 
-        String[] goals = getConfigurationStringArray( configuration, CONFIGURATION_GOALS, "," );
+        Properties configuration = project.getConfiguration();
+
+        String executable = getConfigurationString( configuration, CONFIGURATION_EXECUTABLE );
+
+        String[] targets = getConfigurationStringArray( configuration, CONFIGURATION_TARGETS, "," );
 
         ExecutionResult executionResult;
 
         try
         {
-            executionResult = shellCommandHelper.executeShellCommand( workingDirectory, mavenCommand, goals );
+            executionResult = shellCommandHelper.executeShellCommand( workingDirectory, executable, targets );
         }
         catch ( Exception e )
         {
@@ -74,7 +72,7 @@ public class Maven1Builder
 
         boolean success = executionResult.getExitCode() == 0;
 
-        Maven1BuildResult result = new Maven1BuildResult();
+        AntBuildResult result = new AntBuildResult();
 
         result.setSuccess( success );
 
@@ -87,28 +85,19 @@ public class Maven1Builder
         return result;
     }
 
-//    public ContinuumProject createProjectFromMetadata( URL metadata )
-//        throws ContinuumException
-//    {
-//        File pomFile = createMetadataFile( metadata );
-//
-//        ContinuumProject project = new ContinuumProject();
-//
-//        mapMetadata( pomFile, project );
-//
-//        return project;
-//    }
-
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
         throws ContinuumException
     {
-        File projectXmlFile = new File( workingDirectory, "project.xml" );
+        Properties configuration = new Properties();
 
-        if ( !projectXmlFile.isFile() )
+        if ( !configuration.containsKey( CONFIGURATION_EXECUTABLE ) )
         {
-            throw new ContinuumException( "Could not find Maven project descriptor." );
+            configuration.setProperty( CONFIGURATION_EXECUTABLE, "ant" );
         }
 
-        metadataHelper.mapMetadata( projectXmlFile, project );
+        if ( !configuration.containsKey( CONFIGURATION_TARGETS ) )
+        {
+            configuration.setProperty( CONFIGURATION_TARGETS, "" );
+        }
     }
 }

@@ -26,8 +26,8 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.builder.ant.AntBuilder;
-import org.apache.maven.continuum.builder.shell.ShellBuilder;
+import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
+import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -99,7 +99,7 @@ public class DefaultContinuumXmlRpc
                                     String version,
                                     Hashtable configuration )
     {
-        return addProjectFromScm( scmUrl, AntBuilder.ID, projectName, nagEmailAddress, version, configuration );
+        return addProjectFromScm( scmUrl, AntBuildExecutor.ID, projectName, nagEmailAddress, version, configuration );
     }
 
     // ----------------------------------------------------------------------
@@ -112,7 +112,7 @@ public class DefaultContinuumXmlRpc
                                       String version,
                                       Hashtable configuration )
     {
-        return addProjectFromScm( scmUrl, ShellBuilder.ID, projectName, nagEmailAddress, version, configuration );
+        return addProjectFromScm( scmUrl, ShellBuildExecutor.ID, projectName, nagEmailAddress, version, configuration );
     }
 
     // ----------------------------------------------------------------------
