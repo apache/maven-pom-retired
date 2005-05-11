@@ -5,48 +5,30 @@
   <version>1.0-alpha-2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
-  <url>http://cvs.continuum.codehaus.org/</url>
+  <url>http://maven.apache.org/continuum/</url>
   <ciManagement>
     <system>continuum</system>
-    <url>http://continuum.codehaus.org/continuumweb/servlet/continuum</url>
+    <url>http://maven.zones.apache.org:8080/continuumweb/servlet/continuum</url>
     <notifiers>
       <notifier>
         <type>mail</type>
-        <address>dev@continuum.codehaus.org</address>
+        <address>continuum-dev@maven.apache.org</address>
       </notifier>
     </notifiers>
   </ciManagement>
   <inceptionYear>2003</inceptionYear>
   <mailingLists>
     <mailingList>
-      <name>Continuum Announce List</name>
-      <subscribe>announce-subscribe@continuum.codehaus.org</subscribe>
-      <unsubscribe>announce-unsubscribe@continuum.codehaus.org</unsubscribe>
-      <archive>http://archive.continuum.codehaus.org/</archive>
-    </mailingList>
-    <mailingList>
-      <name>Continuum Despots List</name>
-      <subscribe>despots-subscribe@continuum.codehaus.org</subscribe>
-      <unsubscribe>despots-unsubscribe@continuum.codehaus.org</unsubscribe>
-      <archive>http://archive.continuum.codehaus.org/</archive>
-    </mailingList>
-    <mailingList>
       <name>Continuum Dev List</name>
-      <subscribe>dev-subscribe@continuum.codehaus.org</subscribe>
-      <unsubscribe>dev-unsubscribe@continuum.codehaus.org</unsubscribe>
-      <archive>http://archive.continuum.codehaus.org/</archive>
+      <subscribe>continuum-dev-subscribe@maven.apache.org</subscribe>
+      <unsubscribe>continuum-dev-unsubscribe@maven.apache.org</unsubscribe>
+      <archive>http://mail-archives.apache.org/mod_mbox/</archive>
     </mailingList>
     <mailingList>
       <name>Continuum User List</name>
-      <subscribe>user-subscribe@continuum.codehaus.org</subscribe>
-      <unsubscribe>user-unsubscribe@continuum.codehaus.org</unsubscribe>
-      <archive>http://archive.continuum.codehaus.org/</archive>
-    </mailingList>
-    <mailingList>
-      <name>Continuum SCM List</name>
-      <subscribe>scm-subscribe@continuum.codehaus.org</subscribe>
-      <unsubscribe>scm-unsubscribe@continuum.codehaus.org</unsubscribe>
-      <archive>http://archive.continuum.codehaus.org/</archive>
+      <subscribe>continuum-user-subscribe@maven.apache.org</subscribe>
+      <unsubscribe>continuum-user-unsubscribe@maven.apache.org</unsubscribe>
+      <archive>http://mail-archives.apache.org/mod_mbox</archive>
     </mailingList>
   </mailingLists>
   <dependencies>
