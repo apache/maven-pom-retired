@@ -29,6 +29,13 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
+import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
+import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
@@ -47,12 +54,6 @@ import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.queue.CheckOutTask;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
-import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
-import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
-import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -153,7 +154,7 @@ public class DefaultContinuum
         }
         catch ( MalformedURLException e )
         {
-            throw new ContinuumException( "Invalid URL", e );
+            throw new ContinuumException( "Invalid URL.", e );
         }
 
         return addProjectsFromUrl( u, executorId );
@@ -170,9 +171,9 @@ public class DefaultContinuum
 
             pomFile = File.createTempFile( "continuum-", "-pom-download" );
 
-            FileUtils.fileWrite( pomFile.getAbsolutePath(), pom );
+            pomFile.deleteOnExit();
 
-            getLogger().info( "wrote pom to " + pomFile );
+            FileUtils.fileWrite( pomFile.getAbsolutePath(), pom );
         }
         catch ( IOException ex )
         {
@@ -802,7 +803,14 @@ public class DefaultContinuum
 
         ContinuumBuildExecutor builder = buildExecutorManager.getBuilder( project.getExecutorId() );
 
-        builder.updateProjectFromCheckOut( new File( project.getWorkingDirectory() ), project );
+        try
+        {
+            builder.updateProjectFromCheckOut( new File( project.getWorkingDirectory() ), project );
+        }
+        catch ( ContinuumBuildExecutorException e )
+        {
+            throw new ContinuumException( "Error while updating project from check out.", e);
+        }
 
         // ----------------------------------------------------------------------
         // Store the new descriptor

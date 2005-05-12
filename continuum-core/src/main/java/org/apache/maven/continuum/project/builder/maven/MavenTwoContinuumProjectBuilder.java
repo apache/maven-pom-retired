@@ -16,28 +16,33 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
-import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 
+import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
+import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException;
+import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
-import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.execution.AbstractBuildExecutor;
-
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.apache.maven.project.MavenProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id:$
  */
 public class MavenTwoContinuumProjectBuilder
-    extends AbstractLogEnabled
+    extends AbstractContinuumProjectBuilder
     implements ContinuumProjectBuilder
 {
     public static final String ID = "maven-two-builder";
+
+    private static final String POM_PART = "/pom.xml";
 
     /** @requirement */
     private MavenBuilderHelper builderHelper;
@@ -55,23 +60,68 @@ public class MavenTwoContinuumProjectBuilder
 
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
 
-        MavenTwoProject project = new MavenTwoProject();
+        try
+        {
+            readModules( url, result );
+        }
+        catch ( MalformedURLException e )
+        {
+            throw new ContinuumProjectBuilderException( "Error while building Maven project.", e );
+        }
+
+        return result;
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private void readModules( URL url, ContinuumProjectBuildingResult result )
+        throws MalformedURLException, ContinuumProjectBuilderException
+    {
+        MavenProject mavenProject = null;
 
         try
         {
-            File file = AbstractBuildExecutor.createMetadataFile( url );
-
-            builderHelper.mapMetadataToProject( file, project );
+            mavenProject = builderHelper.getMavenProject( createMetadataFile( url ) );
         }
-        catch ( Exception e )
+        catch ( MavenBuilderHelperException e )
         {
-            throw new ContinuumProjectBuilderException( "Cannot create continuum project.", e );
+            throw new ContinuumProjectBuilderException( "Error while building Maven project.", e );
+        }
+        catch ( IOException e )
+        {
+
         }
 
-        project.setExecutorId( MavenTwoBuildExecutor.ID );
+        MavenTwoProject continuumProject = new MavenTwoProject();
 
-        result.addProject( project );
+        builderHelper.mapMavenProjectToContinuumProject( mavenProject, continuumProject );
 
-        return result;
+        result.addProject( continuumProject, MavenTwoBuildExecutor.ID );
+
+        List modules = mavenProject.getModules();
+
+        String prefix = url.toExternalForm();
+
+        String suffix = "";
+
+        int i = prefix.indexOf( '?' );
+
+        if ( i != -1 )
+        {
+            suffix = prefix.substring( i );
+
+            prefix = prefix.substring( 0, i - POM_PART.length() );
+        }
+
+        for ( Iterator it = modules.iterator(); it.hasNext(); )
+        {
+            String module = (String) it.next();
+
+            URL moduleUrl = new URL( prefix + "/" + module + POM_PART + suffix );
+
+            readModules( moduleUrl, result );
+        }
     }
 }

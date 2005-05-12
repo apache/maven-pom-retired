@@ -19,22 +19,20 @@ package org.apache.maven.continuum.project.builder.maven;
 import java.io.File;
 import java.net.URL;
 
+import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper;
 import org.apache.maven.continuum.project.MavenOneProject;
+import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper;
-import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
-import org.apache.maven.continuum.execution.AbstractBuildExecutor;
-
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id:$
  */
 public class MavenOneContinuumProjectBuilder
-    extends AbstractLogEnabled
+    extends AbstractContinuumProjectBuilder
     implements ContinuumProjectBuilder
 {
     public static final String ID = "maven-one-builder";
@@ -53,15 +51,15 @@ public class MavenOneContinuumProjectBuilder
 
         try
         {
-            File pomFile = AbstractBuildExecutor.createMetadataFile( url );
+            getLogger().info( "Downloading " + url.toExternalForm() );
+
+            File pomFile = createMetadataFile( url );
 
             MavenOneProject project = new MavenOneProject();
 
             metadataHelper.mapMetadata( pomFile, project );
 
-            project.setExecutorId( MavenOneBuildExecutor.ID );
-
-            result.addProject( project );
+            result.addProject( project, MavenOneBuildExecutor.ID );
         }
         catch ( Exception e )
         {

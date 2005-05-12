@@ -19,11 +19,11 @@ package org.apache.maven.continuum.execution.maven.m1;
 import java.io.File;
 import java.util.Properties;
 
-import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.AbstractBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
-import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.execution.shell.ExecutionResult;
+import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 
@@ -53,7 +53,7 @@ public class MavenOneBuildExecutor
     // ----------------------------------------------------------------------
 
     public ContinuumBuildResult build( ContinuumProject project )
-        throws ContinuumException
+        throws ContinuumBuildExecutorException
     {
         Properties configuration = project.getConfiguration();
 
@@ -69,7 +69,7 @@ public class MavenOneBuildExecutor
         }
         catch ( Exception e )
         {
-            throw new ContinuumException( "Error while executing shell command.", e );
+            throw new ContinuumBuildExecutorException( "Error while executing shell command.", e );
         }
 
         boolean success = executionResult.getExitCode() == 0;
@@ -87,28 +87,23 @@ public class MavenOneBuildExecutor
         return result;
     }
 
-//    public ContinuumProject createProjectFromMetadata( URL metadata )
-//        throws ContinuumException
-//    {
-//        File pomFile = createMetadataFile( metadata );
-//
-//        ContinuumProject project = new ContinuumProject();
-//
-//        mapMetadata( pomFile, project );
-//
-//        return project;
-//    }
-
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
-        throws ContinuumException
+        throws ContinuumBuildExecutorException
     {
         File projectXmlFile = new File( workingDirectory, "project.xml" );
 
         if ( !projectXmlFile.isFile() )
         {
-            throw new ContinuumException( "Could not find Maven project descriptor." );
+            throw new ContinuumBuildExecutorException( "Could not find Maven project descriptor." );
         }
 
-        metadataHelper.mapMetadata( projectXmlFile, project );
+        try
+        {
+            metadataHelper.mapMetadata( projectXmlFile, project );
+        }
+        catch ( MavenOneMetadataHelperException e )
+        {
+            throw new ContinuumBuildExecutorException( "Error while mapping metadata.", e );
+        }
     }
 }

@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -41,7 +40,7 @@ public class DefaultMavenOneMetadataHelper
     // ----------------------------------------------------------------------
 
     public void mapMetadata( File metadata, ContinuumProject project )
-        throws ContinuumException
+        throws MavenOneMetadataHelperException
     {
         Xpp3Dom mavenProject;
 
@@ -51,7 +50,7 @@ public class DefaultMavenOneMetadataHelper
         }
         catch ( Exception e )
         {
-            throw new ContinuumException( "Error while reading maven POM.", e );
+            throw new MavenOneMetadataHelperException( "Error while reading maven POM.", e );
         }
 
         // ----------------------------------------------------------------------
@@ -63,7 +62,7 @@ public class DefaultMavenOneMetadataHelper
 
         if ( StringUtils.isEmpty( name ) )
         {
-            throw new ContinuumException( "Missing <name> from the project descriptor." );
+            throw new MavenOneMetadataHelperException( "Missing <name> from the project descriptor." );
         }
 
         // Scm
@@ -79,7 +78,7 @@ public class DefaultMavenOneMetadataHelper
             }
             else
             {
-                throw new ContinuumException( "The project descriptor is missing the SCM information." );
+                throw new MavenOneMetadataHelperException( "The project descriptor is missing the SCM information." );
             }
         }
         else
@@ -90,7 +89,7 @@ public class DefaultMavenOneMetadataHelper
 
             if ( StringUtils.isEmpty( scmConnection ) )
             {
-                throw new ContinuumException( "Missing both anonymous and developer scm connection urls." );
+                throw new MavenOneMetadataHelperException( "Missing both anonymous and developer scm connection urls." );
             }
         }
 
@@ -107,7 +106,7 @@ public class DefaultMavenOneMetadataHelper
             }
             else
             {
-                throw new ContinuumException( "Missing build section." );
+                throw new MavenOneMetadataHelperException( "Missing build section." );
             }
         }
         else
@@ -117,7 +116,7 @@ public class DefaultMavenOneMetadataHelper
 
         if ( StringUtils.isEmpty( nagEmailAddress ) )
         {
-            throw new ContinuumException( "Missing nag email address from the project descriptor." );
+            throw new MavenOneMetadataHelperException( "Missing nag email address from the project descriptor." );
         }
 
         // Version
@@ -125,7 +124,7 @@ public class DefaultMavenOneMetadataHelper
 
         if ( StringUtils.isEmpty( version ) )
         {
-            throw new ContinuumException( "Missing version from the project descriptor." );
+            throw new MavenOneMetadataHelperException( "Missing version from the project descriptor." );
         }
 
         // Goals

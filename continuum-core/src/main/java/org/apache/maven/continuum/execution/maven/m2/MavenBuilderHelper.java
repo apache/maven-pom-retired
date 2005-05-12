@@ -18,8 +18,8 @@ package org.apache.maven.continuum.execution.maven.m2;
 
 import java.io.File;
 
-import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.project.MavenProject;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -29,12 +29,11 @@ public interface MavenBuilderHelper
 {
     String ROLE = MavenBuilderHelper.class.getName();
 
-//    public ContinuumProject createProjectFromMetadata( URL metadata )
-//        throws ContinuumException;
-
-//    public void updateProjectFromMetadata( File workingDirectory, ContinuumProject project )
-//        throws ContinuumException;
-
     void mapMetadataToProject( File metadata, ContinuumProject project )
-        throws ContinuumException;
+        throws MavenBuilderHelperException;
+
+    MavenProject getMavenProject( File file )
+        throws MavenBuilderHelperException;
+
+    void mapMavenProjectToContinuumProject( MavenProject mavenProject, ContinuumProject continuumProject );
 }

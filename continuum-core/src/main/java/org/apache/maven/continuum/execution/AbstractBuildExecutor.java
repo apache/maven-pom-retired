@@ -16,16 +16,9 @@ package org.apache.maven.continuum.execution;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Properties;
 
-import org.apache.maven.continuum.ContinuumException;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -37,20 +30,20 @@ public abstract class AbstractBuildExecutor
     implements ContinuumBuildExecutor
 {
     protected String getConfigurationString( Properties configuration, String property )
-        throws ContinuumException
+        throws ContinuumBuildExecutorException
     {
         String string = configuration.getProperty( property );
 
         if ( StringUtils.isEmpty( string ) )
         {
-            throw new ContinuumException( "Missing configuration: '" + property + "'." );
+            throw new ContinuumBuildExecutorException( "Missing configuration: '" + property + "'." );
         }
 
         return string;
     }
 
     protected String getConfigurationString( Properties configuration, String property, String defaultValue )
-        throws ContinuumException
+        throws ContinuumBuildExecutorException
     {
         String string = configuration.getProperty( property );
 
@@ -63,7 +56,7 @@ public abstract class AbstractBuildExecutor
     }
 
     protected String[] getConfigurationStringArray( Properties configuration, String property, String separator )
-        throws ContinuumException
+        throws ContinuumBuildExecutorException
     {
         String value = getConfigurationString( configuration, property );
 
@@ -71,7 +64,7 @@ public abstract class AbstractBuildExecutor
     }
 
     protected String[] getConfigurationStringArray( Properties configuration, String property, String separator, String[] defaultValue )
-        throws ContinuumException
+        throws ContinuumBuildExecutorException
     {
         String value = getConfigurationString( configuration, property, null );
 
@@ -93,30 +86,5 @@ public abstract class AbstractBuildExecutor
         }
 
         return array;
-    }
-
-    public static File createMetadataFile( URL metadata )
-        throws ContinuumException
-    {
-        try
-        {
-            InputStream is = metadata.openStream();
-
-            File file = File.createTempFile( "continuum", "tmp" );
-
-            FileWriter writer = new FileWriter( file );
-
-            IOUtil.copy( is, writer );
-
-            is.close();
-
-            writer.close();
-
-            return file;
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumException( "Cannot create metadata file:", e );
-        }
     }
 }

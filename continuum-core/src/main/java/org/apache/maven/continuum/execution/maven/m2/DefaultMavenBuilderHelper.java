@@ -17,16 +17,12 @@ package org.apache.maven.continuum.execution.maven.m2;
  */
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Notifier;
@@ -38,7 +34,7 @@ import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.settings.MavenSettings;
 import org.apache.maven.settings.MavenSettingsBuilder;
 
-import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -46,6 +42,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @version $Id: DefaultMavenBuilderHelper.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
  */
 public class DefaultMavenBuilderHelper
+    extends AbstractLogEnabled
     implements MavenBuilderHelper
 {
     /** @requirement */
@@ -67,56 +64,83 @@ public class DefaultMavenBuilderHelper
     // MavenBuilderHelper Implementation
     // ----------------------------------------------------------------------
 
-//    public ContinuumProject createProjectFromMetadata( URL metadata )
-//        throws ContinuumException
-//    {
-//        // ----------------------------------------------------------------------
-//        // We need to roll the project data into a file so that we can use it
-//        // ----------------------------------------------------------------------
-//
-//        MavenTwoProject project = new MavenTwoProject();
-//
-//        try
-//        {
-//            File file = createMetadataFile( metadata );
-//
-//            mapMetadataToProject( file, project );
-//        }
-//        catch ( Exception e )
-//        {
-//            throw new ContinuumException( "Cannot create continuum project:", e );
-//        }
-//
-//        return project;
-//    }
-//
-//    public void updateProjectFromMetadata( File workingDirectory, ContinuumProject project )
-//        throws ContinuumException
-//    {
-//        File f = new File( workingDirectory, "pom.xml" );
-//
-//        mapMetadataToProject( f, project );
-//    }
-
-    public void mapMetadataToProject( File metadata, ContinuumProject project )
-        throws ContinuumException
+    public void mapMetadataToProject( File metadata, ContinuumProject continuumProject )
+        throws MavenBuilderHelperException
     {
-        MavenProject mavenProject = getProject( metadata );
+        mapMavenProjectToContinuumProject( getMavenProject( metadata ), continuumProject );
+    }
 
-        project.setNagEmailAddress( getNagEmailAddress( mavenProject ) );
+    public void mapMavenProjectToContinuumProject( MavenProject mavenProject, ContinuumProject continuumProject )
+    {
+        continuumProject.setNagEmailAddress( getNagEmailAddress( mavenProject ) );
 
-        project.setName( getProjectName( mavenProject ) );
+        continuumProject.setName( getProjectName( mavenProject ) );
 
-        project.setScmUrl( getScmUrl( mavenProject ) );
+        continuumProject.setScmUrl( getScmUrl( mavenProject ) );
 
-        project.setVersion( getVersion( mavenProject ) );
+        continuumProject.setVersion( getVersion( mavenProject ) );
 
-        Properties configuration = project.getConfiguration();
+        Properties configuration = continuumProject.getConfiguration();
 
         if ( !configuration.containsKey( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) )
         {
             configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, "clean:clean, install" );
         }
+    }
+
+    public MavenProject getMavenProject( File file )
+        throws MavenBuilderHelperException
+    {
+        MavenProject project = null;
+
+        try
+        {
+            project = projectBuilder.build( file, getRepository() );
+        }
+        catch ( ProjectBuildingException e )
+        {
+            throw new MavenBuilderHelperException( "Cannot build maven project from " + file, e );
+        }
+
+        // ----------------------------------------------------------------------
+        // Validate the MavenProject using some Continuum rules
+        // ----------------------------------------------------------------------
+
+        // Nag email address
+        CiManagement ciManagement = project.getCiManagement();
+
+        if ( ciManagement == null )
+        {
+            throw new MavenBuilderHelperException( "Missing CiManagement from the project descriptor." );
+        }
+
+        if ( StringUtils.isEmpty( getNagEmailAddress( project ) ) )
+        {
+            throw new MavenBuilderHelperException( "Missing nag email address from the continuous integration info." );
+        }
+
+        // SCM connection
+        Scm scm = project.getScm();
+
+        if ( scm == null )
+        {
+            throw new MavenBuilderHelperException( "Missing Scm from the project descriptor." );
+        }
+
+        String url = scm.getConnection();
+
+        if ( StringUtils.isEmpty( url ) )
+        {
+            throw new MavenBuilderHelperException( "Missing anonymous scm connection url." );
+        }
+
+        // Version
+        if ( StringUtils.isEmpty( project.getVersion() ) )
+        {
+            throw new MavenBuilderHelperException( "Missing version from the project descriptor." );
+        }
+
+        return project;
     }
 
     // ----------------------------------------------------------------------
@@ -127,20 +151,15 @@ public class DefaultMavenBuilderHelper
     {
         String name = project.getName();
 
-        if ( StringUtils.isEmpty( name ) )
-        {
-            name = project.getGroupId() + ":" + project.getArtifactId();
-        }
-
         return name;
     }
 
-    public String getScmUrl( MavenProject project )
+    private String getScmUrl( MavenProject project )
     {
         return project.getScm().getConnection();
     }
 
-    public String getNagEmailAddress( MavenProject project )
+    private String getNagEmailAddress( MavenProject project )
     {
         for ( Iterator it = project.getCiManagement().getNotifiers().iterator(); it.hasNext(); )
         {
@@ -155,7 +174,7 @@ public class DefaultMavenBuilderHelper
         return null;
     }
 
-    public String getVersion( MavenProject project )
+    private String getVersion( MavenProject project )
     {
         return project.getVersion();
     }
@@ -164,88 +183,8 @@ public class DefaultMavenBuilderHelper
     //
     // ----------------------------------------------------------------------
 
-    protected File createMetadataFile( URL metadata )
-        throws ContinuumException
-    {
-        try
-        {
-            InputStream is = metadata.openStream();
-
-            File f = File.createTempFile( "continuum", "tmp" );
-
-            FileWriter writer = new FileWriter( f );
-
-            IOUtil.copy( is, writer );
-
-            is.close();
-
-            writer.close();
-
-            return f;
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumException( "Cannot create metadata file:", e );
-        }
-    }
-
-    protected MavenProject getProject( File file )
-        throws ContinuumException
-    {
-        MavenProject project = null;
-
-        try
-        {
-            project = projectBuilder.build( file, getRepository() );
-        }
-        catch ( ProjectBuildingException e )
-        {
-            throw new ContinuumException( "Cannot build maven project from " + file, e );
-        }
-
-        // ----------------------------------------------------------------------
-        // Validate the MavenProject using some Continuum rules
-        // ----------------------------------------------------------------------
-
-        // Nag email address
-        CiManagement ciManagement = project.getCiManagement();
-
-        if ( ciManagement == null )
-        {
-            throw new ContinuumException( "Missing CiManagement from the project descriptor." );
-        }
-
-        if ( StringUtils.isEmpty( getNagEmailAddress( project ) ) )
-        {
-            throw new ContinuumException( "Missing nag email address from the continuous integration info." );
-        }
-
-        // SCM connection
-        Scm scm = project.getScm();
-
-        if ( scm == null )
-        {
-            throw new ContinuumException( "Missing Scm from the project descriptor." );
-        }
-
-        String url = scm.getConnection();
-
-        if ( StringUtils.isEmpty( url ) )
-        {
-            throw new ContinuumException( "Missing anonymous scm connection url." );
-        }
-
-        // Version
-        if ( StringUtils.isEmpty( project.getVersion() ) )
-        {
-            throw new ContinuumException( "Missing version from the project descriptor." );
-        }
-
-        return project;
-    }
-
     private ArtifactRepository getRepository()
-        throws ContinuumException
+        throws MavenBuilderHelperException
     {
         MavenSettings settings;
 
@@ -255,7 +194,7 @@ public class DefaultMavenBuilderHelper
         }
         catch ( Exception e )
         {
-            throw new ContinuumException( "Error while building settings.", e );
+            throw new MavenBuilderHelperException( "Error while building settings.", e );
         }
 
         Repository repository = new Repository();

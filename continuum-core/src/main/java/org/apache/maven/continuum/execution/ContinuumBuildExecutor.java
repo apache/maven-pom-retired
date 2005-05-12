@@ -18,7 +18,6 @@ package org.apache.maven.continuum.execution;
 
 import java.io.File;
 
-import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 
@@ -31,11 +30,8 @@ public interface ContinuumBuildExecutor
     String ROLE = ContinuumBuildExecutor.class.getName();
 
     ContinuumBuildResult build( ContinuumProject project )
-        throws ContinuumException;
-
-//    ContinuumProject createProjectFromMetadata( URL metadata )
-//        throws ContinuumException;
+        throws ContinuumBuildExecutorException;
 
     void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
-        throws ContinuumException;
+        throws ContinuumBuildExecutorException;
 }

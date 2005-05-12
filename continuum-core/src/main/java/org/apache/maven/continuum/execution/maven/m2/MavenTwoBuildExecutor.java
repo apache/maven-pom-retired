@@ -18,11 +18,11 @@ package org.apache.maven.continuum.execution.maven.m2;
 
 import java.io.File;
 
-import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.AbstractBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
-import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.execution.shell.ExecutionResult;
+import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 
@@ -55,7 +55,7 @@ public class MavenTwoBuildExecutor
     // ----------------------------------------------------------------------
 
     public ContinuumBuildResult build( ContinuumProject project )
-        throws ContinuumException
+        throws ContinuumBuildExecutorException
     {
         File workingDirectory = new File( project.getWorkingDirectory() );
 
@@ -71,7 +71,7 @@ public class MavenTwoBuildExecutor
         }
         catch ( Exception e )
         {
-            throw new ContinuumException( "Error while executing shell command.", e );
+            throw new ContinuumBuildExecutorException( "Error while executing shell command.", e );
         }
 
         boolean success = executionResult.getExitCode() == 0;
@@ -89,18 +89,19 @@ public class MavenTwoBuildExecutor
         return result;
     }
 
-//    public ContinuumProject createProjectFromMetadata( URL metadata )
-//        throws ContinuumException
-//    {
-//        return builderHelper.createProjectFromMetadata( metadata );
-//    }
-//
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
-        throws ContinuumException
+        throws ContinuumBuildExecutorException
     {
         File f = new File( workingDirectory, "pom.xml" );
 
-        builderHelper.mapMetadataToProject( f, project );
+        try
+        {
+            builderHelper.mapMetadataToProject( f, project );
+        }
+        catch ( MavenBuilderHelperException e )
+        {
+            throw new ContinuumBuildExecutorException( "Error while mapping metadata" );
+        }
     }
 
     // ----------------------------------------------------------------------
@@ -108,7 +109,7 @@ public class MavenTwoBuildExecutor
     // ----------------------------------------------------------------------
 
     private String[] getArguments( ContinuumProject project )
-        throws ContinuumException
+        throws ContinuumBuildExecutorException
     {
         String[] a = splitAndTrimString( this.arguments, " " );
 

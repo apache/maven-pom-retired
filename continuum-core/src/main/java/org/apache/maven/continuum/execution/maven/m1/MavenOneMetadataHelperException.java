@@ -16,18 +16,20 @@ package org.apache.maven.continuum.execution.maven.m1;
  * limitations under the License.
  */
 
-import java.io.File;
-
-import org.apache.maven.continuum.project.ContinuumProject;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id:$
  */
-public interface MavenOneMetadataHelper
+public class MavenOneMetadataHelperException
+    extends Exception
 {
-    String ROLE = MavenOneMetadataHelper.class.getName();
+    public MavenOneMetadataHelperException( String message )
+    {
+        super( message );
+    }
 
-    void mapMetadata( File metadata, ContinuumProject project )
-        throws MavenOneMetadataHelperException;
+    public MavenOneMetadataHelperException( String message, Throwable cause )
+    {
+        super( message, cause );
+    }
 }
