@@ -29,7 +29,6 @@ import org.apache.maven.continuum.network.ConnectionConsumer;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.registration.AbstractContinuumRegistrar;
 import org.apache.maven.continuum.socket.SimpleSocket;
-import org.apache.maven.continuum.utils.ContinuumUtils;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
