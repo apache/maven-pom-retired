@@ -1,0 +1,17 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>continuum-parent</artifactId>
+    <groupId>org.apache.maven.continuum</groupId>
+    <version>1.0-alpha-2-SNAPSHOT</version>
+  </parent>
+  <artifactId>continuum-api</artifactId>
+  <name>Continuum API</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-model</artifactId>
+      <version>1.0-alpha-2-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>

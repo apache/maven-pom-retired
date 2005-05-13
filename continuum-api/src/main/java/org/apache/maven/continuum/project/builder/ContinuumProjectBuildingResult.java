@@ -34,6 +34,11 @@ public class ContinuumProjectBuildingResult
         projects = new ArrayList();
     }
 
+    public void addProject( ContinuumProject project )
+    {
+        projects.add( project );
+    }
+
     public void addProject( ContinuumProject project, String executorId )
     {
         project.setExecutorId( executorId );

@@ -10,7 +10,7 @@
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-model</artifactId>
+      <artifactId>continuum-api</artifactId>
       <version>1.0-alpha-2-SNAPSHOT</version>
     </dependency>
 

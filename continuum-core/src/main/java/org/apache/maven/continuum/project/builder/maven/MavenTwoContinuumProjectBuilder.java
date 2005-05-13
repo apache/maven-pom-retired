@@ -16,7 +16,6 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -88,10 +87,6 @@ public class MavenTwoContinuumProjectBuilder
         catch ( MavenBuilderHelperException e )
         {
             throw new ContinuumProjectBuilderException( "Error while building Maven project.", e );
-        }
-        catch ( IOException e )
-        {
-
         }
 
         MavenTwoProject continuumProject = new MavenTwoProject();

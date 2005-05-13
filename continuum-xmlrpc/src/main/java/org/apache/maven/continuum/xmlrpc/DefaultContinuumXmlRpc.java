@@ -16,6 +16,8 @@ package org.apache.maven.continuum.xmlrpc;
  * limitations under the License.
  */
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -35,7 +37,6 @@ import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProject
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.UpdateScmResult;
-import org.apache.maven.continuum.utils.ContinuumUtils;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
@@ -404,8 +405,21 @@ public class DefaultContinuumXmlRpc
 
         hashtable.put( "method", method );
 
-        hashtable.put( "stackTrace", ContinuumUtils.getExceptionStackTrace( throwable ) );
+        hashtable.put( "stackTrace", getExceptionStackTrace( throwable ) );
 
         return hashtable;
     }
-}
+
+    public static String getExceptionStackTrace( Throwable ex )
+    {
+        StringWriter string = new StringWriter();
+
+        PrintWriter writer = new PrintWriter( string );
+
+        ex.printStackTrace( writer );
+
+        writer.flush();
+
+        return string.getBuffer().toString();
+    }
+ }

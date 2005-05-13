@@ -21,6 +21,7 @@ import java.net.URL;
 
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelperException;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
@@ -49,22 +50,22 @@ public class MavenOneContinuumProjectBuilder
     {
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
 
+        getLogger().info( "Downloading " + url.toExternalForm() );
+
+        File pomFile = createMetadataFile( url );
+
+        MavenOneProject project = new MavenOneProject();
+
         try
         {
-            getLogger().info( "Downloading " + url.toExternalForm() );
-
-            File pomFile = createMetadataFile( url );
-
-            MavenOneProject project = new MavenOneProject();
-
             metadataHelper.mapMetadata( pomFile, project );
-
-            result.addProject( project, MavenOneBuildExecutor.ID );
         }
-        catch ( Exception e )
+        catch ( MavenOneMetadataHelperException e )
         {
             throw new ContinuumProjectBuilderException( "Cannot create continuum project.", e );
         }
+
+        result.addProject( project, MavenOneBuildExecutor.ID );
 
         return result;
     }

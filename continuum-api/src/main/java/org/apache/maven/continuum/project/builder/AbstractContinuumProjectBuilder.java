@@ -34,24 +34,31 @@ public abstract class AbstractContinuumProjectBuilder
     implements ContinuumProjectBuilder
 {
     protected File createMetadataFile( URL metadata )
-        throws IOException
+        throws ContinuumProjectBuilderException
     {
-        getLogger().info( "Downloading " + metadata.toExternalForm() );
+        try
+        {
+            getLogger().info( "Downloading " + metadata.toExternalForm() );
 
-        InputStream is = metadata.openStream();
+            InputStream is = metadata.openStream();
 
-        File file = File.createTempFile( "continuum-", ".tmp" );
+            File file = File.createTempFile( "continuum-", ".tmp" );
 
-        file.deleteOnExit();
+            file.deleteOnExit();
 
-        FileWriter writer = new FileWriter( file );
+            FileWriter writer = new FileWriter( file );
 
-        IOUtil.copy( is, writer );
+            IOUtil.copy( is, writer );
 
-        is.close();
+            is.close();
 
-        writer.close();
+            writer.close();
 
-        return file;
+            return file;
+        }
+        catch ( IOException e )
+        {
+            throw new ContinuumProjectBuilderException( "Error while downloading metadata.", e );
+        }
     }
 }

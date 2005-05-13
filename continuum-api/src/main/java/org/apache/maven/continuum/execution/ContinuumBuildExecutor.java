@@ -29,6 +29,14 @@ public interface ContinuumBuildExecutor
 {
     String ROLE = ContinuumBuildExecutor.class.getName();
 
+    String ANT_EXECUTOR_ID = "ant";
+
+    String MAVEN_ONE_EXECUTOR_ID = "maven-one";
+
+    String MAVEN_TWO_EXECUTOR_ID = "maven-two";
+
+    String SHELL_EXECUTOR_ID = "shell";
+
     ContinuumBuildResult build( ContinuumProject project )
         throws ContinuumBuildExecutorException;
 
