@@ -410,7 +410,7 @@ public class DefaultContinuumXmlRpc
         return hashtable;
     }
 
-    public static String getExceptionStackTrace( Throwable ex )
+    private static String getExceptionStackTrace( Throwable ex )
     {
         StringWriter string = new StringWriter();
 

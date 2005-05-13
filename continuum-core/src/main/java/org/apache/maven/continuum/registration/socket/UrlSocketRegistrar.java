@@ -19,6 +19,8 @@ package org.apache.maven.continuum.registration.socket;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
@@ -67,11 +69,28 @@ public class UrlSocketRegistrar
         {
             socket.writeLine( "ERROR" );
 
-            String stackTrace = ContinuumUtils.getExceptionStackTrace( ex );
+            String stackTrace = getExceptionStackTrace( ex );
 
             socket.writeLine( "Exception while adding the project." );
 
             socket.writeLine( stackTrace );
         }
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private static String getExceptionStackTrace( Throwable ex )
+    {
+        StringWriter string = new StringWriter();
+
+        PrintWriter writer = new PrintWriter( string );
+
+        ex.printStackTrace( writer );
+
+        writer.flush();
+
+        return string.getBuffer().toString();
     }
 }
