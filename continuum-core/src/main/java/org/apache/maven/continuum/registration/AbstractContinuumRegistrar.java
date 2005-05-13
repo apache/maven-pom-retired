@@ -16,8 +16,6 @@ package org.apache.maven.continuum.registration;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
@@ -28,11 +26,4 @@ public abstract class AbstractContinuumRegistrar
     extends AbstractLogEnabled
     implements ContinuumRegistrar
 {
-    /** @requirement */
-    private Continuum continuum;
-
-    public Continuum getContinuum()
-    {
-        return continuum;
-    }
 }

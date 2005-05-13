@@ -16,8 +16,6 @@ package org.apache.maven.continuum.execution.manager;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
-
 import org.codehaus.plexus.PlexusTestCase;
 
 /**

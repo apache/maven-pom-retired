@@ -9,6 +9,9 @@
           <role>org.apache.maven.continuum.Continuum</role>
         </requirement>
         <requirement>
+          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+        </requirement>
+        <requirement>
           <role>org.apache.maven.continuum.xmlrpc.XmlRpcHelper</role>
         </requirement>
       </requirements>

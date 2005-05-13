@@ -18,16 +18,17 @@ package org.apache.maven.continuum.xmlrpc;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -52,6 +53,9 @@ public class DefaultContinuumXmlRpc
     private Continuum continuum;
 
     /** @requirement */
+    private ContinuumCore core;
+
+    /** @requirement */
     private XmlRpcHelper xmlRpcHelper;
 
     // ----------------------------------------------------------------------
@@ -62,7 +66,7 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            List projectIds = continuum.addProjectsFromUrl( url, MavenOneContinuumProjectBuilder.ID );
+            Collection projectIds = core.addProjectsFromUrl( url, MavenOneContinuumProjectBuilder.ID );
 
             return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
         }
@@ -80,7 +84,7 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            List projectIds = continuum.addProjectsFromUrl( url, MavenTwoContinuumProjectBuilder.ID );
+            Collection projectIds = core.addProjectsFromUrl( url, MavenTwoContinuumProjectBuilder.ID );
 
             return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
         }
@@ -138,12 +142,12 @@ public class DefaultContinuumXmlRpc
                 configurationProperties.put( entry.getKey().toString(), entry.getValue().toString() );
             }
 
-            String projectId = continuum.addProjectFromScm( scmUrl,
-                                                            executorId,
-                                                            projectName,
-                                                            nagEmailAddress,
-                                                            version,
-                                                            configurationProperties );
+            String projectId = core.addProjectFromScm( scmUrl,
+                                                       executorId,
+                                                       projectName,
+                                                       nagEmailAddress,
+                                                       version,
+                                                       configurationProperties );
 
             return makeHashtable( "projectId", projectId );
         }

@@ -19,13 +19,13 @@ package org.apache.maven.continuum.project.builder.maven;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Iterator;
+import java.util.Map;
 
+import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 
 import org.codehaus.plexus.PlexusTestCase;
 

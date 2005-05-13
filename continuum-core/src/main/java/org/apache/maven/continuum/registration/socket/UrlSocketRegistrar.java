@@ -19,12 +19,13 @@ package org.apache.maven.continuum.registration.socket;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
+import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.network.ConnectionConsumer;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.registration.AbstractContinuumRegistrar;
@@ -38,6 +39,9 @@ public class UrlSocketRegistrar
     extends AbstractContinuumRegistrar
     implements ConnectionConsumer
 {
+    /** @requirement */
+    private ContinuumCore core;
+
     // ----------------------------------------------------------------------
     // ConnectionConsumer Implementation
     // ----------------------------------------------------------------------
@@ -53,7 +57,7 @@ public class UrlSocketRegistrar
 
             URL u = new URL( url );
 
-            List ids = getContinuum().addProjectsFromUrl( u, MavenTwoContinuumProjectBuilder.ID );
+            Collection ids = core.addProjectsFromUrl( u, MavenTwoContinuumProjectBuilder.ID );
 
             for ( Iterator it = ids.iterator(); it.hasNext(); )
             {

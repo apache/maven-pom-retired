@@ -18,10 +18,10 @@ package org.apache.maven.continuum.project.builder.maven;
 
 import java.util.Properties;
 
+import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 
 import org.codehaus.plexus.PlexusTestCase;
 

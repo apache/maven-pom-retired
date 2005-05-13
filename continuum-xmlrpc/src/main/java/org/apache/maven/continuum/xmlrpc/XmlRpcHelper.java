@@ -17,10 +17,10 @@ package org.apache.maven.continuum.xmlrpc;
  */
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.Vector;
-import java.util.Collection;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

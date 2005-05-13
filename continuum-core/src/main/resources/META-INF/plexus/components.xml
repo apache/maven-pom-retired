@@ -1,8 +1,8 @@
 <component-set>
   <components>
     <component>
-      <role>org.apache.maven.continuum.Continuum</role>
-      <implementation>org.apache.maven.continuum.DefaultContinuum</implementation>
+      <role>org.apache.maven.continuum.core.ContinuumCore</role>
+      <implementation>org.apache.maven.continuum.core.DefaultContinuumCore</implementation>
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
@@ -31,6 +31,16 @@
         <app-home>${plexus.home}</app-home>
         <working-directory>${plexus.home}/temp</working-directory>
       </configuration>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.Continuum</role>
+      <implementation>org.apache.maven.continuum.DefaultContinuum</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+        </requirement>
+      </requirements>
     </component>
 
     <component>
@@ -156,7 +166,7 @@
       <implementation>org.apache.maven.continuum.registration.socket.UrlSocketRegistrar</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.Continuum</role>
+          <role>org.apache.maven.continuum.core.ContinuumCore</role>
         </requirement>
       </requirements>
     </component>

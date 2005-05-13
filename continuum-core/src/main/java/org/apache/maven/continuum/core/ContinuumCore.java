@@ -1,4 +1,4 @@
-package org.apache.maven.continuum;
+package org.apache.maven.continuum.core;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,39 +16,47 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
+import java.net.URL;
 import java.util.Collection;
 import java.util.Properties;
 
-import org.apache.maven.continuum.project.AntProject;
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenOneProject;
-import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 
-/**
- * This is the main entry point for Continuum. Projects are added to Continuum
- * by providing an URL to the metadata for project. The metadata for a project
- * must contain the following information:
- * <p/>
- * o project name
- * o project id
- * o SCM information
- * o email notification list
- * o project developers
- */
-public interface Continuum
+public interface ContinuumCore
 {
-    String ROLE = Continuum.class.getName();
+    String ROLE = ContinuumCore.class.getName();
 
     //TODO: an URL converter in OGNL would be nice.
+
+    Collection addProjectsFromUrl( String url, String projectBuilderId )
+        throws ContinuumException;
+
+    Collection addProjectsFromUrl( URL url, String projectBuilderId )
+        throws ContinuumException;
+
+    String addProjectFromScm( String scmUrl,
+                              String executorId,
+                              String projectName,
+                              String nagEmailAddress,
+                              String version,
+                              Properties configuration )
+        throws ContinuumException;
 
     void removeProject( String projectId )
         throws ContinuumException;
 
     void updateProjectFromScm( String projectId )
+        throws ContinuumException;
+
+    void updateProject( String projectId,
+                        String name,
+                        String scmUrl,
+                        String nagEmailAddress,
+                        String version )
         throws ContinuumException;
 
     void updateProjectConfiguration( String projectId, Properties configuration )
@@ -90,51 +98,5 @@ public interface Continuum
         throws ContinuumException;
 
     Collection getChangedFilesForBuild( String buildId )
-        throws ContinuumException;
-
-    // ----------------------------------------------------------------------
-    // Different project types
-    // ----------------------------------------------------------------------
-
-    void addAntProject( AntProject project )
-        throws ContinuumException;
-
-    AntProject getAntProject( String id )
-        throws ContinuumException;
-
-    void updateAntProject( AntProject project )
-        throws ContinuumException;
-
-    // Maven 1
-
-    void addMavenOneProject( MavenOneProject project )
-        throws ContinuumException;
-
-    MavenOneProject getMavenOneProject( String id )
-        throws ContinuumException;
-
-    void updateMavenOneProject( MavenOneProject project )
-        throws ContinuumException;
-
-    // Maven 2
-
-    void addMavenTwoProject( MavenTwoProject project )
-        throws ContinuumException;
-
-    MavenTwoProject getMavenTwoProject( String id )
-        throws ContinuumException;
-
-    void updateMavenTwoProject( MavenTwoProject project )
-        throws ContinuumException;
-
-    // Shell
-
-    void addShellProject( ShellProject project )
-        throws ContinuumException;
-
-    ShellProject getShellProject( String id )
-        throws ContinuumException;
-
-    void updateShellProject( ShellProject project )
         throws ContinuumException;
 }
