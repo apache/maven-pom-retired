@@ -5,6 +5,7 @@ set -x
 
 includes=\
 continuum-api/pom.xml,\
+continuum-cc/pom.xml,\
 continuum-core/pom.xml,\
 continuum-model/pom.xml,\
 continuum-web/pom.xml,\

@@ -1,0 +1,9 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.apache.maven.continuum.project.builder.ContinuumProjectBuilder</role>
+      <role-hint>cc-builder</role-hint>
+      <implementation>org.apache.maven.continuum.project.builder.cc.CriuseControlProjectBuilder</implementation>
+    </component>
+  </components>
+</component-set>
