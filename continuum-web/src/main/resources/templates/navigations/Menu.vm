@@ -2,17 +2,17 @@
  <div id="projecttools" class="toolgroup">
   <div class="label">Continuum</div>
   <div class="body">
-    <div><a href="$link.setPage('continuumProject.form').addQueryData('mode','summary')">Show Projects</a></div>
+    <div><a href="$link.setPage('Summary.vm').addPathInfo( 'fid', 'continuumProject')">Show Projects</a></div>
   </div>
  </div>
 
  <div id="projecttools" class="toolgroup">
   <div class="label">Add Project</div>
   <div class="body">
-    <div><a href="$link.setPage('addMavenTwoProject.form')">M2 Project</a></div>
-    <div><a href="$link.setPage('addMavenOneProject.form')">M1 Project</a></div>
-    <div><a href="$link.setPage('antProject.form')">Ant Project</a></div>
-    <div><a href="$link.setPage('shellProject.form')">Shell Project</a></div>
+    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenTwoProject')">M2 Project</a></div>
+    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenOneProject')">M1 Project</a></div>
+    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'antProject')">Ant Project</a></div>
+    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'shellProject')">Shell Project</a></div>
   </div>
  </div>
 </div>
