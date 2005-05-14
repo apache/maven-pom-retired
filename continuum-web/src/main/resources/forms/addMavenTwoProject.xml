@@ -13,15 +13,15 @@
   <add>
     <title-key>project.title.add</title-key>
     <action>callMethod</action>
-    <view>continuumProject.form?mode=summary</view>
-    <expression>addProjectFromUrl(#m2PomUrl,"maven2")</expression>
+    <view>Summary.vm</view>
+    <expression>addMavenTwoProject(#m2PomUrl)</expression>
   </add>
 
   <!-- Update -->
   <update>
     <title-key>project.title.update</title-key>
     <action>updateEntity</action>
-    <view>continuumProject.form?mode=summary</view>
+    <view>Summary.vm/fid/continuumProject</view>
     <expression>updateMavenTwoProject(#entity)</expression>
   </update>
 

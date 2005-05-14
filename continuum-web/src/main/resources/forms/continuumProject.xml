@@ -3,7 +3,7 @@
   <key-expression>id</key-expression>
   <summary-collection-expression>getProjects()</summary-collection-expression>
   <source-role>org.apache.maven.continuum.Continuum</source-role>
-  <type-expression>builderId</type-expression>
+  <type-expression>executorId</type-expression>
   <elements>
     <element>
       <id>project.name</id>
@@ -54,7 +54,7 @@
   <!-- Delete -->
   <delete>
     <title-key>project.title.delete</title-key>
-    <view>continuumProject.form?mode=summary</view>
+    <view>Summary.vm</view>
     <action>deleteEntity</action>
     <expression>removeProject(#id)</expression>
   </delete>
@@ -79,23 +79,23 @@
     <operations>
       <operation>
         <name>View</name>
-        <action>target/$type$Project.form?mode=view&amp;id=$id$</action>
+        <action>View.vm/fid/$type$Project/id/$id$</action>
       </operation>
       <operation>
         <name>Results</name>
-        <action>target/ProjectBuilds.vm?view=ProjectBuilds&amp;id=$id$</action>
+        <action>ProjectBuilds.vm/view/ProjectBuilds/id/$id$</action>
       </operation>
       <operation>
         <name>Edit</name>
-        <action>target/$type$Project.form?mode=update&amp;id=$id$</action>
+        <action>Edit.vm/fid/$type$Project/id/$id$</action>
       </operation>
       <operation>
         <name>Delete</name>
-        <action>target/$type$Project.form?mode=delete&amp;id=$id$</action>
+        <action>Delete.vm/fid/$type$Project/id/$id$</action>
       </operation>
       <operation>
         <name>Build</name>
-        <action>target/continuumProject.form?mode=summary&amp;action=cam&amp;cid=buildProject&amp;id=$id$</action>
+        <action>Summary.vm/action/cam/cid/buildProject/id/$id$</action>
       </operation>
     </operations>
   </summary>
