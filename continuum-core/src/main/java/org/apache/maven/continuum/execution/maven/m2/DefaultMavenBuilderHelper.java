@@ -30,10 +30,8 @@ import org.apache.maven.model.Repository;
 import org.apache.maven.model.Scm;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
-import org.apache.maven.project.ProjectBuildingException;
-import org.apache.maven.settings.MavenSettings;
 import org.apache.maven.settings.MavenSettingsBuilder;
-
+import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -97,7 +95,7 @@ public class DefaultMavenBuilderHelper
         {
             project = projectBuilder.build( file, getRepository() );
         }
-        catch ( ProjectBuildingException e )
+        catch ( Exception e )
         {
             throw new MavenBuilderHelperException( "Cannot build maven project from " + file, e );
         }
@@ -186,23 +184,11 @@ public class DefaultMavenBuilderHelper
     private ArtifactRepository getRepository()
         throws MavenBuilderHelperException
     {
-        MavenSettings settings;
-
-        try
-        {
-            settings = settingsBuilder.buildSettings();
-        }
-        catch ( Exception e )
-        {
-            throw new MavenBuilderHelperException( "Error while building settings.", e );
-        }
-
         Repository repository = new Repository();
 
-        repository.setId( "local" );
-
-        repository.setUrl( "file://" + localRepository );
-
-        return artifactRepositoryFactory.createArtifactRepository( repository, settings, repositoryLayout );
+        return artifactRepositoryFactory.createArtifactRepository( "local", 
+                                                                   "file://" + localRepository, 
+                                                                   repositoryLayout,
+                                                                   repository.getSnapshotPolicy() );
     }
 }

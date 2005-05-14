@@ -14,6 +14,7 @@
     </component>
     <component>
       <role>org.apache.maven.continuum.network.ConnectionConsumer</role>
+      <role-hint>echoing</role-hint>
       <implementation>org.apache.maven.continuum.network.EchoingConnectionConsumer</implementation>
     </component>
   </components>
