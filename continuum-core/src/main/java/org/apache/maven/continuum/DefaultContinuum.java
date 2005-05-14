@@ -194,6 +194,16 @@ public class DefaultContinuum
         updateProjectConfiguration( project.getId(), configuration );
     }
 
+    // ----------------------------------------------------------------------
+    // Maven 1.x projects
+    // ----------------------------------------------------------------------
+
+    public void addMavenOneProject( String metadataUrl )
+        throws ContinuumException
+    {
+        core.addProjectsFromUrl( metadataUrl, MavenOneBuildExecutor.ID );
+    }
+
     public void addMavenOneProject( MavenOneProject project )
         throws ContinuumException
     {
@@ -233,6 +243,16 @@ public class DefaultContinuum
         configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, project.getGoals() );
 
         updateProjectConfiguration( project.getId(), configuration );
+    }
+
+    // ----------------------------------------------------------------------
+    // Maven 2.x projects
+    // ----------------------------------------------------------------------
+
+    public void addMavenTwoProject( String metadataUrl )  
+        throws ContinuumException
+    {
+        core.addProjectsFromUrl( metadataUrl, MavenTwoBuildExecutor.ID );
     }
 
     public void addMavenTwoProject( MavenTwoProject project )
