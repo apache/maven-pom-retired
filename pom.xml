@@ -65,6 +65,7 @@
     </repository>
   </distributionManagement>
   <modules>
+    <module>continuum-api</module>
     <module>continuum-core</module>
     <module>continuum-model</module>
     <module>continuum-plexus-application</module>
