@@ -93,7 +93,39 @@ public interface Continuum
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
-    // Different project types
+    // Maven 2.x projects.
+    // ----------------------------------------------------------------------
+
+    void addMavenTwoProject( String metadataUrl )
+        throws ContinuumException;
+
+    void addMavenTwoProject( MavenTwoProject project )
+        throws ContinuumException;
+
+    MavenTwoProject getMavenTwoProject( String id )
+        throws ContinuumException;
+
+    void updateMavenTwoProject( MavenTwoProject project )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Maven 1.x projects
+    // ----------------------------------------------------------------------
+
+    void addMavenOneProject( String metadataUrl )
+        throws ContinuumException;
+
+    void addMavenOneProject( MavenOneProject project )
+        throws ContinuumException;
+
+    MavenOneProject getMavenOneProject( String id )
+        throws ContinuumException;
+
+    void updateMavenOneProject( MavenOneProject project )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Ant Projects
     // ----------------------------------------------------------------------
 
     void addAntProject( AntProject project )
@@ -105,29 +137,9 @@ public interface Continuum
     void updateAntProject( AntProject project )
         throws ContinuumException;
 
-    // Maven 1
-
-    void addMavenOneProject( MavenOneProject project )
-        throws ContinuumException;
-
-    MavenOneProject getMavenOneProject( String id )
-        throws ContinuumException;
-
-    void updateMavenOneProject( MavenOneProject project )
-        throws ContinuumException;
-
-    // Maven 2
-
-    void addMavenTwoProject( MavenTwoProject project )
-        throws ContinuumException;
-
-    MavenTwoProject getMavenTwoProject( String id )
-        throws ContinuumException;
-
-    void updateMavenTwoProject( MavenTwoProject project )
-        throws ContinuumException;
-
-    // Shell
+    // ----------------------------------------------------------------------
+    // Shell projects
+    // ----------------------------------------------------------------------
 
     void addShellProject( ShellProject project )
         throws ContinuumException;
