@@ -11,10 +11,8 @@
       <role-hint>new</role-hint>
       <implementation>org.codehaus.plexus.summit.resolver.NewResolver</implementation>
       <configuration>
-        <default-view>Index.vm</default-view>
-        <!--
-        <default-view>continuumProject.form</default-view>
-        -->
+        <initial-view>Summary.vm</initial-view>
+        <default-view>Default.vm</default-view>
         <error-view>Error.vm</error-view>
       </configuration>
     </component>
@@ -82,9 +80,16 @@
             <role-hint>continuum-state</role-hint>
             <scope>global</scope>
           </tool>
+          <tool>
+            <name>formtool</name>
+            <role>formicatool</role>
+            <scope>global</scope>
+          </tool>
         </tools>
       </configuration>
     </component>
+
+
 
     <component>
       <role>datetool</role>
@@ -97,6 +102,17 @@
       <implementation>org.codehaus.continuum.web.tool.CssTool</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
       <configuration/>
+    </component>
+
+    <component>
+      <role>formicatool</role>
+      <implementation>org.codehaus.continuum.web.tool.FormicaTool</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.formica.FormManager</role>
+        </requirement>
+      </requirements>
     </component>
 
     <!--
