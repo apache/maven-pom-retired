@@ -15,7 +15,7 @@
           </property>
           <property>
             <name>javax.jdo.option.ConnectionURL</name>
-            <value>jdbc:hsqldb:mem:.</value>
+            <value>jdbc:hsqldb:.</value>
           </property>
           <property>
             <name>javax.jdo.option.ConnectionUserName</name>

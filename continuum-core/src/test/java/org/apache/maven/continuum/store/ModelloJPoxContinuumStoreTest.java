@@ -54,8 +54,6 @@ public class ModelloJPoxContinuumStoreTest
     {
         super.setUp();
 
-        FileUtils.cleanDirectory( getTestPath( "target/plexus-home" ) );
-
         jdoFactory = (JdoFactory) lookup( JdoFactory.ROLE );
 
         store = (ContinuumStore) lookup( ContinuumStore.ROLE );
