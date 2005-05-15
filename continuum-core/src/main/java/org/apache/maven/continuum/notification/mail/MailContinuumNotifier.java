@@ -98,7 +98,6 @@ public class MailContinuumNotifier
     // ----------------------------------------------------------------------
 
     public void initialize()
-        throws Exception
     {
         // ----------------------------------------------------------------------
         // From mailbox

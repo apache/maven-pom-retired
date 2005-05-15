@@ -55,10 +55,11 @@ import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.queue.CheckOutTask;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.TaskQueueException;
 import org.codehaus.plexus.util.FileUtils;
@@ -870,8 +871,7 @@ public class DefaultContinuumCore
     // Lifecylce Management
     // ----------------------------------------------------------------------
 
-    public void initialize()
-        throws Exception
+    public void initialize() throws InitializationException
     {
         getLogger().info( "Initializing Continuum." );
 
@@ -881,31 +881,43 @@ public class DefaultContinuumCore
         {
             if ( !wdFile.isDirectory() )
             {
-                throw logAndCreateException( "The specified working directory isn't a directory: " +
-                                             "'" + wdFile.getAbsolutePath() + "'." );
+                String msg = "The specified working directory isn't a directory: " + "'" + 
+                    wdFile.getAbsolutePath() + "'.";
+                
+                getLogger().error( msg );
+                throw new InitializationException( msg );
             }
         }
         else
         {
             if ( !wdFile.mkdirs() )
             {
-                throw logAndCreateException( "Could not making the working directory: " +
-                                             "'" + wdFile.getAbsolutePath() + "'." );
+                String msg = "Could not making the working directory: " + "'" + 
+                    wdFile.getAbsolutePath() + "'." ;
+
+                getLogger().error( msg );
+                throw new InitializationException( msg );
             }
         }
 
         getLogger().info( "Showing all projects: " );
 
-        for ( Iterator it = store.getAllProjects().iterator(); it.hasNext(); )
+        try
         {
-            ContinuumProject project = (ContinuumProject) it.next();
+            for ( Iterator it = store.getAllProjects().iterator(); it.hasNext(); )
+            {
+                ContinuumProject project = (ContinuumProject) it.next();
 
-            getLogger().info( " " + project.getId() + ":" + project.getName() + ":" + project.getExecutorId() );
+                getLogger().info( " " + project.getId() + ":" + project.getName() + ":" + project.getExecutorId() );
+            }
+        }
+        catch (ContinuumStoreException e)
+        {
+           throw new InitializationException( "Couldn't load projects.", e );
         }
     }
 
-    public void start()
-        throws Exception
+    public void start() throws StartingException
     {
         getLogger().info( "Starting Continuum." );
 
@@ -914,22 +926,30 @@ public class DefaultContinuumCore
 
         Properties properties = new Properties();
 
-        if ( !file.exists() )
+        try
         {
-            initializeStore( file );
-        }
-        else
-        {
-            properties.load( new FileInputStream( file ) );
-
-            String state = properties.getProperty( DATABASE_INITIALIZED );
-
-            if ( !state.equals( "true" ) )
+            if ( !file.exists() )
             {
-                initializeStore( file );
+                
+                    initializeStore( file );                
+            }
+            else
+            {
+                properties.load( new FileInputStream( file ) );
+    
+                String state = properties.getProperty( DATABASE_INITIALIZED );
+    
+                if ( !state.equals( "true" ) )
+                {
+                    initializeStore( file );
+                }
             }
         }
-
+        catch( Exception e )
+        {
+            throw new StartingException( "Couldn't initialize store,", e );
+        }
+        
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
@@ -950,7 +970,6 @@ public class DefaultContinuumCore
     }
 
     public void stop()
-        throws Exception
     {
         getLogger().info( "Stopping Continuum." );
 

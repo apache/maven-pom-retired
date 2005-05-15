@@ -41,7 +41,6 @@ public class DefaultBuildExecutorManager
     // ----------------------------------------------------------------------
 
     public void initialize()
-        throws Exception
     {
         if ( executors == null )
         {

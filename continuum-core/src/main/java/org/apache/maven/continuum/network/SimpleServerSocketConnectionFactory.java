@@ -19,10 +19,11 @@ package org.apache.maven.continuum.network;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-import org.codehaus.plexus.configuration.PlexusConfigurationException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -51,23 +52,23 @@ public class SimpleServerSocketConnectionFactory
     // ----------------------------------------------------------------------
 
     public void initialize()
-        throws Exception
+        throws InitializationException
     {
         if ( port <= 0 )
-            throw new PlexusConfigurationException( "The port must be bigger than 0." );
+            throw new InitializationException( "The port must be bigger than 0." );
 
         if ( port >= 65536 )
-            throw new PlexusConfigurationException( "The port must be lesser than 65536." );
+            throw new InitializationException( "The port must be lesser than 65536." );
 
         if ( backlog < 0 )
-            throw new PlexusConfigurationException( "The valud of the backlog element must be bigger than 0." );
+            throw new InitializationException( "The valud of the backlog element must be bigger than 0." );
 
         if ( consumer == null )
-            throw new PlexusConfigurationException( "There is no connection consumer configured." );
+            throw new InitializationException( "There is no connection consumer configured." );
     }
 
     public void start()
-        throws Exception
+        throws StartingException
     {
         getLogger().info( "Starting socket listener on port " + port );
 
@@ -79,7 +80,7 @@ public class SimpleServerSocketConnectionFactory
         }
         catch ( IOException ex )
         {
-            throw new Exception( "Could not create a server socket.", ex );
+            throw new StartingException( "Could not create a server socket.", ex );
         }
 
         thread = new WorkerThread( serverSocket, consumer, getLogger() );

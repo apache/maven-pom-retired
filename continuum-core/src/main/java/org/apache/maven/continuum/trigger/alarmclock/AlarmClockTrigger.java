@@ -25,6 +25,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.trigger.AbstractContinuumTrigger;
 
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
 
 /**
@@ -49,23 +50,22 @@ public class AlarmClockTrigger
     // ----------------------------------------------------------------------
 
     public void initialize()
-        throws Exception
+        throws InitializationException
     {
         if ( interval <= 0 )
         {
-            throw new ContinuumException( "Invalid value for 'interval': the interval must be bigger that 0." );
+            throw new InitializationException( "Invalid value for 'interval': the interval must be bigger that 0." );
         }
 
         if ( delay <= 0 )
         {
-            throw new ContinuumException( "Invalid value for 'delay': the delay must be bigger that 0." );
+            throw new InitializationException( "Invalid value for 'delay': the delay must be bigger that 0." );
         }
 
         timer = new Timer();
     }
 
     public void start()
-        throws Exception
     {
         getLogger().info( "Build interval: " + interval + "s" );
         getLogger().info( "Will schedule the first build in: " + delay + "s" );

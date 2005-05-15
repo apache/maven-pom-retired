@@ -45,7 +45,6 @@ public class ContinuumRecipientSource
     // ----------------------------------------------------------------------
 
     public void initialize()
-        throws Exception
     {
         // ----------------------------------------------------------------------
         // To address
