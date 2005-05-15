@@ -16,6 +16,8 @@ package org.apache.maven.continuum.web.context;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.summit.parameters.RequestParameters;
+
 import java.util.Map;
 
 /**
@@ -26,6 +28,5 @@ public interface ViewContextPopulator
 {
     String ROLE = ViewContextPopulator.class.getName();
 
-    /** Map of scalars to place in the context. */
     Map getScalars( String view, Object model, Map parameters );
 }

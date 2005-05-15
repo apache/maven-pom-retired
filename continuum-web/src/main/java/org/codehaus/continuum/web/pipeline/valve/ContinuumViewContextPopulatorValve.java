@@ -21,10 +21,12 @@ import org.apache.maven.continuum.web.context.ViewContextPopulator;
 import org.codehaus.plexus.summit.pipeline.valve.CreateViewContextValve;
 import org.codehaus.plexus.summit.rundata.RunData;
 import org.codehaus.plexus.summit.view.ViewContext;
+import org.codehaus.continuum.web.pipeline.valve.RequestParameterMap;
 
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -53,16 +55,17 @@ public class ContinuumViewContextPopulatorValve
                     // ----------------------------------------------------------------------
                     // We take the parameters from the request so that they can be used to
                     // parameterize the expressions used to extract values out of the
-                    // application model.
+                    // application model. We use the request parameters as the have been
+                    // parsed from the ReqestParameters class.
                     // ----------------------------------------------------------------------
 
                     Map parameters = new HashMap();
 
-                    for ( Enumeration e = data.getRequest().getParameterNames(); e.hasMoreElements(); )
+                    for ( Iterator i  = data.getParameters().getParametersMap().keySet().iterator(); i.hasNext(); )
                     {
-                        String key = (String) e.nextElement();
+                        String key = (String) i.next();
 
-                        parameters.put( key, data.getRequest().getParameter( key ) );
+                        parameters.put( key, data.getParameters().getString( key ) );
                     }
 
                     // ----------------------------------------------------------------------
