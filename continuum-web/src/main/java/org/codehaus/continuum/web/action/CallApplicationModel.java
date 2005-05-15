@@ -49,15 +49,11 @@ public class CallApplicationModel
     {
         Object application = lookup( applicationRole );
 
-        System.out.println( "application = " + application );
-
         String cid = (String) parameters.get( CID );
 
         Call call = (Call) callMap.get( cid );
 
         String expression = call.getExpression();
-
-        System.out.println( "expression = " + expression );
 
         Ognl.getValue( expression, parameters, application );
     }
