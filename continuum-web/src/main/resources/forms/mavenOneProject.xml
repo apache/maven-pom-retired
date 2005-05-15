@@ -16,7 +16,7 @@
   <add>
     <title-key>project.title.add</title-key>
     <action>addEntity</action>
-    <view>continuumProject.form?mode=summary</view>
+    <view>Summary.vm</view>
     <expression>addMavenOneProject(#entity)</expression>
   </add>
 
@@ -24,7 +24,7 @@
   <update>
     <title-key>project.title.update</title-key>
     <action>updateEntity</action>
-    <view>continuumProject.form?mode=summary</view>
+    <view>Summary.vm</view>
     <expression>updateMavenOneProject(#entity)</expression>
   </update>
 
