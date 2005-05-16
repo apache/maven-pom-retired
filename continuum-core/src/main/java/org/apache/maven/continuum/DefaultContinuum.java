@@ -16,9 +16,6 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
-import java.util.Collection;
-import java.util.Properties;
-
 import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
@@ -31,9 +28,14 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
+import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+
+import java.util.Collection;
+import java.util.Properties;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -101,6 +103,33 @@ public class DefaultContinuum
         throws ContinuumException
     {
         return core.getCheckOutScmResultForProject( projectId );
+    }
+
+    // ----------------------------------------------------------------------
+    // Building
+    // ----------------------------------------------------------------------
+
+    public void buildProjects()
+        throws ContinuumException
+    {
+        buildProjects( true );
+    }
+
+    public void buildProjects( boolean force )
+        throws ContinuumException
+    {
+        for ( Iterator i = getProjects().iterator(); i.hasNext(); )
+        {
+            ContinuumProject project = (ContinuumProject) i.next();
+
+            buildProject( project.getId(), force );
+        }
+    }
+
+    public void buildProject( String projectId )
+        throws ContinuumException
+    {
+        core.buildProject( projectId, true );
     }
 
     public void buildProject( String projectId, boolean force )
@@ -201,7 +230,7 @@ public class DefaultContinuum
     public void addMavenOneProject( String metadataUrl )
         throws ContinuumException
     {
-        core.addProjectsFromUrl( metadataUrl, MavenOneBuildExecutor.ID );
+        core.addProjectsFromUrl( metadataUrl, MavenOneContinuumProjectBuilder.ID );
     }
 
     public void addMavenOneProject( MavenOneProject project )
@@ -252,7 +281,7 @@ public class DefaultContinuum
     public void addMavenTwoProject( String metadataUrl )
         throws ContinuumException
     {
-        core.addProjectsFromUrl( metadataUrl, MavenTwoBuildExecutor.ID );
+        core.addProjectsFromUrl( metadataUrl, MavenTwoContinuumProjectBuilder.ID );
     }
 
     public void addMavenTwoProject( MavenTwoProject project )
