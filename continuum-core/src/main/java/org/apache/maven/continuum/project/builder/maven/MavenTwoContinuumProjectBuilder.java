@@ -109,6 +109,10 @@ public class MavenTwoContinuumProjectBuilder
 
             prefix = prefix.substring( 0, i - POM_PART.length() );
         }
+        else
+        {
+            prefix = prefix.substring( 0, prefix.length() - POM_PART.length() );
+        }
 
         for ( Iterator it = modules.iterator(); it.hasNext(); )
         {

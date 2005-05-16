@@ -286,7 +286,10 @@ public class DefaultBuildController
         setBuildResult( context.build.getId(), context.state, context.result, context.scmResult, e );
     }
 
-    private void setBuildResult( String buildId, int state, ContinuumBuildResult result, UpdateScmResult scmResult,
+    private void setBuildResult( String buildId,
+                                 int state,
+                                 ContinuumBuildResult result,
+                                 UpdateScmResult scmResult,
                                  Throwable e )
         throws ContinuumStoreException
     {

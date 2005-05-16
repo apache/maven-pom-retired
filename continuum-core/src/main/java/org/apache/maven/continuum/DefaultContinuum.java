@@ -249,7 +249,7 @@ public class DefaultContinuum
     // Maven 2.x projects
     // ----------------------------------------------------------------------
 
-    public void addMavenTwoProject( String metadataUrl )  
+    public void addMavenTwoProject( String metadataUrl )
         throws ContinuumException
     {
         core.addProjectsFromUrl( metadataUrl, MavenTwoBuildExecutor.ID );

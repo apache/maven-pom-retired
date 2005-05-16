@@ -31,7 +31,7 @@ import org.apache.maven.model.Scm;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.settings.MavenSettingsBuilder;
-import org.apache.maven.settings.Settings;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -182,12 +182,11 @@ public class DefaultMavenBuilderHelper
     // ----------------------------------------------------------------------
 
     private ArtifactRepository getRepository()
-        throws MavenBuilderHelperException
     {
         Repository repository = new Repository();
 
-        return artifactRepositoryFactory.createArtifactRepository( "local", 
-                                                                   "file://" + localRepository, 
+        return artifactRepositoryFactory.createArtifactRepository( "local",
+                                                                   "file://" + localRepository,
                                                                    repositoryLayout,
                                                                    repository.getSnapshotPolicy() );
     }
