@@ -83,7 +83,6 @@ if 1:
 
     progress( "Building Maven 2 project" )
     buildId = buildProject( maven2.id ).id
-    print "original buildId: " + buildId
     assertSuccessfulMaven2Build( buildId )
 
     progress( "Test that a build without any files changed won't execute the executor" )
@@ -95,11 +94,9 @@ if 1:
 
     progress( "Test that a forced build without any files changed executes the executor" )
     buildId = buildProject( maven2.id, True ).id
-    print "forced buildId: " + buildId
     build = assertSuccessfulMaven2Build( buildId )
     assertTrue( "The 'build forced' flag wasn't true", build.forced );
     build = continuum.getBuild( buildId )
-    print "build.state: " + build.state
 
     removeProject( maven2Id )
 

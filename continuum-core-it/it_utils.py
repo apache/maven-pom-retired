@@ -164,6 +164,7 @@ def buildProject( projectId, force=False ):
         return builds[ 0 ]
 
 def removeProject( projectId ):
+    time.sleep( 0.5 )
     continuum.removeProject( projectId )
 
     map = continuum.server.continuum.getProject( projectId )
@@ -193,7 +194,6 @@ def waitForBuild( buildId ):
     timeout = 120                # seconds
     sleepInterval = 0.1
 
-    print "waiting for build: " + buildId
     build = continuum.getBuild( buildId )
 
     while( build.state == continuum.STATE_UPDATING or
