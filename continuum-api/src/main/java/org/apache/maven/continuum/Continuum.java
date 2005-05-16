@@ -43,8 +43,6 @@ public interface Continuum
 {
     String ROLE = Continuum.class.getName();
 
-    //TODO: an URL converter in OGNL would be nice.
-
     void removeProject( String projectId )
         throws ContinuumException;
 
@@ -61,6 +59,19 @@ public interface Continuum
         throws ContinuumException;
 
     CheckOutScmResult getCheckOutScmResultForProject( String projectId )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Building
+    // ----------------------------------------------------------------------
+
+    void buildProjects()
+        throws ContinuumException;
+
+    void buildProjects( boolean force )
+        throws ContinuumException;
+
+    void buildProject( String projectId )
         throws ContinuumException;
 
     void buildProject( String projectId, boolean force )
