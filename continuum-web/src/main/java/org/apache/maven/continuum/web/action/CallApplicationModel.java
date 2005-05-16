@@ -49,7 +49,21 @@ public class CallApplicationModel
 
         String cid = (String) parameters.get( CID );
 
+        if ( cid == null )
+        {
+            getLogger().error( "We cannot call the application with a null CID!" );
+
+            return;
+        }
+
         Call call = (Call) callMap.get( cid );
+
+        if ( call == null )
+        {
+            getLogger().error( "There is no call with id = " + cid + "!" );
+
+            return;                        
+        }
 
         String expression = call.getExpression();
 
