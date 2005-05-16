@@ -24,6 +24,15 @@
       </tr>
       #end
     </table>
-    #bar()
+    ##
+    ## TODO: This should be made a general feature in formica using the CAM
+    ##
+    <form method="post" action="$link">
+      #hidden ( "action" "cam" )
+      #hidden ( "cid" "buildAllProjects" )
+      <div class="functnbar3">
+        <input type="submit" name="build-all" value="Build All"/>
+      </div>
+  </form>
   </div>
 </div>

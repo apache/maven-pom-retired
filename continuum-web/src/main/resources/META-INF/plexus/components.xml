@@ -224,6 +224,10 @@
             <cid>buildProject</cid>
             <expression>buildProject(#id)</expression>
           </call>
+          <call>
+            <cid>buildAllProjects</cid>
+            <expression>buildProjects()</expression>
+          </call>
         </calls>
       </configuration>
     </component>
