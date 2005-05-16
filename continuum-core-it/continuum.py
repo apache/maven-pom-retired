@@ -23,17 +23,24 @@ except socket.error, msg:
     print msg
     sys.exit( -1 )
 
+class XmlRpcException:
+    def __init__( self, method, message, stackTrace ):
+        self.method = method
+        self.message = message
+        self.stackTrace = stackTrace
+
+    def __str__( self ):
+        return "Error while executing method." + os.linesep + \
+               "Method: " + map[ "method" ] + os.linesep + \
+               "Message: " + map[ "message" ] + os.linesep + \
+               "Stack trace: " + map[ "stackTrace" ] + os.linesep
+
 def checkResult( map ):
     if ( map[ "result" ] == "ok" ):
         return map
 
-    print "Error while executing method."
-    print "Method: " + map[ "method" ]
-    print "Message: " + map[ "message" ]
-    print "Stack trace: " + map[ "stackTrace" ]
 
-    raise Exception( "Error while executing method" )
-
+    raise XmlRpcException( map[ "method" ], map[ "message" ], map[ "stackTrace" ] )
 def decodeState( state ):
     if ( state == 1 ):
         return STATE_NEW
@@ -164,6 +171,16 @@ class Project:
         self.version = map[ "version" ]
         self.executorId = map[ "executorId" ]
         self.configuration = map[ "configuration" ]
+
+        if ( map.has_key( "checkOutErrorMessage" ) ):
+            self.checkOutErrorMessage = map[ "checkOutErrorMessage" ]
+        else:
+            self.checkOutErrorMessage = None
+
+        if ( map.has_key( "checkOutErrorException" ) ):
+            self.checkOutErrorException = map[ "checkOutErrorException" ]
+        else:
+            self.checkOutErrorException = None
 
         if ( map.has_key( "checkOutScmResult" ) ):
             self.checkOutScmResult = CheckOutScmResult( map[ "checkOutScmResult" ] )

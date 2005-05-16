@@ -55,6 +55,7 @@ import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.queue.CheckOutTask;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
@@ -63,7 +64,6 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.TaskQueueException;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -179,27 +179,6 @@ public class DefaultContinuumCore
     public Collection addProjectsFromUrl( URL url, String executorId )
         throws ContinuumException
     {
-        File pomFile;
-
-        try
-        {
-            String pom = IOUtil.toString( url.openStream() );
-
-            pomFile = File.createTempFile( "continuum-", "-pom-download" );
-
-            pomFile.deleteOnExit();
-
-            FileUtils.fileWrite( pomFile.getAbsolutePath(), pom );
-        }
-        catch ( IOException ex )
-        {
-            logAndCreateException( "Error while downloading the pom.", ex );
-        }
-
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
         ContinuumProjectBuilder projectBuilder = getProjectBuilder( executorId );
 
         ContinuumProjectBuildingResult result;
@@ -319,7 +298,7 @@ public class DefaultContinuumCore
         }
         catch ( ContinuumScmException e )
         {
-            logAndCreateException( "Error while updating project.", e );
+            throw logAndCreateException( "Error while updating project.", e );
         }
 
         updateProjectFromCheckOut( project );
@@ -364,7 +343,7 @@ public class DefaultContinuumCore
         }
         catch ( ContinuumStoreException ex )
         {
-            logAndCreateException( "Error while removing project.", ex );
+            throw logAndCreateException( "Error while removing project.", ex );
         }
     }
 
@@ -842,7 +821,7 @@ public class DefaultContinuumCore
         }
         catch ( ContinuumBuildExecutorException e )
         {
-            logAndCreateException( "Error while updating project from check out.", e);
+            throw logAndCreateException( "Error while updating project from check out.", e);
         }
 
         // ----------------------------------------------------------------------
@@ -881,9 +860,9 @@ public class DefaultContinuumCore
         {
             if ( !wdFile.isDirectory() )
             {
-                String msg = "The specified working directory isn't a directory: " + "'" + 
+                String msg = "The specified working directory isn't a directory: " + "'" +
                     wdFile.getAbsolutePath() + "'.";
-                
+
                 getLogger().error( msg );
                 throw new InitializationException( msg );
             }
@@ -892,7 +871,7 @@ public class DefaultContinuumCore
         {
             if ( !wdFile.mkdirs() )
             {
-                String msg = "Could not making the working directory: " + "'" + 
+                String msg = "Could not making the working directory: " + "'" +
                     wdFile.getAbsolutePath() + "'." ;
 
                 getLogger().error( msg );
@@ -930,15 +909,15 @@ public class DefaultContinuumCore
         {
             if ( !file.exists() )
             {
-                
-                    initializeStore( file );                
+
+                    initializeStore( file );
             }
             else
             {
                 properties.load( new FileInputStream( file ) );
-    
+
                 String state = properties.getProperty( DATABASE_INITIALIZED );
-    
+
                 if ( !state.equals( "true" ) )
                 {
                     initializeStore( file );
@@ -949,7 +928,7 @@ public class DefaultContinuumCore
         {
             throw new StartingException( "Couldn't initialize store,", e );
         }
-        
+
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------

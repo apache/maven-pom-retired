@@ -121,10 +121,10 @@ public interface ContinuumStore
     // Project and Build state transitions
     // ----------------------------------------------------------------------
 
-//    void setBuildSignalled( String projectId )
-//        throws ContinuumStoreException;
-
-    void setCheckoutDone( String projectId, CheckOutScmResult scmResult )
+    void setCheckoutDone( String projectId,
+                          CheckOutScmResult scmResult,
+                          String errorMessage,
+                          Throwable exception )
         throws ContinuumStoreException;
 
     void setIsUpdating( String projectId )

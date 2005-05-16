@@ -36,7 +36,6 @@ import org.apache.maven.continuum.scm.UpdateScmResult;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -234,7 +233,7 @@ public class ModelloJPoxContinuumStoreTest
 
         checkOutScmResult.setSuccess( true );
 
-        store.setCheckoutDone( projectId, checkOutScmResult );
+        store.setCheckoutDone( projectId, checkOutScmResult, null, null );
 
         project = store.getProject( projectId );
 
@@ -648,7 +647,7 @@ public class ModelloJPoxContinuumStoreTest
 
         checkOutScmResult.setSuccess( true );
 
-        store.setCheckoutDone( projectId, checkOutScmResult );
+        store.setCheckoutDone( projectId, checkOutScmResult, null, null );
 
         ContinuumProject project = store.getProject( projectId );
 

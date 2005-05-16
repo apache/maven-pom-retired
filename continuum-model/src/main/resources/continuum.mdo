@@ -89,6 +89,16 @@
             <type>CheckOutScmResult</type>
           </association>
         </field>
+        <field>
+          <name>checkOutErrorMessage</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>checkOutErrorException</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
       </fields>
     </class>
 

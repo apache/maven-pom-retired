@@ -16,14 +16,15 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import ognl.Ognl;
-import org.codehaus.plexus.action.AbstractAction;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.codehaus.plexus.action.AbstractAction;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+
+import ognl.Ognl;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -60,7 +61,6 @@ public class CallApplicationModel
     // ----------------------------------------------------------------------
 
     public void initialize()
-        throws Exception
     {
         callMap = new HashMap();
 

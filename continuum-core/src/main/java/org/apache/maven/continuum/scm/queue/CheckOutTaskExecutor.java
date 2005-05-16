@@ -24,6 +24,7 @@ import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.scm.manager.NoSuchScmProviderException;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.Task;
@@ -68,7 +69,11 @@ public class CheckOutTaskExecutor
             throw new TaskExecutionException( "Error while reading the project from the store.", e );
         }
 
-        CheckOutScmResult result;
+        CheckOutScmResult result = null;
+
+        String errorMessage = null;
+
+        Throwable exception = null;
 
         try
         {
@@ -76,12 +81,26 @@ public class CheckOutTaskExecutor
         }
         catch ( ContinuumScmException e )
         {
-            throw new TaskExecutionException( "Error while reading the project from the store.", e );
+            // TODO: Dissect the scm exception to be able to give better feedback
+            Throwable cause = e.getCause();
+
+            if ( cause instanceof NoSuchScmProviderException )
+            {
+                errorMessage = cause.getMessage();
+            }
+            else
+            {
+                exception = e;
+            }
+        }
+        catch( Throwable e )
+        {
+            exception = e;
         }
 
         try
         {
-            store.setCheckoutDone( projectId, result );
+            store.setCheckoutDone( projectId, result, errorMessage, exception );
         }
         catch ( ContinuumStoreException e )
         {

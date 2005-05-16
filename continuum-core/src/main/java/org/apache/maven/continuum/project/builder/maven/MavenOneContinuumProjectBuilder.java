@@ -50,8 +50,6 @@ public class MavenOneContinuumProjectBuilder
     {
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
 
-        getLogger().info( "Downloading " + url.toExternalForm() );
-
         File pomFile = createMetadataFile( url );
 
         MavenOneProject project = new MavenOneProject();

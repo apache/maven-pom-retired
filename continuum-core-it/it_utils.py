@@ -210,6 +210,13 @@ def waitForBuild( buildId ):
 
     return build
 
+def waitForSuccessfulCheckOut( projectId ):
+    project = waitForCheckOut( projectId )
+
+    assertEquals( "The check out was not successful for project #" + project.id, continuum.STATE_NEW, project.state )
+
+    return project
+
 def waitForCheckOut( projectId ):
     timeout = 60
     sleepInterval = 0.1
@@ -223,8 +230,6 @@ def waitForCheckOut( projectId ):
 
         if ( timeout <= 0 ):
             fail( "Timeout while waiting for checkout (project id=%(id)s) to complete" % { "id" : project.id } )
-
-    assertEquals( "The check out was not successful for project #" + project.id, continuum.STATE_NEW, project.state )
 
     return project
 
@@ -258,10 +263,8 @@ def getProjectId( projectIds ):
 
     return projectIds[ 0 ]
 
-def initMaven1Project( basedir, scm, cvsroot, artifactId ):
-    cleanDirectory( basedir )
-    os.makedirs( basedir )
-    pom = file( basedir + "/project.xml", "w+" )
+def writeMavenOnePom( filename, artifactId, scmUrl, email ):
+    pom = file( basedir + "/" + filename, "w+" )
     pom.write( """
 <project>
   <pomVersion>3</pomVersion>
@@ -278,11 +281,15 @@ def initMaven1Project( basedir, scm, cvsroot, artifactId ):
 </project>
 """ % {
         "artifactId" : artifactId,
-        "scm" : scm,
-        "scmUrl" : makeScmUrl( scm, cvsroot, artifactId ),
+        "scmUrl" : scmUrl,
         "email" : email
       } )
     pom.close()
+
+def initMaven1Project( basedir, scm, cvsroot, artifactId ):
+    cleanDirectory( basedir )
+    os.makedirs( basedir )
+    writeMavenOnePom( basedir + "/project.xml", artifactId, makeScmUrl( scm, cvsroot, artifactId ), email )
 
     os.makedirs( basedir + "/src/main/java" )
     foo = file( basedir + "/src/main/java/Foo.java", "w+" )

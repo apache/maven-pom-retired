@@ -38,6 +38,7 @@ import org.apache.maven.continuum.scm.UpdateScmResult;
 
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -600,30 +601,10 @@ public class ModelloJPoxContinuumStore
     //
     // ----------------------------------------------------------------------
 
-//    public void setBuildSignalled( String projectId )
-//        throws ContinuumStoreException
-//    {
-//        try
-//        {
-//            store.begin();
-//
-//            ContinuumProject project = store.getContinuumProject( projectId, false );
-//
-//            projectStateGuard.assertTransition( project, ContinuumProjectState.BUILD_SIGNALED );
-//
-//            project.setState( ContinuumProjectState.BUILD_SIGNALED );
-//
-//            store.commit();
-//        }
-//        catch ( Exception e )
-//        {
-//            rollback( store );
-//
-//            throw new ContinuumStoreException( "Error while setting project state: '" + projectId + "'.", e );
-//        }
-//    }
-
-    public void setCheckoutDone( String projectId, CheckOutScmResult scmResult )
+    public void setCheckoutDone( String projectId,
+                                 CheckOutScmResult scmResult,
+                                 String errorMessage,
+                                 Throwable exception )
         throws ContinuumStoreException
     {
         try
@@ -634,7 +615,10 @@ public class ModelloJPoxContinuumStore
 
             int state;
 
-            if ( scmResult.isSuccess() )
+            if ( scmResult != null &&
+                 scmResult.isSuccess() &&
+                 StringUtils.isEmpty( errorMessage ) &&
+                 exception == null )
             {
                 state = ContinuumProjectState.NEW;
             }
@@ -648,6 +632,10 @@ public class ModelloJPoxContinuumStore
             project.setState( state );
 
             project.setCheckOutScmResult( scmResult );
+
+            project.setCheckOutErrorMessage( errorMessage );
+
+            project.setCheckOutErrorException( throwableToString( exception ) );
 
             store.commit();
         }

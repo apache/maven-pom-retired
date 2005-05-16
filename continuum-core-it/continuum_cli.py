@@ -63,26 +63,33 @@ class ContinuumXmlRpcClient(cli.cli):
 
         print "Project details:"
         print """Id: %(id)s
-Name: %(name)s
-Version: %(version)s
-Working directory: %(workingDirectory)s
-Builder type: %(builderId)s""" % project.map
+Name:               %(name)s
+Version:            %(version)s
+Working directory:  %(workingDirectory)s
+State:              %(state)s
+Executor type:      %(executorId)s""" % project.map
 
-        print ""
-        print "Checked out files:"
-        print project.checkOutScmResult
+        if ( project.checkOutErrorMessage != None and project.checkOutErrorException != None ):
+            print ""
+            print "There was a error while checking out the project:"
+            print "Error message: " + project.checkOutErrorMessage
+            print "Exception: " + project.checkOutErrorException
+        else:
+            print ""
+            print "Checked out files:"
+            print project.checkOutScmResult
 
-        print "Project Configuration:"
-        for key in project.configuration.keys():
-            print key + "=" + project.configuration[ key ]
+            print "Project Configuration:"
+            for key in project.configuration.keys():
+                print key + "=" + project.configuration[ key ]
 
-        print ""
-        print "Project Builds:"
-        print "|  Id  |  State |           Start time            |             End time            | Build time |"
-        builds = continuum.getBuildsForProject( project.id, 0, 0 )
-        for build in builds:
-            build.state = continuum.decodeState( build.state )
-            print "| %(id)4s | %(state)6s | %(startTime)s | %(endTime)s | %(totalTime)10s |" % build.map
+            builds = continuum.getBuildsForProject( project.id, 0, 0 )
+            print ""
+            print "Project Builds:"
+            print "|  Id  |  State |           Start time            |             End time            | Build time |"
+            for build in builds:
+                build.state = continuum.decodeState( build.state )
+                print "| %(id)4s | %(state)6s | %(startTime)s | %(endTime)s | %(totalTime)10s |" % build.map
 
     def do_showProjects(self, args):
         """Shows all Continuum projects registeret.
@@ -90,8 +97,11 @@ Builder type: %(builderId)s""" % project.map
 
         projects = continuum.getAllProjects()
 
+        print ""
+        print "Projects:"
+        print "  Id |    State     | Executor | Name"
         for project in projects:
-            print "Id %(id)s, name: '%(name)s'" % project
+            print "%(id)4s | %(state)12s | %(executorId)s | %(name)s" % project.map
 
     def do_buildProject(self, args):
         """Build a Continuum project.

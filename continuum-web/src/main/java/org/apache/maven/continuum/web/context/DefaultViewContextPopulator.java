@@ -75,7 +75,6 @@ public class DefaultViewContextPopulator
     }
 
     public void initialize()
-        throws Exception
     {
         viewMap = new HashMap();
 
