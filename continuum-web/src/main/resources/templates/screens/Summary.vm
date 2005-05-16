@@ -1,0 +1,29 @@
+#set ( $fid = $data.getParameters().getString( "fid" ) )
+#if ( !$fid )
+  #set ( $fid = "continuumProject" )
+#end
+#set ( $form = $formtool.getForm( $fid ) )
+<div class="app">
+  <div id="h3">
+    <h3>$i18n.getString( $form.summary.titleKey )</h3>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <tr>
+        #foreach ( $se in $form.summary.summaryElements )
+        <th>$i18n.getString( $form.getElement( $se.id ).labelKey )</th>
+        #end
+        <th colspan="$form.summary.operations.size()"></th>
+      </tr>
+      #foreach ( $item in $formtool.getSummaryItems( $fid ) )
+      <tr class="$css.nextClass">
+        #foreach ( $se in $form.summary.summaryElements )
+        <td>$formtool.getSummaryItem( $form, $se, $item )</td>
+        #end
+        #foreach ( $operation in $form.summary.operations )
+        <td><a href="$link.setPage( $formtool.getOperationUrl( $form, $item, $operation ) )">$operation.name</a></td>
+        #end
+      </tr>
+      #end
+    </table>
+    #bar()
+  </div>
+</div>

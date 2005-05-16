@@ -1,0 +1,22 @@
+#set ( $fid = $data.getParameters().getString( "fid" ) )
+#set ( $form = $formtool.getForm( $fid ) )
+#set ( $id = $data.getParameters().getString( "id" ) )
+#set ( $item = $formtool.getItem( $form, $id ) )
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>$i18n.getString( $form.view.titleKey )</h3>
+    <div class="axial">
+      <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        #foreach ( $element in $form.elements )
+        #if ( !$element.immutable )
+        <tr class="b">
+          <th>$i18n.getString( $element.labelKey )</th>
+          <td>$formtool.getItem( $form, $element, $item )</td>
+        </tr>
+        #end
+        #end
+      </table>
+      #bar()
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+#if ( !$fid )
+  #set ( $fid = $data.getParameters().getString( "fid" ) )
+#end
+#set ( $form = $formtool.getForm( $fid ) )
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>$i18n.getString( $form.add.titleKey )</h3>
+    <form method="post" action="$link">
+      #hidden ( "formId" $form.id )
+      #hidden ( "action" $form.add.action )
+      #hidden ( "view" $form.add.view )
+      <div class="axial">
+        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+          #foreach ( $element in $form.elements )
+          #if ( !$element.immutable )
+          <tr>
+            #addField( $i18n $data $element )
+            #validateField( $fvr $element )
+          </tr>
+          #end
+          #end
+        </table>
+        #submitBar( "Submit" )
+      </div>
+    </form>
+  </div>
+</div>
