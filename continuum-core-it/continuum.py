@@ -76,7 +76,11 @@ def updateProjectConfiguration( projectId, configuration ):
 def getAllProjects():
     result = checkResult( server.continuum.getAllProjects() )
 
-    return result[ "projects" ]
+    projects = []
+    for project in result[ "projects" ]:
+        projects.append( Project( project ) )
+
+    return projects
 
 def removeProject( projectId ):
     checkResult( server.continuum.removeProject( projectId ) )
@@ -150,11 +154,13 @@ def addShellProject( scmUrl, projectName, nagEmailAddress, version, configuratio
 
 class Project:
     def __init__( self, map ):
+        map[ "state" ] = decodeState( int( map[ "state" ] ) )
+
         self.map = map
         self.id = map[ "id" ]
         self.name = map[ "name" ]
         self.nagEmailAddress = map[ "nagEmailAddress" ]
-        self.state = decodeState( int( map[ "state" ] ) )
+        self.state = map[ "state" ]
         self.version = map[ "version" ]
         self.executorId = map[ "executorId" ]
         self.configuration = map[ "configuration" ]
