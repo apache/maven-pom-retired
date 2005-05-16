@@ -1,4 +1,4 @@
-package org.codehaus.continuum.web.action;
+package org.apache.maven.continuum.web.action;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,17 +16,14 @@ package org.codehaus.continuum.web.action;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.summit.rundata.RunData;
+import ognl.Ognl;
 import org.codehaus.plexus.action.AbstractAction;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 
-import java.util.Map;
-import java.util.List;
-import java.util.Iterator;
 import java.util.HashMap;
-
-import ognl.Ognl;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

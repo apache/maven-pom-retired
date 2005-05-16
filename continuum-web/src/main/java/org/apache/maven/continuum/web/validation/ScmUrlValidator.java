@@ -1,4 +1,4 @@
-package org.codehaus.continuum.web.validation;
+package org.apache.maven.continuum.web.validation;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.

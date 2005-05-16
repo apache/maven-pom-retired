@@ -1,4 +1,4 @@
-package org.codehaus.continuum.web.tool;
+package org.apache.maven.continuum.web.tool;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.

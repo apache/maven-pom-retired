@@ -93,20 +93,20 @@
 
     <component>
       <role>datetool</role>
-      <implementation>org.codehaus.continuum.web.tool.DateTool</implementation>
+      <implementation>org.apache.maven.continuum.web.tool.DateTool</implementation>
       <configuration/>
     </component>
 
     <component>
       <role>csstool</role>
-      <implementation>org.codehaus.continuum.web.tool.CssTool</implementation>
+      <implementation>org.apache.maven.continuum.web.tool.CssTool</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
       <configuration/>
     </component>
 
     <component>
       <role>formicatool</role>
-      <implementation>org.codehaus.continuum.web.tool.FormicaTool</implementation>
+      <implementation>org.apache.maven.continuum.web.tool.FormicaTool</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
       <requirements>
         <requirement>
@@ -216,7 +216,7 @@
     <component>
       <role>org.codehaus.plexus.action.Action</role>
       <role-hint>cam</role-hint>
-      <implementation>org.codehaus.continuum.web.action.CallApplicationModel</implementation>
+      <implementation>org.apache.maven.continuum.web.action.CallApplicationModel</implementation>
       <configuration>
         <application-role>org.apache.maven.continuum.Continuum</application-role>
         <calls>
@@ -237,7 +237,7 @@
     <component>
       <role>org.codehaus.plexus.formica.validation.Validator</role>
       <role-hint>scm-url</role-hint>
-      <implementation>org.codehaus.continuum.web.validation.ScmUrlValidator</implementation>
+      <implementation>org.apache.maven.continuum.web.validation.ScmUrlValidator</implementation>
       <requirements>
         <requirement>
           <role>org.apache.maven.scm.manager.ScmManager</role>
@@ -254,7 +254,7 @@
     <component>
       <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
       <role-hint>continuum-state</role-hint>
-      <implementation>org.codehaus.continuum.web.tool.ContinuumStateContentGenerator</implementation>
+      <implementation>org.apache.maven.continuum.web.tool.ContinuumStateContentGenerator</implementation>
     </component>
 
   </components>

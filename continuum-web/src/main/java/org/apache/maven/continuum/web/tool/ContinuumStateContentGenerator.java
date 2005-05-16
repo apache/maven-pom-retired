@@ -1,4 +1,4 @@
-package org.codehaus.continuum.web.tool;
+package org.apache.maven.continuum.web.tool;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -62,11 +62,11 @@ public class ContinuumStateContentGenerator
         }
         else if ( state == ContinuumProjectState.BUILDING )
         {
-            return "Updating";
+            return "Building";
         }
         else if ( state == ContinuumProjectState.UPDATING )
         {
-            return "Building";
+            return "Updating";
         }
         else if ( state == ContinuumProjectState.CHECKING_OUT )
         {

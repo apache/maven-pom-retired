@@ -21,12 +21,10 @@ import org.apache.maven.continuum.web.context.ViewContextPopulator;
 import org.codehaus.plexus.summit.pipeline.valve.CreateViewContextValve;
 import org.codehaus.plexus.summit.rundata.RunData;
 import org.codehaus.plexus.summit.view.ViewContext;
-import org.codehaus.continuum.web.pipeline.valve.RequestParameterMap;
 
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

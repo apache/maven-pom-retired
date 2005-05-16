@@ -1,4 +1,4 @@
-package org.codehaus.continuum.web.action;
+package org.apache.maven.continuum.web.action;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
