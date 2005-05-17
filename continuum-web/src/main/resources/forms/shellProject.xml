@@ -6,18 +6,15 @@
   <elements>
     <element>
       <id>project.executable</id>
-      <validator>required</validator>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>project.executable.error</error-message-key>
+        </validator>
+      </validators>
       <expression>executable</expression>
       <type>text</type>
     </element>
-    <!--
-    <element>
-      <id>project.arguments</id>
-      <validator>default</validator>
-      <expression>arguments</expression>
-      <type>text</type>
-    </element>
-    -->
   </elements>
 
   <!-- Add -->

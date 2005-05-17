@@ -7,38 +7,68 @@
   <elements>
     <element>
       <id>project.name</id>
-      <validator>required</validator>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>project.name.error</error-message-key>
+        </validator>
+      </validators>
       <type>text</type>
       <expression>name</expression>
     </element>
     <element>
       <id>project.scmUrl</id>
-      <validator>scm-url</validator>
+      <validators>
+        <validator>
+          <id>scm-url</id>
+          <error-message-key>project.scmUrl.error</error-message-key>
+        </validator>
+      </validators>
       <type>text</type>
       <expression>scmUrl</expression>
     </element>
     <element>
       <id>project.nagEmailAddress</id>
-      <validator>required</validator>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>project.nagEmailAddress.error</error-message-key>
+        </validator>
+      </validators>
       <type>text</type>
       <expression>nagEmailAddress</expression>
     </element>
     <element>
       <id>project.version</id>
-      <validator>required</validator>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>project.version.error</error-message-key>
+        </validator>
+      </validators>
       <type>text</type>
       <expression>version</expression>
     </element>
     <element>
       <id>project.type</id>
-      <validator>default</validator>
+      <validators>
+        <validator>
+          <id>default</id>
+          <error-message-key>project.type.error</error-message-key>
+        </validator>
+      </validators>
       <type>text</type>
       <expression>builderId</expression>
       <immutable>true</immutable>
     </element>
     <element>
       <id>project.state</id>
-      <validator>default</validator>
+      <validators>
+        <validator>
+          <id>default</id>
+          <error-message-key>project.state.error</error-message-key>
+        </validator>
+      </validators>
       <type>text</type>
       <expression>state</expression>
       <immutable>true</immutable>

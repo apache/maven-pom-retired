@@ -6,7 +6,12 @@
   <elements>
     <element>
       <id>project.phase</id>
-      <validator>required</validator>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>project.phase.error</error-message-key>
+        </validator>
+      </validators>
       <expression>goals</expression>
       <type>text</type>
     </element>

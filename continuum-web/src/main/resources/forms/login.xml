@@ -3,12 +3,20 @@
   <elements>
     <element>
       <id>login.username</id>
-      <validator>default</validator>
+      <validators>
+        <validator>
+          <id>default</id>
+        </validator>
+      </validators>
       <type>text</type>
     </element>
     <element>
       <id>login.password</id>
-      <validator>default</validator>
+      <validators>
+        <validator>
+          <id>default</id>
+        </validator>
+      </validators>
       <type>password</type>
     </element>
   </elements>
