@@ -13,7 +13,8 @@
         #end
         <th colspan="$form.summary.operations.size()"></th>
       </tr>
-      #foreach ( $item in $formtool.getSummaryItems( $fid ) )
+      #set ( $items = $formtool.getSummaryItems( $fid ) )
+      #foreach ( $item in $items )
       <tr class="$css.nextClass">
         #foreach ( $se in $form.summary.summaryElements )
         <td>$formtool.getSummaryItem( $form, $se, $item )</td>
@@ -29,14 +30,16 @@
       #end
     </table>
     ##
-    ## TODO: This should be made a general feature in formica using the CAM
-    ##
-    <form method="post" action="$link">
-      #hidden ( "action" "cam" )
-      #hidden ( "cid" "buildAllProjects" )
-      <div class="functnbar3">
+    ## TODO: This should be made a general feature in formica using the CAM and an option for an 
+    ## enable expression to model what we have below.
+    <div class="functnbar3">
+      <form method="post" action="$link">
+        #if ( $items && $items.size() > 0 )
+        #hidden ( "action" "cam" )
+        #hidden ( "cid" "buildAllProjects" )
         <input type="submit" name="build-all" value="Build All"/>
-      </div>
-  </form>
+        #end
+      </form>
+    </div>
   </div>
 </div>
