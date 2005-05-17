@@ -105,6 +105,56 @@ public class FormicaTool
         return getItem( form, form.getElement( se.getId() ), item );
     }
 
+    public String getOperationUrl( Form form, Object item, Operation op )
+        throws FormToolException
+    {
+        String id = null;
+
+        String type = null;
+
+        // TODO; throw an exception if the expression key isn't there
+        try
+        {
+            id = (String) Ognl.getValue( form.getKeyExpression(), item );
+
+            type = (String) Ognl.getValue( form.getTypeExpression(), item );
+        }
+        catch ( OgnlException e )
+        {
+            throw new FormToolException( "Error retrieving expression:", e );
+        }
+
+        String s = StringUtils.replace( op.getAction(), "$id$", id );
+
+        s = StringUtils.replace( s, "$formId$", form.getId() );
+
+        s = StringUtils.replace( s, "$type$", type );
+
+        return s;
+    }
+
+    public boolean enableOperation( Form form, Operation operation, Object item )
+        throws FormToolException
+    {
+        if ( operation.getEnable() == null )
+        {
+            return true;
+        }
+
+        try
+        {
+            return ((Boolean)Ognl.getValue( operation.getEnable(), item )).booleanValue();
+        }
+        catch ( OgnlException e )
+        {
+            throw new FormToolException( "Cannot evaluate enable expression: " + operation.getEnable() + " on " + item );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
     public String getItem( Form form, Element element, String id )
         throws FormToolException
     {
@@ -173,35 +223,6 @@ public class FormicaTool
         }
 
         return o.toString();
-    }
-
-
-    public String getOperationUrl( Form form, Object item, Operation op )
-        throws FormToolException
-    {
-        String id = null;
-
-        String type = null;
-
-        // TODO; throw an exception if the expression key isn't there
-        try
-        {
-            id = (String) Ognl.getValue( form.getKeyExpression(), item );
-
-            type = (String) Ognl.getValue( form.getTypeExpression(), item );
-        }
-        catch ( OgnlException e )
-        {
-            throw new FormToolException( "Error retrieving expression:", e );
-        }
-
-        String s = StringUtils.replace( op.getAction(), "$id$", id );
-
-        s = StringUtils.replace( s, "$formId$", form.getId() );
-
-        s = StringUtils.replace( s, "$type$", type );
-
-        return s;
     }
 
     // ----------------------------------------------------------------------

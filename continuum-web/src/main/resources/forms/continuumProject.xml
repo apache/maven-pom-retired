@@ -84,6 +84,7 @@
       <operation>
         <name>Results</name>
         <action>ProjectBuilds.vm/view/ProjectBuilds/id/$id$</action>
+        <enable>getBuilds().size > 0</enable>
       </operation>
       <operation>
         <name>Edit</name>

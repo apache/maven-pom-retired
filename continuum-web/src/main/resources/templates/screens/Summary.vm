@@ -19,7 +19,11 @@
         <td>$formtool.getSummaryItem( $form, $se, $item )</td>
         #end
         #foreach ( $operation in $form.summary.operations )
+        #if ( $formtool.enableOperation( $form, $operation, $item ) )
         <td><a href="$link.setPage( $formtool.getOperationUrl( $form, $item, $operation ) )">$operation.name</a></td>
+        #else
+        <td>$operation.name</td>
+        #end
         #end
       </tr>
       #end
