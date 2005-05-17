@@ -14,6 +14,7 @@
         <th colspan="$form.summary.operations.size()"></th>
       </tr>
       #foreach ( $item in $formtool.getSummaryItems( $fid ) )
+      >>>> $item.getState()
       <tr class="$css.nextClass">
         #foreach ( $se in $form.summary.summaryElements )
         <td>$formtool.getSummaryItem( $form, $se, $item )</td>

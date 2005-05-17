@@ -84,7 +84,7 @@
       <operation>
         <name>Results</name>
         <action>ProjectBuilds.vm/view/ProjectBuilds/id/$id$</action>
-        <enable>getBuilds().size > 0</enable>
+        <enable>getBuilds().size > 0 &amp;&amp; ( getState() == 2 || getState() == 3 || getState() == 4 )</enable>
       </operation>
       <operation>
         <name>Edit</name>
