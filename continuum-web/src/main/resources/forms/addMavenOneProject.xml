@@ -11,7 +11,11 @@
       <validators>
         <validator>
           <id>required</id>
-          <error-message-key>m1PomUrl.error</error-message-key>
+          <error-message-key>empty.error</error-message-key>
+        </validator>
+        <validator>
+          <id>url</id>
+          <error-message-key>url.error</error-message-key>
         </validator>
         <validator>
           <id>url-source</id>
