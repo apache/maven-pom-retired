@@ -41,9 +41,11 @@ class ContinuumXmlRpcClient(cli.cli):
     def do_addMavenTwoProject(self, args):
         """Add a Maven 2.x project."""
 
-        projectId = continuum.addMavenTwoProject( args[0] )
+        projectIds = continuum.addMavenTwoProject( args[0] )
 
-        print "Added project, id: " + projectId
+        print "Added " + str( len( projectIds ) ) + " projects."
+        for id in projectIds:
+            print " id: " + id
 
     def do_addMavenOneProject(self, args):
         """Add a Maven 1.x project."""
@@ -67,13 +69,16 @@ Name:               %(name)s
 Version:            %(version)s
 Working directory:  %(workingDirectory)s
 State:              %(state)s
-Executor type:      %(executorId)s""" % project.map
+Executor type:      %(executorId)s
+SCM URL:            %(scmUrl)s""" % project.map
 
-        if ( project.checkOutErrorMessage != None and project.checkOutErrorException != None ):
+        if ( project.checkOutErrorMessage != None or project.checkOutErrorException != None ):
             print ""
             print "There was a error while checking out the project:"
-            print "Error message: " + project.checkOutErrorMessage
-            print "Exception: " + project.checkOutErrorException
+            if ( project.checkOutErrorMessage != None ):
+                print "Error message: " + project.checkOutErrorMessage
+            if ( project.checkOutErrorException != None ):
+                print "Exception: " + project.checkOutErrorException
         else:
             print ""
             print "Checked out files:"
