@@ -29,17 +29,11 @@ import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 
 /**
- * This is the main entry point for Continuum. Projects are added to Continuum
- * by providing an URL to the metadata for project. The metadata for a project
- * must contain the following information:
- * <p/>
- * o project name
- * o project id
- * o SCM information
- * o email notification list
- * o project developers
+ * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
+ * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @version $Id$
  */
-public interface Continuum
+ public interface Continuum
 {
     String ROLE = Continuum.class.getName();
 
