@@ -308,6 +308,11 @@
           <role>org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper</role>
         </requirement>
       </requirements>
+      <configuration>
+        <excludedPackagingTypes>
+          <packaging implementation="java.lang.String">pom</packaging>
+        </excludedPackagingTypes>
+      </configuration>
     </component>
 
     <!--

@@ -18,6 +18,7 @@ package org.apache.maven.continuum.project.builder.maven;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,6 +46,9 @@ public class MavenTwoContinuumProjectBuilder
 
     /** @requirement */
     private MavenBuilderHelper builderHelper;
+
+    /** @configuration */
+    private List excludedPackagingTypes;
 
     // ----------------------------------------------------------------------
     // ProjectCreator Implementation
@@ -89,11 +93,14 @@ public class MavenTwoContinuumProjectBuilder
             throw new ContinuumProjectBuilderException( "Error while building Maven project.", e );
         }
 
-        MavenTwoProject continuumProject = new MavenTwoProject();
+        if ( !excludedPackagingTypes.contains( mavenProject.getPackaging() ) )
+        {
+            MavenTwoProject continuumProject = new MavenTwoProject();
 
-        builderHelper.mapMavenProjectToContinuumProject( mavenProject, continuumProject );
+            builderHelper.mapMavenProjectToContinuumProject( mavenProject, continuumProject );
 
-        result.addProject( continuumProject, MavenTwoBuildExecutor.ID );
+            result.addProject( continuumProject, MavenTwoBuildExecutor.ID );
+        }
 
         List modules = mavenProject.getModules();
 

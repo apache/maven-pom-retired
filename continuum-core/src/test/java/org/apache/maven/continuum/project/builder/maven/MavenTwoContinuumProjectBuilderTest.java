@@ -86,7 +86,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertNotNull( result );
 
-        assertEquals( 6, result.getProjects().size() );
+        assertEquals( 5, result.getProjects().size() );
 
         Map projects = new HashMap();
 
@@ -99,7 +99,6 @@ public class MavenTwoContinuumProjectBuilderTest
             projects.put( project.getName(), project );
         }
 
-        assertMavenTwoProject( "Continuum Parent Project", projects );
         assertMavenTwoProject( "Continuum Core", projects );
         assertMavenTwoProject( "Continuum Model", projects );
         assertMavenTwoProject( "Continuum Plexus Application", projects );
