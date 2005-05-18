@@ -25,24 +25,6 @@
             <name>javax.jdo.option.ConnectionPassword</name>
             <value></value>
           </property>
-<!--
-          <property>
-            <name>javax.jdo.option.ConnectionDriverName</name>
-            <value>org.postgresql.Driver</value>
-          </property>
-          <property>
-            <name>javax.jdo.option.ConnectionURL</name>
-            <value>jdbc:postgresql://localhost/continuum</value>
-          </property>
-          <property>
-            <name>javax.jdo.option.ConnectionUserName</name>
-            <value>trygvis</value>
-          </property>
-          <property>
-            <name>javax.jdo.option.ConnectionPassword</name>
-            <value></value>
-          </property>
- -->
           <property>
             <name>org.jpox.autoCreateSchema</name>
             <value>true</value>

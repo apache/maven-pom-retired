@@ -368,8 +368,6 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addProject( "Test Project" );
 
-//        store.setBuildSignalled( projectId );
-
         store.setIsUpdating( projectId );
 
         store.setUpdateDone( projectId );
@@ -391,6 +389,52 @@ public class ModelloJPoxContinuumStoreTest
         store.removeProject( projectId );
     }
 
+    public void testAddDuplicateProject()
+        throws Exception
+    {
+        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
+
+        // ----------------------------------------------------------------------
+        // Test projects with duplicate names
+        // ----------------------------------------------------------------------
+
+        String projectId = addProject( "trygve" );
+
+        assertEquals( projectId, store.getProjectByName( "trygve" ).getId() );
+
+        try
+        {
+            addProject( "trygve" );
+
+            fail( "Expected a exception" );
+        }
+        catch( ContinuumStoreException e )
+        {
+            // expected
+        }
+
+        ContinuumProject project = makeStubProject( "brett" );
+
+        project.setScmUrl( "foo" );
+
+        addProject( project );
+
+        assertNotNull( store.getProjectByScmUrl( "foo" ) );
+
+        try
+        {
+            project.setName( "jason" );
+
+            addProject( project );
+
+            fail( "Expected a exception" );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            // expected
+        }
+    }
+
     // ----------------------------------------------------------------------
     // Build
     // ----------------------------------------------------------------------
@@ -405,8 +449,6 @@ public class ModelloJPoxContinuumStoreTest
         jdoFactory.getPersistenceManagerFactory().close();
 
         String projectId = addProject( "Test Project" );
-
-//        store.setBuildSignalled( projectId );
 
         store.setIsUpdating( projectId );
 
@@ -442,23 +484,17 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addProject( "Test Project" );
 
-//        store.setBuildSignalled( projectId );
-
         store.setIsUpdating( projectId );
 
         store.setUpdateDone( projectId );
 
         String projectIdFoo = addProject( "Foo Project" );
 
-//        store.setBuildSignalled( projectIdFoo );
-
         store.setIsUpdating( projectIdFoo );
 
         store.setUpdateDone( projectIdFoo );
 
         String projectIdBar = addProject( "Bar Project" );
-
-//        store.setBuildSignalled( projectIdBar );
 
         store.setIsUpdating( projectIdBar );
 
@@ -516,10 +552,6 @@ public class ModelloJPoxContinuumStoreTest
         // ----------------------------------------------------------------------
 
         String projectId = addProject( "Test Project" );
-
-//        store.setBuildSignalled( projectId );
-
-//        assertInState( projectId, ContinuumProjectState.BUILD_SIGNALED );
 
         store.setIsUpdating( projectId );
 
@@ -607,7 +639,111 @@ public class ModelloJPoxContinuumStoreTest
     }
 
     // ----------------------------------------------------------------------
-    //
+    // Utility methods
+    // ----------------------------------------------------------------------
+
+    public static ContinuumProject makeStubProject( String name )
+    {
+        ContinuumProject project = new ContinuumProject();
+
+        project.setName( name );
+        project.setScmUrl( "scm:local:src/test/repo" );
+        project.setNagEmailAddress( "foo@bar.com" );
+        project.setVersion( "1.0" );
+        project.setExecutorId( "maven2" );
+        project.setWorkingDirectory( "/tmp" );
+        project.setConfiguration( new Properties() );
+
+        return project;
+    }
+
+    public static ContinuumProject makeProject( String name,
+                                                String scmUrl,
+                                                String nagEmailAddress,
+                                                String version,
+                                                String executorId,
+                                                String workingDirectory,
+                                                Properties configuration )
+    {
+        ContinuumProject project = new ContinuumProject();
+
+        project.setName( name );
+        project.setScmUrl( scmUrl );
+        project.setNagEmailAddress( nagEmailAddress );
+        project.setVersion( version );
+        project.setExecutorId( executorId );
+        project.setWorkingDirectory( workingDirectory );
+        project.setConfiguration( configuration );
+
+        return project;
+    }
+
+    private String addProject( String name )
+        throws Exception
+    {
+        return addProject( (ContinuumStore) lookup( ContinuumStore.ROLE ), makeStubProject( name ) );
+    }
+
+    private String addProject( ContinuumProject project )
+        throws Exception
+    {
+        return addProject( (ContinuumStore) lookup( ContinuumStore.ROLE ), project );
+    }
+
+    public static String addProject( ContinuumStore store, ContinuumProject project )
+        throws Exception
+    {
+        return addProject( store,
+                           project.getName(),
+                           project.getScmUrl(),
+                           project.getNagEmailAddress(),
+                           project.getVersion(),
+                           project.getExecutorId(),
+                           project.getWorkingDirectory(),
+                           project.getConfiguration() );
+    }
+
+    public static String addProject( ContinuumStore store, String name )
+        throws Exception
+    {
+        return addProject( store, makeStubProject( name ) );
+    }
+
+    public static String addProject( ContinuumStore store,
+                                     String name,
+                                     String scmUrl,
+                                     String nagEmailAddress,
+                                     String version,
+                                     String executorId,
+                                     String workingDirectory,
+                                     Properties configuration )
+        throws Exception
+    {
+        String projectId = store.addProject( name,
+                                             scmUrl,
+                                             nagEmailAddress,
+                                             version,
+                                             executorId,
+                                             workingDirectory,
+                                             configuration );
+
+        CheckOutScmResult checkOutScmResult = new CheckOutScmResult();
+
+        checkOutScmResult.setSuccess( true );
+
+        store.setCheckoutDone( projectId, checkOutScmResult, null, null );
+
+        ContinuumProject project = store.getProject( projectId );
+
+        assertNotNull( project );
+
+        assertEquals( ContinuumProjectState.NEW, project.getState() );
+
+        return projectId;
+    }
+
+    // ----------------------------------------------------------------------
+    // Assertions
     // ----------------------------------------------------------------------
 
     private void assertInState( String projectId, int state )
@@ -623,39 +759,6 @@ public class ModelloJPoxContinuumStoreTest
         ContinuumJPoxStore.ThreadState state = ( (ModelloJPoxContinuumStore) store ).getStore().getThreadState();
 
         assertNull( state );
-    }
-
-    private String addProject( String name )
-        throws Exception
-    {
-        return addProject( (ContinuumStore) lookup( ContinuumStore.ROLE ), name );
-    }
-
-    public static String addProject( ContinuumStore store, String name )
-        throws Exception
-    {
-        String scmUrl = "scm:local:src/test/repo";
-        String nagEmailAddress = "foo@bar.com";
-        String version = "1.0";
-        String builderId = "maven2";
-        String workingDirectory = "/tmp";
-        Properties configuration = new Properties();
-
-        String projectId = store.addProject( name, scmUrl, nagEmailAddress, version, builderId, workingDirectory, configuration );
-
-        CheckOutScmResult checkOutScmResult = new CheckOutScmResult();
-
-        checkOutScmResult.setSuccess( true );
-
-        store.setCheckoutDone( projectId, checkOutScmResult, null, null );
-
-        ContinuumProject project = store.getProject( projectId );
-
-        assertNotNull( project );
-
-        assertEquals( ContinuumProjectState.NEW, project.getState() );
-
-        return projectId;
     }
 
     private void assertProjectEquals( String projectId, String name, String scmUrl, String nagEmailAddress, String version, String builderId, String workingDirectory, Properties configuration, ContinuumProject project )

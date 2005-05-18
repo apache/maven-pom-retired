@@ -76,7 +76,10 @@ public interface ContinuumStore
     Collection getAllProjects()
         throws ContinuumStoreException;
 
-    Collection findProjectsByName( String nameSearchPattern )
+    ContinuumProject getProjectByName( String nameSearchPattern )
+        throws ContinuumStoreException;
+
+    ContinuumProject getProjectByScmUrl( String scmUrl )
         throws ContinuumStoreException;
 
     ContinuumProject getProject( String projectId )

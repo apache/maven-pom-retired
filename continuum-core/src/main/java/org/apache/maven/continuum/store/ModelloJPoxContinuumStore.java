@@ -96,6 +96,16 @@ public class ModelloJPoxContinuumStore
                               Properties configuration )
         throws ContinuumStoreException
     {
+        if ( getProjectByName( name ) != null )
+        {
+            throw new ContinuumStoreException( "A project with the specified name already exist." );
+        }
+
+        if ( getProjectByScmUrl( scmUrl ) != null )
+        {
+            throw new ContinuumStoreException( "A project with the specified scm url already exist." );
+        }
+
         ContinuumProject project = new ContinuumProject();
 
         project.setName( name );
@@ -289,24 +299,52 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public Collection findProjectsByName( String nameSearchPattern )
+    public ContinuumProject getProjectByName( String name )
         throws ContinuumStoreException
     {
-        Iterator it = getAllProjects().iterator();
-
-        List hits = new ArrayList();
-
-        while ( it.hasNext() )
+        try
         {
-            ContinuumProject continuumProject = (ContinuumProject) it.next();
+            String filter = "this.name == \"" + name + "\"";
 
-            if ( continuumProject.getName().toLowerCase().indexOf( nameSearchPattern.toLowerCase() ) != -1 )
+            String ordering = "";
+
+            Collection projects = store.getContinuumProjectCollection( true, filter, ordering );
+
+            if ( projects.size() == 0 )
             {
-                hits.add( continuumProject );
+                return null;
             }
-        }
 
-        return hits;
+            return (ContinuumProject) projects.iterator().next();
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumStoreException( "Error while loading project set", e );
+        }
+    }
+
+    public ContinuumProject getProjectByScmUrl( String scmUrl )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            String filter = "this.scmUrl == \"" + scmUrl + "\"";
+
+            String ordering = "";
+
+            Collection projects = store.getContinuumProjectCollection( true, filter, ordering );
+
+            if ( projects.size() == 0 )
+            {
+                return null;
+            }
+
+            return (ContinuumProject) projects.iterator().next();
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumStoreException( "Error while finding projects.", e );
+        }
     }
 
     public ContinuumProject getProject( String projectId )
@@ -514,7 +552,11 @@ public class ModelloJPoxContinuumStore
     {
         try
         {
-            return store.getContinuumBuildCollection( true, "this.project.id == \"" + projectId + "\"", "startTime descending" );
+            String filter = "this.project.id == \"" + projectId + "\"";
+
+            String ordering = "startTime descending";
+
+            return store.getContinuumBuildCollection( true, filter, ordering );
         }
         catch ( Exception e )
         {
