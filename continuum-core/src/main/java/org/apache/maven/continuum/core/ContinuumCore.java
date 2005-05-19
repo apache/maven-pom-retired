@@ -26,6 +26,11 @@ import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 
+/**
+ * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
+ * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
+ * @version $Id$
+ */
 public interface ContinuumCore
 {
     String ROLE = ContinuumCore.class.getName();

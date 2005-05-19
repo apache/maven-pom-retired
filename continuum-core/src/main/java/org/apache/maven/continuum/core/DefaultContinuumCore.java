@@ -69,7 +69,7 @@ import org.codehaus.plexus.util.StringUtils;
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
- * @version $Id: DefaultContinuum.java,v 1.7 2005/04/08 12:47:56 trygvis Exp $
+ * @version $Id$
  */
 public class DefaultContinuumCore
     extends AbstractLogEnabled
