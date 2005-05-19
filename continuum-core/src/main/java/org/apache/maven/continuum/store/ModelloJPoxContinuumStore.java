@@ -42,7 +42,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ModelloJPoxContinuumStore.java,v 1.2 2005/04/03 21:31:33 trygvis Exp $
+ * @version $Id$
  */
 public class ModelloJPoxContinuumStore
     extends AbstractContinuumStore
@@ -98,12 +98,12 @@ public class ModelloJPoxContinuumStore
     {
         if ( getProjectByName( name ) != null )
         {
-            throw new ContinuumStoreException( "A project with the specified name already exist." );
+            throw new ContinuumStoreException( "A project with the name '" + name + "' already exist." );
         }
 
         if ( getProjectByScmUrl( scmUrl ) != null )
         {
-            throw new ContinuumStoreException( "A project with the specified scm url already exist." );
+            throw new ContinuumStoreException( "A project with the scm url '" + scmUrl + "' already exist." );
         }
 
         ContinuumProject project = new ContinuumProject();

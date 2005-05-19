@@ -23,7 +23,7 @@ import org.codehaus.plexus.PlexusTestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumNotificationDispatcherTest.java,v 1.2 2005/04/07 23:27:40 trygvis Exp $
+ * @version $Id$
  */
 public class ContinuumNotificationDispatcherTest
     extends PlexusTestCase
@@ -36,9 +36,9 @@ public class ContinuumNotificationDispatcherTest
 
         ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
 
-        String projectId = ModelloJPoxContinuumStoreTest.addProject( store, "Test Project" );
-
-//        store.setBuildSignalled( projectId );
+        String projectId = ModelloJPoxContinuumStoreTest.addProject( store,
+                                                                     "Notification Dispatcher Test Project",
+                                                                     "scm:notification/dispatcher" );
 
         store.setIsUpdating( projectId );
 

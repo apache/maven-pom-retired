@@ -25,7 +25,7 @@ import org.codehaus.plexus.taskqueue.TaskQueue;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: BuildQueueTest.java,v 1.1.1.1 2005/03/29 20:42:04 trygvis Exp $
+ * @version $Id$
  */
 public class BuildQueueTest
     extends PlexusTestCase
@@ -47,9 +47,9 @@ public class BuildQueueTest
     public void testTestTheQueueWithASingleProject()
         throws Exception
     {
-        String name = "Project 1";
+        System.err.println( this.getClassLoader() );
 
-        String projectId = ModelloJPoxContinuumStoreTest.addProject( store, name );
+        String projectId = ModelloJPoxContinuumStoreTest.addProject( store, "Build Queue Project 1", "1" );
 
         buildProject( projectId, false );
 
@@ -72,13 +72,9 @@ public class BuildQueueTest
     public void testTheQueueWithMultipleProjects()
         throws Exception
     {
-        String name1 = "Project 1";
+        String projectId1 = ModelloJPoxContinuumStoreTest.addProject( store, "Build Queue Project 2", "foo" );
 
-        String name2 = "Project 2";
-
-        String projectId1 = ModelloJPoxContinuumStoreTest.addProject( store, name1 );
-
-        String projectId2 = ModelloJPoxContinuumStoreTest.addProject( store, name2 );
+        String projectId2 = ModelloJPoxContinuumStoreTest.addProject( store, "Build Queue Project 3", "bar" );
 
         buildProject( projectId1, false );
 
@@ -112,9 +108,9 @@ public class BuildQueueTest
     public void testTestTheQueueWithASingleProjectAndForcedBuilds()
         throws Exception
     {
-        String name = "Project 1";
+        String name = "Build Queue Project 4";
 
-        String projectId = ModelloJPoxContinuumStoreTest.addProject( store, name );
+        String projectId = ModelloJPoxContinuumStoreTest.addProject( store, name, "4" );
 
         buildProject( projectId, true );
 
