@@ -95,10 +95,10 @@
           <type>String</type>
         </field>
         <field>
-          <name>checkOutErrorException</name>
+          <name>mailType</name>
           <version>1.0.0</version>
           <type>String</type>
-        </field>
+        </field>        
       </fields>
     </class>
 
