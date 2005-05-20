@@ -1,0 +1,26 @@
+ ------
+ Contact the Continuum Team
+ ------
+ Trygve Laugstøl
+ ------
+ Fri May 20 2005
+
+{mailing-lists}
+Continuum Mailing Lists
+ 
+*--------------------------*---------------*-----------------*-------------*
+| <<List Name>>            | <<Subscribe>> | <<Unsubscribe>> | <<Archive>> |
+*--------------------------*---------------*-----------------*-------------*
+| Continuum User List      | {{{mailto:continuum-users-subscribe@maven.apache.org}Subscribe}} | {{{mailto:continuum-users-unsubscribe@maven.apache.org}Unsubscribe}} | {{{http://mail-archives.apache.org/mod_mbox/maven-continuum-users/}Archive}} |
+*--------------------------*---------------*-----------------*-------------*
+| Continuum Developer List | {{{mailto:continuum-dev-subscribe@maven.apache.org}Subscribe}} | {{{mailto:continuum-dev-unsubscribe@maven.apache.org}Unsubscribe}} | {{{http://mail-archives.apache.org/mod_mbox/maven-continuum-dev/}Archive}} |
+*--------------------------*---------------*-----------------*-------------*
+| Continuum Commits List   | {{{mailto:continuum-commit-subscribe@maven.apache.org}Subscribe}} | {{{mailto:continuum-commit-unsubscribe@maven.apache.org}Unsubscribe}} | {{{http://mail-archives.apache.org/mod_mbox/maven-continuum-commit/}Archive}} |
+*--------------------------*---------------*-----------------*-------------*
+
+{issue-tracer}
+Continuum Issue Tracker
+
+ Continuum uses {{{http://jira.codehaus.org/browse/CONTINUUM}this}} issue
+ tracker. If you'd like to follow the current progress please check out the
+ {{{http://jira.codehaus.org/browse/CONTINUUM?report=com.atlassian.jira.plugin.system.project:roadmap-panel} roadmap}}

@@ -14,7 +14,7 @@ Getting the sources
  out the sources with this command:
 
 +--+
-$ svn co http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-alpha-1/ continuum
+$ svn co http://svn.apache.org/repos/asf/maven/continuum/trunk/ continuum
 +--+
 
  All the Continuum Alpha 1 sources will be in a directory called
@@ -57,5 +57,5 @@ Building Continuum
  script from the root of the check out like this:
 
 +--+
-$ sh build.sh</source>
+$ sh build.sh
 +--+
