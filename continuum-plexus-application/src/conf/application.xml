@@ -252,8 +252,18 @@
           </property>
           <property>
             <name>velocimacro.library</name>
-            <value>/org/apache/maven/continuum/notification/mail/templates/common.vm</value>
+            <value>/org/apache/maven/continuum/notification/mail/templates/common.vm,CommonMacros.vm</value>
           </property>
+          <!--
+          
+          This is for dev and we need to find a way to flip this easily,
+          maybe a marmalade config reader that will do logic.                   
+          
+          <property>
+            <name>velocimacro.library.autoreload</name>
+            <value>@velocimacro.reload@</value>
+          </property>
+          -->
         </properties>
       </configuration>
     </component>
