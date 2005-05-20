@@ -1,0 +1,60 @@
+ ------
+ Configuring Continuum
+ ------
+ Trygve Laugstøl
+ ------
+ Fri May 20 2005
+
+Configuring Continuum
+
+ The configuration file for Continuum is inside the Plexus runtime under
+ <<<apps/continuum/conf/application.xml>>>. <NOTE>: You have to start and stop the application at least once before
+ configuring Continuum. This is required because the application container has to unpack the application.
+
+* Mail Notification
+
+ There are three components used by the mail notification system in Continuum:
+
+ * The Mail notifier itself. There are three configurable properties:
+
+  * <<<from-mailbox>>> and <<<from-name>>>: The mailbox and name that will be set as the <<<From>>> header for
+    all mails sent. It is important to ensure that the mailbox is a real account as most SMTP servers will verify
+    that the mailbox actually exists before accepting the mail. If the from mailbox is empty or not specified the
+    nag email address for the project will be used.
+
+  * <<<timestamp-format>>>: This is the timestamp format used for the dates in email messages.
+
+ * The recipient source. This is the component that decides who should receive the email. The only thing that
+   can be configured here is a address that will be used as the recipient for all email sent. This configuration
+   is mostly useful for people who want to make sure all email is sent to a specific account during testing or
+   development.
+
+ * The mail sender is the component that will send the email to the SMTP server. The two properties that can be
+   configured are:
+
+  * <<<smtp-host>>>: The SMTP host. Make sure that this host will accept email.
+
+  * <<<smtp-port>>>: The port to use on the SMTP host.
+
+* Alarm Trigger
+
+ The alarm trigger will trigger a build of all the projects on a timed interval.
+
+ * <<<interval>>>: The number of seconds between each round of scheduling.
+
+ * <<<delay>>>: The number of seconds to wait before starting the first round of scheduling post startup.
+
+* Jetty Configuration
+
+ Jetty is configured in a special way as it's a service, not a component. The
+ only thing that should be changed in the Jetty configuration is the port and
+ that is done by changing the <<<port>>> tag in the <<<services>>> section.
+
+* Socket Listeners
+
+ There are two services listening on sockets that can be configured:
+
+ * <<<url-registrar-server>>>: This registrar will read POM URLs for the Maven 1.x and 2.x project builders.
+
+ * <<<simple-socket-trigger-server>>>: This registrar will read project IDs off the wire and schedule a build for that project.
+

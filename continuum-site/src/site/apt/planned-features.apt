@@ -1,0 +1,51 @@
+ ------
+ Planned Features
+ ------
+ Trygve Laugstøl
+ ------
+ Fri May 20 2005
+
+Planned Features for Continuum
+
+ If you would like to see support for a particular feature that is not listed here please enter them in
+ {{{issue-tracking.html}JIRA}} or send a mail to the {{{mail-lists.html}mailing lists}}.
+
+* Notification
+
+ Support for notification through these mechanisms is planned:
+
+ * {{{http://jira.codehaus.org/browse/CONTINUUM-5}Jabber}}
+
+ * {{{http://jira.codehaus.org/browse/CONTINUUM-33}IRC}}
+
+* SCM Support
+
+ Continuum is using the Maven SCM library for checking out and getting updates from the SCM the project is stored
+ in. Continuum currently only supports CVS and Subversion but support for these SCM is planned:
+
+ * ClearCase
+
+ * Perforce
+
+ * StarTeam
+
+ * Visual Source Safe
+
+* Build Scheduling
+
+ Currently it only supports builds on a regular interval and Continuum definitely needs better build scheduling. There
+ are two major ways to do this:
+
+ [Push] something is triggering a build by telling Continuum to do so. Continuum already supports this through
+        the socket listener that is listening for build IDs to build and through the XML-RPC server.
+
+ [Pull] Continuum is looking for changes and schedules a build when something has changed. This is useful for several
+        reasons: less resources used by useless builds and it's easier to use because there is no need to configure
+        your SCM to push events to Continuum.
+
+* Asynchronous checkouts
+
+ Currently all checkouts are done while the user presses the "add project" button which can take up to
+ several minutes to complete. Continuum need to do this in the background and show that the prjoect currently
+ are beeing checked out in the overview pages. For status updates on this issues take a look at the 
+ {{{http://jira.codehaus.org/browse/CONTINUUM-60}JIRA issue}}.
