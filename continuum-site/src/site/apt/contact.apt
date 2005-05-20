@@ -5,7 +5,6 @@
  ------
  Fri May 20 2005
 
-{mailing-lists}
 Continuum Mailing Lists
  
 *--------------------------*---------------*-----------------*-------------*
@@ -18,7 +17,6 @@ Continuum Mailing Lists
 | Continuum Commits List   | {{{mailto:continuum-commit-subscribe@maven.apache.org}Subscribe}} | {{{mailto:continuum-commit-unsubscribe@maven.apache.org}Unsubscribe}} | {{{http://mail-archives.apache.org/mod_mbox/maven-continuum-commit/}Archive}} |
 *--------------------------*---------------*-----------------*-------------*
 
-{issue-tracer}
 Continuum Issue Tracker
 
  Continuum uses {{{http://jira.codehaus.org/browse/CONTINUUM}this}} issue
