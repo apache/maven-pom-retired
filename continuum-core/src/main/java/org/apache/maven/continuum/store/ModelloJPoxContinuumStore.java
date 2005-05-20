@@ -96,15 +96,20 @@ public class ModelloJPoxContinuumStore
                               Properties configuration )
         throws ContinuumStoreException
     {
+        // TODO: this code should not be here, it belongs in the application or we would have to duplicate this
+        // code in every store we implemented.
+
         if ( getProjectByName( name ) != null )
         {
             throw new ContinuumStoreException( "A project with the name '" + name + "' already exist." );
         }
 
+        /*
         if ( getProjectByScmUrl( scmUrl ) != null )
         {
             throw new ContinuumStoreException( "A project with the scm url '" + scmUrl + "' already exist." );
         }
+        */
 
         ContinuumProject project = new ContinuumProject();
 

@@ -87,28 +87,44 @@ public class DefaultContinuumCore
     //       application initialization sequence. The application should make sure
     //       that the database is properly initialized before starting the store.
 
-    /** @requirement */
+    /**
+     * @requirement
+     */
     private BuildExecutorManager buildExecutorManager;
 
-    /** @requirement */
+    /**
+     * @requirement
+     */
     private ContinuumProjectBuilderManager projectBuilderManager;
 
-    /** @requirement */
+    /**
+     * @requirement
+     */
     private TaskQueue buildQueue;
 
-    /** @requirement */
+    /**
+     * @requirement
+     */
     private TaskQueue checkOutQueue;
 
-    /** @requirement */
+    /**
+     * @requirement
+     */
     private ContinuumStore store;
 
-    /** @requirement */
+    /**
+     * @requirement
+     */
     private ContinuumScm scm;
 
-    /** @requirement */
+    /**
+     * @requirement
+     */
     private String appHome;
 
-    /** @configuration */
+    /**
+     * @configuration
+     */
     private String workingDirectory;
 
     // ----------------------------------------------------------------------
@@ -198,7 +214,7 @@ public class DefaultContinuumCore
 
         for ( Iterator it = result.getProjects().iterator(); it.hasNext(); )
         {
-            ContinuumProject project = ( ContinuumProject ) it.next();
+            ContinuumProject project = (ContinuumProject) it.next();
 
             project = addProjectAndCheckOutSources( project, project.getExecutorId() );
 
@@ -807,7 +823,7 @@ public class DefaultContinuumCore
     private void updateProjectFromCheckOut( ContinuumProject project )
         throws ContinuumException
     {
-        getLogger().info( "Updating project '" + project.getName() + "'.");
+        getLogger().info( "Updating project '" + project.getName() + "'." );
 
         // ----------------------------------------------------------------------
         // Make a new descriptor
@@ -821,7 +837,7 @@ public class DefaultContinuumCore
         }
         catch ( ContinuumBuildExecutorException e )
         {
-            throw logAndCreateException( "Error while updating project from check out.", e);
+            throw logAndCreateException( "Error while updating project from check out.", e );
         }
 
         // ----------------------------------------------------------------------
@@ -872,7 +888,7 @@ public class DefaultContinuumCore
             if ( !wdFile.mkdirs() )
             {
                 String msg = "Could not making the working directory: " + "'" +
-                    wdFile.getAbsolutePath() + "'." ;
+                    wdFile.getAbsolutePath() + "'.";
 
                 getLogger().error( msg );
                 throw new InitializationException( msg );
@@ -890,9 +906,9 @@ public class DefaultContinuumCore
                 getLogger().info( " " + project.getId() + ":" + project.getName() + ":" + project.getExecutorId() );
             }
         }
-        catch (ContinuumStoreException e)
+        catch ( ContinuumStoreException e )
         {
-           throw new InitializationException( "Couldn't load projects.", e );
+            throw new InitializationException( "Couldn't load projects.", e );
         }
     }
 
@@ -910,7 +926,7 @@ public class DefaultContinuumCore
             if ( !file.exists() )
             {
 
-                    initializeStore( file );
+                initializeStore( file );
             }
             else
             {
@@ -924,7 +940,7 @@ public class DefaultContinuumCore
                 }
             }
         }
-        catch( Exception e )
+        catch ( Exception e )
         {
             throw new StartingException( "Couldn't initialize store,", e );
         }
