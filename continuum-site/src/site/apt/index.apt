@@ -1,0 +1,29 @@
+ ------
+ Welcome to Continuum
+ ------
+ Trygve Laugstøl
+ ------
+ Fri May 20 2005
+
+Welcome to Continuum
+
+ Continuum is a continous integration server for building Java based projects.
+ It supports a wide range of projects: 
+
+ * {{{http://maven.apache.org}Maven 1}}
+
+ * {{{http://maven.apache.org/maven2}Maven 2}}
+
+ * {{{http://ant.apache.org}Ant}}
+
+ * Shell scripts
+
+ []
+
+ * {{{about.html#what-is-continuum}What is Continuum?}}
+
+ * {{{about.html#features}What are the features of Continuum?}}
+
+ * {{{about.html#get-involved}Can I get involved?}}
+
+ * {{{about.html#get-help}Where do I get help with Continuum?}}

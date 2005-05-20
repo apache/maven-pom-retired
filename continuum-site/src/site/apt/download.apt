@@ -9,32 +9,34 @@ Download Continuum 1.0 Technology Preview
 
  Continuum is distributed in several formats for your convenience.
 
- You will be prompted for a mirror - please be patient, as it may take 24 hours to reach all mirrors.
+ You will be prompted for a mirror - please be patient, as it may take 24 hours
+ to reach all mirrors.
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-alpha-1-bin.tar.bz2}.tar.bz2}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-1-bin.tar.bz2.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-1-bin.tar.bz2.asc}PGP}})
+ * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-alpha-2-bin.tar.bz2}.tar.bz2}} archive
+   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-2-bin.tar.bz2.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-2-bin.tar.bz2.asc}PGP}})
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-alpha-1-bin.tar.gz}.tar.gz}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-1-bin.tar.gz.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-1-bin.tar.gz.asc}PGP}})
+ * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-alpha-2-bin.tar.gz}.tar.gz}} archive
+   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-2-bin.tar.gz.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-2-bin.tar.gz.asc}PGP}})
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-alpha-1-bin.zip}.zip}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-1-bin.zip.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-1-bin.zip.asc}PGP}})
+ * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-alpha-2-bin.zip}.zip}} archive
+   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-2-bin.zip.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-2-bin.zip.asc}PGP}})
 
  []
 
- Continuum 1.0 is distributed under the {{{http://maven.apache.org/license.html}Apache License, version 2.0}}.
+ Continuum 1.0 is distributed under the
+ {{{http://maven.apache.org/license.html}Apache License, version 2.0}}.
 
 System Requirements
 
-*--*--*
-| JDK              | 1.4 or above |
-*--*--*
-| Memory           | No minimum requirement |
-*--*--*
-| Disk Space       | The Continuum application is in itself less than 10MB but might possibly use more disk space when it's checking out and building sources.|
-*--*--*
-| Operating System | No minimum requirement. Tested on Windows XP, Debian, Fedora Core and Mac OS X. |
-*--*--*
+*------------------*--------------------------------------------------------------------------------------------------------------------------------*
+| JDK              | 1.4 or above                                                                                                                   |
+*------------------*--------------------------------------------------------------------------------------------------------------------------------*
+| Memory           | No minimum requirement                                                                                                         |
+*------------------*--------------------------------------------------------------------------------------------------------------------------------*
+| Disk Space       | The Continuum application is in itself less than 10MB but will use more disk space when it's checking out and building sources |
+*------------------*--------------------------------------------------------------------------------------------------------------------------------*
+| Operating System | No minimum requirement. Tested on Windows XP, Debian, Fedora Core and Mac OS X                                                 |
+*------------------*--------------------------------------------------------------------------------------------------------------------------------*
 
- After downloading Continuum see the {{{getting-started.html}Getting Started}} document for instructions on how
- to install and start Continuum.
+ After downloading Continuum see the {{{getting-started.html}Getting Started}}
+ document for instructions on how to install and start Continuum.

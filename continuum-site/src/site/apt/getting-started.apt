@@ -7,58 +7,72 @@
 
 Installing Continuum
 
- After you have downloaded and unpacked the bundle execute <<<bin/plexus.sh>>> if you are on a UNIX platform or
- <<<bin/plexus.bat>>> if you are using Windows.
+ After you have downloaded and unpacked the bundle execute <<<bin/plexus.sh>>>
+ if you are on a UNIX platform or <<<bin/plexus.bat>>> if you are using
+ Windows.
 
- When Continuum is running you can access it with your browser on {{http://localhost:8080}} or by using the
- XML-RPC interface on port 8000.
+ When Continuum is running you can access it with your browser on
+ {{http://localhost:8080}} or by using the XML-RPC interface on port 8000.
 
 Adding Projects to Continuum
 
- When adding projects note that Continuum will check out the projects directly after you press the button and will not return untill after the projects has been checked out either successfully or not. This is a known issue with Continuum and asynchronous checkouts are {{{planned-features.html#Asynchronous_checkouts}planned}}.
+ When adding projects note that Continuum will check out the projects directly
+ after you press the button and will not return untill after the projects has
+ been checked out either successfully or not. This is a known issue with
+ Continuum and asynchronous checkouts are
+ {{{planned-features.html#Asynchronous_checkouts}planned}}.
 
 * Adding Maven2 Projects
 
- When adding a Maven 2 project all you need is the URL to a POM. The POM has to include at least the SCM information
- to be able to check out the project.
+ When adding a Maven 2 project all you need is the URL to a POM. The POM has to
+ include at least the SCM information to be able to check out the project.
 
 * Adding Maven1 Projects
 
- Adding a Maven 1 it pretty much like adding a Maven 2 project, give it a URL to a POM with SCM information and
- Continuum will add the projects.
+ Adding a Maven 1 it pretty much like adding a Maven 2 project, give it a URL
+ to a POM with SCM information and Continuum will add the projects.
 
- There are is a caveat though: The POM cannot extend a parent POM. When Continuum is downloading the POM it won't
- know how to find the parent POMs. The best way to use Continuum with Maven 1 projects is to give Continuum the
- root POM of your projects only and then have a special goal in the root projects <<<maven.xml>>> to build all of
- the projects. In subsequent versions of Continuum we will deal with Maven 1.x projects in a cleaner way.
+ There are is a caveat though: The POM cannot extend a parent POM. When
+ Continuum is downloading the POM it won't know how to find the parent POMs.
+ The best way to use Continuum with Maven 1 projects is to give Continuum the
+ root POM of your projects only and then have a special goal in the root
+ projects <<<maven.xml>>> to build all of the projects. In subsequent versions
+ of Continuum we will deal with Maven 1.x projects in a cleaner way.
 
 * Adding Ant Projects
 
- When adding Ant projects you have to specify the project's name, SCM URL, nag email address, version and the
- targets to execute.
+ When adding Ant projects you have to specify the project's name, SCM URL, nag
+ email address, version and the targets to execute.
 
- <NOTE:> The SCM URL is a Maven SCM convention. Here's an example of what an SCM URL looks like:
+ <NOTE:> The SCM URL is a Maven SCM convention. Here's an example of what an
+ SCM URL looks like:
  <<<scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk>>>
 
 * Adding Shell Projects
 
- When adding shell projects you have to specify the project's name, SCM URL, nag email address, version and the
- shell script to execute. The working directory of the project will be prepended to the scripts path.
+ When adding shell projects you have to specify the project's name, SCM URL,
+ nag email address, version and the shell script to execute. The working
+ directory of the project will be prepended to the scripts path.
 
- <NOTE:> The SCM URL is a Maven SCM convention. Here's an example of what an SCM URL looks like:
+ <NOTE:> The SCM URL is a Maven SCM convention. Here's an example of what an
+ SCM URL looks like:
  <<<scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk>>>
 
 Building Projects
 
 * Using the Web Interface
 
- To build a project with the web interface from the project list, simply press the "build" button and the project
- will be enqueued on the build list. If Continuum isn't already building a project it will start the build immediately.
+ To build a project with the web interface from the project list, simply press
+ the "build" button and the project will be enqueued on the build list. If
+ Continuum isn't already building a project it will start the build
+ immediately.
 
 * Using the XML-RPC Interface
 
- By using the <<<continuum_cli.py>>> Python script you can remotely control Continuum. Start the script by executing
- <<<python continuum_cli.py>>> and write <<<help>>> to list all available commands.
+ By using the <<<continuum_cli.py>>> Python script you can remotely control
+ Continuum. Start the script by executing <<<python continuum_cli.py>>> and
+ write <<<help>>> to list all available commands.
 
- There is also a reusable Python library called <<<continuum.py>>> that can be used to integrate remote control
- over Continuum into other Python applications.
+ There is also a reusable Python library called <<<continuum.py>>> that can be
+ used to integrate remote control over Continuum into other Python
+ applications.

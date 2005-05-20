@@ -8,46 +8,54 @@
 Getting the sources
 
  To get the sources from the Subversion repository use this SVN url:
- <<<http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-alpha-1>>>
+ <<<http://svn.apache.org/repos/asf/maven/continuum/trunk>>>
 
- If you are using the <<<svn>>> command line Subversion client you can check out the sources with this command:
+ If you are using the <<<svn>>> command line Subversion client you can check
+ out the sources with this command:
 
 +--+
 $ svn co http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-alpha-1/ continuum
 +--+
 
- All the Continuum Alpha 1 sources will be in a directory called <<<continuum>>>.
+ All the Continuum Alpha 1 sources will be in a directory called
+ <<<continuum>>>.
 
- For more information on how to check out the sources see the information pages from Apache
- {{{http://apache.org/dev/version-control.html}here}}.
+ For more information on how to check out the sources see the information pages
+ from Apache {{{http://apache.org/dev/version-control.html}here}}.
 
 Building Continuum
 
- <<NOTE:>> Continuum requires Maven 2 alpha 2 to build.
+ <<NOTE:>> Continuum requires Maven 2 alpha 2 or newer to build. While we use
+ the alpha 2 release to build it should build with newer versions of Maven 2.
 
  Continuum consists of 6 Maven 2 projects:
 
  [continuum-model] is the object model that continuum uses.
 
- [continuum-core] is Continuum's core. It contains all the code for checking out and building the projects. It also
-                  contains the mail notifier and socket listeners.
+ [continuum-core] is Continuum's core. It contains all the code for checking
+                  out and building the projects. It also contains the mail
+                  notifier and socket listeners.
 
- [continuum-web] is the web interface for Continuum. It contains the form definitions used in the web application
-                 and internationalization strings.
+ [continuum-web] is the web interface for Continuum. It contains the form
+                 definitions used in the web application and
+                 internationalization strings.
 
- [continuum-xmlrpc] is the XML-RPC interface. It contains a single component that maps the XML-RPC method calls
-                    to the core components.
+ [continuum-xmlrpc] is the XML-RPC interface. It contains a single component
+                    that maps the XML-RPC method calls to the core components.
 
- [continuum-plexus-application] is a special project that mainly contains the configuration files for Plexus when
-                                running Continuum as a Plexus application.
+ [continuum-plexus-application] is a special project that mainly contains the
+                                configuration files for Plexus when running
+                                Continuum as a Plexus application.
 
- [continuum-core-it] is a integration tests written in Python. It uses the XML-RPC interface to communicate with
-                     the Continuum instance.
+ [continuum-core-it] is a integration tests written in Python. It uses the
+                     XML-RPC interface to communicate with the Continuum
+                     instance.
 
  []
 
- The easiest way to build the entire Continuum project is to use the shell script from the root of the check out like this:
- 
+ The easiest way to build the entire Continuum project is to use the shell
+ script from the root of the check out like this:
+
 +--+
 $ sh build.sh</source>
 +--+
