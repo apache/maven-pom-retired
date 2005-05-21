@@ -41,7 +41,7 @@ import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: CssTool.java,v 1.2 2005/04/06 14:10:38 trygvis Exp $
+ * @version $Id$
  */
 public class FormicaTool
     extends AbstractLogEnabled
@@ -166,6 +166,14 @@ public class FormicaTool
         return getItem( form, element, getItem( form, id ) );
     }
 
+    // ----------------------------------------------------------------------
+    // Need to use the decomposer here
+    //
+    // Ignore if the expression is passive ... shit how to get the data
+    // from the single piece of data that holds what is needed here ...
+    // I need to have some information at the form level about what
+    // elements are affected by the transformations.
+    // ----------------------------------------------------------------------
 
     public String getItem( Form form, Element element, Object item )
         throws FormToolException
@@ -200,21 +208,43 @@ public class FormicaTool
         }
     }
 
-    public String getAUElement( Form form, Element element, Object data, RunData rundata )
+    /**
+     * For a given element in a form, get the data for that form whether it be from a request
+     * parameter or by applying an expression to the item in question.
+     *
+     * @param form Formica form object.
+     * @param element Form element.
+     * @param item The object from which the data will be extracted using an expression.
+     * @param runData The summit runData.
+     * @return
+     * @throws FormToolException
+     */
+    public String getElementData( Form form, Element element, Object item, RunData runData )
         throws FormToolException
     {
-        if ( data == null )
+        // ----------------------------------------------------------------------
+        // First try to get the form data from the request parameters
+        // ----------------------------------------------------------------------
+
+        Object data = runData.getParameters().getString( element.getId() );
+
+        if ( data != null )
         {
-            return null;
+            return data.toString();
         }
 
-        Object o = rundata.getParameters().getString( element.getId() );
-
-        if ( o == null )
+        if ( item != null )
         {
             try
             {
-                o = Ognl.getValue( element.getExpression(), data );
+                // ----------------------------------------------------------------------
+                // Here we need to decompose data into constituent form element
+                // data if necessary.
+                // ----------------------------------------------------------------------
+
+                data = Ognl.getValue( element.getExpression(), item );
+
+                return data.toString();
             }
             catch ( OgnlException e )
             {
@@ -222,7 +252,7 @@ public class FormicaTool
             }
         }
 
-        return o.toString();
+        return "";
     }
 
     // ----------------------------------------------------------------------

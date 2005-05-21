@@ -1,27 +1,17 @@
-#macro ( addField $i18n $data $element )
+## ----------------------------------------------------------------------------
+##
+## ----------------------------------------------------------------------------
+
+#macro ( field $i18n $data $element $item $formtool )
 <th>$i18n.getString( $element.labelKey )</th>
 <td>
-  #set ( $value = $data.getParameters().getString( $element.id ) )
-  #if ( !$value )
-    #set( $value = "" )
+  #set ( $elementData = $formtool.getElementData( $form, $element, $item, $data ) )
+  #if ( $element.type == "text" )
+    #text( $element $elementData )
   #end
-  <input type="text" name="$element.id" value="$value" size="40"/>
   <p>$i18n.getString( $element.messageKey )</p>
 </td>
 #end
-
-#macro ( editField $i18n $data $element $formtool )
-<th>$i18n.getString( $element.labelKey )</th>
-<td>
-  #set ( $value = $formtool.getAUElement( $form, $element, $item, $data ) )
-  #if ( !$value )
-    #set( $value = "" )
-  #end
-  <input type="text" name="$element.id" value="$value" size="40"/>
-  <p>$i18n.getString( $element.messageKey )</p>
-</td>
-#end
-
 
 #macro ( validateField $fvr $element )
 #if ( $fvr && !$fvr.getElementResult( $element.getId()).valid() )
@@ -31,16 +21,57 @@
 #end
 #end
 
+#macro ( bar )
+<div class="functnbar3"/>
+#end
+
+## ----------------------------------------------------------------------------
+##
+## ----------------------------------------------------------------------------
+
+#macro ( text $element $elementData )
+<input type="text" name="$element.id" value="$elementData" size="40"/>
+#end
+
+#macro ( textarea $element $elementData )
+<input type="text" name="$element.id" value="$elementData" size="40"/>
+#end
+
+#macro ( password $element $elementData )
+<input type="text" name="$element.id" value="$elementData" size="40"/>
+#end
+
+#macro ( radio $element $elementData )
+<input type="radio" name="$element.id" value=""/>
+#end
+
+#macro ( checkbox $element $elementData )
+<input type="checkbox" name="$element.id" value=""/>
+#end
+
+#macro ( pulldown $element $elementData )
+<select name="$element.id">
+  #foreach ( $datum in $elementData )
+    <option>
+  #end
+</select>
+#end
+
+#macro ( imageButton $label )
+stuff
+#end
+
 #macro ( hidden $name $value )
 <input type="hidden" name="$name" value="$value"/>
 #end
 
 #macro ( submitBar $labelKey )
 <div class="functnbar3">
-  <input type="submit" value="$labelKey"/>
+<input type="submit" value="$labelKey"/>
 </div>
 #end
 
-#macro ( bar )
-<div class="functnbar3"/>
-#end
+
+##The Selection Box.
+
+##Active Images.

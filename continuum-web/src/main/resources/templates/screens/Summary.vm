@@ -30,16 +30,26 @@
       #end
     </table>
     ##
-    ## TODO: This should be made a general feature in formica using the CAM and an option for an 
+    ## TODO: This should be made a general feature in formica using the CAM and an option for an
     ## enable expression to model what we have below.
     <div class="functnbar3">
-      <form method="post" action="$link">
-        #if ( $items && $items.size() > 0 )
-        #hidden ( "action" "cam" )
-        #hidden ( "cid" "buildAllProjects" )
-        <input type="submit" name="build-all" value="Build All"/>
-        #end
-      </form>
+      <table>
+        <tr>
+          <td>
+            <form method="post" action="$link">
+            #if ( $items && $items.size() > 0 )
+            #hidden ( "action" "cam" )
+            #hidden ( "cid" "buildAllProjects" )
+            <input type="submit" name="build-all" value="Build All"/>
+            #end
+            </form>
+          </td>
+          <td>
+          <img src="/continuum/images/icon_error_sml.gif" alt="Failed"/> $projectsWithErrors
+          <img src="/continuum/images/icon_warning_sml.gif" alt="Error"/> $projectsWithFailures
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 </div>

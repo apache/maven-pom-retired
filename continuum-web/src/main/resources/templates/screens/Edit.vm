@@ -21,7 +21,7 @@
           #foreach ( $element in $form.elements )
           #if ( !$element.immutable )
           <tr>
-            #editField( $i18n $data $element $formtool )
+            #field( $i18n $data $element $item $formtool )
             #validateField( $fvr $element )
           </tr>
           #end
