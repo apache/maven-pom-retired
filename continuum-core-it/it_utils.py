@@ -264,7 +264,7 @@ def getProjectId( projectIds ):
     return projectIds[ 0 ]
 
 def writeMavenOnePom( filename, artifactId, scmUrl, email ):
-    pom = file( basedir + "/" + filename, "w+" )
+    pom = file( "/" + filename, "w+" )
     pom.write( """
 <project>
   <pomVersion>3</pomVersion>

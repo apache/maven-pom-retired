@@ -17,8 +17,6 @@ package org.apache.maven.continuum.core;
  */
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,6 +42,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -75,8 +74,6 @@ public class DefaultContinuumCore
     extends AbstractLogEnabled
     implements ContinuumCore, Initializable, Startable
 {
-    private final static String DATABASE_INITIALIZED = "database.initialized";
-
     private final static String CONTINUUM_VERSION = "1.0-alpha-2-SNAPSHOT";
 
     // ----------------------------------------------------------------------
@@ -160,20 +157,6 @@ public class DefaultContinuumCore
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
-
-    // ----------------------------------------------------------------------
-    // Here it would probably be possible to tell from looking at the meta
-    // data what type of project handler would be required. We could
-    // definitely tell if we were looking at a Maven POM, So for the various
-    // POM versions we would know what builder to use, and for an arbitrary
-    // ----------------------------------------------------------------------
-
-    // add project meta data
-    // create continuum project from project metadata
-    // add continuum project to the store
-    // setup the project
-    // -> check out from scm
-    // -> update the project metadata
 
     public Collection addProjectsFromUrl( String url, String executorId )
         throws ContinuumException
@@ -866,7 +849,8 @@ public class DefaultContinuumCore
     // Lifecylce Management
     // ----------------------------------------------------------------------
 
-    public void initialize() throws InitializationException
+    public void initialize()
+        throws InitializationException
     {
         getLogger().info( "Initializing Continuum." );
 
@@ -876,22 +860,16 @@ public class DefaultContinuumCore
         {
             if ( !wdFile.isDirectory() )
             {
-                String msg = "The specified working directory isn't a directory: " + "'" +
-                    wdFile.getAbsolutePath() + "'.";
-
-                getLogger().error( msg );
-                throw new InitializationException( msg );
+                throw new InitializationException( "The specified working directory isn't a directory: " +
+                                                   "'" + wdFile.getAbsolutePath() + "'." );
             }
         }
         else
         {
             if ( !wdFile.mkdirs() )
             {
-                String msg = "Could not making the working directory: " + "'" +
-                    wdFile.getAbsolutePath() + "'.";
-
-                getLogger().error( msg );
-                throw new InitializationException( msg );
+                throw new InitializationException( "Could not making the working directory: " +
+                                                   "'" + wdFile.getAbsolutePath() + "'." );
             }
         }
 
@@ -912,37 +890,46 @@ public class DefaultContinuumCore
         }
     }
 
-    public void start() throws StartingException
+    public void start()
+        throws StartingException
     {
         getLogger().info( "Starting Continuum." );
 
-        // check to see if the tables exists or not.
-        File file = new File( appHome, "continuum.properties" );
+        // ----------------------------------------------------------------------
+        // Check for projects that's in the "checking out" state and enqueue
+        // them to ensure that they're always checked out.
+        // ----------------------------------------------------------------------
 
-        Properties properties = new Properties();
+        getLogger().info( "Checking for projects that has to be checked out." );
 
         try
         {
-            if ( !file.exists() )
+            for ( Iterator it = store.getAllProjects().iterator(); it.hasNext(); )
             {
+                ContinuumProject project = (ContinuumProject) it.next();
 
-                initializeStore( file );
-            }
-            else
-            {
-                properties.load( new FileInputStream( file ) );
-
-                String state = properties.getProperty( DATABASE_INITIALIZED );
-
-                if ( !state.equals( "true" ) )
+                if ( project.getState() != ContinuumProjectState.CHECKING_OUT )
                 {
-                    initializeStore( file );
+                    continue;
                 }
+
+                getLogger().info( "Adding '" + project.getName() + "' to the check out queue." );
+
+                CheckOutTask checkOutTask = new CheckOutTask( project.getId(),
+                                                              new File( project.getWorkingDirectory() ) );
+
+                checkOutQueue.put( checkOutTask );
             }
         }
-        catch ( Exception e )
+        catch ( ContinuumStoreException e )
         {
-            throw new StartingException( "Couldn't initialize store,", e );
+            throw new StartingException( "Error while enqueuing all projects in the 'checking out' state to " +
+                                         "the check out queue.", e );
+        }
+        catch ( TaskQueueException e )
+        {
+            throw new StartingException( "Error while enqueuing all projects in the 'checking out' state to " +
+                                         "the check out queue.", e );
         }
 
         // ----------------------------------------------------------------------
@@ -969,20 +956,6 @@ public class DefaultContinuumCore
         getLogger().info( "Stopping Continuum." );
 
         getLogger().info( "Continuum stopped." );
-    }
-
-    private void initializeStore( File file )
-        throws Exception
-    {
-        Properties properties = new Properties();
-
-        getLogger().warn( "This system isn't configured. Configuring." );
-
-        store.createDatabase();
-
-        properties.setProperty( DATABASE_INITIALIZED, "true" );
-
-        properties.store( new FileOutputStream( file ), null );
     }
 
     private ContinuumException logAndCreateException( String message )

@@ -71,7 +71,7 @@ if 0:
 if 1:
     progress( "Adding a project with a malformed SCM URL (invalid SCM type)" )
 
-    writeMavenOnePom( "project.xml", "foo", "scm:crap:", "foo@bar" )
+    writeMavenOnePom( basedir + "/project.xml", "foo", "scm:crap:", "foo@bar" )
 
     projectIds = continuum.addMavenOneProject( "file://" + basedir + "/project.xml" )
 

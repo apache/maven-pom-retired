@@ -30,7 +30,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: DefaultContinuumScm.java,v 1.2 2005/03/31 00:01:44 trygvis Exp $
+ * @version $Id$
  */
 public class DefaultContinuumScm
     extends AbstractLogEnabled
@@ -183,15 +183,18 @@ public class DefaultContinuumScm
 
         result.setProviderMessage( scmResult.getProviderMessage() );
 
-        for ( Iterator it = scmResult.getCheckedOutFiles().iterator(); it.hasNext(); )
+        if ( scmResult.getCheckedOutFiles() != null )
         {
-            org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
+            for ( Iterator it = scmResult.getCheckedOutFiles().iterator(); it.hasNext(); )
+            {
+                org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
 
-            ScmFile file = new ScmFile();
+                ScmFile file = new ScmFile();
 
-            file.setPath( scmFile.getPath() );
+                file.setPath( scmFile.getPath() );
 
-            result.addCheckedOutFile( file );
+                result.addCheckedOutFile( file );
+            }
         }
 
         return result;

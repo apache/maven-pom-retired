@@ -39,8 +39,8 @@ def checkResult( map ):
     if ( map[ "result" ] == "ok" ):
         return map
 
-
     raise XmlRpcException( map[ "method" ], map[ "message" ], map[ "stackTrace" ] )
+
 def decodeState( state ):
     if ( state == 1 ):
         return STATE_NEW

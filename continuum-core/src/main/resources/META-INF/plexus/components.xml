@@ -217,7 +217,7 @@
         </requirement>
         <requirement>
           <role>org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout</role>
-          <role-hint>legacy</role-hint>
+          <role-hint>default</role-hint>
         </requirement>
       </requirements>
       <configuration>

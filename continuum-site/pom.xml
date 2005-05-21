@@ -7,4 +7,10 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-site</artifactId>
   <name>Continuum Site</name>
+  <distributionManagement>
+    <site>
+      <id>continuum-site</id>
+      <url>scp://home/trygvis/public_html/maven-stage-site/continuum/</url>
+    </site>
+  </distributionManagement>
 </project>

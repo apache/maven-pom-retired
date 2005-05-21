@@ -12,6 +12,11 @@ copy()
 {
   dir=$1
 
+  if [ ! -d $dir ]
+  then
+    return 0
+  fi
+
   file=`find $dir -name \*.jar -printf %f`
 
   if [ "$dir/$file" -nt "target/plexus-test-runtime/apps/continuum/lib/$file" ]
