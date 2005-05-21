@@ -28,6 +28,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
@@ -36,11 +37,13 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import java.util.Collection;
 import java.util.Properties;
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
- * @version $Id: DefaultContinuum.java,v 1.7 2005/04/08 12:47:56 trygvis Exp $
+ * @version $Id$
  */
 public class DefaultContinuum
     extends AbstractLogEnabled
@@ -50,13 +53,52 @@ public class DefaultContinuum
     private ContinuumCore core;
 
     // ----------------------------------------------------------------------
-    //
+    // Projects
     // ----------------------------------------------------------------------
 
     public Collection getProjects()
         throws ContinuumException
     {
         return core.getProjects();
+    }
+
+    // TODO: i realize these are horribly inefficient and I will correct using JDO
+    // properly after the alpha-2 release.
+
+    public Collection getProjectsWithFailures()
+        throws ContinuumException
+    {
+        List list = new ArrayList();
+
+        for ( Iterator i = core.getProjects().iterator(); i.hasNext(); )
+        {
+            ContinuumProject p = (ContinuumProject) i.next();
+
+            if ( p.getState() == ContinuumProjectState.FAILED )
+            {
+                list.add( p );
+            }
+        }
+
+        return list;
+    }
+
+    public Collection getProjectsWithErrors()
+        throws ContinuumException
+    {
+        List list = new ArrayList();
+
+        for ( Iterator i = core.getProjects().iterator(); i.hasNext(); )
+        {
+            ContinuumProject p = (ContinuumProject) i.next();
+
+            if ( p.getState() == ContinuumProjectState.FAILED )
+            {
+                list.add( p );
+            }
+        }
+
+        return list;
     }
 
     public ContinuumBuild getLatestBuildForProject( String id )
