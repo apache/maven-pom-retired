@@ -56,6 +56,22 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
+    // Projects
+    // ----------------------------------------------------------------------
+
+    Collection getProjects()
+        throws ContinuumException;
+
+    Collection getProjectsWithFailures()
+        throws ContinuumException;
+
+    Collection getProjectsWithErrors()
+        throws ContinuumException;
+
+    ContinuumBuild getLatestBuildForProject( String id )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
     // Building
     // ----------------------------------------------------------------------
 
@@ -69,16 +85,6 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
         throws ContinuumException;
 
     void buildProject( String projectId, boolean force )
-        throws ContinuumException;
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    Collection getProjects()
-        throws ContinuumException;
-
-    ContinuumBuild getLatestBuildForProject( String id )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
