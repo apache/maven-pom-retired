@@ -81,7 +81,7 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-mail-sender-simple</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-1</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

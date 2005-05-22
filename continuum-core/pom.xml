@@ -22,7 +22,7 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-jdo</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-2</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
@@ -32,17 +32,17 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-taskqueue</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-1</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-notification</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-3</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-mail-sender-api</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-1</version>
     </dependency>
 
     <!--
@@ -110,13 +110,13 @@
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-local</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-mail-sender-simple</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-1</version>
       <!--
       <scope>test</scope>
       -->
@@ -124,7 +124,7 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-mail-sender-test</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-1</version>
       <scope>test</scope>
     </dependency>
     <dependency>

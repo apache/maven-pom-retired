@@ -192,20 +192,20 @@
           <!-- JDBC connection configuration -->
           <!-- -->
           <property>
-          <name>javax.jdo.option.ConnectionDriverName</name>
-          <value>org.hsqldb.jdbcDriver</value>
+            <name>javax.jdo.option.ConnectionDriverName</name>
+            <value>org.hsqldb.jdbcDriver</value>
           </property>
           <property>
-          <name>javax.jdo.option.ConnectionURL</name>
-          <value>jdbc:hsqldb:${plexus.home}/database</value>
+            <name>javax.jdo.option.ConnectionURL</name>
+            <value>jdbc:hsqldb:${plexus.home}/database</value>
           </property>
           <property>
-          <name>javax.jdo.option.ConnectionUserName</name>
-          <value>sa</value>
+            <name>javax.jdo.option.ConnectionUserName</name>
+            <value>sa</value>
           </property>
           <property>
-          <name>javax.jdo.option.ConnectionPassword</name>
-          <value></value>
+            <name>javax.jdo.option.ConnectionPassword</name>
+            <value></value>
           </property>
           <!--
           <property>
@@ -224,6 +224,10 @@
           <property>
             <name>javax.jdo.option.ConnectionPassword</name>
             <value></value>
+          </property>
+          <property>
+            <name>hsqldb.nio_data_file</name>
+            <value>false</value>
           </property>
         </properties>
       </configuration>
@@ -255,10 +259,10 @@
             <value>/org/apache/maven/continuum/notification/mail/templates/common.vm,CommonMacros.vm</value>
           </property>
           <!--
-          
+
           This is for dev and we need to find a way to flip this easily,
-          maybe a marmalade config reader that will do logic.                   
-          
+          maybe a marmalade config reader that will do logic.
+
           <property>
             <name>velocimacro.library.autoreload</name>
             <value>@velocimacro.reload@</value>
