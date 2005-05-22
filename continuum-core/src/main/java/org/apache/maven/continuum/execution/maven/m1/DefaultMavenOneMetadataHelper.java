@@ -29,7 +29,7 @@ import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class DefaultMavenOneMetadataHelper
     extends AbstractLogEnabled
@@ -130,9 +130,9 @@ public class DefaultMavenOneMetadataHelper
         // Goals
         Properties configuration = new Properties();
 
-        if ( !configuration.containsKey( MavenOneBuildExecutor.CONFIGURATION_GOALS ) )
+        if ( StringUtils.isEmpty( configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) ) )
         {
-            configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean, jar:install" );
+            configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean jar:install" );
         }
 
         // ----------------------------------------------------------------------

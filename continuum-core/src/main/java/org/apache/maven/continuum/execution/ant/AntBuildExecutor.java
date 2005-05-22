@@ -29,17 +29,25 @@ import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: AntBuilder.java,v 1.3 2005/04/07 23:27:39 trygvis Exp $
+ * @version $Id$
  */
 public class AntBuildExecutor
     extends AbstractBuildExecutor
     implements ContinuumBuildExecutor
 {
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
     public static final String CONFIGURATION_EXECUTABLE = "executable";
 
     public static final String CONFIGURATION_TARGETS = "targets";
 
     public static final String ID = "ant";
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
 
     /** @requirement */
     private ShellCommandHelper shellCommandHelper;
@@ -55,15 +63,17 @@ public class AntBuildExecutor
 
         Properties configuration = project.getConfiguration();
 
-        String executable = getConfigurationString( configuration, CONFIGURATION_EXECUTABLE );
+        String executable = getConfiguration( configuration, CONFIGURATION_EXECUTABLE );
 
-        String[] targets = getConfigurationStringArray( configuration, CONFIGURATION_TARGETS, "," );
+        String targets = getConfiguration( configuration, CONFIGURATION_TARGETS );
 
         ExecutionResult executionResult;
 
         try
         {
-            executionResult = shellCommandHelper.executeShellCommand( workingDirectory, executable, targets );
+            executionResult = shellCommandHelper.executeShellCommand( workingDirectory,
+                                                                      executable,
+                                                                      project.getCommandLineArguments() + " " + targets );
         }
         catch ( Exception e )
         {

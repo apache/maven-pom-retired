@@ -29,7 +29,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: Maven1Builder.java,v 1.2 2005/04/03 21:27:17 trygvis Exp $
+ * @version $Id$
  */
 public class MavenOneBuildExecutor
     extends AbstractBuildExecutor
@@ -59,13 +59,15 @@ public class MavenOneBuildExecutor
 
         File workingDirectory = new File( project.getWorkingDirectory() );
 
-        String[] goals = getConfigurationStringArray( configuration, CONFIGURATION_GOALS, "," );
+        String goals = getConfiguration( configuration, CONFIGURATION_GOALS );
 
         ExecutionResult executionResult;
 
         try
         {
-            executionResult = shellCommandHelper.executeShellCommand( workingDirectory, mavenCommand, goals );
+            executionResult = shellCommandHelper.executeShellCommand( workingDirectory,
+                                                                      mavenCommand,
+                                                                      project.getCommandLineArguments() + " " + goals );
         }
         catch ( Exception e )
         {

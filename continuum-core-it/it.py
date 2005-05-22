@@ -42,7 +42,7 @@ if 1:
     maven1Id = getProjectId( continuum.addMavenOneProject( "file:" + maven1Project + "/project.xml" ) )
     waitForSuccessfulCheckOut( maven1Id );
     maven1 = continuum.getProject( maven1Id )
-    assertProject( maven1Id, "Maven 1 Project", email, continuum.STATE_NEW, "1.0", "maven-1", maven1 )
+    assertProject( maven1Id, "Maven 1 Project", email, continuum.STATE_NEW, "1.0", "", "maven-1", maven1 )
     assertCheckedOutFiles( maven1, [ "/project.xml", "/src/main/java/Foo.java" ] )
 
     progress( "Building Maven 1 project" )
@@ -79,7 +79,7 @@ if 1:
     maven2Id = getProjectId( continuum.addMavenTwoProject( "file:" + maven2Project + "/pom.xml" ) )
     waitForSuccessfulCheckOut( maven2Id );
     maven2 = continuum.getProject( maven2Id )
-    assertProject( maven2Id, "Maven 2 Project", email, continuum.STATE_NEW, "2.0-SNAPSHOT", "maven2", maven2 )
+    assertProject( maven2Id, "Maven 2 Project", email, continuum.STATE_NEW, "2.0-SNAPSHOT", "", "maven2", maven2 )
 
     progress( "Building Maven 2 project" )
     buildId = buildProject( maven2.id ).id
@@ -106,14 +106,14 @@ if 1:
     svnImport( antProject, svnroot, "ant-svn" )
 
     progress( "Adding Ant SVN project" )
-    antSvnId = continuum.addAntProject( "scm:svn:file://" + svnroot + "/ant-svn", "Ant SVN Project", email, "3.0",
+    antSvnId = continuum.addAntProject( "scm:svn:file://" + svnroot + "/ant-svn", "Ant SVN Project", email, "3.0", "-v",
                                         {
                                             "executable": "ant",
-                                            "targets" : "clean, build"
+                                            "targets" : "clean build"
                                         } )
     waitForSuccessfulCheckOut( antSvnId );
     antSvn = continuum.getProject( antSvnId )
-    assertProject( antSvnId, "Ant SVN Project", email, continuum.STATE_NEW, "3.0", "ant", antSvn )
+    assertProject( antSvnId, "Ant SVN Project", email, continuum.STATE_NEW, "3.0", "-v", "ant", antSvn )
     progress( "Building SVN Ant project" )
     buildId = buildProject( antSvn.id ).id
     assertSuccessfulAntBuild( buildId )
@@ -124,11 +124,11 @@ if 1:
     progress( "Initializing Ant CVS project" )
     initAntProject( antProject )
     cvsImport( antProject, cvsroot, "ant-cvs" )
-    antCvsId = continuum.addAntProject( "scm:cvs:local:" + basedir + "/cvsroot:ant-cvs", "Ant CVS Project", email, "3.0",
-                                      { "executable": "ant", "targets" : "clean, build"} )
+    antCvsId = continuum.addAntProject( "scm:cvs:local:" + basedir + "/cvsroot:ant-cvs", "Ant CVS Project", email, "3.0", "-d",
+                                      { "executable": "ant", "targets" : "clean build"} )
     waitForSuccessfulCheckOut( antCvsId );
     antCvs = continuum.getProject( antCvsId )
-    assertProject( antCvsId, "Ant CVS Project", email, continuum.STATE_NEW, "3.0", "ant", antCvs )
+    assertProject( antCvsId, "Ant CVS Project", email, continuum.STATE_NEW, "3.0", "-d", "ant", antCvs )
     progress( "Building CVS Ant project" )
     buildId = buildProject( antCvs.id ).id
     assertSuccessfulAntBuild( buildId )
@@ -140,14 +140,13 @@ if 1:
     cvsImport( shellProject, cvsroot, "shell" )
 
     progress( "Adding CVS Shell project" )
-    shellId = continuum.addShellProject( "scm:cvs:local:" + basedir + "/cvsroot:shell", "Shell Project", email, "3.0",
+    shellId = continuum.addShellProject( "scm:cvs:local:" + basedir + "/cvsroot:shell", "Shell Project", email, "3.0", "",
                                          { 
                                             "executable": "script.sh", 
-                                            "arguments" : ""
                                          } )
     waitForSuccessfulCheckOut( shellId );
     shell = continuum.getProject( shellId )
-    assertProject( shellId, "Shell Project", email, continuum.STATE_NEW, "3.0", "shell", shell )
+    assertProject( shellId, "Shell Project", email, continuum.STATE_NEW, "3.0", "", "shell", shell )
 
     progress( "Building Shell project" )
     buildId = buildProject( shell.id ).id
@@ -169,9 +168,7 @@ if 1:
 
     output = cvsCommit( coDir )
 
-    configuration = shell.configuration
-    configuration[ "arguments" ] = "a b";
-    continuum.updateProjectConfiguration( shell.id, configuration );
+    continuum.updateProject( shell.id, shell.name, shell.scmUrl, shell.nagEmailAddress, shell.version, "a b" )
     shell = continuum.getProject( shell.id )
     buildId = buildProject( shell.id ).id
     assertSuccessfulShellBuild( buildId, """a

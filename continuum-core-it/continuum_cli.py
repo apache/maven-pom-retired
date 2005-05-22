@@ -22,6 +22,9 @@ import continuum
 # history.
 ##########################################################
 
+def isEmpty( str ):
+    return str == None or str == ""
+
 class ContinuumXmlRpcClient(cli.cli):
     def __init__(self):
         cli.cli.__init__(self)
@@ -72,7 +75,7 @@ State:              %(state)s
 Executor type:      %(executorId)s
 SCM URL:            %(scmUrl)s""" % project.map
 
-        if ( project.checkOutErrorMessage != None or project.checkOutErrorException != None ):
+        if ( not isEmpty( project.checkOutErrorMessage ) or not isEmpty( project.checkOutErrorException ) ):
             print ""
             print "There was a error while checking out the project:"
             if ( project.checkOutErrorMessage != None ):
@@ -81,7 +84,6 @@ SCM URL:            %(scmUrl)s""" % project.map
                 print "Exception: " + project.checkOutErrorException
         else:
             print ""
-            print "Checked out files:"
             print project.checkOutScmResult
 
             print "Project Configuration:"
@@ -108,6 +110,11 @@ SCM URL:            %(scmUrl)s""" % project.map
         for project in projects:
             print "%(id)4s | %(state)12s | %(executorId)s | %(name)s" % project.map
 
+    def do_removeProject(self,args):
+        """Removes a project."""
+
+        continuum.removeProject( args[0] )
+
     def do_buildProject(self, args):
         """Build a Continuum project.
         Use this command to signal a build for a Continuum project."""
@@ -130,6 +137,7 @@ SCM URL:            %(scmUrl)s""" % project.map
 
         buildResult = continuum.getBuildResult( args[ 0 ] );
 
+        print "Build result:"
         print buildResult
 
     def do_run(self, args):

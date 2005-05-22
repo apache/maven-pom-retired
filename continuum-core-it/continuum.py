@@ -31,15 +31,20 @@ class XmlRpcException:
 
     def __str__( self ):
         return "Error while executing method." + os.linesep + \
-               "Method: " + map[ "method" ] + os.linesep + \
-               "Message: " + map[ "message" ] + os.linesep + \
-               "Stack trace: " + map[ "stackTrace" ] + os.linesep
+               "Method: " + self.method + os.linesep + \
+               "Message: " + self.message + os.linesep + \
+               "Stack trace: " + self.stackTrace + os.linesep
 
 def checkResult( map ):
     if ( map[ "result" ] == "ok" ):
         return map
 
-    raise XmlRpcException( map[ "method" ], map[ "message" ], map[ "stackTrace" ] )
+    ex = XmlRpcException( map[ "method" ], map[ "message" ], map[ "stackTrace" ] )
+
+    if 1:
+        print str( ex )
+
+    raise ex
 
 def decodeState( state ):
     if ( state == 1 ):
@@ -76,6 +81,9 @@ def getProject( projectId ):
 
 def updateProjectFromScm( projectId ):
     checkResult( server.continuum.updateProjectFromScm( projectId ) )
+
+def updateProject( projectId, name, scmUrl, nagEmailAddress, version, arguments ):
+    checkResult( server.continuum.updateProject( projectId, name, scmUrl, nagEmailAddress, version, arguments ) )
 
 def updateProjectConfiguration( projectId, configuration ):
     checkResult( server.continuum.updateProjectConfiguration( projectId, configuration ) )
@@ -145,8 +153,8 @@ def addMavenTwoProject( url ):
 # Ant project
 ####################################################################
 
-def addAntProject( scmUrl, projectName, nagEmailAddress, version, configuration ):
-    result = checkResult( server.continuum.addAntProject( scmUrl, projectName, nagEmailAddress, version, configuration ) )
+def addAntProject( scmUrl, projectName, nagEmailAddress, version, commandLineArguments, configuration ):
+    result = checkResult( server.continuum.addAntProject( scmUrl, projectName, nagEmailAddress, version, commandLineArguments, configuration ) )
 
     return result[ "projectId" ]
 
@@ -154,21 +162,27 @@ def addAntProject( scmUrl, projectName, nagEmailAddress, version, configuration 
 # Shell project
 ####################################################################
 
-def addShellProject( scmUrl, projectName, nagEmailAddress, version, configuration ):
-    result = checkResult( server.continuum.addShellProject( scmUrl, projectName, nagEmailAddress, version, configuration ) )
+def addShellProject( scmUrl, projectName, nagEmailAddress, version, commandLineArguments, configuration ):
+    result = checkResult( server.continuum.addShellProject( scmUrl, projectName, nagEmailAddress, version, commandLineArguments, configuration ) )
 
     return result[ "projectId" ]
 
 class Project:
     def __init__( self, map ):
         map[ "state" ] = decodeState( int( map[ "state" ] ) )
-
         self.map = map
         self.id = map[ "id" ]
         self.name = map[ "name" ]
         self.nagEmailAddress = map[ "nagEmailAddress" ]
         self.state = map[ "state" ]
         self.version = map[ "version" ]
+        self.scmUrl = map[ "scmUrl" ]
+
+        if ( map.has_key( "commandLineArguments" ) ):
+            self.commandLineArguments = map[ "commandLineArguments" ]
+        else:
+            self.commandLineArguments = ""
+
         self.executorId = map[ "executorId" ]
         self.configuration = map[ "configuration" ]
 

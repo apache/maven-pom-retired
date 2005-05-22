@@ -37,7 +37,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: DefaultMavenBuilderHelper.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
+ * @version $Id$
  */
 public class DefaultMavenBuilderHelper
     extends AbstractLogEnabled
@@ -80,9 +80,9 @@ public class DefaultMavenBuilderHelper
 
         Properties configuration = continuumProject.getConfiguration();
 
-        if ( !configuration.containsKey( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) )
+        if ( StringUtils.isEmpty( configuration.getProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) ) )
         {
-            configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, "clean:clean, install" );
+            configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, "clean:clean install" );
         }
     }
 

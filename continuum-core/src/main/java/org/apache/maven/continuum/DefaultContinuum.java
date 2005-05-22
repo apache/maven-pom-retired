@@ -226,6 +226,7 @@ public class DefaultContinuum
                                 project.getName(),
                                 project.getNagEmailAddress(),
                                 project.getVersion(),
+                                project.getCommandLineArguments(),
                                 configuration );
     }
 
@@ -287,6 +288,7 @@ public class DefaultContinuum
                                 project.getName(),
                                 project.getNagEmailAddress(),
                                 project.getVersion(),
+                                project.getCommandLineArguments(),
                                 configuration );
     }
 
@@ -338,6 +340,7 @@ public class DefaultContinuum
                                 project.getName(),
                                 project.getNagEmailAddress(),
                                 project.getVersion(),
+                                project.getCommandLineArguments(),
                                 configuration );
     }
 
@@ -374,16 +377,12 @@ public class DefaultContinuum
 
         configuration.setProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE, project.getExecutable() );
 
-        if ( project.getArguments() != null )
-        {
-            configuration.setProperty( ShellBuildExecutor.CONFIGURATION_ARGUMENTS, project.getArguments() );
-        }
-
         core.addProjectFromScm( project.getScmUrl(),
                                 ShellBuildExecutor.ID,
                                 project.getName(),
                                 project.getNagEmailAddress(),
                                 project.getVersion(),
+                                project.getCommandLineArguments(),
                                 configuration );
     }
 
@@ -398,8 +397,6 @@ public class DefaultContinuum
 
         sp.setExecutable( p.getConfiguration().getProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE ) );
 
-        sp.setArguments( p.getConfiguration().getProperty( ShellBuildExecutor.CONFIGURATION_ARGUMENTS ) );
-
         return sp;
     }
 
@@ -411,11 +408,6 @@ public class DefaultContinuum
         Properties configuration = new Properties();
 
         configuration.setProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE, project.getExecutable() );
-
-        if ( project.getArguments() != null )
-        {
-            configuration.setProperty( ShellBuildExecutor.CONFIGURATION_ARGUMENTS, project.getArguments() );
-        }
 
         updateProjectConfiguration( project.getId(), configuration );
     }
@@ -431,7 +423,8 @@ public class DefaultContinuum
                             project.getName(),
                             project.getScmUrl(),
                             project.getNagEmailAddress(),
-                            project.getVersion() );
+                            project.getVersion(),
+                            project.getCommandLineArguments() );
     }
 
     private void copyProject( ContinuumProject p1, ContinuumProject p2 )

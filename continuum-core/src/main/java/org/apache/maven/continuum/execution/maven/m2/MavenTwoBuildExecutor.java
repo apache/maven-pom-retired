@@ -28,15 +28,23 @@ import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: MavenShellBuilder.java,v 1.2 2005/04/07 23:27:39 trygvis Exp $
+ * @version $Id$
  */
 public class MavenTwoBuildExecutor
     extends AbstractBuildExecutor
     implements ContinuumBuildExecutor
 {
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
     public final static String CONFIGURATION_GOALS = "goals";
 
     public final static String ID = "maven2";
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
 
     /** @requirement */
     private ShellCommandHelper shellCommandHelper;
@@ -61,10 +69,11 @@ public class MavenTwoBuildExecutor
 
         ExecutionResult executionResult;
 
-        String[] arguments = getArguments( project );
-
         try
         {
+            String arguments = project.getCommandLineArguments() + " " +
+                               getConfiguration( project.getConfiguration(), CONFIGURATION_GOALS );
+
             executionResult = shellCommandHelper.executeShellCommand( workingDirectory,
                                                                       executable,
                                                                       arguments );
@@ -100,27 +109,7 @@ public class MavenTwoBuildExecutor
         }
         catch ( MavenBuilderHelperException e )
         {
-            throw new ContinuumBuildExecutorException( "Error while mapping metadata" );
+            throw new ContinuumBuildExecutorException( "Error while mapping metadata.", e );
         }
-    }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private String[] getArguments( ContinuumProject project )
-        throws ContinuumBuildExecutorException
-    {
-        String[] a = splitAndTrimString( this.arguments, " " );
-
-        String[] goals = getConfigurationStringArray( project.getConfiguration(), CONFIGURATION_GOALS, "," );
-
-        String[] arguments = new String[ a.length + goals.length ];
-
-        System.arraycopy( a, 0, arguments, 0, a.length );
-
-        System.arraycopy( goals, 0, arguments, a.length, goals.length );
-
-        return arguments;
     }
 }

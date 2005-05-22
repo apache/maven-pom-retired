@@ -28,22 +28,30 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenOneProject;
+import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.AntProject;
+import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: DefaultContinuumXmlRpc.java,v 1.3 2005/04/04 15:25:13 trygvis Exp $
+ * @version $Id$
  */
 public class DefaultContinuumXmlRpc
     extends AbstractLogEnabled
@@ -72,7 +80,8 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.addMavenOneProject(): url: '" + url + "'.", e );
+            return handleException( "ContinuumXmlRpc.addMavenOneProject()",
+                                    "URL: '" + url + "'.", e );
         }
     }
 
@@ -90,7 +99,8 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.addMavenTwoProject(): url: '" + url + "'.", e );
+            return handleException( "ContinuumXmlRpc.addMavenTwoProject()",
+                                    "URL: '" + url + "'.", e );
         }
     }
 
@@ -102,9 +112,16 @@ public class DefaultContinuumXmlRpc
                                     String projectName,
                                     String nagEmailAddress,
                                     String version,
+                                    String commandLineArguments,
                                     Hashtable configuration )
     {
-        return addProjectFromScm( scmUrl, AntBuildExecutor.ID, projectName, nagEmailAddress, version, configuration );
+        return addProjectFromScm( scmUrl,
+                                  AntBuildExecutor.ID,
+                                  projectName,
+                                  nagEmailAddress,
+                                  version,
+                                  commandLineArguments,
+                                  configuration );
     }
 
     // ----------------------------------------------------------------------
@@ -115,9 +132,16 @@ public class DefaultContinuumXmlRpc
                                       String projectName,
                                       String nagEmailAddress,
                                       String version,
+                                      String commandLineArguments,
                                       Hashtable configuration )
     {
-        return addProjectFromScm( scmUrl, ShellBuildExecutor.ID, projectName, nagEmailAddress, version, configuration );
+        return addProjectFromScm( scmUrl,
+                                  ShellBuildExecutor.ID,
+                                  projectName,
+                                  nagEmailAddress,
+                                  version,
+                                  commandLineArguments,
+                                  configuration );
     }
 
     // ----------------------------------------------------------------------
@@ -129,6 +153,7 @@ public class DefaultContinuumXmlRpc
                                          String projectName,
                                          String nagEmailAddress,
                                          String version,
+                                         String commandLineArguments,
                                          Hashtable configuration )
     {
         try
@@ -147,13 +172,14 @@ public class DefaultContinuumXmlRpc
                                                        projectName,
                                                        nagEmailAddress,
                                                        version,
+                                                       commandLineArguments,
                                                        configurationProperties );
 
             return makeHashtable( "projectId", projectId );
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.addProjectFromScm().", e );
+            return handleException( "ContinuumXmlRpc.addProjectFromScm()", null, e );
         }
     }
 
@@ -193,7 +219,81 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getProject(): project id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.getProject()",
+                                    "Project id: '" + projectId + "'.", e );
+        }
+    }
+
+    public Hashtable updateProject( String projectId,
+                                    String name,
+                                    String scmUrl,
+                                    String nagEmailAddress,
+                                    String version,
+                                    String commandLineArguments )
+    {
+        try
+        {
+            ContinuumProject project = continuum.getProject( projectId );
+
+            if ( project.getExecutorId().equals( MavenOneBuildExecutor.ID ) )
+            {
+                project = continuum.getMavenOneProject( projectId );
+            }
+            else if ( project.getExecutorId().equals( MavenTwoBuildExecutor.ID ) )
+            {
+                project = continuum.getMavenTwoProject( projectId );
+            }
+            else if ( project.getExecutorId().equals( AntBuildExecutor.ID ) )
+            {
+                project = continuum.getAntProject( projectId );
+            }
+            else if ( project.getExecutorId().equals( ShellBuildExecutor.ID ) )
+            {
+                project = continuum.getShellProject( projectId );
+            }
+
+            project.setName( name );
+
+            project.setScmUrl( scmUrl );
+
+            project.setNagEmailAddress( nagEmailAddress );
+
+            project.setVersion( version );
+
+            project.setCommandLineArguments( commandLineArguments );
+
+            // ----------------------------------------------------------------------
+            //
+            // ----------------------------------------------------------------------
+
+            if ( project instanceof MavenOneProject )
+            {
+                continuum.updateMavenOneProject( (MavenOneProject) project );
+            }
+            else if ( project instanceof MavenTwoProject )
+            {
+                continuum.updateMavenTwoProject( (MavenTwoProject) project );
+            }
+            else if ( project instanceof AntProject )
+            {
+                continuum.updateAntProject( (AntProject) project );
+            }
+            else if ( project instanceof ShellProject )
+            {
+                continuum.updateShellProject( (ShellProject) project );
+            }
+            else
+            {
+                return handleException( "ContinuumXmlRpc.updateProject()",
+                                        "Project id: '" + projectId + "'.", new ContinuumException( "Unknown project type: " + project.getClass().getName() ) );
+            }
+
+            return makeHashtable();
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.updateProject()",
+                                    "Project id: '" + projectId + "'.", e );
         }
     }
 
@@ -207,11 +307,13 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.updateProjectFromScm(): Project id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.updateProjectFromScm()",
+                                    "Project id: '" + projectId + "'.", e );
         }
     }
 
-    public Hashtable updateProjectConfiguration( String projectId, Hashtable configuration )
+    public Hashtable updateProjectConfiguration( String projectId,
+                                                 Hashtable configuration )
     {
         try
         {
@@ -230,7 +332,8 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.updateProjectConfiguration(): Project id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.updateProjectConfiguration()",
+                                    "Project id: '" + projectId + "'.", e );
         }
     }
 
@@ -251,7 +354,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getAllProjects().", e );
+            return handleException( "ContinuumXmlRpc.getAllProjects()", null, e );
         }
     }
 
@@ -265,7 +368,8 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.removeProject(). Project id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.removeProject()",
+                                    "Project id: '" + projectId + "'.", e );
         }
     }
 
@@ -283,7 +387,8 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.buildProject(): project id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.buildProject()",
+                                    "Project id: '" + projectId + "'.", e );
         }
     }
 
@@ -320,7 +425,8 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getBuildsForProject(): id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.getBuildsForProject()",
+                                    "Project id: '" + projectId + "'.", e );
         }
     }
 
@@ -348,7 +454,8 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getBuild(): id: '" + buildId + "'.", e );
+            return handleException( "ContinuumXmlRpc.getBuild()",
+                                    "Build id: '" + buildId + "'.", e );
         }
     }
 
@@ -366,7 +473,8 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getBuildResult(): id: '" + buildId + "'.", e );
+            return handleException( "ContinuumXmlRpc.getBuildResult()",
+                                    "Build id: '" + buildId + "'.", e );
         }
     }
 
@@ -392,7 +500,7 @@ public class DefaultContinuumXmlRpc
         return hashtable;
     }
 
-    private Hashtable handleException( String method, Throwable throwable )
+    private Hashtable handleException( String method, String message, Throwable throwable )
     {
         Hashtable hashtable = new Hashtable();
 
@@ -407,7 +515,14 @@ public class DefaultContinuumXmlRpc
             hashtable.put( "message", "" );
         }
 
-        hashtable.put( "method", method );
+        if ( StringUtils.isEmpty( message ) )
+        {
+            hashtable.put( "method", method );
+        }
+        else
+        {
+            hashtable.put( "method", method + ": " + message );
+        }
 
         hashtable.put( "stackTrace", getExceptionStackTrace( throwable ) );
 

@@ -39,10 +39,10 @@ import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -191,9 +191,16 @@ public class DefaultContinuumCore
             throw logAndCreateException( "Error while creating projects from URL.", e );
         }
 
-        // TODO: Update from metadata in the initial checkout?
+        for ( Iterator it = result.getProjects().iterator(); it.hasNext(); )
+        {
+            ContinuumProject project = (ContinuumProject) it.next();
+
+            validateProject( project );
+        }
 
         List ids = new ArrayList( result.getProjects().size() );
+
+        // TODO: Update from metadata in the initial checkout?
 
         for ( Iterator it = result.getProjects().iterator(); it.hasNext(); )
         {
@@ -212,6 +219,7 @@ public class DefaultContinuumCore
                                      String projectName,
                                      String nagEmailAddress,
                                      String version,
+                                     String commandLineArugments,
                                      Properties configuration )
         throws ContinuumException
     {
@@ -231,17 +239,15 @@ public class DefaultContinuumCore
 
         project.setVersion( version );
 
+        project.setCommandLineArguments( commandLineArugments );
+
         project.setConfiguration( configuration );
 
         // ----------------------------------------------------------------------
-        // Make sure that the builder id is correct before starting to check
-        // stuff out
+        // Validate the project
         // ----------------------------------------------------------------------
 
-        if ( !buildExecutorManager.hasBuilder( executorId ) )
-        {
-            logAndCreateException( "No such executor with id '" + executorId + "'." );
-        }
+        validateProject( project );
 
         // ----------------------------------------------------------------------
         //
@@ -282,8 +288,8 @@ public class DefaultContinuumCore
 
             if ( !workingDirectory.exists() )
             {
-                logAndCreateException( "Could not make missing working directory for " +
-                                       "project '" + project.getName() + "'." );
+                throw logAndCreateException( "Could not make missing working directory for " +
+                                             "project '" + project.getName() + "'." );
             }
         }
 
@@ -303,7 +309,12 @@ public class DefaultContinuumCore
         updateProjectFromCheckOut( project );
     }
 
-    public void updateProject( String projectId, String name, String scmUrl, String nagEmailAddress, String version )
+    public void updateProject( String projectId,
+                               String name,
+                               String scmUrl,
+                               String nagEmailAddress,
+                               String version,
+                               String commandLineArguments )
         throws ContinuumException
     {
         try
@@ -312,7 +323,8 @@ public class DefaultContinuumCore
                                  name,
                                  scmUrl,
                                  nagEmailAddress,
-                                 version );
+                                 version,
+                                 commandLineArguments );
         }
         catch ( ContinuumStoreException e )
         {
@@ -482,6 +494,7 @@ public class DefaultContinuumCore
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
+                           project.getCommandLineArguments(),
                            configuration );
     }
 
@@ -533,6 +546,7 @@ public class DefaultContinuumCore
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
+                           project.getCommandLineArguments(),
                            configuration );
     }
 
@@ -574,6 +588,7 @@ public class DefaultContinuumCore
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
+                           project.getCommandLineArguments(),
                            configuration );
     }
 
@@ -610,16 +625,12 @@ public class DefaultContinuumCore
 
         configuration.setProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE, project.getExecutable() );
 
-        if ( project.getArguments() != null )
-        {
-            configuration.setProperty( ShellBuildExecutor.CONFIGURATION_ARGUMENTS, project.getArguments() );
-        }
-
         addProjectFromScm( project.getScmUrl(),
                            ShellBuildExecutor.ID,
                            project.getName(),
                            project.getNagEmailAddress(),
                            project.getVersion(),
+                           project.getCommandLineArguments(),
                            configuration );
     }
 
@@ -634,8 +645,6 @@ public class DefaultContinuumCore
 
         sp.setExecutable( p.getConfiguration().getProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE ) );
 
-        sp.setArguments( p.getConfiguration().getProperty( ShellBuildExecutor.CONFIGURATION_ARGUMENTS ) );
-
         return sp;
     }
 
@@ -648,13 +657,12 @@ public class DefaultContinuumCore
 
         configuration.setProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE, project.getExecutable() );
 
-        if ( project.getArguments() != null )
-        {
-            configuration.setProperty( ShellBuildExecutor.CONFIGURATION_ARGUMENTS, project.getArguments() );
-        }
-
         updateProjectConfiguration( project.getId(), configuration );
     }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
 
     private void updateProject( ContinuumProject project )
         throws ContinuumException
@@ -665,7 +673,8 @@ public class DefaultContinuumCore
                                  project.getName(),
                                  project.getScmUrl(),
                                  project.getNagEmailAddress(),
-                                 project.getVersion() );
+                                 project.getVersion(),
+                                 project.getCommandLineArguments() );
         }
         catch ( ContinuumStoreException e )
         {
@@ -705,6 +714,43 @@ public class DefaultContinuumCore
         }
     }
 
+    private void validateProject( ContinuumProject project )
+        throws ContinuumException
+    {
+        // ----------------------------------------------------------------------
+        // Make sure that the builder id is correct before starting to check
+        // stuff out
+        // ----------------------------------------------------------------------
+
+        if ( !buildExecutorManager.hasBuildExecutor( project.getExecutorId() ) )
+        {
+            throw logAndCreateException( "No such executor with id '" + project.getExecutorId() + "'." );
+        }
+
+        try
+        {
+            if ( store.getProjectByName( project.getName() ) != null )
+            {
+                throw new ContinuumException( "A project with the name '" + project.getName() + "' already exist." );
+            }
+
+//            if ( getProjectByScmUrl( scmUrl ) != null )
+//            {
+//                throw new ContinuumStoreException( "A project with the scm url '" + scmUrl + "' already exist." );
+//            }
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error while validating the project.", e );
+        }
+
+        // ----------------------------------------------------------------------
+        // Validate each field
+        // ----------------------------------------------------------------------
+
+        project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
+    }
+
     private ContinuumProject addProjectAndCheckOutSources( ContinuumProject project, String executorId )
         throws ContinuumException
     {
@@ -722,6 +768,7 @@ public class DefaultContinuumCore
                                           project.getScmUrl(),
                                           project.getNagEmailAddress(),
                                           project.getVersion(),
+                                          project.getCommandLineArguments(),
                                           executorId,
                                           null,
                                           project.getConfiguration() );
@@ -734,8 +781,8 @@ public class DefaultContinuumCore
 
             if ( !projectWorkingDirectory.exists() && !projectWorkingDirectory.mkdirs() )
             {
-                logAndCreateException( "Could not make the working directory for the project " +
-                                       "'" + projectWorkingDirectory.getAbsolutePath() + "'." );
+                throw logAndCreateException( "Could not make the working directory for the project " +
+                                             "'" + projectWorkingDirectory.getAbsolutePath() + "'." );
             }
 
             project.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
@@ -808,11 +855,14 @@ public class DefaultContinuumCore
     {
         getLogger().info( "Updating project '" + project.getName() + "'." );
 
+        // Save the ID now in case the builder fucks it up
+        String id = project.getId();
+
         // ----------------------------------------------------------------------
         // Make a new descriptor
         // ----------------------------------------------------------------------
 
-        ContinuumBuildExecutor builder = buildExecutorManager.getBuilder( project.getExecutorId() );
+        ContinuumBuildExecutor builder = buildExecutorManager.getBuildExecutor( project.getExecutorId() );
 
         try
         {
@@ -829,13 +879,12 @@ public class DefaultContinuumCore
 
         try
         {
-            String id = project.getId();
-
             store.updateProject( id,
                                  project.getName(),
                                  project.getScmUrl(),
                                  project.getNagEmailAddress(),
-                                 project.getVersion() );
+                                 project.getVersion(),
+                                 project.getCommandLineArguments() );
 
             store.updateProjectConfiguration( id, project.getConfiguration() );
         }

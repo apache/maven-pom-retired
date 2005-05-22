@@ -27,7 +27,7 @@ import org.codehaus.plexus.PlexusTestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: Maven1BuilderTest.java,v 1.3 2005/04/06 13:57:20 trygvis Exp $
+ * @version $Id$
  */
 public class MavenOneContinuumProjectBuilderTest
     extends PlexusTestCase
@@ -61,6 +61,6 @@ public class MavenOneContinuumProjectBuilderTest
 
         assertEquals( 1, configuration.size() );
 
-        assertEquals( "clean:clean, jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
+        assertEquals( "clean:clean jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
     }
 }

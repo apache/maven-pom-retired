@@ -28,7 +28,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: DefaultBuilderManager.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
+ * @version $Id$
  */
 public class DefaultBuildExecutorManager
     extends AbstractLogEnabled
@@ -49,11 +49,11 @@ public class DefaultBuildExecutorManager
 
         if ( executors.size() == 0 )
         {
-            getLogger().warn( "No builders defined." );
+            getLogger().warn( "No build executors defined." );
         }
         else
         {
-            getLogger().info( "Builders:" );
+            getLogger().info( "Build executors:" );
 
             for ( Iterator it = executors.keySet().iterator(); it.hasNext(); )
             {
@@ -63,24 +63,24 @@ public class DefaultBuildExecutorManager
     }
 
     // ----------------------------------------------------------------------
-    // BuilderManager Implementation
+    // BuildExecutorManager Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildExecutor getBuilder( String builderType )
+    public ContinuumBuildExecutor getBuildExecutor( String builderType )
         throws ContinuumException
     {
-        ContinuumBuildExecutor builder = (ContinuumBuildExecutor) executors.get( builderType );
+        ContinuumBuildExecutor executor = (ContinuumBuildExecutor) executors.get( builderType );
 
-        if ( builder == null )
+        if ( executor == null )
         {
-            throw new ContinuumException( "No such builder: '" + builderType + "'." );
+            throw new ContinuumException( "No such executor: '" + builderType + "'." );
         }
 
-        return builder;
+        return executor;
     }
 
-    public boolean hasBuilder( String builderType )
+    public boolean hasBuildExecutor( String executorId )
     {
-        return executors.containsKey( builderType );
+        return executors.containsKey( executorId );
     }
 }

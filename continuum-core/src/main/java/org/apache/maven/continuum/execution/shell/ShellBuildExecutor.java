@@ -28,41 +28,26 @@ import org.codehaus.plexus.util.cli.Commandline;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ShellBuilder.java,v 1.2 2005/04/07 23:27:40 trygvis Exp $
+ * @version $Id$
  */
 public class ShellBuildExecutor
     extends AbstractBuildExecutor
     implements ContinuumBuildExecutor
 {
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
     public static final String CONFIGURATION_EXECUTABLE = "executable";
 
-    public final static String CONFIGURATION_ARGUMENTS = "arguments";
-
     public final static String ID = "shell";
-
-    /** @requirement */
-    private ShellCommandHelper shellCommandHelper;
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
-    protected boolean prependWorkingDirectoryIfMissing()
-    {
-        return true;
-    }
-
-    protected String getExecutable( ContinuumProject project )
-        throws ContinuumBuildExecutorException
-    {
-        return getConfigurationString( project.getConfiguration(), CONFIGURATION_EXECUTABLE );
-    }
-
-    protected String[] getArguments( ContinuumProject project )
-        throws ContinuumBuildExecutorException
-    {
-        return getConfigurationStringArray( project.getConfiguration(), CONFIGURATION_ARGUMENTS, " ", new String[ 0 ] );
-    }
+    /** @requirement */
+    private ShellCommandHelper shellCommandHelper;
 
     // ----------------------------------------------------------------------
     // ContinuumBuilder implementation
@@ -75,13 +60,10 @@ public class ShellBuildExecutor
 
         ExecutionResult executionResult;
 
-        String executable = getExecutable( project );
-
-        String[] arguments = getArguments( project );
+        String executable = getConfiguration( project.getConfiguration(), CONFIGURATION_EXECUTABLE );
 
         if ( executable.charAt( 0 ) != '/' &&
-             executable.charAt( 0 ) != '\\' &&
-             prependWorkingDirectoryIfMissing() )
+             executable.charAt( 0 ) != '\\' )
         {
             executable = workingDirectory + File.separator + executable;
         }
@@ -90,7 +72,7 @@ public class ShellBuildExecutor
         {
             executionResult = shellCommandHelper.executeShellCommand( workingDirectory,
                                                                       executable,
-                                                                      arguments );
+                                                                      project.getCommandLineArguments() );
         }
         catch ( Exception e )
         {
@@ -115,29 +97,5 @@ public class ShellBuildExecutor
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
     {
         // Not much to do.
-    }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    protected Commandline createCommandline( ContinuumProject project, String executable, String[] arguments )
-    {
-        Commandline cl = new Commandline();
-
-        cl.setExecutable( executable );
-
-        cl.setWorkingDirectory( new File( project.getWorkingDirectory() ).getAbsolutePath() );
-
-        for ( int i = 1; i < arguments.length; i++ )
-        {
-            cl.createArgument().setValue( arguments[i] );
-        }
-
-        getLogger().warn( "Executing external command '" + executable + "'." );
-
-        getLogger().warn( "Executing external command. Working directory: " + cl.getWorkingDirectory().getAbsolutePath() );
-
-        return cl;
     }
 }

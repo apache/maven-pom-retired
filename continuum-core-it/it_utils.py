@@ -66,12 +66,13 @@ def assertNotNull( message, condition ):
 
     assertionFailed( message, "Not None", condition )
 
-def assertProject( projectId, name, nagEmailAddress, state, version, executorId, project ):
+def assertProject( projectId, name, nagEmailAddress, state, version, commandLineArguments, executorId, project ):
     assertNotNull( "project.id", projectId )
     assertEquals( "project.name", name, project.name )
     assertEquals( "project.nagEmailAddress", nagEmailAddress, project.nagEmailAddress )
     assertEquals( "project.state", state, project.state )
     assertEquals( "project.version", version, project.version )
+    assertEquals( "project.commandLineArguments", commandLineArguments, project.commandLineArguments )
     assertEquals( "project.executorId", executorId, project.executorId )
 
 def assertCheckedOutFiles( project, expectedCheckedOutFiles ):
@@ -79,7 +80,7 @@ def assertCheckedOutFiles( project, expectedCheckedOutFiles ):
     if ( len( expectedCheckedOutFiles ) != len( actualCheckedOutFiles ) ):
         print "Expected files: "
         for expectedFile in expectedCheckedOutFiles:
-            print " " + expectedFile.path
+            print " " + expectedFile
 
         print "Actual files: "
         for actualFile in actualCheckedOutFiles:

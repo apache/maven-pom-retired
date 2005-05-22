@@ -37,7 +37,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: DefaultBuildController.java,v 1.4 2005/04/07 23:27:38 trygvis Exp $
+ * @version $Id$
  */
 public class DefaultBuildController
     extends AbstractLogEnabled
@@ -111,7 +111,7 @@ public class DefaultBuildController
 
         try
         {
-            context.builder = buildExecutorManager.getBuilder( context.project.getExecutorId() );
+            context.builder = buildExecutorManager.getBuildExecutor( context.project.getExecutorId() );
         }
         catch ( ContinuumException e )
         {
@@ -293,7 +293,7 @@ public class DefaultBuildController
                                  Throwable e )
         throws ContinuumStoreException
     {
-        System.err.println( "Setting the build id '" + buildId + "' state to " + state );
+        getLogger().info( "Setting the build id '" + buildId + "' state to " + state );
 
         store.setBuildResult( buildId, state, result, scmResult, e );
     }

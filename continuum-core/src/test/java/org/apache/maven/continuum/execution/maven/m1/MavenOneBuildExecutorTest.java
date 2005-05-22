@@ -27,7 +27,7 @@ import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: Maven1BuilderTest.java,v 1.3 2005/04/06 13:57:20 trygvis Exp $
+ * @version $Id$
  */
 public class MavenOneBuildExecutorTest
     extends PlexusTestCase
@@ -37,7 +37,7 @@ public class MavenOneBuildExecutorTest
     {
         BuildExecutorManager builderManager = (BuildExecutorManager) lookup( BuildExecutorManager.ROLE );
 
-        MavenOneBuildExecutor executor = (MavenOneBuildExecutor) builderManager.getBuilder( MavenOneBuildExecutor.ID );
+        MavenOneBuildExecutor executor = (MavenOneBuildExecutor) builderManager.getBuildExecutor( MavenOneBuildExecutor.ID );
 
         // ----------------------------------------------------------------------
         // Make a checkout
@@ -70,7 +70,7 @@ public class MavenOneBuildExecutorTest
 
         Properties expectedConfiguration = new Properties();
 
-        expectedConfiguration.put( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean, jar:install" );
+        expectedConfiguration.put( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean jar:install" );
 
         // ----------------------------------------------------------------------
         //
@@ -98,6 +98,6 @@ public class MavenOneBuildExecutorTest
 
         assertEquals( 1, configuration.size() );
 
-        assertEquals( "clean:clean, jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
+        assertEquals( "clean:clean jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
     }
 }

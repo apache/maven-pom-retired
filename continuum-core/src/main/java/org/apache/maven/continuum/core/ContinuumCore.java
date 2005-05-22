@@ -19,6 +19,7 @@ package org.apache.maven.continuum.core;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Properties;
+import java.util.List;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -48,6 +49,7 @@ public interface ContinuumCore
                               String projectName,
                               String nagEmailAddress,
                               String version,
+                              String commandLineArugments,
                               Properties configuration )
         throws ContinuumException;
 
@@ -61,7 +63,8 @@ public interface ContinuumCore
                         String name,
                         String scmUrl,
                         String nagEmailAddress,
-                        String version )
+                        String version,
+                        String commandLineArguments )
         throws ContinuumException;
 
     void updateProjectConfiguration( String projectId, Properties configuration )

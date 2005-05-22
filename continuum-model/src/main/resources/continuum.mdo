@@ -104,6 +104,13 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
+        <!-- TODO: Move to the executor configuration. -->
+        <!-- TODO: Uh, oh, and rename FooProject to FooExecutorConfiguration -->
+        <field>
+          <name>commandLineArguments</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
       </fields>
     </class>
 
@@ -158,11 +165,6 @@
       <fields>
         <field>
           <name>executable</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>arguments</name>
           <version>1.0.0</version>
           <type>String</type>
         </field>

@@ -31,7 +31,7 @@ import org.codehaus.plexus.PlexusTestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: MavenBuilderHelperTest.java,v 1.1.1.1 2005/03/29 20:42:04 trygvis Exp $
+ * @version $Id$
  */
 public class MavenTwoContinuumProjectBuilderTest
     extends PlexusTestCase
@@ -124,7 +124,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, project.getConfiguration().size() );
 
-        assertEquals( "clean:clean, install",
+        assertEquals( "clean:clean install",
                       project.getConfiguration().get( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) );
     }
 }

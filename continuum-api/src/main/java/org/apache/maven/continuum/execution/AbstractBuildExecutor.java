@@ -23,13 +23,13 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: AbstractContinuumBuilder.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
+ * @version $Id$
  */
 public abstract class AbstractBuildExecutor
     extends AbstractLogEnabled
     implements ContinuumBuildExecutor
 {
-    protected String getConfigurationString( Properties configuration, String property )
+    protected String getConfiguration( Properties configuration, String property )
         throws ContinuumBuildExecutorException
     {
         String string = configuration.getProperty( property );
@@ -40,51 +40,5 @@ public abstract class AbstractBuildExecutor
         }
 
         return string;
-    }
-
-    protected String getConfigurationString( Properties configuration, String property, String defaultValue )
-        throws ContinuumBuildExecutorException
-    {
-        String string = configuration.getProperty( property );
-
-        if ( StringUtils.isEmpty( string ) )
-        {
-            return defaultValue;
-        }
-
-        return string;
-    }
-
-    protected String[] getConfigurationStringArray( Properties configuration, String property, String separator )
-        throws ContinuumBuildExecutorException
-    {
-        String value = getConfigurationString( configuration, property );
-
-        return splitAndTrimString( value, "," );
-    }
-
-    protected String[] getConfigurationStringArray( Properties configuration, String property, String separator, String[] defaultValue )
-        throws ContinuumBuildExecutorException
-    {
-        String value = getConfigurationString( configuration, property, null );
-
-        if ( value == null )
-        {
-            return defaultValue;
-        }
-
-        return splitAndTrimString( value, separator );
-    }
-
-    protected String[] splitAndTrimString( String value, String separator )
-    {
-        String[] array = StringUtils.split( value, separator );
-
-        for ( int i = 0; i < array.length; i++ )
-        {
-            array[ i ] = array[ i ].trim();
-        }
-
-        return array;
     }
 }

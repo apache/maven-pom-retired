@@ -70,20 +70,6 @@ public class ModelloJPoxContinuumStore
     // ----------------------------------------------------------------------
 
     // ----------------------------------------------------------------------
-    // Database methods
-    // ----------------------------------------------------------------------
-
-    public void createDatabase()
-        throws ContinuumStoreException
-    {
-    }
-
-    public void deleteDatabase()
-        throws ContinuumStoreException
-    {
-    }
-
-    // ----------------------------------------------------------------------
     // ContinuumProject
     // ----------------------------------------------------------------------
 
@@ -91,32 +77,19 @@ public class ModelloJPoxContinuumStore
                               String scmUrl,
                               String nagEmailAddress,
                               String version,
+                              String commandLineArguments,
                               String executorId,
                               String workingDirectory,
                               Properties configuration )
         throws ContinuumStoreException
     {
-        // TODO: this code should not be here, it belongs in the application or we would have to duplicate this
-        // code in every store we implemented.
-
-        if ( getProjectByName( name ) != null )
-        {
-            throw new ContinuumStoreException( "A project with the name '" + name + "' already exist." );
-        }
-
-        /*
-        if ( getProjectByScmUrl( scmUrl ) != null )
-        {
-            throw new ContinuumStoreException( "A project with the scm url '" + scmUrl + "' already exist." );
-        }
-        */
-
         ContinuumProject project = new ContinuumProject();
 
         project.setName( name );
         project.setScmUrl( scmUrl );
         project.setNagEmailAddress( nagEmailAddress );
         project.setVersion( version );
+        project.setCommandLineArguments( commandLineArguments );
         project.setExecutorId( executorId );
         project.setWorkingDirectory( workingDirectory );
         project.setState( ContinuumProjectState.CHECKING_OUT );
@@ -142,8 +115,6 @@ public class ModelloJPoxContinuumStore
         try
         {
             store.begin();
-
-            getLogger().info( "Removing project with id '" + projectId + "'." );
 
 //            System.err.println( "**********************************" );
 //            System.err.println( "**********************************" );
@@ -242,7 +213,12 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public void updateProject( String projectId, String name, String scmUrl, String nagEmailAddress, String version )
+    public void updateProject( String projectId,
+                               String name,
+                               String scmUrl,
+                               String nagEmailAddress,
+                               String version,
+                               String commandLineArguments )
         throws ContinuumStoreException
     {
         try
@@ -257,6 +233,7 @@ public class ModelloJPoxContinuumStore
             project.setScmUrl( scmUrl );
             project.setNagEmailAddress( nagEmailAddress );
             project.setVersion( version );
+            project.setCommandLineArguments( commandLineArguments );
 
             store.commit();
         }

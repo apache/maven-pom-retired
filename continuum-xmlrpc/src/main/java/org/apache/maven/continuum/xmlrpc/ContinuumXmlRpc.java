@@ -20,7 +20,7 @@ import java.util.Hashtable;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumXmlRpc.java,v 1.3 2005/04/07 23:16:27 trygvis Exp $
+ * @version $Id$
  */
 public interface ContinuumXmlRpc
 {
@@ -32,9 +32,15 @@ public interface ContinuumXmlRpc
 
     Hashtable getProject( String projectId );
 
-    Hashtable updateProjectFromScm( String projectId );
+    Hashtable updateProject( String projectId,
+                             String name,
+                             String scmUrl,
+                             String nagEmailAddress,
+                             String version,
+                             String commandLineArguments );
 
-    Hashtable updateProjectConfiguration( String projectId, Hashtable configuration );
+    Hashtable updateProjectConfiguration( String projectId,
+                                          Hashtable configuration );
 
     Hashtable getAllProjects();
 
@@ -44,9 +50,12 @@ public interface ContinuumXmlRpc
     // Build handling
     // ----------------------------------------------------------------------
 
-    Hashtable buildProject( String projectId, boolean force );
+    Hashtable buildProject( String projectId,
+                            boolean force );
 
-    Hashtable getBuildsForProject( String projectId, int start, int end );
+    Hashtable getBuildsForProject( String projectId,
+                                   int start,
+                                   int end );
 
     Hashtable getBuild( String buildId );
 
@@ -73,6 +82,7 @@ public interface ContinuumXmlRpc
                              String projectName,
                              String nagEmailAddress,
                              String version,
+                             String commandLineArguments,
                              Hashtable configuration );
 
     // ----------------------------------------------------------------------
@@ -83,5 +93,6 @@ public interface ContinuumXmlRpc
                                String projectName,
                                String nagEmailAddress,
                                String version,
+                               String commandLineArguments,
                                Hashtable configuration );
 }

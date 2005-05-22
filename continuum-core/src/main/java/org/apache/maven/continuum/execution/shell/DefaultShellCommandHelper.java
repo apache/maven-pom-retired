@@ -24,7 +24,7 @@ import org.codehaus.plexus.util.cli.Commandline;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: DefaultShellCommandHelper.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
+ * @version $Id$
  */
 public class DefaultShellCommandHelper
     extends AbstractLogEnabled
@@ -34,21 +34,38 @@ public class DefaultShellCommandHelper
     // ShellCommandHelper Implementation
     // ----------------------------------------------------------------------
 
-    public ExecutionResult executeShellCommand( File workingDirectory, String shellCommand, String[] arguments )
+    public ExecutionResult executeShellCommand( File workingDirectory, String executable, String arguments )
         throws Exception
     {
-        Commandline cl = createCommandline( workingDirectory, shellCommand, arguments );
+        // ----------------------------------------------------------------------
+        // Make the command line
+        // ----------------------------------------------------------------------
+
+        Commandline cl = new Commandline();
+
+        cl.setExecutable( executable );
+
+        cl.setWorkingDirectory( workingDirectory.getAbsolutePath() );
+
+        cl.createArgument().setLine( arguments );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
 
         CommandLineUtils.StringStreamConsumer stderr = new CommandLineUtils.StringStreamConsumer();
 
         CommandLineUtils.StringStreamConsumer stdout = new CommandLineUtils.StringStreamConsumer();
 
-        int exitCode;
-
         getLogger().info( "Executing: " + cl );
+
         getLogger().info( "Working directory: " + workingDirectory.getAbsolutePath() );
 
-        exitCode = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
+        int exitCode = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
 
         String out = stdout.getOutput();
 
@@ -57,25 +74,5 @@ public class DefaultShellCommandHelper
         ExecutionResult result = new ExecutionResult( out, err, exitCode );
 
         return result;
-    }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private Commandline createCommandline( File workingDirectory, String shellCommand, String[] arguments )
-    {
-        Commandline cl = new Commandline();
-
-        cl.setExecutable( shellCommand );
-
-        cl.setWorkingDirectory( workingDirectory.getAbsolutePath() );
-
-        for ( int i = 0; i < arguments.length; i++ )
-        {
-            cl.createArgument().setValue( arguments[ i ] );
-        }
-
-        return cl;
     }
 }

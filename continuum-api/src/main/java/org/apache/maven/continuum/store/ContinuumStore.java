@@ -28,21 +28,11 @@ import org.apache.maven.continuum.scm.UpdateScmResult;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumStore.java,v 1.2 2005/04/03 21:31:33 trygvis Exp $
+ * @version $Id$
  */
 public interface ContinuumStore
 {
     String ROLE = ContinuumStore.class.getName();
-
-    // ----------------------------------------------------------------------
-    // Database methods
-    // ----------------------------------------------------------------------
-
-    void createDatabase()
-        throws ContinuumStoreException;
-
-    void deleteDatabase()
-        throws ContinuumStoreException;
 
     // ----------------------------------------------------------------------
     // ContinuumProject
@@ -52,6 +42,7 @@ public interface ContinuumStore
                        String scmUrl,
                        String nagEmailAddress,
                        String version,
+                       String commandLineArguments,
                        String executorId,
                        String workingDirectory,
                        Properties properties )
@@ -67,7 +58,8 @@ public interface ContinuumStore
                         String name,
                         String scmUrl,
                         String nagEmailAddress,
-                        String version )
+                        String version,
+                        String commandLineArguments )
         throws ContinuumStoreException;
 
     void updateProjectConfiguration( String projectId, Properties configuration )

@@ -43,7 +43,8 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     void updateProjectFromScm( String projectId )
         throws ContinuumException;
 
-    void updateProjectConfiguration( String projectId, Properties configuration )
+    void updateProjectConfiguration( String projectId,
+                                     Properties configuration )
         throws ContinuumException;
 
     ContinuumProject getProject( String projectId )

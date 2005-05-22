@@ -21,14 +21,14 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: BuilderManager.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
+ * @version $Id$
  */
 public interface BuildExecutorManager
 {
     String ROLE = BuildExecutorManager.class.getName();
 
-    ContinuumBuildExecutor getBuilder( String builderType )
+    ContinuumBuildExecutor getBuildExecutor( String executorId )
         throws ContinuumException;
 
-    boolean hasBuilder( String builderType );
+    boolean hasBuildExecutor( String executorId );
 }
