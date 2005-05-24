@@ -128,7 +128,7 @@
         <version>2.0-alpha-1</version>
         <configuration>
           <descriptor>src/assembly/bin.xml</descriptor>
-          <finalName>continuum-1.0-alpha-2-SNAPSHOT</finalName>
+          <finalName>continuum-1.0-alpha-2</finalName>
         </configuration>
       </plugin>
     </plugins>
