@@ -92,7 +92,7 @@ public class DefaultContinuum
         {
             ContinuumProject p = (ContinuumProject) i.next();
 
-            if ( p.getState() == ContinuumProjectState.FAILED )
+            if ( p.getState() == ContinuumProjectState.ERROR )
             {
                 list.add( p );
             }
