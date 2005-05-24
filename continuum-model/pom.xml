@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <project>
   <parent>
     <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
-    <version>RELEASE</version>
+    <version>1.0-alpha-2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-model</artifactId>
@@ -26,8 +24,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-jpox-plugin</artifactId>
-        <version>1.0-20050507.150141-7</version>
-        <groupId>org.apache.maven.plugins</groupId>
+        <version>1.0-SNAPSHOT</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.modello</groupId>
@@ -50,7 +47,8 @@
           </goal>
           <goal>
             <id>jpox-store</id>
-            <configuration></configuration>
+            <configuration>
+            </configuration>
           </goal>
         </goals>
       </plugin>

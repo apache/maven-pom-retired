@@ -3,21 +3,21 @@
   <parent>
     <groupId>org.apache.maven.continuum</groupId>
     <artifactId>continuum-parent</artifactId>
-    <version>1.0-alpha-2-SNAPSHOT</version>
+    <version>1.0-alpha-2</version>
   </parent>
   <artifactId>continuum-web</artifactId>
   <name>Continuum Web</name>
-  <version>1.0-alpha-2-SNAPSHOT</version>  
+  <version>1.0-alpha-2</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-model</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-core</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-2</version>
     </dependency>
 
     <!--

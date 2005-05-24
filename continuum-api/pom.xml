@@ -7,12 +7,12 @@
   </parent>
   <artifactId>continuum-api</artifactId>
   <name>Continuum API</name>
-  <version>1.0-alpha-2-SNAPSHOT</version>
+  <version>1.0-alpha-2</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-model</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-2</version>
     </dependency>
   </dependencies>
 </project>
