@@ -1,11 +1,11 @@
  ------
- CruiceControl Support
+ CruiseControl Support
  ------
  Trygve Laugstøl
  ------
  Fri May 23 2005
 
-CruiceControl Support
+CruiseControl Support
 
  Continuum will pick out a few elements from the configuration file and create
  a set of Continuum projects:

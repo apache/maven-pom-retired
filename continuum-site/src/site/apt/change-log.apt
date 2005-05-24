@@ -36,11 +36,11 @@ Change Log
    force a build. This is useful in if the SCM server is up again or some
    snapshot has been updated) 
 
- * Read CruiseControl configuration files. 
- 
-   Continuum can take a CC configuration and turn it into a set of Continuum
-   projects. Look at the {{{cc-support.apt}CruiseControl Support}} page for
-   more information.
+~~* Read CruiseControl configuration files. 
+~~
+~~  Continuum can take a CC configuration and turn it into a set of Continuum
+~~  projects. Look at the {{{cc-support.apt}CruiseControl Support}} page for
+~~  more information.
 
  * Command line arguments per project. 
  

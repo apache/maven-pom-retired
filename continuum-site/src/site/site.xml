@@ -21,7 +21,9 @@
     <menu name="User's Guide">
       <item name="Getting Started" href="getting-started.html"/>
       <item name="Configuration" href="configuration.html"/>
+      <!--
       <item name="CruiseControl Support" href="cc-support.html"/>
+      -->
     </menu>
     <menu name="Developer's Guide">
       <item name="Building" href="dev/building.html"/>
