@@ -7,6 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-cc</artifactId>
   <name>Continuum Model</name>
+  <version>1.0-alpha-2-SNAPSHOT</version> 
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>

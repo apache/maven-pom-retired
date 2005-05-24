@@ -7,6 +7,7 @@
   </parent>
   <artifactId>continuum-core</artifactId>
   <name>Continuum Core</name>
+  <version>1.0-alpha-2-SNAPSHOT</version>  
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
