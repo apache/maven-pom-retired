@@ -16,18 +16,29 @@ Installing Continuum
 
 Adding Projects to Continuum
 
- When adding projects note that Continuum will check out the projects directly
- after you press the button and will not return untill after the projects has
- been checked out either successfully or not. This is a known issue with
- Continuum and asynchronous checkouts are
- {{{planned-features.html#Asynchronous_checkouts}planned}}.
-
-* Adding Maven2 Projects
+* Adding Maven 2 Projects
 
  When adding a Maven 2 project all you need is the URL to a POM. The POM has to
  include at least the SCM information to be able to check out the project.
 
-* Adding Maven1 Projects
+ If there is a <<<<modules>>>> element inside the POM continuum will try to
+ download the child projects by adding the module name to the end of the url.
+ This makes it very easy to add a entire product to Continuum if you list all
+ the child projects insode the POM.
+
+ If you are using ViewCVS you can add your project with a url like this:
+
++--+
+http://cvs.plexus.codehaus.org/*checkout*/plexus/pom.xml
++--+
+
+ Continuum can also use pom.xml files residing on the local file system like this:
+
++--+
+file:/home/user/dev/pom.xml
++--+
+
+* Adding Maven 1 Projects
 
  Adding a Maven 1 it pretty much like adding a Maven 2 project, give it a URL
  to a POM with SCM information and Continuum will add the projects.
@@ -44,7 +55,7 @@ Adding Projects to Continuum
  When adding Ant projects you have to specify the project's name, SCM URL, nag
  email address, version and the targets to execute.
 
- <NOTE:> The SCM URL is a Maven SCM convention. Here's an example of what an
+ <NOTE:> The SCM URL is a Maven SCM URL. Here's an example of what an
  SCM URL looks like:
  <<<scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk>>>
 
@@ -54,7 +65,7 @@ Adding Projects to Continuum
  nag email address, version and the shell script to execute. The working
  directory of the project will be prepended to the scripts path.
 
- <NOTE:> The SCM URL is a Maven SCM convention. Here's an example of what an
+ <NOTE:> The SCM URL is a Maven SCM URL. Here's an example of what an
  SCM URL looks like:
  <<<scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk>>>
 

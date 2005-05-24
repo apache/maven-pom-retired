@@ -1,0 +1,26 @@
+ ------
+ CruiceControl Support
+ ------
+ Trygve Laugstøl
+ ------
+ Fri May 23 2005
+
+CruiceControl Support
+
+ Continuum will pick out a few elements from the configuration file and create
+ a set of Continuum projects:
+
+   * Each <<<project>>> tag will become a Continuum project. The <<<name>>> tag
+     is required and will used as the name of the project.
+
+   * For each <<<project>>> pick ut the first <<<modificationset>>>. At least
+     one modification set has to be specified. If multiple modification sets
+     are specified, the first will be used. Continuum currently only supports
+     CVS and SVN so these are the only two supported modification set types.
+
+     The SCM URL for the project will be <<<"scm:cvs:">>> + the value of the
+     <<<repositoryLocation>>> attribute if it is a SVN modification set or the
+     value of the <<<cvsroot>>> attribute if it is a CVS modification set.
+
+   * The nag email address will be set to the <<<address>>> attribute of the
+     <<<failure>>> of the <<<email>>> or <<<htmlemail>>> elements.

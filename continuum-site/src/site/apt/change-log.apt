@@ -1,0 +1,96 @@
+ ------
+ Change Log
+ ------
+ Trygve Laugstøl
+ ------
+ Fri May 23 2005
+
+Change Log
+
+ This page lists the most important and noteworthy changes. For the complete
+ list of issues look in JIRA for the respective version.
+
+* Changes from 1.0 Alpha 1 to 1.0 Alpha 2
+
+  {{{http://jira.codehaus.org/secure/IssueNavigator.jspa?reset=true&pid=10540&fixfor=10935}The
+  complete change log}}.
+
+** User changes
+
+ * Asynchronous checkouts. 
+ 
+   Check outs from the source code repositories will now happen in the
+   background. This means that the project is first stored in the database and
+   then put on the check out queue. All projects in the "checking out" state
+   will be added to the queue upon startup to make sure all projects
+
+ * A build result will only be added when a build actually is executed. 
+ 
+   In the Alpha 1 release there is a build per hour without any real content as
+   the build wasn't executed. Now a build will only be created when the build
+   is actually executed.
+
+ * Builds can be forced. 
+ 
+   If some external resource has changed that Continuum won't detect you can
+   force a build. This is useful in if the SCM server is up again or some
+   snapshot has been updated) 
+
+ * Read CruiseControl configuration files. 
+ 
+   Continuum can take a CC configuration and turn it into a set of Continuum
+   projects. Look at the {{{cc-support.apt}CruiseControl Support}} page for
+   more information.
+
+ * Command line arguments per project. 
+ 
+   Each project can be configured with command line arguments. This makes it
+   possible to fine tune each argument that's given to the build executor.
+
+ * Recursivly add projects when reading Maven 2 metadata.
+ 
+   Continuum will now read the <<<<modules>>>> element from the Maven 2 POMs
+   and recursivley add turn each Maven 2 project into a Continuum project. This
+   is a really powerfull method as it makes it possible to add all the parts of
+   a entire product in a single operation.
+
+** Technical Changes
+
+ These changes are more of a technical nature and mainly aimed at developers
+ wanting to understand the inner workings of Continuum.
+
+ * Build signaled state removed.
+
+   In the Alpha 1 release when a project was enqueued for building it would go
+   into the "build signaled" state and would then stay there until the build
+   was executed. This showed to be unnecessary complex because it required a
+   build to exist to keep the state of the build. Instead the state was removed
+   and each project was put on a build queue instead.
+
+   When the build controller gets the build task from the queue it will update
+   the source code check out and look for any changes. If there wheren't any
+   changes the build execution is stopped and the controller goes back to
+   reading from the queue for more builds to execue.
+
+   Next the controller will read the project metadata and store any updated
+   information.
+
+   Now, if the project is either new, any files was updated or the build is
+   forced the build controller will create a build object and start the
+   exection of the build.
+
+ * Splited up project building and execution, <<<ContinuumBuilder>>> renamed to
+   <<<ContinuumExecutor>>>, <<<ContinuumProjectBuilder>>> added.
+
+   In Alpha 1 the <<<ContinuumBuilder>>> object had responsibility for both
+   execution of a build (calling <<<m2>>>, <<<ant>>> etc) and the creation of
+   the <<<ContinuumProject>>> from a URL (where the URL was a pointer to a
+   <<<project.xml>>> or <<<pom.xml>>>).
+   
+   In Alpha 2 these two resposibilities have been split up into two components, namely:
+
+   * <<<ContinuumExecutor>>>: this component will do the actual build execution.
+
+   * <<<ContinuumProjectBuilder>>>: this component will build a set of
+     <<<ContinuumProjects>>>. This is also a change from Alpha 1 where the
+     builder would return a single project while now it's a set of projects.

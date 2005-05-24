@@ -47,6 +47,8 @@ Planned Features for Continuum
         useless builds and it's easier to use because there is no need to
         configure your SCM to push events to Continuum.
 
+Completed Features
+
 * Asynchronous checkouts
 
  Currently all checkouts are done while the user presses the "add project"

@@ -17,16 +17,15 @@ Getting the sources
 $ svn co http://svn.apache.org/repos/asf/maven/continuum/trunk/ continuum
 +--+
 
- All the Continuum Alpha 1 sources will be in a directory called
- <<<continuum>>>.
+ The sources will be in a directory called <<<continuum>>>.
 
  For more information on how to check out the sources see the information pages
  from Apache {{{http://apache.org/dev/version-control.html}here}}.
 
 Building Continuum
 
- <<NOTE:>> Continuum requires Maven 2 alpha 2 or newer to build. While we use
- the alpha 2 release to build it should build with newer versions of Maven 2.
+ <<NOTE:>> Continuum requires Maven 2 Alpha 2 or newer to build. While we use
+ the Alpha 2 release to build it should build with newer versions of Maven 2.
 
  Continuum consists of 6 Maven 2 projects:
 
@@ -57,5 +56,5 @@ Building Continuum
  script from the root of the check out like this:
 
 +--+
-$ sh build.sh
+continuum$ sh build.sh
 +--+
