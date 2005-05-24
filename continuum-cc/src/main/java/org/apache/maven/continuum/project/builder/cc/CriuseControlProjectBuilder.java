@@ -35,7 +35,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class CriuseControlProjectBuilder
     extends AbstractContinuumProjectBuilder
@@ -108,6 +108,11 @@ public class CriuseControlProjectBuilder
             if ( publishers != null )
             {
                 String nagEmailAddress = findNagEmailAddress( publishers.getChild( "email" ) );
+
+                if ( nagEmailAddress == null )
+                {
+                    nagEmailAddress = findNagEmailAddress( publishers.getChild( "htmlemail" ) );
+                }
 
                 continuumProject.setNagEmailAddress( nagEmailAddress );
             }
@@ -216,7 +221,7 @@ public class CriuseControlProjectBuilder
                     throw new ContinuumProjectBuilderException( "Continuum doesn't support CVS tags." );
                 }
 
-                scmUrl = "cvs:" + cvsrot;
+                scmUrl = "scm:cvs:" + cvsrot;
             }
             else if ( modifactionset.getName().equals( "svn" ) )
             {
@@ -232,12 +237,14 @@ public class CriuseControlProjectBuilder
                     throw new ContinuumProjectBuilderException( "A 'repositoryLocation' attribute is required when using a svn modification set. The usage of 'localworkingcopy' is not supported." );
                 }
 
-                scmUrl = "svn:" + repositoryLocation;
+                scmUrl = "scm:svn:" + repositoryLocation;
             }
             else
             {
                 throw new ContinuumProjectBuilderException( "Unsupported modification set found '" + modifactionset.getName() + "'." );
             }
+
+            break;
         }
 
         if ( scmUrl == null )
