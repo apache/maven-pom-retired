@@ -22,7 +22,7 @@ Planned Features for Continuum
 * SCM Support
 
  Continuum is using the Maven SCM library for checking out and getting updates
- from the SCM the project is stored in. Continuum currently only supports CVS
+ from the SCM the project uses. Continuum currently only supports CVS
  and Subversion but support for these SCM is planned:
 
  * ClearCase
@@ -38,14 +38,14 @@ Planned Features for Continuum
  Currently it only supports builds on a regular interval and Continuum
  definitely needs better build scheduling. There are two major ways to do this:
 
- [Push] something is triggering a build by telling Continuum to do so.
-        Continuum already supports this through the socket listener that is
-        listening for build IDs to build and through the XML-RPC server.
+ [Push] External processes signal Continuum to perform a build.
+        Continuum supports this through a simple socket listener 
+        and an XML-RPC interface.
 
- [Pull] Continuum is looking for changes and schedules a build when something
-        has changed. This is useful for several reasons: less resources used by
-        useless builds and it's easier to use because there is no need to
-        configure your SCM to push events to Continuum.
+ [Pull] Continuum polls for changes and schedules a build when something
+        has changed. This is useful for several reasons: builds occur only
+        when necessary and you don't have to change the way your SCM is
+        setup.
 
 Completed Features
 
