@@ -1,16 +1,19 @@
-Get these into JIRA
+m2:
+http://svn.apache.org/viewcvs.cgi/*checkout*/maven/wagon/trunk/wagon-provider-api/pom.xml?rev=169925&content-type=text%2Fplain
 
-o deploy/release all components i've modified
-  - plexus-i18n
-  - plexus-action
-  - plexus-formica
-  - plexus-formica-web
-  - plexus-summit  
+Get these into JIRA
 
 o need to check if a project already exists
 
 o check out the release documentation, it would be good to tell users what
   they need to be installed in order to use the various builders
+
+x deploy/release all components i've modified
+  - plexus-i18n
+  - plexus-action
+  - plexus-formica
+  - plexus-formica-web
+  - plexus-summit  
 
 x hookup scm validator
 x trigger the build from the summary
@@ -65,8 +68,37 @@ o for complex validations like the scm validator we may want a better error
 o need to make a paging mechanism, things like the number of builds adds
   up pretty quickly.
 
-o start/stop scripts and supervise integration
+o start/stop scripts and supervise integration. it has to be easy
+  for users to start and stop
 
 o debug mode that spits out sample urls to use for testing
 
 o whip up some quick tests using maxq
+
+o when the build fails completely the errors are not captured in the
+  standard output
+
+o when the addition of project fails by passing in a POM the user must
+  be given details of the error so that they can fix the POM.
+
+o need to account for the difference between required, and validation
+  though with stackable validators that should be possible.
+
+o take a top-level POM (m1/m2) and pull in the whole group of projects
+  and then walk over the checked out directory and collect all the POMs.
+  In m2 this is easy because we can look at modules, but in m1 we need
+  to be aware of test POMs. This would be extremely convenient.
+
+o need to be able to configure notifications
+
+o add developer list to the continuum project so that the developer
+  who broke the build can be notified and tracked
+
+o i would like to be able to develop components and have the application
+  pick them up from their target directory. so artifact enable the app server
+  and teach it about the unified source directory.
+  
+  right now i have a little script that creates the necessary symlinks to the
+  appropriate directories but it would be nice to have something a little more
+  elegant then that. couple that with some dynamic JAR reloading and that
+  would make development much quicker.

@@ -27,12 +27,12 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-log4j-logging</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-i18n</artifactId>
-      <version>1.0-beta-3</version>
+      <version>1.0-beta-4</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>

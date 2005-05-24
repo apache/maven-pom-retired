@@ -33,19 +33,30 @@
 
     <!--
      |
+     | Plexus appserver
+     |
+     |-->
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-appserver</artifactId>
+      <version>1.0-alpha-2</version>
+    </dependency>
+    
+    <!--
+     |
      | Plexus services
      |
      |-->
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-service-jetty</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-1</version>
       <type>plexus-service</type>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-service-xmlrpc</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-2</version>
       <type>plexus-service</type>
     </dependency>
 
@@ -89,7 +100,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-plexus-plugin</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-alpha-2</version>
         <goals>
           <goal>
             <id>app</id>

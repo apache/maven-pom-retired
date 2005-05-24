@@ -1,8 +1,0 @@
-o i would like to be able to develop components and have the application
-  pick them up from their target directory. so artifact enable the app server
-  and teach it about the unified source directory.
-  
-  right now i have a little script that creates the necessary symlinks to the
-  appropriate directories but it would be nice to have something a little more
-  elegant then that. couple that with some dynamic JAR reloading and that
-  would make development much quicker.

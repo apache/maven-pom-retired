@@ -27,8 +27,10 @@ import java.util.Map;
 import java.util.List;
 
 /**
+ * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: DefaultViewContextPopulator.java,v 1.1 2005/04/01 00:11:34 jvanzyl Exp $
+ * @version $Id$
+ * @todo collapse this all into the context view populator valve.
  */
 public class DefaultViewContextPopulator
     extends AbstractLogEnabled
