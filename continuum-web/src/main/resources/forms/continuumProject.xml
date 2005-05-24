@@ -39,7 +39,7 @@
       <validators>
         <validator>
           <id>scm-url</id>
-          <error-message-key>project.scmUrl.error</error-message-key>
+          <error-message-key>projectScmUrl.error</error-message-key>
         </validator>
       </validators>
       <type>text</type>
