@@ -45,8 +45,8 @@
             </form>
           </td>
           <td>
-          <img src="/continuum/images/icon_error_sml.gif" alt="Failed"/> $projectsWithErrors
-          <img src="/continuum/images/icon_warning_sml.gif" alt="Error"/> $projectsWithFailures
+          <img src="/continuum/images/icon_error_sml.gif" alt="Failed"/> $projectsWithFailures
+          <img src="/continuum/images/icon_warning_sml.gif" alt="Error"/> $projectsWithErrors
           </td>
         </tr>
       </table>
