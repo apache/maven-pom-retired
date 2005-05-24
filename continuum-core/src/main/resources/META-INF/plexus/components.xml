@@ -190,7 +190,6 @@
       <implementation>org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor</implementation>
       <configuration>
         <executable>m2</executable>
-        <arguments>-N</arguments>
       </configuration>
       <requirements>
         <requirement>

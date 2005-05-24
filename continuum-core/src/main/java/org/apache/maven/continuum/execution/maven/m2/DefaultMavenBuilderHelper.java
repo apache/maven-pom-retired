@@ -78,6 +78,11 @@ public class DefaultMavenBuilderHelper
 
         continuumProject.setVersion( getVersion( mavenProject ) );
 
+        if ( StringUtils.isEmpty( continuumProject.getCommandLineArguments() ) )
+        {
+            continuumProject.setCommandLineArguments( "-N" );
+        }
+
         Properties configuration = continuumProject.getConfiguration();
 
         if ( StringUtils.isEmpty( configuration.getProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) ) )

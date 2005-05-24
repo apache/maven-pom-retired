@@ -18,7 +18,6 @@ package org.apache.maven.continuum.project.builder.maven;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +33,7 @@ import org.apache.maven.project.MavenProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class MavenTwoContinuumProjectBuilder
     extends AbstractContinuumProjectBuilder

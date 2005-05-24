@@ -55,9 +55,6 @@ public class MavenTwoBuildExecutor
     /** @configuration */
     private String executable;
 
-    /** @configuration */
-    private String arguments;
-
     // ----------------------------------------------------------------------
     // ContinuumBuilder Implementation
     // ----------------------------------------------------------------------
