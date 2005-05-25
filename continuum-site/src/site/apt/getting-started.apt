@@ -23,7 +23,7 @@ Adding Projects to Continuum
 
  If there is a <<<<modules>>>> element inside the POM continuum will try to
  download the child projects by adding the module name to the end of the url.
- This makes it very easy to add a entire product to Continuum if you list all
+ This makes it very easy to add a entire project to Continuum if you list all
  the child projects insode the POM.
 
  If you are using ViewCVS you can add your project with a url like this:
@@ -40,7 +40,7 @@ file:/home/user/dev/pom.xml
 
 * Adding Maven 1 Projects
 
- Adding a Maven 1 it pretty much like adding a Maven 2 project, give it a URL
+ Adding a Maven 1 it pretty much like adding a Maven 2 project, pass it an URL
  to a POM with SCM information and Continuum will add the projects.
 
  There are is a caveat though: The POM cannot extend a parent POM. When
