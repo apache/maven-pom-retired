@@ -10,8 +10,30 @@
   <version>1.0-alpha-2</version>
   <distributionManagement>
     <site>
-      <id>continuum-site</id>
-      <url>scp://home/trygvis/public_html/maven-stage-site/continuum/</url>
+      <id>apache</id>
+      <url>scp://minotaur.apache.org//www/maven.apache.org/continuum/</url>
     </site>
   </distributionManagement>
+  <reports>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+      <!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+      </plugin>
+      -->
+    </plugins>
+  </reports>
 </project>
