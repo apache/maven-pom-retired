@@ -162,6 +162,7 @@
       <operation>
         <name>Build</name>
         <action>Summary.vm/action/cam/cid/buildProject/id/$id$</action>
+        <enable>getState() == 1 || getState() == 2 || getState() == 3 || getState() == 4</enable>
       </operation>
     </operations>
   </summary>
