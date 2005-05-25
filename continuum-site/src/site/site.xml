@@ -1,10 +1,12 @@
 <project name="Apache Maven Continuum">
   <bannerLeft>
     <name>Apache Maven</name>
+    <src>http://maven.apache.org/images/apache-maven-project.png</src>
     <href>http://maven.apache.org</href>
   </bannerLeft>
   <bannerRight>
     <name>Apache Maven Continuum</name>
+    <src>images/continuum.png</src>
     <href>http://maven.apache.org/continuum</href>
   </bannerRight>
   <body>
