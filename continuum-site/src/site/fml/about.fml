@@ -4,10 +4,24 @@
       <question>What is Continuum?</question>
       <answer>
         <p>
-          Continuum is a continous integration server that will ensure the health of your code base.
+          Continuum is a <b>continous integration</b> server that will ensure the health of your code base.  
         </p>
+      </answer>
+    </faq>
+    <faq id="what-is-continuum">
+      <question>What is "Continuous Integration"?</question>
+      <answer>
         <p>
-          For more information on what continous integration is there are lots of articles on the internet:
+          The term "continuous integration" refers to a process that builds and tests code on a frequent, regular
+          basis.  Many continuous integration systems monitor a source repository at regular intervals and trigger an
+          "integration" every time someone commits a change.  An "integration" can be anything from compiling and testing a single
+          project to the assembly and testing of a deliverable from multiple dependent projects.  Among the benefits of continuous integration
+          are the immediate identification of defects and the ability to guarantee that a project's build will succeed at any
+          point in the development cycle.
+        </p>  
+        <p>
+          An in-depth description of continuous integration is beyond the scope of this FAQ. A much more detailed explanation of the concept can be 
+          found at the resources listed below:
           <ul>
             <li>Martin Fowler has a article called
               <a href="http://www.martinfowler.com/articles/continuousIntegration.html">"Continuous Integration"</a>
@@ -17,6 +31,19 @@
             </li>
           </ul>
         </p>
+        <p>
+          There are many continuous integration projects and products on the market.  Here is a list of other products which offer similar
+          capabilities:
+          <ul>
+            <li>
+              <a href="http://cruisecontrol.sourceforge.net">CruiseControl</a>
+            </li>
+            <li>
+              <a href="http://www.urbancode.com/projects/anthill/default.jsp">AntHill</a>
+            </li>
+          </ul>
+        </p>
+
       </answer>
     </faq>
     <faq id="features">
@@ -36,24 +63,6 @@
         </ul>
       </answer>
     </faq>
-    <faq id="get-involved">
-      <question>Can I get involved?</question>
-      <answer>
-        <p>
-          The Apache Maven project welcomes anyone that wishes to contribute to do so by providing patches to the
-          source code, participating in design discussions, or to help out on the users mailing list by answering
-          questions.
-        </p>
-        <p>
-          Frequent contributors recognised by existing committers to the project may be asked if they would like to
-          join the project.
-        </p>
-        <p>
-          For more information, please see
-          <a href="http://maven.apache.org/contributing/help.html">How to Help</a>.
-        </p>
-      </answer>
-    </faq>
     <faq id="get-help">
       <question>Where do I get help with Continuum?</question>
       <answer>
@@ -70,6 +79,55 @@
         <p>
           Please remember that is is a preview release, so please be patient with features that are not yet implemented,
           and be prepared to do some research and to help out yourself wherever possible.
+        </p>
+      </answer>
+    </faq>
+    <faq id="get-involved">
+      <question>Can I get involved?</question>
+      <answer>
+        <p>
+          The Continuum project welcomes anyone that wishes to contribute to do so by providing patches to the
+          source code, participating in design discussions, or to help out on the users mailing list by answering
+          questions.
+        </p>
+        <p>
+          Frequent contributors recognised by existing committers to the project may be asked if they would like to
+          join the project.
+        </p>
+        <p>
+          For more information, please see
+          <a href="http://maven.apache.org/contributing/help.html">How to Help</a>.
+        </p>
+      </answer>
+    </faq>
+    <faq id="get-involved">
+      <question>How do I write documentation for Continuum?</question>
+      <answer>
+        <p>
+          Good documentation is essential, and any help would be appreciated. If you would like to help create
+          documentation for the Continuum project, check out the Continuum site project from the ASF Subversion
+          repository and submit patches using Codehaus' JIRA installation.
+        </p>
+        <p>
+          To checkout the continuum-site project from the ASF Subversion repository, download the Subversion client for
+          your platform and run: <code>svn co http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-site</code>
+        </p>
+        <p>
+          To build the continuum-site project you will need to use Maven 2.  You can download Maven 2 from the <a 
+          href="http://maven.apache.org/maven2/download.html">Downloads page on the Maven 2 project site</a>.  Once you
+          have installed Maven 2 and added it to your <code>PATH</code>, you can build the Continuum project site by
+          executing the <code>site:site</code> goal with the following command: <code>m2 site:site</code>.
+          After executing the <code>site:site</code> goal, the Continuum site will be stored in the
+          <code>target/site</code> directory.
+        </p>
+        <p>
+          Once you have updated the documentation, generate a patch by running <code>svn diff > site-patch.txt</code>.  Create a
+          new issue in the Continuum JIRA project, and attach your patch to this issue.  Before submitting the patch, make sure
+          to build the Continuum site locally and proofread for any typos.
+        </p>
+        <p>
+          Note: If you haven't already read <a href="http://maven.apache.org/contributing/help.html">How to Help</a>, you should.
+          And, if you happen to use Emacs, don't forget to <code>(setq-default tab-width 4 indent-tabs-mode nil)</code>.
         </p>
       </answer>
     </faq>
