@@ -44,7 +44,7 @@
             #end
             </form>
           </td>
-          <td>
+1          <td>
           <img src="/continuum/images/icon_error_sml.gif" alt="Failed"/> $projectsWithFailures
           <img src="/continuum/images/icon_warning_sml.gif" alt="Error"/> $projectsWithErrors
           </td>
