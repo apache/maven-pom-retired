@@ -25,16 +25,16 @@ import org.codehaus.plexus.PlexusTestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
-public class CriuseControlProjectBuilderTest
+public class CruiseControlProjectBuilderTest
     extends PlexusTestCase
 {
     public void testBasic()
         throws Exception
     {
         ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE,
-                                                                                   CriuseControlProjectBuilder.ID );
+                                                                                   CruiseControlContinuumProjectBuilder.ID );
 
         URL url = getTestFile( "src/test/resources/config.xml" ).toURL();
 
