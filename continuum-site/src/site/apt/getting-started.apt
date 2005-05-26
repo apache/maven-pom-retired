@@ -32,12 +32,6 @@ Adding Projects to Continuum
 http://cvs.plexus.codehaus.org/*checkout*/plexus/pom.xml
 +--+
 
- Continuum can also use pom.xml files residing on the local file system like this:
-
-+--+
-file:/home/user/dev/pom.xml
-+--+
-
 * Adding Maven 1 Projects
 
  Adding a Maven 1 it pretty much like adding a Maven 2 project, pass it an URL
