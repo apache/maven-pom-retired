@@ -1,11 +1,9 @@
 Building
 --------
 
-(You may need to clear out your local repository in case of old snapshot dependencies)
-
 Run:
 
-  ./make.sh
+  ./build.sh
 
 To start continuum:
 
@@ -14,6 +12,6 @@ To start continuum:
 
 To access continuum's web site, go to:
 
-  http://localhost:8000/continuumweb/servlet/continuum
+  http://localhost:8080/continuumweb/servlet/continuum
 
 
