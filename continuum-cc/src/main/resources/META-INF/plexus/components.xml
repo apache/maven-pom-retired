@@ -3,7 +3,7 @@
     <component>
       <role>org.apache.maven.continuum.project.builder.ContinuumProjectBuilder</role>
       <role-hint>cc-builder</role-hint>
-      <implementation>org.apache.maven.continuum.project.builder.cc.CriuseControlProjectBuilder</implementation>
+      <implementation>org.apache.maven.continuum.project.builder.cc.CruiseControlProjectBuilder</implementation>
     </component>
   </components>
 </component-set>

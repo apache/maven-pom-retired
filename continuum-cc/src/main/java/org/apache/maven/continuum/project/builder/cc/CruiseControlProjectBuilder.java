@@ -43,7 +43,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class CriuseControlProjectBuilder
+public class CruiseControlProjectBuilder
     extends AbstractContinuumProjectBuilder
 {
     public static final String ID = "cc-builder";

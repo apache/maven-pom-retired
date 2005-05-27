@@ -34,7 +34,7 @@ public class CruiseControlProjectBuilderTest
         throws Exception
     {
         ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE,
-                                                                                   CruiseControlContinuumProjectBuilder.ID );
+                                                                                   CruiseControlProjectBuilder.ID );
 
         URL url = getTestFile( "src/test/resources/config.xml" ).toURL();
 

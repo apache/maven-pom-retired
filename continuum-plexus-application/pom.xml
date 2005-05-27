@@ -12,12 +12,12 @@
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-web</artifactId>
-      <version>1.0-alpha-2</version>
+      <version>1.0-alpha-3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-xmlrpc</artifactId>
-      <version>1.0-alpha-2</version>
+      <version>1.0-alpha-3-SNAPSHOT</version>
     </dependency>
     <!-- Version overrides -->
     <dependency>
@@ -128,7 +128,8 @@
         <version>2.0-alpha-1</version>
         <configuration>
           <descriptor>src/assembly/bin.xml</descriptor>
-          <finalName>continuum-1.0-alpha-2</finalName>
+          <!-- TODO: isn't this the default? if not, can we use the ${pom.} expression? -->
+          <finalName>continuum-1.0-alpha-3-SNAPSHOT</finalName>
         </configuration>
       </plugin>
     </plugins>
