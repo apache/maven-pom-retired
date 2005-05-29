@@ -30,7 +30,7 @@
 ## ----------------------------------------------------------------------------
 
 #macro ( text $element $elementData )
-<input type="text" name="$element.id" value="$elementData" size="40"/>
+<input type="text" name="$element.id" value="$elementData" size="$element.attributes.size"/>
 #end
 
 #macro ( textarea $element $elementData )

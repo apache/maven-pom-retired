@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.apache.maven.continuum</groupId>
     <artifactId>continuum-parent</artifactId>
-    <version>1.0-alpha-3-SNAPSHOT</version>
+    <version>1.0</version>
   </parent>
   <artifactId>continuum-xmlrpc</artifactId>
   <name>Continuum XMLRPC Interface</name>
