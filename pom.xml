@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.continuum</groupId>
   <artifactId>continuum-parent</artifactId>
-  <version>1.0-alpha-3-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
   <url>http://maven.apache.org/continuum/</url>
@@ -35,12 +35,12 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
-      <version>1.0-alpha-3</version>
+      <version>1.0-alpha-4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>1.0-alpha-3</version>
+      <version>1.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
