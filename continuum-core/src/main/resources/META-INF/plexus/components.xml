@@ -212,7 +212,7 @@
           <role>org.apache.maven.artifact.repository.ArtifactRepositoryFactory</role>
         </requirement>
         <requirement>
-          <role>org.apache.maven.settings.MavenSettingsBuilder</role>
+          <role>org.apache.maven.model.settings.MavenSettingsBuilder</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout</role>
@@ -225,8 +225,8 @@
     </component>
 
     <component>
-      <role>org.apache.maven.settings.MavenSettingsBuilder</role>
-      <implementation>org.apache.maven.settings.DefaultMavenSettingsBuilder</implementation>
+      <role>org.apache.maven.model.settings.MavenSettingsBuilder</role>
+      <implementation>org.apache.maven.model.settings.DefaultMavenSettingsBuilder</implementation>
       <configuration>
         <settings-path>${plexus.home}/conf/maven-settings.xml</settings-path>
       </configuration>

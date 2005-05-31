@@ -19,9 +19,9 @@ package org.apache.maven.continuum.core;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Properties;
-import java.util.List;
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -93,7 +93,7 @@ public interface ContinuumCore
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
-    // Build information
+    // ContinuumBuild
     // ----------------------------------------------------------------------
 
     ContinuumBuild getBuild( String buildId )
@@ -106,5 +106,12 @@ public interface ContinuumCore
         throws ContinuumException;
 
     Collection getChangedFilesForBuild( String buildId )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // ContinuumBuildExecutor
+    // ----------------------------------------------------------------------
+
+    ContinuumBuildExecutor getBuildExecutor( String id )
         throws ContinuumException;
 }

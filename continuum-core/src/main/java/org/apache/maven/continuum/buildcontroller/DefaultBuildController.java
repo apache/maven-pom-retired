@@ -136,15 +136,24 @@ public class DefaultBuildController
             // build status to error.
             // ----------------------------------------------------------------------
 
+/////////////////////// This section should delegate to UpdateProjectFromScmContinuumAction
+/////////////////////// START SECTION
             if ( !update( context ) )
             {
                 return;
             }
+/////////////////////// END SECTION
 
+/////////////////////// This section should delegate to UpdateProjectMetadataContinuumAction
+/////////////////////// START SECTION
             if ( !updateProjectMetadata( context ) )
             {
                 return;
             }
+/////////////////////// END SECTION
+
+/////////////////////// This section should delegate to ExecuteBuilderContinuumAction
+/////////////////////// START SECTION
 
             // ----------------------------------------------------------------------
             // Figure out if the project needs to be built
@@ -164,6 +173,8 @@ public class DefaultBuildController
             makeBuild( context );
 
             buildProject( context );
+
+/////////////////////// END SECTION
         }
         catch ( ContinuumStoreException ex )
         {

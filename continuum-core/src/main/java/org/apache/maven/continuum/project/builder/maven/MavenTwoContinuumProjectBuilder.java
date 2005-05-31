@@ -81,7 +81,7 @@ public class MavenTwoContinuumProjectBuilder
     private void readModules( URL url, ContinuumProjectBuildingResult result )
         throws MalformedURLException, ContinuumProjectBuilderException
     {
-        MavenProject mavenProject = null;
+        MavenProject mavenProject;
 
         try
         {
