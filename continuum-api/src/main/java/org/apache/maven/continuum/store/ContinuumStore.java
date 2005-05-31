@@ -87,9 +87,15 @@ public interface ContinuumStore
     // Build
     // ----------------------------------------------------------------------
 
+    /**
+     * @deprecated
+     */
     String createBuild( String projectId, boolean forced )
         throws ContinuumStoreException;
 
+    /**
+     * @deprecated
+     */
     void setBuildResult( String buildId,
                          int state,
                          ContinuumBuildResult result,
@@ -113,7 +119,7 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     // ----------------------------------------------------------------------
-    // Project and Build state transitions
+    // Project Transitions
     // ----------------------------------------------------------------------
 
     void setCheckoutDone( String projectId,
@@ -128,6 +134,25 @@ public interface ContinuumStore
     void setUpdateDone( String projectId )
         throws ContinuumStoreException;
 
+    // ----------------------------------------------------------------------
+    // Build Transitions
+    // ----------------------------------------------------------------------
+
+    String buildingProject( String projectId,
+                            boolean forced,
+                            UpdateScmResult scmResult )
+        throws ContinuumStoreException;
+
     void setBuildNotExecuted( String projectId )
+        throws ContinuumStoreException;
+
+    void setBuildComplete( String buildId,
+                           UpdateScmResult scmResult,
+                           ContinuumBuildResult result )
+        throws ContinuumStoreException;
+
+    void setBuildError( String buildId,
+                        UpdateScmResult scmResult,
+                        Throwable throwable )
         throws ContinuumStoreException;
 }
