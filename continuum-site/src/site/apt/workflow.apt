@@ -1,0 +1,89 @@
+ -----
+ Title
+ -----
+ Author
+ -----
+ Date
+
+Activities
+
+~* Add Project
+~
+~ Only applies when adding project from a URL.
+~
+~** Actions
+~
+~ 1 Download metadata and any referenced metadata
+~ 1 For each project, store project
+~ 1 For each project, add project to the
+
+* Build Project
+
+** Actions
+
+ * Update Project From SCM
+ * Update Project Metadata From Working Directory
+ * Execute Builder
+
+Actions
+
+* Check Out Project
+
+** Input
+
+ * Project id
+ * Working directory (optional)
+
+** Steps
+
+ 1 Checks out the project from SCM
+ 1 Stores the check out result
+ 1 Sets the project state to checked out
+
+* Update Project From SCM
+
+** Input
+
+ * Project id
+
+** Steps
+
+ 1 Set the project state to "updating"
+   NOTE: This should be somewhere else as it is another atomic operation.
+ 1 Update the project from SCM
+ 1 Store the update scm result
+ 1 Set the project state to "building"
+
+* Update Project Metadata From Working Directory
+
+** Input
+
+ * Project id
+ * Builder id
+ * Working directory
+
+** Steps
+
+ 1 Use the builder to update the project from the checkout
+
+ 1 Stores the updated project
+
+* Execute Builder
+
+** Input
+
+ * Builder id
+
+** Preconditions
+
+ If either:
+
+ * Forced
+ * No previous builds (the project is new)
+ * The count of updated files is > 0
+
+** Steps
+
+ 1 Make a ContiuumBuild object
+ 1 Execute the builder
+ 1 Store the ContinuumBuild and the ContinuumBuildResult objects.
