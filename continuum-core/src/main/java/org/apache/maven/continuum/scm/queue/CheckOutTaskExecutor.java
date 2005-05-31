@@ -33,7 +33,7 @@ import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class CheckOutTaskExecutor
     extends AbstractLogEnabled
@@ -52,6 +52,8 @@ public class CheckOutTaskExecutor
     public void executeTask( Task t )
         throws TaskExecutionException
     {
+        // TODO: Replace with a exection of the "check out project" action
+
         CheckOutTask task = (CheckOutTask) t;
 
         String projectId = task.getProjectId();
