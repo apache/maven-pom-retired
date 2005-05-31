@@ -30,7 +30,7 @@ import org.apache.maven.model.Repository;
 import org.apache.maven.model.Scm;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
-import org.apache.maven.model.settings.MavenSettingsBuilder;
+import org.apache.maven.settings.MavenSettingsBuilder;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
