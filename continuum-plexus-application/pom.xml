@@ -99,7 +99,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-plexus-plugin</artifactId>
-        <version>1.1-alpha-2</version>
+        <version>1.1-alpha-3-SNAPSHOT</version>
         <goals>
           <goal>
             <id>app</id>
@@ -117,6 +117,7 @@
             <id>test-runtime</id>
             <configuration>
               <testRuntimeConfiguration>src/test/conf/testRuntimeConfiguration.xml</testRuntimeConfiguration>
+              <testRuntimeConfigurationProperties>app.properties</testRuntimeConfigurationProperties>
             </configuration>
           </goal>
         </goals>
