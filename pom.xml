@@ -31,11 +31,86 @@
       <archive>http://mail-archives.apache.org/mod_mbox</archive>
     </mailingList>
   </mailingLists>
+  <dependencyManagement>
+    <dependencies>
+      <!--
+       |
+       | Maven
+       |
+       -->
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-core</artifactId>
+        <version>2.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-model</artifactId>
+        <version>2.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-artifact</artifactId>
+        <version>2.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-project</artifactId>
+        <version>2.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-settings</artifactId>
+        <version>2.0-SNAPSHOT</version>
+      </dependency>
+      <!--
+       |
+       | Continuum
+       |
+       -->
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-model</artifactId>
+        <version>1.0-alpha-3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-api</artifactId>
+        <version>1.0-alpha-3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-core</artifactId>
+        <version>1.0-alpha-3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-web</artifactId>
+        <version>1.0-alpha-3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-xmlrpc</artifactId>
+        <version>1.0-alpha-3-SNAPSHOT</version>
+      </dependency>
+      <!--
+       |
+       | Plexus
+       |
+       -->
+    </dependencies>
+  </dependencyManagement>
+  
   <dependencies>
     <dependency>
       <groupId>plexus</groupId>
-      <artifactId>plexus-container-default</artifactId>
+      <artifactId>plexus-utils</artifactId>
       <version>1.0-alpha-3</version>
+    </dependency>      
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <version>1.0-alpha-4-SNAPSHOT</version>      
     </dependency>
     <dependency>
       <groupId>junit</groupId>
