@@ -19,9 +19,7 @@ package org.apache.maven.continuum.core.action;
 import java.util.Map;
 
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.UpdateScmResult;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -30,10 +28,10 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 public class UpdateProjectFromScmContinuumAction
     extends AbstractContinuumAction
 {
-    protected void doExecute( Map context )
+    public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = getProject();
+        ContinuumProject project = getProject( context );
 
         String projectId = project.getId();
 
@@ -47,24 +45,8 @@ public class UpdateProjectFromScmContinuumAction
 
         UpdateScmResult updateScmResult = getScm().updateProject( project );
 
-        putContext( KEY_UPDATE_SCM_RESULT, updateScmResult );
+        context.put( KEY_UPDATE_SCM_RESULT, updateScmResult );
 
         getStore().setUpdateDone( projectId );
-    }
-
-    protected void handleException( Throwable throwable )
-        throws ContinuumStoreException
-    {
-        getLogger().fatalError( "Error while updating from SCM. Project id '" + getProjectId() + "'." );
-
-        getStore().setBuildError( getBuildId(),
-                                  getUpdateScmResult( null ),
-                                  throwable );
-    }
-
-    protected void doFinally()
-        throws ContinuumStoreException
-    {
-        getNotifier().checkoutComplete( getProject(), getUpdateScmResult() );
     }
 }

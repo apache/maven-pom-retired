@@ -21,8 +21,6 @@ import java.util.Map;
 
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
-import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.scm.manager.NoSuchScmProviderException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -31,14 +29,14 @@ import org.apache.maven.scm.manager.NoSuchScmProviderException;
 public class CheckOutProjectContinuumAction
     extends AbstractContinuumAction
 {
-    protected void doExecute( Map context )
+    public void execute( Map context )
         throws Exception
     {
-        String projectId = getProjectId();
+        String projectId = getProjectId( context );
 
         ContinuumProject project = getStore().getProject( projectId );
 
-        File workingDirectory = getWorkingDirectory();
+        File workingDirectory = getWorkingDirectory( context );
 
         CheckOutScmResult result;
 
@@ -46,27 +44,6 @@ public class CheckOutProjectContinuumAction
 
         getStore().setCheckoutDone( projectId, result, null, null );
 
-        putContext( KEY_CHECKOUT_SCM_RESULT, result );
-    }
-
-    protected void handleException( Throwable throwable )
-        throws ContinuumStoreException
-    {
-        String errorMessage = null;
-
-        // TODO: Dissect the scm exception to be able to give better feedback
-        Throwable cause = throwable.getCause();
-
-        if ( cause instanceof NoSuchScmProviderException )
-        {
-            errorMessage = cause.getMessage();
-
-            throwable = null;
-        }
-
-        getStore().setCheckoutDone( getProjectId(),
-                                    getCheckOutResult(),
-                                    errorMessage,
-                                    throwable );
+        context.put( KEY_CHECKOUT_SCM_RESULT, result );
     }
 }

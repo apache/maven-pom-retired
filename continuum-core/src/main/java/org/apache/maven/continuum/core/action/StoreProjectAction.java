@@ -16,12 +16,12 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import java.util.Map;
 import java.io.File;
+import java.util.Map;
 
-import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.store.ContinuumStore;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -41,7 +41,7 @@ public class StoreProjectAction
      */
     private String workingDirectory;
 
-    protected void doExecute( Map context )
+    public void execute( Map context )
         throws Exception
     {
         ContinuumProject project = getProject( context );

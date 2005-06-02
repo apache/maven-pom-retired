@@ -18,9 +18,6 @@ package org.apache.maven.continuum.core.action;
 
 import java.util.Map;
 
-import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.store.ContinuumStoreException;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
@@ -28,17 +25,9 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 public class UpdateProjectMetadataContinuumAction
     extends AbstractContinuumAction
 {
-    protected void doExecute( Map context )
+    public void execute( Map context )
         throws Exception
     {
-        getCore().updateProjectFromScm( getProjectId() );
-    }
-
-    protected void handleException( Throwable throwable )
-        throws ContinuumStoreException
-    {
-        getStore().setBuildError( getBuildId(),
-                                  getUpdateScmResult( null ),
-                                  throwable );
+        getCore().updateProjectFromScm( getProjectId( context ) );
     }
 }

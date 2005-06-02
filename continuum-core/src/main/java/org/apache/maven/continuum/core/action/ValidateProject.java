@@ -22,7 +22,6 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.store.ContinuumStore;
 
 import org.codehaus.plexus.util.StringUtils;
@@ -49,7 +48,7 @@ public class ValidateProject
      */
     private ContinuumStore store;
 
-    protected void doExecute( Map context )
+    public void execute( Map context )
         throws Exception
     {
         ContinuumProject project = getProject( context );
@@ -79,10 +78,5 @@ public class ValidateProject
         // ----------------------------------------------------------------------
 
         project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
-    }
-
-    protected void handleException( Throwable throwable )
-        throws ContinuumStoreException
-    {
     }
 }

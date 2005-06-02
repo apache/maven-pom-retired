@@ -21,14 +21,15 @@ import java.util.Map;
 
 import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
+import org.codehaus.plexus.action.Action;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
@@ -37,7 +38,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
  */
 public abstract class AbstractContinuumAction
     extends AbstractLogEnabled
-    implements ContinuumAction
+    implements Action
 {
     // ----------------------------------------------------------------------
     // Keys for the values that can be in the context
@@ -78,26 +79,6 @@ public abstract class AbstractContinuumAction
      * @plexus.requirement
      */
     private ContinuumNotificationDispatcher notifier;
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    protected abstract void doExecute( Map context )
-        throws Exception;
-
-//    protected abstract void handleException( Throwable throwable )
-//        throws ContinuumStoreException;
-
-    protected void handleContinuumStoreException( ContinuumStoreException exception )
-    {
-        getLogger().fatalError( "Error using the store.", exception );
-    }
-
-    protected void doFinally()
-        throws ContinuumStoreException
-    {
-    }
 
     // ----------------------------------------------------------------------
     //
@@ -175,45 +156,6 @@ public abstract class AbstractContinuumAction
     protected UpdateScmResult getUpdateScmResult(  Map context, UpdateScmResult defaultValue )
     {
         return (UpdateScmResult) getObject( context, KEY_UPDATE_SCM_RESULT, defaultValue );
-    }
-
-    // ----------------------------------------------------------------------
-    // ContinuumAction Implementatin
-    // ----------------------------------------------------------------------
-
-    public void execute( Map context )
-    {
-        try
-        {
-            doExecute( context );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            handleContinuumStoreException( e );
-        }
-        catch ( Exception e )
-        {
-            throw new RuntimeException( "Error while executing action.", e );
-//            try
-//            {
-//                handleException( e );
-//            }
-//            catch ( ContinuumStoreException e2 )
-//            {
-//                handleContinuumStoreException( e2 );
-//            }
-        }
-        finally
-        {
-            try
-            {
-                doFinally();
-            }
-            catch ( ContinuumStoreException e )
-            {
-                handleContinuumStoreException( e );
-            }
-        }
     }
 
     // ----------------------------------------------------------------------

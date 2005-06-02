@@ -48,6 +48,11 @@
       <artifactId>plexus-mail-sender-api</artifactId>
       <version>1.0-alpha-1</version>
     </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-action</artifactId>
+      <version>1.0-alpha-1</version>
+    </dependency>
 
     <!--
      |

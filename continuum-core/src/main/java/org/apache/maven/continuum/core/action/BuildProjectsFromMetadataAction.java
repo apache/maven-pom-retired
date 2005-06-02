@@ -22,7 +22,6 @@ import java.util.Map;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -42,7 +41,7 @@ public class BuildProjectsFromMetadataAction
      */
     private ContinuumProjectBuilderManager projectBuilderManager;
 
-    protected void doExecute( Map context )
+    public  void execute( Map context )
         throws Exception
     {
         String projectBuilderId = getString( context, KEY_PROJECT_BUILDER_ID );
@@ -54,10 +53,5 @@ public class BuildProjectsFromMetadataAction
         ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( url );
 
         context.put( KEY_PROJECT_BUILDING_RESULT, result );
-    }
-
-    protected void handleException( Throwable throwable )
-        throws ContinuumStoreException
-    {
     }
 }

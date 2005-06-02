@@ -16,13 +16,12 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import java.util.Map;
 import java.io.File;
+import java.util.Map;
 
-import org.apache.maven.continuum.scm.queue.CheckOutTask;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.scm.queue.CheckOutTask;
 
-import org.codehaus.plexus.taskqueue.TaskQueueException;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 
 /**
@@ -37,7 +36,7 @@ public class AddProjectToCheckOutQueueAction
      */
     private TaskQueue checkOutQueue;
 
-    protected void doExecute( Map context )
+    public void execute( Map context )
         throws Exception
     {
         ContinuumProject project = getProject( context );

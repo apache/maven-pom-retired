@@ -21,12 +21,10 @@ import java.util.Map;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.UpdateScmResult;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -35,18 +33,18 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 public class ExecuteBuilderContinuumAction
     extends AbstractContinuumAction
 {
-    protected void doExecute( Map context )
+    public void execute( Map context )
         throws Exception
     {
         // ----------------------------------------------------------------------
         // Get parameters from the context
         // ----------------------------------------------------------------------
 
-        ContinuumProject project = getProject();
+        ContinuumProject project = getProject( context );
 
-        boolean forced = isForced();
+        boolean forced = isForced( context );
 
-        UpdateScmResult updateScmResult = getUpdateScmResult();
+        UpdateScmResult updateScmResult = getUpdateScmResult( context );
 
         ContinuumBuildExecutor buildExecutor = getCore().getBuildExecutor( project.getExecutorId() );
 
@@ -60,7 +58,7 @@ public class ExecuteBuilderContinuumAction
         {
             getLogger().info( "No files updated, not building. Project id '" + project.getId() + "'." );
 
-            getStore().setBuildNotExecuted( getProjectId() );
+            getStore().setBuildNotExecuted( getProjectId( context ) );
 
             return;
         }
@@ -69,15 +67,17 @@ public class ExecuteBuilderContinuumAction
         // Make the build result
         // ----------------------------------------------------------------------
 
-        String buildId = getStore().buildingProject( getProjectId(), forced, updateScmResult );
+        String buildId = getStore().buildingProject( getProjectId( context ),
+                                                     forced,
+                                                     updateScmResult );
 
-        putContext( KEY_BUILD_ID, buildId );
+        context.put( KEY_BUILD_ID, buildId );
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        getNotifier().runningGoals( project, getBuild() );
+        getNotifier().runningGoals( project, getBuild( context ) );
 
         ContinuumBuildResult result = buildExecutor.build( project );
 
@@ -89,14 +89,6 @@ public class ExecuteBuilderContinuumAction
                                    result,
                                    updateScmResult,
                                    null );
-    }
-
-    protected void handleException( Throwable throwable )
-        throws ContinuumStoreException
-    {
-        getStore().setBuildError( getBuildId(),
-                                  getUpdateScmResult( null ),
-                                  throwable );
     }
 
     // ----------------------------------------------------------------------
