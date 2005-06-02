@@ -83,17 +83,11 @@ public abstract class AbstractContinuumAction
     //
     // ----------------------------------------------------------------------
 
-    private static ThreadLocal threadContext = new ThreadLocal();
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    protected abstract void doExecute()
+    protected abstract void doExecute( Map context )
         throws Exception;
 
-    protected abstract void handleException( Throwable throwable )
-        throws ContinuumStoreException;
+//    protected abstract void handleException( Throwable throwable )
+//        throws ContinuumStoreException;
 
     protected void handleContinuumStoreException( ContinuumStoreException exception )
     {
@@ -133,94 +127,54 @@ public abstract class AbstractContinuumAction
     //
     // ----------------------------------------------------------------------
 
-    protected void putContext( String key, Object value )
-    {
-        getContext().put( key, value );
-    }
-
-    protected String getProjectId()
+    protected String getProjectId( Map context )
         throws ContinuumStoreException
     {
-        return getString( KEY_PROJECT_ID );
+        return getString( context, KEY_PROJECT_ID );
     }
 
-    protected String getBuildId()
+    protected String getBuildId( Map context )
         throws ContinuumStoreException
     {
-        return getString( KEY_BUILD_ID );
+        return getString( context, KEY_BUILD_ID );
     }
 
-    protected boolean isForced()
+    protected boolean isForced( Map context )
         throws ContinuumStoreException
     {
-        return ((Boolean) getObject( KEY_FORCED )).booleanValue();
+        return ((Boolean) getObject( context, KEY_FORCED )).booleanValue();
     }
 
-    protected ContinuumProject getProject()
+    protected ContinuumProject getProject( Map context )
         throws ContinuumStoreException
     {
-        return getStore().getProject( getProjectId() );
+        return getStore().getProject( getProjectId( context ) );
     }
 
-    protected ContinuumBuild getBuild()
+    protected ContinuumBuild getBuild( Map context )
         throws ContinuumStoreException
     {
-        return getStore().getBuild( getBuildId() );
+        return getStore().getBuild( getBuildId( context ) );
     }
 
-    protected File getWorkingDirectory()
+    protected File getWorkingDirectory( Map context )
     {
-        return new File( getString( KEY_WORKING_DIRECTORY ) );
+        return new File( getString( context, KEY_WORKING_DIRECTORY ) );
     }
 
-    protected CheckOutScmResult getCheckOutResult()
+    protected CheckOutScmResult getCheckOutResult( Map context )
     {
-        return (CheckOutScmResult) getObject( KEY_CHECKOUT_SCM_RESULT );
+        return (CheckOutScmResult) getObject( context, KEY_CHECKOUT_SCM_RESULT );
     }
 
-    protected UpdateScmResult getUpdateScmResult()
+    protected UpdateScmResult getUpdateScmResult( Map context )
     {
-        return (UpdateScmResult) getObject( KEY_UPDATE_SCM_RESULT );
+        return (UpdateScmResult) getObject( context, KEY_UPDATE_SCM_RESULT );
     }
 
-    protected UpdateScmResult getUpdateScmResult( UpdateScmResult defaultValue )
+    protected UpdateScmResult getUpdateScmResult(  Map context, UpdateScmResult defaultValue )
     {
-        return (UpdateScmResult) getObject( KEY_UPDATE_SCM_RESULT, defaultValue );
-    }
-
-//    protected void buildCompleted()
-//    {
-//    }
-//
-//    protected void buildError( Throwable throwable )
-//        throws ContinuumStoreException
-//    {
-//        UpdateScmResult updateScmResult = getUpdateScmResult( null );
-//
-//        String buildId = getString( KEY_BUILD_ID, null );
-//
-//        if ( buildId == null )
-//        {
-//            createBuild().getId();
-//        }
-//
-//        getStore().setBuildResult( getProjectId(),
-//                                   ContinuumProjectState.ERROR,
-//                                   null,
-//                                   updateScmResult,
-//                                   throwable );
-//    }
-
-    private String getString( String key, String defaultValue )
-    {
-        String value = (String) getContext().get( key );
-
-        if ( value == null )
-        {
-            return defaultValue;
-        }
-
-        return value;
+        return (UpdateScmResult) getObject( context, KEY_UPDATE_SCM_RESULT, defaultValue );
     }
 
     // ----------------------------------------------------------------------
@@ -229,11 +183,9 @@ public abstract class AbstractContinuumAction
 
     public void execute( Map context )
     {
-        threadContext.set( context );
-
         try
         {
-            doExecute();
+            doExecute( context );
         }
         catch ( ContinuumStoreException e )
         {
@@ -241,14 +193,15 @@ public abstract class AbstractContinuumAction
         }
         catch ( Exception e )
         {
-            try
-            {
-                handleException( e );
-            }
-            catch ( ContinuumStoreException e2 )
-            {
-                handleContinuumStoreException( e2 );
-            }
+            throw new RuntimeException( "Error while executing action.", e );
+//            try
+//            {
+//                handleException( e );
+//            }
+//            catch ( ContinuumStoreException e2 )
+//            {
+//                handleContinuumStoreException( e2 );
+//            }
         }
         finally
         {
@@ -260,8 +213,6 @@ public abstract class AbstractContinuumAction
             {
                 handleContinuumStoreException( e );
             }
-
-            threadContext.set( null );
         }
     }
 
@@ -269,19 +220,14 @@ public abstract class AbstractContinuumAction
     //
     // ----------------------------------------------------------------------
 
-    private Map getContext()
+    protected String getString( Map context, String key )
     {
-        return (Map) threadContext.get();
+        return (String) context.get( key );
     }
 
-    private String getString( String key )
+    private Object getObject( Map context, String key )
     {
-        return (String) getObject( key );
-    }
-
-    private Object getObject( String key )
-    {
-        Object value = getContext().get( key );
+        Object value = context.get( key );
 
         if ( value == null )
         {
@@ -291,9 +237,9 @@ public abstract class AbstractContinuumAction
         return value;
     }
 
-    private Object getObject( String key, Object defaultValue )
+    private Object getObject( Map context, String key, Object defaultValue )
     {
-        Object value = getContext().get( key );
+        Object value = context.get( key );
 
         if ( value == null )
         {

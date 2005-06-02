@@ -16,6 +16,8 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import java.util.Map;
+
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.UpdateScmResult;
@@ -28,7 +30,7 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 public class UpdateProjectFromScmContinuumAction
     extends AbstractContinuumAction
 {
-    protected void doExecute()
+    protected void doExecute( Map context )
         throws Exception
     {
         ContinuumProject project = getProject();

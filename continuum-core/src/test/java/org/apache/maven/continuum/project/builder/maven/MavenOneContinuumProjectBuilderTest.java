@@ -37,7 +37,7 @@ public class MavenOneContinuumProjectBuilderTest
     {
         ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE, MavenOneContinuumProjectBuilder.ID );
 
-        ContinuumProjectBuildingResult result = projectBuilder.createProjectsFromMetadata( getTestFile( "src/test/resources/projects/maven-1.pom.xml" ).toURL() );
+        ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( getTestFile( "src/test/resources/projects/maven-1.pom.xml" ).toURL() );
 
         assertNotNull( result.getProjects() );
 

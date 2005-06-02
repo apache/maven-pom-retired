@@ -17,28 +17,34 @@ package org.apache.maven.continuum.core.action;
  */
 
 import java.util.Map;
+import java.io.File;
 
-import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.scm.queue.CheckOutTask;
+import org.apache.maven.continuum.project.ContinuumProject;
+
+import org.codehaus.plexus.taskqueue.TaskQueueException;
+import org.codehaus.plexus.taskqueue.TaskQueue;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class UpdateProjectMetadataContinuumAction
+public class AddProjectToCheckOutQueueAction
     extends AbstractContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
+    private TaskQueue checkOutQueue;
+
     protected void doExecute( Map context )
         throws Exception
     {
-        getCore().updateProjectFromScm( getProjectId() );
-    }
+        ContinuumProject project = getProject( context );
 
-    protected void handleException( Throwable throwable )
-        throws ContinuumStoreException
-    {
-        getStore().setBuildError( getBuildId(),
-                                  getUpdateScmResult( null ),
-                                  throwable );
+        CheckOutTask checkOutTask = new CheckOutTask( project.getId(),
+                                                      new File( project.getWorkingDirectory() ) );
+
+        checkOutQueue.put( checkOutTask );
     }
 }

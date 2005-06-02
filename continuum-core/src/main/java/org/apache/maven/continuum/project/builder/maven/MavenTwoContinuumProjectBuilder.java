@@ -53,7 +53,7 @@ public class MavenTwoContinuumProjectBuilder
     // ProjectCreator Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumProjectBuildingResult createProjectsFromMetadata( URL url )
+    public ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url )
         throws ContinuumProjectBuilderException
     {
         // ----------------------------------------------------------------------

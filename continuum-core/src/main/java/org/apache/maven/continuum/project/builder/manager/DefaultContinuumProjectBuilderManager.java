@@ -24,7 +24,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class DefaultContinuumProjectBuilderManager
     extends AbstractLogEnabled
@@ -37,7 +37,7 @@ public class DefaultContinuumProjectBuilderManager
     // ProjectCreatorManager Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumProjectBuilder getProjectCreator( String id )
+    public ContinuumProjectBuilder getProjectBuilder( String id )
         throws ContinuumProjectBuilderManagerException
     {
         ContinuumProjectBuilder projectBuilder = ( ContinuumProjectBuilder ) projectBuilders.get( id );

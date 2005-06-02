@@ -30,7 +30,7 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class MavenOneContinuumProjectBuilder
     extends AbstractContinuumProjectBuilder
@@ -45,7 +45,7 @@ public class MavenOneContinuumProjectBuilder
     // ProjectCreator Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumProjectBuildingResult createProjectsFromMetadata( URL url )
+    public ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url )
         throws ContinuumProjectBuilderException
     {
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();

@@ -17,6 +17,7 @@ package org.apache.maven.continuum.core.action;
  */
 
 import java.io.File;
+import java.util.Map;
 
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
@@ -30,7 +31,7 @@ import org.apache.maven.scm.manager.NoSuchScmProviderException;
 public class CheckOutProjectContinuumAction
     extends AbstractContinuumAction
 {
-    protected void doExecute()
+    protected void doExecute( Map context )
         throws Exception
     {
         String projectId = getProjectId();

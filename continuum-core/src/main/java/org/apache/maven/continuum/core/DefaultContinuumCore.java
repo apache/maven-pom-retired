@@ -176,7 +176,7 @@ public class DefaultContinuumCore
 
         try
         {
-            result = projectBuilder.createProjectsFromMetadata( url );
+            result = projectBuilder.buildProjectsFromMetadata( url );
         }
         catch ( ContinuumProjectBuilderException e )
         {
@@ -487,7 +487,7 @@ public class DefaultContinuumCore
     {
         try
         {
-            return projectBuilderManager.getProjectCreator( projectBuilderId );
+            return projectBuilderManager.getProjectBuilder( projectBuilderId );
         }
         catch ( ContinuumProjectBuilderManagerException e )
         {

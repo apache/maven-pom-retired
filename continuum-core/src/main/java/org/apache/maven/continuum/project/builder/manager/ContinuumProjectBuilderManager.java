@@ -20,12 +20,12 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public interface ContinuumProjectBuilderManager
 {
     String ROLE = ContinuumProjectBuilderManager.class.getName();
 
-    ContinuumProjectBuilder getProjectCreator( String id )
+    ContinuumProjectBuilder getProjectBuilder( String id )
         throws ContinuumProjectBuilderManagerException;
 }

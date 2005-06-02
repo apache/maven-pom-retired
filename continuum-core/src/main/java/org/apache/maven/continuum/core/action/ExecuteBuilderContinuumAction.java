@@ -17,6 +17,7 @@ package org.apache.maven.continuum.core.action;
  */
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
@@ -34,7 +35,7 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 public class ExecuteBuilderContinuumAction
     extends AbstractContinuumAction
 {
-    protected void doExecute()
+    protected void doExecute( Map context )
         throws Exception
     {
         // ----------------------------------------------------------------------
