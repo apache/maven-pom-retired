@@ -1,7 +1,7 @@
 <workflow xmlns="http://werkflow.codehaus.org/simple" id="continuum-add-m1-project">
   <sequence>
-    <action id="update-scm"/>
-    <action id="update-metadata"/>
-    <action id="build"/>
+    <action id="build-projects-from-metadata builderId="maven-one-builder"/>
+    <action id="validate-project"/>
+    <action id="store-project"/>
   </sequence>
 </workflow>
