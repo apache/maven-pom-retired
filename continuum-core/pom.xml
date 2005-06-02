@@ -106,6 +106,17 @@
 
     <!--
      |
+     | Werkflow
+     |
+     |-->
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-workflow</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+    </dependency>
+
+    <!--
+     |
      | Test Dependencies
      |
      |-->

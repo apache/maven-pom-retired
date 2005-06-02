@@ -22,11 +22,17 @@ import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class DefaultContinuumTest
     extends PlexusTestCase
 {
+    public void testContinuum()
+        throws Exception
+    {
+        Continuum continuum = (Continuum) lookup( Continuum.ROLE );
+    }
+
     public void testLookups()
         throws Exception
     {

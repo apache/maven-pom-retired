@@ -22,6 +22,8 @@ import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProject
 import org.apache.maven.continuum.store.ContinuumStore;
 
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.taskqueue.TaskQueue;
+import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
 import org.codehaus.plexus.util.StringUtils;
 
 /**

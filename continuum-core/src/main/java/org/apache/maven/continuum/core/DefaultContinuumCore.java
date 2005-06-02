@@ -74,7 +74,7 @@ public class DefaultContinuumCore
 
     // TODO: look up these requiremetns in start() to have better control of the
     //       application initialization sequence. The application should make sure
-    //       that the database is properly initialized before starting the store.
+    //       that the database is properly initialized before starting the store.   
 
     /**
      * @requirement

@@ -33,6 +33,7 @@ import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProject
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.workflow.WorkflowEngine;
 
 import java.util.Collection;
 import java.util.Properties;
@@ -49,8 +50,9 @@ public class DefaultContinuum
     extends AbstractLogEnabled
     implements Continuum
 {
-    /** @requirement */
     private ContinuumCore core;
+
+    private WorkflowEngine workflowEngine;
 
     // ----------------------------------------------------------------------
     // Projects
