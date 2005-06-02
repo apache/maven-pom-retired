@@ -20,12 +20,12 @@ import java.net.URL;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public interface ContinuumProjectBuilder
 {
     String ROLE = ContinuumProjectBuilder.class.getName();
 
-    ContinuumProjectBuildingResult createProjectsFromMetadata( URL url )
+    ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url )
         throws ContinuumProjectBuilderException;
 }

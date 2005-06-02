@@ -62,7 +62,7 @@ public class CruiseControlProjectBuilder
     // ContinuumProjectBuilder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumProjectBuildingResult createProjectsFromMetadata( URL url )
+    public ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url )
         throws ContinuumProjectBuilderException
     {
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
