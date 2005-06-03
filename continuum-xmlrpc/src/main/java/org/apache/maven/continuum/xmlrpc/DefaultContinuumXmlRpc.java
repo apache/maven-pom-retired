@@ -42,7 +42,6 @@ import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
-import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 
@@ -93,9 +92,13 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            Collection projectIds = core.addProjectsFromUrl( url, MavenTwoContinuumProjectBuilder.ID );
+            // TODO: Get the added projects and return the IDs
+            continuum.addMavenTwoProject( url );
 
-            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
+//            Collection projectIds = core.addProjectsFromUrl( url, MavenTwoContinuumProjectBuilder.ID );
+
+//            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
+            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( new Vector(), false ) );
         }
         catch ( Throwable e )
         {
