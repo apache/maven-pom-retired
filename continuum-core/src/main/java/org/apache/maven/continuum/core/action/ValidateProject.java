@@ -64,6 +64,8 @@ public class ValidateProject
         // Validate each field
         // ----------------------------------------------------------------------
 
+        // This is not really validating but sanitizing.
+
         project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
     }
 }

@@ -17,6 +17,7 @@ package org.apache.maven.continuum;
  */
 
 import org.apache.maven.continuum.core.ContinuumCore;
+import org.apache.maven.continuum.core.action.BuildProjectsFromMetadataAction;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
@@ -31,15 +32,19 @@ import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.workflow.WorkflowEngine;
+import org.codehaus.plexus.action.ActionManager;
 
 import java.util.Collection;
 import java.util.Properties;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -53,6 +58,8 @@ public class DefaultContinuum
     private ContinuumCore core;
 
     private WorkflowEngine workflowEngine;
+
+    private ActionManager actionManager;
 
     // ----------------------------------------------------------------------
     // Projects
@@ -327,12 +334,35 @@ public class DefaultContinuum
     public void addMavenTwoProject( String metadataUrl )
         throws ContinuumException
     {
-        // <action id="build-projects-from-metadata" builderId="maven-two-builder"/>
-        // <action id="validate-project"/>
-        // <action id="store-project"/>
-        // <action id="checkout-project"/>
+        Map context = new HashMap();
 
-        core.addProjectsFromUrl( metadataUrl, MavenTwoContinuumProjectBuilder.ID );
+        context.put( BuildProjectsFromMetadataAction.KEY_PROJECT_BUILDER_ID, MavenTwoContinuumProjectBuilder.ID );
+
+        context.put( BuildProjectsFromMetadataAction.KEY_URL, metadataUrl );
+
+        try
+        {
+            actionManager.lookup( "build-projects-from-metadata" ).execute( context );
+
+            ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context.get( BuildProjectsFromMetadataAction.KEY_PROJECT_BUILDING_RESULT );
+
+            List projects = result.getProjects();
+
+            for ( Iterator i = projects.iterator(); i.hasNext(); )
+            {
+                actionManager.lookup( "validate-project" ).execute( context );
+
+                actionManager.lookup( "store-project" ).execute( context );
+
+                actionManager.lookup( "add-project-checkout-queue" ).execute( context );
+            }
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumException( "Error adding m2 project: ", e );
+        }
+
+        //core.addProjectsFromUrl( metadataUrl, MavenTwoContinuumProjectBuilder.ID );
     }
 
     public void addMavenTwoProject( MavenTwoProject project )

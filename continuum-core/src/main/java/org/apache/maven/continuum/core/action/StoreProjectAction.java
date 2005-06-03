@@ -22,16 +22,12 @@ public class StoreProjectAction
      */
     private ContinuumStore store;
 
-    /**
-     * @plexus.configuration
-     *   default-value="${plexus.home}/temp"
-     */
-    private String workingDirectory;
-
     public void execute( Map context )
         throws Exception
     {
         ContinuumProject project = getProject( context );
+
+        File workingDirectory = getWorkingDirectory( context );
 
         String projectId = store.addProject( project.getName(),
                                              project.getScmUrl(),
@@ -53,6 +49,9 @@ public class StoreProjectAction
             throw new ContinuumException( "Could not make the working directory for the project " +
                                           "'" + projectWorkingDirectory.getAbsolutePath() + "'." );
         }
+
+        // The working directory is created based on the project id so we can always
+        // figure out what it is.
 
         project.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
     }

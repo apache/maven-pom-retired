@@ -34,6 +34,7 @@ public class CheckOutProjectContinuumAction
     {
         String projectId = getProjectId( context );
 
+        // TODO: just make this get project and hide the store
         ContinuumProject project = getStore().getProject( projectId );
 
         File workingDirectory = getWorkingDirectory( context );

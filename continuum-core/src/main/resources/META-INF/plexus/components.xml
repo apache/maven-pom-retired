@@ -498,5 +498,51 @@
       </configuration>
     </component>
 
+    <!--
+     |
+     | Actions
+     |
+     -->
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>add-project-to-checkout-queue</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction</implementation>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>build-projects-from-metadata</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.BuildProjectsFromMetadataAction</implementation>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>checkout-project</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.CheckOutProjectContinuumAction</implementation>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>build-project</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.ExecuteBuilderContinuumAction</implementation>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>store-project</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.StoreProjectAction</implementation>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint></role-hint>
+      <implementation>org.apache.maven.continuum.core.action.</implementation>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>update-project</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.UpdateProjectFromScmContinuumAction</implementation>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>update-project-metadata</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.UpdateProjectMetadataContinuumAction</implementation>
+    </component>
+
   </components>
 </component-set>
