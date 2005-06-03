@@ -3,6 +3,6 @@
     <action id="build-projects-from-metadata" builderId="maven-one-builder"/>
     <action id="validate-project"/>
     <action id="store-project"/>
-    <action id="checkout-project"/>    
+    <action id="checkout-project"/>
   </sequence>
 </workflow>
