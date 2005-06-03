@@ -58,3 +58,5 @@ Building Continuum
 +--+
 continuum$ sh build.sh
 +--+
+
+ A complete copy of the output of the build will be in <<<build.log>>>.
