@@ -327,6 +327,11 @@ public class DefaultContinuum
     public void addMavenTwoProject( String metadataUrl )
         throws ContinuumException
     {
+        // <action id="build-projects-from-metadata" builderId="maven-two-builder"/>
+        // <action id="validate-project"/>
+        // <action id="store-project"/>
+        // <action id="checkout-project"/>
+
         core.addProjectsFromUrl( metadataUrl, MavenTwoContinuumProjectBuilder.ID );
     }
 
