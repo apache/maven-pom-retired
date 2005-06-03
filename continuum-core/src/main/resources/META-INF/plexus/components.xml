@@ -40,9 +40,11 @@
         <requirement>
           <role>org.apache.maven.continuum.core.ContinuumCore</role>
         </requirement>
+        <!--
         <requirement>
           <role>org.codehaus.plexus.workflow.WorkflowEngine</role>
         </requirement>
+        -->
       </requirements>
     </component>
 
