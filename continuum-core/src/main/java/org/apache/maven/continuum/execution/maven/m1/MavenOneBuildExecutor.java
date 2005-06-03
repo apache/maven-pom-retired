@@ -61,13 +61,15 @@ public class MavenOneBuildExecutor
 
         String goals = getConfiguration( configuration, CONFIGURATION_GOALS );
 
+        String commandLine = project.getCommandLineArguments() + " " + goals;
+
         ExecutionResult executionResult;
 
         try
         {
             executionResult = shellCommandHelper.executeShellCommand( workingDirectory,
                                                                       mavenCommand,
-                                                                      project.getCommandLineArguments() + " " + goals );
+                                                                      commandLine );
         }
         catch ( Exception e )
         {

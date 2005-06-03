@@ -16,15 +16,15 @@ package org.apache.maven.continuum.core;
  * limitations under the License.
  */
 
+import java.io.File;
+
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.store.ContinuumStore;
 
 import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.taskqueue.TaskQueue;
-import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
-import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -33,6 +33,47 @@ import org.codehaus.plexus.util.StringUtils;
 public class ContinuumCoreTest
     extends PlexusTestCase
 {
+    protected void setUp()
+        throws Exception
+    {
+        super.setUp();
+
+        File plexusHome = new File( (String) getContainer().getContext().get( "plexus.home" ) );
+
+        if ( plexusHome.exists() )
+        {
+            FileUtils.cleanDirectory( plexusHome );
+        }
+    }
+
+    public void testUpdateProject()
+        throws Exception
+    {
+        ContinuumCore core = (ContinuumCore) lookup( ContinuumCore.ROLE );
+
+        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
+
+        // ----------------------------------------------------------------------
+        // Test projects with duplicate names
+        // ----------------------------------------------------------------------
+
+        String projectId = (String) core.addProjectsFromUrl( getTestFile( "src/test-projects/project1/pom.xml" ).toURL(),
+                                                             MavenTwoContinuumProjectBuilder.ID ).iterator().next();
+
+        ContinuumProject project = store.getProject( projectId );
+
+        core.updateProject( projectId,
+                            project.getName() + "2",
+                            project.getScmUrl(),
+                            project.getNagEmailAddress(),
+                            project.getVersion(),
+                            null );
+
+        project = store.getProject( projectId );
+
+        assertNotNull( "The command line arguments are null.", project.getCommandLineArguments() );
+    }
+
     public void testAddDuplicateProject()
         throws Exception
     {

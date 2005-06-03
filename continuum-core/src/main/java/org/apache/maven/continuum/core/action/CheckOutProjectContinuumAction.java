@@ -48,3 +48,4 @@ public class CheckOutProjectContinuumAction
         context.put( KEY_CHECKOUT_SCM_RESULT, result );
     }
 }
+    
