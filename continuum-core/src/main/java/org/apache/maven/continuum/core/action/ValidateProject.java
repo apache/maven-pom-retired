@@ -3,15 +3,11 @@
  */
 package org.apache.maven.continuum.core.action;
 
-import java.util.Map;
-
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.core.ContinuumCore;
-import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.store.ContinuumStore;
-
 import org.codehaus.plexus.util.StringUtils;
+
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -20,37 +16,22 @@ import org.codehaus.plexus.util.StringUtils;
 public class ValidateProject
     extends AbstractContinuumAction
 {
-    /**
-     * @plexus.requirement
-     */
-    private BuildExecutorManager buildExecutorManager;
-
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumCore core;
-
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumStore store;
-
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = getProject( context );
+        ContinuumProject project = getUnvalidatedProject( context );
 
         // ----------------------------------------------------------------------
         // Make sure that the builder id is correct before starting to check
         // stuff out
         // ----------------------------------------------------------------------
 
-        if ( !buildExecutorManager.hasBuildExecutor( project.getExecutorId() ) )
+        if ( !getBuildExecutorManager().hasBuildExecutor( project.getExecutorId() ) )
         {
             throw new ContinuumException( "No such executor with id '" + project.getExecutorId() + "'." );
         }
 
-        if ( store.getProjectByName( project.getName() ) != null )
+        if ( getStore().getProjectByName( project.getName() ) != null )
         {
             throw new ContinuumException( "A project with the name '" + project.getName() + "' already exist." );
         }

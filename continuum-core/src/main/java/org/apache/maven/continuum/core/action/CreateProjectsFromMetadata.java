@@ -3,18 +3,17 @@
  */
 package org.apache.maven.continuum.core.action;
 
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+
 import java.net.URL;
 import java.util.Map;
 
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
+ * @version $Id: BuildProjectsFromMetadataAction.java 179783 2005-06-03 13:04:54Z jvanzyl $
  */
-public class BuildProjectsFromMetadataAction
+public class CreateProjectsFromMetadata
     extends AbstractContinuumAction
 {
     public static final String KEY_URL = "url";
@@ -23,11 +22,6 @@ public class BuildProjectsFromMetadataAction
 
     public static final String KEY_PROJECT_BUILDING_RESULT = "projectBuildingResult";
 
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumProjectBuilderManager projectBuilderManager;
-
     public  void execute( Map context )
         throws Exception
     {
@@ -35,7 +29,7 @@ public class BuildProjectsFromMetadataAction
 
         URL url = new URL( getString( context, KEY_URL ) );
 
-        ContinuumProjectBuilder projectBuilder = projectBuilderManager.getProjectBuilder( projectBuilderId );
+        ContinuumProjectBuilder projectBuilder = getProjectBuilderManager().getProjectBuilder( projectBuilderId );
 
         ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( url );
 

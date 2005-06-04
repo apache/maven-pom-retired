@@ -3,13 +3,11 @@
  */
 package org.apache.maven.continuum.core.action;
 
-import java.io.File;
-import java.util.Map;
-
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.queue.CheckOutTask;
 
-import org.codehaus.plexus.taskqueue.TaskQueue;
+import java.io.File;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -18,19 +16,17 @@ import org.codehaus.plexus.taskqueue.TaskQueue;
 public class AddProjectToCheckOutQueueAction
     extends AbstractContinuumAction
 {
-    /**
-     * @plexus.requirement
-     */
-    private TaskQueue checkOutQueue;
-
     public void execute( Map context )
         throws Exception
     {
         ContinuumProject project = getProject( context );
 
-        CheckOutTask checkOutTask = new CheckOutTask( project.getId(),
-                                                      new File( project.getWorkingDirectory() ) );
+        System.out.println( "getProjectId( context ) = " + getProjectId( context ) );
 
-        checkOutQueue.put( checkOutTask );
+        System.out.println( "getProject( context ) = " + getProject( context ) );
+
+        CheckOutTask checkOutTask = new CheckOutTask( project.getId(), new File( project.getWorkingDirectory() ) );
+
+        getCheckOutQueue().put( checkOutTask );
     }
 }

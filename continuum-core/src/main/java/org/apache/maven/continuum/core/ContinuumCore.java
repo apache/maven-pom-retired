@@ -19,13 +19,20 @@ package org.apache.maven.continuum.core;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Properties;
+import java.io.File;
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
+import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.ContinuumScm;
+import org.codehaus.plexus.taskqueue.TaskQueue;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -114,4 +121,22 @@ public interface ContinuumCore
 
     ContinuumBuildExecutor getBuildExecutor( String id )
         throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Accessors for actions
+    // ----------------------------------------------------------------------
+
+    ContinuumStore getStore();
+
+    ContinuumScm getScm();
+
+    ContinuumProjectBuilderManager getProjectBuilderManager();
+
+    BuildExecutorManager getBuildExecutorManager();
+
+    TaskQueue getBuildQueue();
+
+    TaskQueue getCheckOutQueue();
+
+    String getWorkingDirectory();
 }

@@ -3,12 +3,11 @@
  */
 package org.apache.maven.continuum.core.action;
 
-import java.io.File;
-import java.util.Map;
-
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.store.ContinuumStore;
+
+import java.io.File;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -17,26 +16,30 @@ import org.apache.maven.continuum.store.ContinuumStore;
 public class StoreProjectAction
     extends AbstractContinuumAction
 {
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumStore store;
-
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = getProject( context );
+        ContinuumProject project = getUnvalidatedProject( context );
 
         File workingDirectory = getWorkingDirectory( context );
 
-        String projectId = store.addProject( project.getName(),
-                                             project.getScmUrl(),
-                                             project.getNagEmailAddress(),
-                                             project.getVersion(),
-                                             project.getCommandLineArguments(),
-                                             project.getExecutorId(),
-                                             null,
-                                             project.getConfiguration() );
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+
+        String projectId = getStore().addProject( project.getName(),
+                                                  project.getScmUrl(),
+                                                  project.getNagEmailAddress(),
+                                                  project.getVersion(),
+                                                  project.getCommandLineArguments(),
+                                                  project.getExecutorId(),
+                                                  null,
+                                                  project.getConfiguration() );
+
+        System.out.println( "projectId = " + projectId );
+
+        context.put( KEY_PROJECT_ID, projectId );
 
         // ----------------------------------------------------------------------
         // Set the working directory
@@ -54,5 +57,7 @@ public class StoreProjectAction
         // figure out what it is.
 
         project.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
+        
+        getStore().setWorkingDirectory( projectId, projectWorkingDirectory.getAbsolutePath() );
     }
 }

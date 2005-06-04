@@ -16,21 +16,23 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.util.Map;
-
 import org.apache.maven.continuum.core.ContinuumCore;
+import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-
 import org.codehaus.plexus.action.Action;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.taskqueue.TaskQueue;
+
+import java.io.File;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -45,6 +47,10 @@ public abstract class AbstractContinuumAction
     // ----------------------------------------------------------------------
 
     public final static String KEY_PROJECT_ID = "projectId";
+
+    public final static String KEY_PROJECT = "project";
+
+    public final static String KEY_UNVALIDATED_PROJECT = "project";
 
     public final static String KEY_BUILD_ID = "buildId";
 
@@ -66,19 +72,10 @@ public abstract class AbstractContinuumAction
     private ContinuumCore core;
 
     /**
-     * @plexus.requirement
+     * @requirement
      */
-    private ContinuumStore store;
+    private ContinuumNotificationDispatcher notificationDispatcher;
 
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumScm scm;
-
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumNotificationDispatcher notifier;
 
     // ----------------------------------------------------------------------
     //
@@ -91,17 +88,37 @@ public abstract class AbstractContinuumAction
 
     protected ContinuumStore getStore()
     {
-        return store;
+        return core.getStore();
     }
 
     protected ContinuumScm getScm()
     {
-        return scm;
+        return core.getScm();
     }
 
     protected ContinuumNotificationDispatcher getNotifier()
     {
-        return notifier;
+        return notificationDispatcher;
+    }
+
+    protected ContinuumProjectBuilderManager getProjectBuilderManager()
+    {
+        return core.getProjectBuilderManager();
+    }
+
+    protected TaskQueue getBuildQueue()
+    {
+        return core.getBuildQueue();
+    }
+
+    protected TaskQueue getCheckOutQueue()
+    {
+        return core.getCheckOutQueue();
+    }
+
+    protected BuildExecutorManager getBuildExecutorManager()
+    {
+        return core.getBuildExecutorManager();
     }
 
     // ----------------------------------------------------------------------
@@ -131,6 +148,13 @@ public abstract class AbstractContinuumAction
     {
         return getStore().getProject( getProjectId( context ) );
     }
+
+    protected ContinuumProject getUnvalidatedProject( Map context )
+        throws ContinuumStoreException
+    {
+        return ((ContinuumProject) getObject( context, KEY_UNVALIDATED_PROJECT ) );
+    }
+
 
     protected ContinuumBuild getBuild( Map context )
         throws ContinuumStoreException

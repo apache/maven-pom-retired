@@ -17,7 +17,8 @@ package org.apache.maven.continuum;
  */
 
 import org.apache.maven.continuum.core.ContinuumCore;
-import org.apache.maven.continuum.core.action.BuildProjectsFromMetadataAction;
+import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
+import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
@@ -336,33 +337,47 @@ public class DefaultContinuum
     {
         Map context = new HashMap();
 
-        context.put( BuildProjectsFromMetadataAction.KEY_PROJECT_BUILDER_ID, MavenTwoContinuumProjectBuilder.ID );
+        context.put( CreateProjectsFromMetadata.KEY_PROJECT_BUILDER_ID, MavenTwoContinuumProjectBuilder.ID );
 
-        context.put( BuildProjectsFromMetadataAction.KEY_URL, metadataUrl );
+        context.put( CreateProjectsFromMetadata.KEY_URL, metadataUrl );
+
+        context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, core.getWorkingDirectory() );
 
         try
         {
-            actionManager.lookup( "build-projects-from-metadata" ).execute( context );
+            // ----------------------------------------------------------------------
+            // During the execution of the this action we may find that the metadata
+            // isn't good enough for the following reasons:
+            //
+            // 1) No scm element (repository element for m1)
+            // 2) Invalid scm element (repository element for m1)
+            // 3) No ciManagement (m2)
+            // 4) Invalid ciManagement element (m2)
+            // ----------------------------------------------------------------------
 
-            ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context.get( BuildProjectsFromMetadataAction.KEY_PROJECT_BUILDING_RESULT );
+            actionManager.lookup( "create-projects-from-metadata" ).execute( context );
+
+            ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
 
             List projects = result.getProjects();
 
             for ( Iterator i = projects.iterator(); i.hasNext(); )
             {
+                ContinuumProject project = (ContinuumProject) i.next();
+
+                context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
+
                 actionManager.lookup( "validate-project" ).execute( context );
 
                 actionManager.lookup( "store-project" ).execute( context );
 
-                actionManager.lookup( "add-project-checkout-queue" ).execute( context );
+                actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
             }
         }
         catch ( Exception e )
         {
             throw new ContinuumException( "Error adding m2 project: ", e );
         }
-
-        //core.addProjectsFromUrl( metadataUrl, MavenTwoContinuumProjectBuilder.ID );
     }
 
     public void addMavenTwoProject( MavenTwoProject project )

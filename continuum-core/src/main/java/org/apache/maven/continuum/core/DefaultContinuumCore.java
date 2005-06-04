@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
@@ -106,15 +107,19 @@ public class DefaultContinuumCore
      */
     private ContinuumScm scm;
 
-    /**
-     * @requirement
-     */
-    private String appHome;
+    // ----------------------------------------------------------------------
+    // Configuration
+    // ----------------------------------------------------------------------
 
     /**
      * @configuration
      */
     private String workingDirectory;
+
+    /**
+     * @configuration
+     */
+    private String appHome;
 
     // ----------------------------------------------------------------------
     //
@@ -803,4 +808,44 @@ public class DefaultContinuumCore
 
         return new ContinuumException( message, cause );
     }
+
+    // ----------------------------------------------------------------------
+    // Accessors
+    // ----------------------------------------------------------------------
+
+    public ContinuumStore getStore()
+    {
+        return store;
+    }
+
+    public ContinuumScm getScm()
+    {
+        return scm;
+    }
+
+    public ContinuumProjectBuilderManager getProjectBuilderManager()
+    {
+        return projectBuilderManager;
+    }
+
+    public BuildExecutorManager getBuildExecutorManager()
+    {
+        return buildExecutorManager;
+    }
+
+    public TaskQueue getBuildQueue()
+    {
+        return buildQueue;
+    }
+
+    public TaskQueue getCheckOutQueue()
+    {
+        return checkOutQueue;
+    }
+
+    public String getWorkingDirectory()
+    {
+        return workingDirectory;
+    }
 }
+
