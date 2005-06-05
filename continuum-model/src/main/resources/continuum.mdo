@@ -117,7 +117,7 @@
           <type>String</type>
         </field>
         <field>
-          <name>group</name>
+          <name>groupId</name>
           <version>1.0.0</version>
           <type>String</type>
         </field>
