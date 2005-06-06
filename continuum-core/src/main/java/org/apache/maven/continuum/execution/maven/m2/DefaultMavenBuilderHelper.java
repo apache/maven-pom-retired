@@ -24,10 +24,12 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumDeveloper;
 import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Notifier;
 import org.apache.maven.model.Repository;
 import org.apache.maven.model.Scm;
+import org.apache.maven.model.Developer;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.settings.MavenSettingsBuilder;
@@ -43,6 +45,8 @@ public class DefaultMavenBuilderHelper
     extends AbstractLogEnabled
     implements MavenBuilderHelper
 {
+    public static final String DEFAULT_TEST_OUTPUT_DIRECTORY = "target/surefire-reports";
+
     /** @requirement */
     private MavenProjectBuilder projectBuilder;
 
@@ -88,6 +92,56 @@ public class DefaultMavenBuilderHelper
         if ( StringUtils.isEmpty( configuration.getProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) ) )
         {
             configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, "clean:clean install" );
+        }
+
+        // ----------------------------------------------------------------------
+        // Group
+        // ----------------------------------------------------------------------
+
+        System.out.println( "mavenProject.getGroupId() = " + mavenProject.getGroupId() );
+
+        if ( mavenProject.getGroupId() != null )
+        {
+           continuumProject.setGroupId( mavenProject.getGroupId() );
+        }
+
+        // ----------------------------------------------------------------------
+        // Project Url
+        // ----------------------------------------------------------------------
+
+        System.out.println( "mavenProject.getUrl() = " + mavenProject.getUrl() );
+
+        if ( mavenProject.getUrl() != null )
+        {
+           continuumProject.setUrl( mavenProject.getUrl() );
+        }
+
+        // ----------------------------------------------------------------------
+        // Test output directory
+        // ----------------------------------------------------------------------
+
+        continuumProject.setTestOutputDirectory( DEFAULT_TEST_OUTPUT_DIRECTORY );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        if ( mavenProject.getDevelopers() != null )
+        {
+            for ( Iterator i = mavenProject.getDevelopers().iterator(); i.hasNext(); )
+            {
+                Developer d = (Developer) i.next();
+
+                ContinuumDeveloper cd = new ContinuumDeveloper();
+
+                cd.setId( d.getId() );
+
+                cd.setName( d.getName() );
+
+                cd.setEmail( d.getEmail() );
+
+                continuumProject.addDeveloper( cd );
+            }
         }
     }
 

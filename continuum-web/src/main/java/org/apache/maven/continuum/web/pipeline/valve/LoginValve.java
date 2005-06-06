@@ -20,17 +20,18 @@ import java.io.IOException;
 
 import org.codehaus.plexus.summit.exception.SummitException;
 import org.codehaus.plexus.summit.pipeline.valve.AbstractValve;
+import org.codehaus.plexus.summit.pipeline.valve.ValveInvocationException;
 import org.codehaus.plexus.summit.rundata.RunData;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: LoginValve.java,v 1.1 2005/04/04 14:05:38 jvanzyl Exp $
+ * @version $Id$
  */
 public class LoginValve
     extends AbstractValve
 {
     public void invoke( RunData data )
-        throws IOException, SummitException
+        throws IOException, ValveInvocationException
     {
         String skip = data.getRequest().getParameter( "skipLogin" );
 

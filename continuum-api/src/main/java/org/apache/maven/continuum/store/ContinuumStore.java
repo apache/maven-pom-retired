@@ -38,6 +38,9 @@ public interface ContinuumStore
     // ContinuumProject
     // ----------------------------------------------------------------------
 
+    String addProject( ContinuumProject project )
+        throws ContinuumStoreException;
+
     String addProject( String name,
                        String scmUrl,
                        String nagEmailAddress,

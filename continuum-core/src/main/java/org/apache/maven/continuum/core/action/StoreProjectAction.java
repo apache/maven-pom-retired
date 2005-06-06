@@ -27,7 +27,9 @@ public class StoreProjectAction
         //
         // ----------------------------------------------------------------------
 
+        String projectId = getStore().addProject( project );
 
+        /*
         String projectId = getStore().addProject( project.getName(),
                                                   project.getScmUrl(),
                                                   project.getNagEmailAddress(),
@@ -36,8 +38,7 @@ public class StoreProjectAction
                                                   project.getExecutorId(),
                                                   null,
                                                   project.getConfiguration() );
-
-        System.out.println( "projectId = " + projectId );
+        */
 
         context.put( KEY_PROJECT_ID, projectId );
 
@@ -57,7 +58,7 @@ public class StoreProjectAction
         // figure out what it is.
 
         project.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
-        
+
         getStore().setWorkingDirectory( projectId, projectWorkingDirectory.getAbsolutePath() );
     }
 }

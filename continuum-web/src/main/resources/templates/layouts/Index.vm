@@ -2,12 +2,7 @@
 
 <html>
 <head>
-#if( $project.name )
-  <title>Continuum - $project.name</title>
-#else
-  <title>Continuum</title>
-#end
-
+  <title>$page.title</title>
   <link rel="stylesheet" type="text/css" href="$data.getLink("css/tigris.css")" media="screen" />
   <link rel="stylesheet" type="text/css" href="$data.getLink("css/print.css")" media="print" />
 

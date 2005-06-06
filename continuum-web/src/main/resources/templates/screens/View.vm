@@ -18,5 +18,24 @@
       </table>
       #bar()
     </div>
+
+    $item.url
+    $item.groupId
+    
+
+    <h3>$i18n.getString( $form.view.titleKey )</h3>
+    <div class="axial">
+      <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        #foreach ( $developer in $item.developers )
+        <tr class="b">
+          $developer.name
+          <th>$i18n.getString( $element.labelKey )</th>
+          <td>$formtool.getItem( $form, $element, $item )</td>
+        </tr>
+        #end
+      </table>
+      #bar()
+    </div>
+
   </div>
 </div>

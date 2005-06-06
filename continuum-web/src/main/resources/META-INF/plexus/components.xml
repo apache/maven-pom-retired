@@ -28,12 +28,13 @@
       <implementation>org.codehaus.plexus.summit.pipeline.SummitPipeline</implementation>
       <lifecycle-handler>plexus-configurable</lifecycle-handler>
       <configuration>
+        <nocache>true</nocache>
         <valves>
           <valve>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextValve</valve>
           <!--
           <valve>org.apache.maven.continuum.web.pipeline.valve.LoginValve</valve>
           -->
-          <valve>org.codehaus.plexus.action.web.ActionValve</valve>
+          <valve>org.codehaus.plexus.summit.pipeline.valve.ActionValve</valve>
           <valve>org.codehaus.plexus.summit.pipeline.valve.DetermineTargetValve</valve>
           <valve>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextPopulatorValve</valve>
           <valve>org.codehaus.plexus.summit.pipeline.valve.ResolverValve</valve>
@@ -57,6 +58,11 @@
           <tool>
             <name>link</name>
             <role>linktool</role>
+            <scope>request</scope>
+          </tool>
+          <tool>
+            <name>page</name>
+            <role>pagetool</role>
             <scope>request</scope>
           </tool>
           <tool>
@@ -88,8 +94,6 @@
         </tools>
       </configuration>
     </component>
-
-
 
     <component>
       <role>datetool</role>

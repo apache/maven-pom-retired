@@ -283,7 +283,49 @@ public class DefaultContinuum
     public void addMavenOneProject( String metadataUrl )
         throws ContinuumException
     {
-        core.addProjectsFromUrl( metadataUrl, MavenOneContinuumProjectBuilder.ID );
+        Map context = new HashMap();
+
+        context.put( CreateProjectsFromMetadata.KEY_PROJECT_BUILDER_ID, MavenOneContinuumProjectBuilder.ID );
+
+        context.put( CreateProjectsFromMetadata.KEY_URL, metadataUrl );
+
+        context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, core.getWorkingDirectory() );
+
+        try
+        {
+            // ----------------------------------------------------------------------
+            // During the execution of the this action we may find that the metadata
+            // isn't good enough for the following reasons:
+            //
+            // 1) No scm element (repository element for m1)
+            // 2) Invalid scm element (repository element for m1)
+            // 3) No ciManagement (m2)
+            // 4) Invalid ciManagement element (m2)
+            // ----------------------------------------------------------------------
+
+            actionManager.lookup( "create-projects-from-metadata" ).execute( context );
+
+            ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
+
+            List projects = result.getProjects();
+
+            for ( Iterator i = projects.iterator(); i.hasNext(); )
+            {
+                ContinuumProject project = (ContinuumProject) i.next();
+
+                context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
+
+                actionManager.lookup( "validate-project" ).execute( context );
+
+                actionManager.lookup( "store-project" ).execute( context );
+
+                actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
+            }
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumException( "Error adding m1 project: ", e );
+        }
     }
 
     public void addMavenOneProject( MavenOneProject project )
@@ -293,13 +335,26 @@ public class DefaultContinuum
 
         configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, project.getGoals() );
 
-        core.addProjectFromScm( project.getScmUrl(),
-                                MavenOneBuildExecutor.ID,
-                                project.getName(),
-                                project.getNagEmailAddress(),
-                                project.getVersion(),
-                                project.getCommandLineArguments(),
-                                configuration );
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        Map context = new HashMap();
+
+        context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
+
+        try
+        {
+            actionManager.lookup( "validate-project" ).execute( context );
+
+            actionManager.lookup( "store-project" ).execute( context );
+
+            actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumException( "Error adding m1 project: ", e );
+        }
     }
 
     public MavenOneProject getMavenOneProject( String id )
@@ -383,17 +438,32 @@ public class DefaultContinuum
     public void addMavenTwoProject( MavenTwoProject project )
         throws ContinuumException
     {
+        //TODO: these need to go away
+
         Properties configuration = new Properties();
 
         configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, project.getGoals() );
 
-        core.addProjectFromScm( project.getScmUrl(),
-                                MavenTwoBuildExecutor.ID,
-                                project.getName(),
-                                project.getNagEmailAddress(),
-                                project.getVersion(),
-                                project.getCommandLineArguments(),
-                                configuration );
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        Map context = new HashMap();
+
+        context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
+
+        try
+        {
+            actionManager.lookup( "validate-project" ).execute( context );
+
+            actionManager.lookup( "store-project" ).execute( context );
+
+            actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumException( "Error adding m2 project: ", e );
+        }
     }
 
     public MavenTwoProject getMavenTwoProject( String id )

@@ -81,6 +81,24 @@ public class ModelloJPoxContinuumStore
     // ContinuumProject
     // ----------------------------------------------------------------------
 
+    public String addProject( ContinuumProject project )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            Object id = store.addContinuumProject( project );
+
+            project = store.getContinuumProjectByJdoId( id, true );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumStoreException( "Error while adding a project.", e );
+        }
+
+        return project.getId();
+    }
+
+
     public String addProject( String name,
                               String scmUrl,
                               String nagEmailAddress,
