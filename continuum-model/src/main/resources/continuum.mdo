@@ -142,7 +142,7 @@
       </fields>
     </class>
 
-    <class>
+    <class stash.storable="true">
       <name>ContinuumDeveloper</name>
       <version>1.0.0</version>
       <fields>
@@ -164,7 +164,7 @@
       </fields>
     </class>
 
-    <class>
+    <class stash.storable="true">
       <name>MavenTwoProject</name>
       <version>1.0.0</version>
       <superClass>ContinuumProject</superClass>
@@ -177,7 +177,7 @@
       </fields>
     </class>
 
-    <class>
+    <class stash.storable="true">
       <name>MavenOneProject</name>
       <version>1.0.0</version>
       <superClass>ContinuumProject</superClass>
@@ -190,7 +190,7 @@
       </fields>
     </class>
 
-    <class>
+    <class stash.storable="true">
       <name>AntProject</name>
       <version>1.0.0</version>
       <superClass>ContinuumProject</superClass>
@@ -208,7 +208,7 @@
       </fields>
     </class>
 
-    <class>
+    <class stash.storable="true">
       <name>ShellProject</name>
       <version>1.0.0</version>
       <superClass>ContinuumProject</superClass>
