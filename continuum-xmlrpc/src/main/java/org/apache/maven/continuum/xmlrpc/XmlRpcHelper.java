@@ -21,10 +21,11 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.Vector;
+import java.beans.IntrospectionException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: XmlRpcHelper.java,v 1.1.1.1 2005/03/29 20:42:10 trygvis Exp $
+ * @version $Id$
  */
 public interface XmlRpcHelper
 {
@@ -38,4 +39,7 @@ public interface XmlRpcHelper
 
     Vector collectionToVector( Collection value, boolean convertElements )
         throws IllegalAccessException, InvocationTargetException;
+
+    void hashtableToObject( Hashtable hashtable, Object object )
+        throws IntrospectionException, IllegalAccessException, InvocationTargetException;
 }

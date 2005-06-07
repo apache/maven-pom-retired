@@ -16,14 +16,17 @@ package org.apache.maven.continuum.xmlrpc;
  * limitations under the License.
  */
 
+import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -32,7 +35,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: DefaultXmlRpcHelper.java,v 1.1.1.1 2005/03/29 20:42:10 trygvis Exp $
+ * @version $Id$
  */
 public class DefaultXmlRpcHelper
     extends AbstractLogEnabled
@@ -182,5 +185,109 @@ public class DefaultXmlRpcHelper
         }
 
         return vector;
+    }
+
+    public void hashtableToObject( Hashtable hashtable, Object target )
+        throws IntrospectionException, IllegalAccessException, InvocationTargetException
+    {
+        for ( Iterator it = hashtable.entrySet().iterator(); it.hasNext(); )
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            String key = (String) entry.getKey();
+
+            Object value = entry.getValue();
+
+            if ( key == null || value == null )
+            {
+                continue;
+            }
+
+            // ----------------------------------------------------------------------
+            // Convert the key to a setter
+            // ----------------------------------------------------------------------
+
+            String setterName = "set" +
+                                Character.toUpperCase( key.charAt( 0 ) ) +
+                                key.substring( 1 );
+
+            Class clazz = target.getClass();
+
+            // ----------------------------------------------------------------------
+            //
+            // ----------------------------------------------------------------------
+
+            Method setter = getSetter( clazz, setterName, key );
+
+            if ( setter == null )
+            {
+                continue;
+            }
+
+            // TODO: Implement to give better feedback
+//            Class parameter = setter.getParameterTypes()[ 0 ];
+//
+//            if ( value.getClass().isAssignableFrom( parameter ) )
+//            {
+//            }
+
+            setter.invoke( target, new Object[] { value } );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private Method getSetter( Class clazz, String setterName, String key )
+    {
+        Map setterMap = getSetterMap( clazz );
+
+        Method setter = (Method) setterMap.get( setterName );
+
+        if ( setter == null )
+        {
+            getLogger().warn( "No setter for field '" + key + "' on the class '" + clazz.getName() + "'." );
+
+            return null;
+        }
+
+        if ( setter.getParameterTypes().length != 1 )
+        {
+            getLogger().warn( "No setter for field '" + key + "' on the class '" + clazz.getName() + "'. " +
+                              "The class has multiple setters for the field." );
+        }
+
+        return setter;
+    }
+
+    private Map getSetterMap( Class clazz )
+    {
+        // TODO: Cache the generated maps
+
+        Method[] methods = clazz.getMethods();
+
+        Map map = new HashMap();
+
+        for ( int i = 0; i < methods.length; i++ )
+        {
+            Method method = methods[ i ];
+
+            String name = method.getName();
+
+            if ( name.length() <= 3 )
+            {
+                continue;
+            }
+
+            if ( !name.startsWith( "set" ) )
+            {
+                continue;
+            }
+
+            map.put( name, method );
+        }
+
+        return map;
     }
 }

@@ -22,7 +22,7 @@ import org.codehaus.plexus.PlexusTestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: XmlRpcHelperTest.java,v 1.1.1.1 2005/03/29 20:42:10 trygvis Exp $
+ * @version $Id$
  */
 public class XmlRpcHelperTest
     extends PlexusTestCase
@@ -44,14 +44,29 @@ public class XmlRpcHelperTest
             return foo;
         }
 
+        public void setFoo( String foo )
+        {
+            this.foo = foo;
+        }
+
         public int getBar()
         {
             return bar;
         }
 
+        public void setBar( int bar )
+        {
+            this.bar = bar;
+        }
+
         public boolean isBool()
         {
             return bool;
+        }
+
+        public void setBool( boolean bool )
+        {
+            this.bool = bool;
         }
 
         // ----------------------------------------------------------------------
@@ -194,6 +209,26 @@ public class XmlRpcHelperTest
         assertProperty( "bar", "22", h2 );
 
         assertProperty( "bool", "false", h2 );
+    }
+
+    public void testHashtableToObject()
+        throws Exception
+    {
+        XmlRpcHelper xmlRpcHelper = (XmlRpcHelper) lookup( XmlRpcHelper.ROLE );
+
+        SimleBean bean = new SimleBean();
+
+        Hashtable hashtable = new Hashtable();
+
+        hashtable.put( "foo", "foo" );
+
+        hashtable.put( "bar", new Integer( 17 ) );
+
+        hashtable.put( "bool", Boolean.TRUE );
+
+        xmlRpcHelper.hashtableToObject( hashtable, bean );
+
+        assertEquals( "foo", bean.getFoo() );
     }
 
     // ----------------------------------------------------------------------
