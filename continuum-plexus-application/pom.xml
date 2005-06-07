@@ -121,7 +121,7 @@
           <goal>
             <id>test-runtime</id>
             <configuration>
-              <testRuntimeConfiguration>src/test/conf/testRuntimeConfiguration.xml</testRuntimeConfiguration>
+              <testRuntimeConfiguration>src/test/conf/test-runtime-configuration.xml</testRuntimeConfiguration>
               <testRuntimeConfigurationProperties>app.properties</testRuntimeConfigurationProperties>
             </configuration>
           </goal>
