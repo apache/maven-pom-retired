@@ -1,1 +1,1 @@
-m2 clean:clean plexus:app plexus:test-runtime "$@"
+m2 clean:clean plexus:bundle-application plexus:test-runtime "$@"

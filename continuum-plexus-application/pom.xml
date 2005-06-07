@@ -8,6 +8,7 @@
   <artifactId>continuum-plexus-application</artifactId>
   <name>Continuum Plexus Application</name>
   <version>1.0-alpha-3-SNAPSHOT</version>
+  <packaging>plexus-application</packaging>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
@@ -116,7 +117,7 @@
             </configuration>
           </goal>
           <goal>
-            <id>bundle-application</id>
+            <id>bundle-runtime</id>
           </goal>
           <goal>
             <id>test-runtime</id>
