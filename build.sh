@@ -16,4 +16,4 @@ continuum-xmlrpc/pom.xml
   m2 -r -Dmaven.reactor.includes=*/pom.xml clean:clean "$@"
   m2 -r -Dmaven.reactor.includes="$includes" install "$@"
   (cd continuum-plexus-application && sh build.sh "$@")
-) 2>&1 | tee build.log
+) 2>&1 | tee result.log
