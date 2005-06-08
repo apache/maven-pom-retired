@@ -35,10 +35,8 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
  * @plexus.component
- *
- * @plexus.role org.apache.maven.continuum.project.builder.ContinuumProjectBuilder
- *
- * @plexus.role-hint cc-builder
+ *   role="org.apache.maven.continuum.project.builder.ContinuumProjectBuilder"
+     role-hint="cc-builder"
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$

@@ -34,6 +34,9 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
+ * @plexus.component
+ *   role="org.apache.maven.continuum.xmlrpc.XmlRpcHelper"
+ *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */

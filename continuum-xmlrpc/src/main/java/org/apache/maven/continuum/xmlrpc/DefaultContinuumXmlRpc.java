@@ -49,6 +49,9 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
+ * @plexus.component
+ *   role="org.apache.maven.continuum.xmlrpc.ContinuumXmlRpc"
+ *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
@@ -56,13 +59,19 @@ public class DefaultContinuumXmlRpc
     extends AbstractLogEnabled
     implements ContinuumXmlRpc
 {
-    /** @requirement */
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
-    /** @requirement */
+    /**
+     * @plexus.requirement
+     */
     private ContinuumCore core;
 
-    /** @requirement */
+    /**
+     * @plexus.requirement
+     */
     private XmlRpcHelper xmlRpcHelper;
 
     // ----------------------------------------------------------------------
