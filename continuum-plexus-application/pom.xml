@@ -93,11 +93,18 @@
       <scope>runtime</scope>
     </dependency>
 
-    <!-- -->
+    <!-- Misc -->
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-mail-sender-simple</artifactId>
       <version>1.0-alpha-1</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>1.7.3.0</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
