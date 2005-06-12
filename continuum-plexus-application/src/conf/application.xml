@@ -375,7 +375,7 @@
           </level>
           <level>
             <hierarchy>JPOX</hierarchy>
-            <level>INFO</level>
+            <level>ERROR</level>
           </level>
         </levels>
       </configuration>
