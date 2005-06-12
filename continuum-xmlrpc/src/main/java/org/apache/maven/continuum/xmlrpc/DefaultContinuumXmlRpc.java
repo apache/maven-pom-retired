@@ -18,6 +18,8 @@ package org.apache.maven.continuum.xmlrpc;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -28,22 +30,15 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.core.ContinuumCore;
-import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
-import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
-import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
-import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
+import org.apache.maven.continuum.project.AntProject;
+import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
-import org.apache.maven.continuum.scm.UpdateScmResult;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -67,262 +62,100 @@ public class DefaultContinuumXmlRpc
     /**
      * @plexus.requirement
      */
-    private ContinuumCore core;
-
-    /**
-     * @plexus.requirement
-     */
     private XmlRpcHelper xmlRpcHelper;
 
     // ----------------------------------------------------------------------
-    // Maven 1.x projects
+    // ContinuumXmlRpc Implementation
     // ----------------------------------------------------------------------
 
-    public Hashtable addMavenOneProject( String url )
+    public Hashtable removeProject( String projectId )
     {
         try
         {
-            Collection projectIds = core.addProjectsFromUrl( url, MavenOneContinuumProjectBuilder.ID );
-
-            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.addMavenOneProject()",
-                                    "URL: '" + url + "'.", e );
-        }
-    }
-
-    // ----------------------------------------------------------------------
-    // Maven 2.x projects
-    // ----------------------------------------------------------------------
-
-    public Hashtable addMavenTwoProject( String url )
-    {
-        try
-        {
-            // TODO: Get the added projects and return the IDs
-            continuum.addMavenTwoProject( url );
-
-//            Collection projectIds = core.addProjectsFromUrl( url, MavenTwoContinuumProjectBuilder.ID );
-
-//            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
-            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( new Vector(), false ) );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.addMavenTwoProject()",
-                                    "URL: '" + url + "'.", e );
-        }
-    }
-
-    // ----------------------------------------------------------------------
-    // Ant projects
-    // ----------------------------------------------------------------------
-
-    public Hashtable addAntProject( String scmUrl,
-                                    String projectName,
-                                    String nagEmailAddress,
-                                    String version,
-                                    String commandLineArguments,
-                                    Hashtable configuration )
-    {
-        return addProjectFromScm( scmUrl,
-                                  AntBuildExecutor.ID,
-                                  projectName,
-                                  nagEmailAddress,
-                                  version,
-                                  commandLineArguments,
-                                  configuration );
-    }
-
-    // ----------------------------------------------------------------------
-    // Shell projects
-    // ----------------------------------------------------------------------
-
-    public Hashtable addShellProject( String scmUrl,
-                                      String projectName,
-                                      String nagEmailAddress,
-                                      String version,
-                                      String commandLineArguments,
-                                      Hashtable configuration )
-    {
-        return addProjectFromScm( scmUrl,
-                                  ShellBuildExecutor.ID,
-                                  projectName,
-                                  nagEmailAddress,
-                                  version,
-                                  commandLineArguments,
-                                  configuration );
-    }
-
-    // ----------------------------------------------------------------------
-    // Projects
-    // ----------------------------------------------------------------------
-
-    private Hashtable addProjectFromScm( String scmUrl,
-                                         String executorId,
-                                         String projectName,
-                                         String nagEmailAddress,
-                                         String version,
-                                         String commandLineArguments,
-                                         Hashtable configuration )
-    {
-        try
-        {
-            Properties configurationProperties = new Properties();
-
-            for ( Iterator it = configuration.entrySet().iterator(); it.hasNext(); )
-            {
-                Map.Entry entry = (Map.Entry) it.next();
-
-                configurationProperties.put( entry.getKey().toString(), entry.getValue().toString() );
-            }
-
-            String projectId = core.addProjectFromScm( scmUrl,
-                                                       executorId,
-                                                       projectName,
-                                                       nagEmailAddress,
-                                                       version,
-                                                       commandLineArguments,
-                                                       configurationProperties );
-
-            return makeHashtable( "projectId", projectId );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.addProjectFromScm()", null, e );
-        }
-    }
-
-    public Hashtable getProject( String projectId )
-    {
-        try
-        {
-            Set excludedProperties = new HashSet();
-
-            excludedProperties.add( "configuration" );
-
-            ContinuumProject project = continuum.getProject( projectId );
-
-            Hashtable hashtable = xmlRpcHelper.objectToHashtable( project, excludedProperties );
-
-            Properties configuration = project.getConfiguration();
-
-            Hashtable configurationHashtable = new Hashtable();
-
-            for ( Iterator it = configuration.entrySet().iterator(); it.hasNext(); )
-            {
-                Map.Entry entry = (Map.Entry) it.next();
-
-                configurationHashtable.put( entry.getKey().toString(), entry.getValue().toString() );
-            }
-
-            hashtable.put( "configuration", configurationHashtable );
-
-            CheckOutScmResult result = continuum.getCheckOutScmResultForProject( projectId );
-
-            if ( result != null )
-            {
-                hashtable.put( "checkOutScmResult", xmlRpcHelper.objectToHashtable( result ) );
-            }
-
-            return makeHashtable( "project", hashtable );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.getProject()",
-                                    "Project id: '" + projectId + "'.", e );
-        }
-    }
-
-    public Hashtable updateProject( String projectId,
-                                    String name,
-                                    String scmUrl,
-                                    String nagEmailAddress,
-                                    String version,
-                                    String commandLineArguments )
-    {
-        try
-        {
-            ContinuumProject project = continuum.getProject( projectId );
-
-            if ( project.getExecutorId().equals( MavenOneBuildExecutor.ID ) )
-            {
-                project = continuum.getMavenOneProject( projectId );
-            }
-            else if ( project.getExecutorId().equals( MavenTwoBuildExecutor.ID ) )
-            {
-                project = continuum.getMavenTwoProject( projectId );
-            }
-            else if ( project.getExecutorId().equals( AntBuildExecutor.ID ) )
-            {
-                project = continuum.getAntProject( projectId );
-            }
-            else if ( project.getExecutorId().equals( ShellBuildExecutor.ID ) )
-            {
-                project = continuum.getShellProject( projectId );
-            }
-
-            project.setName( name );
-
-            project.setScmUrl( scmUrl );
-
-            project.setNagEmailAddress( nagEmailAddress );
-
-            project.setVersion( version );
-
-            project.setCommandLineArguments( commandLineArguments );
-
-            // ----------------------------------------------------------------------
-            //
-            // ----------------------------------------------------------------------
-
-            if ( project instanceof MavenOneProject )
-            {
-                continuum.updateMavenOneProject( (MavenOneProject) project );
-            }
-            else if ( project instanceof MavenTwoProject )
-            {
-                continuum.updateMavenTwoProject( (MavenTwoProject) project );
-            }
-            else if ( project instanceof AntProject )
-            {
-                continuum.updateAntProject( (AntProject) project );
-            }
-            else if ( project instanceof ShellProject )
-            {
-                continuum.updateShellProject( (ShellProject) project );
-            }
-            else
-            {
-                return handleException( "ContinuumXmlRpc.updateProject()",
-                                        "Project id: '" + projectId + "'.", new ContinuumException( "Unknown project type: " + project.getClass().getName() ) );
-            }
+            continuum.removeProject( projectId );
 
             return makeHashtable();
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.updateProject()",
+            return handleException( "ContinuumXmlRpc.removeProject()",
                                     "Project id: '" + projectId + "'.", e );
         }
     }
 
-    public Hashtable updateProjectFromScm( String projectId )
-    {
-        try
-        {
-            continuum.updateProjectFromScm( projectId );
-
-            return makeHashtable();
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.updateProjectFromScm()",
-                                    "Project id: '" + projectId + "'.", e );
-        }
-    }
+//    public Hashtable updateProject( String projectId,
+//                                    String name,
+//                                    String scmUrl,
+//                                    String nagEmailAddress,
+//                                    String version,
+//                                    String commandLineArguments )
+//    {
+//        try
+//        {
+//            ContinuumProject project = continuum.getProject( projectId );
+//
+//            if ( project.getExecutorId().equals( MavenOneBuildExecutor.ID ) )
+//            {
+//                project = continuum.getMavenOneProject( projectId );
+//            }
+//            else if ( project.getExecutorId().equals( MavenTwoBuildExecutor.ID ) )
+//            {
+//                project = continuum.getMavenTwoProject( projectId );
+//            }
+//            else if ( project.getExecutorId().equals( AntBuildExecutor.ID ) )
+//            {
+//                project = continuum.getAntProject( projectId );
+//            }
+//            else if ( project.getExecutorId().equals( ShellBuildExecutor.ID ) )
+//            {
+//                project = continuum.getShellProject( projectId );
+//            }
+//
+//            project.setName( name );
+//
+//            project.setScmUrl( scmUrl );
+//
+//            project.setNagEmailAddress( nagEmailAddress );
+//
+//            project.setVersion( version );
+//
+//            project.setCommandLineArguments( commandLineArguments );
+//
+//            // ----------------------------------------------------------------------
+//            //
+//            // ----------------------------------------------------------------------
+//
+//            if ( project instanceof MavenOneProject )
+//            {
+//                continuum.updateMavenOneProject( (MavenOneProject) project );
+//            }
+//            else if ( project instanceof MavenTwoProject )
+//            {
+//                continuum.updateMavenTwoProject( (MavenTwoProject) project );
+//            }
+//            else if ( project instanceof AntProject )
+//            {
+//                continuum.updateAntProject( (AntProject) project );
+//            }
+//            else if ( project instanceof ShellProject )
+//            {
+//                continuum.updateShellProject( (ShellProject) project );
+//            }
+//            else
+//            {
+//                return handleException( "ContinuumXmlRpc.updateProject()",
+//                                        "Project id: '" + projectId + "'.",
+//                                        new ContinuumException( "Unknown project type: " + project.getClass().getName() ) );
+//            }
+//
+//            return makeHashtable();
+//        }
+//        catch ( Throwable e )
+//        {
+//            return handleException( "ContinuumXmlRpc.updateProject()",
+//                                    "Project id: '" + projectId + "'.", e );
+//        }
+//    }
 
     public Hashtable updateProjectConfiguration( String projectId,
                                                  Hashtable configuration )
@@ -349,47 +182,77 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-    public Hashtable getAllProjects()
+    public Hashtable getProject( String projectId )
     {
         try
         {
-            Vector projects = new Vector();
-
-            for ( Iterator it = continuum.getAllProjects( 0, 0 ).iterator(); it.hasNext(); )
-            {
-                ContinuumProject project = (ContinuumProject) it.next();
-
-                projects.add( xmlRpcHelper.objectToHashtable( project ) );
-            }
-
-            return makeHashtable( "projects", projects );
+            return makeHashtable( "project", convertContinuumProject( continuum.getProject( projectId ) ) );
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getAllProjects()", null, e );
-        }
-    }
-
-    public Hashtable removeProject( String projectId )
-    {
-        try
-        {
-            continuum.removeProject( projectId );
-
-            return makeHashtable();
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.removeProject()",
+            return handleException( "ContinuumXmlRpc.getProject()",
                                     "Project id: '" + projectId + "'.", e );
         }
     }
 
+    public Hashtable getProjects()
+    {
+        try
+        {
+            Collection projects = continuum.getAllProjects( 0, 0 );
+
+            Vector results = new Vector( projects.size() );
+
+            for ( Iterator it = projects.iterator(); it.hasNext(); )
+            {
+                results.add( convertContinuumProject( it.next() ) );
+            }
+
+            return makeHashtable( "projects", results );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.getProjects()", null, e );
+        }
+    }
+
+    public Hashtable getCheckOutScmResultForProject( String projectId )
+    {
+        try
+        {
+            CheckOutScmResult result = continuum.getCheckOutScmResultForProject( projectId );
+
+            return makeHashtable( "checkOutScmResult", convertCheckOutScmResult( result ) );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.getCheckOutScmResultForProject()",
+                                    "Project id: '" + projectId + "'.", e );
+        }
+    }
+
+    public Hashtable getLatestBuildForProject( String projectId )
+    {
+        try
+        {
+            ContinuumBuild build = continuum.getLatestBuildForProject( projectId );
+
+            return makeHashtable( "latestBuild", convertContinuumBuild( build ) );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.getCheckOutScmResultForProject()",
+                                    "Project id: '" + projectId + "'.", e );
+        }
+
+    }
+
     // ----------------------------------------------------------------------
-    // Builds
+    // Build handling
     // ----------------------------------------------------------------------
 
-    public Hashtable buildProject( String projectId, boolean force )
+    public Hashtable buildProject( String projectId,
+                                   boolean force )
     {
         try
         {
@@ -404,65 +267,13 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-    public Hashtable getBuildsForProject( String projectId, int start, int end )
-    {
-        try
-        {
-            // TODO: use start and end
-            Iterator it = continuum.getBuildsForProject( projectId ).iterator();
-
-            Vector builds = new Vector();
-
-            Set excludedProperties = new HashSet();
-
-            excludedProperties.add( "project" );
-
-            while ( it.hasNext() )
-            {
-                ContinuumBuild continuumBuild = (ContinuumBuild) it.next();
-
-                Hashtable build = xmlRpcHelper.objectToHashtable( continuumBuild, excludedProperties );
-
-                UpdateScmResult result = continuumBuild.getUpdateScmResult();
-
-                if ( result != null )
-                {
-                    build.put( "updateScmResult", xmlRpcHelper.objectToHashtable( result ) );
-                }
-
-                builds.add( build );
-            }
-
-            return makeHashtable( "builds", builds );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.getBuildsForProject()",
-                                    "Project id: '" + projectId + "'.", e );
-        }
-    }
-
     public Hashtable getBuild( String buildId )
     {
         try
         {
-            ContinuumBuild continuumBuild = continuum.getBuild( buildId );
+            ContinuumBuild build = continuum.getBuild( buildId );
 
-            Set excludedProperties = new HashSet();
-
-            excludedProperties.add( "project" );
-
-            Hashtable build = makeHashtable( "build",
-                                             xmlRpcHelper.objectToHashtable( continuumBuild, excludedProperties ) );
-
-            UpdateScmResult result = continuumBuild.getUpdateScmResult();
-
-            if ( result != null )
-            {
-                build.put( "updateScmResult", xmlRpcHelper.objectToHashtable( result ) );
-            }
-
-            return build;
+            return makeHashtable( "build", convertContinuumBuild( build ) );
         }
         catch ( Throwable e )
         {
@@ -471,23 +282,388 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-    public Hashtable getBuildResult( String buildId )
+    public Hashtable getBuildsForProject( String projectId,
+                                          int start,
+                                          int end )
+    {
+        try
+        {
+            if ( start != 0 || end != 0 )
+            {
+                getLogger().warn( "ContinuumXmlRpc.getBuildsForProject() " +
+                                  "doesn't support usage of the start and end parameters yet." );
+            }
+
+            // TODO: use start and end
+            Collection builds = continuum.getBuildsForProject( projectId );
+
+            Vector result = new Vector( builds.size() );
+
+            for ( Iterator it = builds.iterator(); it.hasNext(); )
+            {
+                result.add( convertContinuumBuild( it.next() ) );
+            }
+
+            return makeHashtable( "builds", result );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.getBuildsForProject()",
+                                    "Project id: '" + projectId + "'.", e );
+        }
+    }
+
+    public Hashtable getBuildResultForBuild( String buildId )
     {
         try
         {
             ContinuumBuildResult result = continuum.getBuildResultForBuild( buildId );
 
-            Set excludedProperties = new HashSet();
-
-            excludedProperties.add( "build" );
-
-            return makeHashtable( "buildResult", xmlRpcHelper.objectToHashtable( result, excludedProperties ) );
+            return makeHashtable( "buildResult", convertContinuumBuildResult( result ) );
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getBuildResult()",
+            return handleException( "ContinuumXmlRpc.getBuildResultForProject()",
                                     "Build id: '" + buildId + "'.", e );
         }
+    }
+
+    public Hashtable getChangedFilesForBuild( String buildId )
+    {
+        try
+        {
+            Collection changedFiles = continuum.getChangedFilesForBuild( buildId );
+
+            Vector result = new Vector( changedFiles.size() );
+
+            for ( Iterator it = changedFiles.iterator(); it.hasNext(); )
+            {
+                result.add( convertScmFile( it.next() ) );
+            }
+
+            return makeHashtable( "changedFiles", result );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.getBuildResultForProject()",
+                                    "Build id: '" + buildId + "'.", e );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Maven 1.x projects
+    // ----------------------------------------------------------------------
+
+    public Hashtable addMavenOneProject( String url )
+    {
+        try
+        {
+            ContinuumProjectBuildingResult result = continuum.addMavenOneProject( url );
+
+            Collection projects = result.getProjects();
+
+            Collection projectIds = new Vector( projects.size() );
+
+            for ( Iterator it = projects.iterator(); it.hasNext(); )
+            {
+                ContinuumProject project = (ContinuumProject) it.next();
+
+                projectIds.add( project.getId() );
+
+                getLogger().info( "project id: " + project.getId() );
+            }
+
+            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.addMavenOneProject()",
+                                    "URL: '" + url + "'.", e );
+        }
+    }
+
+    public Hashtable addMavenOneProject( Hashtable mavenOneProject )
+    {
+        try
+        {
+            MavenOneProject project = new MavenOneProject();
+
+            xmlRpcHelper.hashtableToObject( mavenOneProject, project );
+
+            String projectId = continuum.addMavenOneProject( project );
+
+            Collection projectIds = new ArrayList();
+
+            projectIds.add( projectId );
+
+            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.addMavenOneProject()",
+                                    null, e );
+        }
+    }
+
+    public Hashtable addAntProject( Hashtable antProject )
+    {
+        try
+        {
+            AntProject project = new AntProject();
+
+            xmlRpcHelper.hashtableToObject( antProject, project );
+
+            String projectId = continuum.addAntProject( project );
+
+            Collection projectIds = new ArrayList();
+
+            projectIds.add( projectId );
+
+            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.addAntProject()",
+                                    null, e );
+        }
+    }
+
+    public Hashtable addShellProject( Hashtable shellProject )
+    {
+        try
+        {
+            ShellProject project = new ShellProject();
+
+            xmlRpcHelper.hashtableToObject( shellProject, project );
+
+            String projectId = continuum.addShellProject( project );
+
+            Collection projectIds = new ArrayList();
+
+            projectIds.add( projectId );
+
+            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.ShellProject()",
+                                    null, e );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Maven 2.x projects
+    // ----------------------------------------------------------------------
+
+    public Hashtable addMavenTwoProject( String url )
+    {
+        getLogger().info( "addMavenTwoProject( String url )" );
+        try
+        {
+            // TODO: Get the added projects and return the IDs
+            ContinuumProjectBuildingResult result = continuum.addMavenTwoProject( url );
+
+            Collection projects = result.getProjects();
+
+            Collection projectIds = new Vector( projects.size() );
+
+            for ( Iterator it = projects.iterator(); it.hasNext(); )
+            {
+                ContinuumProject project = (ContinuumProject) it.next();
+
+                projectIds.add( project.getId() );
+
+                getLogger().info( "project id: " + project.getId() );
+            }
+
+            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.addMavenTwoProject()",
+                                    "URL: '" + url + "'.", e );
+        }
+    }
+
+    public Hashtable addMavenTwoProject( Hashtable mavenTwoProject )
+    {
+        getLogger().info( "addMavenTwoProject( Hashtable mavenTwoProject )" );
+        try
+        {
+            MavenTwoProject project = new MavenTwoProject();
+
+            xmlRpcHelper.hashtableToObject( mavenTwoProject, project );
+
+            String projectId = continuum.addMavenTwoProject( project );
+
+            // TODO: Get the added projects and return the IDs
+            Collection projectIds = new Vector();
+
+            projectIds.add( projectId );
+
+            getLogger().info( "project id: " + projectId );
+
+            return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.addMavenTwoProject()", null, e );
+        }
+    }
+
+    public Hashtable updateMavenTwoProject( Hashtable mavenTwoProject )
+    {
+        throw new RuntimeException( "NOT IMPLEMENTED" );
+    }
+
+    // ----------------------------------------------------------------------
+    // Ant projects
+    // ----------------------------------------------------------------------
+
+//    public Hashtable addAntProject( String scmUrl,
+//                                    String projectName,
+//                                    String nagEmailAddress,
+//                                    String version,
+//                                    String commandLineArguments,
+//                                    Hashtable configuration )
+//    {
+//        return addProjectFromScm( scmUrl,
+//                                  AntBuildExecutor.ID,
+//                                  projectName,
+//                                  nagEmailAddress,
+//                                  version,
+//                                  commandLineArguments,
+//                                  configuration );
+//    }
+
+    // ----------------------------------------------------------------------
+    // Shell projects
+    // ----------------------------------------------------------------------
+
+//    public Hashtable addShellProject( String scmUrl,
+//                                      String projectName,
+//                                      String nagEmailAddress,
+//                                      String version,
+//                                      String commandLineArguments,
+//                                      Hashtable configuration )
+//    {
+//        return addProjectFromScm( scmUrl,
+//                                  ShellBuildExecutor.ID,
+//                                  projectName,
+//                                  nagEmailAddress,
+//                                  version,
+//                                  commandLineArguments,
+//                                  configuration );
+//    }
+
+    // ----------------------------------------------------------------------
+    // Projects
+    // ----------------------------------------------------------------------
+
+//    private Hashtable addProjectFromScm( String scmUrl,
+//                                         String executorId,
+//                                         String projectName,
+//                                         String nagEmailAddress,
+//                                         String version,
+//                                         String commandLineArguments,
+//                                         Hashtable configuration )
+//    {
+//        try
+//        {
+//            Properties configurationProperties = new Properties();
+//
+//            for ( Iterator it = configuration.entrySet().iterator(); it.hasNext(); )
+//            {
+//                Map.Entry entry = (Map.Entry) it.next();
+//
+//                configurationProperties.put( entry.getKey().toString(), entry.getValue().toString() );
+//            }
+//
+//            String projectId = core.addProjectFromScm( scmUrl,
+//                                                       executorId,
+//                                                       projectName,
+//                                                       nagEmailAddress,
+//                                                       version,
+//                                                       commandLineArguments,
+//                                                       configurationProperties );
+//
+//            return makeHashtable( "projectId", projectId );
+//        }
+//        catch ( Throwable e )
+//        {
+//            return handleException( "ContinuumXmlRpc.addProjectFromScm()", null, e );
+//        }
+//    }
+
+    // ----------------------------------------------------------------------
+    // Object to Hashtable converters
+    // ----------------------------------------------------------------------
+
+    private Hashtable convertContinuumProject( Object object )
+        throws IllegalAccessException, InvocationTargetException
+    {
+        Set excludedProperties = new HashSet();
+
+        excludedProperties.add( "configuration" );
+
+        excludedProperties.add( "builds" );
+
+        excludedProperties.add( "developers" );
+
+        ContinuumProject project = (ContinuumProject) object;
+
+        Hashtable hashtable = xmlRpcHelper.objectToHashtable( project, excludedProperties );
+
+        Properties configuration = project.getConfiguration();
+
+        Hashtable configurationHashtable = new Hashtable();
+
+        for ( Iterator it = configuration.entrySet().iterator(); it.hasNext(); )
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            configurationHashtable.put( entry.getKey().toString(), entry.getValue().toString() );
+        }
+
+        hashtable.put( "configuration", configurationHashtable );
+
+        return hashtable;
+    }
+
+    private Hashtable convertContinuumBuild( Object object )
+        throws IllegalAccessException, InvocationTargetException
+    {
+        Set excludedProperties = new HashSet();
+
+        excludedProperties.add( "project" );
+
+        return xmlRpcHelper.objectToHashtable( object, excludedProperties );
+    }
+
+    private Hashtable convertContinuumBuildResult( Object object )
+        throws IllegalAccessException, InvocationTargetException
+    {
+        Set excludedProperties = new HashSet();
+
+        excludedProperties.add( "build" );
+
+        return xmlRpcHelper.objectToHashtable( object, excludedProperties );
+    }
+
+    private Hashtable convertScmFile( Object object )
+        throws IllegalAccessException, InvocationTargetException
+    {
+        Set excludedProperties = new HashSet();
+
+        return xmlRpcHelper.objectToHashtable( object, excludedProperties );
+    }
+
+    private Hashtable convertCheckOutScmResult( Object object )
+        throws IllegalAccessException, InvocationTargetException
+    {
+        Set excludedProperties = new HashSet();
+
+        return xmlRpcHelper.objectToHashtable( object, excludedProperties );
     }
 
     // ----------------------------------------------------------------------
@@ -553,4 +729,4 @@ public class DefaultContinuumXmlRpc
 
         return string.getBuffer().toString();
     }
- }
+}

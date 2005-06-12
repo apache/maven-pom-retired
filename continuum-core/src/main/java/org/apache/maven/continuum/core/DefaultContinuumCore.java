@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;

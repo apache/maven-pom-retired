@@ -7,6 +7,7 @@
         <toOverride>nobody@localhost</toOverride>
       </configuration>
     </component>
+<!--
     <component>
       <role>org.codehaus.plexus.jdo.JdoFactory</role>
       <implementation>org.codehaus.plexus.jdo.DefaultJdoFactory</implementation>
@@ -47,5 +48,6 @@
         </properties>
       </configuration>
     </component>
+-->
   </components>
 </plexus>

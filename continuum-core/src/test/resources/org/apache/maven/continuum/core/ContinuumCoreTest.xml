@@ -1,5 +1,6 @@
 <plexus>
   <components>
+<!--
     <component>
       <role>org.codehaus.plexus.jdo.JdoFactory</role>
       <implementation>org.codehaus.plexus.jdo.DefaultJdoFactory</implementation>
@@ -40,5 +41,6 @@
         </properties>
       </configuration>
     </component>
+-->
   </components>
 </plexus>

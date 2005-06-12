@@ -19,6 +19,7 @@ package org.apache.maven.continuum;
 import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
+import org.apache.maven.continuum.core.action.StoreProjectAction;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
@@ -38,6 +39,7 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.workflow.WorkflowEngine;
 import org.codehaus.plexus.action.ActionManager;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Collection;
 import java.util.Properties;
@@ -222,7 +224,7 @@ public class DefaultContinuum
     // Ant Projects
     // ----------------------------------------------------------------------
 
-    public void addAntProject( AntProject project )
+    public String addAntProject( AntProject project )
         throws ContinuumException
     {
         Properties configuration = new Properties();
@@ -231,13 +233,15 @@ public class DefaultContinuum
 
         configuration.setProperty( AntBuildExecutor.CONFIGURATION_TARGETS, project.getTargets() );
 
-        core.addProjectFromScm( project.getScmUrl(),
-                                AntBuildExecutor.ID,
-                                project.getName(),
-                                project.getNagEmailAddress(),
-                                project.getVersion(),
-                                project.getCommandLineArguments(),
-                                configuration );
+        String projectId = core.addProjectFromScm( project.getScmUrl(),
+                                                   AntBuildExecutor.ID,
+                                                   project.getName(),
+                                                   project.getNagEmailAddress(),
+                                                   project.getVersion(),
+                                                   project.getCommandLineArguments(),
+                                                   configuration );
+
+        return projectId;
     }
 
     public AntProject getAntProject( String id )
@@ -280,7 +284,7 @@ public class DefaultContinuum
     // Maven 1.x projects
     // ----------------------------------------------------------------------
 
-    public void addMavenOneProject( String metadataUrl )
+    public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
         throws ContinuumException
     {
         Map context = new HashMap();
@@ -290,6 +294,8 @@ public class DefaultContinuum
         context.put( CreateProjectsFromMetadata.KEY_URL, metadataUrl );
 
         context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, core.getWorkingDirectory() );
+
+        ContinuumProjectBuildingResult result;
 
         try
         {
@@ -305,7 +311,7 @@ public class DefaultContinuum
 
             actionManager.lookup( "create-projects-from-metadata" ).execute( context );
 
-            ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
+            result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
 
             List projects = result.getProjects();
 
@@ -319,16 +325,20 @@ public class DefaultContinuum
 
                 actionManager.lookup( "store-project" ).execute( context );
 
+                project.setId( (String) context.get( StoreProjectAction.KEY_PROJECT_ID ) );
+
                 actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
             }
         }
         catch ( Exception e )
         {
-            throw new ContinuumException( "Error adding m1 project: ", e );
+            throw new ContinuumException( "Error adding Maven 1 project.", e );
         }
+
+        return result;
     }
 
-    public void addMavenOneProject( MavenOneProject project )
+    public String addMavenOneProject( MavenOneProject project )
         throws ContinuumException
     {
         Properties configuration = new Properties();
@@ -349,11 +359,15 @@ public class DefaultContinuum
 
             actionManager.lookup( "store-project" ).execute( context );
 
+            project.setId( (String) context.get( StoreProjectAction.KEY_PROJECT_ID ) );
+
             actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
+
+            return project.getId();
         }
         catch ( Exception e )
         {
-            throw new ContinuumException( "Error adding m1 project: ", e );
+            throw new ContinuumException( "Error adding Maven 1 project.", e );
         }
     }
 
@@ -387,9 +401,13 @@ public class DefaultContinuum
     // Maven 2.x projects
     // ----------------------------------------------------------------------
 
-    public void addMavenTwoProject( String metadataUrl )
+    public ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl )
         throws ContinuumException
     {
+        // ----------------------------------------------------------------------
+        // Initialize the context
+        // ----------------------------------------------------------------------
+
         Map context = new HashMap();
 
         context.put( CreateProjectsFromMetadata.KEY_PROJECT_BUILDER_ID, MavenTwoContinuumProjectBuilder.ID );
@@ -397,6 +415,12 @@ public class DefaultContinuum
         context.put( CreateProjectsFromMetadata.KEY_URL, metadataUrl );
 
         context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, core.getWorkingDirectory() );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        ContinuumProjectBuildingResult result;
 
         try
         {
@@ -412,7 +436,7 @@ public class DefaultContinuum
 
             actionManager.lookup( "create-projects-from-metadata" ).execute( context );
 
-            ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
+            result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
 
             List projects = result.getProjects();
 
@@ -426,16 +450,21 @@ public class DefaultContinuum
 
                 actionManager.lookup( "store-project" ).execute( context );
 
+                project.setId( (String) context.get( StoreProjectAction.KEY_PROJECT_ID ) );
+
                 actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
             }
         }
         catch ( Exception e )
         {
-            throw new ContinuumException( "Error adding m2 project: ", e );
+            throw new ContinuumException( "Error adding Maven 2 project.", e );
         }
+
+        System.err.println();
+        return result;
     }
 
-    public void addMavenTwoProject( MavenTwoProject project )
+    public String addMavenTwoProject( MavenTwoProject project )
         throws ContinuumException
     {
         //TODO: these need to go away
@@ -458,12 +487,16 @@ public class DefaultContinuum
 
             actionManager.lookup( "store-project" ).execute( context );
 
+            project.setId( (String) context.get( StoreProjectAction.KEY_PROJECT_ID ) );
+
             actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
         }
         catch ( Exception e )
         {
-            throw new ContinuumException( "Error adding m2 project: ", e );
+            throw new ContinuumException( "Error adding Maven 2 project.", e );
         }
+
+        return project.getId();
     }
 
     public MavenTwoProject getMavenTwoProject( String id )
@@ -487,25 +520,29 @@ public class DefaultContinuum
 
         Properties configuration = new Properties();
 
-        configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, project.getGoals() );
+        String goals = StringUtils.clean( project.getGoals() );
+
+        configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, goals );
 
         updateProjectConfiguration( project.getId(), configuration );
     }
 
-    public void addShellProject( ShellProject project )
+    public String addShellProject( ShellProject project )
         throws ContinuumException
     {
         Properties configuration = new Properties();
 
         configuration.setProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE, project.getExecutable() );
 
-        core.addProjectFromScm( project.getScmUrl(),
-                                ShellBuildExecutor.ID,
-                                project.getName(),
-                                project.getNagEmailAddress(),
-                                project.getVersion(),
-                                project.getCommandLineArguments(),
-                                configuration );
+        String projectId = core.addProjectFromScm( project.getScmUrl(),
+                                                   ShellBuildExecutor.ID,
+                                                   project.getName(),
+                                                   project.getNagEmailAddress(),
+                                                   project.getVersion(),
+                                                   project.getCommandLineArguments(),
+                                                   configuration );
+
+        return projectId;
     }
 
     public ShellProject getShellProject( String id )

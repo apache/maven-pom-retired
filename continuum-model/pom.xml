@@ -9,15 +9,20 @@
   <name>Continuum Model</name>
   <version>1.0-alpha-3-SNAPSHOT</version>
   <dependencies>
+    <!--
     <dependency>
       <groupId>jdo</groupId>
       <artifactId>jdo</artifactId>
       <version>1.0.1</version>
     </dependency>
+    -->
     <dependency>
       <groupId>jpox</groupId>
       <artifactId>jpox-enhancer</artifactId>
+      <!--
       <version>1.0.4</version>
+      -->
+      <version>1.1.0-beta-3</version>
     </dependency>
   </dependencies>
   <build>
@@ -29,7 +34,7 @@
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
-        <version>1.0-alpha-2</version>
+        <version>1.0-alpha-3-SNAPSHOT</version>
         <configuration>
           <version>1.0.0</version>
           <packageWithVersion>false</packageWithVersion>

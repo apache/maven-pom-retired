@@ -21,6 +21,7 @@ import java.util.Properties;
 
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenOneProject;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
@@ -58,7 +59,7 @@ public class MavenOneBuildExecutorTest
         // Make the "existing" project
         // ----------------------------------------------------------------------
 
-        ContinuumProject project = new ContinuumProject();
+        ContinuumProject project = new MavenOneProject();
 
         project.setName( "Maven" );
 

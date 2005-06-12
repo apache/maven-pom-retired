@@ -40,6 +40,9 @@ public interface XmlRpcHelper
     Vector collectionToVector( Collection value, boolean convertElements )
         throws IllegalAccessException, InvocationTargetException;
 
+    Vector collectionToVector( Collection value, boolean convertElements, Set excludedProperties )
+        throws IllegalAccessException, InvocationTargetException;
+
     void hashtableToObject( Hashtable hashtable, Object object )
         throws IntrospectionException, IllegalAccessException, InvocationTargetException;
 }

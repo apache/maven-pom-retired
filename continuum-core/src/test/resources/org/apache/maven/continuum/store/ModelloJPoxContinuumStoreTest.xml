@@ -1,5 +1,6 @@
 <plexus>
   <components>
+<!--
     <component>
       <role>org.codehaus.plexus.jdo.JdoFactory</role>
       <implementation>org.codehaus.plexus.jdo.DefaultJdoFactory</implementation>
@@ -30,6 +31,10 @@
             <value>true</value>
           </property>
           <property>
+            <name>org.jpox.autoCreateColumns</name>
+            <value>true</value>
+          </property>
+          <property>
             <name>org.jpox.autoStartMechanism</name>
             <value>SchemaTable</value>
           </property>
@@ -40,5 +45,6 @@
         </properties>
       </configuration>
     </component>
+-->
   </components>
 </plexus>

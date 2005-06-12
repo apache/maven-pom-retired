@@ -25,7 +25,7 @@ import continuum
 def isEmpty( str ):
     return str == None or str == ""
 
-class ContinuumXmlRpcClient(cli.cli):
+class ContinuumXmlRpcCli(cli.cli):
     def __init__(self):
         cli.cli.__init__(self)
 
@@ -135,7 +135,7 @@ SCM URL:            %(scmUrl)s""" % project.map
             print build.updateScmResult
         print ""
 
-        buildResult = continuum.getBuildResult( args[ 0 ] );
+        buildResult = continuum.getBuildResultForBuild( args[ 0 ] );
 
         print "Build result:"
         print buildResult
@@ -153,8 +153,10 @@ SCM URL:            %(scmUrl)s""" % project.map
 # Main loop
 ##########################################################
 
+continuum = continuum.Continuum( "http://localhost:8000" )
+
 try:
-    ContinuumXmlRpcClient().cmdloop()
+    ContinuumXmlRpcCli().cmdloop()
 
 except Exception, e:
     print "Error:", e

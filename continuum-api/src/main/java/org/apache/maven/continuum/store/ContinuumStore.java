@@ -23,6 +23,7 @@ import java.util.Properties;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 
@@ -41,6 +42,9 @@ public interface ContinuumStore
     String addProject( ContinuumProject project )
         throws ContinuumStoreException;
 
+    /**
+     * @deprecated
+     */
     String addProject( String name,
                        String scmUrl,
                        String nagEmailAddress,
@@ -80,8 +84,8 @@ public interface ContinuumStore
     ContinuumProject getProject( String projectId )
         throws ContinuumStoreException;
 
-    ContinuumProject getProjectByBuild( String buildId )
-        throws ContinuumStoreException;
+//    ContinuumProject getProjectByBuild( String buildId )
+//        throws ContinuumStoreException;
 
     CheckOutScmResult getCheckOutScmResultForProject( String projectId )
         throws ContinuumStoreException;

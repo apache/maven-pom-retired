@@ -27,39 +27,54 @@ public interface ContinuumXmlRpc
     String ROLE = ContinuumXmlRpc.class.getName();
 
     // ----------------------------------------------------------------------
-    // Project handling
+    // Keep these methods organized in the same order as the Continuum
+    // interface
     // ----------------------------------------------------------------------
 
-    Hashtable getProject( String projectId );
+    // ----------------------------------------------------------------------
+    // Projects
+    // ----------------------------------------------------------------------
 
-    Hashtable updateProject( String projectId,
-                             String name,
-                             String scmUrl,
-                             String nagEmailAddress,
-                             String version,
-                             String commandLineArguments );
+    Hashtable removeProject( String projectId );
+
+//    Hashtable updateProject( String projectId,
+//                             String name,
+//                             String scmUrl,
+//                             String nagEmailAddress,
+//                             String version,
+//                             String commandLineArguments );
 
     Hashtable updateProjectConfiguration( String projectId,
                                           Hashtable configuration );
 
-    Hashtable getAllProjects();
+    Hashtable getProject( String projectId );
 
-    Hashtable removeProject( String projectId );
+    Hashtable getProjects();
+
+    Hashtable getCheckOutScmResultForProject( String projectId );
+
+    Hashtable getLatestBuildForProject( String projectId );
 
     // ----------------------------------------------------------------------
-    // Build handling
+    // Building
     // ----------------------------------------------------------------------
 
     Hashtable buildProject( String projectId,
                             boolean force );
 
+    // ----------------------------------------------------------------------
+    // Builds
+    // ----------------------------------------------------------------------
+
+    Hashtable getBuild( String buildId );
+
     Hashtable getBuildsForProject( String projectId,
                                    int start,
                                    int end );
 
-    Hashtable getBuild( String buildId );
+    Hashtable getBuildResultForBuild( String buildId );
 
-    Hashtable getBuildResult( String buildId );
+    Hashtable getChangedFilesForBuild( String buildId );
 
     // ----------------------------------------------------------------------
     // Maven 2.x projects
@@ -67,32 +82,41 @@ public interface ContinuumXmlRpc
 
     Hashtable addMavenTwoProject( String url );
 
+    Hashtable addMavenTwoProject( Hashtable mavenTwoProject );
+
+    Hashtable updateMavenTwoProject( Hashtable mavenTwoProject );
+
     // ----------------------------------------------------------------------
     // Maven 1.x projects
     // ----------------------------------------------------------------------
 
     Hashtable addMavenOneProject( String url );
 
+    Hashtable addMavenOneProject( Hashtable mavenOneProject );
 
     // ----------------------------------------------------------------------
     // Ant projects
     // ----------------------------------------------------------------------
 
-    Hashtable addAntProject( String scmUrl,
-                             String projectName,
-                             String nagEmailAddress,
-                             String version,
-                             String commandLineArguments,
-                             Hashtable configuration );
+//    Hashtable addAntProject( String scmUrl,
+//                             String projectName,
+//                             String nagEmailAddress,
+//                             String version,
+//                             String commandLineArguments,
+//                             Hashtable configuration );
+
+    Hashtable addAntProject( Hashtable antProject );
 
     // ----------------------------------------------------------------------
     // Shell projects
     // ----------------------------------------------------------------------
 
-    Hashtable addShellProject( String scmUrl,
-                               String projectName,
-                               String nagEmailAddress,
-                               String version,
-                               String commandLineArguments,
-                               Hashtable configuration );
+//    Hashtable addShellProject( String scmUrl,
+//                               String projectName,
+//                               String nagEmailAddress,
+//                               String version,
+//                               String commandLineArguments,
+//                               Hashtable configuration );
+
+    Hashtable addShellProject( Hashtable shellProject );
 }

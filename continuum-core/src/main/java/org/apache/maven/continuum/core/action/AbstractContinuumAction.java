@@ -50,7 +50,7 @@ public abstract class AbstractContinuumAction
 
     public final static String KEY_PROJECT = "project";
 
-    public final static String KEY_UNVALIDATED_PROJECT = "project";
+    public final static String KEY_UNVALIDATED_PROJECT = "unvalidatedProject";
 
     public final static String KEY_BUILD_ID = "buildId";
 

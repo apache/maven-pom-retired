@@ -51,6 +51,9 @@ public interface ContinuumCore
     Collection addProjectsFromUrl( URL url, String projectBuilderId )
         throws ContinuumException;
 
+    /**
+     * @deprecated
+     */
     String addProjectFromScm( String scmUrl,
                               String executorId,
                               String projectName,

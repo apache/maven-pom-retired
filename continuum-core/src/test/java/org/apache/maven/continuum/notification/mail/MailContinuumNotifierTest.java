@@ -28,6 +28,7 @@ import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.project.MavenTwoProject;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.mailsender.MailMessage;
@@ -37,7 +38,7 @@ import org.codehaus.plexus.util.CollectionUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: MailContinuumNotifierTest.java,v 1.4 2005/04/07 23:27:40 trygvis Exp $
+ * @version $Id$
  */
 public class MailContinuumNotifierTest
     extends PlexusTestCase
@@ -65,7 +66,7 @@ public class MailContinuumNotifierTest
         // ContinuumProject
         // ----------------------------------------------------------------------
 
-        ContinuumProject project = new ContinuumProject();
+        ContinuumProject project = new MavenTwoProject();
 
         project.setName( "Test Project" );
 

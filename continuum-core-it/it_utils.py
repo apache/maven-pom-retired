@@ -1,4 +1,4 @@
-import continuum
+#import continuum
 import os
 import shutil
 import sys
@@ -29,7 +29,7 @@ def assertEquals( message, expected, actual ):
         sys.exit( -1 )
 
     if ( expected != None and actual == None ):
-        assert 0, "Expected '" + str( expected ) + "' but the actual value None."
+        print "Expected '" + str( expected ) + "' but the actual value None."
         sys.exit( -1 )
 
     if( expected == actual ):
@@ -97,26 +97,26 @@ def assertCheckedOutFiles( project, expectedCheckedOutFiles ):
 
         assertEquals( "File #" + str( i ) + " doesn't match the expected path.", expectedFile, actualFile.path )
 
-def assertSuccessfulNoBuildPerformed( buildId ):
-    build = waitForBuild( buildId )
+def assertSuccessfulNoBuildPerformed( continuum, buildId ):
+    build = waitForBuild( continuum, buildId )
     assertEquals( "The build wasn't successful.", continuum.STATE_OK, build.state )
-    buildResult = continuum.getBuildResult( buildId )
+    buildResult = continuum.getBuildResultForBuild( buildId )
     assertNotNull( "Build result was null.", buildResult )
     assertTrue( "The build wasn't successful", buildResult.success )
 
-def assertSuccessfulMaven1Build( buildId ):
-    build = waitForBuild( buildId )
+def assertSuccessfulMaven1Build( continuum, buildId ):
+    build = waitForBuild( continuum, buildId )
     assertEquals( "The build wasn't successful.", continuum.STATE_OK, build.state )
-    buildResult = continuum.getBuildResult( buildId )
+    buildResult = continuum.getBuildResultForBuild( buildId )
     assertNotNull( "Build result was null.", buildResult )
     assertTrue( "The build wasn't successful", buildResult.success )
     assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", buildResult.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
     assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
 
-def assertSuccessfulMaven2Build( buildId ):
-    build = waitForBuild( buildId )
+def assertSuccessfulMaven2Build( continuum, buildId ):
+    build = waitForBuild( continuum, buildId )
     assertEquals( "The build wasn't successful.", continuum.STATE_OK, build.state )
-    buildResult = continuum.getBuildResult( buildId )
+    buildResult = continuum.getBuildResultForBuild( buildId )
     assertNotNull( "Build result was null.", buildResult )
     assertTrue( "The build wasn't successful", buildResult.success )
     assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", buildResult.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
@@ -124,25 +124,25 @@ def assertSuccessfulMaven2Build( buildId ):
 
     return build
 
-def assertSuccessfulAntBuild( buildId ):
-    build = waitForBuild( buildId )
+def assertSuccessfulAntBuild( continuum, buildId ):
+    build = waitForBuild( continuum, buildId )
     assertEquals( "The build wasn't successful.", continuum.STATE_OK, build.state )
-    buildResult = continuum.getBuildResult( buildId )
+    buildResult = continuum.getBuildResultForBuild( buildId )
     assertNotNull( "Build result was null.", buildResult )
     assertTrue( "The build wasn't successful", buildResult.success )
     assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", buildResult.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
     assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
 
-def assertSuccessfulShellBuild( buildId, expectedStandardOutput ):
-    build = waitForBuild( buildId )
+def assertSuccessfulShellBuild( continuum, buildId, expectedStandardOutput ):
+    build = waitForBuild( continuum, buildId )
     assertEquals( "The build wasn't successful.", continuum.STATE_OK, build.state )
-    buildResult = continuum.getBuildResult( buildId )
+    buildResult = continuum.getBuildResultForBuild( buildId )
     assertNotNull( "Build result was null.", buildResult )
     assertTrue( "The build wasn't successful", buildResult.success )
     assertEquals( "Standard output didn't contain the expected output.", expectedStandardOutput, buildResult.standardOutput )
     assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
 
-def buildProject( projectId, force=False ):
+def buildProject( continuum, projectId, force=False ):
     count = 600;
 
     originalSize = len( continuum.getBuildsForProject( projectId ) )
@@ -164,25 +164,28 @@ def buildProject( projectId, force=False ):
 
         return builds[ 0 ]
 
-def removeProject( projectId ):
+    # This will never happen, it is just to make pychecker shut up
+    return None
+
+def removeProject( continuum, projectId ):
     time.sleep( 0.5 )
     continuum.removeProject( projectId )
 
-    map = continuum.server.continuum.getProject( projectId )
+    result = continuum.server.continuum.getProject( projectId )
 
-    if ( map[ "result" ] != "failure" ):
-        print map
+    if ( result[ "result" ] != "failure" ):
+        print result
         fail( "Expected a failure when removing project." )
 
 def execute( workingDirectory, command ):
     cwd = os.getcwd()
     os.chdir( workingDirectory )
-    file = os.popen( command )
+    f = os.popen( command )
     os.chdir( cwd )
 
-    output = file.read()
+    output = f.read()
 
-    ret = file.close()
+    ret = f.close()
 
     if ( ret != None ):
         print output
@@ -191,7 +194,7 @@ def execute( workingDirectory, command ):
 
     return output
 
-def waitForBuild( buildId ):
+def waitForBuild( continuum, buildId ):
     timeout = 120                # seconds
     sleepInterval = 0.1
 
@@ -211,14 +214,14 @@ def waitForBuild( buildId ):
 
     return build
 
-def waitForSuccessfulCheckOut( projectId ):
-    project = waitForCheckOut( projectId )
+def waitForSuccessfulCheckOut( continuum, projectId ):
+    project = waitForCheckOut( continuum, projectId )
 
     assertEquals( "The check out was not successful for project #" + project.id, continuum.STATE_NEW, project.state )
 
     return project
 
-def waitForCheckOut( projectId ):
+def waitForCheckOut( continuum, projectId ):
     timeout = 60
     sleepInterval = 0.1
 
@@ -260,7 +263,7 @@ def makeScmUrl( scm, scmroot, artifactId ):
 
 def getProjectId( projectIds ):
     if ( len( projectIds ) != 1 ):
-        fail( "When adding a project only a single project was expected to be added." );
+        fail( "When adding a project only a single project was expected to be added, project ids: " + str( projectIds ) );
 
     return projectIds[ 0 ]
 

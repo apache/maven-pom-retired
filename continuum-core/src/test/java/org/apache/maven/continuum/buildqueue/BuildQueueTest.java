@@ -47,8 +47,6 @@ public class BuildQueueTest
     public void testTestTheQueueWithASingleProject()
         throws Exception
     {
-        System.err.println( this.getClassLoader() );
-
         String projectId = ModelloJPoxContinuumStoreTest.addProject( store, "Build Queue Project 1", "1" );
 
         buildProject( projectId, false );

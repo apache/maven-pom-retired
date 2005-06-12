@@ -26,6 +26,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 
 /**
@@ -108,10 +109,10 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     // Maven 2.x projects.
     // ----------------------------------------------------------------------
 
-    void addMavenTwoProject( String metadataUrl )
+    ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl )
         throws ContinuumException;
 
-    void addMavenTwoProject( MavenTwoProject project )
+    String addMavenTwoProject( MavenTwoProject project )
         throws ContinuumException;
 
     MavenTwoProject getMavenTwoProject( String id )
@@ -124,10 +125,10 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     // Maven 1.x projects
     // ----------------------------------------------------------------------
 
-    void addMavenOneProject( String metadataUrl )
+    ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
         throws ContinuumException;
 
-    void addMavenOneProject( MavenOneProject project )
+    String addMavenOneProject( MavenOneProject project )
         throws ContinuumException;
 
     MavenOneProject getMavenOneProject( String id )
@@ -140,7 +141,7 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     // Ant Projects
     // ----------------------------------------------------------------------
 
-    void addAntProject( AntProject project )
+    String addAntProject( AntProject project )
         throws ContinuumException;
 
     AntProject getAntProject( String id )
@@ -153,7 +154,7 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     // Shell projects
     // ----------------------------------------------------------------------
 
-    void addShellProject( ShellProject project )
+    String addShellProject( ShellProject project )
         throws ContinuumException;
 
     ShellProject getShellProject( String id )

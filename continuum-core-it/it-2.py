@@ -15,6 +15,8 @@ print "stacktraces. This is normal and expected."
 print "############################################################"
 print ""
 
+continuum = continuum.Continuum( "http://localhost:8000" )
+
 progress( "Initializing SCM repositories." )
 
 basedir = os.getcwd() + "/target"
@@ -75,7 +77,7 @@ if 1:
 
     projectIds = continuum.addMavenOneProject( "file://" + basedir + "/project.xml" )
 
-    project = waitForCheckOut( projectIds[ 0 ] )
+    project = waitForCheckOut( continuum, projectIds[ 0 ] )
 
     assertEquals( "The project state should be error.", continuum.STATE_ERROR, project.state )
     assertEquals( "The error message wasn't as expected.", "No such provider: 'crap'.", project.checkOutErrorMessage )

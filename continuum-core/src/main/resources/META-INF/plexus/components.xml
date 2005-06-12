@@ -451,7 +451,9 @@
           </property>
           <property>
             <name>javax.jdo.option.ConnectionURL</name>
-            <value>jdbc:hsqldb:${plexus.home}/database</value>
+            <!--
+            -->
+            <value>jdbc:hsqldb:.</value>
           </property>
           <property>
             <name>javax.jdo.option.ConnectionUserName</name>
@@ -460,6 +462,20 @@
           <property>
             <name>javax.jdo.option.ConnectionPassword</name>
             <value></value>
+          </property>
+          <!--
+           | NOTE: This is the only value HSQLDB supports so we're hardcoding this value
+           | here to prevent JPOX from complaining about the lack of support when running the
+           | unit tests. When running with Continuum in a production enviroment
+           | READ_COMMITTED should be used.
+           |-->
+          <property>
+            <name>org.jpox.transactionIsolation</name>
+            <value>READ_UNCOMMITTED</value>
+          </property>
+          <property>
+            <name>org.jpox.poid.transactionIsolation</name>
+            <value>READ_UNCOMMITTED</value>
           </property>
           <property>
             <name>org.jpox.autoCreateSchema</name>

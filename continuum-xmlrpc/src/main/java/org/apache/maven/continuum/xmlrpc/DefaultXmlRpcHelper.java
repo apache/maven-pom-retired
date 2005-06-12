@@ -63,6 +63,83 @@ public class DefaultXmlRpcHelper
     public Hashtable objectToHashtable( Object object, Set excludedProperties )
         throws IllegalAccessException, InvocationTargetException
     {
+        return objectToHashtable( object, excludedProperties, new HashSet() );
+    }
+
+    public Vector collectionToVector( Collection value, boolean convertElements )
+        throws IllegalAccessException, InvocationTargetException
+    {
+        return collectionToVector( value, convertElements, Collections.EMPTY_SET );
+    }
+
+    public Vector collectionToVector( Collection value, boolean convertElements, Set excludedProperties )
+        throws IllegalAccessException, InvocationTargetException
+    {
+        return collectionToVector( value, convertElements, excludedProperties, new HashSet() );
+    }
+
+    public void hashtableToObject( Hashtable hashtable, Object target )
+        throws IntrospectionException, IllegalAccessException, InvocationTargetException
+    {
+        for ( Iterator it = hashtable.entrySet().iterator(); it.hasNext(); )
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            String key = (String) entry.getKey();
+
+            Object value = entry.getValue();
+
+            if ( key == null || value == null )
+            {
+                continue;
+            }
+
+            // ----------------------------------------------------------------------
+            // Convert the key to a setter
+            // ----------------------------------------------------------------------
+
+            String setterName = "set" +
+                                Character.toUpperCase( key.charAt( 0 ) ) +
+                                key.substring( 1 );
+
+            Class clazz = target.getClass();
+
+            // ----------------------------------------------------------------------
+            //
+            // ----------------------------------------------------------------------
+
+            Method setter = getSetter( clazz, setterName, key );
+
+            if ( setter == null )
+            {
+                continue;
+            }
+
+            // TODO: Implement to give better feedback
+//            Class parameter = setter.getParameterTypes()[ 0 ];
+//
+//            if ( value.getClass().isAssignableFrom( parameter ) )
+//            {
+//            }
+
+            setter.invoke( target, new Object[]{value} );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private Hashtable objectToHashtable( Object object,
+                                         Set excludedProperties,
+                                         Set visitedObjects )
+        throws IllegalAccessException, InvocationTargetException
+    {
+        if ( !visitedObjects.add( object ) )
+        {
+            return null;
+        }
+
         Hashtable hashtable = new Hashtable();
 
         if ( object == null )
@@ -114,7 +191,8 @@ public class DefaultXmlRpcHelper
 
             propertyName = StringUtils.uncapitalise( propertyName );
 
-            if ( excludedProperties.contains( propertyName ) || alwaysExcludedProperties.contains( propertyName ) )
+            if ( excludedProperties.contains( propertyName ) ||
+                 alwaysExcludedProperties.contains( propertyName ) )
             {
                 continue;
             }
@@ -135,6 +213,7 @@ public class DefaultXmlRpcHelper
             }
             else if ( value instanceof String )
             {
+                // nothing to do after all, the object is already a string!
             }
             else if ( value instanceof Number )
             {
@@ -146,24 +225,35 @@ public class DefaultXmlRpcHelper
             }
             else if ( value instanceof Collection )
             {
-                value = collectionToVector( (Collection) value, true );
+                value = collectionToVector( (Collection) value,
+                                            true,
+                                            excludedProperties,
+                                            visitedObjects );
             }
             else
             {
-                value = objectToHashtable( value );
+                value = objectToHashtable( value,
+                                           excludedProperties,
+                                           visitedObjects );
             }
 
             // ----------------------------------------------------------------------
             //
             // ----------------------------------------------------------------------
 
-            hashtable.put( propertyName, value );
+            if ( value != null )
+            {
+                hashtable.put( propertyName, value );
+            }
         }
 
         return hashtable;
     }
 
-    public Vector collectionToVector( Collection value, boolean convertElements )
+    private Vector collectionToVector( Collection value,
+                                      boolean convertElements,
+                                      Set excludedProperties,
+                                      Set visitedObjects )
         throws IllegalAccessException, InvocationTargetException
     {
         if ( value instanceof Vector )
@@ -179,63 +269,16 @@ public class DefaultXmlRpcHelper
 
             if ( convertElements )
             {
-                vector.add( objectToHashtable( object ) );
+                object = objectToHashtable( object, excludedProperties, visitedObjects );
             }
-            else
+
+            if ( object != null )
             {
                 vector.add( object );
             }
         }
 
         return vector;
-    }
-
-    public void hashtableToObject( Hashtable hashtable, Object target )
-        throws IntrospectionException, IllegalAccessException, InvocationTargetException
-    {
-        for ( Iterator it = hashtable.entrySet().iterator(); it.hasNext(); )
-        {
-            Map.Entry entry = (Map.Entry) it.next();
-
-            String key = (String) entry.getKey();
-
-            Object value = entry.getValue();
-
-            if ( key == null || value == null )
-            {
-                continue;
-            }
-
-            // ----------------------------------------------------------------------
-            // Convert the key to a setter
-            // ----------------------------------------------------------------------
-
-            String setterName = "set" +
-                                Character.toUpperCase( key.charAt( 0 ) ) +
-                                key.substring( 1 );
-
-            Class clazz = target.getClass();
-
-            // ----------------------------------------------------------------------
-            //
-            // ----------------------------------------------------------------------
-
-            Method setter = getSetter( clazz, setterName, key );
-
-            if ( setter == null )
-            {
-                continue;
-            }
-
-            // TODO: Implement to give better feedback
-//            Class parameter = setter.getParameterTypes()[ 0 ];
-//
-//            if ( value.getClass().isAssignableFrom( parameter ) )
-//            {
-//            }
-
-            setter.invoke( target, new Object[] { value } );
-        }
     }
 
     // ----------------------------------------------------------------------

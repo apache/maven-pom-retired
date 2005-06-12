@@ -25,6 +25,7 @@ import java.util.Properties;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
@@ -86,6 +87,8 @@ public class ModelloJPoxContinuumStore
     {
         try
         {
+            project.setState( ContinuumProjectState.CHECKING_OUT );
+
             Object id = store.addContinuumProject( project );
 
             project = store.getContinuumProjectByJdoId( id, true );
@@ -97,7 +100,6 @@ public class ModelloJPoxContinuumStore
 
         return project.getId();
     }
-
 
     public String addProject( String name,
                               String scmUrl,
@@ -185,7 +187,7 @@ public class ModelloJPoxContinuumStore
                 pm.deletePersistent( result );
 
 //                System.err.println( "build.setProject( null )" );
-                build.setProject( null );
+//                build.setProject( null );
             }
 
             for ( Iterator it = builds.iterator(); it.hasNext(); )
@@ -193,7 +195,7 @@ public class ModelloJPoxContinuumStore
                 ContinuumBuild build = (ContinuumBuild) it.next();
 
 //                System.err.println( "build.setProject( null )" );
-                build.setProject( null );
+//                build.setProject( null );
 
                 pm.deletePersistent( build );
             }
@@ -370,28 +372,28 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public ContinuumProject getProjectByBuild( String buildId )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumBuild build = store.getContinuumBuild( buildId, false );
-
-            Object id = JDOHelper.getObjectId( build.getProject() );
-
-            store.commit();
-
-            return store.getContinuumProjectByJdoId( id, true );
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while loading project.", e );
-        }
-    }
+//    public ContinuumProject getProjectByBuild( String buildId )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumBuild build = store.getContinuumBuild( buildId, false );
+//
+//            Object id = JDOHelper.getObjectId( build.getProject() );
+//
+//            store.commit();
+//
+//            return store.getContinuumProjectByJdoId( id, true );
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while loading project.", e );
+//        }
+//    }
 
     public CheckOutScmResult getCheckOutScmResultForProject( String projectId )
         throws ContinuumStoreException
@@ -484,6 +486,8 @@ public class ModelloJPoxContinuumStore
 
             ContinuumBuild build = store.getContinuumBuild( buildId, false );
 
+            // TODO: as build.getProject() should be removed replace this with
+            //       a search for the project
             ContinuumProject project = build.getProject();
 
             projectStateGuard.assertTransition( project, state );
@@ -537,21 +541,48 @@ public class ModelloJPoxContinuumStore
     public ContinuumBuild getLatestBuildForProject( String projectId )
         throws ContinuumStoreException
     {
-        // TODO: Find a better way to query for this object.
+        // TODO: Find a better way to query for the latest build.
 
         try
         {
-            List builds = store.getContinuumProject( projectId, true ).getBuilds();
+            store.begin();
 
+            PersistenceManager pm = store.getThreadState().getPersistenceManager();
+
+            Query q = pm.newQuery( ContinuumBuild.class );
+            q.declareParameters( "String projectId" );
+            q.setFilter( "this.project.id == projectId" );
+//            q.setRange( 0, 1 );
+            q.setOrdering( "id asc" );
+            Collection builds = (Collection) q.execute( projectId );
+
+//            List builds = store.getContinuumProject( projectId, false ).getBuilds();
+//
             if ( builds.size() == 0 )
             {
                 return null;
             }
+//
+//            for ( Iterator it = builds.iterator(); it.hasNext(); )
+//            {
+//                ContinuumBuild build = (ContinuumBuild) it.next();
+//
+//                System.err.println( "build.id: " + build.getId() );
+//            }
+//
+//            ContinuumBuild build = (ContinuumBuild) builds.get( builds.size() - 1 );
+            ContinuumBuild build = (ContinuumBuild) builds.iterator().next();
 
-            return (ContinuumBuild) builds.get( builds.size() - 1 );
+            build = (ContinuumBuild) store.getThreadState().getPersistenceManager().detachCopy( build );
+
+            store.commit();
+
+            return build;
         }
         catch ( Exception e )
         {
+            rollback( store );
+
             throw new ContinuumStoreException( "Error while loading last build for project id: '" + projectId + "'.", e );
         }
     }

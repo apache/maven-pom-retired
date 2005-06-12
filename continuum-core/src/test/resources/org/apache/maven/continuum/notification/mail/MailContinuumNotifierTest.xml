@@ -35,7 +35,7 @@
         <timestampFormat>EEE, d MMM yyyy HH:mm:ss Z</timestampFormat>
       </configuration>
     </component>
-
+<!--
     <component>
       <role>org.codehaus.plexus.jdo.JdoFactory</role>
       <implementation>org.codehaus.plexus.jdo.DefaultJdoFactory</implementation>
@@ -76,5 +76,6 @@
         </properties>
       </configuration>
     </component>
+-->
   </components>
 </plexus>

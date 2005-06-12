@@ -59,11 +59,13 @@
       <artifactId>commons-fileupload</artifactId>
       <version>1.0</version>
     </dependency>
+    <!--
     <dependency>
       <groupId>jdo</groupId>
       <artifactId>jdo</artifactId>
       <version>1.0.1</version>
     </dependency>
+    -->
     <dependency>
       <groupId>servletapi</groupId>
       <artifactId>servletapi</artifactId>

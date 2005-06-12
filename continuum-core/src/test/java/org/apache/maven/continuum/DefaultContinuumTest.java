@@ -16,6 +16,12 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
+import java.util.List;
+
+import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.store.ContinuumStore;
+
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
@@ -27,10 +33,10 @@ import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
 public class DefaultContinuumTest
     extends PlexusTestCase
 {
-    public void testContinuum()
+    public void testContinuumConfiguration()
         throws Exception
     {
-        Continuum continuum = (Continuum) lookup( Continuum.ROLE );
+        lookup( Continuum.ROLE );
     }
 
     public void testLookups()
@@ -43,5 +49,41 @@ public class DefaultContinuumTest
         lookup( TaskQueueExecutor.ROLE, "build-project" );
 
         lookup( TaskQueueExecutor.ROLE, "check-out-project" );
+    }
+
+    public void testUpdateProject()
+        throws Exception
+    {
+        Continuum continuum = (Continuum) lookup( Continuum.ROLE );
+
+        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
+
+        // ----------------------------------------------------------------------
+        // Test projects with duplicate names
+        // ----------------------------------------------------------------------
+
+        String url = getTestFile( "src/test-projects/project1/pom.xml" ).toURL().toExternalForm();
+
+        ContinuumProjectBuildingResult result = continuum.addMavenTwoProject( url );
+
+        assertNotNull( result );
+
+        List projects = result.getProjects();
+
+        assertEquals( 1, projects.size() );
+
+        assertEquals( MavenTwoProject.class, projects.get( 0 ).getClass() );
+
+        MavenTwoProject project = (MavenTwoProject) projects.get( 0 );
+
+        project.setName( project.getName() + " 2" );
+
+        project.setCommandLineArguments( null );
+
+        continuum.updateMavenTwoProject( project );
+
+        project = (MavenTwoProject) store.getProject( project.getId() );
+
+        assertNotNull( "The command line arguments are null.", project.getCommandLineArguments() );
     }
 }

@@ -13,6 +13,8 @@ projects = [
 "continuum-xmlrpc" 
 ]
 
+continuum = continuum.Continuum( "http://localhost:8000" )
+
 for project in projects:
     url = baseurl + project + pomAsText
     print url
