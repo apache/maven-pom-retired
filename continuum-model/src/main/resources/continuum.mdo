@@ -239,7 +239,7 @@
           <name>project</name>
           <version>1.0.0</version>
           <required>true</required>
-          <association>
+          <association stash.part="false">
             <type>ContinuumProject</type>
           </association>
         </field>
