@@ -79,35 +79,19 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-settings</artifactId>
     </dependency>
-    
-    <!-- Wagon -->
+    <!-- Maven Wagon -->
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-provider-api</artifactId>
       <version>1.0-alpha-3</version>
     </dependency>
-    <!-- SCM -->
+    <!-- Maven SCM -->
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-api</artifactId>
       <version>1.0-alpha-1</version>
     </dependency>
 
-    <!--
-    <dependency>
-      <groupId>jdo</groupId>
-      <artifactId>jdo</artifactId>
-      <version>1.0.1</version>
-    </dependency>
-    -->
-    <!--
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    -->
     <dependency>
       <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
@@ -150,13 +134,10 @@
       <version>1.0-alpha-1</version>
       <scope>test</scope>
     </dependency>
-    <!--
     <dependency>
-      <groupId>jpox</groupId>
-      <artifactId>jpox</artifactId>
-      <version>1.0.4</version>
+      <groupId>jdo</groupId>
+      <artifactId>jdo</artifactId>
     </dependency>
-    -->
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
