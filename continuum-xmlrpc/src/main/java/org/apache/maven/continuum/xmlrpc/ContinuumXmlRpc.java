@@ -37,13 +37,6 @@ public interface ContinuumXmlRpc
 
     Hashtable removeProject( String projectId );
 
-//    Hashtable updateProject( String projectId,
-//                             String name,
-//                             String scmUrl,
-//                             String nagEmailAddress,
-//                             String version,
-//                             String commandLineArguments );
-
     Hashtable updateProjectConfiguration( String projectId,
                                           Hashtable configuration );
 
@@ -98,25 +91,11 @@ public interface ContinuumXmlRpc
     // Ant projects
     // ----------------------------------------------------------------------
 
-//    Hashtable addAntProject( String scmUrl,
-//                             String projectName,
-//                             String nagEmailAddress,
-//                             String version,
-//                             String commandLineArguments,
-//                             Hashtable configuration );
-
     Hashtable addAntProject( Hashtable antProject );
 
     // ----------------------------------------------------------------------
     // Shell projects
     // ----------------------------------------------------------------------
-
-//    Hashtable addShellProject( String scmUrl,
-//                               String projectName,
-//                               String nagEmailAddress,
-//                               String version,
-//                               String commandLineArguments,
-//                               Hashtable configuration );
 
     Hashtable addShellProject( Hashtable shellProject );
 }
