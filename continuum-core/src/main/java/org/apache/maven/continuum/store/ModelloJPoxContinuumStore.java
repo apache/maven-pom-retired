@@ -31,7 +31,6 @@ import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.project.state.ContinuumProjectStateGuard;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.UpdateScmResult;
@@ -58,9 +57,6 @@ public class ModelloJPoxContinuumStore
 {
     /** @requirement */
     private JdoFactory jdoFactory;
-
-    /** @requirement */
-    private ContinuumProjectStateGuard projectStateGuard;
 
     private ContinuumJPoxStore store;
 
@@ -100,42 +96,6 @@ public class ModelloJPoxContinuumStore
         return project.getId();
     }
 
-//    public String addProject( String name,
-//                              String scmUrl,
-//                              String nagEmailAddress,
-//                              String version,
-//                              String commandLineArguments,
-//                              String executorId,
-//                              String workingDirectory,
-//                              Properties configuration )
-//        throws ContinuumStoreException
-//    {
-//        ContinuumProject project = new ContinuumProject();
-//
-//        project.setName( name );
-//        project.setScmUrl( scmUrl );
-//        project.setNagEmailAddress( nagEmailAddress );
-//        project.setVersion( version );
-//        project.setCommandLineArguments( commandLineArguments );
-//        project.setExecutorId( executorId );
-//        project.setWorkingDirectory( workingDirectory );
-//        project.setState( ContinuumProjectState.CHECKING_OUT );
-//        project.setConfiguration( configuration );
-//
-//        try
-//        {
-//            Object id = store.addContinuumProject( project );
-//
-//            project = store.getContinuumProjectByJdoId( id, true );
-//        }
-//        catch ( Exception e )
-//        {
-//            throw new ContinuumStoreException( "Error while adding a project.", e );
-//        }
-//
-//        return project.getId();
-//    }
-
     public void removeProject( String projectId )
         throws ContinuumStoreException
     {
@@ -143,26 +103,17 @@ public class ModelloJPoxContinuumStore
         {
             store.begin();
 
-//            System.err.println( "**********************************" );
-//            System.err.println( "**********************************" );
-//            System.err.println( "**********************************" );
-
-//            System.err.println( "getProject()" );
             ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            projectStateGuard.assertDeletable( project );
 
             // TODO: This whole section is dumb.
             PersistenceManager pm = store.getThreadState().getPersistenceManager();
 
-//            System.err.println( "project.getBuilds()" );
             List builds = project.getBuilds();
 
             for ( Iterator it = builds.iterator(); it.hasNext(); )
             {
                 ContinuumBuild build = (ContinuumBuild) it.next();
 
-//                System.err.println( "getBuildResult()" );
                 ContinuumBuildResult result = build.getBuildResult();
 
                 if ( result == null )
@@ -170,39 +121,20 @@ public class ModelloJPoxContinuumStore
                     continue;
                 }
 
-//                System.err.println( "result.getChangedFiles()" );
-//                List changedFiles = result.getChangedFiles();
-
-//                System.err.println( "changedFiles.clear()" );
-//                changedFiles.clear();
-
-//                System.err.println( "pm.deletePersistentAll( changedFiles )" );
-//                pm.deletePersistentAll( changedFiles );
-
-//                System.err.println( "result.setBuild( null )" );
                 result.setBuild( null );
 
-//                System.err.println( "pm.deletePersistent( result )" );
                 pm.deletePersistent( result );
-
-//                System.err.println( "build.setProject( null )" );
-//                build.setProject( null );
             }
 
             for ( Iterator it = builds.iterator(); it.hasNext(); )
             {
                 ContinuumBuild build = (ContinuumBuild) it.next();
 
-//                System.err.println( "build.setProject( null )" );
-//                build.setProject( null );
-
                 pm.deletePersistent( build );
             }
 
-//            System.err.println( "pm.deletePersistentAll( builds )" );
             pm.deletePersistentAll( builds );
 
-//            System.err.println( "store.deleteContinuumProject( projectId )" );
             store.deleteContinuumProject( projectId );
 
             store.commit();
@@ -225,8 +157,6 @@ public class ModelloJPoxContinuumStore
             store.begin();
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            projectStateGuard.assertCanChangeWorkingDirectory( project );
 
             project.setWorkingDirectory( workingDirectory );
 
@@ -254,8 +184,6 @@ public class ModelloJPoxContinuumStore
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
 
-            projectStateGuard.assertUpdatable( project );
-
             project.setName( name );
             project.setScmUrl( scmUrl );
             project.setNagEmailAddress( nagEmailAddress );
@@ -271,29 +199,6 @@ public class ModelloJPoxContinuumStore
             throw new ContinuumStoreException( "Error while updating project.", e );
         }
     }
-
-//    public void updateProjectConfiguration( String projectId, Properties configuration )
-//        throws ContinuumStoreException
-//    {
-//        try
-//        {
-//            store.begin();
-//
-//            ContinuumProject project = store.getContinuumProject( projectId, false );
-//
-//            projectStateGuard.assertUpdatable( project );
-//
-//            project.setConfiguration( configuration );
-//
-//            store.commit();
-//        }
-//        catch ( Exception e )
-//        {
-//            rollback( store );
-//
-//            throw new ContinuumStoreException( "Error while updating project configuration.", e );
-//        }
-//    }
 
     public Collection getAllProjects()
         throws ContinuumStoreException
@@ -371,29 +276,6 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-//    public ContinuumProject getProjectByBuild( String buildId )
-//        throws ContinuumStoreException
-//    {
-//        try
-//        {
-//            store.begin();
-//
-//            ContinuumBuild build = store.getContinuumBuild( buildId, false );
-//
-//            Object id = JDOHelper.getObjectId( build.getProject() );
-//
-//            store.commit();
-//
-//            return store.getContinuumProjectByJdoId( id, true );
-//        }
-//        catch ( Exception e )
-//        {
-//            rollback( store );
-//
-//            throw new ContinuumStoreException( "Error while loading project.", e );
-//        }
-//    }
-
     public CheckOutScmResult getCheckOutScmResultForProject( String projectId )
         throws ContinuumStoreException
     {
@@ -447,8 +329,6 @@ public class ModelloJPoxContinuumStore
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
 
-            projectStateGuard.assertInState( project, ContinuumProjectState.BUILDING );
-
             ContinuumBuild build = new ContinuumBuild();
 
             build.setStartTime( System.currentTimeMillis() );
@@ -489,8 +369,6 @@ public class ModelloJPoxContinuumStore
             //       a search for the project
             ContinuumProject project = build.getProject();
 
-            projectStateGuard.assertTransition( project, state );
-
             project.setState( state );
 
             build.setState( state );
@@ -500,17 +378,6 @@ public class ModelloJPoxContinuumStore
             build.setError( throwableToString( error ) );
 
             build.setUpdateScmResult( scmResult );
-
-//            store.commit();
-//
-//            // ----------------------------------------------------------------------
-//            // This double commit seems to be needed for some reason. Not having it
-//            // seems to result in some foreign key constraint violation.
-//            // ----------------------------------------------------------------------
-//
-//            store.begin();
-//
-//            build = store.getContinuumBuild( buildId, false );
 
             build.setBuildResult( result );
 
@@ -551,25 +418,14 @@ public class ModelloJPoxContinuumStore
             Query q = pm.newQuery( ContinuumBuild.class );
             q.declareParameters( "String projectId" );
             q.setFilter( "this.project.id == projectId" );
-//            q.setRange( 0, 1 );
             q.setOrdering( "id asc" );
             Collection builds = (Collection) q.execute( projectId );
 
-//            List builds = store.getContinuumProject( projectId, false ).getBuilds();
-//
             if ( builds.size() == 0 )
             {
                 return null;
             }
-//
-//            for ( Iterator it = builds.iterator(); it.hasNext(); )
-//            {
-//                ContinuumBuild build = (ContinuumBuild) it.next();
-//
-//                System.err.println( "build.id: " + build.getId() );
-//            }
-//
-//            ContinuumBuild build = (ContinuumBuild) builds.get( builds.size() - 1 );
+
             ContinuumBuild build = (ContinuumBuild) builds.iterator().next();
 
             build = (ContinuumBuild) store.getThreadState().getPersistenceManager().detachCopy( build );
@@ -708,8 +564,6 @@ public class ModelloJPoxContinuumStore
                 state = ContinuumProjectState.ERROR;
             }
 
-            projectStateGuard.assertTransition( project, state );
-
             project.setState( state );
 
             project.setCheckOutScmResult( scmResult );
@@ -737,8 +591,6 @@ public class ModelloJPoxContinuumStore
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
 
-            projectStateGuard.assertTransition( project, ContinuumProjectState.UPDATING );
-
             project.setState( ContinuumProjectState.UPDATING );
 
             store.commit();
@@ -759,8 +611,6 @@ public class ModelloJPoxContinuumStore
             store.begin();
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            projectStateGuard.assertTransition( project, ContinuumProjectState.BUILDING );
 
             project.setState( ContinuumProjectState.BUILDING );
 
@@ -796,8 +646,6 @@ public class ModelloJPoxContinuumStore
                 state = latestBuild.getState();
             }
 
-            projectStateGuard.assertTransition( project, state );
-
             project.setState( state );
 
             store.commit();
@@ -820,8 +668,6 @@ public class ModelloJPoxContinuumStore
             store.begin();
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            projectStateGuard.assertInState( project, ContinuumProjectState.BUILDING );
 
             ContinuumBuild build = new ContinuumBuild();
 

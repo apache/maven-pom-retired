@@ -37,9 +37,6 @@ public interface ContinuumXmlRpc
 
     Hashtable removeProject( String projectId );
 
-//    Hashtable updateProjectConfiguration( String projectId,
-//                                          Hashtable configuration );
-
     Hashtable getProject( String projectId );
 
     Hashtable getProjects();

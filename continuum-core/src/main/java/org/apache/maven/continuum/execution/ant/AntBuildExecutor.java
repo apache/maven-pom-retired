@@ -64,11 +64,6 @@ public class AntBuildExecutor
 
         File workingDirectory = new File( project.getWorkingDirectory() );
 
-//        Properties configuration = project.getConfiguration();
-//
-//        String executable = getConfiguration( configuration, CONFIGURATION_EXECUTABLE );
-//
-//        String targets = getConfiguration( configuration, CONFIGURATION_TARGETS );
         String executable = project.getExecutable();
 
         String targets = project.getTargets();

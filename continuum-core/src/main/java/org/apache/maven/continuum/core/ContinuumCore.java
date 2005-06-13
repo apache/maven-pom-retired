@@ -64,9 +64,6 @@ public interface ContinuumCore
                         String commandLineArguments )
         throws ContinuumException;
 
-//    void updateProjectConfiguration( String projectId, Properties configuration )
-//        throws ContinuumException;
-
     ContinuumProject getProject( String projectId )
         throws ContinuumException;
 

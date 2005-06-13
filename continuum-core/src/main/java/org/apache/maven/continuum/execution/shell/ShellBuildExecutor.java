@@ -61,7 +61,6 @@ public class ShellBuildExecutor
 
         ExecutionResult executionResult;
 
-//        String executable = getConfiguration( project.getConfiguration(), CONFIGURATION_EXECUTABLE );
         String executable = project.getExecutable();
 
         if ( executable.charAt( 0 ) != '/' &&

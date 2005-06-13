@@ -127,12 +127,6 @@ public class DefaultMavenOneMetadataHelper
         }
 
         // Goals
-//        Properties configuration = new Properties();
-//
-//        if ( StringUtils.isEmpty( configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) ) )
-//        {
-//            configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean jar:install" );
-//        }
         if ( StringUtils.isEmpty( project.getGoals() ) )
         {
             project.setGoals( "clean:clean jar:install" );
@@ -149,8 +143,6 @@ public class DefaultMavenOneMetadataHelper
         project.setNagEmailAddress( nagEmailAddress );
 
         project.setVersion( version );
-
-//        project.setConfiguration( configuration );
     }
 
     // ----------------------------------------------------------------------

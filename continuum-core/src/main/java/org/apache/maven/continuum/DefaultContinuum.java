@@ -128,12 +128,6 @@ public class DefaultContinuum
         core.updateProjectFromScm( projectId );
     }
 
-//    public void updateProjectConfiguration( String projectId, Properties configuration )
-//        throws ContinuumException
-//    {
-//        core.updateProjectConfiguration( projectId, configuration );
-//    }
-
     public void removeProject( String projectId )
         throws ContinuumException
     {
@@ -236,16 +230,6 @@ public class DefaultContinuum
     public AntProject getAntProject( String projectId )
         throws ContinuumException
     {
-//        ContinuumProject p = getProject( id );
-//
-//        AntProject ap = new AntProject();
-//
-//        copyProject( p, ap );
-//
-//        ap.setTargets( p.getConfiguration().getProperty( AntBuildExecutor.CONFIGURATION_TARGETS ) );
-//
-//        ap.setExecutable( p.getConfiguration().getProperty( AntBuildExecutor.CONFIGURATION_EXECUTABLE ) );
-
         return (AntProject) core.getProject( projectId );
     }
 
@@ -253,20 +237,6 @@ public class DefaultContinuum
         throws ContinuumException
     {
         updateProject( project );
-
-//        // ----------------------------------------------------------------------
-//        // The configuration will be null here because the "executable" and
-//        // "targets" fields in the AntProject are used to create the
-//        // configuration. We probably don't even need the configuration.
-//        // ----------------------------------------------------------------------
-//
-//        Properties configuration = new Properties();
-//
-//        configuration.setProperty( AntBuildExecutor.CONFIGURATION_EXECUTABLE, project.getExecutable() );
-//
-//        configuration.setProperty( AntBuildExecutor.CONFIGURATION_TARGETS, project.getTargets() );
-//
-//        updateProjectConfiguration( project.getId(), configuration );
     }
 
     // ----------------------------------------------------------------------
@@ -332,10 +302,6 @@ public class DefaultContinuum
     public String addMavenOneProject( MavenOneProject project )
         throws ContinuumException
     {
-//        Properties configuration = new Properties();
-//
-//        configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, project.getGoals() );
-
         project.setExecutorId( MavenOneBuildExecutor.ID );
 
         // ----------------------------------------------------------------------
@@ -367,15 +333,6 @@ public class DefaultContinuum
     public MavenOneProject getMavenOneProject( String projectId )
         throws ContinuumException
     {
-//        ContinuumProject p = getProject( projectId );
-//
-//        MavenOneProject mp = new MavenOneProject();
-//
-//        copyProject( p, mp );
-//
-//        mp.setGoals( p.getConfiguration().getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
-//
-//        return mp;
         return (MavenOneProject) core.getProject( projectId );
     }
 
@@ -383,12 +340,6 @@ public class DefaultContinuum
         throws ContinuumException
     {
         updateProject( project );
-
-//        Properties configuration = new Properties();
-//
-//        configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, project.getGoals() );
-//
-//        updateProjectConfiguration( project.getId(), configuration );
     }
 
     // ----------------------------------------------------------------------
@@ -463,12 +414,6 @@ public class DefaultContinuum
     public String addMavenTwoProject( MavenTwoProject project )
         throws ContinuumException
     {
-//        //TODO: these need to go away
-//
-//        Properties configuration = new Properties();
-//
-//        configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, project.getGoals() );
-
         project.setExecutorId( MavenTwoBuildExecutor.ID );
 
         // ----------------------------------------------------------------------
@@ -500,15 +445,6 @@ public class DefaultContinuum
     public MavenTwoProject getMavenTwoProject( String projectId )
         throws ContinuumException
     {
-//        ContinuumProject p = getProject( projectId );
-//
-//        MavenTwoProject mp = new MavenTwoProject();
-//
-//        copyProject( p, mp );
-//
-//        mp.setGoals( p.getConfiguration().getProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) );
-//
-//        return mp;
         return (MavenTwoProject) core.getProject( projectId );
     }
 
@@ -516,14 +452,6 @@ public class DefaultContinuum
         throws ContinuumException
     {
         updateProject( project );
-
-//        Properties configuration = new Properties();
-//
-//        String goals = StringUtils.clean( project.getGoals() );
-//
-//        configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, goals );
-//
-//        updateProjectConfiguration( project.getId(), configuration );
     }
 
     public String addShellProject( ShellProject project )
@@ -539,15 +467,6 @@ public class DefaultContinuum
     public ShellProject getShellProject( String projectId )
         throws ContinuumException
     {
-//        ContinuumProject p = getProject( id );
-//
-//        ShellProject sp = new ShellProject();
-//
-//        copyProject( p, sp );
-//
-//        sp.setExecutable( p.getConfiguration().getProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE ) );
-//
-//        return sp;
         return (ShellProject) core.getProject( projectId );
     }
 
@@ -555,12 +474,6 @@ public class DefaultContinuum
         throws ContinuumException
     {
         updateProject( project );
-
-//        Properties configuration = new Properties();
-//
-//        configuration.setProperty( ShellBuildExecutor.CONFIGURATION_EXECUTABLE, project.getExecutable() );
-//
-//        updateProjectConfiguration( project.getId(), configuration );
     }
 
     // ----------------------------------------------------------------------
@@ -577,19 +490,4 @@ public class DefaultContinuum
                             project.getVersion(),
                             project.getCommandLineArguments() );
     }
-
-//    private void copyProject( ContinuumProject p1, ContinuumProject p2 )
-//    {
-//        p2.setId( p1.getId() );
-//
-//        p2.setName( p1.getName() );
-//
-//        p2.setScmUrl( p1.getScmUrl() );
-//
-//        p2.setNagEmailAddress( p1.getNagEmailAddress() );
-//
-//        p2.setVersion( p1.getVersion() );
-//
-//        p2.setExecutorId( p1.getExecutorId() );
-//    }
 }

@@ -385,38 +385,6 @@ public class ModelloJPoxContinuumStoreTest
                              project2 );
     }
 
-//    public void testUpdateProjectConfiguration()
-//        throws Exception
-//    {
-//        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
-//
-//        String projectId = addProject( "Update Test Project", "scm:update-project" );
-//
-//        ContinuumProject project = store.getProject( projectId );
-//
-//        assertEquals( 0, project.getConfiguration().size() );
-//
-//        // ----------------------------------------------------------------------
-//        //
-//        // ----------------------------------------------------------------------
-//
-//        Properties expected = new Properties();
-//
-//        expected.put( "key", "value" );
-//
-//        store.updateProjectConfiguration( projectId, expected );
-//
-//        Properties actual = store.getProject( projectId ).getConfiguration();
-//
-//        assertNotNull( "The configuration is null", actual );
-//
-//        assertEquals( expected.size(), actual.size() );
-//
-//        assertTrue( actual.containsKey( "key" ) );
-//
-//        assertEquals( "value", actual.getProperty( "key" ) );
-//    }
-
     public void testRemoveProject()
         throws Exception
     {
@@ -727,12 +695,6 @@ public class ModelloJPoxContinuumStoreTest
     // Public utility methods
     // ----------------------------------------------------------------------
 
-//    public static ContinuumProject makeStubProject( String name )
-//    {
-//        return makeStubProject( name,
-//                                "scm:local:src/test/repo" );
-//    }
-
     public static ContinuumProject makeStubProject( String name, String scmUrl )
     {
         return makeProject( name,
@@ -795,12 +757,6 @@ public class ModelloJPoxContinuumStoreTest
         return projectId;
     }
 
-//    public static String addProject( ContinuumStore store, String name )
-//        throws Exception
-//    {
-//        return addProject( store, makeStubProject( name ) );
-//    }
-
     public static String addProject( ContinuumStore store, String name, String scmUrl )
         throws Exception
     {
@@ -817,14 +773,6 @@ public class ModelloJPoxContinuumStoreTest
                                      String workingDirectory  )
         throws Exception
     {
-//        String projectId = store.addProject( name,
-//                                             scmUrl,
-//                                             nagEmailAddress,
-//                                             version,
-//                                             commandLineArguments,
-//                                             executorId,
-//                                             workingDirectory,
-//                                             configuration );
         String projectId = store.addProject( makeProject( name,
                                                           scmUrl,
                                                           nagEmailAddress,
@@ -907,16 +855,5 @@ public class ModelloJPoxContinuumStoreTest
         assertEquals( "project.executorId", builderId, actual.getExecutorId() );
 
         assertEquals( "project.workingDirectory", workingDirectory, actual.getWorkingDirectory() );
-
-//        for ( Iterator it = configuration.keySet().iterator(); it.hasNext(); )
-//        {
-//            String key = (String) it.next();
-//
-//            String value = actual.getConfiguration().getProperty( key );
-//
-//            assertNotNull( "Value for key '" + key + "' was null.", value );
-//
-//            assertEquals( "The values for '" + key + "' doesn't match.", configuration.getProperty( key ), value );
-//        }
     }
 }

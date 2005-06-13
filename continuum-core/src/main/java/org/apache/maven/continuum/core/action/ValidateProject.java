@@ -31,11 +31,10 @@ public class ValidateProject
             throw new ContinuumException( "No such executor with id '" + project.getExecutorId() + "'." );
         }
 
-        // TODO: re-enable
-//        if ( getStore().getProjectByName( project.getName() ) != null )
-//        {
-//            throw new ContinuumException( "A project with the name '" + project.getName() + "' already exist." );
-//        }
+        if ( getStore().getProjectByName( project.getName() ) != null )
+        {
+            throw new ContinuumException( "A project with the name '" + project.getName() + "' already exist." );
+        }
 
 //        if ( getProjectByScmUrl( scmUrl ) != null )
 //        {

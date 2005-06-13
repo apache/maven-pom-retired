@@ -125,15 +125,7 @@
         <requirement>
           <role>org.codehaus.plexus.jdo.JdoFactory</role>
         </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.project.state.ContinuumProjectStateGuard</role>
-        </requirement>
       </requirements>
-    </component>
-
-    <component>
-      <role>org.apache.maven.continuum.project.state.ContinuumProjectStateGuard</role>
-      <implementation>org.apache.maven.continuum.project.state.DefaultContinuumProjectStateGuard</implementation>
     </component>
 
     <!-- Triggers -->

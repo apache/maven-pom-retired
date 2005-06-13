@@ -59,10 +59,6 @@ public class MavenOneBuildExecutor
 
         File workingDirectory = new File( project.getWorkingDirectory() );
 
-//        Properties configuration = project.getConfiguration();
-//
-//        String goals = getConfiguration( configuration, CONFIGURATION_GOALS );
-
         String commandLine = project.getCommandLineArguments() + " " + project.getGoals();
 
         ExecutionResult executionResult;

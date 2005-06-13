@@ -121,10 +121,6 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertTrue( project.getScmUrl().startsWith( scmUrl ) );
 
-//        assertEquals( 1, project.getConfiguration().size() );
-//
-//        assertEquals( "clean:clean install",
-//                      project.getConfiguration().get( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) );
         assertEquals( "clean:clean install", project.getGoals() );
     }
 }

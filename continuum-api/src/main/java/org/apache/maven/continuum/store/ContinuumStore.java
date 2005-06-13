@@ -40,19 +40,6 @@ public interface ContinuumStore
     String addProject( ContinuumProject project )
         throws ContinuumStoreException;
 
-//    /**
-//     * @deprecated
-//     */
-//    String addProject( String name,
-//                       String scmUrl,
-//                       String nagEmailAddress,
-//                       String version,
-//                       String commandLineArguments,
-//                       String executorId,
-//                       String workingDirectory,
-//                       Properties properties )
-//        throws ContinuumStoreException;
-
     void removeProject( String projectId )
         throws ContinuumStoreException;
 
@@ -67,9 +54,6 @@ public interface ContinuumStore
                         String commandLineArguments )
         throws ContinuumStoreException;
 
-//    void updateProjectConfiguration( String projectId, Properties configuration )
-//        throws ContinuumStoreException;
-
     Collection getAllProjects()
         throws ContinuumStoreException;
 
@@ -81,9 +65,6 @@ public interface ContinuumStore
 
     ContinuumProject getProject( String projectId )
         throws ContinuumStoreException;
-
-//    ContinuumProject getProjectByBuild( String buildId )
-//        throws ContinuumStoreException;
 
     CheckOutScmResult getCheckOutScmResultForProject( String projectId )
         throws ContinuumStoreException;

@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumProjectState.java,v 1.1.1.1 2005/03/29 20:42:02 trygvis Exp $
+ * @version $Id$
  */
 public class ContinuumProjectState
     implements Serializable
@@ -52,15 +52,6 @@ public class ContinuumProjectState
      */
 //    public final static ContinuumProjectState ERROR = new ContinuumProjectState( "error" );
     public final static int ERROR = 4;
-
-    /**
-     * This state indicates that this project has been placed on the build queue.
-     * <p/>
-     * Continuum can be configured with a delay from the first build signal to
-     * the actual build starts to make.
-     */
-//    public final static ContinuumProjectState BUILD_SIGNALED = new ContinuumProjectState( "signaled" );
-//    public final static int BUILD_SIGNALED = 5;
 
     /**
      * This state indicates that a project is currently beeing build.

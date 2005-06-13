@@ -303,19 +303,6 @@ public class DefaultContinuumCore
         }
     }
 
-//    public void updateProjectConfiguration( String projectId, Properties configuration )
-//        throws ContinuumException
-//    {
-//        try
-//        {
-//            store.updateProjectConfiguration( projectId, configuration );
-//        }
-//        catch ( ContinuumStoreException ex )
-//        {
-//            throw logAndCreateException( "Error while updating project configuration.", ex );
-//        }
-//    }
-
     public void removeProject( String projectId )
         throws ContinuumException
     {
@@ -488,22 +475,22 @@ public class DefaultContinuumCore
         }
 
         // TODO: Reenable
-//        try
-//        {
-//            if ( store.getProjectByName( project.getName() ) != null )
+        try
+        {
+            if ( store.getProjectByName( project.getName() ) != null )
+            {
+                throw new ContinuumException( "A project with the name '" + project.getName() + "' already exist." );
+            }
+
+//            if ( getProjectByScmUrl( scmUrl ) != null )
 //            {
-//                throw new ContinuumException( "A project with the name '" + project.getName() + "' already exist." );
+//                throw new ContinuumStoreException( "A project with the scm url '" + scmUrl + "' already exist." );
 //            }
-//
-////            if ( getProjectByScmUrl( scmUrl ) != null )
-////            {
-////                throw new ContinuumStoreException( "A project with the scm url '" + scmUrl + "' already exist." );
-////            }
-//        }
-//        catch ( ContinuumStoreException e )
-//        {
-//            throw new ContinuumException( "Error while validating the project.", e );
-//        }
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error while validating the project.", e );
+        }
 
         // ----------------------------------------------------------------------
         // Validate each field
@@ -525,14 +512,6 @@ public class DefaultContinuumCore
             // Store the project
             // ----------------------------------------------------------------------
 
-//            projectId = store.addProject( project.getName(),
-//                                          project.getScmUrl(),
-//                                          project.getNagEmailAddress(),
-//                                          project.getVersion(),
-//                                          project.getCommandLineArguments(),
-//                                          executorId,
-//                                          null,
-//                                          project.getConfiguration() );
             projectId = store.addProject( project );
 
             // ----------------------------------------------------------------------
@@ -647,8 +626,6 @@ public class DefaultContinuumCore
                                  project.getNagEmailAddress(),
                                  project.getVersion(),
                                  project.getCommandLineArguments() );
-
-//            store.updateProjectConfiguration( id, project.getConfiguration() );
         }
         catch ( ContinuumStoreException e )
         {

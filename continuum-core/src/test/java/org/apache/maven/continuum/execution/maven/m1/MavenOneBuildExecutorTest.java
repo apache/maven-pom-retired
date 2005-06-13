@@ -69,10 +69,6 @@ public class MavenOneBuildExecutorTest
 
         project.setGoals( "clean:clean jar:install" );
 
-//        Properties expectedConfiguration = new Properties();
-//
-//        expectedConfiguration.put( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean jar:install" );
-
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
@@ -93,13 +89,6 @@ public class MavenOneBuildExecutorTest
 
         assertEquals( "1.1-SNAPSHOT", project.getVersion() );
 
-//        Properties configuration = project.getConfiguration();
-//
-//        assertNotNull( configuration );
-//
-//        assertEquals( 1, configuration.size() );
-//
-//        assertEquals( "clean:clean jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
         assertEquals( "clean:clean jar:install", project.getGoals() );
     }
 }

@@ -23,7 +23,7 @@ import org.apache.maven.continuum.project.ContinuumProjectState;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: FormatterTool.java,v 1.2 2005/04/03 21:53:22 trygvis Exp $
+ * @version $Id$
  */
 public class FormatterTool
 {
@@ -55,10 +55,6 @@ public class FormatterTool
         {
             return "Error";
         }
-//        else if ( state == ContinuumProjectState.BUILD_SIGNALED )
-//        {
-//            return "Build signaled";
-//        }
         else if ( state == ContinuumProjectState.BUILDING )
         {
             return "Building";

@@ -63,15 +63,11 @@ public class NetCat
 
             while ( ( n = contents.read( buffer ) ) != -1 )
             {
-//                for( int i = 0; i < n; i++)
-//                    System.err.print( (char)buffer[i] );
                 output.write( buffer, 0, n );
             }
 
             while ( ( n = input.read( buffer ) ) != -1 )
             {
-//                for( int i = 0; i < n; i++)
-//                    System.err.print( (char)buffer[i] );
                 result.write( buffer, 0, n );
             }
         }

@@ -52,13 +52,6 @@ public class MavenOneContinuumProjectBuilderTest
 
         assertEquals( "1.1-SNAPSHOT", project.getVersion() );
 
-//        Properties configuration = project.getConfiguration();
-//
-//        assertNotNull( configuration );
-//
-//        assertEquals( 1, configuration.size() );
-//
-//        assertEquals( "clean:clean jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
         assertEquals( "clean:clean jar:install", project.getGoals() );
     }
 }

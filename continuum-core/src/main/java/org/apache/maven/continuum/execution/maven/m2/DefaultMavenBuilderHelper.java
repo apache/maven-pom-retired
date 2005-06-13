@@ -87,12 +87,6 @@ public class DefaultMavenBuilderHelper
             continuumProject.setCommandLineArguments( "-N" );
         }
 
-//        Properties configuration = continuumProject.getConfiguration();
-//
-//        if ( StringUtils.isEmpty( configuration.getProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) ) )
-//        {
-//            configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, "clean:clean install" );
-//        }
         if ( StringUtils.isEmpty( continuumProject.getGoals() ) )
         {
             continuumProject.setGoals( "clean:clean install" );

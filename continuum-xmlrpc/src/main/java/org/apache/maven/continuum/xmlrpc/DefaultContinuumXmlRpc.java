@@ -81,31 +81,6 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-//    public Hashtable updateProjectConfiguration( String projectId,
-//                                                 Hashtable configuration )
-//    {
-//        try
-//        {
-//            Properties configurationProperties = new Properties();
-//
-//            for ( Iterator it = configuration.entrySet().iterator(); it.hasNext(); )
-//            {
-//                Map.Entry entry = (Map.Entry) it.next();
-//
-//                configurationProperties.put( entry.getKey().toString(), entry.getValue().toString() );
-//            }
-//
-//            continuum.updateProjectConfiguration( projectId, configurationProperties );
-//
-//            return makeHashtable();
-//        }
-//        catch ( Throwable e )
-//        {
-//            return handleException( "ContinuumXmlRpc.updateProjectConfiguration()",
-//                                    "Project id: '" + projectId + "'.", e );
-//        }
-//    }
-
     public Hashtable getProject( String projectId )
     {
         try
@@ -536,19 +511,6 @@ public class DefaultContinuumXmlRpc
         ContinuumProject project = (ContinuumProject) object;
 
         Hashtable hashtable = xmlRpcHelper.objectToHashtable( project, excludedProperties );
-
-//        Properties configuration = project.getConfiguration();
-//
-//        Hashtable configurationHashtable = new Hashtable();
-//
-//        for ( Iterator it = configuration.entrySet().iterator(); it.hasNext(); )
-//        {
-//            Map.Entry entry = (Map.Entry) it.next();
-//
-//            configurationHashtable.put( entry.getKey().toString(), entry.getValue().toString() );
-//        }
-//
-//        hashtable.put( "configuration", configurationHashtable );
 
         return hashtable;
     }
