@@ -134,7 +134,7 @@
         <field>
           <name>developers</name>
           <version>1.0.0</version>
-          <association>
+          <association stash.part="true">
             <type>ContinuumDeveloper</type>
             <multiplicity>*</multiplicity>
           </association>
