@@ -77,7 +77,7 @@
         <field>
           <name>builds</name>
           <version>1.0.0</version>
-          <association>
+          <association stash.part="true">
             <type>ContinuumBuild</type>
             <multiplicity>*</multiplicity>
           </association>
