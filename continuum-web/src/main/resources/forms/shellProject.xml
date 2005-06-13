@@ -11,6 +11,10 @@
           <id>required</id>
           <error-message-key>project.executable.error</error-message-key>
         </validator>
+        <validator>
+          <id>safe-path</id>
+          <error-message-key>project.executable.safepath.error</error-message-key>
+        </validator>
       </validators>
       <expression>executable</expression>
       <type>text</type>

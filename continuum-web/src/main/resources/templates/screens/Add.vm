@@ -1,3 +1,4 @@
+$page.setTitle( "Add Project" )
 #if ( !$fid )
   #set ( $fid = $data.getParameters().getString( "fid" ) )
 #end
