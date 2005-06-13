@@ -17,6 +17,7 @@ package org.apache.maven.continuum.xmlrpc;
  */
 
 import java.util.Hashtable;
+import java.util.Date;
 
 import org.codehaus.plexus.PlexusTestCase;
 
@@ -119,6 +120,10 @@ public class XmlRpcHelperTest
         }
 
         public void getBar( int value )
+        {
+        }
+
+        public void setNonConvertableField( Date date )
         {
         }
     }
@@ -229,6 +234,34 @@ public class XmlRpcHelperTest
         xmlRpcHelper.hashtableToObject( hashtable, bean );
 
         assertEquals( "foo", bean.getFoo() );
+
+        assertEquals( 17, bean.getBar() );
+
+        assertEquals( true, bean.isBool() );
+    }
+
+    public void testHashtableToObjectWithStringArguments()
+        throws Exception
+    {
+        XmlRpcHelper xmlRpcHelper = (XmlRpcHelper) lookup( XmlRpcHelper.ROLE );
+
+        SimleBean bean = new SimleBean();
+
+        Hashtable hashtable = new Hashtable();
+
+        hashtable.put( "foo", "foo" );
+
+        hashtable.put( "bar", new Integer( 17 ).toString() );
+
+        hashtable.put( "bool", Boolean.TRUE.toString() );
+
+        xmlRpcHelper.hashtableToObject( hashtable, bean );
+
+        assertEquals( "foo", bean.getFoo() );
+
+        assertEquals( 17, bean.getBar() );
+
+        assertEquals( true, bean.isBool() );
     }
 
     // ----------------------------------------------------------------------

@@ -17,7 +17,6 @@ package org.apache.maven.continuum.execution.maven.m1;
  */
 
 import java.io.File;
-import java.util.Properties;
 
 import org.apache.maven.continuum.execution.AbstractBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
@@ -26,6 +25,7 @@ import org.apache.maven.continuum.execution.shell.ExecutionResult;
 import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenOneProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -52,16 +52,18 @@ public class MavenOneBuildExecutor
     // Builder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildResult build( ContinuumProject project )
+    public ContinuumBuildResult build( ContinuumProject p )
         throws ContinuumBuildExecutorException
     {
-        Properties configuration = project.getConfiguration();
+        MavenOneProject project = (MavenOneProject) p;
 
         File workingDirectory = new File( project.getWorkingDirectory() );
 
-        String goals = getConfiguration( configuration, CONFIGURATION_GOALS );
+//        Properties configuration = project.getConfiguration();
+//
+//        String goals = getConfiguration( configuration, CONFIGURATION_GOALS );
 
-        String commandLine = project.getCommandLineArguments() + " " + goals;
+        String commandLine = project.getCommandLineArguments() + " " + project.getGoals();
 
         ExecutionResult executionResult;
 
@@ -103,7 +105,7 @@ public class MavenOneBuildExecutor
 
         try
         {
-            metadataHelper.mapMetadata( projectXmlFile, project );
+            metadataHelper.mapMetadata( projectXmlFile, (MavenOneProject) project );
         }
         catch ( MavenOneMetadataHelperException e )
         {

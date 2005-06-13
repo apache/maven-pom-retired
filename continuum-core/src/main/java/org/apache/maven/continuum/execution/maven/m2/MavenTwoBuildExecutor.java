@@ -25,6 +25,7 @@ import org.apache.maven.continuum.execution.shell.ExecutionResult;
 import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenTwoProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -59,17 +60,18 @@ public class MavenTwoBuildExecutor
     // ContinuumBuilder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildResult build( ContinuumProject project )
+    public ContinuumBuildResult build( ContinuumProject p )
         throws ContinuumBuildExecutorException
     {
+        MavenTwoProject project = (MavenTwoProject) p;
+
         File workingDirectory = new File( project.getWorkingDirectory() );
 
         ExecutionResult executionResult;
 
         try
         {
-            String arguments = project.getCommandLineArguments() + " " +
-                               getConfiguration( project.getConfiguration(), CONFIGURATION_GOALS );
+            String arguments = project.getCommandLineArguments() + " " + project.getGoals();
 
             executionResult = shellCommandHelper.executeShellCommand( workingDirectory,
                                                                       executable,
@@ -102,7 +104,7 @@ public class MavenTwoBuildExecutor
 
         try
         {
-            builderHelper.mapMetadataToProject( f, project );
+            builderHelper.mapMetadataToProject( f, (MavenTwoProject) project );
         }
         catch ( MavenBuilderHelperException e )
         {

@@ -17,10 +17,8 @@ package org.apache.maven.continuum.execution.maven.m1;
  */
 
 import java.io.File;
-import java.util.Properties;
 
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 
 import org.codehaus.plexus.PlexusTestCase;
@@ -59,7 +57,7 @@ public class MavenOneBuildExecutorTest
         // Make the "existing" project
         // ----------------------------------------------------------------------
 
-        ContinuumProject project = new MavenOneProject();
+        MavenOneProject project = new MavenOneProject();
 
         project.setName( "Maven" );
 
@@ -69,9 +67,11 @@ public class MavenOneBuildExecutorTest
 
         project.setVersion( "1.1-SNAPSHOT" );
 
-        Properties expectedConfiguration = new Properties();
+        project.setGoals( "clean:clean jar:install" );
 
-        expectedConfiguration.put( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean jar:install" );
+//        Properties expectedConfiguration = new Properties();
+//
+//        expectedConfiguration.put( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean jar:install" );
 
         // ----------------------------------------------------------------------
         //
@@ -93,12 +93,13 @@ public class MavenOneBuildExecutorTest
 
         assertEquals( "1.1-SNAPSHOT", project.getVersion() );
 
-        Properties configuration = project.getConfiguration();
-
-        assertNotNull( configuration );
-
-        assertEquals( 1, configuration.size() );
-
-        assertEquals( "clean:clean jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
+//        Properties configuration = project.getConfiguration();
+//
+//        assertNotNull( configuration );
+//
+//        assertEquals( 1, configuration.size() );
+//
+//        assertEquals( "clean:clean jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
+        assertEquals( "clean:clean jar:install", project.getGoals() );
     }
 }

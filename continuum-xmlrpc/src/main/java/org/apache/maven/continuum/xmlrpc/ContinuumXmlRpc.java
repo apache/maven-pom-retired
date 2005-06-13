@@ -37,8 +37,8 @@ public interface ContinuumXmlRpc
 
     Hashtable removeProject( String projectId );
 
-    Hashtable updateProjectConfiguration( String projectId,
-                                          Hashtable configuration );
+//    Hashtable updateProjectConfiguration( String projectId,
+//                                          Hashtable configuration );
 
     Hashtable getProject( String projectId );
 
@@ -87,15 +87,21 @@ public interface ContinuumXmlRpc
 
     Hashtable addMavenOneProject( Hashtable mavenOneProject );
 
+    Hashtable updateMavenOneProject( Hashtable mavenOneProject );
+
     // ----------------------------------------------------------------------
     // Ant projects
     // ----------------------------------------------------------------------
 
     Hashtable addAntProject( Hashtable antProject );
 
+    Hashtable updateAntProject( Hashtable antProject );
+
     // ----------------------------------------------------------------------
     // Shell projects
     // ----------------------------------------------------------------------
 
     Hashtable addShellProject( Hashtable shellProject );
+
+    Hashtable updateShellProject( Hashtable shellProject );
 }

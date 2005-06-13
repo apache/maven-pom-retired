@@ -26,6 +26,7 @@ import org.apache.maven.continuum.execution.shell.ExecutionResult;
 import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.AntProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -56,16 +57,21 @@ public class AntBuildExecutor
     // ContinuumBuilder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildResult build( ContinuumProject project )
+    public ContinuumBuildResult build( ContinuumProject p )
         throws ContinuumBuildExecutorException
     {
+        AntProject project = (AntProject) p;
+
         File workingDirectory = new File( project.getWorkingDirectory() );
 
-        Properties configuration = project.getConfiguration();
+//        Properties configuration = project.getConfiguration();
+//
+//        String executable = getConfiguration( configuration, CONFIGURATION_EXECUTABLE );
+//
+//        String targets = getConfiguration( configuration, CONFIGURATION_TARGETS );
+        String executable = project.getExecutable();
 
-        String executable = getConfiguration( configuration, CONFIGURATION_EXECUTABLE );
-
-        String targets = getConfiguration( configuration, CONFIGURATION_TARGETS );
+        String targets = project.getTargets();
 
         ExecutionResult executionResult;
 

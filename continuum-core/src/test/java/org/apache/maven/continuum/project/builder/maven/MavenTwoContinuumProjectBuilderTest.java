@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -122,9 +121,10 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertTrue( project.getScmUrl().startsWith( scmUrl ) );
 
-        assertEquals( 1, project.getConfiguration().size() );
-
-        assertEquals( "clean:clean install",
-                      project.getConfiguration().get( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) );
+//        assertEquals( 1, project.getConfiguration().size() );
+//
+//        assertEquals( "clean:clean install",
+//                      project.getConfiguration().get( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) );
+        assertEquals( "clean:clean install", project.getGoals() );
     }
 }

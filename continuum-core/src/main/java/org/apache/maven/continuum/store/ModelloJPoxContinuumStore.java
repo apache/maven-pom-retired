@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
@@ -101,41 +100,41 @@ public class ModelloJPoxContinuumStore
         return project.getId();
     }
 
-    public String addProject( String name,
-                              String scmUrl,
-                              String nagEmailAddress,
-                              String version,
-                              String commandLineArguments,
-                              String executorId,
-                              String workingDirectory,
-                              Properties configuration )
-        throws ContinuumStoreException
-    {
-        ContinuumProject project = new ContinuumProject();
-
-        project.setName( name );
-        project.setScmUrl( scmUrl );
-        project.setNagEmailAddress( nagEmailAddress );
-        project.setVersion( version );
-        project.setCommandLineArguments( commandLineArguments );
-        project.setExecutorId( executorId );
-        project.setWorkingDirectory( workingDirectory );
-        project.setState( ContinuumProjectState.CHECKING_OUT );
-        project.setConfiguration( configuration );
-
-        try
-        {
-            Object id = store.addContinuumProject( project );
-
-            project = store.getContinuumProjectByJdoId( id, true );
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumStoreException( "Error while adding a project.", e );
-        }
-
-        return project.getId();
-    }
+//    public String addProject( String name,
+//                              String scmUrl,
+//                              String nagEmailAddress,
+//                              String version,
+//                              String commandLineArguments,
+//                              String executorId,
+//                              String workingDirectory,
+//                              Properties configuration )
+//        throws ContinuumStoreException
+//    {
+//        ContinuumProject project = new ContinuumProject();
+//
+//        project.setName( name );
+//        project.setScmUrl( scmUrl );
+//        project.setNagEmailAddress( nagEmailAddress );
+//        project.setVersion( version );
+//        project.setCommandLineArguments( commandLineArguments );
+//        project.setExecutorId( executorId );
+//        project.setWorkingDirectory( workingDirectory );
+//        project.setState( ContinuumProjectState.CHECKING_OUT );
+//        project.setConfiguration( configuration );
+//
+//        try
+//        {
+//            Object id = store.addContinuumProject( project );
+//
+//            project = store.getContinuumProjectByJdoId( id, true );
+//        }
+//        catch ( Exception e )
+//        {
+//            throw new ContinuumStoreException( "Error while adding a project.", e );
+//        }
+//
+//        return project.getId();
+//    }
 
     public void removeProject( String projectId )
         throws ContinuumStoreException
@@ -273,28 +272,28 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public void updateProjectConfiguration( String projectId, Properties configuration )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            projectStateGuard.assertUpdatable( project );
-
-            project.setConfiguration( configuration );
-
-            store.commit();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while updating project configuration.", e );
-        }
-    }
+//    public void updateProjectConfiguration( String projectId, Properties configuration )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumProject project = store.getContinuumProject( projectId, false );
+//
+//            projectStateGuard.assertUpdatable( project );
+//
+//            project.setConfiguration( configuration );
+//
+//            store.commit();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while updating project configuration.", e );
+//        }
+//    }
 
     public Collection getAllProjects()
         throws ContinuumStoreException

@@ -18,12 +18,10 @@ package org.apache.maven.continuum.store;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 
@@ -42,18 +40,18 @@ public interface ContinuumStore
     String addProject( ContinuumProject project )
         throws ContinuumStoreException;
 
-    /**
-     * @deprecated
-     */
-    String addProject( String name,
-                       String scmUrl,
-                       String nagEmailAddress,
-                       String version,
-                       String commandLineArguments,
-                       String executorId,
-                       String workingDirectory,
-                       Properties properties )
-        throws ContinuumStoreException;
+//    /**
+//     * @deprecated
+//     */
+//    String addProject( String name,
+//                       String scmUrl,
+//                       String nagEmailAddress,
+//                       String version,
+//                       String commandLineArguments,
+//                       String executorId,
+//                       String workingDirectory,
+//                       Properties properties )
+//        throws ContinuumStoreException;
 
     void removeProject( String projectId )
         throws ContinuumStoreException;
@@ -69,8 +67,8 @@ public interface ContinuumStore
                         String commandLineArguments )
         throws ContinuumStoreException;
 
-    void updateProjectConfiguration( String projectId, Properties configuration )
-        throws ContinuumStoreException;
+//    void updateProjectConfiguration( String projectId, Properties configuration )
+//        throws ContinuumStoreException;
 
     Collection getAllProjects()
         throws ContinuumStoreException;

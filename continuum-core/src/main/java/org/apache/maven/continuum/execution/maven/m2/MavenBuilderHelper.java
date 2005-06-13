@@ -19,21 +19,22 @@ package org.apache.maven.continuum.execution.maven.m2;
 import java.io.File;
 
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.project.MavenProject;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: MavenBuilderHelper.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
+ * @version $Id$
  */
 public interface MavenBuilderHelper
 {
     String ROLE = MavenBuilderHelper.class.getName();
 
-    void mapMetadataToProject( File metadata, ContinuumProject project )
+    void mapMetadataToProject( File metadata, MavenTwoProject project )
         throws MavenBuilderHelperException;
 
     MavenProject getMavenProject( File file )
         throws MavenBuilderHelperException;
 
-    void mapMavenProjectToContinuumProject( MavenProject mavenProject, ContinuumProject continuumProject );
+    void mapMavenProjectToContinuumProject( MavenProject mavenProject, MavenTwoProject continuumProject );
 }

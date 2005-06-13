@@ -18,9 +18,8 @@ package org.apache.maven.continuum.execution.maven.m1;
 
 import java.io.File;
 import java.io.FileReader;
-import java.util.Properties;
 
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenOneProject;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -39,7 +38,7 @@ public class DefaultMavenOneMetadataHelper
     // MavenOneMetadataHelper Implementation
     // ----------------------------------------------------------------------
 
-    public void mapMetadata( File metadata, ContinuumProject project )
+    public void mapMetadata( File metadata, MavenOneProject project )
         throws MavenOneMetadataHelperException
     {
         Xpp3Dom mavenProject;
@@ -128,11 +127,15 @@ public class DefaultMavenOneMetadataHelper
         }
 
         // Goals
-        Properties configuration = new Properties();
-
-        if ( StringUtils.isEmpty( configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) ) )
+//        Properties configuration = new Properties();
+//
+//        if ( StringUtils.isEmpty( configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) ) )
+//        {
+//            configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean jar:install" );
+//        }
+        if ( StringUtils.isEmpty( project.getGoals() ) )
         {
-            configuration.setProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS, "clean:clean jar:install" );
+            project.setGoals( "clean:clean jar:install" );
         }
 
         // ----------------------------------------------------------------------
@@ -147,7 +150,7 @@ public class DefaultMavenOneMetadataHelper
 
         project.setVersion( version );
 
-        project.setConfiguration( configuration );
+//        project.setConfiguration( configuration );
     }
 
     // ----------------------------------------------------------------------

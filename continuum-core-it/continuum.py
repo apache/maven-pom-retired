@@ -28,34 +28,34 @@ def checkResult( map ):
     raise ex
 
 def decodeState( state ):
-    if ( state == 1 ):
-        return Continuum.STATE_NEW
-    elif ( state == 2 ):
-        return Continuum.STATE_OK
-    elif ( state == 3 ):
-        return Continuum.STATE_FAILED
-    elif ( state == 4 ):
-        return Continuum.STATE_ERROR
+    if ( state == Continuum.STATE_NEW ):
+        return "new"
+    elif ( state == Continuum.STATE_OK ):
+        return "ok"
+    elif ( state == Continuum.STATE_FAILED ):
+        return "failed"
+    elif ( state == Continuum.STATE_ERROR ):
+        return "error"
 #    elif ( state == 5 ):
 #        return Continuum.STATE_BUILD_SIGNALED
-    elif ( state == 6 ):
-        return Continuum.STATE_BUILDING
-    elif ( state == 7 ):
-        return Continuum.STATE_CHECKING_OUT
-    elif ( state == 8 ):
-        return Continuum.STATE_UPDATING
+    elif ( state == Continuum.STATE_BUILDING ):
+        return "building"
+    elif ( state == Continuum.STATE_CHECKING_OUT ):
+        return "checking out"
+    elif ( state == Continuum.STATE_UPDATING ):
+        return "updating"
     else:
         return "UNKNOWN STATE (" + str( state ) + ")."
 
 class Continuum:
-    STATE_NEW = "new"
-    STATE_OK = "ok"
-    STATE_FAILED = "failed"
-    STATE_ERROR = "error"
+    STATE_NEW = 1
+    STATE_OK = 2
+    STATE_FAILED = 3
+    STATE_ERROR = 4
     #STATE_BUILD_SIGNALED = "build signaled"
-    STATE_BUILDING = "building"
-    STATE_CHECKING_OUT = "checking out"
-    STATE_UPDATING = "updating"
+    STATE_BUILDING = 6
+    STATE_CHECKING_OUT = 7
+    STATE_UPDATING = 8
 
     def __init__( self, url ):
         self.server = xmlrpclib.Server(url, allow_none=True)
@@ -80,20 +80,20 @@ class Continuum:
     #def updateProjectFromScm( projectId ):
     #    checkResult( server.continuum.updateProjectFromScm( projectId ) )
 
-    def updateProjectConfiguration( self, projectId, configuration ):
-        checkResult( self.server.continuum.updateProjectConfiguration( projectId, configuration ) )
+    #def updateProjectConfiguration( self, projectId, configuration ):
+    #    checkResult( self.server.continuum.updateProjectConfiguration( projectId, configuration ) )
 
     def getProject( self, projectId ):
         result = checkResult( self.server.continuum.getProject( projectId ) )
 
-        return Project( result[ "project" ] )
+        return self.makeProject( result[ "project" ] )
 
     def getProjects( self ):
         result = checkResult( self.server.continuum.getAllProjects() )
 
         projects = []
         for project in result[ "projects" ]:
-            projects.append( Project( project ) )
+            projects.append( self.makeProject( project ) )
 
         return projects
 
@@ -168,7 +168,10 @@ class Continuum:
     def addAntProject( self, antProject ):
         result = checkResult( self.server.continuum.addAntProject( antProject ) )
 
-        return result[ "projectId" ]
+        return result[ "projectIds" ]
+
+    def updateAntProject( self, antProject ):
+        checkResult( self.server.continuum.updateAntProject( antProject ) )
 
     ####################################################################
     # Shell projects
@@ -177,7 +180,28 @@ class Continuum:
     def addShellProject( self, shellProject ):
         result = checkResult( self.server.continuum.addShellProject( shellProject ) )
 
-        return result[ "projectId" ]
+        return result[ "projectIds" ]
+
+    def updateShellProject( self, shellProject ):
+        checkResult( self.server.continuum.updateShellProject( shellProject ) )
+
+    ####################################################################
+    #
+    ####################################################################
+
+    def makeProject( self, map ):
+        executorId = map[ "executorId" ]
+        if ( executorId == "maven2" ):
+            return MavenTwoProject( map )
+        elif ( executorId == "maven-1" ):
+            return MavenOneProject( map )
+        elif ( executorId == "ant" ):
+            return AntProject( map )
+        elif ( executorId == "shell" ):
+            return ShellProject( map )
+        else:
+            raise Exception( "Unknown executor id '" + executorId + "'." );
+
 
 ####################################################################
 # Domain classes
@@ -190,14 +214,14 @@ class Project:
         if ( map == None ):
             return
 
-        map[ "state" ] = decodeState( int( map[ "state" ] ) )
+#        map[ "state" ] = decodeState( int( map[ "state" ] ) )
         self.id = map[ "id" ]
         self.name = map[ "name" ]
         self.scmUrl = map[ "scmUrl" ]
         self.nagEmailAddress = map[ "nagEmailAddress" ]
         self.version = map[ "version" ]
         self.workingDirectory = map[ "workingDirectory" ]
-        self.state = map[ "state" ]
+        self.state = int( map[ "state" ] )
         self.executorId = map[ "executorId" ]
 
         if ( map.has_key( "commandLineArguments" ) ):
@@ -205,7 +229,7 @@ class Project:
         else:
             self.commandLineArguments = ""
 
-        self.configuration = map[ "configuration" ]
+#        self.configuration = map[ "configuration" ]
 
         if ( map.has_key( "checkOutScmResult" ) ):
             self.checkOutScmResult = CheckOutScmResult( map[ "checkOutScmResult" ] )
@@ -224,17 +248,43 @@ class Project:
         s = "id: " + self.id + os.linesep +\
             "name: " + self.name + os.linesep +\
             "nagEmailAddress: " + self.nagEmailAddress + os.linesep +\
-            "state: " + self.state + os.linesep +\
+            "state: " + decodeState( self.state ) + os.linesep +\
             "version: " + self.version + os.linesep +\
             "executor id: " + self.executorId + os.linesep
 
-        if ( len( self.configuration.keys() ) > 0 ):
-            conf = ""
-            for key in self.configuration.keys():
-                conf += os.linesep + key + "=" + self.configuration[ key ]
-            s += conf
+#        if ( len( self.configuration.keys() ) > 0 ):
+#            conf = ""
+#            for key in self.configuration.keys():
+#                conf += os.linesep + key + "=" + self.configuration[ key ]
+#            s += conf
 
         return s
+
+class MavenTwoProject( Project ):
+    def __init__( self, map=None ):
+        Project.__init__( self, map )
+
+        if ( map == None ):
+            return
+    
+        self.goals = map[ "goals" ]
+
+    def __str__( self ):
+        return Project.__str__( self ) + os.linesep +\
+               "goals: " + self.goals + os.linesep
+
+class MavenOneProject( Project ):
+    def __init__( self, map=None ):
+        Project.__init__( self, map )
+
+        if ( map == None ):
+            return
+    
+        self.goals = map[ "goals" ]
+
+    def __str__( self ):
+        return Project.__str__( self ) + os.linesep +\
+               "goals: " + self.goals + os.linesep
 
 class AntProject( Project ):
     def __init__( self, map=None ):
@@ -251,16 +301,29 @@ class AntProject( Project ):
                "executable: " + self.executable + os.linesep +\
                "targets: " + self.targets + os.linesep
 
+class ShellProject( Project ):
+    def __init__( self, map=None ):
+        Project.__init__( self, map )
+
+        if ( map == None ):
+            return
+    
+        self.executable = map[ "executable" ]
+
+    def __str__( self ):
+        return Project.__str__( self ) + os.linesep +\
+               "executable: " + self.executable + os.linesep
+
 class Build:
     def __init__( self, map ):
-        map[ "state" ] = decodeState( int( map[ "state" ] ) )
+        #map[ "state" ] = decodeState( int( map[ "state" ] ) )
         map[ "forced" ] = bool( map[ "forced" ] )
         map[ "totalTime" ] = int( map[ "endTime" ] )/ 1000 - int( map[ "startTime" ] ) / 1000
         map[ "startTime" ] = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime( int( map[ "startTime" ] ) / 1000 ) )
         map[ "endTime" ] = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime( int( map[ "endTime" ] ) / 1000 ) )
 
         self.id = map[ "id" ]
-        self.state = map[ "state" ]
+        self.state = int( map[ "state" ] )
         self.forced = map[ "forced" ]
         self.startTime = map[ "startTime" ]
         self.endTime = map[ "endTime" ]
@@ -277,17 +340,15 @@ class Build:
             map[ "error" ] = ""
 
     def __str__( self ):
-        value = """Id: %(id)s
-State: %(state)s
-Start time: %(startTime)s
-End time: %(endTime)s
-Build time: %(totalTime)ss
-""" % self.map
+        s = "Id: " + self.id + os.linesep +\
+            "State: " + decodeState( self.state ) + os.linesep +\
+            "End time: " + self.endTime + os.linesep +\
+            "Build time: " + self.totalTime + os.linesep
 
         if ( self.error != "" ):
-            value += "Error: %(error)s" % self.map
+            s += "Error: %(error)s" % self.map
 
-        return value
+        return s
 
 class BuildResult:
     def __init__( self, map ):

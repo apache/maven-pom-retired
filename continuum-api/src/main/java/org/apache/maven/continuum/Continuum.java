@@ -17,7 +17,6 @@ package org.apache.maven.continuum;
  */
 
 import java.util.Collection;
-import java.util.Properties;
 
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -44,9 +43,9 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     void updateProjectFromScm( String projectId )
         throws ContinuumException;
 
-    void updateProjectConfiguration( String projectId,
-                                     Properties configuration )
-        throws ContinuumException;
+//    void updateProjectConfiguration( String projectId,
+//                                     Properties configuration )
+//        throws ContinuumException;
 
     ContinuumProject getProject( String projectId )
         throws ContinuumException;

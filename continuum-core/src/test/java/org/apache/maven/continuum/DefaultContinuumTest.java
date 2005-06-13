@@ -51,7 +51,7 @@ public class DefaultContinuumTest
         lookup( TaskQueueExecutor.ROLE, "check-out-project" );
     }
 
-    public void testUpdateProject()
+    public void testUpdateMavenTwoProject()
         throws Exception
     {
         Continuum continuum = (Continuum) lookup( Continuum.ROLE );
@@ -82,7 +82,7 @@ public class DefaultContinuumTest
 
         continuum.updateMavenTwoProject( project );
 
-        project = (MavenTwoProject) store.getProject( project.getId() );
+        project = continuum.getMavenTwoProject( project.getId() );
 
         assertNotNull( "The command line arguments are null.", project.getCommandLineArguments() );
     }

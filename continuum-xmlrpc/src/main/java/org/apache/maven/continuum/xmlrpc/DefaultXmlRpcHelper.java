@@ -122,6 +122,14 @@ public class DefaultXmlRpcHelper
 //            {
 //            }
 
+            value = convertValueToSetterType( setter.getParameterTypes()[ 0 ], value );
+
+            if ( value == null )
+            {
+                continue;
+            }
+
+            getLogger().info( "Invoking " + setter.toString() + " with " + value.getClass().getName() );
             setter.invoke( target, new Object[]{value} );
         }
     }
@@ -302,6 +310,8 @@ public class DefaultXmlRpcHelper
         {
             getLogger().warn( "No setter for field '" + key + "' on the class '" + clazz.getName() + "'. " +
                               "The class has multiple setters for the field." );
+
+            return null;
         }
 
         return setter;
@@ -335,5 +345,48 @@ public class DefaultXmlRpcHelper
         }
 
         return map;
+    }
+
+    private Object convertValueToSetterType( Class type, Object value )
+    {
+        if ( value.equals( type.getClass() ) )
+        {
+            return value;
+        }
+
+        if ( type == String.class )
+        {
+            return value;
+        }
+
+        if ( type.getClass().equals( Integer.class ) || type.equals( int.class )  )
+        {
+            if ( value.getClass().equals( String.class ) )
+            {
+                return new Integer( (String) value );
+            }
+
+            if ( value.getClass().equals( Integer.class ) || value.getClass().equals( int.class ) )
+            {
+                return value;
+            }
+        }
+
+        if ( type.getClass().equals( Boolean.class ) || type.equals( boolean.class ) )
+        {
+            if ( value.getClass().equals( String.class ) )
+            {
+                return new Boolean( (String) value );
+            }
+
+            if ( value.getClass().equals( Boolean.class ) || value.getClass().equals( boolean.class ) )
+            {
+                return value;
+            }
+        }
+
+        getLogger().error( "Could not convert a " + value.getClass().getName() + " to a " + type.getName() );
+
+        return null;
     }
 }

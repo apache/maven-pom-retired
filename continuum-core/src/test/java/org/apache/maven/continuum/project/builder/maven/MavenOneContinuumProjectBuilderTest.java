@@ -16,10 +16,7 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
-import java.util.Properties;
-
-import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 
@@ -43,7 +40,7 @@ public class MavenOneContinuumProjectBuilderTest
 
         assertEquals( 1, result.getProjects().size() );
 
-        ContinuumProject project = ( ContinuumProject ) result.getProjects().get( 0 );
+        MavenOneProject project = (MavenOneProject) result.getProjects().get( 0 );
 
         assertNotNull( project );
 
@@ -55,12 +52,13 @@ public class MavenOneContinuumProjectBuilderTest
 
         assertEquals( "1.1-SNAPSHOT", project.getVersion() );
 
-        Properties configuration = project.getConfiguration();
-
-        assertNotNull( configuration );
-
-        assertEquals( 1, configuration.size() );
-
-        assertEquals( "clean:clean jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
+//        Properties configuration = project.getConfiguration();
+//
+//        assertNotNull( configuration );
+//
+//        assertEquals( 1, configuration.size() );
+//
+//        assertEquals( "clean:clean jar:install", configuration.getProperty( MavenOneBuildExecutor.CONFIGURATION_GOALS ) );
+        assertEquals( "clean:clean jar:install", project.getGoals() );
     }
 }

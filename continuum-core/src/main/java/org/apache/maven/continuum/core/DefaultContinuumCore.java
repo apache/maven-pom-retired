@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
@@ -202,7 +201,7 @@ public class DefaultContinuumCore
         {
             ContinuumProject project = (ContinuumProject) it.next();
 
-            project = addProjectAndCheckOutSources( project, project.getExecutorId() );
+            project = addProjectAndCheckOutSources( project );
 
             ids.add( project.getId() );
         }
@@ -210,35 +209,9 @@ public class DefaultContinuumCore
         return ids;
     }
 
-    public String addProjectFromScm( String scmUrl,
-                                     String executorId,
-                                     String projectName,
-                                     String nagEmailAddress,
-                                     String version,
-                                     String commandLineArugments,
-                                     Properties configuration )
+    public String addProjectFromScm( ContinuumProject project )
         throws ContinuumException
     {
-        // ----------------------------------------------------------------------
-        // Create the stub project
-        // ----------------------------------------------------------------------
-
-        ContinuumProject project = new ContinuumProject();
-
-        project.setScmUrl( scmUrl );
-
-        project.setExecutorId( executorId );
-
-        project.setName( projectName );
-
-        project.setNagEmailAddress( nagEmailAddress );
-
-        project.setVersion( version );
-
-        project.setCommandLineArguments( commandLineArugments );
-
-        project.setConfiguration( configuration );
-
         // ----------------------------------------------------------------------
         // Validate the project
         // ----------------------------------------------------------------------
@@ -255,7 +228,7 @@ public class DefaultContinuumCore
         //
         // ----------------------------------------------------------------------
 
-        project = addProjectAndCheckOutSources( project, executorId );
+        project = addProjectAndCheckOutSources( project );
 
         updateProjectFromCheckOut( project );
 
@@ -330,18 +303,18 @@ public class DefaultContinuumCore
         }
     }
 
-    public void updateProjectConfiguration( String projectId, Properties configuration )
-        throws ContinuumException
-    {
-        try
-        {
-            store.updateProjectConfiguration( projectId, configuration );
-        }
-        catch ( ContinuumStoreException ex )
-        {
-            throw logAndCreateException( "Error while updating project configuration.", ex );
-        }
-    }
+//    public void updateProjectConfiguration( String projectId, Properties configuration )
+//        throws ContinuumException
+//    {
+//        try
+//        {
+//            store.updateProjectConfiguration( projectId, configuration );
+//        }
+//        catch ( ContinuumStoreException ex )
+//        {
+//            throw logAndCreateException( "Error while updating project configuration.", ex );
+//        }
+//    }
 
     public void removeProject( String projectId )
         throws ContinuumException
@@ -514,22 +487,23 @@ public class DefaultContinuumCore
             throw logAndCreateException( "No such executor with id '" + project.getExecutorId() + "'." );
         }
 
-        try
-        {
-            if ( store.getProjectByName( project.getName() ) != null )
-            {
-                throw new ContinuumException( "A project with the name '" + project.getName() + "' already exist." );
-            }
-
-//            if ( getProjectByScmUrl( scmUrl ) != null )
+        // TODO: Reenable
+//        try
+//        {
+//            if ( store.getProjectByName( project.getName() ) != null )
 //            {
-//                throw new ContinuumStoreException( "A project with the scm url '" + scmUrl + "' already exist." );
+//                throw new ContinuumException( "A project with the name '" + project.getName() + "' already exist." );
 //            }
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new ContinuumException( "Error while validating the project.", e );
-        }
+//
+////            if ( getProjectByScmUrl( scmUrl ) != null )
+////            {
+////                throw new ContinuumStoreException( "A project with the scm url '" + scmUrl + "' already exist." );
+////            }
+//        }
+//        catch ( ContinuumStoreException e )
+//        {
+//            throw new ContinuumException( "Error while validating the project.", e );
+//        }
 
         // ----------------------------------------------------------------------
         // Validate each field
@@ -538,7 +512,7 @@ public class DefaultContinuumCore
         project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
     }
 
-    private ContinuumProject addProjectAndCheckOutSources( ContinuumProject project, String executorId )
+    private ContinuumProject addProjectAndCheckOutSources( ContinuumProject project  )
         throws ContinuumException
     {
         String projectId;
@@ -551,14 +525,15 @@ public class DefaultContinuumCore
             // Store the project
             // ----------------------------------------------------------------------
 
-            projectId = store.addProject( project.getName(),
-                                          project.getScmUrl(),
-                                          project.getNagEmailAddress(),
-                                          project.getVersion(),
-                                          project.getCommandLineArguments(),
-                                          executorId,
-                                          null,
-                                          project.getConfiguration() );
+//            projectId = store.addProject( project.getName(),
+//                                          project.getScmUrl(),
+//                                          project.getNagEmailAddress(),
+//                                          project.getVersion(),
+//                                          project.getCommandLineArguments(),
+//                                          executorId,
+//                                          null,
+//                                          project.getConfiguration() );
+            projectId = store.addProject( project );
 
             // ----------------------------------------------------------------------
             // Set the working directory
@@ -673,7 +648,7 @@ public class DefaultContinuumCore
                                  project.getVersion(),
                                  project.getCommandLineArguments() );
 
-            store.updateProjectConfiguration( id, project.getConfiguration() );
+//            store.updateProjectConfiguration( id, project.getConfiguration() );
         }
         catch ( ContinuumStoreException e )
         {

@@ -19,18 +19,17 @@ package org.apache.maven.continuum.execution.maven.m2;
 import java.io.File;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Properties;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumDeveloper;
+import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.model.CiManagement;
+import org.apache.maven.model.Developer;
 import org.apache.maven.model.Notifier;
 import org.apache.maven.model.Repository;
 import org.apache.maven.model.Scm;
-import org.apache.maven.model.Developer;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.settings.MavenSettingsBuilder;
@@ -67,13 +66,13 @@ public class DefaultMavenBuilderHelper
     // MavenBuilderHelper Implementation
     // ----------------------------------------------------------------------
 
-    public void mapMetadataToProject( File metadata, ContinuumProject continuumProject )
+    public void mapMetadataToProject( File metadata, MavenTwoProject continuumProject )
         throws MavenBuilderHelperException
     {
         mapMavenProjectToContinuumProject( getMavenProject( metadata ), continuumProject );
     }
 
-    public void mapMavenProjectToContinuumProject( MavenProject mavenProject, ContinuumProject continuumProject )
+    public void mapMavenProjectToContinuumProject( MavenProject mavenProject, MavenTwoProject continuumProject )
     {
         continuumProject.setNagEmailAddress( getNagEmailAddress( mavenProject ) );
 
@@ -88,11 +87,15 @@ public class DefaultMavenBuilderHelper
             continuumProject.setCommandLineArguments( "-N" );
         }
 
-        Properties configuration = continuumProject.getConfiguration();
-
-        if ( StringUtils.isEmpty( configuration.getProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) ) )
+//        Properties configuration = continuumProject.getConfiguration();
+//
+//        if ( StringUtils.isEmpty( configuration.getProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS ) ) )
+//        {
+//            configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, "clean:clean install" );
+//        }
+        if ( StringUtils.isEmpty( continuumProject.getGoals() ) )
         {
-            configuration.setProperty( MavenTwoBuildExecutor.CONFIGURATION_GOALS, "clean:clean install" );
+            continuumProject.setGoals( "clean:clean install" );
         }
 
         // ----------------------------------------------------------------------

@@ -23,8 +23,7 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
-
-import org.codehaus.plexus.util.cli.Commandline;
+import org.apache.maven.continuum.project.ShellProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -53,14 +52,17 @@ public class ShellBuildExecutor
     // ContinuumBuilder implementation
     // ----------------------------------------------------------------------
 
-    public synchronized ContinuumBuildResult build( ContinuumProject project )
+    public synchronized ContinuumBuildResult build( ContinuumProject p )
         throws ContinuumBuildExecutorException
     {
+        ShellProject project = (ShellProject) p;
+
         File workingDirectory = new File( project.getWorkingDirectory() );
 
         ExecutionResult executionResult;
 
-        String executable = getConfiguration( project.getConfiguration(), CONFIGURATION_EXECUTABLE );
+//        String executable = getConfiguration( project.getConfiguration(), CONFIGURATION_EXECUTABLE );
+        String executable = project.getExecutable();
 
         if ( executable.charAt( 0 ) != '/' &&
              executable.charAt( 0 ) != '\\' )

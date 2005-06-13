@@ -19,15 +19,16 @@ package org.apache.maven.continuum.execution.maven.m1;
 import java.io.File;
 
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenOneProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public interface MavenOneMetadataHelper
 {
     String ROLE = MavenOneMetadataHelper.class.getName();
 
-    void mapMetadata( File metadata, ContinuumProject project )
+    void mapMetadata( File metadata, MavenOneProject project )
         throws MavenOneMetadataHelperException;
 }

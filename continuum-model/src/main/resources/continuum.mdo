@@ -65,6 +65,7 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
+<!--
         <field>
           <name>configuration</name>
           <version>1.0.0</version>
@@ -74,6 +75,7 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+-->
         <field>
           <name>builds</name>
           <version>1.0.0</version>

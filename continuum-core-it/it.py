@@ -1,4 +1,4 @@
-from continuum import Continuum, AntProject
+from continuum import Continuum, MavenTwoProject, MavenOneProject, AntProject, ShellProject
 import os
 import shutil
 import sys
@@ -38,7 +38,7 @@ execute( os.getcwd(), "svnadmin create " + svnroot )
 
 startTime = int( time.time() )
 
-if 0:
+if 1:
     progress( "Initializing Maven 1 CVS project" )
     initMaven1Project( maven1Project, "cvs", cvsroot, "maven-1" )
     progress( "Adding Maven 1 project" )
@@ -75,7 +75,7 @@ if 0:
 
     removeProject( continuum, maven1.id );
 
-if 0:
+if 1:
     progress( "Initializing Maven 2 CVS project" )
     initMaven2Project( maven2Project, cvsroot, "maven-2" )
     progress( "Adding Maven 2 project" )
@@ -90,10 +90,8 @@ if 0:
 
     progress( "Test that a build without any files changed won't execute the executor" )
     expectedSize = len( continuum.getBuildsForProject( maven2.id ) )
-    print( "waiting" )
     continuum.buildProject( maven2.id, False )
     time.sleep( 3.0 )
-    print( "waited" )
     actualSize = len( continuum.getBuildsForProject( maven2.id ) )
     assertEquals( "A build has unexpectedly been executed.", expectedSize, actualSize )
 
@@ -111,15 +109,15 @@ if 1:
     svnImport( antProject, svnroot, "ant-svn" )
 
     progress( "Adding Ant SVN project" )
-    antProject = AntProject()
-    antProject.scmUrl = "scm:svn:file://" + svnroot + "/ant-svn"
-    antProject.name = "Ant SVN Project"
-    antProject.nagEmailAddress = email
-    antProject.version = "3.0"
-    antProject.commandLineArguments = "-v"
-    antProject.executable = "ant"
-    antProject.targets = "clean build"
-    antSvnId = continuum.addAntProject( antProject )
+    p = AntProject()
+    p.scmUrl = "scm:svn:file://" + svnroot + "/ant-svn"
+    p.name = "Ant SVN Project"
+    p.nagEmailAddress = email
+    p.version = "3.0"
+    p.commandLineArguments = "-v"
+    p.executable = "ant"
+    p.targets = "clean build"
+    antSvnId = getProjectId( continuum.addAntProject( p ) )
     waitForSuccessfulCheckOut( continuum, antSvnId );
     antSvn = continuum.getProject( antSvnId )
     assertProject( antSvnId, "Ant SVN Project", email, continuum.STATE_NEW, "3.0", "-v", "ant", antSvn )
@@ -129,13 +127,22 @@ if 1:
 
     removeProject( continuum, antSvnId )
 
-if 0:
+if 1:
     progress( "Initializing Ant CVS project" )
     initAntProject( antProject )
     cvsImport( antProject, cvsroot, "ant-cvs" )
-    antCvsId = continuum.addAntProject( "scm:cvs:local:" + basedir + "/cvsroot:ant-cvs", "Ant CVS Project", email, "3.0", "-d",
-                                      { "executable": "ant", "targets" : "clean build"} )
+
+    p = AntProject()
+    p.scmUrl = "scm:cvs:local:" + basedir + "/cvsroot:ant-cvs"
+    p.name = "Ant CVS Project"
+    p.nagEmailAddress = email
+    p.version = "3.0"
+    p.commandLineArguments = "-d"
+    p.executable = "ant"
+    p.targets = "clean build"
+    antCvsId = getProjectId( continuum.addAntProject( p ) )
     waitForSuccessfulCheckOut( continuum, antCvsId );
+
     antCvs = continuum.getProject( antCvsId )
     assertProject( antCvsId, "Ant CVS Project", email, continuum.STATE_NEW, "3.0", "-d", "ant", antCvs )
     progress( "Building CVS Ant project" )
@@ -143,16 +150,20 @@ if 0:
     assertSuccessfulAntBuild( continuum, buildId )
     removeProject( continuum, antCvsId )
 
-if 0:
+if 1:
     progress( "Initializing Shell CVS project" )
     initShellProject( shellProject )
     cvsImport( shellProject, cvsroot, "shell" )
 
     progress( "Adding CVS Shell project" )
-    shellId = continuum.addShellProject( "scm:cvs:local:" + basedir + "/cvsroot:shell", "Shell Project", email, "3.0", "",
-                                         { 
-                                            "executable": "script.sh", 
-                                         } )
+    p = ShellProject()
+    p.scmUrl = "scm:cvs:local:" + basedir + "/cvsroot:shell"
+    p.name = "Shell Project"
+    p.nagEmailAddress = email
+    p.version = "3.0"
+    p.commandLineArguments = ""
+    p.executable = "script.sh"
+    shellId = getProjectId( continuum.addShellProject( p ) )
     waitForSuccessfulCheckOut( continuum, shellId );
     shell = continuum.getProject( shellId )
     assertProject( shellId, "Shell Project", email, continuum.STATE_NEW, "3.0", "", "shell", shell )
@@ -177,8 +188,11 @@ if 0:
 
     output = cvsCommit( coDir )
 
-    continuum.updateProject( shell.id, shell.name, shell.scmUrl, shell.nagEmailAddress, shell.version, "a b" )
+    #continuum.updateProject( shell.id, shell.name, shell.scmUrl, shell.nagEmailAddress, shell.version, "a b" )
     shell = continuum.getProject( shell.id )
+    shell.commandLineArguments = "a b";
+    continuum.updateShellProject( shell )
+
     buildId = buildProject( continuum, shell.id ).id
     assertSuccessfulShellBuild( continuum, buildId, """a
 b
