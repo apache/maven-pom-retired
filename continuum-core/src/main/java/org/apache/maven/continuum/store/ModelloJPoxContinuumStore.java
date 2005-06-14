@@ -170,6 +170,19 @@ public class ModelloJPoxContinuumStore
         }
     }
 
+    public void updateProject( ContinuumProject project )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            store.storeContinuumProject( project );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumStoreException( "Error while setting the working directory.", e );
+        }
+    }
+
     public void updateProject( String projectId,
                                String name,
                                String scmUrl,
@@ -266,9 +279,7 @@ public class ModelloJPoxContinuumStore
     {
         try
         {
-            ContinuumProject project = store.getContinuumProject( projectId, true );
-
-            return project;
+            return store.getContinuumProject( projectId, true );
         }
         catch ( Exception e )
         {

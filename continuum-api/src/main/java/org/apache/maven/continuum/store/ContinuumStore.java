@@ -34,7 +34,7 @@ public interface ContinuumStore
     String ROLE = ContinuumStore.class.getName();
 
     // ----------------------------------------------------------------------
-    // ContinuumProject
+    // ContinuumProject Mutators
     // ----------------------------------------------------------------------
 
     String addProject( ContinuumProject project )
@@ -46,6 +46,9 @@ public interface ContinuumStore
     void setWorkingDirectory( String projectId, String workingDirectory )
         throws ContinuumStoreException;
 
+    void updateProject( ContinuumProject project )
+        throws ContinuumStoreException;
+
     void updateProject( String projectId,
                         String name,
                         String scmUrl,
@@ -53,6 +56,10 @@ public interface ContinuumStore
                         String version,
                         String commandLineArguments )
         throws ContinuumStoreException;
+
+    // ----------------------------------------------------------------------
+    // ContinuumProject Queries
+    // ----------------------------------------------------------------------
 
     Collection getAllProjects()
         throws ContinuumStoreException;

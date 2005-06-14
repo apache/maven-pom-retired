@@ -171,20 +171,20 @@ public class ModelloJPoxContinuumStoreTest
         configuration.setProperty( "foo", "bar" );
 
         ContinuumProject expected = makeMavenTwoProject( "Test Project",
-                                                 "scm:local:src/test/repo",
-                                                 "foo@bar.com",
-                                                 "1.0",
-                                                 "a b",
-                                                 "maven2",
-                                                 "/tmp" );
+                                                         "scm:local:src/test/repo",
+                                                         "foo@bar.com",
+                                                         "1.0",
+                                                         "a b",
+                                                         "maven2",
+                                                         "/tmp" );
 
         String projectId = store.addProject( makeMavenTwoProject( "Test Project",
-                                                          "scm:local:src/test/repo",
-                                                          "foo@bar.com",
-                                                          "1.0",
-                                                          "a b",
-                                                          "maven2",
-                                                          "/tmp" ) );
+                                                                  "scm:local:src/test/repo",
+                                                                  "foo@bar.com",
+                                                                  "1.0",
+                                                                  "a b",
+                                                                  "maven2",
+                                                                  "/tmp" ) );
 
         assertNotNull( "The project id is null.", projectId );
 
@@ -192,6 +192,7 @@ public class ModelloJPoxContinuumStoreTest
 
         assertProjectEquals( projectId, expected, actual );
     }
+
 
     public void testGetNonExistingProject()
         throws Exception
@@ -224,12 +225,12 @@ public class ModelloJPoxContinuumStoreTest
         String workingDirectory = "/tmp";
 
         String projectId = store.addProject( makeMavenTwoProject( name,
-                                                          scmUrl,
-                                                          nagEmailAddress,
-                                                          version,
-                                                          commandLineArguments,
-                                                          builderId,
-                                                          workingDirectory ) );
+                                                                  scmUrl,
+                                                                  nagEmailAddress,
+                                                                  version,
+                                                                  commandLineArguments,
+                                                                  builderId,
+                                                                  workingDirectory ) );
 
         // ----------------------------------------------------------------------
         //
@@ -418,10 +419,62 @@ public class ModelloJPoxContinuumStoreTest
     // ----------------------------------------------------------------------
 
     public void testUpdateMavenTwoProject()
+        throws Exception
     {
+        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
 
+        String projectId = addMavenTwoProject( "Maven Two Project", "scm:foo" );
+
+        MavenTwoProject project = (MavenTwoProject) store.getProject( projectId );
+
+        project.setName( "New name" );
+        project.setGoals( "clean test" );
+
+        store.updateProject( project );
+
+        project = (MavenTwoProject) store.getProject( projectId );
+
+        assertEquals( "New name", project.getName() );
+        assertEquals( "clean test", project.getGoals() );
     }
+/*
+    public void testUpdateMavenTwoProjectWithANonJdoObject()
+        throws Exception
+    {
+        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
 
+        // ----------------------------------------------------------------------
+        // Make a project in the store
+        // ----------------------------------------------------------------------
+
+        String projectId = addMavenTwoProject( "Maven Two Project", "scm:foo" );
+
+        // ----------------------------------------------------------------------
+        // This is a object constructed from outside Continuum, typically
+        // something that comes in over the wire.
+        // ----------------------------------------------------------------------
+
+        MavenTwoProject external = makeStubMavenTwoProject( "Maven Two Project", "scm:foo" );
+
+        external.setId( projectId );
+
+        external.setName( "New name" );
+
+        MavenTwoProject p = (MavenTwoProject) store.getProject( projectId );
+
+        assertEquals( "Maven Two Project", p.getName() );
+
+        store.updateProject( external );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        MavenTwoProject actual = (MavenTwoProject) store.getProject( projectId );
+
+        assertEquals( "New name", actual.getName() );
+    }
+*/
     // ----------------------------------------------------------------------
     // Build
     // ----------------------------------------------------------------------
@@ -704,26 +757,26 @@ public class ModelloJPoxContinuumStoreTest
     // Public utility methods
     // ----------------------------------------------------------------------
 
-    public static ContinuumProject makeStubMavenTwoProject( String name, String scmUrl )
+    public static MavenTwoProject makeStubMavenTwoProject( String name, String scmUrl )
     {
         return makeMavenTwoProject( name,
-                            scmUrl,
-                            "foo@bar.com",
-                            "1.0",
-                            "",
-                            ContinuumBuildExecutor.MAVEN_TWO_EXECUTOR_ID,
-                            "/tmp" );
+                                    scmUrl,
+                                    "foo@bar.com",
+                                    "1.0",
+                                    "",
+                                    ContinuumBuildExecutor.MAVEN_TWO_EXECUTOR_ID,
+                                    "/tmp" );
     }
 
-    public static ContinuumProject makeMavenTwoProject( String name,
-                                                String scmUrl,
-                                                String nagEmailAddress,
-                                                String version,
-                                                String commandLineArguments,
-                                                String executorId,
-                                                String workingDirectory )
+    public static MavenTwoProject makeMavenTwoProject( String name,
+                                                       String scmUrl,
+                                                       String nagEmailAddress,
+                                                       String version,
+                                                       String commandLineArguments,
+                                                       String executorId,
+                                                       String workingDirectory )
     {
-        ContinuumProject project = new MavenTwoProject();
+        MavenTwoProject project = new MavenTwoProject();
 
         project.setName( name );
         project.setScmUrl( scmUrl );
@@ -783,12 +836,12 @@ public class ModelloJPoxContinuumStoreTest
         throws Exception
     {
         String projectId = store.addProject( makeMavenTwoProject( name,
-                                                          scmUrl,
-                                                          nagEmailAddress,
-                                                          version,
-                                                          commandLineArguments,
-                                                          executorId,
-                                                          workingDirectory ) );
+                                                                  scmUrl,
+                                                                  nagEmailAddress,
+                                                                  version,
+                                                                  commandLineArguments,
+                                                                  executorId,
+                                                                  workingDirectory ) );
 
         CheckOutScmResult checkOutScmResult = new CheckOutScmResult();
 
