@@ -47,7 +47,7 @@ public class BuildQueueTest
     public void testTestTheQueueWithASingleProject()
         throws Exception
     {
-        String projectId = ModelloJPoxContinuumStoreTest.addProject( store, "Build Queue Project 1", "1" );
+        String projectId = ModelloJPoxContinuumStoreTest.addMavenTwoProject( store, "Build Queue Project 1", "1" );
 
         buildProject( projectId, false );
 
@@ -70,9 +70,9 @@ public class BuildQueueTest
     public void testTheQueueWithMultipleProjects()
         throws Exception
     {
-        String projectId1 = ModelloJPoxContinuumStoreTest.addProject( store, "Build Queue Project 2", "foo" );
+        String projectId1 = ModelloJPoxContinuumStoreTest.addMavenTwoProject( store, "Build Queue Project 2", "foo" );
 
-        String projectId2 = ModelloJPoxContinuumStoreTest.addProject( store, "Build Queue Project 3", "bar" );
+        String projectId2 = ModelloJPoxContinuumStoreTest.addMavenTwoProject( store, "Build Queue Project 3", "bar" );
 
         buildProject( projectId1, false );
 
@@ -108,7 +108,7 @@ public class BuildQueueTest
     {
         String name = "Build Queue Project 4";
 
-        String projectId = ModelloJPoxContinuumStoreTest.addProject( store, name, "4" );
+        String projectId = ModelloJPoxContinuumStoreTest.addMavenTwoProject( store, name, "4" );
 
         buildProject( projectId, true );
 

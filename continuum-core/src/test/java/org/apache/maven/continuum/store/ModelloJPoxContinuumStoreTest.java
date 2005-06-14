@@ -170,7 +170,7 @@ public class ModelloJPoxContinuumStoreTest
 
         configuration.setProperty( "foo", "bar" );
 
-        ContinuumProject expected = makeProject( "Test Project",
+        ContinuumProject expected = makeMavenTwoProject( "Test Project",
                                                  "scm:local:src/test/repo",
                                                  "foo@bar.com",
                                                  "1.0",
@@ -178,7 +178,7 @@ public class ModelloJPoxContinuumStoreTest
                                                  "maven2",
                                                  "/tmp" );
 
-        String projectId = store.addProject( makeProject( "Test Project",
+        String projectId = store.addProject( makeMavenTwoProject( "Test Project",
                                                           "scm:local:src/test/repo",
                                                           "foo@bar.com",
                                                           "1.0",
@@ -223,7 +223,7 @@ public class ModelloJPoxContinuumStoreTest
         String builderId = "maven2";
         String workingDirectory = "/tmp";
 
-        String projectId = store.addProject( makeProject( name,
+        String projectId = store.addProject( makeMavenTwoProject( name,
                                                           scmUrl,
                                                           nagEmailAddress,
                                                           version,
@@ -321,7 +321,7 @@ public class ModelloJPoxContinuumStoreTest
         String builderId1 = "maven2";
         String workingDirectory1 = "/tmp";
 
-        String id1 = addProject( store,
+        String id1 = addMavenTwoProject( store,
                                  name1,
                                  scmUrl1,
                                  nagEmailAddress1,
@@ -338,7 +338,7 @@ public class ModelloJPoxContinuumStoreTest
         String builderId2 = "maven2";
         String workingDirectory2 = "/tmp";
 
-        String id2 = addProject( store,
+        String id2 = addMavenTwoProject( store,
                                  name2,
                                  scmUrl2,
                                  nagEmailAddress2,
@@ -390,7 +390,7 @@ public class ModelloJPoxContinuumStoreTest
     {
         ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
 
-        String projectId = addProject( "Remove Test Project", "scm:remove-project" );
+        String projectId = addMavenTwoProject( "Remove Test Project", "scm:remove-project" );
 
         store.setIsUpdating( projectId );
 
@@ -414,6 +414,15 @@ public class ModelloJPoxContinuumStoreTest
     }
 
     // ----------------------------------------------------------------------
+    // Maven Two project tests
+    // ----------------------------------------------------------------------
+
+    public void testUpdateMavenTwoProject()
+    {
+
+    }
+
+    // ----------------------------------------------------------------------
     // Build
     // ----------------------------------------------------------------------
 
@@ -424,7 +433,7 @@ public class ModelloJPoxContinuumStoreTest
 
         lookup( JdoFactory.ROLE );
 
-        String projectId = addProject( "Build Test Project", "scm:build" );
+        String projectId = addMavenTwoProject( "Build Test Project", "scm:build" );
 
         store.setIsUpdating( projectId );
 
@@ -488,19 +497,19 @@ public class ModelloJPoxContinuumStoreTest
         // Set up projects
         // ----------------------------------------------------------------------
 
-        String projectId = addProject( "Association Test Project", "scm:association" );
+        String projectId = addMavenTwoProject( "Association Test Project", "scm:association" );
 
         store.setIsUpdating( projectId );
 
         store.setUpdateDone( projectId );
 
-        String projectIdFoo = addProject( "Foo Project", "scm:association-foo" );
+        String projectIdFoo = addMavenTwoProject( "Foo Project", "scm:association-foo" );
 
         store.setIsUpdating( projectIdFoo );
 
         store.setUpdateDone( projectIdFoo );
 
-        String projectIdBar = addProject( "Bar Project", "scm:association-bar" );
+        String projectIdBar = addMavenTwoProject( "Bar Project", "scm:association-bar" );
 
         store.setIsUpdating( projectIdBar );
 
@@ -554,7 +563,7 @@ public class ModelloJPoxContinuumStoreTest
     public void testGetLatestBuild()
         throws Exception
     {
-        String projectId = addProject( "Association Test Project", "scm:association" );
+        String projectId = addMavenTwoProject( "Association Test Project", "scm:association" );
 
         store.setIsUpdating( projectId );
 
@@ -593,7 +602,7 @@ public class ModelloJPoxContinuumStoreTest
         //
         // ----------------------------------------------------------------------
 
-        String projectId = addProject( "Build Result Project", "scm:build/result" );
+        String projectId = addMavenTwoProject( "Build Result Project", "scm:build/result" );
 
         store.setIsUpdating( projectId );
 
@@ -684,20 +693,20 @@ public class ModelloJPoxContinuumStoreTest
     // Private utility methods
     // ----------------------------------------------------------------------
 
-    private String addProject( String name, String scmUrl )
+    private String addMavenTwoProject( String name, String scmUrl )
         throws Exception
     {
-        return addProject( (ContinuumStore) lookup( ContinuumStore.ROLE ),
-                           makeStubProject( name, scmUrl ) );
+        return addMavenTwoProject( (ContinuumStore) lookup( ContinuumStore.ROLE ),
+                           makeStubMavenTwoProject( name, scmUrl ) );
     }
 
     // ----------------------------------------------------------------------
     // Public utility methods
     // ----------------------------------------------------------------------
 
-    public static ContinuumProject makeStubProject( String name, String scmUrl )
+    public static ContinuumProject makeStubMavenTwoProject( String name, String scmUrl )
     {
-        return makeProject( name,
+        return makeMavenTwoProject( name,
                             scmUrl,
                             "foo@bar.com",
                             "1.0",
@@ -706,7 +715,7 @@ public class ModelloJPoxContinuumStoreTest
                             "/tmp" );
     }
 
-    public static ContinuumProject makeProject( String name,
+    public static ContinuumProject makeMavenTwoProject( String name,
                                                 String scmUrl,
                                                 String nagEmailAddress,
                                                 String version,
@@ -727,7 +736,7 @@ public class ModelloJPoxContinuumStoreTest
         return project;
     }
 
-    public static String addProject( ContinuumStore store, ContinuumProject project )
+    public static String addMavenTwoProject( ContinuumStore store, ContinuumProject project )
         throws Exception
     {
         String projectId = store.addProject( project );
@@ -757,13 +766,13 @@ public class ModelloJPoxContinuumStoreTest
         return projectId;
     }
 
-    public static String addProject( ContinuumStore store, String name, String scmUrl )
+    public static String addMavenTwoProject( ContinuumStore store, String name, String scmUrl )
         throws Exception
     {
-        return addProject( store, makeStubProject( name, scmUrl ) );
+        return addMavenTwoProject( store, makeStubMavenTwoProject( name, scmUrl ) );
     }
 
-    public static String addProject( ContinuumStore store,
+    public static String addMavenTwoProject( ContinuumStore store,
                                      String name,
                                      String scmUrl,
                                      String nagEmailAddress,
@@ -773,7 +782,7 @@ public class ModelloJPoxContinuumStoreTest
                                      String workingDirectory  )
         throws Exception
     {
-        String projectId = store.addProject( makeProject( name,
+        String projectId = store.addProject( makeMavenTwoProject( name,
                                                           scmUrl,
                                                           nagEmailAddress,
                                                           version,

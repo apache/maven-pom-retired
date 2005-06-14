@@ -36,7 +36,7 @@ public class ContinuumNotificationDispatcherTest
 
         ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
 
-        String projectId = ModelloJPoxContinuumStoreTest.addProject( store,
+        String projectId = ModelloJPoxContinuumStoreTest.addMavenTwoProject( store,
                                                                      "Notification Dispatcher Test Project",
                                                                      "scm:notification/dispatcher" );
 

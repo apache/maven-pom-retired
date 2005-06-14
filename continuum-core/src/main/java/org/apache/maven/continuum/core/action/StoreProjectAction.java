@@ -30,7 +30,7 @@ public class StoreProjectAction
         String projectId = getStore().addProject( project );
 
         /*
-        String projectId = getStore().addProject( project.getName(),
+        String projectId = getStore().addMavenTwoProject( project.getName(),
                                                   project.getScmUrl(),
                                                   project.getNagEmailAddress(),
                                                   project.getVersion(),
