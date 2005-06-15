@@ -62,7 +62,7 @@ public interface ContinuumXmlRpc
                                    int start,
                                    int end );
 
-    Hashtable getBuildResultForBuild( String buildId );
+//    Hashtable getBuildResultForBuild( String buildId );
 
     Hashtable getChangedFilesForBuild( String buildId );
 

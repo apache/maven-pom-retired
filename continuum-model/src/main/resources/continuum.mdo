@@ -15,7 +15,7 @@
    |
    |-->
   <classes>
-    <class rootElement="true" stash.storable="true"><!-- java.abstract="true" -->
+    <class rootElement="true" stash.storable="true" java.abstract="true"><!-- -->
       <name>ContinuumProject</name>
       <version>1.0.0</version>
       <fields>
@@ -321,7 +321,7 @@
          | Common fields for all builders
          |
          | -->
-
+<!--
         <field>
           <name>buildResult</name>
           <version>1.0.0</version>
@@ -332,6 +332,27 @@
             This field contains a builder specific object that the view will
             know how to work with.
           </description>
+        </field>
+-->
+        <field>
+          <name>success</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+        </field>
+        <field stash.maxSize="8000">
+          <name>standardOutput</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field stash.maxSize="8000">
+          <name>standardError</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>exitCode</name>
+          <version>1.0.0</version>
+          <type>int</type>
         </field>
         <field>
           <name>updateScmResult</name>
@@ -348,7 +369,9 @@
     | BuilderBuildResult
     |
     | -->
-    <class stash.storable="true"> <!-- java.abstract="true"-->
+    <!-- java.abstract="true"-->
+<!--
+    <class>
       <name>ContinuumBuildResult</name>
       <version>1.0.0</version>
       <fields>
@@ -364,16 +387,25 @@
           <version>1.0.0</version>
           <type>boolean</type>
         </field>
+        <field>
+          <name>standardOutput</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>standardError</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>exitCode</name>
+          <version>1.0.0</version>
+          <type>int</type>
+        </field>
       </fields>
     </class>
-<!--
-    <class>
-      <name>ErrorBuildResult</name>
-      <packageName>org.apache.maven.continuum.execution</packageName>
-      <superClass>ContinuumBuildResult</superClass>
-      <version>1.0.0</version>
-    </class>
 -->
+<!--
     <class>
       <name>ShellBuildResult</name>
       <packageName>org.apache.maven.continuum.execution.shell</packageName>
@@ -469,7 +501,7 @@
         </field>
       </fields>
     </class>
-
+-->
     <!--
      |
      | Scm Result

@@ -19,8 +19,8 @@ package org.apache.maven.continuum.store;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.UpdateScmResult;
@@ -91,7 +91,7 @@ public interface ContinuumStore
      */
     void setBuildResult( String buildId,
                          int state,
-                         ContinuumBuildResult result,
+                         ContinuumBuildExecutionResult result,
                          UpdateScmResult scmResult,
                          Throwable error )
         throws ContinuumStoreException;
@@ -105,8 +105,8 @@ public interface ContinuumStore
     Collection getBuildsForProject( String projectId, int start, int end )
         throws ContinuumStoreException;
 
-    ContinuumBuildResult getBuildResultForBuild( String buildId )
-        throws ContinuumStoreException;
+//    ContinuumBuildResult getBuildResultForBuild( String buildId )
+//        throws ContinuumStoreException;
 
     List getChangedFilesForBuild( String buildId )
         throws ContinuumStoreException;
@@ -141,7 +141,7 @@ public interface ContinuumStore
 
     void setBuildComplete( String buildId,
                            UpdateScmResult scmResult,
-                           ContinuumBuildResult result )
+                           ContinuumBuildExecutionResult result )
         throws ContinuumStoreException;
 
     void setBuildError( String buildId,

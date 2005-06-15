@@ -50,19 +50,19 @@ public class DefaultMavenBuilderHelper
 {
     public static final String DEFAULT_TEST_OUTPUT_DIRECTORY = "target/surefire-reports";
 
-    /** @requirement */
+    /** @plexus.requirement */
     private MavenProjectBuilder projectBuilder;
 
-    /** @requirement */
+    /** @plexus.requirement */
     private ArtifactRepositoryFactory artifactRepositoryFactory;
 
-    /** @requirement */
+    /** @plexus.requirement */
     private MavenSettingsBuilder settingsBuilder;
 
-    /** @requirement */
+    /** @plexus.requirement */
     private ArtifactRepositoryLayout repositoryLayout;
 
-    /** @configuration */
+    /** @plexus.configuration */
     private String localRepository;
 
     // ----------------------------------------------------------------------
@@ -76,9 +76,8 @@ public class DefaultMavenBuilderHelper
     }
 
     public void mapMavenProjectToContinuumProject( MavenProject mavenProject, MavenTwoProject continuumProject )
+        throws MavenBuilderHelperException
     {
-        continuumProject.setNotifiers( getNotifiers( mavenProject ) );
-
         continuumProject.setName( getProjectName( mavenProject ) );
 
         continuumProject.setScmUrl( getScmUrl( mavenProject ) );
@@ -99,8 +98,6 @@ public class DefaultMavenBuilderHelper
         // Group
         // ----------------------------------------------------------------------
 
-        System.out.println( "mavenProject.getGroupId() = " + mavenProject.getGroupId() );
-
         if ( mavenProject.getGroupId() != null )
         {
            continuumProject.setGroupId( mavenProject.getGroupId() );
@@ -109,8 +106,6 @@ public class DefaultMavenBuilderHelper
         // ----------------------------------------------------------------------
         // Project Url
         // ----------------------------------------------------------------------
-
-        System.out.println( "mavenProject.getUrl() = " + mavenProject.getUrl() );
 
         if ( mavenProject.getUrl() != null )
         {
@@ -144,6 +139,12 @@ public class DefaultMavenBuilderHelper
                 continuumProject.addDeveloper( cd );
             }
         }
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        continuumProject.setNotifiers( getNotifiers( mavenProject ) );
     }
 
     public MavenProject getMavenProject( File file )
@@ -221,6 +222,7 @@ public class DefaultMavenBuilderHelper
     }
 
     private List getNotifiers( MavenProject mavenProject )
+        throws MavenBuilderHelperException
     {
         List notifiers = new ArrayList();
 
@@ -230,10 +232,12 @@ public class DefaultMavenBuilderHelper
 
             ContinuumNotifier notifier = new ContinuumNotifier();
 
-            if ( !StringUtils.isEmpty( projectNotifier.getType() ) )
+            if ( StringUtils.isEmpty( projectNotifier.getType() ) )
             {
-                notifier.setType( projectNotifier.getType() );
+                throw new MavenBuilderHelperException( "Missing type from notifier." );
             }
+
+            notifier.setType( projectNotifier.getType() );
 
             notifier.setConfiguration( projectNotifier.getConfiguration() );
 

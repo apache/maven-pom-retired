@@ -47,6 +47,12 @@ def decodeState( state ):
     else:
         return "UNKNOWN STATE (" + str( state ) + ")."
 
+def makeMailNotifier( address ):
+    notifier = ContinuumNotifier()
+
+    notifier.type = "mail"
+    notifier.configuration = { "address" : address }
+
 class Continuum:
     STATE_NEW = 1
     STATE_OK = 2
@@ -118,15 +124,15 @@ class Continuum:
 
         return builds
 
-    def getBuildResultForBuild( self, buildId ):
-        result = checkResult( self.server.continuum.getBuildResultForBuild( buildId ) )
-
-        buildResult = result[ "buildResult" ]
-
-        if ( len( buildResult ) == 0 ):
-            return None
-
-        return BuildResult( buildResult )
+#    def getBuildResultForBuild( self, buildId ):
+#        result = checkResult( self.server.continuum.getBuildResultForBuild( buildId ) )
+#
+#        buildResult = result[ "buildResult" ]
+#
+#        if ( len( buildResult ) == 0 ):
+#            return None
+#
+#        return BuildResult( buildResult )
 
     def getChangedFilesForBuild( self, buildId ):
         result = checkResult( self.server.continuum.getBuildResultForBuild( buildId ) )
@@ -210,6 +216,8 @@ class Continuum:
 class Project:
     def __init__( self, map ):
         self.map = map;
+        self.developers = []
+        self.notifiers = []
 
         if ( map == None ):
             return
@@ -218,7 +226,6 @@ class Project:
         self.id = map[ "id" ]
         self.name = map[ "name" ]
         self.scmUrl = map[ "scmUrl" ]
-        self.nagEmailAddress = map[ "nagEmailAddress" ]
         self.version = map[ "version" ]
         self.workingDirectory = map[ "workingDirectory" ]
         self.state = int( map[ "state" ] )
@@ -244,19 +251,22 @@ class Project:
         else:
             self.checkOutErrorException = None
 
+        self.developers = list()
+        if ( map.has_key( "developers" ) ):
+            for f in map[ "developers" ]:
+                self.developers.append( ContinuumDeveloper( f ) )
+
+        self.notifiers = list()
+        if ( map.has_key( "notifiers" ) ):
+            for f in map[ "notifiers" ]:
+                self.notifiers.append( ContinuumNotifier( f ) )
+
     def __str__( self ):
         s = "id: " + self.id + os.linesep +\
             "name: " + self.name + os.linesep +\
-            "nagEmailAddress: " + self.nagEmailAddress + os.linesep +\
             "state: " + decodeState( self.state ) + os.linesep +\
             "version: " + self.version + os.linesep +\
             "executor id: " + self.executorId + os.linesep
-
-#        if ( len( self.configuration.keys() ) > 0 ):
-#            conf = ""
-#            for key in self.configuration.keys():
-#                conf += os.linesep + key + "=" + self.configuration[ key ]
-#            s += conf
 
         return s
 
@@ -339,6 +349,17 @@ class Build:
             self.error = ""
             map[ "error" ] = ""
 
+        self.success = map[ "success" ] == "true"
+        self.exitCode = int( map[ "exitCode" ] )
+        if ( map.has_key( "standardOutput" ) ):
+            self.standardOutput = map[ "standardOutput" ]
+        else:
+            self.standardOutput = None
+        if ( map.has_key( "standardError" ) ):
+            self.standardError = map[ "standardError" ]
+        else:
+            self.standardError = None
+
     def __str__( self ):
         s = "Id: " + self.id + os.linesep +\
             "State: " + decodeState( self.state ) + os.linesep +\
@@ -347,30 +368,14 @@ class Build:
 
         if ( self.error != "" ):
             s += "Error: %(error)s" % self.map
-
-        return s
-
-class BuildResult:
-    def __init__( self, map ):
-        # This is the common stuff between all ContinuumBuildResult objects
-        self.success = map[ "success" ] == "true"
-
-        self.exitCode = int( map[ "exitCode" ] )
-        self.standardOutput = map[ "standardOutput" ]
-        self.standardError = map[ "standardError" ]
-
-    def __str__( self ):
         value = "Success: " + str( self.success )
-
         value += os.linesep + "Exit code: " + str( self.exitCode )
-
         if ( len( self.standardOutput ) > 0 ):
               value += os.linesep + "Standard output: " + self.standardOutput
-
         if ( len( self.standardError ) > 0 ):
                value += os.linesep + "Standard error: " + self.standardError
 
-        return value
+        return s
 
 class ScmResult:
     def __init__( self, map ):
@@ -389,8 +394,8 @@ class ScmResult:
 
     def __str__( self ):
         value = "Success: " + str( self.success ) + os.linesep +\
-                 "Provider Message: " + self.providerMessage + os.linesep +\
-                 "Command output: " + self.commandOutput
+                "Provider Message: " + self.providerMessage + os.linesep +\
+                "Command output: " + self.commandOutput
 
         return value
 
@@ -437,3 +442,34 @@ class ScmFile:
     def __init__( self, map ):
         self.map = map
         self.path = map[ "path" ]
+
+class ContinuumDeveloper:
+    def __init__( self, map ):
+        self.id = map[ "id" ]
+        self.name = map[ "name" ]
+        self.email = map[ "email" ]
+
+    def __str__( self ):
+        value = "id: " + self.id + os.linesep +\
+                "name: " + self.name + os.linesep +\
+                "email: " + self.email
+
+        return value
+
+class ContinuumNotifier:
+    def __init__( self, map=None ):
+        self.type = None
+        self.configuration = {}
+
+        if ( map == None ):
+            return
+
+        self.type = map[ "type" ]
+
+        if ( map.has_key( "configuration" ) ):
+            self.configuration = map[ "configuration" ]
+
+    def __str__( self ):
+        value = "type: " + self.type
+
+        return value

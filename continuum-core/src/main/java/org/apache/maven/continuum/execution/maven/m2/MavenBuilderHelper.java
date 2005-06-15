@@ -35,5 +35,6 @@ public interface MavenBuilderHelper
     MavenProject getMavenProject( File file )
         throws MavenBuilderHelperException;
 
-    void mapMavenProjectToContinuumProject( MavenProject mavenProject, MavenTwoProject continuumProject );
+    void mapMavenProjectToContinuumProject( MavenProject mavenProject, MavenTwoProject continuumProject )
+        throws MavenBuilderHelperException;
 }

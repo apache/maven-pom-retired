@@ -69,11 +69,18 @@ def assertNotNull( message, condition ):
 def assertProject( projectId, name, nagEmailAddress, state, version, commandLineArguments, executorId, project ):
     assertNotNull( "project.id", projectId )
     assertEquals( "project.name", name, project.name )
-    assertEquals( "project.nagEmailAddress", nagEmailAddress, project.nagEmailAddress )
     assertEquals( "project.state", state, project.state )
     assertEquals( "project.version", version, project.version )
     assertEquals( "project.commandLineArguments", commandLineArguments, project.commandLineArguments )
     assertEquals( "project.executorId", executorId, project.executorId )
+
+    if ( nagEmailAddress == None ):
+        assertEquals( "project.notifiers.size", 0, len( project.notifiers ) )
+    else:
+        assertEquals( "project.notifiers.size", 1, len( project.notifiers ) )
+        assertEquals( "project.notifiers[0].type", "mail", project.notifiers[0].type )
+        assertTrue( "project.notifiers[0].configuration.has_key('address')", project.notifiers[0].configuration.has_key('address') )
+        assertEquals( "project.notifiers[0].configuration['address']", nagEmailAddress, project.notifiers[0].configuration['address'] )
 
 def assertCheckedOutFiles( project, expectedCheckedOutFiles ):
     actualCheckedOutFiles = project.checkOutScmResult.checkedOutFiles
@@ -100,47 +107,37 @@ def assertCheckedOutFiles( project, expectedCheckedOutFiles ):
 def assertSuccessfulNoBuildPerformed( continuum, buildId ):
     build = waitForBuild( continuum, buildId )
     assertEquals( "The build wasn't successful.", continuum.STATE_OK, build.state )
-    buildResult = continuum.getBuildResultForBuild( buildId )
-    assertNotNull( "Build result was null.", buildResult )
-    assertTrue( "The build wasn't successful", buildResult.success )
+    assertTrue( "The build wasn't successful", build.success )
 
 def assertSuccessfulMaven1Build( continuum, buildId ):
     build = waitForBuild( continuum, buildId )
     assertEquals( "The build wasn't successful.", continuum.STATE_OK, build.state )
-    buildResult = continuum.getBuildResultForBuild( buildId )
-    assertNotNull( "Build result was null.", buildResult )
-    assertTrue( "The build wasn't successful", buildResult.success )
-    assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", buildResult.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
-    assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
+    assertTrue( "The build wasn't successful", build.success )
+    assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", build.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
+    assertEquals( "Standard error wasn't empty.", 0, len( build.standardError ) )
 
 def assertSuccessfulMaven2Build( continuum, buildId ):
     build = waitForBuild( continuum, buildId )
     assertEquals( "The build wasn't successful.", continuum.STATE_OK, build.state )
-    buildResult = continuum.getBuildResultForBuild( buildId )
-    assertNotNull( "Build result was null.", buildResult )
-    assertTrue( "The build wasn't successful", buildResult.success )
-    assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", buildResult.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
-    assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
+    assertTrue( "The build wasn't successful", build.success )
+    assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", build.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
+    assertEquals( "Standard error wasn't empty.", 0, len( build.standardError ) )
 
     return build
 
 def assertSuccessfulAntBuild( continuum, buildId ):
     build = waitForBuild( continuum, buildId )
     assertEquals( "The build wasn't successful.", continuum.STATE_OK, build.state )
-    buildResult = continuum.getBuildResultForBuild( buildId )
-    assertNotNull( "Build result was null.", buildResult )
-    assertTrue( "The build wasn't successful", buildResult.success )
-    assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", buildResult.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
-    assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
+    assertTrue( "The build wasn't successful", build.success )
+    assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.", build.standardOutput.find( "BUILD SUCCESSFUL" ) != -1 )
+    assertEquals( "Standard error wasn't empty.", 0, len( build.standardError ) )
 
 def assertSuccessfulShellBuild( continuum, buildId, expectedStandardOutput ):
     build = waitForBuild( continuum, buildId )
     assertEquals( "The build wasn't successful.", continuum.STATE_OK, build.state )
-    buildResult = continuum.getBuildResultForBuild( buildId )
-    assertNotNull( "Build result was null.", buildResult )
-    assertTrue( "The build wasn't successful", buildResult.success )
-    assertEquals( "Standard output didn't contain the expected output.", expectedStandardOutput, buildResult.standardOutput )
-    assertEquals( "Standard error wasn't empty.", 0, len( buildResult.standardError ) )
+    assertTrue( "The build wasn't successful", build.success )
+    assertEquals( "Standard output didn't contain the expected output.", expectedStandardOutput, build.standardOutput )
+    assertEquals( "Standard error wasn't empty.", 0, len( build.standardError ) )
 
 def buildProject( continuum, projectId, force=False ):
     count = 600;
@@ -317,7 +314,9 @@ def initMaven2Project( basedir, cvsroot, artifactId ):
     <notifiers>
       <notifier>
         <type>mail</type>
-        <address>%(email)s</address>
+        <configuration>
+          <address>%(email)s</address>
+        </configuration>
       </notifier>
     </notifiers>
   </ciManagement>

@@ -58,6 +58,8 @@ public class MavenTwoContinuumProjectBuilderTest
 
         ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get(0);
 
+        assertEquals( "mail", notifier.getType() );
+
         assertEquals( "foo@bar", notifier.getConfiguration().get( "address" ) );
     }
 
@@ -82,6 +84,8 @@ public class MavenTwoContinuumProjectBuilderTest
         assertEquals( 1, project.getNotifiers().size() );
 
         ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get(0);
+
+        assertEquals( "mail", notifier.getType() );
 
         assertEquals( "foo@bar", notifier.getConfiguration().get( "address" ) );
     }

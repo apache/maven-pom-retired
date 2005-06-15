@@ -31,7 +31,6 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
@@ -76,32 +75,32 @@ public class DefaultContinuumCore
     //       that the database is properly initialized before starting the store.
 
     /**
-     * @requirement
+     * @plexus.requirement
      */
     private BuildExecutorManager buildExecutorManager;
 
     /**
-     * @requirement
+     * @plexus.requirement
      */
     private ContinuumProjectBuilderManager projectBuilderManager;
 
     /**
-     * @requirement
+     * @plexus.requirement
      */
     private TaskQueue buildQueue;
 
     /**
-     * @requirement
+     * @plexus.requirement
      */
     private TaskQueue checkOutQueue;
 
     /**
-     * @requirement
+     * @plexus.requirement
      */
     private ContinuumStore store;
 
     /**
-     * @requirement
+     * @plexus.requirement
      */
     private ContinuumScm scm;
 
@@ -110,12 +109,12 @@ public class DefaultContinuumCore
     // ----------------------------------------------------------------------
 
     /**
-     * @configuration
+     * @plexus.configuration
      */
     private String workingDirectory;
 
     /**
-     * @configuration
+     * @plexus.configuration
      */
     private String appHome;
 
@@ -387,7 +386,9 @@ public class DefaultContinuumCore
     {
         try
         {
-            return store.getBuild( buildId );
+            ContinuumBuild b = store.getBuild( buildId );
+
+            return b;
         }
         catch ( ContinuumStoreException e )
         {
@@ -408,18 +409,18 @@ public class DefaultContinuumCore
         }
     }
 
-    public ContinuumBuildResult getBuildResultForBuild( String buildId )
-        throws ContinuumException
-    {
-        try
-        {
-            return store.getBuildResultForBuild( buildId );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw logAndCreateException( "Cannot retrieve build result for build with id = " + buildId, e );
-        }
-    }
+//    public ContinuumBuildResult getBuildResultForBuild( String buildId )
+//        throws ContinuumException
+//    {
+//        try
+//        {
+//            return store.getBuildResultForBuild( buildId );
+//        }
+//        catch ( ContinuumStoreException e )
+//        {
+//            throw logAndCreateException( "Cannot retrieve build result for build with id = " + buildId, e );
+//        }
+//    }
 
     public Collection getChangedFilesForBuild( String buildId )
         throws ContinuumException

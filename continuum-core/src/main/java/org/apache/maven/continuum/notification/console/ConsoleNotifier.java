@@ -22,7 +22,6 @@ import java.util.Set;
 
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 
 import org.codehaus.plexus.notification.NotificationException;
@@ -47,8 +46,6 @@ public class ConsoleNotifier
 
         ContinuumBuild build = (ContinuumBuild) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
-        ContinuumBuildResult result = (ContinuumBuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD_RESULT );
-
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_STARTED ) )
         {
             buildStarted( project );
@@ -67,11 +64,11 @@ public class ConsoleNotifier
         }
         else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_GOALS_COMPLETED ) )
         {
-            goalsCompleted( project, build, result );
+            goalsCompleted( project, build );
         }
         else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
         {
-            buildComplete( project, build, result );
+            buildComplete( project, build );
         }
         else
         {
@@ -103,9 +100,9 @@ public class ConsoleNotifier
         out( project, build, "Running goals." );
     }
 
-    private void goalsCompleted( ContinuumProject project, ContinuumBuild build, ContinuumBuildResult result )
+    private void goalsCompleted( ContinuumProject project, ContinuumBuild build )
     {
-        if ( result != null )
+        if ( build.getError() == null )
         {
             out( project, build, "Goals completed. state: " + build.getState() );
         }
@@ -115,9 +112,9 @@ public class ConsoleNotifier
         }
     }
 
-    private void buildComplete( ContinuumProject project, ContinuumBuild build, ContinuumBuildResult result )
+    private void buildComplete( ContinuumProject project, ContinuumBuild build )
     {
-        if ( result != null )
+        if ( build.getError() == null )
         {
             out( project, build, "Build complete. state: " + build.getState() );
         }

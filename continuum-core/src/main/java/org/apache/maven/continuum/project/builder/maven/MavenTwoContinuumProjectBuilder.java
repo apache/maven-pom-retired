@@ -43,10 +43,10 @@ public class MavenTwoContinuumProjectBuilder
 
     private static final String POM_PART = "/pom.xml";
 
-    /** @requirement */
+    /** @plexus.requirement */
     private MavenBuilderHelper builderHelper;
 
-    /** @configuration */
+    /** @plexus.configuration */
     private List excludedPackagingTypes;
 
     // ----------------------------------------------------------------------
@@ -70,6 +70,10 @@ public class MavenTwoContinuumProjectBuilder
         {
             throw new ContinuumProjectBuilderException( "Error while building Maven project.", e );
         }
+        catch ( MavenBuilderHelperException e )
+        {
+            throw new ContinuumProjectBuilderException( "Error while mapping Maven project to Continuum project.", e );
+        }
 
         return result;
     }
@@ -79,7 +83,7 @@ public class MavenTwoContinuumProjectBuilder
     // ----------------------------------------------------------------------
 
     private void readModules( URL url, ContinuumProjectBuildingResult result )
-        throws MalformedURLException, ContinuumProjectBuilderException
+        throws MalformedURLException, ContinuumProjectBuilderException, MavenBuilderHelperException
     {
         MavenProject mavenProject;
 

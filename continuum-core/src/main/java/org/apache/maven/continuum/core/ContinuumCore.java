@@ -24,7 +24,6 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
@@ -97,8 +96,8 @@ public interface ContinuumCore
     Collection getBuildsForProject( String projectId )
         throws ContinuumException;
 
-    ContinuumBuildResult getBuildResultForBuild( String buildId )
-        throws ContinuumException;
+//    ContinuumBuildResult getBuildResultForBuild( String buildId )
+//        throws ContinuumException;
 
     Collection getChangedFilesForBuild( String buildId )
         throws ContinuumException;

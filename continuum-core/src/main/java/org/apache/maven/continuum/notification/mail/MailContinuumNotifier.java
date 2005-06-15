@@ -29,7 +29,6 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
@@ -155,8 +154,6 @@ public class MailContinuumNotifier
 
         ContinuumBuild build = (ContinuumBuild) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
-        ContinuumBuildResult result = (ContinuumBuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD_RESULT );
-
         // ----------------------------------------------------------------------
         // If there wasn't any building done, don't notify
         // ----------------------------------------------------------------------
@@ -174,7 +171,7 @@ public class MailContinuumNotifier
         {
             if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
             {
-                buildComplete( project, build, result, source, recipients );
+                buildComplete( project, build, source, recipients );
             }
         }
         catch ( ContinuumException e )
@@ -183,8 +180,10 @@ public class MailContinuumNotifier
         }
     }
 
-    private void buildComplete( ContinuumProject project, ContinuumBuild build, ContinuumBuildResult buildResult,
-                                String source, Set recipients )
+    private void buildComplete( ContinuumProject project,
+                                ContinuumBuild build,
+                                String source,
+                                Set recipients )
         throws ContinuumException
     {
         // ----------------------------------------------------------------------
@@ -225,8 +224,6 @@ public class MailContinuumNotifier
             context.put( "build", build );
 
             context.put( "previousBuild", previousBuild );
-
-            context.put( "buildResult", buildResult );
 
             // ----------------------------------------------------------------------
             // Tools
@@ -297,7 +294,7 @@ public class MailContinuumNotifier
     private void sendMessage( ContinuumProject project, Set recipients, String subject, String content )
         throws ContinuumException
     {
-        String fromMailbox = getFromMailbox( project );
+        String fromMailbox = getFromMailbox();
 
         if ( fromMailbox == null )
         {
@@ -346,7 +343,7 @@ public class MailContinuumNotifier
         }
     }
 
-    private String getFromMailbox( ContinuumProject project )
+    private String getFromMailbox()
     {
         if ( fromMailbox != null )
         {

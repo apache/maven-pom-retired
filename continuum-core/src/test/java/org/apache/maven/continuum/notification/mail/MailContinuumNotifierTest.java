@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.execution.shell.ShellBuildResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -91,20 +90,6 @@ public class MailContinuumNotifierTest
         build.setState( ContinuumProjectState.OK );
 
         context.put( ContinuumNotificationDispatcher.CONTEXT_BUILD, build );
-
-        // ----------------------------------------------------------------------
-        // ShellBuildResult
-        // ----------------------------------------------------------------------
-
-        ShellBuildResult buildResult = new ShellBuildResult();
-
-        buildResult.setExitCode( 0 );
-
-        buildResult.setStandardOutput( "HABBA HABBA" );
-
-        buildResult.setStandardError( "HUBBA HUBBA" );
-
-        context.put( ContinuumNotificationDispatcher.CONTEXT_BUILD_RESULT, buildResult );
 
         // ----------------------------------------------------------------------
         //

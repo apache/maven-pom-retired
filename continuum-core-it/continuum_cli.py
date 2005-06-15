@@ -44,7 +44,7 @@ class ContinuumXmlRpcCli(cli.cli):
     def do_addMavenTwoProject(self, args):
         """Add a Maven 2.x project."""
 
-        projectIds = continuum.addMavenTwoProject( args[0] )
+        projectIds = c.addMavenTwoProject( args[0] )
 
         print "Added " + str( len( projectIds ) ) + " projects."
         for id in projectIds:
@@ -53,7 +53,7 @@ class ContinuumXmlRpcCli(cli.cli):
     def do_addMavenOneProject(self, args):
         """Add a Maven 1.x project."""
 
-        projectId = continuum.addMavenOneProject( args[0] )
+        projectId = c.addMavenOneProject( args[0] )
 
         print "Added project, id: " + projectId
 
@@ -64,7 +64,7 @@ class ContinuumXmlRpcCli(cli.cli):
         """Shows Continuum project.
         Use this command to show the details of a Continuum project."""
 
-        project = continuum.getProject( args[0] )
+        project = c.getProject( args[0] )
 
         print "Project details:"
         print "Id: " + project.id
@@ -86,11 +86,7 @@ class ContinuumXmlRpcCli(cli.cli):
             print ""
             print project.checkOutScmResult
 
-            print "Project Configuration:"
-            for key in project.configuration.keys():
-                print key + "=" + project.configuration[ key ]
-
-            builds = continuum.getBuildsForProject( project.id, 0, 0 )
+            builds = c.getBuildsForProject( project.id, 0, 0 )
             print ""
             print "Project Builds:"
             print "|  Id  |  State |           Start time            |             End time            | Build time |"
@@ -98,11 +94,17 @@ class ContinuumXmlRpcCli(cli.cli):
                 build.state = continuum.decodeState( build.state )
                 print "| %(id)4s | %(state)6s | %(startTime)s | %(endTime)s | %(totalTime)10s |" % build.map
 
+        print ""
+        print "Notifiers:"
+        for notifier in project.notifiers:
+            print " type: " + notifier.type
+            print " configuration: " + str( notifier.configuration )
+
     def do_showProjects(self, args):
         """Shows all Continuum projects registeret.
         Use this command to list all Continuum projects."""
 
-        projects = continuum.getAllProjects()
+        projects = c.getAllProjects()
 
         print ""
         print "Projects:"
@@ -114,20 +116,20 @@ class ContinuumXmlRpcCli(cli.cli):
     def do_removeProject(self,args):
         """Removes a project."""
 
-        continuum.removeProject( args[0] )
+        c.removeProject( args[0] )
 
     def do_buildProject(self, args):
         """Build a Continuum project.
         Use this command to signal a build for a Continuum project."""
 
-        continuum.buildProject( args[ 0 ] )
+        c.buildProject( args[ 0 ] )
 
         print "Enqueued project"
 
     def do_showBuild( self, args ):
         """Shows the result of a build."""
 
-        build = continuum.getBuild( args[ 0 ] );
+        build = c.getBuild( args[ 0 ] );
 
         print build
 
@@ -136,7 +138,7 @@ class ContinuumXmlRpcCli(cli.cli):
             print build.updateScmResult
         print ""
 
-        buildResult = continuum.getBuildResultForBuild( args[ 0 ] );
+        buildResult = c.getBuildResultForBuild( args[ 0 ] );
 
         print "Build result:"
         print buildResult
@@ -154,7 +156,7 @@ class ContinuumXmlRpcCli(cli.cli):
 # Main loop
 ##########################################################
 
-continuum = continuum.Continuum( "http://localhost:8000" )
+c = continuum.Continuum( "http://localhost:8000" )
 
 try:
     ContinuumXmlRpcCli().cmdloop()

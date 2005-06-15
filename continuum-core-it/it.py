@@ -1,4 +1,4 @@
-from continuum import Continuum, MavenTwoProject, MavenOneProject, AntProject, ShellProject
+from continuum import Continuum, MavenTwoProject, MavenOneProject, AntProject, ShellProject, makeMailNotifier
 import os
 import shutil
 import sys
@@ -14,7 +14,7 @@ print "stacktraces. This is normal and expected."
 print "############################################################"
 print ""
 
-continuum = Continuum( "http://localhost:8000" )
+c = Continuum( "http://localhost:8000" )
 
 from it_utils import *
 
@@ -42,15 +42,15 @@ if 1:
     progress( "Initializing Maven 1 CVS project" )
     initMaven1Project( maven1Project, "cvs", cvsroot, "maven-1" )
     progress( "Adding Maven 1 project" )
-    maven1Id = getProjectId( continuum.addMavenOneProject( "file:" + maven1Project + "/project.xml" ) )
-    waitForSuccessfulCheckOut( continuum, maven1Id );
-    maven1 = continuum.getProject( maven1Id )
-    assertProject( maven1Id, "Maven 1 Project", email, continuum.STATE_NEW, "1.0", "", "maven-1", maven1 )
+    maven1Id = getProjectId( c.addMavenOneProject( "file:" + maven1Project + "/project.xml" ) )
+    waitForSuccessfulCheckOut( c, maven1Id );
+    maven1 = c.getProject( maven1Id )
+    assertProject( maven1Id, "Maven 1 Project", email, c.STATE_NEW, "1.0", "", "maven-1", maven1 )
     assertCheckedOutFiles( maven1, [ "/project.xml", "/src/main/java/Foo.java" ] )
 
     progress( "Building Maven 1 project" )
-    buildId = buildProject( continuum, maven1.id ).id
-    assertSuccessfulMaven1Build( continuum, buildId )
+    buildId = buildProject( c, maven1.id ).id
+    assertSuccessfulMaven1Build( c, buildId )
 
     progress( "Testing that the POM is updated before each build." )
     cleanDirectory( coDir )
@@ -68,40 +68,40 @@ if 1:
 
     cvsCommit( coDir )
 
-    #continuum.updateProjectFromScm( maven1.id )
-    #maven1 = continuum.getProject( maven1.id )
+    #c.updateProjectFromScm( maven1.id )
+    #maven1 = c.getProject( maven1.id )
     #assertEquals( "The project name wasn't changed.", "Maven 1 Project - Changed", maven1.name )
     #assertEquals( "The project version wasn't changed.", "1.1", maven1.version )
 
-    removeProject( continuum, maven1.id );
+    removeProject( c, maven1.id );
 
 if 1:
     progress( "Initializing Maven 2 CVS project" )
     initMaven2Project( maven2Project, cvsroot, "maven-2" )
     progress( "Adding Maven 2 project" )
-    maven2Id = getProjectId( continuum.addMavenTwoProject( "file:" + maven2Project + "/pom.xml" ) )
-    waitForSuccessfulCheckOut( continuum, maven2Id );
-    maven2 = continuum.getProject( maven2Id )
-    assertProject( maven2Id, "Maven 2 Project", email, continuum.STATE_NEW, "2.0-SNAPSHOT", "-N", "maven2", maven2 )
+    maven2Id = getProjectId( c.addMavenTwoProject( "file:" + maven2Project + "/pom.xml" ) )
+    waitForSuccessfulCheckOut( c, maven2Id );
+    maven2 = c.getProject( maven2Id )
+    assertProject( maven2Id, "Maven 2 Project", email, c.STATE_NEW, "2.0-SNAPSHOT", "-N", "maven2", maven2 )
 
     progress( "Building Maven 2 project" )
-    buildId = buildProject( continuum, maven2.id ).id
-    assertSuccessfulMaven2Build( continuum, buildId )
+    buildId = buildProject( c, maven2.id ).id
+    assertSuccessfulMaven2Build( c, buildId )
 
     progress( "Test that a build without any files changed won't execute the executor" )
-    expectedSize = len( continuum.getBuildsForProject( maven2.id ) )
-    continuum.buildProject( maven2.id, False )
+    expectedSize = len( c.getBuildsForProject( maven2.id ) )
+    c.buildProject( maven2.id, False )
     time.sleep( 3.0 )
-    actualSize = len( continuum.getBuildsForProject( maven2.id ) )
+    actualSize = len( c.getBuildsForProject( maven2.id ) )
     assertEquals( "A build has unexpectedly been executed.", expectedSize, actualSize )
 
     progress( "Test that a forced build without any files changed executes the executor" )
-    buildId = buildProject( continuum, maven2.id, True ).id
-    build = assertSuccessfulMaven2Build( continuum, buildId )
+    buildId = buildProject( c, maven2.id, True ).id
+    build = assertSuccessfulMaven2Build( c, buildId )
     assertTrue( "The 'build forced' flag wasn't true", build.forced );
-    build = continuum.getBuild( buildId )
+    build = c.getBuild( buildId )
 
-    removeProject( continuum, maven2Id )
+    removeProject( c, maven2Id )
 
 if 1:
     progress( "Initializing Ant SVN project" )
@@ -112,20 +112,20 @@ if 1:
     p = AntProject()
     p.scmUrl = "scm:svn:file://" + svnroot + "/ant-svn"
     p.name = "Ant SVN Project"
-    p.nagEmailAddress = email
+    p.notifiers.append( makeMailNotifier( email ) )
     p.version = "3.0"
     p.commandLineArguments = "-v"
     p.executable = "ant"
     p.targets = "clean build"
-    antSvnId = getProjectId( continuum.addAntProject( p ) )
-    waitForSuccessfulCheckOut( continuum, antSvnId );
-    antSvn = continuum.getProject( antSvnId )
-    assertProject( antSvnId, "Ant SVN Project", email, continuum.STATE_NEW, "3.0", "-v", "ant", antSvn )
+    antSvnId = getProjectId( c.addAntProject( p ) )
+    waitForSuccessfulCheckOut( c, antSvnId );
+    antSvn = c.getProject( antSvnId )
+    assertProject( antSvnId, "Ant SVN Project", None, c.STATE_NEW, "3.0", "-v", "ant", antSvn )
     progress( "Building SVN Ant project" )
-    buildId = buildProject( continuum, antSvn.id ).id
-    assertSuccessfulAntBuild( continuum, buildId )
+    buildId = buildProject( c, antSvn.id ).id
+    assertSuccessfulAntBuild( c, buildId )
 
-    removeProject( continuum, antSvnId )
+    removeProject( c, antSvnId )
 
 if 1:
     progress( "Initializing Ant CVS project" )
@@ -135,20 +135,20 @@ if 1:
     p = AntProject()
     p.scmUrl = "scm:cvs:local:" + basedir + "/cvsroot:ant-cvs"
     p.name = "Ant CVS Project"
-    p.nagEmailAddress = email
+    p.notifiers.append( makeMailNotifier( email ) )
     p.version = "3.0"
     p.commandLineArguments = "-d"
     p.executable = "ant"
     p.targets = "clean build"
-    antCvsId = getProjectId( continuum.addAntProject( p ) )
-    waitForSuccessfulCheckOut( continuum, antCvsId );
+    antCvsId = getProjectId( c.addAntProject( p ) )
+    waitForSuccessfulCheckOut( c, antCvsId );
 
-    antCvs = continuum.getProject( antCvsId )
-    assertProject( antCvsId, "Ant CVS Project", email, continuum.STATE_NEW, "3.0", "-d", "ant", antCvs )
+    antCvs = c.getProject( antCvsId )
+    assertProject( antCvsId, "Ant CVS Project", None, c.STATE_NEW, "3.0", "-d", "ant", antCvs )
     progress( "Building CVS Ant project" )
-    buildId = buildProject( continuum, antCvs.id ).id
-    assertSuccessfulAntBuild( continuum, buildId )
-    removeProject( continuum, antCvsId )
+    buildId = buildProject( c, antCvs.id ).id
+    assertSuccessfulAntBuild( c, buildId )
+    removeProject( c, antCvsId )
 
 if 1:
     progress( "Initializing Shell CVS project" )
@@ -159,18 +159,18 @@ if 1:
     p = ShellProject()
     p.scmUrl = "scm:cvs:local:" + basedir + "/cvsroot:shell"
     p.name = "Shell Project"
-    p.nagEmailAddress = email
+    p.notifiers.append( makeMailNotifier( email ) )
     p.version = "3.0"
     p.commandLineArguments = ""
     p.executable = "script.sh"
-    shellId = getProjectId( continuum.addShellProject( p ) )
-    waitForSuccessfulCheckOut( continuum, shellId );
-    shell = continuum.getProject( shellId )
-    assertProject( shellId, "Shell Project", email, continuum.STATE_NEW, "3.0", "", "shell", shell )
+    shellId = getProjectId( c.addShellProject( p ) )
+    waitForSuccessfulCheckOut( c, shellId );
+    shell = c.getProject( shellId )
+    assertProject( shellId, "Shell Project", None, c.STATE_NEW, "3.0", "", "shell", shell )
 
     progress( "Building Shell project" )
-    buildId = buildProject( continuum, shell.id ).id
-    assertSuccessfulShellBuild( continuum, buildId, "" )
+    buildId = buildProject( c, shell.id ).id
+    assertSuccessfulShellBuild( c, buildId, "" )
 
     # Test project reconfiguration
     # Test that a project will be built after a changed file is committed
@@ -188,16 +188,16 @@ if 1:
 
     output = cvsCommit( coDir )
 
-    #continuum.updateProject( shell.id, shell.name, shell.scmUrl, shell.nagEmailAddress, shell.version, "a b" )
-    shell = continuum.getProject( shell.id )
+    #c.updateProject( shell.id, shell.name, shell.scmUrl, shell.nagEmailAddress, shell.version, "a b" )
+    shell = c.getProject( shell.id )
     shell.commandLineArguments = "a b";
-    continuum.updateShellProject( shell )
+    c.updateShellProject( shell )
 
-    buildId = buildProject( continuum, shell.id ).id
-    assertSuccessfulShellBuild( continuum, buildId, """a
+    buildId = buildProject( c, shell.id ).id
+    assertSuccessfulShellBuild( c, buildId, """a
 b
 """ )
-    removeProject( continuum, shellId )
+    removeProject( c, shellId )
 
 # TODO: Add project failure tests
 

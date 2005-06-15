@@ -21,10 +21,10 @@ import java.util.Collection;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.ContinuumScm;
@@ -72,7 +72,7 @@ public class DefaultBuildController
 
         UpdateScmResult scmResult;
 
-        ContinuumBuildResult result;
+        ContinuumBuildExecutionResult result;
 
         int state;
 
@@ -288,18 +288,20 @@ public class DefaultBuildController
     {
         makeBuild( context );
 
-        context.result = new ContinuumBuildResult();
-
-        context.result.setSuccess( false );
+        context.result = new ContinuumBuildExecutionResult( false, null, null, 0 );
 
         context.state = ContinuumProjectState.ERROR;
 
-        setBuildResult( context.build.getId(), context.state, context.result, context.scmResult, e );
+        setBuildResult( context.build.getId(),
+                        context.state,
+                        context.result,
+                        context.scmResult,
+                        e );
     }
 
     private void setBuildResult( String buildId,
                                  int state,
-                                 ContinuumBuildResult result,
+                                 ContinuumBuildExecutionResult result,
                                  UpdateScmResult scmResult,
                                  Throwable e )
         throws ContinuumStoreException

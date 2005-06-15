@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.Properties;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -238,6 +239,10 @@ public class DefaultXmlRpcHelper
                                             excludedProperties,
                                             visitedObjects );
             }
+            else if ( value instanceof Properties )
+            {
+                value = propertiesToHashtable( (Properties) value );
+            }
             else
             {
                 value = objectToHashtable( value,
@@ -258,10 +263,24 @@ public class DefaultXmlRpcHelper
         return hashtable;
     }
 
+    private Hashtable propertiesToHashtable( Properties value  )
+    {
+        Hashtable properties = new Hashtable();
+
+        for ( Iterator it = value.entrySet().iterator(); it.hasNext(); )
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            properties.put( entry.getKey(), entry.getValue() );
+        }
+
+        return properties;
+    }
+
     private Vector collectionToVector( Collection value,
-                                      boolean convertElements,
-                                      Set excludedProperties,
-                                      Set visitedObjects )
+                                       boolean convertElements,
+                                       Set excludedProperties,
+                                       Set visitedObjects )
         throws IllegalAccessException, InvocationTargetException
     {
         if ( value instanceof Vector )

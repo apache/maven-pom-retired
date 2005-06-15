@@ -21,7 +21,7 @@ import java.io.File;
 import org.apache.maven.continuum.execution.AbstractBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ShellProject;
 
@@ -52,7 +52,7 @@ public class ShellBuildExecutor
     // ContinuumBuilder implementation
     // ----------------------------------------------------------------------
 
-    public synchronized ContinuumBuildResult build( ContinuumProject p )
+    public synchronized ContinuumBuildExecutionResult build( ContinuumProject p )
         throws ContinuumBuildExecutorException
     {
         ShellProject project = (ShellProject) p;
@@ -80,19 +80,10 @@ public class ShellBuildExecutor
             throw new ContinuumBuildExecutorException( "Error while executing shell command.", e );
         }
 
-        boolean success = executionResult.getExitCode() == 0;
-
-        ShellBuildResult result = new ShellBuildResult();
-
-        result.setSuccess( success );
-
-        result.setStandardOutput( executionResult.getStandardOutput() );
-
-        result.setStandardError( executionResult.getStandardError() );
-
-        result.setExitCode( executionResult.getExitCode() );
-
-        return result;
+        return new ContinuumBuildExecutionResult( executionResult.getExitCode() == 0,
+                                                  executionResult.getStandardOutput(),
+                                                  executionResult.getStandardError(),
+                                                  executionResult.getExitCode() );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

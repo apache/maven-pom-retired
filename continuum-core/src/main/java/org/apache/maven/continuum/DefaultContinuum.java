@@ -29,7 +29,6 @@ import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
 import org.apache.maven.continuum.core.action.StoreProjectAction;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.MavenOneProject;
@@ -201,11 +200,11 @@ public class DefaultContinuum
         return core.getBuildsForProject( projectId );
     }
 
-    public ContinuumBuildResult getBuildResultForBuild( String buildId )
-        throws ContinuumException
-    {
-        return core.getBuildResultForBuild( buildId );
-    }
+//    public ContinuumBuildResult getBuildResultForBuild( String buildId )
+//        throws ContinuumException
+//    {
+//        return core.getBuildResultForBuild( buildId );
+//    }
 
     public Collection getChangedFilesForBuild( String buildId )
         throws ContinuumException

@@ -29,7 +29,6 @@ import java.util.Vector;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
@@ -85,7 +84,9 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            return makeHashtable( "project", convertContinuumProject( continuum.getProject( projectId ) ) );
+            ContinuumProject project = continuum.getProject( projectId );
+
+            return makeHashtable( "project", convertContinuumProject( project, false ) );
         }
         catch ( Throwable e )
         {
@@ -104,7 +105,7 @@ public class DefaultContinuumXmlRpc
 
             for ( Iterator it = projects.iterator(); it.hasNext(); )
             {
-                results.add( convertContinuumProject( it.next() ) );
+                results.add( convertContinuumProject( it.next(), true ) );
             }
 
             return makeHashtable( "projects", results );
@@ -212,20 +213,20 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-    public Hashtable getBuildResultForBuild( String buildId )
-    {
-        try
-        {
-            ContinuumBuildResult result = continuum.getBuildResultForBuild( buildId );
-
-            return makeHashtable( "buildResult", convertContinuumBuildResult( result ) );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.getBuildResultForProject()",
-                                    "Build id: '" + buildId + "'.", e );
-        }
-    }
+//    public Hashtable getBuildResultForBuild( String buildId )
+//    {
+//        try
+//        {
+//            ContinuumBuildResult result = continuum.getBuildResultForBuild( buildId );
+//
+//            return makeHashtable( "buildResult", convertContinuumBuildResult( result ) );
+//        }
+//        catch ( Throwable e )
+//        {
+//            return handleException( "ContinuumXmlRpc.getBuildResultForProject()",
+//                                    "Build id: '" + buildId + "'.", e );
+//        }
+//    }
 
     public Hashtable getChangedFilesForBuild( String buildId )
     {
@@ -269,8 +270,6 @@ public class DefaultContinuumXmlRpc
                 ContinuumProject project = (ContinuumProject) it.next();
 
                 projectIds.add( project.getId() );
-
-                getLogger().info( "project id: " + project.getId() );
             }
 
             return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
@@ -296,8 +295,6 @@ public class DefaultContinuumXmlRpc
             Collection projectIds = new Vector();
 
             projectIds.add( projectId );
-
-            getLogger().info( "project id: " + projectId );
 
             return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
         }
@@ -345,8 +342,6 @@ public class DefaultContinuumXmlRpc
                 ContinuumProject project = (ContinuumProject) it.next();
 
                 projectIds.add( project.getId() );
-
-                getLogger().info( "project id: " + project.getId() );
             }
 
             return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
@@ -497,16 +492,19 @@ public class DefaultContinuumXmlRpc
     // Object to Hashtable converters
     // ----------------------------------------------------------------------
 
-    private Hashtable convertContinuumProject( Object object )
+    private Hashtable convertContinuumProject( Object object, boolean summary )
         throws IllegalAccessException, InvocationTargetException
     {
         Set excludedProperties = new HashSet();
 
-        excludedProperties.add( "configuration" );
-
         excludedProperties.add( "builds" );
 
-        excludedProperties.add( "developers" );
+        if ( summary )
+        {
+            excludedProperties.add( "developers" );
+
+            excludedProperties.add( "notifiers" );
+        }
 
         ContinuumProject project = (ContinuumProject) object;
 
@@ -521,16 +519,6 @@ public class DefaultContinuumXmlRpc
         Set excludedProperties = new HashSet();
 
         excludedProperties.add( "project" );
-
-        return xmlRpcHelper.objectToHashtable( object, excludedProperties );
-    }
-
-    private Hashtable convertContinuumBuildResult( Object object )
-        throws IllegalAccessException, InvocationTargetException
-    {
-        Set excludedProperties = new HashSet();
-
-        excludedProperties.add( "build" );
 
         return xmlRpcHelper.objectToHashtable( object, excludedProperties );
     }

@@ -16,31 +16,48 @@ package org.apache.maven.continuum.execution;
  * limitations under the License.
  */
 
-import java.io.File;
-
-import org.apache.maven.continuum.project.ContinuumProject;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public interface ContinuumBuildExecutor
+public class ContinuumBuildExecutionResult
 {
-    String ROLE = ContinuumBuildExecutor.class.getName();
+    private boolean success;
 
-    //TODO: i know we won't have many more build executors but this really isn't very
-    // scalable having constants for specific builders in the api
-    String ANT_EXECUTOR_ID = "ant";
+    private String standardOutput;
 
-    String MAVEN_ONE_EXECUTOR_ID = "maven-one";
+    private String standardError;
 
-    String MAVEN_TWO_EXECUTOR_ID = "maven-two";
+    private int exitCode;
 
-    String SHELL_EXECUTOR_ID = "shell";
+    public ContinuumBuildExecutionResult( boolean success, String standardOutput, String standardError, int exitCode )
+    {
+        this.success = success;
 
-    ContinuumBuildExecutionResult build( ContinuumProject project )
-        throws ContinuumBuildExecutorException;
+        this.standardOutput = standardOutput;
 
-    void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
-        throws ContinuumBuildExecutorException;
+        this.standardError = standardError;
+
+        this.exitCode = exitCode;
+    }
+
+    public boolean isSuccess()
+    {
+        return success;
+    }
+
+    public String getStandardOutput()
+    {
+        return standardOutput;
+    }
+
+    public String getStandardError()
+    {
+        return standardError;
+    }
+
+    public int getExitCode()
+    {
+        return exitCode;
+    }
 }

@@ -24,11 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.maven.continuum.execution.shell.ShellBuildResult;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
-import org.apache.maven.continuum.execution.ant.AntBuildResult;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -408,11 +406,24 @@ public class ModelloJPoxContinuumStoreTest
 
         scmResult.addUpdatedFile( file );
 
-        ContinuumBuildResult result = new ShellBuildResult();
-
-        store.setBuildResult( buildId, ContinuumProjectState.OK, result, scmResult, null );
+        store.setBuildResult( buildId,
+                              ContinuumProjectState.OK,
+                              makeContinuumBuildExecutionResult( true, "", "", 0 ),
+                              scmResult,
+                              null );
 
         store.removeProject( projectId );
+    }
+
+    private ContinuumBuildExecutionResult makeContinuumBuildExecutionResult( boolean success,
+                                                                             String standardOutput,
+                                                                             String standardError,
+                                                                             int exitCode )
+    {
+        return new ContinuumBuildExecutionResult( success,
+                                                  standardOutput,
+                                                  standardError,
+                                                  exitCode );
     }
 
     // ----------------------------------------------------------------------
@@ -513,15 +524,9 @@ public class ModelloJPoxContinuumStoreTest
 
         updateScmResult.getUpdatedFiles().add( scmFile );
 
-        AntBuildResult buildResult = new AntBuildResult();
-
-        buildResult.setExitCode( 10 );
-
-        buildResult.setStandardError( "stderr" );
-
-        buildResult.setStandardOutput( "stdout" );
-
-        store.setBuildComplete( buildId, updateScmResult, buildResult );
+        store.setBuildComplete( buildId,
+                                updateScmResult,
+                                makeContinuumBuildExecutionResult( true, "stdout", "stderr", 10 ) );
 
         // ----------------------------------------------------------------------
         // Store and check the build object
@@ -708,23 +713,19 @@ public class ModelloJPoxContinuumStoreTest
         // Check the build result
         // ----------------------------------------------------------------------
 
-        ContinuumBuildResult result = store.getBuildResultForBuild( buildId );
+//        ContinuumBuildResult result = store.getBuildResultForBuild( buildId );
 
         assertIsCommitted( store );
 
-        assertNull( result );
+//        assertNull( result );
 
         UpdateScmResult scmResult = new UpdateScmResult();
 
-        ShellBuildResult shellBuildResult = new ShellBuildResult();
-
-        shellBuildResult.setExitCode( 1 );
-
-        shellBuildResult.setStandardOutput( "output" );
-
-        shellBuildResult.setStandardError( "error" );
-
-        store.setBuildResult( buildId, ContinuumProjectState.OK, shellBuildResult, scmResult, null );
+        store.setBuildResult( buildId,
+                              ContinuumProjectState.OK,
+                              makeContinuumBuildExecutionResult( true, "output", "error", 1 ),
+                              scmResult,
+                              null );
 
         assertIsCommitted( store );
 
@@ -732,15 +733,15 @@ public class ModelloJPoxContinuumStoreTest
         //
         // ----------------------------------------------------------------------
 
-        shellBuildResult = (ShellBuildResult) store.getBuildResultForBuild( buildId );
+        build = store.getBuild( buildId );
 
         assertIsCommitted( store );
 
-        assertEquals( 1, shellBuildResult.getExitCode() );
+        assertEquals( 1, build.getExitCode() );
 
-        assertEquals( "output", shellBuildResult.getStandardOutput() );
+        assertEquals( "output", build.getStandardOutput() );
 
-        assertEquals( "error", shellBuildResult.getStandardError() );
+        assertEquals( "error", build.getStandardError() );
     }
 
     // ----------------------------------------------------------------------

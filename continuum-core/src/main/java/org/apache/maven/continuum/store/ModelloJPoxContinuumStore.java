@@ -26,10 +26,9 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
@@ -111,21 +110,21 @@ public class ModelloJPoxContinuumStore
 
             List builds = project.getBuilds();
 
-            for ( Iterator it = builds.iterator(); it.hasNext(); )
-            {
-                ContinuumBuild build = (ContinuumBuild) it.next();
-
-                ContinuumBuildResult result = build.getBuildResult();
-
-                if ( result == null )
-                {
-                    continue;
-                }
-
-                result.setBuild( null );
-
-                pm.deletePersistent( result );
-            }
+//            for ( Iterator it = builds.iterator(); it.hasNext(); )
+//            {
+//                ContinuumBuild build = (ContinuumBuild) it.next();
+//
+//                ContinuumBuildResult result = build.getBuildResult();
+//
+//                if ( result == null )
+//                {
+//                    continue;
+//                }
+//
+//                result.setBuild( null );
+//
+//                pm.deletePersistent( result );
+//            }
 
             for ( Iterator it = builds.iterator(); it.hasNext(); )
             {
@@ -367,7 +366,10 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public void setBuildResult( String buildId, int state, ContinuumBuildResult result, UpdateScmResult scmResult,
+    public void setBuildResult( String buildId,
+                                int state,
+                                ContinuumBuildExecutionResult result,
+                                UpdateScmResult scmResult,
                                 Throwable error )
         throws ContinuumStoreException
     {
@@ -391,7 +393,17 @@ public class ModelloJPoxContinuumStore
 
             build.setUpdateScmResult( scmResult );
 
-            build.setBuildResult( result );
+            // ----------------------------------------------------------------------
+            // Copy over the build result
+            // ----------------------------------------------------------------------
+
+            build.setSuccess( result.isSuccess() );
+
+            build.setStandardOutput( result.getStandardOutput() );
+
+            build.setStandardError( result.getStandardError() );
+
+            build.setExitCode( result.getExitCode() );
 
             store.commit();
         }
@@ -471,37 +483,37 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public ContinuumBuildResult getBuildResultForBuild( String buildId )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumBuild build = store.getContinuumBuild( buildId, false );
-
-            if ( build.getBuildResult() == null )
-            {
-                store.commit();
-
-                return null;
-            }
-
-            Object id = JDOHelper.getObjectId( build.getBuildResult() );
-
-            store.commit();
-
-            ContinuumBuildResult result = store.getContinuumBuildResultByJdoId( id, true );
-
-            return result;
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while getting build result.", e );
-        }
-    }
+//    public ContinuumBuildResult getBuildResultForBuild( String buildId )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumBuild build = store.getContinuumBuild( buildId, false );
+//
+//            if ( build.getBuildResult() == null )
+//            {
+//                store.commit();
+//
+//                return null;
+//            }
+//
+//            Object id = JDOHelper.getObjectId( build.getBuildResult() );
+//
+//            store.commit();
+//
+//            ContinuumBuildResult result = store.getContinuumBuildResultByJdoId( id, true );
+//
+//            return result;
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while getting build result.", e );
+//        }
+//    }
 
     public List getChangedFilesForBuild( String buildId )
         throws ContinuumStoreException
@@ -512,12 +524,12 @@ public class ModelloJPoxContinuumStore
 
             ContinuumBuild build = store.getContinuumBuild( buildId, false );
 
-            if ( build.getBuildResult() == null )
-            {
-                store.commit();
-
-                return null;
-            }
+//            if ( build.getBuildResult() == null )
+//            {
+//                store.commit();
+//
+//                return null;
+//            }
 
             // TODO: Having to copy the objects feels a /bit/ strange.
 
@@ -714,7 +726,7 @@ public class ModelloJPoxContinuumStore
 
     public void setBuildComplete( String buildId,
                                   UpdateScmResult scmResult,
-                                  ContinuumBuildResult result )
+                                  ContinuumBuildExecutionResult result )
         throws ContinuumStoreException
     {
         try
@@ -732,7 +744,17 @@ public class ModelloJPoxContinuumStore
 
             project.setState( state );
 
-            build.setBuildResult( result );
+            // ----------------------------------------------------------------------
+            // Copy over the build result
+            // ----------------------------------------------------------------------
+
+            build.setSuccess( result.isSuccess() );
+
+            build.setStandardOutput( result.getStandardOutput() );
+
+            build.setStandardError( result.getStandardError() );
+
+            build.setExitCode( result.getExitCode() );
 
             store.commit();
         }

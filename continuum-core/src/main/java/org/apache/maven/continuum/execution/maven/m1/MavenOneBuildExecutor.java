@@ -19,11 +19,11 @@ package org.apache.maven.continuum.execution.maven.m1;
 import java.io.File;
 
 import org.apache.maven.continuum.execution.AbstractBuildExecutor;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.execution.shell.ExecutionResult;
 import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 
@@ -52,7 +52,7 @@ public class MavenOneBuildExecutor
     // Builder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildResult build( ContinuumProject p )
+    public ContinuumBuildExecutionResult build( ContinuumProject p )
         throws ContinuumBuildExecutorException
     {
         MavenOneProject project = (MavenOneProject) p;
@@ -74,19 +74,10 @@ public class MavenOneBuildExecutor
             throw new ContinuumBuildExecutorException( "Error while executing shell command.", e );
         }
 
-        boolean success = executionResult.getExitCode() == 0;
-
-        Maven1BuildResult result = new Maven1BuildResult();
-
-        result.setSuccess( success );
-
-        result.setStandardOutput( executionResult.getStandardOutput() );
-
-        result.setStandardError( executionResult.getStandardError() );
-
-        result.setExitCode( executionResult.getExitCode() );
-
-        return result;
+        return new ContinuumBuildExecutionResult( executionResult.getExitCode() == 0,
+                                                  executionResult.getStandardOutput(),
+                                                  executionResult.getStandardError(),
+                                                  executionResult.getExitCode() );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

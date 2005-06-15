@@ -51,6 +51,8 @@ public class MavenOneContinuumProjectBuilderTest
 
         ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get( 0 );
 
+        assertEquals( "mail", notifier.getType() );
+
         assertEquals( "dev@maven.apache.org", notifier.getConfiguration().get( "address" ) );
 
         assertEquals( "1.1-SNAPSHOT", project.getVersion() );

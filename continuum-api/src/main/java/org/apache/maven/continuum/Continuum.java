@@ -20,7 +20,6 @@ import java.util.Collection;
 
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
@@ -94,8 +93,8 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     Collection getBuildsForProject( String projectId )
         throws ContinuumException;
 
-    ContinuumBuildResult getBuildResultForBuild( String buildId )
-        throws ContinuumException;
+//    ContinuumBuildResult getBuildResultForBuild( String buildId )
+//        throws ContinuumException;
 
     Collection getChangedFilesForBuild( String buildId )
         throws ContinuumException;
