@@ -486,7 +486,7 @@ public class DefaultContinuum
         core.updateProject( project.getId(),
                             project.getName(),
                             project.getScmUrl(),
-                            project.getNagEmailAddress(),
+                            project.getNotifiers(),
                             project.getVersion(),
                             project.getCommandLineArguments() );
     }

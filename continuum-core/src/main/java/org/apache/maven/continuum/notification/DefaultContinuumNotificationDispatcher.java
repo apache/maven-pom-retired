@@ -17,31 +17,40 @@ package org.apache.maven.continuum.notification;
  */
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.notification.NotificationDispatcher;
 import org.codehaus.plexus.notification.NotificationException;
+import org.codehaus.plexus.notification.RecipientSource;
+import org.codehaus.plexus.notification.notifier.Notifier;
+import org.codehaus.plexus.notification.notifier.manager.NotifierManager;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: DefaultContinuumNotificationDispatcher.java,v 1.2 2005/04/01 22:55:52 trygvis Exp $
+ * @version $Id$
  */
 public class DefaultContinuumNotificationDispatcher
     extends AbstractLogEnabled
     implements ContinuumNotificationDispatcher
 {
     /** @requirement */
-    private NotificationDispatcher notificationDispatcher;
+    private NotifierManager notifierManager;
 
     /** @requirement */
     private ContinuumStore store;
+
+    /** @requirement */
+    private RecipientSource recipientSource;
 
     // ----------------------------------------------------------------------
     // ContinuumNotificationDispatcher Implementation
@@ -49,32 +58,32 @@ public class DefaultContinuumNotificationDispatcher
 
     public void buildStarted( ContinuumProject project )
     {
-        sendNotifiaction( MESSAGE_ID_BUILD_STARTED, project, null );
+        sendNotification( MESSAGE_ID_BUILD_STARTED, project, null );
     }
 
     public void checkoutStarted( ContinuumProject project )
     {
-        sendNotifiaction( MESSAGE_ID_CHECKOUT_STARTED, project, null );
+        sendNotification( MESSAGE_ID_CHECKOUT_STARTED, project, null );
     }
 
     public void checkoutComplete( ContinuumProject project, UpdateScmResult scmResult )
     {
-        sendNotifiaction( MESSAGE_ID_CHECKOUT_COMPLETE, project, null );
+        sendNotification( MESSAGE_ID_CHECKOUT_COMPLETE, project, null );
     }
 
     public void runningGoals( ContinuumProject project, ContinuumBuild build )
     {
-        sendNotifiaction( MESSAGE_ID_RUNNING_GOALS, project, build );
+        sendNotification( MESSAGE_ID_RUNNING_GOALS, project, build );
     }
 
     public void goalsCompleted( ContinuumProject project, ContinuumBuild build )
     {
-        sendNotifiaction( MESSAGE_ID_GOALS_COMPLETED, project, build );
+        sendNotification( MESSAGE_ID_GOALS_COMPLETED, project, build );
     }
 
     public void buildComplete( ContinuumProject project, ContinuumBuild build )
     {
-        sendNotifiaction( MESSAGE_ID_BUILD_COMPLETE, project, build );
+        sendNotification( MESSAGE_ID_BUILD_COMPLETE, project, build );
     }
 
     // ----------------------------------------------------------------------
@@ -82,14 +91,14 @@ public class DefaultContinuumNotificationDispatcher
     // ----------------------------------------------------------------------
 
 
-    private void sendNotifiaction( String messageId,
+    private void sendNotification( String messageId,
                                    ContinuumProject project,
                                    ContinuumBuild build )
     {
-        sendNotifiaction( messageId, project, build, null );
+        sendNotification( messageId, project, build, null );
     }
 
-    private void sendNotifiaction( String messageId,
+    private void sendNotification( String messageId,
                                    ContinuumProject project,
                                    ContinuumBuild build,
                                    UpdateScmResult scmResult )
@@ -125,7 +134,20 @@ public class DefaultContinuumNotificationDispatcher
 
         try
         {
-            notificationDispatcher.sendNotification( messageId, context );
+            for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
+            {
+                ContinuumNotifier continuumNotifier = (ContinuumNotifier) i.next();
+
+                String notifierType = continuumNotifier.getType();
+
+                Properties configuration = continuumNotifier.getConfiguration();
+
+                Notifier notifier = notifierManager.getNotifier( notifierType );
+
+                Set recipients = recipientSource.getRecipients( notifierType, messageId, configuration, context );
+
+                notifier.sendNotification( messageId, recipients, continuumNotifier.getConfiguration(), context );
+            }
         }
         catch ( NotificationException e )
         {

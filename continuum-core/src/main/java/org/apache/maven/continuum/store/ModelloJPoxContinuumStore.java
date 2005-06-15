@@ -29,6 +29,7 @@ import javax.jdo.Query;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
@@ -186,7 +187,7 @@ public class ModelloJPoxContinuumStore
     public void updateProject( String projectId,
                                String name,
                                String scmUrl,
-                               String nagEmailAddress,
+                               List notifiers,
                                String version,
                                String commandLineArguments )
         throws ContinuumStoreException
@@ -199,7 +200,7 @@ public class ModelloJPoxContinuumStore
 
             project.setName( name );
             project.setScmUrl( scmUrl );
-            project.setNagEmailAddress( nagEmailAddress );
+            project.setNotifiers( notifiers );
             project.setVersion( version );
             project.setCommandLineArguments( commandLineArguments );
 

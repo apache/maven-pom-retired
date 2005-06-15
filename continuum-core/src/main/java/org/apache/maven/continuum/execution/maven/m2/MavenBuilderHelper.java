@@ -18,7 +18,6 @@ package org.apache.maven.continuum.execution.maven.m2;
 
 import java.io.File;
 
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.project.MavenProject;
 

@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -35,7 +36,7 @@ import org.codehaus.plexus.PlexusTestCase;
 public class MavenTwoContinuumProjectBuilderTest
     extends PlexusTestCase
 {
-    public void testGetNagEmailAddressWhenTypeIsSetToEmail()
+    public void testGetEmailAddressWhenTypeIsSetToEmail()
         throws Exception
     {
         ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder)
@@ -51,10 +52,16 @@ public class MavenTwoContinuumProjectBuilderTest
 
         MavenTwoProject project = ( MavenTwoProject ) result.getProjects().get( 0 );
 
-        assertEquals( "foo@bar", project.getNagEmailAddress() );
+        assertNotNull( project.getNotifiers() );
+
+        assertEquals( 1, project.getNotifiers().size() );
+
+        ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get(0);
+
+        assertEquals( "foo@bar", notifier.getConfiguration().get( "address" ) );
     }
 
-    public void testGetNagEmailAddressWhenTypeIsntSet()
+    public void testGetEmailAddressWhenTypeIsntSet()
         throws Exception
     {
         ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder)
@@ -70,7 +77,13 @@ public class MavenTwoContinuumProjectBuilderTest
 
         MavenTwoProject project = (MavenTwoProject) result.getProjects().get( 0 );
 
-        assertEquals( "foo@bar", project.getNagEmailAddress() );
+        assertNotNull( project.getNotifiers() );
+
+        assertEquals( 1, project.getNotifiers().size() );
+
+        ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get(0);
+
+        assertEquals( "foo@bar", notifier.getConfiguration().get( "address" ) );
     }
 
     public void testCreateProjectsWithModules()

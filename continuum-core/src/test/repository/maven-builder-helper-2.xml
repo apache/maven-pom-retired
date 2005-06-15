@@ -6,7 +6,9 @@
   <ciManagement>
     <notifiers>
       <notifier>
-        <address>foo@bar</address>
+        <configuration>
+          <address>foo@bar</address>
+        </configuration>
       </notifier>
     </notifiers>
   </ciManagement>

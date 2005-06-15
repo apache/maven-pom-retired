@@ -22,10 +22,12 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
+import org.apache.maven.continuum.notification.ContinuumRecipientSource;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -35,23 +37,22 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.exception.ResourceNotFoundException;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.mailsender.MailMessage;
 import org.codehaus.plexus.mailsender.MailSender;
 import org.codehaus.plexus.mailsender.MailSenderException;
 import org.codehaus.plexus.notification.NotificationException;
-import org.codehaus.plexus.notification.notifier.Notifier;
+import org.codehaus.plexus.notification.notifier.AbstractNotifier;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: MailContinuumNotifier.java,v 1.3 2005/04/02 21:40:04 trygvis Exp $
+ * @version $Id$
  */
 public class MailContinuumNotifier
-    extends AbstractLogEnabled
-    implements Initializable, Notifier
+    extends AbstractNotifier
+    implements Initializable
 {
     // ----------------------------------------------------------------------
     // Requirements
@@ -86,6 +87,8 @@ public class MailContinuumNotifier
     private String localHostName;
 
     private FormatterTool formatterTool;
+
+    private Map configuration;
 
     // ----------------------------------------------------------------------
     //
@@ -143,9 +146,11 @@ public class MailContinuumNotifier
     // Notifier Implementation
     // ----------------------------------------------------------------------
 
-    public void sendNotification( String source, Set recipients, Map context )
+    public void sendNotification( String source, Set recipients, Map configuration, Map context )
         throws NotificationException
     {
+        this.configuration = configuration;
+
         ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
         ContinuumBuild build = (ContinuumBuild) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
@@ -348,12 +353,19 @@ public class MailContinuumNotifier
             return fromMailbox;
         }
 
-        if ( StringUtils.isEmpty( project.getNagEmailAddress() ) )
+        String address = null;
+
+        if ( configuration != null )
+        {
+            address = (String) configuration.get( ContinuumRecipientSource.ADDRESS_FIELD );
+        }
+
+        if ( StringUtils.isEmpty( address ) )
         {
             return FALLBACK_FROM_MAILBOX;
         }
 
-        return project.getNagEmailAddress();
+        return address;
     }
 
     private boolean shouldNotify( ContinuumBuild build, ContinuumBuild previousBuild )
@@ -424,5 +436,14 @@ public class MailContinuumNotifier
         }
 
         return (ContinuumBuild) itr.next();
+    }
+
+    /**
+     * @see org.codehaus.plexus.notification.notifier.Notifier#sendNotification(java.lang.String, java.util.Set, java.util.Properties)
+     */
+    public void sendNotification( String arg0, Set arg1, Properties arg2 )
+        throws NotificationException
+    {
+        throw new NotificationException( "Not implemented." );
     }
 }

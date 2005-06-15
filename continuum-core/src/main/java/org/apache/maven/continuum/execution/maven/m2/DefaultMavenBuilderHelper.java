@@ -17,13 +17,16 @@ package org.apache.maven.continuum.execution.maven.m2;
  */
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.continuum.project.ContinuumDeveloper;
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Developer;
@@ -74,7 +77,7 @@ public class DefaultMavenBuilderHelper
 
     public void mapMavenProjectToContinuumProject( MavenProject mavenProject, MavenTwoProject continuumProject )
     {
-        continuumProject.setNagEmailAddress( getNagEmailAddress( mavenProject ) );
+        continuumProject.setNotifiers( getNotifiers( mavenProject ) );
 
         continuumProject.setName( getProjectName( mavenProject ) );
 
@@ -172,9 +175,9 @@ public class DefaultMavenBuilderHelper
             throw new MavenBuilderHelperException( "Missing CiManagement from the project descriptor." );
         }
 
-        if ( StringUtils.isEmpty( getNagEmailAddress( project ) ) )
+        if ( getNotifiers( project ).isEmpty() )
         {
-            throw new MavenBuilderHelperException( "Missing nag email address from the continuous integration info." );
+            throw new MavenBuilderHelperException( "Missing notifiers from the continuous integration info." );
         }
 
         // SCM connection
@@ -217,19 +220,27 @@ public class DefaultMavenBuilderHelper
         return project.getScm().getConnection();
     }
 
-    private String getNagEmailAddress( MavenProject project )
+    private List getNotifiers( MavenProject mavenProject )
     {
-        for ( Iterator it = project.getCiManagement().getNotifiers().iterator(); it.hasNext(); )
-        {
-            Notifier notifier = (Notifier) it.next();
+        List notifiers = new ArrayList();
 
-            if ( notifier.getType().equals( "mail" ) )
+        for ( Iterator i = mavenProject.getCiManagement().getNotifiers().iterator(); i.hasNext(); )
+        {
+            Notifier projectNotifier = (Notifier) i.next();
+
+            ContinuumNotifier notifier = new ContinuumNotifier();
+
+            if ( !StringUtils.isEmpty( projectNotifier.getType() ) )
             {
-                return notifier.getAddress();
+                notifier.setType( projectNotifier.getType() );
             }
+
+            notifier.setConfiguration( projectNotifier.getConfiguration() );
+
+            notifiers.add( notifier );
         }
 
-        return null;
+        return notifiers;
     }
 
     private String getVersion( MavenProject project )

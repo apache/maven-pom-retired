@@ -16,6 +16,7 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -48,7 +49,9 @@ public class MavenOneContinuumProjectBuilderTest
 
         assertEquals( "scm:svn:http://svn.apache.org/repos/asf:maven/maven-1/core/trunk/", project.getScmUrl() );
 
-        assertEquals( "dev@maven.apache.org", project.getNagEmailAddress() );
+        ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get( 0 );
+
+        assertEquals( "dev@maven.apache.org", notifier.getConfiguration().get( "address" ) );
 
         assertEquals( "1.1-SNAPSHOT", project.getVersion() );
 

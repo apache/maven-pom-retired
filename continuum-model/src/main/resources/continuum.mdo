@@ -36,11 +36,6 @@
           <type>String</type>
         </field>
         <field>
-          <name>nagEmailAddress</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
           <name>version</name>
           <version>1.0.0</version>
           <type>String</type>
@@ -138,6 +133,41 @@
           <version>1.0.0</version>
           <association stash.part="true">
             <type>ContinuumDeveloper</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>notifiers</name>
+          <version>1.0.0</version>
+          <association stash.part="true">
+            <type>ContinuumNotifier</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class stash.storable="true">
+      <name>ContinuumNotifier</name>
+      <version>1.0.0</version>
+      <description>
+        Configures one method for notifying users/developers when a build breaks.
+      </description>
+      <fields>
+        <field>
+          <name>type</name>
+          <version>1.0.0</version>
+          <defaultValue>mail</defaultValue>
+          <type>String</type>
+          <description>The mechanism used to deliver notifications.</description>
+        </field>
+        <field>
+          <name>configuration</name>
+          <version>1.0.0</version>
+          <description>Extended configuration specific to this notifier goes here.</description>
+          <type>Properties</type>
+          <association xml.mapStyle="inline"  stash.part="true">
+            <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>

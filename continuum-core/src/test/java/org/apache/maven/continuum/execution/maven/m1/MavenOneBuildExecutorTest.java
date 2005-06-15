@@ -17,8 +17,12 @@ package org.apache.maven.continuum.execution.maven.m1;
  */
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.MavenOneProject;
 
 import org.codehaus.plexus.PlexusTestCase;
@@ -63,7 +67,19 @@ public class MavenOneBuildExecutorTest
 
         project.setScmUrl( "scm:svn:http://svn.apache.org/repos/asf:maven/maven-1/core/trunk/" );
 
-        project.setNagEmailAddress( "dev@maven.apache.org" );
+        ContinuumNotifier notifier = new ContinuumNotifier();
+
+        Properties props = new Properties();
+
+        props.put( "address", "dev@maven.apache.org" );
+
+        notifier.setConfiguration( props );
+
+        List notifiers = new ArrayList();
+
+        notifiers.add( notifier );
+
+        project.setNotifiers( notifiers );
 
         project.setVersion( "1.1-SNAPSHOT" );
 
@@ -85,7 +101,9 @@ public class MavenOneBuildExecutorTest
 
         assertEquals( "scm:svn:http://svn.apache.org/repos/asf:maven/maven-1/core/trunk/", project.getScmUrl() );
 
-        assertEquals( "dev@maven.apache.org", project.getNagEmailAddress() );
+        ContinuumNotifier actualNotifier = (ContinuumNotifier) project.getNotifiers().get( 0 );
+
+        assertEquals( "dev@maven.apache.org", actualNotifier.getConfiguration().get( "address" ) );
 
         assertEquals( "1.1-SNAPSHOT", project.getVersion() );
 

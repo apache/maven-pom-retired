@@ -19,9 +19,13 @@ package org.apache.maven.continuum.project.builder.cc;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.project.AntProject;
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
@@ -111,14 +115,24 @@ public class CruiseControlProjectBuilder
 
             if ( publishers != null )
             {
-                String nagEmailAddress = findNagEmailAddress( publishers.getChild( "email" ) );
+                String emailAddress = findNagEmailAddress( publishers.getChild( "email" ) );
 
-                if ( nagEmailAddress == null )
+                if ( emailAddress == null )
                 {
-                    nagEmailAddress = findNagEmailAddress( publishers.getChild( "htmlemail" ) );
+                    emailAddress = findNagEmailAddress( publishers.getChild( "htmlemail" ) );
                 }
 
-                continuumProject.setNagEmailAddress( nagEmailAddress );
+                ContinuumNotifier notifier = new ContinuumNotifier();
+
+                Properties props = new Properties();
+
+                props.put( "address", emailAddress );
+
+                notifier.setConfiguration( props );
+
+                List notifiers = new ArrayList();
+
+                continuumProject.setNotifiers( notifiers );
             }
 
             // ----------------------------------------------------------------------
@@ -273,7 +287,7 @@ public class CruiseControlProjectBuilder
             return null;
         }
 
-        String nagEmailAddress = failure[ 0 ].getValue();
+        String nagEmailAddress = failure[ 0 ].getAttribute( "address" );
 
         if ( StringUtils.isEmpty( nagEmailAddress ) )
         {

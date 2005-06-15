@@ -18,12 +18,15 @@ package org.apache.maven.continuum.notification;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.notification.AbstractRecipientSource;
 import org.codehaus.plexus.notification.NotificationException;
 import org.codehaus.plexus.notification.RecipientSource;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -31,12 +34,14 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumRecipientSource.java,v 1.2 2005/04/01 22:55:52 trygvis Exp $
+ * @version $Id$
  */
 public class ContinuumRecipientSource
-    extends AbstractLogEnabled
-    implements RecipientSource, Initializable
+    extends AbstractRecipientSource
+    implements Initializable
 {
+    public static String ADDRESS_FIELD = "address";
+
     /** @configuration */
     private String toOverride;
 
@@ -64,28 +69,7 @@ public class ContinuumRecipientSource
     // RecipientSource Implementation
     // ----------------------------------------------------------------------
 
-    public Set getRecipients( String notifierType, String messageId, Map context )
-        throws NotificationException
-    {
-        if ( notifierType.equals( "console" ) )
-        {
-            return Collections.EMPTY_SET;
-        }
-        else if ( notifierType.equals( "mail" ) )
-        {
-            return getMailRecipients( context );
-        }
-
-        getLogger().warn( "Unknown notifier type '" + notifierType + "'." );
-
-        return Collections.EMPTY_SET;
-    }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private Set getMailRecipients( Map context )
+    public Set getRecipients( String notifierType, String messageId, Map configuration, Map context )
         throws NotificationException
     {
         ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
@@ -101,11 +85,26 @@ public class ContinuumRecipientSource
         {
             recipients.add( toOverride );
         }
-        else if ( !StringUtils.isEmpty( project.getNagEmailAddress() ) )
+        else if ( project.getNotifiers() != null && !project.getNotifiers().isEmpty() )
         {
-            recipients.add( project.getNagEmailAddress() );
+            for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
+            {
+                ContinuumNotifier notifier = (ContinuumNotifier) i.next();
+
+                if ( notifier.getType().equals( notifierType ) && notifier.getConfiguration().containsKey( ADDRESS_FIELD ) )
+                {
+                    recipients.add( notifier.getConfiguration().getProperty( ADDRESS_FIELD ) );
+                }
+            }
         }
 
-        return recipients;
+        if ( recipients.isEmpty() )
+        {
+            return Collections.EMPTY_SET;
+        }
+        else
+        {
+            return recipients;
+        }
     }
 }

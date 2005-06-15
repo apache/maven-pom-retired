@@ -18,6 +18,7 @@ package org.apache.maven.continuum.core;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
@@ -59,7 +60,7 @@ public interface ContinuumCore
     void updateProject( String projectId,
                         String name,
                         String scmUrl,
-                        String nagEmailAddress,
+                        List notifiers,
                         String version,
                         String commandLineArguments )
         throws ContinuumException;

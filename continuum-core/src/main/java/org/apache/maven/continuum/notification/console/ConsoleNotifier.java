@@ -17,6 +17,7 @@ package org.apache.maven.continuum.notification.console;
  */
 
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
@@ -24,24 +25,22 @@ import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.notification.NotificationException;
-import org.codehaus.plexus.notification.notifier.Notifier;
+import org.codehaus.plexus.notification.notifier.AbstractNotifier;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ConsoleNotifier.java,v 1.1.1.1 2005/03/29 20:42:01 trygvis Exp $
+ * @version $Id$
  */
 public class ConsoleNotifier
-    extends AbstractLogEnabled
-    implements Notifier
+    extends AbstractNotifier
 {
     // ----------------------------------------------------------------------
     // Notifier Implementation
     // ----------------------------------------------------------------------
 
-    public void sendNotification( String source, Set recipients, Map context )
+    public void sendNotification( String source, Set recipients, Map configuration, Map context )
         throws NotificationException
     {
         ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
@@ -136,5 +135,14 @@ public class ConsoleNotifier
         {
             System.out.println( build.getError() );
         }
+    }
+
+    /**
+     * @see org.codehaus.plexus.notification.notifier.Notifier#sendNotification(java.lang.String, java.util.Set, java.util.Properties)
+     */
+    public void sendNotification( String arg0, Set arg1, Properties arg2 )
+        throws NotificationException
+    {
+        throw new NotificationException( "Not implemented." );
     }
 }

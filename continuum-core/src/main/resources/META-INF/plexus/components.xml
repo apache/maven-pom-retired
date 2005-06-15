@@ -100,10 +100,13 @@
       <implementation>org.apache.maven.continuum.notification.DefaultContinuumNotificationDispatcher</implementation>
       <requirements>
         <requirement>
-          <role>org.codehaus.plexus.notification.NotificationDispatcher</role>
+          <role>org.codehaus.plexus.notification.notifier.manager.NotifierManager</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.notification.RecipientSource</role>
         </requirement>
       </requirements>
     </component>

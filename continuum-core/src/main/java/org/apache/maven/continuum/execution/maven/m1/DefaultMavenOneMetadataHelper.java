@@ -18,7 +18,13 @@ package org.apache.maven.continuum.execution.maven.m1;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
+import org.apache.maven.continuum.notification.ContinuumRecipientSource;
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.MavenOneProject;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -95,13 +101,15 @@ public class DefaultMavenOneMetadataHelper
         // Nag email address
         Xpp3Dom build = mavenProject.getChild( "build" );
 
-        String nagEmailAddress;
+        List notifiers = null;
+
+        ContinuumNotifier notifier = new ContinuumNotifier();
 
         if ( build == null )
         {
-            if ( !StringUtils.isEmpty( project.getNagEmailAddress() ) )
+            if ( project.getNotifiers() != null && !project.getNotifiers().isEmpty() )
             {
-                nagEmailAddress = project.getNagEmailAddress();
+                notifiers = project.getNotifiers();
             }
             else
             {
@@ -110,12 +118,47 @@ public class DefaultMavenOneMetadataHelper
         }
         else
         {
-            nagEmailAddress = getValue( build, "nagEmailAddress", project.getNagEmailAddress() );
+            String currentNagEmailAddress = null;
+            
+            if ( project.getNotifiers() != null && !project.getNotifiers().isEmpty() )
+            {
+                for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
+                {
+                    ContinuumNotifier notif = (ContinuumNotifier) i.next();
+
+                    // Can we have an other type for maven 1 project?
+                    if ( "mail".equals( notif.getType() ) )
+                    {
+                        currentNagEmailAddress = notif.getConfiguration().getProperty( ContinuumRecipientSource.ADDRESS_FIELD );
+                    }
+                }
+            }
+
+            String nagEmailAddress = getValue( build, "nagEmailAddress", currentNagEmailAddress );
+
+            if ( nagEmailAddress != null )
+            {
+                Properties props = new Properties();
+
+                props.put( ContinuumRecipientSource.ADDRESS_FIELD, nagEmailAddress );
+
+                notifier.setConfiguration( props );
+            }
+
         }
 
-        if ( StringUtils.isEmpty( nagEmailAddress ) )
+        if ( notifiers == null && notifier.getConfiguration().isEmpty() )
         {
             throw new MavenOneMetadataHelperException( "Missing nag email address from the project descriptor." );
+        }
+        else
+        {
+            if ( notifiers == null )
+            {
+                notifiers = new ArrayList();
+            }
+
+            notifiers.add( notifier );
         }
 
         // Version
@@ -140,7 +183,7 @@ public class DefaultMavenOneMetadataHelper
 
         project.setScmUrl( scmConnection );
 
-        project.setNagEmailAddress( nagEmailAddress );
+        project.setNotifiers( notifiers );
 
         project.setVersion( version );
     }

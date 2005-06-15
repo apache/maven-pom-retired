@@ -52,7 +52,7 @@ public interface ContinuumStore
     void updateProject( String projectId,
                         String name,
                         String scmUrl,
-                        String nagEmailAddress,
+                        List notifiers,
                         String version,
                         String commandLineArguments )
         throws ContinuumStoreException;

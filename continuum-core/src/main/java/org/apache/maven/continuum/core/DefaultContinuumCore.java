@@ -281,7 +281,7 @@ public class DefaultContinuumCore
     public void updateProject( String projectId,
                                String name,
                                String scmUrl,
-                               String nagEmailAddress,
+                               List notifiers,
                                String version,
                                String commandLineArguments )
         throws ContinuumException
@@ -293,7 +293,7 @@ public class DefaultContinuumCore
             store.updateProject( projectId,
                                  name,
                                  scmUrl,
-                                 nagEmailAddress,
+                                 notifiers,
                                  version,
                                  commandLineArguments );
         }
@@ -623,7 +623,7 @@ public class DefaultContinuumCore
             store.updateProject( id,
                                  project.getName(),
                                  project.getScmUrl(),
-                                 project.getNagEmailAddress(),
+                                 project.getNotifiers(),
                                  project.getVersion(),
                                  project.getCommandLineArguments() );
         }
