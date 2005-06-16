@@ -228,7 +228,8 @@
       <role>org.apache.maven.settings.MavenSettingsBuilder</role>
       <implementation>org.apache.maven.settings.DefaultMavenSettingsBuilder</implementation>
       <configuration>
-        <settings-path>${plexus.home}/conf/maven-settings.xml</settings-path>
+        <globalSettingsPath>${maven.home}/conf/settings.xml</globalSettingsPath>
+        <userSettingsPath>${plexus.home}/conf/maven-settings.xml</userSettingsPath>
       </configuration>
     </component>
 
