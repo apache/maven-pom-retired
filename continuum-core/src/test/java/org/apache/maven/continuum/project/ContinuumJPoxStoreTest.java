@@ -135,16 +135,16 @@ public class ContinuumJPoxStoreTest
         // This is a 1..n association
         // ----------------------------------------------------------------------
 
-        try
-        {
-            p.getDevelopers();
-
-            fail( "Expected a JDODetachedFieldAccessException." );
-        }
-        catch ( JDODetachedFieldAccessException e )
-        {
-            // expected
-        }
+//        try
+//        {
+//            p.getDevelopers();
+//
+//            fail( "Expected a JDODetachedFieldAccessException." );
+//        }
+//        catch ( JDODetachedFieldAccessException e )
+//        {
+//            // expected
+//        }
     }
 
     // ----------------------------------------------------------------------
