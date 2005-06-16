@@ -60,17 +60,6 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
-<!--
-        <field>
-          <name>configuration</name>
-          <version>1.0.0</version>
-          <type>Properties</type>
-          <association xml.mapStyle="inline" stash.part="true">
-            <type>String</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
--->
         <field>
           <name>builds</name>
           <version>1.0.0</version>
@@ -166,7 +155,7 @@
           <version>1.0.0</version>
           <description>Extended configuration specific to this notifier goes here.</description>
           <type>Properties</type>
-          <association xml.mapStyle="inline"  stash.part="true">
+          <association xml.mapStyle="inline" stash.part="true">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -316,24 +305,6 @@
           -->
         </field>
 
-        <!--
-         |
-         | Common fields for all builders
-         |
-         | -->
-<!--
-        <field>
-          <name>buildResult</name>
-          <version>1.0.0</version>
-          <association stash.part="true">
-            <type>ContinuumBuildResult</type>
-          </association>
-          <description>
-            This field contains a builder specific object that the view will
-            know how to work with.
-          </description>
-        </field>
--->
         <field>
           <name>success</name>
           <version>1.0.0</version>
@@ -364,144 +335,6 @@
       </fields>
     </class>
 
-    <!--
-    |
-    | BuilderBuildResult
-    |
-    | -->
-    <!-- java.abstract="true"-->
-<!--
-    <class>
-      <name>ContinuumBuildResult</name>
-      <version>1.0.0</version>
-      <fields>
-        <field>
-          <name>build</name>
-          <version>1.0.0</version>
-          <association>
-            <type>ContinuumBuild</type>
-          </association>
-        </field>
-        <field>
-          <name>success</name>
-          <version>1.0.0</version>
-          <type>boolean</type>
-        </field>
-        <field>
-          <name>standardOutput</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>standardError</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>exitCode</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-      </fields>
-    </class>
--->
-<!--
-    <class>
-      <name>ShellBuildResult</name>
-      <packageName>org.apache.maven.continuum.execution.shell</packageName>
-      <superClass>ContinuumBuildResult</superClass>
-      <version>1.0.0</version>
-      <fields>
-        <field stash.maxSize="8000">
-          <name>standardOutput</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field stash.maxSize="8000">
-          <name>standardError</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>exitCode</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-      </fields>
-    </class>
-
-    <class>
-      <name>Maven1BuildResult</name>
-      <packageName>org.apache.maven.continuum.execution.maven.m1</packageName>
-      <superClass>ContinuumBuildResult</superClass>
-      <version>1.0.0</version>
-      <fields>
-        <field stash.maxSize="8000">
-          <name>standardOutput</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field stash.maxSize="8000">
-          <name>standardError</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>exitCode</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-      </fields>
-    </class>
-
-    <class>
-      <name>MavenTwoBuildResult</name>
-      <packageName>org.apache.maven.continuum.execution.maven.m2</packageName>
-      <superClass>ContinuumBuildResult</superClass>
-      <version>1.0.0</version>
-      <fields>
-        <field stash.maxSize="8000">
-          <name>standardOutput</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field stash.maxSize="8000">
-          <name>standardError</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>exitCode</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-      </fields>
-    </class>
-
-    <class>
-      <name>AntBuildResult</name>
-      <packageName>org.apache.maven.continuum.execution.ant</packageName>
-      <superClass>ContinuumBuildResult</superClass>
-      <version>1.0.0</version>
-      <fields>
-        <field stash.maxSize="8000">
-          <name>standardOutput</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field stash.maxSize="8000">
-          <name>standardError</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>exitCode</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-      </fields>
-    </class>
--->
     <!--
      |
      | Scm Result
