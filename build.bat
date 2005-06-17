@@ -29,7 +29,7 @@ goto Win9xApp
 @REM Reaching here means variables are defined and arguments have been captured
 :endInit
 
-SET INCLUDES=continuum-api/pom.xml,continuum-cc/pom.xml,continuum-core/pom.xml,continuum-model/pom.xml,continuum-web/pom.xml,continuum-xmlrpc/pom.xml
+SET INCLUDES=continuum-api/pom.xml,continuum-cc/pom.xml,continuum-core/pom.xml,continuum-model/pom.xml,continuum-notifiers/pom.xml,continuum-notifiers/continuum-jabber-notifier/pom.xml,continuum-notifiers/continuum-msn-notifier/pom.xml,continuum-web/pom.xml,continuum-xmlrpc/pom.xml
 
 call m2 -N install %MAVEN_CMD_LINE_ARGS%
 call m2 -r -Dmaven.reactor.includes=*/pom.xml clean:clean %MAVEN_CMD_LINE_ARGS%
