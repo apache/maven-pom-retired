@@ -25,10 +25,8 @@ import java.util.Set;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.notification.AbstractRecipientSource;
 import org.codehaus.plexus.notification.NotificationException;
-import org.codehaus.plexus.notification.RecipientSource;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -42,7 +40,7 @@ public class ContinuumRecipientSource
 {
     public static String ADDRESS_FIELD = "address";
 
-    /** @configuration */
+    /** @plexus.configuration */
     private String toOverride;
 
     // ----------------------------------------------------------------------
@@ -87,13 +85,20 @@ public class ContinuumRecipientSource
         }
         else if ( project.getNotifiers() != null && !project.getNotifiers().isEmpty() )
         {
-            for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
+            for ( Iterator notifierIterator = project.getNotifiers().iterator(); notifierIterator.hasNext(); )
             {
-                ContinuumNotifier notifier = (ContinuumNotifier) i.next();
+                ContinuumNotifier notifier = (ContinuumNotifier) notifierIterator.next();
 
                 if ( notifier.getType().equals( notifierType ) && notifier.getConfiguration().containsKey( ADDRESS_FIELD ) )
                 {
-                    recipients.add( notifier.getConfiguration().getProperty( ADDRESS_FIELD ) );
+                    String addressField = notifier.getConfiguration().getProperty( ADDRESS_FIELD );
+
+                    String[] addresses = StringUtils.split( addressField, "," );
+
+                    for ( int i = 0; i < addresses.length; i++ )
+                    {
+                        recipients.add( addresses[i].trim() );
+                    }
                 }
             }
         }
