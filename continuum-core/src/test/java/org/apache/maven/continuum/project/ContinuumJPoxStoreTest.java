@@ -17,6 +17,7 @@ package org.apache.maven.continuum.project;
  */
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.JDODetachedFieldAccessException;
@@ -34,6 +35,37 @@ import org.codehaus.plexus.jdo.JdoFactory;
 public class ContinuumJPoxStoreTest
     extends PlexusTestCase
 {
+    private JdoFactory jdoFactory;
+
+    private PersistenceManagerFactory pmf;
+
+    private ContinuumJPoxStore store;
+
+    public void setUp()
+        throws Exception
+    {
+        super.setUp();
+
+        jdoFactory = (JdoFactory) lookup( JdoFactory.ROLE );
+
+        pmf = jdoFactory.getPersistenceManagerFactory();
+
+        store = new ContinuumJPoxStore( pmf );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        Collection projects = store.getContinuumProjectCollection( true, "", "" );
+
+        for ( Iterator it = projects.iterator(); it.hasNext(); )
+        {
+            ContinuumProject project = (ContinuumProject) it.next();
+
+            store.deleteContinuumProject( project.getId() );
+        }
+    }
+
     public void testCascadingDelete()
         throws Exception
     {
@@ -81,13 +113,9 @@ public class ContinuumJPoxStoreTest
     public void testFetchGroups()
         throws Exception
     {
-        JdoFactory jdoFactory = (JdoFactory) lookup( JdoFactory.ROLE );
-
-        PersistenceManagerFactory pmf = jdoFactory.getPersistenceManagerFactory();
-
-        ContinuumJPoxStore store = new ContinuumJPoxStore( pmf );
-
         ContinuumProject p = makeProject( store );
+
+        String projectId = p.getId();
 
         // ----------------------------------------------------------------------
         // Try to get a single project. This object should include the
@@ -95,7 +123,7 @@ public class ContinuumJPoxStoreTest
         // collections.
         // ----------------------------------------------------------------------
 
-        p = store.getContinuumProject( p.getId(), true );
+        p = store.getContinuumProject( projectId, true );
 
         assertEquals( "check out error exception", p.getCheckOutErrorException() );
 
@@ -112,9 +140,14 @@ public class ContinuumJPoxStoreTest
 
         Collection projects = store.getContinuumProjectCollection( true, "", "" );
 
+        assertEquals( "projects.size", 1 , projects.size() );
+
         p = (ContinuumProject) projects.iterator().next();
 
-        assertEquals( "check out error exception", p.getCheckOutErrorException() );
+        assertEquals( "project.id", projectId, p.getId() );
+
+        assertEquals( "project.checkOutException",
+                      "check out error exception", p.getCheckOutErrorException() );
 
         // ----------------------------------------------------------------------
         // This is a 1..1 association
