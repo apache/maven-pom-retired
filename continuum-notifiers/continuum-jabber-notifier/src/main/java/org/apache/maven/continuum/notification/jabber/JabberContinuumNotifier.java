@@ -43,7 +43,7 @@ public class JabberContinuumNotifier
     // Requirements
     // ----------------------------------------------------------------------
 
-    /** plexus.configuration */
+    /** @plexus.requirement */
     private JabberClient jabberClient;
 
     // ----------------------------------------------------------------------

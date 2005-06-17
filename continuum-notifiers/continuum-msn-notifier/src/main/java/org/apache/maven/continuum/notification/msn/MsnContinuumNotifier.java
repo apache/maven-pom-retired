@@ -43,7 +43,7 @@ public class MsnContinuumNotifier
     // Requirements
     // ----------------------------------------------------------------------
 
-    /** plexus.configuration */
+    /** @plexus.requirement */
     private MsnClient msnClient;
 
     // ----------------------------------------------------------------------

@@ -33,6 +33,22 @@
 
     <!--
      |
+     | Continuum notifiers
+     |
+     |-->
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-jabber-notifier</artifactId>
+      <version>1.0-alpha-3-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-msn-notifier</artifactId>
+      <version>1.0-alpha-3-SNAPSHOT</version>
+    </dependency>
+
+    <!--
+     |
      | Plexus appserver
      |
      |-->

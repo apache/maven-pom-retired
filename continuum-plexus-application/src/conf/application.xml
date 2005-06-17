@@ -112,6 +112,42 @@
     </component>
 
     <!--
+    | The jabber notifier
+    |-->
+    <component>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>jabber</role-hint>
+      <implementation>org.apache.maven.continuum.notification.jabber.JabberContinuumNotifier</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.jabber.JabberClient</role>
+        </requirement>
+      <!-- configuration>
+        <from-address/>
+        <from-password/>
+        <host/>
+        <port/>
+      </configuration -->
+    </component>
+
+    <!--
+    | The MSN notifier
+    |-->
+    <component>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>msn</role-hint>
+      <implementation>org.apache.maven.continuum.notification.msn.MsnContinuumNotifier</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.msn.MsnClient</role>
+        </requirement>
+      <!-- configuration>
+        <from-address/>
+        <from-password/>
+      </configuration -->
+    </component>
+
+    <!--
     | The alarm trigger
     |-->
     <component>
