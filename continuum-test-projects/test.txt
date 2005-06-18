@@ -1,0 +1,20 @@
+ant
+-----
+targets: build
+executable: ant
+name: Ant Test
+nag email: jason@maven.org
+scm url: scm:svn: http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/ant
+version: 1.0
+
+m1
+-----
+http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/m1/project.xml
+
+m2
+-----
+http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/m2/pom.xml
+
+shell
+-----
+http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/shell
