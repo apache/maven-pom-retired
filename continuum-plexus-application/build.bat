@@ -1,3 +1,4 @@
+@echo off
 @REM Decide how to startup depending on the version of windows
 
 @REM -- Win98ME
