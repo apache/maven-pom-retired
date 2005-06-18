@@ -22,6 +22,7 @@
     </dependency>
   </dependencies>
   <modules>
+    <module>continuum-irc-notifier</module>
     <module>continuum-jabber-notifier</module>
     <module>continuum-msn-notifier</module>
   </modules>

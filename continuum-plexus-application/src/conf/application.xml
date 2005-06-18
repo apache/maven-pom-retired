@@ -112,6 +112,21 @@
     </component>
 
     <!--
+    | The irc notifier
+    |-->
+    <component>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>irc</role-hint>
+      <implementation>org.apache.maven.continuum.notification.irc.IrcContinuumNotifier</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.ircbot.IrcBot</role>
+          <role-hint>client</role-hint>
+        </requirement>
+      </requirements>
+    </component>
+
+    <!--
     | The jabber notifier
     |-->
     <component>
@@ -122,6 +137,7 @@
         <requirement>
           <role>org.codehaus.plexus.jabber.JabberClient</role>
         </requirement>
+      </requirements>
       <!-- configuration>
         <from-address/>
         <from-password/>
@@ -141,6 +157,7 @@
         <requirement>
           <role>org.codehaus.plexus.msn.MsnClient</role>
         </requirement>
+      </requirements>
       <!-- configuration>
         <from-address/>
         <from-password/>
