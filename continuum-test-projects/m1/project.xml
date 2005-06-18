@@ -1,0 +1,14 @@
+
+<project>
+  <pomVersion>3</pomVersion>
+  <groupId>continuum</groupId>
+  <artifactId>maven-1</artifactId>
+  <currentVersion>1.0</currentVersion>
+  <name>Maven 1 Project</name>
+  <repository>
+    <connection>scm:cvs:local:/test-ci/cvsroot:maven-1</connection>
+  </repository>
+  <build>
+    <nagEmailAddress>jason@maven.org</nagEmailAddress>
+  </build>
+</project>

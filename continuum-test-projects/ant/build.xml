@@ -1,0 +1,11 @@
+
+<project>
+  <target name="build">
+    <property name="classes" value="target/classes"/>
+    <mkdir dir="${classes}"/>
+    <javac srcdir="src/main/java" destdir="${classes}"/>
+  </target>
+  <target name="clean">
+    <delete dir="${classes}"/>
+  </target>
+</project>
