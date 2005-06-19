@@ -482,11 +482,12 @@ public class DefaultContinuum
     private void updateProject( ContinuumProject project )
         throws ContinuumException
     {
-        core.updateProject( project.getId(),
-                            project.getName(),
-                            project.getScmUrl(),
-                            project.getNotifiers(),
-                            project.getVersion(),
-                            project.getCommandLineArguments() );
+        core.updateProject( project );
+//        core.updateProject( project.getId(),
+//                            project.getName(),
+//                            project.getScmUrl(),
+//                            project.getNotifiers(),
+//                            project.getVersion(),
+//                            project.getCommandLineArguments() );
     }
 }

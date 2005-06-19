@@ -56,13 +56,16 @@ public interface ContinuumCore
     void updateProjectFromScm( String projectId )
         throws ContinuumException;
 
-    void updateProject( String projectId,
-                        String name,
-                        String scmUrl,
-                        List notifiers,
-                        String version,
-                        String commandLineArguments )
+    void updateProject( ContinuumProject project )
         throws ContinuumException;
+
+//    void updateProject( String projectId,
+//                        String name,
+//                        String scmUrl,
+//                        List notifiers,
+//                        String version,
+//                        String commandLineArguments )
+//        throws ContinuumException;
 
     ContinuumProject getProject( String projectId )
         throws ContinuumException;

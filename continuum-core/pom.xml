@@ -18,6 +18,10 @@
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>jpox</groupId>
+      <artifactId>jpox</artifactId>
+    </dependency>
     <!--
      |
      | Plexus Dependencies

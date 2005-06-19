@@ -154,8 +154,8 @@
           <name>configuration</name>
           <version>1.0.0</version>
           <description>Extended configuration specific to this notifier goes here.</description>
-          <type>Properties</type>
-          <association xml.mapStyle="inline" stash.part="true">
+          <type>Map</type>
+          <association xml.mapStyle="inline" stash.part="true" stash.keyType="java.lang.String">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>

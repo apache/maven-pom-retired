@@ -169,14 +169,6 @@ public class ModelloJPoxContinuumStoreTest
 
         configuration.setProperty( "foo", "bar" );
 
-        ContinuumProject expected = makeMavenTwoProject( "Test Project",
-                                                         "scm:local:src/test/repo",
-                                                         "foo@bar.com",
-                                                         "1.0",
-                                                         "a b",
-                                                         "maven2",
-                                                         "/tmp" );
-
         String projectId = store.addProject( makeMavenTwoProject( "Test Project",
                                                                   "scm:local:src/test/repo",
                                                                   "foo@bar.com",
@@ -189,7 +181,13 @@ public class ModelloJPoxContinuumStoreTest
 
         ContinuumProject actual = store.getProject( projectId );
 
-        assertProjectEquals( projectId, expected, actual );
+        assertProjectEquals( projectId, makeMavenTwoProject( "Test Project",
+                                                             "scm:local:src/test/repo",
+                                                             "foo@bar.com",
+                                                             "1.0",
+                                                             "a b",
+                                                             "maven2",
+                                                             "/tmp" ), actual );
     }
 
 
@@ -223,19 +221,21 @@ public class ModelloJPoxContinuumStoreTest
         String builderId = "maven2";
         String workingDirectory = "/tmp";
 
-        String projectId = store.addProject( makeMavenTwoProject( name,
-                                                                  scmUrl,
-                                                                  nagEmailAddress,
-                                                                  version,
-                                                                  commandLineArguments,
-                                                                  builderId,
-                                                                  workingDirectory ) );
+        ContinuumProject project = makeMavenTwoProject( name,
+                                                        scmUrl,
+                                                        nagEmailAddress,
+                                                        version,
+                                                        commandLineArguments,
+                                                        builderId,
+                                                        workingDirectory );
+
+        String projectId = store.addProject( project );
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        ContinuumProject project = store.getProject( projectId );
+        project = store.getProject( projectId );
 
         assertNotNull( project );
 
@@ -261,25 +261,44 @@ public class ModelloJPoxContinuumStoreTest
         //
         // ----------------------------------------------------------------------
 
+        project = store.getProject( projectId );
+        System.err.println( ( (ContinuumNotifier) project.getNotifiers().get( 0 ) ).getConfiguration() );
+
         String name2 = "name 2";
         String scmUrl2 = "scm url 2";
         String emailAddress2 = "2@bar";
         String version2 = "v2";
         String commandLineArguments2 = "";
 
-        store.updateProject( projectId,
-                             name2,
-                             scmUrl2,
-                             createNotifiers( emailAddress2 ),
-                             version2,
-                             commandLineArguments2 );
+        project.setName( name2 );
+        project.setScmUrl( scmUrl2 );
+
+        ContinuumNotifier notifier = ((ContinuumNotifier) project.getNotifiers().get( 0 ));
+        notifier.setType( "kewk" );
+        notifier.getConfiguration().put( "address", emailAddress2 );
+        notifier.getConfiguration().put( "name", "tryg" );
+        project.setVersion( version2 );
+        project.setCommandLineArguments( commandLineArguments2 );
+
+        System.err.println( ( (ContinuumNotifier) project.getNotifiers().get( 0 ) ).getConfiguration() );
+        store.updateProject( project );
+        System.err.println( ( (ContinuumNotifier) project.getNotifiers().get( 0 ) ).getConfiguration() );
 
         project = store.getProject( projectId );
+
+        System.err.println( ((ContinuumNotifier)project.getNotifiers().get(0)).getConfiguration() );
+
+        notifier = new ContinuumNotifier();
+        notifier.setType( "kewk" );
+        notifier.getConfiguration().put( "address", emailAddress2 );
+        notifier.getConfiguration().put( "name", "tryg" );
+        List notifiers = new ArrayList();
+        notifiers.add( notifier );
 
         assertProjectEquals( projectId,
                              name2,
                              scmUrl2,
-                             createNotifiers( emailAddress2 ),
+                             notifiers,
                              version2,
                              commandLineArguments2,
                              builderId,
@@ -798,6 +817,8 @@ public class ModelloJPoxContinuumStoreTest
     {
         ContinuumNotifier notifier = new ContinuumNotifier();
 
+        notifier.setType( "mail" );
+
         Properties props = new Properties();
 
         props.put( "address", emailAddress );
@@ -811,7 +832,8 @@ public class ModelloJPoxContinuumStoreTest
         return notifiers;
     }
 
-    public static String addMavenTwoProject( ContinuumStore store, ContinuumProject project )
+    public static String addMavenTwoProject( ContinuumStore store,
+                                             ContinuumProject project )
         throws Exception
     {
         String projectId = store.addProject( project );
@@ -841,20 +863,22 @@ public class ModelloJPoxContinuumStoreTest
         return projectId;
     }
 
-    public static String addMavenTwoProject( ContinuumStore store, String name, String scmUrl )
+    public static String addMavenTwoProject( ContinuumStore store,
+                                             String name,
+                                             String scmUrl )
         throws Exception
     {
         return addMavenTwoProject( store, makeStubMavenTwoProject( name, scmUrl ) );
     }
 
     public static String addMavenTwoProject( ContinuumStore store,
-                                     String name,
-                                     String scmUrl,
-                                     String nagEmailAddress,
-                                     String version,
-                                     String commandLineArguments,
-                                     String executorId,
-                                     String workingDirectory  )
+                                             String name,
+                                             String scmUrl,
+                                             String nagEmailAddress,
+                                             String version,
+                                             String commandLineArguments,
+                                             String executorId,
+                                             String workingDirectory )
         throws Exception
     {
         String projectId = store.addProject( makeMavenTwoProject( name,
@@ -924,9 +948,17 @@ public class ModelloJPoxContinuumStoreTest
                                       String workingDirectory,
                                       ContinuumProject actual )
     {
-        assertProjectEquals( projectId, name, scmUrl, createNotifiers( emailAddress), version, commandLineArguments,
-                             builderId, workingDirectory, actual );
+        assertProjectEquals( projectId,
+                             name,
+                             scmUrl,
+                             createNotifiers( emailAddress),
+                             version,
+                             commandLineArguments,
+                             builderId,
+                             workingDirectory,
+                             actual );
     }
+
     private void assertProjectEquals( String projectId,
                                       String name,
                                       String scmUrl,
@@ -943,9 +975,9 @@ public class ModelloJPoxContinuumStoreTest
 
         assertEquals( "project.scmUrl", scmUrl, actual.getScmUrl() );
 
-        assertNotNull( notifiers );
+        assertNotNull( "project.notifiers", actual.getNotifiers() );
 
-        assertEquals( "project.notifiers", notifiers.size(), actual.getNotifiers().size() );
+        assertEquals( "project.notifiers.size", notifiers.size(), actual.getNotifiers().size() );
 
         for ( int i = 0; i < notifiers.size(); i++ )
         {

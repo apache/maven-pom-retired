@@ -119,7 +119,7 @@ public class DefaultMavenOneMetadataHelper
         else
         {
             String currentNagEmailAddress = null;
-            
+
             if ( project.getNotifiers() != null && !project.getNotifiers().isEmpty() )
             {
                 for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
@@ -129,7 +129,7 @@ public class DefaultMavenOneMetadataHelper
                     // Can we have an other type for maven 1 project?
                     if ( "mail".equals( notif.getType() ) )
                     {
-                        currentNagEmailAddress = notif.getConfiguration().getProperty( ContinuumRecipientSource.ADDRESS_FIELD );
+                        currentNagEmailAddress = (String) notif.getConfiguration().get( ContinuumRecipientSource.ADDRESS_FIELD );
                     }
                 }
             }

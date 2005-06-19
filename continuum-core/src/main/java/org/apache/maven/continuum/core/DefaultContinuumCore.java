@@ -234,6 +234,19 @@ public class DefaultContinuumCore
         return project.getId();
     }
 
+    public void removeProject( String projectId )
+        throws ContinuumException
+    {
+        try
+        {
+            store.removeProject( projectId );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while removing project.", ex );
+        }
+    }
+
     public void updateProjectFromScm( String projectId )
         throws ContinuumException
     {
@@ -277,43 +290,44 @@ public class DefaultContinuumCore
         updateProjectFromCheckOut( project );
     }
 
-    public void updateProject( String projectId,
-                               String name,
-                               String scmUrl,
-                               List notifiers,
-                               String version,
-                               String commandLineArguments )
+    public void updateProject( ContinuumProject project )
         throws ContinuumException
     {
         try
         {
-            commandLineArguments = StringUtils.clean( commandLineArguments );
-
-            store.updateProject( projectId,
-                                 name,
-                                 scmUrl,
-                                 notifiers,
-                                 version,
-                                 commandLineArguments );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw logAndCreateException( "Error while updating the project.", e );
-        }
-    }
-
-    public void removeProject( String projectId )
-        throws ContinuumException
-    {
-        try
-        {
-            store.removeProject( projectId );
+            store.updateProject( project );
         }
         catch ( ContinuumStoreException ex )
         {
             throw logAndCreateException( "Error while removing project.", ex );
         }
+
     }
+
+//    public void updateProject( String projectId,
+//                               String name,
+//                               String scmUrl,
+//                               List notifiers,
+//                               String version,
+//                               String commandLineArguments )
+//        throws ContinuumException
+//    {
+//        try
+//        {
+//            commandLineArguments = StringUtils.clean( commandLineArguments );
+//
+//            store.updateProject( projectId,
+//                                 name,
+//                                 scmUrl,
+//                                 notifiers,
+//                                 version,
+//                                 commandLineArguments );
+//        }
+//        catch ( ContinuumStoreException e )
+//        {
+//            throw logAndCreateException( "Error while updating the project.", e );
+//        }
+//    }
 
     public ContinuumProject getProject( String projectId )
         throws ContinuumException
@@ -597,9 +611,6 @@ public class DefaultContinuumCore
     {
         getLogger().info( "Updating project '" + project.getName() + "'." );
 
-        // Save the ID now in case the builder fucks it up
-        String id = project.getId();
-
         // ----------------------------------------------------------------------
         // Make a new descriptor
         // ----------------------------------------------------------------------
@@ -621,12 +632,14 @@ public class DefaultContinuumCore
 
         try
         {
-            store.updateProject( id,
-                                 project.getName(),
-                                 project.getScmUrl(),
-                                 project.getNotifiers(),
-                                 project.getVersion(),
-                                 project.getCommandLineArguments() );
+//            store.updateProject( id,
+//                                 project.getName(),
+//                                 project.getScmUrl(),
+//                                 project.getNotifiers(),
+//                                 project.getVersion(),
+//                                 project.getCommandLineArguments() );
+
+            store.updateProject( project );
         }
         catch ( ContinuumStoreException e )
         {

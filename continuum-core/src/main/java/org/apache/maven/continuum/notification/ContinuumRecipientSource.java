@@ -91,7 +91,7 @@ public class ContinuumRecipientSource
 
                 if ( notifier.getType().equals( notifierType ) && notifier.getConfiguration().containsKey( ADDRESS_FIELD ) )
                 {
-                    String addressField = notifier.getConfiguration().getProperty( ADDRESS_FIELD );
+                    String addressField = (String) notifier.getConfiguration().get( ADDRESS_FIELD );
 
                     String[] addresses = StringUtils.split( addressField, "," );
 

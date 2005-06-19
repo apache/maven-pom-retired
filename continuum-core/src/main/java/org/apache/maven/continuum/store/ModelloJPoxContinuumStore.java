@@ -55,7 +55,7 @@ public class ModelloJPoxContinuumStore
     extends AbstractContinuumStore
     implements ContinuumStore, Initializable
 {
-    /** @requirement */
+    /** @plexus.requirement */
     private JdoFactory jdoFactory;
 
     private ContinuumJPoxStore store;
@@ -175,7 +175,28 @@ public class ModelloJPoxContinuumStore
     {
         try
         {
+            project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
+
             store.storeContinuumProject( project );
+
+//            pm.attachCopyAll( project.getDevelopers(), true );
+//
+//            Collection notifiers = project.getNotifiers();
+
+//            System.err.println( "updating " + notifiers.size() );
+//
+//            for ( Iterator it = notifiers.iterator(); it.hasNext(); )
+//            {
+//                ContinuumNotifier notifier = (ContinuumNotifier) it.next();
+//
+//                System.err.println( "type: " + notifier.getType() );
+//                System.err.println( "config:" + notifier.getConfiguration() );
+//                System.err.println( "id: " + JDOHelper.getObjectId( notifier ) );
+//
+//                pm.attachCopy( notifier, true );
+//            }
+
+//            pm.attachCopyAll( notifiers, true );
         }
         catch ( Exception e )
         {
@@ -183,35 +204,35 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public void updateProject( String projectId,
-                               String name,
-                               String scmUrl,
-                               List notifiers,
-                               String version,
-                               String commandLineArguments )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            project.setName( name );
-            project.setScmUrl( scmUrl );
-            project.setNotifiers( notifiers );
-            project.setVersion( version );
-            project.setCommandLineArguments( commandLineArguments );
-
-            store.commit();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while updating project.", e );
-        }
-    }
+//    public void updateProject( String projectId,
+//                               String name,
+//                               String scmUrl,
+//                               List notifiers,
+//                               String version,
+//                               String commandLineArguments )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumProject project = store.getContinuumProject( projectId, false );
+//
+//            project.setName( name );
+//            project.setScmUrl( scmUrl );
+//            project.setNotifiers( notifiers );
+//            project.setVersion( version );
+//            project.setCommandLineArguments( commandLineArguments );
+//
+//            store.commit();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while updating project.", e );
+//        }
+//    }
 
     public Collection getAllProjects()
         throws ContinuumStoreException

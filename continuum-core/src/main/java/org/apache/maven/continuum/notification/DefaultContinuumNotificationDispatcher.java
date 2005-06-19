@@ -19,7 +19,6 @@ package org.apache.maven.continuum.notification;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -43,13 +42,13 @@ public class DefaultContinuumNotificationDispatcher
     extends AbstractLogEnabled
     implements ContinuumNotificationDispatcher
 {
-    /** @requirement */
+    /** @plexus.requirement */
     private NotifierManager notifierManager;
 
-    /** @requirement */
+    /** @plexus.requirement */
     private ContinuumStore store;
 
-    /** @requirement */
+    /** @plexus.requirement */
     private RecipientSource recipientSource;
 
     // ----------------------------------------------------------------------
@@ -140,7 +139,7 @@ public class DefaultContinuumNotificationDispatcher
 
                 String notifierType = continuumNotifier.getType();
 
-                Properties configuration = continuumNotifier.getConfiguration();
+                Map configuration = continuumNotifier.getConfiguration();
 
                 Notifier notifier = notifierManager.getNotifier( notifierType );
 

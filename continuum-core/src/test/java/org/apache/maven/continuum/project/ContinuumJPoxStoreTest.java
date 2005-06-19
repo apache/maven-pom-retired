@@ -18,9 +18,11 @@ package org.apache.maven.continuum.project;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
-import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.JDODetachedFieldAccessException;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
 
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
@@ -64,6 +66,155 @@ public class ContinuumJPoxStoreTest
 
             store.deleteContinuumProject( project.getId() );
         }
+    }
+
+    public void testNotifiers()
+        throws Exception
+    {
+        // ----------------------------------------------------------------------
+        // Store a single notifier
+        // ----------------------------------------------------------------------
+
+        ContinuumNotifier n = new ContinuumNotifier();
+
+        n.setType( "foo" );
+
+        n.getConfiguration().put( "foo", "bar" );
+
+        Object oid = store.addContinuumNotifier( n );
+
+        n = store.getContinuumNotifierByJdoId( oid, true );
+
+        assertEquals( "foo", n.getType() );
+
+        assertNotNull( n.getConfiguration() );
+
+        assertEquals( 1, n.getConfiguration().size() );
+
+        assertEquals( "bar", n.getConfiguration().get( "foo" ) );
+
+        // ----------------------------------------------------------------------
+        // Update a single notifier
+        // ----------------------------------------------------------------------
+
+        n = store.getContinuumNotifierByJdoId( oid, true );
+
+        n.setType( "bar" );
+
+        n.getConfiguration().remove( "foo" );
+
+        n.getConfiguration().put( "bar", "foo" );
+
+        PersistenceManager pm = store.begin();
+
+        pm.attachCopy( n, true );
+
+        store.commit();
+
+        n = store.getContinuumNotifierByJdoId( oid, true );
+
+        assertNotifier( "bar", "bar", "foo", n );
+
+        assertEquals( 1, n.getConfiguration().size() );
+    }
+
+    public void testNotifiersInProject()
+        throws Exception
+    {
+        // ----------------------------------------------------------------------
+        // Make a project with two notifiers
+        // ----------------------------------------------------------------------
+
+        ContinuumProject p = makeProject( store );
+
+        ContinuumNotifier n;
+
+        n = makeNotifier( "foo", "foo", "bar" );
+
+        p.getNotifiers().add( n );
+
+        n = makeNotifier( "bar", "bar", "foo" );
+
+        p.getNotifiers().add( n );
+
+        store.storeContinuumProject( p );
+
+        // ----------------------------------------------------------------------
+        // Assert
+        // ----------------------------------------------------------------------
+
+        p = store.getContinuumProject( p.getId(), true );
+
+        List notifiers = p.getNotifiers();
+
+        assertEquals( 2, notifiers.size() );
+
+        assertNotifier( "foo", "foo", "bar", (ContinuumNotifier)notifiers.get( 0 ) );
+
+        assertNotifier( "bar", "bar", "foo", (ContinuumNotifier) notifiers.get( 1 ) );
+
+        // ----------------------------------------------------------------------
+        // Modify the first notifier
+        // ----------------------------------------------------------------------
+
+        System.err.println( "***" );
+        System.err.println( "***" );
+        System.err.println( "***" );
+
+        System.err.println( "store.getContinuumProject( p.getId(), true );" );
+        p = store.getContinuumProject( p.getId(), true );
+
+        System.err.println( "p.getNotifiers();" );
+        notifiers = p.getNotifiers();
+
+        System.err.println( "notifiers.get( 0 );" );
+        n = (ContinuumNotifier) notifiers.get( 0 );
+
+        System.err.println( "n.setType( \"baz\" );" );
+        n.setType( "baz" );
+
+        // change a existsing property
+        System.err.println( "n.getConfiguration().put( \"foo\", \"foo\" );" );
+        n.getConfiguration().put( "foo", "foo" );
+
+        // add another property
+        System.err.println( "n.getConfiguration().put( \"baz\", \"yay\" );" );
+        n.getConfiguration().put( "baz", "yay" );
+
+        System.err.println( "store.storeContinuumProject( p );" );
+        store.storeContinuumProject( p );
+        
+        System.err.println( "***" );
+        System.err.println( "***" );
+        System.err.println( "***" );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        p = store.getContinuumProject( p.getId(), true );
+
+        notifiers = p.getNotifiers();
+
+        assertEquals( 2, notifiers.size() );
+
+        n = (ContinuumNotifier) notifiers.get( 0 );
+
+        assertEquals( "baz", n.getType() );
+
+        assertNotNull( n.getConfiguration() );
+
+        assertEquals( "foo", n.getConfiguration().get( "foo" ) );
+
+        assertEquals( "yay", n.getConfiguration().get( "baz" ) );
+
+        n = (ContinuumNotifier) notifiers.get( 1 );
+
+        assertEquals( "bar", n.getType() );
+
+        assertNotNull( n.getConfiguration() );
+
+        assertEquals( "foo", n.getConfiguration().get( "bar" ) );
     }
 
     public void testCascadingDelete()
@@ -184,6 +335,28 @@ public class ContinuumJPoxStoreTest
     //
     // ----------------------------------------------------------------------
 
+    private void assertNotifier( String type, String key, String value, ContinuumNotifier notifier )
+    {
+        assertEquals( type, notifier.getType() );
+
+        assertNotNull( notifier.getConfiguration() );
+
+        assertEquals( 1, notifier.getConfiguration().size() );
+
+        assertEquals( value, notifier.getConfiguration().get( key ) );
+    }
+
+    private ContinuumNotifier makeNotifier( String type, String key, String value )
+    {
+        ContinuumNotifier notifier = new ContinuumNotifier();
+
+        notifier.setType( type );
+
+        notifier.getConfiguration().put( key, value );
+
+        return notifier;
+    }
+
     private ContinuumProject makeProject( ContinuumJPoxStore store )
         throws Exception
     {
@@ -247,6 +420,6 @@ public class ContinuumJPoxStoreTest
         //
         // ----------------------------------------------------------------------
 
-        return p;
+        return store.getContinuumProjectByJdoId( oid, true );
     }
 }

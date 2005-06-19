@@ -49,13 +49,13 @@ public interface ContinuumStore
     void updateProject( ContinuumProject project )
         throws ContinuumStoreException;
 
-    void updateProject( String projectId,
-                        String name,
-                        String scmUrl,
-                        List notifiers,
-                        String version,
-                        String commandLineArguments )
-        throws ContinuumStoreException;
+//    void updateProject( String projectId,
+//                        String name,
+//                        String scmUrl,
+//                        List notifiers,
+//                        String version,
+//                        String commandLineArguments )
+//        throws ContinuumStoreException;
 
     // ----------------------------------------------------------------------
     // ContinuumProject Queries
