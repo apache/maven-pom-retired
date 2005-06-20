@@ -8,7 +8,9 @@
   <artifactId>continuum-plexus-application</artifactId>
   <name>Continuum Plexus Application</name>
   <version>1.0-alpha-3-SNAPSHOT</version>
+  <!--
   <packaging>plexus-application</packaging>
+  -->
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
@@ -133,19 +135,37 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plexus-plugin</artifactId>
         <version>1.1-alpha-3-SNAPSHOT</version>
-        <configuration>
-          <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
-          <configurationsDirectory>src/conf</configurationsDirectory>
-          <configurationProperties>app.properties</configurationProperties>
-          <applicationName>continuum</applicationName>
-          <testRuntimeConfiguration>src/test/conf/test-runtime-configuration.xml</testRuntimeConfiguration>
-          <testRuntimeConfigurationProperties>app.properties</testRuntimeConfigurationProperties>
-        </configuration>
         <executions>
           <execution>
+            <!--
+            <phase>generate-resources</phase>
+            <configuration>
+              <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
+              <configurationsDirectory>src/conf</configurationsDirectory>
+              <configurationProperties>app.properties</configurationProperties>
+              <applicationName>continuum</applicationName>
+            </configuration>
+            -->
             <goals>
               <goal>app</goal>
-              <goal>bundle-runtime</goal>
+            </goals>
+          </execution>
+          <execution>
+            <!--
+            <phase>package</phase>
+            -->
+            <goals>
+              <goal>bundle-application</goal>
+            </goals>
+          </execution>
+          <execution>
+            <!--
+            <configuration>
+              <runtimeConfiguration>src/test/conf/test-runtime-configuration.xml</testRuntimeConfiguration>
+              <runtimeConfigurationProperties>app.properties</testRuntimeConfigurationProperties>
+            </configuration>
+            -->
+            <goals>
               <goal>test-runtime</goal>
             </goals>
           </execution>
@@ -171,3 +191,7 @@
     </plugins>
   </build>
 </project>
+
+<!--
+
+-->
