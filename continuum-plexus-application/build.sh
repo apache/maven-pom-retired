@@ -1,1 +1,1 @@
-m2 clean:clean package plexus:bundle-application plexus:test-runtime "$@"
+m2 -o clean:clean package plexus:bundle-application plexus:test-runtime "$@"

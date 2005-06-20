@@ -17,8 +17,16 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jpox-plugin</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>enhance</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.codehaus.modello</groupId>
@@ -29,22 +37,15 @@
           <packageWithVersion>false</packageWithVersion>
           <model>src/main/resources/continuum.mdo</model>
         </configuration>
-        <goals>
-          <goal>
-            <id>java</id>
-          </goal>
-          <goal>
-            <id>jpox-jdo-mapping</id>
-            <configuration>
-              <outputDirectory>target/classes</outputDirectory>
-            </configuration>
-          </goal>
-          <goal>
-            <id>jpox-store</id>
-            <configuration>
-            </configuration>
-          </goal>
-        </goals>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+              <goal>jpox-jdo-mapping</goal>
+              <goal>jpox-store</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
