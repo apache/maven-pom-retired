@@ -17,14 +17,18 @@ package org.apache.maven.continuum.core.action;
  */
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.store.AbstractContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -58,7 +62,8 @@ public class ExecuteBuilderContinuumAction
         {
             getLogger().info( "No files updated, not building. Project id '" + project.getId() + "'." );
 
-            getStore().setBuildNotExecuted( getProjectId( context ) );
+// No state in the project
+//            getStore().setBuildNotExecuted( getProjectId( context ) );
 
             return;
         }
@@ -67,9 +72,11 @@ public class ExecuteBuilderContinuumAction
         // Make the build result
         // ----------------------------------------------------------------------
 
-        String buildId = getStore().buildingProject( getProjectId( context ),
-                                                     forced,
-                                                     updateScmResult );
+//        String buildId = getStore().buildingProject( getProjectId( context ),
+//                                                     forced,
+//                                                     updateScmResult );
+
+        String buildId = createBuild( project, forced, updateScmResult );
 
         context.put( KEY_BUILD_ID, buildId );
 
@@ -84,11 +91,55 @@ public class ExecuteBuilderContinuumAction
         int state = result.isSuccess() ?
                     ContinuumProjectState.OK : ContinuumProjectState.FAILED;
 
-        getStore().setBuildResult( buildId,
-                                   state,
-                                   result,
-                                   updateScmResult,
-                                   null );
+//        getStore().setBuildResult( buildId,
+//                                   state,
+//                                   result,
+//                                   updateScmResult,
+//                                   null );
+
+        ContinuumBuild build = getStore().getBuild( buildId );
+
+        build.setState( state );
+
+        build.setEndTime( new Date().getTime() );
+
+        build.setError( AbstractContinuumStore.throwableToString( null ) );
+
+        build.setUpdateScmResult( updateScmResult );
+
+        // ----------------------------------------------------------------------
+        // Copy over the build result
+        // ----------------------------------------------------------------------
+
+        build.setSuccess( result.isSuccess() );
+
+        build.setStandardOutput( result.getStandardOutput() );
+
+        build.setStandardError( result.getStandardError() );
+
+        build.setExitCode( result.getExitCode() );
+
+        getStore().updateBuild( build );
+    }
+
+    private String createBuild( ContinuumProject project,
+                                boolean forced,
+                                UpdateScmResult scmResult )
+        throws ContinuumStoreException
+    {
+        ContinuumBuild build = new ContinuumBuild();
+
+        build.setStartTime( new Date().getTime() );
+
+        build.setState( ContinuumProjectState.BUILDING );
+
+//        project.setState( ContinuumProjectState.BUILDING );
+
+        build.setForced( forced );
+
+        build.setUpdateScmResult( scmResult );
+
+        return getStore().addBuild( project.getId(), build );
     }
 
     // ----------------------------------------------------------------------

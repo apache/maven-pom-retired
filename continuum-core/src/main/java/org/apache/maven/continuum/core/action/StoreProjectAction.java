@@ -29,16 +29,7 @@ public class StoreProjectAction
 
         String projectId = getStore().addProject( project );
 
-        /*
-        String projectId = getStore().addProject( project.getName(),
-                                                  project.getScmUrl(),
-                                                  project.getNagEmailAddress(),
-                                                  project.getVersion(),
-                                                  project.getCommandLineArguments(),
-                                                  project.getExecutorId(),
-                                                  null,
-                                                  project.getConfiguration() );
-        */
+        project = getStore().getProject( projectId );
 
         context.put( KEY_PROJECT_ID, projectId );
 
@@ -59,6 +50,8 @@ public class StoreProjectAction
 
         project.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
 
-        getStore().setWorkingDirectory( projectId, projectWorkingDirectory.getAbsolutePath() );
+        getStore().updateProject( project );
+
+//        getStore().setWorkingDirectory( projectId, projectWorkingDirectory.getAbsolutePath() );
     }
 }

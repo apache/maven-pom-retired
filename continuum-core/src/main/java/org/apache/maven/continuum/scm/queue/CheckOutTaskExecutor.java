@@ -24,6 +24,7 @@ import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.store.AbstractContinuumStore;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -39,10 +40,10 @@ public class CheckOutTaskExecutor
     extends AbstractLogEnabled
     implements TaskExecutor
 {
-    /** @requirement */
+    /** @plexus.requirement */
     private ContinuumScm scm;
 
-    /** @requirement */
+    /** @plexus.requirement */
     private ContinuumStore store;
 
     // ----------------------------------------------------------------------
@@ -102,7 +103,16 @@ public class CheckOutTaskExecutor
 
         try
         {
-            store.setCheckoutDone( projectId, result, errorMessage, exception );
+//            store.setCheckoutDone( projectId, result, errorMessage, exception );
+            project = store.getProject( projectId );
+
+            project.setCheckOutScmResult( result );
+
+            project.setCheckOutErrorMessage( errorMessage );
+
+            project.setCheckOutErrorException( AbstractContinuumStore.throwableToString( exception ) );
+
+            store.updateProject( project );
         }
         catch ( ContinuumStoreException e )
         {

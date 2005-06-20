@@ -95,7 +95,10 @@ public class IrcContinuumNotifier
         }
     }
 
-    private void buildComplete( ContinuumProject project, ContinuumBuild build, String source, Set recipients )
+    private void buildComplete( ContinuumProject project,
+                                ContinuumBuild build,
+                                String source,
+                                Set recipients )
         throws ContinuumException
     {
         // ----------------------------------------------------------------------
@@ -117,16 +120,16 @@ public class IrcContinuumNotifier
 
         ircClient.logon();
 
-        ircClient.sendNotice( (String) configuration.get( "channel" ), generateMessage( project ) );
+        ircClient.sendNotice( (String) configuration.get( "channel" ), generateMessage( project, build ) );
 
         ircClient.logoff();
 
         ircClient.disconnect();
     }
 
-    private String generateMessage( ContinuumProject project )
+    private String generateMessage( ContinuumProject project, ContinuumBuild build )
     {
-        int state = project.getState();
+        int state = build.getState();
 
         if ( state == ContinuumProjectState.OK )
         {
@@ -142,9 +145,9 @@ public class IrcContinuumNotifier
         }
         else
         {
-            getLogger().warn( "Unknown build state " + project.getState() );
+            getLogger().warn( "Unknown build state " + build.getState() );
 
-            return "ERROR: Unknown build state " + project.getState();
+            return "ERROR: Unknown build state " + build.getState();
         }
     }
 

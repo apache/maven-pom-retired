@@ -71,7 +71,7 @@ class ContinuumXmlRpcCli(cli.cli):
         print "Name:               " + project.name
         print "Version:            " + project.version
         print "Working directory:  " + project.workingDirectory
-        print "State:              " + continuum.decodeState( project.state )
+#        print "State:              " + continuum.decodeState( project.state )
         print "Executor type:      " + project.executorId
         print "SCM URL:            " + project.scmUrl
 
@@ -110,8 +110,9 @@ class ContinuumXmlRpcCli(cli.cli):
         print "Projects:"
         print "  Id |    State     | Executor | Name"
         for project in projects:
-            project.state = continuum.decodeState( project.state )
-            print "%(id)4s | %(state)12s | %(executorId)s | %(name)s" % project.map
+#            project.state = continuum.decodeState( project.state ) 
+# | %(state)12s
+            print "%(id)4s  | %(executorId)s | %(name)s" % project.map
 
     def do_removeProject(self,args):
         """Removes a project."""

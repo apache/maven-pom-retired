@@ -43,9 +43,8 @@ public class CheckOutProjectContinuumAction
 
         result = getScm().checkOut( project, workingDirectory );
 
-        getStore().setCheckoutDone( projectId, result, null, null );
+//        getStore().setCheckoutDone( projectId, result, null, null );
 
         context.put( KEY_CHECKOUT_SCM_RESULT, result );
     }
 }
-    

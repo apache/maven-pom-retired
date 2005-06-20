@@ -29,8 +29,6 @@ public class ContinuumViewContextValve
     extends CreateViewContextValve
 {
     protected void populateViewContext( RunData data, ViewContext context )
-        throws ValveInvocationException
-    
     {
         context.put( "data", data );
     }

@@ -228,7 +228,7 @@ class Project:
         self.scmUrl = map[ "scmUrl" ]
         self.version = map[ "version" ]
         self.workingDirectory = map[ "workingDirectory" ]
-        self.state = int( map[ "state" ] )
+#        self.state = int( map[ "state" ] )
         self.executorId = map[ "executorId" ]
 
         if ( map.has_key( "commandLineArguments" ) ):
@@ -261,10 +261,10 @@ class Project:
             for f in map[ "notifiers" ]:
                 self.notifiers.append( ContinuumNotifier( f ) )
 
+# "state: " + decodeState( self.state ) + os.linesep +\
     def __str__( self ):
         s = "id: " + self.id + os.linesep +\
             "name: " + self.name + os.linesep +\
-            "state: " + decodeState( self.state ) + os.linesep +\
             "version: " + self.version + os.linesep +\
             "executor id: " + self.executorId + os.linesep
 

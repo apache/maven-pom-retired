@@ -84,10 +84,11 @@ public class DefaultContinuum
         {
             ContinuumProject p = (ContinuumProject) i.next();
 
-            if ( p.getState() == ContinuumProjectState.FAILED )
-            {
-                list.add( p );
-            }
+// TODO: FIX
+//            if ( p.getState() == ContinuumProjectState.FAILED )
+//            {
+//                list.add( p );
+//            }
         }
 
         return list;
@@ -102,10 +103,11 @@ public class DefaultContinuum
         {
             ContinuumProject p = (ContinuumProject) i.next();
 
-            if ( p.getState() == ContinuumProjectState.ERROR )
-            {
-                list.add( p );
-            }
+// TODO: FIX
+//            if ( p.getState() == ContinuumProjectState.ERROR )
+//            {
+//                list.add( p );
+//            }
         }
 
         return list;

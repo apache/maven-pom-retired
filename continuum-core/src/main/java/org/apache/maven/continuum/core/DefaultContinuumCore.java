@@ -533,6 +533,8 @@ public class DefaultContinuumCore
             // Set the working directory
             // ----------------------------------------------------------------------
 
+            project = store.getProject( projectId );
+
             projectWorkingDirectory = new File( workingDirectory, projectId );
 
             if ( !projectWorkingDirectory.exists() && !projectWorkingDirectory.mkdirs() )
@@ -547,7 +549,8 @@ public class DefaultContinuumCore
             // Check out the project
             // ----------------------------------------------------------------------
 
-            store.setWorkingDirectory( projectId, projectWorkingDirectory.getAbsolutePath() );
+            store.updateProject( project );
+//            store.setWorkingDirectory( projectId, projectWorkingDirectory.getAbsolutePath() );
         }
         catch ( ContinuumStoreException ex )
         {
@@ -702,37 +705,37 @@ public class DefaultContinuumCore
         // them to ensure that they're always checked out.
         // ----------------------------------------------------------------------
 
-        getLogger().info( "Checking for projects that has to be checked out." );
-
-        try
-        {
-            for ( Iterator it = store.getAllProjects().iterator(); it.hasNext(); )
-            {
-                ContinuumProject project = (ContinuumProject) it.next();
-
-                if ( project.getState() != ContinuumProjectState.CHECKING_OUT )
-                {
-                    continue;
-                }
-
-                getLogger().info( "Adding '" + project.getName() + "' to the check out queue." );
-
-                CheckOutTask checkOutTask = new CheckOutTask( project.getId(),
-                                                              new File( project.getWorkingDirectory() ) );
-
-                checkOutQueue.put( checkOutTask );
-            }
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new StartingException( "Error while enqueuing all projects in the 'checking out' state to " +
-                                         "the check out queue.", e );
-        }
-        catch ( TaskQueueException e )
-        {
-            throw new StartingException( "Error while enqueuing all projects in the 'checking out' state to " +
-                                         "the check out queue.", e );
-        }
+//        getLogger().info( "Checking for projects that has to be checked out." );
+//
+//        try
+//        {
+//            for ( Iterator it = store.getAllProjects().iterator(); it.hasNext(); )
+//            {
+//                ContinuumProject project = (ContinuumProject) it.next();
+//
+//                if ( project.getState() != ContinuumProjectState.CHECKING_OUT )
+//                {
+//                    continue;
+//                }
+//
+//                getLogger().info( "Adding '" + project.getName() + "' to the check out queue." );
+//
+//                CheckOutTask checkOutTask = new CheckOutTask( project.getId(),
+//                                                              new File( project.getWorkingDirectory() ) );
+//
+//                checkOutQueue.put( checkOutTask );
+//            }
+//        }
+//        catch ( ContinuumStoreException e )
+//        {
+//            throw new StartingException( "Error while enqueuing all projects in the 'checking out' state to " +
+//                                         "the check out queue.", e );
+//        }
+//        catch ( TaskQueueException e )
+//        {
+//            throw new StartingException( "Error while enqueuing all projects in the 'checking out' state to " +
+//                                         "the check out queue.", e );
+//        }
 
         // ----------------------------------------------------------------------
         //

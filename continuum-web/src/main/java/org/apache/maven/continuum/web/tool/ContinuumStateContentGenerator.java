@@ -33,11 +33,12 @@ public class ContinuumStateContentGenerator
 {
     public String generate( Object item )
     {
-        int state;
+        int state = 0;
 
         if ( item instanceof ContinuumProject )
         {
-            state = ( (ContinuumProject) item ).getState();
+            getLogger().warn( "The project doesn't have any state anymore" );
+//            state = ( (ContinuumProject) item ).getState();
         }
         else
         {

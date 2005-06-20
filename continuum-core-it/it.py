@@ -45,7 +45,7 @@ if 1:
     maven1Id = getProjectId( c.addMavenOneProject( "file:" + maven1Project + "/project.xml" ) )
     waitForSuccessfulCheckOut( c, maven1Id );
     maven1 = c.getProject( maven1Id )
-    assertProject( maven1Id, "Maven 1 Project", email, c.STATE_NEW, "1.0", "", "maven-1", maven1 )
+    assertProject( maven1Id, "Maven 1 Project", email, "1.0", "", "maven-1", maven1 )
     assertCheckedOutFiles( maven1, [ "/project.xml", "/src/main/java/Foo.java" ] )
 
     progress( "Building Maven 1 project" )
@@ -82,7 +82,7 @@ if 1:
     maven2Id = getProjectId( c.addMavenTwoProject( "file:" + maven2Project + "/pom.xml" ) )
     waitForSuccessfulCheckOut( c, maven2Id );
     maven2 = c.getProject( maven2Id )
-    assertProject( maven2Id, "Maven 2 Project", email, c.STATE_NEW, "2.0-SNAPSHOT", "-N", "maven2", maven2 )
+    assertProject( maven2Id, "Maven 2 Project", email, "2.0-SNAPSHOT", "-N", "maven2", maven2 )
 
     progress( "Building Maven 2 project" )
     buildId = buildProject( c, maven2.id ).id
@@ -120,7 +120,7 @@ if 1:
     antSvnId = getProjectId( c.addAntProject( p ) )
     waitForSuccessfulCheckOut( c, antSvnId );
     antSvn = c.getProject( antSvnId )
-    assertProject( antSvnId, "Ant SVN Project", None, c.STATE_NEW, "3.0", "-v", "ant", antSvn )
+    assertProject( antSvnId, "Ant SVN Project", None, "3.0", "-v", "ant", antSvn )
     progress( "Building SVN Ant project" )
     buildId = buildProject( c, antSvn.id ).id
     assertSuccessfulAntBuild( c, buildId )
@@ -144,7 +144,7 @@ if 1:
     waitForSuccessfulCheckOut( c, antCvsId );
 
     antCvs = c.getProject( antCvsId )
-    assertProject( antCvsId, "Ant CVS Project", None, c.STATE_NEW, "3.0", "-d", "ant", antCvs )
+    assertProject( antCvsId, "Ant CVS Project", None, "3.0", "-d", "ant", antCvs )
     progress( "Building CVS Ant project" )
     buildId = buildProject( c, antCvs.id ).id
     assertSuccessfulAntBuild( c, buildId )
@@ -166,7 +166,7 @@ if 1:
     shellId = getProjectId( c.addShellProject( p ) )
     waitForSuccessfulCheckOut( c, shellId );
     shell = c.getProject( shellId )
-    assertProject( shellId, "Shell Project", None, c.STATE_NEW, "3.0", "", "shell", shell )
+    assertProject( shellId, "Shell Project", None, "3.0", "", "shell", shell )
 
     progress( "Building Shell project" )
     buildId = buildProject( c, shell.id ).id
@@ -192,6 +192,8 @@ if 1:
     shell = c.getProject( shell.id )
     shell.commandLineArguments = "a b";
     c.updateShellProject( shell )
+    shell = c.getProject( shell.id )
+    assertEquals( "Updated command line arguments doesn't match", "a b", shell.commandLineArguments );
 
     buildId = buildProject( c, shell.id ).id
     assertSuccessfulShellBuild( c, buildId, """a

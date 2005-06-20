@@ -123,14 +123,13 @@ public class DefaultXmlRpcHelper
 //            {
 //            }
 
-            value = convertValueToSetterType( setter.getParameterTypes()[ 0 ], value );
+            value = convertValueToSetterType( setter.getParameterTypes()[ 0 ], value, key );
 
             if ( value == null )
             {
                 continue;
             }
 
-            getLogger().info( "Invoking " + setter.toString() + " with " + value.getClass().getName() );
             setter.invoke( target, new Object[]{value} );
         }
     }
@@ -220,35 +219,11 @@ public class DefaultXmlRpcHelper
             {
                 continue;
             }
-            else if ( value instanceof String )
-            {
-                // nothing to do after all, the object is already a string!
-            }
-            else if ( value instanceof Number )
-            {
-                value = value.toString();
-            }
-            else if ( value instanceof Boolean )
-            {
-                value = value.toString();
-            }
-            else if ( value instanceof Collection )
-            {
-                value = collectionToVector( (Collection) value,
-                                            true,
-                                            excludedProperties,
-                                            visitedObjects );
-            }
-            else if ( value instanceof Properties )
-            {
-                value = propertiesToHashtable( (Properties) value );
-            }
-            else
-            {
-                value = objectToHashtable( value,
-                                           excludedProperties,
-                                           visitedObjects );
-            }
+
+            value = convertValue( value,
+                                  true,
+                                  excludedProperties,
+                                  visitedObjects );
 
             // ----------------------------------------------------------------------
             //
@@ -263,6 +238,50 @@ public class DefaultXmlRpcHelper
         return hashtable;
     }
 
+    private Object convertValue( Object value,
+                                 boolean convertElements,
+                                 Set excludedProperties,
+                                 Set visitedObjects )
+        throws IllegalAccessException, InvocationTargetException
+    {
+        if ( value instanceof String )
+        {
+            return value;
+        }
+        else if ( value instanceof Number )
+        {
+            return value.toString();
+        }
+        else if ( value instanceof Boolean )
+        {
+            return value.toString();
+        }
+        else if ( value instanceof Collection )
+        {
+            return collectionToVector( (Collection) value,
+                                       convertElements,
+                                       excludedProperties,
+                                       visitedObjects );
+        }
+        else if ( value instanceof Properties )
+        {
+            return propertiesToHashtable( (Properties) value );
+        }
+        else if ( value instanceof Map )
+        {
+            return mapToHashtable( (Map) value,
+                                   convertElements,
+                                   excludedProperties,
+                                   visitedObjects );
+        }
+        else
+        {
+            return objectToHashtable( value,
+                                      excludedProperties,
+                                      visitedObjects );
+        }
+    }
+
     private Hashtable propertiesToHashtable( Properties value  )
     {
         Hashtable properties = new Hashtable();
@@ -272,6 +291,37 @@ public class DefaultXmlRpcHelper
             Map.Entry entry = (Map.Entry) it.next();
 
             properties.put( entry.getKey(), entry.getValue() );
+        }
+
+        return properties;
+    }
+
+    private Object mapToHashtable( Map value,
+                                   boolean convertElements,
+                                   Set excludedProperties,
+                                   Set visitedObjects )
+        throws IllegalAccessException, InvocationTargetException
+    {
+        Hashtable properties = new Hashtable();
+
+        for ( Iterator it = value.entrySet().iterator(); it.hasNext(); )
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            Object object = entry.getValue();
+
+            if ( convertElements )
+            {
+                object = convertValue( object,
+                                       convertElements,
+                                       excludedProperties,
+                                       visitedObjects );
+            }
+
+            if ( object != null )
+            {
+                properties.put( entry.getKey(), object );
+            }
         }
 
         return properties;
@@ -296,7 +346,10 @@ public class DefaultXmlRpcHelper
 
             if ( convertElements )
             {
-                object = objectToHashtable( object, excludedProperties, visitedObjects );
+                object = convertValue( object,
+                                       convertElements,
+                                       excludedProperties,
+                                       visitedObjects );
             }
 
             if ( object != null )
@@ -366,7 +419,7 @@ public class DefaultXmlRpcHelper
         return map;
     }
 
-    private Object convertValueToSetterType( Class type, Object value )
+    private Object convertValueToSetterType( Class type, Object value, String key )
     {
         if ( value.equals( type.getClass() ) )
         {
@@ -404,7 +457,9 @@ public class DefaultXmlRpcHelper
             }
         }
 
-        getLogger().error( "Could not convert a " + value.getClass().getName() + " to a " + type.getName() );
+        getLogger().error( "Could not convert a " + value.getClass().getName() + " " +
+                           "to a " + type.getName() + ". " +
+                           "Field name: " + key );
 
         return null;
     }

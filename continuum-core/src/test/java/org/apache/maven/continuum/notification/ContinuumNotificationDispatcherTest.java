@@ -18,6 +18,8 @@ package org.apache.maven.continuum.notification;
 
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ModelloJPoxContinuumStoreTest;
+import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 
 import org.codehaus.plexus.PlexusTestCase;
 
@@ -40,11 +42,16 @@ public class ContinuumNotificationDispatcherTest
                                                                      "Notification Dispatcher Test Project",
                                                                      "scm:notification/dispatcher" );
 
-        store.setIsUpdating( projectId );
+//        store.setIsUpdating( projectId );
 
-        store.setUpdateDone( projectId );
+//        store.setUpdateDone( projectId );
 
-        String buildId = store.createBuild( projectId, false );
+//        String buildId = store.createBuild( projectId, false );
+        ContinuumBuild build = new ContinuumBuild();
+        build.setStartTime( System.currentTimeMillis() );
+        build.setState( ContinuumProjectState.BUILDING );
+        build.setForced( false );
+        String buildId = store.addBuild( projectId, build );
 
         notificationDispatcher.buildComplete( store.getProject( projectId ), store.getBuild( buildId ) );
     }

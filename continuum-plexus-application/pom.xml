@@ -79,11 +79,13 @@
       <groupId>plexus</groupId>
       <artifactId>plexus-service-jetty</artifactId>
       <version>1.0-alpha-1</version>
+      <type>plexus-service</type>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-service-xmlrpc</artifactId>
       <version>1.0-alpha-2</version>
+      <type>plexus-service</type>
     </dependency>
 
     <!--

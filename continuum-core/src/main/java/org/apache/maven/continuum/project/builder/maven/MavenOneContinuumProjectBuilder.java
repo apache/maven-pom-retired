@@ -38,7 +38,7 @@ public class MavenOneContinuumProjectBuilder
 {
     public static final String ID = "maven-one-builder";
 
-    /** @requirement */
+    /** @plexus.requirement */
     private MavenOneMetadataHelper metadataHelper;
 
     // ----------------------------------------------------------------------

@@ -258,7 +258,6 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            // TODO: Get the added projects and return the IDs
             ContinuumProjectBuildingResult result = continuum.addMavenTwoProject( url );
 
             Collection projects = result.getProjects();
@@ -291,7 +290,6 @@ public class DefaultContinuumXmlRpc
 
             String projectId = continuum.addMavenTwoProject( project );
 
-            // TODO: Get the added projects and return the IDs
             Collection projectIds = new Vector();
 
             projectIds.add( projectId );
@@ -306,10 +304,12 @@ public class DefaultContinuumXmlRpc
 
     public Hashtable updateMavenTwoProject( Hashtable mavenTwoProject )
     {
-        MavenTwoProject project = new MavenTwoProject();
+        String id = getId( mavenTwoProject );
 
         try
         {
+            MavenTwoProject project = continuum.getMavenTwoProject( id );
+
             xmlRpcHelper.hashtableToObject( mavenTwoProject, project );
 
             continuum.updateMavenTwoProject( project );
@@ -319,7 +319,7 @@ public class DefaultContinuumXmlRpc
         catch ( Throwable e )
         {
             return handleException( "ContinuumXmlRpc.updateMavenTwoProject()",
-                                    "Project id: " + project.getId(), e );
+                                    "Project id: '" + id + "'.", e );
         }
     }
 
@@ -378,10 +378,12 @@ public class DefaultContinuumXmlRpc
 
     public Hashtable updateMavenOneProject( Hashtable mavenOneProject )
     {
-        MavenOneProject project = new MavenOneProject();
+        String id = getId( mavenOneProject );
 
         try
         {
+            MavenOneProject project = continuum.getMavenOneProject( id );
+
             xmlRpcHelper.hashtableToObject( mavenOneProject, project );
 
             continuum.updateMavenOneProject( project );
@@ -391,9 +393,8 @@ public class DefaultContinuumXmlRpc
         catch ( Throwable e )
         {
             return handleException( "ContinuumXmlRpc.updateMavenTwoProject()",
-                                    "Project id: " + project.getId(), e );
+                                    "Project id: '" + id + "'.", e );
         }
-
     }
 
     // ----------------------------------------------------------------------
@@ -425,10 +426,12 @@ public class DefaultContinuumXmlRpc
 
     public Hashtable updateAntProject( Hashtable antProject )
     {
-        AntProject project = new AntProject();
+        String id = getId( antProject );
 
         try
         {
+            AntProject project = continuum.getAntProject( id );
+
             xmlRpcHelper.hashtableToObject( antProject, project );
 
             continuum.updateAntProject( project );
@@ -438,7 +441,7 @@ public class DefaultContinuumXmlRpc
         catch ( Throwable e )
         {
             return handleException( "ContinuumXmlRpc.updateMavenTwoProject()",
-                                    "Project id: " + project.getId(), e );
+                                    "Project id: '" + id + "'", e );
         }
     }
 
@@ -471,12 +474,14 @@ public class DefaultContinuumXmlRpc
 
     public Hashtable updateShellProject( Hashtable shellProject )
     {
-        ShellProject project = new ShellProject();
+        String id = getId( shellProject );
 
         try
         {
-            xmlRpcHelper.hashtableToObject( shellProject, project );
+            ShellProject project = continuum.getShellProject( id );
 
+            xmlRpcHelper.hashtableToObject( shellProject, project );
+    
             continuum.updateShellProject( project );
 
             return makeHashtable();
@@ -484,8 +489,17 @@ public class DefaultContinuumXmlRpc
         catch ( Throwable e )
         {
             return handleException( "ContinuumXmlRpc.updateMavenTwoProject()",
-                                    "Project id: " + project.getId(), e );
+                                    "Project id: '" + id + "'", e );
         }
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private String getId( Hashtable hashtable )
+    {
+        return (String) hashtable.get( "id" );
     }
 
     // ----------------------------------------------------------------------

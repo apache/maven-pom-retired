@@ -39,7 +39,7 @@ public class UpdateProjectFromScmContinuumAction
         //
         // ----------------------------------------------------------------------
 
-        getStore().setIsUpdating( projectId );
+//        getStore().setIsUpdating( projectId );
 
         getNotifier().checkoutStarted( project );
 
@@ -47,6 +47,6 @@ public class UpdateProjectFromScmContinuumAction
 
         context.put( KEY_UPDATE_SCM_RESULT, updateScmResult );
 
-        getStore().setUpdateDone( projectId );
+//        getStore().setUpdateDone( projectId );
     }
 }

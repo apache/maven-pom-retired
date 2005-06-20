@@ -82,7 +82,7 @@ public class ModelloJPoxContinuumStore
     {
         try
         {
-            project.setState( ContinuumProjectState.CHECKING_OUT );
+//            project.setState( ContinuumProjectState.CHECKING_OUT );
 
             Object id = store.addContinuumProject( project );
 
@@ -149,26 +149,26 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public void setWorkingDirectory( String projectId, String workingDirectory )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            project.setWorkingDirectory( workingDirectory );
-
-            store.commit();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while setting the working directory.", e );
-        }
-    }
+//    public void setWorkingDirectory( String projectId, String workingDirectory )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumProject project = store.getContinuumProject( projectId, false );
+//
+//            project.setWorkingDirectory( workingDirectory );
+//
+//            store.commit();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while setting the working directory.", e );
+//        }
+//    }
 
     public void updateProject( ContinuumProject project )
         throws ContinuumStoreException
@@ -178,6 +178,8 @@ public class ModelloJPoxContinuumStore
             project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
 
             store.storeContinuumProject( project );
+
+            project = store.getContinuumProject( project.getId(), true );
 
 //            pm.attachCopyAll( project.getDevelopers(), true );
 //
@@ -352,7 +354,42 @@ public class ModelloJPoxContinuumStore
     // Build
     // ----------------------------------------------------------------------
 
-    public String createBuild( String projectId, boolean forced )
+//    public String createBuild( String projectId, boolean forced )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumProject project = store.getContinuumProject( projectId, false );
+//
+//            ContinuumBuild build = new ContinuumBuild();
+//
+//            build.setStartTime( System.currentTimeMillis() );
+//
+//            build.setState( ContinuumProjectState.BUILDING );
+//
+//            build.setProject( project );
+//
+//            build.setForced( forced );
+//
+//            Object id = store.addContinuumBuild( build );
+//
+//            store.commit();
+//
+//            build = store.getContinuumBuildByJdoId( id, true );
+//
+//            return build.getId();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while creating continuum build for project: '" + projectId + "'.", e );
+//        }
+//    }
+
+    public String addBuild( String projectId, ContinuumBuild build )
         throws ContinuumStoreException
     {
         try
@@ -361,15 +398,11 @@ public class ModelloJPoxContinuumStore
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
 
-            ContinuumBuild build = new ContinuumBuild();
-
-            build.setStartTime( System.currentTimeMillis() );
-
-            build.setState( ContinuumProjectState.BUILDING );
-
             build.setProject( project );
 
-            build.setForced( forced );
+//            build.setStartTime( System.currentTimeMillis() );
+//            build.setState( ContinuumProjectState.BUILDING );
+//            build.setForced( forced );
 
             Object id = store.addContinuumBuild( build );
 
@@ -387,54 +420,67 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public void setBuildResult( String buildId,
-                                int state,
-                                ContinuumBuildExecutionResult result,
-                                UpdateScmResult scmResult,
-                                Throwable error )
+    public void updateBuild( ContinuumBuild build )
         throws ContinuumStoreException
     {
         try
         {
-            store.begin();
-
-            ContinuumBuild build = store.getContinuumBuild( buildId, false );
-
-            // TODO: as build.getProject() should be removed replace this with
-            //       a search for the project
-            ContinuumProject project = build.getProject();
-
-            project.setState( state );
-
-            build.setState( state );
-
-            build.setEndTime( new Date().getTime() );
-
-            build.setError( throwableToString( error ) );
-
-            build.setUpdateScmResult( scmResult );
-
-            // ----------------------------------------------------------------------
-            // Copy over the build result
-            // ----------------------------------------------------------------------
-
-            build.setSuccess( result.isSuccess() );
-
-            build.setStandardOutput( result.getStandardOutput() );
-
-            build.setStandardError( result.getStandardError() );
-
-            build.setExitCode( result.getExitCode() );
-
-            store.commit();
+            store.storeContinuumBuild( build );
         }
         catch ( Exception e )
         {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while setting build result for build: '" + buildId + "'.", e );
+            throw new ContinuumStoreException( "Error while updating continuum build: '" + build.getId() + "'.", e );
         }
     }
+
+//    public void setBuildResult( String buildId,
+//                                int state,
+//                                ContinuumBuildExecutionResult result,
+//                                UpdateScmResult scmResult,
+//                                Throwable error )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumBuild build = store.getContinuumBuild( buildId, false );
+//
+//            // TODO: as build.getProject() should be removed replace this with
+//            //       a search for the project
+//            ContinuumProject project = build.getProject();
+//
+//            project.setState( state );
+//
+//            build.setState( state );
+//
+//            build.setEndTime( new Date().getTime() );
+//
+//            build.setError( throwableToString( error ) );
+//
+//            build.setUpdateScmResult( scmResult );
+//
+//            // ----------------------------------------------------------------------
+//            // Copy over the build result
+//            // ----------------------------------------------------------------------
+//
+//            build.setSuccess( result.isSuccess() );
+//
+//            build.setStandardOutput( result.getStandardOutput() );
+//
+//            build.setStandardError( result.getStandardError() );
+//
+//            build.setExitCode( result.getExitCode() );
+//
+//            store.commit();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while setting build result for build: '" + buildId + "'.", e );
+//        }
+//    }
 
     public ContinuumBuild getBuild( String buildId )
         throws ContinuumStoreException
@@ -583,240 +629,239 @@ public class ModelloJPoxContinuumStore
     //
     // ----------------------------------------------------------------------
 
-    public void setCheckoutDone( String projectId,
-                                 CheckOutScmResult scmResult,
-                                 String errorMessage,
-                                 Throwable exception )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            int state;
-
-            if ( scmResult != null &&
-                 scmResult.isSuccess() &&
-                 StringUtils.isEmpty( errorMessage ) &&
-                 exception == null )
-            {
-                state = ContinuumProjectState.NEW;
-            }
-            else
-            {
-                state = ContinuumProjectState.ERROR;
-            }
-
-            project.setState( state );
-
-            project.setCheckOutScmResult( scmResult );
-
-            project.setCheckOutErrorMessage( errorMessage );
-
-            project.setCheckOutErrorException( throwableToString( exception ) );
-
-            store.commit();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while setting check out scm result.", e );
-        }
-    }
-
-    public void setIsUpdating( String projectId )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            project.setState( ContinuumProjectState.UPDATING );
-
-            store.commit();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while setting build state.", e );
-        }
-    }
-
-    public void setUpdateDone( String projectId )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            project.setState( ContinuumProjectState.BUILDING );
-
-            store.commit();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while setting update scm result.", e );
-        }
-    }
-
-    public void setBuildNotExecuted( String projectId )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            int state;
-
-            ContinuumBuild latestBuild = getLatestBuildForProject( projectId );
-
-            if ( latestBuild == null )
-            {
-                state = ContinuumProjectState.NEW;
-            }
-            else
-            {
-                state = latestBuild.getState();
-            }
-
-            project.setState( state );
-
-            store.commit();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while setting update scm result.", e );
-        }
-    }
-
-    public String buildingProject( String projectId,
-                                   boolean forced,
-                                   UpdateScmResult scmResult )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            ContinuumProject project = store.getContinuumProject( projectId, false );
-
-            ContinuumBuild build = new ContinuumBuild();
-
-            build.setStartTime( new Date().getTime() );
-
-            build.setState( ContinuumProjectState.BUILDING );
-
-            project.setState( ContinuumProjectState.BUILDING );
-
-            build.setProject( project );
-
-            build.setForced( forced );
-
-            build.setUpdateScmResult( scmResult );
-
-            Object id = store.addContinuumBuild( build );
-
-            build = store.getContinuumBuildByJdoId( id, false );
-
-            store.commit();
-
-            return build.getId();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while creating continuum build for project: '" + projectId + "'.", e );
-        }
-
-    }
-
-    public void setBuildComplete( String buildId,
-                                  UpdateScmResult scmResult,
-                                  ContinuumBuildExecutionResult result )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            int state = result.isSuccess() ?
-                        ContinuumProjectState.OK : ContinuumProjectState.FAILED;
-
-            ContinuumBuild build = store.getContinuumBuild( buildId, false );
-
-            build.setState( state );
-
-            ContinuumProject project = build.getProject();
-
-            project.setState( state );
-
-            // ----------------------------------------------------------------------
-            // Copy over the build result
-            // ----------------------------------------------------------------------
-
-            build.setSuccess( result.isSuccess() );
-
-            build.setStandardOutput( result.getStandardOutput() );
-
-            build.setStandardError( result.getStandardError() );
-
-            build.setExitCode( result.getExitCode() );
-
-            store.commit();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while setting build result for build: '" + buildId + "'.", e );
-        }
-    }
-
-    public void setBuildError( String buildId,
-                               UpdateScmResult scmResult,
-                               Throwable throwable )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            store.begin();
-
-            int state = ContinuumProjectState.ERROR;
-
-            ContinuumBuild build = store.getContinuumBuild( buildId, false );
-
-            build.setState( state );
-
-            ContinuumProject project = build.getProject();
-
-            project.setState( state );
-
-            build.setError( throwableToString( throwable ) );
-
-            store.commit();
-        }
-        catch ( Exception e )
-        {
-            rollback( store );
-
-            throw new ContinuumStoreException( "Error while setting build result for build: '" + buildId + "'.", e );
-        }
-    }
+//    public void setCheckoutDone( String projectId,
+//                                 CheckOutScmResult scmResult,
+//                                 String errorMessage,
+//                                 Throwable exception )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumProject project = store.getContinuumProject( projectId, false );
+//
+//            int state;
+//
+//            if ( scmResult != null &&
+//                 scmResult.isSuccess() &&
+//                 StringUtils.isEmpty( errorMessage ) &&
+//                 exception == null )
+//            {
+//                state = ContinuumProjectState.NEW;
+//            }
+//            else
+//            {
+//                state = ContinuumProjectState.ERROR;
+//            }
+//
+//            project.setState( state );
+//
+//            project.setCheckOutScmResult( scmResult );
+//
+//            project.setCheckOutErrorMessage( errorMessage );
+//
+//            project.setCheckOutErrorException( throwableToString( exception ) );
+//
+//            store.commit();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while setting check out scm result.", e );
+//        }
+//    }
+
+//    public void setIsUpdating( String projectId )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumProject project = store.getContinuumProject( projectId, false );
+//
+//            project.setState( ContinuumProjectState.UPDATING );
+//
+//            store.commit();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while setting build state.", e );
+//        }
+//    }
+
+//    public void setUpdateDone( String projectId )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumProject project = store.getContinuumProject( projectId, false );
+//
+//            project.setState( ContinuumProjectState.BUILDING );
+//
+//            store.commit();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while setting update scm result.", e );
+//        }
+//    }
+
+//    public void setBuildNotExecuted( String projectId )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumProject project = store.getContinuumProject( projectId, false );
+//
+//            int state;
+//
+//            ContinuumBuild latestBuild = getLatestBuildForProject( projectId );
+//
+//            if ( latestBuild == null )
+//            {
+//                state = ContinuumProjectState.NEW;
+//            }
+//            else
+//            {
+//                state = latestBuild.getState();
+//            }
+//
+//            project.setState( state );
+//
+//            store.commit();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while setting update scm result.", e );
+//        }
+//    }
+
+//    public String buildingProject( String projectId,
+//                                   boolean forced,
+//                                   UpdateScmResult scmResult )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            ContinuumProject project = store.getContinuumProject( projectId, false );
+//
+//            ContinuumBuild build = new ContinuumBuild();
+//
+//            build.setStartTime( new Date().getTime() );
+//
+//            build.setState( ContinuumProjectState.BUILDING );
+//
+//            project.setState( ContinuumProjectState.BUILDING );
+//
+//            build.setProject( project );
+//
+//            build.setForced( forced );
+//
+//            build.setUpdateScmResult( scmResult );
+//
+//            Object id = store.addContinuumBuild( build );
+//
+//            build = store.getContinuumBuildByJdoId( id, false );
+//
+//            store.commit();
+//
+//            return build.getId();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while creating continuum build for project: '" + projectId + "'.", e );
+//        }
+//    }
+
+//    public void setBuildComplete( String buildId,
+//                                  UpdateScmResult scmResult,
+//                                  ContinuumBuildExecutionResult result )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            int state = result.isSuccess() ?
+//                        ContinuumProjectState.OK : ContinuumProjectState.FAILED;
+//
+//            ContinuumBuild build = store.getContinuumBuild( buildId, false );
+//
+//            build.setState( state );
+//
+//            ContinuumProject project = build.getProject();
+//
+//            project.setState( state );
+//
+//            // ----------------------------------------------------------------------
+//            // Copy over the build result
+//            // ----------------------------------------------------------------------
+//
+//            build.setSuccess( result.isSuccess() );
+//
+//            build.setStandardOutput( result.getStandardOutput() );
+//
+//            build.setStandardError( result.getStandardError() );
+//
+//            build.setExitCode( result.getExitCode() );
+//
+//            store.commit();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while setting build result for build: '" + buildId + "'.", e );
+//        }
+//    }
+
+//    public void setBuildError( String buildId,
+//                               UpdateScmResult scmResult,
+//                               Throwable throwable )
+//        throws ContinuumStoreException
+//    {
+//        try
+//        {
+//            store.begin();
+//
+//            int state = ContinuumProjectState.ERROR;
+//
+//            ContinuumBuild build = store.getContinuumBuild( buildId, false );
+//
+//            build.setState( state );
+//
+//            ContinuumProject project = build.getProject();
+//
+//            project.setState( state );
+//
+//            build.setError( throwableToString( throwable ) );
+//
+//            store.commit();
+//        }
+//        catch ( Exception e )
+//        {
+//            rollback( store );
+//
+//            throw new ContinuumStoreException( "Error while setting build result for build: '" + buildId + "'.", e );
+//        }
+//    }
 
     // ----------------------------------------------------------------------
     //

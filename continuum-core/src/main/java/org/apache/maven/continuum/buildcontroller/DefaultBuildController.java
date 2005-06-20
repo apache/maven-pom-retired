@@ -17,6 +17,9 @@ package org.apache.maven.continuum.buildcontroller;
  */
 
 import java.util.Collection;
+import java.util.Date;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
@@ -43,19 +46,19 @@ public class DefaultBuildController
     extends AbstractLogEnabled
     implements BuildController
 {
-    /** @requirement */
+    /** @plexus.requirement */
     private BuildExecutorManager buildExecutorManager;
 
-    /** @requirement */
+    /** @plexus.requirement */
     private ContinuumStore store;
 
-    /** @requirement */
+    /** @plexus.requirement */
     private ContinuumNotificationDispatcher notifier;
 
-    /** @requirement */
+    /** @plexus.requirement */
     private Continuum continuum;
 
-    /** @requirement */
+    /** @plexus.requirement */
     private ContinuumScm scm;
 
     // ----------------------------------------------------------------------
@@ -165,7 +168,8 @@ public class DefaultBuildController
             {
                 getLogger().info( "No files updated, not building. Project id '" + context.project.getId() + "'." );
 
-                store.setBuildNotExecuted( projectId );
+//                Nothing to do, the project doesn't contain any state anymore
+//                store.setBuildNotExecuted( projectId );
 
                 return;
             }
@@ -198,13 +202,15 @@ public class DefaultBuildController
     {
         try
         {
-            store.setIsUpdating( context.project.getId() );
+// No state in the project
+//            store.setIsUpdating( context.project.getId() );
 
             notifier.checkoutStarted( context.project );
 
             context.scmResult = scm.updateProject( context.project );
 
-            store.setUpdateDone( context.project.getId() );
+// No state in the project
+//            store.setUpdateDone( context.project.getId() );
 
             return true;
         }
@@ -265,7 +271,11 @@ public class DefaultBuildController
                 context.state = ContinuumProjectState.FAILED;
             }
 
-            setBuildResult( context.build.getId(), context.state, context.result, context.scmResult, null );
+            setBuildResult( context.build.getId(),
+                            context.state,
+                            context.result,
+                            context.scmResult,
+                            null );
         }
         catch ( Throwable ex )
         {
@@ -303,18 +313,50 @@ public class DefaultBuildController
                                  int state,
                                  ContinuumBuildExecutionResult result,
                                  UpdateScmResult scmResult,
-                                 Throwable e )
+                                 Throwable error )
         throws ContinuumStoreException
     {
         getLogger().info( "Setting the build id '" + buildId + "' state to " + state );
 
-        store.setBuildResult( buildId, state, result, scmResult, e );
+//        store.setBuildResult( buildId, state, result, scmResult, e );
+
+        ContinuumBuild build = store.getBuild( buildId );
+
+        build.setState( state );
+
+        build.setEndTime( new Date().getTime() );
+
+        build.setError( throwableToString( error ) );
+
+        build.setUpdateScmResult( scmResult );
+
+        // ----------------------------------------------------------------------
+        // Copy over the build result
+        // ----------------------------------------------------------------------
+
+        build.setSuccess( result.isSuccess() );
+
+        build.setStandardOutput( result.getStandardOutput() );
+
+        build.setStandardError( result.getStandardError() );
+
+        build.setExitCode( result.getExitCode() );
+
+        store.updateBuild( build );
     }
 
     private void makeBuild( BuildContext context )
         throws ContinuumStoreException
     {
-        String buildId = store.createBuild( context.project.getId(), context.forced );
+//        String buildId = store.createBuild( context.project.getId(), context.forced );
+
+        ContinuumBuild build = new ContinuumBuild();
+
+        build.setStartTime( System.currentTimeMillis() );
+        build.setState( ContinuumProjectState.BUILDING );
+        build.setForced( context.forced );
+
+        String buildId = store.addBuild( context.project.getId(), build );
 
         getLogger().info( "Build id: '" + buildId + "'." );
 
@@ -330,5 +372,23 @@ public class DefaultBuildController
         Collection builds = store.getBuildsForProject( project.getId(), 0, 0 );
 
         return builds.size() == 0;
+    }
+
+    public static String throwableToString( Throwable error )
+    {
+        if ( error == null )
+        {
+            return "";
+        }
+
+        StringWriter writer = new StringWriter();
+
+        PrintWriter printer = new PrintWriter( writer );
+
+        error.printStackTrace( printer );
+
+        printer.flush();
+
+        return writer.getBuffer().toString();
     }
 }

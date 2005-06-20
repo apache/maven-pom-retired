@@ -57,26 +57,26 @@ public class MailContinuumNotifier
     // Requirements
     // ----------------------------------------------------------------------
 
-    /** @requirement */
+    /** @plexus.requirement */
     private VelocityComponent velocity;
 
-    /** @configuration */
+    /** @plexus.configuration */
     private ContinuumStore store;
 
-    /** @configuration */
+    /** @plexus.configuration */
     private MailSender mailSender;
 
     // ----------------------------------------------------------------------
     // Configuration
     // ----------------------------------------------------------------------
 
-    /** @configuration */
+    /** @plexus.configuration */
     private String fromMailbox;
 
-    /** @configuration */
+    /** @plexus.configuration */
     private String fromName;
 
-    /** @configuration */
+    /** @plexus.configuration */
     private String timestampFormat;
 
     // ----------------------------------------------------------------------
@@ -258,7 +258,7 @@ public class MailContinuumNotifier
         // Send the mail
         // ----------------------------------------------------------------------
 
-        String subject = generateSubject( project );
+        String subject = generateSubject( project, build );
 
         sendMessage( project, recipients, subject, content );
     }
@@ -267,9 +267,9 @@ public class MailContinuumNotifier
     //
     // ----------------------------------------------------------------------
 
-    private String generateSubject( ContinuumProject project )
+    private String generateSubject( ContinuumProject project, ContinuumBuild build )
     {
-        int state = project.getState();
+        int state = build.getState();
 
         if ( state == ContinuumProjectState.OK )
         {
@@ -285,9 +285,9 @@ public class MailContinuumNotifier
         }
         else
         {
-            getLogger().warn( "Unknown build state " + project.getState() );
+            getLogger().warn( "Unknown build state " + build.getState() );
 
-            return "[continuum] ERROR: Unknown build state " + project.getState();
+            return "[continuum] ERROR: Unknown build state " + build.getState();
         }
     }
 

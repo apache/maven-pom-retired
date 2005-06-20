@@ -25,12 +25,10 @@ def fail( message ):
 
 def assertEquals( message, expected, actual ):
     if ( expected == None and actual != None ):
-        print "Expected None but the actual value was: '" + str( actual ) + "'."
-        sys.exit( -1 )
+        assertionFailed( message, "None", actual )
 
     if ( expected != None and actual == None ):
-        print "Expected '" + str( expected ) + "' but the actual value None."
-        sys.exit( -1 )
+        assertionFailed( message, expected, "None" )
 
     if( expected == actual ):
         return
@@ -66,10 +64,10 @@ def assertNotNull( message, condition ):
 
     assertionFailed( message, "Not None", condition )
 
-def assertProject( projectId, name, nagEmailAddress, state, version, commandLineArguments, executorId, project ):
+def assertProject( projectId, name, nagEmailAddress, version, commandLineArguments, executorId, project ):
     assertNotNull( "project.id", projectId )
     assertEquals( "project.name", name, project.name )
-    assertEquals( "project.state", state, project.state )
+#    assertEquals( "project.state", state, project.state )
     assertEquals( "project.version", version, project.version )
     assertEquals( "project.commandLineArguments", commandLineArguments, project.commandLineArguments )
     assertEquals( "project.executorId", executorId, project.executorId )
@@ -79,6 +77,7 @@ def assertProject( projectId, name, nagEmailAddress, state, version, commandLine
     else:
         assertEquals( "project.notifiers.size", 1, len( project.notifiers ) )
         assertEquals( "project.notifiers[0].type", "mail", project.notifiers[0].type )
+        print str( project.notifiers[0].configuration )
         assertTrue( "project.notifiers[0].configuration.has_key('address')", project.notifiers[0].configuration.has_key('address') )
         assertEquals( "project.notifiers[0].configuration['address']", nagEmailAddress, project.notifiers[0].configuration['address'] )
 
@@ -214,7 +213,10 @@ def waitForBuild( continuum, buildId ):
 def waitForSuccessfulCheckOut( continuum, projectId ):
     project = waitForCheckOut( continuum, projectId )
 
-    assertEquals( "The check out was not successful for project #" + project.id, continuum.STATE_NEW, project.state )
+#    assertEquals( "The check out was not successful for project #" + project.id, continuum.STATE_NEW, project.state )
+    assertEquals( "The check out was not successful for project #" + project.id, None, project.checkOutErrorMessage )
+    assertEquals( "The check out was not successful for project #" + project.id, "", project.checkOutErrorException )
+    assertTrue( "The check out was not successful for project #" + project.id, project.checkOutScmResult.success )
 
     return project
 
@@ -224,7 +226,9 @@ def waitForCheckOut( continuum, projectId ):
 
     project = continuum.getProject( projectId )
 
-    while( project.state == continuum.STATE_CHECKING_OUT ):
+    while( project.checkOutScmResult == None and
+           project.checkOutErrorMessage == None and
+           project.checkOutErrorException == None ):
         project = continuum.getProject( projectId )
         time.sleep( sleepInterval )
         timeout -= sleepInterval
