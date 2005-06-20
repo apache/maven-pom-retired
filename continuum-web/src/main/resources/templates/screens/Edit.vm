@@ -1,13 +1,5 @@
-#if ( !$fid )
-  #set ( $fid = $data.getParameters().getString( "fid" ) )
-#end
-#set ( $form = $formtool.getForm( $fid ) )
-#if ( !$id )
-  #set ( $id = $data.getParameters().getString( "id" ) )
-#end
-#if ( $id )
-  #set( $item = $formtool.getItem( $form, $id ) )
-#end
+$page.setTitle( $item.name )
+
 <div class="app">
   <div id="axial" class="h3">
     <h3>$i18n.getString( $form.update.titleKey )</h3>

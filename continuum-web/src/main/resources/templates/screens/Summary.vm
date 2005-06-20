@@ -1,8 +1,5 @@
-#set ( $fid = $data.getParameters().getString( "fid" ) )
-#if ( !$fid )
-  #set ( $fid = "continuumProject" )
-#end
-#set ( $form = $formtool.getForm( $fid ) )
+$page.setTitle( "Continuum" )
+
 <div class="app">
   <div id="h3">
     <h3>$i18n.getString( $form.summary.titleKey )</h3>
@@ -13,7 +10,7 @@
         #end
         <th colspan="$form.summary.operations.size()"></th>
       </tr>
-      #set ( $items = $formtool.getSummaryItems( $fid ) )
+      #set ( $items = $formtool.getSummaryItems( $form.id ) )
       #foreach ( $item in $items )
       <tr class="$css.nextClass">
         #foreach ( $se in $form.summary.summaryElements )
@@ -44,7 +41,7 @@
             #end
             </form>
           </td>
-1          <td>
+          <td>
           <img src="/continuum/images/icon_error_sml.gif" alt="Failed"/> $projectsWithFailures
           <img src="/continuum/images/icon_warning_sml.gif" alt="Error"/> $projectsWithErrors
           </td>

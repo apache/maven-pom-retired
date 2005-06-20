@@ -1,0 +1,8 @@
+$page.setTitle( "Login" )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <form method="post" action="$link">
+    </form>
+  </div>
+</div>
