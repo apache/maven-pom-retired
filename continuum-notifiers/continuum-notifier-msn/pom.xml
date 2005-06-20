@@ -5,13 +5,13 @@
     <artifactId>continuum-parent-notifiers</artifactId>
     <version>1.0-alpha-3-SNAPSHOT</version>
   </parent>
-  <artifactId>continuum-jabber-notifier</artifactId>
-  <name>Continuum Jabber Notifier</name>
+  <artifactId>continuum-notifier-msn</artifactId>
+  <name>Continuum MSN Notifier</name>
   <version>1.0-alpha-3-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>plexus</groupId>
-      <artifactId>plexus-jabber</artifactId>
+      <artifactId>plexus-msn</artifactId>
       <version>1.0-alpha-1-SNAPSHOT</version>
     </dependency>
   </dependencies>

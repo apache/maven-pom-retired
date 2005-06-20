@@ -9,8 +9,9 @@ continuum-cc/pom.xml,\
 continuum-core/pom.xml,\
 continuum-model/pom.xml,\
 continuum-notifiers/pom.xml,\
-continuum-notifiers/continuum-jabber-notifier/pom.xml,\
-continuum-notifiers/continuum-msn-notifier/pom.xml,\
+continuum-notifiers/continuum-notifier-irc/pom.xml,\
+continuum-notifiers/continuum-notifier-jabber/pom.xml,\
+continuum-notifiers/continuum-notifier-msn/pom.xml,\
 continuum-web/pom.xml,\
 continuum-xmlrpc/pom.xml
 

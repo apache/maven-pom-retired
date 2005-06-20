@@ -5,14 +5,14 @@
     <artifactId>continuum-parent-notifiers</artifactId>
     <version>1.0-alpha-3-SNAPSHOT</version>
   </parent>
-  <artifactId>continuum-irc-notifier</artifactId>
-  <name>Continuum IRC Notifier</name>
+  <artifactId>continuum-notifier-jabber</artifactId>
+  <name>Continuum Jabber Notifier</name>
   <version>1.0-alpha-3-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>plexus</groupId>
-      <artifactId>plexus-ircbot</artifactId>
-      <version>1.1-alpha-4-SNAPSHOT</version>
+      <artifactId>plexus-jabber</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
