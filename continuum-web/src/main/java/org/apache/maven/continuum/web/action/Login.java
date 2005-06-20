@@ -23,7 +23,7 @@ import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: Login.java,v 1.1 2005/04/01 00:11:34 jvanzyl Exp $
+ * @version $Id$
  */
 public class Login
     extends AbstractAction

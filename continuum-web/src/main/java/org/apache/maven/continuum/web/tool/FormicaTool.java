@@ -147,7 +147,13 @@ public class FormicaTool
         }
         catch ( OgnlException e )
         {
-            throw new FormToolException( "Cannot evaluate enable expression: " + operation.getEnable() + " on " + item );
+            getLogger().error( "Cannot evaluate enable expression: " + operation.getEnable() + " on " + item, e );
+
+            // ----------------------------------------------------------------------
+            // If there is an error evaluating the expression we'll protect
+            // ----------------------------------------------------------------------
+
+            return false;
         }
     }
 

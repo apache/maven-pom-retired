@@ -25,7 +25,7 @@ import org.apache.maven.continuum.project.ContinuumBuild;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: StateContentGenerator.java,v 1.1 2005/04/04 14:05:38 jvanzyl Exp $
+ * @version $Id$
  */
 public class ContinuumStateContentGenerator
     extends AbstractLogEnabled

@@ -19,7 +19,7 @@ package org.apache.maven.continuum.web.tool;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: CssTool.java,v 1.2 2005/04/06 14:10:38 trygvis Exp $
+ * @version $Id$
  */
 public class CssTool
 {

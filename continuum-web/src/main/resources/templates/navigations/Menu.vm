@@ -9,10 +9,21 @@
  <div id="projecttools" class="toolgroup">
   <div class="label">Add Project</div>
   <div class="body">
-    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenTwoProject')">M2 Project</a></div>
-    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenOneProject')">M1 Project</a></div>
-    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'antProject')">Ant Project</a></div>
-    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'shellProject')">Shell Project</a></div>
+    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenTwoProject')">Add M2 Project</a></div>
+    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'uploadMavenTwoProject')">Upload M2 Project</a></div>
+    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenOneProject')">Add M1 Project</a></div>
+    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'uploadMavenOneProject')">Upload M1 Project</a></div>
+    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'antProject')">Add Ant Project</a></div>
+    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'shellProject')">Add Shell Project</a></div>
   </div>
  </div>
+
+  <div id="projecttools" class="toolgroup">
+   <div class="label">Import Project</div>
+   <div class="body">
+     <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'importCruiseControlProject')">CC Project</a></div>
+     <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'uploadCruiseControlProject')">Upload CC Project</a></div>
+   </div>
+  </div>
+
 </div>

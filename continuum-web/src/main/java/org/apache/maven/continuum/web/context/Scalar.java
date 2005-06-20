@@ -18,7 +18,7 @@ package org.apache.maven.continuum.web.context;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: Scalar.java,v 1.1 2005/04/01 00:11:34 jvanzyl Exp $
+ * @version $Id$
  */
 public class Scalar
 {

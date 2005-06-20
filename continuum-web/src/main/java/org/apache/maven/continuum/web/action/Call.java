@@ -18,7 +18,7 @@ package org.apache.maven.continuum.web.action;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class Call
 {

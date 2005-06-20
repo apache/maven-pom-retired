@@ -8,6 +8,8 @@
   #set ( $elementData = $formtool.getElementData( $form, $element, $item, $data ) )
   #if ( $element.type == "text" )
     #text( $element $elementData )
+  #elseif ( $element.type == "upload" )
+    #upload( $element $elementData )
   #end
   <p>$i18n.getString( $element.messageKey )</p>
 </td>
@@ -35,6 +37,10 @@
 
 #macro ( textarea $element $elementData )
 <input type="text" name="$element.id" value="$elementData" size="40"/>
+#end
+
+#macro ( upload $element $elementData )
+<input type="file" name="$element.id" value="$elementData" size="40"/>
 #end
 
 #macro ( password $element $elementData )

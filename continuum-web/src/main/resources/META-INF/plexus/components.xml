@@ -8,8 +8,14 @@
      -->
     <component>
       <role>org.codehaus.plexus.summit.resolver.Resolver</role>
-      <role-hint>new</role-hint>
-      <implementation>org.codehaus.plexus.summit.resolver.NewResolver</implementation>
+      <role-hint>classic</role-hint>
+      <implementation>org.codehaus.plexus.summit.resolver.ClassicResolver</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.summit.renderer.Renderer</role>
+          <role-hint>velocity</role-hint>
+        </requirement>
+      </requirements>
       <configuration>
         <initial-view>Summary.vm</initial-view>
         <default-view>Default.vm</default-view>
@@ -28,17 +34,20 @@
       <implementation>org.codehaus.plexus.summit.pipeline.SummitPipeline</implementation>
       <lifecycle-handler>plexus-configurable</lifecycle-handler>
       <configuration>
+        <!-- This indicates that we do not wanted pages cached on the client side -->
         <nocache>true</nocache>
         <valves>
-          <valve>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextValve</valve>
           <!--
           <valve>org.apache.maven.continuum.web.pipeline.valve.LoginValve</valve>
           -->
+          <!-- This is required because actions may need to put things in the context -->
+          <valve>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextValve</valve>
           <valve>org.codehaus.plexus.summit.pipeline.valve.ActionValve</valve>
           <valve>org.codehaus.plexus.summit.pipeline.valve.DetermineTargetValve</valve>
           <valve>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextPopulatorValve</valve>
-          <valve>org.codehaus.plexus.summit.pipeline.valve.ResolverValve</valve>
           <valve>org.codehaus.plexus.summit.pull.PullToolValve</valve>
+          <valve>org.apache.maven.continuum.web.pipeline.valve.FormicaValve</valve>
+          <valve>org.codehaus.plexus.summit.pipeline.valve.ResolverValve</valve>
           <valve>org.codehaus.plexus.summit.pipeline.valve.DisplayValve</valve>
         </valves>
       </configuration>
@@ -88,7 +97,7 @@
           </tool>
           <tool>
             <name>formtool</name>
-            <role>formicatool</role>
+            <role>org.apache.maven.continuum.web.tool.FormicaTool</role>
             <scope>global</scope>
           </tool>
         </tools>
@@ -109,7 +118,7 @@
     </component>
 
     <component>
-      <role>formicatool</role>
+      <role>org.apache.maven.continuum.web.tool.FormicaTool</role>
       <implementation>org.apache.maven.continuum.web.tool.FormicaTool</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
       <requirements>
@@ -130,6 +139,7 @@
       <implementation>org.apache.maven.continuum.web.context.DefaultViewContextPopulator</implementation>
       <configuration>
         <views>
+          <!-- Start Forms Views -->
           <view>
             <id>Summary</id>
             <scalars>
@@ -143,6 +153,7 @@
               </scalar>
             </scalars>
           </view>
+          <!-- End Forms Views -->
           <view>
             <id>ProjectBuilds</id>
             <scalars>
@@ -199,6 +210,20 @@
       <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
       <role-hint>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextValve</role-hint>
       <implementation>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextValve</implementation>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
+      <role-hint>org.apache.maven.continuum.web.pipeline.valve.FormicaValve</role-hint>
+      <implementation>org.apache.maven.continuum.web.pipeline.valve.FormicaValve</implementation>
+      <configuration>
+        <default-form-id>continuumProject</default-form-id>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.web.tool.FormicaTool</role>
+        </requirement>
+      </requirements>
     </component>
 
     <component>
