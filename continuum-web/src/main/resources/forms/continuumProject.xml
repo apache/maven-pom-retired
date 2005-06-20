@@ -145,7 +145,7 @@
          | Only show the result pages if there are builds to show and if the project is in a state
          | of ok, failed, error.
          -->
-        <enable>getState() == 4 || ( getBuilds().size > 0 &amp;&amp; ( getState() == 2 || getState() == 3 ) )</enable>
+        <enable>getState() == 4 || ( getBuilds() != null &amp;&amp; getBuilds().size > 0 &amp;&amp; ( getState() == 2 || getState() == 3 ) )</enable>
       </operation>
       <operation>
         <name>Edit</name>

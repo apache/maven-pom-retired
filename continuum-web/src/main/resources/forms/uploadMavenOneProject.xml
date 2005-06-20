@@ -1,0 +1,41 @@
+<form>
+  <id>uploadMavenOneProject</id>
+  <source-role>org.apache.maven.continuum.Continuum</source-role>
+  <attributes>
+    <multipart>true</multipart>
+  </attributes>
+  <elements>
+    <!--
+    TODO: we're going to have to move away from dotted properties because it confuses OGNL i.e #project.foo
+    isn't used as a string literal. OGNL looks for a project reference which will be null.
+    -->
+    <element>
+      <id>m1PomUrl</id>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>empty.error</error-message-key>
+        </validator>
+      </validators>
+      <expression>scmUrl</expression>
+      <type>upload</type>
+    </element>
+  </elements>
+
+  <!-- Add -->
+  <add>
+    <title-key>project.title.add</title-key>
+    <action>callMethod</action>
+    <view>Summary.vm</view>
+    <expression>addMavenOneProject(#m1PomUrl)</expression>
+  </add>
+
+  <!-- Update -->
+  <update>
+    <title-key>project.title.update</title-key>
+    <action>updateEntity</action>
+    <view>Summary.vm</view>
+    <expression>updateMavenOneProject(#entity)</expression>
+  </update>
+
+</form>
