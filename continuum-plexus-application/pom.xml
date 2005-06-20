@@ -132,7 +132,7 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven</groupId>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plexus-plugin</artifactId>
         <version>1.1-alpha-3-SNAPSHOT</version>
         <configuration>
@@ -154,7 +154,7 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven</groupId>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.0-alpha-1</version>
         <configuration>
