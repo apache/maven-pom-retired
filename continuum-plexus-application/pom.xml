@@ -163,9 +163,11 @@
           <finalName>continuum-1.0-alpha-3-SNAPSHOT</finalName>
         </configuration>
         <executions>
-          <goals>
-            <goal>assembly</goal>
-          </goals>
+          <execution>
+            <goals>
+              <goal>assembly</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
     </plugins>
