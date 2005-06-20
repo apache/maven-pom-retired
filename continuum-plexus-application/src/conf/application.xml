@@ -112,6 +112,73 @@
     </component>
 
     <!--
+    | The irc notifier
+    |-->
+    <component>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>irc</role-hint>
+      <implementation>org.apache.maven.continuum.notification.irc.IrcContinuumNotifier</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.ircbot.IrcBot</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.ircbot.IrcBot</role>
+      <implementation>org.codehaus.plexus.ircbot.DefaultIrcClient</implementation>
+    </component>
+
+    <!--
+    | The jabber notifier
+    |-->
+    <component>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>jabber</role-hint>
+      <implementation>org.apache.maven.continuum.notification.jabber.JabberContinuumNotifier</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.jabber.JabberClient</role>
+        </requirement>
+      </requirements>
+      <!-- configuration>
+        <from-address/>
+        <from-password/>
+        <host/>
+        <port/>
+      </configuration -->
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.jabber.JabberClient</role>
+      <implementation>org.codehaus.plexus.jabber.DefaultJabberClient</implementation>
+    </component>
+
+    <!--
+    | The MSN notifier
+    |-->
+    <component>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>msn</role-hint>
+      <implementation>org.apache.maven.continuum.notification.msn.MsnContinuumNotifier</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.msn.MsnClient</role>
+        </requirement>
+      </requirements>
+      <!-- configuration>
+        <from-address/>
+        <from-password/>
+      </configuration -->
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.msn.MsnClient</role>
+      <implementation>org.codehaus.plexus.msn.DefaultMsnClient</implementation>
+    </component>
+
+    <!--
     | The alarm trigger
     |-->
     <component>
