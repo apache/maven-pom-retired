@@ -17,17 +17,20 @@ package org.apache.maven.continuum.web.pipeline.valve;
  */
 
 import org.codehaus.plexus.summit.pipeline.valve.CreateViewContextValve;
+import org.codehaus.plexus.summit.pipeline.valve.ValveInvocationException;
 import org.codehaus.plexus.summit.rundata.RunData;
 import org.codehaus.plexus.summit.view.ViewContext;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumViewContextValve.java,v 1.1 2005/04/04 14:05:38 jvanzyl Exp $
+ * @version $Id$
  */
 public class ContinuumViewContextValve
     extends CreateViewContextValve
 {
     protected void populateViewContext( RunData data, ViewContext context )
+        throws ValveInvocationException
+    
     {
         context.put( "data", data );
     }

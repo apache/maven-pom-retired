@@ -19,6 +19,7 @@ package org.apache.maven.continuum.web.pipeline.valve;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.web.context.ViewContextPopulator;
 import org.codehaus.plexus.summit.pipeline.valve.CreateViewContextValve;
+import org.codehaus.plexus.summit.pipeline.valve.ValveInvocationException;
 import org.codehaus.plexus.summit.rundata.RunData;
 import org.codehaus.plexus.summit.view.ViewContext;
 
@@ -28,7 +29,7 @@ import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumViewContextPopulatorValve.java,v 1.1 2005/04/04 14:05:38 jvanzyl Exp $
+ * @version $Id$
  */
 public class ContinuumViewContextPopulatorValve
     extends CreateViewContextValve
@@ -38,6 +39,7 @@ public class ContinuumViewContextPopulatorValve
     private Continuum model;
 
     protected void populateViewContext( RunData data, ViewContext context )
+        throws ValveInvocationException
     {
         if ( data.getTarget() != null )
         {
