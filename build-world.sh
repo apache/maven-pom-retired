@@ -3,11 +3,12 @@
 set -x
 set -e
 
-m2_repo="https://svn.apache.org/repos/asf/maven/components/trunk maven"
+m2_repo="http://svn.apache.org/repos/asf/maven/components/trunk maven"
 continuum_repo="https://svn.apache.org/repos/asf/maven/continuum/trunk continuum"
 
 clean=0
 force_build=0
+self_update=0
 
 function usage
 {
@@ -20,10 +21,27 @@ do
   case $1 in 
     --clean) clean=1 ;;
     --force-build) force_build=1 ;;
+    --self-update) self_update=1 ;;
     *) usage ;;
   esac
   shift
 done
+
+##############################################################################
+# Self update
+##############################################################################
+
+if [ $self_update == "1" ]
+then
+  trunk="https://svn.apache.org/repos/asf/maven/continuum/trunk"
+  script="build-world.sh"
+  echo "Saving $script to $script.bak"
+  cp $script $script.bak
+  echo "Downloading $trunk/$script to $script.tmp from Subversion"
+  svn cat $trunk/$script > $script.tmp
+  mv $script.tmp $script
+  exit 0
+fi
 
 ##############################################################################
 # Clean up
