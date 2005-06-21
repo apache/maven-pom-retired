@@ -12,7 +12,7 @@ self_update=0
 
 function usage
 {
-  echo "Usage: $0 [--clean] [--force-build]"
+  echo "Usage: $0 [--clean] [--force-build] [--self-update]"
   exit 1
 }
 
