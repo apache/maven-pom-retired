@@ -259,6 +259,7 @@ public class DefaultMavenBuilderHelper
         return artifactRepositoryFactory.createArtifactRepository( "local",
                                                                    "file://" + localRepository,
                                                                    repositoryLayout,
-                                                                   repository.getSnapshotPolicy() );
+                                                                   repository.getSnapshotPolicy(),
+                                                                   repository.getChecksumPolicy() );
     }
 }
