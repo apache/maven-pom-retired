@@ -40,6 +40,7 @@ then
   echo "Downloading $trunk/$script to $script.tmp from Subversion"
   svn cat $trunk/$script > $script.tmp
   mv $script.tmp $script
+  chmod +x $script
   exit 0
 fi
 
