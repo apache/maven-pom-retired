@@ -26,16 +26,16 @@ import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class BuildProjectTaskExecutor
     extends AbstractLogEnabled
     implements TaskExecutor
 {
-    /** @requirement */
+    /** @plexus.requirement */
     private BuildController controller;
 
-    /** @requirement */
+    /** @plexus.requirement */
     private ContinuumStore store;
 
     // ----------------------------------------------------------------------

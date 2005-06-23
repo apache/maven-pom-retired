@@ -21,10 +21,6 @@ public class AddProjectToCheckOutQueueAction
     {
         ContinuumProject project = getProject( context );
 
-        System.out.println( "getProjectId( context ) = " + getProjectId( context ) );
-
-        System.out.println( "getProject( context ) = " + getProject( context ) );
-
         CheckOutTask checkOutTask = new CheckOutTask( project.getId(), new File( project.getWorkingDirectory() ) );
 
         getCheckOutQueue().put( checkOutTask );

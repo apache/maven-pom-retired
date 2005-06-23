@@ -30,10 +30,10 @@ import org.apache.maven.continuum.core.action.StoreProjectAction;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
@@ -45,7 +45,6 @@ import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.workflow.WorkflowEngine;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -56,10 +55,10 @@ public class DefaultContinuum
     extends AbstractLogEnabled
     implements Continuum
 {
+    /** @plexus.requirement */
     private ContinuumCore core;
 
-    private WorkflowEngine workflowEngine;
-
+    /** @plexus.requirement */
     private ActionManager actionManager;
 
     // ----------------------------------------------------------------------
@@ -84,11 +83,12 @@ public class DefaultContinuum
         {
             ContinuumProject p = (ContinuumProject) i.next();
 
-// TODO: FIX
-//            if ( p.getState() == ContinuumProjectState.FAILED )
-//            {
-//                list.add( p );
-//            }
+            ContinuumBuild build = core.getLatestBuildForProject( p.getId() );
+
+            if ( build.getState() == ContinuumProjectState.FAILED )
+            {
+                list.add( p );
+            }
         }
 
         return list;
@@ -103,11 +103,12 @@ public class DefaultContinuum
         {
             ContinuumProject p = (ContinuumProject) i.next();
 
-// TODO: FIX
-//            if ( p.getState() == ContinuumProjectState.ERROR )
-//            {
-//                list.add( p );
-//            }
+            ContinuumBuild build = core.getLatestBuildForProject( p.getId() );
+
+            if ( build.getState() == ContinuumProjectState.ERROR )
+            {
+                list.add( p );
+            }
         }
 
         return list;
@@ -122,12 +123,6 @@ public class DefaultContinuum
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
-
-    public void updateProjectFromScm( String projectId )
-        throws ContinuumException
-    {
-        core.updateProjectFromScm( projectId );
-    }
 
     public void removeProject( String projectId )
         throws ContinuumException
@@ -223,9 +218,7 @@ public class DefaultContinuum
     {
         project.setExecutorId( AntBuildExecutor.ID );
 
-        String projectId = core.addProjectFromScm( project );
-
-        return projectId;
+        return executeAddProjectFromScmActivity( project );
     }
 
     public AntProject getAntProject( String projectId )
@@ -237,7 +230,7 @@ public class DefaultContinuum
     public void updateAntProject( AntProject project )
         throws ContinuumException
     {
-        updateProject( project );
+        executeUpdateProjectActivity( project );
     }
 
     // ----------------------------------------------------------------------
@@ -340,7 +333,7 @@ public class DefaultContinuum
     public void updateMavenOneProject( MavenOneProject project )
         throws ContinuumException
     {
-        updateProject( project );
+        executeUpdateProjectActivity( project );
     }
 
     // ----------------------------------------------------------------------
@@ -408,7 +401,6 @@ public class DefaultContinuum
             throw new ContinuumException( "Error adding Maven 2 project.", e );
         }
 
-        System.err.println();
         return result;
     }
 
@@ -452,7 +444,7 @@ public class DefaultContinuum
     public void updateMavenTwoProject( MavenTwoProject project )
         throws ContinuumException
     {
-        updateProject( project );
+        executeUpdateProjectActivity( project );
     }
 
     public String addShellProject( ShellProject project )
@@ -460,9 +452,14 @@ public class DefaultContinuum
     {
         project.setExecutorId( ShellBuildExecutor.ID );
 
-        String projectId = core.addProjectFromScm( project );
-
-        return projectId;
+        try
+        {
+            return executeAddProjectFromScmActivity( project );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumException( "Error adding Shell project.", e );
+        }
     }
 
     public ShellProject getShellProject( String projectId )
@@ -474,22 +471,43 @@ public class DefaultContinuum
     public void updateShellProject( ShellProject project )
         throws ContinuumException
     {
-        updateProject( project );
+        executeUpdateProjectActivity( project );
     }
 
     // ----------------------------------------------------------------------
-    //
+    // Activities. These should end up as workflows in werkflow
     // ----------------------------------------------------------------------
 
-    private void updateProject( ContinuumProject project )
+    private void executeUpdateProjectActivity( ContinuumProject project )
         throws ContinuumException
     {
         core.updateProject( project );
-//        core.updateProject( project.getId(),
-//                            project.getName(),
-//                            project.getScmUrl(),
-//                            project.getNotifiers(),
-//                            project.getVersion(),
-//                            project.getCommandLineArguments() );
+    }
+
+    private String executeAddProjectFromScmActivity( ContinuumProject project )
+        throws ContinuumException
+    {
+        try
+        {
+            Map context = new HashMap();
+
+            // ----------------------------------------------------------------------
+            //
+            // ----------------------------------------------------------------------
+
+            context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
+
+            actionManager.lookup( "validate-project" ).execute( context );
+
+            actionManager.lookup( "store-project" ).execute( context );
+
+            actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
+
+            return (String) context.get( StoreProjectAction.KEY_PROJECT_ID );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumException( "Error adding project.", e );
+        }
     }
 }

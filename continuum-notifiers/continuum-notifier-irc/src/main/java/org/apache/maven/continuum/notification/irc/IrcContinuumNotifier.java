@@ -23,9 +23,9 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.codehaus.plexus.ircbot.IrcBot;
 import org.codehaus.plexus.notification.NotificationException;
 import org.codehaus.plexus.notification.notifier.AbstractNotifier;
+import org.codehaus.plexus.ircbot.IrcBot;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -86,7 +86,7 @@ public class IrcContinuumNotifier
         {
             if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
             {
-                buildComplete( project, build, source, recipients );
+                buildComplete( project, build );
             }
         }
         catch ( ContinuumException e )
@@ -96,9 +96,7 @@ public class IrcContinuumNotifier
     }
 
     private void buildComplete( ContinuumProject project,
-                                ContinuumBuild build,
-                                String source,
-                                Set recipients )
+                                ContinuumBuild build )
         throws ContinuumException
     {
         // ----------------------------------------------------------------------

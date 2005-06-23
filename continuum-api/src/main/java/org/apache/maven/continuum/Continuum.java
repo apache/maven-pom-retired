@@ -39,9 +39,6 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     void removeProject( String projectId )
         throws ContinuumException;
 
-    void updateProjectFromScm( String projectId )
-        throws ContinuumException;
-
     ContinuumProject getProject( String projectId )
         throws ContinuumException;
 

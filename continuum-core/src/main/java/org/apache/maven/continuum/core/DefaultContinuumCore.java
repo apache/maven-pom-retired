@@ -17,31 +17,18 @@ package org.apache.maven.continuum.core;
  */
 
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
-import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManagerException;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
-import org.apache.maven.continuum.scm.ContinuumScmException;
-import org.apache.maven.continuum.scm.queue.CheckOutTask;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
@@ -52,7 +39,6 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.TaskQueueException;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -151,7 +137,7 @@ public class DefaultContinuumCore
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
-
+/*
     public Collection addProjectsFromUrl( String url, String executorId )
         throws ContinuumException
     {
@@ -233,7 +219,7 @@ public class DefaultContinuumCore
 
         return project.getId();
     }
-
+*/
     public void removeProject( String projectId )
         throws ContinuumException
     {
@@ -246,7 +232,7 @@ public class DefaultContinuumCore
             throw logAndCreateException( "Error while removing project.", ex );
         }
     }
-
+/*
     public void updateProjectFromScm( String projectId )
         throws ContinuumException
     {
@@ -289,7 +275,7 @@ public class DefaultContinuumCore
 
         updateProjectFromCheckOut( project );
     }
-
+*/
     public void updateProject( ContinuumProject project )
         throws ContinuumException
     {
@@ -301,7 +287,6 @@ public class DefaultContinuumCore
         {
             throw logAndCreateException( "Error while removing project.", ex );
         }
-
     }
 
 //    public void updateProject( String projectId,
@@ -462,7 +447,7 @@ public class DefaultContinuumCore
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
-
+/*
     private ContinuumProjectBuilder getProjectBuilder( String projectBuilderId )
         throws ContinuumException
     {
@@ -475,7 +460,8 @@ public class DefaultContinuumCore
             throw logAndCreateException( "Error while getting project builder '" + projectBuilderId + "'.", e );
         }
     }
-
+*/
+/*
     private void validateProject( ContinuumProject project )
         throws ContinuumException
     {
@@ -489,7 +475,6 @@ public class DefaultContinuumCore
             throw logAndCreateException( "No such executor with id '" + project.getExecutorId() + "'." );
         }
 
-        // TODO: Reenable
         try
         {
             if ( store.getProjectByName( project.getName() ) != null )
@@ -513,7 +498,8 @@ public class DefaultContinuumCore
 
         project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
     }
-
+*/
+/*
     private ContinuumProject addProjectAndCheckOutSources( ContinuumProject project  )
         throws ContinuumException
     {
@@ -570,7 +556,8 @@ public class DefaultContinuumCore
 
         return getProject( projectId );
     }
-
+*/
+/*
     private void doTempCheckOut( ContinuumProject project )
         throws ContinuumException
     {
@@ -608,7 +595,8 @@ public class DefaultContinuumCore
             throw logAndCreateException( "Error while checking out the project.", e );
         }
     }
-
+*/
+/*
     private void updateProjectFromCheckOut( ContinuumProject project )
         throws ContinuumException
     {
@@ -635,13 +623,6 @@ public class DefaultContinuumCore
 
         try
         {
-//            store.updateProject( id,
-//                                 project.getName(),
-//                                 project.getScmUrl(),
-//                                 project.getNotifiers(),
-//                                 project.getVersion(),
-//                                 project.getCommandLineArguments() );
-
             store.updateProject( project );
         }
         catch ( ContinuumStoreException e )
@@ -649,7 +630,7 @@ public class DefaultContinuumCore
             throw logAndCreateException( "Error while storing the updated project.", e );
         }
     }
-
+*/
     // ----------------------------------------------------------------------
     // Lifecylce Management
     // ----------------------------------------------------------------------
@@ -762,14 +743,14 @@ public class DefaultContinuumCore
 
         getLogger().info( "Continuum stopped." );
     }
-
+/*
     private ContinuumException logAndCreateException( String message )
     {
         getLogger().error( message );
 
         return new ContinuumException( message );
     }
-
+*/
     private ContinuumException logAndCreateException( String message, Throwable cause )
     {
         getLogger().error( message, cause );

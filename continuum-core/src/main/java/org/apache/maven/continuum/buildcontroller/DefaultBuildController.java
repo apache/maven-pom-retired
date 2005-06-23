@@ -16,26 +16,25 @@ package org.apache.maven.continuum.buildcontroller;
  * limitations under the License.
  */
 
-import java.util.Collection;
-import java.util.Date;
-import java.io.StringWriter;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
+import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.ContinuumScm;
-import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
+import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
@@ -47,42 +46,13 @@ public class DefaultBuildController
     implements BuildController
 {
     /** @plexus.requirement */
-    private BuildExecutorManager buildExecutorManager;
-
-    /** @plexus.requirement */
     private ContinuumStore store;
 
     /** @plexus.requirement */
     private ContinuumNotificationDispatcher notifier;
 
     /** @plexus.requirement */
-    private Continuum continuum;
-
-    /** @plexus.requirement */
-    private ContinuumScm scm;
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private static class BuildContext
-    {
-        ContinuumProject project;
-
-        ContinuumBuildExecutor builder;
-
-        boolean forced;
-
-        UpdateScmResult scmResult;
-
-        ContinuumBuildExecutionResult result;
-
-        int state;
-
-        Throwable cause;
-
-        ContinuumBuild build;
-    }
+    private ActionManager actionManager;
 
     // ----------------------------------------------------------------------
     // BuildController Implementation
@@ -90,9 +60,7 @@ public class DefaultBuildController
 
     public void build( String projectId, boolean forced )
     {
-        BuildContext context = new BuildContext();
-
-        context.forced = forced;
+        long startTime = System.currentTimeMillis();
 
         // ----------------------------------------------------------------------
         // Initialize the context
@@ -101,25 +69,17 @@ public class DefaultBuildController
         // if these calls fail we're screwed anyway
         // and it will only be logged through the logger.
 
+        ContinuumProject project;
+
+        String buildId = null;
+
         try
         {
-            context.project = store.getProject( projectId );
+            project = store.getProject( projectId );
         }
         catch ( ContinuumStoreException ex )
         {
             getLogger().error( "Internal error while building the project.", ex );
-
-            return;
-        }
-
-        try
-        {
-            context.builder = buildExecutorManager.getBuildExecutor( context.project.getExecutorId() );
-        }
-        catch ( ContinuumException e )
-        {
-            getLogger().fatalError( "Error while getting builder '" + context.project.getExecutorId() + "'. " +
-                                    "Project Id: '" + projectId + "'.", e );
 
             return;
         }
@@ -130,8 +90,39 @@ public class DefaultBuildController
 
         try
         {
-            notifier.buildStarted( context.project );
+            notifier.buildStarted( project );
 
+            Map actionContext = new HashMap();
+
+            actionContext.put( AbstractContinuumAction.KEY_PROJECT_ID, projectId );
+
+            actionContext.put( AbstractContinuumAction.KEY_FORCED, Boolean.valueOf( forced ) );
+
+            UpdateScmResult scmResult = null;
+
+            try
+            {
+                actionManager.lookup( "update-working-directory-from-scm" ).execute( actionContext );
+
+                scmResult = (UpdateScmResult) actionContext.get( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT );
+
+                actionManager.lookup( "update-project-from-working-directory" ).execute( actionContext );
+
+                actionManager.lookup( "execute-builder" ).execute( actionContext );
+
+                buildId = (String) actionContext.get( AbstractContinuumAction.KEY_BUILD_ID );
+            }
+            catch ( Throwable e )
+            {
+                buildId = makeAndSetErrorBuildResult( store.getProject( projectId ),
+                                                      scmResult,
+                                                      startTime,
+                                                      forced, e );
+            }
+
+/////////////////////// This section should delegate to UpdateWorkingDirectoryFromScmContinuumAction
+/*
+/////////////////////// START SECTION
             // ----------------------------------------------------------------------
             // Update the project
             //
@@ -139,22 +130,23 @@ public class DefaultBuildController
             // build status to error.
             // ----------------------------------------------------------------------
 
-/////////////////////// This section should delegate to UpdateProjectFromScmContinuumAction
-/////////////////////// START SECTION
+
             if ( !update( context ) )
             {
                 return;
             }
 /////////////////////// END SECTION
-
-/////////////////////// This section should delegate to UpdateProjectMetadataContinuumAction
+*/
+/*
+/////////////////////// This section should delegate to UpdateProjectFromWorkingDirectoryContinuumAction
 /////////////////////// START SECTION
             if ( !updateProjectMetadata( context ) )
             {
                 return;
             }
 /////////////////////// END SECTION
-
+*/
+/*
 /////////////////////// This section should delegate to ExecuteBuilderContinuumAction
 /////////////////////// START SECTION
 
@@ -179,8 +171,9 @@ public class DefaultBuildController
             buildProject( context );
 
 /////////////////////// END SECTION
+*/
         }
-        catch ( ContinuumStoreException ex )
+        catch ( Exception ex )
         {
             if ( !Thread.interrupted() )
             {
@@ -189,14 +182,28 @@ public class DefaultBuildController
         }
         finally
         {
-            notifier.buildComplete( context.project, context.build );
+            ContinuumBuild build = null;
+
+            if ( buildId != null )
+            {
+                try
+                {
+                    build = store.getBuild( buildId );
+                }
+                catch ( ContinuumStoreException e )
+                {
+                    // ignore
+                }
+            }
+
+            notifier.buildComplete( project, build );
         }
     }
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
-
+/*
     private boolean update( BuildContext context )
         throws ContinuumStoreException
     {
@@ -227,7 +234,8 @@ public class DefaultBuildController
             notifier.checkoutComplete( context.project, context.scmResult );
         }
     }
-
+*/
+/*
     private boolean updateProjectMetadata( BuildContext context )
         throws ContinuumStoreException
     {
@@ -252,7 +260,8 @@ public class DefaultBuildController
 
         return true;
     }
-
+*/
+/*
     private void buildProject( BuildContext context )
         throws ContinuumStoreException
     {
@@ -288,81 +297,41 @@ public class DefaultBuildController
             notifier.goalsCompleted( context.project, context.build );
         }
     }
-
+*/
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
-    private void makeAndSetErrorBuildResult( BuildContext context, Throwable e )
+    private String makeAndSetErrorBuildResult( ContinuumProject project,
+                                             UpdateScmResult scmResult,
+                                             long startTime,
+                                             boolean forced,
+                                             Throwable e )
         throws ContinuumStoreException
     {
-        makeBuild( context );
-
-        context.result = new ContinuumBuildExecutionResult( false, null, null, 0 );
-
-        context.state = ContinuumProjectState.ERROR;
-
-        setBuildResult( context.build.getId(),
-                        context.state,
-                        context.result,
-                        context.scmResult,
-                        e );
-    }
-
-    private void setBuildResult( String buildId,
-                                 int state,
-                                 ContinuumBuildExecutionResult result,
-                                 UpdateScmResult scmResult,
-                                 Throwable error )
-        throws ContinuumStoreException
-    {
-        getLogger().info( "Setting the build id '" + buildId + "' state to " + state );
-
-//        store.setBuildResult( buildId, state, result, scmResult, e );
-
-        ContinuumBuild build = store.getBuild( buildId );
-
-        build.setState( state );
-
-        build.setEndTime( new Date().getTime() );
-
-        build.setError( throwableToString( error ) );
-
-        build.setUpdateScmResult( scmResult );
-
-        // ----------------------------------------------------------------------
-        // Copy over the build result
-        // ----------------------------------------------------------------------
-
-        build.setSuccess( result.isSuccess() );
-
-        build.setStandardOutput( result.getStandardOutput() );
-
-        build.setStandardError( result.getStandardError() );
-
-        build.setExitCode( result.getExitCode() );
-
-        store.updateBuild( build );
-    }
-
-    private void makeBuild( BuildContext context )
-        throws ContinuumStoreException
-    {
-//        String buildId = store.createBuild( context.project.getId(), context.forced );
+        getLogger().error( "Error while building project.", e );
 
         ContinuumBuild build = new ContinuumBuild();
 
-        build.setStartTime( System.currentTimeMillis() );
-        build.setState( ContinuumProjectState.BUILDING );
-        build.setForced( context.forced );
+        build.setState( ContinuumProjectState.ERROR );
 
-        String buildId = store.addBuild( context.project.getId(), build );
+        build.setForced( forced );
+
+        build.setStartTime( startTime );
+
+        build.setEndTime( System.currentTimeMillis() );
+
+        build.setError( throwableToString( e ) );
+
+        build.setSuccess( false );
+
+        build.setUpdateScmResult( scmResult );
+
+        String buildId = store.addBuild( project.getId(), build );
 
         getLogger().info( "Build id: '" + buildId + "'." );
 
-        context.build = store.getBuild( buildId );
-
-        context.build.setUpdateScmResult( context.scmResult );
+        return buildId;
     }
 
     // Check to see if there is only a single build in the builds list.

@@ -18,9 +18,15 @@ package org.apache.maven.continuum.core.action;
 
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.ContinuumScmException;
+import org.apache.maven.continuum.store.AbstractContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.scm.manager.NoSuchScmProviderException;
 
 import java.io.File;
 import java.util.Map;
+
+import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -39,11 +45,63 @@ public class CheckOutProjectContinuumAction
 
         File workingDirectory = getWorkingDirectory( context );
 
-        CheckOutScmResult result;
+        CheckOutScmResult result = null;
 
-        result = getScm().checkOut( project, workingDirectory );
+        String errorMessage = null;
 
-//        getStore().setCheckoutDone( projectId, result, null, null );
+        Throwable exception = null;
+
+        // ----------------------------------------------------------------------
+        // Check out the project
+        // ----------------------------------------------------------------------
+
+        try
+        {
+            result = getScm().checkOut( project, workingDirectory );
+        }
+        catch ( ContinuumScmException e )
+        {
+            // TODO: Dissect the scm exception to be able to give better feedback
+            Throwable cause = e.getCause();
+
+            if ( cause instanceof NoSuchScmProviderException )
+            {
+                errorMessage = cause.getMessage();
+            }
+            else
+            {
+                exception = e;
+            }
+        }
+        catch ( Throwable e )
+        {
+            exception = e;
+        }
+
+        // ----------------------------------------------------------------------
+        // Store the check out result or error
+        // ----------------------------------------------------------------------
+
+        try
+        {
+            project = getStore().getProject( projectId );
+
+            project.setCheckOutScmResult( result );
+
+            project.setCheckOutErrorMessage( errorMessage );
+
+            project.setCheckOutErrorException( AbstractContinuumStore.throwableToString( exception ) );
+
+            getStore().updateProject( project );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new TaskExecutionException( "Error while storing the check out result.", e );
+        }
+
+        // ----------------------------------------------------------------------
+        // Safe the result in the context
+        // ----------------------------------------------------------------------
 
         context.put( KEY_CHECKOUT_SCM_RESULT, result );
     }

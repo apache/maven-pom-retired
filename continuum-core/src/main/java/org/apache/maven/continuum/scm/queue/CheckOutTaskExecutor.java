@@ -17,16 +17,12 @@ package org.apache.maven.continuum.scm.queue;
  */
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
-import org.apache.maven.continuum.scm.ContinuumScm;
-import org.apache.maven.continuum.scm.ContinuumScmException;
-import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.store.AbstractContinuumStore;
-import org.apache.maven.scm.manager.NoSuchScmProviderException;
+import org.apache.maven.continuum.core.action.CheckOutProjectContinuumAction;
 
+import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
@@ -41,10 +37,7 @@ public class CheckOutTaskExecutor
     implements TaskExecutor
 {
     /** @plexus.requirement */
-    private ContinuumScm scm;
-
-    /** @plexus.requirement */
-    private ContinuumStore store;
+    private ActionManager actionManager;
 
     // ----------------------------------------------------------------------
     // TaskExecutor Implementation
@@ -53,14 +46,29 @@ public class CheckOutTaskExecutor
     public void executeTask( Task t )
         throws TaskExecutionException
     {
-        // TODO: Replace with a exection of the "check out project" action
-
         CheckOutTask task = (CheckOutTask) t;
 
         String projectId = task.getProjectId();
 
-        File workingDirectory = task.getWorkingDirectory();
+        String workingDirectory = task.getWorkingDirectory().getAbsolutePath();
 
+        Map context = new HashMap();
+
+        context.put( CheckOutProjectContinuumAction.KEY_PROJECT_ID, projectId );
+
+        context.put( CheckOutProjectContinuumAction.KEY_WORKING_DIRECTORY, workingDirectory );
+
+        try
+        {
+            actionManager.lookup( "checkout-project" ).execute( context );
+        }
+        catch ( Exception e )
+        {
+            throw new TaskExecutionException( "Error checking out project.", e );
+        }
+
+        // TODO: Replace with a exection of the "check out project" action
+/*
         ContinuumProject project;
 
         try
@@ -82,7 +90,7 @@ public class CheckOutTaskExecutor
         {
             result = scm.checkOut( project, workingDirectory );
         }
-        catch ( ContinuumScmException e )
+        catch( Throwable e )
         {
             // TODO: Dissect the scm exception to be able to give better feedback
             Throwable cause = e.getCause();
@@ -93,17 +101,14 @@ public class CheckOutTaskExecutor
             }
             else
             {
+                errorMessage = "";
+
                 exception = e;
             }
-        }
-        catch( Throwable e )
-        {
-            exception = e;
         }
 
         try
         {
-//            store.setCheckoutDone( projectId, result, errorMessage, exception );
             project = store.getProject( projectId );
 
             project.setCheckOutScmResult( result );
@@ -118,5 +123,6 @@ public class CheckOutTaskExecutor
         {
             throw new TaskExecutionException( "Error while storing the check out result.", e );
         }
+*/
     }
 }

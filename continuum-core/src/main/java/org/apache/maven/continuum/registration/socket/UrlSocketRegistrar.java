@@ -21,26 +21,25 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URL;
-import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.maven.continuum.core.ContinuumCore;
+import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.network.ConnectionConsumer;
-import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.registration.AbstractContinuumRegistrar;
 import org.apache.maven.continuum.socket.SimpleSocket;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: UrlSocketRegistrar.java,v 1.1.1.1 2005/03/29 20:42:02 trygvis Exp $
+ * @version $Id$
  */
 public class UrlSocketRegistrar
     extends AbstractContinuumRegistrar
     implements ConnectionConsumer
 {
-    /** @requirement */
-    private ContinuumCore core;
+    /** @plexus.requirement */
+    private Continuum continuum;
 
     // ----------------------------------------------------------------------
     // ConnectionConsumer Implementation
@@ -55,15 +54,13 @@ public class UrlSocketRegistrar
         {
             String url = socket.readLine();
 
-            URL u = new URL( url );
+            ContinuumProjectBuildingResult result = continuum.addMavenTwoProject( url );
 
-            Collection ids = core.addProjectsFromUrl( u, MavenTwoContinuumProjectBuilder.ID );
-
-            for ( Iterator it = ids.iterator(); it.hasNext(); )
+            for ( Iterator it = result.getProjects().iterator(); it.hasNext(); )
             {
-                String id = (String) it.next();
+                ContinuumProject project = (ContinuumProject) it.next();
 
-                socket.writeLine( "id=" + id );
+                socket.writeLine( "id=" + project.getId() );
             }
 
             socket.writeLine( "OK" );

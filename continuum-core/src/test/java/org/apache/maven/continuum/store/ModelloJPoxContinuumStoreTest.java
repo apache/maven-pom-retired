@@ -264,7 +264,6 @@ public class ModelloJPoxContinuumStoreTest
         // ----------------------------------------------------------------------
 
         project = store.getProject( projectId );
-        System.err.println( ( (ContinuumNotifier) project.getNotifiers().get( 0 ) ).getConfiguration() );
 
         String name2 = "name 2";
         String scmUrl2 = "scm url 2";
@@ -282,13 +281,9 @@ public class ModelloJPoxContinuumStoreTest
         project.setVersion( version2 );
         project.setCommandLineArguments( commandLineArguments2 );
 
-        System.err.println( ( (ContinuumNotifier) project.getNotifiers().get( 0 ) ).getConfiguration() );
         store.updateProject( project );
-        System.err.println( ( (ContinuumNotifier) project.getNotifiers().get( 0 ) ).getConfiguration() );
 
         project = store.getProject( projectId );
-
-        System.err.println( ((ContinuumNotifier)project.getNotifiers().get(0)).getConfiguration() );
 
         notifier = new ContinuumNotifier();
         notifier.setType( "kewk" );

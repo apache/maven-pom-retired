@@ -157,36 +157,21 @@ public class ContinuumJPoxStoreTest
         // Modify the first notifier
         // ----------------------------------------------------------------------
 
-        System.err.println( "***" );
-        System.err.println( "***" );
-        System.err.println( "***" );
-
-        System.err.println( "store.getContinuumProject( p.getId(), true );" );
         p = store.getContinuumProject( p.getId(), true );
 
-        System.err.println( "p.getNotifiers();" );
         notifiers = p.getNotifiers();
 
-        System.err.println( "notifiers.get( 0 );" );
         n = (ContinuumNotifier) notifiers.get( 0 );
 
-        System.err.println( "n.setType( \"baz\" );" );
         n.setType( "baz" );
 
         // change a existsing property
-        System.err.println( "n.getConfiguration().put( \"foo\", \"foo\" );" );
         n.getConfiguration().put( "foo", "foo" );
 
         // add another property
-        System.err.println( "n.getConfiguration().put( \"baz\", \"yay\" );" );
         n.getConfiguration().put( "baz", "yay" );
 
-        System.err.println( "store.storeContinuumProject( p );" );
         store.storeContinuumProject( p );
-        
-        System.err.println( "***" );
-        System.err.println( "***" );
-        System.err.println( "***" );
 
         // ----------------------------------------------------------------------
         //

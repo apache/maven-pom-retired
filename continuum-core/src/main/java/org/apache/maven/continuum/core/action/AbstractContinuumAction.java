@@ -48,8 +48,6 @@ public abstract class AbstractContinuumAction
 
     public final static String KEY_PROJECT_ID = "projectId";
 
-    public final static String KEY_PROJECT = "project";
-
     public final static String KEY_UNVALIDATED_PROJECT = "unvalidatedProject";
 
     public final static String KEY_BUILD_ID = "buildId";
@@ -58,9 +56,9 @@ public abstract class AbstractContinuumAction
 
     public static final String KEY_CHECKOUT_SCM_RESULT = "checkOutResult";
 
-    protected static final String KEY_UPDATE_SCM_RESULT = "updateResult";
+    public static final String KEY_UPDATE_SCM_RESULT = "updateResult";
 
-    private static final String KEY_FORCED = "forced";
+    public static final String KEY_FORCED = "forced";
 
     // ----------------------------------------------------------------------
     // Requirements
@@ -72,7 +70,7 @@ public abstract class AbstractContinuumAction
     private ContinuumCore core;
 
     /**
-     * @requirement
+     * @plexus.requirement
      */
     private ContinuumNotificationDispatcher notificationDispatcher;
 
@@ -125,14 +123,12 @@ public abstract class AbstractContinuumAction
     //
     // ----------------------------------------------------------------------
 
-    protected String getProjectId( Map context )
-        throws ContinuumStoreException
+    public String getProjectId( Map context )
     {
         return getString( context, KEY_PROJECT_ID );
     }
 
-    protected String getBuildId( Map context )
-        throws ContinuumStoreException
+    public String getBuildId( Map context )
     {
         return getString( context, KEY_BUILD_ID );
     }
@@ -154,7 +150,6 @@ public abstract class AbstractContinuumAction
     {
         return ((ContinuumProject) getObject( context, KEY_UNVALIDATED_PROJECT ) );
     }
-
 
     protected ContinuumBuild getBuild( Map context )
         throws ContinuumStoreException

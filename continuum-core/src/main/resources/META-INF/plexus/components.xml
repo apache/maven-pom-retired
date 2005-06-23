@@ -78,19 +78,13 @@
       <implementation>org.apache.maven.continuum.buildcontroller.DefaultBuildController</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
-        </requirement>
-        <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.notification.ContinuumNotificationDispatcher</role>
         </requirement>
         <requirement>
-          <role>org.apache.maven.continuum.scm.ContinuumScm</role>
-        </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.Continuum</role>
+          <role>org.codehaus.plexus.action.ActionManager</role>
         </requirement>
       </requirements>
     </component>
@@ -169,7 +163,7 @@
       <implementation>org.apache.maven.continuum.registration.socket.UrlSocketRegistrar</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+          <role>org.apache.maven.continuum.Continuum</role>
         </requirement>
       </requirements>
     </component>
@@ -397,10 +391,7 @@
       <implementation>org.apache.maven.continuum.scm.queue.CheckOutTaskExecutor</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.store.ContinuumStore</role>
-        </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.scm.ContinuumScm</role>
+          <role>org.codehaus.plexus.action.ActionManager</role>
         </requirement>
       </requirements>
     </component>
@@ -549,7 +540,7 @@
     </component>
     <component>
       <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>build-project</role-hint>
+      <role-hint>execute-builder</role-hint>
       <implementation>org.apache.maven.continuum.core.action.ExecuteBuilderContinuumAction</implementation>
       <requirements>
         <requirement>
@@ -582,18 +573,21 @@
     </component>
     <component>
       <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>update-project</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.UpdateProjectFromScmContinuumAction</implementation>
+      <role-hint>update-working-directory-from-scm</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.UpdateWorkingDirectoryFromScmContinuumAction</implementation>
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.core.ContinuumCore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.notification.ContinuumNotificationDispatcher</role>
         </requirement>
       </requirements>
     </component>
     <component>
       <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>update-project-metadata</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.UpdateProjectMetadataContinuumAction</implementation>
+      <role-hint>update-project-from-working-directory</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.UpdateProjectFromWorkingDirectoryContinuumAction</implementation>
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.core.ContinuumCore</role>

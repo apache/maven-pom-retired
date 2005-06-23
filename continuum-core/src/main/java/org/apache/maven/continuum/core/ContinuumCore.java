@@ -16,9 +16,7 @@ package org.apache.maven.continuum.core;
  * limitations under the License.
  */
 
-import java.net.URL;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
@@ -41,20 +39,20 @@ public interface ContinuumCore
 {
     String ROLE = ContinuumCore.class.getName();
 
-    Collection addProjectsFromUrl( String url, String projectBuilderId )
-        throws ContinuumException;
-
-    Collection addProjectsFromUrl( URL url, String projectBuilderId )
-        throws ContinuumException;
-
-    String addProjectFromScm( ContinuumProject project )
-        throws ContinuumException;
+//    Collection addProjectsFromUrl( String url, String projectBuilderId )
+//        throws ContinuumException;
+//
+//    Collection addProjectsFromUrl( URL url, String projectBuilderId )
+//        throws ContinuumException;
+//
+//    String addProjectFromScm( ContinuumProject project )
+//        throws ContinuumException;
 
     void removeProject( String projectId )
         throws ContinuumException;
 
-    void updateProjectFromScm( String projectId )
-        throws ContinuumException;
+//    void updateProjectFromScm( String projectId )
+//        throws ContinuumException;
 
     void updateProject( ContinuumProject project )
         throws ContinuumException;

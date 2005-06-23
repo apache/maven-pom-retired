@@ -5,8 +5,10 @@ package org.apache.maven.continuum.core.action;
 
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.ContinuumException;
 
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.Map;
 
 /**
@@ -27,7 +29,18 @@ public class CreateProjectsFromMetadata
     {
         String projectBuilderId = getString( context, KEY_PROJECT_BUILDER_ID );
 
-        URL url = new URL( getString( context, KEY_URL ) );
+        String u = getString( context, KEY_URL );
+
+        URL url;
+
+        try
+        {
+            url = new URL( u );
+        }
+        catch ( MalformedURLException e )
+        {
+            throw new ContinuumException( "'" + u + "' is not a valid URL.", e );
+        }
 
         ContinuumProjectBuilder projectBuilder = getProjectBuilderManager().getProjectBuilder( projectBuilderId );
 

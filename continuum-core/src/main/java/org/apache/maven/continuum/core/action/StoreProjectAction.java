@@ -21,8 +21,6 @@ public class StoreProjectAction
     {
         ContinuumProject project = getUnvalidatedProject( context );
 
-        File workingDirectory = getWorkingDirectory( context );
-
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
@@ -37,7 +35,7 @@ public class StoreProjectAction
         // Set the working directory
         // ----------------------------------------------------------------------
 
-        File projectWorkingDirectory = new File( workingDirectory, projectId );
+        File projectWorkingDirectory = new File( getCore().getWorkingDirectory(), projectId );
 
         if ( !projectWorkingDirectory.exists() && !projectWorkingDirectory.mkdirs() )
         {

@@ -16,18 +16,40 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.scm.UpdateScmResult;
+
 import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class UpdateProjectMetadataContinuumAction
+public class UpdateWorkingDirectoryFromScmContinuumAction
     extends AbstractContinuumAction
 {
     public void execute( Map context )
         throws Exception
     {
-        getCore().updateProjectFromScm( getProjectId( context ) );
+        ContinuumProject project = getProject( context );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        getNotifier().checkoutStarted( project );
+
+        UpdateScmResult updateScmResult = null;
+
+        try
+        {
+            updateScmResult = getScm().updateProject( project );
+
+            context.put( KEY_UPDATE_SCM_RESULT, updateScmResult );
+        }
+        finally
+        {
+            getNotifier().checkoutComplete( project, updateScmResult );
+        }
     }
 }
