@@ -57,7 +57,16 @@ then
   mkdir -p $HOME/repository
 fi
 
-cp -r sun-repo/* $HOME/repository
+if [ ! -d sun-repo ]
+then
+  echo "WARN: Missing ./sun-repo
+If the build fails with missing Sun related dependencies please make this
+directory and put any relevant jars there. The repository will be copied over
+to the real Maven 2 repository before each build to make sure the Maven 2
+repository can be cleaned before a build and still not miss any dependencies."
+else
+  cp -r sun-repo/* $HOME/repository
+fi
 
 ##############################################################################
 # Check out the sources
