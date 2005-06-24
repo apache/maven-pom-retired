@@ -1,16 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -x
 set -e
 
-m2_repo="http://svn.apache.org/repos/asf/maven/components/trunk maven"
-continuum_repo="https://svn.apache.org/repos/asf/maven/continuum/trunk continuum"
+m2_repo="http://svn.apache.org/repos/asf/maven/components/trunk"
+continuum_repo="https://svn.apache.org/repos/asf/maven/continuum/trunk"
 
 clean=0
 force_build=0
 self_update=0
 
-function usage
+usage()
 {
   echo "Usage: $0 [--clean] [--force-build] [--self-update]"
   exit 1
@@ -31,7 +31,7 @@ done
 # Self update
 ##############################################################################
 
-if [ $self_update == "1" ]
+if [ $self_update -eq "1" ]
 then
   trunk="https://svn.apache.org/repos/asf/maven/continuum/trunk"
   script="build-world.sh"
@@ -48,13 +48,34 @@ fi
 # Clean up
 ##############################################################################
 
-if [ $clean == "1" ]
+if [ $clean -eq "1" ]
 then
   rm -rf maven
   rm -rf continuum
-  rm -rf $HOME/repository
+  rm -rf $HOME/.m2/repository
   rm -rf $HOME/m2
-  mkdir -p $HOME/repository
+  mkdir -p $HOME/.m2/repository
+fi
+
+if [ ! -d $HOME/.m2/repository ]
+then
+  mkdir $HOME/.m2/repository
+fi
+
+##############################################################################
+# Do some checks of the enviroment
+##############################################################################
+
+if [ ! -x m2 ]
+then
+  echo "WARN: Could not find m2 in PATH. For the build scripts for Continuum to
+work m2 has to be in the PATH. 
+
+If this is the first time you are running this script please this message 
+can be ignored.
+
+PATH: $PATH
+M2_HOME: $M2_HOME"
 fi
 
 if [ ! -d sun-repo ]
@@ -65,31 +86,45 @@ directory and put any relevant jars there. The repository will be copied over
 to the real Maven 2 repository before each build to make sure the Maven 2
 repository can be cleaned before a build and still not miss any dependencies."
 else
-  cp -r sun-repo/* $HOME/repository
+  cp -r sun-repo/* $HOME/.m2/repository
 fi
 
 ##############################################################################
 # Check out the sources
 ##############################################################################
 
-svn co $m2_repo > m2_update
-
-tmp=`grep -v revision m2_update | wc -l`
-echo "Updated"
-if [ "$tmp" -eq 0 ]
+# Maven 2
+first_build=0
+if [ ! -d maven ]
 then
- m2_updated=0
-else
- m2_updated=1
+  first_build=1
 fi
 
-svn co $continuum_repo > continuum_update
-tmp=`grep -v revision continuum_update | wc -l`
-if [ "$tmp" -eq 0 ]
+svn co $m2_repo maven > m2_update
+
+tmp=`grep -v revision m2_update | wc -l`
+if [ "$tmp" -eq 0 -a $first_build -eq 0 ]
 then
- continuum_updated=0
+ build_m2=0
 else
- continuum_updated=1
+ build_m2=1
+fi
+
+# Continuum
+first_build=0
+if [ ! -d continuum ]
+then
+  first_build=1
+fi
+
+svn co $continuum_repo continuum > continuum_update
+
+tmp=`grep -v revision continuum_update | wc -l`
+if [ "$tmp" -eq 0 -a $first_build -eq 0 ]
+then
+ build_continuum=0
+else
+ build_continuum=1
 fi
 
 ##############################################################################
@@ -102,14 +137,14 @@ unset M2_HOME
 
 echo M2_HOME: $M2_HOME
 
-if [ $m2_updated -eq 1 -o $clean -eq 1 -o $force_build -eq 1 ]
+if [ $build_m2 -eq 1 -o $clean -eq 1 -o $force_build -eq 1 ]
 then
   cd maven
   M2_HOME=$HOME/m2 bash -x m2-bootstrap-all.sh
   cd ..
 fi
 
-if [ $continuum_updated -eq 1 -o $clean -eq 1 -o $force_build -eq 1 ]
+if [ $build_continuum -eq 1 -o $clean -eq 1 -o $force_build -eq 1 ]
 then
   cd continuum
   bash -x build.sh -X
