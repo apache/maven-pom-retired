@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-set -x
 set -e
 
 m2_repo="http://svn.apache.org/repos/asf/maven/components/trunk"
-continuum_repo="https://svn.apache.org/repos/asf/maven/continuum/trunk"
+continuum_repo="http://svn.apache.org/repos/asf/maven/continuum/trunk"
 
 clean=0
 force_build=0
@@ -26,6 +25,20 @@ do
   esac
   shift
 done
+
+if [ -r ./settings ]
+then
+  source ./settings
+fi
+
+if [ -z "$NIGHTLY_ROOT" ]
+then
+  echo "NIGHTLY_ROOT must be set"
+  exit 1
+fi
+
+root="$NIGHTLY_ROOT"
+M2_HOME="$NIGHTLY_ROOT/m2-nightly"
 
 ##############################################################################
 # Self update
@@ -50,32 +63,29 @@ fi
 
 if [ $clean -eq "1" ]
 then
-  rm -rf maven
-  rm -rf continuum
-  rm -rf $HOME/.m2/repository
-  rm -rf $HOME/m2
-  mkdir -p $HOME/.m2/repository
+  rm -rf $root/maven
+  rm -rf $root/continuum
+  rm -rf $root/repository
+  rm -rf $M2_HOME
 fi
 
-if [ ! -d $HOME/.m2/repository ]
-then
-  mkdir $HOME/.m2/repository
-fi
+mkdir -p $root
+mkdir -p $root/repository
 
 ##############################################################################
 # Do some checks of the enviroment
 ##############################################################################
 
-if [ ! -x m2 ]
+if [ -z "$JAVA_HOME" ]
 then
-  echo "WARN: Could not find m2 in PATH. For the build scripts for Continuum to
-work m2 has to be in the PATH. 
+  echo "JAVA_HOME must be set."
+fi
 
-If this is the first time you are running this script please this message 
-can be ignored.
-
-PATH: $PATH
-M2_HOME: $M2_HOME"
+if [ -z "`which java`" ]
+then
+  echo "Could not find 'java' in the path."
+  echo "PATH: $PATH"
+  exit 1
 fi
 
 if [ ! -d sun-repo ]
@@ -86,7 +96,7 @@ directory and put any relevant jars there. The repository will be copied over
 to the real Maven 2 repository before each build to make sure the Maven 2
 repository can be cleaned before a build and still not miss any dependencies."
 else
-  cp -r sun-repo/* $HOME/.m2/repository
+  cp -r sun-repo/* $root/repository
 fi
 
 ##############################################################################
@@ -100,6 +110,7 @@ then
   first_build=1
 fi
 
+cd $root
 svn co $m2_repo maven > m2_update
 
 tmp=`grep -v revision m2_update | wc -l`
@@ -131,17 +142,29 @@ fi
 # Build
 ##############################################################################
 
-PATH=$HOME/m2/bin:$PATH
-M2_HOME=$HOME/m2
-unset M2_HOME
+PATH=$M2_HOME/bin:$PATH
 
+echo PATH: $PATH
 echo M2_HOME: $M2_HOME
 
 if [ $build_m2 -eq 1 -o $clean -eq 1 -o $force_build -eq 1 ]
 then
   cd maven
-  M2_HOME=$HOME/m2 bash -x m2-bootstrap-all.sh
+  bash -x m2-bootstrap-all.sh
   cd ..
+fi
+
+if [ ! -x m2 ]
+then
+  echo "WARN: Could not find m2 in PATH. For the build scripts for Continuum to
+work m2 has to be in the PATH. 
+
+If this is the first time you are running this script please this message 
+can be ignored.
+
+PATH: $PATH
+M2_HOME: $M2_HOME"
+  exit 1
 fi
 
 if [ $build_continuum -eq 1 -o $clean -eq 1 -o $force_build -eq 1 ]
