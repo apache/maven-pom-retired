@@ -22,10 +22,10 @@ import org.apache.maven.continuum.execution.AbstractBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
-import org.apache.maven.continuum.execution.shell.ExecutionResult;
-import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
+
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -39,14 +39,17 @@ public class MavenOneBuildExecutor
 
     public final static String ID = "maven-1";
 
-    /** @requirement */
-    private ShellCommandHelper shellCommandHelper;
-
-    /** @requirement */
+    /** @plexus.requirement */
     private MavenOneMetadataHelper metadataHelper;
 
-    /** @configuration */
-    private String mavenCommand;
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    public MavenOneBuildExecutor()
+    {
+        super( ID, true );
+    }
 
     // ----------------------------------------------------------------------
     // Builder Implementation
@@ -59,25 +62,10 @@ public class MavenOneBuildExecutor
 
         File workingDirectory = new File( project.getWorkingDirectory() );
 
-        String commandLine = project.getCommandLineArguments() + " " + project.getGoals();
+        String commandLine = StringUtils.clean( project.getCommandLineArguments() ) + " " +
+                             StringUtils.clean( project.getGoals() );
 
-        ExecutionResult executionResult;
-
-        try
-        {
-            executionResult = shellCommandHelper.executeShellCommand( workingDirectory,
-                                                                      mavenCommand,
-                                                                      commandLine );
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumBuildExecutorException( "Error while executing shell command.", e );
-        }
-
-        return new ContinuumBuildExecutionResult( executionResult.getExitCode() == 0,
-                                                  executionResult.getStandardOutput(),
-                                                  executionResult.getStandardError(),
-                                                  executionResult.getExitCode() );
+        return executeShellCommand( workingDirectory, null, commandLine );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

@@ -19,9 +19,9 @@ package org.apache.maven.continuum.execution.shell;
 import java.io.File;
 
 import org.apache.maven.continuum.execution.AbstractBuildExecutor;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ShellProject;
 
@@ -45,8 +45,10 @@ public class ShellBuildExecutor
     //
     // ----------------------------------------------------------------------
 
-    /** @requirement */
-    private ShellCommandHelper shellCommandHelper;
+    public ShellBuildExecutor()
+    {
+        super( ID, false );
+    }
 
     // ----------------------------------------------------------------------
     // ContinuumBuilder implementation
@@ -59,35 +61,24 @@ public class ShellBuildExecutor
 
         File workingDirectory = new File( project.getWorkingDirectory() );
 
-        ExecutionResult executionResult;
+        String executable = project.getExecutable();
+
+        return executeShellCommand( workingDirectory,
+                                    executable,
+                                    project.getCommandLineArguments() );
+    }
+
+    public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject p )
+        throws ContinuumBuildExecutorException
+    {
+        ShellProject project = (ShellProject) p;
 
         String executable = project.getExecutable();
 
-        if ( executable.charAt( 0 ) != '/' &&
-             executable.charAt( 0 ) != '\\' )
+        if ( new File( executable ).isAbsolute() )
         {
-            executable = workingDirectory + File.separator + executable;
+            throw new ContinuumBuildExecutorException( "The shell script must be a relative path. " +
+                                                       "It will be relative to the checkout" );
         }
-
-        try
-        {
-            executionResult = shellCommandHelper.executeShellCommand( workingDirectory,
-                                                                      executable,
-                                                                      project.getCommandLineArguments() );
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumBuildExecutorException( "Error while executing shell command.", e );
-        }
-
-        return new ContinuumBuildExecutionResult( executionResult.getExitCode() == 0,
-                                                  executionResult.getStandardOutput(),
-                                                  executionResult.getStandardError(),
-                                                  executionResult.getExitCode() );
-    }
-
-    public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
-    {
-        // Not much to do.
     }
 }

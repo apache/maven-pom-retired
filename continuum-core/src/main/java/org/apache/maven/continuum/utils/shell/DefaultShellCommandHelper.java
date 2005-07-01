@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.execution.shell;
+package org.apache.maven.continuum.utils.shell;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -34,7 +34,25 @@ public class DefaultShellCommandHelper
     // ShellCommandHelper Implementation
     // ----------------------------------------------------------------------
 
-    public ExecutionResult executeShellCommand( File workingDirectory, String executable, String arguments )
+    public ExecutionResult executeShellCommand( File workingDirectory,
+                                                File executable,
+                                                String arguments )
+        throws Exception
+    {
+        Commandline cl = new Commandline();
+
+        Commandline.Argument argument = cl.createArgument();
+
+        argument.setLine( arguments );
+
+        return executeShellCommand( workingDirectory,
+                                    executable,
+                                    argument.getParts() );
+    }
+
+    public ExecutionResult executeShellCommand( File workingDirectory,
+                                                File executable,
+                                                String[] arguments )
         throws Exception
     {
         // ----------------------------------------------------------------------
@@ -43,11 +61,16 @@ public class DefaultShellCommandHelper
 
         Commandline cl = new Commandline();
 
-        cl.setExecutable( executable );
+        cl.setExecutable( executable.getAbsolutePath() );
 
         cl.setWorkingDirectory( workingDirectory.getAbsolutePath() );
 
-        cl.createArgument().setLine( arguments );
+        for ( int i = 0; i < arguments.length; i++ )
+        {
+            String argument = arguments[ i ];
+
+            cl.createArgument().setValue( argument );
+        }
 
         // ----------------------------------------------------------------------
         //

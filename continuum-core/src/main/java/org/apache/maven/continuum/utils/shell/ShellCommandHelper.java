@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.execution;
+package org.apache.maven.continuum.utils.shell;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,29 +16,23 @@ package org.apache.maven.continuum.execution;
  * limitations under the License.
  */
 
-import java.util.Properties;
-
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.StringUtils;
+import java.io.File;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public abstract class AbstractBuildExecutor
-    extends AbstractLogEnabled
-    implements ContinuumBuildExecutor
+public interface ShellCommandHelper
 {
-    protected String getConfiguration( Properties configuration, String property )
-        throws ContinuumBuildExecutorException
-    {
-        String string = configuration.getProperty( property );
+    String ROLE = ShellCommandHelper.class.getName();
 
-        if ( StringUtils.isEmpty( string ) )
-        {
-            throw new ContinuumBuildExecutorException( "Missing configuration: '" + property + "'." );
-        }
+    ExecutionResult executeShellCommand( File workingDirectory,
+                                         File executable,
+                                         String arguments )
+        throws Exception;
 
-        return string;
-    }
+    ExecutionResult executeShellCommand( File workingDirectory,
+                                         File executable,
+                                         String[] arguments )
+        throws Exception;
 }

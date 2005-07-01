@@ -17,16 +17,13 @@ package org.apache.maven.continuum.execution.ant;
  */
 
 import java.io.File;
-import java.util.Properties;
 
 import org.apache.maven.continuum.execution.AbstractBuildExecutor;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
-import org.apache.maven.continuum.execution.shell.ExecutionResult;
-import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.AntProject;
+import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -50,8 +47,10 @@ public class AntBuildExecutor
     //
     // ----------------------------------------------------------------------
 
-    /** @requirement */
-    private ShellCommandHelper shellCommandHelper;
+    public AntBuildExecutor()
+    {
+        super( ID, true );
+    }
 
     // ----------------------------------------------------------------------
     // ContinuumBuilder Implementation
@@ -68,38 +67,19 @@ public class AntBuildExecutor
 
         String targets = project.getTargets();
 
-        ExecutionResult executionResult;
-
-        try
-        {
-            executionResult = shellCommandHelper.executeShellCommand( workingDirectory,
-                                                                      executable,
-                                                                      project.getCommandLineArguments() + " " + targets );
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumBuildExecutorException( "Error while executing shell command.", e );
-        }
-
-        return new ContinuumBuildExecutionResult( executionResult.getExitCode() == 0,
-                                                  executionResult.getStandardOutput(),
-                                                  executionResult.getStandardError(),
-                                                  executionResult.getExitCode() );
+        return executeShellCommand( workingDirectory,
+                                    executable,
+                                    project.getCommandLineArguments() + " " + targets );
     }
 
-    public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
+    public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject p )
         throws ContinuumBuildExecutorException
     {
-        Properties configuration = new Properties();
+        AntProject project = (AntProject) p;
 
-        if ( !configuration.containsKey( CONFIGURATION_EXECUTABLE ) )
+        if ( project.getTargets() == null )
         {
-            configuration.setProperty( CONFIGURATION_EXECUTABLE, "ant" );
-        }
-
-        if ( !configuration.containsKey( CONFIGURATION_TARGETS ) )
-        {
-            configuration.setProperty( CONFIGURATION_TARGETS, "" );
+            project.setTargets( "" );
         }
     }
 }

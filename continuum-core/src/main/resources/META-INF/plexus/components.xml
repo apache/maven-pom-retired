@@ -186,11 +186,14 @@
       <role-hint>maven2</role-hint>
       <implementation>org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor</implementation>
       <configuration>
-        <executable>m2</executable>
+        <default-executable>m2</default-executable>
       </configuration>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.execution.shell.ShellCommandHelper</role>
+          <role>org.apache.maven.continuum.utils.shell.ShellCommandHelper</role>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.commandline.ExecutableResolver</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper</role>
@@ -232,11 +235,14 @@
       <role-hint>maven-1</role-hint>
       <implementation>org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor</implementation>
       <configuration>
-        <maven-command>maven</maven-command>
+        <default-executable>maven</default-executable>
       </configuration>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.execution.shell.ShellCommandHelper</role>
+          <role>org.apache.maven.continuum.utils.shell.ShellCommandHelper</role>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.commandline.ExecutableResolver</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper</role>
@@ -250,8 +256,8 @@
     </component>
 
     <component>
-      <role>org.apache.maven.continuum.execution.shell.ShellCommandHelper</role>
-      <implementation>org.apache.maven.continuum.execution.shell.DefaultShellCommandHelper</implementation>
+      <role>org.apache.maven.continuum.utils.shell.ShellCommandHelper</role>
+      <implementation>org.apache.maven.continuum.utils.shell.DefaultShellCommandHelper</implementation>
     </component>
 
     <component>
@@ -260,9 +266,15 @@
       <implementation>org.apache.maven.continuum.execution.ant.AntBuildExecutor</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.execution.shell.ShellCommandHelper</role>
+          <role>org.apache.maven.continuum.utils.shell.ShellCommandHelper</role>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.commandline.ExecutableResolver</role>
         </requirement>
       </requirements>
+      <configuration>
+        <default-executable>ant</default-executable>
+      </configuration>
     </component>
 
     <component>
@@ -271,7 +283,10 @@
       <implementation>org.apache.maven.continuum.execution.shell.ShellBuildExecutor</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.execution.shell.ShellCommandHelper</role>
+          <role>org.apache.maven.continuum.utils.shell.ShellCommandHelper</role>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.commandline.ExecutableResolver</role>
         </requirement>
       </requirements>
     </component>

@@ -18,15 +18,16 @@ package org.apache.maven.continuum.store;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Date;
 
+import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumNotifier;
@@ -37,7 +38,6 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 
-import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.jdo.JdoFactory;
 
 /**
@@ -45,7 +45,7 @@ import org.codehaus.plexus.jdo.JdoFactory;
  * @version $Id$
  */
 public class ModelloJPoxContinuumStoreTest
-    extends PlexusTestCase
+    extends AbstractContinuumTest
 {
     private ContinuumStore store;
 
@@ -175,7 +175,6 @@ public class ModelloJPoxContinuumStoreTest
                                                                   "foo@bar.com",
                                                                   "1.0",
                                                                   "a b",
-                                                                  "maven2",
                                                                   "/tmp" ) );
 
         assertNotNull( "The project id is null.", projectId );
@@ -187,7 +186,6 @@ public class ModelloJPoxContinuumStoreTest
                                                              "foo@bar.com",
                                                              "1.0",
                                                              "a b",
-                                                             "maven2",
                                                              "/tmp" ), actual );
     }
 
@@ -219,7 +217,6 @@ public class ModelloJPoxContinuumStoreTest
         String nagEmailAddress = "foo@bar.com";
         String version = "1.0";
         String commandLineArguments = "";
-        String builderId = "maven2";
         String workingDirectory = "/tmp";
 
         ContinuumProject project = makeMavenTwoProject( name,
@@ -227,7 +224,6 @@ public class ModelloJPoxContinuumStoreTest
                                                         nagEmailAddress,
                                                         version,
                                                         commandLineArguments,
-                                                        builderId,
                                                         workingDirectory );
 
         String projectId = store.addProject( project );
@@ -298,7 +294,7 @@ public class ModelloJPoxContinuumStoreTest
                              notifiers,
                              version2,
                              commandLineArguments2,
-                             builderId,
+                             MavenTwoBuildExecutor.ID,
                              workingDirectory,
                              project );
 
@@ -334,7 +330,6 @@ public class ModelloJPoxContinuumStoreTest
         String nagEmailAddress1 = "foo@bar.com";
         String version1 = "1.0";
         String commandLineArguments1 = "";
-        String builderId1 = "maven2";
         String workingDirectory1 = "/tmp";
 
         String id1 = addMavenTwoProject( store,
@@ -343,7 +338,6 @@ public class ModelloJPoxContinuumStoreTest
                                  nagEmailAddress1,
                                  version1,
                                  commandLineArguments1,
-                                 builderId1,
                                  workingDirectory1 );
 
         String name2 = "Test Project 2";
@@ -351,7 +345,6 @@ public class ModelloJPoxContinuumStoreTest
         String nagEmailAddress2 = "foo@bar.com";
         String version2 = "1.0";
         String commandLineArguments2 = "";
-        String builderId2 = "maven2";
         String workingDirectory2 = "/tmp";
 
         String id2 = addMavenTwoProject( store,
@@ -360,7 +353,6 @@ public class ModelloJPoxContinuumStoreTest
                                  nagEmailAddress2,
                                  version2,
                                  commandLineArguments2,
-                                 builderId2,
                                  workingDirectory2 );
 
         Map projects = new HashMap();
@@ -384,7 +376,7 @@ public class ModelloJPoxContinuumStoreTest
                              nagEmailAddress1,
                              version1,
                              commandLineArguments1,
-                             builderId1,
+                             MavenTwoBuildExecutor.ID,
                              workingDirectory1,
                              project1 );
 
@@ -396,7 +388,7 @@ public class ModelloJPoxContinuumStoreTest
                              nagEmailAddress2,
                              version2,
                              commandLineArguments2,
-                             builderId2,
+                             MavenTwoBuildExecutor.ID,
                              workingDirectory2,
                              project2 );
     }
@@ -799,60 +791,6 @@ public class ModelloJPoxContinuumStoreTest
     // Public utility methods
     // ----------------------------------------------------------------------
 
-    public static MavenTwoProject makeStubMavenTwoProject( String name, String scmUrl )
-    {
-        return makeMavenTwoProject( name,
-                                    scmUrl,
-                                    "foo@bar.com",
-                                    "1.0",
-                                    "",
-                                    ContinuumBuildExecutor.MAVEN_TWO_EXECUTOR_ID,
-                                    "/tmp" );
-    }
-
-    public static MavenTwoProject makeMavenTwoProject( String name,
-                                                       String scmUrl,
-                                                       String emailAddress,
-                                                       String version,
-                                                       String commandLineArguments,
-                                                       String executorId,
-                                                       String workingDirectory )
-    {
-        MavenTwoProject project = new MavenTwoProject();
-
-        project.setName( name );
-        project.setScmUrl( scmUrl );
-
-        List notifiers = createNotifiers( emailAddress );
-        project.setNotifiers( notifiers );
-
-        project.setVersion( version );
-        project.setCommandLineArguments( commandLineArguments );
-        project.setExecutorId( executorId );
-        project.setWorkingDirectory( workingDirectory );
-
-        return project;
-    }
-
-    private static List createNotifiers( String emailAddress )
-    {
-        ContinuumNotifier notifier = new ContinuumNotifier();
-
-        notifier.setType( "mail" );
-
-        Properties props = new Properties();
-
-        props.put( "address", emailAddress );
-
-        notifier.setConfiguration( props );
-
-        List notifiers = new ArrayList();
-
-        notifiers.add( notifier );
-
-        return notifiers;
-    }
-
     public static String addMavenTwoProject( ContinuumStore store,
                                              ContinuumProject project )
         throws Exception
@@ -898,7 +836,6 @@ public class ModelloJPoxContinuumStoreTest
                                              String nagEmailAddress,
                                              String version,
                                              String commandLineArguments,
-                                             String executorId,
                                              String workingDirectory )
         throws Exception
     {
@@ -907,7 +844,6 @@ public class ModelloJPoxContinuumStoreTest
                                                                   nagEmailAddress,
                                                                   version,
                                                                   commandLineArguments,
-                                                                  executorId,
                                                                   workingDirectory ) );
 
         CheckOutScmResult checkOutScmResult = new CheckOutScmResult();
@@ -919,8 +855,6 @@ public class ModelloJPoxContinuumStoreTest
         ContinuumProject project = store.getProject( projectId );
 
         assertNotNull( project );
-
-//        assertEquals( ContinuumProjectState.NEW, project.getState() );
 
         return projectId;
     }
@@ -1043,7 +977,7 @@ public class ModelloJPoxContinuumStoreTest
         assertProjectEquals( projectId,
                              name,
                              scmUrl,
-                             createNotifiers( emailAddress),
+                             createMailNotifierList( emailAddress),
                              version,
                              commandLineArguments,
                              builderId,

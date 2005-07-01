@@ -57,6 +57,11 @@
       <artifactId>plexus-action</artifactId>
       <version>1.0-alpha-1</version>
     </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-command-line</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+    </dependency>
 
     <!--
      |

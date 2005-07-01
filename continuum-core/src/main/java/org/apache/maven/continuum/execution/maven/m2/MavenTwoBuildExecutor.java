@@ -22,8 +22,6 @@ import org.apache.maven.continuum.execution.AbstractBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
-import org.apache.maven.continuum.execution.shell.ExecutionResult;
-import org.apache.maven.continuum.execution.shell.ShellCommandHelper;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 
@@ -47,14 +45,17 @@ public class MavenTwoBuildExecutor
     //
     // ----------------------------------------------------------------------
 
-    /** @requirement */
-    private ShellCommandHelper shellCommandHelper;
-
-    /** @requirement */
+    /** @plexus.requirement */
     private MavenBuilderHelper builderHelper;
 
-    /** @configuration */
-    private String executable;
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    public MavenTwoBuildExecutor()
+    {
+        super( ID, true );
+    }
 
     // ----------------------------------------------------------------------
     // ContinuumBuilder Implementation
@@ -67,25 +68,11 @@ public class MavenTwoBuildExecutor
 
         File workingDirectory = new File( project.getWorkingDirectory() );
 
-        ExecutionResult executionResult;
+        String arguments = project.getCommandLineArguments() + " " + project.getGoals();
 
-        try
-        {
-            String arguments = project.getCommandLineArguments() + " " + project.getGoals();
-
-            executionResult = shellCommandHelper.executeShellCommand( workingDirectory,
-                                                                      executable,
-                                                                      arguments );
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumBuildExecutorException( "Error while executing shell command.", e );
-        }
-
-        return new ContinuumBuildExecutionResult( executionResult.getExitCode() == 0,
-                                                  executionResult.getStandardOutput(),
-                                                  executionResult.getStandardError(),
-                                                  executionResult.getExitCode() );
+        return executeShellCommand( workingDirectory,
+                                    null,
+                                    arguments );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

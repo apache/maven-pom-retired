@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.execution.shell;
+package org.apache.maven.continuum.utils.shell;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,18 +16,39 @@ package org.apache.maven.continuum.execution.shell;
  * limitations under the License.
  */
 
-import java.io.File;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public interface ShellCommandHelper
+public class ExecutionResult
 {
-    String ROLE = ShellCommandHelper.class.getName();
+    private String standardOutput;
 
-    ExecutionResult executeShellCommand( File workingDirectory,
-                                         String executable,
-                                         String arguments )
-        throws Exception;
+    private String standardError;
+
+    private int exitCode;
+
+    public ExecutionResult( String standardOutput, String standardError, int exitCode )
+    {
+        this.standardOutput = standardOutput;
+
+        this.standardError = standardError;
+
+        this.exitCode = exitCode;
+    }
+
+    public String getStandardOutput()
+    {
+        return standardOutput;
+    }
+
+    public String getStandardError()
+    {
+        return standardError;
+    }
+
+    public int getExitCode()
+    {
+        return exitCode;
+    }
 }
