@@ -120,6 +120,12 @@ public class DefaultContinuum
         return core.getLatestBuildForProject( id );
     }
 
+    public boolean isBuilding( String id )
+        throws ContinuumException
+    {
+        return core.isBuilding( id );
+    }
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------

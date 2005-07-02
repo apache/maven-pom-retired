@@ -19,6 +19,7 @@ package org.apache.maven.continuum.core;
 import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
@@ -134,92 +135,33 @@ public class DefaultContinuumCore
         }
     }
 
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-/*
-    public Collection addProjectsFromUrl( String url, String executorId )
+    public boolean isBuilding( String id )
         throws ContinuumException
     {
-        URL u;
+        List queue;
 
         try
         {
-            u = new URL( url );
+            queue = buildQueue.getQueueSnapshot();
         }
-        catch ( MalformedURLException e )
+        catch ( TaskQueueException e )
         {
-            throw logAndCreateException( "Invalid URL.", e );
+            throw new ContinuumException( "Error while getting the queue snapshot." );
         }
 
-        return addProjectsFromUrl( u, executorId );
+        for ( Iterator it = queue.iterator(); it.hasNext(); )
+        {
+            BuildProjectTask task = (BuildProjectTask) it.next();
+
+            if ( task.getProjectId().equals( id ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public Collection addProjectsFromUrl( URL url, String executorId )
-        throws ContinuumException
-    {
-        ContinuumProjectBuilder projectBuilder = getProjectBuilder( executorId );
-
-        ContinuumProjectBuildingResult result;
-
-        try
-        {
-            result = projectBuilder.buildProjectsFromMetadata( url );
-        }
-        catch ( ContinuumProjectBuilderException e )
-        {
-            throw logAndCreateException( "Error while creating projects from URL.", e );
-        }
-
-        for ( Iterator it = result.getProjects().iterator(); it.hasNext(); )
-        {
-            ContinuumProject project = (ContinuumProject) it.next();
-
-            validateProject( project );
-        }
-
-        List ids = new ArrayList( result.getProjects().size() );
-
-        // TODO: Update from metadata in the initial checkout?
-
-        for ( Iterator it = result.getProjects().iterator(); it.hasNext(); )
-        {
-            ContinuumProject project = (ContinuumProject) it.next();
-
-            project = addProjectAndCheckOutSources( project );
-
-            ids.add( project.getId() );
-        }
-
-        return ids;
-    }
-
-    public String addProjectFromScm( ContinuumProject project )
-        throws ContinuumException
-    {
-        // ----------------------------------------------------------------------
-        // Validate the project
-        // ----------------------------------------------------------------------
-
-        validateProject( project );
-
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        doTempCheckOut( project );
-
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        project = addProjectAndCheckOutSources( project );
-
-        updateProjectFromCheckOut( project );
-
-        return project.getId();
-    }
-*/
     public void removeProject( String projectId )
         throws ContinuumException
     {
@@ -232,50 +174,7 @@ public class DefaultContinuumCore
             throw logAndCreateException( "Error while removing project.", ex );
         }
     }
-/*
-    public void updateProjectFromScm( String projectId )
-        throws ContinuumException
-    {
-        ContinuumProject project;
 
-        try
-        {
-            project = store.getProject( projectId );
-        }
-        catch ( ContinuumStoreException ex )
-        {
-            throw logAndCreateException( "Error while updating project from SCM.", ex );
-        }
-
-        File workingDirectory = new File( project.getWorkingDirectory() );
-
-        if ( !workingDirectory.exists() )
-        {
-            getLogger().warn( "Creating missing working directory for project '" + project.getName() + "'." );
-
-            if ( !workingDirectory.exists() )
-            {
-                throw logAndCreateException( "Could not make missing working directory for " +
-                                             "project '" + project.getName() + "'." );
-            }
-        }
-
-        // ----------------------------------------------------------------------
-        // Update the source code
-        // ----------------------------------------------------------------------
-
-        try
-        {
-            scm.updateProject( project );
-        }
-        catch ( ContinuumScmException e )
-        {
-            throw logAndCreateException( "Error while updating project.", e );
-        }
-
-        updateProjectFromCheckOut( project );
-    }
-*/
     public void updateProject( ContinuumProject project )
         throws ContinuumException
     {

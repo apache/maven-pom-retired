@@ -67,6 +67,9 @@ public interface ContinuumCore
     ContinuumBuild getLatestBuildForProject( String id )
         throws ContinuumException;
 
+    boolean isBuilding( String id )
+        throws ContinuumException;
+
     // ----------------------------------------------------------------------
     // ContinuumBuild
     // ----------------------------------------------------------------------
