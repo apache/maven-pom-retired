@@ -43,20 +43,8 @@ public interface ContinuumStore
     void removeProject( String projectId )
         throws ContinuumStoreException;
 
-//    /** @deprecated Use updateProject */
-//    void setWorkingDirectory( String projectId, String workingDirectory )
-//        throws ContinuumStoreException;
-
     void updateProject( ContinuumProject project )
         throws ContinuumStoreException;
-
-//    void updateProject( String projectId,
-//                        String name,
-//                        String scmUrl,
-//                        List notifiers,
-//                        String version,
-//                        String commandLineArguments )
-//        throws ContinuumStoreException;
 
     // ----------------------------------------------------------------------
     // ContinuumProject Queries
@@ -81,27 +69,11 @@ public interface ContinuumStore
     // Build
     // ----------------------------------------------------------------------
 
-//    /**
-//     * @deprecated use store build
-//     */
-//    String createBuild( String projectId, boolean forced )
-//        throws ContinuumStoreException;
-
     String addBuild( String projectId, ContinuumBuild build )
         throws ContinuumStoreException;
 
     void updateBuild( ContinuumBuild build )
         throws ContinuumStoreException;
-
-//    /**
-//     * @deprecated use update build
-//     */
-//    void setBuildResult( String buildId,
-//                         int state,
-//                         ContinuumBuildExecutionResult result,
-//                         UpdateScmResult scmResult,
-//                         Throwable error )
-//        throws ContinuumStoreException;
 
     ContinuumBuild getBuild( String buildId )
         throws ContinuumStoreException;
@@ -112,47 +84,6 @@ public interface ContinuumStore
     Collection getBuildsForProject( String projectId, int start, int end )
         throws ContinuumStoreException;
 
-//    ContinuumBuildResult getBuildResultForBuild( String buildId )
-//        throws ContinuumStoreException;
-
     List getChangedFilesForBuild( String buildId )
         throws ContinuumStoreException;
-
-    // ----------------------------------------------------------------------
-    // Project Transitions
-    // ----------------------------------------------------------------------
-
-//    void setCheckoutDone( String projectId,
-//                          CheckOutScmResult scmResult,
-//                          String errorMessage,
-//                          Throwable exception )
-//        throws ContinuumStoreException;
-
-//    void setIsUpdating( String projectId )
-//        throws ContinuumStoreException;
-
-//    void setUpdateDone( String projectId )
-//        throws ContinuumStoreException;
-
-    // ----------------------------------------------------------------------
-    // Build Transitions
-    // ----------------------------------------------------------------------
-
-//    String buildingProject( String projectId,
-//                            boolean forced,
-//                            UpdateScmResult scmResult )
-//        throws ContinuumStoreException;
-
-//    void setBuildNotExecuted( String projectId )
-//        throws ContinuumStoreException;
-
-//    void setBuildComplete( String buildId,
-//                           UpdateScmResult scmResult,
-//                           ContinuumBuildExecutionResult result )
-//        throws ContinuumStoreException;
-
-//    void setBuildError( String buildId,
-//                        UpdateScmResult scmResult,
-//                        Throwable throwable )
-//        throws ContinuumStoreException;
 }

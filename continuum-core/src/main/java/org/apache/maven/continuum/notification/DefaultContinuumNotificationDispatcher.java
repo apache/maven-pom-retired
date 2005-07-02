@@ -115,8 +115,6 @@ public class DefaultContinuumNotificationDispatcher
             if ( build != null )
             {
                 context.put( CONTEXT_BUILD, store.getBuild( build.getId() ) );
-
-//                context.put( CONTEXT_BUILD_RESULT, store.getBuildResultForBuild( build.getId() ) );
             }
 
             if ( scmResult != null )

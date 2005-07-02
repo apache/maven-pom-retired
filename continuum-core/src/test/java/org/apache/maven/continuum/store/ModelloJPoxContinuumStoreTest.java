@@ -236,8 +236,6 @@ public class ModelloJPoxContinuumStoreTest
 
         assertNotNull( project );
 
-//        assertEquals( ContinuumProjectState.CHECKING_OUT, project.getState() );
-
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
@@ -246,14 +244,11 @@ public class ModelloJPoxContinuumStoreTest
 
         checkOutScmResult.setSuccess( true );
 
-//        store.setCheckoutDone( projectId, checkOutScmResult, null, null );
         setCheckoutDone( store, projectId, checkOutScmResult, null, null );
 
         project = store.getProject( projectId );
 
         assertNotNull( project );
-
-//        assertEquals( ContinuumProjectState.NEW, project.getState() );
 
         // ----------------------------------------------------------------------
         //
@@ -400,10 +395,6 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addMavenTwoProject( "Remove Test Project", "scm:remove-project" );
 
-//        store.setIsUpdating( projectId );
-
-//        store.setUpdateDone( projectId );
-
         String buildId = createBuild( store, projectId, false );
 
         UpdateScmResult scmResult = new UpdateScmResult();
@@ -509,10 +500,6 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addMavenTwoProject( "Build Test Project", "scm:build" );
 
-//        store.setIsUpdating( projectId );
-
-//        store.setUpdateDone( projectId );
-
         // ----------------------------------------------------------------------
         // Construct a build object
         // ----------------------------------------------------------------------
@@ -589,21 +576,9 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addMavenTwoProject( "Association Test Project", "scm:association" );
 
-//        store.setIsUpdating( projectId );
-//
-//        store.setUpdateDone( projectId );
-
         String projectIdFoo = addMavenTwoProject( "Foo Project", "scm:association-foo" );
 
-//        store.setIsUpdating( projectIdFoo );
-//
-//        store.setUpdateDone( projectIdFoo );
-
         String projectIdBar = addMavenTwoProject( "Bar Project", "scm:association-bar" );
-
-//        store.setIsUpdating( projectIdBar );
-//
-//        store.setUpdateDone( projectIdBar );
 
         // ----------------------------------------------------------------------
         //
@@ -655,10 +630,6 @@ public class ModelloJPoxContinuumStoreTest
     {
         String projectId = addMavenTwoProject( "Association Test Project", "scm:association" );
 
-//        store.setIsUpdating( projectId );
-//
-//        store.setUpdateDone( projectId );
-
         List expectedBuilds = new ArrayList();
 
         for ( int i = 0; i < 10; i++ )
@@ -694,19 +665,9 @@ public class ModelloJPoxContinuumStoreTest
 
         String projectId = addMavenTwoProject( "Build Result Project", "scm:build/result" );
 
-//        store.setIsUpdating( projectId );
-//
-//        assertInState( projectId, ContinuumProjectState.UPDATING );
-//
-//        store.setUpdateDone( projectId );
-//
-//        assertInState( projectId, ContinuumProjectState.BUILDING );
-
         long now = System.currentTimeMillis();
 
         String buildId = createBuild( store, projectId, false );
-
-//        assertInState( projectId, ContinuumProjectState.BUILDING );
 
         assertIsCommitted( store );
 
@@ -716,11 +677,7 @@ public class ModelloJPoxContinuumStoreTest
         // Check that the project's state has been updated
         // ----------------------------------------------------------------------
 
-//        ContinuumProject project = store.getProject( projectId );
-
         assertIsCommitted( store );
-
-//        assertEquals( ContinuumProjectState.BUILDING, project.getState() );
 
         // ----------------------------------------------------------------------
         // Check the build
@@ -744,11 +701,7 @@ public class ModelloJPoxContinuumStoreTest
         // Check the build result
         // ----------------------------------------------------------------------
 
-//        ContinuumBuildResult result = store.getBuildResultForBuild( buildId );
-
         assertIsCommitted( store );
-
-//        assertNull( result );
 
         UpdateScmResult scmResult = new UpdateScmResult();
 
@@ -816,8 +769,6 @@ public class ModelloJPoxContinuumStoreTest
         project = store.getProject( projectId );
 
         assertNotNull( project );
-
-//        assertEquals( ContinuumProjectState.NEW, project.getState() );
 
         return projectId;
     }
@@ -922,25 +873,11 @@ public class ModelloJPoxContinuumStoreTest
         build.setExitCode( result.getExitCode() );
 
         store.updateBuild( build );
-//
-//        ContinuumProject project = store.getProject( build.getProject().getId() );
-//
-//        project.setState( state );
-//
-//        store.updateProject( project );
     }
 
     // ----------------------------------------------------------------------
     // Assertions
     // ----------------------------------------------------------------------
-
-//    private void assertInState( String projectId, int state )
-//        throws ContinuumStoreException
-//    {
-//        ContinuumProject project = store.getProject( projectId );
-//
-//        assertEquals( state, project.getState() );
-//    }
 
     private void assertIsCommitted( ContinuumStore store )
     {

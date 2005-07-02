@@ -39,31 +39,11 @@ public interface ContinuumCore
 {
     String ROLE = ContinuumCore.class.getName();
 
-//    Collection addProjectsFromUrl( String url, String projectBuilderId )
-//        throws ContinuumException;
-//
-//    Collection addProjectsFromUrl( URL url, String projectBuilderId )
-//        throws ContinuumException;
-//
-//    String addProjectFromScm( ContinuumProject project )
-//        throws ContinuumException;
-
     void removeProject( String projectId )
         throws ContinuumException;
 
-//    void updateProjectFromScm( String projectId )
-//        throws ContinuumException;
-
     void updateProject( ContinuumProject project )
         throws ContinuumException;
-
-//    void updateProject( String projectId,
-//                        String name,
-//                        String scmUrl,
-//                        List notifiers,
-//                        String version,
-//                        String commandLineArguments )
-//        throws ContinuumException;
 
     ContinuumProject getProject( String projectId )
         throws ContinuumException;
@@ -96,9 +76,6 @@ public interface ContinuumCore
 
     Collection getBuildsForProject( String projectId )
         throws ContinuumException;
-
-//    ContinuumBuildResult getBuildResultForBuild( String buildId )
-//        throws ContinuumException;
 
     Collection getChangedFilesForBuild( String buildId )
         throws ContinuumException;

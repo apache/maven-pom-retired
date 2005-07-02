@@ -49,7 +49,5 @@ public class StoreProjectAction
         project.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
 
         getStore().updateProject( project );
-
-//        getStore().setWorkingDirectory( projectId, projectWorkingDirectory.getAbsolutePath() );
     }
 }

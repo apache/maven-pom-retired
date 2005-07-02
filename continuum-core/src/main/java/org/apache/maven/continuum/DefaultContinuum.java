@@ -197,12 +197,6 @@ public class DefaultContinuum
         return core.getBuildsForProject( projectId );
     }
 
-//    public ContinuumBuildResult getBuildResultForBuild( String buildId )
-//        throws ContinuumException
-//    {
-//        return core.getBuildResultForBuild( buildId );
-//    }
-
     public Collection getChangedFilesForBuild( String buildId )
         throws ContinuumException
     {

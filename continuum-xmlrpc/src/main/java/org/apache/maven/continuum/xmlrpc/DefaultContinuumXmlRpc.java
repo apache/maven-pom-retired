@@ -213,21 +213,6 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-//    public Hashtable getBuildResultForBuild( String buildId )
-//    {
-//        try
-//        {
-//            ContinuumBuildResult result = continuum.getBuildResultForBuild( buildId );
-//
-//            return makeHashtable( "buildResult", convertContinuumBuildResult( result ) );
-//        }
-//        catch ( Throwable e )
-//        {
-//            return handleException( "ContinuumXmlRpc.getBuildResultForProject()",
-//                                    "Build id: '" + buildId + "'.", e );
-//        }
-//    }
-
     public Hashtable getChangedFilesForBuild( String buildId )
     {
         try
@@ -481,7 +466,7 @@ public class DefaultContinuumXmlRpc
             ShellProject project = continuum.getShellProject( id );
 
             xmlRpcHelper.hashtableToObject( shellProject, project );
-    
+
             continuum.updateShellProject( project );
 
             return makeHashtable();

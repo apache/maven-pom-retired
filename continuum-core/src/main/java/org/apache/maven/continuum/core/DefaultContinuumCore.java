@@ -289,31 +289,6 @@ public class DefaultContinuumCore
         }
     }
 
-//    public void updateProject( String projectId,
-//                               String name,
-//                               String scmUrl,
-//                               List notifiers,
-//                               String version,
-//                               String commandLineArguments )
-//        throws ContinuumException
-//    {
-//        try
-//        {
-//            commandLineArguments = StringUtils.clean( commandLineArguments );
-//
-//            store.updateProject( projectId,
-//                                 name,
-//                                 scmUrl,
-//                                 notifiers,
-//                                 version,
-//                                 commandLineArguments );
-//        }
-//        catch ( ContinuumStoreException e )
-//        {
-//            throw logAndCreateException( "Error while updating the project.", e );
-//        }
-//    }
-
     public ContinuumProject getProject( String projectId )
         throws ContinuumException
     {
@@ -408,19 +383,6 @@ public class DefaultContinuumCore
         }
     }
 
-//    public ContinuumBuildResult getBuildResultForBuild( String buildId )
-//        throws ContinuumException
-//    {
-//        try
-//        {
-//            return store.getBuildResultForBuild( buildId );
-//        }
-//        catch ( ContinuumStoreException e )
-//        {
-//            throw logAndCreateException( "Cannot retrieve build result for build with id = " + buildId, e );
-//        }
-//    }
-
     public Collection getChangedFilesForBuild( String buildId )
         throws ContinuumException
     {
@@ -444,193 +406,6 @@ public class DefaultContinuumCore
         return buildExecutorManager.getBuildExecutor( id );
     }
 
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-/*
-    private ContinuumProjectBuilder getProjectBuilder( String projectBuilderId )
-        throws ContinuumException
-    {
-        try
-        {
-            return projectBuilderManager.getProjectBuilder( projectBuilderId );
-        }
-        catch ( ContinuumProjectBuilderManagerException e )
-        {
-            throw logAndCreateException( "Error while getting project builder '" + projectBuilderId + "'.", e );
-        }
-    }
-*/
-/*
-    private void validateProject( ContinuumProject project )
-        throws ContinuumException
-    {
-        // ----------------------------------------------------------------------
-        // Make sure that the builder id is correct before starting to check
-        // stuff out
-        // ----------------------------------------------------------------------
-
-        if ( !buildExecutorManager.hasBuildExecutor( project.getExecutorId() ) )
-        {
-            throw logAndCreateException( "No such executor with id '" + project.getExecutorId() + "'." );
-        }
-
-        try
-        {
-            if ( store.getProjectByName( project.getName() ) != null )
-            {
-                throw new ContinuumException( "A project with the name '" + project.getName() + "' already exist." );
-            }
-
-//            if ( getProjectByScmUrl( scmUrl ) != null )
-//            {
-//                throw new ContinuumStoreException( "A project with the scm url '" + scmUrl + "' already exist." );
-//            }
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new ContinuumException( "Error while validating the project.", e );
-        }
-
-        // ----------------------------------------------------------------------
-        // Validate each field
-        // ----------------------------------------------------------------------
-
-        project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
-    }
-*/
-/*
-    private ContinuumProject addProjectAndCheckOutSources( ContinuumProject project  )
-        throws ContinuumException
-    {
-        String projectId;
-
-        File projectWorkingDirectory;
-
-        try
-        {
-            // ----------------------------------------------------------------------
-            // Store the project
-            // ----------------------------------------------------------------------
-
-            projectId = store.addProject( project );
-
-            // ----------------------------------------------------------------------
-            // Set the working directory
-            // ----------------------------------------------------------------------
-
-            project = store.getProject( projectId );
-
-            projectWorkingDirectory = new File( workingDirectory, projectId );
-
-            if ( !projectWorkingDirectory.exists() && !projectWorkingDirectory.mkdirs() )
-            {
-                throw logAndCreateException( "Could not make the working directory for the project " +
-                                             "'" + projectWorkingDirectory.getAbsolutePath() + "'." );
-            }
-
-            project.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
-
-            // ----------------------------------------------------------------------
-            // Check out the project
-            // ----------------------------------------------------------------------
-
-            store.updateProject( project );
-//            store.setWorkingDirectory( projectId, projectWorkingDirectory.getAbsolutePath() );
-        }
-        catch ( ContinuumStoreException ex )
-        {
-            throw logAndCreateException( "Exception while adding project.", ex );
-        }
-
-        try
-        {
-            CheckOutTask checkOutTask = new CheckOutTask( projectId, projectWorkingDirectory );
-
-            checkOutQueue.put( checkOutTask );
-        }
-        catch ( TaskQueueException e )
-        {
-            throw logAndCreateException( "Exception while adding the project to the check out queue.", e );
-        }
-
-        return getProject( projectId );
-    }
-*/
-/*
-    private void doTempCheckOut( ContinuumProject project )
-        throws ContinuumException
-    {
-        File checkoutDirectory = new File( workingDirectory, "temp-project" );
-
-        if ( checkoutDirectory.exists() )
-        {
-            try
-            {
-                FileUtils.cleanDirectory( checkoutDirectory );
-            }
-            catch ( IOException ex )
-            {
-                throw logAndCreateException( "Error while cleaning out " + checkoutDirectory.getAbsolutePath() );
-            }
-        }
-        else
-        {
-            if ( !checkoutDirectory.mkdirs() )
-            {
-                throw logAndCreateException( "Could not make the check out directory " +
-                                             "'" + checkoutDirectory.getAbsolutePath() + "'." );
-            }
-        }
-
-        // TODO: Get the list of files to check out from the builder.
-        // Maven 2: pom.xml, Maven 1: project.xml, Ant: all? build.xml?
-
-        try
-        {
-            scm.checkOut( project, checkoutDirectory );
-        }
-        catch ( ContinuumScmException e )
-        {
-            throw logAndCreateException( "Error while checking out the project.", e );
-        }
-    }
-*/
-/*
-    private void updateProjectFromCheckOut( ContinuumProject project )
-        throws ContinuumException
-    {
-        getLogger().info( "Updating project '" + project.getName() + "'." );
-
-        // ----------------------------------------------------------------------
-        // Make a new descriptor
-        // ----------------------------------------------------------------------
-
-        ContinuumBuildExecutor builder = buildExecutorManager.getBuildExecutor( project.getExecutorId() );
-
-        try
-        {
-            builder.updateProjectFromCheckOut( new File( project.getWorkingDirectory() ), project );
-        }
-        catch ( ContinuumBuildExecutorException e )
-        {
-            throw logAndCreateException( "Error while updating project from check out.", e );
-        }
-
-        // ----------------------------------------------------------------------
-        // Store the new descriptor
-        // ----------------------------------------------------------------------
-
-        try
-        {
-            store.updateProject( project );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw logAndCreateException( "Error while storing the updated project.", e );
-        }
-    }
-*/
     // ----------------------------------------------------------------------
     // Lifecylce Management
     // ----------------------------------------------------------------------
@@ -682,43 +457,6 @@ public class DefaultContinuumCore
         getLogger().info( "Starting Continuum." );
 
         // ----------------------------------------------------------------------
-        // Check for projects that's in the "checking out" state and enqueue
-        // them to ensure that they're always checked out.
-        // ----------------------------------------------------------------------
-
-//        getLogger().info( "Checking for projects that has to be checked out." );
-//
-//        try
-//        {
-//            for ( Iterator it = store.getAllProjects().iterator(); it.hasNext(); )
-//            {
-//                ContinuumProject project = (ContinuumProject) it.next();
-//
-//                if ( project.getState() != ContinuumProjectState.CHECKING_OUT )
-//                {
-//                    continue;
-//                }
-//
-//                getLogger().info( "Adding '" + project.getName() + "' to the check out queue." );
-//
-//                CheckOutTask checkOutTask = new CheckOutTask( project.getId(),
-//                                                              new File( project.getWorkingDirectory() ) );
-//
-//                checkOutQueue.put( checkOutTask );
-//            }
-//        }
-//        catch ( ContinuumStoreException e )
-//        {
-//            throw new StartingException( "Error while enqueuing all projects in the 'checking out' state to " +
-//                                         "the check out queue.", e );
-//        }
-//        catch ( TaskQueueException e )
-//        {
-//            throw new StartingException( "Error while enqueuing all projects in the 'checking out' state to " +
-//                                         "the check out queue.", e );
-//        }
-
-        // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
@@ -743,14 +481,7 @@ public class DefaultContinuumCore
 
         getLogger().info( "Continuum stopped." );
     }
-/*
-    private ContinuumException logAndCreateException( String message )
-    {
-        getLogger().error( message );
 
-        return new ContinuumException( message );
-    }
-*/
     private ContinuumException logAndCreateException( String message, Throwable cause )
     {
         getLogger().error( message, cause );

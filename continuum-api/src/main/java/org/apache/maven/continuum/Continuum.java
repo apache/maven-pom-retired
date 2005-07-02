@@ -90,9 +90,6 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     Collection getBuildsForProject( String projectId )
         throws ContinuumException;
 
-//    ContinuumBuildResult getBuildResultForBuild( String buildId )
-//        throws ContinuumException;
-
     Collection getChangedFilesForBuild( String buildId )
         throws ContinuumException;
 

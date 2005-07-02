@@ -42,11 +42,6 @@ public class ContinuumNotificationDispatcherTest
                                                                      "Notification Dispatcher Test Project",
                                                                      "scm:notification/dispatcher" );
 
-//        store.setIsUpdating( projectId );
-
-//        store.setUpdateDone( projectId );
-
-//        String buildId = store.createBuild( projectId, false );
         ContinuumBuild build = new ContinuumBuild();
         build.setStartTime( System.currentTimeMillis() );
         build.setState( ContinuumProjectState.BUILDING );
