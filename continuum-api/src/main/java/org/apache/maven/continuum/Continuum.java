@@ -64,6 +64,9 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     ContinuumBuild getLatestBuildForProject( String id )
         throws ContinuumException;
 
+    boolean isBuilding( String id )
+        throws ContinuumException;
+
     // ----------------------------------------------------------------------
     // Building
     // ----------------------------------------------------------------------
