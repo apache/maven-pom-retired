@@ -1,4 +1,4 @@
-$page.setTitle( $item.name )
+$page.setTitle( "Continuum - Project View: ${item.name}" )
 
 <div class="app">
   <div id="axial" class="h3">
@@ -16,22 +16,26 @@ $page.setTitle( $item.name )
       </table>
       #bar()
     </div>
+  </div>
 
     ## This is an extension which could be done by a parse or include
+## TODO: internationalize and use forms instead of this hardcoded layout - tryg
 
-    <h3>$i18n.getString( $form.view.titleKey )</h3>
-    <div class="axial">
-      <table border="1" cellspacing="2" cellpadding="3" width="100%">
-        #foreach ( $developer in $item.developers )
-        <tr class="b">
-          $developer.name
-          <th>$i18n.getString( $element.labelKey )</th>
-          <td>$formtool.getItem( $form, $element, $item )</td>
-        </tr>
-        #end
-      </table>
-      #bar()
-    </div>
-
+  <div id="h3">
+    <h3>Developers</h3>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+      #foreach ( $developer in $item.developers )
+      <tr class="$css.nextClass">
+        <td>${developer.name}</th>
+        <td><a href="mailto:${developer.email}">${developer.email}</a></td>
+      </tr>
+      #end
+    </table>
+    #bar()
   </div>
+
 </div>

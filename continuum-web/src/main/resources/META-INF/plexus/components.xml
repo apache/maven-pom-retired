@@ -307,6 +307,11 @@
       <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
       <role-hint>continuum-state</role-hint>
       <implementation>org.apache.maven.continuum.web.tool.ContinuumStateContentGenerator</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
     </component>
 
   </components>

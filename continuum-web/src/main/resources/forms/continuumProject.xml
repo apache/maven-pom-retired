@@ -45,6 +45,7 @@
       <type>text</type>
       <expression>scmUrl</expression>
     </element>
+<!-- TODO: Replace this with some notifier forms
     <element>
       <id>project.nagEmailAddress</id>
       <validators>
@@ -56,6 +57,7 @@
       <type>text</type>
       <expression>nagEmailAddress</expression>
     </element>
+-->
     <element>
       <id>project.version</id>
       <validators>
@@ -145,7 +147,9 @@
          | Only show the result pages if there are builds to show and if the project is in a state
          | of ok, failed, error.
          -->
+        <!-- TODO: reenable
         <enable>getState() == 4 || ( getBuilds() != null &amp;&amp; getBuilds().size > 0 &amp;&amp; ( getState() == 2 || getState() == 3 ) )</enable>
+        -->
       </operation>
       <operation>
         <name>Edit</name>
@@ -157,12 +161,16 @@
         <!--
          | Allow deletion when the project is in a state of new, ok, failed, error.
          -->
+        <!--
         <enable>getState() == 1 || getState() == 2 || getState() == 3 || getState() == 4</enable>
+        -->
       </operation>
       <operation>
         <name>Build</name>
         <action>Summary.vm/action/cam/cid/buildProject/id/$id$</action>
+        <!--
         <enable>getState() == 1 || getState() == 2 || getState() == 3 || getState() == 4</enable>
+        -->
       </operation>
     </operations>
   </summary>

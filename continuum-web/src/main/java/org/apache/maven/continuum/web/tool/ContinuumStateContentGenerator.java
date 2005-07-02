@@ -22,6 +22,8 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.ContinuumException;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -31,16 +33,34 @@ public class ContinuumStateContentGenerator
     extends AbstractLogEnabled
     implements ContentGenerator
 {
+    /** @plexus.requirement */
+    private Continuum continuum;
+
     public String generate( Object item )
     {
         int state = 0;
 
         if ( item instanceof ContinuumProject )
         {
-            getLogger().warn( "The project doesn't have any state anymore" );
+            ContinuumProject project = (ContinuumProject) item;
 
-            return "";
-//            state = ( (ContinuumProject) item ).getState();
+            try
+            {
+                ContinuumBuild build = continuum.getLatestBuildForProject( project.getId() );
+
+                if ( build == null )
+                {
+                    return "New";
+                }
+
+                state = build.getState();
+            }
+            catch ( ContinuumException e )
+            {
+                getLogger().warn( "Error while getting latest build for project '" + project.getId() + "'.", e );
+
+                return "Unknown";
+            }
         }
         else
         {

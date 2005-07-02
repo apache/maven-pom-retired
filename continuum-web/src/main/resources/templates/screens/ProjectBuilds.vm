@@ -1,3 +1,5 @@
+$page.setTitle( "Continuum - ${project.name} Builds" )
+
 <div class="app">
   #if ( $project.checkOutErrorException )
   <h3>Checkout Exception</h3>

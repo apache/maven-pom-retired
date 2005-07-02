@@ -1,3 +1,5 @@
+$page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$build.startTime)" )
+
 <div class="app">
   <h3>Build result for $project.name</h3>
   <p>
