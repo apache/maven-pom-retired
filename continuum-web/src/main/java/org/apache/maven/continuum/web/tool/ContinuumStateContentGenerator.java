@@ -38,6 +38,8 @@ public class ContinuumStateContentGenerator
         if ( item instanceof ContinuumProject )
         {
             getLogger().warn( "The project doesn't have any state anymore" );
+
+            return "";
 //            state = ( (ContinuumProject) item ).getState();
         }
         else
