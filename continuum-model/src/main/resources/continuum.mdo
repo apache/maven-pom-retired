@@ -46,20 +46,11 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
-<!--
-        <field>
+        <field stash.storable="false">
           <name>state</name>
           <version>1.0.0</version>
           <type>int</type>
--->
-          <!--
-          <association>
-            <type>ContinuumProjectState</type>
-          </association>
-          -->
-<!--
         </field>
--->
         <field>
           <name>executorId</name>
           <version>1.0.0</version>

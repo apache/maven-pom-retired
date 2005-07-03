@@ -28,6 +28,7 @@ import javax.jdo.Query;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 
@@ -79,13 +80,13 @@ public class ModelloJPoxContinuumStore
             Object id = store.addContinuumProject( project );
 
             project = store.getContinuumProjectByJdoId( id, true );
+
+            return project.getId();
         }
         catch ( Exception e )
         {
             throw new ContinuumStoreException( "Error while adding a project.", e );
         }
-
-        return project.getId();
     }
 
     public void removeProject( String projectId )
@@ -147,7 +148,14 @@ public class ModelloJPoxContinuumStore
     {
         try
         {
-            return store.getContinuumProjectCollection( true, null, "name ascending" );
+            Collection collection = store.getContinuumProjectCollection( true, null, "name ascending" );
+
+            for ( Iterator it = collection.iterator(); it.hasNext(); )
+            {
+                setProjectState( (ContinuumProject) it.next() );
+            }
+
+            return collection;
         }
         catch ( Exception e )
         {
@@ -164,17 +172,29 @@ public class ModelloJPoxContinuumStore
 
             String ordering = "";
 
+            store.begin();
+
             Collection projects = store.getContinuumProjectCollection( true, filter, ordering );
 
             if ( projects.size() == 0 )
             {
+                store.commit();
+
                 return null;
             }
 
-            return (ContinuumProject) projects.iterator().next();
+            ContinuumProject project = (ContinuumProject) projects.iterator().next();
+
+            setProjectState( project );
+
+            store.commit();
+
+            return project;
         }
         catch ( Exception e )
         {
+            rollback( store );
+
             throw new ContinuumStoreException( "Error while loading project set", e );
         }
     }
@@ -184,6 +204,8 @@ public class ModelloJPoxContinuumStore
     {
         try
         {
+            store.begin();
+
             String filter = "this.scmUrl == \"" + scmUrl + "\"";
 
             String ordering = "";
@@ -192,13 +214,21 @@ public class ModelloJPoxContinuumStore
 
             if ( projects.size() == 0 )
             {
+                store.commit();
+
                 return null;
             }
 
-            return (ContinuumProject) projects.iterator().next();
+            ContinuumProject project = setProjectState( (ContinuumProject) projects.iterator().next() );
+
+            store.commit();
+
+            return project;
         }
         catch ( Exception e )
         {
+            rollback( store );
+
             throw new ContinuumStoreException( "Error while finding projects.", e );
         }
     }
@@ -208,10 +238,20 @@ public class ModelloJPoxContinuumStore
     {
         try
         {
-            return store.getContinuumProject( projectId, true );
+            store.begin();
+
+            ContinuumProject project = store.getContinuumProject( projectId, true );
+
+            setProjectState( project );
+
+            store.commit();
+
+            return project;
         }
         catch ( Exception e )
         {
+            rollback( store );
+
             throw new ContinuumStoreException( "Error while loading project.", e );
         }
     }
@@ -332,6 +372,8 @@ public class ModelloJPoxContinuumStore
 
             if ( builds.size() == 0 )
             {
+                store.commit();
+
                 return null;
             }
 
@@ -411,6 +453,23 @@ public class ModelloJPoxContinuumStore
     public ContinuumJPoxStore getStore()
     {
         return store;
+    }
+
+    private ContinuumProject setProjectState( ContinuumProject project )
+        throws ContinuumStoreException
+    {
+        ContinuumBuild build = getLatestBuildForProject( project.getId() );
+
+        if ( build == null )
+        {
+            project.setState( ContinuumProjectState.NEW );
+        }
+        else
+        {
+            project.setState( build.getState() );
+        }
+
+        return project;
     }
 
     private void rollback( ContinuumJPoxStore store )
