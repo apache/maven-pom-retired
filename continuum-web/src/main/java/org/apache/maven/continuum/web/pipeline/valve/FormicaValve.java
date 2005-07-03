@@ -81,7 +81,7 @@ public class FormicaValve
         }
         catch ( FormToolException e )
         {
-            throw new ValveInvocationException( "Error populating context: ", e );
+            throw new ValveInvocationException( "Error populating context.", e );
         }
     }
 }

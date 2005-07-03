@@ -1,10 +1,14 @@
 $page.setTitle( "Continuum - ${project.name} Builds" )
 
 <div class="app">
-  #if ( $project.checkOutErrorException )
+  #if ( !$project.checkOutScmResult.success )
   <h3>Checkout Exception</h3>
   <p>
+    There was a error while checking out the project: $project.checkOutErrorMessage
+
+    #if ( $project.checkOutErrorException && $project.checkOutErrorException != "" )
     <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px"><code><pre>$project.checkOutErrorException</pre></code></div>
+    #end
   </p>
   #end
   <h3>Build results for $project.name</h3>

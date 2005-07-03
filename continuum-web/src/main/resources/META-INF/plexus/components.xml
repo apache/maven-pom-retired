@@ -270,6 +270,10 @@
             <cid>buildAllProjects</cid>
             <expression>buildProjects()</expression>
           </call>
+          <call>
+            <cid>checkoutProject</cid>
+            <expression>checkoutProject(#id)</expression>
+          </call>
         </calls>
       </configuration>
     </component>

@@ -27,6 +27,7 @@ import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
 import org.apache.maven.continuum.core.action.StoreProjectAction;
+import org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -120,12 +121,6 @@ public class DefaultContinuum
         return core.getLatestBuildForProject( id );
     }
 
-    public boolean isBuilding( String id )
-        throws ContinuumException
-    {
-        return core.isBuilding( id );
-    }
-
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -134,6 +129,29 @@ public class DefaultContinuum
         throws ContinuumException
     {
         core.removeProject( projectId );
+    }
+
+    public boolean isBuilding( String id )
+        throws ContinuumException
+    {
+        return core.isBuilding( id );
+    }
+
+    public void checkoutProject( String id )
+        throws ContinuumException
+    {
+        Map context = new HashMap();
+
+        context.put( AddProjectToCheckOutQueueAction.KEY_PROJECT_ID, id );
+
+        try
+        {
+            actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumException( "Error while adding the project to the check out queue.", e );
+        }
     }
 
     public ContinuumProject getProject( String projectId )

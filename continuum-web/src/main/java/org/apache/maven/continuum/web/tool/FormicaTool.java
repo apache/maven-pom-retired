@@ -276,7 +276,7 @@ public class FormicaTool
         }
         catch ( ComponentLookupException e )
         {
-            throw new FormToolException( "Cannot lookup source component: ", e );
+            throw new FormToolException( "Cannot lookup source component.", e );
         }
 
         Map map = new HashMap();

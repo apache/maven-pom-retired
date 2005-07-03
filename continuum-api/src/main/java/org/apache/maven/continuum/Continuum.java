@@ -36,7 +36,17 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
 {
     String ROLE = Continuum.class.getName();
 
+    // ----------------------------------------------------------------------
+    // Project
+    // ----------------------------------------------------------------------
+
     void removeProject( String projectId )
+        throws ContinuumException;
+
+    boolean isBuilding( String id )
+        throws ContinuumException;
+
+    void checkoutProject( String id )
         throws ContinuumException;
 
     ContinuumProject getProject( String projectId )
@@ -48,10 +58,6 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     CheckOutScmResult getCheckOutScmResultForProject( String projectId )
         throws ContinuumException;
 
-    // ----------------------------------------------------------------------
-    // Projects
-    // ----------------------------------------------------------------------
-
     Collection getProjects()
         throws ContinuumException;
 
@@ -62,9 +68,6 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
         throws ContinuumException;
 
     ContinuumBuild getLatestBuildForProject( String id )
-        throws ContinuumException;
-
-    boolean isBuilding( String id )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------

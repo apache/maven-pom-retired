@@ -30,6 +30,7 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.action.Action;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.TaskQueue;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.Map;
@@ -74,6 +75,19 @@ public abstract class AbstractContinuumAction
      */
     private ContinuumNotificationDispatcher notificationDispatcher;
 
+    // ----------------------------------------------------------------------
+    // Utils
+    // ----------------------------------------------------------------------
+
+    protected String nullIfEmpty( String string )
+    {
+        if ( StringUtils.isEmpty( string ) )
+        {
+            return null;
+        }
+
+        return string;
+    }
 
     // ----------------------------------------------------------------------
     //

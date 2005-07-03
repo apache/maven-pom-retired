@@ -13,8 +13,20 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         </tr>
         #end
         #end
+    </table>
+    <div class="functnbar3">
+      <table>
+        <tr>
+          <td>
+            <form method="post" action="$link">
+            #hidden ( "action" "cam" )
+            #hidden ( "cid" "checkoutProject" )
+            #hidden ( "id" "$item.id" )
+            <input type="submit" name="checkout-project" value="Checkout"/>
+            </form>
+          </td>
+        </tr>
       </table>
-      #bar()
     </div>
   </div>
 

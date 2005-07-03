@@ -88,9 +88,9 @@ public class CheckOutProjectContinuumAction
 
             project.setCheckOutScmResult( result );
 
-            project.setCheckOutErrorMessage( errorMessage );
+            project.setCheckOutErrorMessage( nullIfEmpty( errorMessage ) );
 
-            project.setCheckOutErrorException( AbstractContinuumStore.throwableToString( exception ) );
+            project.setCheckOutErrorException( nullIfEmpty( AbstractContinuumStore.throwableToString( exception ) ) );
 
             getStore().updateProject( project );
         }

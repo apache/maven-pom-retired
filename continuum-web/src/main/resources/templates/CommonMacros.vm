@@ -32,7 +32,11 @@
 ## ----------------------------------------------------------------------------
 
 #macro ( text $element $elementData )
+#if ( $element && $element.attributes && $element.attributes.size > 0 )
 <input type="text" name="$element.id" value="$elementData" size="$element.attributes.size"/>
+#else
+<input type="text" name="$element.id" value="$elementData"/>
+#end
 #end
 
 #macro ( textarea $element $elementData )
