@@ -1,4 +1,4 @@
-clas Foo 
+class Foo 
 { 
     
 }
