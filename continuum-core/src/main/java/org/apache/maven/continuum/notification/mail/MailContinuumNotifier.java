@@ -83,7 +83,7 @@ public class MailContinuumNotifier
     //
     // ----------------------------------------------------------------------
 
-    private String localHostName;
+    private String buildHost;
 
     private FormatterTool formatterTool;
 
@@ -101,6 +101,17 @@ public class MailContinuumNotifier
 
     public void initialize()
     {
+        try
+        {
+            InetAddress address = InetAddress.getLocalHost();
+
+            buildHost = StringUtils.clean( address.getCanonicalHostName() );
+        }
+        catch ( UnknownHostException ex )
+        {
+            fromName = "Continuum";
+        }
+
         // ----------------------------------------------------------------------
         // From mailbox
         // ----------------------------------------------------------------------
@@ -118,21 +129,12 @@ public class MailContinuumNotifier
 
         if ( StringUtils.isEmpty( fromName ) )
         {
-            try
-            {
-                InetAddress address = InetAddress.getLocalHost();
-
-                localHostName = address.getCanonicalHostName();
-
-                fromName = "Continuum@" + localHostName;
-            }
-            catch ( UnknownHostException ex )
-            {
-                fromName = "Continuum";
-            }
+            fromName = "Continuum@" + buildHost;
         }
 
         getLogger().info( "From name: " + fromName );
+
+        getLogger().info( "Build host name: " + buildHost );
 
         // ----------------------------------------------------------------------
         //
@@ -221,8 +223,6 @@ public class MailContinuumNotifier
 
             context.put( "build", build );
 
-            context.put( "build", build );
-
             context.put( "previousBuild", previousBuild );
 
             // ----------------------------------------------------------------------
@@ -233,7 +233,7 @@ public class MailContinuumNotifier
 
             // TODO: Make the build host a part of the build
 
-            context.put( "buildHost", localHostName );
+            context.put( "buildHost", buildHost );
 
             // ----------------------------------------------------------------------
             //
@@ -305,7 +305,7 @@ public class MailContinuumNotifier
 
         MailMessage message = new MailMessage();
 
-        message.addHeader( "X-Continuum-Host", localHostName );
+        message.addHeader( "X-Continuum-Build-Host", buildHost );
 
         message.addHeader( "X-Continuum-Project-Id", project.getId() );
 

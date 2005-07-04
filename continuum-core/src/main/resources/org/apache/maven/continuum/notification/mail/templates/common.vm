@@ -14,37 +14,55 @@
  * limitations under the License.
  *#
 #macro( shellBuildResult )
-****************************************************************************
 Build statistics:
   State: $formatter.formatProjectState( $build.state )
 #if ( $previousBuild )
   Previous State: $formatter.formatProjectState( $previousBuild.state )
 #else
-  Previous build: No previous build.
+  Previous Build: No previous build.
 #end
   Started at: $formatter.formatTimestamp( $build.startTime )
   Finished at: $formatter.formatTimestamp( $build.endTime )
   Total time: $formatter.formatInterval( $build.startTime, $build.endTime )
+  Forced: $build.forced
+  Exit code: $build.exitCode
   Building machine hostname: $buildHost
-****************************************************************************
 
-#if ( $buildResult.standardOutput && $buildResult.standardOutput != "" )
+#if ( $build.updateScmResult )
+Changes
+#if ( $build.updateScmResult.updatedFiles.size() == 0 )
+ No files changed
+#else
+ #foreach ( $file in $build.updateScmResult.updatedFiles )
+ * $file.path
+ #end
+#end
+#end
+
+#if ( $build.state == 4 )
 ****************************************************************************
-Standard output:
+Build Error:
 ****************************************************************************
-$buildResult.standardOutput
+$build.error
+#else
 ****************************************************************************
+Standard Output:
+****************************************************************************
+#if ( $build.standardOutput && $build.standardOutput != "" )
+$build.standardOutput
 #else
 There was no content on standard output.
 #end
+****************************************************************************
 
-#if( $buildResult.standardError && $buildResult.standardError != "" )
 ****************************************************************************
-Standard error:
+Standard Error:
 ****************************************************************************
-$buildResult.standardError
-****************************************************************************
+#if( $build.standardError && $build.standardError != "" )
+$build.standardError
 #else
 There was no content on standard error.
 #end
+****************************************************************************
 #end
+#end ## #macro( shellBuildResult )

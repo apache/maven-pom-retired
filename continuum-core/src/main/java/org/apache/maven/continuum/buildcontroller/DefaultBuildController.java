@@ -127,9 +127,9 @@ public class DefaultBuildController
                     // Check to see if there was a error while checking out the project
                     // ----------------------------------------------------------------------
 
-                    // TODO: remove once CONTINUUM-193 is resolved
                     if ( StringUtils.isEmpty( checkoutErrorMessage ) && StringUtils.isEmpty( checkoutErrorException ) )
                     {
+                        // TODO: remove once CONTINUUM-193 is resolved
                         UpdateScmResult updateScmResult = new UpdateScmResult();
 
                         updateScmResult.setCommandOutput( checkOutScmResult.getCommandOutput() );
@@ -190,58 +190,6 @@ public class DefaultBuildController
                 buildId = storeBuild( project, build );
             }
 
-/////////////////////// This section should delegate to UpdateWorkingDirectoryFromScmContinuumAction
-/*
-/////////////////////// START SECTION
-            // ----------------------------------------------------------------------
-            // Update the project
-            //
-            // If this fails, create a build, store the scm result and set the
-            // build status to error.
-            // ----------------------------------------------------------------------
-
-
-            if ( !update( context ) )
-            {
-                return;
-            }
-/////////////////////// END SECTION
-*/
-/*
-/////////////////////// This section should delegate to UpdateProjectFromWorkingDirectoryContinuumAction
-/////////////////////// START SECTION
-            if ( !updateProjectMetadata( context ) )
-            {
-                return;
-            }
-/////////////////////// END SECTION
-*/
-/*
-/////////////////////// This section should delegate to ExecuteBuilderContinuumAction
-/////////////////////// START SECTION
-
-            // ----------------------------------------------------------------------
-            // Figure out if the project needs to be built
-            // ----------------------------------------------------------------------
-
-            if ( context.scmResult.getUpdatedFiles().size() == 0 &&
-                 !forced &&
-                 !isNew( context.project ) )
-            {
-                getLogger().info( "No files updated, not building. Project id '" + context.project.getId() + "'." );
-
-//                Nothing to do, the project doesn't contain any state anymore
-//                store.setBuildNotExecuted( projectId );
-
-                return;
-            }
-
-            makeBuild( context );
-
-            buildProject( context );
-
-/////////////////////// END SECTION
-*/
         }
         catch ( Exception ex )
         {
@@ -270,104 +218,6 @@ public class DefaultBuildController
         }
     }
 
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-/*
-    private boolean update( BuildContext context )
-        throws ContinuumStoreException
-    {
-        try
-        {
-// No state in the project
-//            store.setIsUpdating( context.project.getId() );
-
-            notifier.checkoutStarted( context.project );
-
-            context.scmResult = scm.updateProject( context.project );
-
-// No state in the project
-//            store.setUpdateDone( context.project.getId() );
-
-            return true;
-        }
-        catch ( ContinuumScmException e )
-        {
-            getLogger().fatalError( "Error while updating from SCM. Project id '" + context.project.getId() + "'." );
-
-            makeAndStoreErrorBuildResult( context, e );
-
-            return false;
-        }
-        finally
-        {
-            notifier.checkoutComplete( context.project, context.scmResult );
-        }
-    }
-*/
-/*
-    private boolean updateProjectMetadata( BuildContext context )
-        throws ContinuumStoreException
-    {
-        // TODO: Update the metadata files and then update the project descriptor
-        // before updating the project itself. This will make it possible to migrate
-        // a project from one SCM to another.
-
-        ContinuumProject project = context.project;
-
-        try
-        {
-            continuum.updateProjectFromScm( project.getId() );
-        }
-        catch ( ContinuumException e )
-        {
-            getLogger().fatalError( "Error while updating project metadata from check out.", e );
-
-            makeAndStoreErrorBuildResult( context, e );
-
-            return false;
-        }
-
-        return true;
-    }
-*/
-/*
-    private void buildProject( BuildContext context )
-        throws ContinuumStoreException
-    {
-        try
-        {
-            notifier.runningGoals( context.project, context.build );
-
-            context.result = context.builder.build( context.project );
-
-            if ( context.result.isSuccess() )
-            {
-                context.state = ContinuumProjectState.OK;
-            }
-            else
-            {
-                context.state = ContinuumProjectState.FAILED;
-            }
-
-            setBuildResult( context.build.getId(),
-                            context.state,
-                            context.result,
-                            context.scmResult,
-                            null );
-        }
-        catch ( Throwable ex )
-        {
-            getLogger().fatalError( "Error building the project, project id: '" + context.project.getId() + "'.", ex );
-
-            makeAndStoreErrorBuildResult( context, ex );
-        }
-        finally
-        {
-            notifier.goalsCompleted( context.project, context.build );
-        }
-    }
-*/
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
