@@ -16,11 +16,10 @@ package org.apache.maven.continuum.scm.queue;
  * limitations under the License.
  */
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.maven.continuum.core.action.CheckOutProjectContinuumAction;
+import org.apache.maven.continuum.core.action.CheckoutProjectContinuumAction;
 
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -54,13 +53,15 @@ public class CheckOutTaskExecutor
 
         Map context = new HashMap();
 
-        context.put( CheckOutProjectContinuumAction.KEY_PROJECT_ID, projectId );
+        context.put( CheckoutProjectContinuumAction.KEY_PROJECT_ID, projectId );
 
-        context.put( CheckOutProjectContinuumAction.KEY_WORKING_DIRECTORY, workingDirectory );
+        context.put( CheckoutProjectContinuumAction.KEY_WORKING_DIRECTORY, workingDirectory );
 
         try
         {
             actionManager.lookup( "checkout-project" ).execute( context );
+
+            actionManager.lookup( "store-checkout-scm-result" ).execute( context );
         }
         catch ( Exception e )
         {

@@ -36,7 +36,7 @@ public class DefaultContinuumScm
     extends AbstractLogEnabled
     implements ContinuumScm
 {
-    /** @requirement */
+    /** @plexus.requirement */
     private ScmManager scmManager;
 
     // ----------------------------------------------------------------------

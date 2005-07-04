@@ -50,4 +50,21 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
     #bar()
   </div>
 
+  #if ( ( $project.checkOutException && $project.checkOutException != "" ) || ( $project.checkOutErrorMessage && $project.checkOutErrorMessage != "" ) )
+  <div id="h3">
+    <h3>Checkout Error</h3>
+    <p>
+      There was a error while checking out the project.
+
+      #if ( $project.checkOutErrorMessage && $project.checkOutErrorMessage != "" )
+      Error message: $project.checkOutErrorMessage
+      #end
+
+      #if ( $project.checkOutErrorException && $project.checkOutErrorException != "" )
+      <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px"><code><pre>$project.checkOutErrorException</pre></code></div>
+      #end
+    </p>
+  </div>
+  #end
+
 </div>

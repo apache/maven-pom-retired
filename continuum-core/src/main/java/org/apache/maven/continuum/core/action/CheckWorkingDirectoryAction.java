@@ -16,17 +16,16 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import java.util.Map;
 import java.io.File;
+import java.util.Map;
 
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class UpdateProjectFromWorkingDirectoryContinuumAction
+public class CheckWorkingDirectoryAction
     extends AbstractContinuumAction
 {
     public void execute( Map context )
@@ -34,20 +33,8 @@ public class UpdateProjectFromWorkingDirectoryContinuumAction
     {
         ContinuumProject project = getProject( context );
 
-        getLogger().info( "Updating project '" + project.getName() + "' from checkout." );
+        File workingDirectory = new File( project.getWorkingDirectory() );
 
-        // ----------------------------------------------------------------------
-        // Make a new descriptor
-        // ----------------------------------------------------------------------
-
-        ContinuumBuildExecutor builder = getBuildExecutorManager().getBuildExecutor( project.getExecutorId() );
-
-        builder.updateProjectFromCheckOut( new File( project.getWorkingDirectory() ), project );
-
-        // ----------------------------------------------------------------------
-        // Store the new descriptor
-        // ----------------------------------------------------------------------
-
-        getStore().updateProject( project );
+        context.put( KEY_WORKING_DIRECTORY_EXISTS, Boolean.valueOf( workingDirectory.exists() ) );
     }
 }

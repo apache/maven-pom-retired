@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collections;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
@@ -418,6 +419,11 @@ public class ModelloJPoxContinuumStore
             store.begin();
 
             ContinuumBuild build = store.getContinuumBuild( buildId, false );
+
+            if ( build.getUpdateScmResult() == null )
+            {
+                return Collections.EMPTY_LIST;
+            }
 
             // TODO: Having to copy the objects feels a /bit/ strange.
 

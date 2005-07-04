@@ -43,9 +43,6 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     void removeProject( String projectId )
         throws ContinuumException;
 
-    boolean isBuilding( String id )
-        throws ContinuumException;
-
     void checkoutProject( String id )
         throws ContinuumException;
 
@@ -68,6 +65,13 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
         throws ContinuumException;
 
     ContinuumBuild getLatestBuildForProject( String id )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Queues
+    // ----------------------------------------------------------------------
+
+    boolean isInBuildingQueue( String id )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------

@@ -47,17 +47,23 @@ public abstract class AbstractContinuumAction
     // Keys for the values that can be in the context
     // ----------------------------------------------------------------------
 
-    public final static String KEY_PROJECT_ID = "projectId";
+    public final static String KEY_PROJECT_ID = "project-id";
 
-    public final static String KEY_UNVALIDATED_PROJECT = "unvalidatedProject";
+    public final static String KEY_UNVALIDATED_PROJECT = "unvalidated-project";
 
-    public final static String KEY_BUILD_ID = "buildId";
+    public final static String KEY_BUILD_ID = "build-id";
 
-    public static final String KEY_WORKING_DIRECTORY = "workingDirectory";
+    public static final String KEY_WORKING_DIRECTORY = "working-directory";
 
-    public static final String KEY_CHECKOUT_SCM_RESULT = "checkOutResult";
+    public static final String KEY_WORKING_DIRECTORY_EXISTS = "working-directory-exists";
 
-    public static final String KEY_UPDATE_SCM_RESULT = "updateResult";
+    public static final String KEY_CHECKOUT_SCM_RESULT = "checkout-result";
+
+    public static final String KEY_CHECKOUT_ERROR_MESSAGE = "checkout-error-message";
+
+    public static final String KEY_CHECKOUT_ERROR_EXCEPTION = "checkout-error-exception";
+
+    public static final String KEY_UPDATE_SCM_RESULT = "update-result";
 
     public static final String KEY_FORCED = "forced";
 
@@ -137,20 +143,19 @@ public abstract class AbstractContinuumAction
     //
     // ----------------------------------------------------------------------
 
-    public String getProjectId( Map context )
+    public static String getProjectId( Map context )
     {
         return getString( context, KEY_PROJECT_ID );
     }
 
-    public String getBuildId( Map context )
+    public static String getBuildId( Map context )
     {
         return getString( context, KEY_BUILD_ID );
     }
 
-    protected boolean isForced( Map context )
-        throws ContinuumStoreException
+    public static boolean isForced( Map context )
     {
-        return ((Boolean) getObject( context, KEY_FORCED )).booleanValue();
+        return getBoolean( context, KEY_FORCED );
     }
 
     protected ContinuumProject getProject( Map context )
@@ -159,8 +164,7 @@ public abstract class AbstractContinuumAction
         return getStore().getProject( getProjectId( context ) );
     }
 
-    protected ContinuumProject getUnvalidatedProject( Map context )
-        throws ContinuumStoreException
+    public static ContinuumProject getUnvalidatedProject( Map context )
     {
         return ((ContinuumProject) getObject( context, KEY_UNVALIDATED_PROJECT ) );
     }
@@ -171,22 +175,32 @@ public abstract class AbstractContinuumAction
         return getStore().getBuild( getBuildId( context ) );
     }
 
-    protected File getWorkingDirectory( Map context )
+    public static File getWorkingDirectory( Map context )
     {
         return new File( getString( context, KEY_WORKING_DIRECTORY ) );
     }
 
-    protected CheckOutScmResult getCheckOutResult( Map context )
+    public static CheckOutScmResult getCheckoutResult( Map context )
     {
         return (CheckOutScmResult) getObject( context, KEY_CHECKOUT_SCM_RESULT );
     }
 
-    protected UpdateScmResult getUpdateScmResult( Map context )
+    public static String getCheckoutErrorMessage( Map context )
+    {
+        return getString( context, KEY_CHECKOUT_ERROR_MESSAGE );
+    }
+
+    public static String getCheckoutErrorException( Map context )
+    {
+        return getString( context, KEY_CHECKOUT_ERROR_EXCEPTION );
+    }
+
+    public static UpdateScmResult getUpdateScmResult( Map context )
     {
         return (UpdateScmResult) getObject( context, KEY_UPDATE_SCM_RESULT );
     }
 
-    protected UpdateScmResult getUpdateScmResult(  Map context, UpdateScmResult defaultValue )
+    public static UpdateScmResult getUpdateScmResult(  Map context, UpdateScmResult defaultValue )
     {
         return (UpdateScmResult) getObject( context, KEY_UPDATE_SCM_RESULT, defaultValue );
     }
@@ -195,12 +209,17 @@ public abstract class AbstractContinuumAction
     //
     // ----------------------------------------------------------------------
 
-    protected String getString( Map context, String key )
+    protected static String getString( Map context, String key )
     {
         return (String) context.get( key );
     }
 
-    private Object getObject( Map context, String key )
+    public static boolean getBoolean( Map context, String key )
+    {
+        return ( (Boolean) getObject( context, key ) ).booleanValue();
+    }
+
+    private static Object getObject( Map context, String key )
     {
         Object value = context.get( key );
 
@@ -212,7 +231,7 @@ public abstract class AbstractContinuumAction
         return value;
     }
 
-    private Object getObject( Map context, String key, Object defaultValue )
+    private static Object getObject( Map context, String key, Object defaultValue )
     {
         Object value = context.get( key );
 

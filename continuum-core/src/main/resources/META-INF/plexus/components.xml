@@ -546,7 +546,17 @@
     <component>
       <role>org.codehaus.plexus.action.Action</role>
       <role-hint>checkout-project</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.CheckOutProjectContinuumAction</implementation>
+      <implementation>org.apache.maven.continuum.core.action.CheckoutProjectContinuumAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>store-checkout-scm-result</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.StoreCheckOutScmResultAction</implementation>
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.core.ContinuumCore</role>
@@ -603,6 +613,16 @@
       <role>org.codehaus.plexus.action.Action</role>
       <role-hint>update-project-from-working-directory</role-hint>
       <implementation>org.apache.maven.continuum.core.action.UpdateProjectFromWorkingDirectoryContinuumAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>check-working-directory</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.CheckWorkingDirectoryAction</implementation>
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.core.ContinuumCore</role>

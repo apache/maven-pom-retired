@@ -17,37 +17,38 @@ package org.apache.maven.continuum.core.action;
  */
 
 import java.util.Map;
-import java.io.File;
 
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.store.AbstractContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
+
+import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class UpdateProjectFromWorkingDirectoryContinuumAction
+public class StoreCheckOutScmResultAction
     extends AbstractContinuumAction
 {
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = getProject( context );
+        try
+        {
+            ContinuumProject project = getProject( context );
 
-        getLogger().info( "Updating project '" + project.getName() + "' from checkout." );
+            project.setCheckOutScmResult( getCheckoutResult( context ) );
 
-        // ----------------------------------------------------------------------
-        // Make a new descriptor
-        // ----------------------------------------------------------------------
+            project.setCheckOutErrorMessage( nullIfEmpty( getCheckoutErrorMessage( context ) ) );
 
-        ContinuumBuildExecutor builder = getBuildExecutorManager().getBuildExecutor( project.getExecutorId() );
+            project.setCheckOutErrorException( nullIfEmpty( getCheckoutErrorException( context ) ) );
 
-        builder.updateProjectFromCheckOut( new File( project.getWorkingDirectory() ), project );
-
-        // ----------------------------------------------------------------------
-        // Store the new descriptor
-        // ----------------------------------------------------------------------
-
-        getStore().updateProject( project );
+            getStore().updateProject( project );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new TaskExecutionException( "Error while storing the checkout result.", e );
+        }
     }
 }

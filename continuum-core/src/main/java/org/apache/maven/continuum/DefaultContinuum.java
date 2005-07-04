@@ -122,6 +122,16 @@ public class DefaultContinuum
     }
 
     // ----------------------------------------------------------------------
+    // Queues
+    // ----------------------------------------------------------------------
+
+    public boolean isInBuildingQueue( String id )
+        throws ContinuumException
+    {
+        return core.isBuilding( id );
+    }
+
+    // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
@@ -129,12 +139,6 @@ public class DefaultContinuum
         throws ContinuumException
     {
         core.removeProject( projectId );
-    }
-
-    public boolean isBuilding( String id )
-        throws ContinuumException
-    {
-        return core.isBuilding( id );
     }
 
     public void checkoutProject( String id )

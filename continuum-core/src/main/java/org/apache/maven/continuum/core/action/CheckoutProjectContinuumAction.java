@@ -16,32 +16,26 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import java.io.File;
+import java.util.Map;
+
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.store.AbstractContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
-
-import java.io.File;
-import java.util.Map;
-
-import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class CheckOutProjectContinuumAction
+public class CheckoutProjectContinuumAction
     extends AbstractContinuumAction
 {
     public void execute( Map context )
         throws Exception
     {
-        String projectId = getProjectId( context );
-
-        // TODO: just make this get project and hide the store
-        ContinuumProject project = getStore().getProject( projectId );
+        ContinuumProject project = getProject( context );
 
         File workingDirectory = getWorkingDirectory( context );
 
@@ -79,30 +73,13 @@ public class CheckOutProjectContinuumAction
         }
 
         // ----------------------------------------------------------------------
-        // Store the check out result or error
-        // ----------------------------------------------------------------------
-
-        try
-        {
-            project = getStore().getProject( projectId );
-
-            project.setCheckOutScmResult( result );
-
-            project.setCheckOutErrorMessage( nullIfEmpty( errorMessage ) );
-
-            project.setCheckOutErrorException( nullIfEmpty( AbstractContinuumStore.throwableToString( exception ) ) );
-
-            getStore().updateProject( project );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new TaskExecutionException( "Error while storing the check out result.", e );
-        }
-
-        // ----------------------------------------------------------------------
-        // Safe the result in the context
+        // Store the result in the context
         // ----------------------------------------------------------------------
 
         context.put( KEY_CHECKOUT_SCM_RESULT, result );
+
+        context.put( KEY_CHECKOUT_ERROR_MESSAGE, errorMessage );
+
+        context.put( KEY_CHECKOUT_ERROR_EXCEPTION, AbstractContinuumStore.throwableToString( exception ) );
     }
 }
