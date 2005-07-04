@@ -215,7 +215,7 @@ def waitForSuccessfulCheckOut( continuum, projectId ):
 
 #    assertEquals( "The check out was not successful for project #" + project.id, continuum.STATE_NEW, project.state )
     assertEquals( "The check out was not successful for project #" + project.id, None, project.checkOutErrorMessage )
-    assertEquals( "The check out was not successful for project #" + project.id, "", project.checkOutErrorException )
+    assertEquals( "The check out was not successful for project #" + project.id, None, project.checkOutErrorException )
     assertTrue( "The check out was not successful for project #" + project.id, project.checkOutScmResult.success )
 
     return project
