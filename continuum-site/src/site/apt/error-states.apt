@@ -1,0 +1,33 @@
+ ------
+ Continuum Error States
+ ------
+ Jason van Zyl
+ ------
+
+Continuum Error Cases
+
+ This attempts to be a full catalog of all the things that could wrong while
+ running Continuum. We catalog in an attempt to accurate trap the errors so we
+ can report useful information back to the user.
+ 
+* Maven 2.x
+
+ * m2 POM imported lacks an <<<scm>>> element
+ 
+ * m2 POM imported lacks a <<<ciManagement>>> element
+
+ * Missing <<<m2>>> executable or it is not in the path
+
+* Maven 1.0 - 1.0.2
+
+ * m2 POM imported lacks a <<<repository>>> element
+ 
+ * m1 POM imported lacks a <<<nagEmailAddress>>> element
+
+ * Missing <<<maven>>> executable or it is not in the path
+ 
+* Ant
+
+ * Missing <<<ant>>> executable or it is not in the path
+
+* Shell
