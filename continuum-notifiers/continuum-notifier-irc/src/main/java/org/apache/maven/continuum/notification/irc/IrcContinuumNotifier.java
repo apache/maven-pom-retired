@@ -45,7 +45,7 @@ public class IrcContinuumNotifier
     // ----------------------------------------------------------------------
 
     /**
-     * @plexus.configuration
+     * @plexus.requirement
      */
     private ContinuumStore store;
 
@@ -190,7 +190,7 @@ public class IrcContinuumNotifier
             return true;
         }
 
-        getLogger().info( "Same state, not sending mail." );
+        getLogger().info( "Same state, not sending message." );
 
         return false;
     }
