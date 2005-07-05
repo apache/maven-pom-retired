@@ -58,12 +58,6 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     Collection getProjects()
         throws ContinuumException;
 
-    Collection getProjectsWithFailures()
-        throws ContinuumException;
-
-    Collection getProjectsWithErrors()
-        throws ContinuumException;
-
     ContinuumBuild getLatestBuildForProject( String id )
         throws ContinuumException;
 
