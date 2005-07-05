@@ -8,8 +8,18 @@
     <notifiers>
       <notifier>
         <type>mail</type>
-        <address>trygvis@codehaus.org</address>
+        <configuration>
+          <address>jason@maven.org</address>
+        </configuration>
       </notifier>
+      <notifier>
+        <type>irc</type>
+        <configuration>
+          <host>irc.codehaus.org</host>
+          <port>6667</port>
+          <channel>#maven</channel>
+        </configuration>
+      </notifier>      
     </notifiers>
   </ciManagement>
   <scm>
