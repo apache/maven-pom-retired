@@ -1,4 +1,4 @@
 class Foo 
 { 
-    
+    int foo;    
 }
