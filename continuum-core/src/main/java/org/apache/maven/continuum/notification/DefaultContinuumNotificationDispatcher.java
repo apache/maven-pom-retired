@@ -42,13 +42,19 @@ public class DefaultContinuumNotificationDispatcher
     extends AbstractLogEnabled
     implements ContinuumNotificationDispatcher
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private NotifierManager notifierManager;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ContinuumStore store;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private RecipientSource recipientSource;
 
     // ----------------------------------------------------------------------
@@ -131,26 +137,26 @@ public class DefaultContinuumNotificationDispatcher
             return;
         }
 
-        try
+        for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
         {
-            for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
+            ContinuumNotifier continuumNotifier = (ContinuumNotifier) i.next();
+
+            String notifierType = continuumNotifier.getType();
+
+            Map configuration = continuumNotifier.getConfiguration();
+
+            try
             {
-                ContinuumNotifier continuumNotifier = (ContinuumNotifier) i.next();
-
-                String notifierType = continuumNotifier.getType();
-
-                Map configuration = continuumNotifier.getConfiguration();
-
                 Notifier notifier = notifierManager.getNotifier( notifierType );
 
                 Set recipients = recipientSource.getRecipients( notifierType, messageId, configuration, context );
 
                 notifier.sendNotification( messageId, recipients, continuumNotifier.getConfiguration(), context );
             }
-        }
-        catch ( NotificationException e )
-        {
-            getLogger().error( "Error while notifying.", e );
+            catch ( NotificationException e )
+            {
+                getLogger().error( "Error while trying to use the " + notifierType + "notifier.", e );
+            }
         }
     }
 }
