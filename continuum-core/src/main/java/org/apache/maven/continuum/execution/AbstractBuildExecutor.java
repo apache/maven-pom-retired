@@ -180,7 +180,8 @@ public abstract class AbstractBuildExecutor
         }
         catch ( Exception e )
         {
-            throw new ContinuumBuildExecutorException( "Error while executing shell command.", e );
+            throw new ContinuumBuildExecutorException(
+                "Error while executing shell command. The most common error is that " + executable + " is not in your path.", e );
         }
     }
 }

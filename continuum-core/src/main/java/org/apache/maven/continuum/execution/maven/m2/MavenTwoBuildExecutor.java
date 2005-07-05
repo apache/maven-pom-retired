@@ -70,9 +70,10 @@ public class MavenTwoBuildExecutor
 
         String arguments = project.getCommandLineArguments() + " " + project.getGoals();
 
-        return executeShellCommand( workingDirectory,
-                                    null,
-                                    arguments );
+        // Adding executable name so that i can get something meaningful in the error message.
+        // If this is not set and there's nothing in the path we have no executable name.
+
+        return executeShellCommand( workingDirectory, "m2", arguments );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

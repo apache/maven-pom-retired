@@ -50,7 +50,7 @@ public class DefaultBuildController
     private ContinuumStore store;
 
     /** @plexus.requirement */
-    private ContinuumNotificationDispatcher notifier;
+    private ContinuumNotificationDispatcher notifierDispatcher;
 
     /** @plexus.requirement */
     private ActionManager actionManager;
@@ -91,7 +91,7 @@ public class DefaultBuildController
 
         try
         {
-            notifier.buildStarted( project );
+            notifierDispatcher.buildStarted( project );
 
             Map actionContext = new HashMap();
 
@@ -188,8 +188,9 @@ public class DefaultBuildController
                 build.setError( throwableToString( e ) );
 
                 buildId = storeBuild( project, build );
-            }
 
+                project.setState( ContinuumProjectState.ERROR );
+            }
         }
         catch ( Exception ex )
         {
@@ -214,7 +215,7 @@ public class DefaultBuildController
                 }
             }
 
-            notifier.buildComplete( project, build );
+            notifierDispatcher.buildComplete( project, build );
         }
     }
 

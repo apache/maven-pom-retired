@@ -61,6 +61,8 @@ public class DefaultShellCommandHelper
 
         Commandline cl = new Commandline();
 
+        System.out.println( "executable = " + executable );
+
         cl.setExecutable( executable.getAbsolutePath() );
 
         cl.setWorkingDirectory( workingDirectory.getAbsolutePath() );

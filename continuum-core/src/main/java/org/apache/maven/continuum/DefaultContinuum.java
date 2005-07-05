@@ -46,6 +46,7 @@ import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.ExceptionUtils;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -84,9 +85,7 @@ public class DefaultContinuum
         {
             ContinuumProject p = (ContinuumProject) i.next();
 
-            ContinuumBuild build = core.getLatestBuildForProject( p.getId() );
-
-            if ( build.getState() == ContinuumProjectState.FAILED )
+            if ( p.getState() == ContinuumProjectState.FAILED )
             {
                 list.add( p );
             }
@@ -104,9 +103,25 @@ public class DefaultContinuum
         {
             ContinuumProject p = (ContinuumProject) i.next();
 
-            ContinuumBuild build = core.getLatestBuildForProject( p.getId() );
+            if ( p.getState() == ContinuumProjectState.ERROR )
+            {
+                list.add( p );
+            }
+        }
 
-            if ( build.getState() == ContinuumProjectState.ERROR )
+        return list;
+    }
+
+    public Collection getProjectsWithSuccess()
+        throws ContinuumException
+    {
+        List list = new ArrayList();
+
+        for ( Iterator i = core.getProjects().iterator(); i.hasNext(); )
+        {
+            ContinuumProject p = (ContinuumProject) i.next();
+
+            if ( p.getState() == ContinuumProjectState.OK )
             {
                 list.add( p );
             }
