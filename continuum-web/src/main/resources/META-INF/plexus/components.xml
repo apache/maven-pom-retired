@@ -139,21 +139,6 @@
       <implementation>org.apache.maven.continuum.web.context.DefaultViewContextPopulator</implementation>
       <configuration>
         <views>
-          <!-- Start Forms Views -->
-          <view>
-            <id>Summary</id>
-            <scalars>
-              <scalar>
-                <id>projectsWithFailures</id>
-                <expression>getProjectsWithFailures().size()</expression>
-              </scalar>
-              <scalar>
-                <id>projectsWithErrors</id>
-                <expression>getProjectsWithErrors().size()</expression>
-              </scalar>
-            </scalars>
-          </view>
-          <!-- End Forms Views -->
           <view>
             <id>ProjectBuilds</id>
             <scalars>

@@ -17,15 +17,18 @@ $page.setTitle( "Continuum" )
   <div id="h3">
     <h3>$i18n.getString( $form.summary.titleKey )</h3>
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
-      <tr>
-        #foreach ( $se in $form.summary.summaryElements )
-        <th>$i18n.getString( $form.getElement( $se.id ).labelKey )</th>
-        #end
-        <th colspan="$form.summary.operations.size()"></th>
-      </tr>
-      #set ( $items = $formtool.getSummaryItems( $form.id ) )
-      #foreach ( $item in $items )
 
+      <!-- i18n -->
+      <tr>
+        <th>Status</th>
+        <th>Project Name</th>
+        <th>Version</th>
+        <th colspan="6"></th>
+      </tr>
+
+      #set ( $items = $continuum.projects )
+
+      #foreach ( $item in $items )
       #if ( $item.state == 2 )
         #set( $success = $success + 1 )
       #elseif ( $item.state == 3 )
@@ -35,23 +38,44 @@ $page.setTitle( "Continuum" )
       #end
 
       <tr class="$css.nextClass">
-        #foreach ( $se in $form.summary.summaryElements )
-        <td>$formtool.getSummaryItem( $form, $se, $item )</td>
-        #end
-        #foreach ( $operation in $form.summary.operations )
-        #if ( $formtool.enableOperation( $form, $operation, $item ) )
-        <td><a href="$link.setPage( $formtool.getOperationUrl( $form, $item, $operation ) )">$operation.name</a></td>
+        <td>$state.generate( $item )</td>
+        <td>$item.name</td>
+        <td>$item.version</td>
+        <td><a href="$link.setPage('View.vm').addPathInfo('fid', "${item.executorId}Project").addPathInfo('id', $item.id)">View</a></td>
+
+        ## Operations
+
+        <td><a href="$link.setPage('Edit.vm').addPathInfo('fid', "${item.executorId}Project").addPathInfo('id', $item.id)">Edit</a></td>
+
+        #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+        <td><a href="$link.setPage('Delete.vm').addPathInfo('fid', "${item.executorId}Project").addPathInfo('id', $item.id)">Delete</a></td>
         #else
-        <td>$operation.name</td>
+        <td>Delete</td>
         #end
+
+        #if ( $item.state != 1 )
+        #set ( $build = $continuum.getLatestBuildForProject($item.id) )
+        <td><a href="$link.setPage('ProjectBuild.vm').addPathInfo('view', "ProjectBuild").addPathInfo('id', $item.id).addPathInfo('buildId', $build.id)">Last Result</a></td>
+        #else
+        <td>Last Result</td>
         #end
+
+        #if ( $item.state != 1 )
+        <td><a href="$link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id)">All Results</a></td>
+        #else
+        <td>All Results</td>
+        #end
+
+        #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+        <td><a href="$link.addPathInfo('action', 'cam').addPathInfo('cid','buildProject').addPathInfo('id', $item.id)">Build</a></td>
+        #else
+        <td>Build</td>
+        #end
+
       </tr>
       #end
     </table>
 
-    ##
-    ## TODO: This should be made a general feature in formica using the CAM and an option for an
-    ## enable expression to model what we have below.
     <div class="functnbar3">
       <form method="post" action="$link">
         #if ( $items && $items.size() > 0 )
