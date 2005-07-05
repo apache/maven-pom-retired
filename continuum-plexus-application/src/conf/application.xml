@@ -41,7 +41,7 @@
             <file>${plexus.home}/lib/continuum-web-1.0-alpha-3-SNAPSHOT.jar</file>
             <context>/continuum</context>
             <extractWar>true</extractWar>
-            <extractionPath>${plexus.home}/webapp</extractionPath>
+            <extraction-path>${plexus.home}/webapp</extraction-path>
             <listeners>
               <http-listener>
                 <port>@jetty.port@</port>
