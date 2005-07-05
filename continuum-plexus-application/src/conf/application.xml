@@ -42,7 +42,18 @@
             <context>/continuum</context>
             <extractWar>true</extractWar>
             <extractionPath>${plexus.home}/webapp</extractionPath>
-            <port>@jetty.port@</port>
+            <listeners>
+              <http-listener>
+                <port>@jetty.port@</port>
+              </http-listener>
+              <!--
+              <proxy-http-listener>
+                <port>8090</port>
+                <proxy-host>localhost</proxy-host>
+                <proxy-port>80</proxy-port>
+              </proxy-http-listener>
+              -->
+            </listeners>
           </webapp>
         </webapps>
       </configuration>
