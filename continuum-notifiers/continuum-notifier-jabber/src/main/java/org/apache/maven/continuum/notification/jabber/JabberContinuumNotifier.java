@@ -23,7 +23,6 @@ import org.codehaus.plexus.jabber.JabberClient;
 import org.codehaus.plexus.jabber.JabberClientException;
 import org.codehaus.plexus.notification.NotificationException;
 import org.codehaus.plexus.notification.notifier.AbstractNotifier;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Iterator;
@@ -37,13 +36,14 @@ import java.util.Set;
  */
 public class JabberContinuumNotifier
     extends AbstractNotifier
-    implements Initializable
 {
     // ----------------------------------------------------------------------
     // Requirements
     // ----------------------------------------------------------------------
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private JabberClient jabberClient;
 
     // ----------------------------------------------------------------------
@@ -71,59 +71,57 @@ public class JabberContinuumNotifier
     private String port;
 
     // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private Map configuration;
-
-    private Set recipients;
-
-    // ----------------------------------------------------------------------
-    // Component Lifecycle
-    // ----------------------------------------------------------------------
-
-    public void initialize()
-    {
-    }
-
-    // ----------------------------------------------------------------------
     // Notifier Implementation
     // ----------------------------------------------------------------------
 
-    public void sendNotification( String source, Set recipients, Map configuration, Map context )
+    public void sendNotification( String source,
+                                  Set recipients,
+                                  Map configuration,
+                                  Map context )
         throws NotificationException
     {
-        this.configuration = configuration;
-
-        this.recipients = recipients;
-
         ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
         ContinuumBuild build = (ContinuumBuild) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        if ( recipients.size() == 0 )
+        {
+            getLogger().info( "No mail recipients for '" + project.getName() + "'." );
+
+            return;
+        }
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_STARTED ) )
         {
-            buildStarted( project );
+            buildStarted( project, recipients, configuration );
         }
         else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_CHECKOUT_STARTED ) )
         {
-            checkoutStarted( project );
+            checkoutStarted( project, recipients, configuration );
         }
         else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_CHECKOUT_COMPLETE ) )
         {
-            checkoutComplete( project );
+            checkoutComplete( project, recipients, configuration );
         }
         else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_RUNNING_GOALS ) )
         {
-            runningGoals( project, build );
+            runningGoals( project, build, recipients, configuration );
         }
         else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_GOALS_COMPLETED ) )
         {
-            goalsCompleted( project, build );
+            goalsCompleted( project, build, recipients, configuration );
         }
         else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
         {
-            buildComplete( project, build );
+            buildComplete( project, build, recipients, configuration );
         }
         else
         {
@@ -135,71 +133,75 @@ public class JabberContinuumNotifier
     //
     // ----------------------------------------------------------------------
 
-    private void buildStarted( ContinuumProject project )
+    private void buildStarted( ContinuumProject project, Set recipients, Map configuration )
     throws NotificationException
     {
-        sendMessage( project, null, "Build started." );
+        sendMessage( project, null, "Build started.", recipients, configuration );
     }
 
-    private void checkoutStarted( ContinuumProject project )
+    private void checkoutStarted( ContinuumProject project, Set recipients, Map configuration )
     throws NotificationException
     {
-        sendMessage( project, null, "Checkout started." );
+        sendMessage( project, null, "Checkout started.", recipients, configuration );
     }
 
-    private void checkoutComplete( ContinuumProject project )
+    private void checkoutComplete( ContinuumProject project, Set recipients, Map configuration )
     throws NotificationException
     {
-        sendMessage( project, null, "Checkout complete." );
+        sendMessage( project, null, "Checkout complete.", recipients, configuration );
     }
 
-    private void runningGoals( ContinuumProject project, ContinuumBuild build )
+    private void runningGoals( ContinuumProject project, ContinuumBuild build, Set recipients, Map configuration )
     throws NotificationException
     {
-        sendMessage( project, build, "Running goals." );
+        sendMessage( project, build, "Running goals.", recipients, configuration );
     }
 
-    private void goalsCompleted( ContinuumProject project, ContinuumBuild build )
-    throws NotificationException
-    {
-        if ( build.getError() == null )
-        {
-            sendMessage( project, build, "Goals completed. state: " + build.getState() );
-        }
-        else
-        {
-            sendMessage( project, build, "Goals completed." );
-        }
-    }
-
-    private void buildComplete( ContinuumProject project, ContinuumBuild build )
+    private void goalsCompleted( ContinuumProject project, ContinuumBuild build, Set recipients, Map configuration )
     throws NotificationException
     {
         if ( build.getError() == null )
         {
-            sendMessage( project, build, "Build complete. state: " + build.getState() );
+            sendMessage( project, build, "Goals completed. state: " + build.getState(), recipients, configuration );
         }
         else
         {
-            sendMessage( project, build, "Build complete." );
+            sendMessage( project, build, "Goals completed.", recipients, configuration );
         }
     }
 
-    private void sendMessage( ContinuumProject project, ContinuumBuild build, String msg )
+    private void buildComplete( ContinuumProject project, ContinuumBuild build, Set recipients, Map configuration )
+    throws NotificationException
+    {
+        if ( build.getError() == null )
+        {
+            sendMessage( project, build, "Build complete. state: " + build.getState(), recipients, configuration );
+        }
+        else
+        {
+            sendMessage( project, build, "Build complete.", recipients, configuration );
+        }
+    }
+
+    private void sendMessage( ContinuumProject project,
+                              ContinuumBuild build,
+                              String msg,
+                              Set recipients,
+                              Map configuration )
         throws NotificationException
     {
         String message = "Build event for project '" + project.getName() + "':" + msg;
 
-        jabberClient.setHost( getHost() );
+        jabberClient.setHost( getHost( configuration ) );
 
         if ( configuration.containsKey( "port" ) )
         {
             jabberClient.setPort( ( (Integer) configuration.get( "port" ) ).intValue() );
         }
 
-        jabberClient.setUser( getUsername() );
+        jabberClient.setUser( getUsername( configuration ) );
 
-        jabberClient.setPassword( getPassword() );
+        jabberClient.setPassword( getPassword( configuration ) );
 
         try
         {
@@ -211,7 +213,7 @@ public class JabberContinuumNotifier
             {
                 String recipient = (String) i.next();
 
-                if ( isGroup() )
+                if ( isGroup( configuration ) )
                 {
                     jabberClient.sendMessageToGroup( recipient, message );
                 }
@@ -243,16 +245,13 @@ public class JabberContinuumNotifier
         }
     }
 
-    /**
-     * @see org.codehaus.plexus.notification.notifier.Notifier#sendNotification(java.lang.String, java.util.Set, java.util.Properties)
-     */
     public void sendNotification( String arg0, Set arg1, Properties arg2 )
         throws NotificationException
     {
         throw new NotificationException( "Not implemented." );
     }
 
-    private String getHost()
+    private String getHost( Map configuration )
     {
         if ( configuration.containsKey( "host" ) )
         {
@@ -274,7 +273,7 @@ public class JabberContinuumNotifier
         return host;
     }
 
-    private String getUsername()
+    private String getUsername( Map configuration )
     {
         if ( configuration.containsKey( "address" ) )
         {
@@ -291,7 +290,7 @@ public class JabberContinuumNotifier
         return fromAddress;
     }
 
-    private String getPassword()
+    private String getPassword( Map configuration )
     {
         if ( configuration.containsKey( "password" ) )
         {
@@ -303,7 +302,7 @@ public class JabberContinuumNotifier
         return fromPassword;
     }
 
-    private boolean isGroup()
+    private boolean isGroup( Map configuration )
     {
         if ( configuration.containsKey( "isGroup" ) )
         {

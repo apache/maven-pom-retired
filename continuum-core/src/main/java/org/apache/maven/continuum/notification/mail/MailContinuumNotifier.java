@@ -57,26 +57,38 @@ public class MailContinuumNotifier
     // Requirements
     // ----------------------------------------------------------------------
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private VelocityComponent velocity;
 
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private ContinuumStore store;
 
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private MailSender mailSender;
 
     // ----------------------------------------------------------------------
     // Configuration
     // ----------------------------------------------------------------------
 
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private String fromMailbox;
 
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private String fromName;
 
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private String timestampFormat;
 
     // ----------------------------------------------------------------------
@@ -86,8 +98,6 @@ public class MailContinuumNotifier
     private String buildHost;
 
     private FormatterTool formatterTool;
-
-    private Map configuration;
 
     // ----------------------------------------------------------------------
     //
@@ -147,11 +157,12 @@ public class MailContinuumNotifier
     // Notifier Implementation
     // ----------------------------------------------------------------------
 
-    public void sendNotification( String source, Set recipients, Map configuration, Map context )
+    public void sendNotification( String source,
+                                  Set recipients,
+                                  Map configuration,
+                                  Map context )
         throws NotificationException
     {
-        this.configuration = configuration;
-
         ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
         ContinuumBuild build = (ContinuumBuild) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
@@ -166,6 +177,17 @@ public class MailContinuumNotifier
         }
 
         // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        if ( recipients.size() == 0 )
+        {
+            getLogger().info( "No mail recipients for '" + project.getName() + "'." );
+
+            return;
+        }
+
+        // ----------------------------------------------------------------------
         // Generate and send email
         // ----------------------------------------------------------------------
 
@@ -173,7 +195,7 @@ public class MailContinuumNotifier
         {
             if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
             {
-                buildComplete( project, build, source, recipients );
+                buildComplete( project, build, source, recipients, configuration );
             }
         }
         catch ( ContinuumException e )
@@ -185,7 +207,8 @@ public class MailContinuumNotifier
     private void buildComplete( ContinuumProject project,
                                 ContinuumBuild build,
                                 String source,
-                                Set recipients )
+                                Set recipients,
+                                Map configuration )
         throws ContinuumException
     {
         // ----------------------------------------------------------------------
@@ -260,7 +283,7 @@ public class MailContinuumNotifier
 
         String subject = generateSubject( project, build );
 
-        sendMessage( project, recipients, subject, content );
+        sendMessage( project, recipients, subject, content, configuration );
     }
 
     // ----------------------------------------------------------------------
@@ -291,10 +314,14 @@ public class MailContinuumNotifier
         }
     }
 
-    private void sendMessage( ContinuumProject project, Set recipients, String subject, String content )
+    private void sendMessage( ContinuumProject project,
+                              Set recipients,
+                              String subject,
+                              String content,
+                              Map configuration )
         throws ContinuumException
     {
-        String fromMailbox = getFromMailbox();
+        String fromMailbox = getFromMailbox( configuration );
 
         if ( fromMailbox == null )
         {
@@ -343,7 +370,7 @@ public class MailContinuumNotifier
         }
     }
 
-    private String getFromMailbox()
+    private String getFromMailbox( Map configuration )
     {
         if ( fromMailbox != null )
         {

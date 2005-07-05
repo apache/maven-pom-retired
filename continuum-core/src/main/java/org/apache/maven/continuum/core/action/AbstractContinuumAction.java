@@ -34,6 +34,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -225,6 +226,14 @@ public abstract class AbstractContinuumAction
 
         if ( value == null )
         {
+            System.err.println( "context" );
+            for ( Iterator it = context.keySet().iterator(); it.hasNext(); )
+            {
+                String s = (String) it.next();
+
+                System.err.println( s );
+            }
+
             throw new RuntimeException( "Missing value for key '" + key + "'." );
         }
 

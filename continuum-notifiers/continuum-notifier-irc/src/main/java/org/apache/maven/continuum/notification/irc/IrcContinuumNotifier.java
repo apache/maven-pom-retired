@@ -44,27 +44,26 @@ public class IrcContinuumNotifier
     // Requirements
     // ----------------------------------------------------------------------
 
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private ContinuumStore store;
 
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private IrcBot ircClient;
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private Map configuration;
 
     // ----------------------------------------------------------------------
     // Notifier Implementation
     // ----------------------------------------------------------------------
 
-    public void sendNotification( String source, Set recipients, Map configuration, Map context )
+    public void sendNotification( String source,
+                                  Set recipients,
+                                  Map configuration,
+                                  Map context )
         throws NotificationException
     {
-        this.configuration = configuration;
-
         ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
         ContinuumBuild build = (ContinuumBuild) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
@@ -77,6 +76,16 @@ public class IrcContinuumNotifier
         {
             return;
         }
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        if ( recipients.size() == 0 )
+        {
+            getLogger().info( "No IRC recipients for '" + project.getName() + "'." );
+
+            return;
+        }
 
         // ----------------------------------------------------------------------
         // Generate and send message
@@ -86,7 +95,7 @@ public class IrcContinuumNotifier
         {
             if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
             {
-                buildComplete( project, build );
+                buildComplete( project, build, configuration );
             }
         }
         catch ( ContinuumException e )
@@ -96,7 +105,8 @@ public class IrcContinuumNotifier
     }
 
     private void buildComplete( ContinuumProject project,
-                                ContinuumBuild build )
+                                ContinuumBuild build,
+                                Map configuration )
         throws ContinuumException
     {
         // ----------------------------------------------------------------------

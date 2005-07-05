@@ -19,7 +19,6 @@ package org.apache.maven.continuum.core.action;
 import java.util.Map;
 
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.store.AbstractContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
