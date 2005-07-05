@@ -155,9 +155,11 @@
         <requirement>
           <role>org.codehaus.plexus.jabber.JabberClient</role>
         </requirement>
+        <!--
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>        
-        </requirement>                
+        </requirement>
+        -->
       </requirements>
       <!-- configuration>
         <from-address/>
@@ -183,9 +185,11 @@
         <requirement>
           <role>org.codehaus.plexus.msn.MsnClient</role>
         </requirement>
+        <!--
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>        
-        </requirement>                
+        </requirement>
+        -->
       </requirements>
       <!-- configuration>
         <from-address/>
