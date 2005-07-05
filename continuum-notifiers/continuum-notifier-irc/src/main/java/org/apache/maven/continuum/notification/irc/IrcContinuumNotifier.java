@@ -124,7 +124,7 @@ public class IrcContinuumNotifier
         // Send the message
         // ----------------------------------------------------------------------
 
-        ircClient.connect( (String) configuration.get( "host" ), ( (Integer) configuration.get( "host" ) ).intValue() );
+        ircClient.connect( (String) configuration.get( "host" ), ( (Integer) configuration.get( "port" ) ).intValue() );
 
         ircClient.logon();
 
