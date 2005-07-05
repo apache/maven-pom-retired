@@ -1,14 +1,9 @@
-<font face="verdana,geneva,helvetica">
-<table id="error">
-   <tr>
-      <td><h2>Error</h2></td>
-   </tr>
-   <tr>
-      <td>
-<pre>
-$exceptionStackTrace
-</pre>
-      </td>
-   </tr>
-</table>
-</font>
+$page.setTitle( $i18n.getString( "continuumError" ) )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>$i18n.getString( "continuumError" )</h3>
+  </div>
+  <pre>$stackTrace</pre>
+</div>
+

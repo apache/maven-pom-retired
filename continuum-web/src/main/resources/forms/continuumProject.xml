@@ -4,24 +4,6 @@
   <summary-collection-expression>getProjects()</summary-collection-expression>
   <source-role>org.apache.maven.continuum.Continuum</source-role>
   <type-expression>executorId</type-expression>
-
-  <!--
-  <transformations>
-    <transformation>
-      <id>scmUrl</id>
-      <composition>
-        <expression>"scm" + ":" + #projectScm + ":" + #projectScmUrl</expression>
-      </composition>
-      <decomposition>
-        #projectScm = split( #data, ":" )[1]
-        #projectScm = #data.substring( 0, #data.indexOf( ":", 4 ) )
-        #projectScmUrl = split( #data, ":" )[2+]
-        #projectScmUrl = #data.substring( #data.indexOf( ":", 4 ) )
-      </decomposition>
-    </transformation>
-  </transformations>
-  -->
-
   <elements>
     <element>
       <id>project.name</id>

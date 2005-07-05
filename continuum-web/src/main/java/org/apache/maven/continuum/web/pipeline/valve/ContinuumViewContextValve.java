@@ -20,6 +20,8 @@ import org.codehaus.plexus.summit.pipeline.valve.CreateViewContextValve;
 import org.codehaus.plexus.summit.pipeline.valve.ValveInvocationException;
 import org.codehaus.plexus.summit.rundata.RunData;
 import org.codehaus.plexus.summit.view.ViewContext;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.apache.maven.continuum.Continuum;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -31,5 +33,14 @@ public class ContinuumViewContextValve
     protected void populateViewContext( RunData data, ViewContext context )
     {
         context.put( "data", data );
+
+        try
+        {
+            context.put( "continuum", data.lookup( Continuum.ROLE ) );
+        }
+        catch ( ComponentLookupException e )
+        {
+            // won't happen
+        }
     }
 }

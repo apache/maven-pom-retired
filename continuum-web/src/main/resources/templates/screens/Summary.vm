@@ -1,4 +1,17 @@
+## 1 = new
+## 2 = ok
+## 3 = failed
+## 4 = error
+## 5 = signalled
+## 6 = building
+## 7 = checking out
+## 8 = updating
+
 $page.setTitle( "Continuum" )
+
+#set( $success = 0 )
+#set( $failures = 0 )
+#set( $errors = 0 )
 
 <div class="app">
   <div id="h3">
@@ -12,6 +25,15 @@ $page.setTitle( "Continuum" )
       </tr>
       #set ( $items = $formtool.getSummaryItems( $form.id ) )
       #foreach ( $item in $items )
+
+      #if ( $item.state == 2 )
+        #set( $success = $success + 1 )
+      #elseif ( $item.state == 3 )
+        #set( $failures = $failures + 1 )
+      #elseif( $item.state == 4 )
+        #set( $errors = $errors + 1 )
+      #end
+
       <tr class="$css.nextClass">
         #foreach ( $se in $form.summary.summaryElements )
         <td>$formtool.getSummaryItem( $form, $se, $item )</td>
@@ -26,27 +48,28 @@ $page.setTitle( "Continuum" )
       </tr>
       #end
     </table>
+
     ##
     ## TODO: This should be made a general feature in formica using the CAM and an option for an
     ## enable expression to model what we have below.
     <div class="functnbar3">
-      <table>
-        <tr>
-          <td>
-            <form method="post" action="$link">
-            #if ( $items && $items.size() > 0 )
-            #hidden ( "action" "cam" )
-            #hidden ( "cid" "buildAllProjects" )
-            <input type="submit" name="build-all" value="Build All"/>
-            #end
-            </form>
-          </td>
-          <td>
-          <img src="/continuum/images/icon_error_sml.gif" alt="Failed"/> $projectsWithFailures
-          <img src="/continuum/images/icon_warning_sml.gif" alt="Error"/> $projectsWithErrors
-          </td>
-        </tr>
-      </table>
+      <form method="post" action="$link">
+        #if ( $items && $items.size() > 0 )
+        #hidden ( "action" "cam" )
+        #hidden ( "cid" "buildAllProjects" )
+        <input type="submit" name="build-all" value="Build All"/>
+        #end
+      </form>
     </div>
   </div>
 </div>
+
+<table>
+  <tr>
+    <td align="right">
+      <img src="/continuum/images/icon_success_sml.gif" alt="Success"/> $success
+      <img src="/continuum/images/icon_error_sml.gif" alt="Failed"/> $failures
+      <img src="/continuum/images/icon_warning_sml.gif" alt="Error"/> $errors
+    </td>
+  </tr>
+</table>

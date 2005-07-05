@@ -51,12 +51,12 @@ public class FormicaValve
 
         String formId = data.getParameters().getString( "fid" );
 
-        context.put( "fid", formId );
-
         if ( formId == null )
         {
             formId = defaultFormId;
         }
+
+        context.put( "fid", formId );
 
         Form form;
 
