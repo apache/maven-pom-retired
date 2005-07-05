@@ -104,9 +104,11 @@ public class DefaultContinuumNotificationDispatcher
     {
         Map context = new HashMap();
 
+        // ----------------------------------------------------------------------
         // The objects are reread from the store to make sure they're getting the "final"
-        // state of the objects. Ideally this should be done on a pr notifier basis or the
+        // state of the objects. Ideally this should be done on a per notifier basis or the
         // objects should be made read only.
+        // ----------------------------------------------------------------------
 
         try
         {
