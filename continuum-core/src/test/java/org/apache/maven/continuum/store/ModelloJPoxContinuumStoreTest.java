@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.maven.continuum.AbstractContinuumTest;
+import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -837,7 +838,7 @@ public class ModelloJPoxContinuumStoreTest
 
         project.setCheckOutErrorMessage( errorMessage );
 
-        project.setCheckOutErrorException( AbstractContinuumStore.throwableToString( exception ) );
+        project.setCheckOutErrorException( ContinuumUtils.throwableToString( exception ) );
 
         store.updateProject( project );
     }
@@ -856,7 +857,7 @@ public class ModelloJPoxContinuumStoreTest
 
         build.setEndTime( new Date().getTime() );
 
-        build.setError( AbstractContinuumStore.throwableToString( error ) );
+        build.setError( ContinuumUtils.throwableToString( error ) );
 
         build.setUpdateScmResult( scmResult );
 

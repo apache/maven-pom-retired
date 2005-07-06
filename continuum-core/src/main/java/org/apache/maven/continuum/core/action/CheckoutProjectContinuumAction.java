@@ -23,6 +23,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.store.AbstractContinuumStore;
+import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
 
 /**
@@ -80,6 +81,6 @@ public class CheckoutProjectContinuumAction
 
         context.put( KEY_CHECKOUT_ERROR_MESSAGE, errorMessage );
 
-        context.put( KEY_CHECKOUT_ERROR_EXCEPTION, AbstractContinuumStore.throwableToString( exception ) );
+        context.put( KEY_CHECKOUT_ERROR_EXCEPTION, ContinuumUtils.throwableToString( exception ) );
     }
 }

@@ -16,34 +16,14 @@ package org.apache.maven.continuum.store;
  * limitations under the License.
  */
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: AbstractContinuumStore.java,v 1.1.1.1 2005/03/29 20:42:02 trygvis Exp $
+ * @version $Id$
  */
 public abstract class AbstractContinuumStore
     extends AbstractLogEnabled
     implements ContinuumStore
 {
-    public static String throwableToString( Throwable error )
-    {
-        if ( error == null )
-        {
-            return "";
-        }
-
-        StringWriter writer = new StringWriter();
-
-        PrintWriter printer = new PrintWriter( writer );
-
-        error.printStackTrace( printer );
-
-        printer.flush();
-
-        return writer.getBuffer().toString();
-    }
- }
+}

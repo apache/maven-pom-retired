@@ -88,5 +88,6 @@
     <module>continuum-plexus-application</module>
     <module>continuum-web</module>
     <module>continuum-xmlrpc</module>
+    <module>I'm-not-here-project</module>
   </modules>
 </project>

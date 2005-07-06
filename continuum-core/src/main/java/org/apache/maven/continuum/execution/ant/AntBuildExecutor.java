@@ -25,6 +25,8 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumProject;
 
+import org.codehaus.plexus.util.StringUtils;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
@@ -65,11 +67,12 @@ public class AntBuildExecutor
 
         String executable = project.getExecutable();
 
-        String targets = project.getTargets();
+        String arguments = StringUtils.clean( project.getCommandLineArguments() ) + " " +
+                           StringUtils.clean( project.getTargets() );
 
         return executeShellCommand( workingDirectory,
                                     executable,
-                                    project.getCommandLineArguments() + " " + targets );
+                                    arguments );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject p )

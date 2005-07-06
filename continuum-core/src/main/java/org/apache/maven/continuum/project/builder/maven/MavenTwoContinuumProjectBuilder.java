@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.io.IOException;
 
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException;
@@ -29,6 +30,7 @@ import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilde
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.project.MavenProject;
 
 /**
@@ -43,14 +45,18 @@ public class MavenTwoContinuumProjectBuilder
 
     private static final String POM_PART = "/pom.xml";
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private MavenBuilderHelper builderHelper;
 
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private List excludedPackagingTypes;
 
     // ----------------------------------------------------------------------
-    // ProjectCreator Implementation
+    // AbstractContinuumProjectBuilder Implementation
     // ----------------------------------------------------------------------
 
     public ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url )
@@ -62,18 +68,7 @@ public class MavenTwoContinuumProjectBuilder
 
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
 
-        try
-        {
-            readModules( url, result );
-        }
-        catch ( MalformedURLException e )
-        {
-            throw new ContinuumProjectBuilderException( "Error while building Maven project.", e );
-        }
-        catch ( MavenBuilderHelperException e )
-        {
-            throw new ContinuumProjectBuilderException( "Error while mapping Maven project to Continuum project.", e );
-        }
+        readModules( url, result );
 
         return result;
     }
@@ -83,7 +78,6 @@ public class MavenTwoContinuumProjectBuilder
     // ----------------------------------------------------------------------
 
     private void readModules( URL url, ContinuumProjectBuildingResult result )
-        throws MalformedURLException, ContinuumProjectBuilderException, MavenBuilderHelperException
     {
         MavenProject mavenProject;
 
@@ -93,14 +87,31 @@ public class MavenTwoContinuumProjectBuilder
         }
         catch ( MavenBuilderHelperException e )
         {
-            throw new ContinuumProjectBuilderException( "Error while building Maven project.", e );
+            // TODO: Use the Error diagnoser from Maven 2 to get a better error message here.
+
+            result.addWarning( ContinuumUtils.throwableToString( e ) );
+
+            return;
+        }
+        catch ( IOException e )
+        {
+            result.addWarning( "Could not download " + url );
+
+            return;
         }
 
         if ( !excludedPackagingTypes.contains( mavenProject.getPackaging() ) )
         {
             MavenTwoProject continuumProject = new MavenTwoProject();
 
-            builderHelper.mapMavenProjectToContinuumProject( mavenProject, continuumProject );
+            try
+            {
+                builderHelper.mapMavenProjectToContinuumProject( mavenProject, continuumProject );
+            }
+            catch ( MavenBuilderHelperException e )
+            {
+                result.addWarning( ContinuumUtils.throwableToString( e ) );
+            }
 
             result.addProject( continuumProject, MavenTwoBuildExecutor.ID );
         }
@@ -128,7 +139,20 @@ public class MavenTwoContinuumProjectBuilder
         {
             String module = (String) it.next();
 
-            URL moduleUrl = new URL( prefix + "/" + module + POM_PART + suffix );
+            URL moduleUrl = null;
+
+            String urlString = prefix + "/" + module + POM_PART + suffix;
+
+            try
+            {
+                moduleUrl = new URL( urlString );
+            }
+            catch ( MalformedURLException e )
+            {
+                result.addWarning( "Could not download project from '" + urlString + "'." );
+
+                continue;
+            }
 
             readModules( moduleUrl, result );
         }

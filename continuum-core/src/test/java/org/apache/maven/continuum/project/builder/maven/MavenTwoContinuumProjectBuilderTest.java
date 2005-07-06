@@ -46,6 +46,10 @@ public class MavenTwoContinuumProjectBuilderTest
 
         ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( pom.toURL() );
 
+        assertNotNull( result.getWarnings() );
+
+        assertEquals( 0, result.getWarnings().size() );
+
         assertNotNull( result.getProjects() );
 
         assertEquals( 1, result.getProjects().size() );
@@ -72,6 +76,10 @@ public class MavenTwoContinuumProjectBuilderTest
         File pom = getTestFile( "src/test/repository/maven-builder-helper-2.xml" );
 
         ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( pom.toURL() );
+
+        assertNotNull( result.getWarnings() );
+
+        assertEquals( 0, result.getWarnings().size() );
 
         assertNotNull( result.getProjects() );
 
@@ -101,6 +109,20 @@ public class MavenTwoContinuumProjectBuilderTest
         ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( new URL( url ) );
 
         assertNotNull( result );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        assertNotNull( result.getWarnings() );
+
+        assertEquals( 1, result.getWarnings().size() );
+
+        assertTrue( result.getWarnings().get( 0 ).toString().indexOf( "I'm-not-here-project/pom.xml" ) != -1 );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
 
         assertEquals( 5, result.getProjects().size() );
 

@@ -27,38 +27,31 @@ import org.codehaus.plexus.util.IOUtil;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public abstract class AbstractContinuumProjectBuilder
     extends AbstractLogEnabled
     implements ContinuumProjectBuilder
 {
     protected File createMetadataFile( URL metadata )
-        throws ContinuumProjectBuilderException
+        throws IOException
     {
-        try
-        {
-            getLogger().info( "Downloading " + metadata.toExternalForm() );
+        getLogger().info( "Downloading " + metadata.toExternalForm() );
 
-            InputStream is = metadata.openStream();
+        InputStream is = metadata.openStream();
 
-            File file = File.createTempFile( "continuum-", ".tmp" );
+        File file = File.createTempFile( "continuum-", ".tmp" );
 
-            file.deleteOnExit();
+        file.deleteOnExit();
 
-            FileWriter writer = new FileWriter( file );
+        FileWriter writer = new FileWriter( file );
 
-            IOUtil.copy( is, writer );
+        IOUtil.copy( is, writer );
 
-            is.close();
+        is.close();
 
-            writer.close();
+        writer.close();
 
-            return file;
-        }
-        catch ( IOException e )
-        {
-            throw new ContinuumProjectBuilderException( "Error while downloading metadata.", e );
-        }
+        return file;
     }
 }

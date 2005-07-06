@@ -35,7 +35,7 @@ public class DefaultShellCommandHelper
     // ----------------------------------------------------------------------
 
     public ExecutionResult executeShellCommand( File workingDirectory,
-                                                File executable,
+                                                String executable,
                                                 String arguments )
         throws Exception
     {
@@ -51,7 +51,7 @@ public class DefaultShellCommandHelper
     }
 
     public ExecutionResult executeShellCommand( File workingDirectory,
-                                                File executable,
+                                                String executable,
                                                 String[] arguments )
         throws Exception
     {
@@ -61,9 +61,7 @@ public class DefaultShellCommandHelper
 
         Commandline cl = new Commandline();
 
-        System.out.println( "executable = " + executable );
-
-        cl.setExecutable( executable.getAbsolutePath() );
+        cl.setExecutable( executable );
 
         cl.setWorkingDirectory( workingDirectory.getAbsolutePath() );
 

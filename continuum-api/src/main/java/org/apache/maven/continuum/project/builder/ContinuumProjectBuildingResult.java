@@ -23,16 +23,13 @@ import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class ContinuumProjectBuildingResult
 {
-    private List projects;
+    private List projects = new ArrayList();
 
-    public ContinuumProjectBuildingResult()
-    {
-        projects = new ArrayList();
-    }
+    private List warnings = new ArrayList();
 
     public void addProject( ContinuumProject project )
     {
@@ -49,5 +46,15 @@ public class ContinuumProjectBuildingResult
     public List getProjects()
     {
         return projects;
+    }
+
+    public void addWarning( String warning )
+    {
+        warnings.add( warning );
+    }
+
+    public List getWarnings()
+    {
+        return warnings;
     }
 }

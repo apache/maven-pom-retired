@@ -41,13 +41,19 @@ public abstract class AbstractBuildExecutor
     //
     // ----------------------------------------------------------------------
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ShellCommandHelper shellCommandHelper;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ExecutableResolver executableResolver;
 
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private String defaultExecutable;
 
     // ----------------------------------------------------------------------
@@ -57,8 +63,6 @@ public abstract class AbstractBuildExecutor
     private String id;
 
     private boolean resolveExecutable;
-
-    private File resolvedExecutable;
 
     // ----------------------------------------------------------------------
     //
@@ -89,16 +93,17 @@ public abstract class AbstractBuildExecutor
             }
             else
             {
-                resolvedExecutable = executableResolver.findExecutable( defaultExecutable, path );
+                File resolvedExecutable = executableResolver.findExecutable( defaultExecutable, path );
 
                 if ( resolvedExecutable == null )
                 {
-                    getLogger().warn( "Could not find the executable '" + defaultExecutable + "' in the path '" + path + "'" );
+                    getLogger().warn( "Could not find the executable '" + defaultExecutable + "' in the " +
+                                      "path '" + path + "'." );
                 }
                 else
                 {
                     getLogger().info( "Resolved the executable '" + defaultExecutable + "' to " +
-                                      "'" + resolvedExecutable.getAbsolutePath() + "'");
+                                      "'" + resolvedExecutable.getAbsolutePath() + "'.");
                 }
             }
         }
@@ -113,29 +118,22 @@ public abstract class AbstractBuildExecutor
                                                                  String arguments )
         throws ContinuumBuildExecutorException
     {
-        File actualExecutable = resolvedExecutable;
-
         // ----------------------------------------------------------------------
         // If we're not searching the path for the executable, prefix the
         // executable with the working directory to make sure the path is
         // absolute and thus won't be tried resolved by using the PATH
         // ----------------------------------------------------------------------
 
+        String actualExecutable;
+
         if ( !resolveExecutable )
         {
-            actualExecutable = new File( workingDirectory, executable );
+            actualExecutable = new File( workingDirectory, executable ).getAbsolutePath();
         }
-
-        // ----------------------------------------------------------------------
-        // Find the executable to execute in the path
-        // ----------------------------------------------------------------------
-
-        // TODO: actually use the resolved executable. This is disabled now until
-        //       I know that this code actually is working properly on all platforms
-        List path = executableResolver.getDefaultPath();
-
-        if ( resolveExecutable )
+        else
         {
+            List path = executableResolver.getDefaultPath();
+
             if ( StringUtils.isEmpty( executable ) )
             {
                 executable = defaultExecutable;
@@ -153,14 +151,15 @@ public abstract class AbstractBuildExecutor
 
                     getLogger().warn( element );
                 }
+
+                actualExecutable = defaultExecutable;
             }
             else
             {
                 getLogger().warn( "Using executable '" + e.getAbsolutePath() + "'." );
-            }
 
-            // TODO: remove comment when this code is working properly
-            actualExecutable = e;
+                actualExecutable = e.getAbsolutePath();
+            }
         }
 
         // ----------------------------------------------------------------------
@@ -180,8 +179,9 @@ public abstract class AbstractBuildExecutor
         }
         catch ( Exception e )
         {
-            throw new ContinuumBuildExecutorException(
-                "Error while executing shell command. The most common error is that " + executable + " is not in your path.", e );
+            throw new ContinuumBuildExecutorException( "Error while executing shell command. " +
+                                                       "The most common error is that '" + executable + "' " +
+                                                       "is not in your path.", e );
         }
     }
 }

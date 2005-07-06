@@ -27,12 +27,12 @@ public interface ShellCommandHelper
     String ROLE = ShellCommandHelper.class.getName();
 
     ExecutionResult executeShellCommand( File workingDirectory,
-                                         File executable,
+                                         String executable,
                                          String arguments )
         throws Exception;
 
     ExecutionResult executeShellCommand( File workingDirectory,
-                                         File executable,
+                                         String executable,
                                          String[] arguments )
         throws Exception;
 }

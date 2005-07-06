@@ -65,10 +65,9 @@ public class MavenOneBuildExecutor
         String commandLine = StringUtils.clean( project.getCommandLineArguments() ) + " " +
                              StringUtils.clean( project.getGoals() );
 
-        // Adding executable name so that i can get something meaningful in the error message.
-        // If this is not set and there's nothing in the path we have no executable name.
-        
-        return executeShellCommand( workingDirectory, "maven", commandLine );
+        return executeShellCommand( workingDirectory, 
+                                    null,
+                                    commandLine );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

@@ -226,13 +226,13 @@ public abstract class AbstractContinuumAction
 
         if ( value == null )
         {
-            System.err.println( "context" );
-            for ( Iterator it = context.keySet().iterator(); it.hasNext(); )
-            {
-                String s = (String) it.next();
-
-                System.err.println( s );
-            }
+//            System.err.println( "context" );
+//            for ( Iterator it = context.keySet().iterator(); it.hasNext(); )
+//            {
+//                String s = (String) it.next();
+//
+//                System.err.println( s );
+//            }
 
             throw new RuntimeException( "Missing value for key '" + key + "'." );
         }

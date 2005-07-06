@@ -25,6 +25,8 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 
+import org.codehaus.plexus.util.StringUtils;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
@@ -68,12 +70,12 @@ public class MavenTwoBuildExecutor
 
         File workingDirectory = new File( project.getWorkingDirectory() );
 
-        String arguments = project.getCommandLineArguments() + " " + project.getGoals();
+        String arguments = StringUtils.clean( project.getCommandLineArguments() ) + " " +
+                           StringUtils.clean( project.getGoals() );
 
-        // Adding executable name so that i can get something meaningful in the error message.
-        // If this is not set and there's nothing in the path we have no executable name.
-
-        return executeShellCommand( workingDirectory, "m2", arguments );
+        return executeShellCommand( workingDirectory,
+                                    null,
+                                    arguments );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
