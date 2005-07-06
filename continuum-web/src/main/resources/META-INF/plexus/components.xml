@@ -157,7 +157,7 @@
             <scalars>
               <scalar>
                 <id>project</id>
-                <expression>getProject(#projectId)</expression>
+                <expression>getProject(#id)</expression>
               </scalar>
               <scalar>
                 <id>build</id>

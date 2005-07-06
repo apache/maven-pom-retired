@@ -15,7 +15,7 @@ $page.setTitle( "Continuum - ${project.name} Builds" )
         <td>$date.format('medium',$build.startTime)</td>
         <td>$date.format('medium',$build.endTime)</td>
         <td>$state.generate($build)</td>
-        <td><a href="$link.setPage('ProjectBuild.vm').addQueryData('view','ProjectBuild').addQueryData('buildId',$build.id).addQueryData('projectId',$project.id)">Result</a></td>
+        <td><a href="$link.setPage('ProjectBuild.vm').addQueryData('view','ProjectBuild').addQueryData('buildId',$build.id).addQueryData('id',$project.id)">Result</a></td>
       </tr>
       #end
     </table>
