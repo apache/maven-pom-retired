@@ -177,17 +177,6 @@ public class MailContinuumNotifier
         }
 
         // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        if ( recipients.size() == 0 )
-        {
-            getLogger().info( "No mail recipients for '" + project.getName() + "'." );
-
-            return;
-        }
-
-        // ----------------------------------------------------------------------
         // Generate and send email
         // ----------------------------------------------------------------------
 
@@ -321,6 +310,13 @@ public class MailContinuumNotifier
                               Map configuration )
         throws ContinuumException
     {
+        if ( recipients.size() == 0 )
+        {
+            getLogger().info( "No mail recipients for '" + project.getName() + "'." );
+
+            return;
+        }
+
         String fromMailbox = getFromMailbox( configuration );
 
         if ( fromMailbox == null )
