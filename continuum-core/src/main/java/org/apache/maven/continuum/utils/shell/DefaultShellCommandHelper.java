@@ -80,10 +80,6 @@ public class DefaultShellCommandHelper
 
         CommandLineUtils.StringStreamConsumer stdout = new CommandLineUtils.StringStreamConsumer();
 
-        getLogger().info( "Executing: " + cl );
-
-        getLogger().info( "Working directory: " + workingDirectory.getAbsolutePath() );
-
         int exitCode = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
 
         // ----------------------------------------------------------------------

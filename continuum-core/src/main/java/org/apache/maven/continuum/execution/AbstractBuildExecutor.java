@@ -156,8 +156,6 @@ public abstract class AbstractBuildExecutor
             }
             else
             {
-                getLogger().warn( "Using executable '" + e.getAbsolutePath() + "'." );
-
                 actualExecutable = e.getAbsolutePath();
             }
         }
@@ -166,11 +164,19 @@ public abstract class AbstractBuildExecutor
         // Execute the build
         // ----------------------------------------------------------------------
 
+        getLogger().warn( "Executable '" + actualExecutable + "'." );
+
+        getLogger().info( "Arguments: " + arguments );
+
+        getLogger().info( "Working directory: " + workingDirectory.getAbsolutePath() );
+
         try
         {
             ExecutionResult result = shellCommandHelper.executeShellCommand( workingDirectory,
                                                                              actualExecutable,
                                                                              arguments );
+
+            getLogger().info( "Exit code: " + result.getExitCode() );
 
             return new ContinuumBuildExecutionResult( result.getExitCode() == 0,
                                                       result.getStandardOutput(),
