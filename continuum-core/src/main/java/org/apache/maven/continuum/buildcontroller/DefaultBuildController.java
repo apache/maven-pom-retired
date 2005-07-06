@@ -16,8 +16,6 @@ package org.apache.maven.continuum.buildcontroller;
  * limitations under the License.
  */
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,6 +31,7 @@ import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.utils.ContinuumUtils;
 
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -185,7 +184,7 @@ public class DefaultBuildController
 
                 ContinuumBuild build = makeBuildResult( scmResult, startTime, forced );
 
-                build.setError( throwableToString( e ) );
+                build.setError( ContinuumUtils.throwableToString( e ) );
 
                 buildId = storeBuild( project, build );
 
@@ -261,23 +260,5 @@ public class DefaultBuildController
         Collection builds = store.getBuildsForProject( project.getId(), 0, 0 );
 
         return builds.size() == 0;
-    }
-
-    public static String throwableToString( Throwable error )
-    {
-        if ( error == null )
-        {
-            return "";
-        }
-
-        StringWriter writer = new StringWriter();
-
-        PrintWriter printer = new PrintWriter( writer );
-
-        error.printStackTrace( printer );
-
-        printer.flush();
-
-        return writer.getBuffer().toString();
     }
 }

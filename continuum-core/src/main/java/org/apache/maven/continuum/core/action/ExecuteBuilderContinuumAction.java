@@ -21,13 +21,14 @@ import java.util.Date;
 import java.util.Map;
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.utils.ContinuumUtils;
+import org.apache.maven.continuum.buildcontroller.DefaultBuildController;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.UpdateScmResult;
-import org.apache.maven.continuum.store.AbstractContinuumStore;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -110,6 +111,14 @@ public class ExecuteBuilderContinuumAction
             build.setStandardError( result.getStandardError() );
 
             build.setExitCode( result.getExitCode() );
+        }
+        catch( Throwable e )
+        {
+            build.setState( ContinuumProjectState.ERROR );
+
+            build.setSuccess( false );
+
+            build.setError( ContinuumUtils.throwableToString( e ) );
         }
         finally
         {
