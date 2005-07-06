@@ -16,19 +16,20 @@ package org.apache.maven.continuum.notification.jabber;
  * limitations under the License.
  */
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
+
 import org.codehaus.plexus.jabber.JabberClient;
 import org.codehaus.plexus.jabber.JabberClientException;
 import org.codehaus.plexus.notification.NotificationException;
 import org.codehaus.plexus.notification.notifier.AbstractNotifier;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -134,31 +135,31 @@ public class JabberContinuumNotifier
     // ----------------------------------------------------------------------
 
     private void buildStarted( ContinuumProject project, Set recipients, Map configuration )
-    throws NotificationException
+        throws NotificationException
     {
         sendMessage( project, null, "Build started.", recipients, configuration );
     }
 
     private void checkoutStarted( ContinuumProject project, Set recipients, Map configuration )
-    throws NotificationException
+        throws NotificationException
     {
         sendMessage( project, null, "Checkout started.", recipients, configuration );
     }
 
     private void checkoutComplete( ContinuumProject project, Set recipients, Map configuration )
-    throws NotificationException
+        throws NotificationException
     {
         sendMessage( project, null, "Checkout complete.", recipients, configuration );
     }
 
     private void runningGoals( ContinuumProject project, ContinuumBuild build, Set recipients, Map configuration )
-    throws NotificationException
+        throws NotificationException
     {
         sendMessage( project, build, "Running goals.", recipients, configuration );
     }
 
     private void goalsCompleted( ContinuumProject project, ContinuumBuild build, Set recipients, Map configuration )
-    throws NotificationException
+        throws NotificationException
     {
         if ( build.getError() == null )
         {
@@ -171,7 +172,7 @@ public class JabberContinuumNotifier
     }
 
     private void buildComplete( ContinuumProject project, ContinuumBuild build, Set recipients, Map configuration )
-    throws NotificationException
+        throws NotificationException
     {
         if ( build.getError() == null )
         {
@@ -237,11 +238,6 @@ public class JabberContinuumNotifier
             {
 
             }
-        }
-
-        if ( build != null && !StringUtils.isEmpty( build.getError() ) )
-        {
-            System.out.println( build.getError() );
         }
     }
 

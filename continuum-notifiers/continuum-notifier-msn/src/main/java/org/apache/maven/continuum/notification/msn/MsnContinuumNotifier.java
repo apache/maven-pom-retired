@@ -217,11 +217,6 @@ public class MsnContinuumNotifier
 
             }
         }
-
-        if ( build != null && !StringUtils.isEmpty( build.getError() ) )
-        {
-            System.out.println( build.getError() );
-        }
     }
 
     /**
