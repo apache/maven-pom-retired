@@ -312,6 +312,9 @@ public class MailContinuumNotifier
     {
         if ( recipients.size() == 0 )
         {
+            // This is a useful message for the users when debugging why they don't
+            // receive any mails
+
             getLogger().info( "No mail recipients for '" + project.getName() + "'." );
 
             return;
