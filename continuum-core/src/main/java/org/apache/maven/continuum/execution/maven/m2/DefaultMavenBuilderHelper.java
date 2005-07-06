@@ -82,7 +82,7 @@ public class DefaultMavenBuilderHelper
 
         if ( StringUtils.isEmpty( continuumProject.getCommandLineArguments() ) )
         {
-            continuumProject.setCommandLineArguments( "-N" );
+            continuumProject.setCommandLineArguments( "-N -B" );
         }
 
         if ( StringUtils.isEmpty( continuumProject.getGoals() ) )
@@ -208,6 +208,11 @@ public class DefaultMavenBuilderHelper
     public String getProjectName( MavenProject project )
     {
         String name = project.getName();
+
+        if ( StringUtils.isEmpty( name ) )
+        {
+            return project.getId();
+        }
 
         return name;
     }
