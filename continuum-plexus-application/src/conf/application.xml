@@ -40,7 +40,6 @@
           <webapp>
             <file>${plexus.home}/lib/continuum-web-1.0-alpha-3-SNAPSHOT.jar</file>
             <context>/continuum</context>
-            <extractWar>true</extractWar>
             <extraction-path>${plexus.home}/webapp</extraction-path>
             <listeners>
               <http-listener>
