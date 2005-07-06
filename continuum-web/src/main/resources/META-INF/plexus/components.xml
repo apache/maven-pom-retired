@@ -153,6 +153,24 @@
             </scalars>
           </view>
           <view>
+            <id>ProjectNotifiers</id>
+            <scalars>
+              <scalar>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <view>
+            <id>SelectNotifier</id>
+            <scalars>
+              <scalar>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <view>
             <id>ProjectBuild</id>
             <scalars>
               <scalar>
@@ -250,6 +268,10 @@
           <call>
             <cid>checkoutProject</cid>
             <expression>checkoutProject(#id)</expression>
+          </call>
+          <call>
+            <cid>deleteNotifier</cid>
+            <expression>removeNotifier(#id,#notifierType)</expression>
           </call>
         </calls>
       </configuration>

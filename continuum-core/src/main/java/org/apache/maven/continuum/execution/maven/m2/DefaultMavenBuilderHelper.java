@@ -238,7 +238,7 @@ public class DefaultMavenBuilderHelper
                 throw new MavenBuilderHelperException( "Missing type from notifier." );
             }
 
-            notifier.setType( projectNotifier.getType() );
+            notifier.setType( projectNotifier.getType() );            
 
             notifier.setConfiguration( projectNotifier.getConfiguration() );
 

@@ -1,0 +1,22 @@
+$page.setTitle( "Continuum - ${project.name} Notifiers" )
+
+<div class="app">
+  <div id="h3">
+    <h3>Continuum Projects</h3>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <tr>
+        <th>Notifier Type</th>
+        <th colspan="1"></th>
+      </tr>
+      #foreach ( $notifier in $project.notifiers )
+      <tr class="$css.nextClass">
+        <td>$notifier.type</td>
+        <td><a href="$link.setPage('ProjectNotifiers.vm').addPathInfo('notifierType', $notifier.type).addPathInfo('action','cam').addPathInfo('cid','deleteNotifier').addPathInfo('id', $project.id)">Delete</a></td>
+      </tr>
+      #end
+    </table>
+  </div>
+  <div class="functnbar3">
+    <a href="$link.setPage('SelectNotifier.vm').addPathInfo('id', $project.id )">Add</a>
+  </div>
+</div>

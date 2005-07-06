@@ -15,7 +15,7 @@ $page.setTitle( "Continuum" )
 
 <div class="app">
   <div id="h3">
-    <h3>$i18n.getString( $form.summary.titleKey )</h3>
+    <h3>Continuum Projects</h3>
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
 
       <!-- i18n -->
@@ -23,7 +23,7 @@ $page.setTitle( "Continuum" )
         <th>Status</th>
         <th>Project Name</th>
         <th>Version</th>
-        <th colspan="6"></th>
+        <th colspan="7"></th>
       </tr>
 
       #set ( $items = $continuum.projects )
@@ -71,6 +71,8 @@ $page.setTitle( "Continuum" )
         #else
         <td>Build</td>
         #end
+
+        <td><a href="$link.setPage('ProjectNotifiers.vm').addPathInfo('view', "ProjectNotifiers").addPathInfo('id', $item.id )">Notifiers</a></td>
 
       </tr>
       #end

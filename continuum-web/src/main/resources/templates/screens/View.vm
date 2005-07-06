@@ -30,9 +30,10 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
     </div>
   </div>
 
-    ## This is an extension which could be done by a parse or include
-## TODO: internationalize and use forms instead of this hardcoded layout - tryg
+  ## This is an extension which could be done by a parse or include
+  ## TODO: internationalize and use forms instead of this hardcoded layout - tryg
 
+  #if ( $item.developers.size() > 0 )
   <div id="h3">
     <h3>Developers</h3>
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
@@ -49,6 +50,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
     </table>
     #bar()
   </div>
+  #end
 
   #if ( ( $project.checkOutException && $project.checkOutException != "" ) || ( $project.checkOutErrorMessage && $project.checkOutErrorMessage != "" ) )
   <div id="h3">

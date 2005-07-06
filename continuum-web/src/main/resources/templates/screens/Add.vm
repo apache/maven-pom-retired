@@ -4,9 +4,10 @@ $page.setTitle( "Add Project" )
   <div id="axial" class="h3">
     <h3>$i18n.getString( $form.add.titleKey )</h3>
     <form method="post" action="$link" #if( $form.attributes.multipart )enctype="multipart/form-data"#end>
-      #hidden ( "formId" $form.id )
+      #hidden ( "fid" $form.id )
       #hidden ( "action" $form.add.action )
       #hidden ( "view" $form.add.view )
+      #hidden ( "id" $id )
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
           #foreach ( $element in $form.elements )
@@ -15,6 +16,10 @@ $page.setTitle( "Add Project" )
             #field( $i18n $data $element $item $formtool )
             #validateField( $fvr $element )
           </tr>
+          #else
+            #if ( $element.defaultValue )
+              #hidden ( $element.id $element.defaultValue )
+            #end
           #end
           #end
         </table>

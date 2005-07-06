@@ -4,7 +4,7 @@ $page.setTitle( $item.name )
   <div id="axial" class="h3">
     <h3>$i18n.getString( $form.update.titleKey )</h3>
     <form method="post" action="$link">
-      #hidden ( "formId" $form.id )
+      #hidden ( "fid" $form.id )      
       #hidden ( "action" $form.update.action )
       #hidden ( "view" $form.update.view )
       #hidden ( "id" $id )

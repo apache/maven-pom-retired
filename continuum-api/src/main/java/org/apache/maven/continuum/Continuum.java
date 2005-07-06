@@ -17,6 +17,7 @@ package org.apache.maven.continuum;
  */
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -153,5 +154,15 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
         throws ContinuumException;
 
     void updateShellProject( ShellProject project )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Notification
+    // ----------------------------------------------------------------------
+
+    void addNotifier( String projectId, String notifierType, Map configuration )
+        throws ContinuumException;
+
+    void removeNotifier( String projectId, String notifierType )
         throws ContinuumException;
 }

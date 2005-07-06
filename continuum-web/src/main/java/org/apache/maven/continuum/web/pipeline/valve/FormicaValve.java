@@ -4,10 +4,12 @@ import org.apache.maven.continuum.web.tool.FormToolException;
 import org.apache.maven.continuum.web.tool.FormicaTool;
 
 import org.codehaus.plexus.formica.Form;
+import org.codehaus.plexus.formica.action.FormInfo;
 import org.codehaus.plexus.summit.pipeline.valve.CreateViewContextValve;
 import org.codehaus.plexus.summit.pipeline.valve.ValveInvocationException;
 import org.codehaus.plexus.summit.rundata.RunData;
 import org.codehaus.plexus.summit.view.ViewContext;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -16,6 +18,8 @@ import org.codehaus.plexus.summit.view.ViewContext;
 public class FormicaValve
     extends CreateViewContextValve
 {
+    public static final String FORMICA_REDIRECT = "formicaRedirect";
+
     // ----------------------------------------------------------------------
     // Requirements
     // ----------------------------------------------------------------------
@@ -37,6 +41,42 @@ public class FormicaValve
     protected void populateViewContext( RunData data, ViewContext context )
         throws ValveInvocationException
     {
+        FormInfo formInfo = (FormInfo) data.getMap().get( "formInfo" );
+
+        String formId;
+
+        // ----------------------------------------------------------------------
+        // We'll use a formInfo object if we have one, otherwise we will look
+        // in the request for form info.
+        // ----------------------------------------------------------------------
+
+        if ( formInfo != null )
+        {
+            formId = formInfo.getFid();
+        }
+        else if ( data.getParameters().getString( FORMICA_REDIRECT ) != null )
+        {
+            String[] s = StringUtils.split( data.getParameters().getString( FORMICA_REDIRECT ), ":" );
+
+            formId = s[0];
+
+            data.setTarget( s[1] );
+        }
+        else
+        {
+            formId = data.getParameters().getString( "fid" );
+        }
+
+        // ----------------------------------------------------------------------
+        // If a formId can't be found in either place then we're not dealing with
+        // a form so we can safely return.
+        // ----------------------------------------------------------------------
+
+        if ( formId == null )
+        {
+            return;
+        }
+
         // ----------------------------------------------------------------------
         // Entity Id
         // ----------------------------------------------------------------------
@@ -48,13 +88,6 @@ public class FormicaValve
         // ----------------------------------------------------------------------
         // Form
         // ----------------------------------------------------------------------
-
-        String formId = data.getParameters().getString( "fid" );
-
-        if ( formId == null )
-        {
-            formId = defaultFormId;
-        }
 
         context.put( "fid", formId );
 

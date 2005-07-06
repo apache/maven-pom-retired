@@ -1,13 +1,5 @@
-#if ( !$fid )
-  #set ( $fid = $data.getParameters().getString( "fid" ) )
-#end
-#set ( $form = $formtool.getForm( $fid ) )
-#if ( !$id )
-  #set ( $id = $data.getParameters().getString( "id" ) )
-#end
-#if ( $id )
-  #set( $item = $formtool.getItem( $form, $id ) )
-#end
+$page.setTitle( "Delete Project" )
+
 <div class="app">
   <div id="axial" class="h3">
     <h3>$i18n.getString( $form.delete.titleKey )</h3>
@@ -17,7 +9,7 @@
       </p>
     </div>
     <form method="post" action="$link">
-      #hidden ( "formId" $form.id )
+      #hidden ( "fid" $form.id )
       #hidden ( "action" $form.delete.action )
       #hidden ( "view" $form.delete.view )
       #hidden ( "id" $id )

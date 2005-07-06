@@ -123,14 +123,24 @@ public class IrcContinuumNotifier
         }
 
         // ----------------------------------------------------------------------
-        // Send the message
+        // Gather configuration values
         // ----------------------------------------------------------------------
 
-        ircClient.connect( (String) configuration.get( "host" ), ( (Integer) configuration.get( "port" ) ).intValue() );
+        String host = (String) configuration.get( "host" );
+
+        int port = Integer.parseInt( (String) configuration.get( "port" ) );
+
+        String channel = (String) configuration.get( "channel" );
+
+        // ----------------------------------------------------------------------
+        // Send message
+        // ----------------------------------------------------------------------
+
+        ircClient.connect( host, port, "continuum" );
 
         ircClient.logon();
 
-        ircClient.sendNotice( (String) configuration.get( "channel" ), generateMessage( project, build ) );
+        ircClient.sendMessageToChannel( channel, generateMessage( project, build ) );
 
         ircClient.logoff();
 

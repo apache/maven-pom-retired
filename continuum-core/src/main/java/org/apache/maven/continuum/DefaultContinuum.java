@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
@@ -35,6 +36,7 @@ import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
@@ -43,6 +45,7 @@ import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
+import org.apache.maven.model.Notifier;
 
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -57,10 +60,14 @@ public class DefaultContinuum
     extends AbstractLogEnabled
     implements Continuum
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ContinuumCore core;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ActionManager actionManager;
 
     // ----------------------------------------------------------------------
@@ -489,5 +496,83 @@ public class DefaultContinuum
         {
             throw new ContinuumException( "Error adding project.", e );
         }
+    }
+
+    // ----------------------------------------------------------------------
+    // Notification
+    // ----------------------------------------------------------------------
+
+    public void addNotifier( String projectId, String notifierType, Map configuration )
+        throws ContinuumException
+    {
+        System.out.println( "projectId = " + projectId );
+
+        System.out.println( "notifierType = " + notifierType );
+
+        System.out.println( "configuration = " + configuration );
+
+        ContinuumNotifier notifier = new ContinuumNotifier();
+
+        notifier.setType( notifierType );
+
+        // ----------------------------------------------------------------------
+        // Needs to be properties ...
+        // ----------------------------------------------------------------------
+
+        Properties notifierProperties = new Properties();
+
+        for ( Iterator i = configuration.keySet().iterator(); i.hasNext(); )
+        {
+            Object key = i.next();
+
+            Object value = configuration.get( key );
+
+            if ( value instanceof String )
+            {
+                notifierProperties.setProperty( (String) key, (String) value  );
+            }
+        }
+
+        notifier.setConfiguration( notifierProperties );
+
+        ContinuumProject project = core.getProject( projectId );
+
+        project.addNotifier( notifier );
+
+        core.updateProject( project );
+    }
+
+    public void removeNotifier( String projectId, String notifierType )
+        throws ContinuumException
+    {
+        System.out.println( "Here removing the notifier!" );
+
+        System.out.println( "projectId = " + projectId );
+
+        System.out.println( "notifierType = " + notifierType );
+
+        ContinuumProject project = core.getProject( projectId );
+
+        List notifiers = project.getNotifiers();
+
+        System.out.println( "notifiers.size() = " + notifiers.size() );
+
+        for ( Iterator i = notifiers.iterator(); i.hasNext(); )
+        {
+            ContinuumNotifier n = (ContinuumNotifier) i.next();
+
+            if ( n.getType().equals( notifierType ) )
+            {
+                System.out.println( "n.getType() = " + n.getType() );
+
+                i.remove();
+            }
+        }
+
+        System.out.println( "notifiers.size() = " + notifiers.size() );
+
+        project.setNotifiers( notifiers );
+
+        core.updateProject( project );
     }
 }

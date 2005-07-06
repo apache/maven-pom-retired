@@ -23,6 +23,7 @@
     <action>addEntity</action>
     <view>Summary.vm</view>
     <view-on-failure>Add.vm</view-on-failure>
+    <fid-on-failure>maven-1Project</fid-on-failure>        
     <expression>addMavenOneProject(#entity)</expression>
   </add>
 
