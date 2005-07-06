@@ -9,8 +9,7 @@
     <script type="text/javascript">
   if (document.layers)
   {
-    document.write('
-      <link rel="stylesheet" type="text/css" href="$data.getLink("css/ns4_only.css")" media="screen"/>')
+    document.write(' <link rel="stylesheet" type="text/css" href="$data.getLink("css/ns4_only.css")" media="screen"/>')
   }
     </script>
     <script src="$data.getLink("scripts/tigris.js")" type="text/javascript"></script>
