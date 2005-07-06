@@ -210,15 +210,18 @@ public class DefaultContinuumScm
 
         result.setProviderMessage( scmResult.getProviderMessage() );
 
-        for ( Iterator it = scmResult.getUpdatedFiles().iterator(); it.hasNext(); )
+        if ( scmResult.getUpdatedFiles() != null )
         {
-            org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
+            for ( Iterator it = scmResult.getUpdatedFiles().iterator(); it.hasNext(); )
+            {
+                org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
 
-            ScmFile file = new ScmFile();
+                ScmFile file = new ScmFile();
 
-            file.setPath( scmFile.getPath() );
+                file.setPath( scmFile.getPath() );
 
-            result.addUpdatedFile( file );
+                result.addUpdatedFile( file );
+            }
         }
 
         return result;
