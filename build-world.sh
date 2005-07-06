@@ -6,12 +6,13 @@ m2_repo="http://svn.apache.org/repos/asf/maven/components/trunk"
 continuum_repo="http://svn.apache.org/repos/asf/maven/continuum/trunk"
 
 clean=0
-force_build=0
+force_build_maven_2=0
+force_build_continuum=0
 self_update=0
 
 usage()
 {
-  echo "Usage: $0 [--clean] [--force-build] [--self-update]"
+  echo "Usage: $0 [--clean] [--force-build] [--force-build-maven-2] [--force-build-continuum] [--self-update]"
   exit 1
 }
 
@@ -19,7 +20,9 @@ while [ "$1" ];
 do
   case $1 in 
     --clean) clean=1 ;;
-    --force-build) force_build=1 ;;
+    --force-build-maven-2) force_build_maven_2=1 ;;
+    --force-build-continuum) force_build_continuum=1 ;;
+    --force-build) force_build_maven_2=1; force_build_continuum=1 ;;
     --self-update) self_update=1 ;;
     *) usage ;;
   esac
@@ -63,6 +66,7 @@ fi
 
 if [ $clean -eq "1" ]
 then
+  echo "Cleaning"
   rm -rf $root/maven
   rm -rf $root/continuum
   rm -rf $root/repository
@@ -96,12 +100,15 @@ directory and put any relevant jars there. The repository will be copied over
 to the real Maven 2 repository before each build to make sure the Maven 2
 repository can be cleaned before a build and still not miss any dependencies."
 else
+  echo "Copying over the artifacs in sun-repo."
   cp -r sun-repo/* $root/repository
 fi
 
 ##############################################################################
 # Check out the sources
 ##############################################################################
+
+cd $root
 
 # Maven 2
 first_build=0
@@ -110,7 +117,7 @@ then
   first_build=1
 fi
 
-cd $root
+echo "Updating the Maven 2 checkout."
 svn co $m2_repo maven > m2_update
 
 tmp=`grep -v revision m2_update | wc -l`
@@ -128,6 +135,7 @@ then
   first_build=1
 fi
 
+echo "Updating the Continuum checkout."
 svn co $continuum_repo continuum > continuum_update
 
 tmp=`grep -v revision continuum_update | wc -l`
@@ -144,17 +152,18 @@ fi
 
 PATH=$M2_HOME/bin:$PATH
 
-echo PATH: $PATH
-echo M2_HOME: $M2_HOME
-
-if [ $build_m2 -eq 1 -o $clean -eq 1 -o $force_build -eq 1 ]
+if [ $build_m2 -eq 1 -o $clean -eq 1 -o $force_build_maven_2 -eq 1 ]
 then
+(
   cd maven
-  bash -x m2-bootstrap-all.sh
-  cd ..
+  echo "Bootstrapping Maven 2."
+  M2_HOME=$M2_HOME bash m2-bootstrap-all.sh
+)
+else
+  echo "Not building Maven 2."
 fi
 
-if [ ! -x m2 ]
+if [ -z "`which m2`" ]
 then
   echo "WARN: Could not find m2 in PATH. For the build scripts for Continuum to
 work m2 has to be in the PATH. 
@@ -167,9 +176,12 @@ M2_HOME: $M2_HOME"
   exit 1
 fi
 
-if [ $build_continuum -eq 1 -o $clean -eq 1 -o $force_build -eq 1 ]
+if [ $build_continuum -eq 1 -o $clean -eq 1 -o $force_build_continuum -eq 1 ]
 then
+  echo "Building Continuum."
   cd continuum
-  bash -x build.sh -X
+  bash build.sh
   cd ..
+else
+  echo "Not building Continuum."
 fi
