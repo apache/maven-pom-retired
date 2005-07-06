@@ -17,6 +17,8 @@ package org.apache.maven.continuum.project.builder.maven;
  */
 
 import java.io.File;
+import java.io.PrintStream;
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -106,7 +108,14 @@ public class MavenTwoContinuumProjectBuilderTest
 
         String url = getTestFile( "src/test/resources/projects/continuum/pom.xml" ).toURL().toExternalForm();
 
+        // Eat System.out
+        PrintStream ps = System.out;
+
+        System.setOut( new PrintStream( new ByteArrayOutputStream() ) );
+
         ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( new URL( url ) );
+
+        System.setOut( ps );
 
         assertNotNull( result );
 

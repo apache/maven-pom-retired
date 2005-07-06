@@ -95,6 +95,8 @@ public class MavenTwoContinuumProjectBuilder
         }
         catch ( IOException e )
         {
+            getLogger().warn( "Could not download the URL", e );
+
             result.addWarning( "Could not download " + url );
 
             return;

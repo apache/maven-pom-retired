@@ -17,6 +17,7 @@ package org.apache.maven.continuum.project.builder.maven;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
@@ -25,8 +26,8 @@ import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelperExcep
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.utils.ContinuumUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -46,11 +47,23 @@ public class MavenOneContinuumProjectBuilder
     // ----------------------------------------------------------------------
 
     public ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url )
-        throws ContinuumProjectBuilderException
     {
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
 
-        File pomFile = createMetadataFile( url );
+        File pomFile;
+
+        try
+        {
+            pomFile = createMetadataFile( url );
+        }
+        catch ( IOException e )
+        {
+            getLogger().warn( "Could not download the URL", e );
+
+            result.addWarning( "Could not download the URL '" + url + "'." );
+
+            return result;
+        }
 
         MavenOneProject project = new MavenOneProject();
 
@@ -60,7 +73,7 @@ public class MavenOneContinuumProjectBuilder
         }
         catch ( MavenOneMetadataHelperException e )
         {
-            throw new ContinuumProjectBuilderException( "Cannot create continuum project.", e );
+            result.addWarning( ContinuumUtils.throwableToString( e ) );
         }
 
         result.addProject( project, MavenOneBuildExecutor.ID );
