@@ -19,6 +19,7 @@ package org.apache.maven.continuum.core.action;
 import java.util.Map;
 
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
@@ -35,13 +36,27 @@ public class StoreCheckOutScmResultAction
     {
         try
         {
+            // ----------------------------------------------------------------------
+            //
+            // ----------------------------------------------------------------------
+
+            CheckOutScmResult checkOutScmResult = (CheckOutScmResult) context.get( KEY_CHECKOUT_SCM_RESULT );
+
+            String checkoutErrorMessage = (String) context.get( KEY_CHECKOUT_ERROR_MESSAGE );
+
+            String checkoutErrorException = (String) context.get( KEY_CHECKOUT_ERROR_EXCEPTION );
+
+            // ----------------------------------------------------------------------
+            //
+            // ----------------------------------------------------------------------
+
             ContinuumProject project = getProject( context );
 
-            project.setCheckOutScmResult( getCheckoutResult( context ) );
+            project.setCheckOutScmResult( checkOutScmResult );
 
-            project.setCheckOutErrorMessage( nullIfEmpty( getCheckoutErrorMessage( context ) ) );
+            project.setCheckOutErrorMessage( checkoutErrorMessage );
 
-            project.setCheckOutErrorException( nullIfEmpty( getCheckoutErrorException( context ) ) );
+            project.setCheckOutErrorException( checkoutErrorException );
 
             getStore().updateProject( project );
         }
