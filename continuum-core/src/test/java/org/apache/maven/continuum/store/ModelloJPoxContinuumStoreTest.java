@@ -609,7 +609,7 @@ public class ModelloJPoxContinuumStoreTest
 
         assertNotNull( build );
 
-        assertEquals( build.getId(), (String) expectedBuilds.get( 9 ) );
+        assertEquals( build.getId(), (String) expectedBuilds.get( 0 ) );
 
         Collection actualBuilds = store.getBuildsForProject( projectId, 0, 0 );
 
@@ -634,11 +634,13 @@ public class ModelloJPoxContinuumStoreTest
     {
         String projectId = addMavenTwoProject( "Association Test Project", "scm:association" );
 
+        int size = 10;
+
         List expectedBuilds = new ArrayList();
 
-        for ( int i = 0; i < 10; i++ )
+        for ( int i = 0; i < size; i++ )
         {
-            expectedBuilds.add( 0, createBuild( store, projectId, false ) );
+            expectedBuilds.add( createBuild( store, projectId, false ) );
         }
 
         // ----------------------------------------------------------------------
@@ -649,11 +651,13 @@ public class ModelloJPoxContinuumStoreTest
 
         assertNotNull( build );
 
-        assertEquals( build.getId(), (String) expectedBuilds.get( 9 ) );
+        assertEquals( build.getId(), (String) expectedBuilds.get( size - 1 ) );
 
         Collection actualBuilds = store.getBuildsForProject( projectId, 0, 0 );
 
-        assertEquals( 10, actualBuilds.size() );
+        assertEquals( build.getId(), ( (ContinuumBuild) actualBuilds.iterator().next() ).getId() );
+
+        assertEquals( size, actualBuilds.size() );
     }
 
     public void testBuildResult()

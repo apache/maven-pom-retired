@@ -374,7 +374,7 @@ public class ModelloJPoxContinuumStore
             Query q = pm.newQuery( ContinuumBuild.class );
             q.declareParameters( "String projectId" );
             q.setFilter( "this.project.id == projectId" );
-            q.setOrdering( "id asc" );
+            q.setOrdering( "startTime descending" );
             Collection builds = (Collection) q.execute( projectId );
 
             if ( builds.size() == 0 )
