@@ -1,6 +1,7 @@
 <form>
   <id>notificationMail</id>
   <source-role>org.apache.maven.continuum.Continuum</source-role>
+  <lookup-expression>getNotifier(#id,#notifierType)</lookup-expression>  
   <elements>
     <element>
       <id>notifierType</id>

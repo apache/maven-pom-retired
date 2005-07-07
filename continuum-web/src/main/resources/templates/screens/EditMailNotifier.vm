@@ -1,0 +1,27 @@
+$page.setTitle( "Continuum - Mail Notifier" )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>Edit Mail Notifier</h3>
+    <form method="post" action="$link">
+      #hidden ( "action" "cam" )
+      #hidden ( "cid" "updateNotifier" )
+      #hidden ( "view" "ProjectNotifiers.vm" )
+      #hidden ( "id" $project.id )
+      #hidden ( "notifierType" "mail" )
+      <div class="axial">
+        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+          <tr>
+            <th>Mail Address</th>
+            <td>
+              <input type="text" name="address" value="$notifier.configuration.address" size="40"/>
+            </td>
+            ##field( $i18n $data $element $item $formtool )
+            ##validateField( $fvr $element )
+          </tr>
+        </table>
+        #submitBar( "Submit" )
+      </div>
+    </form>
+  </div>
+</div>

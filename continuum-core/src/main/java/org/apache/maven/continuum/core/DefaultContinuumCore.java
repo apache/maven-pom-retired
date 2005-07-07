@@ -175,6 +175,10 @@ public class DefaultContinuumCore
         }
     }
 
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
     public void removeNotifier( Object oid )
         throws ContinuumException
     {
@@ -187,6 +191,23 @@ public class DefaultContinuumCore
             throw logAndCreateException( "Error while removing notifier.", ex );
         }
     }
+
+    public void storeNotifier( Object oid )
+        throws ContinuumException
+    {
+        try
+        {
+            store.storeNotifier( oid );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while removing notifier.", ex );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
 
     public void updateProject( ContinuumProject project )
         throws ContinuumException

@@ -524,4 +524,26 @@ public class ModelloJPoxContinuumStore
             throw new ContinuumStoreException( "Error while removing a notifier.", e );
         }
     }
+
+    public void storeNotifier( Object notifier )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            store.begin();
+
+            PersistenceManager pm = store.getThreadState().getPersistenceManager();
+
+            notifier = pm.attachCopy( notifier, false );
+
+            store.commit();
+        }
+        catch ( Exception e )
+        {
+            rollback( store );
+
+            throw new ContinuumStoreException( "Error while removing a notifier.", e );
+        }
+    }
+
 }

@@ -67,6 +67,8 @@ public class CallApplicationModel
 
         String expression = call.getExpression();
 
+        parameters.put( "parameters", parameters );
+
         Ognl.getValue( expression, parameters, application );
     }
 

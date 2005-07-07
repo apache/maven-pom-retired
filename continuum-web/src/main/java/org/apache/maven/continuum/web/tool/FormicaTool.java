@@ -172,15 +172,6 @@ public class FormicaTool
         return getItem( form, element, getItem( form, id ) );
     }
 
-    // ----------------------------------------------------------------------
-    // Need to use the decomposer here
-    //
-    // Ignore if the expression is passive ... shit how to get the data
-    // from the single piece of data that holds what is needed here ...
-    // I need to have some information at the form level about what
-    // elements are affected by the transformations.
-    // ----------------------------------------------------------------------
-
     public String getItem( Form form, Element element, Object item )
         throws FormToolException
     {

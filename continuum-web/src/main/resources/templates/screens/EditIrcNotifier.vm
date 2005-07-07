@@ -1,0 +1,39 @@
+$page.setTitle( "Continuum - IRC Notifier" )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>Edit IRC Notifier</h3>
+    <form method="post" action="$link">
+      #hidden ( "action" "cam" )
+      #hidden ( "cid" "updateNotifier" )
+      #hidden ( "view" "ProjectNotifiers.vm" )
+      #hidden ( "id" $project.id )
+      #hidden ( "notifierType" "irc" )
+      <div class="axial">
+        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+          <tr>
+            <th>IRC Host</th>
+            <td>
+              <input type="text" name="host" value="$notifier.configuration.host" size="40"/>
+            </td>
+          </tr>
+          <tr>
+            <th>IRC Port</th>
+            <td>
+              <input type="text" name="port" value="$notifier.configuration.port" size="40"/>
+            </td>
+          </tr>
+          <tr>
+            <th>IRC Channel</th>
+            <td>
+              <input type="text" name="channel" value="$notifier.configuration.channel" size="40"/>
+            </td>
+            ##field( $i18n $data $element $item $formtool )
+            ##validateField( $fvr $element )
+          </tr>
+        </table>
+        #submitBar( "Submit" )
+      </div>
+    </form>
+  </div>
+</div>

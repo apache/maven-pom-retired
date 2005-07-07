@@ -24,6 +24,7 @@ import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.ContinuumException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -91,6 +92,9 @@ public interface ContinuumStore
     // Notifiers
     // ----------------------------------------------------------------------
 
-    void removeNotifier( Object oid )
+    void removeNotifier( Object notifier )
+        throws ContinuumStoreException;
+
+    void storeNotifier( Object notifier )
         throws ContinuumStoreException;
 }

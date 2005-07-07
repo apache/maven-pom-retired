@@ -139,6 +139,11 @@
       <implementation>org.apache.maven.continuum.web.context.DefaultViewContextPopulator</implementation>
       <configuration>
         <views>
+          <!--
+           |
+           | Project Builds
+           |
+           -->
           <view>
             <id>ProjectBuilds</id>
             <scalars>
@@ -152,6 +157,24 @@
               </scalar>
             </scalars>
           </view>
+          <view>
+            <id>ProjectBuild</id>
+            <scalars>
+              <scalar>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
+              </scalar>
+              <scalar>
+                <id>build</id>
+                <expression>getBuild(#buildId)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <!--
+           |
+           | Notification
+           |
+           -->
           <view>
             <id>ProjectNotifiers</id>
             <scalars>
@@ -171,15 +194,46 @@
             </scalars>
           </view>
           <view>
-            <id>ProjectBuild</id>
+            <id>ViewIrcNotifier</id>
             <scalars>
+              <scalar>
+                <id>notifier</id>
+                <expression>getNotifier(#id,#notifierType)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <view>
+            <id>ViewMailNotifier</id>
+            <scalars>
+              <scalar>
+                <id>notifier</id>
+                <expression>getNotifier(#id,#notifierType)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <view>
+            <id>EditIrcNotifier</id>
+            <scalars>
+              <scalar>
+                <id>notifier</id>
+                <expression>getNotifier(#id,#notifierType)</expression>
+              </scalar>
               <scalar>
                 <id>project</id>
                 <expression>getProject(#id)</expression>
               </scalar>
+            </scalars>
+          </view>
+          <view>
+            <id>EditMailNotifier</id>
+            <scalars>
               <scalar>
-                <id>build</id>
-                <expression>getBuild(#buildId)</expression>
+                <id>notifier</id>
+                <expression>getNotifier(#id,#notifierType)</expression>
+              </scalar>
+              <scalar>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
               </scalar>
             </scalars>
           </view>
@@ -269,9 +323,18 @@
             <cid>checkoutProject</cid>
             <expression>checkoutProject(#id)</expression>
           </call>
+          <!--
+           |
+           | Notifiers
+           |
+           -->
           <call>
             <cid>deleteNotifier</cid>
             <expression>removeNotifier(#id,#notifierType)</expression>
+          </call>
+          <call>
+            <cid>updateNotifier</cid>
+            <expression>updateNotifier(#id,#notifierType,#parameters)</expression>
           </call>
         </calls>
       </configuration>

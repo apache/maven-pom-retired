@@ -16,44 +16,35 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
+import org.apache.maven.continuum.core.ContinuumCore;
+import org.apache.maven.continuum.core.action.AbstractContinuumAction;
+import org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction;
+import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
+import org.apache.maven.continuum.core.action.StoreProjectAction;
+import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
+import org.apache.maven.continuum.project.AntProject;
+import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenOneProject;
+import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
+import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
+import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.codehaus.plexus.action.ActionManager;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import org.apache.maven.continuum.core.ContinuumCore;
-import org.apache.maven.continuum.core.action.AbstractContinuumAction;
-import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
-import org.apache.maven.continuum.core.action.StoreProjectAction;
-import org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction;
-import org.apache.maven.continuum.project.AntProject;
-import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenOneProject;
-import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.project.ContinuumNotifier;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
-import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
-import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
-import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
-import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
-import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.model.Notifier;
-
-import org.codehaus.plexus.action.ActionManager;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.ExceptionUtils;
-
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -506,17 +497,45 @@ public class DefaultContinuum
     // Notification
     // ----------------------------------------------------------------------
 
-    public void addNotifier( String projectId, String notifierType, Map configuration )
+    // This whole section needs a scrub but will need to be dealt with generally
+    // when we add schedules and profiles to the mix.
+
+    public ContinuumNotifier getNotifier( String projectId, String notifierType )
         throws ContinuumException
     {
-        ContinuumNotifier notifier = new ContinuumNotifier();
+        ContinuumProject project = core.getProject( projectId );
 
-        notifier.setType( notifierType );
+        List notifiers = project.getNotifiers();
 
-        // ----------------------------------------------------------------------
-        // Needs to be properties ... but data comes in via a Map
-        // ----------------------------------------------------------------------
+        ContinuumNotifier notifier = null;
 
+        for ( Iterator i = notifiers.iterator(); i.hasNext(); )
+        {
+            notifier = (ContinuumNotifier) i.next();
+
+            if ( notifier.getType().equals( notifierType ) )
+            {
+                break;
+            }
+        }
+
+        return notifier;
+    }
+
+    public void updateNotifier( String projectId, String notifierType, Map configuration )
+        throws ContinuumException
+    {
+        ContinuumNotifier notifier = getNotifier( projectId, notifierType );
+
+        Properties notifierProperties = createNotifierProperties( configuration );
+
+        notifier.setConfiguration( notifierProperties );
+
+        core.storeNotifier( notifier );
+    }
+
+    private Properties createNotifierProperties( Map configuration )
+    {
         Properties notifierProperties = new Properties();
 
         for ( Iterator i = configuration.keySet().iterator(); i.hasNext(); )
@@ -531,6 +550,22 @@ public class DefaultContinuum
             }
         }
 
+        return notifierProperties;
+    }
+
+    public void addNotifier( String projectId, String notifierType, Map configuration )
+        throws ContinuumException
+    {
+        ContinuumNotifier notifier = new ContinuumNotifier();
+
+        notifier.setType( notifierType );
+
+        // ----------------------------------------------------------------------
+        // Needs to be properties ... but data comes in via a Map
+        // ----------------------------------------------------------------------
+
+        Properties notifierProperties = createNotifierProperties( configuration );
+
         notifier.setConfiguration( notifierProperties );
 
         ContinuumProject project = core.getProject( projectId );
@@ -543,21 +578,7 @@ public class DefaultContinuum
     public void removeNotifier( String projectId, String notifierType )
         throws ContinuumException
     {
-        ContinuumProject project = core.getProject( projectId );
-
-        List notifiers = project.getNotifiers();
-
-        ContinuumNotifier n = null;
-
-        for ( Iterator i = notifiers.iterator(); i.hasNext(); )
-        {
-            n = (ContinuumNotifier) i.next();
-
-            if ( n.getType().equals( notifierType ) )
-            {
-                break;
-            }
-        }
+        ContinuumNotifier n = getNotifier( projectId, notifierType );
 
         if ( n != null )
         {

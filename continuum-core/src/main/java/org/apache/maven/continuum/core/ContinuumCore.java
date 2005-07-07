@@ -60,6 +60,9 @@ public interface ContinuumCore
     void removeNotifier( Object oid )
         throws ContinuumException;
 
+    void storeNotifier( Object notifier )
+        throws ContinuumException;
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------

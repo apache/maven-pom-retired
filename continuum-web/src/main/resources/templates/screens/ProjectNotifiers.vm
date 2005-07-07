@@ -2,15 +2,33 @@ $page.setTitle( "Continuum - ${project.name} Notifiers" )
 
 <div class="app">
   <div id="h3">
-    <h3>Continuum Projects</h3>
+    <h3>${project.name} Notifiers</h3>
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
       <tr>
         <th>Notifier Type</th>
-        <th colspan="1"></th>
+        <th colspan="3"></th>
       </tr>
       #foreach ( $notifier in $project.notifiers )
       <tr class="$css.nextClass">
-        <td>$notifier.type</td>
+
+        #if ( $notifier.type == "irc" )
+        <td>IRC</td>
+        #elseif ( $notifier.type == "mail" )
+        <td>Mail</td>
+        #end
+
+        #if ( $notifier.type == "irc" )
+        <td><a href="$link.setPage('ViewIrcNotifier.vm').addPathInfo('view','ViewIrcNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">View</a></td>
+        #elseif ( $notifier.type == "mail" )
+        <td><a href="$link.setPage('ViewMailNotifier.vm').addPathInfo('view','ViewMailNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">View</a></td>
+        #end
+
+        #if ( $notifier.type == "irc" )
+        <td><a href="$link.setPage('EditIrcNotifier.vm').addPathInfo('view','EditIrcNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">Edit</a></td>
+        #elseif ( $notifier.type == "mail" )
+        <td><a href="$link.setPage('EditMailNotifier.vm').addPathInfo('view','EditMailNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">Edit</a></td>
+        #end
+
         <td><a href="$link.setPage('ProjectNotifiers.vm').addPathInfo('notifierType', $notifier.type).addPathInfo('action','cam').addPathInfo('cid','deleteNotifier').addPathInfo('id', $project.id)">Delete</a></td>
       </tr>
       #end

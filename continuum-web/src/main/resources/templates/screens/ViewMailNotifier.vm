@@ -1,0 +1,18 @@
+$page.setTitle( "Continuum - IRC Notifier" )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>Mail Notifier</h3>
+    <div class="axial">
+      <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        <tr class="b">
+          <th>Address</th>
+          <td>$notifier.configuration.address</td>
+        </tr>
+      </table>
+    </div>
+    <div class="functnbar3">
+      <a href="$link.setPage('ProjectNotifiers.vm').addPathInfo('view','ProjectNotifiers').addPathInfo('id',$data.parameters.getString(" id"))">Back to Notifiers</a>
+    </div>
+  </div>
+</div>

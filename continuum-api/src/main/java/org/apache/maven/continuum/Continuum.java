@@ -25,6 +25,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 
@@ -159,6 +160,12 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     // ----------------------------------------------------------------------
     // Notification
     // ----------------------------------------------------------------------
+
+    ContinuumNotifier getNotifier( String projectId, String notifierType )
+        throws ContinuumException;
+
+    public void updateNotifier( String projectId, String notifierType, Map configuration )
+        throws ContinuumException;
 
     void addNotifier( String projectId, String notifierType, Map configuration )
         throws ContinuumException;
