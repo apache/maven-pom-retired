@@ -320,9 +320,13 @@ public class ModelloJPoxContinuumStore
 
             Object id = store.addContinuumBuild( build );
 
+            project.setLastBuildId( build.getId() );
+
             store.commit();
 
             build = store.getContinuumBuildByJdoId( id, true );
+
+            System.out.println( "build.getId() = " + build.getId() );
 
             return build.getId();
         }
@@ -361,6 +365,39 @@ public class ModelloJPoxContinuumStore
     }
 
     public ContinuumBuild getLatestBuildForProject( String projectId )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            store.begin();
+
+            ContinuumProject p = store.getContinuumProject( projectId, false );
+
+            if ( p.getLastBuildId() == null )
+            {
+                store.commit();
+
+                return null;
+            }
+
+            ContinuumBuild b = store.getContinuumBuild( p.getLastBuildId(), false );
+
+            b = (ContinuumBuild) store.getThreadState().getPersistenceManager().detachCopy( b );
+
+            store.commit();
+
+            return b;
+
+        }
+        catch ( Exception e )
+        {
+            rollback( store );
+
+            throw new ContinuumStoreException( "Error while loading last build for project id: '" + projectId + "'.", e );
+        }
+    }
+
+    public ContinuumBuild getLatestBuildForProjectx( String projectId )
         throws ContinuumStoreException
     {
         // TODO: Find a better way to query for the latest build.
