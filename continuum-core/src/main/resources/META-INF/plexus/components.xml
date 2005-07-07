@@ -215,6 +215,9 @@
           <role>org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout</role>
           <role-hint>default</role-hint>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.settings.MavenSettingsBuilder</role>
+        </requirement>
       </requirements>
       <configuration>
         <local-repository>${plexus.home}/local-repository</local-repository>

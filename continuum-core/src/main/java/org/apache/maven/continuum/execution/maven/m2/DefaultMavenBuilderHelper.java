@@ -17,6 +17,7 @@ package org.apache.maven.continuum.execution.maven.m2;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -35,9 +36,12 @@ import org.apache.maven.model.Repository;
 import org.apache.maven.model.Scm;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.settings.MavenSettingsBuilder;
+import org.apache.maven.settings.Settings;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -57,6 +61,9 @@ public class DefaultMavenBuilderHelper
 
     /** @plexus.requirement */
     private ArtifactRepositoryLayout repositoryLayout;
+
+    /** @plexus.requirement */
+    private MavenSettingsBuilder mavenSettingsBuilder;
 
     /** @plexus.configuration */
     private String localRepository;
@@ -83,6 +90,8 @@ public class DefaultMavenBuilderHelper
         if ( StringUtils.isEmpty( continuumProject.getCommandLineArguments() ) )
         {
             continuumProject.setCommandLineArguments( "-N -B" );
+
+//            continuumProject.setCommandLineArguments( "-N -B -Djline.terminal=jline.UnsupportedTerminal" );
         }
 
         if ( StringUtils.isEmpty( continuumProject.getGoals() ) )
@@ -238,7 +247,7 @@ public class DefaultMavenBuilderHelper
                 throw new MavenBuilderHelperException( "Missing type from notifier." );
             }
 
-            notifier.setType( projectNotifier.getType() );            
+            notifier.setType( projectNotifier.getType() );
 
             notifier.setConfiguration( projectNotifier.getConfiguration() );
 
@@ -259,6 +268,23 @@ public class DefaultMavenBuilderHelper
 
     private ArtifactRepository getRepository()
     {
+        String localRepository = this.localRepository;
+
+        try
+        {
+            Settings settings = mavenSettingsBuilder.buildSettings();
+
+            localRepository = settings.getLocalRepository();
+        }
+        catch ( IOException e )
+        {
+            getLogger().warn( "Error while building Maven settings.", e );
+        }
+        catch ( XmlPullParserException e )
+        {
+            getLogger().warn( "Error while building Maven settings.", e );
+        }
+
         Repository repository = new Repository();
 
         return artifactRepositoryFactory.createArtifactRepository( "local",
