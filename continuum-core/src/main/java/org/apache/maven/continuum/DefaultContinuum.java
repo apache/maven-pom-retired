@@ -45,11 +45,15 @@ import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.model.Notifier;
 
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.ExceptionUtils;
+
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManager;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -505,18 +509,12 @@ public class DefaultContinuum
     public void addNotifier( String projectId, String notifierType, Map configuration )
         throws ContinuumException
     {
-        System.out.println( "projectId = " + projectId );
-
-        System.out.println( "notifierType = " + notifierType );
-
-        System.out.println( "configuration = " + configuration );
-
         ContinuumNotifier notifier = new ContinuumNotifier();
 
         notifier.setType( notifierType );
 
         // ----------------------------------------------------------------------
-        // Needs to be properties ...
+        // Needs to be properties ... but data comes in via a Map
         // ----------------------------------------------------------------------
 
         Properties notifierProperties = new Properties();
@@ -545,34 +543,25 @@ public class DefaultContinuum
     public void removeNotifier( String projectId, String notifierType )
         throws ContinuumException
     {
-        System.out.println( "Here removing the notifier!" );
-
-        System.out.println( "projectId = " + projectId );
-
-        System.out.println( "notifierType = " + notifierType );
-
         ContinuumProject project = core.getProject( projectId );
 
         List notifiers = project.getNotifiers();
 
-        System.out.println( "notifiers.size() = " + notifiers.size() );
+        ContinuumNotifier n = null;
 
         for ( Iterator i = notifiers.iterator(); i.hasNext(); )
         {
-            ContinuumNotifier n = (ContinuumNotifier) i.next();
+            n = (ContinuumNotifier) i.next();
 
             if ( n.getType().equals( notifierType ) )
             {
-                System.out.println( "n.getType() = " + n.getType() );
-
-                i.remove();
+                break;
             }
         }
 
-        System.out.println( "notifiers.size() = " + notifiers.size() );
-
-        project.setNotifiers( notifiers );
-
-        core.updateProject( project );
+        if ( n != null )
+        {
+            core.removeNotifier( n );
+        }
     }
 }

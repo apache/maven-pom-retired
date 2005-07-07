@@ -41,6 +41,9 @@ import org.apache.maven.continuum.scm.UpdateScmResult;
 
 import org.codehaus.plexus.jdo.JdoFactory;
 
+import javax.jdo.PersistenceManager;
+import javax.jdo.JDOHelper;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
@@ -963,5 +966,5 @@ public class ModelloJPoxContinuumStoreTest
         assertEquals( "project.executorId", builderId, actual.getExecutorId() );
 
         assertEquals( "project.workingDirectory", workingDirectory, actual.getWorkingDirectory() );
-    }
+    }    
 }

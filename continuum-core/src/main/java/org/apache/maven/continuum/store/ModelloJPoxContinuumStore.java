@@ -237,11 +237,17 @@ public class ModelloJPoxContinuumStore
     public ContinuumProject getProject( String projectId )
         throws ContinuumStoreException
     {
+        return getProject( projectId, true );
+    }
+
+    public ContinuumProject getProject( String projectId, boolean detach )
+        throws ContinuumStoreException
+    {
         try
         {
             store.begin();
 
-            ContinuumProject project = store.getContinuumProject( projectId, true );
+            ContinuumProject project = store.getContinuumProject( projectId, detach );
 
             setProjectState( project );
 
@@ -489,6 +495,33 @@ public class ModelloJPoxContinuumStore
         catch ( Exception e )
         {
             getLogger().error( "Error while rolling back tx.", e );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Notifiers
+    // ----------------------------------------------------------------------
+
+    public void removeNotifier( Object notifier )
+        throws ContinuumStoreException
+    {
+        try
+        {
+            store.begin();
+
+            PersistenceManager pm = store.getThreadState().getPersistenceManager();
+
+            notifier = pm.attachCopy( notifier, false );
+
+            pm.deletePersistent( notifier );
+
+            store.commit();
+        }
+        catch ( Exception e )
+        {
+            rollback( store );
+
+            throw new ContinuumStoreException( "Error while removing a notifier.", e );
         }
     }
 }

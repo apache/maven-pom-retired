@@ -27,6 +27,7 @@
     <action>addEntity</action>
     <view>Summary.vm</view>
     <view-on-failure>Add.vm</view-on-failure>
+    <fid-on-failure>shellProject</fid-on-failure>
     <expression>addShellProject(#entity)</expression>
   </add>
 

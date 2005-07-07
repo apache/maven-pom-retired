@@ -23,6 +23,7 @@
     <action>addEntity</action>
     <view>Summary.vm</view>
     <view-on-failure>Add.vm</view-on-failure>
+    <fid-on-failure>antProject</fid-on-failure>    
     <expression>addAntProject(#entity)</expression>
   </add>
 

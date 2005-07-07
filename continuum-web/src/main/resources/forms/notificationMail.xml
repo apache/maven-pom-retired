@@ -8,7 +8,7 @@
       <immutable>true</immutable>
     </element>
     <element>
-      <id>mailAddress</id>
+      <id>address</id>
       <validators>
         <validator>
           <id>required</id>
@@ -25,6 +25,7 @@
     <action>callMethod</action>
     <view>Summary.vm</view>
     <view-on-failure>Add.vm</view-on-failure>
+    <fid-on-failure>notificationMail</fid-on-failure>
     <expression>addNotifier(#id,#notifierType,#parameters)</expression>
   </add>
 

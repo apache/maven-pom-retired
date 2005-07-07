@@ -57,6 +57,9 @@ public interface ContinuumCore
     void buildProject( String projectId, boolean force )
         throws ContinuumException;
 
+    void removeNotifier( Object oid )
+        throws ContinuumException;
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------

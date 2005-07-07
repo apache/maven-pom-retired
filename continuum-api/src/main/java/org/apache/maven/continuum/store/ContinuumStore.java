@@ -86,4 +86,11 @@ public interface ContinuumStore
 
     List getChangedFilesForBuild( String buildId )
         throws ContinuumStoreException;
+
+    // ----------------------------------------------------------------------
+    // Notifiers
+    // ----------------------------------------------------------------------
+
+    void removeNotifier( Object oid )
+        throws ContinuumStoreException;
 }
