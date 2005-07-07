@@ -35,6 +35,15 @@ public class CheckWorkingDirectoryAction
 
         File workingDirectory = new File( project.getWorkingDirectory() );
 
-        context.put( KEY_WORKING_DIRECTORY_EXISTS, Boolean.valueOf( workingDirectory.exists() ) );
+        if ( !workingDirectory.exists() )
+        {
+            context.put( KEY_WORKING_DIRECTORY_EXISTS, Boolean.FALSE );
+
+            return;
+        }
+
+        File[] files = workingDirectory.listFiles();
+
+        context.put( KEY_WORKING_DIRECTORY_EXISTS, Boolean.valueOf( files.length > 0 ) );
     }
 }
