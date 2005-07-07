@@ -60,3 +60,7 @@ continuum$ sh build.sh
 +--+
 
  A complete copy of the output of the build will be in <<<build.log>>>.
+
+      [Note:] For Windows, you need to check out the sources at the root of your disk
+              because continuum build use long path name and Windows doesn't accept
+              path length greater than 250 characters.
