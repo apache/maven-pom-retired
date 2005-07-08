@@ -86,9 +86,9 @@ public class CheckoutProjectContinuumAction
                     errorMessage = "";
                     errorMessage += "Provider message: "  + StringUtils.clean( result.getProviderMessage() ) + System.getProperty( "line.separator" );
                     errorMessage += "Command output: " + System.getProperty( "line.separator" );
-                    errorMessage += "-------------------------------------------------------------------------------";
+                    errorMessage += "-------------------------------------------------------------------------------" + System.getProperty( "line.separator" );
                     errorMessage += StringUtils.clean( result.getCommandOutput() );
-                    errorMessage += "-------------------------------------------------------------------------------";
+                    errorMessage += "-------------------------------------------------------------------------------" + System.getProperty( "line.separator" );
                 }
                 else
                 {
