@@ -233,7 +233,7 @@ public class DefaultContinuumCore
         }
         catch ( ContinuumStoreException ex )
         {
-            throw logAndCreateException( "Exception while getting all projects.", ex );
+            throw logAndCreateException( "Exception while getting project '" + projectId + "'.", ex );
         }
     }
 
@@ -246,7 +246,7 @@ public class DefaultContinuumCore
         }
         catch ( ContinuumStoreException ex )
         {
-            throw logAndCreateException( "Exception while getting all projects.", ex );
+            throw logAndCreateException( "Exception while getting projects.", ex );
         }
     }
 
