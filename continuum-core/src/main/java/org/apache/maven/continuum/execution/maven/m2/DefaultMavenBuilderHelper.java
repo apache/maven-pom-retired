@@ -16,15 +16,6 @@ package org.apache.maven.continuum.execution.maven.m2;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
@@ -40,10 +31,16 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.settings.MavenSettingsBuilder;
 import org.apache.maven.settings.Settings;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -133,6 +130,8 @@ public class DefaultMavenBuilderHelper
 
         if ( mavenProject.getDevelopers() != null )
         {
+            List developers = new ArrayList();
+
             for ( Iterator i = mavenProject.getDevelopers().iterator(); i.hasNext(); )
             {
                 Developer d = (Developer) i.next();
@@ -145,8 +144,10 @@ public class DefaultMavenBuilderHelper
 
                 cd.setEmail( d.getEmail() );
 
-                continuumProject.addDeveloper( cd );
+                developers.add( cd );
             }
+
+            continuumProject.setDevelopers( developers );
         }
 
         // ----------------------------------------------------------------------
