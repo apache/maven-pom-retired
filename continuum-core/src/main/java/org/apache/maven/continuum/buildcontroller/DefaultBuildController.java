@@ -87,6 +87,12 @@ public class DefaultBuildController
         }
 
         // ----------------------------------------------------------------------
+        // TODO: Centralize the error handling from the SCM related actions.
+        // ContinuumScmResult should return a ContinuumScmResult from all
+        // methods, even in a case of failure.
+        // ----------------------------------------------------------------------
+
+        // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
@@ -128,27 +134,7 @@ public class DefaultBuildController
                     // Check to see if there was a error while checking out the project
                     // ----------------------------------------------------------------------
 
-                    if ( StringUtils.isEmpty( checkoutErrorMessage ) && StringUtils.isEmpty( checkoutErrorException ) )
-                    {
-                        // TODO: remove once CONTINUUM-193 is resolved
-                        UpdateScmResult updateScmResult = new UpdateScmResult();
-
-                        updateScmResult.setCommandOutput( checkOutScmResult.getCommandOutput() );
-
-                        updateScmResult.setProviderMessage( checkOutScmResult.getProviderMessage() );
-
-                        updateScmResult.setSuccess( false );
-
-                        for ( Iterator it = checkOutScmResult.getCheckedOutFiles().iterator(); it.hasNext(); )
-                        {
-                            ScmFile scmFile = (ScmFile) it.next();
-
-                            updateScmResult.getUpdatedFiles().add( scmFile );
-                        }
-
-                        actionContext.put( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT, updateScmResult );
-                    }
-                    else
+                    if ( !StringUtils.isEmpty( checkoutErrorMessage ) || !StringUtils.isEmpty( checkoutErrorException ) )
                     {
                         ContinuumBuild build = makeBuildResult( scmResult, startTime, forced );
 
@@ -172,6 +158,24 @@ public class DefaultBuildController
 
                         return;
                      }
+
+                    // TODO: remove once CONTINUUM-193 is resolved
+                    UpdateScmResult updateScmResult = new UpdateScmResult();
+
+                    updateScmResult.setCommandOutput( checkOutScmResult.getCommandOutput() );
+
+                    updateScmResult.setProviderMessage( checkOutScmResult.getProviderMessage() );
+
+                    updateScmResult.setSuccess( false );
+
+                    for ( Iterator it = checkOutScmResult.getCheckedOutFiles().iterator(); it.hasNext(); )
+                    {
+                        ScmFile scmFile = (ScmFile) it.next();
+
+                        updateScmResult.getUpdatedFiles().add( scmFile );
+                    }
+
+                    actionContext.put( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT, updateScmResult );
                 }
 
                 scmResult = (UpdateScmResult) actionContext.get( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT );
@@ -188,7 +192,35 @@ public class DefaultBuildController
 
                 ContinuumBuild build = makeBuildResult( scmResult, startTime, forced );
 
-                build.setError( ContinuumUtils.throwableToString( e ) );
+                String error;
+
+                // This can happen if the "update project from scm" action fails
+                if ( e instanceof ContinuumScmException )
+                {
+                    ContinuumScmException ex = (ContinuumScmException) e;
+
+                    ScmResult result = ex.getResult();
+
+                    error = "";
+
+                    if ( result != null )
+                    {
+                        error += "Provider message: " + StringUtils.clean( result.getProviderMessage() ) + System.getProperty( "line.separator" );
+                        error += "Command output: " + System.getProperty( "line.separator" );
+                        error += "-------------------------------------------------------------------------------";
+                        error += StringUtils.clean( result.getCommandOutput() ) + System.getProperty( "line.separator" );
+                        error += "-------------------------------------------------------------------------------";
+                    }
+
+                    error += "Exception:" + System.getProperty( "line.separator" );
+                    error += ContinuumUtils.throwableToString( e );
+                }
+                else
+                {
+                    error = ContinuumUtils.throwableToString( e );
+                }
+
+                build.setError( error );
 
                 buildId = storeBuild( project, build );
 

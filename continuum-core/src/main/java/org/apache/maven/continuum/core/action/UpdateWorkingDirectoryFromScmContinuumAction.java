@@ -33,23 +33,15 @@ public class UpdateWorkingDirectoryFromScmContinuumAction
     {
         ContinuumProject project = getProject( context );
 
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        getNotifier().checkoutStarted( project );
-
         UpdateScmResult updateScmResult = null;
 
         try
         {
+            getNotifier().checkoutStarted( project );
+
             updateScmResult = getScm().updateProject( project );
 
             context.put( KEY_UPDATE_SCM_RESULT, updateScmResult );
-        }
-        catch( Throwable e )
-        {
-            CheckoutProjectContinuumAction.handleThrowable( e, context );
         }
         finally
         {
