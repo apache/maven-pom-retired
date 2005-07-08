@@ -19,6 +19,7 @@ package org.apache.maven.continuum.project;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.jdo.JDODetachedFieldAccessException;
 import javax.jdo.PersistenceManager;
@@ -201,6 +202,80 @@ public class ContinuumJPoxStoreTest
         assertNotNull( n.getConfiguration() );
 
         assertEquals( "foo", n.getConfiguration().get( "bar" ) );
+    }
+
+    // ----------------------------------------------------------------------
+    // Developers
+    // ----------------------------------------------------------------------
+
+    public void testDevelopersInProject()
+        throws Exception
+    {
+        ContinuumProject p = makeProject( store );
+
+        List devs = new ArrayList();
+
+        ContinuumDeveloper dev = new ContinuumDeveloper();
+
+        dev.setEmail( "foo@bar.com" );
+
+        dev.setName( "Jason" );
+
+        devs.add( dev );
+
+        p.setDevelopers( devs );
+
+        store.storeContinuumProject( p );
+
+        // ----------------------------------------------------------------------
+        // Lookup our stored developer
+        // ----------------------------------------------------------------------
+
+        p = store.getContinuumProject( p.getId(), true );
+
+        List retrievedDevs = p.getDevelopers();
+
+        assertEquals( 1, retrievedDevs.size() );
+
+        ContinuumDeveloper retrievedDev = (ContinuumDeveloper) retrievedDevs.get( 0 );
+
+        assertEquals( "foo@bar.com", retrievedDev.getEmail() );
+
+        assertEquals( "Jason", retrievedDev.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now create a new list and replace the developers
+        // ----------------------------------------------------------------------
+
+        devs = new ArrayList();
+
+        dev = new ContinuumDeveloper();
+
+        dev.setEmail( "boo@bar.com" );
+
+        dev.setName( "Trygve" );
+
+        devs.add( dev );
+
+        p.setDevelopers( devs );
+
+        store.storeContinuumProject( p );
+
+        // ----------------------------------------------------------------------
+        // Now lets see that we only have one developer and it's the right one
+        // ----------------------------------------------------------------------
+
+        p = store.getContinuumProject( p.getId(), true );
+
+        retrievedDevs = p.getDevelopers();
+
+        assertEquals( 1, retrievedDevs.size() );
+
+        retrievedDev = (ContinuumDeveloper) retrievedDevs.get( 0 );
+
+        assertEquals( "boo@bar.com", retrievedDev.getEmail() );
+
+        assertEquals( "Trygve", retrievedDev.getName() );
     }
 
     public void testCascadingDelete()
