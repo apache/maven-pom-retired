@@ -10,11 +10,7 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
       </tr>
       <tr class="a">
         <th>End Time</th>
-        #if ( $build.endTime == 0 )
-        <td>Not completed</td>
-        #else
         <td>$date.format('medium',$build.endTime)</td>
-        #end
       </tr>
       <tr class="a">
         <th>Build forced</th>
