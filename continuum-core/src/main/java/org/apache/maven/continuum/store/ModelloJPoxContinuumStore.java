@@ -322,11 +322,11 @@ public class ModelloJPoxContinuumStore
 
             project.setLastBuildId( build.getId() );
 
+            project.setBuildNumber( project.getBuildNumber() + 1 );
+
             store.commit();
 
             build = store.getContinuumBuildByJdoId( id, true );
-
-            System.out.println( "build.getId() = " + build.getId() );
 
             return build.getId();
         }

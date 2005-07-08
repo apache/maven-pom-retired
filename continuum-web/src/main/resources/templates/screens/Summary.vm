@@ -16,13 +16,14 @@ $page.setTitle( "Continuum" )
 <div class="app">
   <div id="h3">
     <h3>Continuum Projects</h3>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <table border="1" cellspacing="2" cellpadding="3" width="100%" id="projectSummaryTable">
 
       <!-- i18n -->
       <tr>
         <th>Status</th>
         <th>Project Name</th>
         <th>Version</th>
+        <th>Build</th>
         <th colspan="7"></th>
       </tr>
 
@@ -41,6 +42,7 @@ $page.setTitle( "Continuum" )
         <td>$state.generate( $item )</td>
         <td>$item.name</td>
         <td>$item.version</td>
+        <td>$item.buildNumber</td>
         <td><a href="$link.setPage('View.vm').addPathInfo('fid', "${item.executorId}Project").addPathInfo('id', $item.id)">View</a></td>
 
         ## Operations
@@ -53,14 +55,14 @@ $page.setTitle( "Continuum" )
         <td>Delete</td>
         #end
 
-        #if ( $item.state != 1 )
+        #if ( $item.lastBuildId )
         #set ( $build = $continuum.getLatestBuildForProject($item.id) )
         <td><a href="$link.setPage('ProjectBuild.vm').addPathInfo('view', "ProjectBuild").addPathInfo('id', $item.id).addPathInfo('buildId', $build.id)">Last Result</a></td>
         #else
         <td>Last Result</td>
         #end
 
-        #if ( $item.state != 1 )
+        #if ( $item.lastBuildId )
         <td><a href="$link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id)">All Results</a></td>
         #else
         <td>All Results</td>
