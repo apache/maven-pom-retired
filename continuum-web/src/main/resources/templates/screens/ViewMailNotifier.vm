@@ -12,7 +12,7 @@ $page.setTitle( "Continuum - IRC Notifier" )
       </table>
     </div>
     <div class="functnbar3">
-      <a href="$link.setPage('ProjectNotifiers.vm').addPathInfo('view','ProjectNotifiers').addPathInfo('id',$data.parameters.getString(" id"))">Back to Notifiers</a>
+      <a href="$link.setPage('ProjectNotifiers.vm').addPathInfo('view','ProjectNotifiers').addPathInfo('id',$data.parameters.getString("id"))">Back to Notifiers</a>
     </div>
   </div>
 </div>
