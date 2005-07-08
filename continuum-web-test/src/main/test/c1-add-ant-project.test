@@ -19,5 +19,6 @@ check_tablecell | (1,0) = New
 check_tablecell | (1,1) = Ant Test Project
 check_tablecell | (1,2) = 1.0
 click_link | Delete
+check_text | Are you sure you want to delete this project?
 select_form | 0
 submit_form | deleteEntry
