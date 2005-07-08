@@ -89,9 +89,11 @@ public class DefaultMavenBuilderHelper
 
         if ( StringUtils.isEmpty( continuumProject.getCommandLineArguments() ) )
         {
-            continuumProject.setCommandLineArguments( "-N -B" );
+            // ----------------------------------------------------------------------
+            // Run in non-interactive mode and non-recursive mode
+            // ----------------------------------------------------------------------
 
-//            continuumProject.setCommandLineArguments( "-N -B -Djline.terminal=jline.UnsupportedTerminal" );
+            continuumProject.setCommandLineArguments( "-N -B" );
         }
 
         if ( StringUtils.isEmpty( continuumProject.getGoals() ) )
@@ -268,6 +270,11 @@ public class DefaultMavenBuilderHelper
 
     private ArtifactRepository getRepository()
     {
+        // ----------------------------------------------------------------------
+        // Set our configured location as the default but try to use the defaults
+        // as returned by the MavenSettings component.
+        // ----------------------------------------------------------------------
+
         String localRepository = this.localRepository;
 
         try
