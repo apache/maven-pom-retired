@@ -1,0 +1,6 @@
+get_html | http://localhost:8080/continuum/servlet/continuum
+check_title | Continuum
+check_text | Continuum Projects
+check_text | Status
+check_text | Project Name
+check_text | Version
