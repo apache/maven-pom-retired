@@ -53,9 +53,66 @@ Configuring Continuum
 
 * Jetty Configuration
 
- Jetty is configured in a special way as it's a service, not a component. The
- only thing that should be changed in the Jetty configuration is the port and
- that is done by changing the <<<port>>> tag in the <<<services>>> section.
+ Jetty is configured in a special way as it's a service, not a component. You
+ can configure a set of listeners for the ports that Jetty should listen on.
+
+ There are two types of listeners:
+
+ * <<<http-listener>>>: This is a normal HTTP listener and must have
+   <<<<port>>>> and optionaly <<<<host>>>> configured. The host is name or IP
+   of the interface the Jetty instance will listen on. If not configured Jetty
+   will listen on all interfaces.
+
+ * <<<proxy-http-listener>>>: This is a special HTTP listener used when having
+   another web server as a front end to Continuum. It can be configured like
+   the normal HTTP listener by using <<<<port>>>> and <<<<host>>>> but has also
+   two other arguments:
+
+   * <<<proxy-host>>>: Set this to the host name of the public web server.
+
+   * <<<proxy-port>>>: Set this to the port number of the public web server.
+
+** Example Jetty Configuration
+
+ This is a example configuration on how to configure Jetty with one normal HTTP
+ listener and one proxy HTTP listener. With configuration Jetty will listen on
+ two ports, 8080 and 8090. Continuum can be used from either
+ http://localhost:8080 or http://www.company.com/continuum.
+
++----+
+<service>
+  <id>jetty</id>
+  <configuration>
+    <webapps>
+      <webapp>
+        <file>${plexus.home}/lib/continuum-web-1.0-alpha-3-SNAPSHOT.jar</file>
+        <context>/continuum</context>
+        <extraction-path>${plexus.home}/webapp</extraction-path>
+        <listeners>
+          <http-listener>
+            <port>8080</port>
+          </http-listener>
+          <proxy-http-listener>
+            <port>8090</port>
+            <proxy-host>www.company.com</proxy-host>
+            <proxy-port>80</proxy-port>
+          </proxy-http-listener>
+        </listeners>
+      </webapp>
+    </webapps>
+  </configuration>
+</service>
++----+
+
+** Example Apache Configuration
+ 
+ This is a example configuration on how to configure Apache to work as a front
+ end to Continuum. Make sure mod_proxy is installed and loaded.
+
++----+
+ProxyPass /continuum http://localhost:8080/continuum/
+ProxyPassReverse /confluence http://localhost:8080/continuum/
++----+
 
 * Socket Listeners
 
