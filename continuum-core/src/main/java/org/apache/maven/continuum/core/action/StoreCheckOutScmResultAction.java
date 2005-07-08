@@ -40,11 +40,11 @@ public class StoreCheckOutScmResultAction
             //
             // ----------------------------------------------------------------------
 
-            CheckOutScmResult checkOutScmResult = (CheckOutScmResult) context.get( KEY_CHECKOUT_SCM_RESULT );
+            CheckOutScmResult checkOutScmResult = AbstractContinuumAction.getCheckoutResult( context, null );
 
-            String checkoutErrorMessage = (String) context.get( KEY_CHECKOUT_ERROR_MESSAGE );
+            String checkoutErrorMessage = AbstractContinuumAction.getCheckoutErrorMessage( context, null );
 
-            String checkoutErrorException = (String) context.get( KEY_CHECKOUT_ERROR_EXCEPTION );
+            String checkoutErrorException = AbstractContinuumAction.getCheckoutErrorException( context, null );
 
             // ----------------------------------------------------------------------
             //

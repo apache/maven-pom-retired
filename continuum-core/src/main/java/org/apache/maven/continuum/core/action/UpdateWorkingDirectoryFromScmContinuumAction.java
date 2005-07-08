@@ -47,6 +47,10 @@ public class UpdateWorkingDirectoryFromScmContinuumAction
 
             context.put( KEY_UPDATE_SCM_RESULT, updateScmResult );
         }
+        catch( Throwable e )
+        {
+            CheckoutProjectContinuumAction.handleThrowable( e, context );
+        }
         finally
         {
             getNotifier().checkoutComplete( project, updateScmResult );

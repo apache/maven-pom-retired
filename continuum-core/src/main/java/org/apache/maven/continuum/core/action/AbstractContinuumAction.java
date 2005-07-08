@@ -181,19 +181,19 @@ public abstract class AbstractContinuumAction
         return new File( getString( context, KEY_WORKING_DIRECTORY ) );
     }
 
-    public static CheckOutScmResult getCheckoutResult( Map context )
+    public static CheckOutScmResult getCheckoutResult( Map context, Object defaultValue )
     {
-        return (CheckOutScmResult) getObject( context, KEY_CHECKOUT_SCM_RESULT );
+        return (CheckOutScmResult) getObject( context, KEY_CHECKOUT_SCM_RESULT, defaultValue );
     }
 
-    public static String getCheckoutErrorMessage( Map context )
+    public static String getCheckoutErrorMessage( Map context, String defaultValue )
     {
-        return getString( context, KEY_CHECKOUT_ERROR_MESSAGE );
+        return getString( context, KEY_CHECKOUT_ERROR_MESSAGE, defaultValue );
     }
 
-    public static String getCheckoutErrorException( Map context )
+    public static String getCheckoutErrorException( Map context, String defaultValue )
     {
-        return getString( context, KEY_CHECKOUT_ERROR_EXCEPTION );
+        return getString( context, KEY_CHECKOUT_ERROR_EXCEPTION, defaultValue );
     }
 
     public static UpdateScmResult getUpdateScmResult( Map context )
@@ -212,7 +212,12 @@ public abstract class AbstractContinuumAction
 
     protected static String getString( Map context, String key )
     {
-        return (String) context.get( key );
+        return (String) getObject( context, key );
+    }
+
+    protected static String getString( Map context, String key, String defaultValue )
+    {
+        return (String) getObject( context, key, defaultValue );
     }
 
     public static boolean getBoolean( Map context, String key )
@@ -226,14 +231,6 @@ public abstract class AbstractContinuumAction
 
         if ( value == null )
         {
-//            System.err.println( "context" );
-//            for ( Iterator it = context.keySet().iterator(); it.hasNext(); )
-//            {
-//                String s = (String) it.next();
-//
-//                System.err.println( s );
-//            }
-
             throw new RuntimeException( "Missing value for key '" + key + "'." );
         }
 

@@ -29,6 +29,8 @@ import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.scm.ContinuumScmException;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
@@ -116,11 +118,11 @@ public class DefaultBuildController
 
                     actionManager.lookup( "checkout-project" ).execute( actionContext );
 
-                    CheckOutScmResult checkOutScmResult = AbstractContinuumAction.getCheckoutResult( actionContext );
+                    CheckOutScmResult checkOutScmResult = AbstractContinuumAction.getCheckoutResult( actionContext, null );
 
-                    String checkoutErrorMessage = AbstractContinuumAction.getCheckoutErrorMessage( actionContext );
+                    String checkoutErrorMessage = AbstractContinuumAction.getCheckoutErrorMessage( actionContext, null );
 
-                    String checkoutErrorException = AbstractContinuumAction.getCheckoutErrorException( actionContext );
+                    String checkoutErrorException = AbstractContinuumAction.getCheckoutErrorException( actionContext, null );
 
                     // ----------------------------------------------------------------------
                     // Check to see if there was a error while checking out the project
@@ -135,7 +137,7 @@ public class DefaultBuildController
 
                         updateScmResult.setProviderMessage( checkOutScmResult.getProviderMessage() );
 
-                        updateScmResult.setSuccess( checkOutScmResult.isSuccess() );
+                        updateScmResult.setSuccess( false );
 
                         for ( Iterator it = checkOutScmResult.getCheckedOutFiles().iterator(); it.hasNext(); )
                         {
@@ -154,11 +156,13 @@ public class DefaultBuildController
 
                         if ( !StringUtils.isEmpty( checkoutErrorMessage ) )
                         {
-                            error = checkoutErrorMessage + System.getProperty( "line.separator" );
+                            error = "Error message:" + System.getProperty( "line.separator" );
+                            error = checkoutErrorException;
                         }
 
                         if ( !StringUtils.isEmpty( checkoutErrorException ) )
                         {
+                            error += "Exception:" + System.getProperty( "line.separator" );
                             error += checkoutErrorException;
                         }
 

@@ -22,9 +22,11 @@ import java.util.Map;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScmException;
-import org.apache.maven.continuum.store.AbstractContinuumStore;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
+
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -40,21 +42,29 @@ public class CheckoutProjectContinuumAction
 
         File workingDirectory = getWorkingDirectory( context );
 
-        CheckOutScmResult result = null;
-
-        String errorMessage = null;
-
-        Throwable exception = null;
-
         // ----------------------------------------------------------------------
         // Check out the project
         // ----------------------------------------------------------------------
 
         try
         {
-            result = getScm().checkOut( project, workingDirectory );
+            CheckOutScmResult result = getScm().checkOut( project, workingDirectory );
+
+            context.put( KEY_CHECKOUT_SCM_RESULT, result );
         }
-        catch ( ContinuumScmException e )
+        catch ( Throwable e )
+        {
+            handleThrowable( e, context );
+        }
+    }
+
+    public static void handleThrowable( Throwable e, Map context )
+    {
+        String errorMessage;
+
+        Throwable exception;
+
+        if ( e instanceof ContinuumScmException )
         {
             // TODO: Dissect the scm exception to be able to give better feedback
             Throwable cause = e.getCause();
@@ -62,22 +72,38 @@ public class CheckoutProjectContinuumAction
             if ( cause instanceof NoSuchScmProviderException )
             {
                 errorMessage = cause.getMessage();
+
+                exception = null;
             }
             else
             {
+                ContinuumScmException ex = (ContinuumScmException) e;
+
+                ScmResult result = ex.getResult();
+
+                if ( result != null )
+                {
+                    errorMessage = "";
+                    errorMessage += "Provider message: "  + StringUtils.clean( result.getProviderMessage() ) + System.getProperty( "line.separator" );
+                    errorMessage += "Command output: " + System.getProperty( "line.separator" );
+                    errorMessage += "-------------------------------------------------------------------------------";
+                    errorMessage += StringUtils.clean( result.getCommandOutput() );
+                    errorMessage += "-------------------------------------------------------------------------------";
+                }
+                else
+                {
+                    errorMessage = "";
+                }
+
                 exception = e;
             }
         }
-        catch ( Throwable e )
+        else
         {
+            errorMessage = "Unknown exception, type: " + e.getClass().getName();
+
             exception = e;
         }
-
-        // ----------------------------------------------------------------------
-        // Store the result in the context
-        // ----------------------------------------------------------------------
-
-        context.put( KEY_CHECKOUT_SCM_RESULT, result );
 
         context.put( KEY_CHECKOUT_ERROR_MESSAGE, errorMessage );
 
