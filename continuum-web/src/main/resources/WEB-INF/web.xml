@@ -10,8 +10,23 @@
     <servlet-class>org.codehaus.plexus.summit.Summit</servlet-class>
     <load-on-startup>5</load-on-startup>
   </servlet>
+  <servlet>
+    <servlet-name>XFireServlet</servlet-name>
+    <display-name>XFire Servlet</display-name>
+    <servlet-class>
+        org.codehaus.xfire.plexus.PlexusXFireServlet
+    </servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>continuum</servlet-name>
     <url-pattern>/continuum/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>XFireServlet</servlet-name>
+    <url-pattern>/servlet/XFireServlet/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>XFireServlet</servlet-name>
+    <url-pattern>/services/*</url-pattern>
   </servlet-mapping>
 </web-app>
