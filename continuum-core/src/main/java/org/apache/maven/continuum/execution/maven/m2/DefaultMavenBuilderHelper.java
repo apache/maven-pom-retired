@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
@@ -250,6 +252,11 @@ public class DefaultMavenBuilderHelper
             }
 
             notifier.setType( projectNotifier.getType() );
+
+            if ( projectNotifier.getConfiguration() == null )
+            {
+                throw new MavenBuilderHelperException( "Notifier configuration cannot be null." );
+            }
 
             notifier.setConfiguration( projectNotifier.getConfiguration() );
 
