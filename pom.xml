@@ -90,6 +90,11 @@
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-xfire</artifactId>
+        <version>1.0-alpha-3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-xmlrpc</artifactId>
         <version>1.0-alpha-3-SNAPSHOT</version>
       </dependency>
@@ -171,6 +176,7 @@
     <module>continuum-plexus-application</module>
     -->
     <module>continuum-web</module>
+    <module>continuum-xfire</module>
     <module>continuum-xmlrpc</module>
   </modules>
 </project>

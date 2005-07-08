@@ -13,6 +13,7 @@ continuum-notifiers/continuum-notifier-irc/pom.xml,\
 continuum-notifiers/continuum-notifier-jabber/pom.xml,\
 continuum-notifiers/continuum-notifier-msn/pom.xml,\
 continuum-web/pom.xml,\
+continuum-xfire/pom.xml,\
 continuum-xmlrpc/pom.xml
 
 (
