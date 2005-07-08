@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class CruiseControlTest
     extends TestCase

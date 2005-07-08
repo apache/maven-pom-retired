@@ -18,7 +18,7 @@ package org.apache.maven.continuum;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumException.java,v 1.1.1.1 2005/03/29 20:41:58 trygvis Exp $
+ * @version $Id$
  */
 public class ContinuumException
     extends Exception

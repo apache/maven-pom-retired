@@ -18,7 +18,7 @@ package org.apache.maven.continuum.execution.manager;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: BuilderNotFoundException.java,v 1.1.1.1 2005/03/29 20:42:00 trygvis Exp $
+ * @version $Id$
  */
 public class BuildExecutorNotFoundException
     extends Exception

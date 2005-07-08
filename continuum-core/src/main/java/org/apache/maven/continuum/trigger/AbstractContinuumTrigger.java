@@ -22,7 +22,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: AbstractContinuumTrigger.java,v 1.1.1.1 2005/03/29 20:42:03 trygvis Exp $
+ * @version $Id$
  */
 public class AbstractContinuumTrigger
     extends AbstractLogEnabled

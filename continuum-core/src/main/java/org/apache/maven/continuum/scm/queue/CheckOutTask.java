@@ -22,7 +22,7 @@ import org.codehaus.plexus.taskqueue.Task;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class CheckOutTask
     implements Task

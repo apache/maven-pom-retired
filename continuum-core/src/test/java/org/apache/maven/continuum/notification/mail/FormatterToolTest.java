@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: FormatterToolTest.java,v 1.4 2005/04/05 06:09:39 jvanzyl Exp $
+ * @version $Id$
  */
 public class FormatterToolTest
     extends TestCase

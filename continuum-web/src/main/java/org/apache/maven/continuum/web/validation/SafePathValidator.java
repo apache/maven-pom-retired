@@ -11,7 +11,7 @@ import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ScmUrlValidator.java 170819 2005-05-18 20:34:26Z trygvis $
+ * @version $Id$
  */
 public class SafePathValidator
     extends AbstractValidator

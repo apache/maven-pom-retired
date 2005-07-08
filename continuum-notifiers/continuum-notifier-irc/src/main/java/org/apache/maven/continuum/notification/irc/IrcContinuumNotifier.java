@@ -35,7 +35,7 @@ import java.util.Set;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
- * @version $Id: $
+ * @version $Id$
  */
 public class IrcContinuumNotifier
     extends AbstractNotifier

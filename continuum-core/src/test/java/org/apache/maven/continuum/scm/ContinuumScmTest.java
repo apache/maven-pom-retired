@@ -20,7 +20,7 @@ import org.codehaus.plexus.PlexusTestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumScmTest.java,v 1.1.1.1 2005/03/29 20:42:04 trygvis Exp $
+ * @version $Id$
  */
 public class ContinuumScmTest
     extends PlexusTestCase

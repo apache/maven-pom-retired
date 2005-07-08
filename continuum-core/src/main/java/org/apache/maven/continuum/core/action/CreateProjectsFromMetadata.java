@@ -13,7 +13,7 @@ import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: BuildProjectsFromMetadataAction.java 179783 2005-06-03 13:04:54Z jvanzyl $
+ * @version $Id$
  */
 public class CreateProjectsFromMetadata
     extends AbstractContinuumAction

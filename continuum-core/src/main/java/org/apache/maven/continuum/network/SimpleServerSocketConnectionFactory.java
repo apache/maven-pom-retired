@@ -27,7 +27,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: SimpleServerSocketConnectionFactory.java,v 1.1.1.1 2005/03/29 20:42:01 trygvis Exp $
+ * @version $Id$
  */
 public class SimpleServerSocketConnectionFactory
     extends AbstractLogEnabled

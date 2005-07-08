@@ -18,7 +18,7 @@ package org.apache.maven.continuum.execution;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class ContinuumBuildExecutorException
     extends Exception

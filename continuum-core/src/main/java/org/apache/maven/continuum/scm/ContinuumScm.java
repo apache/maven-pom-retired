@@ -22,7 +22,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumScm.java,v 1.2 2005/03/31 00:01:44 trygvis Exp $
+ * @version $Id$
  */
 public interface ContinuumScm
 {

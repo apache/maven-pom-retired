@@ -18,7 +18,7 @@ package org.apache.maven.continuum.buildcontroller;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: BuildController.java,v 1.1.1.1 2005/03/29 20:41:59 trygvis Exp $
+ * @version $Id$
  */
 public interface BuildController
 {

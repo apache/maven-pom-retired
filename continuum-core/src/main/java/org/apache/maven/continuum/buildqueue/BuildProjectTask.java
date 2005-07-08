@@ -20,7 +20,7 @@ import org.codehaus.plexus.taskqueue.Task;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: BuildProjectTask.java,v 1.1.1.1 2005/03/29 20:42:01 trygvis Exp $
+ * @version $Id$
  */
 public class BuildProjectTask
     implements Task

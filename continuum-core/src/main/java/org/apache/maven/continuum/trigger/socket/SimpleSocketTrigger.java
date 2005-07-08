@@ -36,7 +36,7 @@ import org.codehaus.plexus.util.IOUtil;
  * all the projects.
  *
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: SimpleSocketTrigger.java,v 1.1.1.1 2005/03/29 20:42:03 trygvis Exp $
+ * @version $Id$
  */
 public class SimpleSocketTrigger
     extends AbstractContinuumTrigger

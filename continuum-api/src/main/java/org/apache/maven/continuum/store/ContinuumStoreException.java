@@ -18,7 +18,7 @@ package org.apache.maven.continuum.store;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ContinuumStoreException.java,v 1.1.1.1 2005/03/29 20:42:02 trygvis Exp $
+ * @version $Id$
  */
 public class ContinuumStoreException extends Exception
 {
