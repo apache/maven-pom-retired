@@ -1,0 +1,88 @@
+ ------
+ SOAP API
+ ------
+ Dan Diephouse
+ ------
+ Fri Jul 8 2005
+
+Getting Started
+
+ Continuum has a SOAP API which makes it easy to add, remove, view and manipulate 
+ builds from within your applications. Continuum includes a client to access this
+ API. Alternatively, you may generate a client from favorite SOAP toolkit
+ (such as the toolkits for PERL or .NET) using the WSDL found at 
+ {{http://localhost:8080/continuum/services/Continuum?wsdl}}. If you are using a
+ client other than the one mentioned below, the code should be roughly the same.
+
+ The API provides the following operations:
+ * addProject
+ * getProject
+ * remoteProject
+ * updateProject
+ * checkoutProject
+ * removeProject
+ * getLatestBuild
+ * getCheckOutScmResult
+
+Using the Bundled Java Client
+
+* Creating a Client
++--+
+import org.apache.maven.continuum.xfire.ContinuumWebService;
+import org.apache.maven.continuum.xfire.ContinuumClientFactory;
+import org.apache.maven.continuum.xfire.Project;
+import org.apache.maven.continuum.xfire.Build;
+import org.apache.maven.continuum.project.ContinuumProjectState;
+
+...
+
+ContinuumWebService continuum = 
+    ContinuumClientFactory.createClient("http://localhost:8080/continuum/services/Continuum");
++--+
+
+* Adding A Project
+
++--+
+Project project = new Project();
+project.setType("maven-two");
+project.setScmUrl("scm:svn....");
+
+continuum.addProject(project);
++--+
+
+ The project type tells Continuum what type of project to expect. Valid values are
+ "ant", "shell", "maven-one", and "maven-two".
+ 
+* Getting the latest build
+
++--+
+Build build = continuum.getLatestBuild(project.getId());
+
+if (build.getState() == ContinuumProjectState.OK)
+    doSomething();
+else if (build.getState() == ContinuumProjectState.FAILED)
+    punishDevelopers();
++--+
+
+Notes for other Toolkits
+
+* Project State
+ In one of the above code snippets, you see that we can check the build state.
+ The build state can be one of several values:
+ 
+*---*------------------------*
+| 1 | New Build              |
+*---*------------------------*
+| 2 | Successful Build       |
+*---*------------------------*
+| 3 | Failed Build           |
+*---*------------------------*
+| 4 | Error building         |
+*---*------------------------*
+| 6 | Build in process       |
+*---*------------------------*
+| 7 | Checking out from SCM  |
+*---*------------------------*
+| 8 | Updating from SCM      |
+*---*------------------------*
+
