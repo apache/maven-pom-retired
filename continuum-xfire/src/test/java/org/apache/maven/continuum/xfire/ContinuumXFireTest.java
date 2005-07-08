@@ -91,7 +91,7 @@ public class ContinuumXFireTest
 
         Document doc = getWSDLDocument("Continuum");
         
-        printNode(doc);
+        // printNode(doc);
         
         addNamespace("wsdl", WSDLWriter.WSDL11_NS);
         addNamespace("wsdlsoap", WSDLWriter.WSDL11_SOAP_NS);
