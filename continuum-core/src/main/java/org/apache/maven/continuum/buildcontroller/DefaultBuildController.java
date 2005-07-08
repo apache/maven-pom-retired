@@ -207,9 +207,9 @@ public class DefaultBuildController
                     {
                         error += "Provider message: " + StringUtils.clean( result.getProviderMessage() ) + System.getProperty( "line.separator" );
                         error += "Command output: " + System.getProperty( "line.separator" );
-                        error += "-------------------------------------------------------------------------------";
+                        error += "-------------------------------------------------------------------------------" + System.getProperty( "line.separator" );
                         error += StringUtils.clean( result.getCommandOutput() ) + System.getProperty( "line.separator" );
-                        error += "-------------------------------------------------------------------------------";
+                        error += "-------------------------------------------------------------------------------" + System.getProperty( "line.separator" );
                     }
 
                     error += "Exception:" + System.getProperty( "line.separator" );
