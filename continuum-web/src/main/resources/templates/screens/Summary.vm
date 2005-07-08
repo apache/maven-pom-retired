@@ -21,7 +21,7 @@ $page.setTitle( "Continuum" )
       <!-- i18n -->
       <tr>
         <th>Status</th>
-        <th>Project Name</th>
+        <th>Name</th>
         <th>Version</th>
         <th>Build</th>
         <th colspan="7"></th>
