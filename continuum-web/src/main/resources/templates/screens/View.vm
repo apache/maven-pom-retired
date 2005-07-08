@@ -25,6 +25,16 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
             <input type="submit" name="checkout-project" value="Checkout"/>
             </form>
           </td>
+
+          #if ( $item.lastBuildId )
+          #set ( $build = $continuum.getLatestBuildForProject($item.id) )
+          <td><a href="$link.setPage('ProjectBuild.vm').addPathInfo('view', "ProjectBuild").addPathInfo('id', $item.id).addPathInfo('buildId', $build.id)">Last Result</a></td>
+          #end
+
+          #if ( $item.lastBuildId )
+          <td><a href="$link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id)">All Results</a></td>
+          #end
+
         </tr>
       </table>
     </div>
