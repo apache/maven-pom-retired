@@ -225,11 +225,6 @@
     </component>
 
     <component>
-      <role>org.apache.maven.settings.MavenSettingsBuilder</role>
-      <implementation>org.apache.maven.settings.DefaultMavenSettingsBuilder</implementation>
-    </component>
-
-    <component>
       <role>org.apache.maven.continuum.execution.ContinuumBuildExecutor</role>
       <role-hint>maven-1</role-hint>
       <implementation>org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor</implementation>
