@@ -208,6 +208,44 @@ public class ContinuumJPoxStoreTest
     // Developers
     // ----------------------------------------------------------------------
 
+    public void testCollectionManipulation()
+        throws Exception
+    {
+        ContinuumProject p = makeProject( store );
+
+        p = store.getContinuumProject( p.getId(), true );
+
+        List devs = p.getDevelopers();
+        ContinuumDeveloper dev = new ContinuumDeveloper();
+        dev.setEmail( "boo@bar.com" );
+        dev.setName( "Trygve" );
+        devs.add( dev );
+
+        store.storeContinuumProject( p );
+
+        p = store.getContinuumProject( p.getId(), true );
+        devs = p.getDevelopers();
+        assertEquals( 1, devs.size() );
+        dev = new ContinuumDeveloper();
+        dev.setEmail( "foo@bar.com" );
+        dev.setName( "Jason" );
+        devs.add( dev );
+
+        store.storeContinuumProject( p );
+
+        p = store.getContinuumProject( p.getId(), true );
+        devs = p.getDevelopers();
+        assertEquals( 2, devs.size() );
+        devs.remove( 0 );
+        devs.remove( 0 );
+        assertEquals( 0, devs.size() );
+        store.storeContinuumProject( p );
+
+        p = store.getContinuumProject( p.getId(), true );
+        devs = p.getDevelopers();
+        assertEquals( 0, devs.size() );
+    }
+
     public void testDevelopersInProject()
         throws Exception
     {
