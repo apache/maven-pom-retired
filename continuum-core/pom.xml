@@ -29,8 +29,8 @@
      |-->
     <dependency>
       <groupId>plexus</groupId>
-      <artifactId>plexus-jdo</artifactId>
-      <version>1.0-alpha-3-SNAPSHOT</version>
+      <artifactId>plexus-jdo2</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
