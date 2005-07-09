@@ -15,13 +15,21 @@ Getting Started
  client other than the one mentioned below, the code should be roughly the same.
 
  The API provides the following operations:
+ 
  * addProject
+ 
  * getProject
+ 
  * remoteProject
+ 
  * updateProject
+ 
  * checkoutProject
+ 
  * removeProject
+ 
  * getLatestBuild
+ 
  * getCheckOutScmResult
 
 Using the Bundled Java Client
