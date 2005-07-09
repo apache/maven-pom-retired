@@ -37,10 +37,10 @@ public class AlarmClockTrigger
     extends AbstractContinuumTrigger
     implements Initializable, Startable
 {
-    /** @configuration */
+    /** @plexus.configuration */
     private int interval;
 
-    /** @configuration */
+    /** @plexus.configuration */
     private int delay;
 
     private Timer timer;

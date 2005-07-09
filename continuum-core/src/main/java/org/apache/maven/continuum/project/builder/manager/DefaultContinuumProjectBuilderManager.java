@@ -30,7 +30,7 @@ public class DefaultContinuumProjectBuilderManager
     extends AbstractLogEnabled
     implements ContinuumProjectBuilderManager
 {
-    /** @requirement */
+    /** @plexus.requirement */
     private Map projectBuilders;
 
     // ----------------------------------------------------------------------

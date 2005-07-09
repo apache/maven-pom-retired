@@ -28,7 +28,7 @@ public class AbstractContinuumTrigger
     extends AbstractLogEnabled
     implements ContinuumTrigger
 {
-    /** @requirement */
+    /** @plexus.requirement */
     private Continuum continuum;
 
     public Continuum getContinuum()

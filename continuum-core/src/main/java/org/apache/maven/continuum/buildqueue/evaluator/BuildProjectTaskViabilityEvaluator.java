@@ -36,7 +36,7 @@ public class BuildProjectTaskViabilityEvaluator
     extends AbstractLogEnabled
     implements TaskViabilityEvaluator
 {
-    /** @configuration */
+    /** @plexus.configuration */
     private long requiredBuildInterval;
 
     // ----------------------------------------------------------------------
