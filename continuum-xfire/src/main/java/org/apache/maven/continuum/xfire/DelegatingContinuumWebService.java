@@ -191,6 +191,8 @@ public class DelegatingContinuumWebService
         {
             ContinuumBuild build = continuum.getLatestBuildForProject(projectId);
             
+            if (build == null) return null;
+            
             return convertToRemote(build);
         }
         catch (ContinuumException e)

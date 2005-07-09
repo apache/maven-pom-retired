@@ -15,13 +15,12 @@ package org.apache.maven.continuum.xfire;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import java.util.List;
 
 public class Project
 {
     private String name;
     private String version;
-    private List developers;
+    // private List developers;
     // private List notifiers;
     private String scmUrl;
     private String url;
@@ -88,6 +87,7 @@ public class Project
     {
         this.name = name;
     }
+    /*
     public List getDevelopers()
     {
         return developers;
@@ -96,6 +96,7 @@ public class Project
     {
         this.developers = developers;
     }
+    */
     public String getScmUrl()
     {
         return scmUrl;

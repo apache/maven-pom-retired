@@ -69,7 +69,10 @@ public class ContinuumXFireTest
         CheckOutScmResult result = ws.getCheckOutScmResult(id);
 
         Collection builds = ws.getBuilds(id);
+        assertEquals(0, builds.size());
         
+        Build build = ws.getLatestBuild(id);
+
         ws.removeProject(id);
         
         try
