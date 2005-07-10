@@ -1,6 +1,5 @@
 
 <project>
-  <extend>../project.xml</extend>
   <pomVersion>3</pomVersion>
   <groupId>continuum</groupId>
   <artifactId>maven-1</artifactId>
