@@ -1,0 +1,42 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>continuum</groupId>
+  <artifactId>maven-2</artifactId>
+  <!--
+  <version>2.0-SNAPSHOT</version>
+  -->
+  <name>Maven 2 Test Project</name>
+  <ciManagement>
+    <notifiers>
+      <notifier>
+        <type>mail</type>
+        <configuration>
+          <address>jason@maven.org</address>
+        </configuration>
+      </notifier>
+      <notifier>
+        <type>irc</type>
+        <configuration>
+          <host>irc.codehaus.org</host>
+          <port>6667</port>
+          <channel>#maven</channel>
+        </configuration>
+      </notifier>      
+    </notifiers>
+  </ciManagement>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/m2</connection>
+  </scm>
+  <developers>
+    <developer>
+      <id>jvanzyl</id>
+      <name>Jason van Zyl</name>
+      <email>jason@zenplex.com</email>
+      <organization>Zenplex</organization>
+      <roles>
+        <role>Developer</role>
+        <role>Release Manager</role>
+      </roles>
+    </developer>
+  </developers>
+</project>
