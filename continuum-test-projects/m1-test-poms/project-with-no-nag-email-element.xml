@@ -8,9 +8,9 @@
   <repository>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/m1</connection>
   </repository>
-  <!--
   <build>
+    <!--
     <nagEmailAddress>jason@maven.org</nagEmailAddress>
+    -->
   </build>
-  -->
 </project>
