@@ -59,6 +59,19 @@ public class DefaultMavenOneMetadataHelper
         }
 
         // ----------------------------------------------------------------------
+        // We cannot deal with projects that use the <extend/> element because
+        // we don't have the whole source tree and we might be missing elements
+        // that are present in the parent.
+        // ----------------------------------------------------------------------
+
+        String extend = getValue( mavenProject, "extend", null );
+
+        if ( extend != null )
+        {
+            throw new MavenOneMetadataHelperException( "Cannot use a POM with an 'extend' element." );
+        }
+
+        // ----------------------------------------------------------------------
         // Populating the descriptor
         // ----------------------------------------------------------------------
 
@@ -67,7 +80,7 @@ public class DefaultMavenOneMetadataHelper
 
         if ( StringUtils.isEmpty( name ) )
         {
-            throw new MavenOneMetadataHelperException( "Missing <name> from the project descriptor." );
+            throw new MavenOneMetadataHelperException( "Missing 'name' element in POM." );
         }
 
         // Scm
@@ -83,7 +96,7 @@ public class DefaultMavenOneMetadataHelper
             }
             else
             {
-                throw new MavenOneMetadataHelperException( "The project descriptor is missing the SCM information." );
+                throw new MavenOneMetadataHelperException( "Missing 'scm' element in the POM." );
             }
         }
         else
@@ -113,7 +126,7 @@ public class DefaultMavenOneMetadataHelper
             }
             else
             {
-                throw new MavenOneMetadataHelperException( "Missing build section." );
+                throw new MavenOneMetadataHelperException( "Missing 'build' element in the POM." );
             }
         }
         else
@@ -149,7 +162,7 @@ public class DefaultMavenOneMetadataHelper
 
         if ( notifiers == null && notifier.getConfiguration().isEmpty() )
         {
-            throw new MavenOneMetadataHelperException( "Missing nag email address from the project descriptor." );
+            throw new MavenOneMetadataHelperException( "Missing 'nagEmailAddress' element in the 'build' element in the POM." );
         }
         else
         {
@@ -166,7 +179,7 @@ public class DefaultMavenOneMetadataHelper
 
         if ( StringUtils.isEmpty( version ) )
         {
-            throw new MavenOneMetadataHelperException( "Missing version from the project descriptor." );
+            throw new MavenOneMetadataHelperException( "Missing 'version' element in the POM." );
         }
 
         // Goals

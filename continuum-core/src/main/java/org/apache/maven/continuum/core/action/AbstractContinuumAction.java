@@ -32,6 +32,7 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
 import org.codehaus.plexus.action.Action;
+import org.codehaus.plexus.action.AbstractAction;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.util.StringUtils;
@@ -41,8 +42,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @version $Id$
  */
 public abstract class AbstractContinuumAction
-    extends AbstractLogEnabled
-    implements Action
+    extends AbstractAction
 {
     // ----------------------------------------------------------------------
     // Keys for the values that can be in the context

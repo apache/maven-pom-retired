@@ -73,7 +73,7 @@ public class MavenOneContinuumProjectBuilder
         }
         catch ( MavenOneMetadataHelperException e )
         {
-            result.addWarning( ContinuumUtils.throwableToString( e ) );
+            result.addWarning( e.getMessage() );
         }
 
         result.addProject( project, MavenOneBuildExecutor.ID );

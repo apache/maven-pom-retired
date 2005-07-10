@@ -357,7 +357,12 @@ public class DefaultContinuum
 
             actionManager.lookup( "create-projects-from-metadata" ).execute( context );
 
-            result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
+            result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );            
+
+            if ( result.getWarnings().size() > 0 )
+            {
+                return result;
+            }
 
             List projects = result.getProjects();
 

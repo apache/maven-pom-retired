@@ -87,9 +87,7 @@ public class MavenTwoContinuumProjectBuilder
         }
         catch ( MavenBuilderHelperException e )
         {
-            // TODO: Use the Error diagnoser from Maven 2 to get a better error message here.
-
-            result.addWarning( ContinuumUtils.throwableToString( e ) );
+            result.addWarning( e.getMessage() );
 
             return;
         }

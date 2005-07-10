@@ -171,7 +171,11 @@ public class DefaultMavenBuilderHelper
         }
         catch ( Exception e )
         {
-            throw new MavenBuilderHelperException( "Cannot build maven project from " + file, e );
+            String msg = "Cannot build maven project from " + file + ".";
+
+            getLogger().error( msg, e );
+
+            throw new MavenBuilderHelperException( msg, e );
         }
 
         // ----------------------------------------------------------------------
@@ -183,12 +187,12 @@ public class DefaultMavenBuilderHelper
 
         if ( ciManagement == null )
         {
-            throw new MavenBuilderHelperException( "Missing CiManagement from the project descriptor." );
+            throw new MavenBuilderHelperException( "Missing 'ciManagement' element in the POM." );
         }
 
         if ( getNotifiers( project ).isEmpty() )
         {
-            throw new MavenBuilderHelperException( "Missing notifiers from the continuous integration info." );
+            throw new MavenBuilderHelperException( "Missing 'notifiers' element in the 'ciManagement' element in the POM." );
         }
 
         // SCM connection
@@ -196,20 +200,14 @@ public class DefaultMavenBuilderHelper
 
         if ( scm == null )
         {
-            throw new MavenBuilderHelperException( "Missing Scm from the project descriptor." );
+            throw new MavenBuilderHelperException( "Missing 'scm' element in the POM." );
         }
 
         String url = scm.getConnection();
 
         if ( StringUtils.isEmpty( url ) )
         {
-            throw new MavenBuilderHelperException( "Missing anonymous scm connection url." );
-        }
-
-        // Version
-        if ( StringUtils.isEmpty( project.getVersion() ) )
-        {
-            throw new MavenBuilderHelperException( "Missing version from the project descriptor." );
+            throw new MavenBuilderHelperException( "Missing 'connection' element in the 'scm' element in the POM." );
         }
 
         return project;
