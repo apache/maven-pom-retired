@@ -1,0 +1,17 @@
+
+<project>
+  <extend>../project.xml</extend>
+  <pomVersion>3</pomVersion>
+  <groupId>continuum</groupId>
+  <artifactId>maven-1</artifactId>
+  <currentVersion>1.0</currentVersion>
+  <name>Maven 1 Project</name>
+  <!--
+  <repository>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/m1</connection>
+  </repository>
+  -->
+  <build>
+    <nagEmailAddress>jason@maven.org</nagEmailAddress>
+  </build>
+</project>
