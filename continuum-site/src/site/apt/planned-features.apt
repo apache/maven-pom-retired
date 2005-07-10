@@ -17,7 +17,9 @@ Planned Features for Continuum
 
  * {{{http://jira.codehaus.org/browse/CONTINUUM-5}Jabber}}
 
- * {{{http://jira.codehaus.org/browse/CONTINUUM-33}IRC}}
+ * {{{http://jira.codehaus.org/browse/CONTINUUM-215}MSN}}
+
+ * {{{http://jira.codehaus.org/browse/CONTINUUM-187}Yahoo}}
 
 * SCM Support
 
@@ -39,7 +41,7 @@ Planned Features for Continuum
  definitely needs better build scheduling. There are two major ways to do this:
 
  [Push] External processes signal Continuum to perform a build.
-        Continuum supports this through a simple socket listener 
+        Continuum supports this through a simple socket listener
         and an XML-RPC interface.
 
  [Pull] Continuum polls for changes and schedules a build when something
@@ -48,6 +50,12 @@ Planned Features for Continuum
         setup.
 
 Completed Features
+
+* Notification
+
+ Support for notification through these mechanisms is completed:
+
+ * {{{http://jira.codehaus.org/browse/CONTINUUM-33}IRC}}
 
 * Asynchronous checkouts
 

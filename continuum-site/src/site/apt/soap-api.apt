@@ -7,29 +7,29 @@
 
 Getting Started
 
- Continuum has a SOAP API which makes it easy to add, remove, view and manipulate 
+ Continuum has a SOAP API which makes it easy to add, remove, view and manipulate
  builds from within your applications. Continuum includes a client to access this
  API. Alternatively, you may generate a client from favorite SOAP toolkit
- (such as the toolkits for PERL or .NET) using the WSDL found at 
+ (such as the toolkits for PERL or .NET) using the WSDL found at
  {{http://localhost:8080/continuum/services/Continuum?wsdl}}. If you are using a
  client other than the one mentioned below, the code should be roughly the same.
 
  The API provides the following operations:
- 
+
  * addProject
- 
+
  * getProject
- 
+
  * remoteProject
- 
+
  * updateProject
- 
+
  * checkoutProject
- 
+
  * removeProject
- 
+
  * getLatestBuild
- 
+
  * getCheckOutScmResult
 
 Using the Bundled Java Client
@@ -44,7 +44,7 @@ import org.apache.maven.continuum.project.ContinuumProjectState;
 
 ...
 
-ContinuumWebService continuum = 
+ContinuumWebService continuum =
     ContinuumClientFactory.createClient("http://localhost:8080/continuum/services/Continuum");
 +--+
 
@@ -60,7 +60,7 @@ continuum.addProject(project);
 
  The project type tells Continuum what type of project to expect. Valid values are
  "ant", "shell", "maven-one", and "maven-two".
- 
+
 * Getting the latest build
 
 +--+
@@ -77,7 +77,7 @@ Notes for other Toolkits
 * Project State
  In one of the above code snippets, you see that we can check the build state.
  The build state can be one of several values:
- 
+
 *---*------------------------*
 | 1 | New Build              |
 *---*------------------------*
@@ -93,4 +93,3 @@ Notes for other Toolkits
 *---*------------------------*
 | 8 | Updating from SCM      |
 *---*------------------------*
-

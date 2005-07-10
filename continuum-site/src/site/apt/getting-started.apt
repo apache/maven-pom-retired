@@ -12,7 +12,7 @@ Installing Continuum
  Windows.
 
  When Continuum is running you can access it with your browser on
- {{http://localhost:8080/continuum}} or by using the XML-RPC interface on port 8000.
+ {{http://localhost:8080/continuum}} or by using the XMLRPC interface on port 8000.
 
 Adding Projects to Continuum
 
@@ -29,8 +29,65 @@ Adding Projects to Continuum
  If you are using ViewCVS you can add your project with a url like this:
 
 +--+
-http://cvs.plexus.codehaus.org/*checkout*/plexus/pom.xml
+http://svn.codehaus.org/*checkout*/trunk/pom.xml?root=plexus
 +--+
+
+ <NOTE:> When adding projects from ViewCVS (and possibly other equivalent
+ systems) make sure you remove the part of the url specifying the revision of
+ the POM to get. If you don't do this you might not get the latest POM old data.
+
+** Configuring Maven 2 Projects
+
+ When adding Maven 2 projects Continuum will read the data in the POM and store
+ it. It will store:
+
+ * The SCM information
+
+ * The developers
+
+ * The notifiers
+
+ []
+
+ The notifiers is configured inside the <<<<ciManagement>>>> section of the POM
+ like this:
+
++--+
+<ciManagement>
+  <system>continuum</system>
+  <notifiers>
+    <notifier>
+      ...
+    </notifier>
+  </notifiers>
+</ciManagement>
++--+
+
+ Example mail notifier configuration:
+
++--+
+<notifier>
+  <type>mail</type>
+  <address>dev@maven.apache.org</address>
+<notifier>
++--+
+
+ Example IRC notifier configuration:
+
++--+
+<notifier>
+  <type>irc</type>
+  <configuration>
+    <host>irc.codehaus.org</host>
+    <port>6667</port>
+    <channel>#maven</channel>
+  </configuration>
+</notifier>   
++--+
+
+ <Note:> The IRC notifier will not join the channel so the channel can't have
+ mode +n. To make sure that the channel doesn't have mode +n set write this in a
+ IRC client: <<</mode -n>>>
 
 * Adding Maven 1 Projects
 
