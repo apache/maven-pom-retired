@@ -29,6 +29,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.codehaus.xfire.fault.XFireFault;
 
@@ -57,21 +58,13 @@ public class DelegatingContinuumWebService
         {
             if (projectInfo.getType().equals("maven-one"))
             {
-                MavenOneProject project = new MavenOneProject();
-                project.setGoals(projectInfo.getGoals());
-                
-                convertToLocal(projectInfo, project);
-
-                return continuum.addMavenOneProject(project);
+                throw new XFireFault("Use the 'addMavenOneProject' operation to add maven one projects.",
+                                     XFireFault.SENDER);
             }
             else if (projectInfo.getType().equals("maven-two"))
             {
-                MavenTwoProject project = new MavenTwoProject();
-                project.setGoals(projectInfo.getGoals());
-                
-                convertToLocal(projectInfo, project);
-                
-                return continuum.addMavenTwoProject(project);
+                throw new XFireFault("Use the 'addMavenTwoProject' operation to add maven one projects.",
+                                     XFireFault.SENDER);
             }
             else if (projectInfo.getType().equals("shell"))
             {
@@ -101,7 +94,9 @@ public class DelegatingContinuumWebService
         }
         catch (Throwable e)
         {
-            e.printStackTrace();
+            if (e instanceof XFireFault)
+                throw (XFireFault) e;
+            
             throw new XFireFault(e);
         }
     }
@@ -253,15 +248,12 @@ public class DelegatingContinuumWebService
     private Project createProjectInfo(ContinuumProject project)
         throws XFireFault
     {
-        Project projectInfo = new Project();
-        projectInfo.setId(project.getId());
-        
-        convertToProjectInfo(project, projectInfo);
+        Project projectInfo = convertToRemote(project);
         
         return projectInfo;
     }
     
-    private void convertToProjectInfo(ContinuumProject project, Project projectInfo)
+    private void convertToRemote(ContinuumProject project, Project projectInfo)
         throws XFireFault
     {
         if (project instanceof MavenOneProject)
@@ -361,5 +353,71 @@ public class DelegatingContinuumWebService
         {
             throw new XFireFault(e);
         }
+    }
+
+    public Collection addMavenTwoProject(String url)
+        throws XFireFault
+    {
+        try
+        {
+            ContinuumProjectBuildingResult result = continuum.addMavenTwoProject(url);
+            
+            if (result.getWarnings().size() > 0)
+            {
+                throw new XFireFault(result.getWarnings().toString(), XFireFault.SENDER);
+            }
+            
+            List projects = new ArrayList();
+            
+            for (Iterator itr = result.getProjects().iterator(); itr.hasNext();)
+            {
+                ContinuumProject project = (ContinuumProject) itr.next();
+
+                projects.add(convertToRemote(project));
+            }
+            return projects;
+        }
+        catch (ContinuumException e)
+        {
+            throw new XFireFault(e);
+        }
+    }
+
+    public Collection addMavenOneProject(String url)
+        throws XFireFault
+    {
+        try
+        {
+            ContinuumProjectBuildingResult result = continuum.addMavenOneProject(url);
+            
+            if (result.getWarnings().size() > 0)
+            {
+                throw new XFireFault(result.getWarnings().toString(), XFireFault.SENDER);
+            }
+            
+            List projects = new ArrayList();
+            
+            for (Iterator itr = result.getProjects().iterator(); itr.hasNext();)
+            {
+                ContinuumProject project = (ContinuumProject) itr.next();
+
+                projects.add(convertToRemote(project));
+            }
+            return projects;
+        }
+        catch (ContinuumException e)
+        {
+            throw new XFireFault(e);
+        }
+    }
+
+    private Project convertToRemote(ContinuumProject project)
+        throws XFireFault
+    {
+        Project remote = new Project();
+        remote.setId(project.getId());
+        
+        convertToRemote(project, remote);
+        return remote;
     }
 }

@@ -83,6 +83,12 @@ public class ContinuumXFireTest
         catch (XFireFault fault)
         {
         }
+        
+        String url = getTestFile( "../continuum-test-projects/m2/pom.xml" ).toURL().toExternalForm();
+        Collection projects = ws.addMavenTwoProject(url);
+        assertEquals(1, projects.size());
+        Project m2 = (Project) projects.iterator().next();
+        assertNotNull(m2.getId());
     }
     
     public void testWSDL()

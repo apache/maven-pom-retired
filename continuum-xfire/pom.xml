@@ -27,22 +27,22 @@
     <dependency>
       <groupId>org.codehaus.xfire</groupId>
       <artifactId>xfire-annotations</artifactId>
-      <version>1.0-20050708.185435-12</version>
+      <version>1.0-20050710.171837-13</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.xfire</groupId>
       <artifactId>xfire-core</artifactId>
-      <version>1.0-20050708.185435-12</version>
+      <version>1.0-20050710.171837-13</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.xfire</groupId>
       <artifactId>xfire-aegis</artifactId>
-      <version>1.0-20050708.185435-12</version>
+      <version>1.0-20050710.171837-13</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.xfire</groupId>
       <artifactId>xfire-plexus</artifactId>
-      <version>1.0-20050708.185435-12</version>
+      <version>1.0-20050710.171837-13</version>
       <exclusions>
         <exclusion>
           <groupId>org.codehaus.xfire</groupId>

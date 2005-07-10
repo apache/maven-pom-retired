@@ -22,7 +22,7 @@ import org.codehaus.xfire.fault.XFireFault;
 import org.codehaus.xfire.annotations.commons.*;
 
 /**
- * @@WebService(name = "Continuum", targetNamespace = "http://continuum.maven.apache.org")
+ * @@WebService(name = "Continuum", targetNamespace = "http://continuum.maven.apache.org/")
  */
 public interface ContinuumWebService
 {
@@ -41,6 +41,20 @@ public interface ContinuumWebService
      */ 
     void updateProject(Project projectInfo) throws XFireFault;
     
+    /**
+     * @@WebMethod()
+     * @@.project WebParam("MetadataUrl")
+     * @@.return WebResult("Projects")
+     */ 
+    Collection addMavenTwoProject(String scmUrl) throws XFireFault;
+    
+    /**
+     * @@WebMethod()
+     * @@.project WebParam("MetadataUrl")
+     * @@.return WebResult("Projects")
+     */ 
+    Collection addMavenOneProject(String scmUrl) throws XFireFault;
+
     /**
      * @@WebMethod()
      * @@.project WebParam("Project")
