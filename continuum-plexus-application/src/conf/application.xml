@@ -4,15 +4,6 @@
     <component>
       <role>org.apache.maven.continuum.Continuum</role>
     </component>
-    <!-- These components should be controlled by a application component -->
-    <component>
-      <role>org.apache.maven.continuum.network.ConnectionFactory</role>
-      <role-hint>simple-socket-trigger-server</role-hint>
-    </component>
-    <component>
-      <role>org.apache.maven.continuum.network.ConnectionFactory</role>
-      <role-hint>url-registrar-server</role-hint>
-    </component>
     <component>
       <role>org.apache.maven.continuum.trigger.ContinuumTrigger</role>
       <role-hint>alarm-clock</role-hint>
