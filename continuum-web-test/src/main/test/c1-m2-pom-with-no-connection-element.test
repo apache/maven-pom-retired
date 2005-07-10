@@ -1,0 +1,9 @@
+# 
+# Check the addition of an m2 project
+# 
+get_html | http://localhost:8080/continuum/servlet/continuum
+click_link | Add M2 Project
+select_form | 0
+set_textfield | m2PomUrl = http://svn.apache.org/viewcvs.cgi/*checkout*/maven/continuum/trunk/continuum-test-projects/m2-test-poms/pom-with-no-connection-element.xml
+submit_form | Submit
+check_text | Missing 'connection' element in the 'scm' element in the POM.
