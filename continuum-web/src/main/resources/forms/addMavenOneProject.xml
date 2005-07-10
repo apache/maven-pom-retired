@@ -30,7 +30,7 @@
   <!-- Add -->
   <add>
     <title-key>project.title.add</title-key>
-    <action>callMethod</action>
+    <action>addMavenOneProject</action>
     <view>Summary.vm</view>
     <view-on-failure>Add.vm</view-on-failure>
     <fid-on-failure>addMavenOneProject</fid-on-failure>    

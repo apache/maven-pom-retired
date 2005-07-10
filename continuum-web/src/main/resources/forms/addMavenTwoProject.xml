@@ -25,7 +25,7 @@
   <!-- Add -->
   <add>
     <title-key>project.title.add</title-key>
-    <action>callMethod</action>
+    <action>addMavenTwoProject</action>
     <view>Summary.vm</view>
     <view-on-failure>Add.vm</view-on-failure>
     <fid-on-failure>addMavenTwoProject</fid-on-failure>

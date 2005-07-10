@@ -20,6 +20,7 @@
         <initial-view>Summary.vm</initial-view>
         <default-view>Default.vm</default-view>
         <error-view>Error.vm</error-view>
+        <result-messages-view>ResultMessages.vm</result-messages-view>
       </configuration>
     </component>
 
@@ -302,6 +303,28 @@
       <role>org.codehaus.plexus.action.Action</role>
       <role-hint>login</role-hint>
       <implementation>org.apache.maven.continuum.web.action.Login</implementation>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>addMavenTwoProject</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.AddMavenTwoProject</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.formica.FormManager</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>addMavenOneProject</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.AddMavenOneProject</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.formica.FormManager</role>
+        </requirement>
+      </requirements>
     </component>
 
     <component>
