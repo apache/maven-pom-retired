@@ -82,7 +82,7 @@ if 1:
     maven2Id = getProjectId( c.addMavenTwoProject( "file:" + maven2Project + "/pom.xml" ) )
     waitForSuccessfulCheckOut( c, maven2Id );
     maven2 = c.getProject( maven2Id )
-    assertProject( maven2Id, "Maven 2 Project", email, "2.0-SNAPSHOT", "-N", "maven2", maven2 )
+    assertProject( maven2Id, "Maven 2 Project", email, "2.0-SNAPSHOT", "-N -B", "maven2", maven2 )
 
     progress( "Building Maven 2 project" )
     buildId = buildProject( c, maven2.id ).id
