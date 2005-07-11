@@ -43,17 +43,14 @@
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-notifier-irc</artifactId>
-      <version>1.0-alpha-3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-notifier-jabber</artifactId>
-      <version>1.0-alpha-3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-notifier-msn</artifactId>
-      <version>1.0-alpha-3-SNAPSHOT</version>
     </dependency>
 
     <!--
@@ -64,7 +61,7 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-appserver</artifactId>
-      <version>1.0-alpha-3-SNAPSHOT</version>
+      <version>1.0-alpha-3</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
@@ -80,7 +77,7 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-service-jetty</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-2</version>
       <type>plexus-service</type>
     </dependency>
     <dependency>
@@ -149,7 +146,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plexus-plugin</artifactId>
-        <version>1.1-alpha-3-SNAPSHOT</version>
+        <version>1.1-alpha-5</version>
         <configuration>
           <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
           <configurationsDirectory>src/conf</configurationsDirectory>

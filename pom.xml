@@ -98,6 +98,21 @@
         <artifactId>continuum-xmlrpc</artifactId>
         <version>1.0-alpha-3-SNAPSHOT</version>
       </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-irc</artifactId>
+      <version>1.0-alpha-3-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-jabber</artifactId>
+      <version>1.0-alpha-3-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-msn</artifactId>
+      <version>1.0-alpha-3-SNAPSHOT</version>
+    </dependency>
       <!--
        |
        | Plexus
@@ -116,12 +131,12 @@
       <dependency>
         <groupId>jpox</groupId>
         <artifactId>jpox</artifactId>
-        <version>1.1.0-beta-4-SNAPSHOT</version>
+        <version>1.1.0-beta-4-c1</version>
       </dependency>
       <dependency>
         <groupId>jpox</groupId>
         <artifactId>jpox-enhancer</artifactId>
-        <version>1.1.0-beta-4-SNAPSHOT</version>
+        <version>1.1.0-beta-4-c1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -135,7 +150,7 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
+      <version>1.0-alpha-5</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

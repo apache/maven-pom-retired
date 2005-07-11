@@ -96,7 +96,7 @@ public class DefaultMavenOneMetadataHelper
             }
             else
             {
-                throw new MavenOneMetadataHelperException( "Missing 'scm' element in the POM." );
+                throw new MavenOneMetadataHelperException( "Missing 'repository' element in the POM." );
             }
         }
         else
