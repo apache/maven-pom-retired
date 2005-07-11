@@ -51,6 +51,11 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.xfire</groupId>
+      <artifactId>yom</artifactId>
+      <version>1.0-20050711.140048-1</version>
+    </dependency>
+    <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-servlet</artifactId>
       <version>1.0-beta-2</version>
