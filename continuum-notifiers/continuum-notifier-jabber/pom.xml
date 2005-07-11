@@ -3,11 +3,11 @@
   <parent>
     <groupId>org.apache.maven.continuum</groupId>
     <artifactId>continuum-parent-notifiers</artifactId>
-    <version>1.0-alpha-3-SNAPSHOT</version>
+    <version>1.0-alpha-3</version>
   </parent>
   <artifactId>continuum-notifier-jabber</artifactId>
   <name>Continuum Jabber Notifier</name>
-  <version>1.0-alpha-3-SNAPSHOT</version>
+  <version>1.0-alpha-3</version>
   <dependencies>
     <dependency>
       <groupId>plexus</groupId>

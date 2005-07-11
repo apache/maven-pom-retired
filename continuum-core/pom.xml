@@ -7,7 +7,7 @@
   </parent>
   <artifactId>continuum-core</artifactId>
   <name>Continuum Core</name>
-  <version>1.0-alpha-3-SNAPSHOT</version>
+  <version>1.0-alpha-3</version>
   <dependencies>
     <!--
      |

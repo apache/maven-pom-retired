@@ -7,7 +7,7 @@
   </parent>
   <artifactId>continuum-plexus-application</artifactId>
   <name>Continuum Plexus Application</name>
-  <version>1.0-alpha-3-SNAPSHOT</version>
+  <version>1.0-alpha-3</version>
   <packaging>plexus-application</packaging>
   <dependencies>
     <dependency>
@@ -185,7 +185,7 @@
         <configuration>
           <descriptor>src/assembly/bin.xml</descriptor>
           <!-- TODO: isn't this the default? if not, can we use the ${pom.} expression? -->
-          <finalName>continuum-1.0-alpha-3-SNAPSHOT</finalName>
+          <finalName>continuum-1.0-alpha-3</finalName>
         </configuration>
         <executions>
           <execution>

@@ -8,12 +8,12 @@
   <artifactId>continuum-parent-notifiers</artifactId>
   <name>Continuum Notifiers</name>
   <packaging>pom</packaging>
-  <version>1.0-alpha-3-SNAPSHOT</version>
+  <version>1.0-alpha-3</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-api</artifactId>
-      <version>1.0-alpha-3-SNAPSHOT</version>
+      <version>1.0-alpha-3</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
