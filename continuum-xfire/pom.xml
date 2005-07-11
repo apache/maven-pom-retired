@@ -27,22 +27,22 @@
     <dependency>
       <groupId>org.codehaus.xfire</groupId>
       <artifactId>xfire-annotations</artifactId>
-      <version>1.0-20050711.175050-15</version>
+      <version>1.0-20050711.182522-17</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.xfire</groupId>
       <artifactId>xfire-core</artifactId>
-      <version>1.0-20050711.175050-15</version>
+      <version>1.0-20050711.182522-17</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.xfire</groupId>
       <artifactId>xfire-aegis</artifactId>
-      <version>1.0-20050711.175050-15</version>
+      <version>1.0-20050711.182522-17</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.xfire</groupId>
       <artifactId>xfire-plexus</artifactId>
-      <version>1.0-20050711.175050-15</version>
+      <version>1.0-20050711.182822-17</version>
       <exclusions>
         <exclusion>
           <groupId>org.codehaus.xfire</groupId>
@@ -53,7 +53,7 @@
     <dependency>
       <groupId>org.codehaus.xfire</groupId>
       <artifactId>yom</artifactId>
-      <version>1.0-20050711.140048-1</version>
+      <version>1.0-20050711.181737-2</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
