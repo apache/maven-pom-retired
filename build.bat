@@ -29,7 +29,7 @@ goto Win9xApp
 @REM Reaching here means variables are defined and arguments have been captured
 :endInit
 
-SET INCLUDES=continuum-api/pom.xml,continuum-cc/pom.xml,continuum-core/pom.xml,continuum-model/pom.xml,continuum-notifiers/pom.xml,continuum-notifiers/continuum-notifier-irc/pom.xml,continuum-notifiers/continuum-notifier-jabber/pom.xml,continuum-notifiers/continuum-notifier-msn/pom.xml,continuum-web/pom.xml,continuum-xmlrpc/pom.xml
+SET INCLUDES=continuum-api/pom.xml,continuum-cc/pom.xml,continuum-core/pom.xml,continuum-model/pom.xml,continuum-notifiers/pom.xml,continuum-notifiers/continuum-notifier-irc/pom.xml,continuum-notifiers/continuum-notifier-jabber/pom.xml,continuum-notifiers/continuum-notifier-msn/pom.xml,continuum-web/pom.xml,continuum-xfire/pom.xml,continuum-xmlrpc/pom.xml
 
 call m2 -N install %MAVEN_CMD_LINE_ARGS%
 cd continuum-notifiers
