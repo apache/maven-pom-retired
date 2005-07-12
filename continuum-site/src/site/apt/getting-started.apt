@@ -8,11 +8,11 @@
 Installing Continuum
 
  After you have downloaded and unpacked the bundle execute <<<bin/plexus.sh>>>
- if you are on a UNIX platform or <<<bin/plexus.bat>>> if you are using
+ if you are on a UNIX platform or <<<bin/plexus.bat ..\conf\plexus.xml>>> if you are using
  Windows.
 
  When Continuum is running you can access it with your browser on
- {{http://localhost:8080/continuum}} or by using the XMLRPC interface on port 8000.
+ {{http://localhost:8080/continuum/servlet/continuum}} or by using the XMLRPC interface on port 8000.
 
 Adding Projects to Continuum
 
@@ -105,8 +105,8 @@ http://svn.codehaus.org/*checkout*/trunk/pom.xml?root=plexus
 
 * Adding Ant Projects
 
- When adding Ant projects you have to specify the project's name, SCM URL, nag
- email address, version and the targets to execute.
+ When adding Ant projects you have to specify the project's name, SCM URL, 
+ version and the targets to execute.
 
  <NOTE:> The SCM URL is a Maven SCM URL. Here's an example of what an
  SCM URL looks like:
@@ -115,7 +115,7 @@ http://svn.codehaus.org/*checkout*/trunk/pom.xml?root=plexus
 * Adding Shell Projects
 
  When adding shell projects you have to specify the project's name, SCM URL,
- nag email address, version and the shell script to execute. The working
+ version and the shell script to execute. The working
  directory of the project will be prepended to the scripts path.
 
  <NOTE:> The SCM URL is a Maven SCM URL. Here's an example of what an

@@ -3,11 +3,11 @@
   <parent>
     <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0</version>
+    <version>1.0-beta-1-SNAPSHOT</version>
   </parent>
   <artifactId>continuum-api</artifactId>
   <name>Continuum API</name>
-  <version>1.0-alpha-3</version>
+  <version>1.0-beta-1-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>

@@ -3,9 +3,9 @@
   <parent>
     <groupId>org.apache.maven.continuum</groupId>
     <artifactId>continuum-parent</artifactId>
-    <version>1.0</version>
+    <version>1.0-beta-1-SNAPSHOT</version>
   </parent>
-  <version>1.0-alpha-3</version>
+  <version>1.0-beta-1-SNAPSHOT</version>
   <artifactId>continuum-xfire</artifactId>
   <name>Continuum XFire Interface</name>
   <dependencies>
