@@ -24,8 +24,7 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.utils.ContinuumUtils;
-import org.apache.maven.scm.manager.NoSuchScmProviderException;
-
+import org.codehaus.plexus.scm.NoSuchScmProviderException;
 import org.codehaus.plexus.util.StringUtils;
 
 /**

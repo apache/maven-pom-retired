@@ -22,11 +22,10 @@ import java.util.Iterator;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.ScmFileSet;
-import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.apache.maven.scm.repository.ScmRepositoryException;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.scm.ScmManager;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

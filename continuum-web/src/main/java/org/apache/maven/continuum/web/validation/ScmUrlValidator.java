@@ -18,10 +18,9 @@ package org.apache.maven.continuum.web.validation;
 
 import java.util.List;
 
-import org.apache.maven.scm.manager.ScmManager;
-
 import org.codehaus.plexus.formica.FormicaException;
 import org.codehaus.plexus.formica.validation.AbstractValidator;
+import org.codehaus.plexus.scm.ScmManager;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -30,7 +29,9 @@ import org.codehaus.plexus.formica.validation.AbstractValidator;
 public class ScmUrlValidator
     extends AbstractValidator
 {
-    /** @requirement */
+    /**
+     * @plexus.requirement
+     */
     private ScmManager scmManager;
 
     public boolean validate( String scmUrl )

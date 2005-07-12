@@ -110,7 +110,7 @@
       <implementation>org.apache.maven.continuum.scm.DefaultContinuumScm</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.scm.manager.ScmManager</role>
+          <role>org.codehaus.plexus.scm.ScmManager</role>
         </requirement>
       </requirements>
     </component>

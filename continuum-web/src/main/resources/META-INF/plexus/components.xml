@@ -375,7 +375,7 @@
       <implementation>org.apache.maven.continuum.web.validation.ScmUrlValidator</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.scm.manager.ScmManager</role>
+          <role>org.codehaus.plexus.scm.ScmManager</role>
         </requirement>
       </requirements>
     </component>
