@@ -157,22 +157,6 @@ public class DefaultBuildController
                         return;
                      }
 
-                    // TODO: remove once CONTINUUM-193 is resolved
-//                    UpdateScmResult updateScmResult = new UpdateScmResult();
-
-//                    updateScmResult.setCommandOutput( checkOutScmResult.getCommandOutput() );
-
-//                    updateScmResult.setProviderMessage( checkOutScmResult.getProviderMessage() );
-
-//                    updateScmResult.setSuccess( false );
-
-//                    for ( Iterator it = checkOutScmResult.getFiles().iterator(); it.hasNext(); )
-//                    {
-//                        ScmFile scmFile = (ScmFile) it.next();
-
-//                        updateScmResult.getFiles().add( scmFile );
-//                    }
-
                     actionContext.put( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT, checkOutScmResult );
                 }
 
