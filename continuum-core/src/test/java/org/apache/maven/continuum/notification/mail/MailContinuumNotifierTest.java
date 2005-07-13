@@ -28,7 +28,7 @@ import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 
 import org.codehaus.plexus.PlexusTestCase;
@@ -184,15 +184,15 @@ public class MailContinuumNotifierTest
 
         build.setExitCode( 10 );
 
-        UpdateScmResult updateScmResult = new UpdateScmResult();
+        ScmResult scmResult = new ScmResult();
 
         ScmFile file = new ScmFile();
 
         file.setPath( "/hey/yo/lets/go");
 
-        updateScmResult.getUpdatedFiles().add( file );
+        scmResult.getFiles().add( file );
 
-        build.setUpdateScmResult( updateScmResult );
+        build.setScmResult( scmResult );
 
         return build;
     }

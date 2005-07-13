@@ -17,20 +17,20 @@ package org.apache.maven.continuum.xfire;
  */
 import java.util.List;
 
-public class UpdateScmResult
+public class ScmResult
 {
-    private List updatedFiles;
+    private List files;
     private boolean success;
     private String providerMessage;
     private String commandOutput;
     
-    public List getUpdatedFiles()
+    public List getFiles()
     {
-        return updatedFiles;
+        return files;
     }
-    public void setUpdatedFiles(List updatedFiles)
+    public void setFiles(List files)
     {
-        this.updatedFiles = updatedFiles;
+        this.files = files;
     }
     public String getCommandOutput()
     {

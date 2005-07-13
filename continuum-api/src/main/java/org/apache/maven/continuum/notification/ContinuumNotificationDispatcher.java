@@ -18,7 +18,7 @@ package org.apache.maven.continuum.notification;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -50,7 +50,7 @@ public interface ContinuumNotificationDispatcher
 
     String CONTEXT_BUILD_RESULT = "result";
 
-    String CONTEXT_UPDATE_SCM_RESULT = "updateScmResult";
+    String CONTEXT_UPDATE_SCM_RESULT = "scmResult";
 
     // ----------------------------------------------------------------------
     //
@@ -60,7 +60,7 @@ public interface ContinuumNotificationDispatcher
 
     void checkoutStarted( ContinuumProject project );
 
-    void checkoutComplete( ContinuumProject project, UpdateScmResult scmResult );
+    void checkoutComplete( ContinuumProject project, ScmResult scmResult );
 
     void runningGoals( ContinuumProject project, ContinuumBuild build );
 

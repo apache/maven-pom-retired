@@ -66,7 +66,7 @@ public class ContinuumXFireTest
         assertEquals(project.getScmUrl(), p2.getScmUrl());
         assertEquals(project.getExecutable(), p2.getExecutable());
         
-        CheckOutScmResult result = ws.getCheckOutScmResult(id);
+        ScmResult result = ws.getScmResult(id);
 
         Collection builds = ws.getBuilds(id);
         assertEquals(0, builds.size());

@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.Map;
 
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.utils.ContinuumUtils;
@@ -47,7 +46,7 @@ public class CheckoutProjectContinuumAction
 
         try
         {
-            CheckOutScmResult result = getScm().checkOut( project, workingDirectory );
+            ScmResult result = getScm().checkOut( project, workingDirectory );
 
             context.put( KEY_CHECKOUT_SCM_RESULT, result );
         }

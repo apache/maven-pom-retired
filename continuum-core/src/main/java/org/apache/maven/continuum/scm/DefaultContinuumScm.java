@@ -22,6 +22,8 @@ import java.util.Iterator;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.ScmFileSet;
+import org.apache.maven.scm.command.checkout.CheckOutScmResult;
+import org.apache.maven.scm.command.update.UpdateScmResult;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.apache.maven.scm.repository.ScmRepositoryException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -42,7 +44,7 @@ public class DefaultContinuumScm
     // ContinuumScm implementation
     // ----------------------------------------------------------------------
 
-    public CheckOutScmResult checkOut( ContinuumProject project, File workingDirectory )
+    public ScmResult checkOut( ContinuumProject project, File workingDirectory )
         throws ContinuumScmException
     {
         try
@@ -53,7 +55,7 @@ public class DefaultContinuumScm
 
             ScmRepository repository = scmManager.makeScmRepository( project.getScmUrl() );
 
-            CheckOutScmResult result;
+            ScmResult result;
 
             synchronized ( this )
             {
@@ -69,7 +71,7 @@ public class DefaultContinuumScm
 
                 ScmFileSet fileSet = new ScmFileSet( workingDirectory );
 
-                result = convertCheckOutScmResult( scmManager.checkOut( repository, fileSet, tag ) );
+                result = convertScmResult( scmManager.checkOut( repository, fileSet, tag ) );
             }
 
             if ( !result.isSuccess() )
@@ -83,7 +85,7 @@ public class DefaultContinuumScm
                 throw new ContinuumScmException( "Error while checking out the project.", result );
             }
 
-            getLogger().info( "Checked out " + result.getCheckedOutFiles().size() + " files." );
+            getLogger().info( "Checked out " + result.getFiles().size() + " files." );
 
             return result;
         }
@@ -103,7 +105,7 @@ public class DefaultContinuumScm
      * @param project The project to check out.
      * @throws ContinuumScmException Thrown in case of a exception while checking out the sources.
      */
-    public CheckOutScmResult checkOutProject( ContinuumProject project )
+    public ScmResult checkOutProject( ContinuumProject project )
         throws ContinuumScmException
     {
         String workingDirectory = project.getWorkingDirectory();
@@ -116,7 +118,7 @@ public class DefaultContinuumScm
         return checkOut( project, new File( workingDirectory ) );
     }
 
-    public UpdateScmResult updateProject( ContinuumProject project )
+    public ScmResult updateProject( ContinuumProject project )
         throws ContinuumScmException
     {
         try
@@ -134,13 +136,13 @@ public class DefaultContinuumScm
 
             String tag = null;
 
-            UpdateScmResult result;
+            ScmResult result;
 
             ScmFileSet fileSet = new ScmFileSet( workingDirectory );
 
             synchronized ( this )
             {
-                result = convertUpdateScmResult( scmManager.update( repository, fileSet, tag ) );
+                result = convertScmResult( scmManager.update( repository, fileSet, tag ) );
             }
 
             if ( !result.isSuccess() )
@@ -154,7 +156,7 @@ public class DefaultContinuumScm
                 throw new ContinuumScmException( "Error while checking out the project.", result );
             }
 
-            getLogger().info( "Updated " + result.getUpdatedFiles().size() + " files." );
+            getLogger().info( "Updated " + result.getFiles().size() + " files." );
 
             return result;
         }
@@ -172,9 +174,9 @@ public class DefaultContinuumScm
     //
     // ----------------------------------------------------------------------
 
-    private CheckOutScmResult convertCheckOutScmResult( org.apache.maven.scm.command.checkout.CheckOutScmResult scmResult )
+    private ScmResult convertScmResult( CheckOutScmResult scmResult )
     {
-        CheckOutScmResult result = new CheckOutScmResult();
+        ScmResult result = new ScmResult();
 
         result.setSuccess( scmResult.isSuccess() );
 
@@ -192,16 +194,16 @@ public class DefaultContinuumScm
 
                 file.setPath( scmFile.getPath() );
 
-                result.addCheckedOutFile( file );
+                result.addFile( file );
             }
         }
 
         return result;
     }
 
-    private UpdateScmResult convertUpdateScmResult( org.apache.maven.scm.command.update.UpdateScmResult scmResult )
+    private ScmResult convertScmResult( UpdateScmResult scmResult )
     {
-        UpdateScmResult result = new UpdateScmResult();
+        ScmResult result = new ScmResult();
 
         result.setSuccess( scmResult.isSuccess() );
 
@@ -219,7 +221,7 @@ public class DefaultContinuumScm
 
                 file.setPath( scmFile.getPath() );
 
-                result.addUpdatedFile( file );
+                result.addFile( file );
             }
         }
 

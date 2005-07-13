@@ -25,9 +25,8 @@ import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
-import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
@@ -181,9 +180,9 @@ public abstract class AbstractContinuumAction
         return new File( getString( context, KEY_WORKING_DIRECTORY ) );
     }
 
-    public static CheckOutScmResult getCheckoutResult( Map context, Object defaultValue )
+    public static ScmResult getCheckoutResult( Map context, Object defaultValue )
     {
-        return (CheckOutScmResult) getObject( context, KEY_CHECKOUT_SCM_RESULT, defaultValue );
+        return (ScmResult) getObject( context, KEY_CHECKOUT_SCM_RESULT, defaultValue );
     }
 
     public static String getCheckoutErrorMessage( Map context, String defaultValue )
@@ -196,14 +195,14 @@ public abstract class AbstractContinuumAction
         return getString( context, KEY_CHECKOUT_ERROR_EXCEPTION, defaultValue );
     }
 
-    public static UpdateScmResult getUpdateScmResult( Map context )
+    public static ScmResult getUpdateScmResult( Map context )
     {
-        return (UpdateScmResult) getObject( context, KEY_UPDATE_SCM_RESULT );
+        return (ScmResult) getObject( context, KEY_UPDATE_SCM_RESULT );
     }
 
-    public static UpdateScmResult getUpdateScmResult(  Map context, UpdateScmResult defaultValue )
+    public static ScmResult getUpdateScmResult(  Map context, ScmResult defaultValue )
     {
-        return (UpdateScmResult) getObject( context, KEY_UPDATE_SCM_RESULT, defaultValue );
+        return (ScmResult) getObject( context, KEY_UPDATE_SCM_RESULT, defaultValue );
     }
 
     // ----------------------------------------------------------------------

@@ -14,7 +14,7 @@ public class Build
     private String standardError;
     private int exitCode;
     
-    private UpdateScmResult updateScmResult;
+    private ScmResult scmResult;
 
     public Date getEndTime()
     {
@@ -106,13 +106,13 @@ public class Build
         this.state = state;
     }
 
-    public UpdateScmResult getUpdateScmResult()
+    public ScmResult getScmResult()
     {
-        return updateScmResult;
+        return scmResult;
     }
 
-    public void setUpdateScmResult(UpdateScmResult updateScmResult)
+    public void setScmResult(ScmResult scmResult)
     {
-        this.updateScmResult = updateScmResult;
+        this.scmResult = scmResult;
     }
 }

@@ -35,9 +35,8 @@ import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
-import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 
 import org.codehaus.plexus.jdo.JdoFactory;
 
@@ -244,11 +243,11 @@ public class ModelloJPoxContinuumStoreTest
         //
         // ----------------------------------------------------------------------
 
-        CheckOutScmResult checkOutScmResult = new CheckOutScmResult();
+        ScmResult scmResult = new ScmResult();
 
-        checkOutScmResult.setSuccess( true );
+        scmResult.setSuccess( true );
 
-        setCheckoutDone( store, projectId, checkOutScmResult, null, null );
+        setCheckoutDone( store, projectId, scmResult, null, null );
 
         project = store.getProject( projectId );
 
@@ -401,13 +400,13 @@ public class ModelloJPoxContinuumStoreTest
 
         String buildId = createBuild( store, projectId, false );
 
-        UpdateScmResult scmResult = new UpdateScmResult();
+        ScmResult scmResult = new ScmResult();
 
         ScmFile file = new ScmFile();
 
         file.setPath( "foo" );
 
-        scmResult.addUpdatedFile( file );
+        scmResult.addFile( file );
 
         setBuildResult( store,
                         buildId,
@@ -510,23 +509,23 @@ public class ModelloJPoxContinuumStoreTest
 
         String buildId = createBuild( store, projectId, false );
 
-        UpdateScmResult updateScmResult = new UpdateScmResult();
+        ScmResult scmResult = new ScmResult();
 
-        updateScmResult.setCommandOutput( "commandOutput" );
+        scmResult.setCommandOutput( "commandOutput" );
 
-        updateScmResult.setProviderMessage( "providerMessage" );
+        scmResult.setProviderMessage( "providerMessage" );
 
-        updateScmResult.setSuccess( true );
+        scmResult.setSuccess( true );
 
         ScmFile scmFile = new ScmFile();
 
         scmFile.setPath( "/foo" );
 
-        updateScmResult.getUpdatedFiles().add( scmFile );
+        scmResult.getFiles().add( scmFile );
 
         setBuildComplete( store,
                           buildId,
-                          updateScmResult,
+                          scmResult,
                           makeContinuumBuildExecutionResult( true, "stdout", "stderr", 10 ) );
 
         // ----------------------------------------------------------------------
@@ -548,13 +547,13 @@ public class ModelloJPoxContinuumStoreTest
 
     private void setBuildComplete( ContinuumStore store,
                                    String buildId,
-                                   UpdateScmResult updateScmResult,
+                                   ScmResult scmResult,
                                    ContinuumBuildExecutionResult result )
         throws ContinuumStoreException
     {
         ContinuumBuild build = store.getBuild( buildId );
 
-        build.setUpdateScmResult( updateScmResult );
+        build.setScmResult( scmResult );
 
         build.setSuccess( result.isSuccess() );
 
@@ -711,7 +710,7 @@ public class ModelloJPoxContinuumStoreTest
 
         assertIsCommitted( store );
 
-        UpdateScmResult scmResult = new UpdateScmResult();
+        ScmResult scmResult = new ScmResult();
 
         setBuildResult( store,
                         buildId,
@@ -758,21 +757,21 @@ public class ModelloJPoxContinuumStoreTest
     {
         String projectId = store.addProject( project );
 
-        CheckOutScmResult checkOutScmResult = new CheckOutScmResult();
+        ScmResult scmResult = new ScmResult();
 
-        checkOutScmResult.setSuccess( true );
+        scmResult.setSuccess( true );
 
-        checkOutScmResult.setCommandOutput( "commandOutput" );
+        scmResult.setCommandOutput( "commandOutput" );
 
-        checkOutScmResult.setProviderMessage( "providerMessage" );
+        scmResult.setProviderMessage( "providerMessage" );
 
         ScmFile scmFile = new ScmFile();
 
         scmFile.setPath( "/foo" );
 
-        checkOutScmResult.addCheckedOutFile( scmFile );
+        scmResult.addFile( scmFile );
 
-        setCheckoutDone( store, projectId, checkOutScmResult, null, null );
+        setCheckoutDone( store, projectId, scmResult, null, null );
 
         project = store.getProject( projectId );
 
@@ -805,11 +804,11 @@ public class ModelloJPoxContinuumStoreTest
                                                                   commandLineArguments,
                                                                   workingDirectory ) );
 
-        CheckOutScmResult checkOutScmResult = new CheckOutScmResult();
+        ScmResult scmResult = new ScmResult();
 
-        checkOutScmResult.setSuccess( true );
+        scmResult.setSuccess( true );
 
-        setCheckoutDone( store, projectId, checkOutScmResult, null, null );
+        setCheckoutDone( store, projectId, scmResult, null, null );
 
         ContinuumProject project = store.getProject( projectId );
 
@@ -834,14 +833,14 @@ public class ModelloJPoxContinuumStoreTest
 
     private static void setCheckoutDone( ContinuumStore store,
                                   String projectId,
-                                  CheckOutScmResult checkOutScmResult,
+                                  ScmResult scmResult,
                                   String errorMessage,
                                   Throwable exception  )
         throws ContinuumStoreException
     {
         ContinuumProject project = store.getProject( projectId );
 
-        project.setCheckOutScmResult( checkOutScmResult );
+        project.setScmResult( scmResult );
 
         project.setCheckOutErrorMessage( errorMessage );
 
@@ -854,7 +853,7 @@ public class ModelloJPoxContinuumStoreTest
                                        String buildId,
                                        int state,
                                        ContinuumBuildExecutionResult result,
-                                       UpdateScmResult scmResult,
+                                       ScmResult scmResult,
                                        Throwable error )
         throws ContinuumStoreException
     {
@@ -866,7 +865,7 @@ public class ModelloJPoxContinuumStoreTest
 
         build.setError( ContinuumUtils.throwableToString( error ) );
 
-        build.setUpdateScmResult( scmResult );
+        build.setScmResult( scmResult );
 
         // ----------------------------------------------------------------------
         // Copy over the build result

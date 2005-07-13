@@ -144,13 +144,13 @@ public class DelegatingContinuumWebService
     }
 
 
-    public CheckOutScmResult getCheckOutScmResult(String projectId)
+    public ScmResult getScmResult(String projectId)
         throws XFireFault
     {
         try
         {
-            org.apache.maven.continuum.scm.CheckOutScmResult localCSR = 
-                continuum.getCheckOutScmResultForProject(projectId);
+            org.apache.maven.continuum.scm.ScmResult localCSR = 
+                continuum.getScmResultForProject(projectId);
             
             if (localCSR == null) return null;
             
@@ -160,24 +160,6 @@ public class DelegatingContinuumWebService
         {
             throw new XFireFault(e);
         }
-    }
-
-    private CheckOutScmResult convertToRemote(org.apache.maven.continuum.scm.CheckOutScmResult localUSR)
-    {
-        CheckOutScmResult result = new CheckOutScmResult();
-        result.setCommandOutput(localUSR.getCommandOutput());
-        result.setProviderMessage(localUSR.getProviderMessage());
-        result.setSuccess(localUSR.isSuccess());
-        
-        ArrayList files = new ArrayList();
-        for (Iterator itr = localUSR.getCheckedOutFiles().iterator(); itr.hasNext();)
-        {
-            ScmFile file = (ScmFile) itr.next();
-            files.add(file.getPath());
-        }
-        result.setCheckedOutFiles(files);
-        
-        return result;
     }
 
     public Build getLatestBuild(String projectId) throws XFireFault
@@ -209,24 +191,24 @@ public class DelegatingContinuumWebService
         remBuild.setStandardError(build.getStandardError());
         remBuild.setStandardOutput(build.getStandardOutput());
         remBuild.setState(build.getState());
-        remBuild.setUpdateScmResult(convertToRemote(build.getUpdateScmResult()));
+        remBuild.setScmResult(convertToRemote(build.getScmResult()));
         return remBuild;
     }
 
-    private UpdateScmResult convertToRemote(org.apache.maven.continuum.scm.UpdateScmResult localUSR)
+    private ScmResult convertToRemote(org.apache.maven.continuum.scm.ScmResult localUSR)
     {
-        UpdateScmResult result = new UpdateScmResult();
+        ScmResult result = new ScmResult();
         result.setCommandOutput(localUSR.getCommandOutput());
         result.setProviderMessage(localUSR.getProviderMessage());
         result.setSuccess(localUSR.isSuccess());
         
         ArrayList files = new ArrayList();
-        for (Iterator itr = localUSR.getUpdatedFiles().iterator(); itr.hasNext();)
+        for (Iterator itr = localUSR.getFiles().iterator(); itr.hasNext();)
         {
             ScmFile file = (ScmFile) itr.next();
             files.add(file.getPath());
         }
-        result.setUpdatedFiles(files);
+        result.setFiles(files);
         
         return result;
     }

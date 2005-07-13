@@ -28,7 +28,7 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -48,7 +48,7 @@ public class ExecuteBuilderContinuumAction
 
         boolean forced = isForced( context );
 
-        UpdateScmResult updateScmResult = getUpdateScmResult( context );
+        ScmResult scmResult = getUpdateScmResult( context );
 
         ContinuumBuildExecutor buildExecutor = getCore().getBuildExecutor( project.getExecutorId() );
 
@@ -56,7 +56,7 @@ public class ExecuteBuilderContinuumAction
         // This is really a precondition for this action to execute
         // ----------------------------------------------------------------------
 
-        if ( updateScmResult.getUpdatedFiles().size() == 0 &&
+        if ( scmResult.getFiles().size() == 0 &&
              !forced &&
              !isNew( project ) )
         {
@@ -77,7 +77,7 @@ public class ExecuteBuilderContinuumAction
 
         build.setForced( forced );
 
-        build.setUpdateScmResult( updateScmResult );
+        build.setScmResult( scmResult );
 
         String buildId = getStore().addBuild( project.getId(), build );
 

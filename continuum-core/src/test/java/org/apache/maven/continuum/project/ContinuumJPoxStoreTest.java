@@ -26,7 +26,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.JDOHelper;
 
-import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 
 import org.codehaus.plexus.PlexusTestCase;
@@ -357,7 +357,7 @@ public class ContinuumJPoxStoreTest
 
         assertEquals( 0, store.getContinuumBuildCollection( true, "", "" ).size() );
 
-        assertEquals( 0, store.getCheckOutScmResultCollection( true, "", "" ).size() );
+        assertEquals( 0, store.getScmResultCollection( true, "", "" ).size() );
     }
 
     public void testFetchGroups()
@@ -377,7 +377,7 @@ public class ContinuumJPoxStoreTest
 
         assertEquals( "check out error exception", p.getCheckOutErrorException() );
 
-        p.getCheckOutScmResult();
+        p.getScmResult();
 
         p.getBuilds();
 
@@ -405,7 +405,7 @@ public class ContinuumJPoxStoreTest
 
         try
         {
-            p.getCheckOutScmResult();
+            p.getScmResult();
 
             fail( "Expected a JDODetachedFieldAccessException." );
         }
@@ -475,7 +475,7 @@ public class ContinuumJPoxStoreTest
         //
         // ----------------------------------------------------------------------
 
-        CheckOutScmResult result = new CheckOutScmResult();
+        ScmResult result = new ScmResult();
 
         result.setCommandOutput( "command output" );
 
@@ -487,9 +487,9 @@ public class ContinuumJPoxStoreTest
 
         scmFile.setPath( "/foo" );
 
-        result.getCheckedOutFiles().add( scmFile );
+        result.getFiles().add( scmFile );
 
-        p.setCheckOutScmResult( result );
+        p.setScmResult( result );
 
         p.setCheckOutErrorException( "check out error exception" );
 

@@ -26,9 +26,7 @@ import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
-import org.apache.maven.continuum.scm.UpdateScmResult;
 import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
@@ -106,7 +104,7 @@ public class DefaultBuildController
 
             actionContext.put( AbstractContinuumAction.KEY_FORCED, Boolean.valueOf( forced ) );
 
-            UpdateScmResult scmResult = null;
+            ScmResult scmResult = null;
 
             try
             {
@@ -124,7 +122,7 @@ public class DefaultBuildController
 
                     actionManager.lookup( "checkout-project" ).execute( actionContext );
 
-                    CheckOutScmResult checkOutScmResult = AbstractContinuumAction.getCheckoutResult( actionContext, null );
+                    ScmResult checkOutScmResult = AbstractContinuumAction.getCheckoutResult( actionContext, null );
 
                     String checkoutErrorMessage = AbstractContinuumAction.getCheckoutErrorMessage( actionContext, null );
 
@@ -160,25 +158,25 @@ public class DefaultBuildController
                      }
 
                     // TODO: remove once CONTINUUM-193 is resolved
-                    UpdateScmResult updateScmResult = new UpdateScmResult();
+//                    UpdateScmResult updateScmResult = new UpdateScmResult();
 
-                    updateScmResult.setCommandOutput( checkOutScmResult.getCommandOutput() );
+//                    updateScmResult.setCommandOutput( checkOutScmResult.getCommandOutput() );
 
-                    updateScmResult.setProviderMessage( checkOutScmResult.getProviderMessage() );
+//                    updateScmResult.setProviderMessage( checkOutScmResult.getProviderMessage() );
 
-                    updateScmResult.setSuccess( false );
+//                    updateScmResult.setSuccess( false );
 
-                    for ( Iterator it = checkOutScmResult.getCheckedOutFiles().iterator(); it.hasNext(); )
-                    {
-                        ScmFile scmFile = (ScmFile) it.next();
+//                    for ( Iterator it = checkOutScmResult.getFiles().iterator(); it.hasNext(); )
+//                    {
+//                        ScmFile scmFile = (ScmFile) it.next();
 
-                        updateScmResult.getUpdatedFiles().add( scmFile );
-                    }
+//                        updateScmResult.getFiles().add( scmFile );
+//                    }
 
-                    actionContext.put( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT, updateScmResult );
+                    actionContext.put( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT, checkOutScmResult );
                 }
 
-                scmResult = (UpdateScmResult) actionContext.get( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT );
+                scmResult = (ScmResult) actionContext.get( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT );
 
                 actionManager.lookup( "update-project-from-working-directory" ).execute( actionContext );
 
@@ -268,7 +266,7 @@ public class DefaultBuildController
         return buildId;
     }
 
-    private ContinuumBuild makeBuildResult( UpdateScmResult scmResult,
+    private ContinuumBuild makeBuildResult( ScmResult scmResult,
                                             long startTime,
                                             boolean forced )
     {
@@ -284,7 +282,7 @@ public class DefaultBuildController
 
         build.setSuccess( false );
 
-        build.setUpdateScmResult( scmResult );
+        build.setScmResult( scmResult );
 
         return build;
     }

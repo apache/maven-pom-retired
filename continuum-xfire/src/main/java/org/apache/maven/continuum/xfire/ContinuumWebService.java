@@ -108,9 +108,9 @@ public interface ContinuumWebService
     /**
      * @@WebMethod()
      * @@.projectId WebParam("ProjectId")
-     * @@.return WebResult(name="CheckOutScmResult", targetNamespace="http://continuum.maven.apache.org")
+     * @@.return WebResult(name="ScmResult", targetNamespace="http://continuum.maven.apache.org")
      */
-    CheckOutScmResult getCheckOutScmResult( String projectId )
+    ScmResult getScmResult( String projectId )
         throws XFireFault;
 
 }

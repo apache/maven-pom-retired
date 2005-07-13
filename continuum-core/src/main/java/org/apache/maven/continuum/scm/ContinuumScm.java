@@ -28,12 +28,12 @@ public interface ContinuumScm
 {
     String ROLE = ContinuumScm.class.getName();
 
-    CheckOutScmResult checkOut( ContinuumProject project, File workingDirectory )
+    ScmResult checkOut( ContinuumProject project, File workingDirectory )
         throws ContinuumScmException;
 
-    CheckOutScmResult checkOutProject( ContinuumProject project )
+    ScmResult checkOutProject( ContinuumProject project )
         throws ContinuumScmException;
 
-    UpdateScmResult updateProject( ContinuumProject project )
+    ScmResult updateProject( ContinuumProject project )
         throws ContinuumScmException;
 }

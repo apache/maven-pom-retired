@@ -22,8 +22,7 @@ import java.util.List;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
-import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.ContinuumException;
 
 /**
@@ -63,7 +62,7 @@ public interface ContinuumStore
     ContinuumProject getProject( String projectId )
         throws ContinuumStoreException;
 
-    CheckOutScmResult getCheckOutScmResultForProject( String projectId )
+    ScmResult getScmResultForProject( String projectId )
         throws ContinuumStoreException;
 
     // ----------------------------------------------------------------------

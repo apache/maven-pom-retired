@@ -23,14 +23,14 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
     </table>
   </p>
 
-  #if ( $build.updateScmResult )
+  #if ( $build.scmResult )
   <h4>Changes</h4>
   <p>
-    #if ( $build.updateScmResult.updatedFiles.size() == 0 )
+    #if ( $build.scmResult.files.size() == 0 )
     <b>No files changed</b>
     #else
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
-      #foreach ( $file in $build.updateScmResult.updatedFiles )
+      #foreach ( $file in $build.scmResult.files )
       <tr class="a">
         <td>$file.path</td>
       </tr>

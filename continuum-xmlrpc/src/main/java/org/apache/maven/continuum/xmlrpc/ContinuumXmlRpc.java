@@ -41,7 +41,7 @@ public interface ContinuumXmlRpc
 
     Hashtable getProjects();
 
-    Hashtable getCheckOutScmResultForProject( String projectId );
+    Hashtable getScmResultForProject( String projectId );
 
     Hashtable getLatestBuildForProject( String projectId );
 

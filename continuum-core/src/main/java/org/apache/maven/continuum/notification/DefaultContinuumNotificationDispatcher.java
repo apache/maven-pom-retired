@@ -24,7 +24,7 @@ import java.util.Set;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
@@ -71,7 +71,7 @@ public class DefaultContinuumNotificationDispatcher
         sendNotification( MESSAGE_ID_CHECKOUT_STARTED, project, null );
     }
 
-    public void checkoutComplete( ContinuumProject project, UpdateScmResult scmResult )
+    public void checkoutComplete( ContinuumProject project, ScmResult scmResult )
     {
         sendNotification( MESSAGE_ID_CHECKOUT_COMPLETE, project, null );
     }
@@ -106,7 +106,7 @@ public class DefaultContinuumNotificationDispatcher
     private void sendNotification( String messageId,
                                    ContinuumProject project,
                                    ContinuumBuild build,
-                                   UpdateScmResult scmResult )
+                                   ScmResult scmResult )
     {
         Map context = new HashMap();
 

@@ -28,12 +28,12 @@ Build statistics:
   Exit code: $build.exitCode
   Building machine hostname: $buildHost
 
-#if ( $build.updateScmResult )
+#if ( $build.scmResult )
 Changes
-#if ( $build.updateScmResult.updatedFiles.size() == 0 )
+#if ( $build.scmResult.files.size() == 0 )
  No files changed
 #else
- #foreach ( $file in $build.updateScmResult.updatedFiles )
+ #foreach ( $file in $build.scmResult.files )
  * $file.path
  #end
 #end

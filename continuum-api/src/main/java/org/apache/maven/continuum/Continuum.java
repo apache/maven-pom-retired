@@ -27,7 +27,7 @@ import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -54,7 +54,7 @@ import org.apache.maven.continuum.scm.CheckOutScmResult;
     Collection getAllProjects( int start, int end )
         throws ContinuumException;
 
-    CheckOutScmResult getCheckOutScmResultForProject( String projectId )
+    ScmResult getScmResultForProject( String projectId )
         throws ContinuumException;
 
     Collection getProjects()

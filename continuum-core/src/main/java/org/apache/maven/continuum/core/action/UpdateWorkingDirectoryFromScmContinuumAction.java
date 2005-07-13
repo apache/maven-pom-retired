@@ -17,7 +17,7 @@ package org.apache.maven.continuum.core.action;
  */
 
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.scm.UpdateScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 
 import java.util.Map;
 
@@ -33,19 +33,19 @@ public class UpdateWorkingDirectoryFromScmContinuumAction
     {
         ContinuumProject project = getProject( context );
 
-        UpdateScmResult updateScmResult = null;
+        ScmResult scmResult = null;
 
         try
         {
             getNotifier().checkoutStarted( project );
 
-            updateScmResult = getScm().updateProject( project );
+            scmResult = getScm().updateProject( project );
 
-            context.put( KEY_UPDATE_SCM_RESULT, updateScmResult );
+            context.put( KEY_UPDATE_SCM_RESULT, scmResult );
         }
         finally
         {
-            getNotifier().checkoutComplete( project, updateScmResult );
+            getNotifier().checkoutComplete( project, scmResult );
         }
     }
 }

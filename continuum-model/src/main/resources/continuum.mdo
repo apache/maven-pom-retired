@@ -80,10 +80,10 @@
           </association>
         </field>
         <field>
-          <name>checkOutScmResult</name>
+          <name>scmResult</name>
           <version>1.0.0</version>
           <association>
-            <type>CheckOutScmResult</type>
+            <type>ScmResult</type>
           </association>
         </field>
         <field>
@@ -344,10 +344,10 @@
           <type>int</type>
         </field>
         <field>
-          <name>updateScmResult</name>
+          <name>scmResult</name>
           <version>1.0.0</version>
           <association stash.part="true">
-            <type>UpdateScmResult</type>
+            <type>ScmResult</type>
           </association>
         </field>
       </fields>
@@ -358,7 +358,7 @@
      | Scm Result
      |
      |-->
-    <class java.abstract="true">
+    <class stash.storable="true">
       <name>ScmResult</name>
       <packageName>org.apache.maven.continuum.scm</packageName>
       <version>1.0.0</version>
@@ -377,6 +377,14 @@
           <name>commandOutput</name>
           <version>1.0.0</version>
           <type>String</type>
+        </field>
+        <field>
+          <name>files</name>
+          <version>1.0.0</version>
+          <association stash.part="true">
+            <type>ScmFile</type>
+            <multiplicity>*</multiplicity>
+          </association>
         </field>
       </fields>
     </class>
@@ -398,40 +406,6 @@
                   <type>ScmFileStatus</type>
                 </field>
         -->
-      </fields>
-    </class>
-
-    <class stash.storable="true">
-      <name>CheckOutScmResult</name>
-      <packageName>org.apache.maven.continuum.scm</packageName>
-      <superClass>ScmResult</superClass>
-      <version>1.0.0</version>
-      <fields>
-        <field>
-          <name>checkedOutFiles</name>
-          <version>1.0.0</version>
-          <association stash.part="true">
-            <type>ScmFile</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-      </fields>
-    </class>
-
-    <class stash.storable="true">
-      <name>UpdateScmResult</name>
-      <packageName>org.apache.maven.continuum.scm</packageName>
-      <superClass>ScmResult</superClass>
-      <version>1.0.0</version>
-      <fields>
-        <field>
-          <name>updatedFiles</name>
-          <version>1.0.0</version>
-          <association stash.part="true">
-            <type>ScmFile</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
       </fields>
     </class>
   </classes>

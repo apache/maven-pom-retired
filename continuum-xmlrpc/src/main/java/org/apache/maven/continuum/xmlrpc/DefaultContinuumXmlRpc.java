@@ -35,7 +35,7 @@ import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -116,17 +116,17 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-    public Hashtable getCheckOutScmResultForProject( String projectId )
+    public Hashtable getScmResultForProject( String projectId )
     {
         try
         {
-            CheckOutScmResult result = continuum.getCheckOutScmResultForProject( projectId );
+            ScmResult result = continuum.getScmResultForProject( projectId );
 
-            return makeHashtable( "checkOutScmResult", convertCheckOutScmResult( result ) );
+            return makeHashtable( "scmResult", convertScmResult( result ) );
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getCheckOutScmResultForProject()",
+            return handleException( "ContinuumXmlRpc.getScmResultForProject()",
                                     "Project id: '" + projectId + "'.", e );
         }
     }
@@ -141,7 +141,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getCheckOutScmResultForProject()",
+            return handleException( "ContinuumXmlRpc.getLatestBuildForProject()",
                                     "Project id: '" + projectId + "'.", e );
         }
 
@@ -530,7 +530,7 @@ public class DefaultContinuumXmlRpc
         return xmlRpcHelper.objectToHashtable( object, excludedProperties );
     }
 
-    private Hashtable convertCheckOutScmResult( Object object )
+    private Hashtable convertScmResult( Object object )
         throws IllegalAccessException, InvocationTargetException
     {
         Set excludedProperties = new HashSet();

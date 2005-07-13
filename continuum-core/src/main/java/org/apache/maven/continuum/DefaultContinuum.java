@@ -35,7 +35,7 @@ import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
@@ -130,10 +130,10 @@ public class DefaultContinuum
         return core.getAllProjects( start, end );
     }
 
-    public CheckOutScmResult getCheckOutScmResultForProject( String projectId )
+    public ScmResult getScmResultForProject( String projectId )
         throws ContinuumException
     {
-        return core.getCheckOutScmResultForProject( projectId );
+        return core.getScmResultForProject( projectId );
     }
 
     // ----------------------------------------------------------------------

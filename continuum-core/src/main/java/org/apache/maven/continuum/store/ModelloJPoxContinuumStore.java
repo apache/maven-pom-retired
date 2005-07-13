@@ -30,7 +30,7 @@ import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumJPoxStore;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 
 import org.codehaus.plexus.jdo.JdoFactory;
@@ -263,7 +263,7 @@ public class ModelloJPoxContinuumStore
         }
     }
 
-    public CheckOutScmResult getCheckOutScmResultForProject( String projectId )
+    public ScmResult getScmResultForProject( String projectId )
         throws ContinuumStoreException
     {
         try
@@ -272,7 +272,7 @@ public class ModelloJPoxContinuumStore
 
             ContinuumProject project = store.getContinuumProject( projectId, false );
 
-            if ( project.getCheckOutScmResult() == null )
+            if ( project.getScmResult() == null )
             {
                 store.commit();
 
@@ -281,15 +281,15 @@ public class ModelloJPoxContinuumStore
 
             PersistenceManager pm = JDOHelper.getPersistenceManager( project );
 
-            CheckOutScmResult result = project.getCheckOutScmResult();
+            ScmResult result = project.getScmResult();
 
             pm.retrieve( result );
 
             pm.makeTransient( result );
 
-            pm.retrieveAll( result.getCheckedOutFiles(), false );
+            pm.retrieveAll( result.getFiles(), false );
 
-            pm.makeTransientAll( result.getCheckedOutFiles() );
+            pm.makeTransientAll( result.getFiles() );
 
             store.commit();
 
@@ -423,7 +423,7 @@ public class ModelloJPoxContinuumStore
 
             ContinuumBuild build = store.getContinuumBuild( buildId, false );
 
-            if ( build.getUpdateScmResult() == null )
+            if ( build.getScmResult() == null )
             {
                 return Collections.EMPTY_LIST;
             }
@@ -432,7 +432,7 @@ public class ModelloJPoxContinuumStore
 
             List changedFiles = new ArrayList();
 
-            for ( Iterator it = build.getUpdateScmResult().getUpdatedFiles().iterator(); it.hasNext(); )
+            for ( Iterator it = build.getScmResult().getFiles().iterator(); it.hasNext(); )
             {
                 ScmFile scmFile = (ScmFile) it.next();
 

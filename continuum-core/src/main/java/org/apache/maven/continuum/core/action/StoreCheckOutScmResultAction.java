@@ -19,7 +19,7 @@ package org.apache.maven.continuum.core.action;
 import java.util.Map;
 
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
@@ -40,7 +40,7 @@ public class StoreCheckOutScmResultAction
             //
             // ----------------------------------------------------------------------
 
-            CheckOutScmResult checkOutScmResult = AbstractContinuumAction.getCheckoutResult( context, null );
+            ScmResult scmResult = AbstractContinuumAction.getCheckoutResult( context, null );
 
             String checkoutErrorMessage = AbstractContinuumAction.getCheckoutErrorMessage( context, null );
 
@@ -52,7 +52,7 @@ public class StoreCheckOutScmResultAction
 
             ContinuumProject project = getProject( context );
 
-            project.setCheckOutScmResult( checkOutScmResult );
+            project.setScmResult( scmResult );
 
             project.setCheckOutErrorMessage( checkoutErrorMessage );
 

@@ -24,7 +24,7 @@ import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
-import org.apache.maven.continuum.scm.CheckOutScmResult;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.store.ContinuumStore;
 
@@ -51,7 +51,7 @@ public interface ContinuumCore
     Collection getAllProjects( int start, int end )
         throws ContinuumException;
 
-    CheckOutScmResult getCheckOutScmResultForProject( String projectId )
+    ScmResult getScmResultForProject( String projectId )
         throws ContinuumException;
 
     void buildProject( String projectId, boolean force )
