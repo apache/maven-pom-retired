@@ -17,9 +17,11 @@ package org.apache.maven.continuum.core;
  */
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
@@ -51,8 +53,6 @@ public class DefaultContinuumCore
     extends AbstractLogEnabled
     implements ContinuumCore, Initializable, Startable
 {
-    private final static String CONTINUUM_VERSION = "1.0-alpha-2-SNAPSHOT";
-
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -393,11 +393,11 @@ public class DefaultContinuumCore
         //
         // ----------------------------------------------------------------------
 
-        String banner = StringUtils.repeat( "-", CONTINUUM_VERSION.length() );
+        String banner = StringUtils.repeat( "-", getVersion().length() );
 
         getLogger().info( "" );
         getLogger().info( "" );
-        getLogger().info( "< Continuum " + CONTINUUM_VERSION + " started! >" );
+        getLogger().info( "< Continuum " + getVersion() + " started! >" );
         getLogger().info( "-----------------------" + banner );
         getLogger().info( "       \\   ^__^" );
         getLogger().info( "        \\  (oo)\\_______" );
@@ -459,6 +459,24 @@ public class DefaultContinuumCore
     public String getWorkingDirectory()
     {
         return workingDirectory;
+    }
+
+    private String getVersion()
+    {
+        InputStream resourceAsStream;
+        try
+        {
+            Properties properties = new Properties();
+            resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(
+                "META-INF/maven/org.apache.maven.continuum/continuum-core/pom.properties" );
+            properties.load( resourceAsStream );
+
+            return properties.getProperty( "version", "unknown" );
+        }
+        catch ( Exception e )
+        {
+            return "unknown";
+        }
     }
 }
 
