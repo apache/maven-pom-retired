@@ -225,6 +225,33 @@ public class DefaultContinuumScm
             }
         }
 
+        if ( scmResult.getChanges() != null )
+        {
+            for ( Iterator it = scmResult.getChanges().iterator(); it.hasNext(); )
+            {
+                org.apache.maven.scm.ChangeSet changeSet = (org.apache.maven.scm.ChangeSet) it.next();
+
+                ChangeSet change = new ChangeSet();
+
+                change.setAuthor( changeSet.getAuthor() );
+
+                change.setComment( changeSet.getComment() );
+
+                change.setDate( changeSet.getDate() );
+
+                if ( changeSet.getFile() != null )
+                {
+                    ChangeFile file = new ChangeFile();
+
+                    file.setName( changeSet.getFile().getName() );
+
+                    file.setRevision( changeSet.getFile().getRevision() );
+                }
+
+                result.addChange( change );
+            }
+        }
+
         return result;
     }
 }
