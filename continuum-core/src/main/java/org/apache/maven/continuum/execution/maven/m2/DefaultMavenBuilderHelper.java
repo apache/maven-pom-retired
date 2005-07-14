@@ -101,12 +101,21 @@ public class DefaultMavenBuilderHelper
         }
 
         // ----------------------------------------------------------------------
-        // Group
+        // GroupId
         // ----------------------------------------------------------------------
 
         if ( mavenProject.getGroupId() != null )
         {
            continuumProject.setGroupId( mavenProject.getGroupId() );
+        }
+
+        // ----------------------------------------------------------------------
+        // artifactId
+        // ----------------------------------------------------------------------
+
+        if ( mavenProject.getArtifactId() != null )
+        {
+           continuumProject.setArtifactId( mavenProject.getArtifactId() );
         }
 
         // ----------------------------------------------------------------------
@@ -181,6 +190,8 @@ public class DefaultMavenBuilderHelper
         // ----------------------------------------------------------------------
         // Validate the MavenProject using some Continuum rules
         // ----------------------------------------------------------------------
+
+
 
         // Nag email address
         CiManagement ciManagement = project.getCiManagement();

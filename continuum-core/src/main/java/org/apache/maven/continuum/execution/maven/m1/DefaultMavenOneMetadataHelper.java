@@ -72,10 +72,42 @@ public class DefaultMavenOneMetadataHelper
         }
 
         // ----------------------------------------------------------------------
-        // Populating the descriptor
+        // groupId
         // ----------------------------------------------------------------------
 
-        // Name
+        String groupId = getValue( mavenProject, "groupId", null );
+
+        if ( groupId  != null )
+        {
+            throw new MavenOneMetadataHelperException( "Missing 'groupId' element in the POM." );
+        }
+
+        // ----------------------------------------------------------------------
+        // artifactId
+        // ----------------------------------------------------------------------
+
+        String artifactId = getValue( mavenProject, "artifactId", null );
+
+        if ( groupId  != null )
+        {
+            throw new MavenOneMetadataHelperException( "Missing 'artifactId' element in the POM." );
+        }
+
+        // ----------------------------------------------------------------------
+        // version
+        // ----------------------------------------------------------------------
+
+        String version = getValue( mavenProject, "currentVersion", project.getVersion() );
+
+        if ( StringUtils.isEmpty( version ) )
+        {
+            throw new MavenOneMetadataHelperException( "Missing 'version' element in the POM." );
+        }
+
+        // ----------------------------------------------------------------------
+        // name
+        // ----------------------------------------------------------------------
+
         String name = getValue( mavenProject, "name", project.getName() );
 
         if ( StringUtils.isEmpty( name ) )
@@ -83,7 +115,10 @@ public class DefaultMavenOneMetadataHelper
             throw new MavenOneMetadataHelperException( "Missing 'name' element in POM." );
         }
 
-        // Scm
+        // ----------------------------------------------------------------------
+        // scm
+        // ----------------------------------------------------------------------
+
         Xpp3Dom repository = mavenProject.getChild( "repository" );
 
         String scmConnection;
@@ -111,7 +146,10 @@ public class DefaultMavenOneMetadataHelper
             }
         }
 
-        // Nag email address
+        // ----------------------------------------------------------------------
+        // notifiers
+        // ----------------------------------------------------------------------
+
         Xpp3Dom build = mavenProject.getChild( "build" );
 
         List notifiers = null;
@@ -157,7 +195,6 @@ public class DefaultMavenOneMetadataHelper
 
                 notifier.setConfiguration( props );
             }
-
         }
 
         if ( notifiers == null && notifier.getConfiguration().isEmpty() )
@@ -174,14 +211,6 @@ public class DefaultMavenOneMetadataHelper
             notifiers.add( notifier );
         }
 
-        // Version
-        String version = getValue( mavenProject, "currentVersion", project.getVersion() );
-
-        if ( StringUtils.isEmpty( version ) )
-        {
-            throw new MavenOneMetadataHelperException( "Missing 'version' element in the POM." );
-        }
-
         // Goals
         if ( StringUtils.isEmpty( project.getGoals() ) )
         {
@@ -192,13 +221,17 @@ public class DefaultMavenOneMetadataHelper
         // Make the project
         // ----------------------------------------------------------------------
 
+        project.setGroupId( groupId );
+
+        project.setArtifactId( artifactId );
+
+        project.setVersion( version );
+
         project.setName( name );
 
         project.setScmUrl( scmConnection );
 
         project.setNotifiers( notifiers );
-
-        project.setVersion( version );
     }
 
     // ----------------------------------------------------------------------
