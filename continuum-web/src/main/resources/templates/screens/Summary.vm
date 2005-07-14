@@ -55,14 +55,14 @@ $page.setTitle( "Continuum" )
         <td>Delete</td>
         #end
 
-        #if ( $item.lastBuildId )
+        #if ( $item.latestBuildId )
         #set ( $build = $continuum.getLatestBuildForProject($item.id) )
         <td><a href="$link.setPage('ProjectBuild.vm').addPathInfo('view', "ProjectBuild").addPathInfo('id', $item.id).addPathInfo('buildId', $build.id)">Last Result</a></td>
         #else
         <td>Last Result</td>
         #end
 
-        #if ( $item.lastBuildId )
+        #if ( $item.latestBuildId )
         <td><a href="$link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id)">All Results</a></td>
         #else
         <td>All Results</td>
