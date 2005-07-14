@@ -27,19 +27,6 @@
       <type>text</type>
       <expression>scmUrl</expression>
     </element>
-<!-- TODO: Replace this with some notifier forms
-    <element>
-      <id>project.nagEmailAddress</id>
-      <validators>
-        <validator>
-          <id>required</id>
-          <error-message-key>project.nagEmailAddress.error</error-message-key>
-        </validator>
-      </validators>
-      <type>text</type>
-      <expression>nagEmailAddress</expression>
-    </element>
--->
     <element>
       <id>project.version</id>
       <validators>
