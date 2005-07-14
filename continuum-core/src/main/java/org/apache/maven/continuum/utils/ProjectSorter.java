@@ -66,11 +66,7 @@ public class ProjectSorter
 
             for ( Iterator j = project.getDependencies().iterator(); j.hasNext(); )
             {
-                Object o = i.next();
-
-                System.out.println( "o = " + o );
-
-                ContinuumDependency dependency = (ContinuumDependency) o;
+                ContinuumDependency dependency = (ContinuumDependency) j.next();
 
                 String dependencyId = getDependencyId( dependency );
 

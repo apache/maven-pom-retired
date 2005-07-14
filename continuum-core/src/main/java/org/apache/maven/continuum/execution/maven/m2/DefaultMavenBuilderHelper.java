@@ -181,6 +181,8 @@ public class DefaultMavenBuilderHelper
 
                 cd.setVersion( dependency.getVersion() );
 
+                System.out.println( "adding cd = " + cd );
+
                 dependencies.add( cd );
             }
 
