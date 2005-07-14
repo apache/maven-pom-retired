@@ -27,6 +27,7 @@ import org.apache.maven.model.Developer;
 import org.apache.maven.model.Notifier;
 import org.apache.maven.model.Repository;
 import org.apache.maven.model.Scm;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.settings.MavenSettingsBuilder;
@@ -134,7 +135,7 @@ public class DefaultMavenBuilderHelper
         continuumProject.setTestOutputDirectory( DEFAULT_TEST_OUTPUT_DIRECTORY );
 
         // ----------------------------------------------------------------------
-        //
+        // Developers
         // ----------------------------------------------------------------------
 
         if ( mavenProject.getDevelopers() != null )
@@ -157,6 +158,24 @@ public class DefaultMavenBuilderHelper
             }
 
             continuumProject.setDevelopers( developers );
+        }
+
+        // ----------------------------------------------------------------------
+        // Dependencies
+        // ----------------------------------------------------------------------
+
+        if ( mavenProject.getDependencies() != null )
+        {
+            List dependencies = new ArrayList();
+
+            for ( Iterator i = mavenProject.getDependencies().iterator(); i.hasNext(); )
+            {
+                Dependency d = (Dependency) i.next();
+
+                dependencies.add( d.getGroupId() + ":" + d.getArtifactId() );
+            }
+
+            continuumProject.setDependencies( dependencies );
         }
 
         // ----------------------------------------------------------------------

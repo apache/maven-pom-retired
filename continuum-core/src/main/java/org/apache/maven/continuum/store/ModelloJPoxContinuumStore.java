@@ -320,7 +320,7 @@ public class ModelloJPoxContinuumStore
 
             Object id = store.addContinuumBuild( build );
 
-            project.setLastBuildId( build.getId() );
+            project.setLatestBuildId( build.getId() );
 
             project.setBuildNumber( project.getBuildNumber() + 1 );
 
@@ -373,14 +373,14 @@ public class ModelloJPoxContinuumStore
 
             ContinuumProject p = store.getContinuumProject( projectId, false );
 
-            if ( p.getLastBuildId() == null )
+            if ( p.getLatestBuildId() == null )
             {
                 store.commit();
 
                 return null;
             }
 
-            ContinuumBuild b = store.getContinuumBuild( p.getLastBuildId(), false );
+            ContinuumBuild b = store.getContinuumBuild( p.getLatestBuildId(), false );
 
             b = (ContinuumBuild) store.getThreadState().getPersistenceManager().detachCopy( b );
 
