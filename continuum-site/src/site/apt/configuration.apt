@@ -111,7 +111,7 @@ Configuring Continuum
 
 +----+
 ProxyPass /continuum http://localhost:8080/continuum/
-ProxyPassReverse /confluence http://localhost:8080/continuum/
+ProxyPassReverse /continuum http://localhost:8080/continuum/
 +----+
 
 * Socket Listeners
