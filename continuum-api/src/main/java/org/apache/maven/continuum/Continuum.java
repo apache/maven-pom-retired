@@ -18,6 +18,7 @@ package org.apache.maven.continuum;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.List;
 
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -28,6 +29,7 @@ import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.scm.ScmResult;
+import org.codehaus.plexus.util.dag.CycleDetectedException;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -73,6 +75,9 @@ import org.apache.maven.continuum.scm.ScmResult;
     // ----------------------------------------------------------------------
     // Building
     // ----------------------------------------------------------------------
+
+    List getProjectsInBuildOrder()
+        throws CycleDetectedException, ContinuumException;
 
     void buildProjects()
         throws ContinuumException;

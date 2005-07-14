@@ -57,7 +57,7 @@
           <type>String</type>
         </field>
         <field>
-          <name>lastBuildId</name>
+          <name>latestBuildId</name>
           <version>1.0.0</version>
           <type>String</type>
         </field>
@@ -149,6 +149,14 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field>
+          <name>dependencies</name>
+          <version>1.0.0</version>
+          <association stash.part="true">
+            <type>ContinuumDependency</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
 
@@ -196,6 +204,29 @@
         </field>
         <field>
           <name>email</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+    
+    <class stash.storable="true">
+      <name>ContinuumDependency</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>groupId</name>
+          <identifier>true</identifier>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>artifactId</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>version</name>
           <version>1.0.0</version>
           <type>String</type>
         </field>

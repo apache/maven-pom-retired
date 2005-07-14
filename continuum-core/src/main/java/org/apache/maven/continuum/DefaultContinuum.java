@@ -36,8 +36,10 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.scm.ScmResult;
+import org.apache.maven.continuum.utils.ProjectSorter;
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.dag.CycleDetectedException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -155,6 +157,35 @@ public class DefaultContinuum
 
             buildProject( project.getId(), force );
         }
+
+        /*
+        try
+        {
+            for ( Iterator i = getProjectsInBuildOrder().iterator(); i.hasNext(); )
+            {
+                ContinuumProject project = (ContinuumProject) i.next();
+
+                buildProject( project.getId(), force );
+            }
+        }
+        catch ( CycleDetectedException e )
+        {
+            getLogger().warn( "Cycle detected while sorting projects for building, falling back to unsorted build." );
+
+            for ( Iterator i = getProjects().iterator(); i.hasNext(); )
+            {
+                ContinuumProject project = (ContinuumProject) i.next();
+
+                buildProject( project.getId(), force );
+            }
+        }
+        */
+    }
+
+    public List getProjectsInBuildOrder()
+        throws CycleDetectedException, ContinuumException
+    {
+        return ProjectSorter.getSortedProjects( getProjects() );
     }
 
     public void buildProject( String projectId )
@@ -357,7 +388,7 @@ public class DefaultContinuum
 
             actionManager.lookup( "create-projects-from-metadata" ).execute( context );
 
-            result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );            
+            result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
 
             if ( result.getWarnings().size() > 0 )
             {
@@ -551,7 +582,7 @@ public class DefaultContinuum
 
             if ( value instanceof String )
             {
-                notifierProperties.setProperty( (String) key, (String) value  );
+                notifierProperties.setProperty( (String) key, (String) value );
             }
         }
 

@@ -3,13 +3,14 @@
  */
 package org.apache.maven.continuum.utils;
 
-import org.apache.maven.model.Dependency;
+import org.apache.maven.continuum.project.ContinuumDependency;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 import org.codehaus.plexus.util.dag.DAG;
 import org.codehaus.plexus.util.dag.TopologicalSorter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -39,7 +40,7 @@ public class ProjectSorter
      * <li>do a topo sort on the graph that remains.</li>
      * </ul>
      */
-    public static List getSortedProjects( List projects )
+    public static List getSortedProjects( Collection projects )
         throws CycleDetectedException
     {
         DAG dag = new DAG();
@@ -65,7 +66,13 @@ public class ProjectSorter
 
             for ( Iterator j = project.getDependencies().iterator(); j.hasNext(); )
             {
-                String dependencyId = (String) i.next();
+                Object o = i.next();
+
+                System.out.println( "o = " + o );
+
+                ContinuumDependency dependency = (ContinuumDependency) o;
+
+                String dependencyId = getDependencyId( dependency );
 
                 if ( dag.getVertex( dependencyId ) != null )
                 {
@@ -87,6 +94,11 @@ public class ProjectSorter
     }
 
     private static String getProjectId( ContinuumProject project )
+    {
+        return project.getGroupId() + ":" + project.getArtifactId();
+    }
+
+    private static String getDependencyId( ContinuumDependency project )
     {
         return project.getGroupId() + ":" + project.getArtifactId();
     }

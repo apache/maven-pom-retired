@@ -22,6 +22,7 @@ import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.continuum.project.ContinuumDeveloper;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.ContinuumDependency;
 import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Developer;
 import org.apache.maven.model.Notifier;
@@ -170,9 +171,17 @@ public class DefaultMavenBuilderHelper
 
             for ( Iterator i = mavenProject.getDependencies().iterator(); i.hasNext(); )
             {
-                Dependency d = (Dependency) i.next();
+                Dependency dependency = (Dependency) i.next();
 
-                dependencies.add( d.getGroupId() + ":" + d.getArtifactId() );
+                ContinuumDependency cd = new ContinuumDependency();
+
+                cd.setGroupId( dependency.getGroupId() );
+
+                cd.setArtifactId( dependency.getArtifactId() );
+
+                cd.setVersion( dependency.getVersion() );
+
+                dependencies.add( cd );
             }
 
             continuumProject.setDependencies( dependencies );
