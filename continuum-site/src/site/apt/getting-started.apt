@@ -8,7 +8,7 @@
 Installing Continuum
 
  After you have downloaded and unpacked the bundle execute <<<bin/plexus.sh>>>
- if you are on a UNIX platform or <<<bin/plexus.bat ..\conf\plexus.xml>>> if you are using
+ if you are on a UNIX platform or <<<bin/plexus.bat>>> if you are using
  Windows.
 
  When Continuum is running you can access it with your browser on
