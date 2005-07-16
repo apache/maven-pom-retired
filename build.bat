@@ -29,9 +29,4 @@ goto Win9xApp
 @REM Reaching here means variables are defined and arguments have been captured
 :endInit
 
-call m2 -N install %MAVEN_CMD_LINE_ARGS%
-cd continuum-notifiers
-call m2 -N install %MAVEN_CMD_LINE_ARGS%
-cd ..
-call m2 -r -Dmaven.reactor.includes=*/pom.xml clean:clean %MAVEN_CMD_LINE_ARGS%
-call m2 -r install %MAVEN_CMD_LINE_ARGS%
+call m2 clean:clean install %MAVEN_CMD_LINE_ARGS%
