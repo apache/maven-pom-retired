@@ -4,7 +4,7 @@
 get_html | http://localhost:8080/continuum/servlet/continuum
 click_link | Add M1 Project
 select_form | 0
-set_textfield | m1PomUrl = http://svn.apache.org/viewcvs.cgi/*checkout*/maven/continuum/trunk/continuum-test-projects/m1/project.xml
+set_textfield | m1PomUrl = http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/m1/project.xml
 submit_form | Submit
 #
 # Make sure the project was added by inspecting the table

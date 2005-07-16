@@ -4,6 +4,6 @@
 get_html | http://localhost:8080/continuum/servlet/continuum
 click_link | Add M1 Project
 select_form | 0
-set_textfield | m1PomUrl =http://svn.apache.org/viewcvs.cgi/*checkout*/maven/continuum/trunk/continuum-test-projects/m1-test-poms/project-with-extend-element.xml
+set_textfield | m1PomUrl =http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/m1-test-poms/project-with-extend-element.xml
 submit_form | Submit
 check_text | Cannot use a POM with an 'extend' element.
