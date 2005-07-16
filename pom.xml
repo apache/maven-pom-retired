@@ -170,15 +170,24 @@
       <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
     </repository>
   </distributionManagement>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-plexus-plugin</artifactId>
+          <version>1.1-alpha-6-SNAPSHOT</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
   <modules>
     <module>continuum-api</module>
     <module>continuum-cc</module>
     <module>continuum-core</module>
     <module>continuum-model</module>
     <module>continuum-notifiers</module>
-    <!--
     <module>continuum-plexus-application</module>
-    -->
     <module>continuum-web</module>
     <module>continuum-xfire</module>
     <module>continuum-xmlrpc</module>
