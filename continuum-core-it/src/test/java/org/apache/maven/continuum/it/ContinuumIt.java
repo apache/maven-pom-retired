@@ -16,14 +16,6 @@ package org.apache.maven.continuum.it;
  * limitations under the License.
  */
 
-import java.io.File;
-
-import org.codehaus.plexus.application.PlexusApplicationHost;
-import org.codehaus.plexus.application.ApplicationServer;
-import org.codehaus.plexus.application.profile.ApplicationRuntimeProfile;
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.classworlds.ClassWorld;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
@@ -33,6 +25,14 @@ public class ContinuumIt
     public static void main( String[] args )
         throws Exception
     {
+        AbstractIntegrationTest.progress( "############################################################" );
+        AbstractIntegrationTest.progress( "Running integration tests" );
+        AbstractIntegrationTest.progress( "" );
+        AbstractIntegrationTest.progress( "NOTE:" );
+        AbstractIntegrationTest.progress( "When running these integration tests you will get some" );
+        AbstractIntegrationTest.progress( "stacktraces. This is normal and expected." );
+        AbstractIntegrationTest.progress( "############################################################" );
+/*
         // ----------------------------------------------------------------------
         // Set up the enviroment
         // ----------------------------------------------------------------------
@@ -64,9 +64,6 @@ public class ContinuumIt
         PlexusContainer container = profile.getContainer();
 
         applicationHost.shutdown();
-    }
-
-    private static void doTests()
-    {
+*/
     }
 }
