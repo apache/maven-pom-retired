@@ -98,26 +98,26 @@
         <artifactId>continuum-xmlrpc</artifactId>
         <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-notifier-irc</artifactId>
-      <version>1.0-beta-1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-notifier-jabber</artifactId>
-      <version>1.0-beta-1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-notifier-msn</artifactId>
-      <version>1.0-beta-1-SNAPSHOT</version>
-    </dependency>
-      <!--
-       |
-       | Plexus
-       |
-       -->
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-plexus-application</artifactId>
+        <version>1.0-beta-1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-notifier-irc</artifactId>
+        <version>1.0-beta-1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-notifier-jabber</artifactId>
+        <version>1.0-beta-1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-notifier-msn</artifactId>
+        <version>1.0-beta-1-SNAPSHOT</version>
+      </dependency>
       <!--
        |
        | JDO

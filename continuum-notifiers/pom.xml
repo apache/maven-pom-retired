@@ -6,13 +6,14 @@
     <version>1.0-beta-1-SNAPSHOT</version>
   </parent>
   <artifactId>continuum-parent-notifiers</artifactId>
+  <version>1.0-beta-1-SNAPSHOT</version>
   <name>Continuum Notifiers</name>
   <packaging>pom</packaging>
-  <version>1.0-beta-1-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-api</artifactId>
+      <!-- TODO: remove -->
       <version>1.0-beta-1-SNAPSHOT</version>
     </dependency>
     <dependency>

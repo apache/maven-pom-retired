@@ -1,13 +1,13 @@
 <project>
+  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
     <version>1.0-beta-1-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-model</artifactId>
-  <name>Continuum Model</name>
   <version>1.0-beta-1-SNAPSHOT</version>
+  <name>Continuum Model</name>
   <dependencies>
     <dependency>
       <groupId>jpox</groupId>

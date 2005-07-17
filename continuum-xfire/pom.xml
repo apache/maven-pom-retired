@@ -5,8 +5,8 @@
     <artifactId>continuum-parent</artifactId>
     <version>1.0-beta-1-SNAPSHOT</version>
   </parent>
-  <version>1.0-beta-1-SNAPSHOT</version>
   <artifactId>continuum-xfire</artifactId>
+  <version>1.0-beta-1-SNAPSHOT</version>
   <name>Continuum XFire Interface</name>
   <dependencies>
     <dependency>

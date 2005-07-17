@@ -6,8 +6,8 @@
     <version>1.0-beta-1-SNAPSHOT</version>
   </parent>
   <artifactId>continuum-xmlrpc</artifactId>
-  <name>Continuum XMLRPC Interface</name>
   <version>1.0-beta-1-SNAPSHOT</version>
+  <name>Continuum XMLRPC Interface</name>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>

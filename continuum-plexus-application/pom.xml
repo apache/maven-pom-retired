@@ -6,8 +6,8 @@
     <version>1.0-beta-1-SNAPSHOT</version>
   </parent>
   <artifactId>continuum-plexus-application</artifactId>
-  <name>Continuum Plexus Application</name>
   <version>1.0-beta-1-SNAPSHOT</version>
+  <name>Continuum Plexus Application</name>
   <packaging>plexus-application</packaging>
   <dependencies>
     <dependency>
@@ -163,6 +163,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plexus-plugin</artifactId>
+        <version>1.0-alpha-6-SNAPSHOT</version>
         <configuration>
           <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
           <configurationsDirectory>src/conf</configurationsDirectory>
@@ -172,6 +173,7 @@
           <runtimeConfigurationProperties>app.properties</runtimeConfigurationProperties>
           <runtimePath>target/plexus-test-runtime</runtimePath>
         </configuration>
+<!--
         <executions>
           <execution>
             <goals>
@@ -181,6 +183,7 @@
             </goals>
           </execution>
         </executions>
+-->
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
