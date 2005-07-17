@@ -226,6 +226,11 @@ public abstract class AbstractContinuumAction
 
     private static Object getObject( Map context, String key )
     {
+        if ( !context.containsKey( key ) )
+        {
+            throw new RuntimeException( "Missing key '" + key + "'." );
+        }
+
         Object value = context.get( key );
 
         if ( value == null )
