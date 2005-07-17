@@ -279,6 +279,11 @@ public class DefaultContinuum
 
             result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
 
+            if ( result.getWarnings().size() > 0 )
+            {
+                return result;
+            }
+
             List projects = result.getProjects();
 
             for ( Iterator i = projects.iterator(); i.hasNext(); )
