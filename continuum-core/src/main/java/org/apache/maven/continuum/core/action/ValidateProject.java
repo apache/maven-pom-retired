@@ -41,6 +41,11 @@ public class ValidateProject
 //            throw new ContinuumStoreException( "A project with the scm url '" + scmUrl + "' already exist." );
 //        }
 
+        if ( StringUtils.isEmpty( project.getScmUrl() ) )
+        {
+            throw new ContinuumException( "The SCM URL has to be set." );
+        }
+
         // TODO: validate that the SCM provider id
 
         // ----------------------------------------------------------------------
