@@ -35,6 +35,7 @@ Getting Started
 Using the Bundled Java Client
 
 * Creating a Client
+
 +--+
 import org.apache.maven.continuum.xfire.ContinuumWebService;
 import org.apache.maven.continuum.xfire.ContinuumClientFactory;
@@ -44,8 +45,8 @@ import org.apache.maven.continuum.project.ContinuumProjectState;
 
 ...
 
-ContinuumWebService continuum =
-    ContinuumClientFactory.createClient("http://localhost:8080/continuum/services/Continuum");
+String url = "http://localhost:8080/continuum/services/Continuum";
+ContinuumWebService continuum = ContinuumClientFactory.createClient( url );
 +--+
 
 * Adding A Project
@@ -66,30 +67,35 @@ continuum.addProject(project);
 +--+
 Build build = continuum.getLatestBuild(project.getId());
 
-if (build.getState() == ContinuumProjectState.OK)
+if ( build.getState() == ContinuumProjectState.OK )
+{
     doSomething();
-else if (build.getState() == ContinuumProjectState.FAILED)
+}
+else if ( build.getState() == ContinuumProjectState.FAILED )
+{
     punishDevelopers();
+}
 +--+
 
 Notes for other Toolkits
 
 * Project State
+
  In one of the above code snippets, you see that we can check the build state.
  The build state can be one of several values:
 
-*---*------------------------*
+*---*------------------------+
 | 1 | New Build              |
-*---*------------------------*
+*---*------------------------+
 | 2 | Successful Build       |
-*---*------------------------*
+*---*------------------------+
 | 3 | Failed Build           |
-*---*------------------------*
+*---*------------------------+
 | 4 | Error building         |
-*---*------------------------*
+*---*------------------------+
 | 6 | Build in process       |
-*---*------------------------*
+*---*------------------------+
 | 7 | Checking out from SCM  |
-*---*------------------------*
+*---*------------------------+
 | 8 | Updating from SCM      |
-*---*------------------------*
+*---*------------------------+
