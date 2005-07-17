@@ -65,18 +65,18 @@ public class MavenOneContinuumProjectBuilder
             return result;
         }
 
-        MavenOneProject project = new MavenOneProject();
-
         try
         {
+            MavenOneProject project = new MavenOneProject();
+
             metadataHelper.mapMetadata( pomFile, project );
+
+            result.addProject( project, MavenOneBuildExecutor.ID );
         }
         catch ( MavenOneMetadataHelperException e )
         {
             result.addWarning( e.getMessage() );
         }
-
-        result.addProject( project, MavenOneBuildExecutor.ID );
 
         return result;
     }

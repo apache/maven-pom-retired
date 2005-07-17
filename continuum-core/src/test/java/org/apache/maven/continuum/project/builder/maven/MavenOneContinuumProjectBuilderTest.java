@@ -16,6 +16,8 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
+import java.util.Iterator;
+
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
@@ -37,9 +39,20 @@ public class MavenOneContinuumProjectBuilderTest
 
         ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( getTestFile( "src/test/resources/projects/maven-1.pom.xml" ).toURL() );
 
+        assertNotNull( result.getWarnings() );
+
         assertNotNull( result.getProjects() );
 
-        assertEquals( 1, result.getProjects().size() );
+        for ( Iterator it = result.getWarnings().iterator(); it.hasNext(); )
+        {
+            String s = (String) it.next();
+
+            System.err.println( s );
+        }
+
+        assertEquals( "result.warning.length", 0, result.getWarnings().size() );
+
+        assertEquals( "result.projects.length", 1, result.getProjects().size() );
 
         MavenOneProject project = (MavenOneProject) result.getProjects().get( 0 );
 

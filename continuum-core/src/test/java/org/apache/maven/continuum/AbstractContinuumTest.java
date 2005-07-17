@@ -27,6 +27,7 @@ import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.store.ContinuumStore;
 
 import org.codehaus.plexus.PlexusTestCase;
 
@@ -37,6 +38,16 @@ import org.codehaus.plexus.PlexusTestCase;
 public abstract class AbstractContinuumTest
     extends PlexusTestCase
 {
+    // ----------------------------------------------------------------------
+    // Store
+    // ----------------------------------------------------------------------
+
+    protected ContinuumStore getStore()
+        throws Exception
+    {
+        return (ContinuumStore) lookup( ContinuumStore.ROLE, "jdo" );
+    }
+
     // ----------------------------------------------------------------------
     // Build Executor
     // ----------------------------------------------------------------------

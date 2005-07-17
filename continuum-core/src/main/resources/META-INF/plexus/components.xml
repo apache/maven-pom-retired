@@ -117,7 +117,19 @@
 
     <component>
       <role>org.apache.maven.continuum.store.ContinuumStore</role>
+      <role-hint>modello</role-hint>
       <implementation>org.apache.maven.continuum.store.ModelloJPoxContinuumStore</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.jdo.JdoFactory</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.store.ContinuumStore</role>
+      <role-hint>jdo</role-hint>
+      <implementation>org.apache.maven.continuum.store.JdoContinuumStore</implementation>
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.jdo.JdoFactory</role>
@@ -134,9 +146,6 @@
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.Continuum</role>
-        </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.store.tx.StoreTransactionManager</role>
         </requirement>
       </requirements>
       <configuration>
@@ -623,6 +632,5 @@
         </requirement>
       </requirements>
     </component>
-
   </components>
 </component-set>

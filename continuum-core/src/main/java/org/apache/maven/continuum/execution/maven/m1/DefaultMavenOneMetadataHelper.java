@@ -72,25 +72,36 @@ public class DefaultMavenOneMetadataHelper
         }
 
         // ----------------------------------------------------------------------
-        // groupId
+        // Artifact and group id
         // ----------------------------------------------------------------------
 
-        String groupId = getValue( mavenProject, "groupId", null );
+        String groupId;
 
-        if ( groupId  != null )
+        String artifactId;
+
+        String id = getValue( mavenProject, "id", null );
+
+        if ( !StringUtils.isEmpty( id ) )
         {
-            throw new MavenOneMetadataHelperException( "Missing 'groupId' element in the POM." );
+            groupId = id;
+
+            artifactId = id;
         }
-
-        // ----------------------------------------------------------------------
-        // artifactId
-        // ----------------------------------------------------------------------
-
-        String artifactId = getValue( mavenProject, "artifactId", null );
-
-        if ( groupId  != null )
+        else
         {
-            throw new MavenOneMetadataHelperException( "Missing 'artifactId' element in the POM." );
+            groupId = getValue( mavenProject, "groupId", project.getGroupId() );
+
+            if ( StringUtils.isEmpty( groupId ) )
+            {
+                throw new MavenOneMetadataHelperException( "Missing 'groupId' element in the POM." );
+            }
+
+            artifactId = getValue( mavenProject, "artifactId", project.getArtifactId() );
+
+            if ( StringUtils.isEmpty( artifactId ) )
+            {
+                throw new MavenOneMetadataHelperException( "Missing 'artifactId' element in the POM." );
+            }
         }
 
         // ----------------------------------------------------------------------
@@ -99,7 +110,8 @@ public class DefaultMavenOneMetadataHelper
 
         String version = getValue( mavenProject, "currentVersion", project.getVersion() );
 
-        if ( StringUtils.isEmpty( version ) )
+        if ( StringUtils.isEmpty( project.getVersion() ) &&
+             StringUtils.isEmpty( version ) )
         {
             throw new MavenOneMetadataHelperException( "Missing 'version' element in the POM." );
         }
@@ -110,7 +122,8 @@ public class DefaultMavenOneMetadataHelper
 
         String name = getValue( mavenProject, "name", project.getName() );
 
-        if ( StringUtils.isEmpty( name ) )
+        if ( StringUtils.isEmpty( project.getName() ) &&
+             StringUtils.isEmpty( name ) )
         {
             throw new MavenOneMetadataHelperException( "Missing 'name' element in POM." );
         }
@@ -142,7 +155,7 @@ public class DefaultMavenOneMetadataHelper
 
             if ( StringUtils.isEmpty( scmConnection ) )
             {
-                throw new MavenOneMetadataHelperException( "Missing both anonymous and developer scm connection urls." );
+                throw new MavenOneMetadataHelperException( "Missing both anonymous and developer SCM connection URLs." );
             }
         }
 

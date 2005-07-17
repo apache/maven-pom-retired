@@ -503,6 +503,8 @@ public class DefaultContinuumXmlRpc
             excludedProperties.add( "developers" );
 
             excludedProperties.add( "notifiers" );
+
+            excludedProperties.add( "checkOutScmResult" );
         }
 
         ContinuumProject project = (ContinuumProject) object;

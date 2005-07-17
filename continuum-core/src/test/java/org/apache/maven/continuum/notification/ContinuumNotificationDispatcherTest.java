@@ -20,15 +20,14 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ModelloJPoxContinuumStoreTest;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProjectState;
-
-import org.codehaus.plexus.PlexusTestCase;
+import org.apache.maven.continuum.AbstractContinuumTest;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class ContinuumNotificationDispatcherTest
-    extends PlexusTestCase
+    extends AbstractContinuumTest
 {
     public void testNotificationDispatcher()
         throws Exception
@@ -36,7 +35,7 @@ public class ContinuumNotificationDispatcherTest
         ContinuumNotificationDispatcher notificationDispatcher =
             (ContinuumNotificationDispatcher) lookup( ContinuumNotificationDispatcher.ROLE );
 
-        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
+        ContinuumStore store = getStore();
 
         String projectId = ModelloJPoxContinuumStoreTest.addMavenTwoProject( store,
                                                                              "Notification Dispatcher Test Project",

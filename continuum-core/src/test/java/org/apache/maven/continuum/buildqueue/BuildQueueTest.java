@@ -18,6 +18,7 @@ package org.apache.maven.continuum.buildqueue;
 
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ModelloJPoxContinuumStoreTest;
+import org.apache.maven.continuum.AbstractContinuumTest;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.taskqueue.Task;
@@ -28,7 +29,7 @@ import org.codehaus.plexus.taskqueue.TaskQueue;
  * @version $Id$
  */
 public class BuildQueueTest
-    extends PlexusTestCase
+    extends AbstractContinuumTest
 {
     private TaskQueue buildQueue;
 

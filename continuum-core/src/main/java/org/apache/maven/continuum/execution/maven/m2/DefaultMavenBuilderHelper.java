@@ -106,7 +106,7 @@ public class DefaultMavenBuilderHelper
         // GroupId
         // ----------------------------------------------------------------------
 
-        if ( mavenProject.getGroupId() != null )
+        if ( StringUtils.isEmpty( mavenProject.getGroupId() ) )
         {
            continuumProject.setGroupId( mavenProject.getGroupId() );
         }
@@ -115,7 +115,7 @@ public class DefaultMavenBuilderHelper
         // artifactId
         // ----------------------------------------------------------------------
 
-        if ( mavenProject.getArtifactId() != null )
+        if ( StringUtils.isEmpty( mavenProject.getArtifactId() ) )
         {
            continuumProject.setArtifactId( mavenProject.getArtifactId() );
         }
@@ -124,7 +124,7 @@ public class DefaultMavenBuilderHelper
         // Project Url
         // ----------------------------------------------------------------------
 
-        if ( mavenProject.getUrl() != null )
+        if ( StringUtils.isEmpty( mavenProject.getUrl() ) )
         {
            continuumProject.setUrl( mavenProject.getUrl() );
         }

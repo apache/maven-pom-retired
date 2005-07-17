@@ -65,6 +65,10 @@ public class MavenOneBuildExecutorTest
 
         project.setName( "Maven" );
 
+        project.setGroupId( "org.apache.maven" );
+
+        project.setArtifactId( "maven");
+
         project.setScmUrl( "scm:svn:http://svn.apache.org/repos/asf:maven/maven-1/core/trunk/" );
 
         ContinuumNotifier notifier = new ContinuumNotifier();

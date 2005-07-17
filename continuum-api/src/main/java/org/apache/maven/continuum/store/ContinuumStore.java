@@ -53,7 +53,7 @@ public interface ContinuumStore
     Collection getAllProjects()
         throws ContinuumStoreException;
 
-    ContinuumProject getProjectByName( String nameSearchPattern )
+    ContinuumProject getProjectByName( String name )
         throws ContinuumStoreException;
 
     ContinuumProject getProjectByScmUrl( String scmUrl )

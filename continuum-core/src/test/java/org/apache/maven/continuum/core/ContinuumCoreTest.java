@@ -16,6 +16,8 @@ package org.apache.maven.continuum.core;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.store.ContinuumStore;
+
 import org.codehaus.plexus.PlexusTestCase;
 
 /**
@@ -39,7 +41,9 @@ public class ContinuumCoreTest
 //    }
 
     public void testRemoveMeWhenTheOtherTestsAreEnabledAgain()
+        throws Exception
     {
+        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
     }
 
 //    public void testUpdateProject()

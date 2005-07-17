@@ -56,8 +56,6 @@ public class DefaultContinuumTest
     {
         Continuum continuum = (Continuum) lookup( Continuum.ROLE );
 
-        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
-
         // ----------------------------------------------------------------------
         // Test projects with duplicate names
         // ----------------------------------------------------------------------
