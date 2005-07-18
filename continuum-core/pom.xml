@@ -62,7 +62,11 @@
       <artifactId>plexus-command-line</artifactId>
       <version>1.0-alpha-1</version>
     </dependency>
-
+    <dependency>
+      <groupId>quartz</groupId>
+      <artifactId>quartz</artifactId>
+      <version>1.4.5</version>
+    </dependency>    
     <!--
      |
      | Maven Dependencies

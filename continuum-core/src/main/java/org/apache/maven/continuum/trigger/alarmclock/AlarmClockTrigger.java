@@ -68,6 +68,7 @@ public class AlarmClockTrigger
     public void start()
     {
         getLogger().info( "Build interval: " + interval + "s" );
+
         getLogger().info( "Will schedule the first build in: " + delay + "s" );
 
         timer.schedule( new BuildTask(), delay * 1000, interval * 1000 );

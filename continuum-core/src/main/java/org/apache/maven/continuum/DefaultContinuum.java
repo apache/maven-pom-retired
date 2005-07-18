@@ -32,14 +32,20 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.utils.ProjectSorter;
+import org.apache.maven.continuum.scheduler.ContinuumScheduler;
+import org.apache.maven.continuum.scheduler.ContinuumSchedulerConstants;
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -55,17 +61,19 @@ import java.util.Properties;
  */
 public class DefaultContinuum
     extends AbstractLogEnabled
-    implements Continuum
+    implements Continuum, Initializable
 {
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private ContinuumCore core;
 
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private ActionManager actionManager;
+
+    /** @plexus.requirement */
+    private ContinuumScheduler scheduler;
+
+    /** @plexus.requirement */
+    private ConfigurationService configurationService;
 
     // ----------------------------------------------------------------------
     // Projects
@@ -148,6 +156,8 @@ public class DefaultContinuum
         buildProjects( true );
     }
 
+    // TODO: take a Properties here so that we can be extensible. For example we would like to be able
+    // to specify an update or clean checkout as well.
     public void buildProjects( boolean force )
         throws ContinuumException
     {
@@ -625,5 +635,81 @@ public class DefaultContinuum
         {
             core.removeNotifier( n );
         }
+    }
+
+    // ----------------------------------------------------------------------
+    // Lifecylce Management
+    // ----------------------------------------------------------------------
+
+    public void initialize()
+        throws InitializationException
+    {
+        // ----------------------------------------------------------------------
+        // Make sure that the default schedule exists so that projects being
+        // added to Continuum will participate in a scheduled build by default
+        // ----------------------------------------------------------------------
+
+        if ( !defaultScheduleExists() )
+        {
+            createDefaultSchedule();
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Build Scheduling
+    // ----------------------------------------------------------------------
+
+    public ContinuumSchedule getSchedule( String id )
+    {
+        return null;
+    }
+
+    public void addSchedule( ContinuumSchedule schedule )
+    {
+    }
+
+    public void updateSchedule( ContinuumSchedule schedule )
+    {
+    }
+
+    public void removeSchedule( ContinuumSchedule schedule )
+    {
+    }
+
+
+    public void addScheduleToProject( ContinuumProject project, ContinuumSchedule schedule )
+    {
+        project.addSchedule( schedule );
+    }
+
+    public void removeScheduleFromProject( ContinuumProject project, ContinuumSchedule schedule )
+    {
+        project.removeSchedule( schedule );
+    }
+
+    // ----------------------------------------------------------------------
+    // Internal Build Scheduling
+    // ----------------------------------------------------------------------
+
+    private boolean defaultScheduleExists()
+    {
+        // ----------------------------------------------------------------------
+        // Perform a lookup for the default schedule to see if it exists.
+        // ----------------------------------------------------------------------
+
+        return true;
+    }
+
+    private void createDefaultSchedule()
+    {
+        ContinuumSchedule schedule = new ContinuumSchedule();
+
+        schedule.setName( ContinuumSchedulerConstants.DEFAULT_SCHEDULE_NAME );
+
+        schedule.setDescription( ContinuumSchedulerConstants.DEFAULT_SCHEDULE_NAME );
+
+        schedule.setScmMode( ContinuumSchedulerConstants.DEFAULT_SCHEDULE_SCM_MODE );
+
+        schedule.setCronExpression( ContinuumSchedulerConstants.DEFAULT_CRON_EXPRESSION );
     }
 }

@@ -155,6 +155,11 @@ public abstract class AbstractContinuumTest
 
     protected static List createMailNotifierList( String emailAddress )
     {
+        if ( emailAddress == null )
+        {
+            return null;
+        }
+
         ContinuumNotifier notifier = new ContinuumNotifier();
 
         notifier.setType( "mail" );
@@ -365,21 +370,24 @@ public abstract class AbstractContinuumTest
 
         assertEquals( "project.scmUrl", scmUrl, actual.getScmUrl() );
 
-        assertNotNull( "project.notifiers", actual.getNotifiers() );
-
-        assertEquals( "project.notifiers.size", notifiers.size(), actual.getNotifiers().size() );
-
-        for ( int i = 0; i < notifiers.size(); i++ )
+        if ( notifiers != null )
         {
-            ContinuumNotifier notifier = (ContinuumNotifier) notifiers.get( i );
+            assertNotNull( "project.notifiers", actual.getNotifiers() );
 
-            ContinuumNotifier actualNotifier = (ContinuumNotifier) actual.getNotifiers().get( i );
+            assertEquals( "project.notifiers.size", notifiers.size(), actual.getNotifiers().size() );
 
-            assertEquals( "project.notifiers.notifier.type", notifier.getType(), actualNotifier.getType() );
+            for ( int i = 0; i < notifiers.size(); i++ )
+            {
+                ContinuumNotifier notifier = (ContinuumNotifier) notifiers.get( i );
 
-            assertEquals( "project.notifiers.notifier.configuration.address",
-                          notifier.getConfiguration().get( "address" ),
-                          actualNotifier.getConfiguration().get( "address" ) );
+                ContinuumNotifier actualNotifier = (ContinuumNotifier) actual.getNotifiers().get( i );
+
+                assertEquals( "project.notifiers.notifier.type", notifier.getType(), actualNotifier.getType() );
+
+                assertEquals( "project.notifiers.notifier.configuration.address",
+                              notifier.getConfiguration().get( "address" ),
+                              actualNotifier.getConfiguration().get( "address" ) );
+            }
         }
 
         assertEquals( "project.version", version, actual.getVersion() );
@@ -390,4 +398,4 @@ public abstract class AbstractContinuumTest
 
         assertEquals( "project.workingDirectory", workingDirectory, actual.getWorkingDirectory() );
     }
- }
+}
