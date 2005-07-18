@@ -18,10 +18,12 @@ package org.apache.maven.continuum.store;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.ContinuumException;
 
@@ -95,5 +97,21 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     void storeNotifier( Object notifier )
+        throws ContinuumStoreException;
+
+    // ----------------------------------------------------------------------
+    // Schedules
+    // ----------------------------------------------------------------------
+
+    Collection getSchedules()
+        throws ContinuumStoreException;
+
+    ContinuumSchedule getSchedule( String scheduleId )
+        throws ContinuumStoreException;
+
+    void updateSchedule( ContinuumSchedule schedule )
+        throws ContinuumStoreException;
+
+    void removeSchedule( ContinuumSchedule schedule )
         throws ContinuumStoreException;
 }
