@@ -161,7 +161,7 @@
           <name>schedules</name>
           <version>1.0.0</version>
           <type>Set</type>
-          <association stash.part="true">
+          <association stash.part="false">
             <type>ContinuumSchedule</type>
             <multiplicity>*</multiplicity>
           </association>
