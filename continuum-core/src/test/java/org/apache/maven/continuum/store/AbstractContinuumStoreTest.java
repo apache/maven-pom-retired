@@ -63,7 +63,7 @@ public class AbstractContinuumStoreTest
     {
         super.setUp();
 
-        store = (ContinuumStore) lookup( ContinuumStore.ROLE, roleHint );
+        store = (ContinuumStore) lookup( "ContinuumStore", roleHint );
 
         assertEquals( implementationClass, store.getClass() );
 
@@ -152,7 +152,7 @@ public class AbstractContinuumStoreTest
 
         assertNotNull( project );
 
-        assertEquals( projectId, project );
+        assertEquals( projectId, project.getId() );
 
         // ----------------------------------------------------------------------
         //
@@ -162,7 +162,7 @@ public class AbstractContinuumStoreTest
 
         assertNotNull( project );
 
-        assertEquals( projectId, project );
+        assertEquals( projectId, project.getId() );
 
         // ----------------------------------------------------------------------
         //
@@ -172,7 +172,7 @@ public class AbstractContinuumStoreTest
 
         assertNotNull( project );
 
-        assertEquals( projectId, project );
+        assertEquals( projectId, project.getId() );
 
         // ----------------------------------------------------------------------
         //

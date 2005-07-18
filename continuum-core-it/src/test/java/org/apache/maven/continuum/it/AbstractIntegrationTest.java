@@ -35,6 +35,7 @@ import java.util.List;
 
 import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -135,6 +136,7 @@ public abstract class AbstractIntegrationTest
         line();
         print( "IT root: " + rootDirectory.getAbsolutePath() );
         print( "Remoting method: " + remotingMethod );
+        print( "Store implementation: " + lookup( ContinuumStore.ROLE ).getClass() );
         line();
 
         deleteAndCreateDirectory( rootDirectory );

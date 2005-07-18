@@ -214,6 +214,8 @@ public class DefaultContinuumCore
     {
         try
         {
+            project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
+
             store.updateProject( project );
         }
         catch ( ContinuumStoreException ex )

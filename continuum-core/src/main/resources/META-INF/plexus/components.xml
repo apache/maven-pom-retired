@@ -117,6 +117,19 @@
 
     <component>
       <role>org.apache.maven.continuum.store.ContinuumStore</role>
+      <implementation>org.apache.maven.continuum.store.JdoContinuumStore</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.jdo.JdoFactory</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <!-- TODO: Remove these two once the plexus bug where plexus would pick
+         the first component with role hint if no component without a role hint exists
+         and was looked up -->
+    <component>
+      <role>ContinuumStore</role>
       <role-hint>modello</role-hint>
       <implementation>org.apache.maven.continuum.store.ModelloJPoxContinuumStore</implementation>
       <requirements>
@@ -127,7 +140,7 @@
     </component>
 
     <component>
-      <role>org.apache.maven.continuum.store.ContinuumStore</role>
+      <role>ContinuumStore</role>
       <role-hint>jdo</role-hint>
       <implementation>org.apache.maven.continuum.store.JdoContinuumStore</implementation>
       <requirements>

@@ -163,18 +163,20 @@ public class JdoContinuumStore
 
             query.declareParameters( "String name" );
 
-            query.setFilter( "this.name = name" );
+            query.setFilter( "this.name == name" );
 
             Collection result = ( (Collection) query.execute( name ) );
 
-            commit( tx );
-
             if ( result.size() == 0 )
             {
+                commit( tx );
+
                 return null;
             }
 
             Object object = pm.detachCopy( result.iterator().next() );
+
+            commit( tx );
 
             return (ContinuumProject) object;
         }
@@ -201,18 +203,20 @@ public class JdoContinuumStore
 
             query.declareParameters( "String scmUrl" );
 
-            query.setFilter( "this.scmUrl = scmUrl" );
+            query.setFilter( "this.scmUrl == scmUrl" );
 
             Collection result = ( (Collection) query.execute( scmUrl ) );
 
-            commit( tx );
-
             if ( result.size() == 0 )
             {
+                commit( tx );
+
                 return null;
             }
 
             Object object = pm.detachCopy( result.iterator().next() );
+
+            commit( tx );
 
             return (ContinuumProject) object;
         }
@@ -254,8 +258,33 @@ public class JdoContinuumStore
     public ScmResult getScmResultForProject( String projectId )
         throws ContinuumStoreException
     {
-        // TODO:
-        throw new UnsupportedOperationException();
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            ContinuumProject project = getContinuumProject( pm, projectId );
+
+            ScmResult scmResult = project.getScmResult();
+
+            if ( scmResult == null )
+            {
+                return null;
+            }
+
+            scmResult = (ScmResult) pm.detachCopy( scmResult );
+
+            commit( tx );
+
+            return scmResult;
+        }
+        finally
+        {
+            rollback( tx );
+        }
     }
 
     public String addBuild( String projectId, ContinuumBuild build )
@@ -400,22 +429,45 @@ public class JdoContinuumStore
     public List getChangedFilesForBuild( String buildId )
         throws ContinuumStoreException
     {
-        // TODO:
-        throw new UnsupportedOperationException();
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            ContinuumBuild build  = getContinuumBuild( pm, buildId );
+
+            ScmResult scmResult = build.getScmResult();
+
+            if ( scmResult == null )
+            {
+                return null;
+            }
+
+            List files = (List) pm.detachCopyAll( scmResult.getFiles() );
+
+            commit( tx );
+
+            return files;
+        }
+        finally
+        {
+            rollback( tx );
+        }
     }
 
     public void removeNotifier( Object notifier )
         throws ContinuumStoreException
     {
-        // TODO:
-        throw new UnsupportedOperationException();
+        attachAndDelete( notifier );
     }
 
     public void storeNotifier( Object notifier )
         throws ContinuumStoreException
     {
-        // TODO:
-        throw new UnsupportedOperationException();
+        updateObject( notifier );
     }
 
     // ----------------------------------------------------------------------
@@ -468,6 +520,28 @@ public class JdoContinuumStore
         Object id = pm.getObjectId( object );
 
         return pm.getObjectById( id );
+    }
+
+    private void attachAndDelete( Object object )
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            pm.attachCopy( object, true );
+
+            pm.deletePersistent( object );
+
+            commit( tx );
+        }
+        finally
+        {
+            rollback( tx );
+        }
     }
 
     private void deletePersistentById( Class clazz, Object identifier )

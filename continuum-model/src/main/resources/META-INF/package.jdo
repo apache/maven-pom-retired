@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jdo PUBLIC
+  "-//Sun Microsystems, Inc.//DTD Java Data Objects Metadata 2.0//EN"
+  "http://java.sun.com/dtd/jdo_2_0.dtd">
+
+<jdo>
+  <package name="org.apache.maven.continuum.project">
+    <class name="ContinuumProject" detachable="true" identity-type="application">
+      <field name="id" persistence-modifier="persistent" null-value="exception" primary-key="true" value-strategy="native"/>
+      <field name="name" persistence-modifier="persistent"/>
+      <field name="scmUrl" persistence-modifier="persistent"/>
+      <field name="version" persistence-modifier="persistent"/>
+      <field name="workingDirectory" persistence-modifier="persistent"/>
+      <field name="state" persistence-modifier="none"/>
+      <field name="executorId" persistence-modifier="persistent"/>
+      <field name="latestBuildId" persistence-modifier="persistent"/>
+      <field name="previousBuildId" persistence-modifier="persistent"/>
+      <field name="buildNumber" persistence-modifier="persistent"/>
+      <field name="builds" persistence-modifier="persistent">
+        <collection element-type="ContinuumBuild" dependent-element="true"/>
+      </field>
+      <field name="scmResult" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
+      <field name="checkOutErrorMessage" persistence-modifier="persistent"/>
+      <field name="checkOutErrorException" persistence-modifier="persistent"/>
+      <field name="mailType" persistence-modifier="persistent"/>
+      <field name="commandLineArguments" persistence-modifier="persistent"/>
+      <field name="url" persistence-modifier="persistent"/>
+      <field name="artifactId" persistence-modifier="persistent"/>
+      <field name="groupId" persistence-modifier="persistent"/>
+      <field name="testOutputDirectory" persistence-modifier="persistent"/>
+      <field name="developers" persistence-modifier="persistent" default-fetch-group="true">
+        <collection element-type="ContinuumDeveloper" dependent-element="true"/>
+      </field>
+      <field name="notifiers" persistence-modifier="persistent" default-fetch-group="true">
+        <collection element-type="ContinuumNotifier" dependent-element="true"/>
+      </field>
+      <field name="dependencies" persistence-modifier="persistent" default-fetch-group="true">
+        <collection element-type="ContinuumDependency" dependent-element="true"/>
+      </field>
+    </class>
+    <class name="ContinuumNotifier" detachable="true" identity-type="datastore">
+      <field name="type" persistence-modifier="persistent"/>
+      <field name="configuration" persistence-modifier="persistent" default-fetch-group="true">
+        <map key-type="java.lang.String" value-type="String" dependent-key="true" dependent-value="true"/>
+        <join/>
+      </field>
+    </class>
+    <class name="ContinuumDeveloper" detachable="true" identity-type="application">
+      <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
+      <field name="name" persistence-modifier="persistent"/>
+      <field name="email" persistence-modifier="persistent"/>
+    </class>
+    <class name="ContinuumDependency" detachable="true" identity-type="datastore">
+      <field name="groupId" persistence-modifier="persistent"/>
+      <field name="artifactId" persistence-modifier="persistent"/>
+      <field name="version" persistence-modifier="persistent"/>
+    </class>
+    <class name="MavenTwoProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject" detachable="true">
+      <inheritance strategy="new-table"/>
+      <field name="goals" persistence-modifier="persistent"/>
+    </class>
+    <class name="MavenOneProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject" detachable="true">
+      <inheritance strategy="new-table"/>
+      <field name="goals" persistence-modifier="persistent"/>
+    </class>
+    <class name="AntProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject" detachable="true">
+      <inheritance strategy="new-table"/>
+      <field name="executable" persistence-modifier="persistent"/>
+      <field name="targets" persistence-modifier="persistent"/>
+    </class>
+    <class name="ShellProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject" detachable="true">
+      <inheritance strategy="new-table"/>
+      <field name="executable" persistence-modifier="persistent"/>
+    </class>
+    <class name="ContinuumBuild" detachable="true" identity-type="application">
+      <field name="project" persistence-modifier="persistent" null-value="exception" default-fetch-group="false"/>
+      <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
+      <field name="state" persistence-modifier="persistent"/>
+      <field name="forced" persistence-modifier="persistent"/>
+      <field name="startTime" persistence-modifier="persistent"/>
+      <field name="endTime" persistence-modifier="persistent"/>
+      <field name="error" persistence-modifier="persistent">
+        <extension vendor-name="jpox" key="length" value="max 8000"/>
+      </field>
+      <field name="success" persistence-modifier="persistent"/>
+      <field name="standardOutput" persistence-modifier="persistent">
+        <extension vendor-name="jpox" key="length" value="max 8000"/>
+      </field>
+      <field name="standardError" persistence-modifier="persistent">
+        <extension vendor-name="jpox" key="length" value="max 8000"/>
+      </field>
+      <field name="exitCode" persistence-modifier="persistent"/>
+      <field name="scmResult" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
+    </class>
+  </package>
+  <package name="org.apache.maven.continuum.scm">
+    <class name="ScmResult" detachable="true" identity-type="datastore">
+      <field name="success" persistence-modifier="persistent"/>
+      <field name="providerMessage" persistence-modifier="persistent"/>
+      <field name="commandOutput" persistence-modifier="persistent"/>
+      <field name="files" persistence-modifier="persistent" default-fetch-group="true">
+        <collection element-type="ScmFile" dependent-element="true"/>
+      </field>
+      <field name="changes" persistence-modifier="persistent" default-fetch-group="true">
+        <collection element-type="ChangeSet" dependent-element="true"/>
+      </field>
+    </class>
+    <class name="ScmFile" detachable="true" identity-type="datastore">
+      <field name="path" persistence-modifier="persistent"/>
+    </class>
+    <class name="ChangeSet" detachable="true" identity-type="datastore">
+      <field name="author" persistence-modifier="persistent"/>
+      <field name="comment" persistence-modifier="persistent"/>
+      <field name="date" persistence-modifier="persistent"/>
+      <field name="file" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
+    </class>
+    <class name="ChangeFile" detachable="true" identity-type="datastore">
+      <field name="name" persistence-modifier="persistent"/>
+      <field name="revision" persistence-modifier="persistent"/>
+    </class>
+  </package>
+</jdo>

@@ -53,7 +53,7 @@ public abstract class AbstractContinuumTest
     protected ContinuumStore getStore()
         throws Exception
     {
-        return (ContinuumStore) lookup( ContinuumStore.ROLE, "jdo" );
+        return (ContinuumStore) lookup( ContinuumStore.ROLE );
     }
 
     // ----------------------------------------------------------------------

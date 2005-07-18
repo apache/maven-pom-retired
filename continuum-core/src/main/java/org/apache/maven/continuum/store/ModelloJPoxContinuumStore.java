@@ -115,8 +115,6 @@ public class ModelloJPoxContinuumStore
             store.deleteContinuumProject( projectId );
 
             store.commit();
-
-            getLogger().info( "Removed project with id '" + projectId + "'." );
         }
         catch ( Exception e )
         {
@@ -131,8 +129,6 @@ public class ModelloJPoxContinuumStore
     {
         try
         {
-            project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
-
             store.storeContinuumProject( project );
 
             project = store.getContinuumProject( project.getId(), true );
