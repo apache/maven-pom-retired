@@ -668,4 +668,46 @@ public class AbstractContinuumStoreTest
         return addMavenTwoProject( store,
                                    makeStubMavenTwoProject( name, scmUrl ) );
     }
+
+    // ----------------------------------------------------------------------
+    // Notifiers
+    // ----------------------------------------------------------------------
+
+    public void testNotifiersAreBeingDetached()
+        throws Exception
+    {
+        List notifiers = new ArrayList();
+
+        ContinuumNotifier notifier = new ContinuumNotifier();
+
+        notifier.setType( "foo" );
+
+        Map configuration = new HashMap();
+
+        configuration.put( "moo", "foo" );
+
+        notifier.setConfiguration( configuration );
+
+        notifiers.add( notifier );
+
+        ContinuumProject project = new MavenTwoProject();
+
+        project.setNotifiers( notifiers );
+
+        String id = getStore().addProject( project );
+
+        project = getStore().getProject( id );
+
+        notifiers = project.getNotifiers();
+
+        assertNotNull( notifiers );
+
+        notifier = (ContinuumNotifier) notifiers.get( 0 );
+
+        assertEquals( "foo", notifier.getType() );
+
+        configuration = notifier.getConfiguration();
+
+        assertEquals( "foo", configuration.get( "moo" ) );
+    }
 }
