@@ -2,6 +2,7 @@ $page.setTitle( "Add Project" )
 
 <div class="app">
   <div id="axial" class="h3">
+    >>>>>>>>> $form.add.titleKey
     <h3>$i18n.getString( $form.add.titleKey )</h3>
     <form method="post" action="$link" #if( $form.attributes.multipart )enctype="multipart/form-data"#end>
       #hidden ( "fid" $form.id )

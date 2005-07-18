@@ -62,12 +62,12 @@
       <groupId>plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>1.0.1</version>
-    </dependency>     
+    </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-appserver</artifactId>
       <version>1.0-alpha-3</version>
-    </dependency>     
+    </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-container-artifact</artifactId>
@@ -158,6 +158,34 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>env-test</id>
+      <activator>
+        <property>
+          <name>env</name>
+          <value>test</value>
+        </property>
+      </activator>
+      <properties>
+        <appProperties>test.properties</appProperties>
+      </properties>
+    </profile>
+    <profile>
+      <id>env-production</id>
+      <activator>
+        <property>
+          <name>env</name>
+          <value>production</value>
+        </property>
+      </activator>
+      <properties>
+        <appProperties>test.properties</appProperties>
+      </properties>
+    </profile>
+  </profiles>
+
   <build>
     <plugins>
       <plugin>
@@ -169,7 +197,7 @@
           <configurationProperties>app.properties</configurationProperties>
           <applicationName>continuum</applicationName>
           <runtimeConfiguration>src/test/conf/test-runtime-configuration.xml</runtimeConfiguration>
-          <runtimeConfigurationProperties>app.properties</runtimeConfigurationProperties>
+          <runtimeConfigurationProperties>${appProperties}</runtimeConfigurationProperties>
           <runtimePath>target/plexus-test-runtime</runtimePath>
         </configuration>
         <executions>

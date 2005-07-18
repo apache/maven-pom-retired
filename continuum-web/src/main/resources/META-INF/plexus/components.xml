@@ -101,6 +101,11 @@
             <role>org.apache.maven.continuum.web.tool.FormicaTool</role>
             <scope>global</scope>
           </tool>
+          <tool>
+            <name>formDataTool</name>
+            <role>org.apache.maven.continuum.web.tool.FormDataTool</role>
+            <scope>global</scope>
+          </tool>
         </tools>
       </configuration>
     </component>
@@ -115,6 +120,12 @@
       <role>csstool</role>
       <implementation>org.apache.maven.continuum.web.tool.CssTool</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
+      <configuration/>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.web.tool.FormDataTool</role>
+      <implementation>org.apache.maven.continuum.web.tool.FormDataTool</implementation>
       <configuration/>
     </component>
 

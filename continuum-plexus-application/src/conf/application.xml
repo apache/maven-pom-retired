@@ -6,7 +6,7 @@
     </component>
     <component>
       <role>org.apache.maven.continuum.trigger.ContinuumTrigger</role>
-      <role-hint>alarm-clock</role-hint>
+      <role-hint>quartz-alarm-clock</role-hint>
     </component>
     <component>
       <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
@@ -220,6 +220,32 @@
         <delay>3600</delay>
       </configuration>
     </component>
+    
+    <component>
+      <role>org.apache.maven.continuum.trigger.ContinuumTrigger</role>
+      <role-hint>quartz-alarm-clock</role-hint>
+      <implementation>org.apache.maven.continuum.trigger.quartz.QuartzAlarmClockTrigger</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.scheduler.ContinuumScheduler</role>
+        </requirement>        
+      </requirements>
+      <configuration>
+        <!--
+        | The interval in number of seconds between scheduling the projects.
+        | The default value is one hour.
+        |-->
+        <interval>3600</interval>
+        <!--
+        | The delay to wait after startup.
+        | The default value is one hour.
+        |-->
+        <delay>3600</delay>
+      </configuration>
+    </component>    
 
     <component>
       <role>org.apache.maven.continuum.network.ConnectionFactory</role>

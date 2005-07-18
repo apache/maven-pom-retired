@@ -27,8 +27,10 @@ import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.scm.ScmResult;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
 /**
@@ -177,4 +179,21 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
 
     void removeNotifier( String projectId, String notifierType )
         throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Schedules
+    // ----------------------------------------------------------------------
+
+    public ContinuumSchedule getSchedule( String scheduleId )
+        throws ContinuumException;
+
+    public void addSchedule( ContinuumSchedule schedule )
+        throws ContinuumException;
+
+    public void updateSchedule( ContinuumSchedule schedule )
+        throws ContinuumException;
+
+    public void removeSchedule( String scheduleId )
+        throws ContinuumException;
+
 }

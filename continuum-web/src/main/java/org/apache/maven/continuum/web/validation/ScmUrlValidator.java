@@ -38,13 +38,12 @@ public class ScmUrlValidator
         throws FormicaException
     {
         List messages = scmManager.validateScmRepository( scmUrl );
+
         if (messages.size() != 0)
         {
-            throw new RuntimeException( "Error : " + messages.get(0));
+            return false;
         }
-        else
-        {
-            return messages.size() == 0;
-        }
+
+        return true;
     }
 }

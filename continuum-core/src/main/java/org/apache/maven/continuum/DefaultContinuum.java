@@ -41,9 +41,12 @@ import org.apache.maven.continuum.utils.ProjectSorter;
 import org.apache.maven.continuum.scheduler.ContinuumScheduler;
 import org.apache.maven.continuum.scheduler.ContinuumSchedulerConstants;
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
@@ -74,6 +77,9 @@ public class DefaultContinuum
 
     /** @plexus.requirement */
     private ConfigurationService configurationService;
+
+    /** @plexus.requirement */
+    private ContinuumStore store;
 
     // ----------------------------------------------------------------------
     // Projects
@@ -659,23 +665,59 @@ public class DefaultContinuum
     // Build Scheduling
     // ----------------------------------------------------------------------
 
-    public ContinuumSchedule getSchedule( String id )
+    public ContinuumSchedule getSchedule( String scheduleId )
+        throws ContinuumException
     {
-        return null;
+        try
+        {
+            ContinuumSchedule schedule = store.getSchedule( scheduleId );
+
+            return schedule;
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Exception while getting project '" + scheduleId + "'.", ex );
+        }
     }
 
     public void addSchedule( ContinuumSchedule schedule )
+        throws ContinuumException
     {
+        try
+        {
+            store.addSchedule( schedule );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while removing project.", ex );
+        }
     }
 
     public void updateSchedule( ContinuumSchedule schedule )
+        throws ContinuumException
     {
+        try
+        {
+            store.updateSchedule( schedule );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while removing project.", ex );
+        }
     }
 
-    public void removeSchedule( ContinuumSchedule schedule )
+    public void removeSchedule( String scheduleId )
+        throws ContinuumException
     {
+        try
+        {
+            store.removeSchedule( scheduleId );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while removing project.", ex );
+        }
     }
-
 
     public void addScheduleToProject( ContinuumProject project, ContinuumSchedule schedule )
     {
@@ -710,6 +752,19 @@ public class DefaultContinuum
 
         schedule.setScmMode( ContinuumSchedulerConstants.DEFAULT_SCHEDULE_SCM_MODE );
 
+        schedule.setActive( true );
+
         schedule.setCronExpression( ContinuumSchedulerConstants.DEFAULT_CRON_EXPRESSION );
+    }
+
+    // ----------------------------------------------------------------------
+    // Logging
+    // ----------------------------------------------------------------------
+
+    private ContinuumException logAndCreateException( String message, Throwable cause )
+    {
+        getLogger().error( message, cause );
+
+        return new ContinuumException( message, cause );
     }
 }

@@ -29,6 +29,10 @@
     #radio( $element $elementData )
   #elseif ( $element.type == "upload" )
     #upload( $element $elementData )
+  #elseif ( $element.type == "pulldown" )
+    #pulldown( $element $elementData )
+  #elseif ( $element.type == "checkbox" )
+    #checkbox( $element $elementData )
   #end
   <p>
     $i18n.getString( $element.messageKey ) <font color="red"><b>$!errorMsg</b></font>
@@ -77,13 +81,14 @@
 #end
 
 #macro ( checkbox $element $elementData )
-<input type="checkbox" name="$element.id" value=""/>
+>>>>> $elementData
+<input type="checkbox" name="$element.id"/>
 #end
 
 #macro ( pulldown $element $elementData )
 <select name="$element.id">
-  #foreach ( $datum in $elementData )
-    <option>
+  #foreach ( $datum in $formDataTool.pulldown( $element.data ) )
+    <option value="$datum.name">$datum.value
   #end
 </select>
 #end

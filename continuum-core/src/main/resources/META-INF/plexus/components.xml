@@ -57,6 +57,9 @@
         <requirement>
           <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
       </requirements>
     </component>
 

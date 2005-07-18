@@ -1,29 +1,55 @@
 <div id="navcolum">
- <div id="projecttools" class="toolgroup">
-  <div class="label">Continuum</div>
-  <div class="body">
-    <div><a href="$link.setPage('Summary.vm').addPathInfo( 'fid', 'continuumProject')">Show Projects</a></div>
+  <div id="projecttools" class="toolgroup">
+    <div class="label">Continuum</div>
+    <div class="body">
+      <div>
+        <a href="$link.setPage('Summary.vm').addPathInfo( 'fid', 'continuumProject')">Show Projects</a>
+      </div>
+    </div>
   </div>
- </div>
-
- <div id="projecttools" class="toolgroup">
-  <div class="label">Add Project</div>
-  <div class="body">
-    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenTwoProject')">Add M2 Project</a></div>
-    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'uploadMavenTwoProject')">Upload M2 Project</a></div>
-    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenOneProject')">Add M1 Project</a></div>
-    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'uploadMavenOneProject')">Upload M1 Project</a></div>
-    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'antProject')">Add Ant Project</a></div>
-    <div><a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'shellProject')">Add Shell Project</a></div>
-  </div>
- </div>
 
   <div id="projecttools" class="toolgroup">
-   <div class="label">Build</div>
-   <div class="body">
-     <div><a href="$link.setPage('BuildOrder.vm')">Build Order</a></div>
-   </div>
+    <div class="label">Add Project</div>
+    <div class="body">
+      <div>
+        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenTwoProject')">Add M2 Project</a>
+      </div>
+      <div>
+        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'uploadMavenTwoProject')">Upload M2 Project</a>
+      </div>
+      <div>
+        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenOneProject')">Add M1 Project</a>
+      </div>
+      <div>
+        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'uploadMavenOneProject')">Upload M1 Project</a>
+      </div>
+      <div>
+        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'antProject')">Add Ant Project</a>
+      </div>
+      <div>
+        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'shellProject')">Add Shell Project</a>
+      </div>
+    </div>
   </div>
+
+  <div id="projecttools" class="toolgroup">
+    <div class="label">Schedules</div>
+    <div class="body">
+      <div>
+        <a href="$link.setPage('schedule,ScheduleSummary.vm')">Schedules</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="projecttools" class="toolgroup">
+    <div class="label">Schedules</div>
+    <div class="body">
+      <div>
+        <a href="$link.setPage('BuildOrder.vm')">Build Order</a>
+      </div>
+    </div>
+  </div>
+
 
   <!--
   <div id="projecttools" class="toolgroup">

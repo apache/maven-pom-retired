@@ -1,0 +1,14 @@
+ ------
+ Articles on CI
+ ------
+ Jason van Zyl
+ ------
+
+Articles on CI
+
+ * {{{http://www.martinfowler.com/articles/continuousIntegration.html}Continuous Integration}}
+
+ * {{{http://www.joelonsoftware.com/articles/fog0000000023.html}Daily Builds Are Your Friend}}
+ 
+ * {{{http://www.stevemcconnell.com/bp04.htm}Daily Builds and Smoke Test}}
+
