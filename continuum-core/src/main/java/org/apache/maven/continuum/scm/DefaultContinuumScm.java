@@ -17,6 +17,7 @@ package org.apache.maven.continuum.scm;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -28,6 +29,7 @@ import org.apache.maven.scm.repository.ScmRepository;
 import org.apache.maven.scm.repository.ScmRepositoryException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.scm.ScmManager;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -64,6 +66,17 @@ public class DefaultContinuumScm
                     if ( !workingDirectory.mkdirs() )
                     {
                         throw new ContinuumScmException( "Could not make directory: " + workingDirectory.getAbsolutePath() );
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        FileUtils.cleanDirectory( workingDirectory );
+                    }
+                    catch ( IOException e )
+                    {
+                        throw new ContinuumScmException( "Could not clean directory : " + workingDirectory.getAbsolutePath(), e );
                     }
                 }
 
