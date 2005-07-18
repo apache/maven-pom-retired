@@ -94,7 +94,7 @@ public class MsnContinuumNotifier
         //
         // ----------------------------------------------------------------------
 
-*/
+/*
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_STARTED ) )
         {
             buildStarted( project, recipients, configuration );
