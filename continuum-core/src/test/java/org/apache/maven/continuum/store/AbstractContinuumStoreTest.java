@@ -18,16 +18,14 @@ package org.apache.maven.continuum.store;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Collections;
 
 import org.apache.maven.continuum.AbstractContinuumTest;
-import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -153,6 +151,28 @@ public class AbstractContinuumStoreTest
         project = store.getProject( projectId );
 
         assertNotNull( project );
+
+        assertEquals( projectId, project );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        project = store.getProjectByName( name );
+
+        assertNotNull( project );
+
+        assertEquals( projectId, project );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        project = store.getProjectByScmUrl( scmUrl );
+
+        assertNotNull( project );
+
+        assertEquals( projectId, project );
 
         // ----------------------------------------------------------------------
         //
