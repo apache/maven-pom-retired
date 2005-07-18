@@ -272,6 +272,8 @@ public class JdoContinuumStore
 
             if ( scmResult == null )
             {
+                commit( tx );
+
                 return null;
             }
 
@@ -372,6 +374,8 @@ public class JdoContinuumStore
 
             if ( buildId == null )
             {
+                commit( tx );
+
                 return null;
             }
 
@@ -443,6 +447,8 @@ public class JdoContinuumStore
 
             if ( scmResult == null )
             {
+                commit( tx );
+
                 return null;
             }
 
