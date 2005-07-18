@@ -1,6 +1,3 @@
-/*
- * Copyright (c) 2005 Your Corporation. All Rights Reserved.
- */
 package org.apache.maven.continuum.store;
 
 import java.util.ArrayList;
@@ -750,16 +747,32 @@ public class AbstractContinuumStoreTest
         assertEquals( "0 * * * * ?", schedule.getCronExpression() );
 
         // ----------------------------------------------------------------------
-        //
+        // Now lookup the schedule on its own and make sure the project is
+        // present within the schedule.
         // ----------------------------------------------------------------------
 
-        schedule = store.getSchedule( schedule.getId() );
+        String scheduleId = schedule.getId();
+
+        schedule = store.getSchedule( scheduleId );
 
         assertNotNull( schedule );
 
         project = (ContinuumProject) schedule.getProjects().iterator().next();
 
         assertNotNull( project );
+
+        assertEquals( "Project Scheduling", project.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now delete the project from the store and make sure that the schedule
+        // still remains in the store.
+        // ----------------------------------------------------------------------
+
+        store.removeProject( projectId );
+
+        schedule = store.getSchedule( scheduleId );
+
+        assertNotNull( schedule );
     }
 
     // ----------------------------------------------------------------------

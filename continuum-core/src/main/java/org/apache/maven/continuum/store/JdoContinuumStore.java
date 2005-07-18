@@ -20,6 +20,7 @@ import javax.jdo.Transaction;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -82,7 +83,48 @@ public class JdoContinuumStore
     public void removeProject( String projectId )
         throws ContinuumStoreException
     {
-        deletePersistentById( ContinuumProject.class, projectId );
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Object id = pm.newObjectIdInstance( ContinuumProject.class, projectId );
+
+            ContinuumProject project = (ContinuumProject) pm.getObjectById( id );
+
+            // ----------------------------------------------------------------------
+            // We need to remove this project reference from any schedule in the
+            // system. So grab the list of schedules this project belongs to
+            // then iterate through the collection of schedules removing the
+            // reference to this project. This seems like a bit much but the
+            // only thing that works.
+            // ----------------------------------------------------------------------
+
+            if ( project.getSchedules() != null && project.getSchedules().size() > 0 )
+            {
+                Set schedules = project.getSchedules();
+
+                for ( Iterator i = schedules.iterator(); i.hasNext(); )
+                {
+                    ContinuumSchedule schedule = (ContinuumSchedule) i.next();
+
+                    schedule.getProjects().remove( project );
+                }
+
+                makePersistentAll( pm, project.getSchedules() );
+            }
+
+            pm.deletePersistent( project );
+
+            commit( tx );
+        }
+        finally
+        {
+            rollback( tx );
+        }
     }
 
     public void updateProject( ContinuumProject project )
@@ -113,8 +155,6 @@ public class JdoContinuumStore
         {
             rollback( tx );
         }
-
-        //updateObject( project );
     }
 
     public Collection getAllProjects()
@@ -372,6 +412,18 @@ public class JdoContinuumStore
         {
             rollback( tx );
         }
+    }
+
+    public void updateSchedule( ContinuumSchedule schedule )
+        throws ContinuumStoreException
+    {
+        updateObject( schedule );
+    }
+
+    public void removeSchedule( ContinuumSchedule schedule )
+        throws ContinuumStoreException
+    {
+        attachAndDelete( schedule );
     }
 
     // ----------------------------------------------------------------------
