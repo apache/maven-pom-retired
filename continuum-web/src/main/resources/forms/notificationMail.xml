@@ -17,6 +17,8 @@
         </validator>
       </validators>
       <type>text</type>
+      <label-key>mail.address.label</label-key>
+      <message-key>mail.address.message</message-key>
     </element>
   </elements>
 

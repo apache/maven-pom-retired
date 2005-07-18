@@ -17,6 +17,8 @@
         </validator>
       </validators>
       <type>text</type>
+      <label-key>irc.host.label</label-key>
+      <message-key>irc.host.message</message-key>
     </element>
     <element>
       <id>port</id>
@@ -28,6 +30,8 @@
         </validator>
       </validators>
       <type>text</type>
+      <label-key>irc.port.label</label-key>
+      <message-key>irc.port.message</message-key>
     </element>
     <element>
       <id>channel</id>
@@ -38,6 +42,8 @@
         </validator>
       </validators>
       <type>text</type>
+      <label-key>irc.channel.label</label-key>
+      <message-key>irc.channel.message</message-key>
     </element>
   </elements>
 
