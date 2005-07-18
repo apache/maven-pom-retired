@@ -20,6 +20,23 @@
           <channel>#maven</channel>
         </configuration>
       </notifier>      
+      <notifier>
+        <type>jabber</type>
+        <configuration>
+          <host>jabber.domain.com</host>
+          <login>myuser</login>
+          <password>mypassword</password>
+          <address>destUser@jabber.domain.com
+        </configuration>
+      </notifier>      
+      <notifier>
+        <type>msn</type>
+        <configuration>
+          <login>myuser</login>
+          <password>mypassword</password>
+          <address>destUser@domain.com
+        </configuration>
+      </notifier>      
     </notifiers>
   </ciManagement>
   <scm>
