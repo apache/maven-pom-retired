@@ -715,25 +715,34 @@ public class AbstractContinuumStoreTest
     // Schedules
     // ----------------------------------------------------------------------
 
-    public void testSchedulesBeingAddedToProject()
+    public void testScheduleAdditionAndRemovalFromProject()
         throws Exception
     {
+        // create project
         String projectId = addMavenTwoProject( "Project Scheduling", "scm:scheduling" );
 
         ContinuumProject project = store.getProject( projectId );
 
+        // add schedule
         project.addSchedule( createStubSchedule( "schedule1" ) );
 
+        // update project
         store.updateProject( project );
 
+        // retrieve project
         project = store.getProject( projectId );
 
         assertNotNull( project );
 
+        // get schedules out of the project
         Set schedules = project.getSchedules();
 
+        assertEquals( 1, schedules.size() );
+
+        // get individual schedule
         ContinuumSchedule schedule = (ContinuumSchedule) schedules.iterator().next();
 
+        // test values within schedule
         assertEquals( "schedule1", schedule.getName() );
 
         assertEquals( "schedule1", schedule.getDescription() );
@@ -773,6 +782,69 @@ public class AbstractContinuumStoreTest
         schedule = store.getSchedule( scheduleId );
 
         assertNotNull( schedule );
+    }
+
+    public void testProjectAdditionAndRemovalFromSchedule()
+        throws Exception
+    {
+        // create schedule
+        ContinuumSchedule schedule = createStubSchedule( "schedule2" );
+
+        String scheduleId = store.addSchedule( schedule );
+
+        schedule = store.getSchedule( scheduleId );
+
+        String projectId = addMavenTwoProject( "Project", "scm:scheduling" );
+
+        ContinuumProject project = store.getProject( projectId );
+
+        // add project
+        schedule.addProject( project );
+
+        // update schedule
+        store.updateSchedule( schedule );
+
+        // retrieve schedule
+        schedule = store.getSchedule( scheduleId );
+
+        assertNotNull( schedule );
+
+        // get projects out of the schedule
+        Set projects = schedule.getProjects();
+
+        assertEquals( 1, projects.size() );
+
+        // get individual project
+        project = (ContinuumProject) schedule.getProjects().iterator().next();
+
+        // test values within project
+        assertEquals( "Project", project.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now lookup the project on its own and make sure the schedule is
+        // present within the project.
+        // ----------------------------------------------------------------------
+
+        project = store.getProject( projectId );
+
+        assertNotNull( project );
+
+        schedule = (ContinuumSchedule) project.getSchedules().iterator().next();
+
+        assertEquals( "schedule2", schedule.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now delete the schedule from the store and make sure that the project
+        // still remains in the store.
+        // ----------------------------------------------------------------------
+
+        schedule = store.getSchedule( scheduleId );
+
+        store.removeSchedule( schedule.getId() );
+
+        project = store.getProject( projectId );
+
+        assertNotNull( project );
     }
 
     // ----------------------------------------------------------------------

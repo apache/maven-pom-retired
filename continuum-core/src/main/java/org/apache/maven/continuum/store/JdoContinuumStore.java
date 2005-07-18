@@ -113,8 +113,6 @@ public class JdoContinuumStore
 
                     schedule.getProjects().remove( project );
                 }
-
-                makePersistentAll( pm, project.getSchedules() );
             }
 
             pm.deletePersistent( project );
@@ -139,7 +137,8 @@ public class JdoContinuumStore
             tx.begin();
 
             // ----------------------------------------------------------------------
-            // Work around for bug with M:N relationships
+            // Work around for bug with M:N relationships. We must persist the list
+            // of schedules or they don't get saved.
             // ----------------------------------------------------------------------
 
             if ( project.getSchedules() != null && project.getSchedules().size() > 0 )
@@ -340,6 +339,29 @@ public class JdoContinuumStore
     // Schedules
     // ----------------------------------------------------------------------
 
+    public String addSchedule( ContinuumSchedule schedule )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            schedule = (ContinuumSchedule) makePersistent( pm, schedule );
+
+            commit( tx );
+
+            return schedule.getId();
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
     public ContinuumSchedule getSchedule( String projectId )
         throws ContinuumStoreException
     {
@@ -420,10 +442,49 @@ public class JdoContinuumStore
         updateObject( schedule );
     }
 
-    public void removeSchedule( ContinuumSchedule schedule )
+    public void removeSchedule( String scheduleId )
         throws ContinuumStoreException
     {
-        attachAndDelete( schedule );
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Object id = pm.newObjectIdInstance( ContinuumSchedule.class, scheduleId );
+
+            ContinuumSchedule schedule = (ContinuumSchedule) pm.getObjectById( id );
+
+            // ----------------------------------------------------------------------
+            // We need to remove this schedule reference from any project in the
+            // system. So grab the list of projects this schedule belongs to
+            // then iterate through the collection of projects removing the
+            // reference to this schedule. This seems like a bit much but the
+            // only thing that works.
+            // ----------------------------------------------------------------------
+
+            if ( schedule.getProjects() != null && schedule.getProjects().size() > 0 )
+            {
+                Set projects = schedule.getProjects();
+
+                for ( Iterator i = projects.iterator(); i.hasNext(); )
+                {
+                    ContinuumProject project = (ContinuumProject) i.next();
+
+                    project.getSchedules().remove( schedule );
+                }
+            }
+
+            pm.deletePersistent( schedule );
+
+            commit( tx );
+        }
+        finally
+        {
+            rollback( tx );
+        }
     }
 
     // ----------------------------------------------------------------------
