@@ -65,12 +65,12 @@
           <name>previousBuildId</name>
           <version>1.0.0</version>
           <type>String</type>
-        </field>        
+        </field>
         <field>
           <name>buildNumber</name>
           <version>1.0.0</version>
           <type>int</type>
-        </field>        
+        </field>
         <field>
           <name>builds</name>
           <version>1.0.0</version>
@@ -157,8 +157,107 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+        <field>
+          <name>schedules</name>
+          <version>1.0.0</version>
+          <type>Set</type>
+          <association stash.part="true">
+            <type>ContinuumSchedule</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
+
+    <class stash.storable="true">
+      <name>ContinuumSchedule</name>
+      <version>1.0.0</version>
+      <description><![CDATA[
+        Schedule for a project.
+      ]]></description>
+      <fields>
+        <field>
+          <name>projects</name>
+          <version>1.0.0</version>
+          <type>Set</type>
+          <association stash.part="true">
+            <type>ContinuumProject</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>id</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>active</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>description</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <!--
+         | update
+         | clean checkout
+         -->
+        <field>
+          <name>scmMode</name>
+          <version>1.0.0</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>delay</name>
+          <description><![CDATA[
+            Delay in seconds.
+          ]]></description>
+          <version>1.0.0</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>cronExpression</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
+    <class stash.storable="true">
+      <name>ContinuumTrigger</name>
+      <version>1.0.0</version>
+      <description><![CDATA[
+        Schedule for a project.
+      ]]></description>
+      <fields>
+        <!--
+         | internal
+         | cron
+         -->
+        <field>
+          <name>type</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <!--
+         | interval = interval in seconds
+         | cron = cron syntax
+         -->
+        <field>
+          <name>specification</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+
 
     <class stash.storable="true">
       <name>ContinuumNotifier</name>
@@ -209,7 +308,7 @@
         </field>
       </fields>
     </class>
-    
+
     <class stash.storable="true">
       <name>ContinuumDependency</name>
       <version>1.0.0</version>
