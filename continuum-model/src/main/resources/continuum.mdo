@@ -231,35 +231,6 @@
     </class>
 
     <class stash.storable="true">
-      <name>ContinuumTrigger</name>
-      <version>1.0.0</version>
-      <description><![CDATA[
-        Schedule for a project.
-      ]]></description>
-      <fields>
-        <!--
-         | internal
-         | cron
-         -->
-        <field>
-          <name>type</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <!--
-         | interval = interval in seconds
-         | cron = cron syntax
-         -->
-        <field>
-          <name>specification</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-      </fields>
-    </class>
-
-
-    <class stash.storable="true">
       <name>ContinuumNotifier</name>
       <version>1.0.0</version>
       <description>
