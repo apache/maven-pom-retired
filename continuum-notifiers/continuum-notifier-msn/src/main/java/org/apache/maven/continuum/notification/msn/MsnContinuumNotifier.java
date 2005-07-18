@@ -94,6 +94,7 @@ public class MsnContinuumNotifier
         //
         // ----------------------------------------------------------------------
 
+*/
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_STARTED ) )
         {
             buildStarted( project, recipients, configuration );
@@ -121,6 +122,11 @@ public class MsnContinuumNotifier
         else
         {
             getLogger().warn( "Unknown source: '" + source + "'." );
+        }
+*/
+        if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
+        {
+            buildComplete( project, build, recipients, configuration );
         }
     }
 

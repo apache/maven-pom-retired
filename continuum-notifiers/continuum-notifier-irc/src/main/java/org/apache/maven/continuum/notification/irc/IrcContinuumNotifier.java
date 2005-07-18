@@ -76,18 +76,6 @@ public class IrcContinuumNotifier
         {
             return;
         }
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        /*
-        if ( recipients.size() == 0 )
-        {
-            getLogger().info( "No IRC recipients for '" + project.getName() + "'." );
-
-            return;
-        }
-        */
 
         // ----------------------------------------------------------------------
         // Generate and send message

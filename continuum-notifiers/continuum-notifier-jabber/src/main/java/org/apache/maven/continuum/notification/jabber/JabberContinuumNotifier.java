@@ -91,7 +91,7 @@ public class JabberContinuumNotifier
 
         if ( recipients.size() == 0 )
         {
-            getLogger().info( "No jabber recipients for '" + project.getName() + "'." );
+            getLogger().info( "No Jabber recipients for '" + project.getName() + "'." );
 
             return;
         }
@@ -100,6 +100,7 @@ public class JabberContinuumNotifier
         //
         // ----------------------------------------------------------------------
 
+/*
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_STARTED ) )
         {
             buildStarted( project, recipients, configuration );
@@ -127,6 +128,11 @@ public class JabberContinuumNotifier
         else
         {
             getLogger().warn( "Unknown source: '" + source + "'." );
+        }
+*/
+        if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
+        {
+            buildComplete( project, build, recipients, configuration );
         }
     }
 
