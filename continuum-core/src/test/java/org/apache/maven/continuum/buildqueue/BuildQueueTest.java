@@ -16,11 +16,8 @@ package org.apache.maven.continuum.buildqueue;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ModelloJPoxContinuumStoreTest;
 import org.apache.maven.continuum.AbstractContinuumTest;
 
-import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 
@@ -33,22 +30,18 @@ public class BuildQueueTest
 {
     private TaskQueue buildQueue;
 
-    private ContinuumStore store;
-
     public void setUp()
         throws Exception
     {
         super.setUp();
 
         buildQueue = (TaskQueue) lookup( TaskQueue.ROLE, "build-project" );
-
-        store = (ContinuumStore) lookup( ContinuumStore.ROLE );
     }
 
     public void testTestTheQueueWithASingleProject()
         throws Exception
     {
-        String projectId = ModelloJPoxContinuumStoreTest.addMavenTwoProject( store, "Build Queue Project 1", "1" );
+        String projectId = AbstractContinuumTest.addMavenTwoProject( getStore(), "Build Queue Project 1", "1" );
 
         buildProject( projectId, false );
 
@@ -71,9 +64,9 @@ public class BuildQueueTest
     public void testTheQueueWithMultipleProjects()
         throws Exception
     {
-        String projectId1 = ModelloJPoxContinuumStoreTest.addMavenTwoProject( store, "Build Queue Project 2", "foo" );
+        String projectId1 = AbstractContinuumTest.addMavenTwoProject( getStore(), "Build Queue Project 2", "foo" );
 
-        String projectId2 = ModelloJPoxContinuumStoreTest.addMavenTwoProject( store, "Build Queue Project 3", "bar" );
+        String projectId2 = AbstractContinuumTest.addMavenTwoProject( getStore(), "Build Queue Project 3", "bar" );
 
         buildProject( projectId1, false );
 
@@ -109,7 +102,7 @@ public class BuildQueueTest
     {
         String name = "Build Queue Project 4";
 
-        String projectId = ModelloJPoxContinuumStoreTest.addMavenTwoProject( store, name, "4" );
+        String projectId = AbstractContinuumTest.addMavenTwoProject( getStore(), name, "4" );
 
         buildProject( projectId, true );
 
