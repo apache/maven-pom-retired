@@ -103,15 +103,19 @@ public interface ContinuumStore
     // Schedules
     // ----------------------------------------------------------------------
 
+    String addSchedule( ContinuumSchedule schedule )
+        throws ContinuumStoreException;
+
+    void updateSchedule( ContinuumSchedule schedule )
+        throws ContinuumStoreException;
+
+    void removeSchedule( String scheduleId )
+        throws ContinuumStoreException;
+
     Collection getSchedules()
         throws ContinuumStoreException;
 
     ContinuumSchedule getSchedule( String scheduleId )
         throws ContinuumStoreException;
 
-    void updateSchedule( ContinuumSchedule schedule )
-        throws ContinuumStoreException;
-
-    void removeSchedule( ContinuumSchedule schedule )
-        throws ContinuumStoreException;
 }
