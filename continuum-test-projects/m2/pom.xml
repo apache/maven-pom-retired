@@ -26,7 +26,7 @@
           <host>jabber.domain.com</host>
           <login>myuser</login>
           <password>mypassword</password>
-          <address>destUser@jabber.domain.com
+          <address>destUser@jabber.domain.com</address>
         </configuration>
       </notifier>      
       <notifier>
@@ -34,7 +34,7 @@
         <configuration>
           <login>myuser</login>
           <password>mypassword</password>
-          <address>destUser@domain.com
+          <address>destUser@domain.com</address>
         </configuration>
       </notifier>      
     </notifiers>
