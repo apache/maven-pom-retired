@@ -10,7 +10,7 @@ $page.setTitle( "Continuum - Notifier Selection" )
         <option value="notificationMail:Add.vm">Mail
         <option value="notificationIrc:Add.vm">IRC
         <option value="notificationJabber:Add.vm">Jabber
-        <option value="notificationJabber:Add.vm">MSN
+        <option value="notificationMsn:Add.vm">MSN
       </select>
       <p/>
       <div class="axial">
