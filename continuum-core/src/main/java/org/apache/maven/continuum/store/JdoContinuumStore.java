@@ -1,11 +1,14 @@
-/*
- * Copyright (c) 2005 Your Corporation. All Rights Reserved.
- */
 package org.apache.maven.continuum.store;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.project.ContinuumSchedule;
+import org.apache.maven.continuum.scm.ScmResult;
+import org.codehaus.plexus.jdo.JdoFactory;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
 import javax.jdo.Extent;
 import javax.jdo.JDOObjectNotFoundException;
@@ -14,16 +17,9 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
-
-import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.scm.ScmResult;
-
-import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -71,8 +67,6 @@ public class JdoContinuumStore
 
             Object object = makePersistent( pm, project );
 
-            object = pm.detachCopy( object );
-
             project = (ContinuumProject) object;
 
             commit( tx );
@@ -94,7 +88,33 @@ public class JdoContinuumStore
     public void updateProject( ContinuumProject project )
         throws ContinuumStoreException
     {
-        updateObject( project );
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            // ----------------------------------------------------------------------
+            // Work around for bug with M:N relationships
+            // ----------------------------------------------------------------------
+
+            if ( project.getSchedules() != null && project.getSchedules().size() > 0 )
+            {
+                makePersistentAll( pm, project.getSchedules() );
+            }
+
+            pm.attachCopy( project, true );
+
+            commit( tx );
+        }
+        finally
+        {
+            rollback( tx );
+        }
+
+        //updateObject( project );
     }
 
     public Collection getAllProjects()
@@ -275,6 +295,88 @@ public class JdoContinuumStore
             rollback( tx );
         }
     }
+
+    // ----------------------------------------------------------------------
+    // Schedules
+    // ----------------------------------------------------------------------
+
+    public ContinuumSchedule getSchedule( String projectId )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            ContinuumSchedule schedule = getContinuumSchedule( pm, projectId );
+
+            schedule = (ContinuumSchedule) pm.detachCopy( schedule );
+
+            commit( tx );
+
+            return schedule;
+        }
+        catch( JDOObjectNotFoundException e )
+        {
+            throw new ContinuumObjectNotFoundException( ContinuumProject.class.getName(), projectId );
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    private ContinuumSchedule getContinuumSchedule( PersistenceManager pm, String projectId )
+    {
+        pm.getFetchPlan().addGroup( "schedule-detail" );
+
+        Object id = pm.newObjectIdInstance( ContinuumSchedule.class, projectId );
+
+        return (ContinuumSchedule) pm.getObjectById( id );
+    }
+
+    public Collection getSchedules()
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( ContinuumSchedule.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.setOrdering( "name ascending" );
+
+            Collection result = (Collection) query.execute();
+
+            result = pm.detachCopyAll( result );
+
+            for ( Iterator it = result.iterator(); it.hasNext(); )
+            {
+                setProjectState( (ContinuumProject) it.next() );
+            }
+
+            commit( tx );
+
+            return result;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Builds
+    // ----------------------------------------------------------------------
 
     public String addBuild( String projectId, ContinuumBuild build )
         throws ContinuumStoreException
@@ -515,6 +617,11 @@ public class JdoContinuumStore
         Object id = pm.getObjectId( object );
 
         return pm.getObjectById( id );
+    }
+
+    private void makePersistentAll( PersistenceManager pm, Collection object )
+    {
+        pm.makePersistentAll( object );
     }
 
     private void attachAndDelete( Object object )

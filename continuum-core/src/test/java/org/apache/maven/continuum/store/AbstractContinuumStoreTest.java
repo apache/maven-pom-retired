@@ -11,8 +11,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.maven.continuum.AbstractContinuumTest;
+import org.apache.maven.continuum.scheduler.ContinuumSchedulerConstants;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -20,6 +22,7 @@ import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.ScmResult;
 
@@ -709,5 +712,80 @@ public class AbstractContinuumStoreTest
         configuration = notifier.getConfiguration();
 
         assertEquals( "foo", configuration.get( "moo" ) );
+    }
+
+    // ----------------------------------------------------------------------
+    // Schedules
+    // ----------------------------------------------------------------------
+
+    public void testSchedulesBeingAddedToProject()
+        throws Exception
+    {
+        String projectId = addMavenTwoProject( "Project Scheduling", "scm:scheduling" );
+
+        ContinuumProject project = store.getProject( projectId );
+
+        project.addSchedule( createStubSchedule( "schedule1" ) );
+
+        store.updateProject( project );
+
+        project = store.getProject( projectId );
+
+        assertNotNull( project );
+
+        Set schedules = project.getSchedules();
+
+        ContinuumSchedule schedule = (ContinuumSchedule) schedules.iterator().next();
+
+        assertEquals( "schedule1", schedule.getName() );
+
+        assertEquals( "schedule1", schedule.getDescription() );
+
+        assertTrue( schedule.isActive() );
+
+        assertEquals( ContinuumSchedulerConstants.SCM_MODE_UPDATE, schedule.getScmMode() );
+
+        assertEquals( 3600, schedule.getDelay() );
+
+        assertEquals( "0 * * * * ?", schedule.getCronExpression() );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        schedule = store.getSchedule( schedule.getId() );
+
+        assertNotNull( schedule );
+
+        project = (ContinuumProject) schedule.getProjects().iterator().next();
+
+        assertNotNull( project );
+    }
+
+    // ----------------------------------------------------------------------
+    // name
+    // description = name
+    // active = true
+    // scmMode = ContinuumSchedulerConstants.SCM_MODE_UPDATE
+    // delay = 3600
+    // cronExpression = 0 * * * * ?
+    // ----------------------------------------------------------------------
+    protected ContinuumSchedule createStubSchedule( String name )
+    {
+        ContinuumSchedule schedule = new ContinuumSchedule();
+
+        schedule.setName( name );
+
+        schedule.setDescription( name );
+
+        schedule.setActive( true );
+
+        schedule.setScmMode( ContinuumSchedulerConstants.SCM_MODE_UPDATE );
+
+        schedule.setDelay( 3600 );
+
+        schedule.setCronExpression( "0 * * * * ?" );
+
+        return schedule;
     }
 }
