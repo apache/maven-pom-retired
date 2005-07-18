@@ -15,18 +15,30 @@ $page.setTitle( "Continuum - ${project.name} Notifiers" )
         <td>IRC</td>
         #elseif ( $notifier.type == "mail" )
         <td>Mail</td>
+        #elseif ( $notifier.type == "msn" )
+        <td>MSN</td>
+        #elseif ( $notifier.type == "jabber" )
+        <td>Jabber</td>
         #end
 
         #if ( $notifier.type == "irc" )
         <td><a href="$link.setPage('ViewIrcNotifier.vm').addPathInfo('view','ViewIrcNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">View</a></td>
         #elseif ( $notifier.type == "mail" )
         <td><a href="$link.setPage('ViewMailNotifier.vm').addPathInfo('view','ViewMailNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">View</a></td>
+        #elseif ( $notifier.type == "msn" )
+        <td><a href="$link.setPage('ViewMsnNotifier.vm').addPathInfo('view','ViewMsnNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">View</a></td>
+        #elseif ( $notifier.type == "jabber" )
+        <td><a href="$link.setPage('ViewJabberNotifier.vm').addPathInfo('view','ViewJabberNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">View</a></td>
         #end
 
         #if ( $notifier.type == "irc" )
         <td><a href="$link.setPage('EditIrcNotifier.vm').addPathInfo('view','EditIrcNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">Edit</a></td>
         #elseif ( $notifier.type == "mail" )
         <td><a href="$link.setPage('EditMailNotifier.vm').addPathInfo('view','EditMailNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">Edit</a></td>
+        #elseif ( $notifier.type == "msn" )
+        <td><a href="$link.setPage('EditMsnNotifier.vm').addPathInfo('view','EditMsnNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">Edit</a></td>
+        #elseif ( $notifier.type == "jabber" )
+        <td><a href="$link.setPage('EditJabberNotifier.vm').addPathInfo('view','EditJabberNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $project.id)">Edit</a></td>
         #end
 
         <td><a href="$link.setPage('ProjectNotifiers.vm').addPathInfo('notifierType', $notifier.type).addPathInfo('action','cam').addPathInfo('cid','deleteNotifier').addPathInfo('id', $project.id)">Delete</a></td>

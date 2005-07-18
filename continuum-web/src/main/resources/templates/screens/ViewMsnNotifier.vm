@@ -1,0 +1,26 @@
+$page.setTitle( "Continuum - MSN Notifier" )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>MSN Notifier</h3>
+    <div class="axial">
+      <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        <tr class="b">
+          <th>MSN Login</th>
+          <td>$notifier.configuration.login</td>
+        </tr>
+        <tr class="b">
+          <th>MSN Password</th>
+          <td>**********</td>
+        </tr>
+        <tr class="b">
+          <th>MSN Recipient</th>
+          <td>$notifier.configuration.address</td>
+        </tr>
+      </table>
+    </div>
+    <div class="functnbar3">
+      <a href="$link.setPage('ProjectNotifiers.vm').addPathInfo('view','ProjectNotifiers').addPathInfo('id',$data.parameters.getString("id"))">Back to Notifiers</a>
+    </div>
+  </div>
+</div>

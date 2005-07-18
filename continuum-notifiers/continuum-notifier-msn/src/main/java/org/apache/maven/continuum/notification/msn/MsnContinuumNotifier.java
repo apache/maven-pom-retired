@@ -85,7 +85,7 @@ public class MsnContinuumNotifier
 
         if ( recipients.size() == 0 )
         {
-            getLogger().info( "No mail recipients for '" + project.getName() + "'." );
+            getLogger().info( "No MSN recipients for '" + project.getName() + "'." );
 
             return;
         }
@@ -230,14 +230,9 @@ public class MsnContinuumNotifier
 
     private String getUsername( Map configuration )
     {
-        if ( configuration.containsKey( "address" ) )
+        if ( configuration.containsKey( "login" ) )
         {
-            String username = (String) configuration.get( "address" );
-
-            if ( username.indexOf( "@" ) > 0 )
-            {
-                username = username.substring( 0, username.indexOf( "@" ) );
-            }
+            String username = (String) configuration.get( "login" );
 
             return username;
         }

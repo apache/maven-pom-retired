@@ -1,0 +1,39 @@
+$page.setTitle( "Continuum - MSN Notifier" )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>Edit MSN Notifier</h3>
+    <form method="post" action="$link">
+      #hidden ( "action" "cam" )
+      #hidden ( "cid" "updateNotifier" )
+      #hidden ( "view" "ProjectNotifiers.vm" )
+      #hidden ( "id" $project.id )
+      #hidden ( "notifierType" "jabber" )
+      <div class="axial">
+        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+          <tr>
+            <th>MSN Login</th>
+            <td>
+              <input type="text" name="port" value="$notifier.configuration.login" size="40"/>
+            </td>
+          </tr>
+          <tr>
+            <th>MSN Password</th>
+            <td>
+              <input type="password" name="password" value="$notifier.configuration.password" size="40"/>
+            </td>
+          </tr>
+          <tr>
+            <th>MSN Recipient</th>
+            <td>
+              <input type="text" name="address" value="$notifier.configuration.address" size="40"/>
+            </td>
+            ##field( $i18n $data $element $item $formtool )
+            ##validateField( $fvr $element )
+          </tr>
+        </table>
+        #submitBar( "Submit" )
+      </div>
+    </form>
+  </div>
+</div>

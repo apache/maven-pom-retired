@@ -8,12 +8,25 @@
 #if ( $fvr && !$fvr.getElementResult( $element.getId()).valid() )
   #set ( $errorMsg = "&nbsp;&nbsp; [ $fvr.getElementResult( $element.getId() ).errorMessage ] " )
   #set ( $attr = 'style="background-color: #ffffcc"' )
+#else
+  #set ( $errorMsg = "" )
+  #set ( $attr = '' )
 #end
 
 <td $attr>
   #set ( $elementData = $formtool.getElementData( $form, $element, $item, $data ) )
   #if ( $element.type == "text" )
     #text( $element $elementData )
+  #elseif ( $element.type == "textarea" )
+    #textarea( $element $elementData )
+  #elseif ( $element.type == "checkbox" )
+    #checkbox( $element $elementData )
+  #elseif ( $element.type == "hidden" )
+    #hidden( $element $elementData )
+  #elseif ( $element.type == "password" )
+    #password( $element $elementData )
+  #elseif ( $element.type == "radio" )
+    #radio( $element $elementData )
   #elseif ( $element.type == "upload" )
     #upload( $element $elementData )
   #end
@@ -56,7 +69,7 @@
 #end
 
 #macro ( password $element $elementData )
-<input type="text" name="$element.id" value="$elementData" size="40"/>
+<input type="password" name="$element.id" value="$elementData" size="40"/>
 #end
 
 #macro ( radio $element $elementData )

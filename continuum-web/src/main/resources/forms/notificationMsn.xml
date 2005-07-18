@@ -1,12 +1,36 @@
 <form>
-  <id>notificationMail</id>
+  <id>notificationMsn</id>
   <source-role>org.apache.maven.continuum.Continuum</source-role>
   <lookup-expression>getNotifier(#id,#notifierType)</lookup-expression>  
   <elements>
     <element>
       <id>notifierType</id>
-      <default-value>mail</default-value>
+      <default-value>msn</default-value>
       <immutable>true</immutable>
+    </element>
+    <element>
+      <id>login</id>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>empty.error</error-message-key>
+        </validator>
+      </validators>
+      <type>text</type>
+      <label-key>msn.login.label</label-key>
+      <message-key>msn.login.message</message-key>
+    </element>
+    <element>
+      <id>password</id>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>empty.error</error-message-key>
+        </validator>
+      </validators>
+      <type>password</type>
+      <label-key>msn.password.label</label-key>
+      <message-key>msn.password.message</message-key>
     </element>
     <element>
       <id>address</id>
@@ -17,16 +41,18 @@
         </validator>
       </validators>
       <type>text</type>
+      <label-key>msn.address.label</label-key>
+      <message-key>msn.address.message</message-key>
     </element>
   </elements>
 
   <!-- Add -->
   <add>
-    <title-key>mailNotificationTitle</title-key>
+    <title-key>jabberNotificationTitle</title-key>
     <action>callMethod</action>
     <view>Summary.vm</view>
     <view-on-failure>Add.vm</view-on-failure>
-    <fid-on-failure>notificationMail</fid-on-failure>
+    <fid-on-failure>notificationJabber</fid-on-failure>
     <expression>addNotifier(#id,#notifierType,#parameters)</expression>
   </add>
 

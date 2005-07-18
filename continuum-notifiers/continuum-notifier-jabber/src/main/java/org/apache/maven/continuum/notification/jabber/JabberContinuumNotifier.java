@@ -91,7 +91,7 @@ public class JabberContinuumNotifier
 
         if ( recipients.size() == 0 )
         {
-            getLogger().info( "No mail recipients for '" + project.getName() + "'." );
+            getLogger().info( "No jabber recipients for '" + project.getName() + "'." );
 
             return;
         }
@@ -271,9 +271,9 @@ public class JabberContinuumNotifier
 
     private String getUsername( Map configuration )
     {
-        if ( configuration.containsKey( "address" ) )
+        if ( configuration.containsKey( "login" ) )
         {
-            String username = (String) configuration.get( "address" );
+            String username = (String) configuration.get( "login" );
 
             if ( username.indexOf( "@" ) > 0 )
             {
