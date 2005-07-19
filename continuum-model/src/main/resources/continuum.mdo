@@ -417,17 +417,6 @@
           <name>error</name>
           <version>1.0.0</version>
           <type>String</type>
-          <!--
-          <association>
-            <type>java.lang.Throwable</type>
-          </association>
-          -->
-        </field>
-
-        <field>
-          <name>success</name>
-          <version>1.0.0</version>
-          <type>boolean</type>
         </field>
         <field>
           <name>exitCode</name>

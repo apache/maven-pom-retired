@@ -96,16 +96,8 @@ public class ExecuteBuilderContinuumAction
 
             ContinuumBuildExecutionResult result = buildExecutor.build( project );
 
-            if ( result.isSuccess() )
-            {
-                build.setState( ContinuumProjectState.OK );
-            }
-            else
-            {
-                build.setState( ContinuumProjectState.FAILED );
-            }
-
-            build.setSuccess( result.isSuccess() );
+            build.setState( result.getExitCode() == 0 ?
+                            ContinuumProjectState.OK : ContinuumProjectState.FAILED );
 
             build.setExitCode( result.getExitCode() );
 
@@ -114,8 +106,6 @@ public class ExecuteBuilderContinuumAction
         catch( Throwable e )
         {
             build.setState( ContinuumProjectState.ERROR );
-
-            build.setSuccess( false );
 
             build.setError( ContinuumUtils.throwableToString( e ) );
         }

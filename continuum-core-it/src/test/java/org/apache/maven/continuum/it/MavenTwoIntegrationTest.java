@@ -98,8 +98,6 @@ public class MavenTwoIntegrationTest
 
         assertTrue( "The 'build forced' flag wasn't true", build.isForced() );
 
-        build = continuum.getBuild( buildId );
-
         removeProject( projectId );
     }
 

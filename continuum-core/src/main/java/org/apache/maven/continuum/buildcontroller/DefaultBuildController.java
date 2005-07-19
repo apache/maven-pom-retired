@@ -264,8 +264,6 @@ public class DefaultBuildController
 
         build.setEndTime( System.currentTimeMillis() );
 
-        build.setSuccess( false );
-
         build.setScmResult( scmResult );
 
         return build;

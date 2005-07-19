@@ -340,19 +340,17 @@ public class AbstractContinuumStoreTest
         setBuildResult( store,
                         buildId,
                         ContinuumProjectState.OK,
-                        makeContinuumBuildExecutionResult( true, "", 0 ),
+                        makeContinuumBuildExecutionResult( "", 0 ),
                         scmResult,
                         null );
 
         store.removeProject( projectId );
     }
 
-    private ContinuumBuildExecutionResult makeContinuumBuildExecutionResult( boolean success,
-                                                                             String output,
+    private ContinuumBuildExecutionResult makeContinuumBuildExecutionResult( String output,
                                                                              int exitCode )
     {
-        return new ContinuumBuildExecutionResult( success,
-                                                  output,
+        return new ContinuumBuildExecutionResult( output,
                                                   exitCode );
     }
 
@@ -468,7 +466,7 @@ public class AbstractContinuumStoreTest
         setBuildComplete( store,
                           buildId,
                           scmResult,
-                          makeContinuumBuildExecutionResult( true, "output", 10 ) );
+                          makeContinuumBuildExecutionResult( "output", 10 ) );
 
         // ----------------------------------------------------------------------
         // Store and check the build object
@@ -496,8 +494,6 @@ public class AbstractContinuumStoreTest
         ContinuumBuild build = store.getBuild( buildId );
 
         build.setScmResult( scmResult );
-
-        build.setSuccess( result.isSuccess() );
 
         build.setExitCode( result.getExitCode() );
 
@@ -637,7 +633,7 @@ public class AbstractContinuumStoreTest
         setBuildResult( store,
                         buildId,
                         ContinuumProjectState.OK,
-                        makeContinuumBuildExecutionResult( true, "output", 1 ),
+                        makeContinuumBuildExecutionResult(  "output", 1 ),
                         scmResult,
                         null );
 

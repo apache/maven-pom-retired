@@ -182,8 +182,6 @@ public class MailContinuumNotifierTest
 
         build.setState( state );
 
-        build.setSuccess( state == ContinuumProjectState.OK );
-
         build.setForced( true );
 
         build.setExitCode( 10 );

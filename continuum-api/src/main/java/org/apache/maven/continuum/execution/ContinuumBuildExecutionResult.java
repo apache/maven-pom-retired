@@ -22,25 +22,15 @@ package org.apache.maven.continuum.execution;
  */
 public class ContinuumBuildExecutionResult
 {
-    private boolean success;
-
     private String output;
 
     private int exitCode;
 
-    public ContinuumBuildExecutionResult( boolean success,
-                                          String output, int exitCode )
+    public ContinuumBuildExecutionResult( String output, int exitCode )
     {
-        this.success = success;
-
         this.output = output;
 
         this.exitCode = exitCode;
-    }
-
-    public boolean isSuccess()
-    {
-        return success;
     }
 
     public String getOutput()

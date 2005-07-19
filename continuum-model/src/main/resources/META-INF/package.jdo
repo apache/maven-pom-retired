@@ -65,8 +65,8 @@
       <field name="delay" persistence-modifier="persistent"/>
       <field name="cronExpression" persistence-modifier="persistent"/>
       <fetch-group name="schedule-detail">
-        <field name="projects"/>        
-      </fetch-group>      
+        <field name="projects"/>
+      </fetch-group>
     </class>
 
     <class name="ContinuumNotifier" detachable="true" identity-type="datastore">
@@ -113,7 +113,6 @@
       <field name="error" persistence-modifier="persistent">
         <extension vendor-name="jpox" key="length" value="max 8000"/>
       </field>
-      <field name="success" persistence-modifier="persistent"/>
       <field name="exitCode" persistence-modifier="persistent"/>
       <field name="scmResult" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
     </class>

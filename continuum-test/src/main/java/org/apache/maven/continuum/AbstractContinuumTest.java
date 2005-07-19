@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.io.File;
-import java.io.IOException;
 
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
@@ -39,8 +37,6 @@ import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 
 import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.context.Context;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -58,10 +54,12 @@ public abstract class AbstractContinuumTest
     {
         super.setUp();
 
-        Context context = getContainer().getContext();
+        setUpConfigurationService( (ConfigurationService) lookup( ConfigurationService.ROLE ) );
+    }
 
-        ConfigurationService configurationService = (ConfigurationService) lookup( ConfigurationService.ROLE );
-
+    public static void setUpConfigurationService( ConfigurationService configurationService )
+        throws Exception
+    {
         configurationService.setBuildOutputDirectory( getTestFile( "target/build-output" ) );
     }
 
@@ -315,8 +313,6 @@ public abstract class AbstractContinuumTest
         // ----------------------------------------------------------------------
         // Copy over the build result
         // ----------------------------------------------------------------------
-
-        build.setSuccess( result.isSuccess() );
 
         build.setExitCode( result.getExitCode() );
 

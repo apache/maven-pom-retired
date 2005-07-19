@@ -36,6 +36,7 @@ import java.util.List;
 import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.AbstractContinuumTest;
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
@@ -91,7 +92,7 @@ public abstract class AbstractIntegrationTest
 
         Properties properties = new Properties();
 
-        properties.load( new FileInputStream( getTestFile( "../continuum-plexus-application/app.properties" ) ) );
+        properties.load( new FileInputStream( getTestFile( "../continuum-plexus-application/test.properties" ) ) );
 
         String s = IOUtil.toString( new InterpolationFilterReader( reader, properties, "@", "@" ) );
 
@@ -109,8 +110,6 @@ public abstract class AbstractIntegrationTest
         }
 
         context.put( "plexus.home", plexusHome.getAbsolutePath() );
-
-        AbstractContinuumTest.makeConfiguration( plexusHome.getAbsolutePath() );
     }
 
     public final void setUp()
@@ -155,6 +154,8 @@ public abstract class AbstractIntegrationTest
 
             continuum.removeProject( project.getId() );
         }
+
+        AbstractContinuumTest.setUpConfigurationService( (ConfigurationService) lookup( ConfigurationService.ROLE ) );
     }
 
     public final void tearDown()
@@ -182,10 +183,10 @@ public abstract class AbstractIntegrationTest
         {
             return (Continuum) lookup( Continuum.ROLE );
         }
-        else if ( remotingMethod.equals( REMOTING_METHOD_XMLRPC ) )
-        {
-            return new ContinuumXmlRpcClient( getHost(), getPort(), getXmlRpcHelper() );
-        }
+//        else if ( remotingMethod.equals( REMOTING_METHOD_XMLRPC ) )
+//        {
+//            return new ContinuumXmlRpcClient( getHost(), getPort(), getXmlRpcHelper() );
+//        }
 
         fail( "Unsupported remoting method '" + remotingMethod + "'." );
 
@@ -570,8 +571,6 @@ public abstract class AbstractIntegrationTest
 
         assertEquals( "The build wasn't successful.", ContinuumProjectState.OK, build.getState() );
 
-        assertTrue( "The build wasn't successful", build.isSuccess() );
-
         return build;
     }
 
@@ -580,7 +579,7 @@ public abstract class AbstractIntegrationTest
     {
         ContinuumBuild build = waitForBuild( buildId );
 
-        if ( build.getState() != ContinuumProjectState.OK || !build.isSuccess() )
+        if ( build.getState() != ContinuumProjectState.OK )
         {
             print( "Build state: " + build.getState() );
 

@@ -50,7 +50,7 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class ContinuumXmlRpcClient
+public abstract class ContinuumXmlRpcClient
     implements Continuum
 {
     // ----------------------------------------------------------------------
