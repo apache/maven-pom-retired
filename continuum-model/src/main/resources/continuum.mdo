@@ -555,5 +555,41 @@
         </field>
       </fields>
     </class>
+    
+    <!-- Profiles -->
+    
+    <class>
+      <name>ContinuumProfile</name>
+      <packageName>org.apache.maven.continuum.profile</packageName>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>jdk</name>
+          <version>1.0.0</version>
+          <association>
+            <type>ContinuumJdk</type>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ContinuumJdk</name>
+      <packageName>org.apache.maven.continuum.profile</packageName>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>version</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>home</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>        
+      </fields>
+    </class>
+    
   </classes>
 </model>

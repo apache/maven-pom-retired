@@ -144,4 +144,16 @@
       <field name="revision" persistence-modifier="persistent"/>
     </class>
   </package>
+  
+  <!-- Profiles -->
+  
+  <package name="org.apache.maven.continuum.profile">
+    <class name="ContinuumProfile" detachable="true" identity-type="application">
+      <field name="jdk" persistence-modifier="persistent"/>
+    </class>
+    <class name="ContinuumJdk" detachable="true" identity-type="datastore">
+      <field name="version" persistence-modifier="persistent"/>
+      <field name="home" persistence-modifier="persistent"/>      
+    </class>    
+  </package>        
 </jdo>
