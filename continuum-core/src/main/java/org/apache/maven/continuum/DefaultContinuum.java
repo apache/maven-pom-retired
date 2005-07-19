@@ -732,14 +732,38 @@ public class DefaultContinuum
         }
     }
 
-    public void addScheduleToProject( ContinuumProject project, ContinuumSchedule schedule )
+    // ----------------------------------------------------------------------
+    // Project scheduling
+    // ----------------------------------------------------------------------
+
+    public void addProjectToSchedule( ContinuumProject project, ContinuumSchedule schedule )
+        throws ContinuumException
     {
-        project.addSchedule( schedule );
+        schedule.addProject( project );
+
+        try
+        {
+            store.updateSchedule( schedule );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Error while adding project to schedule.", e );
+        }
     }
 
-    public void removeScheduleFromProject( ContinuumProject project, ContinuumSchedule schedule )
+    public void removeProjectFromSchedule( ContinuumProject project, ContinuumSchedule schedule )
+        throws ContinuumException
     {
-        project.removeSchedule( schedule );
+        schedule.removeProject( project );
+
+        try
+        {
+            store.updateSchedule( schedule );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Error while removing project from schedule.", e );
+        }
     }
 
     // ----------------------------------------------------------------------
