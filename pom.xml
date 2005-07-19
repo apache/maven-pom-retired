@@ -189,7 +189,7 @@
   <modules>
     <module>continuum-api</module>
     <module>continuum-cc</module>
-    <module>continuum-core-ci</module>
+    <module>continuum-core-it</module>
     <module>continuum-core</module>
     <module>continuum-model</module>
     <module>continuum-notifiers</module>
