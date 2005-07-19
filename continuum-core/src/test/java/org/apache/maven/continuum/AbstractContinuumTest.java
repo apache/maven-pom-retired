@@ -16,28 +16,32 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
-import java.util.List;
-import java.util.Properties;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Properties;
+import java.io.File;
+import java.io.IOException;
 
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
-import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
+import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.scm.ScmFile;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.scm.ScmResult;
-import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.context.Context;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -46,6 +50,39 @@ import org.codehaus.plexus.PlexusTestCase;
 public abstract class AbstractContinuumTest
     extends PlexusTestCase
 {
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    protected void setUp()
+        throws Exception
+    {
+        super.setUp();
+
+        Context context = getContainer().getContext();
+
+        String plexusHome = (String) context.get( "plexus.home" );
+
+        makeConfiguration( plexusHome );
+    }
+
+    public static void makeConfiguration( String plexusHome )
+        throws IOException
+    {
+        File configFile = new File( plexusHome, "conf/configuration.xml" );
+
+        if ( !configFile.getParentFile().exists() &&
+             !configFile.getParentFile().mkdirs() )
+        {
+            throw new IOException( "Could not make directory: '" + configFile.getParentFile() + "'." );
+        }
+
+        FileUtils.fileWrite( configFile.getAbsolutePath(),
+                             "<configuration>" +
+                             "<build-output-directory>target/build-output</build-output-directory>" +
+                             "</configuration>");
+    }
+
     // ----------------------------------------------------------------------
     // Store
     // ----------------------------------------------------------------------
@@ -305,11 +342,9 @@ public abstract class AbstractContinuumTest
 
         build.setSuccess( result.isSuccess() );
 
-        build.setStandardOutput( result.getStandardOutput() );
-
-        build.setStandardError( result.getStandardError() );
-
         build.setExitCode( result.getExitCode() );
+
+        store.setBuildOutput( build.getId(), result.getOutput() );
 
         store.updateBuild( build );
     }

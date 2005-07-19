@@ -22,7 +22,6 @@ import java.util.Map;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
-import org.apache.maven.continuum.buildcontroller.DefaultBuildController;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -89,6 +88,8 @@ public class ExecuteBuilderContinuumAction
 
         build = getStore().getBuild( buildId );
 
+        String output = null;
+
         try
         {
             getNotifier().runningGoals( project, getBuild( context ) );
@@ -106,11 +107,9 @@ public class ExecuteBuilderContinuumAction
 
             build.setSuccess( result.isSuccess() );
 
-            build.setStandardOutput( result.getStandardOutput() );
-
-            build.setStandardError( result.getStandardError() );
-
             build.setExitCode( result.getExitCode() );
+
+            output = result.getOutput();
         }
         catch( Throwable e )
         {
@@ -127,6 +126,8 @@ public class ExecuteBuilderContinuumAction
             // ----------------------------------------------------------------------
             // Copy over the build result
             // ----------------------------------------------------------------------
+
+            getStore().setBuildOutput( buildId, output );
 
             getStore().updateBuild( build );
 

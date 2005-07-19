@@ -30,9 +30,7 @@ import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
-import org.codehaus.plexus.action.Action;
 import org.codehaus.plexus.action.AbstractAction;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.util.StringUtils;
 

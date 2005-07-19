@@ -10,7 +10,6 @@ import org.apache.maven.continuum.Continuum;
 import org.codehaus.plexus.logging.Logger;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 /**

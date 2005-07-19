@@ -1,17 +1,18 @@
 package org.apache.maven.continuum.configuration;
 
-import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
-import org.codehaus.plexus.util.xml.Xpp3DomWriter;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.codehaus.plexus.util.FileUtils;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
+import org.codehaus.plexus.util.xml.Xpp3DomWriter;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -20,7 +21,15 @@ import java.io.Writer;
 public class DefaultConfigurationService
     implements ConfigurationService
 {
+    /**
+     * @plexus.configuration
+     */
     private File source;
+
+    /**
+     * @plexus.configuration
+     */
+    private File applicationHome;
 
     private Xpp3Dom configuration;
 
@@ -40,20 +49,57 @@ public class DefaultConfigurationService
         this.url = url;
     }
 
+    private File buildOutputDirectory;
+
+    public File getBuildOutputDirectory()
+    {
+        return buildOutputDirectory;
+    }
+
+    public void setBuildOutputDirectory( File buildOutputDirectory )
+    {
+        this.buildOutputDirectory = buildOutputDirectory;
+    }
+
     // ----------------------------------------------------------------------
     // Process configuration to glean application specific values
     // ----------------------------------------------------------------------
 
     protected void processInboundConfiguration()
+        throws ConfigurationLoadingException
     {
-        url = configuration.getChild( "url" ).getValue();
+        url = configuration.getChild( CONFIGURATION_URL ).getValue();
+
+        buildOutputDirectory = getFile( configuration, CONFIGURATION_BUILD_OUTPUT_DIRECTORY );
+    }
+
+    private File getFile( Xpp3Dom configuration, String elementName )
+        throws ConfigurationLoadingException
+    {
+        String value = configuration.getChild( elementName ).getValue();
+
+        if ( StringUtils.isEmpty( value ) )
+        {
+            throw new ConfigurationLoadingException( "Missing required element '" + elementName + "'." );
+        }
+
+        File f = new File( value );
+
+        if ( !f.isAbsolute() )
+        {
+            f = new File( applicationHome, value );
+        }
+
+        return f;
     }
 
     protected void processOutboundConfiguration()
     {
         configuration = new Xpp3Dom( "configuration" );
 
-        configuration.addChild( createDom( "url", url ) );
+        configuration.addChild( createDom( CONFIGURATION_URL, url ) );
+
+        configuration.addChild( createFileDom( CONFIGURATION_BUILD_OUTPUT_DIRECTORY, buildOutputDirectory ) );
     }
 
     protected Xpp3Dom createDom( String elementName, String value )
@@ -63,6 +109,18 @@ public class DefaultConfigurationService
         dom.setValue( value );
 
         return dom;
+    }
+
+    private Xpp3Dom createFileDom( String elementName, File file )
+    {
+        String path = file.getAbsolutePath();
+
+        if ( path.startsWith( applicationHome.getAbsolutePath() ) )
+        {
+            path = path.substring( applicationHome.getAbsolutePath().length() );
+        }
+
+        return createDom( elementName, path );
     }
 
     // ----------------------------------------------------------------------
@@ -99,7 +157,7 @@ public class DefaultConfigurationService
 
         try
         {
-            File backup = new File( source.getName() + ".backup " );
+            File backup = new File( source.getName() + ".backup" );
 
             FileUtils.rename( source, backup );
 

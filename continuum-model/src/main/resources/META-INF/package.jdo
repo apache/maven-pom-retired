@@ -29,7 +29,7 @@
       <!-- Collections -->
       <field name="builds" persistence-modifier="persistent">
         <collection element-type="ContinuumBuild" dependent-element="true"/>
-      </field>      
+      </field>
       <field name="developers" persistence-modifier="persistent">
         <collection element-type="ContinuumDeveloper" dependent-element="true"/>
       </field>
@@ -49,26 +49,26 @@
         <field name="developers"/>
         <field name="notifiers"/>
         <field name="dependencies"/>
-        <field name="schedules"/>        
+        <field name="schedules"/>
       </fetch-group>
     </class>
 
     <class name="ContinuumSchedule" detachable="true" identity-type="application">
-      <field name="projects" persistence-modifier="persistent" mapped-by="schedules">    
+      <field name="projects" persistence-modifier="persistent" mapped-by="schedules">
         <collection element-type="ContinuumProject"/>
       </field>
-      <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
+      <field name="id" persistence-modifier="persistent" null-value="exception" primary-key="true" value-strategy="native"/>
       <field name="name" persistence-modifier="persistent"/>
       <field name="description" persistence-modifier="persistent"/>
       <field name="active" persistence-modifier="persistent"/>
-      <field name="scmMode" persistence-modifier="persistent"/>      
-      <field name="delay" persistence-modifier="persistent"/>      
+      <field name="scmMode" persistence-modifier="persistent"/>
+      <field name="delay" persistence-modifier="persistent"/>
       <field name="cronExpression" persistence-modifier="persistent"/>
       <fetch-group name="schedule-detail">
         <field name="projects"/>        
       </fetch-group>      
     </class>
-    
+
     <class name="ContinuumNotifier" detachable="true" identity-type="datastore">
       <field name="type" persistence-modifier="persistent"/>
       <field name="configuration" persistence-modifier="persistent" default-fetch-group="true">
@@ -114,12 +114,6 @@
         <extension vendor-name="jpox" key="length" value="max 8000"/>
       </field>
       <field name="success" persistence-modifier="persistent"/>
-      <field name="standardOutput" persistence-modifier="persistent">
-        <extension vendor-name="jpox" key="length" value="max 8000"/>
-      </field>
-      <field name="standardError" persistence-modifier="persistent">
-        <extension vendor-name="jpox" key="length" value="max 8000"/>
-      </field>
       <field name="exitCode" persistence-modifier="persistent"/>
       <field name="scmResult" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
     </class>

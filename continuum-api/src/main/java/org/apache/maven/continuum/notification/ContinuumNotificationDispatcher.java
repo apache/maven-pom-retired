@@ -46,6 +46,8 @@ public interface ContinuumNotificationDispatcher
 
     String CONTEXT_BUILD = "build";
 
+    String CONTEXT_BUILD_OUTPUT = "build-output";
+
     String CONTEXT_PROJECT = "project";
 
     String CONTEXT_BUILD_RESULT = "result";
@@ -60,7 +62,7 @@ public interface ContinuumNotificationDispatcher
 
     void checkoutStarted( ContinuumProject project );
 
-    void checkoutComplete( ContinuumProject project, ScmResult scmResult );
+    void checkoutComplete( ContinuumProject project );
 
     void runningGoals( ContinuumProject project, ContinuumBuild build );
 

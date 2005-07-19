@@ -15,7 +15,7 @@
    |
    |-->
   <classes>
-    <class rootElement="true" stash.storable="true" java.abstract="true"><!-- -->
+    <class rootElement="true" stash.storable="true" java.abstract="true">
       <name>ContinuumProject</name>
       <version>1.0.0</version>
       <fields>
@@ -428,16 +428,6 @@
           <name>success</name>
           <version>1.0.0</version>
           <type>boolean</type>
-        </field>
-        <field stash.maxSize="8000">
-          <name>standardOutput</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field stash.maxSize="8000">
-          <name>standardError</name>
-          <version>1.0.0</version>
-          <type>String</type>
         </field>
         <field>
           <name>exitCode</name>

@@ -38,6 +38,7 @@
       <implementation>org.apache.maven.continuum.configuration.DefaultConfigurationService</implementation>
       <configuration>
         <source>${plexus.home}/conf/configuration.xml</source>
+        <application-home>${plexus.home}</application-home>
       </configuration>
     </component>
 
@@ -134,6 +135,9 @@
         <requirement>
           <role>org.codehaus.plexus.jdo.JdoFactory</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
       </requirements>
     </component>
 
@@ -148,6 +152,9 @@
         <requirement>
           <role>org.codehaus.plexus.jdo.JdoFactory</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
       </requirements>
     </component>
 
@@ -158,6 +165,9 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.jdo.JdoFactory</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
         </requirement>
       </requirements>
     </component>

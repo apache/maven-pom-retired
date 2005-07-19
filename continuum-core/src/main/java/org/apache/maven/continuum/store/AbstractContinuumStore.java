@@ -16,7 +16,13 @@ package org.apache.maven.continuum.store;
  * limitations under the License.
  */
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.maven.continuum.configuration.ConfigurationService;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -26,4 +32,62 @@ public abstract class AbstractContinuumStore
     extends AbstractLogEnabled
     implements ContinuumStore
 {
+    /** @plexus.requirement */
+    private ConfigurationService configurationService;
+
+    public void setBuildOutput( String buildId, String output )
+        throws ContinuumStoreException
+    {
+        File file = getOutputFile( buildId );
+
+        getLogger().warn( "Writing the build output to: " + file.getAbsolutePath() );
+
+        try
+        {
+            FileUtils.fileWrite( file.getAbsolutePath(), output );
+        }
+        catch ( IOException e )
+        {
+            throw new ContinuumStoreException( "Could not write the build output to file: " +
+                                               "'" + file.getAbsolutePath() + "'.", e );
+        }
+    }
+
+    public String getBuildOutput( String buildId )
+        throws ContinuumStoreException
+    {
+        File file = getOutputFile( buildId );
+
+        try
+        {
+            return FileUtils.fileRead( file.getAbsolutePath() );
+        }
+        catch ( IOException e )
+        {
+            getLogger().warn( "Error reading build output for build '" + buildId + "'.", e );
+
+            return null;
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private File getOutputFile( String buildId )
+        throws ContinuumStoreException
+    {
+        File dir = new File( configurationService.getBuildOutputDirectory(),
+                             getProjectForBuild( buildId ).getId() );
+
+        if ( !dir.exists() && !dir.mkdirs() )
+        {
+            throw new ContinuumStoreException( "Could not make the build output directory: " +
+                                               "'" + dir.getAbsolutePath() + "'." );
+        }
+
+        File file = new File( dir, buildId + ".log.txt" );
+
+        return file;
+    }
 }

@@ -37,6 +37,7 @@ import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.xmlrpc.XmlRpcClientLite;
 import org.apache.xmlrpc.XmlRpcClient;
@@ -328,6 +329,34 @@ public class ContinuumXmlRpcClient
     }
 
     public void removeNotifier( String projectId, String notifierType )
+        throws ContinuumException
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    // ----------------------------------------------------------------------
+    // Schedules
+    // ----------------------------------------------------------------------
+
+    public ContinuumSchedule getSchedule( String scheduleId )
+        throws ContinuumException
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    public void addSchedule( ContinuumSchedule schedule )
+        throws ContinuumException
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    public void updateSchedule( ContinuumSchedule schedule )
+        throws ContinuumException
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    public void removeSchedule( String scheduleId )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();

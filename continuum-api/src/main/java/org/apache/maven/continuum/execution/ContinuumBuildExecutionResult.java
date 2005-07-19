@@ -24,19 +24,16 @@ public class ContinuumBuildExecutionResult
 {
     private boolean success;
 
-    private String standardOutput;
-
-    private String standardError;
+    private String output;
 
     private int exitCode;
 
-    public ContinuumBuildExecutionResult( boolean success, String standardOutput, String standardError, int exitCode )
+    public ContinuumBuildExecutionResult( boolean success,
+                                          String output, int exitCode )
     {
         this.success = success;
 
-        this.standardOutput = standardOutput;
-
-        this.standardError = standardError;
+        this.output = output;
 
         this.exitCode = exitCode;
     }
@@ -46,14 +43,9 @@ public class ContinuumBuildExecutionResult
         return success;
     }
 
-    public String getStandardOutput()
+    public String getOutput()
     {
-        return standardOutput;
-    }
-
-    public String getStandardError()
-    {
-        return standardError;
+        return output;
     }
 
     public int getExitCode()

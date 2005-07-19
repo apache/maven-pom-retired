@@ -24,7 +24,7 @@ import java.util.Set;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.scm.ScmResult;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
@@ -71,7 +71,7 @@ public class DefaultContinuumNotificationDispatcher
         sendNotification( MESSAGE_ID_CHECKOUT_STARTED, project, null );
     }
 
-    public void checkoutComplete( ContinuumProject project, ScmResult scmResult )
+    public void checkoutComplete( ContinuumProject project )
     {
         sendNotification( MESSAGE_ID_CHECKOUT_COMPLETE, project, null );
     }
@@ -95,18 +95,9 @@ public class DefaultContinuumNotificationDispatcher
     //
     // ----------------------------------------------------------------------
 
-
     private void sendNotification( String messageId,
                                    ContinuumProject project,
                                    ContinuumBuild build )
-    {
-        sendNotification( messageId, project, build, null );
-    }
-
-    private void sendNotification( String messageId,
-                                   ContinuumProject project,
-                                   ContinuumBuild build,
-                                   ScmResult scmResult )
     {
         Map context = new HashMap();
 
@@ -122,12 +113,16 @@ public class DefaultContinuumNotificationDispatcher
 
             if ( build != null )
             {
-                context.put( CONTEXT_BUILD, store.getBuild( build.getId() ) );
-            }
+                build = store.getBuild( build.getId() );
 
-            if ( scmResult != null )
-            {
-                context.put( CONTEXT_UPDATE_SCM_RESULT, scmResult );
+                context.put( CONTEXT_BUILD, build );
+
+                if ( build.getEndTime() != 0 )
+                {
+                    context.put( CONTEXT_BUILD_OUTPUT, store.getBuildOutput( build.getId() ) );
+                }
+
+                context.put( CONTEXT_UPDATE_SCM_RESULT, build.getScmResult() );
             }
         }
         catch ( ContinuumStoreException e )

@@ -76,21 +76,17 @@ public class DefaultShellCommandHelper
         //
         // ----------------------------------------------------------------------
 
-        CommandLineUtils.StringStreamConsumer stderr = new CommandLineUtils.StringStreamConsumer();
+        CommandLineUtils.StringStreamConsumer consumer = new CommandLineUtils.StringStreamConsumer();
 
-        CommandLineUtils.StringStreamConsumer stdout = new CommandLineUtils.StringStreamConsumer();
-
-        int exitCode = CommandLineUtils.executeCommandLine( cl, stdout, stderr );
+        int exitCode = CommandLineUtils.executeCommandLine( cl, consumer, consumer );
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        String out = stdout.getOutput();
+        String output = consumer.getOutput();
 
-        String err = stderr.getOutput();
-
-        ExecutionResult result = new ExecutionResult( out, err, exitCode );
+        ExecutionResult result = new ExecutionResult( output, exitCode );
 
         return result;
     }

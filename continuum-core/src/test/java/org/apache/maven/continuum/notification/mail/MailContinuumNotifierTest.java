@@ -51,11 +51,9 @@ public class MailContinuumNotifierTest
 
         ContinuumBuild build = makeBuild( ContinuumProjectState.OK );
 
-        build.setStandardOutput( "stdout" );
-
-        build.setStandardError( "stderr" );
-
-        MailMessage mailMessage = sendNotificationAndGetMessage( project, build );
+        MailMessage mailMessage = sendNotificationAndGetMessage( project,
+                                                                 build,
+                                                                 "lots out build output" );
 
         dumpContent( mailMessage );
     }
@@ -67,9 +65,9 @@ public class MailContinuumNotifierTest
 
         ContinuumBuild build = makeBuild( ContinuumProjectState.FAILED );
 
-        MailMessage mailMessage = sendNotificationAndGetMessage( project, build );
-
-        build.setStandardOutput( "stdout" );
+        MailMessage mailMessage = sendNotificationAndGetMessage( project,
+                                                                 build,
+                                                                 "output" );
 
         dumpContent( mailMessage );
     }
@@ -81,18 +79,21 @@ public class MailContinuumNotifierTest
 
         ContinuumBuild build = makeBuild( ContinuumProjectState.ERROR );
 
-        build.setStandardError( "stderr" );
-
         build.setError( "Big long error message" );
 
-        MailMessage mailMessage = sendNotificationAndGetMessage( project, build );
+        MailMessage mailMessage = sendNotificationAndGetMessage( project,
+                                                                 build,
+                                                                 "lots of stack traces" );
 
         dumpContent( mailMessage );
     }
 
     private void dumpContent( MailMessage mailMessage )
     {
-//        System.err.println( mailMessage.getContent() );
+        if ( false )
+        {
+            System.err.println( mailMessage.getContent() );
+        }
     }
 
     // ----------------------------------------------------------------------
@@ -100,7 +101,8 @@ public class MailContinuumNotifierTest
     // ----------------------------------------------------------------------
 
     private MailMessage sendNotificationAndGetMessage( ContinuumProject project,
-                                                       ContinuumBuild build )
+                                                       ContinuumBuild build,
+                                                       String buildOutput )
         throws Exception
     {
         Set recipients = new HashSet();
@@ -112,6 +114,8 @@ public class MailContinuumNotifierTest
         context.put( ContinuumNotificationDispatcher.CONTEXT_PROJECT, project );
 
         context.put( ContinuumNotificationDispatcher.CONTEXT_BUILD, build );
+
+        context.put( ContinuumNotificationDispatcher.CONTEXT_BUILD_OUTPUT, buildOutput );
 
         context.put( "buildHost", "foo.bar.com" );
 

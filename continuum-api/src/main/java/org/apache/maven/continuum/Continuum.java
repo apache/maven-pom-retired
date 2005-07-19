@@ -30,7 +30,6 @@ import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.scm.ScmResult;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
 /**
@@ -171,7 +170,7 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
     ContinuumNotifier getNotifier( String projectId, String notifierType )
         throws ContinuumException;
 
-    public void updateNotifier( String projectId, String notifierType, Map configuration )
+    void updateNotifier( String projectId, String notifierType, Map configuration )
         throws ContinuumException;
 
     void addNotifier( String projectId, String notifierType, Map configuration )
@@ -184,16 +183,16 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
     // Schedules
     // ----------------------------------------------------------------------
 
-    public ContinuumSchedule getSchedule( String scheduleId )
+    ContinuumSchedule getSchedule( String scheduleId )
         throws ContinuumException;
 
-    public void addSchedule( ContinuumSchedule schedule )
+    void addSchedule( ContinuumSchedule schedule )
         throws ContinuumException;
 
-    public void updateSchedule( ContinuumSchedule schedule )
+    void updateSchedule( ContinuumSchedule schedule )
         throws ContinuumException;
 
-    public void removeSchedule( String scheduleId )
+    void removeSchedule( String scheduleId )
         throws ContinuumException;
 
 }

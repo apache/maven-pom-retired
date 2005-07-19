@@ -10,10 +10,8 @@ public class Build
     private Date startTime;
     private Date endTime;
     private String error;
-    private String standardOutput;
-    private String standardError;
     private int exitCode;
-    
+
     private ScmResult scmResult;
 
     public Date getEndTime()
@@ -64,26 +62,6 @@ public class Build
     public void setId(String id)
     {
         this.id = id;
-    }
-
-    public String getStandardError()
-    {
-        return standardError;
-    }
-
-    public void setStandardError(String standardError)
-    {
-        this.standardError = standardError;
-    }
-
-    public String getStandardOutput()
-    {
-        return standardOutput;
-    }
-
-    public void setStandardOutput(String standardOutput)
-    {
-        this.standardOutput = standardOutput;
     }
 
     public Date getStartTime()

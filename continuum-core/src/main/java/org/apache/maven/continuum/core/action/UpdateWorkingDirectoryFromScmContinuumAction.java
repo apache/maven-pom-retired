@@ -45,7 +45,7 @@ public class UpdateWorkingDirectoryFromScmContinuumAction
         }
         finally
         {
-            getNotifier().checkoutComplete( project, scmResult );
+            getNotifier().checkoutComplete( project );
         }
     }
 }

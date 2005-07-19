@@ -179,8 +179,7 @@ public abstract class AbstractBuildExecutor
             getLogger().info( "Exit code: " + result.getExitCode() );
 
             return new ContinuumBuildExecutionResult( result.getExitCode() == 0,
-                                                      result.getStandardOutput(),
-                                                      result.getStandardError(),
+                                                      result.getOutput(),
                                                       result.getExitCode() );
         }
         catch ( Exception e )

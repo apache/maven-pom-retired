@@ -48,26 +48,15 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
     </div>
   </p>
 #else
-  <h4>Standard Output</h4>
+  <h4>Output</h4>
   <p>
-#if ( $build.standardOutput && $build.standardOutput != "" )
+#if ( $build.output && $build.output != "" )
     <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px">
-    <code><pre>$build.standardOutput</pre></code>
+    <code><pre>$build.output</pre></code>
     </div>
 #else
-No output on standard output
+No output.
 #end
-  </p>
-
-  <h4>Standard Error</h4>
-  <p>
-    #if ( $build.standardError && $build.standardError != "" )
-    <div style="width:100%; height:200px; overflow:auto; border-style: solid; border-width: 1px">
-    <code><pre>$build.standardError</pre></code>
-    </div>
-    #else
-    No output on standard error
-    #end
   </p>
 #end
 

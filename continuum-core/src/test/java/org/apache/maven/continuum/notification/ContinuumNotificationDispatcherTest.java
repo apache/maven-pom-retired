@@ -46,6 +46,7 @@ public class ContinuumNotificationDispatcherTest
         build.setForced( false );
         String buildId = store.addBuild( projectId, build );
 
-        notificationDispatcher.buildComplete( store.getProject( projectId ), store.getBuild( buildId ) );
+        notificationDispatcher.buildComplete( store.getProject( projectId ),
+                                              store.getBuild( buildId ) );
     }
 }

@@ -36,7 +36,7 @@ import org.codehaus.xfire.fault.XFireFault;
 public class DelegatingContinuumWebService
     implements ContinuumWebService
 {
-    Continuum continuum; 
+    Continuum continuum;
 
     public void checkoutProject(String id)
         throws XFireFault
@@ -70,9 +70,9 @@ public class DelegatingContinuumWebService
             {
                 ShellProject project = new ShellProject();
                 project.setExecutable(projectInfo.getExecutable());
-                
+
                 convertToLocal(projectInfo, project);
-                
+
                 return continuum.addShellProject(project);
             }
             else if (projectInfo.getType().equals("ant"))
@@ -80,15 +80,15 @@ public class DelegatingContinuumWebService
                 AntProject project = new AntProject();
                 project.setExecutable(projectInfo.getExecutable());
                 project.setTargets(projectInfo.getTargets());
-                
+
                 convertToLocal(projectInfo, project);
-                
+
                 return continuum.addAntProject(project);
             }
             else
             {
-                throw new XFireFault("Invalid project type: " + projectInfo.getType() + 
-                                     ". Must be maven-one, maven-two, shell, or ant.", 
+                throw new XFireFault("Invalid project type: " + projectInfo.getType() +
+                                     ". Must be maven-one, maven-two, shell, or ant.",
                                      XFireFault.SENDER);
             }
         }
@@ -96,13 +96,12 @@ public class DelegatingContinuumWebService
         {
             if (e instanceof XFireFault)
                 throw (XFireFault) e;
-            
+
             throw new XFireFault(e);
         }
     }
 
     private void convertToLocal(Project info, ContinuumProject project)
-        throws XFireFault
     {
         project.setName(info.getName());
         project.setVersion(info.getVersion());
@@ -129,12 +128,12 @@ public class DelegatingContinuumWebService
         {
             Collection localBuilds = continuum.getBuildsForProject(projectId);
             ArrayList builds = new ArrayList();
-            
+
             for (Iterator itr = localBuilds.iterator(); itr.hasNext();)
             {
                 builds.add(convertToRemote((ContinuumBuild) itr.next()));
             }
-            
+
             return builds;
         }
         catch (ContinuumException e)
@@ -149,11 +148,11 @@ public class DelegatingContinuumWebService
     {
         try
         {
-            org.apache.maven.continuum.scm.ScmResult localCSR = 
+            org.apache.maven.continuum.scm.ScmResult localCSR =
                 continuum.getScmResultForProject(projectId);
-            
+
             if (localCSR == null) return null;
-            
+
             return convertToRemote(localCSR);
         }
         catch (ContinuumException e)
@@ -167,9 +166,9 @@ public class DelegatingContinuumWebService
         try
         {
             ContinuumBuild build = continuum.getLatestBuildForProject(projectId);
-            
+
             if (build == null) return null;
-            
+
             return convertToRemote(build);
         }
         catch (ContinuumException e)
@@ -188,8 +187,6 @@ public class DelegatingContinuumWebService
         remBuild.setExitCode(build.getExitCode());
         remBuild.setForced(build.isForced());
         remBuild.setId(build.getId());
-        remBuild.setStandardError(build.getStandardError());
-        remBuild.setStandardOutput(build.getStandardOutput());
         remBuild.setState(build.getState());
         remBuild.setScmResult(convertToRemote(build.getScmResult()));
         return remBuild;
@@ -201,7 +198,7 @@ public class DelegatingContinuumWebService
         result.setCommandOutput(localUSR.getCommandOutput());
         result.setProviderMessage(localUSR.getProviderMessage());
         result.setSuccess(localUSR.isSuccess());
-        
+
         ArrayList files = new ArrayList();
         for (Iterator itr = localUSR.getFiles().iterator(); itr.hasNext();)
         {
@@ -209,7 +206,7 @@ public class DelegatingContinuumWebService
             files.add(file.getPath());
         }
         result.setFiles(files);
-        
+
         return result;
     }
 
@@ -231,10 +228,10 @@ public class DelegatingContinuumWebService
         throws XFireFault
     {
         Project projectInfo = convertToRemote(project);
-        
+
         return projectInfo;
     }
-    
+
     private void convertToRemote(ContinuumProject project, Project projectInfo)
         throws XFireFault
     {
@@ -261,7 +258,7 @@ public class DelegatingContinuumWebService
         }
         else
         {
-            throw new XFireFault("Invalid project type for id " + project.getId(), 
+            throw new XFireFault("Invalid project type for id " + project.getId(),
                                  XFireFault.SENDER);
         }
 
@@ -276,7 +273,7 @@ public class DelegatingContinuumWebService
         try
         {
             Collection projects = continuum.getProjects();
-            
+
             List infos = new ArrayList();
             for (Iterator itr = projects.iterator(); itr.hasNext();)
             {
@@ -311,9 +308,9 @@ public class DelegatingContinuumWebService
         try
         {
             ContinuumProject project = continuum.getProject(projectInfo.getId());
-            
+
             convertToLocal(projectInfo, project);
-            
+
             if (project instanceof MavenOneProject)
             {
                 continuum.updateMavenOneProject((MavenOneProject)project);
@@ -343,14 +340,14 @@ public class DelegatingContinuumWebService
         try
         {
             ContinuumProjectBuildingResult result = continuum.addMavenTwoProject(url);
-            
+
             if (result.getWarnings().size() > 0)
             {
                 throw new XFireFault(result.getWarnings().toString(), XFireFault.SENDER);
             }
-            
+
             List projects = new ArrayList();
-            
+
             for (Iterator itr = result.getProjects().iterator(); itr.hasNext();)
             {
                 ContinuumProject project = (ContinuumProject) itr.next();
@@ -371,14 +368,14 @@ public class DelegatingContinuumWebService
         try
         {
             ContinuumProjectBuildingResult result = continuum.addMavenOneProject(url);
-            
+
             if (result.getWarnings().size() > 0)
             {
                 throw new XFireFault(result.getWarnings().toString(), XFireFault.SENDER);
             }
-            
+
             List projects = new ArrayList();
-            
+
             for (Iterator itr = result.getProjects().iterator(); itr.hasNext();)
             {
                 ContinuumProject project = (ContinuumProject) itr.next();
@@ -398,7 +395,7 @@ public class DelegatingContinuumWebService
     {
         Project remote = new Project();
         remote.setId(project.getId());
-        
+
         convertToRemote(project, remote);
         return remote;
     }

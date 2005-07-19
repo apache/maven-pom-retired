@@ -18,14 +18,11 @@ package org.apache.maven.continuum.store;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
-import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.scm.ScmResult;
-import org.apache.maven.continuum.ContinuumException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -64,6 +61,9 @@ public interface ContinuumStore
     ContinuumProject getProject( String projectId )
         throws ContinuumStoreException;
 
+    ContinuumProject getProjectForBuild( String buildId )
+        throws ContinuumStoreException;
+
     ScmResult getScmResultForProject( String projectId )
         throws ContinuumStoreException;
 
@@ -77,7 +77,13 @@ public interface ContinuumStore
     void updateBuild( ContinuumBuild build )
         throws ContinuumStoreException;
 
+    void setBuildOutput( String buildId, String output )
+        throws ContinuumStoreException;
+
     ContinuumBuild getBuild( String buildId )
+        throws ContinuumStoreException;
+
+    String getBuildOutput( String buildId )
         throws ContinuumStoreException;
 
     ContinuumBuild getLatestBuildForProject( String projectId )

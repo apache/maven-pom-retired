@@ -1,14 +1,25 @@
 package org.apache.maven.continuum.store;
 
-import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.project.ContinuumSchedule;
-import org.apache.maven.continuum.scm.ScmResult;
-import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+/*
+ * Copyright 2004-2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.jdo.Extent;
 import javax.jdo.JDOObjectNotFoundException;
@@ -17,17 +28,23 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+
+import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.project.ContinuumSchedule;
+import org.apache.maven.continuum.scm.ScmResult;
+
+import org.codehaus.plexus.jdo.JdoFactory;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class JdoContinuumStore
-    extends AbstractLogEnabled
+    extends AbstractContinuumStore
     implements ContinuumStore, Initializable
 {
     /**
@@ -283,7 +300,7 @@ public class JdoContinuumStore
         {
             tx.begin();
 
-            ContinuumProject project = getContinuumProject( pm, projectId );
+            ContinuumProject project = getContinuumProject( pm, projectId, true );
 
             project = (ContinuumProject) pm.detachCopy( project );
 
@@ -294,6 +311,33 @@ public class JdoContinuumStore
         catch( JDOObjectNotFoundException e )
         {
             throw new ContinuumObjectNotFoundException( ContinuumProject.class.getName(), projectId );
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public ContinuumProject getProjectForBuild( String buildId )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            ContinuumBuild build = getContinuumBuild( pm, buildId );
+
+            String projectId = build.getProject().getId();
+
+            ContinuumProject project = getContinuumProject( pm, projectId, true );
+
+            commit( tx );
+
+            return project;
         }
         finally
         {
@@ -312,7 +356,7 @@ public class JdoContinuumStore
         {
             tx.begin();
 
-            ContinuumProject project = getContinuumProject( pm, projectId );
+            ContinuumProject project = getContinuumProject( pm, projectId, false );
 
             ScmResult scmResult = project.getScmResult();
 
@@ -373,7 +417,7 @@ public class JdoContinuumStore
         {
             tx.begin();
 
-            ContinuumSchedule schedule = getContinuumSchedule( pm, projectId );
+            ContinuumSchedule schedule = getContinuumSchedule( pm, projectId, true );
 
             schedule = (ContinuumSchedule) pm.detachCopy( schedule );
 
@@ -389,15 +433,6 @@ public class JdoContinuumStore
         {
             rollback( tx );
         }
-    }
-
-    private ContinuumSchedule getContinuumSchedule( PersistenceManager pm, String projectId )
-    {
-        pm.getFetchPlan().addGroup( "schedule-detail" );
-
-        Object id = pm.newObjectIdInstance( ContinuumSchedule.class, projectId );
-
-        return (ContinuumSchedule) pm.getObjectById( id );
     }
 
     public Collection getSchedules()
@@ -502,7 +537,7 @@ public class JdoContinuumStore
         {
             tx.begin();
 
-            ContinuumProject project = getContinuumProject( pm, projectId );
+            ContinuumProject project = getContinuumProject( pm, projectId, false );
 
             build.setProject( project );
 
@@ -570,7 +605,7 @@ public class JdoContinuumStore
         {
             tx.begin();
 
-            ContinuumProject project = getContinuumProject( pm, projectId );
+            ContinuumProject project = getContinuumProject( pm, projectId, false );
 
             String buildId = project.getLatestBuildId();
 
@@ -643,7 +678,7 @@ public class JdoContinuumStore
         {
             tx.begin();
 
-            ContinuumBuild build  = getContinuumBuild( pm, buildId );
+            ContinuumBuild build = getContinuumBuild( pm, buildId );
 
             ScmResult scmResult = build.getScmResult();
 
@@ -703,9 +738,14 @@ public class JdoContinuumStore
     //
     // ----------------------------------------------------------------------
 
-    private ContinuumProject getContinuumProject( PersistenceManager pm, String projectId )
+    private ContinuumProject getContinuumProject( PersistenceManager pm,
+                                                  String projectId,
+                                                  boolean details )
     {
-        pm.getFetchPlan().addGroup( "project-detail" );
+        if ( details )
+        {
+            pm.getFetchPlan().addGroup( "project-detail" );
+        }
 
         Object id = pm.newObjectIdInstance( ContinuumProject.class, projectId );
 
@@ -714,13 +754,28 @@ public class JdoContinuumStore
         return project;
     }
 
-    private ContinuumBuild getContinuumBuild( PersistenceManager pm, String buildId )
+    private ContinuumBuild getContinuumBuild( PersistenceManager pm,
+                                              String buildId )
     {
         Object id = pm.newObjectIdInstance( ContinuumBuild.class, buildId );
 
         ContinuumBuild build = (ContinuumBuild) pm.getObjectById( id );
 
         return build;
+    }
+
+    private ContinuumSchedule getContinuumSchedule( PersistenceManager pm,
+                                                    String projectId,
+                                                    boolean details )
+    {
+        if ( details )
+        {
+            pm.getFetchPlan().addGroup( "schedule-detail" );
+        }
+
+        Object id = pm.newObjectIdInstance( ContinuumSchedule.class, projectId );
+
+        return (ContinuumSchedule) pm.getObjectById( id );
     }
 
     private Object makePersistent( PersistenceManager pm, Object object )

@@ -22,29 +22,20 @@ package org.apache.maven.continuum.utils.shell;
  */
 public class ExecutionResult
 {
-    private String standardOutput;
-
-    private String standardError;
+    private String output;
 
     private int exitCode;
 
-    public ExecutionResult( String standardOutput, String standardError, int exitCode )
+    public ExecutionResult( String output, int exitCode )
     {
-        this.standardOutput = standardOutput;
-
-        this.standardError = standardError;
+        this.output = output;
 
         this.exitCode = exitCode;
     }
 
-    public String getStandardOutput()
+    public String getOutput()
     {
-        return standardOutput;
-    }
-
-    public String getStandardError()
-    {
-        return standardError;
+        return output;
     }
 
     public int getExitCode()

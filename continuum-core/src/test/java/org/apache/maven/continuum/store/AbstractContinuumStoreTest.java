@@ -340,7 +340,7 @@ public class AbstractContinuumStoreTest
         setBuildResult( store,
                         buildId,
                         ContinuumProjectState.OK,
-                        makeContinuumBuildExecutionResult( true, "", "", 0 ),
+                        makeContinuumBuildExecutionResult( true, "", 0 ),
                         scmResult,
                         null );
 
@@ -348,13 +348,11 @@ public class AbstractContinuumStoreTest
     }
 
     private ContinuumBuildExecutionResult makeContinuumBuildExecutionResult( boolean success,
-                                                                             String standardOutput,
-                                                                             String standardError,
+                                                                             String output,
                                                                              int exitCode )
     {
         return new ContinuumBuildExecutionResult( success,
-                                                  standardOutput,
-                                                  standardError,
+                                                  output,
                                                   exitCode );
     }
 
@@ -470,7 +468,7 @@ public class AbstractContinuumStoreTest
         setBuildComplete( store,
                           buildId,
                           scmResult,
-                          makeContinuumBuildExecutionResult( true, "stdout", "stderr", 10 ) );
+                          makeContinuumBuildExecutionResult( true, "output", 10 ) );
 
         // ----------------------------------------------------------------------
         // Store and check the build object
@@ -501,11 +499,9 @@ public class AbstractContinuumStoreTest
 
         build.setSuccess( result.isSuccess() );
 
-        build.setStandardOutput( result.getStandardOutput() );
-
-        build.setStandardError( result.getStandardError() );
-
         build.setExitCode( result.getExitCode() );
+
+        store.setBuildOutput( buildId, "output" );
 
         store.updateBuild( build );
     }
@@ -641,7 +637,7 @@ public class AbstractContinuumStoreTest
         setBuildResult( store,
                         buildId,
                         ContinuumProjectState.OK,
-                        makeContinuumBuildExecutionResult( true, "output", "error", 1 ),
+                        makeContinuumBuildExecutionResult( true, "output", 1 ),
                         scmResult,
                         null );
 
@@ -653,9 +649,7 @@ public class AbstractContinuumStoreTest
 
         assertEquals( 1, build.getExitCode() );
 
-        assertEquals( "output", build.getStandardOutput() );
-
-        assertEquals( "error", build.getStandardError() );
+        assertEquals( "output", store.getBuildOutput( buildId ) );
     }
 
     // ----------------------------------------------------------------------

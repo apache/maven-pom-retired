@@ -46,23 +46,14 @@ Build Error:
 $build.error
 #else
 ****************************************************************************
-Standard Output:
+Output:
 ****************************************************************************
-#if ( $build.standardOutput && $build.standardOutput != "" )
-$build.standardOutput
+#if ( $build.output && $build.output != "" )
+$build.output
 #else
-There was no content on standard output.
+There was no output.
 #end
 ****************************************************************************
 
-****************************************************************************
-Standard Error:
-****************************************************************************
-#if( $build.standardError && $build.standardError != "" )
-$build.standardError
-#else
-There was no content on standard error.
-#end
-****************************************************************************
 #end
 #end ## #macro( shellBuildResult )

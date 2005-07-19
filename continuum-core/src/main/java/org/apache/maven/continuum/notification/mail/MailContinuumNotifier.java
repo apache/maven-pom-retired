@@ -167,6 +167,8 @@ public class MailContinuumNotifier
 
         ContinuumBuild build = (ContinuumBuild) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
+        String buildOutput = (String) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD_OUTPUT );
+
         // ----------------------------------------------------------------------
         // If there wasn't any building done, don't notify
         // ----------------------------------------------------------------------
@@ -184,7 +186,12 @@ public class MailContinuumNotifier
         {
             if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
             {
-                buildComplete( project, build, source, recipients, configuration );
+                buildComplete( project,
+                               build,
+                               buildOutput,
+                               source,
+                               recipients,
+                               configuration );
             }
         }
         catch ( ContinuumException e )
@@ -195,6 +202,7 @@ public class MailContinuumNotifier
 
     private void buildComplete( ContinuumProject project,
                                 ContinuumBuild build,
+                                String buildOutput,
                                 String source,
                                 Set recipients,
                                 Map configuration )
@@ -234,6 +242,8 @@ public class MailContinuumNotifier
             context.put( "project", project );
 
             context.put( "build", build );
+
+            context.put( "buildOutput", buildOutput );
 
             context.put( "previousBuild", previousBuild );
 

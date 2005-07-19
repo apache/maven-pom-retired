@@ -63,8 +63,6 @@ public abstract class AbstractIntegrationTest
 
     private Date startTime;
 
-    private Date endTime;
-
     private File rootDirectory;
 
     private File cvsRoot;
@@ -75,11 +73,11 @@ public abstract class AbstractIntegrationTest
 
     private String remotingMethod;
 
-    public final String REMOTING_METHOD_JVM = "jvm";
+    public static final String REMOTING_METHOD_JVM = "jvm";
 
-    public final String REMOTING_METHOD_XMLRPC = "xmlrpc";
+    public static final String REMOTING_METHOD_XMLRPC = "xmlrpc";
 
-    public final String REMOTING_METHOD_XFIRE = "xfire";
+    public static final String REMOTING_METHOD_XFIRE = "xfire";
 
     // ----------------------------------------------------------------------
     //
@@ -110,6 +108,20 @@ public abstract class AbstractIntegrationTest
         }
 
         context.put( "plexus.home", plexusHome.getAbsolutePath() );
+
+        // TODO: Replace with AbstractContinuumTest.makeConfiguration( plexusHome.getAbsolutePath() );
+        File configFile = new File( plexusHome.getAbsolutePath(), "conf/configuration.xml" );
+
+        if ( !configFile.getParentFile().exists() &&
+             !configFile.getParentFile().mkdirs() )
+        {
+            throw new IOException( "Could not make directory: '" + configFile.getParentFile() + "'." );
+        }
+
+        FileUtils.fileWrite( configFile.getAbsolutePath(),
+                             "<configuration>" +
+                             "<build-output-directory>target/build-output</build-output-directory>" +
+                             "</configuration>");
     }
 
     public final void setUp()
@@ -141,7 +153,7 @@ public abstract class AbstractIntegrationTest
 
         deleteAndCreateDirectory( rootDirectory );
 
-        progress( "Connecting to Continuum" );
+        progress( "Connecting to and starting Continuum" );
         Continuum continuum = getContinuum();
 
         progress( "Removing all existing projects from Continuum." );
@@ -159,7 +171,7 @@ public abstract class AbstractIntegrationTest
     public final void tearDown()
         throws Exception
     {
-        endTime = new Date();
+        Date endTime = new Date();
 
         super.tearDown();
 
@@ -232,6 +244,16 @@ public abstract class AbstractIntegrationTest
     protected File getItFile( String dir )
     {
         return new File( rootDirectory, dir );
+    }
+
+    // ----------------------------------------------------------------------
+    // Component getters
+    // ----------------------------------------------------------------------
+
+    public ContinuumStore getStore()
+        throws Exception
+    {
+        return (ContinuumStore) lookup( ContinuumStore.ROLE );
     }
 
     // ----------------------------------------------------------------------
@@ -574,19 +596,17 @@ public abstract class AbstractIntegrationTest
             print( "Build state: " + build.getState() );
 
             line();
-            print( "Standard output" );
+            print( "Output" );
             line();
-            print( build.getStandardOutput() );
-            line();
-
-            line();
-            print( "Standard error" );
-            line();
-            print( build.getStandardError() );
+            print( getStore().getBuildOutput( buildId ) );
             line();
 
             fail( "The build was not successful" );
         }
+
+        String output = getStore().getBuildOutput( buildId );
+
+        assertNotNull( "Output was null.", output );
 
         return build;
     }
@@ -596,9 +616,10 @@ public abstract class AbstractIntegrationTest
     {
         ContinuumBuild build = assertSuccessfulBuild( buildId );
 
-        assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.",
-                    build.getStandardOutput().indexOf( "BUILD SUCCESSFUL" ) != -1 );
-        assertEquals( "Standard error wasn't empty.", 0, build.getStandardError().length() );
+        String output = getStore().getBuildOutput( buildId );
+
+        assertTrue( "Output didn't contain the 'BUILD SUCCESSFUL' message.",
+                    output.indexOf( "BUILD SUCCESSFUL" ) != -1 );
 
         return build;
     }
@@ -608,9 +629,10 @@ public abstract class AbstractIntegrationTest
     {
         ContinuumBuild build = assertSuccessfulBuild( buildId );
 
+        String output = getStore().getBuildOutput( buildId );
+
         assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.",
-                    build.getStandardOutput().indexOf( "BUILD SUCCESSFUL" ) != -1 );
-        assertEquals( "Standard error wasn't empty.", 0, build.getStandardError().length() );
+                    output.indexOf( "BUILD SUCCESSFUL" ) != -1 );
 
         return build;
     }
@@ -620,9 +642,10 @@ public abstract class AbstractIntegrationTest
     {
         ContinuumBuild build = assertSuccessfulBuild( buildId );
 
+        String output = getStore().getBuildOutput( buildId );
+
         assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.",
-                    build.getStandardOutput().indexOf( "BUILD SUCCESSFUL" ) != -1 );
-        assertEquals( "Standard error wasn't empty.", 0, build.getStandardError().length() );
+                    output.indexOf( "BUILD SUCCESSFUL" ) != -1 );
 
         return build;
     }
@@ -632,9 +655,11 @@ public abstract class AbstractIntegrationTest
     {
         ContinuumBuild build = assertSuccessfulBuild( buildId );
 
-        assertEquals( "Standard output didn't contain the expected output.", expectedStandardOutput,
-                      build.getStandardOutput() );
-        assertEquals( "Standard error wasn't empty.", 0, build.getStandardError().length() );
+        String output = getStore().getBuildOutput( buildId );
+
+        assertEquals( "Standard output didn't contain the expected output.",
+                      expectedStandardOutput,
+                      output );
 
         return build;
     }
