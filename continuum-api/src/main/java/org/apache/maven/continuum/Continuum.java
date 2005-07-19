@@ -163,6 +163,7 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
     void updateShellProject( ShellProject project )
         throws ContinuumException;
 
+
     // ----------------------------------------------------------------------
     // Notification
     // ----------------------------------------------------------------------
@@ -170,7 +171,7 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
     ContinuumNotifier getNotifier( String projectId, String notifierType )
         throws ContinuumException;
 
-    void updateNotifier( String projectId, String notifierType, Map configuration )
+     void updateNotifier( String projectId, String notifierType, Map configuration )
         throws ContinuumException;
 
     void addNotifier( String projectId, String notifierType, Map configuration )
@@ -183,16 +184,18 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
     // Schedules
     // ----------------------------------------------------------------------
 
-    ContinuumSchedule getSchedule( String scheduleId )
+     Collection getSchedules()
         throws ContinuumException;
 
-    void addSchedule( ContinuumSchedule schedule )
+     ContinuumSchedule getSchedule( String scheduleId )
         throws ContinuumException;
 
-    void updateSchedule( ContinuumSchedule schedule )
+     void addSchedule( ContinuumSchedule schedule )
         throws ContinuumException;
 
-    void removeSchedule( String scheduleId )
+     void updateSchedule( ContinuumSchedule schedule )
         throws ContinuumException;
 
+     void removeSchedule( String scheduleId )
+        throws ContinuumException;
 }

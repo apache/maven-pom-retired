@@ -105,7 +105,7 @@ public class FormicaValve
 
             String view = data.getTarget();
 
-            if ( view != null && ( view.startsWith( "View" ) || view.startsWith( "Edit" ) ) )
+            if ( view != null && ( view.indexOf( "View" ) >= 0 || view.indexOf( "Edit" ) >= 0 ) )
             {
                 Object item = formicaTool.getItem( form, id );
 

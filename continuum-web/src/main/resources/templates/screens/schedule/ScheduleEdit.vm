@@ -1,12 +1,12 @@
-$page.setTitle( "Add Project" )
+$page.setTitle( $item.name )
 
 <div class="app">
   <div id="axial" class="h3">
-    <h3>$i18n.getString( $form.add.titleKey )</h3>
-    <form method="post" action="$link" #if( $form.attributes.multipart )enctype="multipart/form-data"#end>
-      #hidden ( "fid" $form.id )
-      #hidden ( "action" $form.add.action )
-      #hidden ( "view" $form.add.view )
+    <h3>$i18n.getString( $form.update.titleKey )</h3>
+    <form method="post" action="$link">
+      #hidden ( "fid" $form.id )      
+      #hidden ( "action" $form.update.action )
+      #hidden ( "view" $form.update.view )
       #hidden ( "id" $id )
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
@@ -15,10 +15,6 @@ $page.setTitle( "Add Project" )
           <tr>
             #field( $i18n $data $element $item $formtool )
           </tr>
-          #else
-            #if ( $element.defaultValue )
-              #hidden ( $element.id $element.defaultValue )
-            #end
           #end
           #end
         </table>

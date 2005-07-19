@@ -676,7 +676,20 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException ex )
         {
-            throw logAndCreateException( "Exception while getting project '" + scheduleId + "'.", ex );
+            throw logAndCreateException( "Exception while getting schedule '" + scheduleId + "'.", ex );
+        }
+    }
+
+    public Collection getSchedules()
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getSchedules();
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Exception while getting schedules.", ex );
         }
     }
 
@@ -689,7 +702,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException ex )
         {
-            throw logAndCreateException( "Error while removing project.", ex );
+            throw logAndCreateException( "Error while removing schedule.", ex );
         }
     }
 
@@ -702,7 +715,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException ex )
         {
-            throw logAndCreateException( "Error while removing project.", ex );
+            throw logAndCreateException( "Error while removing schedule.", ex );
         }
     }
 
@@ -715,7 +728,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException ex )
         {
-            throw logAndCreateException( "Error while removing project.", ex );
+            throw logAndCreateException( "Error while removing schedule.", ex );
         }
     }
 

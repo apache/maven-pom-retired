@@ -456,11 +456,6 @@ public class JdoContinuumStore
 
             result = pm.detachCopyAll( result );
 
-            for ( Iterator it = result.iterator(); it.hasNext(); )
-            {
-                setProjectState( (ContinuumProject) it.next() );
-            }
-
             commit( tx );
 
             return result;
