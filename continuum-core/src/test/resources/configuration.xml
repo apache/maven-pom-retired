@@ -1,0 +1,4 @@
+<configuration>
+  <url>http://localhost:8080/continuum/servlet/continuum</url>
+  <build-output-directory>build-output</build-output-directory>
+</configuration>

@@ -1,0 +1,12 @@
+<plexus>
+  <components>
+    <component>
+      <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+      <implementation>org.apache.maven.continuum.configuration.DefaultConfigurationService</implementation>
+      <configuration>
+        <application-home>${basedir}/target/continuum</application-home>
+        <source>${basedir}/target/configuration.xml</source>
+      </configuration>
+    </component>
+  </components>
+</plexus>

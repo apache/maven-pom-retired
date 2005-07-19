@@ -1,12 +1,5 @@
 package org.apache.maven.continuum.configuration;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -14,9 +7,20 @@ import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.codehaus.plexus.util.xml.Xpp3DomWriter;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Date;
+
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class DefaultConfigurationService
     implements ConfigurationService
@@ -31,6 +35,10 @@ public class DefaultConfigurationService
      */
     private File applicationHome;
 
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
     private Xpp3Dom configuration;
 
     // ----------------------------------------------------------------------
@@ -38,6 +46,16 @@ public class DefaultConfigurationService
     // ----------------------------------------------------------------------
 
     private String url;
+
+    private File buildOutputDirectory;
+
+    private Map jdks;
+
+    private static final String LS = System.getProperty( "line.separator" );
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
 
     public String getUrl()
     {
@@ -49,8 +67,6 @@ public class DefaultConfigurationService
         this.url = url;
     }
 
-    private File buildOutputDirectory;
-
     public File getBuildOutputDirectory()
     {
         return buildOutputDirectory;
@@ -61,6 +77,26 @@ public class DefaultConfigurationService
         this.buildOutputDirectory = buildOutputDirectory;
     }
 
+    public Map getJdks()
+    {
+        return jdks;
+    }
+
+    public void addJdk( String jdkVersion, String jdkHome )
+    {
+        if ( jdks == null )
+        {
+            jdks = new TreeMap();
+        }
+
+        jdks.put( jdkVersion, jdkHome );
+    }
+
+    public void setJdks( Map jdks )
+    {
+        this.jdks = jdks;
+    }
+
     // ----------------------------------------------------------------------
     // Process configuration to glean application specific values
     // ----------------------------------------------------------------------
@@ -68,9 +104,42 @@ public class DefaultConfigurationService
     protected void processInboundConfiguration()
         throws ConfigurationLoadingException
     {
-        url = configuration.getChild( CONFIGURATION_URL ).getValue();
+        Xpp3Dom urlDom = configuration.getChild( CONFIGURATION_URL );
 
-        buildOutputDirectory = getFile( configuration, CONFIGURATION_BUILD_OUTPUT_DIRECTORY );
+        if ( urlDom != null )
+        {
+            url = urlDom.getValue();
+        }
+
+        Xpp3Dom buildOutputDirectoryDom = configuration.getChild( CONFIGURATION_BUILD_OUTPUT_DIRECTORY );
+
+        if ( buildOutputDirectoryDom != null )
+        {
+            buildOutputDirectory = getFile( configuration, CONFIGURATION_BUILD_OUTPUT_DIRECTORY );
+        }
+
+        Xpp3Dom jdksElement = configuration.getChild( CONFIGURATION_JDKS );
+
+        if ( jdksElement != null )
+        {
+            jdks = new TreeMap();
+
+            Xpp3Dom[] jdkElements = jdksElement.getChildren( CONFIGURATION_JDK );
+
+            for ( int i = 0; i < jdkElements.length; i++ )
+            {
+                Xpp3Dom jdkElement = jdkElements[i];
+
+                String version = jdkElement.getChild( CONFIGURATION_JDK_VERSION ).getValue();
+
+                String home = jdkElement.getChild( CONFIGURATION_JDK_HOME ).getValue();
+
+                if ( version != null & home != null )
+                {
+                    jdks.put( version, home );
+                }
+            }
+        }
     }
 
     private File getFile( Xpp3Dom configuration, String elementName )
@@ -95,11 +164,39 @@ public class DefaultConfigurationService
 
     protected void processOutboundConfiguration()
     {
-        configuration = new Xpp3Dom( "configuration" );
+        configuration = new Xpp3Dom( CONFIGURATION );
 
-        configuration.addChild( createDom( CONFIGURATION_URL, url ) );
+        if ( url != null )
+        {
+            configuration.addChild( createDom( CONFIGURATION_URL, url ) );
+        }
 
-        configuration.addChild( createFileDom( CONFIGURATION_BUILD_OUTPUT_DIRECTORY, buildOutputDirectory ) );
+        if ( buildOutputDirectory != null )
+        {
+            configuration.addChild( createFileDom( CONFIGURATION_BUILD_OUTPUT_DIRECTORY, buildOutputDirectory ) );
+        }
+
+        if ( jdks != null )
+        {
+            Xpp3Dom jdksDom = new Xpp3Dom( CONFIGURATION_JDKS );
+
+            for ( Iterator i = jdks.keySet().iterator(); i.hasNext(); )
+            {
+                String version = (String) i.next();
+
+                String home = (String) jdks.get( version );
+
+                Xpp3Dom jdkDom = new Xpp3Dom( CONFIGURATION_JDK );
+
+                jdkDom.addChild( createDom( CONFIGURATION_JDK_VERSION, version ) );
+
+                jdkDom.addChild( createDom( CONFIGURATION_JDK_HOME, home ) );
+
+                jdksDom.addChild( jdkDom );
+            }
+
+            configuration.addChild( jdksDom );
+        }
     }
 
     protected Xpp3Dom createDom( String elementName, String value )
@@ -163,7 +260,13 @@ public class DefaultConfigurationService
 
             Writer writer = new FileWriter( source );
 
+            writer.write( "<!-- Written by Continuum on " + new Date() + " -->" + LS );
+
             Xpp3DomWriter.write( writer, configuration );
+
+            writer.flush();
+
+            writer.close();
         }
         catch ( IOException e )
         {
