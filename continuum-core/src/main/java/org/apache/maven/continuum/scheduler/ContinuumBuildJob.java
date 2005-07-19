@@ -11,10 +11,11 @@ import org.codehaus.plexus.logging.Logger;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Collection;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class ContinuumBuildJob
     implements Job
@@ -35,13 +36,23 @@ public class ContinuumBuildJob
 
         Continuum continuum = (Continuum) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.CONTINUUM );
 
-        ContinuumSchedule schedule = (ContinuumSchedule) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.SCHEDULE );
+        //ContinuumSchedule schedule = (ContinuumSchedule) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.SCHEDULE );
 
         // ----------------------------------------------------------------------
         // Lookup all projects that belong to this schedule
         // ----------------------------------------------------------------------
 
-        Set projects = schedule.getProjects();
+        //Set projects = schedule.getProjects();
+
+        Collection projects = null;
+        try
+        {
+            projects = continuum.getProjects();
+        }
+        catch ( ContinuumException e )
+        {
+            logger.error( "Error retrieving projects.", e );
+        }
 
         for ( Iterator i = projects.iterator(); i.hasNext(); )
         {
