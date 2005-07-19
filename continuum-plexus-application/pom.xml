@@ -162,26 +162,26 @@
   <profiles>
     <profile>
       <id>env-test</id>
-      <activator>
+      <activation>
         <property>
           <name>env</name>
           <value>test</value>
         </property>
-      </activator>
+      </activation>
       <properties>
         <appProperties>test.properties</appProperties>
       </properties>
     </profile>
     <profile>
       <id>env-production</id>
-      <activator>
+      <activation>
         <property>
           <name>env</name>
           <value>production</value>
         </property>
-      </activator>
+      </activation>
       <properties>
-        <appProperties>test.properties</appProperties>
+        <appProperties>app.properties</appProperties>
       </properties>
     </profile>
   </profiles>
