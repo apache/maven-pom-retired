@@ -20,7 +20,7 @@ import java.util.Map;
  * Sort projects by dependencies.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id: ProjectSorter.java 164217 2005-04-22 11:01:33Z brett $
+ * @version $Id$
  */
 public class ProjectSorter
 {

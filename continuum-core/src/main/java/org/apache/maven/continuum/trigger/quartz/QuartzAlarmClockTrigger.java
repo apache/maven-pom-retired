@@ -18,7 +18,7 @@ import java.text.ParseException;
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: AlarmClockTrigger.java 209941 2005-07-09 13:14:31Z trygvis $
+ * @version $Id$
  */
 public class QuartzAlarmClockTrigger
     extends AbstractContinuumTrigger
