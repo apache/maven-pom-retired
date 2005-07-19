@@ -148,6 +148,7 @@
   
   <package name="org.apache.maven.continuum.profile">
     <class name="ContinuumProfile" detachable="true" identity-type="application">
+      <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>    
       <field name="jdk" persistence-modifier="persistent"/>
     </class>
     <class name="ContinuumJdk" detachable="true" identity-type="datastore">
