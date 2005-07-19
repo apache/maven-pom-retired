@@ -16,6 +16,8 @@ package org.apache.maven.continuum.configuration;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.profile.ContinuumJdk;
+
 import java.io.File;
 import java.util.Map;
 
@@ -59,7 +61,7 @@ public interface ConfigurationService
 
     Map getJdks();
 
-    void addJdk( String version, String home );
+    void addJdk( ContinuumJdk jdk );
 
     void setJdks( Map jdks );
 

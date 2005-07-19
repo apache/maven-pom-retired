@@ -18,6 +18,7 @@ package org.apache.maven.continuum.configuration;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
+import org.apache.maven.continuum.profile.ContinuumJdk;
 
 import java.io.File;
 import java.util.Map;
@@ -52,11 +53,29 @@ public class ConfigurationServiceTest
 
         assertEquals( "build-output", service.getBuildOutputDirectory().getName() );
 
-        service.addJdk( "1.3", "/jdks/1.3" );
+        ContinuumJdk jdk = new ContinuumJdk();
 
-        service.addJdk( "1.4", "/jdks/1.4" );
+        jdk.setVersion( "1.3" );
 
-        service.addJdk( "1.5", "/jdks/1.5" );
+        jdk.setHome( "/jdks/1.3" );
+
+        service.addJdk( jdk);
+
+        jdk = new ContinuumJdk();
+
+        jdk.setVersion( "1.4" );
+
+        jdk.setHome( "/jdks/1.4" );
+
+        service.addJdk( jdk);
+
+        jdk = new ContinuumJdk();
+
+        jdk.setVersion( "1.5" );
+
+        jdk.setHome( "/jdks/1.5" );
+
+        service.addJdk( jdk);
 
         service.store();
 
@@ -70,14 +89,17 @@ public class ConfigurationServiceTest
 
         assertNotNull( jdks.get( "1.3" ) );
 
-        assertEquals( "/jdks/1.3", (String) jdks.get( "1.3" ) );
+        jdk = (ContinuumJdk) jdks.get( "1.3" );
 
-        assertNotNull( jdks.get( "1.4" ) );
+        assertEquals( "/jdks/1.3", jdk.getHome() );
 
-        assertEquals( "/jdks/1.4", (String) jdks.get( "1.4" ) );
+        jdk = (ContinuumJdk) jdks.get( "1.4" );
 
-        assertNotNull( jdks.get( "1.5" ) );
+        assertEquals( "/jdks/1.4", jdk.getHome() );
 
-        assertEquals( "/jdks/1.5", (String) jdks.get( "1.5" ) );
+        jdk = (ContinuumJdk) jdks.get( "1.5" );
+
+        assertEquals( "/jdks/1.5", jdk.getHome() );
+
     }
 }

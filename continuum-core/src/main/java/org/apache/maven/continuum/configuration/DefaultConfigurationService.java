@@ -6,6 +6,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.codehaus.plexus.util.xml.Xpp3DomWriter;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.apache.maven.continuum.profile.ContinuumJdk;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -82,14 +83,14 @@ public class DefaultConfigurationService
         return jdks;
     }
 
-    public void addJdk( String jdkVersion, String jdkHome )
+    public void addJdk( ContinuumJdk jdk )
     {
         if ( jdks == null )
         {
             jdks = new TreeMap();
         }
 
-        jdks.put( jdkVersion, jdkHome );
+        jdks.put( jdk.getVersion(), jdk );
     }
 
     public void setJdks( Map jdks )
@@ -136,7 +137,13 @@ public class DefaultConfigurationService
 
                 if ( version != null & home != null )
                 {
-                    jdks.put( version, home );
+                    ContinuumJdk jdk = new ContinuumJdk();
+
+                    jdk.setVersion( version );
+
+                    jdk.setHome( home );
+
+                    jdks.put( version, jdk );
                 }
             }
         }
@@ -184,13 +191,13 @@ public class DefaultConfigurationService
             {
                 String version = (String) i.next();
 
-                String home = (String) jdks.get( version );
+                ContinuumJdk jdk = (ContinuumJdk) jdks.get( version );
 
                 Xpp3Dom jdkDom = new Xpp3Dom( CONFIGURATION_JDK );
 
                 jdkDom.addChild( createDom( CONFIGURATION_JDK_VERSION, version ) );
 
-                jdkDom.addChild( createDom( CONFIGURATION_JDK_HOME, home ) );
+                jdkDom.addChild( createDom( CONFIGURATION_JDK_HOME, jdk.getHome() ) );
 
                 jdksDom.addChild( jdkDom );
             }
