@@ -198,4 +198,14 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
 
      void removeSchedule( String scheduleId )
         throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Project scheduling
+    // ----------------------------------------------------------------------
+
+    public void addProjectToSchedule( ContinuumProject project, ContinuumSchedule schedule )
+        throws ContinuumException;
+
+    public void removeProjectFromSchedule( ContinuumProject project, ContinuumSchedule schedule )
+        throws ContinuumException;
 }
