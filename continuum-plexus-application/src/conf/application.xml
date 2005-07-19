@@ -108,10 +108,15 @@
 
     <component>
       <role>org.codehaus.plexus.mailsender.MailSender</role>
-      <implementation>org.codehaus.plexus.mailsender.simple.SimpleMailSender</implementation>
+      <implementation>org.codehaus.plexus.mailsender.javamail.JavamailMailSender</implementation>
       <configuration>
         <smtp-host>localhost</smtp-host>
         <smtp-port>25</smtp-port>
+        <!--
+        <username>mylogin</username>
+        <password>mypassword</password>
+        <sslMode>true</sslMode>
+        -->
       </configuration>
     </component>
 
