@@ -1,0 +1,95 @@
+<form>
+  <id>schedule</id>
+  <source-role>org.apache.maven.continuum.Continuum</source-role>
+  <target-class>org.apache.maven.continuum.project.ContinuumSchedule</target-class>
+  <lookup-expression>getSchedule(#id)</lookup-expression>
+  <elements>
+    <element>
+      <id>scheduleName</id>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>empty.error</error-message-key>
+        </validator>
+      </validators>
+      <expression>name</expression>
+      <type>text</type>
+    </element>
+    <element>
+      <id>scheduleDescription</id>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>empty.error</error-message-key>
+        </validator>
+      </validators>
+      <expression>description</expression>
+      <type>text</type>
+    </element>
+    <element>
+      <id>scheduleScmMode</id>
+      <validators>
+        <validator>
+          <id>default</id>
+        </validator>
+      </validators>
+      <expression>scmMode</expression>
+      <type>pulldown</type>
+      <data>0=Update,1=Clean Checkout</data>
+    </element>
+    <element>
+      <id>scheduleCronExpression</id>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>empty.error</error-message-key>
+        </validator>
+      </validators>
+      <expression>cronExpression</expression>
+      <type>text</type>
+    </element>
+    <element>
+      <id>scheduleActive</id>
+      <validators>
+        <validator>
+          <id>default</id>
+        </validator>
+      </validators>
+      <expression>active</expression>
+      <type>checkbox</type>
+      <default-value>false</default-value>
+    </element>
+  </elements>
+
+  <view>
+    <title-key>schedule.viewTitle</title-key>
+  </view>
+
+  <delete>
+    <title-key>schedule.deleteTitle</title-key>
+    <view>schedule,ScheduleSummary.vm</view>
+    <action>deleteEntity</action>
+    <expression>removeSchedule(#id)</expression>
+  </delete>
+
+  <!-- Add -->
+  <add>
+    <title-key>schedule.addTitle</title-key>
+    <action>addEntity</action>
+    <view>schedule,ScheduleSummary.vm</view>
+    <view-on-failure>Add.vm</view-on-failure>
+    <fid-on-failure>schedule</fid-on-failure>
+    <expression>addSchedule(#entity)</expression>
+  </add>
+
+  <!-- Update -->
+  <update>
+    <title-key>schedule.updateTitle</title-key>
+    <action>updateEntity</action>
+    <view>schedule,ScheduleSummary.vm</view>
+    <view-on-failure>Edit.vm</view-on-failure>
+    <fid-on-failure>schedule</fid-on-failure>
+    <expression>updateSchedule(#entity)</expression>
+  </update>
+
+</form>
