@@ -31,8 +31,6 @@
     #upload( $element $elementData )
   #elseif ( $element.type == "pulldown" )
     #pulldown( $element $elementData )
-  #elseif ( $element.type == "checkbox" )
-    #checkbox( $element $elementData )
   #end
   <p>
     $i18n.getString( $element.messageKey ) <font color="red"><b>$!errorMsg</b></font>
