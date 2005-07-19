@@ -30,7 +30,7 @@ public class ShellBuildExecutorTest
     public void testNonAbsolutePath()
         throws Exception
     {
-        ShellBuildExecutor buildExecutor = getShellBuildExecutor();
+        ShellBuildExecutor buildExecutor = (ShellBuildExecutor) getBuildExecutor( ShellBuildExecutor.ID );
 
         ShellProject project = makeStubShellProject( "Shell project", "scm:foo" );
 
@@ -48,9 +48,11 @@ public class ShellBuildExecutorTest
 
         project.setExecutable( getTestFile( "foo.sh" ).getAbsolutePath() );
 
+        ShellBuildExecutor buildExecutor = (ShellBuildExecutor) getBuildExecutor( ShellBuildExecutor.ID );
+
         try
         {
-            getShellBuildExecutor().updateProjectFromCheckOut( null, project );
+            buildExecutor.updateProjectFromCheckOut( null, project );
 
             fail( "Expected ContinuumBuildExecutorException" );
         }

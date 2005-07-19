@@ -35,6 +35,7 @@ import java.util.List;
 
 import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ScmFile;
@@ -109,19 +110,7 @@ public abstract class AbstractIntegrationTest
 
         context.put( "plexus.home", plexusHome.getAbsolutePath() );
 
-        // TODO: Replace with AbstractContinuumTest.makeConfiguration( plexusHome.getAbsolutePath() );
-        File configFile = new File( plexusHome.getAbsolutePath(), "conf/configuration.xml" );
-
-        if ( !configFile.getParentFile().exists() &&
-             !configFile.getParentFile().mkdirs() )
-        {
-            throw new IOException( "Could not make directory: '" + configFile.getParentFile() + "'." );
-        }
-
-        FileUtils.fileWrite( configFile.getAbsolutePath(),
-                             "<configuration>" +
-                             "<build-output-directory>target/build-output</build-output-directory>" +
-                             "</configuration>");
+        AbstractContinuumTest.makeConfiguration( plexusHome.getAbsolutePath() );
     }
 
     public final void setUp()

@@ -25,8 +25,6 @@ import java.io.IOException;
 
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
-import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -38,6 +36,7 @@ import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
+import org.apache.maven.continuum.configuration.ConfigurationService;
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
@@ -61,26 +60,9 @@ public abstract class AbstractContinuumTest
 
         Context context = getContainer().getContext();
 
-        String plexusHome = (String) context.get( "plexus.home" );
+        ConfigurationService configurationService = (ConfigurationService) lookup( ConfigurationService.ROLE );
 
-        makeConfiguration( plexusHome );
-    }
-
-    public static void makeConfiguration( String plexusHome )
-        throws IOException
-    {
-        File configFile = new File( plexusHome, "conf/configuration.xml" );
-
-        if ( !configFile.getParentFile().exists() &&
-             !configFile.getParentFile().mkdirs() )
-        {
-            throw new IOException( "Could not make directory: '" + configFile.getParentFile() + "'." );
-        }
-
-        FileUtils.fileWrite( configFile.getAbsolutePath(),
-                             "<configuration>" +
-                             "<build-output-directory>target/build-output</build-output-directory>" +
-                             "</configuration>");
+        configurationService.setBuildOutputDirectory( getTestFile( "target/build-output" ) );
     }
 
     // ----------------------------------------------------------------------
@@ -107,12 +89,6 @@ public abstract class AbstractContinuumTest
         return buildExecutor;
     }
 
-    protected ShellBuildExecutor getShellBuildExecutor()
-        throws Exception
-    {
-        return (ShellBuildExecutor) getBuildExecutor( ShellBuildExecutor.ID );
-    }
-
     // ----------------------------------------------------------------------
     // Maven 2 Project Generators
     // ----------------------------------------------------------------------
@@ -124,7 +100,7 @@ public abstract class AbstractContinuumTest
                                     "foo@bar.com",
                                     "1.0",
                                     "",
-                                    getTestFile( "plexus-temp" ).getAbsolutePath() );
+                                    PlexusTestCase.getTestFile( "plexus-temp" ).getAbsolutePath() );
     }
 
     public static MavenTwoProject makeMavenTwoProject( String name,
@@ -142,7 +118,7 @@ public abstract class AbstractContinuumTest
                      version,
                      commandLineArguments,
                      workingDirectory,
-                     MavenTwoBuildExecutor.ID );
+                     "maven2" );
 
         List notifiers = createMailNotifierList( emailAddress );
 
@@ -164,8 +140,8 @@ public abstract class AbstractContinuumTest
                      scmUrl,
                      "1.0",
                      "",
-                     getTestFile( "plexus-temp" ).getAbsolutePath(),
-                     ShellBuildExecutor.ID );
+                     PlexusTestCase.getTestFile( "plexus-temp" ).getAbsolutePath(),
+                     "shell" );
 
         project.setExecutable( "script.sh" );
 
