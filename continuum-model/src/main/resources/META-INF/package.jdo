@@ -151,7 +151,9 @@
       <field name="description" persistence-modifier="persistent"/>
       <field name="url" persistence-modifier="persistent"/>
       <field name="issueManagementUrl" persistence-modifier="persistent"/>
-      <field name="projects" persistence-modifier="persistent" mapped-by="projectGroup"/>
+      <field name="projects" persistence-modifier="persistent" mapped-by="projectGroup">
+        <collection element-type="ContinuumProject"/>
+      </field>
       <field name="buildSettings" persistence-modifier="persistent">
         <collection element-type="ContinuumBuildSettings"/>
         <join/>
