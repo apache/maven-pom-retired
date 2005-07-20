@@ -143,6 +143,15 @@ public interface ContinuumStore
     String addBuildGroup( ContinuumBuildGroup buildGroup )
         throws ContinuumStoreException;
 
+    void updateBuildGroup( ContinuumBuildGroup buildGroup )
+        throws ContinuumStoreException;
+
+    void removeBuildGroup( String buildGroupId )
+        throws ContinuumStoreException;
+
     ContinuumBuildGroup getBuildGroup( String buildGroupId )
+        throws ContinuumStoreException;
+
+    Collection getBuildGroups()
         throws ContinuumStoreException;
 }
