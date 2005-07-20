@@ -20,7 +20,6 @@ import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.project.ContinuumBuildGroup;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
-import org.apache.maven.continuum.project.ContinuumSchedule;
 
 import java.util.Collection;
 import java.util.Set;
@@ -107,6 +106,69 @@ public class NewModelTest
         buildGroup = getStore().getBuildGroup( buildGroupId );
 
         getStore().removeBuildGroup( buildGroup.getId() );
+
+        project = getStore().getProject( projectId );
+
+        assertNotNull( project );
+    }
+
+    public void testProjectAdditionAndRemovalFromProjectGroup()
+        throws Exception
+    {
+        // create projectGroup
+        ContinuumProjectGroup projectGroup = createStubProjectGroup( "projectGroup1", "projectGroup1" );
+
+        String projectGroupId = getStore().addProjectGroup( projectGroup );
+
+        projectGroup = getStore().getProjectGroup( projectGroupId );
+
+        String projectId = addMavenTwoProject( getStore(), "project2", "scm:scheduling" );
+
+        ContinuumProject project = getStore().getProject( projectId );
+
+        // add project
+        projectGroup.addProject( project );
+
+        // update projectGroup
+        getStore().updateProjectGroup( projectGroup );
+
+        // retrieve projectGroup
+        projectGroup = getStore().getProjectGroup( projectGroupId );
+
+        assertNotNull( projectGroup );
+
+        // get projects out of the projectGroup
+        Set projects = projectGroup.getProjects();
+
+        assertEquals( 1, projects.size() );
+
+        // get individual project
+        project = (ContinuumProject) projectGroup.getProjects().iterator().next();
+
+        // test values within project
+        assertEquals( "project2", project.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now lookup the project on its own and make sure the projectGroup is
+        // present within the project.
+        // ----------------------------------------------------------------------
+
+        project = getStore().getProject( projectId );
+
+        assertNotNull( project );
+
+        projectGroup = project.getProjectGroup();
+
+        assertEquals( "projectGroup1", projectGroup.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now delete the projectGroup from the getStore() and make sure that the project
+        // still remains in the getStore().
+        // ----------------------------------------------------------------------
+
+        projectGroup = getStore().getProjectGroup( projectGroupId );
+
+        getStore().removeProjectGroup( projectGroup.getId() );
 
         project = getStore().getProject( projectId );
 
@@ -269,4 +331,16 @@ public class NewModelTest
 
         return buildGroup;
     }
+
+    public ContinuumProjectGroup createStubProjectGroup( String name, String description )
+    {
+        ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
+
+        projectGroup.setName( name );
+
+        projectGroup.setDescription( description );
+
+        return projectGroup;
+    }
+
 }

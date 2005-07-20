@@ -721,6 +721,91 @@ public class JdoContinuumStore
         return ((ContinuumProjectGroup)addObject( projectGroup )).getId();
     }
 
+    public void updateProjectGroup( ContinuumProjectGroup projectGroup )
+        throws ContinuumStoreException
+    {
+        updateObject( projectGroup );
+    }
+
+    public Collection getProjectGroups()
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( ContinuumProjectGroup.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.setOrdering( "name ascending" );
+
+            Collection result = (Collection) query.execute();
+
+            result = pm.detachCopyAll( result );
+
+            commit( tx );
+
+            return result;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public void removeProjectGroup( String projectGroupId )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Object id = pm.newObjectIdInstance( ContinuumProjectGroup.class, projectGroupId );
+
+            ContinuumProjectGroup projectGroup = (ContinuumProjectGroup) pm.getObjectById( id );
+
+            // ----------------------------------------------------------------------
+            // We need to remove this projectGroup reference from any project in the
+            // system. So grab the list of projects this projectGroup belongs to
+            // then iterate through the collection of projects removing the
+            // reference to this projectGroup. This seems like a bit much but the
+            // only thing that works.
+            // ----------------------------------------------------------------------
+
+            /*
+            if ( projectGroup.getProjects() != null && projectGroup.getProjects().size() > 0 )
+            {
+                Set projects = projectGroup.getProjects();
+
+                for ( Iterator i = projects.iterator(); i.hasNext(); )
+                {
+                    ContinuumProject project = (ContinuumProject) i.next();
+
+                    project.getBuildGroups().remove( projectGroup );
+                }
+            }
+            */
+
+            pm.deletePersistent( projectGroup );
+
+            commit( tx );
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+
     public ContinuumProjectGroup getProjectGroup( String projectGroupId )
         throws ContinuumStoreException
     {
@@ -829,6 +914,7 @@ public class JdoContinuumStore
             rollback( tx );
         }
     }
+
 
     // ----------------------------------------------------------------------
     //
