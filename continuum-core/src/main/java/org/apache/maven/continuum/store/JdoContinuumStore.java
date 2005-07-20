@@ -28,6 +28,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
+import javax.jdo.JDOHelper;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -130,50 +131,7 @@ public class JdoContinuumStore
                     System.out.println( "removed: " + r );
                 }
             }
-/*
-            System.out.println( "------------------------------------------" );
-            System.out.println( "Remove project" );
-            System.out.println( "------------------------------------------" );
 
-            System.out.println( "project.getId() = " + project.getId() );
-            System.out.println( "project.getBuildGroups() = " + project.getBuildGroups() );
-            System.out.println( "project.getBuildGroups().size() = " + project.getBuildGroups().size() );
-
-            if ( project.getBuildGroups() != null && project.getBuildGroups().size() > 0 )
-            {
-                Set buildGroups = project.getBuildGroups();
-
-                for ( Iterator i = buildGroups.iterator(); i.hasNext(); )
-                {
-                    ContinuumBuildGroup buildGroup = (ContinuumBuildGroup) i.next();
-
-                    System.out.println( "buildGroup.getProjects() = " + buildGroup.getProjects() );
-                    System.out.println( "buildGroup.getProjects().size() = " + buildGroup.getProjects().size() );
-
-//                    boolean removed = buildGroup.getProjects().remove( project );
-//
-//                    System.out.println( "removed: " + removed );
-
-                    for ( Iterator j = buildGroup.getProjects().iterator(); j.hasNext(); )
-                    {
-                        ContinuumProject continuumProject = (ContinuumProject) j.next();
-
-                        System.out.println( "testing : " + continuumProject.getId() );
-                        if ( continuumProject.getId().equals( project.getId() ) )
-                        {
-                            System.out.println( "removing " + project.getId() + ", " + project );
-
-                            j.remove();
-                        }
-                    }
-                }
-            }
-            System.out.println( "project.getBuildGroups() = " + project.getBuildGroups() );
-            System.out.println( "project.getBuildGroups().size() = " + project.getBuildGroups().size() );
-
-            System.out.println( "project = " + project );
-            System.out.println( "project.getProjectGroup() = " + project.getProjectGroup() );
-*/
             if ( project.getProjectGroup() != null )
             {
                 ContinuumProjectGroup pg = project.getProjectGroup();
@@ -222,12 +180,6 @@ public class JdoContinuumStore
 
             if ( project.getBuildGroups() != null && project.getBuildGroups().size() > 0 )
             {
-                for ( Iterator it = project.getBuildGroups().iterator(); it.hasNext(); )
-                {
-                    ContinuumBuildGroup buildGroup = (ContinuumBuildGroup) it.next();
-
-                    System.err.println( "buildGroup.id: " + buildGroup.getId() );
-                }
                 pm.attachCopyAll( project.getBuildGroups(), true );
             }
 
@@ -787,12 +739,95 @@ public class JdoContinuumStore
         return ((ContinuumBuildGroup) addObject( buildGroup )).getId();
     }
 
+    public void updateBuildGroup( ContinuumBuildGroup schedule )
+        throws ContinuumStoreException
+    {
+        updateObject( schedule );
+    }
+
+    public void removeBuildGroup( String buildGroupId )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Object id = pm.newObjectIdInstance( ContinuumBuildGroup.class, buildGroupId );
+
+            ContinuumBuildGroup buildGroup = (ContinuumBuildGroup) pm.getObjectById( id );
+
+            // ----------------------------------------------------------------------
+            // We need to remove this buildGroup reference from any project in the
+            // system. So grab the list of projects this buildGroup belongs to
+            // then iterate through the collection of projects removing the
+            // reference to this buildGroup. This seems like a bit much but the
+            // only thing that works.
+            // ----------------------------------------------------------------------
+
+            if ( buildGroup.getProjects() != null && buildGroup.getProjects().size() > 0 )
+            {
+                Set projects = buildGroup.getProjects();
+
+                for ( Iterator i = projects.iterator(); i.hasNext(); )
+                {
+                    ContinuumProject project = (ContinuumProject) i.next();
+
+                    project.getBuildGroups().remove( buildGroup );
+                }
+            }
+
+            pm.deletePersistent( buildGroup );
+
+            commit( tx );
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+
     public ContinuumBuildGroup getBuildGroup( String buildGroupId )
         throws ContinuumStoreException
     {
         return (ContinuumBuildGroup) getDetailedObject( ContinuumBuildGroup.class,
                                                         buildGroupId,
                                                         "build-group-detail" );
+    }
+
+    public Collection getBuildGroups()
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( ContinuumBuildGroup.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.setOrdering( "name ascending" );
+
+            Collection result = (Collection) query.execute();
+
+            result = pm.detachCopyAll( result );
+
+            commit( tx );
+
+            return result;
+        }
+        finally
+        {
+            rollback( tx );
+        }
     }
 
     // ----------------------------------------------------------------------

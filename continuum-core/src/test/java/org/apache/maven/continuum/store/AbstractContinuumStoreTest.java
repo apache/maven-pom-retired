@@ -32,11 +32,11 @@ import org.codehaus.plexus.jdo.JdoFactory;
 public class AbstractContinuumStoreTest
     extends AbstractContinuumTest
 {
-    private ContinuumStore store;
+    protected ContinuumStore store;
 
-    private String roleHint;
+    protected String roleHint;
 
-    private Class implementationClass;
+    protected Class implementationClass;
 
     public AbstractContinuumStoreTest( String roleHint, Class implementationClass )
     {
@@ -652,7 +652,7 @@ public class AbstractContinuumStoreTest
     // Private utility methods
     // ----------------------------------------------------------------------
 
-    private String addMavenTwoProject( String name, String scmUrl )
+    protected String addMavenTwoProject( String name, String scmUrl )
         throws Exception
     {
         return addMavenTwoProject( store,
@@ -714,10 +714,20 @@ public class AbstractContinuumStoreTest
         ContinuumProject project = store.getProject( projectId );
 
         // add schedule
-        project.addSchedule( createStubSchedule( "schedule1" ) );
+        //project.addSchedule( createStubSchedule( "schedule1" ) );
+
+        ContinuumSchedule s = createStubSchedule( "schedule1" );
+
+        String sid = store.addSchedule( s );
+
+        s = store.getSchedule( sid );
+
+        project.addSchedule( s );
 
         // update project
         store.updateProject( project );
+
+        assertEquals( 1, store.getSchedules().size() );
 
         // retrieve project
         project = store.getProject( projectId );

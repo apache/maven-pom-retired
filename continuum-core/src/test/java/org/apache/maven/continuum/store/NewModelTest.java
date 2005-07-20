@@ -20,8 +20,10 @@ import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.project.ContinuumBuildGroup;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.project.ContinuumSchedule;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -30,12 +32,89 @@ import java.util.Collection;
 public class NewModelTest
     extends AbstractContinuumTest
 {
-    public void testFoo()
+    public void testAddingBuildGroupToProjectAndUpdatingProject()
+        throws Exception
     {
-        // Just to make sure that there is at least a single test in this test case.
+        String projectId = addMavenTwoProject( getStore(), "Project Scheduling", "scm:scheduling" );
+
+        ContinuumProject project = getStore().getProject( projectId );
+
+        project.addBuildGroup( createStubBuildGroup( "Plexus", "Description" ) );
+
+        getStore().updateProject( project );
+
+        assertEquals( 1, getStore().getBuildGroups().size() );
+
+        project = getStore().getProject( projectId );
+
+        assertEquals( 1, project.getBuildGroups().size() );
     }
 
-    public void XXXtestBasic()
+    public void testProjectAdditionAndRemovalFromBuildGroup()
+        throws Exception
+    {
+        // create buildGroup
+        ContinuumBuildGroup buildGroup = createStubBuildGroup( "buildGroup1", "buildGroup1" );
+
+        String buildGroupId = getStore().addBuildGroup( buildGroup );
+
+        buildGroup = getStore().getBuildGroup( buildGroupId );
+
+        String projectId = addMavenTwoProject( getStore(), "project1", "scm:scheduling" );
+
+        ContinuumProject project = getStore().getProject( projectId );
+
+        // add project
+        buildGroup.addProject( project );
+
+        // update buildGroup
+        getStore().updateBuildGroup( buildGroup );
+
+        // retrieve buildGroup
+        buildGroup = getStore().getBuildGroup( buildGroupId );
+
+        assertNotNull( buildGroup );
+
+        // get projects out of the buildGroup
+        Set projects = buildGroup.getProjects();
+
+        assertEquals( 1, projects.size() );
+
+        // get individual project
+        project = (ContinuumProject) buildGroup.getProjects().iterator().next();
+
+        // test values within project
+        assertEquals( "project1", project.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now lookup the project on its own and make sure the buildGroup is
+        // present within the project.
+        // ----------------------------------------------------------------------
+
+        project = getStore().getProject( projectId );
+
+        assertNotNull( project );
+
+        buildGroup = (ContinuumBuildGroup) project.getBuildGroups().iterator().next();
+
+        assertEquals( "buildGroup1", buildGroup.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now delete the buildGroup from the getStore() and make sure that the project
+        // still remains in the getStore().
+        // ----------------------------------------------------------------------
+
+        buildGroup = getStore().getBuildGroup( buildGroupId );
+
+        getStore().removeBuildGroup( buildGroup.getId() );
+
+        project = getStore().getProject( projectId );
+
+        assertNotNull( project );
+    }
+
+
+    public void xtestBasic()
         throws Exception
     {
         // ----------------------------------------------------------------------
@@ -98,11 +177,13 @@ public class NewModelTest
 
         ContinuumBuildGroup buildGroup = new ContinuumBuildGroup();
 
-        buildGroup.setName( "Plexus Hey Yo");
+        buildGroup.setName( "Plexus Hey Yo" );
 
-        String buildGroupId = getStore().addBuildGroup( buildGroup );
+        buildGroup.setDescription( "Description" );
 
-        buildGroup = getStore().getBuildGroup( buildGroupId );
+        //String buildGroupId = getStore().addBuildGroup( buildGroup );
+
+        //buildGroup = getStore().getBuildGroup( buildGroupId );
 
         System.err.println( "buildGroup.id: " + buildGroup.getId() );
 
@@ -115,6 +196,17 @@ public class NewModelTest
         componentA.addBuildGroup( buildGroup );
 
         getStore().updateProject( componentA );
+
+        System.out.println( "componentA.getBuildGroups().size() = " + componentA.getBuildGroups().size() );
+
+        buildGroup = (ContinuumBuildGroup) componentA.getBuildGroups().iterator().next();
+
+        String buildGroupId = buildGroup.getId();
+
+        assertNotNull( buildGroup );
+
+        //String buildGroupId = getStore().getBuildGroup;
+
 
         // ----------------------------------------------------------------------
         // Assert that the project has a build group
@@ -140,7 +232,7 @@ public class NewModelTest
 
         assertEquals( "buildGroup.projects.size", 1, buildGroup.getProjects().size() );
 
-        assertEquals( projectIdA, ((ContinuumProject) buildGroup.getProjects().iterator().next() ).getId() );
+        assertEquals( projectIdA, ( (ContinuumProject) buildGroup.getProjects().iterator().next() ).getId() );
 
         // ----------------------------------------------------------------------
         //
@@ -165,5 +257,16 @@ public class NewModelTest
         assertNotNull( plexusGroup );
 
 //        assertEquals( 0, plexusGroup.getProjects().size() );
+    }
+
+    public ContinuumBuildGroup createStubBuildGroup( String name, String description )
+    {
+        ContinuumBuildGroup buildGroup = new ContinuumBuildGroup();
+
+        buildGroup.setName( name );
+
+        buildGroup.setDescription( description );
+
+        return buildGroup;
     }
 }
