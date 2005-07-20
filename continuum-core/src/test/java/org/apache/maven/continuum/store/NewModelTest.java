@@ -30,6 +30,11 @@ import java.util.Collection;
 public class NewModelTest
     extends AbstractContinuumTest
 {
+    public void testFoo()
+    {
+        // Just to make sure that there is at least a single test in this test case.
+    }
+
     public void XXXtestBasic()
         throws Exception
     {
