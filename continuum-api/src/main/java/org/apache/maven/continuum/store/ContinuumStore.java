@@ -22,6 +22,8 @@ import java.util.List;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumSchedule;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.project.ContinuumBuildGroup;
 import org.apache.maven.continuum.scm.ScmResult;
 
 /**
@@ -124,4 +126,23 @@ public interface ContinuumStore
     ContinuumSchedule getSchedule( String scheduleId )
         throws ContinuumStoreException;
 
+    // ----------------------------------------------------------------------
+    // Project Groups
+    // ----------------------------------------------------------------------
+
+    String addProjectGroup( ContinuumProjectGroup projectGroup )
+        throws ContinuumStoreException;
+
+    ContinuumProjectGroup getProjectGroup( String projectGroupId )
+        throws ContinuumStoreException;
+
+    // ----------------------------------------------------------------------
+    // Build Group
+    // ----------------------------------------------------------------------
+
+    String addBuildGroup( ContinuumBuildGroup buildGroup )
+        throws ContinuumStoreException;
+
+    ContinuumBuildGroup getBuildGroup( String buildGroupId )
+        throws ContinuumStoreException;
 }
