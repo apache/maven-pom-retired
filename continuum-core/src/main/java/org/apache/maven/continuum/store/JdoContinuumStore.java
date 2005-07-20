@@ -111,11 +111,83 @@ public class JdoContinuumStore
                 {
                     ContinuumSchedule schedule = (ContinuumSchedule) i.next();
 
-                    schedule.getProjects().remove( project );
+                    boolean r = schedule.getProjects().remove( project );
+
+                    System.out.println( "removed: " + r );
                 }
             }
 
-            project.setProjectGroup( null );
+            if ( project.getBuildGroups() != null && project.getBuildGroups().size() > 0 )
+            {
+                Set buildGroups = project.getBuildGroups();
+
+                for ( Iterator i = buildGroups.iterator(); i.hasNext(); )
+                {
+                    ContinuumBuildGroup buildGroup = (ContinuumBuildGroup) i.next();
+
+                    boolean r = buildGroup.getProjects().remove( project );
+
+                    System.out.println( "removed: " + r );
+                }
+            }
+/*
+            System.out.println( "------------------------------------------" );
+            System.out.println( "Remove project" );
+            System.out.println( "------------------------------------------" );
+
+            System.out.println( "project.getId() = " + project.getId() );
+            System.out.println( "project.getBuildGroups() = " + project.getBuildGroups() );
+            System.out.println( "project.getBuildGroups().size() = " + project.getBuildGroups().size() );
+
+            if ( project.getBuildGroups() != null && project.getBuildGroups().size() > 0 )
+            {
+                Set buildGroups = project.getBuildGroups();
+
+                for ( Iterator i = buildGroups.iterator(); i.hasNext(); )
+                {
+                    ContinuumBuildGroup buildGroup = (ContinuumBuildGroup) i.next();
+
+                    System.out.println( "buildGroup.getProjects() = " + buildGroup.getProjects() );
+                    System.out.println( "buildGroup.getProjects().size() = " + buildGroup.getProjects().size() );
+
+//                    boolean removed = buildGroup.getProjects().remove( project );
+//
+//                    System.out.println( "removed: " + removed );
+
+                    for ( Iterator j = buildGroup.getProjects().iterator(); j.hasNext(); )
+                    {
+                        ContinuumProject continuumProject = (ContinuumProject) j.next();
+
+                        System.out.println( "testing : " + continuumProject.getId() );
+                        if ( continuumProject.getId().equals( project.getId() ) )
+                        {
+                            System.out.println( "removing " + project.getId() + ", " + project );
+
+                            j.remove();
+                        }
+                    }
+                }
+            }
+            System.out.println( "project.getBuildGroups() = " + project.getBuildGroups() );
+            System.out.println( "project.getBuildGroups().size() = " + project.getBuildGroups().size() );
+
+            System.out.println( "project = " + project );
+            System.out.println( "project.getProjectGroup() = " + project.getProjectGroup() );
+*/
+            if ( project.getProjectGroup() != null )
+            {
+                ContinuumProjectGroup pg = project.getProjectGroup();
+
+                System.out.println( "before: " + pg.getProjects() );
+
+                boolean removed = pg.getProjects().remove( project );
+
+                System.out.println( "removed: " + removed );
+
+                System.out.println( "after: " + pg.getProjects() );
+            }
+
+            System.out.println( "------------------------------------------" );
 
             pm.deletePersistent( project );
 
@@ -145,7 +217,18 @@ public class JdoContinuumStore
 
             if ( project.getSchedules() != null && project.getSchedules().size() > 0 )
             {
-                makePersistentAll( pm, project.getSchedules() );
+                pm.attachCopyAll( project.getSchedules(), true );
+            }
+
+            if ( project.getBuildGroups() != null && project.getBuildGroups().size() > 0 )
+            {
+                for ( Iterator it = project.getBuildGroups().iterator(); it.hasNext(); )
+                {
+                    ContinuumBuildGroup buildGroup = (ContinuumBuildGroup) it.next();
+
+                    System.err.println( "buildGroup.id: " + buildGroup.getId() );
+                }
+                pm.attachCopyAll( project.getBuildGroups(), true );
             }
 
             pm.attachCopy( project, true );

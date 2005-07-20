@@ -17,10 +17,11 @@ package org.apache.maven.continuum.store;
  */
 
 import org.apache.maven.continuum.AbstractContinuumTest;
-import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumBuildGroup;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
+
+import java.util.Collection;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -29,7 +30,7 @@ import org.apache.maven.continuum.project.ContinuumBuildGroup;
 public class NewModelTest
     extends AbstractContinuumTest
 {
-    public void testBasic()
+    public void XXXtestBasic()
         throws Exception
     {
         // ----------------------------------------------------------------------
@@ -78,13 +79,13 @@ public class NewModelTest
 
         ContinuumProject plexusComponentB = getStore().getProject( projectIdB );
 
-        assertNotNull( plexusComponentA.getProjectGroup() );
+        assertNotNull( "componentA.projectGroup == null", plexusComponentA.getProjectGroup() );
 
-        assertNotNull( plexusComponentB.getProjectGroup() );
+        assertNotNull( "componentB.projectGroup == null", plexusComponentB.getProjectGroup() );
 
-        assertEquals( plexusGroup.getId(), plexusComponentA.getProjectGroup().getId() );
+        assertEquals( "projectGroup.id != componentA.projectGroup.id", plexusGroup.getId(), plexusComponentA.getProjectGroup().getId() );
 
-        assertEquals( plexusGroup.getId(), plexusComponentB.getProjectGroup().getId() );
+        assertEquals( "projectGroup.id != componentA.projectGroup.id", plexusGroup.getId(), plexusComponentB.getProjectGroup().getId() );
 
         // ----------------------------------------------------------------------
         //
@@ -98,9 +99,21 @@ public class NewModelTest
 
         buildGroup = getStore().getBuildGroup( buildGroupId );
 
-        componentA.getBuildGroups().add( buildGroup );
+        System.err.println( "buildGroup.id: " + buildGroup.getId() );
+
+        // ----------------------------------------------------------------------
+        // Add component A to the build group
+        // ----------------------------------------------------------------------
+
+//        componentA.getBuildGroups().add( buildGroup );
+
+        componentA.addBuildGroup( buildGroup );
 
         getStore().updateProject( componentA );
+
+        // ----------------------------------------------------------------------
+        // Assert that the project has a build group
+        // ----------------------------------------------------------------------
 
         componentA = getStore().getProject( componentA.getId() );
 
@@ -108,7 +121,21 @@ public class NewModelTest
 
         assertEquals( 1, componentA.getBuildGroups().size() );
 
-        assertEquals( buildGroupId, ((ContinuumBuildGroup) componentA.getBuildGroups().iterator().next()).getId() );
+        // ----------------------------------------------------------------------
+        // Assert that the build group has a project
+        // ----------------------------------------------------------------------
+
+//        buildGroup = (ContinuumBuildGroup) componentA.getBuildGroups().iterator().next();
+//
+//        assertEquals( "buildGroupId", buildGroupId, buildGroup.getId() );
+
+        buildGroup = getStore().getBuildGroup( buildGroupId );
+
+        assertEquals( "buildGroupId", buildGroupId, buildGroup.getId() );
+
+        assertEquals( "buildGroup.projects.size", 1, buildGroup.getProjects().size() );
+
+        assertEquals( projectIdA, ((ContinuumProject) buildGroup.getProjects().iterator().next() ).getId() );
 
         // ----------------------------------------------------------------------
         //
@@ -117,6 +144,10 @@ public class NewModelTest
         getStore().removeProject( componentA.getId() );
 
         getStore().removeProject( componentB.getId() );
+
+        Collection projects = getStore().getAllProjects();
+
+        assertEquals( "projects.size", 0, projects.size() );
 
         buildGroup = getStore().getBuildGroup( buildGroupId );
 
