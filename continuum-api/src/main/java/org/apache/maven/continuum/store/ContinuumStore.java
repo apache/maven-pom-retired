@@ -133,7 +133,16 @@ public interface ContinuumStore
     String addProjectGroup( ContinuumProjectGroup projectGroup )
         throws ContinuumStoreException;
 
+    void updateProjectGroup( ContinuumProjectGroup projectGroup )
+        throws ContinuumStoreException;
+
     ContinuumProjectGroup getProjectGroup( String projectGroupId )
+        throws ContinuumStoreException;
+
+    void removeProjectGroup( String projectGroupId )
+        throws ContinuumStoreException;
+
+    Collection getProjectGroups()
         throws ContinuumStoreException;
 
     // ----------------------------------------------------------------------
