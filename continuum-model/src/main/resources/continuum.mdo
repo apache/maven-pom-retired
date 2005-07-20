@@ -206,6 +206,7 @@
           <name>id</name>
           <version>1.0.0</version>
           <type>String</type>
+          <identifier>true</identifier>
         </field>
         <field>
           <name>active</name>
