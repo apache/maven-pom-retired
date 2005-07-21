@@ -24,6 +24,7 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumBuildGroup;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.scm.ScmResult;
 
 /**
@@ -162,5 +163,24 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     Collection getBuildGroups()
+        throws ContinuumStoreException;
+
+    // ----------------------------------------------------------------------
+    // Build settings
+    // ----------------------------------------------------------------------
+
+    String addBuildSettings( ContinuumBuildSettings buildSettings )
+        throws ContinuumStoreException;
+
+    void updateBuildSettings( ContinuumBuildSettings buildSettings )
+        throws ContinuumStoreException;
+
+    void removeBuildSettings( String buildSettingsId )
+        throws ContinuumStoreException;
+
+    ContinuumBuildSettings getBuildSettings( String buildSettingsId )
+        throws ContinuumStoreException;
+
+    Collection getBuildSettings()
         throws ContinuumStoreException;
 }
