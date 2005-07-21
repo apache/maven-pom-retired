@@ -182,6 +182,10 @@
       <field name="buildGroups" persistence-modifier="persistent" mapped-by="buildSettings">
         <collection element-type="ContinuumBuildGroup"/>
       </field>
+      <fetch-group name="build-settings-detail">
+        <field name="buildGroups"/>
+        <field name="projectGroups"/>
+      </fetch-group>      
     </class>
 
   </package>
