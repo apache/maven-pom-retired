@@ -744,6 +744,11 @@
           <type>String</type>
         </field>
         <field>
+          <name>cronExpression</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
           <name>buildGroups</name>
           <version>1.0.0</version>
           <type>Set</type>
