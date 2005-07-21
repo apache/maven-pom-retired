@@ -43,6 +43,16 @@
     </component>
 
     <component>
+      <role>org.apache.maven.continuum.initialization.ContinuumInitializer</role>
+      <implementation>org.apache.maven.continuum.initialization.DefaultContinuumInitializer</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
       <role>org.apache.maven.continuum.Continuum</role>
       <implementation>org.apache.maven.continuum.DefaultContinuum</implementation>
       <requirements>
