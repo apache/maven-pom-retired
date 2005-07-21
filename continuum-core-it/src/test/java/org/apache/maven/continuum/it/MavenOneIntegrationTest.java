@@ -50,7 +50,7 @@ public class MavenOneIntegrationTest
 
         progress( "Adding Maven 1 project" );
 
-        String projectId = getProjectId( continuum.addMavenOneProject( "file:" + root + "/project.xml" ) );
+        String projectId = getProjectId( continuum.addMavenOneProject( getFileUrl( root ) + "/project.xml" ) );
 
         waitForSuccessfulCheckout( projectId );
 

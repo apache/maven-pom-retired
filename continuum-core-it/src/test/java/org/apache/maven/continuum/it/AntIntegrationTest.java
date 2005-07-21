@@ -53,7 +53,7 @@ public class AntIntegrationTest
         progress( "Adding Ant SVN project" );
 
         AntProject p = new AntProject();
-        p.setScmUrl( "scm:svn:file://" + getSvnRoot() + "/ant-svn" );
+        p.setScmUrl( makeScmUrl( "svn", getSvnRoot(), "ant-svn" ) );
         p.setName( "Ant SVN Project" );
 //        p.getNotifiers().add( makeMailNotifier( email ) );
         p.setVersion( "3.0" );
@@ -94,7 +94,7 @@ public class AntIntegrationTest
         cvsImport( root, "ant-cvs", getCvsRoot() );
 
         AntProject p = new AntProject();
-        p.setScmUrl( "scm:cvs:local:" + getCvsRoot().getAbsolutePath() + ":ant-cvs" );
+        p.setScmUrl( makeScmUrl( "cvs", getCvsRoot(), "ant-cvs" ) );
         p.setName( "Ant CVS Project" );
 //        p.getNotifiers().add( makeMailNotifier( email ) );
         p.setVersion( "3.0" );

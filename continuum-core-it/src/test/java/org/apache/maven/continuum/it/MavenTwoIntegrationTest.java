@@ -126,7 +126,7 @@ public class MavenTwoIntegrationTest
             "    </notifiers>\n" +
             "  </ciManagement>\n" +
             "  <scm>\n" +
-            "    <connection>scm:cvs:local:" + cvsRoot.getAbsolutePath() + ":" + artifactId + "</connection>\n" +
+            "    <connection>" + makeScmUrl( "cvs", cvsRoot, artifactId ) + "</connection>\n" +
             "  </scm>\n" +
             "</project>" );
 

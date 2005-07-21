@@ -47,6 +47,7 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult
 
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.context.Context;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.InterpolationFilterReader;
 import org.codehaus.plexus.util.IOUtil;
@@ -280,7 +281,7 @@ public abstract class AbstractIntegrationTest
 
         if ( exitCode != 0 )
         {
-            System.err.println( "Error while executing command: " + cmd );
+            System.err.println( "Error while executing command: " + commandline.toString() );
             System.err.println( "Exit code: " + exitCode );
 
             System.err.println( "Standard output:" );
@@ -688,7 +689,7 @@ public abstract class AbstractIntegrationTest
     protected void svnImport( File root, String artifactId, File svnRoot )
         throws CommandLineException
     {
-        system( root, "svn", "import -m - . file://" + svnRoot.getAbsolutePath() + "/" + artifactId );
+        system( root, "svn", "import -m - . " + getFileUrl( getSvnRoot() ) + "/" + artifactId );
     }
 
     protected void cvsCheckout( File cvsRoot, String module, File coDir )
@@ -713,23 +714,66 @@ public abstract class AbstractIntegrationTest
         system( svnRoot, "svnadmin", "create " + svnRoot.getAbsolutePath() );
     }
 
-    // ----------------------------------------------------------------------
-    // Maven 1
-    // ----------------------------------------------------------------------
+    protected String getFileUrl( File repositoryRootFile )
+        throws CommandLineException
+    {
+        String repositoryRoot = repositoryRootFile.getAbsolutePath();
+
+        // TODO: it'd be great to build this into CommandLineUtils somehow
+        // TODO: some way without a custom cygwin sys property?
+        if ( "true".equals( System.getProperty( "cygwin" ) ) )
+        {
+            Commandline cl = new Commandline();
+
+            cl.setExecutable( "cygpath" );
+
+            cl.createArgument().setValue( "--unix" );
+
+            cl.createArgument().setValue( repositoryRoot );
+
+            CommandLineUtils.StringStreamConsumer stdout = new CommandLineUtils.StringStreamConsumer();
+
+            int exitValue = CommandLineUtils.executeCommandLine( cl, stdout, null );
+
+            if ( exitValue != 0 )
+            {
+                throw new CommandLineException( "Unable to convert cygwin path, exit code = " + exitValue );
+            }
+
+            repositoryRoot = stdout.getOutput().trim();
+        }
+        else if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
+        {
+            repositoryRoot = "/" + StringUtils.replace( repositoryRoot, "\\", "/" );
+        }
+
+        return "file://" + repositoryRoot;
+    }
+
+    private String getScmUrl( File repositoryRootFile )
+        throws CommandLineException
+    {
+        return "scm:svn:" + getFileUrl( repositoryRootFile );
+    }
 
     protected String makeScmUrl( String scm, File scmRoot, String artifactId )
+        throws CommandLineException
     {
         if ( scm.equals( "cvs" ) )
         {
-            return "scm:cvs:local:" + scmRoot.getAbsolutePath() + ":" + artifactId;
+            return "scm|cvs|local|" + scmRoot.getAbsolutePath() + "|" + artifactId;
         }
         else if ( scm.equals( "svn" ) )
         {
-            return "scm:svn:file:" + scmRoot.getAbsolutePath() + "/" + artifactId;
+            return getScmUrl( scmRoot ) + "/" + artifactId;
         }
 
         throw new RuntimeException( "Unknown SCM type '" + scm + "'" );
     }
+
+    // ----------------------------------------------------------------------
+    // Maven 1
+    // ----------------------------------------------------------------------
 
     protected void writeMavenOnePom( File file,
                                      String artifactId,

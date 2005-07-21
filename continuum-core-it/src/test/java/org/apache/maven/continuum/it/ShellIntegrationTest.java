@@ -53,12 +53,12 @@ public class ShellIntegrationTest
         progress( "Adding CVS Shell project" );
 
         ShellProject p = new ShellProject();
-        p.setScmUrl( "scm:cvs:local:" + getCvsRoot() + ":shell" );
+        p.setScmUrl( "scm|cvs|local|" + getCvsRoot() + "|shell" );
         p.setName( "Shell Project" );
 //        p.getNotifiers().add( makeMailNotifier( email ) );
         p.setVersion( "3.0" );
         p.setCommandLineArguments( "" );
-        p.setExecutable( "script.sh" );
+        p.setExecutable( getScriptName() );
         String projectId = continuum.addShellProject( p );
         waitForSuccessfulCheckout( projectId );
 
@@ -76,7 +76,7 @@ public class ShellIntegrationTest
 
         cvsCheckout( getCvsRoot(), "shell", coDir );
 
-        File s = new File( coDir, "script.sh" );
+        File s = new File( coDir, getScriptName() );
         String script = FileUtils.fileRead( s );
         FileUtils.fileWrite( s.getAbsolutePath(), script + " # Extra part" );
         system( root, "chmod", "+x " + s.getAbsolutePath() );
@@ -101,14 +101,43 @@ public class ShellIntegrationTest
     {
         deleteAndCreateDirectory( root );
 
-        File script = new File( root, "script.sh" );
+        File script = new File( root, getScriptName() );
 
-        FileUtils.fileWrite( script.getAbsolutePath(),
-                             "#!/bin/bash" + EOL +
-                             "for arg in \"$@\"; do" + EOL +
-                             "  echo $arg" + EOL +
-                             "done");
+        FileUtils.fileWrite( script.getAbsolutePath(), getScriptContent() );
 
-        system( root, "chmod", "+x " + script.getAbsolutePath() );
+        if ( !System.getProperty( "os.name" ).startsWith( "Windows" ) || "true".equals( System.getProperty( "cygwin" ) ) )
+        {
+            system( root, "chmod", "+x " + script.getAbsolutePath() );
+        }
+    }
+
+    private String getScriptName()
+    {
+        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) && !"true".equals( System.getProperty( "cygwin" ) ) )
+        {
+            return "script.bat";
+        }
+        else
+        {
+            return "script.sh";
+        }
+    }
+
+    private String getScriptContent()
+    {
+        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) && !"true".equals( System.getProperty( "cygwin" ) ) )
+        {
+            return "@ECHO OFF" + EOL +
+                "IF \"%*\" == \"\" GOTO end" + EOL +
+                "FOR %%a IN (%*) DO ECHO %%a" + EOL +
+                ":end" + EOL;
+        }
+        else
+        {
+            return "#!/bin/bash" + EOL +
+                "for arg in \"$@\"; do" + EOL +
+                "  echo $arg" + EOL +
+                "done";
+        }
     }
 }
