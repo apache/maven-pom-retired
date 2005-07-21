@@ -5,6 +5,8 @@ package org.apache.maven.continuum.core.action;
 
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
+import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManagerException;
 import org.apache.maven.continuum.ContinuumException;
 
 import java.net.URL;
@@ -24,8 +26,10 @@ public class CreateProjectsFromMetadata
 
     public static final String KEY_PROJECT_BUILDING_RESULT = "projectBuildingResult";
 
-    public  void execute( Map context )
-        throws Exception
+    public void execute( Map context )
+        throws ContinuumException,
+               ContinuumProjectBuilderManagerException,
+               ContinuumProjectBuilderException
     {
         String projectBuilderId = getString( context, KEY_PROJECT_BUILDER_ID );
 

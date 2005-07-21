@@ -46,6 +46,17 @@ public class ValidateProject
             throw new ContinuumException( "The SCM URL has to be set." );
         }
 
+        // TODO: Enable
+//        if ( StringUtils.isEmpty( project.getGroupId() ) )
+//        {
+//            throw new ContinuumException( "The group id has to be set." );
+//        }
+//
+//        if ( StringUtils.isEmpty( project.getArtifactId() ) )
+//        {
+//            throw new ContinuumException( "The artifact id has to be set." );
+//        }
+
         // TODO: validate that the SCM provider id
 
         // ----------------------------------------------------------------------

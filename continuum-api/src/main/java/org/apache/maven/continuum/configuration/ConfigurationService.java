@@ -16,11 +16,14 @@ package org.apache.maven.continuum.configuration;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.profile.ContinuumJdk;
+
 import java.io.File;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id$
+ * @version $Id:$
  */
 public interface ConfigurationService
 {
@@ -30,9 +33,19 @@ public interface ConfigurationService
     //
     // ----------------------------------------------------------------------
 
+    public static final String CONFIGURATION = "configuration";
+
     public static final String CONFIGURATION_URL = "url";
 
     public static final String CONFIGURATION_BUILD_OUTPUT_DIRECTORY = "build-output-directory";
+
+    public static final String CONFIGURATION_JDKS = "jdks";
+
+    public static final String CONFIGURATION_JDK = "jdk";
+
+    public static final String CONFIGURATION_JDK_VERSION = "jdk-version";
+
+    public static final String CONFIGURATION_JDK_HOME = "jdk-home";
 
     // ----------------------------------------------------------------------
     //
@@ -45,6 +58,12 @@ public interface ConfigurationService
     File getBuildOutputDirectory();
 
     void setBuildOutputDirectory( File buildOutputDirectory );
+
+    Map getJdks();
+
+    void addJdk( ContinuumJdk jdk );
+
+    void setJdks( Map jdks );
 
     // ----------------------------------------------------------------------
     //

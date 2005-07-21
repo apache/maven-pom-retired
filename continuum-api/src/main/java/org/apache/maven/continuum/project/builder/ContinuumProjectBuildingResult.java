@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -29,11 +30,18 @@ public class ContinuumProjectBuildingResult
 {
     private List projects = new ArrayList();
 
+    private List projectGroups = new ArrayList();
+
     private List warnings = new ArrayList();
 
     public void addProject( ContinuumProject project )
     {
         projects.add( project );
+    }
+
+    public void addProjectGroup( ContinuumProjectGroup projectGroup )
+    {
+        projectGroups.add( projectGroup );
     }
 
     public void addProject( ContinuumProject project, String executorId )
@@ -46,6 +54,11 @@ public class ContinuumProjectBuildingResult
     public List getProjects()
     {
         return projects;
+    }
+
+    public List getProjectGroups()
+    {
+        return projectGroups;
     }
 
     public void addWarning( String warning )

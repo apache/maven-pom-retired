@@ -45,8 +45,8 @@
               <goal>java</goal>
               <!--
               <goal>jpox-jdo-mapping</goal>
-              -->
               <goal>jpox-store</goal>
+              -->
             </goals>
           </execution>
         </executions>

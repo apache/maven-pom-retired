@@ -28,7 +28,6 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
-import javax.jdo.JDOHelper;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -806,13 +805,52 @@ public class JdoContinuumStore
         }
     }
 
-
     public ContinuumProjectGroup getProjectGroup( String projectGroupId )
         throws ContinuumStoreException
     {
         return (ContinuumProjectGroup) getDetailedObject( ContinuumProjectGroup.class,
                                                           projectGroupId,
                                                           "project-group-detail" );
+    }
+
+    public ContinuumProjectGroup getProjectGroupByName( String name )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( ContinuumProjectGroup.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.setOrdering( "name ascending" );
+
+            query.declareParameters( "String filter" );
+
+            query.setFilter( "this.name == name" );
+
+            Collection result = (Collection) query.execute( name );
+
+            if ( result.size() == 0 )
+            {
+                throw new ContinuumObjectNotFoundException( ContinuumProjectGroup.class.getName(), name );
+            }
+
+            Object object = pm.detachCopy( result.iterator().next() );
+
+            commit( tx );
+
+            return (ContinuumProjectGroup) object;
+        }
+        finally
+        {
+            rollback( tx );
+        }
     }
 
     // ----------------------------------------------------------------------

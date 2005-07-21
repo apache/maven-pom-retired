@@ -16,6 +16,7 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction;
@@ -29,26 +30,25 @@ import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
-import org.apache.maven.continuum.scm.ScmResult;
-import org.apache.maven.continuum.utils.ProjectSorter;
 import org.apache.maven.continuum.scheduler.ContinuumScheduler;
 import org.apache.maven.continuum.scheduler.ContinuumSchedulerConstants;
-import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.utils.ProjectSorter;
+
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.dag.CycleDetectedException;
-import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.codehaus.plexus.util.dag.CycleDetectedException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -80,6 +80,12 @@ public class DefaultContinuum
 
     /** @plexus.requirement */
     private ContinuumStore store;
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    private static final String DEFAULT_PROJECT_GROUP_NAME = "Default Project";
 
     // ----------------------------------------------------------------------
     // Projects
@@ -269,62 +275,9 @@ public class DefaultContinuum
     public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
         throws ContinuumException
     {
-        Map context = new HashMap();
-
-        context.put( CreateProjectsFromMetadata.KEY_PROJECT_BUILDER_ID, MavenOneContinuumProjectBuilder.ID );
-
-        context.put( CreateProjectsFromMetadata.KEY_URL, metadataUrl );
-
-        context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, core.getWorkingDirectory() );
-
-        ContinuumProjectBuildingResult result;
-
-        try
-        {
-            // ----------------------------------------------------------------------
-            // During the execution of the this action we may find that the metadata
-            // isn't good enough for the following reasons:
-            //
-            // 1) No scm element (repository element for m1)
-            // 2) Invalid scm element (repository element for m1)
-            // 3) No ciManagement (m2)
-            // 4) Invalid ciManagement element (m2)
-            // ----------------------------------------------------------------------
-
-            actionManager.lookup( "create-projects-from-metadata" ).execute( context );
-
-            result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
-
-            if ( result.getWarnings().size() > 0 )
-            {
-                return result;
-            }
-
-            List projects = result.getProjects();
-
-            for ( Iterator i = projects.iterator(); i.hasNext(); )
-            {
-                ContinuumProject project = (ContinuumProject) i.next();
-
-                project.setExecutorId( MavenOneBuildExecutor.ID );
-
-                context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
-
-                actionManager.lookup( "validate-project" ).execute( context );
-
-                actionManager.lookup( "store-project" ).execute( context );
-
-                project.setId( (String) context.get( StoreProjectAction.KEY_PROJECT_ID ) );
-
-                actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
-            }
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumException( "Error adding Maven 1 project.", e );
-        }
-
-        return result;
+        return executeAddProjectsFromMetadataActivity( metadataUrl,
+                                                       MavenOneContinuumProjectBuilder.ID,
+                                                       MavenOneBuildExecutor.ID );
     }
 
     public String addMavenOneProject( MavenOneProject project )
@@ -332,30 +285,7 @@ public class DefaultContinuum
     {
         project.setExecutorId( MavenOneBuildExecutor.ID );
 
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        Map context = new HashMap();
-
-        context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
-
-        try
-        {
-            actionManager.lookup( "validate-project" ).execute( context );
-
-            actionManager.lookup( "store-project" ).execute( context );
-
-            project.setId( (String) context.get( StoreProjectAction.KEY_PROJECT_ID ) );
-
-            actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
-
-            return project.getId();
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumException( "Error adding Maven 1 project.", e );
-        }
+        return executeAddProjectFromScmActivity( project );
     }
 
     public MavenOneProject getMavenOneProject( String projectId )
@@ -377,70 +307,9 @@ public class DefaultContinuum
     public ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl )
         throws ContinuumException
     {
-        // ----------------------------------------------------------------------
-        // Initialize the context
-        // ----------------------------------------------------------------------
-
-        Map context = new HashMap();
-
-        context.put( CreateProjectsFromMetadata.KEY_PROJECT_BUILDER_ID, MavenTwoContinuumProjectBuilder.ID );
-
-        context.put( CreateProjectsFromMetadata.KEY_URL, metadataUrl );
-
-        context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, core.getWorkingDirectory() );
-
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        ContinuumProjectBuildingResult result;
-
-        try
-        {
-            // ----------------------------------------------------------------------
-            // During the execution of the this action we may find that the metadata
-            // isn't good enough for the following reasons:
-            //
-            // 1) No scm element (repository element for m1)
-            // 2) Invalid scm element (repository element for m1)
-            // 3) No ciManagement (m2)
-            // 4) Invalid ciManagement element (m2)
-            // ----------------------------------------------------------------------
-
-            actionManager.lookup( "create-projects-from-metadata" ).execute( context );
-
-            result = (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
-
-            if ( result.getWarnings().size() > 0 )
-            {
-                return result;
-            }
-
-            List projects = result.getProjects();
-
-            for ( Iterator i = projects.iterator(); i.hasNext(); )
-            {
-                ContinuumProject project = (ContinuumProject) i.next();
-
-                project.setExecutorId( MavenTwoBuildExecutor.ID );
-
-                context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
-
-                actionManager.lookup( "validate-project" ).execute( context );
-
-                actionManager.lookup( "store-project" ).execute( context );
-
-                project.setId( (String) context.get( StoreProjectAction.KEY_PROJECT_ID ) );
-
-                actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
-            }
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumException( "Error adding Maven 2 project.", e );
-        }
-
-        return result;
+        return executeAddProjectsFromMetadataActivity( metadataUrl,
+                                                       MavenTwoContinuumProjectBuilder.ID,
+                                                       MavenTwoBuildExecutor.ID );
     }
 
     public String addMavenTwoProject( MavenTwoProject project )
@@ -448,30 +317,7 @@ public class DefaultContinuum
     {
         project.setExecutorId( MavenTwoBuildExecutor.ID );
 
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        Map context = new HashMap();
-
-        context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
-
-        try
-        {
-            actionManager.lookup( "validate-project" ).execute( context );
-
-            actionManager.lookup( "store-project" ).execute( context );
-
-            project.setId( (String) context.get( StoreProjectAction.KEY_PROJECT_ID ) );
-
-            actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumException( "Error adding Maven 2 project.", e );
-        }
-
-        return project.getId();
+        return executeAddProjectFromScmActivity( project );
     }
 
     public MavenTwoProject getMavenTwoProject( String projectId )
@@ -486,19 +332,16 @@ public class DefaultContinuum
         executeUpdateProjectActivity( project );
     }
 
+    // ----------------------------------------------------------------------
+    // Shell projects
+    // ----------------------------------------------------------------------
+
     public String addShellProject( ShellProject project )
         throws ContinuumException
     {
         project.setExecutorId( ShellBuildExecutor.ID );
 
-        try
-        {
-            return executeAddProjectFromScmActivity( project );
-        }
-        catch ( Exception e )
-        {
-            throw new ContinuumException( "Error adding Shell project.", e );
-        }
+        return executeAddProjectFromScmActivity( project );
     }
 
     public ShellProject getShellProject( String projectId )
@@ -548,6 +391,70 @@ public class DefaultContinuum
         {
             throw new ContinuumException( "Error adding project.", e );
         }
+    }
+
+    private ContinuumProjectBuildingResult executeAddProjectsFromMetadataActivity( String metadataUrl,
+                                                                                   String projectBuilderId,
+                                                                                   String buildExecutorId )
+        throws ContinuumException
+    {
+        Map context = new HashMap();
+
+        context.put( CreateProjectsFromMetadata.KEY_PROJECT_BUILDER_ID, projectBuilderId );
+
+        context.put( CreateProjectsFromMetadata.KEY_URL, metadataUrl );
+
+        context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, core.getWorkingDirectory() );
+
+        ContinuumProjectBuildingResult result;
+
+        try
+        {
+            // ----------------------------------------------------------------------
+            // During the execution of the this action we may find that the metadata
+            // isn't good enough for the following reasons:
+            //
+            // 1) No scm element (repository element for m1)
+            // 2) Invalid scm element (repository element for m1)
+            // 3) No ciManagement (m2)
+            // 4) Invalid ciManagement element (m2)
+            // ----------------------------------------------------------------------
+
+            actionManager.lookup( "create-projects-from-metadata" ).execute( context );
+
+            result = (ContinuumProjectBuildingResult)
+                context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
+
+            if ( result.getWarnings().size() > 0 )
+            {
+                return result;
+            }
+
+            List projects = result.getProjects();
+
+            for ( Iterator i = projects.iterator(); i.hasNext(); )
+            {
+                ContinuumProject project = (ContinuumProject) i.next();
+
+                project.setExecutorId( buildExecutorId );
+
+                context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
+
+                actionManager.lookup( "validate-project" ).execute( context );
+
+                actionManager.lookup( "store-project" ).execute( context );
+
+                project.setId( (String) context.get( StoreProjectAction.KEY_PROJECT_ID ) );
+
+//                actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
+            }
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumException( "Error adding projects from metadata '" + metadataUrl + "'.", e );
+        }
+
+        return result;
     }
 
     // ----------------------------------------------------------------------
@@ -670,9 +577,7 @@ public class DefaultContinuum
     {
         try
         {
-            ContinuumSchedule schedule = store.getSchedule( scheduleId );
-
-            return schedule;
+            return store.getSchedule( scheduleId );
         }
         catch ( ContinuumStoreException ex )
         {
@@ -767,7 +672,7 @@ public class DefaultContinuum
     }
 
     // ----------------------------------------------------------------------
-    // Internal Build Scheduling
+    // Default Object Management
     // ----------------------------------------------------------------------
 
     private boolean defaultScheduleExists()

@@ -16,22 +16,26 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
-import java.io.IOException;
-
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.utils.ContinuumUtils;
+import org.apache.maven.model.IssueManagement;
 import org.apache.maven.project.MavenProject;
+
+import org.codehaus.plexus.util.StringUtils;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -68,7 +72,7 @@ public class MavenTwoContinuumProjectBuilder
 
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
 
-        readModules( url, result );
+        readModules( url, result, true );
 
         return result;
     }
@@ -77,7 +81,9 @@ public class MavenTwoContinuumProjectBuilder
     //
     // ----------------------------------------------------------------------
 
-    private void readModules( URL url, ContinuumProjectBuildingResult result )
+    private void readModules( URL url,
+                              ContinuumProjectBuildingResult result,
+                              boolean groupPom )
     {
         MavenProject mavenProject;
 
@@ -98,6 +104,16 @@ public class MavenTwoContinuumProjectBuilder
             result.addWarning( "Could not download " + url );
 
             return;
+        }
+
+        if ( groupPom )
+        {
+            ContinuumProjectGroup projectGroup = buildProjectGroup( mavenProject );
+
+            if ( projectGroup != null )
+            {
+                result.addProjectGroup( projectGroup );
+            }
         }
 
         if ( !excludedPackagingTypes.contains( mavenProject.getPackaging() ) )
@@ -139,9 +155,9 @@ public class MavenTwoContinuumProjectBuilder
         {
             String module = (String) it.next();
 
-            URL moduleUrl = null;
-
             String urlString = prefix + "/" + module + POM_PART + suffix;
+
+            URL moduleUrl;
 
             try
             {
@@ -154,7 +170,65 @@ public class MavenTwoContinuumProjectBuilder
                 continue;
             }
 
-            readModules( moduleUrl, result );
+            readModules( moduleUrl, result, false );
         }
+    }
+
+    private ContinuumProjectGroup buildProjectGroup( MavenProject mavenProject )
+    {
+        ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
+
+        // ----------------------------------------------------------------------
+        // Group id
+        // ----------------------------------------------------------------------
+
+        if ( StringUtils.isEmpty( mavenProject.getGroupId() ) )
+        {
+            return null;
+        }
+
+        projectGroup.setGroupId( projectGroup.getGroupId() );
+
+        // ----------------------------------------------------------------------
+        // Name
+        // ----------------------------------------------------------------------
+
+        String name = mavenProject.getName();
+
+        if ( StringUtils.isEmpty( name ) )
+        {
+            name = mavenProject.getId();
+        }
+
+        projectGroup.setName( name );
+
+        // ----------------------------------------------------------------------
+        // Description
+        // ----------------------------------------------------------------------
+
+        projectGroup.setDescription( mavenProject.getDescription() );
+
+        // ----------------------------------------------------------------------
+        // URL
+        // ----------------------------------------------------------------------
+
+        projectGroup.setUrl( mavenProject.getUrl() );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        String issueManagementUrl = null;
+
+        IssueManagement issueManagement = mavenProject.getIssueManagement();
+
+        if( issueManagement != null )
+        {
+            issueManagementUrl = issueManagement.getUrl();
+        }
+
+        projectGroup.setIssueManagementUrl( issueManagementUrl );
+
+        return projectGroup;
     }
 }

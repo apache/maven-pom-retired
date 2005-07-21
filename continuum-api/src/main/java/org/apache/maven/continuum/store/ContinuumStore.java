@@ -137,10 +137,13 @@ public interface ContinuumStore
     void updateProjectGroup( ContinuumProjectGroup projectGroup )
         throws ContinuumStoreException;
 
+    void removeProjectGroup( String projectGroupId )
+        throws ContinuumStoreException;
+
     ContinuumProjectGroup getProjectGroup( String projectGroupId )
         throws ContinuumStoreException;
 
-    void removeProjectGroup( String projectGroupId )
+    ContinuumProjectGroup getProjectGroupByName( String name )
         throws ContinuumStoreException;
 
     Collection getProjectGroups()
