@@ -113,8 +113,6 @@ public class JdoContinuumStore
                     ContinuumSchedule schedule = (ContinuumSchedule) i.next();
 
                     boolean r = schedule.getProjects().remove( project );
-
-                    System.out.println( "removed: " + r );
                 }
             }
 
@@ -126,9 +124,7 @@ public class JdoContinuumStore
                 {
                     ContinuumBuildGroup buildGroup = (ContinuumBuildGroup) i.next();
 
-                    boolean r = buildGroup.getProjects().remove( project );
-
-                    System.out.println( "removed: " + r );
+                    buildGroup.getProjects().remove( project );
                 }
             }
 
@@ -136,16 +132,8 @@ public class JdoContinuumStore
             {
                 ContinuumProjectGroup pg = project.getProjectGroup();
 
-                System.out.println( "before: " + pg.getProjects() );
-
-                boolean removed = pg.getProjects().remove( project );
-
-                System.out.println( "removed: " + removed );
-
-                System.out.println( "after: " + pg.getProjects() );
+                pg.getProjects().remove( project );
             }
-
-            System.out.println( "------------------------------------------" );
 
             pm.deletePersistent( project );
 
@@ -1096,9 +1084,7 @@ public class JdoContinuumStore
 
         Object id = pm.newObjectIdInstance( ContinuumProject.class, projectId );
 
-        ContinuumProject project = (ContinuumProject) pm.getObjectById( id );
-
-        return project;
+        return (ContinuumProject) pm.getObjectById( id );
     }
 
     private ContinuumBuild getContinuumBuild( PersistenceManager pm,
@@ -1106,9 +1092,7 @@ public class JdoContinuumStore
     {
         Object id = pm.newObjectIdInstance( ContinuumBuild.class, buildId );
 
-        ContinuumBuild build = (ContinuumBuild) pm.getObjectById( id );
-
-        return build;
+        return (ContinuumBuild) pm.getObjectById( id );
     }
 
     private ContinuumSchedule getContinuumSchedule( PersistenceManager pm,
@@ -1159,13 +1143,13 @@ public class JdoContinuumStore
 
             Object id = pm.getObjectId( object );
 
-            object = pm.getObjectById( id );
+            Object addedObject = pm.getObjectById( id );
 
-            object = pm.detachCopy( object );
+            addedObject = pm.detachCopy( addedObject );
 
             commit( tx );
 
-            return object;
+            return addedObject;
         }
         finally
         {
@@ -1179,19 +1163,14 @@ public class JdoContinuumStore
 
         Object id = pm.getObjectId( object );
 
-        object = pm.getObjectById( id );
+        Object persistentObject = pm.getObjectById( id );
 
         if ( detach )
         {
-            object = pm.detachCopy( object );
+            persistentObject = pm.detachCopy( persistentObject );
         }
 
-        return object;
-    }
-
-    private void makePersistentAll( PersistenceManager pm, Collection object )
-    {
-        pm.makePersistentAll( object );
+        return persistentObject;
     }
 
     private Object getDetailedObject( Class clazz, String id, String fetchGroup )
