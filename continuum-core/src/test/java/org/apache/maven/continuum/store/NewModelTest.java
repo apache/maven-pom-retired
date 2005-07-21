@@ -242,6 +242,72 @@ public class NewModelTest
         assertNotNull( buildGroup );
     }
 
+    public void testBuildSettingsAdditionAndRemovalFromProjectGroup()
+        throws Exception
+    {
+        // create buildSettings
+        ContinuumBuildSettings buildSettings = createStubBuildSettings( "buildSettings1", "1.3" );
+
+        String buildSettingsId = getStore().addBuildSettings( buildSettings );
+
+        buildSettings = getStore().getBuildSettings( buildSettingsId );
+
+        // create projectGroup
+        ContinuumProjectGroup projectGroup = createStubProjectGroup( "projectGroup1", "projectGroup1" );
+
+        String projectGroupId = getStore().addProjectGroup( projectGroup );
+
+        projectGroup = getStore().getProjectGroup( projectGroupId );
+
+        // add build group
+        buildSettings.addProjectGroup( projectGroup );
+
+        // update buildSettings
+        getStore().updateBuildSettings( buildSettings );
+
+        // retrieve buildSettings
+        buildSettings = getStore().getBuildSettings( buildSettingsId );
+
+        assertNotNull( buildSettings );
+
+        // get projectGroups out of the buildSettings
+        Set projectGroups = buildSettings.getProjectGroups();
+
+        assertEquals( 1, projectGroups.size() );
+
+        // get individual build group
+        projectGroup = (ContinuumProjectGroup) buildSettings.getProjectGroups().iterator().next();
+
+        // test values within the build group
+        assertEquals( "projectGroup1", projectGroup.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now lookup the build group on its own and make sure the build settings are
+        // present within the build build gropu.
+        // ----------------------------------------------------------------------
+
+        projectGroup = getStore().getProjectGroup( projectGroupId );
+
+        assertNotNull( projectGroup );
+
+        buildSettings = (ContinuumBuildSettings) projectGroup.getBuildSettings().iterator().next();
+
+        assertEquals( "buildSettings1", buildSettings.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now delete the buildSettings from the getStore() and make sure that the build group
+        // still remains in the getStore().
+        // ----------------------------------------------------------------------
+
+        buildSettings = getStore().getBuildSettings( buildSettingsId );
+
+        getStore().removeBuildSettings( buildSettings.getId() );
+
+        projectGroup = getStore().getProjectGroup( projectGroupId );
+
+        assertNotNull( projectGroup );
+    }
+
     // ----------------------------------------------------------------------
     // Simple utils
     // ----------------------------------------------------------------------
