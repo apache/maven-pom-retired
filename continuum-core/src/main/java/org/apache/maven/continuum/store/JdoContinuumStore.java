@@ -36,6 +36,7 @@ import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumBuildGroup;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.scm.ScmResult;
 
 import org.codehaus.plexus.jdo.JdoFactory;
@@ -78,7 +79,7 @@ public class JdoContinuumStore
     public String addProject( ContinuumProject project )
         throws ContinuumStoreException
     {
-        return ((ContinuumProject)addObject( project ) ).getId();
+        return ( (ContinuumProject) addObject( project ) ).getId();
     }
 
     public void removeProject( String projectId )
@@ -328,7 +329,7 @@ public class JdoContinuumStore
 
             return project;
         }
-        catch( JDOObjectNotFoundException e )
+        catch ( JDOObjectNotFoundException e )
         {
             throw new ContinuumObjectNotFoundException( ContinuumProject.class.getName(), projectId );
         }
@@ -406,7 +407,7 @@ public class JdoContinuumStore
     public String addSchedule( ContinuumSchedule schedule )
         throws ContinuumStoreException
     {
-        return ((ContinuumSchedule)addObject( schedule ) ).getId();
+        return ( (ContinuumSchedule) addObject( schedule ) ).getId();
     }
 
     public ContinuumSchedule getSchedule( String projectId )
@@ -428,7 +429,7 @@ public class JdoContinuumStore
 
             return schedule;
         }
-        catch( JDOObjectNotFoundException e )
+        catch ( JDOObjectNotFoundException e )
         {
             throw new ContinuumObjectNotFoundException( ContinuumProject.class.getName(), projectId );
         }
@@ -718,7 +719,7 @@ public class JdoContinuumStore
     public String addProjectGroup( ContinuumProjectGroup projectGroup )
         throws ContinuumStoreException
     {
-        return ((ContinuumProjectGroup)addObject( projectGroup )).getId();
+        return ( (ContinuumProjectGroup) addObject( projectGroup ) ).getId();
     }
 
     public void updateProjectGroup( ContinuumProjectGroup projectGroup )
@@ -821,7 +822,7 @@ public class JdoContinuumStore
     public String addBuildGroup( ContinuumBuildGroup buildGroup )
         throws ContinuumStoreException
     {
-        return ((ContinuumBuildGroup) addObject( buildGroup )).getId();
+        return ( (ContinuumBuildGroup) addObject( buildGroup ) ).getId();
     }
 
     public void updateBuildGroup( ContinuumBuildGroup schedule )
@@ -915,6 +916,140 @@ public class JdoContinuumStore
         }
     }
 
+    // ----------------------------------------------------------------------
+    // Build Settings
+    // ----------------------------------------------------------------------
+
+    public String addBuildSettings( ContinuumBuildSettings buildSettings )
+        throws ContinuumStoreException
+    {
+        return ( (ContinuumBuildSettings) addObject( buildSettings ) ).getId();
+    }
+
+    public void updateBuildSettings( ContinuumBuildSettings buildSettings )
+        throws ContinuumStoreException
+    {
+        updateObject( buildSettings );
+    }
+
+    public void removeBuildSettings( String buildSettingsId )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Object id = pm.newObjectIdInstance( ContinuumBuildSettings.class, buildSettingsId );
+
+            ContinuumBuildSettings buildSettings = (ContinuumBuildSettings) pm.getObjectById( id );
+
+            // remove references of this buildSettings object in the build groups
+            if ( buildSettings.getBuildGroups() != null && buildSettings.getBuildGroups().size() > 0 )
+            {
+                Set projects = buildSettings.getBuildGroups();
+
+                for ( Iterator i = projects.iterator(); i.hasNext(); )
+                {
+                    ContinuumBuildGroup buildGroup = (ContinuumBuildGroup) i.next();
+
+                    buildGroup.getBuildSettings().remove( buildSettings );
+                }
+            }
+
+            // remove references of this buildSettings object in the project groups
+            if ( buildSettings.getProjectGroups() != null && buildSettings.getProjectGroups().size() > 0 )
+            {
+                Set projects = buildSettings.getProjectGroups();
+
+                for ( Iterator i = projects.iterator(); i.hasNext(); )
+                {
+                    ContinuumProjectGroup project = (ContinuumProjectGroup) i.next();
+
+                    project.getBuildSettings().remove( buildSettings );
+                }
+            }
+
+            pm.deletePersistent( buildSettings );
+
+            commit( tx );
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public ContinuumBuildSettings getBuildSettings( String buildSettingsId )
+        throws ContinuumStoreException
+    {
+        return (ContinuumBuildSettings) getDetailedObject( ContinuumBuildSettings.class,
+                                                           buildSettingsId,
+                                                           "build-settings-detail" );
+
+        /*
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Object id = pm.newObjectIdInstance( ContinuumBuildSettings.class, buildSettingsId );
+
+            ContinuumBuildSettings buildSettings = (ContinuumBuildSettings) pm.getObjectById( id );
+
+            buildSettings = (ContinuumBuildSettings) pm.detachCopy( buildSettings );
+
+            commit( tx );
+
+            return buildSettings;
+        }
+        catch ( JDOObjectNotFoundException e )
+        {
+            throw new ContinuumObjectNotFoundException( ContinuumBuildSettings.class.getName(), buildSettingsId );
+        }
+        finally
+        {
+            rollback( tx );
+        }
+        */
+    }
+
+    public Collection getBuildSettings()
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( ContinuumBuildSettings.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.setOrdering( "name ascending" );
+
+            Collection result = (Collection) query.execute();
+
+            result = pm.detachCopyAll( result );
+
+            commit( tx );
+
+            return result;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
 
     // ----------------------------------------------------------------------
     //

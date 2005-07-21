@@ -20,6 +20,7 @@ import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.project.ContinuumBuildGroup;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
 
 import java.util.Collection;
 import java.util.Set;
@@ -175,6 +176,112 @@ public class NewModelTest
         assertNotNull( project );
     }
 
+    public void testBuildSettingsAdditionAndRemovalFromBuildGroup()
+        throws Exception
+    {
+        // create buildSettings
+        ContinuumBuildSettings buildSettings = createStubBuildSettings( "buildSettings1", "1.3" );
+
+        String buildSettingsId = getStore().addBuildSettings( buildSettings );
+
+        buildSettings = getStore().getBuildSettings( buildSettingsId );
+
+        // create buildGroup
+        ContinuumBuildGroup buildGroup = createStubBuildGroup( "buildGroup1", "buildGroup1" );
+
+        String buildGroupId = getStore().addBuildGroup( buildGroup );
+
+        buildGroup = getStore().getBuildGroup( buildGroupId );
+
+        // add build group
+        buildSettings.addBuildGroup( buildGroup );
+
+        // update buildSettings
+        getStore().updateBuildSettings( buildSettings );
+
+        // retrieve buildSettings
+        buildSettings = getStore().getBuildSettings( buildSettingsId );
+
+        assertNotNull( buildSettings );
+
+        // get buildGroups out of the buildSettings
+        Set buildGroups = buildSettings.getBuildGroups();
+
+        assertEquals( 1, buildGroups.size() );
+
+        // get individual build group
+        buildGroup = (ContinuumBuildGroup) buildSettings.getBuildGroups().iterator().next();
+
+        // test values within the build group
+        assertEquals( "buildGroup1", buildGroup.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now lookup the build group on its own and make sure the build settings are
+        // present within the build build gropu.
+        // ----------------------------------------------------------------------
+
+        buildGroup = getStore().getBuildGroup( buildGroupId );
+
+        assertNotNull( buildGroup );
+
+        buildSettings = (ContinuumBuildSettings) buildGroup.getBuildSettings().iterator().next();
+
+        assertEquals( "buildSettings1", buildSettings.getName() );
+
+        // ----------------------------------------------------------------------
+        // Now delete the buildSettings from the getStore() and make sure that the build group
+        // still remains in the getStore().
+        // ----------------------------------------------------------------------
+
+        buildSettings = getStore().getBuildSettings( buildSettingsId );
+
+        getStore().removeBuildSettings( buildSettings.getId() );
+
+        buildGroup = getStore().getBuildGroup( buildGroupId );
+
+        assertNotNull( buildGroup );
+    }
+
+    // ----------------------------------------------------------------------
+    // Simple utils
+    // ----------------------------------------------------------------------
+
+    public ContinuumBuildSettings createStubBuildSettings( String name, String jdkVersion )
+    {
+        ContinuumBuildSettings buildSettings = new ContinuumBuildSettings();
+
+        buildSettings.setName( name );
+
+        buildSettings.setJdkVersion( jdkVersion );
+
+        return buildSettings;
+    }
+
+    public ContinuumBuildGroup createStubBuildGroup( String name, String description )
+    {
+        ContinuumBuildGroup buildGroup = new ContinuumBuildGroup();
+
+        buildGroup.setName( name );
+
+        buildGroup.setDescription( description );
+
+        return buildGroup;
+    }
+
+    public ContinuumProjectGroup createStubProjectGroup( String name, String description )
+    {
+        ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
+
+        projectGroup.setName( name );
+
+        projectGroup.setDescription( description );
+
+        return projectGroup;
+    }
+
+    // ----------------------------------------------------------------------
+    // We're not exactly sure why this beasty doesn't work.
+    // ----------------------------------------------------------------------
 
     public void xtestBasic()
         throws Exception
@@ -320,27 +427,4 @@ public class NewModelTest
 
 //        assertEquals( 0, plexusGroup.getProjects().size() );
     }
-
-    public ContinuumBuildGroup createStubBuildGroup( String name, String description )
-    {
-        ContinuumBuildGroup buildGroup = new ContinuumBuildGroup();
-
-        buildGroup.setName( name );
-
-        buildGroup.setDescription( description );
-
-        return buildGroup;
-    }
-
-    public ContinuumProjectGroup createStubProjectGroup( String name, String description )
-    {
-        ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
-
-        projectGroup.setName( name );
-
-        projectGroup.setDescription( description );
-
-        return projectGroup;
-    }
-
 }
