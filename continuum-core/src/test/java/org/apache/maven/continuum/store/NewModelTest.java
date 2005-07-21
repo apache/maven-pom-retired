@@ -39,7 +39,13 @@ public class NewModelTest
 
         ContinuumProject project = getStore().getProject( projectId );
 
-        project.addBuildGroup( createStubBuildGroup( "Plexus", "Description" ) );
+        ContinuumBuildGroup buildGroup = createStubBuildGroup( "Plexus", "Description" );
+
+        String buildGroupId = getStore().addBuildGroup( buildGroup );
+
+        buildGroup = getStore().getBuildGroup( buildGroupId );
+
+        project.addBuildGroup( buildGroup );
 
         getStore().updateProject( project );
 
