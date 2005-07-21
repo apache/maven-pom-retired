@@ -38,7 +38,6 @@ public class ShellIntegrationTest
     public void testBasic()
         throws Exception
     {
-        System.out.println(getScriptContent());
         Continuum continuum = getContinuum();
 
         initializeCvsRoot();
