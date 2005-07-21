@@ -38,6 +38,7 @@ public class ShellIntegrationTest
     public void testBasic()
         throws Exception
     {
+        System.out.println(getScriptContent());
         Continuum continuum = getContinuum();
 
         initializeCvsRoot();
@@ -76,10 +77,7 @@ public class ShellIntegrationTest
 
         cvsCheckout( getCvsRoot(), "shell", coDir );
 
-        File s = new File( coDir, getScriptName() );
-        String script = FileUtils.fileRead( s );
-        FileUtils.fileWrite( s.getAbsolutePath(), script + " # Extra part" );
-        system( root, "chmod", "+x " + s.getAbsolutePath() );
+        addExtraPartInScript( root, coDir );
 
         cvsCommit( coDir );
 
@@ -138,6 +136,21 @@ public class ShellIntegrationTest
                 "for arg in \"$@\"; do" + EOL +
                 "  echo $arg" + EOL +
                 "done";
+        }
+    }
+    private void addExtraPartInScript( File rootDir, File coDir )
+        throws Exception
+    {
+        File s = new File( coDir, getScriptName() );
+        String script = FileUtils.fileRead( s );
+        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) && !"true".equals( System.getProperty( "cygwin" ) ) )
+        {
+            FileUtils.fileWrite( s.getAbsolutePath(), script + EOL + " REM Extra part" );
+        }
+        else
+        {
+            FileUtils.fileWrite( s.getAbsolutePath(), script + " # Extra part" );
+            system( rootDir, "chmod", "+x " + s.getAbsolutePath() );
         }
     }
 }
