@@ -989,35 +989,6 @@ public class JdoContinuumStore
         return (ContinuumBuildSettings) getDetailedObject( ContinuumBuildSettings.class,
                                                            buildSettingsId,
                                                            "build-settings-detail" );
-
-        /*
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            Object id = pm.newObjectIdInstance( ContinuumBuildSettings.class, buildSettingsId );
-
-            ContinuumBuildSettings buildSettings = (ContinuumBuildSettings) pm.getObjectById( id );
-
-            buildSettings = (ContinuumBuildSettings) pm.detachCopy( buildSettings );
-
-            commit( tx );
-
-            return buildSettings;
-        }
-        catch ( JDOObjectNotFoundException e )
-        {
-            throw new ContinuumObjectNotFoundException( ContinuumBuildSettings.class.getName(), buildSettingsId );
-        }
-        finally
-        {
-            rollback( tx );
-        }
-        */
     }
 
     public Collection getBuildSettings()
