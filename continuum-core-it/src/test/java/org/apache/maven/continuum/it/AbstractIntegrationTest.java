@@ -282,6 +282,7 @@ public abstract class AbstractIntegrationTest
         if ( exitCode != 0 )
         {
             System.err.println( "Error while executing command: " + commandline.toString() );
+            System.err.println( "workingDirectory: " + workingDirectory.getAbsolutePath() );
             System.err.println( "Exit code: " + exitCode );
 
             System.err.println( "Standard output:" );
@@ -695,7 +696,7 @@ public abstract class AbstractIntegrationTest
     protected void cvsCheckout( File cvsRoot, String module, File coDir )
         throws CommandLineException
     {
-        system( cvsRoot, "cvs", "-d " + cvsRoot.getAbsolutePath() + " checkout -d " + coDir.getAbsolutePath() + " " + module );
+        system( new File( getBasedir() ), "cvs", "-d " + cvsRoot.getAbsolutePath() + " checkout -d " + coDir.getAbsolutePath() + " " + module );
     }
 
     protected void cvsCommit( File coDir )
