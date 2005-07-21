@@ -446,7 +446,7 @@ public class DefaultContinuum
 
                 project.setId( (String) context.get( StoreProjectAction.KEY_PROJECT_ID ) );
 
-//                actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
+                actionManager.lookup( "add-project-to-checkout-queue" ).execute( context );
             }
         }
         catch ( Exception e )
