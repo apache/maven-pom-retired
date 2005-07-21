@@ -309,43 +309,6 @@ public class NewModelTest
     }
 
     // ----------------------------------------------------------------------
-    // Simple utils
-    // ----------------------------------------------------------------------
-
-    public ContinuumBuildSettings createStubBuildSettings( String name, String jdkVersion )
-    {
-        ContinuumBuildSettings buildSettings = new ContinuumBuildSettings();
-
-        buildSettings.setName( name );
-
-        buildSettings.setJdkVersion( jdkVersion );
-
-        return buildSettings;
-    }
-
-    public ContinuumBuildGroup createStubBuildGroup( String name, String description )
-    {
-        ContinuumBuildGroup buildGroup = new ContinuumBuildGroup();
-
-        buildGroup.setName( name );
-
-        buildGroup.setDescription( description );
-
-        return buildGroup;
-    }
-
-    public ContinuumProjectGroup createStubProjectGroup( String name, String description )
-    {
-        ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
-
-        projectGroup.setName( name );
-
-        projectGroup.setDescription( description );
-
-        return projectGroup;
-    }
-
-    // ----------------------------------------------------------------------
     // We're not exactly sure why this beasty doesn't work.
     // ----------------------------------------------------------------------
 
