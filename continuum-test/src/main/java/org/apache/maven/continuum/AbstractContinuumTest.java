@@ -29,6 +29,9 @@ import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
+import org.apache.maven.continuum.project.ContinuumBuildGroup;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
@@ -404,5 +407,42 @@ public abstract class AbstractContinuumTest
         assertEquals( "project.executorId", builderId, actual.getExecutorId() );
 
         assertEquals( "project.workingDirectory", workingDirectory, actual.getWorkingDirectory() );
+    }
+
+    // ----------------------------------------------------------------------
+    // Simple utils
+    // ----------------------------------------------------------------------
+
+    public ContinuumBuildSettings createStubBuildSettings( String name, String jdkVersion )
+    {
+        ContinuumBuildSettings buildSettings = new ContinuumBuildSettings();
+
+        buildSettings.setName( name );
+
+        buildSettings.setJdkVersion( jdkVersion );
+
+        return buildSettings;
+    }
+
+    public ContinuumBuildGroup createStubBuildGroup( String name, String description )
+    {
+        ContinuumBuildGroup buildGroup = new ContinuumBuildGroup();
+
+        buildGroup.setName( name );
+
+        buildGroup.setDescription( description );
+
+        return buildGroup;
+    }
+
+    public ContinuumProjectGroup createStubProjectGroup( String name, String description )
+    {
+        ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
+
+        projectGroup.setName( name );
+
+        projectGroup.setDescription( description );
+
+        return projectGroup;
     }
 }
