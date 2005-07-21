@@ -40,8 +40,6 @@ public abstract class AbstractContinuumStore
     {
         File file = getOutputFile( buildId );
 
-        getLogger().warn( "Writing the build output to: " + file.getAbsolutePath() );
-
         try
         {
             FileUtils.fileWrite( file.getAbsolutePath(), output );
