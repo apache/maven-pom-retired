@@ -29,4 +29,8 @@ public interface ContinuumInitializer
 
     void initialize()
         throws ContinuumInitializationException;
+
+    ContinuumProjectGroup getDefaultProjectGroup();
+
+    ContinuumBuildSettings getDefaultBuildSettings();
 }

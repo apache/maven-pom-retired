@@ -1,7 +1,10 @@
 package org.apache.maven.continuum.store;
 
 import org.apache.maven.continuum.AbstractContinuumTest;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.initialization.ContinuumInitializer;
+import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -26,9 +29,27 @@ import org.apache.maven.continuum.initialization.ContinuumInitializer;
 public class ContinuumTypicalUsageTest
     extends AbstractContinuumTest
 {
+    // !! as part of creating the build settings a build job needs to be scheduled
+    // and we need to control the activation of the build settings.
+
+    // I can specify the class of the job and have a test job
+    // I can set a job listener here
+    // figure out when the job is done and make sure the mechanism works
+    // then we can figure out how to get projects into the right groups.
+    // create a project group for all projects with X groupId
+
     // ----------------------------------------------------------------------
-    // 1. Create the default project group
-    // 2. Create the default build settings
+    // 1. Initialize Continuum
+    //    -> create default build settings
+    //    -> create default project group
+    //    -> default build settings are added to the project group
+    //
+    // 2. Create a project
+    //
+    // 3. Add the project to the default project group
+    //
+    // 4.
+
     // ----------------------------------------------------------------------
 
     public void testContinuumTypicalUsage()
@@ -42,5 +63,31 @@ public class ContinuumTypicalUsageTest
         ContinuumInitializer initializer = (ContinuumInitializer) lookup( ContinuumInitializer.ROLE );
 
         initializer.initialize();
+
+        ContinuumProjectGroup defaultProjectGroup = initializer.getDefaultProjectGroup();
+
+        // ----------------------------------------------------------------------
+        // At this point we can now accept new projects into the system
+        // ----------------------------------------------------------------------
+
+        ContinuumProject project = makeStubMavenTwoProject( "test1", "scm:url" );
+
+        String projectId = addMavenTwoProject( getStore(), project );
+
+        project = getStore().getProject( projectId );
+
+        // ----------------------------------------------------------------------
+        // Now that we have a project we want to add it to the default project group
+        // ----------------------------------------------------------------------
+
+        defaultProjectGroup.addProject( project );
+
+        getStore().updateProjectGroup( defaultProjectGroup );
+
+        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_NAME,   project.getProjectGroup().getName() );
+
+        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_DESCRIPTION,   project.getProjectGroup().getDescription() );
+
+        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_ID,   project.getProjectGroup().getGroupId() );
     }
 }

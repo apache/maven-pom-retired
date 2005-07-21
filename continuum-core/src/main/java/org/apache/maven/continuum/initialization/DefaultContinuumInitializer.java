@@ -45,6 +45,17 @@ public class DefaultContinuumInitializer
 
     public static final String DEFAULT_BUILD_SETTINGS_NAME = "DEFAULT_BUILD_SETTINGS";
 
+    // Cron expression for execution every hour.
+    public static final String DEFAULT_BUILD_SETTINGS_CRON_EXPRESSION = "0 0 * * * ?";
+
+    // ----------------------------------------------------------------------
+    // Default project group and build settings
+    // ----------------------------------------------------------------------
+
+    private ContinuumProjectGroup defaultProjectGroup;
+
+    private ContinuumBuildSettings defaultBuildSettings;
+
     // ----------------------------------------------------------------------
     //  Requirements
     // ----------------------------------------------------------------------
@@ -59,29 +70,43 @@ public class DefaultContinuumInitializer
     public void initialize()
         throws ContinuumInitializationException
     {
-        ContinuumBuildSettings defaultBuildSettings = createDefaultBuildSettings();
+        defaultBuildSettings = createDefaultBuildSettings();
 
         try
         {
-            store.addBuildSettings( defaultBuildSettings );
+            String id = store.addBuildSettings( defaultBuildSettings );
+
+            defaultBuildSettings = store.getBuildSettings( id );
         }
         catch ( ContinuumStoreException e )
         {
             throw new ContinuumInitializationException( "Error storing default Continuum build settings.", e );
         }
 
-        ContinuumProjectGroup defaultProjectGroup = createDefaultProjectGroup();
+        defaultProjectGroup = createDefaultProjectGroup();
 
         defaultProjectGroup.addBuildSetting( defaultBuildSettings );
 
         try
         {
-            store.addProjectGroup( defaultProjectGroup );
+            String id = store.addProjectGroup( defaultProjectGroup );
+
+            defaultProjectGroup = store.getProjectGroup( id );
         }
         catch ( ContinuumStoreException e )
         {
             throw new ContinuumInitializationException( "Error storing default Continuum project group.", e );
         }
+    }
+
+    public ContinuumProjectGroup getDefaultProjectGroup()
+    {
+        return defaultProjectGroup;
+    }
+
+    public ContinuumBuildSettings getDefaultBuildSettings()
+    {
+        return defaultBuildSettings;
     }
 
     // ----------------------------------------------------------------------
@@ -114,6 +139,8 @@ public class DefaultContinuumInitializer
         buildSettings.setLabelingScheme( BuildSettingsConstants.LABELLING_STRATEGY_NEVER );
 
         buildSettings.setScmMode( BuildSettingsConstants.SCM_MODE_UPDATE );
+
+        buildSettings.setCronExpression( DEFAULT_BUILD_SETTINGS_CRON_EXPRESSION );
 
         // Setting the jdk version to null means fall back to the default JAVA_HOME.
         buildSettings.setJdkVersion( null );

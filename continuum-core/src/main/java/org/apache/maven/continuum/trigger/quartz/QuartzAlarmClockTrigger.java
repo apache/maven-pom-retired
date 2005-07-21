@@ -96,7 +96,7 @@ public class QuartzAlarmClockTrigger
 
         try
         {
-            trigger.setCronExpression( "0 * * * * ?" );
+            trigger.setCronExpression( "0 0 * * * ?" );
         }
         catch ( ParseException e )
         {

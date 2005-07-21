@@ -50,4 +50,7 @@ public class BuildSettingsConstants
 
     public static final int SCM_MODE_UPDATE = 1;
 
+    // ----------------------------------------------------------------------
+    // Cron scheduling
+    // ----------------------------------------------------------------------
 }
