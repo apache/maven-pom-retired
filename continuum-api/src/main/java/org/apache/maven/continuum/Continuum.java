@@ -28,6 +28,8 @@ import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumSchedule;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
@@ -208,4 +210,20 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
 
     void removeProjectFromSchedule( ContinuumProject project, ContinuumSchedule schedule )
         throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Project groups
+    // ----------------------------------------------------------------------
+
+    // ----------------------------------------------------------------------
+    // Build Settings
+    // ----------------------------------------------------------------------
+
+    // ----------------------------------------------------------------------
+    // Defaults
+    // ----------------------------------------------------------------------
+
+    ContinuumProjectGroup getDefaultProjectGroup();
+
+    ContinuumBuildSettings getDefaultBuildSettings();
 }
