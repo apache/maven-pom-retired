@@ -18,6 +18,7 @@ package org.apache.maven.continuum.core;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -29,6 +30,7 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
@@ -146,7 +148,7 @@ public class DefaultContinuumCore
         }
         catch ( TaskQueueException e )
         {
-            throw new ContinuumException( "Error while getting the queue snapshot." );
+            throw new ContinuumException( "Error while getting the queue snapshot.", e );
         }
 
         for ( Iterator it = queue.iterator(); it.hasNext(); )
@@ -179,12 +181,12 @@ public class DefaultContinuumCore
     //
     // ----------------------------------------------------------------------
 
-    public void removeNotifier( Object oid )
+    public void removeNotifier( ContinuumNotifier notifier )
         throws ContinuumException
     {
         try
         {
-            store.removeNotifier( oid );
+            store.removeNotifier( notifier );
         }
         catch ( ContinuumStoreException ex )
         {
@@ -192,12 +194,12 @@ public class DefaultContinuumCore
         }
     }
 
-    public void storeNotifier( Object oid )
+    public ContinuumNotifier storeNotifier( ContinuumNotifier notifier )
         throws ContinuumException
     {
         try
         {
-            store.storeNotifier( oid );
+            return store.storeNotifier( notifier );
         }
         catch ( ContinuumStoreException ex )
         {
@@ -209,14 +211,14 @@ public class DefaultContinuumCore
     //
     // ----------------------------------------------------------------------
 
-    public void updateProject( ContinuumProject project )
+    public ContinuumProject updateProject( ContinuumProject project )
         throws ContinuumException
     {
         try
         {
             project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
 
-            store.updateProject( project );
+            return store.updateProject( project );
         }
         catch ( ContinuumStoreException ex )
         {
@@ -229,9 +231,7 @@ public class DefaultContinuumCore
     {
         try
         {
-            ContinuumProject project = store.getProject( projectId );
-
-            return project;
+            return store.getProject( projectId );
         }
         catch ( ContinuumStoreException ex )
         {
@@ -295,9 +295,7 @@ public class DefaultContinuumCore
     {
         try
         {
-            ContinuumBuild b = store.getBuild( buildId );
-
-            return b;
+            return store.getBuild( buildId );
         }
         catch ( ContinuumStoreException e )
         {
@@ -465,17 +463,24 @@ public class DefaultContinuumCore
 
     private String getVersion()
     {
-        InputStream resourceAsStream;
         try
         {
             Properties properties = new Properties();
-            resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(
-                "META-INF/maven/org.apache.maven.continuum/continuum-core/pom.properties" );
+
+            String name = "META-INF/maven/org.apache.maven.continuum/continuum-core/pom.properties";
+
+            InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream( name );
+
+            if ( resourceAsStream == null )
+            {
+                return "unknown";
+            }
+
             properties.load( resourceAsStream );
 
             return properties.getProperty( "version", "unknown" );
         }
-        catch ( Exception e )
+        catch ( IOException e )
         {
             return "unknown";
         }

@@ -21,6 +21,7 @@ import org.apache.maven.continuum.project.ContinuumBuildGroup;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
+import org.apache.maven.continuum.project.MavenTwoProject;
 
 import java.util.Collection;
 import java.util.Set;
@@ -35,23 +36,19 @@ public class NewModelTest
     public void testAddingBuildGroupToProjectAndUpdatingProject()
         throws Exception
     {
-        String projectId = addMavenTwoProject( getStore(), "Project Scheduling", "scm:scheduling" );
-
-        ContinuumProject project = getStore().getProject( projectId );
+        ContinuumProject project = addMavenTwoProject( getStore(), "Project Scheduling", "scm:scheduling" );
 
         ContinuumBuildGroup buildGroup = createStubBuildGroup( "Plexus", "Description" );
 
-        String buildGroupId = getStore().addBuildGroup( buildGroup );
-
-        buildGroup = getStore().getBuildGroup( buildGroupId );
+        buildGroup = getStore().addBuildGroup( buildGroup );
 
         project.addBuildGroup( buildGroup );
 
-        getStore().updateProject( project );
+        project = getStore().updateProject( project );
 
         assertEquals( 1, getStore().getBuildGroups().size() );
 
-        project = getStore().getProject( projectId );
+        project = getStore().getProject( project.getId() );
 
         assertEquals( 1, project.getBuildGroups().size() );
     }
@@ -62,22 +59,15 @@ public class NewModelTest
         // create buildGroup
         ContinuumBuildGroup buildGroup = createStubBuildGroup( "buildGroup1", "buildGroup1" );
 
-        String buildGroupId = getStore().addBuildGroup( buildGroup );
+        buildGroup = getStore().addBuildGroup( buildGroup );
 
-        buildGroup = getStore().getBuildGroup( buildGroupId );
-
-        String projectId = addMavenTwoProject( getStore(), "project1", "scm:scheduling" );
-
-        ContinuumProject project = getStore().getProject( projectId );
+        ContinuumProject project = addMavenTwoProject( getStore(), "project1", "scm:scheduling" );
 
         // add project
         buildGroup.addProject( project );
 
         // update buildGroup
-        getStore().updateBuildGroup( buildGroup );
-
-        // retrieve buildGroup
-        buildGroup = getStore().getBuildGroup( buildGroupId );
+        buildGroup = getStore().updateBuildGroup( buildGroup );
 
         assertNotNull( buildGroup );
 
@@ -97,7 +87,7 @@ public class NewModelTest
         // present within the project.
         // ----------------------------------------------------------------------
 
-        project = getStore().getProject( projectId );
+        project = getStore().getProject( project.getId() );
 
         assertNotNull( project );
 
@@ -110,11 +100,11 @@ public class NewModelTest
         // still remains in the getStore().
         // ----------------------------------------------------------------------
 
-        buildGroup = getStore().getBuildGroup( buildGroupId );
+        buildGroup = getStore().getBuildGroup( buildGroup.getId() );
 
         getStore().removeBuildGroup( buildGroup.getId() );
 
-        project = getStore().getProject( projectId );
+        project = getStore().getProject( project.getId() );
 
         assertNotNull( project );
     }
@@ -125,22 +115,15 @@ public class NewModelTest
         // create projectGroup
         ContinuumProjectGroup projectGroup = createStubProjectGroup( "projectGroup1", "projectGroup1" );
 
-        String projectGroupId = getStore().addProjectGroup( projectGroup );
+        projectGroup = getStore().addProjectGroup( projectGroup );
 
-        projectGroup = getStore().getProjectGroup( projectGroupId );
-
-        String projectId = addMavenTwoProject( getStore(), "project2", "scm:scheduling" );
-
-        ContinuumProject project = getStore().getProject( projectId );
+        ContinuumProject project = addMavenTwoProject( getStore(), "project2", "scm:scheduling" );
 
         // add project
         projectGroup.addProject( project );
 
         // update projectGroup
-        getStore().updateProjectGroup( projectGroup );
-
-        // retrieve projectGroup
-        projectGroup = getStore().getProjectGroup( projectGroupId );
+        projectGroup = getStore().updateProjectGroup( projectGroup );
 
         assertNotNull( projectGroup );
 
@@ -160,7 +143,7 @@ public class NewModelTest
         // present within the project.
         // ----------------------------------------------------------------------
 
-        project = getStore().getProject( projectId );
+        project = getStore().getProject( project.getId() );
 
         assertNotNull( project );
 
@@ -173,11 +156,11 @@ public class NewModelTest
         // still remains in the getStore().
         // ----------------------------------------------------------------------
 
-        projectGroup = getStore().getProjectGroup( projectGroupId );
+        projectGroup = getStore().getProjectGroup( projectGroup.getId() );
 
         getStore().removeProjectGroup( projectGroup.getId() );
 
-        project = getStore().getProject( projectId );
+        project = getStore().getProject( project.getId() );
 
         assertNotNull( project );
     }
@@ -188,25 +171,18 @@ public class NewModelTest
         // create buildSettings
         ContinuumBuildSettings buildSettings = createStubBuildSettings( "buildSettings1", "1.3" );
 
-        String buildSettingsId = getStore().addBuildSettings( buildSettings );
-
-        buildSettings = getStore().getBuildSettings( buildSettingsId );
+        buildSettings = getStore().addBuildSettings( buildSettings );
 
         // create buildGroup
         ContinuumBuildGroup buildGroup = createStubBuildGroup( "buildGroup1", "buildGroup1" );
 
-        String buildGroupId = getStore().addBuildGroup( buildGroup );
-
-        buildGroup = getStore().getBuildGroup( buildGroupId );
+        buildGroup = getStore().addBuildGroup( buildGroup );
 
         // add build group
         buildSettings.addBuildGroup( buildGroup );
 
         // update buildSettings
-        getStore().updateBuildSettings( buildSettings );
-
-        // retrieve buildSettings
-        buildSettings = getStore().getBuildSettings( buildSettingsId );
+        buildSettings = getStore().updateBuildSettings( buildSettings );
 
         assertNotNull( buildSettings );
 
@@ -226,7 +202,7 @@ public class NewModelTest
         // present within the build build gropu.
         // ----------------------------------------------------------------------
 
-        buildGroup = getStore().getBuildGroup( buildGroupId );
+        buildGroup = getStore().getBuildGroup( buildGroup.getId() );
 
         assertNotNull( buildGroup );
 
@@ -239,11 +215,11 @@ public class NewModelTest
         // still remains in the getStore().
         // ----------------------------------------------------------------------
 
-        buildSettings = getStore().getBuildSettings( buildSettingsId );
+        buildSettings = getStore().getBuildSettings( buildSettings.getId() );
 
         getStore().removeBuildSettings( buildSettings.getId() );
 
-        buildGroup = getStore().getBuildGroup( buildGroupId );
+        buildGroup = getStore().getBuildGroup( buildGroup.getId() );
 
         assertNotNull( buildGroup );
     }
@@ -254,25 +230,18 @@ public class NewModelTest
         // create buildSettings
         ContinuumBuildSettings buildSettings = createStubBuildSettings( "buildSettings1", "1.3" );
 
-        String buildSettingsId = getStore().addBuildSettings( buildSettings );
-
-        buildSettings = getStore().getBuildSettings( buildSettingsId );
+        buildSettings = getStore().addBuildSettings( buildSettings );
 
         // create projectGroup
         ContinuumProjectGroup projectGroup = createStubProjectGroup( "projectGroup1", "projectGroup1" );
 
-        String projectGroupId = getStore().addProjectGroup( projectGroup );
-
-        projectGroup = getStore().getProjectGroup( projectGroupId );
+        projectGroup = getStore().addProjectGroup( projectGroup );
 
         // add build group
         buildSettings.addProjectGroup( projectGroup );
 
         // update buildSettings
-        getStore().updateBuildSettings( buildSettings );
-
-        // retrieve buildSettings
-        buildSettings = getStore().getBuildSettings( buildSettingsId );
+        buildSettings = getStore().updateBuildSettings( buildSettings );
 
         assertNotNull( buildSettings );
 
@@ -292,7 +261,7 @@ public class NewModelTest
         // present within the build build gropu.
         // ----------------------------------------------------------------------
 
-        projectGroup = getStore().getProjectGroup( projectGroupId );
+        projectGroup = getStore().getProjectGroup( projectGroup.getId() );
 
         assertNotNull( projectGroup );
 
@@ -305,11 +274,11 @@ public class NewModelTest
         // still remains in the getStore().
         // ----------------------------------------------------------------------
 
-        buildSettings = getStore().getBuildSettings( buildSettingsId );
+        buildSettings = getStore().getBuildSettings( buildSettings.getId() );
 
         getStore().removeBuildSettings( buildSettings.getId() );
 
-        projectGroup = getStore().getProjectGroup( projectGroupId );
+        projectGroup = getStore().getProjectGroup( projectGroup.getId() );
 
         assertNotNull( projectGroup );
     }
@@ -331,49 +300,43 @@ public class NewModelTest
 
         plexusGroup.setName( "Plexus" );
 
-        String plexusGroupId = getStore().addProjectGroup( plexusGroup );
-
-        plexusGroup = getStore().getProjectGroup( plexusGroupId );
+        plexusGroup = getStore().addProjectGroup( plexusGroup );
 
         // ----------------------------------------------------------------------
         // Add projects from URL metadata
         // ----------------------------------------------------------------------
 
-        ContinuumProject componentA = makeStubMavenTwoProject( "component a", "a" );
+        MavenTwoProject componentA = makeStubMavenTwoProject( "component a", "a" );
 
         componentA.setProjectGroup( plexusGroup );
 
-        String projectIdA = addMavenTwoProject( getStore(),
-                                                componentA );
+        componentA = addMavenTwoProject( getStore(), componentA );
 
-        ContinuumProject componentB = makeStubMavenTwoProject( "component b", "b" );
+        MavenTwoProject componentB = makeStubMavenTwoProject( "component b", "b" );
 
         componentB.setProjectGroup( plexusGroup );
 
-        String projectIdB = addMavenTwoProject( getStore(),
-                                                componentB );
+        componentB = addMavenTwoProject( getStore(), componentB );
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        plexusGroup = getStore().getProjectGroup( plexusGroupId );
-
         assertNotNull( plexusGroup.getProjects() );
 
         assertEquals( 2, plexusGroup.getProjects().size() );
 
-        ContinuumProject plexusComponentA = getStore().getProject( projectIdA );
+        componentA = (MavenTwoProject) getStore().getProject( componentA.getId() );
 
-        ContinuumProject plexusComponentB = getStore().getProject( projectIdB );
+        componentB = (MavenTwoProject) getStore().getProject( componentB.getId() );
 
-        assertNotNull( "componentA.projectGroup == null", plexusComponentA.getProjectGroup() );
+        assertNotNull( "componentA.projectGroup == null", componentA.getProjectGroup() );
 
-        assertNotNull( "componentB.projectGroup == null", plexusComponentB.getProjectGroup() );
+        assertNotNull( "componentB.projectGroup == null", componentB.getProjectGroup() );
 
-        assertEquals( "projectGroup.id != componentA.projectGroup.id", plexusGroup.getId(), plexusComponentA.getProjectGroup().getId() );
+        assertEquals( "projectGroup.id != componentA.projectGroup.id", plexusGroup.getId(), componentA.getProjectGroup().getId() );
 
-        assertEquals( "projectGroup.id != componentA.projectGroup.id", plexusGroup.getId(), plexusComponentB.getProjectGroup().getId() );
+        assertEquals( "projectGroup.id != componentA.projectGroup.id", plexusGroup.getId(), componentB.getProjectGroup().getId() );
 
         // ----------------------------------------------------------------------
         //
@@ -401,22 +364,17 @@ public class NewModelTest
 
         getStore().updateProject( componentA );
 
-        System.out.println( "componentA.getBuildGroups().size() = " + componentA.getBuildGroups().size() );
-
         buildGroup = (ContinuumBuildGroup) componentA.getBuildGroups().iterator().next();
 
         String buildGroupId = buildGroup.getId();
 
         assertNotNull( buildGroup );
 
-        //String buildGroupId = getStore().getBuildGroup;
-
-
         // ----------------------------------------------------------------------
         // Assert that the project has a build group
         // ----------------------------------------------------------------------
 
-        componentA = getStore().getProject( componentA.getId() );
+        componentA = (MavenTwoProject) getStore().getProject( componentA.getId() );
 
         assertNotNull( componentA.getBuildGroups() );
 
@@ -436,7 +394,7 @@ public class NewModelTest
 
         assertEquals( "buildGroup.projects.size", 1, buildGroup.getProjects().size() );
 
-        assertEquals( projectIdA, ( (ContinuumProject) buildGroup.getProjects().iterator().next() ).getId() );
+        assertEquals( componentA.getId(), ( (ContinuumProject) buildGroup.getProjects().iterator().next() ).getId() );
 
         // ----------------------------------------------------------------------
         //
@@ -456,7 +414,7 @@ public class NewModelTest
 
         assertEquals( 0, buildGroup.getProjects().size() );
 
-        plexusGroup = getStore().getProjectGroup( plexusGroupId );
+        plexusGroup = getStore().getProjectGroup( plexusGroup.getId() );
 
         assertNotNull( plexusGroup );
 

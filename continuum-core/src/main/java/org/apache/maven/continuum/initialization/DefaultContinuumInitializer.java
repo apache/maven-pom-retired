@@ -74,9 +74,7 @@ public class DefaultContinuumInitializer
 
         try
         {
-            String id = store.addBuildSettings( defaultBuildSettings );
-
-            defaultBuildSettings = store.getBuildSettings( id );
+            defaultBuildSettings = store.addBuildSettings( defaultBuildSettings );
         }
         catch ( ContinuumStoreException e )
         {
@@ -85,17 +83,24 @@ public class DefaultContinuumInitializer
 
         defaultProjectGroup = createDefaultProjectGroup();
 
-        defaultProjectGroup.addBuildSetting( defaultBuildSettings );
-
         try
         {
-            String id = store.addProjectGroup( defaultProjectGroup );
-
-            defaultProjectGroup = store.getProjectGroup( id );
+            defaultProjectGroup = store.addProjectGroup( defaultProjectGroup );
         }
         catch ( ContinuumStoreException e )
         {
             throw new ContinuumInitializationException( "Error storing default Continuum project group.", e );
+        }
+
+        defaultProjectGroup.addBuildSetting( defaultBuildSettings );
+
+        try
+        {
+            store.updateProjectGroup( defaultProjectGroup );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumInitializationException( "Error updating default Continuum project group.", e );
         }
     }
 

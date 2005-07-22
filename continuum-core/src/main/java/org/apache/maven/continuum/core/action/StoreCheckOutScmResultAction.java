@@ -32,7 +32,7 @@ public class StoreCheckOutScmResultAction
     extends AbstractContinuumAction
 {
     public void execute( Map context )
-        throws Exception
+        throws TaskExecutionException
     {
         try
         {

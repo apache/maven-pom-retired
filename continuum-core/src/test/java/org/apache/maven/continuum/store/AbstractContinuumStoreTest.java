@@ -32,11 +32,11 @@ import org.codehaus.plexus.jdo.JdoFactory;
 public class AbstractContinuumStoreTest
     extends AbstractContinuumTest
 {
-    protected ContinuumStore store;
+    private ContinuumStore store;
 
-    protected String roleHint;
+    private String roleHint;
 
-    protected Class implementationClass;
+    private Class implementationClass;
 
     public AbstractContinuumStoreTest( String roleHint, Class implementationClass )
     {
@@ -73,23 +73,21 @@ public class AbstractContinuumStoreTest
 
         configuration.setProperty( "foo", "bar" );
 
-        String projectId = store.addProject( makeMavenTwoProject( "Test Project",
-                                                                  "scm:local:src/test/repo",
-                                                                  "foo@bar.com",
-                                                                  "1.0",
-                                                                  "a b",
-                                                                  "/tmp" ) );
+        ContinuumProject actual = store.addProject( makeMavenTwoProject( "Test Project",
+                                                                         "scm:local:src/test/repo",
+                                                                         "foo@bar.com",
+                                                                         "1.0",
+                                                                         "a b",
+                                                                         "/tmp" ) );
 
-        assertNotNull( "The project id is null.", projectId );
+        assertNotNull( "The project id is null.", actual.getId() );
 
-        ContinuumProject actual = store.getProject( projectId );
-
-        assertProjectEquals( projectId, makeMavenTwoProject( "Test Project",
-                                                             "scm:local:src/test/repo",
-                                                             "foo@bar.com",
-                                                             "1.0",
-                                                             "a b",
-                                                             "/tmp" ), actual );
+        assertProjectEquals( makeMavenTwoProject( "Test Project",
+                                                  "scm:local:src/test/repo",
+                                                  "foo@bar.com",
+                                                  "1.0",
+                                                  "a b",
+                                                  "/tmp" ), actual );
     }
 
     public void testGetNonExistingProject()
@@ -122,24 +120,22 @@ public class AbstractContinuumStoreTest
         String commandLineArguments = "";
         String workingDirectory = "/tmp";
 
-        ContinuumProject project = makeMavenTwoProject( name,
-                                                        scmUrl,
-                                                        nagEmailAddress,
-                                                        version,
-                                                        commandLineArguments,
-                                                        workingDirectory );
+        ContinuumProject expected = makeMavenTwoProject( name,
+                                                         scmUrl,
+                                                         nagEmailAddress,
+                                                         version,
+                                                         commandLineArguments,
+                                                         workingDirectory );
 
-        String projectId = store.addProject( project );
+        ContinuumProject project = store.addProject( expected );
+
+        String projectId = project.getId();
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        project = store.getProject( projectId );
-
         assertNotNull( project );
-
-        assertEquals( projectId, project.getId() );
 
         // ----------------------------------------------------------------------
         //
@@ -169,17 +165,17 @@ public class AbstractContinuumStoreTest
 
         scmResult.setSuccess( true );
 
-        setCheckoutDone( store, projectId, scmResult, null, null );
-
-        project = store.getProject( projectId );
+        project = setCheckoutDone( store, store.getProject( projectId ), scmResult, null, null );
 
         assertNotNull( project );
+
+        assertNotNull( project.getScmResult() );
+
+        assertTrue( project.getScmResult().isSuccess() );
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
-
-        project = store.getProject( projectId );
 
         String name2 = "name 2";
         String scmUrl2 = "scm url 2";
@@ -192,7 +188,7 @@ public class AbstractContinuumStoreTest
 
         assertNotNull( project.getNotifiers() );
         assertEquals( 1, project.getNotifiers().size() );
-        ContinuumNotifier notifier = ((ContinuumNotifier) project.getNotifiers().get( 0 ));
+        ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get( 0 );
         notifier.setType( "kewk" );
         notifier.getConfiguration().put( "address", emailAddress2 );
         notifier.getConfiguration().put( "name", "tryg" );
@@ -210,8 +206,7 @@ public class AbstractContinuumStoreTest
         List notifiers = new ArrayList();
         notifiers.add( notifier );
 
-        assertProjectEquals( projectId,
-                             name2,
+        assertProjectEquals( name2,
                              scmUrl2,
                              notifiers,
                              version2,
@@ -257,13 +252,13 @@ public class AbstractContinuumStoreTest
         String commandLineArguments1 = "";
         String workingDirectory1 = "/tmp";
 
-        String id1 = addMavenTwoProject( store,
-                                         name1,
-                                         scmUrl1,
-                                         nagEmailAddress1,
-                                         version1,
-                                         commandLineArguments1,
-                                         workingDirectory1 );
+        ContinuumProject project1 = addMavenTwoProject( store,
+                                                        name1,
+                                                        scmUrl1,
+                                                        nagEmailAddress1,
+                                                        version1,
+                                                        commandLineArguments1,
+                                                        workingDirectory1 );
 
         String name2 = "Test All Projects 2";
         String scmUrl2 = "scm:local:src/test/repo/bar";
@@ -272,13 +267,13 @@ public class AbstractContinuumStoreTest
         String commandLineArguments2 = "";
         String workingDirectory2 = "/tmp";
 
-        String id2 = addMavenTwoProject( store,
-                                         name2,
-                                         scmUrl2,
-                                         nagEmailAddress2,
-                                         version2,
-                                         commandLineArguments2,
-                                         workingDirectory2 );
+        ContinuumProject project2 = addMavenTwoProject( store,
+                                                        name2,
+                                                        scmUrl2,
+                                                        nagEmailAddress2,
+                                                        version2,
+                                                        commandLineArguments2,
+                                                        workingDirectory2 );
 
         Map projects = new HashMap();
 
@@ -297,10 +292,7 @@ public class AbstractContinuumStoreTest
             projects.put( project.getName(), project );
         }
 
-        ContinuumProject project1 = (ContinuumProject) projects.get( name1 );
-
-        assertProjectEquals( id1,
-                             name1,
+        assertProjectEquals( name1,
                              scmUrl1,
                              (String)null,
                              version1,
@@ -309,10 +301,7 @@ public class AbstractContinuumStoreTest
                              workingDirectory1,
                              project1 );
 
-        ContinuumProject project2 = (ContinuumProject) projects.get( name2 );
-
-        assertProjectEquals( id2,
-                             name2,
+        assertProjectEquals( name2,
                              scmUrl2,
                              (String)null,
                              version2,
@@ -325,9 +314,9 @@ public class AbstractContinuumStoreTest
     public void testRemoveProject()
         throws Exception
     {
-        String projectId = addMavenTwoProject( "Remove Test Project", "scm:remove-project" );
+        ContinuumProject project = addMavenTwoProject( store, "Remove Test Project", "scm:remove-project" );
 
-        String buildId = createBuild( store, projectId, false );
+        ContinuumBuild build = createBuild( store, project.getId(), false );
 
         ScmResult scmResult = new ScmResult();
 
@@ -338,13 +327,13 @@ public class AbstractContinuumStoreTest
         scmResult.addFile( file );
 
         setBuildResult( store,
-                        buildId,
+                        build,
                         ContinuumProjectState.OK,
                         makeContinuumBuildExecutionResult( "", 0 ),
                         scmResult,
                         null );
 
-        store.removeProject( projectId );
+        store.removeProject( project.getId() );
     }
 
     private ContinuumBuildExecutionResult makeContinuumBuildExecutionResult( String output,
@@ -358,7 +347,7 @@ public class AbstractContinuumStoreTest
         throws Exception
     {
         String projectId = addMavenTwoProject( store,
-                                               makeStubMavenTwoProject( "Last project", "scm:foo" ) );
+                                               makeStubMavenTwoProject( "Last project", "scm:foo" ) ).getId();
 
         assertNull( store.getLatestBuildForProject( projectId ) );
 
@@ -366,7 +355,7 @@ public class AbstractContinuumStoreTest
 
         for ( int i = 0; i < 10; i++ )
         {
-            expectedBuilds.add( createBuild( store, projectId, false ) );
+            expectedBuilds.add( createBuild( store, projectId, false ).getId() );
         }
 
         assertEquals( expectedBuilds.get( expectedBuilds.size() - 1 ),
@@ -380,7 +369,7 @@ public class AbstractContinuumStoreTest
     public void testUpdateMavenTwoProject()
         throws Exception
     {
-        String projectId = addMavenTwoProject( "Maven Two Project", "scm:foo" );
+        String projectId = addMavenTwoProject( store, "Maven Two Project", "scm:foo" ).getId();
 
         MavenTwoProject project = (MavenTwoProject) store.getProject( projectId );
 
@@ -441,13 +430,15 @@ public class AbstractContinuumStoreTest
     {
         lookup( JdoFactory.ROLE );
 
-        String projectId = addMavenTwoProject( "Build Test Project", "scm:build" );
+        String projectId = addMavenTwoProject( store, "Build Test Project", "scm:build" ).getId();
 
         // ----------------------------------------------------------------------
         // Construct a build object
         // ----------------------------------------------------------------------
 
-        String buildId = createBuild( store, projectId, false );
+        ContinuumBuild build = createBuild( store, projectId, false );
+
+        String buildId = build.getId();
 
         ScmResult scmResult = new ScmResult();
 
@@ -464,7 +455,7 @@ public class AbstractContinuumStoreTest
         scmResult.getFiles().add( scmFile );
 
         setBuildComplete( store,
-                          buildId,
+                          build,
                           scmResult,
                           makeContinuumBuildExecutionResult( "output", 10 ) );
 
@@ -478,7 +469,7 @@ public class AbstractContinuumStoreTest
 
         assertEquals( "Expected the build set to contain a single build.", 1, builds.size() );
 
-        ContinuumBuild build = (ContinuumBuild) builds.iterator().next();
+        build = (ContinuumBuild) builds.iterator().next();
 
         assertNotNull( build );
 
@@ -486,18 +477,16 @@ public class AbstractContinuumStoreTest
     }
 
     private void setBuildComplete( ContinuumStore store,
-                                   String buildId,
+                                   ContinuumBuild build,
                                    ScmResult scmResult,
                                    ContinuumBuildExecutionResult result )
         throws ContinuumStoreException
     {
-        ContinuumBuild build = store.getBuild( buildId );
-
         build.setScmResult( scmResult );
 
         build.setExitCode( result.getExitCode() );
 
-        store.setBuildOutput( buildId, "output" );
+        store.setBuildOutput( build.getId(), "output" );
 
         store.updateBuild( build );
     }
@@ -511,11 +500,11 @@ public class AbstractContinuumStoreTest
         // Set up projects
         // ----------------------------------------------------------------------
 
-        String projectId = addMavenTwoProject( "Association Test Project", "scm:association" );
+        String projectId = addMavenTwoProject( store, "Association Test Project", "scm:association" ).getId();
 
-        String projectIdFoo = addMavenTwoProject( "Foo Project", "scm:association-foo" );
+        String projectIdFoo = addMavenTwoProject( store, "Foo Project", "scm:association-foo" ).getId();
 
-        String projectIdBar = addMavenTwoProject( "Bar Project", "scm:association-bar" );
+        String projectIdBar = addMavenTwoProject( store, "Bar Project", "scm:association-bar" ).getId();
 
         // ----------------------------------------------------------------------
         //
@@ -525,7 +514,7 @@ public class AbstractContinuumStoreTest
 
         for ( int i = 0; i < 10; i++ )
         {
-            expectedBuilds.add( createBuild( store, projectId, false ) );
+            expectedBuilds.add( createBuild( store, projectId, false ).getId() );
 
             createBuild( store, projectIdFoo, false );
 
@@ -567,7 +556,7 @@ public class AbstractContinuumStoreTest
     public void testGetLatestBuild()
         throws Exception
     {
-        String projectId = addMavenTwoProject( "Association Test Project", "scm:association" );
+        String projectId = addMavenTwoProject( store, "Association Test Project", "scm:association" ).getId();
 
         int size = 10;
 
@@ -575,7 +564,7 @@ public class AbstractContinuumStoreTest
 
         for ( int i = 0; i < size; i++ )
         {
-            expectedBuilds.add( createBuild( store, projectId, false ) );
+            expectedBuilds.add( createBuild( store, projectId, false ).getId() );
         }
 
         // ----------------------------------------------------------------------
@@ -604,17 +593,15 @@ public class AbstractContinuumStoreTest
         //
         // ----------------------------------------------------------------------
 
-        String projectId = addMavenTwoProject( "Build Result Project", "scm:build/result" );
+        String projectId = addMavenTwoProject( store, "Build Result Project", "scm:build/result" ).getId();
 
         long now = System.currentTimeMillis();
 
-        String buildId = createBuild( store, projectId, false );
-
-        assertNotNull( buildId );
-
-        ContinuumBuild build = store.getBuild( buildId );
+        ContinuumBuild build = createBuild( store, projectId, false );
 
         assertNotNull( build );
+
+        assertNotNull( build.getId() );
 
         assertEquals( now / 10000, build.getStartTime() / 10000 );
 
@@ -631,7 +618,7 @@ public class AbstractContinuumStoreTest
         ScmResult scmResult = new ScmResult();
 
         setBuildResult( store,
-                        buildId,
+                        build,
                         ContinuumProjectState.OK,
                         makeContinuumBuildExecutionResult(  "output", 1 ),
                         scmResult,
@@ -641,22 +628,11 @@ public class AbstractContinuumStoreTest
         //
         // ----------------------------------------------------------------------
 
-        build = store.getBuild( buildId );
+        build = store.getBuild( build.getId() );
 
         assertEquals( 1, build.getExitCode() );
 
-        assertEquals( "output", store.getBuildOutput( buildId ) );
-    }
-
-    // ----------------------------------------------------------------------
-    // Private utility methods
-    // ----------------------------------------------------------------------
-
-    protected String addMavenTwoProject( String name, String scmUrl )
-        throws Exception
-    {
-        return addMavenTwoProject( store,
-                                   makeStubMavenTwoProject( name, scmUrl ) );
+        assertEquals( "output", store.getBuildOutput( build.getId() ) );
     }
 
     // ----------------------------------------------------------------------
@@ -684,9 +660,7 @@ public class AbstractContinuumStoreTest
 
         project.setNotifiers( notifiers );
 
-        String id = getStore().addProject( project );
-
-        project = getStore().getProject( id );
+        project = getStore().addProject( project );
 
         notifiers = project.getNotifiers();
 
@@ -709,18 +683,16 @@ public class AbstractContinuumStoreTest
         throws Exception
     {
         // create project
-        String projectId = addMavenTwoProject( "Project Scheduling", "scm:scheduling" );
+        ContinuumProject project = addMavenTwoProject( store, "Project Scheduling", "scm:scheduling" );
 
-        ContinuumProject project = store.getProject( projectId );
+        String projectId = project.getId();
 
         // add schedule
         //project.addSchedule( createStubSchedule( "schedule1" ) );
 
         ContinuumSchedule s = createStubSchedule( "schedule1" );
 
-        String sid = store.addSchedule( s );
-
-        s = store.getSchedule( sid );
+        s = store.addSchedule( s );
 
         project.addSchedule( s );
 
@@ -790,22 +762,15 @@ public class AbstractContinuumStoreTest
         // create schedule
         ContinuumSchedule schedule = createStubSchedule( "schedule2" );
 
-        String scheduleId = store.addSchedule( schedule );
+        schedule = store.addSchedule( schedule );
 
-        schedule = store.getSchedule( scheduleId );
-
-        String projectId = addMavenTwoProject( "Project", "scm:scheduling" );
-
-        ContinuumProject project = store.getProject( projectId );
+        ContinuumProject project = addMavenTwoProject( store, "Project", "scm:scheduling" );
 
         // add project
         schedule.addProject( project );
 
         // update schedule
-        store.updateSchedule( schedule );
-
-        // retrieve schedule
-        schedule = store.getSchedule( scheduleId );
+        schedule = store.updateSchedule( schedule );
 
         assertNotNull( schedule );
 
@@ -825,7 +790,7 @@ public class AbstractContinuumStoreTest
         // present within the project.
         // ----------------------------------------------------------------------
 
-        project = store.getProject( projectId );
+        project = store.getProject( project.getId() );
 
         assertNotNull( project );
 
@@ -838,11 +803,11 @@ public class AbstractContinuumStoreTest
         // still remains in the store.
         // ----------------------------------------------------------------------
 
-        schedule = store.getSchedule( scheduleId );
+        schedule = store.getSchedule( schedule.getId() );
 
         store.removeSchedule( schedule.getId() );
 
-        project = store.getProject( projectId );
+        project = store.getProject( project.getId() );
 
         assertNotNull( project );
     }

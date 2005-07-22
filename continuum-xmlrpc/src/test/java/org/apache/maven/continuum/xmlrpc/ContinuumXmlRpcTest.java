@@ -52,15 +52,13 @@ public class ContinuumXmlRpcTest
 
         MavenTwoProject project = makeStubMavenTwoProject( "My Project", "scm:foo" );
 
-        String projectId = store.addProject( project );
-
-        project = (MavenTwoProject) store.getProject( projectId );
+        project = (MavenTwoProject) store.addProject( project );
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        Hashtable hashtable = xmlRpc.getProject( projectId );
+        Hashtable hashtable = xmlRpc.getProject( project.getId() );
 
 //        dumpValue( 0, "result", hashtable );
     }
@@ -159,11 +157,11 @@ public class ContinuumXmlRpcTest
 
     private void dumpVector( int indent, String key, Vector vector )
     {
+        System.err.println( makeIndent( indent ) + key + " = [" );
+
         Iterator it;
 
         int i;
-
-        System.err.println( makeIndent( indent ) + key + " = [");
 
         for ( it = vector.iterator(), i = 0; it.hasNext(); i++ )
         {

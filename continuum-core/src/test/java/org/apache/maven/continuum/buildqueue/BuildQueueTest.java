@@ -17,6 +17,7 @@ package org.apache.maven.continuum.buildqueue;
  */
 
 import org.apache.maven.continuum.AbstractContinuumTest;
+import org.apache.maven.continuum.project.ContinuumProject;
 
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.TaskQueue;
@@ -41,7 +42,9 @@ public class BuildQueueTest
     public void testTestTheQueueWithASingleProject()
         throws Exception
     {
-        String projectId = AbstractContinuumTest.addMavenTwoProject( getStore(), "Build Queue Project 1", "1" );
+        ContinuumProject project = addMavenTwoProject( getStore(), "Build Queue Project 1", "1" );
+
+        String projectId = project.getId();
 
         buildProject( projectId, false );
 
@@ -64,9 +67,9 @@ public class BuildQueueTest
     public void testTheQueueWithMultipleProjects()
         throws Exception
     {
-        String projectId1 = AbstractContinuumTest.addMavenTwoProject( getStore(), "Build Queue Project 2", "foo" );
+        String projectId1 = addMavenTwoProject( getStore(), "Build Queue Project 2", "foo" ).getId();
 
-        String projectId2 = AbstractContinuumTest.addMavenTwoProject( getStore(), "Build Queue Project 3", "bar" );
+        String projectId2 = addMavenTwoProject( getStore(), "Build Queue Project 3", "bar" ).getId();
 
         buildProject( projectId1, false );
 
@@ -102,7 +105,7 @@ public class BuildQueueTest
     {
         String name = "Build Queue Project 4";
 
-        String projectId = AbstractContinuumTest.addMavenTwoProject( getStore(), name, "4" );
+        String projectId = addMavenTwoProject( getStore(), name, "4" ).getId();
 
         buildProject( projectId, true );
 

@@ -190,10 +190,10 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
      ContinuumSchedule getSchedule( String scheduleId )
         throws ContinuumException;
 
-     void addSchedule( ContinuumSchedule schedule )
+    ContinuumSchedule addSchedule( ContinuumSchedule schedule )
         throws ContinuumException;
 
-     void updateSchedule( ContinuumSchedule schedule )
+    ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
         throws ContinuumException;
 
      void removeSchedule( String scheduleId )
@@ -203,10 +203,9 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
     // Project scheduling
     // ----------------------------------------------------------------------
 
-    public void addProjectToSchedule( ContinuumProject project, ContinuumSchedule schedule )
+    ContinuumSchedule addProjectToSchedule( ContinuumProject project, ContinuumSchedule schedule )
         throws ContinuumException;
 
-    public void removeProjectFromSchedule( ContinuumProject project, ContinuumSchedule schedule )
+    void removeProjectFromSchedule( ContinuumProject project, ContinuumSchedule schedule )
         throws ContinuumException;
-     
 }

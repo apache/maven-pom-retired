@@ -185,7 +185,7 @@
       <fetch-group name="build-settings-detail">
         <field name="buildGroups"/>
         <field name="projectGroups"/>
-      </fetch-group>      
+      </fetch-group>
     </class>
 
   </package>

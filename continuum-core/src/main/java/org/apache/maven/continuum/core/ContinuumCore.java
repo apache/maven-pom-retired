@@ -23,6 +23,7 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
@@ -42,7 +43,7 @@ public interface ContinuumCore
     void removeProject( String projectId )
         throws ContinuumException;
 
-    void updateProject( ContinuumProject project )
+    ContinuumProject updateProject( ContinuumProject project )
         throws ContinuumException;
 
     ContinuumProject getProject( String projectId )
@@ -57,10 +58,10 @@ public interface ContinuumCore
     void buildProject( String projectId, boolean force )
         throws ContinuumException;
 
-    void removeNotifier( Object oid )
+    void removeNotifier( ContinuumNotifier oid )
         throws ContinuumException;
 
-    void storeNotifier( Object notifier )
+    ContinuumNotifier storeNotifier( ContinuumNotifier notifier )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------

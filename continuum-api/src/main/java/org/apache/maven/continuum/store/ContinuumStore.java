@@ -25,6 +25,7 @@ import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumBuildGroup;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
+import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.scm.ScmResult;
 
 /**
@@ -39,13 +40,13 @@ public interface ContinuumStore
     // ContinuumProject Mutators
     // ----------------------------------------------------------------------
 
-    String addProject( ContinuumProject project )
+    ContinuumProject addProject( ContinuumProject project )
         throws ContinuumStoreException;
 
     void removeProject( String projectId )
         throws ContinuumStoreException;
 
-    void updateProject( ContinuumProject project )
+    ContinuumProject updateProject( ContinuumProject project )
         throws ContinuumStoreException;
 
     // ----------------------------------------------------------------------
@@ -74,10 +75,10 @@ public interface ContinuumStore
     // Build
     // ----------------------------------------------------------------------
 
-    String addBuild( String projectId, ContinuumBuild build )
+    ContinuumBuild addBuild( String projectId, ContinuumBuild build )
         throws ContinuumStoreException;
 
-    void updateBuild( ContinuumBuild build )
+    ContinuumBuild updateBuild( ContinuumBuild build )
         throws ContinuumStoreException;
 
     void setBuildOutput( String buildId, String output )
@@ -102,20 +103,20 @@ public interface ContinuumStore
     // Notifiers
     // ----------------------------------------------------------------------
 
-    void removeNotifier( Object notifier )
+    void removeNotifier( ContinuumNotifier notifier )
         throws ContinuumStoreException;
 
-    void storeNotifier( Object notifier )
+    ContinuumNotifier storeNotifier( ContinuumNotifier notifier )
         throws ContinuumStoreException;
 
     // ----------------------------------------------------------------------
     // Schedules
     // ----------------------------------------------------------------------
 
-    String addSchedule( ContinuumSchedule schedule )
+    ContinuumSchedule addSchedule( ContinuumSchedule schedule )
         throws ContinuumStoreException;
 
-    void updateSchedule( ContinuumSchedule schedule )
+    ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
         throws ContinuumStoreException;
 
     void removeSchedule( String scheduleId )
@@ -131,10 +132,10 @@ public interface ContinuumStore
     // Project Groups
     // ----------------------------------------------------------------------
 
-    String addProjectGroup( ContinuumProjectGroup projectGroup )
+    ContinuumProjectGroup addProjectGroup( ContinuumProjectGroup projectGroup )
         throws ContinuumStoreException;
 
-    void updateProjectGroup( ContinuumProjectGroup projectGroup )
+    ContinuumProjectGroup updateProjectGroup( ContinuumProjectGroup projectGroup )
         throws ContinuumStoreException;
 
     void removeProjectGroup( String projectGroupId )
@@ -153,10 +154,10 @@ public interface ContinuumStore
     // Build Group
     // ----------------------------------------------------------------------
 
-    String addBuildGroup( ContinuumBuildGroup buildGroup )
+    ContinuumBuildGroup addBuildGroup( ContinuumBuildGroup buildGroup )
         throws ContinuumStoreException;
 
-    void updateBuildGroup( ContinuumBuildGroup buildGroup )
+    ContinuumBuildGroup updateBuildGroup( ContinuumBuildGroup buildGroup )
         throws ContinuumStoreException;
 
     void removeBuildGroup( String buildGroupId )
@@ -172,10 +173,10 @@ public interface ContinuumStore
     // Build settings
     // ----------------------------------------------------------------------
 
-    String addBuildSettings( ContinuumBuildSettings buildSettings )
+    ContinuumBuildSettings addBuildSettings( ContinuumBuildSettings buildSettings )
         throws ContinuumStoreException;
 
-    void updateBuildSettings( ContinuumBuildSettings buildSettings )
+    ContinuumBuildSettings updateBuildSettings( ContinuumBuildSettings buildSettings )
         throws ContinuumStoreException;
 
     void removeBuildSettings( String buildSettingsId )

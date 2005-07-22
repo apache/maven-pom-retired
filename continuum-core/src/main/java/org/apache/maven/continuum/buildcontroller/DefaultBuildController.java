@@ -108,7 +108,9 @@ public class DefaultBuildController
             {
                 actionManager.lookup( "check-working-directory" ).execute( actionContext );
 
-                boolean workingDirectoryExists = AbstractContinuumAction.getBoolean( actionContext, AbstractContinuumAction.KEY_WORKING_DIRECTORY_EXISTS );
+                boolean workingDirectoryExists =
+                    AbstractContinuumAction.getBoolean( actionContext,
+                                                        AbstractContinuumAction.KEY_WORKING_DIRECTORY_EXISTS );
 
                 if ( workingDirectoryExists )
                 {
@@ -141,7 +143,7 @@ public class DefaultBuildController
                         if ( !StringUtils.isEmpty( checkoutErrorMessage ) )
                         {
                             error = "Error message:" + System.getProperty( "line.separator" );
-                            error = checkoutErrorException;
+                            error += checkoutErrorException;
                         }
 
                         if ( !StringUtils.isEmpty( checkoutErrorException ) )
@@ -152,7 +154,7 @@ public class DefaultBuildController
 
                         build.setError( error );
 
-                        buildId = storeBuild( project, build );
+                        buildId = storeBuild( project, build ).getId();
 
                         return;
                      }
@@ -174,9 +176,10 @@ public class DefaultBuildController
 
                 ContinuumBuild build = makeBuildResult( scmResult, startTime, forced );
 
+                // This can happen if the "update project from scm" action fails
+
                 String error;
 
-                // This can happen if the "update project from scm" action fails
                 if ( e instanceof ContinuumScmException )
                 {
                     ContinuumScmException ex = (ContinuumScmException) e;
@@ -204,7 +207,7 @@ public class DefaultBuildController
 
                 build.setError( error );
 
-                buildId = storeBuild( project, build );
+                buildId = storeBuild( project, build ).getId();
 
                 project.setState( ContinuumProjectState.ERROR );
             }
@@ -240,14 +243,14 @@ public class DefaultBuildController
     //
     // ----------------------------------------------------------------------
 
-    private String storeBuild( ContinuumProject project, ContinuumBuild build )
+    private ContinuumBuild storeBuild( ContinuumProject project, ContinuumBuild build )
         throws ContinuumStoreException
     {
-        String buildId = store.addBuild( project.getId(), build );
+        build = store.addBuild( project.getId(), build );
 
-        getLogger().info( "Build id: '" + buildId + "'." );
+        getLogger().info( "Build id: '" + build.getId() + "'." );
 
-        return buildId;
+        return build;
     }
 
     private ContinuumBuild makeBuildResult( ScmResult scmResult,

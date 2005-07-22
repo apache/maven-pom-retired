@@ -83,6 +83,16 @@ public abstract class ContinuumXmlRpcClient
         client = new XmlRpcClientLite( host, port );
     }
 
+    public String getHost()
+    {
+        return host;
+    }
+
+    public int getPort()
+    {
+        return port;
+    }
+
     // ----------------------------------------------------------------------
     // Project
     // ----------------------------------------------------------------------
@@ -344,13 +354,13 @@ public abstract class ContinuumXmlRpcClient
         throw new UnsupportedOperationException();
     }
 
-    public void addSchedule( ContinuumSchedule schedule )
+    public ContinuumSchedule addSchedule( ContinuumSchedule schedule )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateSchedule( ContinuumSchedule schedule )
+    public ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
@@ -431,7 +441,7 @@ public abstract class ContinuumXmlRpcClient
 
         try
         {
-            helper.hashtableToObject( (Hashtable) returnValue, object );
+            helper.hashtableToObject( returnValue, object );
         }
         catch ( IntrospectionException e )
         {

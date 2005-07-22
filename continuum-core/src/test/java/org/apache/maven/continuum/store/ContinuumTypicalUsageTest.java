@@ -1,11 +1,5 @@
 package org.apache.maven.continuum.store;
 
-import org.apache.maven.continuum.AbstractContinuumTest;
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
-import org.apache.maven.continuum.initialization.ContinuumInitializer;
-import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
-
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
  *
@@ -21,6 +15,13 @@ import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.apache.maven.continuum.AbstractContinuumTest;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.initialization.ContinuumInitializer;
+import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -70,11 +71,9 @@ public class ContinuumTypicalUsageTest
         // At this point we can now accept new projects into the system
         // ----------------------------------------------------------------------
 
-        ContinuumProject project = makeStubMavenTwoProject( "test1", "scm:url" );
+        MavenTwoProject project = makeStubMavenTwoProject( "test1", "scm:url" );
 
-        String projectId = addMavenTwoProject( getStore(), project );
-
-        project = getStore().getProject( projectId );
+        project = addMavenTwoProject( getStore(), project );
 
         // ----------------------------------------------------------------------
         // Now that we have a project we want to add it to the default project group
@@ -84,10 +83,10 @@ public class ContinuumTypicalUsageTest
 
         getStore().updateProjectGroup( defaultProjectGroup );
 
-        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_NAME,   project.getProjectGroup().getName() );
+        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_NAME, project.getProjectGroup().getName() );
 
-        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_DESCRIPTION,   project.getProjectGroup().getDescription() );
+        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_DESCRIPTION, project.getProjectGroup().getDescription() );
 
-        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_ID,   project.getProjectGroup().getGroupId() );
+        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_ID, project.getProjectGroup().getGroupId() );
     }
 }

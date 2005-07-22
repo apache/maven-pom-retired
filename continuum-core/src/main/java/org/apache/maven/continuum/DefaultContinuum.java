@@ -598,12 +598,12 @@ public class DefaultContinuum
         }
     }
 
-    public void addSchedule( ContinuumSchedule schedule )
+    public ContinuumSchedule addSchedule( ContinuumSchedule schedule )
         throws ContinuumException
     {
         try
         {
-            store.addSchedule( schedule );
+            return store.addSchedule( schedule );
         }
         catch ( ContinuumStoreException ex )
         {
@@ -611,12 +611,12 @@ public class DefaultContinuum
         }
     }
 
-    public void updateSchedule( ContinuumSchedule schedule )
+    public ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
         throws ContinuumException
     {
         try
         {
-            store.updateSchedule( schedule );
+            return store.updateSchedule( schedule );
         }
         catch ( ContinuumStoreException ex )
         {
@@ -641,14 +641,14 @@ public class DefaultContinuum
     // Project scheduling
     // ----------------------------------------------------------------------
 
-    public void addProjectToSchedule( ContinuumProject project, ContinuumSchedule schedule )
+    public ContinuumSchedule addProjectToSchedule( ContinuumProject project, ContinuumSchedule schedule )
         throws ContinuumException
     {
         schedule.addProject( project );
 
         try
         {
-            store.updateSchedule( schedule );
+            return store.updateSchedule( schedule );
         }
         catch ( ContinuumStoreException e )
         {

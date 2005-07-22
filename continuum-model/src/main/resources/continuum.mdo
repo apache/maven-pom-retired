@@ -401,9 +401,9 @@
         </field>
         <field>
           <name>id</name>
-          <identifier>true</identifier>
           <version>1.0.0</version>
           <type>String</type>
+          <identifier>true</identifier>
         </field>
         <field>
           <name>state</name>

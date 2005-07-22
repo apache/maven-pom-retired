@@ -78,7 +78,7 @@ public class ExecuteBuilderContinuumAction
 
         build.setScmResult( scmResult );
 
-        String buildId = getStore().addBuild( project.getId(), build );
+        String buildId = getStore().addBuild( project.getId(), build ).getId();
 
         context.put( KEY_BUILD_ID, buildId );
 
@@ -119,7 +119,7 @@ public class ExecuteBuilderContinuumAction
 
             getStore().setBuildOutput( buildId, output );
 
-            getStore().updateBuild( build );
+            build = getStore().updateBuild( build );
 
             getNotifier().goalsCompleted( project, build );
         }

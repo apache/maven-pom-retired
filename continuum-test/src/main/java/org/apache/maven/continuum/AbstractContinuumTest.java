@@ -195,11 +195,13 @@ public abstract class AbstractContinuumTest
     // Public utility methods
     // ----------------------------------------------------------------------
 
-    public static String addMavenTwoProject( ContinuumStore store,
-                                             ContinuumProject project )
-        throws Exception
+    public static MavenTwoProject addMavenTwoProject( ContinuumStore store,
+                                                      MavenTwoProject project )
+    throws Exception
     {
-        String projectId = store.addProject( project );
+        ContinuumProject addedProject = store.addProject( project );
+
+        assertNotNull( addedProject );
 
         ScmResult scmResult = new ScmResult();
 
@@ -215,56 +217,51 @@ public abstract class AbstractContinuumTest
 
         scmResult.addFile( scmFile );
 
-        setCheckoutDone( store, projectId, scmResult, null, null );
+        addedProject = setCheckoutDone( store, addedProject, scmResult, null, null );
 
-        project = store.getProject( projectId );
-
-        assertNotNull( project );
-
-        return projectId;
+        return (MavenTwoProject) addedProject;
     }
 
-    public static String addMavenTwoProject( ContinuumStore store,
-                                             String name,
-                                             String scmUrl )
-        throws Exception
+    public static MavenTwoProject addMavenTwoProject( ContinuumStore store,
+                                                      String name,
+                                                      String scmUrl )
+    throws Exception
     {
         return addMavenTwoProject( store, makeStubMavenTwoProject( name, scmUrl ) );
     }
 
-    public static String addMavenTwoProject( ContinuumStore store,
-                                             String name,
-                                             String scmUrl,
-                                             String nagEmailAddress,
-                                             String version,
-                                             String commandLineArguments,
-                                             String workingDirectory )
-        throws Exception
+    public static MavenTwoProject addMavenTwoProject( ContinuumStore store,
+                                                      String name,
+                                                      String scmUrl,
+                                                      String nagEmailAddress,
+                                                      String version,
+                                                      String commandLineArguments,
+                                                      String workingDirectory )
+    throws Exception
     {
-        String projectId = store.addProject( makeMavenTwoProject( name,
-                                                                  scmUrl,
-                                                                  nagEmailAddress,
-                                                                  version,
-                                                                  commandLineArguments,
-                                                                  workingDirectory ) );
+        ContinuumProject project = store.addProject(
+            makeMavenTwoProject( name,
+                                 scmUrl,
+                                 nagEmailAddress,
+                                 version,
+                                 commandLineArguments,
+                                 workingDirectory ) );
 
         ScmResult scmResult = new ScmResult();
 
         scmResult.setSuccess( true );
 
-        setCheckoutDone( store, projectId, scmResult, null, null );
-
-        ContinuumProject project = store.getProject( projectId );
+        project = setCheckoutDone( store, project, scmResult, null, null );
 
         assertNotNull( project );
 
-        return projectId;
+        return (MavenTwoProject) project;
     }
 
-    public static String createBuild( ContinuumStore store,
-                                      String projectId,
-                                      boolean forced )
-        throws ContinuumStoreException
+    public static ContinuumBuild createBuild( ContinuumStore store,
+                                              String projectId,
+                                              boolean forced )
+    throws ContinuumStoreException
     {
         ContinuumBuild build = new ContinuumBuild();
 
@@ -277,34 +274,30 @@ public abstract class AbstractContinuumTest
         return store.addBuild( projectId, build );
     }
 
-    public static void setCheckoutDone( ContinuumStore store,
-                                        String projectId,
-                                        ScmResult scmResult,
-                                        String errorMessage,
-                                        Throwable exception )
-        throws ContinuumStoreException
+    public static ContinuumProject setCheckoutDone( ContinuumStore store,
+                                                    ContinuumProject project,
+                                                    ScmResult scmResult,
+                                                    String errorMessage,
+                                                    Throwable exception )
+    throws ContinuumStoreException
     {
-        ContinuumProject project = store.getProject( projectId );
-
         project.setScmResult( scmResult );
 
         project.setCheckOutErrorMessage( errorMessage );
 
         project.setCheckOutErrorException( ContinuumUtils.throwableToString( exception ) );
 
-        store.updateProject( project );
+        return store.updateProject( project );
     }
 
     public static void setBuildResult( ContinuumStore store,
-                                       String buildId,
+                                       ContinuumBuild build,
                                        int state,
                                        ContinuumBuildExecutionResult result,
                                        ScmResult scmResult,
                                        Throwable error )
         throws ContinuumStoreException
     {
-        ContinuumBuild build = store.getBuild( buildId );
-
         build.setState( state );
 
         build.setEndTime( new Date().getTime() );
@@ -328,12 +321,10 @@ public abstract class AbstractContinuumTest
     // Assertions
     // ----------------------------------------------------------------------
 
-    public void assertProjectEquals( String projectId,
-                                     ContinuumProject expected,
+    public void assertProjectEquals( ContinuumProject expected,
                                      ContinuumProject actual )
     {
-        assertProjectEquals( projectId,
-                             expected.getName(),
+        assertProjectEquals( expected.getName(),
                              expected.getScmUrl(),
                              expected.getNotifiers(),
                              expected.getVersion(),
@@ -343,8 +334,7 @@ public abstract class AbstractContinuumTest
                              actual );
     }
 
-    public void assertProjectEquals( String projectId,
-                                     String name,
+    public void assertProjectEquals( String name,
                                      String scmUrl,
                                      String emailAddress,
                                      String version,
@@ -353,8 +343,7 @@ public abstract class AbstractContinuumTest
                                      String workingDirectory,
                                      ContinuumProject actual )
     {
-        assertProjectEquals( projectId,
-                             name,
+        assertProjectEquals( name,
                              scmUrl,
                              createMailNotifierList( emailAddress ),
                              version,
@@ -364,8 +353,7 @@ public abstract class AbstractContinuumTest
                              actual );
     }
 
-    public void assertProjectEquals( String projectId,
-                                     String name,
+    public void assertProjectEquals( String name,
                                      String scmUrl,
                                      List notifiers,
                                      String version,
@@ -374,8 +362,6 @@ public abstract class AbstractContinuumTest
                                      String workingDirectory,
                                      ContinuumProject actual )
     {
-        assertEquals( "project.id", projectId, actual.getId() );
-
         assertEquals( "project.name", name, actual.getName() );
 
         assertEquals( "project.scmUrl", scmUrl, actual.getScmUrl() );
