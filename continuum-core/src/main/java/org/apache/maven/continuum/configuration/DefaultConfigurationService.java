@@ -46,6 +46,10 @@ public class DefaultConfigurationService
     // Continuum specifics we'll refactor out later
     // ----------------------------------------------------------------------
 
+    private boolean inMemoryMode;
+
+    private boolean initialized;
+
     private String url;
 
     private File buildOutputDirectory;
@@ -57,6 +61,16 @@ public class DefaultConfigurationService
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
+
+    public void setInitialized( boolean initialized )
+    {
+        this.initialized = initialized;
+    }
+
+    public boolean isInitialized()
+    {
+        return initialized;
+    }
 
     public String getUrl()
     {
@@ -98,6 +112,16 @@ public class DefaultConfigurationService
         this.jdks = jdks;
     }
 
+    public void setInMemoryMode( boolean inMemoryMode )
+    {
+        this.inMemoryMode = inMemoryMode;
+    }
+
+    public boolean inMemoryMode()
+    {
+        return inMemoryMode;
+    }
+
     // ----------------------------------------------------------------------
     // Process configuration to glean application specific values
     // ----------------------------------------------------------------------
@@ -105,6 +129,22 @@ public class DefaultConfigurationService
     protected void processInboundConfiguration()
         throws ConfigurationLoadingException
     {
+        Xpp3Dom initializedDom = configuration.getChild( CONFIGURATION_INITIALIZED );
+
+        if ( initializedDom != null )
+        {
+            String booleanString = initializedDom.getValue();
+
+            if ( booleanString.equals( "true" ) || booleanString.equals( "1" ) )
+            {
+                initialized = true;
+            }
+            else
+            {
+                initialized = false;
+            }
+        }
+
         Xpp3Dom urlDom = configuration.getChild( CONFIGURATION_URL );
 
         if ( urlDom != null )
@@ -173,6 +213,8 @@ public class DefaultConfigurationService
     {
         configuration = new Xpp3Dom( CONFIGURATION );
 
+        configuration.addChild( createDom( CONFIGURATION_INITIALIZED, Boolean.toString( initialized ) ) );
+
         if ( url != null )
         {
             configuration.addChild( createDom( CONFIGURATION_URL, url ) );
@@ -234,6 +276,11 @@ public class DefaultConfigurationService
     public void load()
         throws ConfigurationLoadingException
     {
+        if ( inMemoryMode )
+        {
+            return;
+        }
+
         try
         {
             configuration = Xpp3DomBuilder.build( new FileReader( source ) );
@@ -257,6 +304,11 @@ public class DefaultConfigurationService
     public void store()
         throws ConfigurationStoringException
     {
+        if ( inMemoryMode )
+        {
+            return;
+        }
+
         processOutboundConfiguration();
 
         try

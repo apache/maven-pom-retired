@@ -71,6 +71,9 @@
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.initialization.ContinuumInitializer</role>
+        </requirement>
       </requirements>
     </component>
 

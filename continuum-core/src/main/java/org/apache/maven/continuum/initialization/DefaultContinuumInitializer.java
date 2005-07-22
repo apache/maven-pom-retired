@@ -5,6 +5,7 @@ import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.build.settings.BuildSettingsConstants;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -27,6 +28,7 @@ import org.apache.maven.continuum.build.settings.BuildSettingsConstants;
  * @version $Id:$
  */
 public class DefaultContinuumInitializer
+    extends AbstractLogEnabled
     implements ContinuumInitializer
 {
     // ----------------------------------------------------------------------
@@ -70,6 +72,8 @@ public class DefaultContinuumInitializer
     public void initialize()
         throws ContinuumInitializationException
     {
+        getLogger().info( "Continuum initializer running ..." );
+
         defaultBuildSettings = createDefaultBuildSettings();
 
         try

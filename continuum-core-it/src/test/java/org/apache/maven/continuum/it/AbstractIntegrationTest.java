@@ -103,6 +103,12 @@ public abstract class AbstractIntegrationTest
     protected void customizeContext( Context context )
         throws Exception
     {
+        // ----------------------------------------------------------------------
+        // This level of directory nesting is setup to mimic the continuum
+        // application running in development mode where it picks up resources
+        // in situ like forms, templates and localization resources.
+        // ----------------------------------------------------------------------
+
         File plexusHome = getTestFile( "target/leve1/level2/plexus-home" );
 
         if ( !plexusHome.isDirectory() )

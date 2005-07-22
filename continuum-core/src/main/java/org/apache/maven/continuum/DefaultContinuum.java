@@ -17,6 +17,8 @@ package org.apache.maven.continuum;
  */
 
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.configuration.ConfigurationLoadingException;
+import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction;
@@ -34,6 +36,8 @@ import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
@@ -43,11 +47,16 @@ import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ProjectSorter;
+import org.apache.maven.continuum.initialization.ContinuumInitializer;
+import org.apache.maven.continuum.initialization.ContinuumInitializationException;
 
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.StoppingException;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
 import java.util.Collection;
@@ -64,22 +73,37 @@ import java.util.Properties;
  */
 public class DefaultContinuum
     extends AbstractLogEnabled
-    implements Continuum, Initializable
+    implements Continuum, Startable
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ContinuumCore core;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ActionManager actionManager;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ContinuumScheduler scheduler;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ConfigurationService configurationService;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ContinuumStore store;
+
+    /**
+     * @plexus.requirement
+     */
+    private ContinuumInitializer initializer;
 
     // ----------------------------------------------------------------------
     //
@@ -554,17 +578,40 @@ public class DefaultContinuum
     // Lifecylce Management
     // ----------------------------------------------------------------------
 
-    public void initialize()
-        throws InitializationException
+    public void start()
+        throws StartingException
     {
-        // ----------------------------------------------------------------------
-        // Make sure that the default schedule exists so that projects being
-        // added to Continuum will participate in a scheduled build by default
-        // ----------------------------------------------------------------------
-
-        if ( !defaultScheduleExists() )
+        try
         {
-            createDefaultSchedule();
+            configurationService.load();
+
+            if ( !configurationService.isInitialized() )
+            {
+                initializer.initialize();
+
+                configurationService.setInitialized( true );
+            }
+        }
+        catch ( ConfigurationLoadingException e )
+        {
+            throw new StartingException( "Error loading the Continuum configuration.", e );
+        }
+        catch ( ContinuumInitializationException e )
+        {
+            throw new StartingException( "Cannot initializing Continuum for the first time.", e );
+        }
+    }
+
+    public void stop()
+        throws StoppingException
+    {
+        try
+        {
+            configurationService.store();
+        }
+        catch ( ConfigurationStoringException e )
+        {
+            throw new StoppingException( "Error storing the Continuum configuration.", e );
         }
     }
 
@@ -669,6 +716,16 @@ public class DefaultContinuum
         {
             throw logAndCreateException( "Error while removing project from schedule.", e );
         }
+    }
+
+    public ContinuumProjectGroup getDefaultProjectGroup()
+    {
+        return initializer.getDefaultProjectGroup();
+    }
+
+    public ContinuumBuildSettings getDefaultBuildSettings()
+    {
+        return initializer.getDefaultBuildSettings();
     }
 
     // ----------------------------------------------------------------------

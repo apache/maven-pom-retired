@@ -2,7 +2,7 @@ package org.apache.maven.continuum.scheduler;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class ContinuumSchedulerConstants
 {
@@ -37,4 +37,6 @@ public class ContinuumSchedulerConstants
     public static final String CONTINUUM = "continuum";
 
     public static final String SCHEDULE = "schedule";
+
+    public static final String BUILD_SETTINGS = "build-settings";
 }

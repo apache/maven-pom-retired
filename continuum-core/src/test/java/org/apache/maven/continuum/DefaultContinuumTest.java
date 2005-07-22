@@ -31,7 +31,7 @@ import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
  * @version $Id$
  */
 public class DefaultContinuumTest
-    extends PlexusTestCase
+    extends AbstractContinuumTest
 {
     public void testContinuumConfiguration()
         throws Exception

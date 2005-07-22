@@ -23,7 +23,7 @@ import java.util.Map;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id:$
+ * @version $Id$
  */
 public interface ConfigurationService
 {
@@ -34,6 +34,8 @@ public interface ConfigurationService
     // ----------------------------------------------------------------------
 
     public static final String CONFIGURATION = "configuration";
+
+    public static final String CONFIGURATION_INITIALIZED = "initialized";
 
     public static final String CONFIGURATION_URL = "url";
 
@@ -51,6 +53,10 @@ public interface ConfigurationService
     //
     // ----------------------------------------------------------------------
 
+    void setInitialized( boolean initialized );
+
+    boolean isInitialized();
+
     String getUrl();
 
     void setUrl( String url );
@@ -64,6 +70,10 @@ public interface ConfigurationService
     void addJdk( ContinuumJdk jdk );
 
     void setJdks( Map jdks );
+
+    void setInMemoryMode( boolean inMemoryMode );
+
+    boolean inMemoryMode();
 
     // ----------------------------------------------------------------------
     //

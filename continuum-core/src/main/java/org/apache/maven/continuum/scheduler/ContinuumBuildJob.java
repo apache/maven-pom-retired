@@ -5,6 +5,8 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobDetail;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumSchedule;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.Continuum;
 import org.codehaus.plexus.logging.Logger;
@@ -36,37 +38,32 @@ public class ContinuumBuildJob
 
         Continuum continuum = (Continuum) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.CONTINUUM );
 
-        //ContinuumSchedule schedule = (ContinuumSchedule) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.SCHEDULE );
+        ContinuumBuildSettings buildSettings = (ContinuumBuildSettings) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.BUILD_SETTINGS );
 
         // ----------------------------------------------------------------------
-        // Lookup all projects that belong to this schedule
+        // Lookup all the project groups that belong to these build settings
         // ----------------------------------------------------------------------
 
-        //Set projects = schedule.getProjects();
+        Set projectGroups = buildSettings.getProjectGroups();
 
-        Collection projects = null;
-        try
+        for ( Iterator iterator = projectGroups.iterator(); iterator.hasNext(); )
         {
-            projects = continuum.getProjects();
-        }
-        catch ( ContinuumException e )
-        {
-            logger.error( "Error retrieving projects.", e );
-        }
+            ContinuumProjectGroup projectGroup = (ContinuumProjectGroup) iterator.next();
 
-        for ( Iterator i = projects.iterator(); i.hasNext(); )
-        {
-            ContinuumProject project = (ContinuumProject) i.next();
+            Set projects = projectGroup.getProjects();
 
-            try
+            for ( Iterator j = projects.iterator(); j.hasNext(); )
             {
-                continuum.buildProject( project.getId(), false );
-            }
-            catch ( ContinuumException ex )
-            {
-                logger.error( "Could not enqueue project: " + project.getId() + " ('" + project.getName() + "').", ex );
+                ContinuumProject project = (ContinuumProject) j.next();
 
-                continue;
+                try
+                {
+                    continuum.buildProject( project.getId(), false );
+                }
+                catch ( ContinuumException ex )
+                {
+                    logger.error( "Could not enqueue project: " + project.getId() + " ('" + project.getName() + "').", ex );
+                }
             }
         }
     }

@@ -22,5 +22,14 @@
         <workflowDirectory>${basedir}/../continuum-plexus-application/src/conf/workflows</workflowDirectory>
       </configuration>
     </component>
+
+    <component>
+      <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+      <implementation>org.apache.maven.continuum.configuration.DefaultConfigurationService</implementation>
+      <configuration>
+        <inMemoryMode>true</inMemoryMode>
+      </configuration>
+    </component>
+
   </components>
 </plexus>
