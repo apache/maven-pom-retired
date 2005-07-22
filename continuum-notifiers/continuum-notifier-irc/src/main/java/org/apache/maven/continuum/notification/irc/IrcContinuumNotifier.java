@@ -17,14 +17,16 @@ package org.apache.maven.continuum.notification.irc;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+
 import org.codehaus.plexus.notification.NotificationException;
-import org.codehaus.plexus.notification.notifier.AbstractNotifier;
 import org.codehaus.plexus.ircbot.IrcBot;
 
 import java.util.Collection;
@@ -38,7 +40,7 @@ import java.util.Set;
  * @version $Id$
  */
 public class IrcContinuumNotifier
-    extends AbstractNotifier
+    extends AbstractContinuumNotifier
 {
     // ----------------------------------------------------------------------
     // Requirements
@@ -53,6 +55,11 @@ public class IrcContinuumNotifier
      * @plexus.configuration
      */
     private IrcBot ircClient;
+
+    /**
+     * @plexus.requirement
+     */
+    private ConfigurationService configurationService;
 
     // ----------------------------------------------------------------------
     // Notifier Implementation
@@ -136,27 +143,32 @@ public class IrcContinuumNotifier
     }
 
     private String generateMessage( ContinuumProject project, ContinuumBuild build )
+        throws ContinuumException
     {
         int state = build.getState();
 
+        String message;
+
         if ( state == ContinuumProjectState.OK )
         {
-            return "BUILD SUCCESSFUL: " + project.getName();
+            message = "BUILD SUCCESSFUL: " + project.getName();
         }
         else if ( state == ContinuumProjectState.FAILED )
         {
-            return "BUILD FAILURE: " + project.getName();
+            message = "BUILD FAILURE: " + project.getName();
         }
         else if ( state == ContinuumProjectState.ERROR )
         {
-            return "BUILD ERROR: " + project.getName();
+            message = "BUILD ERROR: " + project.getName();
         }
         else
         {
-            getLogger().warn( "Unknown build state " + build.getState() );
+            getLogger().warn( "Unknown build state " + build.getState() + " for project " + project.getId() );
 
-            return "ERROR: Unknown build state " + build.getState();
+            message = "ERROR: Unknown build state " + build.getState();
         }
+
+        return message + " " + getReportUrl( project, build, configurationService );
     }
 
     private boolean shouldNotify( ContinuumBuild build, ContinuumBuild previousBuild )

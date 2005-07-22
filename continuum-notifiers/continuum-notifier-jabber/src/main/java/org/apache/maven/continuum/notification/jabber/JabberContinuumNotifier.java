@@ -21,14 +21,17 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 
 import org.codehaus.plexus.jabber.JabberClient;
 import org.codehaus.plexus.jabber.JabberClientException;
 import org.codehaus.plexus.notification.NotificationException;
-import org.codehaus.plexus.notification.notifier.AbstractNotifier;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -36,7 +39,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @version $Id$
  */
 public class JabberContinuumNotifier
-    extends AbstractNotifier
+    extends AbstractContinuumNotifier
 {
     // ----------------------------------------------------------------------
     // Requirements
@@ -46,6 +49,11 @@ public class JabberContinuumNotifier
      * @plexus.requirement
      */
     private JabberClient jabberClient;
+
+    /**
+     * @plexus.requirement
+     */
+    private ConfigurationService configurationService;
 
     // ----------------------------------------------------------------------
     // Configuration
@@ -100,39 +108,9 @@ public class JabberContinuumNotifier
         //
         // ----------------------------------------------------------------------
 
-/*
-        if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_STARTED ) )
-        {
-            buildStarted( project, recipients, configuration );
-        }
-        else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_CHECKOUT_STARTED ) )
-        {
-            checkoutStarted( project, recipients, configuration );
-        }
-        else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_CHECKOUT_COMPLETE ) )
-        {
-            checkoutComplete( project, recipients, configuration );
-        }
-        else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_RUNNING_GOALS ) )
-        {
-            runningGoals( project, build, recipients, configuration );
-        }
-        else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_GOALS_COMPLETED ) )
-        {
-            goalsCompleted( project, build, recipients, configuration );
-        }
-        else if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
-        {
-            buildComplete( project, build, recipients, configuration );
-        }
-        else
-        {
-            getLogger().warn( "Unknown source: '" + source + "'." );
-        }
-*/
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
         {
-            buildComplete( project, build, recipients, configuration );
+            sendMessage( project, build, recipients, configuration );
         }
     }
 
@@ -140,64 +118,51 @@ public class JabberContinuumNotifier
     //
     // ----------------------------------------------------------------------
 
-    private void buildStarted( ContinuumProject project, Set recipients, Map configuration )
-        throws NotificationException
+    private String generateMessage( ContinuumProject project, ContinuumBuild build )
+        throws ContinuumException
     {
-        sendMessage( project, null, "Build started.", recipients, configuration );
-    }
+        int state = build.getState();
 
-    private void checkoutStarted( ContinuumProject project, Set recipients, Map configuration )
-        throws NotificationException
-    {
-        sendMessage( project, null, "Checkout started.", recipients, configuration );
-    }
+        String message;
 
-    private void checkoutComplete( ContinuumProject project, Set recipients, Map configuration )
-        throws NotificationException
-    {
-        sendMessage( project, null, "Checkout complete.", recipients, configuration );
-    }
-
-    private void runningGoals( ContinuumProject project, ContinuumBuild build, Set recipients, Map configuration )
-        throws NotificationException
-    {
-        sendMessage( project, build, "Running goals.", recipients, configuration );
-    }
-
-    private void goalsCompleted( ContinuumProject project, ContinuumBuild build, Set recipients, Map configuration )
-        throws NotificationException
-    {
-        if ( build.getError() == null )
+        if ( state == ContinuumProjectState.OK )
         {
-            sendMessage( project, build, "Goals completed. state: " + build.getState(), recipients, configuration );
+            message = "BUILD SUCCESSFUL: " + project.getName();
+        }
+        else if ( state == ContinuumProjectState.FAILED )
+        {
+            message = "BUILD FAILURE: " + project.getName();
+        }
+        else if ( state == ContinuumProjectState.ERROR )
+        {
+            message = "BUILD ERROR: " + project.getName();
         }
         else
         {
-            sendMessage( project, build, "Goals completed.", recipients, configuration );
-        }
-    }
+            getLogger().warn( "Unknown build state " + build.getState() + " for project " + project.getId() );
 
-    private void buildComplete( ContinuumProject project, ContinuumBuild build, Set recipients, Map configuration )
-        throws NotificationException
-    {
-        if ( build.getError() == null )
-        {
-            sendMessage( project, build, "Build complete. state: " + build.getState(), recipients, configuration );
+            message = "ERROR: Unknown build state " + build.getState();
         }
-        else
-        {
-            sendMessage( project, build, "Build complete.", recipients, configuration );
-        }
+
+        return message + " " + getReportUrl( project, build, configurationService );
     }
 
     private void sendMessage( ContinuumProject project,
                               ContinuumBuild build,
-                              String msg,
                               Set recipients,
                               Map configuration )
         throws NotificationException
     {
-        String message = "Build event for project '" + project.getName() + "':" + msg;
+        String message = "";
+
+        try
+        {
+            message = generateMessage( project, build );
+        }
+        catch ( ContinuumException e )
+        {
+            throw new NotificationException( "Can't generate the message.", e );
+        }
 
         jabberClient.setHost( getHost( configuration ) );
 

@@ -85,6 +85,9 @@
         <requirement>
           <role>org.codehaus.plexus.mailsender.MailSender</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
       </requirements>
       <configuration>
         <from-mailbox>@mail.override.from.mailbox@</from-mailbox>
@@ -134,6 +137,9 @@
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>        
         </requirement>        
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
       </requirements>
     </component>
 
@@ -152,6 +158,9 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.jabber.JabberClient</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
         </requirement>
         <!--
         <requirement>
@@ -182,6 +191,9 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.msn.MsnClient</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
         </requirement>
         <!--
         <requirement>

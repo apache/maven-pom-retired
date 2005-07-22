@@ -26,6 +26,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
 import org.apache.maven.continuum.project.ContinuumBuild;
@@ -61,6 +62,11 @@ public class MailContinuumNotifier
      * @plexus.requirement
      */
     private VelocityComponent velocity;
+
+    /**
+     * @plexus.requirement
+     */
+    private ConfigurationService configurationService;
 
     /**
      * @plexus.configuration
