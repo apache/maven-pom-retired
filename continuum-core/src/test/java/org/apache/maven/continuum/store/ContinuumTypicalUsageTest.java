@@ -17,15 +17,14 @@ package org.apache.maven.continuum.store;
  */
 
 import org.apache.maven.continuum.AbstractContinuumTest;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.initialization.ContinuumInitializer;
-import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class ContinuumTypicalUsageTest
     extends AbstractContinuumTest
@@ -56,16 +55,9 @@ public class ContinuumTypicalUsageTest
     public void testContinuumTypicalUsage()
         throws Exception
     {
-        // ----------------------------------------------------------------------
-        // Simulate the initial running of the system which will create the
-        // default project group and the default build settings.
-        // ----------------------------------------------------------------------
+        Continuum continuum = (Continuum) lookup( Continuum.ROLE );
 
-        ContinuumInitializer initializer = (ContinuumInitializer) lookup( ContinuumInitializer.ROLE );
-
-        initializer.initialize();
-
-        ContinuumProjectGroup defaultProjectGroup = initializer.getDefaultProjectGroup();
+        ContinuumProjectGroup defaultProjectGroup = continuum.getDefaultProjectGroup();
 
         // ----------------------------------------------------------------------
         // At this point we can now accept new projects into the system
