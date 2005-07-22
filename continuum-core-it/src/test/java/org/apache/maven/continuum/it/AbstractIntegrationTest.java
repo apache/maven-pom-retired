@@ -103,12 +103,22 @@ public abstract class AbstractIntegrationTest
     protected void customizeContext( Context context )
         throws Exception
     {
-        File plexusHome = getTestFile( "target/lets/do/some" );
+        File plexusHome = getTestFile( "target/leve1/level2/plexus-home" );
 
         if ( !plexusHome.isDirectory() )
         {
             assertTrue( plexusHome.mkdirs() );
         }
+
+        // ----------------------------------------------------------------------
+        // Use configuration file from the continuum-plexus-application
+        // ----------------------------------------------------------------------
+
+        File configurationSource = getTestFile( "../continuum-plexus-application/src/conf/configuration.xml" );
+
+        File configurationForIT = new File( plexusHome, "conf/configuration.xml" );
+
+        FileUtils.copyFile( configurationSource, configurationForIT );
 
         context.put( "plexus.home", plexusHome.getAbsolutePath() );
     }
