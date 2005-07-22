@@ -16,15 +16,13 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
-import java.util.List;
-
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.store.ContinuumStore;
-
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
+
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

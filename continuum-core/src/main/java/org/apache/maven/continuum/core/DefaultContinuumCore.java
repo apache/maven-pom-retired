@@ -469,7 +469,7 @@ public class DefaultContinuumCore
 
             String name = "META-INF/maven/org.apache.maven.continuum/continuum-core/pom.properties";
 
-            InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream( name );
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream( name );
 
             if ( resourceAsStream == null )
             {
@@ -486,4 +486,3 @@ public class DefaultContinuumCore
         }
     }
 }
-
