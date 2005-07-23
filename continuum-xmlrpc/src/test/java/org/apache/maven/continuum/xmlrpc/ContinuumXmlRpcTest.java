@@ -16,28 +16,22 @@ package org.apache.maven.continuum.xmlrpc;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
-import java.util.Vector;
-
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
-import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.store.ContinuumStore;
 
-import org.codehaus.plexus.PlexusTestCase;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class ContinuumXmlRpcTest
-    extends PlexusTestCase
+    extends AbstractContinuumTest
 {
     public void testBasic()
         throws Exception
@@ -60,61 +54,7 @@ public class ContinuumXmlRpcTest
 
         Hashtable hashtable = xmlRpc.getProject( project.getId() );
 
-//        dumpValue( 0, "result", hashtable );
-    }
-
-    public static MavenTwoProject makeStubMavenTwoProject( String name, String scmUrl )
-    {
-        return makeMavenTwoProject( name,
-                                    scmUrl,
-                                    "foo@bar.com",
-                                    "1.0",
-                                    "",
-                                    ContinuumBuildExecutor.MAVEN_TWO_EXECUTOR_ID,
-                                    "/tmp" );
-    }
-
-    public static MavenTwoProject makeMavenTwoProject( String name,
-                                                       String scmUrl,
-                                                       String emailAddress,
-                                                       String version,
-                                                       String commandLineArguments,
-                                                       String executorId,
-                                                       String workingDirectory )
-    {
-        MavenTwoProject project = new MavenTwoProject();
-
-        project.setName( name );
-        project.setScmUrl( scmUrl );
-
-        List notifiers = createNotifiers( emailAddress );
-        project.setNotifiers( notifiers );
-
-        project.setVersion( version );
-        project.setCommandLineArguments( commandLineArguments );
-        project.setExecutorId( executorId );
-        project.setWorkingDirectory( workingDirectory );
-
-        return project;
-    }
-
-    private static List createNotifiers( String emailAddress )
-    {
-        ContinuumNotifier notifier = new ContinuumNotifier();
-
-        notifier.setType( "mail" );
-
-        Properties props = new Properties();
-
-        props.put( "address", emailAddress );
-
-        notifier.setConfiguration( props );
-
-        List notifiers = new ArrayList();
-
-        notifiers.add( notifier );
-
-        return notifiers;
+        dumpValue( 0, "result", hashtable );
     }
 
     // ----------------------------------------------------------------------
@@ -133,7 +73,7 @@ public class ContinuumXmlRpcTest
         }
         else
         {
-            System.err.println( makeIndent( indent ) + key + "=" + value );
+            out( makeIndent( indent ) + key + "=" + value );
         }
     }
 
@@ -141,7 +81,7 @@ public class ContinuumXmlRpcTest
     {
         Map map = new TreeMap( hashtable );
 
-        System.err.println( makeIndent( indent ) + key + " = {" );
+        out( makeIndent( indent ) + key + " = {" );
 
         for ( Iterator it = map.entrySet().iterator(); it.hasNext(); )
         {
@@ -152,12 +92,12 @@ public class ContinuumXmlRpcTest
             dumpValue( indent + 1, (String) entry.getKey(), value );
         }
 
-        System.err.println( makeIndent( indent ) + "}" );
+        out( makeIndent( indent ) + "}" );
     }
 
     private void dumpVector( int indent, String key, Vector vector )
     {
-        System.err.println( makeIndent( indent ) + key + " = [" );
+        out( makeIndent( indent ) + key + " = [" );
 
         Iterator it;
 
@@ -170,7 +110,7 @@ public class ContinuumXmlRpcTest
             dumpValue( indent + 1, "#" + i, value );
         }
 
-        System.err.println( makeIndent( indent ) + "]" );
+        out( makeIndent( indent ) + "]" );
     }
 
     private String makeIndent( int size )
@@ -183,5 +123,10 @@ public class ContinuumXmlRpcTest
         }
 
         return s;
+    }
+
+    private void out( String message )
+    {
+//        System.out.println( message );
     }
 }
