@@ -16,16 +16,15 @@ package org.apache.maven.continuum.execution.ant;
  * limitations under the License.
  */
 
-import java.io.File;
-
 import org.apache.maven.continuum.execution.AbstractBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumProject;
-
 import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

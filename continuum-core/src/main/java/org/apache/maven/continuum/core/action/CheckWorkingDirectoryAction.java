@@ -16,10 +16,10 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.project.ContinuumProject;
+
 import java.io.File;
 import java.util.Map;
-
-import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

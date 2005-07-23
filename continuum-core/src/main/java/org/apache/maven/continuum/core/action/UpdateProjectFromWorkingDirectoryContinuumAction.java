@@ -16,14 +16,14 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import java.util.Map;
-import java.io.File;
-
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.ContinuumException;
+
+import java.io.File;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

@@ -53,6 +53,19 @@
     </component>
 
     <component>
+      <role>org.apache.maven.continuum.build.settings.BuildSettingsActivator</role>
+      <implementation>org.apache.maven.continuum.build.settings.DefaultBuildSettingsActivator</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.scheduler.ContinuumScheduler</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
       <role>org.apache.maven.continuum.Continuum</role>
       <implementation>org.apache.maven.continuum.DefaultContinuum</implementation>
       <requirements>
@@ -73,6 +86,9 @@
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.initialization.ContinuumInitializer</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.build.settings.BuildSettingsActivator</role>
         </requirement>
       </requirements>
     </component>

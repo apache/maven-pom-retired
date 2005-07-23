@@ -16,21 +16,20 @@ package org.apache.maven.continuum.execution.maven.m1;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.notification.ContinuumRecipientSource;
+import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.MavenOneProject;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
+
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-
-import org.apache.maven.continuum.notification.ContinuumRecipientSource;
-import org.apache.maven.continuum.project.ContinuumNotifier;
-import org.apache.maven.continuum.project.MavenOneProject;
-
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

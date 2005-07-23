@@ -16,11 +16,10 @@ package org.apache.maven.continuum.project.builder.manager;
  * limitations under the License.
  */
 
-import java.util.Map;
-
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

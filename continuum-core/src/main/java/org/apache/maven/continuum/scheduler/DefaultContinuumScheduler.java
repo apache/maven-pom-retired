@@ -1,34 +1,35 @@
 package org.apache.maven.continuum.scheduler;
 
+import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.project.ContinuumSchedule;
+import org.codehaus.plexus.PlexusConstants;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.context.Context;
+import org.codehaus.plexus.context.ContextException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StoppingException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
-import org.codehaus.plexus.context.ContextException;
-import org.codehaus.plexus.context.Context;
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.PlexusConstants;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.quartz.CronTrigger;
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.quartz.JobListener;
+import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.Trigger;
-import org.quartz.JobListener;
 import org.quartz.TriggerListener;
-import org.quartz.JobDataMap;
-import org.quartz.CronTrigger;
-import org.quartz.Scheduler;
+import org.quartz.Job;
 import org.quartz.impl.StdScheduler;
 import org.quartz.impl.StdSchedulerFactory;
-import org.apache.maven.continuum.project.ContinuumSchedule;
-import org.apache.maven.continuum.Continuum;
 
-import java.util.Properties;
-import java.util.Date;
 import java.text.ParseException;
+import java.util.Date;
+import java.util.Properties;
 
 public class DefaultContinuumScheduler
     extends AbstractLogEnabled
@@ -44,10 +45,30 @@ public class DefaultContinuumScheduler
     //
     // ----------------------------------------------------------------------
 
-    public void scheduleJob( ContinuumSchedule schedule )
+    public boolean jobExists( String jobName, String jobGroup )
         throws ContinuumSchedulerException
     {
-        scheduleJob( createJobDetail( schedule ), createTrigger( schedule ) );
+        String[] jobNames = null;
+
+        try
+        {
+             jobNames = scheduler.getJobNames( jobGroup );
+        }
+        catch ( SchedulerException e )
+        {
+            throw new ContinuumSchedulerException( "Error getting job.", e );
+        }
+
+        for ( int i = 0; i < jobNames.length; i++ )
+        {
+            String name = jobNames[i];
+
+            if ( jobName.equals( name ) );
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -123,6 +144,13 @@ public class DefaultContinuumScheduler
     public void scheduleJob( JobDetail jobDetail, Trigger trigger )
         throws ContinuumSchedulerException
     {
+        if ( jobExists( jobDetail.getName(), jobDetail.getGroup()) )
+        {
+            getLogger().warn( "Will not schedule this job as a job {" + jobDetail.getName() + ":" + jobDetail.getGroup() + "} already exists." );
+
+            return;
+        }
+
         try
         {
             scheduler.scheduleJob( jobDetail, trigger );

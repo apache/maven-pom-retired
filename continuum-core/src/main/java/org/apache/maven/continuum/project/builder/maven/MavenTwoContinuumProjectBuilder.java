@@ -28,7 +28,6 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult
 import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.model.IssueManagement;
 import org.apache.maven.project.MavenProject;
-
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;

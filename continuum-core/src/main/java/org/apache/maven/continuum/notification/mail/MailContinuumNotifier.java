@@ -16,15 +16,6 @@ package org.apache.maven.continuum.notification.mail;
  * limitations under the License.
  */
 
-import java.io.StringWriter;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
@@ -36,7 +27,6 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.exception.ResourceNotFoundException;
-
 import org.codehaus.plexus.mailsender.MailMessage;
 import org.codehaus.plexus.mailsender.MailSender;
 import org.codehaus.plexus.mailsender.MailSenderException;
@@ -45,6 +35,15 @@ import org.codehaus.plexus.notification.notifier.AbstractNotifier;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.velocity.VelocityComponent;
+
+import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>

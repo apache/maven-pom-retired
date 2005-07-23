@@ -1,10 +1,10 @@
 package org.apache.maven.continuum.initialization;
 
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.build.settings.BuildSettingsConstants;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.build.settings.BuildSettingsConstants;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /*
@@ -48,7 +48,8 @@ public class DefaultContinuumInitializer
     public static final String DEFAULT_BUILD_SETTINGS_NAME = "DEFAULT_BUILD_SETTINGS";
 
     // Cron expression for execution every hour.
-    public static final String DEFAULT_BUILD_SETTINGS_CRON_EXPRESSION = "0 0 * * * ?";
+    //public static final String DEFAULT_BUILD_SETTINGS_CRON_EXPRESSION = "0 0 * * * ?";
+    public static final String DEFAULT_BUILD_SETTINGS_CRON_EXPRESSION = "0 * * * * ?";
 
     // ----------------------------------------------------------------------
     // Default project group and build settings

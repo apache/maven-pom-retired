@@ -16,10 +16,6 @@ package org.apache.maven.continuum.scm;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
-
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.ScmFileSet;
@@ -30,6 +26,10 @@ import org.apache.maven.scm.repository.ScmRepositoryException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.scm.ScmManager;
 import org.codehaus.plexus.util.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

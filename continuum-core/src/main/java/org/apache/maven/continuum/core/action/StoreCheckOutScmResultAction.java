@@ -16,13 +16,12 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import java.util.Map;
-
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
+
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

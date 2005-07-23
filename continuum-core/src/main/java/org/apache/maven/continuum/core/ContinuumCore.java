@@ -16,20 +16,19 @@ package org.apache.maven.continuum.core;
  * limitations under the License.
  */
 
-import java.util.Collection;
-
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
-import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
-
 import org.codehaus.plexus.taskqueue.TaskQueue;
+
+import java.util.Collection;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>

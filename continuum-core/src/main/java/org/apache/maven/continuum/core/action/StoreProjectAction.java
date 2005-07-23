@@ -4,13 +4,12 @@
 package org.apache.maven.continuum.core.action;
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.Map;
-
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

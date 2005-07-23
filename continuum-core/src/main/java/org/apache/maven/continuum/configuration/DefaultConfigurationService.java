@@ -1,12 +1,13 @@
 package org.apache.maven.continuum.configuration;
 
+import org.apache.maven.continuum.profile.ContinuumJdk;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.codehaus.plexus.util.xml.Xpp3DomWriter;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.apache.maven.continuum.profile.ContinuumJdk;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,16 +15,17 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Date;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
 public class DefaultConfigurationService
+    extends AbstractLogEnabled
     implements ConfigurationService
 {
     /**
@@ -64,6 +66,8 @@ public class DefaultConfigurationService
 
     public void setInitialized( boolean initialized )
     {
+        getLogger().info( "Setting the initialization state to " + initialized );
+
         this.initialized = initialized;
     }
 
@@ -212,6 +216,10 @@ public class DefaultConfigurationService
     protected void processOutboundConfiguration()
     {
         configuration = new Xpp3Dom( CONFIGURATION );
+
+        System.out.println( "initialized = " + initialized );
+
+        System.out.println( ">>>>>>>>>>>>>>>>>>> Boolean.toString( initialized ) = " + Boolean.toString( initialized ) );
 
         configuration.addChild( createDom( CONFIGURATION_INITIALIZED, Boolean.toString( initialized ) ) );
 

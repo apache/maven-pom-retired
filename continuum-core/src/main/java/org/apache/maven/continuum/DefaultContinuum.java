@@ -16,8 +16,10 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.build.settings.BuildSettingsActivationException;
+import org.apache.maven.continuum.build.settings.BuildSettingsActivator;
 import org.apache.maven.continuum.configuration.ConfigurationLoadingException;
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
@@ -28,16 +30,18 @@ import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
+import org.apache.maven.continuum.initialization.ContinuumInitializationException;
+import org.apache.maven.continuum.initialization.ContinuumInitializer;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
@@ -47,15 +51,10 @@ import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ProjectSorter;
-import org.apache.maven.continuum.initialization.ContinuumInitializer;
-import org.apache.maven.continuum.initialization.ContinuumInitializationException;
-
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.action.Action;
 import org.codehaus.plexus.action.ActionNotFoundException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StoppingException;
@@ -67,6 +66,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -106,6 +106,11 @@ public class DefaultContinuum
      * @plexus.requirement
      */
     private ContinuumInitializer initializer;
+
+    /**
+     * @plexus.requirement
+     */
+    private BuildSettingsActivator buildSettingsActivator;
 
     // ----------------------------------------------------------------------
     //
@@ -187,8 +192,6 @@ public class DefaultContinuum
         buildProjects( true );
     }
 
-    // TODO: take a Properties here so that we can be extensible. For example we would like to be able
-    // to specify an update or clean checkout as well.
     public void buildProjects( boolean force )
         throws ContinuumException
     {
@@ -223,12 +226,6 @@ public class DefaultContinuum
         */
     }
 
-    public List getProjectsInBuildOrder()
-        throws CycleDetectedException, ContinuumException
-    {
-        return ProjectSorter.getSortedProjects( getProjects() );
-    }
-
     public void buildProject( String projectId )
         throws ContinuumException
     {
@@ -239,6 +236,36 @@ public class DefaultContinuum
         throws ContinuumException
     {
         core.buildProject( projectId, force );
+    }
+
+    public void buildProjectGroup( ContinuumProjectGroup projectGroup, ContinuumBuildSettings buildSettings )
+        throws ContinuumException
+    {
+        Set projects = projectGroup.getProjects();
+
+        for ( Iterator j = projects.iterator(); j.hasNext(); )
+        {
+            ContinuumProject project = (ContinuumProject) j.next();
+
+            try
+            {
+                buildProject( project.getId(), false );
+            }
+            catch ( ContinuumException ex )
+            {
+                getLogger().error( "Could not enqueue project: " + project.getId() + " ('" + project.getName() + "').", ex );
+            }
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    public List getProjectsInBuildOrder()
+        throws CycleDetectedException, ContinuumException
+    {
+        return ProjectSorter.getSortedProjects( getProjects() );
     }
 
     // ----------------------------------------------------------------------
@@ -570,6 +597,20 @@ public class DefaultContinuum
 
                 configurationService.setInitialized( true );
             }
+
+            // ----------------------------------------------------------------------
+            // Activate all the Build settings in the system
+            // ----------------------------------------------------------------------
+
+            try
+            {
+                buildSettingsActivator.activateBuildSettings( this );
+            }
+            catch ( BuildSettingsActivationException e )
+            {
+                throw new StartingException( "Error activating build settings.", e );
+            }
+
         }
         catch ( ConfigurationLoadingException e )
         {
@@ -768,4 +809,8 @@ public class DefaultContinuum
 
         return new ContinuumException( message, cause );
     }
+
+    // ----------------------------------------------------------------------
+    // Build settings
+    // ----------------------------------------------------------------------
 }

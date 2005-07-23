@@ -16,9 +16,9 @@ package org.apache.maven.continuum.execution.maven.m1;
  * limitations under the License.
  */
 
-import java.io.File;
-
 import org.apache.maven.continuum.project.MavenOneProject;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

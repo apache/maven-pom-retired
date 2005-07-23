@@ -16,15 +16,14 @@ package org.apache.maven.continuum.execution.manager;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
-
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

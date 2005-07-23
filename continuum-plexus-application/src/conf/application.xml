@@ -4,10 +4,12 @@
     <component>
       <role>org.apache.maven.continuum.Continuum</role>
     </component>
+    <!--
     <component>
       <role>org.apache.maven.continuum.trigger.ContinuumTrigger</role>
       <role-hint>quartz-alarm-clock</role-hint>
     </component>
+    -->
     <component>
       <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
       <role-hint>build-project</role-hint>

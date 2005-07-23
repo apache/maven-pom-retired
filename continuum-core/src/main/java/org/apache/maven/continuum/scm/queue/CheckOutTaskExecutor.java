@@ -16,16 +16,15 @@ package org.apache.maven.continuum.scm.queue;
  * limitations under the License.
  */
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.maven.continuum.core.action.CheckoutProjectContinuumAction;
-
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

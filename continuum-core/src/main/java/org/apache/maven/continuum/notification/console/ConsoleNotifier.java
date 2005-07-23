@@ -16,17 +16,16 @@ package org.apache.maven.continuum.notification.console;
  * limitations under the License.
  */
 
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
-
 import org.codehaus.plexus.notification.NotificationException;
 import org.codehaus.plexus.notification.notifier.AbstractNotifier;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

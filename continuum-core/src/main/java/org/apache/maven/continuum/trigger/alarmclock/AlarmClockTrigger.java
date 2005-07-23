@@ -16,17 +16,16 @@ package org.apache.maven.continuum.trigger.alarmclock;
  * limitations under the License.
  */
 
-import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.trigger.AbstractContinuumTrigger;
-
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
+
+import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>

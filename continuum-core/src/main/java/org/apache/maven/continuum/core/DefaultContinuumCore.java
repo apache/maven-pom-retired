@@ -16,27 +16,18 @@ package org.apache.maven.continuum.core;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
-import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
@@ -45,6 +36,14 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.TaskQueueException;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>

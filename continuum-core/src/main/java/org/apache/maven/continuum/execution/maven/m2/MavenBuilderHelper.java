@@ -16,10 +16,10 @@ package org.apache.maven.continuum.execution.maven.m2;
  * limitations under the License.
  */
 
-import java.io.File;
-
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.project.MavenProject;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>

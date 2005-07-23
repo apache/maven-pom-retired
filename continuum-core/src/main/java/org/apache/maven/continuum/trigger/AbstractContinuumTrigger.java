@@ -17,7 +17,6 @@ package org.apache.maven.continuum.trigger;
  */
 
 import org.apache.maven.continuum.Continuum;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**

@@ -16,9 +16,9 @@ package org.apache.maven.continuum.scm.queue;
  * limitations under the License.
  */
 
-import java.io.File;
-
 import org.codehaus.plexus.taskqueue.Task;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

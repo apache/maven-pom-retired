@@ -16,11 +16,11 @@ package org.apache.maven.continuum.utils.shell;
  * limitations under the License.
  */
 
-import java.io.File;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

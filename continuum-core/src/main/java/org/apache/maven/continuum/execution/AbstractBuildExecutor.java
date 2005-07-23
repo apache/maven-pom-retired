@@ -16,18 +16,17 @@ package org.apache.maven.continuum.execution;
  * limitations under the License.
  */
 
-import java.util.List;
-import java.util.Iterator;
-import java.io.File;
-
-import org.apache.maven.continuum.utils.shell.ShellCommandHelper;
 import org.apache.maven.continuum.utils.shell.ExecutionResult;
-
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.apache.maven.continuum.utils.shell.ShellCommandHelper;
 import org.codehaus.plexus.commandline.ExecutableResolver;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

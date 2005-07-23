@@ -16,11 +16,10 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
+import junit.framework.Assert;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
-
-import junit.framework.Assert;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

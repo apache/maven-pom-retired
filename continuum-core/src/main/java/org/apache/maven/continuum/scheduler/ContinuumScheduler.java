@@ -1,9 +1,8 @@
 package org.apache.maven.continuum.scheduler;
 
 import org.quartz.JobDetail;
-import org.quartz.Trigger;
-import org.quartz.SchedulerException;
 import org.quartz.JobListener;
+import org.quartz.Trigger;
 import org.quartz.TriggerListener;
 
 public interface ContinuumScheduler
@@ -15,5 +14,8 @@ public interface ContinuumScheduler
 
     void addGlobalJobListener( JobListener listener );
 
-    void addGlobalTriggerListener( TriggerListener listener );  
+    void addGlobalTriggerListener( TriggerListener listener );
+
+    boolean jobExists( String jobGroup, String jobName )
+        throws ContinuumSchedulerException;
 }

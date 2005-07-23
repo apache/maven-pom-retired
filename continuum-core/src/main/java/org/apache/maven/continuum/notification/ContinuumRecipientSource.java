@@ -16,19 +16,18 @@ package org.apache.maven.continuum.notification;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.codehaus.plexus.notification.AbstractRecipientSource;
+import org.codehaus.plexus.notification.NotificationException;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.util.StringUtils;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.maven.continuum.project.ContinuumNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
-
-import org.codehaus.plexus.notification.AbstractRecipientSource;
-import org.codehaus.plexus.notification.NotificationException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

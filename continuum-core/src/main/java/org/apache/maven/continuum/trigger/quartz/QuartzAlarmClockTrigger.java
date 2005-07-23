@@ -1,19 +1,18 @@
 package org.apache.maven.continuum.trigger.quartz;
 
-import org.apache.maven.continuum.scheduler.ContinuumScheduler;
 import org.apache.maven.continuum.scheduler.ContinuumBuildJob;
+import org.apache.maven.continuum.scheduler.ContinuumScheduler;
 import org.apache.maven.continuum.trigger.AbstractContinuumTrigger;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
+import org.quartz.CronTrigger;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
-import org.quartz.SchedulerException;
-import org.quartz.CronTrigger;
 
-import java.util.Date;
 import java.text.ParseException;
+import java.util.Date;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>

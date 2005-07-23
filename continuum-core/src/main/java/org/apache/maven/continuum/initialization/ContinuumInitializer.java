@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.initialization;
 
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.

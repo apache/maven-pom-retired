@@ -16,23 +16,22 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.util.Map;
-
 import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
-import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
+import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-
 import org.codehaus.plexus.action.AbstractAction;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

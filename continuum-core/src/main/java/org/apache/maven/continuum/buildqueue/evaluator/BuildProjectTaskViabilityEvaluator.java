@@ -16,17 +16,16 @@ package org.apache.maven.continuum.buildqueue.evaluator;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.buildqueue.BuildProjectTask;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.taskqueue.TaskQueueException;
+import org.codehaus.plexus.taskqueue.TaskViabilityEvaluator;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.maven.continuum.buildqueue.BuildProjectTask;
-
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.taskqueue.TaskQueueException;
-import org.codehaus.plexus.taskqueue.TaskViabilityEvaluator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

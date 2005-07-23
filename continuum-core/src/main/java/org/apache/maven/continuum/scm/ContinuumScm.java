@@ -16,9 +16,9 @@ package org.apache.maven.continuum.scm;
  * limitations under the License.
  */
 
-import java.io.File;
-
 import org.apache.maven.continuum.project.ContinuumProject;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

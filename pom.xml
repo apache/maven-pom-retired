@@ -201,7 +201,9 @@
     <module>continuum-plexus-application</module>
     <module>continuum-test</module>
     <module>continuum-web</module>
+    <!--
     <module>continuum-xfire</module>
+    -->
     <module>continuum-xmlrpc</module>
   </modules>
 </project>

@@ -94,6 +94,9 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
     void buildProject( String projectId, boolean force )
         throws ContinuumException;
 
+    void buildProjectGroup( ContinuumProjectGroup projectGroup, ContinuumBuildSettings buildSettings )
+        throws ContinuumException;
+
     // ----------------------------------------------------------------------
     // Build information
     // ----------------------------------------------------------------------

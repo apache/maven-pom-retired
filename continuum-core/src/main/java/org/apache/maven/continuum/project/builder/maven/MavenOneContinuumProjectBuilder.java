@@ -16,10 +16,6 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelperException;
@@ -27,7 +23,10 @@ import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.utils.ContinuumUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
