@@ -313,7 +313,7 @@ public class DefaultConfigurationService
 
         try
         {
-            File backup = new File( source.getName() + ".backup" );
+            File backup = new File( source.getAbsolutePath() + ".backup" );
 
             FileUtils.rename( source, backup );
 
