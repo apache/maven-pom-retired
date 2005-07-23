@@ -147,6 +147,9 @@ public interface ContinuumStore
     ContinuumProjectGroup getProjectGroupByName( String name )
         throws ContinuumStoreException;
 
+    ContinuumProjectGroup getProjectGroupByGroupId( String groupId )
+        throws ContinuumStoreException;
+
     Collection getProjectGroups()
         throws ContinuumStoreException;
 

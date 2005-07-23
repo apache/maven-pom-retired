@@ -186,7 +186,7 @@ public class MavenTwoContinuumProjectBuilder
             return null;
         }
 
-        projectGroup.setGroupId( projectGroup.getGroupId() );
+        projectGroup.setGroupId( mavenProject.getGroupId() );
 
         // ----------------------------------------------------------------------
         // Name

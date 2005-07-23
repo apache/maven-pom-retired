@@ -806,41 +806,18 @@ public class JdoContinuumStore
     public ContinuumProjectGroup getProjectGroupByName( String name )
         throws ContinuumStoreException
     {
-        PersistenceManager pm = pmf.getPersistenceManager();
+        return (ContinuumProjectGroup) getObjectFromQuery( ContinuumProjectGroup.class,
+                                                           "name",
+                                                           name );
+    }
 
-        Transaction tx = pm.currentTransaction();
+    public ContinuumProjectGroup getProjectGroupByGroupId( String groupId )
+        throws ContinuumStoreException
+    {
+        return (ContinuumProjectGroup) getObjectFromQuery( ContinuumProjectGroup.class,
+                                                           "groupId",
+                                                           groupId );
 
-        try
-        {
-            tx.begin();
-
-            Extent extent = pm.getExtent( ContinuumProjectGroup.class, true );
-
-            Query query = pm.newQuery( extent );
-
-            query.setOrdering( "name ascending" );
-
-            query.declareParameters( "String filter" );
-
-            query.setFilter( "this.name == name" );
-
-            Collection result = (Collection) query.execute( name );
-
-            if ( result.size() == 0 )
-            {
-                throw new ContinuumObjectNotFoundException( ContinuumProjectGroup.class.getName(), name );
-            }
-
-            Object object = pm.detachCopy( result.iterator().next() );
-
-            commit( tx );
-
-            return (ContinuumProjectGroup) object;
-        }
-        finally
-        {
-            rollback( tx );
-        }
     }
 
     // ----------------------------------------------------------------------
@@ -1201,6 +1178,51 @@ public class JdoContinuumStore
         catch ( JDOObjectNotFoundException e )
         {
             throw new ContinuumObjectNotFoundException( clazz.getName(), id );
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    private Object getObjectFromQuery( Class clazz, String idField, String id )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( clazz, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.declareParameters( "String " + idField );
+
+            query.setFilter( "this." + idField + " == " + idField );
+
+            Collection result = (Collection) query.execute( id );
+
+            if ( result.size() == 0 )
+            {
+                throw new ContinuumObjectNotFoundException( clazz.getName(), id );
+            }
+
+            if ( result.size() > 1 )
+            {
+                throw new ContinuumStoreException( "A query for object of " +
+                                                   "type " + clazz.getName() + " on the " +
+                                                   "field '" + idField + "' returned more than one object." );
+            }
+
+            Object object = pm.detachCopy( result.iterator().next() );
+
+            commit( tx );
+
+            return object;
         }
         finally
         {

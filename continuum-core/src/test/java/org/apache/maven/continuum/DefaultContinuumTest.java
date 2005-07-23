@@ -18,7 +18,6 @@ package org.apache.maven.continuum;
 
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
 

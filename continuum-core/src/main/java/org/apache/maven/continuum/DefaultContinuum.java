@@ -46,14 +46,14 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.scheduler.ContinuumScheduler;
-import org.apache.maven.continuum.scheduler.ContinuumSchedulerConstants;
 import org.apache.maven.continuum.scm.ScmResult;
+import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ProjectSorter;
 import org.codehaus.plexus.action.ActionManager;
-import org.codehaus.plexus.action.Action;
 import org.codehaus.plexus.action.ActionNotFoundException;
+import org.codehaus.plexus.action.Action;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
@@ -460,10 +460,59 @@ public class DefaultContinuum
         ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult)
             context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
 
+        // ----------------------------------------------------------------------
+        // Look for any warnings.
+        // ----------------------------------------------------------------------
+
         if ( result.getWarnings().size() > 0 )
         {
             return result;
         }
+
+        // ----------------------------------------------------------------------
+        // Save any new project groups that we've found
+        // ----------------------------------------------------------------------
+
+        ContinuumProjectGroup projectGroup = null;
+
+        for ( Iterator it = result.getProjectGroups().iterator(); it.hasNext(); )
+        {
+            projectGroup = (ContinuumProjectGroup) it.next();
+
+            getLogger().info( "Looking for project group '" + projectGroup.getGroupId() + "'." );
+
+            try
+            {
+                try
+                {
+                    projectGroup = store.getProjectGroupByGroupId( projectGroup.getGroupId() );
+
+                    getLogger().info( "Existed." );
+                }
+                catch ( ContinuumObjectNotFoundException e )
+                {
+                    projectGroup = store.addProjectGroup( projectGroup );
+
+                    getLogger().info( "Added." );
+                }
+            }
+            catch ( ContinuumStoreException e )
+            {
+                throw new ContinuumException( "Error while querying for project group.", e );
+            }
+        }
+
+        if ( projectGroup == null )
+        {
+            getLogger().info( "Using default project group." );
+
+            projectGroup = getDefaultProjectGroup();
+        }
+
+        // ----------------------------------------------------------------------
+        // Save all the projects
+        // TODO: Validate all the projects before saving them
+        // ----------------------------------------------------------------------
 
         List projects = result.getProjects();
 
@@ -472,6 +521,8 @@ public class DefaultContinuum
             ContinuumProject project = (ContinuumProject) i.next();
 
             project.setExecutorId( buildExecutorId );
+
+            project.setProjectGroup( projectGroup );
 
             context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
 
@@ -746,34 +797,6 @@ public class DefaultContinuum
     public ContinuumBuildSettings getDefaultBuildSettings()
     {
         return initializer.getDefaultBuildSettings();
-    }
-
-    // ----------------------------------------------------------------------
-    // Default Object Management
-    // ----------------------------------------------------------------------
-
-    private boolean defaultScheduleExists()
-    {
-        // ----------------------------------------------------------------------
-        // Perform a lookup for the default schedule to see if it exists.
-        // ----------------------------------------------------------------------
-
-        return true;
-    }
-
-    private void createDefaultSchedule()
-    {
-        ContinuumSchedule schedule = new ContinuumSchedule();
-
-        schedule.setName( ContinuumSchedulerConstants.DEFAULT_SCHEDULE_NAME );
-
-        schedule.setDescription( ContinuumSchedulerConstants.DEFAULT_SCHEDULE_NAME );
-
-        schedule.setScmMode( ContinuumSchedulerConstants.DEFAULT_SCHEDULE_SCM_MODE );
-
-        schedule.setActive( true );
-
-        schedule.setCronExpression( ContinuumSchedulerConstants.DEFAULT_CRON_EXPRESSION );
     }
 
     // ----------------------------------------------------------------------

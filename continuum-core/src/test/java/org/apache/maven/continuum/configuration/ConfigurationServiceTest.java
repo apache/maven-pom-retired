@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class ConfigurationServiceTest
     extends PlexusTestCase

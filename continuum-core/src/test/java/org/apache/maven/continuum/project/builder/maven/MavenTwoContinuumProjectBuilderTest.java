@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 
@@ -120,18 +121,42 @@ public class MavenTwoContinuumProjectBuilderTest
         assertNotNull( result );
 
         // ----------------------------------------------------------------------
-        //
+        // Assert the warnings
         // ----------------------------------------------------------------------
 
         assertNotNull( result.getWarnings() );
 
         assertEquals( 1, result.getWarnings().size() );
 
-        assertTrue( result.getWarnings().get( 0 ).toString().indexOf( "I'm-not-here-project/pom.xml" ) != -1 );
+        assertTrue( "Does not end with I'm-not-here-project/pom.xml",
+                    result.getWarnings().get( 0 ).toString().endsWith( "I'm-not-here-project/pom.xml" ) );
 
         // ----------------------------------------------------------------------
-        //
+        // Assert the project group built
         // ----------------------------------------------------------------------
+
+        assertNotNull( result.getProjectGroups() );
+
+        assertEquals( 1, result.getProjectGroups().size() );
+
+        ContinuumProjectGroup projectGroup = (ContinuumProjectGroup) result.getProjectGroups().iterator().next();
+
+        assertEquals( "projectGroup.groupId", "org.apache.maven.continuum", projectGroup.getGroupId() );
+
+        assertEquals( "projectGroup.name", "Continuum Parent Project", projectGroup.getName() );
+
+        assertEquals( "projectGroup.description", "Continuum Project Description", projectGroup.getDescription() );
+
+        assertEquals( "projectGroup.url", "http://cvs.continuum.codehaus.org/", projectGroup.getUrl() );
+
+        assertEquals( "projectGroup.issueManagementUrl", "http://jira.codehaus.org/browse/CONTINUUM",
+                      projectGroup.getIssueManagementUrl() );
+
+        // ----------------------------------------------------------------------
+        // Assert the projects built
+        // ----------------------------------------------------------------------
+
+        assertNotNull( result.getProjects() );
 
         assertEquals( 5, result.getProjects().size() );
 

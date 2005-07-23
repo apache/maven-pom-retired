@@ -5,6 +5,7 @@
   <version>1.0-alpha-2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
+  <description>Continuum Project Description</description>
   <url>http://cvs.continuum.codehaus.org/</url>
   <ciManagement>
     <system>continuum</system>
@@ -16,6 +17,10 @@
       </notifier>
     </notifiers>
   </ciManagement>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/CONTINUUM</url>
+  </issueManagement>
   <inceptionYear>2003</inceptionYear>
   <mailingLists>
     <mailingList>
