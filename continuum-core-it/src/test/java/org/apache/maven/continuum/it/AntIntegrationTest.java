@@ -141,7 +141,7 @@ public class AntIntegrationTest
         File buildXml = new File( root, "build.xml" );
 
         FileUtils.fileWrite( buildXml.getAbsolutePath(),
-            "<project>\n" +
+            "<project default=\"foo\">\n" +
             "  <target name=\"build\">\n" +
             "    <property name=\"classes\" value=\"target/classes\"/>\n" +
             "    <mkdir dir=\"${classes}\"/>\n" +
