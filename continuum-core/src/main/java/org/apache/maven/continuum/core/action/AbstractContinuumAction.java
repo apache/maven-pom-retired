@@ -21,6 +21,7 @@ import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.ScmResult;
@@ -44,11 +45,15 @@ public abstract class AbstractContinuumAction
     // Keys for the values that can be in the context
     // ----------------------------------------------------------------------
 
-    public final static String KEY_PROJECT_ID = "project-id";
+    public static final String KEY_PROJECT_ID = "project-id";
 
-    public final static String KEY_UNVALIDATED_PROJECT = "unvalidated-project";
+    public static final String KEY_UNVALIDATED_PROJECT = "unvalidated-project";
 
-    public final static String KEY_BUILD_ID = "build-id";
+    public static final String KEY_PROJECT_GROUP_ID = "project-group-id";
+
+    public static final String KEY_UNVALIDATED_PROJECT_GROUP = "unvalidated-project-group";
+
+    public static final String KEY_BUILD_ID = "build-id";
 
     public static final String KEY_WORKING_DIRECTORY = "working-directory";
 
@@ -163,7 +168,12 @@ public abstract class AbstractContinuumAction
 
     public static ContinuumProject getUnvalidatedProject( Map context )
     {
-        return ((ContinuumProject) getObject( context, KEY_UNVALIDATED_PROJECT ) );
+        return (ContinuumProject) getObject( context, KEY_UNVALIDATED_PROJECT );
+    }
+
+    public static ContinuumProjectGroup getUnvalidatedProjectGroup( Map context )
+    {
+        return (ContinuumProjectGroup) getObject( context, KEY_UNVALIDATED_PROJECT_GROUP );
     }
 
     protected ContinuumBuild getBuild( Map context )

@@ -38,8 +38,7 @@ public class ContinuumNotificationDispatcherTest
         ContinuumStore store = getStore();
 
         ContinuumProject project = AbstractContinuumTest.addMavenTwoProject( store,
-                                                                             "Notification Dispatcher Test Project",
-                                                                             "scm:notification/dispatcher" );
+                                                                             "Notification Dispatcher Test Project" );
 
         ContinuumBuild build = new ContinuumBuild();
         build.setStartTime( System.currentTimeMillis() );

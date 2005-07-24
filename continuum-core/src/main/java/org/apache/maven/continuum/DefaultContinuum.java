@@ -446,13 +446,7 @@ public class DefaultContinuum
         context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, core.getWorkingDirectory() );
 
         // ----------------------------------------------------------------------
-        // During the execution of the this action we may find that the metadata
-        // isn't good enough for the following reasons:
-        //
-        // 1) No scm element (repository element for m1)
-        // 2) Invalid scm element (repository element for m1)
-        // 3) No ciManagement (m2)
-        // 4) Invalid ciManagement element (m2)
+        // Create the projects from the URL
         // ----------------------------------------------------------------------
 
         executeAction( "create-projects-from-metadata", context );
@@ -470,7 +464,8 @@ public class DefaultContinuum
         }
 
         // ----------------------------------------------------------------------
-        // Save any new project groups that we've found
+        // Save any new project groups that we've found. Currenly all projects
+        // will go into the first project group in the list.
         // ----------------------------------------------------------------------
 
         ContinuumProjectGroup projectGroup = null;
@@ -479,21 +474,21 @@ public class DefaultContinuum
         {
             projectGroup = (ContinuumProjectGroup) it.next();
 
-            getLogger().info( "Looking for project group '" + projectGroup.getGroupId() + "'." );
-
             try
             {
                 try
                 {
                     projectGroup = store.getProjectGroupByGroupId( projectGroup.getGroupId() );
-
-                    getLogger().info( "Existed." );
                 }
                 catch ( ContinuumObjectNotFoundException e )
                 {
-                    projectGroup = store.addProjectGroup( projectGroup );
+                    Map pgContext = new HashMap();
 
-                    getLogger().info( "Added." );
+                    pgContext.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, projectGroup );
+
+                    executeAction( "validate-project-group", pgContext );
+
+                    executeAction( "store-project-group", pgContext );
                 }
             }
             catch ( ContinuumStoreException e )
@@ -504,8 +499,6 @@ public class DefaultContinuum
 
         if ( projectGroup == null )
         {
-            getLogger().info( "Using default project group." );
-
             projectGroup = getDefaultProjectGroup();
         }
 

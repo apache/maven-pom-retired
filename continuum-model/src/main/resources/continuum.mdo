@@ -46,6 +46,14 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
+<!--
+add stash.storable="false" to workingDirectory and scmUrl
+        <field>
+          <name>path</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+-->
         <field stash.storable="false">
           <name>state</name>
           <version>1.0.0</version>
@@ -572,9 +580,9 @@
         </field>
       </fields>
     </class>
-    
+
     <!-- Profiles -->
-    
+
     <class>
       <name>ContinuumProfile</name>
       <packageName>org.apache.maven.continuum.profile</packageName>
@@ -604,7 +612,7 @@
           <name>home</name>
           <version>1.0.0</version>
           <type>String</type>
-        </field>        
+        </field>
       </fields>
     </class>
 
@@ -683,6 +691,16 @@
         </field>
         <field>
           <name>issueManagementUrl</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>scmUrl</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>workingDirectory</name>
           <version>1.0.0</version>
           <type>String</type>
         </field>

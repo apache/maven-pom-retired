@@ -655,8 +655,28 @@
     </component>
     <component>
       <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>store-project-group</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.StoreProjectGroupAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
       <role-hint>validate-project</role-hint>
       <implementation>org.apache.maven.continuum.core.action.ValidateProject</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>validate-project-group</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.ValidateProjectGroup</implementation>
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.core.ContinuumCore</role>

@@ -32,7 +32,7 @@ public class ShellBuildExecutorTest
     {
         ShellBuildExecutor buildExecutor = (ShellBuildExecutor) getBuildExecutor( ShellBuildExecutor.ID );
 
-        ShellProject project = makeStubShellProject( "Shell project", "scm:foo" );
+        ShellProject project = makeStubShellProject( "Shell project" );
 
         String script = project.getExecutable();
 
@@ -44,7 +44,7 @@ public class ShellBuildExecutorTest
     public void testAbsolutePath()
         throws Exception
     {
-        ShellProject project = makeStubShellProject( "Shell project", "scm:foo" );
+        ShellProject project = makeStubShellProject( "Shell project" );
 
         project.setExecutable( getTestFile( "foo.sh" ).getAbsolutePath() );
 

@@ -63,7 +63,7 @@ public class ContinuumTypicalUsageTest
         // At this point we can now accept new projects into the system
         // ----------------------------------------------------------------------
 
-        MavenTwoProject project = makeStubMavenTwoProject( "test1", "scm:url" );
+        MavenTwoProject project = makeStubMavenTwoProject( "test1" );
 
         project = addMavenTwoProject( getStore(), project );
 

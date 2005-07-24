@@ -1,7 +1,20 @@
-/*
- * Copyright (c) 2005 Your Corporation. All Rights Reserved.
- */
 package org.apache.maven.continuum.core.action;
+
+/*
+ * Copyright 2004-2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -14,7 +27,7 @@ import java.util.Map;
  * @version $Id$
  */
 public class ValidateProject
-    extends AbstractContinuumAction
+    extends AbstractValidationContinuumAction
 {
     public void execute( Map context )
         throws Exception
@@ -41,21 +54,10 @@ public class ValidateProject
 //            throw new ContinuumStoreException( "A project with the scm url '" + scmUrl + "' already exist." );
 //        }
 
-        if ( StringUtils.isEmpty( project.getScmUrl() ) )
-        {
-            throw new ContinuumException( "The SCM URL has to be set." );
-        }
-
         // TODO: Enable
-//        if ( StringUtils.isEmpty( project.getGroupId() ) )
-//        {
-//            throw new ContinuumException( "The group id has to be set." );
-//        }
-//
-//        if ( StringUtils.isEmpty( project.getArtifactId() ) )
-//        {
-//            throw new ContinuumException( "The artifact id has to be set." );
-//        }
+//        assertStringNotEmpty( project.getPath(), "path" );
+//        assertStringNotEmpty( project.getGroupId(), "group id" );
+//        assertStringNotEmpty( project.getArtifactId(), "artifact id" );
 
         // TODO: validate that the SCM provider id
 

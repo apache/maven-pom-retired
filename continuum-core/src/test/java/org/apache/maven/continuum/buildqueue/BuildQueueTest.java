@@ -42,7 +42,7 @@ public class BuildQueueTest
     public void testTestTheQueueWithASingleProject()
         throws Exception
     {
-        ContinuumProject project = addMavenTwoProject( getStore(), "Build Queue Project 1", "1" );
+        ContinuumProject project = addMavenTwoProject( getStore(), "Build Queue Project 1" );
 
         String projectId = project.getId();
 
@@ -67,9 +67,9 @@ public class BuildQueueTest
     public void testTheQueueWithMultipleProjects()
         throws Exception
     {
-        String projectId1 = addMavenTwoProject( getStore(), "Build Queue Project 2", "foo" ).getId();
+        String projectId1 = addMavenTwoProject( getStore(), "Build Queue Project 2" ).getId();
 
-        String projectId2 = addMavenTwoProject( getStore(), "Build Queue Project 3", "bar" ).getId();
+        String projectId2 = addMavenTwoProject( getStore(), "Build Queue Project 3" ).getId();
 
         buildProject( projectId1, false );
 
@@ -105,7 +105,7 @@ public class BuildQueueTest
     {
         String name = "Build Queue Project 4";
 
-        String projectId = addMavenTwoProject( getStore(), name, "4" ).getId();
+        String projectId = addMavenTwoProject( getStore(), name ).getId();
 
         buildProject( projectId, true );
 

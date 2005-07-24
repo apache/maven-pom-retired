@@ -16,38 +16,36 @@ package org.apache.maven.continuum.notification.mail;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.AbstractContinuumTest;
+import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
+import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.scm.ScmFile;
+import org.apache.maven.continuum.scm.ScmResult;
+
+import org.codehaus.plexus.mailsender.MailMessage;
+import org.codehaus.plexus.mailsender.test.MockMailSender;
+import org.codehaus.plexus.notification.notifier.Notifier;
+import org.codehaus.plexus.util.CollectionUtils;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.scm.ScmResult;
-import org.apache.maven.continuum.scm.ScmFile;
-
-import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.mailsender.MailMessage;
-import org.codehaus.plexus.mailsender.test.MockMailSender;
-import org.codehaus.plexus.notification.notifier.Notifier;
-import org.codehaus.plexus.util.CollectionUtils;
-
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class MailContinuumNotifierTest
-    extends PlexusTestCase
+    extends AbstractContinuumTest
 {
     public void testSuccessfulBuild()
         throws Exception
     {
-        ContinuumProject project = makeProject();
+        ContinuumProject project = makeStubMavenTwoProject( "Test Project" );
 
         ContinuumBuild build = makeBuild( ContinuumProjectState.OK );
 
@@ -61,7 +59,7 @@ public class MailContinuumNotifierTest
     public void testFailedBuild()
         throws Exception
     {
-        ContinuumProject project = makeProject();
+        ContinuumProject project = makeStubMavenTwoProject( "Test Project" );
 
         ContinuumBuild build = makeBuild( ContinuumProjectState.FAILED );
 
@@ -75,7 +73,7 @@ public class MailContinuumNotifierTest
     public void testErrorenousBuild()
         throws Exception
     {
-        ContinuumProject project = makeProject();
+        ContinuumProject project = makeStubMavenTwoProject( "Test Project" );
 
         ContinuumBuild build = makeBuild( ContinuumProjectState.ERROR );
 
@@ -158,16 +156,6 @@ public class MailContinuumNotifierTest
         assertNull( ( (MailMessage.Address) to.get( 0 ) ).getName() );
 
         return mailMessage;
-    }
-
-    private ContinuumProject makeProject()
-    {
-        ContinuumProject project = new MavenTwoProject();
-
-        project.setName( "Test Project" );
-
-        project.setExecutorId( MavenTwoBuildExecutor.ID );
-        return project;
     }
 
     private ContinuumBuild makeBuild( int state )

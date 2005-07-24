@@ -44,7 +44,7 @@ public class ContinuumXmlRpcTest
         //
         // ----------------------------------------------------------------------
 
-        MavenTwoProject project = makeStubMavenTwoProject( "My Project", "scm:foo" );
+        MavenTwoProject project = makeStubMavenTwoProject( "My Project" );
 
         project = (MavenTwoProject) store.addProject( project );
 

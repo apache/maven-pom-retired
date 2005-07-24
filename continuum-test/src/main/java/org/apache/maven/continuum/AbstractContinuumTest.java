@@ -16,30 +16,29 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumBuildGroup;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
-import org.apache.maven.continuum.project.ContinuumBuildGroup;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
-import org.apache.maven.continuum.configuration.ConfigurationService;
-
 import org.codehaus.plexus.PlexusTestCase;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -96,31 +95,25 @@ public abstract class AbstractContinuumTest
     // Maven 2 Project Generators
     // ----------------------------------------------------------------------
 
-    public static MavenTwoProject makeStubMavenTwoProject( String name, String scmUrl )
+    public static MavenTwoProject makeStubMavenTwoProject( String name )
     {
         return makeMavenTwoProject( name,
-                                    scmUrl,
                                     "foo@bar.com",
                                     "1.0",
-                                    "",
-                                    PlexusTestCase.getTestFile( "plexus-temp" ).getAbsolutePath() );
+                                    "" );
     }
 
     public static MavenTwoProject makeMavenTwoProject( String name,
-                                                       String scmUrl,
                                                        String emailAddress,
                                                        String version,
-                                                       String commandLineArguments,
-                                                       String workingDirectory )
+                                                       String commandLineArguments )
     {
         MavenTwoProject project = new MavenTwoProject();
 
         makeProject( project,
                      name,
-                     scmUrl,
                      version,
                      commandLineArguments,
-                     workingDirectory,
                      "maven2" );
 
         List notifiers = createMailNotifierList( emailAddress );
@@ -134,16 +127,14 @@ public abstract class AbstractContinuumTest
     // Shell Project Generators
     // ----------------------------------------------------------------------
 
-    public static ShellProject makeStubShellProject( String name, String scmUrl )
+    public static ShellProject makeStubShellProject( String name )
     {
         ShellProject project = new ShellProject();
 
         makeProject( project,
                      name,
-                     scmUrl,
                      "1.0",
                      "",
-                     PlexusTestCase.getTestFile( "plexus-temp" ).getAbsolutePath(),
                      "shell" );
 
         project.setExecutable( "script.sh" );
@@ -153,18 +144,17 @@ public abstract class AbstractContinuumTest
 
     public static ContinuumProject makeProject( ContinuumProject project,
                                                 String name,
-                                                String scmUrl,
                                                 String version,
                                                 String commandLineArguments,
-                                                String workingDirectory,
                                                 String executorId )
     {
         project.setName( name );
-        project.setScmUrl( scmUrl );
         project.setVersion( version );
         project.setCommandLineArguments( commandLineArguments );
-        project.setWorkingDirectory( workingDirectory );
         project.setExecutorId( executorId );
+
+        // TODO: Remove
+        project.setWorkingDirectory( "/tmp" );
 
         return project;
     }
@@ -199,7 +189,7 @@ public abstract class AbstractContinuumTest
 
     public static MavenTwoProject addMavenTwoProject( ContinuumStore store,
                                                       MavenTwoProject project )
-    throws Exception
+        throws Exception
     {
         ContinuumProject addedProject = store.addProject( project );
 
@@ -225,29 +215,24 @@ public abstract class AbstractContinuumTest
     }
 
     public static MavenTwoProject addMavenTwoProject( ContinuumStore store,
-                                                      String name,
-                                                      String scmUrl )
-    throws Exception
+                                                      String name )
+        throws Exception
     {
-        return addMavenTwoProject( store, makeStubMavenTwoProject( name, scmUrl ) );
+        return addMavenTwoProject( store, makeStubMavenTwoProject( name ) );
     }
 
     public static MavenTwoProject addMavenTwoProject( ContinuumStore store,
                                                       String name,
-                                                      String scmUrl,
                                                       String nagEmailAddress,
                                                       String version,
-                                                      String commandLineArguments,
-                                                      String workingDirectory )
-    throws Exception
+                                                      String commandLineArguments )
+        throws Exception
     {
         ContinuumProject project = store.addProject(
             makeMavenTwoProject( name,
-                                 scmUrl,
                                  nagEmailAddress,
                                  version,
-                                 commandLineArguments,
-                                 workingDirectory ) );
+                                 commandLineArguments ) );
 
         ScmResult scmResult = new ScmResult();
 
@@ -263,7 +248,7 @@ public abstract class AbstractContinuumTest
     public static ContinuumBuild createBuild( ContinuumStore store,
                                               String projectId,
                                               boolean forced )
-    throws ContinuumStoreException
+        throws ContinuumStoreException
     {
         ContinuumBuild build = new ContinuumBuild();
 
@@ -281,7 +266,7 @@ public abstract class AbstractContinuumTest
                                                     ScmResult scmResult,
                                                     String errorMessage,
                                                     Throwable exception )
-    throws ContinuumStoreException
+        throws ContinuumStoreException
     {
         project.setScmResult( scmResult );
 
@@ -327,46 +312,38 @@ public abstract class AbstractContinuumTest
                                      ContinuumProject actual )
     {
         assertProjectEquals( expected.getName(),
-                             expected.getScmUrl(),
                              expected.getNotifiers(),
                              expected.getVersion(),
                              expected.getCommandLineArguments(),
                              expected.getExecutorId(),
-                             expected.getWorkingDirectory(),
                              actual );
     }
 
     public void assertProjectEquals( String name,
-                                     String scmUrl,
                                      String emailAddress,
                                      String version,
                                      String commandLineArguments,
                                      String builderId,
-                                     String workingDirectory,
                                      ContinuumProject actual )
     {
         assertProjectEquals( name,
-                             scmUrl,
                              createMailNotifierList( emailAddress ),
                              version,
                              commandLineArguments,
                              builderId,
-                             workingDirectory,
                              actual );
     }
 
     public void assertProjectEquals( String name,
-                                     String scmUrl,
                                      List notifiers,
                                      String version,
                                      String commandLineArguments,
                                      String builderId,
-                                     String workingDirectory,
                                      ContinuumProject actual )
     {
         assertEquals( "project.name", name, actual.getName() );
 
-        assertEquals( "project.scmUrl", scmUrl, actual.getScmUrl() );
+//        assertEquals( "project.scmUrl", scmUrl, actual.getScmUrl() );
 
         if ( notifiers != null )
         {
@@ -394,7 +371,7 @@ public abstract class AbstractContinuumTest
 
         assertEquals( "project.executorId", builderId, actual.getExecutorId() );
 
-        assertEquals( "project.workingDirectory", workingDirectory, actual.getWorkingDirectory() );
+//        assertEquals( "project.workingDirectory", workingDirectory, actual.getWorkingDirectory() );
     }
 
     // ----------------------------------------------------------------------

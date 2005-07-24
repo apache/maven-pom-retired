@@ -36,7 +36,7 @@ public class NewModelTest
     public void testAddingBuildGroupToProjectAndUpdatingProject()
         throws Exception
     {
-        ContinuumProject project = addMavenTwoProject( getStore(), "Project Scheduling", "scm:scheduling" );
+        ContinuumProject project = addMavenTwoProject( getStore(), "Project Scheduling" );
 
         ContinuumBuildGroup buildGroup = createStubBuildGroup( "Plexus", "Description" );
 
@@ -61,7 +61,7 @@ public class NewModelTest
 
         buildGroup = getStore().addBuildGroup( buildGroup );
 
-        ContinuumProject project = addMavenTwoProject( getStore(), "project1", "scm:scheduling" );
+        ContinuumProject project = addMavenTwoProject( getStore(), "project1" );
 
         // add project
         buildGroup.addProject( project );
@@ -117,7 +117,7 @@ public class NewModelTest
 
         projectGroup = getStore().addProjectGroup( projectGroup );
 
-        ContinuumProject project = addMavenTwoProject( getStore(), "project2", "scm:scheduling" );
+        ContinuumProject project = addMavenTwoProject( getStore(), "project2" );
 
         // add project
         projectGroup.addProject( project );
@@ -306,13 +306,13 @@ public class NewModelTest
         // Add projects from URL metadata
         // ----------------------------------------------------------------------
 
-        MavenTwoProject componentA = makeStubMavenTwoProject( "component a", "a" );
+        MavenTwoProject componentA = makeStubMavenTwoProject( "component a" );
 
         componentA.setProjectGroup( plexusGroup );
 
         componentA = addMavenTwoProject( getStore(), componentA );
 
-        MavenTwoProject componentB = makeStubMavenTwoProject( "component b", "b" );
+        MavenTwoProject componentB = makeStubMavenTwoProject( "component b" );
 
         componentB.setProjectGroup( plexusGroup );
 
@@ -351,8 +351,6 @@ public class NewModelTest
         //String buildGroupId = getStore().addBuildGroup( buildGroup );
 
         //buildGroup = getStore().getBuildGroup( buildGroupId );
-
-        System.err.println( "buildGroup.id: " + buildGroup.getId() );
 
         // ----------------------------------------------------------------------
         // Add component A to the build group

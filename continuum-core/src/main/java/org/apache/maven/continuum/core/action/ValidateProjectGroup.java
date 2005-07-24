@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.core.action;
 
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,26 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.scm.queue.CheckOutTask;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 
-import java.io.File;
 import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class AddProjectToCheckOutQueueAction
-    extends AbstractContinuumAction
+public class ValidateProjectGroup
+    extends AbstractValidationContinuumAction
 {
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = getProject( context );
+        ContinuumProjectGroup projectGroup = getUnvalidatedProjectGroup( context );
 
-        CheckOutTask checkOutTask = new CheckOutTask( project.getId(), new File( project.getWorkingDirectory() ) );
+        // TODO: assert that the name is unique
 
-        getCheckOutQueue().put( checkOutTask );
+        assertStringNotEmpty( projectGroup.getName(), "name" );
+
+        assertStringNotEmpty( projectGroup.getGroupId(), "group id" );
     }
 }
