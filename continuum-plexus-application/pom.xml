@@ -14,10 +14,12 @@
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-web</artifactId>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-xfire</artifactId>
     </dependency>
+    -->
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-xmlrpc</artifactId>
