@@ -226,7 +226,5 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
     // Defaults
     // ----------------------------------------------------------------------
 
-    ContinuumProjectGroup getDefaultProjectGroup();
-
     ContinuumBuildSettings getDefaultBuildSettings();
 }

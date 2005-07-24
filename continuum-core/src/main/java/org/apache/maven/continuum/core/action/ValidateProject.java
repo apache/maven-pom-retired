@@ -58,6 +58,7 @@ public class ValidateProject
 //        assertStringNotEmpty( project.getPath(), "path" );
 //        assertStringNotEmpty( project.getGroupId(), "group id" );
 //        assertStringNotEmpty( project.getArtifactId(), "artifact id" );
+        // TODO: check for project group
 
         // TODO: validate that the SCM provider id
 

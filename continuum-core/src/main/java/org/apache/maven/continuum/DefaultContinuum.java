@@ -497,11 +497,6 @@ public class DefaultContinuum
             }
         }
 
-        if ( projectGroup == null )
-        {
-            projectGroup = getDefaultProjectGroup();
-        }
-
         // ----------------------------------------------------------------------
         // Save all the projects
         // TODO: Validate all the projects before saving them
@@ -780,11 +775,6 @@ public class DefaultContinuum
         {
             throw logAndCreateException( "Error while removing project from schedule.", e );
         }
-    }
-
-    public ContinuumProjectGroup getDefaultProjectGroup()
-    {
-        return initializer.getDefaultProjectGroup();
     }
 
     public ContinuumBuildSettings getDefaultBuildSettings()

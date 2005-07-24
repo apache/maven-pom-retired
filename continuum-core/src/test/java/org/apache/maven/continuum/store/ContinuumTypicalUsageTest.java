@@ -57,7 +57,8 @@ public class ContinuumTypicalUsageTest
     {
         Continuum continuum = (Continuum) lookup( Continuum.ROLE );
 
-        ContinuumProjectGroup defaultProjectGroup = continuum.getDefaultProjectGroup();
+        ContinuumProjectGroup defaultProjectGroup = AbstractContinuumTest.getDefaultProjectGroup( getStore() );
+            //continuum.getDefaultProjectGroup();
 
         // ----------------------------------------------------------------------
         // At this point we can now accept new projects into the system
@@ -75,10 +76,10 @@ public class ContinuumTypicalUsageTest
 
         getStore().updateProjectGroup( defaultProjectGroup );
 
-        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_NAME, project.getProjectGroup().getName() );
+        assertEquals( defaultProjectGroup.getName(), project.getProjectGroup().getName() );
 
-        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_DESCRIPTION, project.getProjectGroup().getDescription() );
+        assertEquals( defaultProjectGroup.getDescription(), project.getProjectGroup().getDescription() );
 
-        assertEquals( DefaultContinuumInitializer.DEFAULT_PROJECT_GROUP_ID, project.getProjectGroup().getGroupId() );
+        assertEquals( defaultProjectGroup.getGroupId(), project.getProjectGroup().getGroupId() );
     }
 }

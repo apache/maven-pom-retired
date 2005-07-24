@@ -63,6 +63,8 @@ public class StoreProjectAction
 
         project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
 
-        getStore().updateProject( project );
+        project = getStore().updateProject( project );
+
+        context.put( KEY_UNVALIDATED_PROJECT, project );
     }
 }

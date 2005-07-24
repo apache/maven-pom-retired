@@ -101,7 +101,7 @@ public class DefaultContinuumInitializer
 
         try
         {
-            store.updateProjectGroup( defaultProjectGroup );
+            defaultProjectGroup = store.updateProjectGroup( defaultProjectGroup );
         }
         catch ( ContinuumStoreException e )
         {

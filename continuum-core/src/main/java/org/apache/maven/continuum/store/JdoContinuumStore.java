@@ -808,7 +808,8 @@ public class JdoContinuumStore
     {
         return (ContinuumProjectGroup) getObjectFromQuery( ContinuumProjectGroup.class,
                                                            "name",
-                                                           name );
+                                                           name,
+                                                           PROJECT_GROUP_DETAIL_FG );
     }
 
     public ContinuumProjectGroup getProjectGroupByGroupId( String groupId )
@@ -816,7 +817,8 @@ public class JdoContinuumStore
     {
         return (ContinuumProjectGroup) getObjectFromQuery( ContinuumProjectGroup.class,
                                                            "groupId",
-                                                           groupId );
+                                                           groupId,
+                                                           PROJECT_GROUP_DETAIL_FG );
 
     }
 
@@ -1088,20 +1090,6 @@ public class JdoContinuumStore
         return (ContinuumSchedule) pm.getObjectById( id );
     }
 
-    private ContinuumProjectGroup getContinuumProjectGroup( PersistenceManager pm,
-                                                            String projectGroupId,
-                                                            boolean details )
-    {
-        if ( details )
-        {
-            pm.getFetchPlan().addGroup( PROJECT_GROUP_DETAIL_FG );
-        }
-
-        Object id = pm.newObjectIdInstance( ContinuumProjectGroup.class, projectGroupId );
-
-        return (ContinuumProjectGroup) pm.getObjectById( id );
-    }
-
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -1185,7 +1173,10 @@ public class JdoContinuumStore
         }
     }
 
-    private Object getObjectFromQuery( Class clazz, String idField, String id )
+    private Object getObjectFromQuery( Class clazz,
+                                       String idField,
+                                       String id,
+                                       String fetchGroup )
         throws ContinuumStoreException
     {
         PersistenceManager pm = pmf.getPersistenceManager();
@@ -1203,6 +1194,8 @@ public class JdoContinuumStore
             query.declareParameters( "String " + idField );
 
             query.setFilter( "this." + idField + " == " + idField );
+
+            query.getFetchPlan().addGroup( fetchGroup );
 
             Collection result = (Collection) query.execute( id );
 
