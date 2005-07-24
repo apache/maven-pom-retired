@@ -18,6 +18,9 @@ package org.apache.maven.continuum.core.action;
 
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.ScmResult;
+import org.apache.maven.continuum.scm.ContinuumScm;
+import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
+import org.apache.maven.continuum.store.ContinuumStore;
 
 import java.util.Map;
 
@@ -28,24 +31,30 @@ import java.util.Map;
 public class UpdateWorkingDirectoryFromScmContinuumAction
     extends AbstractContinuumAction
 {
+    private ContinuumNotificationDispatcher notifier;
+
+    private ContinuumScm scm;
+
+    private ContinuumStore store;
+
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = getProject( context );
+        ContinuumProject project = store.getProject( getProjectId( context ) );
 
         ScmResult scmResult = null;
 
         try
         {
-            getNotifier().checkoutStarted( project );
+            notifier.checkoutStarted( project );
 
-            scmResult = getScm().updateProject( project );
+            scmResult = scm.updateProject( project );
 
             context.put( KEY_UPDATE_SCM_RESULT, scmResult );
         }
         finally
         {
-            getNotifier().checkoutComplete( project );
+            notifier.checkoutComplete( project );
         }
     }
 }

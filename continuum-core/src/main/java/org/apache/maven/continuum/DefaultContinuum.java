@@ -18,10 +18,10 @@ package org.apache.maven.continuum;
 
 import org.apache.maven.continuum.build.settings.BuildSettingsActivationException;
 import org.apache.maven.continuum.build.settings.BuildSettingsActivator;
+import org.apache.maven.continuum.buildqueue.BuildProjectTask;
 import org.apache.maven.continuum.configuration.ConfigurationLoadingException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
-import org.apache.maven.continuum.core.ContinuumCore;
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction;
 import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
@@ -51,15 +51,23 @@ import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ProjectSorter;
+import org.codehaus.plexus.action.Action;
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.action.ActionNotFoundException;
-import org.codehaus.plexus.action.Action;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StoppingException;
+import org.codehaus.plexus.taskqueue.TaskQueue;
+import org.codehaus.plexus.taskqueue.TaskQueueException;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -75,12 +83,12 @@ import java.util.Set;
  */
 public class DefaultContinuum
     extends AbstractLogEnabled
-    implements Continuum, Startable
+    implements Continuum, Initializable,Startable
 {
     /**
      * @plexus.requirement
      */
-    private ContinuumCore core;
+    //private ContinuumCore core;
 
     /**
      * @plexus.requirement
@@ -113,6 +121,25 @@ public class DefaultContinuum
     private BuildSettingsActivator buildSettingsActivator;
 
     // ----------------------------------------------------------------------
+    // Moved from core
+    // ----------------------------------------------------------------------
+
+    /**
+     * @plexus.requirement
+     */
+    private TaskQueue buildQueue;
+
+    /**
+     * @plexus.configuration
+     */
+    private String workingDirectory;
+
+    /**
+     * @plexus.configuration
+     */
+    private String appHome;
+
+    // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
@@ -125,13 +152,27 @@ public class DefaultContinuum
     public Collection getProjects()
         throws ContinuumException
     {
-        return core.getProjects();
+        try
+        {
+            return store.getAllProjects();
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Error while getting all projects.", e );
+        }
     }
 
     public ContinuumBuild getLatestBuildForProject( String id )
         throws ContinuumException
     {
-        return core.getLatestBuildForProject( id );
+        try
+        {
+            return store.getLatestBuildForProject( id );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Error while getting the last build for project '" + id + "'.", e );
+        }
     }
 
     // ----------------------------------------------------------------------
@@ -141,7 +182,28 @@ public class DefaultContinuum
     public boolean isInBuildingQueue( String id )
         throws ContinuumException
     {
-        return core.isBuilding( id );
+        List queue;
+
+        try
+        {
+            queue = buildQueue.getQueueSnapshot();
+        }
+        catch ( TaskQueueException e )
+        {
+            throw new ContinuumException( "Error while getting the queue snapshot.", e );
+        }
+
+        for ( Iterator it = queue.iterator(); it.hasNext(); )
+        {
+            BuildProjectTask task = (BuildProjectTask) it.next();
+
+            if ( task.getProjectId().equals( id ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // ----------------------------------------------------------------------
@@ -151,7 +213,14 @@ public class DefaultContinuum
     public void removeProject( String projectId )
         throws ContinuumException
     {
-        core.removeProject( projectId );
+        try
+        {
+            store.removeProject( projectId );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while removing project.", ex );
+        }
     }
 
     public void checkoutProject( String id )
@@ -167,19 +236,40 @@ public class DefaultContinuum
     public ContinuumProject getProject( String projectId )
         throws ContinuumException
     {
-        return core.getProject( projectId );
+        try
+        {
+            return store.getProject( projectId );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Exception while getting project '" + projectId + "'.", ex );
+        }
     }
 
     public Collection getAllProjects( int start, int end )
         throws ContinuumException
     {
-        return core.getAllProjects( start, end );
+        try
+        {
+            return store.getAllProjects();
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Exception while getting projects.", ex );
+        }
     }
 
     public ScmResult getScmResultForProject( String projectId )
         throws ContinuumException
     {
-        return core.getScmResultForProject( projectId );
+        try
+        {
+            return store.getScmResultForProject( projectId );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Exception while getting check out scm result for project.", ex );
+        }
     }
 
     // ----------------------------------------------------------------------
@@ -229,13 +319,28 @@ public class DefaultContinuum
     public void buildProject( String projectId )
         throws ContinuumException
     {
-        core.buildProject( projectId, true );
+        buildProject( projectId, true );
     }
 
     public void buildProject( String projectId, boolean force )
         throws ContinuumException
     {
-        core.buildProject( projectId, force );
+        try
+        {
+            ContinuumProject project = store.getProject( projectId );
+
+            getLogger().info( "Enqueuing '" + project.getName() + "'." );
+
+            buildQueue.put( new BuildProjectTask( projectId, force ) );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Error while creating build object.", e );
+        }
+        catch ( TaskQueueException e )
+        {
+            throw logAndCreateException( "Error while creating enqueuing object.", e );
+        }
     }
 
     public void buildProjectGroup( ContinuumProjectGroup projectGroup, ContinuumBuildSettings buildSettings )
@@ -275,19 +380,40 @@ public class DefaultContinuum
     public ContinuumBuild getBuild( String buildId )
         throws ContinuumException
     {
-        return core.getBuild( buildId );
+        try
+        {
+            return store.getBuild( buildId );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Unable to retrieve build with id = " + buildId, e );
+        }
     }
 
     public Collection getBuildsForProject( String projectId )
         throws ContinuumException
     {
-        return core.getBuildsForProject( projectId );
+        try
+        {
+            return store.getBuildsForProject( projectId, 0, 0 );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Cannot retrieve builds for project with id = " + projectId, e );
+        }
     }
 
     public Collection getChangedFilesForBuild( String buildId )
         throws ContinuumException
     {
-        return core.getChangedFilesForBuild( buildId );
+        try
+        {
+            return store.getChangedFilesForBuild( buildId );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Cannot retrieve build result for build with id = " + buildId, e );
+        }
     }
 
     // ----------------------------------------------------------------------
@@ -305,7 +431,7 @@ public class DefaultContinuum
     public AntProject getAntProject( String projectId )
         throws ContinuumException
     {
-        return (AntProject) core.getProject( projectId );
+        return (AntProject) getProject( projectId );
     }
 
     public void updateAntProject( AntProject project )
@@ -337,7 +463,7 @@ public class DefaultContinuum
     public MavenOneProject getMavenOneProject( String projectId )
         throws ContinuumException
     {
-        return (MavenOneProject) core.getProject( projectId );
+        return (MavenOneProject) getProject( projectId );
     }
 
     public void updateMavenOneProject( MavenOneProject project )
@@ -369,7 +495,7 @@ public class DefaultContinuum
     public MavenTwoProject getMavenTwoProject( String projectId )
         throws ContinuumException
     {
-        return (MavenTwoProject) core.getProject( projectId );
+        return (MavenTwoProject) getProject( projectId );
     }
 
     public void updateMavenTwoProject( MavenTwoProject project )
@@ -393,7 +519,7 @@ public class DefaultContinuum
     public ShellProject getShellProject( String projectId )
         throws ContinuumException
     {
-        return (ShellProject) core.getProject( projectId );
+        return (ShellProject) getProject( projectId );
     }
 
     public void updateShellProject( ShellProject project )
@@ -409,7 +535,7 @@ public class DefaultContinuum
     private void executeUpdateProjectActivity( ContinuumProject project )
         throws ContinuumException
     {
-        core.updateProject( project );
+        updateProject( project );
     }
 
     private String executeAddProjectFromScmActivity( ContinuumProject project )
@@ -420,6 +546,8 @@ public class DefaultContinuum
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
+
+        context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
 
         context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
 
@@ -443,7 +571,7 @@ public class DefaultContinuum
 
         context.put( CreateProjectsFromMetadata.KEY_URL, metadataUrl );
 
-        context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, core.getWorkingDirectory() );
+        context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
 
         // ----------------------------------------------------------------------
         // Create the projects from the URL
@@ -483,6 +611,8 @@ public class DefaultContinuum
                 catch ( ContinuumObjectNotFoundException e )
                 {
                     Map pgContext = new HashMap();
+
+                    pgContext.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, getWorkingDirectory() );                    
 
                     pgContext.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, projectGroup );
 
@@ -536,7 +666,7 @@ public class DefaultContinuum
     public ContinuumNotifier getNotifier( String projectId, String notifierType )
         throws ContinuumException
     {
-        ContinuumProject project = core.getProject( projectId );
+        ContinuumProject project = getProject( projectId );
 
         List notifiers = project.getNotifiers();
 
@@ -564,7 +694,7 @@ public class DefaultContinuum
 
         notifier.setConfiguration( notifierProperties );
 
-        core.storeNotifier( notifier );
+        storeNotifier( notifier );
     }
 
     private Properties createNotifierProperties( Map configuration )
@@ -601,11 +731,11 @@ public class DefaultContinuum
 
         notifier.setConfiguration( notifierProperties );
 
-        ContinuumProject project = core.getProject( projectId );
+        ContinuumProject project = getProject( projectId );
 
         project.addNotifier( notifier );
 
-        core.updateProject( project );
+        updateProject( project );
     }
 
     public void removeNotifier( String projectId, String notifierType )
@@ -615,7 +745,7 @@ public class DefaultContinuum
 
         if ( n != null )
         {
-            core.removeNotifier( n );
+            removeNotifier( n );
         }
     }
 
@@ -623,9 +753,52 @@ public class DefaultContinuum
     // Lifecylce Management
     // ----------------------------------------------------------------------
 
+    public void initialize()
+        throws InitializationException
+    {
+        getLogger().info( "Initializing Continuum." );
+
+        File wdFile = new File( workingDirectory );
+
+        if ( wdFile.exists() )
+        {
+            if ( !wdFile.isDirectory() )
+            {
+                throw new InitializationException( "The specified working directory isn't a directory: " +
+                                                   "'" + wdFile.getAbsolutePath() + "'." );
+            }
+        }
+        else
+        {
+            if ( !wdFile.mkdirs() )
+            {
+                throw new InitializationException( "Could not making the working directory: " +
+                                                   "'" + wdFile.getAbsolutePath() + "'." );
+            }
+        }
+
+        getLogger().info( "Showing all projects: " );
+
+        try
+        {
+            for ( Iterator it = store.getAllProjects().iterator(); it.hasNext(); )
+            {
+                ContinuumProject project = (ContinuumProject) it.next();
+
+                getLogger().info( " " + project.getId() + ":" + project.getName() + ":" + project.getExecutorId() );
+            }
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new InitializationException( "Couldn't load projects.", e );
+        }
+    }
+
     public void start()
         throws StartingException
     {
+        startMessage();
+
         try
         {
             configurationService.load();
@@ -672,6 +845,8 @@ public class DefaultContinuum
         {
             throw new StoppingException( "Error storing the Continuum configuration.", e );
         }
+
+        stopMessage();
     }
 
     // ----------------------------------------------------------------------
@@ -819,4 +994,108 @@ public class DefaultContinuum
     // ----------------------------------------------------------------------
     // Build settings
     // ----------------------------------------------------------------------
+
+    // core
+
+    public ContinuumProject updateProject( ContinuumProject project )
+        throws ContinuumException
+    {
+        try
+        {
+            project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
+
+            return store.updateProject( project );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while removing project.", ex );
+        }
+    }
+
+    public void removeNotifier( ContinuumNotifier notifier )
+        throws ContinuumException
+    {
+        try
+        {
+            store.removeNotifier( notifier );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while removing notifier.", ex );
+        }
+    }
+
+    public ContinuumNotifier storeNotifier( ContinuumNotifier notifier )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.storeNotifier( notifier );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while removing notifier.", ex );
+        }
+    }
+
+    public String getWorkingDirectory()
+    {
+        return workingDirectory;
+    }
+
+    private void startMessage()
+        throws StartingException
+    {
+        getLogger().info( "Starting Continuum." );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        String banner = StringUtils.repeat( "-", getVersion().length() );
+
+        getLogger().info( "" );
+        getLogger().info( "" );
+        getLogger().info( "< Continuum " + getVersion() + " started! >" );
+        getLogger().info( "-----------------------" + banner );
+        getLogger().info( "       \\   ^__^" );
+        getLogger().info( "        \\  (oo)\\_______" );
+        getLogger().info( "           (__)\\       )\\/\\" );
+        getLogger().info( "               ||----w |" );
+        getLogger().info( "               ||     ||" );
+        getLogger().info( "" );
+        getLogger().info( "" );
+    }
+
+    private void stopMessage()
+    {
+        getLogger().info( "Stopping Continuum." );
+
+        getLogger().info( "Continuum stopped." );
+    }
+
+    private String getVersion()
+    {
+        try
+        {
+            Properties properties = new Properties();
+
+            String name = "META-INF/maven/org.apache.maven.continuum/continuum-core/pom.properties";
+
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream( name );
+
+            if ( resourceAsStream == null )
+            {
+                return "unknown";
+            }
+
+            properties.load( resourceAsStream );
+
+            return properties.getProperty( "version", "unknown" );
+        }
+        catch ( IOException e )
+        {
+            return "unknown";
+        }
+    }
 }

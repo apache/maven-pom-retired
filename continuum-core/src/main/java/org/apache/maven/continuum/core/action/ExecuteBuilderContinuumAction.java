@@ -16,13 +16,16 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
+import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.ScmResult;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 
 import java.util.Collection;
@@ -36,6 +39,12 @@ import java.util.Map;
 public class ExecuteBuilderContinuumAction
     extends AbstractContinuumAction
 {
+    private BuildExecutorManager buildExecutorManager;
+
+    private ContinuumStore store;
+
+    private ContinuumNotificationDispatcher notifier;
+
     public void execute( Map context )
         throws Exception
     {
@@ -43,13 +52,13 @@ public class ExecuteBuilderContinuumAction
         // Get parameters from the context
         // ----------------------------------------------------------------------
 
-        ContinuumProject project = getProject( context );
+        ContinuumProject project = store.getProject( getProjectId( context ) );
 
         boolean forced = isForced( context );
 
         ScmResult scmResult = getUpdateScmResult( context );
 
-        ContinuumBuildExecutor buildExecutor = getCore().getBuildExecutor( project.getExecutorId() );
+        ContinuumBuildExecutor buildExecutor = buildExecutorManager.getBuildExecutor( project.getExecutorId() );
 
         // ----------------------------------------------------------------------
         // This is really a precondition for this action to execute
@@ -78,7 +87,7 @@ public class ExecuteBuilderContinuumAction
 
         build.setScmResult( scmResult );
 
-        String buildId = getStore().addBuild( project.getId(), build ).getId();
+        String buildId = store.addBuild( project.getId(), build ).getId();
 
         context.put( KEY_BUILD_ID, buildId );
 
@@ -86,13 +95,13 @@ public class ExecuteBuilderContinuumAction
         //
         // ----------------------------------------------------------------------
 
-        build = getStore().getBuild( buildId );
+        build = store.getBuild( buildId );
 
         String output = null;
 
         try
         {
-            getNotifier().runningGoals( project, getBuild( context ) );
+            notifier.runningGoals( project, build );
 
             ContinuumBuildExecutionResult result = buildExecutor.build( project );
 
@@ -117,11 +126,11 @@ public class ExecuteBuilderContinuumAction
             // Copy over the build result
             // ----------------------------------------------------------------------
 
-            getStore().setBuildOutput( buildId, output );
+            store.setBuildOutput( buildId, output );
 
-            build = getStore().updateBuild( build );
+            build = store.updateBuild( build );
 
-            getNotifier().goalsCompleted( project, build );
+            notifier.goalsCompleted( project, build );
         }
     }
 
@@ -130,9 +139,9 @@ public class ExecuteBuilderContinuumAction
     // ----------------------------------------------------------------------
 
     private boolean isNew( ContinuumProject project )
-        throws ContinuumException
+        throws ContinuumStoreException
     {
-        Collection builds = getCore().getBuildsForProject( project.getId() );
+        Collection builds = store.getBuildsForProject( project.getId(), 0, 0 );
 
         return builds.size() == 0;
     }

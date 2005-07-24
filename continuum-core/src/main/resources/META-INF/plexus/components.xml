@@ -1,30 +1,32 @@
 <component-set>
   <components>
     <component>
-      <role>org.apache.maven.continuum.core.ContinuumCore</role>
-      <implementation>org.apache.maven.continuum.core.DefaultContinuumCore</implementation>
+      <role>org.apache.maven.continuum.Continuum</role>
+      <implementation>org.apache.maven.continuum.DefaultContinuum</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
+          <role>org.codehaus.plexus.action.ActionManager</role>
         </requirement>
         <requirement>
-          <role>org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager</role>
+          <role>org.apache.maven.continuum.scheduler.ContinuumScheduler</role>
         </requirement>
         <requirement>
-          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
-          <role-hint>build-project</role-hint>
-          <field-name>buildQueue</field-name>
-        </requirement>
-        <requirement>
-          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
-          <role-hint>check-out-project</role-hint>
-          <field-name>checkOutQueue</field-name>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
         <requirement>
-          <role>org.apache.maven.continuum.scm.ContinuumScm</role>
+          <role>org.apache.maven.continuum.initialization.ContinuumInitializer</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.build.settings.BuildSettingsActivator</role>
+        </requirement>
+        <!-- from core -->
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>build-project</role-hint>
+          <field-name>buildQueue</field-name>
         </requirement>
       </requirements>
       <configuration>
@@ -66,34 +68,6 @@
     </component>
 
     <component>
-      <role>org.apache.maven.continuum.Continuum</role>
-      <implementation>org.apache.maven.continuum.DefaultContinuum</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
-        </requirement>
-        <requirement>
-          <role>org.codehaus.plexus.action.ActionManager</role>
-        </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.scheduler.ContinuumScheduler</role>
-        </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
-        </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.store.ContinuumStore</role>
-        </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.initialization.ContinuumInitializer</role>
-        </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.build.settings.BuildSettingsActivator</role>
-        </requirement>
-      </requirements>
-    </component>
-
-    <component>
       <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
       <implementation>org.apache.maven.continuum.execution.manager.DefaultBuildExecutorManager</implementation>
       <requirements>
@@ -106,7 +80,8 @@
 
     <component>
       <role>org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager</role>
-      <implementation>org.apache.maven.continuum.project.builder.manager.DefaultContinuumProjectBuilderManager</implementation>
+      <implementation>
+        org.apache.maven.continuum.project.builder.manager.DefaultContinuumProjectBuilderManager</implementation>
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.project.builder.ContinuumProjectBuilder</role>
@@ -416,7 +391,8 @@
     <component>
       <role>org.codehaus.plexus.taskqueue.TaskViabilityEvaluator</role>
       <role-hint>build-project</role-hint>
-      <implementation>org.apache.maven.continuum.buildqueue.evaluator.BuildProjectTaskViabilityEvaluator</implementation>
+      <implementation>
+        org.apache.maven.continuum.buildqueue.evaluator.BuildProjectTaskViabilityEvaluator</implementation>
       <configuration>
         <required-buildInterval>1000</required-buildInterval>
       </configuration>
@@ -596,17 +572,12 @@
       <implementation>org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>check-out-project</role-hint>
+          <field-name>checkOutQueue</field-name>
         </requirement>
-      </requirements>
-    </component>
-    <component>
-      <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>create-projects-from-metadata</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.CreateProjectsFromMetadata</implementation>
-      <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
       </requirements>
     </component>
@@ -616,93 +587,10 @@
       <implementation>org.apache.maven.continuum.core.action.CheckoutProjectContinuumAction</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
-        </requirement>
-      </requirements>
-    </component>
-    <component>
-      <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>store-checkout-scm-result</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.StoreCheckOutScmResultAction</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
-        </requirement>
-      </requirements>
-    </component>
-    <component>
-      <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>execute-builder</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.ExecuteBuilderContinuumAction</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
         <requirement>
-          <role>org.apache.maven.continuum.notification.ContinuumNotificationDispatcher</role>
-        </requirement>
-      </requirements>
-    </component>
-    <component>
-      <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>store-project</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.StoreProjectAction</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
-        </requirement>
-      </requirements>
-    </component>
-    <component>
-      <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>store-project-group</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.StoreProjectGroupAction</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
-        </requirement>
-      </requirements>
-    </component>
-    <component>
-      <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>validate-project</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.ValidateProject</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
-        </requirement>
-      </requirements>
-    </component>
-    <component>
-      <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>validate-project-group</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.ValidateProjectGroup</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
-        </requirement>
-      </requirements>
-    </component>
-    <component>
-      <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>update-working-directory-from-scm</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.UpdateWorkingDirectoryFromScmContinuumAction</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
-        </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.notification.ContinuumNotificationDispatcher</role>
-        </requirement>
-      </requirements>
-    </component>
-    <component>
-      <role>org.codehaus.plexus.action.Action</role>
-      <role-hint>update-project-from-working-directory</role-hint>
-      <implementation>org.apache.maven.continuum.core.action.UpdateProjectFromWorkingDirectoryContinuumAction</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+          <role>org.apache.maven.continuum.scm.ContinuumScm</role>
         </requirement>
       </requirements>
     </component>
@@ -712,7 +600,126 @@
       <implementation>org.apache.maven.continuum.core.action.CheckWorkingDirectoryAction</implementation>
       <requirements>
         <requirement>
-          <role>org.apache.maven.continuum.core.ContinuumCore</role>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>create-projects-from-metadata</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.CreateProjectsFromMetadata</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>execute-builder</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.ExecuteBuilderContinuumAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.notification.ContinuumNotificationDispatcher</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>store-checkout-scm-result</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.StoreCheckOutScmResultAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>store-project</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.StoreProjectAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>store-project-group</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.StoreProjectGroupAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>validate-project</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.ValidateProject</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>validate-project-group</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.ValidateProjectGroup</implementation>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>update-working-directory-from-scm</role-hint>
+      <implementation>
+        org.apache.maven.continuum.core.action.UpdateWorkingDirectoryFromScmContinuumAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.notification.ContinuumNotificationDispatcher</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.scm.ContinuumScm</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>update-project-from-working-directory</role-hint>
+      <implementation>
+        org.apache.maven.continuum.core.action.UpdateProjectFromWorkingDirectoryContinuumAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>validate-project</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.ValidateProject</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
       </requirements>
     </component>

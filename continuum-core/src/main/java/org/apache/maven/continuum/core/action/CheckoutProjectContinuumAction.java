@@ -19,7 +19,9 @@ package org.apache.maven.continuum.core.action;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.scm.ScmResult;
+import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.utils.ContinuumUtils;
+import org.apache.maven.continuum.store.ContinuumStore;
 import org.codehaus.plexus.scm.NoSuchScmProviderException;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -33,10 +35,14 @@ import java.util.Map;
 public class CheckoutProjectContinuumAction
     extends AbstractContinuumAction
 {
+    private ContinuumScm scm;
+
+    private ContinuumStore store;
+
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = getProject( context );
+        ContinuumProject project = store.getProject( getProjectId( context ) );
 
         File workingDirectory = getWorkingDirectory( context );
 
@@ -46,7 +52,7 @@ public class CheckoutProjectContinuumAction
 
         try
         {
-            ScmResult result = getScm().checkOut( project, workingDirectory );
+            ScmResult result = scm.checkOut( project, workingDirectory );
 
             context.put( KEY_CHECKOUT_SCM_RESULT, result );
         }

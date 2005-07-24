@@ -19,8 +19,10 @@ package org.apache.maven.continuum.core.action;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
+import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.store.ContinuumStore;
 
 import java.io.File;
 import java.util.Map;
@@ -32,10 +34,14 @@ import java.util.Map;
 public class UpdateProjectFromWorkingDirectoryContinuumAction
     extends AbstractContinuumAction
 {
+    private BuildExecutorManager buildExecutorManager;
+
+    private ContinuumStore store;
+
     public void execute( Map context )
         throws ContinuumStoreException, ContinuumException, ContinuumBuildExecutorException
     {
-        ContinuumProject project = getProject( context );
+        ContinuumProject project = store.getProject( getProjectId( context ) );
 
         getLogger().info( "Updating project '" + project.getName() + "' from checkout." );
 
@@ -43,7 +49,7 @@ public class UpdateProjectFromWorkingDirectoryContinuumAction
         // Make a new descriptor
         // ----------------------------------------------------------------------
 
-        ContinuumBuildExecutor builder = getBuildExecutorManager().getBuildExecutor( project.getExecutorId() );
+        ContinuumBuildExecutor builder = buildExecutorManager.getBuildExecutor( project.getExecutorId() );
 
         builder.updateProjectFromCheckOut( new File( project.getWorkingDirectory() ), project );
 
@@ -51,6 +57,6 @@ public class UpdateProjectFromWorkingDirectoryContinuumAction
         // Store the new descriptor
         // ----------------------------------------------------------------------
 
-        getStore().updateProject( project );
+        store.updateProject( project );
     }
 }

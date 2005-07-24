@@ -19,6 +19,7 @@ package org.apache.maven.continuum.core.action;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.store.ContinuumStore;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -31,6 +32,8 @@ import java.util.Map;
 public class StoreProjectAction
     extends AbstractContinuumAction
 {
+    private ContinuumStore store;
+
     public void execute( Map context )
         throws ContinuumException, ContinuumStoreException
     {
@@ -40,7 +43,7 @@ public class StoreProjectAction
         //
         // ----------------------------------------------------------------------
 
-        project = getStore().addProject( project );
+        project = store.addProject( project );
 
         context.put( KEY_PROJECT_ID, project.getId() );
 
@@ -48,7 +51,7 @@ public class StoreProjectAction
         // Set the working directory
         // ----------------------------------------------------------------------
 
-        File projectWorkingDirectory = new File( getCore().getWorkingDirectory(), project.getId() );
+        File projectWorkingDirectory = new File( getWorkingDirectory( context ), project.getId() );
 
         if ( !projectWorkingDirectory.exists() && !projectWorkingDirectory.mkdirs() )
         {
@@ -63,8 +66,6 @@ public class StoreProjectAction
 
         project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
 
-        project = getStore().updateProject( project );
-
-        context.put( KEY_UNVALIDATED_PROJECT, project );
+        project = store.updateProject( project );
     }
 }

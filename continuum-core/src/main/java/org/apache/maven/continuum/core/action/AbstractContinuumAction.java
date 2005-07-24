@@ -16,19 +16,10 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.core.ContinuumCore;
-import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
-import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
-import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
-import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.ScmResult;
-import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.action.AbstractAction;
-import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -70,20 +61,6 @@ public abstract class AbstractContinuumAction
     public static final String KEY_FORCED = "forced";
 
     // ----------------------------------------------------------------------
-    // Requirements
-    // ----------------------------------------------------------------------
-
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumCore core;
-
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumNotificationDispatcher notificationDispatcher;
-
-    // ----------------------------------------------------------------------
     // Utils
     // ----------------------------------------------------------------------
 
@@ -95,50 +72,6 @@ public abstract class AbstractContinuumAction
         }
 
         return string;
-    }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    protected ContinuumCore getCore()
-    {
-        return core;
-    }
-
-    protected ContinuumStore getStore()
-    {
-        return core.getStore();
-    }
-
-    protected ContinuumScm getScm()
-    {
-        return core.getScm();
-    }
-
-    protected ContinuumNotificationDispatcher getNotifier()
-    {
-        return notificationDispatcher;
-    }
-
-    protected ContinuumProjectBuilderManager getProjectBuilderManager()
-    {
-        return core.getProjectBuilderManager();
-    }
-
-    protected TaskQueue getBuildQueue()
-    {
-        return core.getBuildQueue();
-    }
-
-    protected TaskQueue getCheckOutQueue()
-    {
-        return core.getCheckOutQueue();
-    }
-
-    protected BuildExecutorManager getBuildExecutorManager()
-    {
-        return core.getBuildExecutorManager();
     }
 
     // ----------------------------------------------------------------------
@@ -160,12 +93,6 @@ public abstract class AbstractContinuumAction
         return getBoolean( context, KEY_FORCED );
     }
 
-    protected ContinuumProject getProject( Map context )
-        throws ContinuumStoreException
-    {
-        return getStore().getProject( getProjectId( context ) );
-    }
-
     public static ContinuumProject getUnvalidatedProject( Map context )
     {
         return (ContinuumProject) getObject( context, KEY_UNVALIDATED_PROJECT );
@@ -174,12 +101,6 @@ public abstract class AbstractContinuumAction
     public static ContinuumProjectGroup getUnvalidatedProjectGroup( Map context )
     {
         return (ContinuumProjectGroup) getObject( context, KEY_UNVALIDATED_PROJECT_GROUP );
-    }
-
-    protected ContinuumBuild getBuild( Map context )
-        throws ContinuumStoreException
-    {
-        return getStore().getBuild( getBuildId( context ) );
     }
 
     public static File getWorkingDirectory( Map context )

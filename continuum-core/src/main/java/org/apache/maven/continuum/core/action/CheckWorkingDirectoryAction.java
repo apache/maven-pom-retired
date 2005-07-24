@@ -17,6 +17,7 @@ package org.apache.maven.continuum.core.action;
  */
 
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.store.ContinuumStore;
 
 import java.io.File;
 import java.util.Map;
@@ -28,10 +29,12 @@ import java.util.Map;
 public class CheckWorkingDirectoryAction
     extends AbstractContinuumAction
 {
+    private ContinuumStore store;
+
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = getProject( context );
+        ContinuumProject project = store.getProject( getProjectId( context ) );
 
         File workingDirectory = new File( project.getWorkingDirectory() );
 
