@@ -64,7 +64,12 @@ public class MavenTwoIntegrationTest
                        MavenTwoBuildExecutor.ID,
                        project );
 
-        assertEquals( "project.notifiers.size", 1, project.getNotifiers().size() );
+        assertEquals( "project.notifiers.size", 2, project.getNotifiers().size() );
+
+        //TODO: Activate this test when CONTINUUM-252 will be fixed
+        //removeNotifier( projectId, ( (ContinuumNotifier) project.getNotifiers().get( 1 ) ).getType() );
+
+        //assertEquals( "project.notifiers.size", 1, project.getNotifiers().size() );
 
         Map configuration = ((ContinuumNotifier) project.getNotifiers().get( 0 )).getConfiguration();
 
@@ -123,6 +128,14 @@ public class MavenTwoIntegrationTest
             "          <address>" + getEmail() + "</address>\n" +
             "        </configuration>\n" +
             "      </notifier>\n" +
+            "      <notifier>\n" +
+            "        <type>irc</type>\n" +
+            "        <configuration>\n" +
+            "          <host>irc.codehaus.org</host>\n" +
+            "          <port>6667</port>\n" +
+            "          <channel>#plexus</channel>\n" +
+            "        </configuration>\n" +
+            "      </notifier>\n" +
             "    </notifiers>\n" +
             "  </ciManagement>\n" +
             "  <scm>\n" +
@@ -136,5 +149,19 @@ public class MavenTwoIntegrationTest
                              "class Foo { }" );
 
         cvsImport( basedir, artifactId, getCvsRoot() );
+    }
+
+    private void removeNotifier( String projectId, String notifierType )
+    {
+        try
+        {
+            getContinuum().removeNotifier( projectId, notifierType );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+
+            fail( "Unexpected exception after removing notifier '" + notifierType + "' for project '" + projectId );
+        }
     }
 }
