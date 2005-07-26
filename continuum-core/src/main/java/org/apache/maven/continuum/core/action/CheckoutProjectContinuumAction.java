@@ -22,7 +22,7 @@ import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.continuum.store.ContinuumStore;
-import org.codehaus.plexus.scm.NoSuchScmProviderException;
+import org.apache.maven.scm.manager.NoSuchScmProviderException;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;

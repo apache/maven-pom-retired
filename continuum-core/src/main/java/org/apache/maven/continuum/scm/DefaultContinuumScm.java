@@ -21,10 +21,10 @@ import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.ScmFileSet;
 import org.apache.maven.scm.command.checkout.CheckOutScmResult;
 import org.apache.maven.scm.command.update.UpdateScmResult;
+import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.apache.maven.scm.repository.ScmRepositoryException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.scm.ScmManager;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
@@ -84,7 +84,7 @@ public class DefaultContinuumScm
 
                 ScmFileSet fileSet = new ScmFileSet( workingDirectory );
 
-                result = convertScmResult( scmManager.checkOut( repository, fileSet, tag ) );
+                result = convertScmResult( scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, tag ) );
             }
 
             if ( !result.isSuccess() )
@@ -155,7 +155,7 @@ public class DefaultContinuumScm
 
             synchronized ( this )
             {
-                result = convertScmResult( scmManager.update( repository, fileSet, tag ) );
+                result = convertScmResult( scmManager.getProviderByRepository( repository ).update( repository, fileSet, tag ) );
             }
 
             if ( !result.isSuccess() )
