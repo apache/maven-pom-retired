@@ -27,7 +27,6 @@ import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Developer;
 import org.apache.maven.model.Notifier;
-import org.apache.maven.model.Repository;
 import org.apache.maven.model.Scm;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
@@ -339,12 +338,10 @@ public class DefaultMavenBuilderHelper
             getLogger().warn( "Error while building Maven settings.", e );
         }
 
-        Repository repository = new Repository();
-
         return artifactRepositoryFactory.createArtifactRepository( "local",
                                                                    "file://" + localRepository,
                                                                    repositoryLayout,
-                                                                   repository.getSnapshotPolicy(),
-                                                                   repository.getChecksumPolicy() );
+                                                                   null,
+                                                                   null );
     }
 }
