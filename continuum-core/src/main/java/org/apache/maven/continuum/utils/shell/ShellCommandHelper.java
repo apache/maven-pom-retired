@@ -28,11 +28,13 @@ public interface ShellCommandHelper
 
     ExecutionResult executeShellCommand( File workingDirectory,
                                          String executable,
-                                         String arguments )
+                                         String arguments,
+                                         File output )
         throws Exception;
 
     ExecutionResult executeShellCommand( File workingDirectory,
                                          String executable,
-                                         String[] arguments )
+                                         String[] arguments,
+                                         File output)
         throws Exception;
 }

@@ -57,7 +57,7 @@ public class AntBuildExecutor
     // ContinuumBuilder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildExecutionResult build( ContinuumProject p )
+    public ContinuumBuildExecutionResult build( ContinuumProject p, File buildOutput )
         throws ContinuumBuildExecutorException
     {
         AntProject project = (AntProject) p;
@@ -71,7 +71,8 @@ public class AntBuildExecutor
 
         return executeShellCommand( workingDirectory,
                                     executable,
-                                    arguments );
+                                    arguments,
+                                    buildOutput );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject p )

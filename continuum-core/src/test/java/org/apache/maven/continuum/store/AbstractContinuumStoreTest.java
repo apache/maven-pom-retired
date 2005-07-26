@@ -463,7 +463,7 @@ public class AbstractContinuumStoreTest
 
         build.setExitCode( result.getExitCode() );
 
-        store.setBuildOutput( build.getId(), "output" );
+        //store.setBuildOutput( build.getId(), "output" );
 
         store.updateBuild( build );
     }

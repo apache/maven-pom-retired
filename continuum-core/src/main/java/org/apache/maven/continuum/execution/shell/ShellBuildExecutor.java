@@ -54,7 +54,7 @@ public class ShellBuildExecutor
     // ContinuumBuilder implementation
     // ----------------------------------------------------------------------
 
-    public synchronized ContinuumBuildExecutionResult build( ContinuumProject p )
+    public synchronized ContinuumBuildExecutionResult build( ContinuumProject p, File buildOutput )
         throws ContinuumBuildExecutorException
     {
         ShellProject project = (ShellProject) p;
@@ -65,7 +65,8 @@ public class ShellBuildExecutor
 
         return executeShellCommand( workingDirectory,
                                     executable,
-                                    project.getCommandLineArguments() );
+                                    project.getCommandLineArguments(),
+                                    buildOutput );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject p )

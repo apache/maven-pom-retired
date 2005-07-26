@@ -54,7 +54,7 @@ public class MavenOneBuildExecutor
     // Builder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildExecutionResult build( ContinuumProject p )
+    public ContinuumBuildExecutionResult build( ContinuumProject p, File buildOutput )
         throws ContinuumBuildExecutorException
     {
         MavenOneProject project = (MavenOneProject) p;
@@ -66,7 +66,8 @@ public class MavenOneBuildExecutor
 
         return executeShellCommand( workingDirectory, 
                                     null,
-                                    commandLine );
+                                    commandLine,
+                                    buildOutput );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

@@ -62,7 +62,7 @@ public class MavenTwoBuildExecutor
     // ContinuumBuilder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildExecutionResult build( ContinuumProject p )
+    public ContinuumBuildExecutionResult build( ContinuumProject p, File buildOutput )
         throws ContinuumBuildExecutorException
     {
         MavenTwoProject project = (MavenTwoProject) p;
@@ -74,7 +74,8 @@ public class MavenTwoBuildExecutor
 
         return executeShellCommand( workingDirectory,
                                     null,
-                                    arguments );
+                                    arguments,
+                                    buildOutput );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

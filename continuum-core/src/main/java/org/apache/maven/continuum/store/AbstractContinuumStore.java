@@ -34,26 +34,10 @@ public abstract class AbstractContinuumStore
     /** @plexus.requirement */
     private ConfigurationService configurationService;
 
-    public void setBuildOutput( String buildId, String output )
-        throws ContinuumStoreException
-    {
-        File file = getOutputFile( buildId );
-
-        try
-        {
-            FileUtils.fileWrite( file.getAbsolutePath(), output );
-        }
-        catch ( IOException e )
-        {
-            throw new ContinuumStoreException( "Could not write the build output to file: " +
-                                               "'" + file.getAbsolutePath() + "'.", e );
-        }
-    }
-
     public String getBuildOutput( String buildId )
         throws ContinuumStoreException
     {
-        File file = getOutputFile( buildId );
+        File file = getBuildOutputFile( buildId );
 
         try
         {
@@ -71,7 +55,7 @@ public abstract class AbstractContinuumStore
     //
     // ----------------------------------------------------------------------
 
-    private File getOutputFile( String buildId )
+    public File getBuildOutputFile( String buildId )
         throws ContinuumStoreException
     {
         File dir = new File( configurationService.getBuildOutputDirectory(),
@@ -83,8 +67,6 @@ public abstract class AbstractContinuumStore
                                                "'" + dir.getAbsolutePath() + "'." );
         }
 
-        File file = new File( dir, buildId + ".log.txt" );
-
-        return file;
+        return new File( dir, buildId + ".log.txt" );
     }
 }

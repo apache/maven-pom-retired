@@ -34,11 +34,13 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.FileUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -338,7 +340,16 @@ public abstract class AbstractContinuumTest
 
         build.setExitCode( result.getExitCode() );
 
-        store.setBuildOutput( build.getId(), result.getOutput() );
+        String outputFile = store.getBuildOutputFile( build.getId() ).getAbsolutePath();
+
+        try
+        {
+            FileUtils.fileWrite( outputFile, result.getOutput() );
+        }
+        catch ( IOException e )
+        {
+            // do nothing
+        }
 
         store.updateBuild( build );
     }

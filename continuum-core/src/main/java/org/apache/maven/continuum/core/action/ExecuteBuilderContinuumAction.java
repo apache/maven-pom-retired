@@ -31,6 +31,7 @@ import org.apache.maven.continuum.utils.ContinuumUtils;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+import java.io.File;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -103,14 +104,14 @@ public class ExecuteBuilderContinuumAction
         {
             notifier.runningGoals( project, build );
 
-            ContinuumBuildExecutionResult result = buildExecutor.build( project );
+            File buildOutputFile = store.getBuildOutputFile( buildId );
+
+            ContinuumBuildExecutionResult result = buildExecutor.build( project, buildOutputFile );
 
             build.setState( result.getExitCode() == 0 ?
                             ContinuumProjectState.OK : ContinuumProjectState.FAILED );
 
             build.setExitCode( result.getExitCode() );
-
-            output = result.getOutput();
         }
         catch( Throwable e )
         {
@@ -125,8 +126,6 @@ public class ExecuteBuilderContinuumAction
             // ----------------------------------------------------------------------
             // Copy over the build result
             // ----------------------------------------------------------------------
-
-            store.setBuildOutput( buildId, output );
 
             build = store.updateBuild( build );
 

@@ -114,13 +114,14 @@ public abstract class AbstractBuildExecutor
 
     protected ContinuumBuildExecutionResult executeShellCommand( File workingDirectory,
                                                                  String executable,
-                                                                 String arguments )
+                                                                 String arguments,
+                                                                 File output )
         throws ContinuumBuildExecutorException
     {
         // ----------------------------------------------------------------------
         // If we're not searching the path for the executable, prefix the
         // executable with the working directory to make sure the path is
-        // absolute and thus won't be tried resolved by using the PATH
+        // absolute and thus won't be tried resoled by using the PATH
         // ----------------------------------------------------------------------
 
         String actualExecutable;
@@ -173,12 +174,12 @@ public abstract class AbstractBuildExecutor
         {
             ExecutionResult result = shellCommandHelper.executeShellCommand( workingDirectory,
                                                                              actualExecutable,
-                                                                             arguments );
+                                                                             arguments,
+                                                                             output );
 
             getLogger().info( "Exit code: " + result.getExitCode() );
 
-            return new ContinuumBuildExecutionResult( result.getOutput(),
-                                                      result.getExitCode() );
+            return new ContinuumBuildExecutionResult( "", result.getExitCode() );
         }
         catch ( Exception e )
         {

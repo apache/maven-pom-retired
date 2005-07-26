@@ -19,8 +19,13 @@ package org.apache.maven.continuum.utils.shell;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
+import org.codehaus.plexus.util.cli.StreamConsumer;
+import org.codehaus.plexus.util.cli.WriterStreamConsumer;
+import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -36,7 +41,8 @@ public class DefaultShellCommandHelper
 
     public ExecutionResult executeShellCommand( File workingDirectory,
                                                 String executable,
-                                                String arguments )
+                                                String arguments,
+                                                File output )
         throws Exception
     {
         Commandline cl = new Commandline();
@@ -47,12 +53,14 @@ public class DefaultShellCommandHelper
 
         return executeShellCommand( workingDirectory,
                                     executable,
-                                    argument.getParts() );
+                                    argument.getParts(),
+                                    output );
     }
 
     public ExecutionResult executeShellCommand( File workingDirectory,
                                                 String executable,
-                                                String[] arguments )
+                                                String[] arguments,
+                                                File output )
         throws Exception
     {
         // ----------------------------------------------------------------------
@@ -76,18 +84,22 @@ public class DefaultShellCommandHelper
         //
         // ----------------------------------------------------------------------
 
-        CommandLineUtils.StringStreamConsumer consumer = new CommandLineUtils.StringStreamConsumer();
+        //CommandLineUtils.StringStreamConsumer consumer = new CommandLineUtils.StringStreamConsumer();
+
+        Writer writer = new FileWriter( output );
+
+        StreamConsumer consumer = new WriterStreamConsumer( writer );
 
         int exitCode = CommandLineUtils.executeCommandLine( cl, consumer, consumer );
+
+        writer.flush();
+
+        writer.close();
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        String output = consumer.getOutput();
-
-        ExecutionResult result = new ExecutionResult( output, exitCode );
-
-        return result;
+        return new ExecutionResult( exitCode );
     }
 }

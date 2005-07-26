@@ -34,12 +34,16 @@
      |
      | Plexus Dependencies
      |
-     |-->
+     |-->     
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>     
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-jdo2</artifactId>
       <version>1.0-alpha-1</version>
-    </dependency>
+    </dependency>    
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-velocity</artifactId>

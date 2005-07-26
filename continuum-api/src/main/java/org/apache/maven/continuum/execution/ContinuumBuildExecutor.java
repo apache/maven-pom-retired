@@ -38,7 +38,7 @@ public interface ContinuumBuildExecutor
 
     String SHELL_EXECUTOR_ID = "shell";
 
-    ContinuumBuildExecutionResult build( ContinuumProject project )
+    ContinuumBuildExecutionResult build( ContinuumProject project, File buildOutput )
         throws ContinuumBuildExecutorException;
 
     void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
