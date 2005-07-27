@@ -190,6 +190,22 @@
       <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
     </repository>
   </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>snapshots</id>
+      <name>Maven Central Development Repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>snapshots</id>
+      <name>Maven Central Plugins Development Repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2/plugins</url>
+    </pluginRepository>
+  </pluginRepositories>
+
   <build>
     <pluginManagement>
       <plugins>
