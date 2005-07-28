@@ -8,7 +8,7 @@
   <url>http://maven.apache.org/continuum/</url>
   <ciManagement>
     <system>continuum</system>
-    <url>http://maven.zones.apache.org:8080/continuumweb/servlet/continuum</url>
+    <url>http://maven.zones.apache.org/continuum/</url>
     <notifiers>
       <notifier>
         <type>mail</type>
