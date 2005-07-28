@@ -14,7 +14,7 @@
       <url>scp://minotaur.apache.org//www/maven.apache.org/continuum/</url>
     </site>
   </distributionManagement>
-  <reports>
+  <reporting>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -35,5 +35,5 @@
       </plugin>
       -->
     </plugins>
-  </reports>
+  </reporting>
 </project>

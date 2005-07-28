@@ -32,5 +32,6 @@
       <item name="Building" href="dev/building.html"/>
       <item name="Change Log" href="change-log.html"/>
     </menu>
+    ${reports}
   </body>
 </project>
