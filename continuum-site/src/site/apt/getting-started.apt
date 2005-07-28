@@ -12,7 +12,7 @@ Installing Continuum
  Windows or <<<bin/macosx/run.sh>>> if you are using MacOS X.
 
  When Continuum is running you can access it with your browser on
- {{http://localhost:8080/continuum/servlet/continuum}} or by using the XMLRPC interface on port 8000.
+ {{http://localhost:8080/continuum/}} or by using the XMLRPC interface on port 8000.
 
 Adding Projects to Continuum
 
