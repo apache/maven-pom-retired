@@ -133,7 +133,7 @@ public class MavenTwoIntegrationTest
             "        <configuration>\n" +
             "          <host>irc.codehaus.org</host>\n" +
             "          <port>6667</port>\n" +
-            "          <channel>#plexus</channel>\n" +
+            "          <channel>#test</channel>\n" +
             "        </configuration>\n" +
             "      </notifier>\n" +
             "    </notifiers>\n" +
