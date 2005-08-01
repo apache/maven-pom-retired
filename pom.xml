@@ -12,7 +12,9 @@
     <notifiers>
       <notifier>
         <type>mail</type>
-        <address>continuum-dev@maven.apache.org</address>
+        <configuration>
+          <address>continuum-dev@maven.apache.org</address>
+        </configuration>
       </notifier>
     </notifiers>
   </ciManagement>
@@ -189,20 +191,31 @@
       <name>Maven Repository</name>
       <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
     </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Maven Central Development Repository</name>
+      <url>scp://repo1.maven.org/home/projects/maven/repository-staging/snapshots/maven2</url>
+    </snapshotRepository>
   </distributionManagement>
 
   <repositories>
     <repository>
       <id>snapshots</id>
-      <name>Maven Central Development Repository</name>
+      <name>Maven Snapshot Development Repository</name>
       <url>http://snapshots.maven.codehaus.org/maven2</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
     </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
       <id>snapshots</id>
-      <name>Maven Central Plugins Development Repository</name>
+      <name>Maven Snapshot Plugins Development Repository</name>
       <url>http://snapshots.maven.codehaus.org/maven2/plugins</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
     </pluginRepository>
   </pluginRepositories>
 
