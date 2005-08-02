@@ -226,7 +226,7 @@ public abstract class AbstractIntegrationTest
 
     protected String getEmail()
     {
-        return "trygvis@codehaus.org";
+        return System.getProperty( "user.name" ) + "@localhost";
     }
 
     // ----------------------------------------------------------------------
