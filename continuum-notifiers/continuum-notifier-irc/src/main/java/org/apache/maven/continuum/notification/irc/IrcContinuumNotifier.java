@@ -131,15 +131,40 @@ public class IrcContinuumNotifier
         // Send message
         // ----------------------------------------------------------------------
 
-        ircClient.connect( host, port, "continuum" );
+        try
+        {
+            ircClient.connect( host, port, "continuum" );
 
-        ircClient.logon();
+            ircClient.logon();
 
-        ircClient.sendMessageToChannel( channel, generateMessage( project, build ) );
-
-        ircClient.logoff();
-
-        ircClient.disconnect();
+            ircClient.sendMessageToChannel( channel, generateMessage( project, build ) );
+        }
+        catch( Exception e )
+        {
+            throw new ContinuumException( "Exception while sending message.", e );
+        }
+        finally
+        {
+            try
+            {
+                ircClient.logoff();
+            }
+            catch( Exception e )
+            {
+                throw new ContinuumException( "Exception while logoff.", e );
+            }
+            finally
+            {
+                try
+                {
+                    ircClient.disconnect();
+                }
+                catch( Exception e )
+                {
+                    throw new ContinuumException( "Exception while disconnecting.", e );
+                }
+            }
+        }
     }
 
     private String generateMessage( ContinuumProject project, ContinuumBuild build )
