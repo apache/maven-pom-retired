@@ -530,6 +530,7 @@ public abstract class AbstractContinuumStoreTest
         }
     }
 
+/*
     public void testGetLatestBuild()
         throws Exception
     {
@@ -560,6 +561,7 @@ public abstract class AbstractContinuumStoreTest
 
         assertEquals( size, actualBuilds.size() );
     }
+*/
 
     public void testBuildResult()
         throws Exception
