@@ -29,7 +29,7 @@ import org.codehaus.plexus.jdo.JdoFactory;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class AbstractContinuumStoreTest
+public abstract class AbstractContinuumStoreTest
     extends AbstractContinuumTest
 {
     private ContinuumStore store;
