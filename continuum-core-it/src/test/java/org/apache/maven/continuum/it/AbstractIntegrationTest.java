@@ -16,44 +16,44 @@ package org.apache.maven.continuum.it;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.Reader;
-import java.io.FileReader;
-import java.io.ByteArrayInputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.List;
-
-import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
-import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.AbstractContinuumTest;
+import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
-import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.scm.ScmResult;
-import org.apache.maven.continuum.scm.ScmFile;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-
+import org.apache.maven.continuum.scm.ScmFile;
+import org.apache.maven.continuum.scm.ScmResult;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.context.Context;
-import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.InterpolationFilterReader;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.InterpolationFilterReader;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -62,7 +62,7 @@ import org.codehaus.plexus.util.cli.Commandline;
 public abstract class AbstractIntegrationTest
     extends PlexusTestCase
 {
-    private final static DateFormat progressDateFormat = new SimpleDateFormat( "yyyy.MM.dd HH:mm:ss" );
+    private static final DateFormat progressDateFormat = new SimpleDateFormat( "yyyy.MM.dd HH:mm:ss" );
 
     private Date startTime;
 
@@ -184,7 +184,7 @@ public abstract class AbstractIntegrationTest
 
         long diff = endTime.getTime() - startTime.getTime();
 
-        System.err.println( "Used " + diff + "ms" );
+        progress( "Used " + diff + "ms" );
     }
 
     protected XmlRpcHelper getXmlRpcHelper()
@@ -270,7 +270,7 @@ public abstract class AbstractIntegrationTest
     protected void system( File workingDirectory, String cmd, String arguments )
         throws CommandLineException
     {
-        system( workingDirectory, cmd, new String[] { arguments } );
+        system( workingDirectory, cmd, new String[]{arguments} );
     }
 
     protected void system( File workingDirectory, String cmd, String[] arguments )
@@ -284,7 +284,7 @@ public abstract class AbstractIntegrationTest
 
         for ( int i = 0; i < arguments.length; i++ )
         {
-            String argument = arguments[ i ];
+            String argument = arguments[i];
 
             commandline.createArgument().setLine( argument );
         }
@@ -407,7 +407,7 @@ public abstract class AbstractIntegrationTest
 
         getContinuum().buildProject( projectId, force );
 
-        while( true )
+        while ( true )
         {
             Collection builds = getContinuum().getBuildsForProject( projectId );
 
@@ -423,7 +423,7 @@ public abstract class AbstractIntegrationTest
 
             count--;
 
-            Thread.sleep( 100 );
+            Thread.yield();
         }
     }
 
@@ -438,7 +438,7 @@ public abstract class AbstractIntegrationTest
 
             fail( "Expected exception after removing project '" + projectId + "'." );
         }
-        catch ( Exception e )
+        catch ( ContinuumException e )
         {
             // expected
         }
@@ -449,22 +449,19 @@ public abstract class AbstractIntegrationTest
     {
         long timeout = 60 * 1000;
 
-        long sleepInterval = 100;
+        long start = System.currentTimeMillis();
 
         ContinuumProject project = getContinuum().getProject( projectId );
 
-        while( project.getScmResult() == null &&
-               project.getCheckOutErrorMessage() == null &
-               project.getCheckOutErrorException() == null )
+        while ( project.getScmResult() == null &&
+            project.getCheckOutErrorMessage() == null & project.getCheckOutErrorException() == null )
         {
-            Thread.sleep( sleepInterval );
-
-            timeout -= sleepInterval;
-
-            if ( timeout <= 0 )
+            if ( System.currentTimeMillis() - start > timeout )
             {
                 fail( "Timeout while waiting for project '" + project.getName() + "' to be checked out." );
             }
+
+            Thread.yield();
 
             project = getContinuum().getProject( projectId );
         }
@@ -497,21 +494,19 @@ public abstract class AbstractIntegrationTest
         throws Exception
     {
         int timeout = 120 * 1000;
-        int sleepInterval = 100;
+        long start = System.currentTimeMillis();
 
         ContinuumBuild build = getContinuum().getBuild( buildId );
 
-        while( build.getState() == ContinuumProjectState.UPDATING ||
-               build.getState() == ContinuumProjectState.BUILDING )
+        while ( build.getState() == ContinuumProjectState.UPDATING ||
+            build.getState() == ContinuumProjectState.BUILDING )
         {
-            if ( timeout <= 0 )
+            if ( System.currentTimeMillis() - start > timeout )
             {
                 fail( "Timeout while waiting for build #" + buildId + " to complete." );
             }
 
-            Thread.sleep( sleepInterval );
-
-            timeout -= sleepInterval;
+            Thread.yield();
 
             build = getContinuum().getBuild( buildId );
         }
@@ -523,12 +518,8 @@ public abstract class AbstractIntegrationTest
     // Assertions
     // ----------------------------------------------------------------------
 
-    public void assertProject( String projectId,
-                               String name,
-                               String version,
-                               String commandLineArguments,
-                               String executorId,
-                               ContinuumProject project )
+    public void assertProject( String projectId, String name, String version, String commandLineArguments,
+                               String executorId, ContinuumProject project )
     {
         assertEquals( "project.id", projectId, project.getId() );
         assertEquals( "project.name", name, project.getName() );
@@ -537,8 +528,7 @@ public abstract class AbstractIntegrationTest
         assertEquals( "project.executorId", executorId, project.getExecutorId() );
     }
 
-    public void assertCheckedOutFiles( ContinuumProject project,
-                                       String[] expectedCheckedOutFiles )
+    public void assertCheckedOutFiles( ContinuumProject project, String[] expectedCheckedOutFiles )
     {
         assertNotNull( "project.scmResult", project.getScmResult() );
 
@@ -552,7 +542,7 @@ public abstract class AbstractIntegrationTest
 
             for ( int i = 0; i < expectedCheckedOutFiles.length; i++ )
             {
-                String checkedOutFile = expectedCheckedOutFiles[ i ];
+                String checkedOutFile = expectedCheckedOutFiles[i];
 
                 print( " " + checkedOutFile );
             }
@@ -566,22 +556,22 @@ public abstract class AbstractIntegrationTest
                 print( " " + scmFile.getPath() );
             }
 
-            assertEquals( "The expected and actual lists of checked out actualCheckedOutFiles doesn't have the same length.",
-                          expectedCheckedOutFiles.length,
-                          actualCheckedOutFiles.size() );
+            assertEquals(
+                "The expected and actual lists of checked out actualCheckedOutFiles doesn't have the same length.",
+                expectedCheckedOutFiles.length, actualCheckedOutFiles.size() );
         }
 
         for ( int i = 0; i < expectedCheckedOutFiles.length; i++ )
         {
-            String expectedCheckedOutFile = expectedCheckedOutFiles[ i ];
+            String expectedCheckedOutFile = expectedCheckedOutFiles[i];
 
             ScmFile actualCheckedOutFile = (ScmFile) actualCheckedOutFiles.get( i );
 
-            assertEquals( "File #" + i + " doesn't match the expected path.",
-                          expectedCheckedOutFile,
+            assertEquals( "File #" + i + " doesn't match the expected path.", expectedCheckedOutFile,
                           actualCheckedOutFile.getPath() );
         }
     }
+
     public ContinuumBuild assertSuccessfulNoBuildPerformed( String buildId )
         throws Exception
     {
@@ -620,27 +610,13 @@ public abstract class AbstractIntegrationTest
     public ContinuumBuild assertSuccessfulMaven1Build( String buildId )
         throws Exception
     {
-        ContinuumBuild build = assertSuccessfulBuild( buildId );
-
-        String output = getStore().getBuildOutput( buildId );
-
-        assertTrue( "Output didn't contain the 'BUILD SUCCESSFUL' message.",
-                    output.indexOf( "BUILD SUCCESSFUL" ) != -1 );
-
-        return build;
+        return assertSuccessfulAntBuild( buildId );
     }
 
     public ContinuumBuild assertSuccessfulMaven2Build( String buildId )
         throws Exception
     {
-        ContinuumBuild build = assertSuccessfulBuild( buildId );
-
-        String output = getStore().getBuildOutput( buildId );
-
-        assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.",
-                    output.indexOf( "BUILD SUCCESSFUL" ) != -1 );
-
-        return build;
+        return assertSuccessfulMaven1Build( buildId );
     }
 
     public ContinuumBuild assertSuccessfulAntBuild( String buildId )
@@ -650,8 +626,11 @@ public abstract class AbstractIntegrationTest
 
         String output = getStore().getBuildOutput( buildId );
 
-        assertTrue( "Standard output didn't contain the 'BUILD SUCCESSFUL' message.",
-                    output.indexOf( "BUILD SUCCESSFUL" ) != -1 );
+        if ( output.indexOf( "BUILD SUCCESSFUL" ) < 0 )
+        {
+            System.err.println( "output: " + output );
+            fail( "Standard output didn't contain the 'BUILD SUCCESSFUL' message." );
+        }
 
         return build;
     }
@@ -663,9 +642,7 @@ public abstract class AbstractIntegrationTest
 
         String output = getStore().getBuildOutput( buildId );
 
-        assertEquals( "Standard output didn't contain the expected output.",
-                      expectedStandardOutput,
-                      output );
+        assertEquals( "Standard output didn't contain the expected output.", expectedStandardOutput, output );
 
         return build;
     }
@@ -687,7 +664,7 @@ public abstract class AbstractIntegrationTest
     protected void scmImport( File root, String artifactId, String scm, File scmRoot )
         throws CommandLineException
     {
-        if ( scm.equals( "cvs" ) )
+        if ( "cvs".equals( scm ) )
         {
             cvsImport( root, artifactId, scmRoot );
         }
@@ -700,7 +677,8 @@ public abstract class AbstractIntegrationTest
     protected void cvsImport( File root, String artifactId, File scmRoot )
         throws CommandLineException
     {
-        system( root, "cvs", "-d " + scmRoot.getAbsolutePath() + " import -m yo_yo " + artifactId + " continuum_test start" );
+        system( root, "cvs",
+                "-d " + scmRoot.getAbsolutePath() + " import -m yo_yo " + artifactId + " continuum_test start" );
     }
 
     protected void svnImport( File root, String artifactId, File svnRoot )
@@ -712,13 +690,14 @@ public abstract class AbstractIntegrationTest
     protected void cvsCheckout( File cvsRoot, String module, File coDir )
         throws CommandLineException
     {
-        system( new File( getBasedir() ), "cvs", "-d " + cvsRoot.getAbsolutePath() + " checkout -d " + coDir.getAbsolutePath() + " " + module );
+        system( new File( getBasedir() ), "cvs",
+                "-d " + cvsRoot.getAbsolutePath() + " checkout -d " + coDir.getAbsolutePath() + " " + module );
     }
 
     protected void cvsCommit( File coDir )
         throws CommandLineException
     {
-        system( coDir, "cvs", new String[] { "commit -m ", "-" } );
+        system( coDir, "cvs", new String[]{"commit -m ", "-"} );
     }
 
     protected void initializeSvnRoot()
@@ -776,11 +755,11 @@ public abstract class AbstractIntegrationTest
     protected String makeScmUrl( String scm, File scmRoot, String artifactId )
         throws CommandLineException
     {
-        if ( scm.equals( "cvs" ) )
+        if ( "cvs".equals( scm ) )
         {
             return "scm|cvs|local|" + scmRoot.getAbsolutePath() + "|" + artifactId;
         }
-        else if ( scm.equals( "svn" ) )
+        else if ( "svn".equals( scm ) )
         {
             return getScmUrl( scmRoot ) + "/" + artifactId;
         }
@@ -792,10 +771,7 @@ public abstract class AbstractIntegrationTest
     // Maven 1
     // ----------------------------------------------------------------------
 
-    protected void writeMavenOnePom( File file,
-                                     String artifactId,
-                                     String scmUrl,
-                                     String email )
+    protected void writeMavenOnePom( File file, String artifactId, String scmUrl, String email )
         throws IOException
     {
         PrintWriter writer = new PrintWriter( new FileWriter( file ) );
