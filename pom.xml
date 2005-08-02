@@ -203,9 +203,9 @@
       <id>snapshots</id>
       <name>Maven Snapshot Development Repository</name>
       <url>http://snapshots.maven.codehaus.org/maven2</url>
-      <!-- releases>
+      <releases>
         <enabled>false</enabled>
-      </releases -->
+      </releases>
     </repository>
   </repositories>
   <pluginRepositories>
@@ -213,9 +213,9 @@
       <id>snapshots</id>
       <name>Maven Snapshot Plugins Development Repository</name>
       <url>http://snapshots.maven.codehaus.org/maven2/plugins</url>
-      <!-- releases>
+      <releases>
         <enabled>false</enabled>
-      </releases -->
+      </releases>
     </pluginRepository>
   </pluginRepositories>
 
