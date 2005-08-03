@@ -1,3 +1,4 @@
+<!-- TODO: let's lose the continuum prefix on all these class names -->
 <model>
   <id>continuum</id>
   <name>Continuum</name>
@@ -46,14 +47,14 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
-<!--
-add stash.storable="false" to workingDirectory and scmUrl
-        <field>
-          <name>path</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
--->
+        <!--
+        add stash.storable="false" to workingDirectory and scmUrl
+                <field>
+                  <name>path</name>
+                  <version>1.0.0</version>
+                  <type>String</type>
+                </field>
+        -->
         <field stash.storable="false">
           <name>state</name>
           <version>1.0.0</version>

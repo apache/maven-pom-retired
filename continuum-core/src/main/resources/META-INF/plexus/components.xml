@@ -531,6 +531,12 @@
             <name>org.jpox.autoStartMechanismMode</name>
             <value>Quiet</value>
           </property>
+          <!-- TODO: check if we need this on
+                    <property>
+                      <name>javax.jdo.option.Multithreaded</name>
+                      <value>true</value>
+                    </property>
+          -->
         </properties>
       </configuration>
     </component>
