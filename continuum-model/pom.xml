@@ -22,7 +22,6 @@
         <version>1.0</version>
         <executions>
           <execution>
-            <id>foo</id>
             <goals>
               <goal>enhance</goal>
             </goals>
@@ -40,7 +39,6 @@
         </configuration>
         <executions>
           <execution>
-            <id>foo</id>
             <goals>
               <goal>java</goal>
               <!--
