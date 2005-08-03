@@ -1,9 +1,0 @@
-# 
-# Check the addition of an m2 project
-# 
-get_html | http://localhost:8080/continuum/servlet/continuum
-click_link | Add M1 Project
-select_form | 0
-set_textfield | m1PomUrl = http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/m1-test-poms/project-with-no-nag-email-element.xml
-submit_form | Submit
-check_text | Missing 'nagEmailAddress' element in the 'build' element in the POM.
