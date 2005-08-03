@@ -29,7 +29,8 @@ if [ ! -z "$RUNNING" ]; then
 fi
 
 HOME_DIR=`pwd`
-DIR=$HOME/continuum-build
+DIR=$HOME_DIR/checkouts
+SUNREPO=$HOME_DIR/sunrepo
 REPO=$HOME_DIR/maven-repo-local
 SCM_LOG=scm.log
 TIMESTAMP=`date +%Y%m%d.%H%M%S`
@@ -58,11 +59,6 @@ mkdir -p $MESSAGE_DIR
 
 # ----------------------------------------------------------------------------------
 
-BUILD_REQUIRED=false
-if [ -f $HOME_DIR/build_required ]; then
-  BUILD_REQUIRED=`cat $HOME_DIR/build_required`
-fi
-
 if [ ! -d $DIR/maven-components ]; then
   CMD="checkout"
 fi
@@ -72,12 +68,26 @@ fi
   then
 
     rm -rf $DIR > /dev/null 2>&1
-      
+
     mkdir $DIR
-      
+
     rm -rf $REPO > /dev/null 2>&1
-      
+
     mkdir $REPO
+
+    cp -R $SUNREPO/* $REPO/
+
+    echo
+    echo "Performing a clean check out of maven2 ..."
+    echo
+
+    (
+      cd $DIR
+
+      $SVN co http://svn.apache.org/repos/asf/maven/components/trunk maven-components > $HOME_DIR/$SCM_LOG 2>&1
+
+      build_m1=1
+    )
 
     echo
     echo "Performing a clean check out of continuum ..."
@@ -85,20 +95,20 @@ fi
 
     (
       cd $DIR
-        
+
       $SVN co http://svn.apache.org/repos/asf/maven/continuum/trunk continuum > $HOME_DIR/$SCM_LOG 2>&1
-    
-      echo "true" > $HOME_DIR/build_required     
+
+      build_continuum=1
     )
-    
+
   else
-    
+
     echo
-    echo "Performing an update of continuum ..."
+    echo "Performing an update of maven-components ..."
     echo
-      
+
     (
-      cd $DIR/continuum
+      cd $DIR/maven-components
       
       $SVN update > $HOME_DIR/$SCM_LOG 2>&1
       
@@ -106,53 +116,69 @@ fi
 
       if [ "$?" = "1" ]
       then
-        
-	echo $BUILD_REQUIRED > $HOME_DIR/build_required
-      
-        else
-	
-	echo "true" > $HOME_DIR/build_required
-	  
+        build_m2=0
+      else
+        build_m1=1
+      fi
+
+    )
+
+    echo
+    echo "Performing an update of continuum ..."
+    echo
+
+    (
+      cd $DIR/continuum
+
+      $SVN update > $HOME_DIR/$SCM_LOG 2>&1
+
+      grep "^[PUAD] " $HOME_DIR/$SCM_LOG > /dev/null 2>&1
+
+      if [ "$?" = "1" ]
+      then
+        build_continuum=0
+      else
+        build_continuum=1
       fi
 
     )
 
   fi
-    
-  BUILD_REQUIRED=`cat $HOME_DIR/build_required`
 
-  if [ "$BUILD_REQUIRED" = "true" ]
+  if [ build_m2 != 0 -o build_continuum != 0 ]
   then
       
     echo "Updates occured, build required ..."
     echo
-    grep "^[PUAD] " $HOME_DIR/$SCM_LOG
-    echo
+
+    (
+      cd $DIR/maven-components
+  
+      sh m2-bootstrap-all.sh -Dmaven.repo.local="$REPO" -Dmaven.home="$M2_HOME" --update-snapshots
+      ret=$?; if [ $ret != 0 ]; then exit $ret; fi
+    )    
+    ret=$?; if [ $ret != 0 ]; then exit $ret; fi
 
     (
       cd $DIR/continuum
-  
+
       sh build.sh -Dmaven.repo.local="$REPO" -Dmaven.home="$M2_HOME"
       ret=$?; if [ $ret != 0 ]; then exit $ret; fi
     )    
     ret=$?; if [ $ret != 0 ]; then exit $ret; fi
 
   else
-  
     echo "No updates occured, no build required. Done."
-  
   fi
 
 ) >> $MESSAGE 2>&1
 ret=$?
 
-BUILD_REQUIRED=`cat $HOME_DIR/build_required`
-
 # Only send mail to the list if a build was required.
 
 host=`hostname`
 
-if [ "$BUILD_REQUIRED" = "true" ]
+if [ build_m2 != 0 -o build_continuum != 0 ]
 then
   echo "From: $FROM" > log
   echo "To: $TO" >> log
@@ -160,7 +186,6 @@ then
     echo "Subject: [continuum build - FAILED - $CMD] $DATE" >> log
   else
     echo "Subject: [continuum build - SUCCESS - $CMD] $DATE" >> log
-    rm $HOME_DIR/build_required
   fi
   echo "" >> log
   echo "Log:" >> log
