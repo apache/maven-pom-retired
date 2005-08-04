@@ -39,7 +39,7 @@ DEPLOY_SITE=http://maven.zones.apache.org/~continuum/builds
 DIST=m2-${TIMESTAMP}.tar.gz
 SVN=svn
 
-M2_HOME=$HOME_DIR/m2
+M2_HOME=/export/home/maven/m2
 export M2_HOME
 PATH=$PATH:$JAVA_HOME/bin:$M2_HOME/bin
 export PATH
@@ -58,7 +58,7 @@ mkdir -p $MESSAGE_DIR
 
 # ----------------------------------------------------------------------------------
 
-if [ ! -d $DIR/maven-components ]; then
+if [ ! -d $DIR/continuum ]; then
   CMD="checkout"
 fi
 
@@ -77,18 +77,6 @@ fi
     cp -R $SUNREPO/* $REPO/
 
     echo
-    echo "Performing a clean check out of maven2 ..."
-    echo
-
-    (
-      cd $DIR
-
-      $SVN co http://svn.apache.org/repos/asf/maven/components/trunk maven-components > $HOME_DIR/$SCM_LOG 2>&1
-
-      build_m1=1
-    )
-
-    echo
     echo "Performing a clean check out of continuum ..."
     echo
 
@@ -101,26 +89,6 @@ fi
     )
 
   else
-
-    echo
-    echo "Performing an update of maven-components ..."
-    echo
-
-    (
-      cd $DIR/maven-components
-      
-      $SVN update > $HOME_DIR/$SCM_LOG 2>&1
-      
-      grep "^[PUAD] " $HOME_DIR/$SCM_LOG > /dev/null 2>&1
-
-      if [ "$?" = "1" ]
-      then
-        build_m2=0
-      else
-        build_m1=1
-      fi
-
-    )
 
     echo
     echo "Performing an update of continuum ..."
@@ -144,19 +112,11 @@ fi
 
   fi
 
-  if [ build_m2 != 0 -o build_continuum != 0 ]
+  if [ build_continuum != 0 ]
   then
       
     echo "Updates occured, build required ..."
     echo
-
-    (
-      cd $DIR/maven-components
-  
-      sh m2-bootstrap-all.sh -Dmaven.repo.local="$REPO" -Dmaven.home="$M2_HOME" --update-snapshots
-      ret=$?; if [ $ret != 0 ]; then exit $ret; fi
-    )    
-    ret=$?; if [ $ret != 0 ]; then exit $ret; fi
 
     (
       cd $DIR/continuum
