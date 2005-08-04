@@ -59,12 +59,10 @@ public class MavenOneBuildExecutor
     {
         MavenOneProject project = (MavenOneProject) p;
 
-        File workingDirectory = new File( project.getWorkingDirectory() );
-
         String commandLine = StringUtils.clean( project.getCommandLineArguments() ) + " " +
                              StringUtils.clean( project.getGoals() );
 
-        return executeShellCommand( workingDirectory, 
+        return executeShellCommand( project,
                                     null,
                                     commandLine,
                                     buildOutput );

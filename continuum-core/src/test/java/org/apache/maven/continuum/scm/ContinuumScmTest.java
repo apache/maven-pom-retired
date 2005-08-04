@@ -16,14 +16,14 @@ package org.apache.maven.continuum.scm;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.apache.maven.continuum.AbstractContinuumTest;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class ContinuumScmTest
-    extends PlexusTestCase
+    extends AbstractContinuumTest
 {
     public void testBasic()
         throws Exception

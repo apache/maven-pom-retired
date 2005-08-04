@@ -62,14 +62,12 @@ public class AntBuildExecutor
     {
         AntProject project = (AntProject) p;
 
-        File workingDirectory = new File( project.getWorkingDirectory() );
-
         String executable = project.getExecutable();
 
         String arguments = StringUtils.clean( project.getCommandLineArguments() ) + " " +
                            StringUtils.clean( project.getTargets() );
 
-        return executeShellCommand( workingDirectory,
+        return executeShellCommand( project,
                                     executable,
                                     arguments,
                                     buildOutput );

@@ -128,8 +128,8 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getWarnings().size() );
 
-        assertTrue( "Does not end with I'm-not-here-project/pom.xml",
-                    result.getWarnings().get( 0 ).toString().endsWith( "I'm-not-here-project/pom.xml" ) );
+        assertTrue( "Does not end with \"I'm-not-here-project/pom.xml\"",
+                    result.getWarnings().get( 0 ).toString().indexOf( "I'm-not-here-project/pom.xml" ) != -1 );
 
         // ----------------------------------------------------------------------
         // Assert the project group built

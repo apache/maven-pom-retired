@@ -1,12 +1,5 @@
 package org.apache.maven.continuum.initialization;
 
-import org.apache.maven.continuum.build.settings.BuildSettingsConstants;
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
-import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
  *
@@ -22,6 +15,12 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.apache.maven.continuum.build.settings.BuildSettingsConstants;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -55,8 +54,6 @@ public class DefaultContinuumInitializer
     // Default project group and build settings
     // ----------------------------------------------------------------------
 
-    private ContinuumProjectGroup defaultProjectGroup;
-
     private ContinuumBuildSettings defaultBuildSettings;
 
     // ----------------------------------------------------------------------
@@ -85,33 +82,6 @@ public class DefaultContinuumInitializer
         {
             throw new ContinuumInitializationException( "Error storing default Continuum build settings.", e );
         }
-
-        defaultProjectGroup = createDefaultProjectGroup();
-
-        try
-        {
-            defaultProjectGroup = store.addProjectGroup( defaultProjectGroup );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new ContinuumInitializationException( "Error storing default Continuum project group.", e );
-        }
-
-        defaultProjectGroup.addBuildSetting( defaultBuildSettings );
-
-        try
-        {
-            defaultProjectGroup = store.updateProjectGroup( defaultProjectGroup );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new ContinuumInitializationException( "Error updating default Continuum project group.", e );
-        }
-    }
-
-    public ContinuumProjectGroup getDefaultProjectGroup()
-    {
-        return defaultProjectGroup;
     }
 
     public ContinuumBuildSettings getDefaultBuildSettings()
@@ -122,20 +92,6 @@ public class DefaultContinuumInitializer
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
-
-    public ContinuumProjectGroup createDefaultProjectGroup()
-        throws ContinuumInitializationException
-    {
-        ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
-
-        projectGroup.setName( DEFAULT_PROJECT_GROUP_NAME );
-
-        projectGroup.setGroupId( DEFAULT_PROJECT_GROUP_ID );
-
-        projectGroup.setDescription( DEFAULT_PROJECT_GROUP_DESCRIPTION );
-
-        return projectGroup;
-    }
 
     public ContinuumBuildSettings createDefaultBuildSettings()
         throws ContinuumInitializationException

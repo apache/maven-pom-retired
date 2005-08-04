@@ -17,6 +17,7 @@ package org.apache.maven.continuum.scm;
  */
 
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.ScmFileSet;
 import org.apache.maven.scm.command.checkout.CheckOutScmResult;
@@ -39,8 +40,15 @@ public class DefaultContinuumScm
     extends AbstractLogEnabled
     implements ContinuumScm
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ScmManager scmManager;
+
+    /**
+     * @plexus.requirement
+     */
+    private WorkingDirectoryService workingDirectoryService;
 
     // ----------------------------------------------------------------------
     // ContinuumScm implementation
@@ -121,14 +129,14 @@ public class DefaultContinuumScm
     public ScmResult checkOutProject( ContinuumProject project )
         throws ContinuumScmException
     {
-        String workingDirectory = project.getWorkingDirectory();
+        File workingDirectory = workingDirectoryService.getWorkingDirectory( project );
 
         if ( workingDirectory == null )
         {
             throw new ContinuumScmException( "The working directory for the project has to be set. Project: '" + project.getName() + "', id: '" + project.getId() + "'.");
         }
 
-        return checkOut( project, new File( workingDirectory ) );
+        return checkOut( project, workingDirectory );
     }
 
     public ScmResult updateProject( ContinuumProject project )
@@ -138,11 +146,12 @@ public class DefaultContinuumScm
         {
             getLogger().info( "Updating project: id: '" + project.getId() + "', name '" + project.getName() + "'." );
 
-            File workingDirectory = new File( project.getWorkingDirectory() );
+            File workingDirectory = workingDirectoryService.getWorkingDirectory( project );
 
             if ( !workingDirectory.exists() )
             {
-                throw new ContinuumScmException( "The working directory for the project doesn't exist (" + project.getWorkingDirectory() + ")." );
+                throw new ContinuumScmException( "The working directory for the project doesn't exist " +
+                                                 "(" + workingDirectory.getAbsolutePath() + ")." );
             }
 
             ScmRepository repository = scmManager.makeScmRepository( project.getScmUrl() );

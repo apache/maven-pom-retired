@@ -17,8 +17,6 @@ package org.apache.maven.continuum.store;
  */
 
 import org.apache.maven.continuum.AbstractContinuumTest;
-import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.MavenTwoProject;
 
@@ -55,31 +53,60 @@ public class ContinuumTypicalUsageTest
     public void testContinuumTypicalUsage()
         throws Exception
     {
-        Continuum continuum = (Continuum) lookup( Continuum.ROLE );
+        ContinuumProjectGroup projectGroup = AbstractContinuumTest.getDefaultProjectGroup( getStore() );
 
-        ContinuumProjectGroup defaultProjectGroup = AbstractContinuumTest.getDefaultProjectGroup( getStore() );
-            //continuum.getDefaultProjectGroup();
+        int projectGroupProjectCount = projectGroup.getProjects().size();
+
+        int projectCount = getStore().getAllProjects().size();
+
+        int projectGroupCount = getStore().getProjectGroups().size();
 
         // ----------------------------------------------------------------------
         // At this point we can now accept new projects into the system
         // ----------------------------------------------------------------------
 
-        MavenTwoProject project = makeStubMavenTwoProject( "test1" );
+        MavenTwoProject project1 = makeStubMavenTwoProject( "Typical Project 1" );
 
-        project = addMavenTwoProject( getStore(), project );
+        project1.setProjectGroup( projectGroup );
+
+        project1 = addMavenTwoProject( getStore(), project1 );
+
+        assertNotNull( project1.getProjectGroup() );
+
+        assertEquals( projectGroup.getName(), project1.getProjectGroup().getName() );
+
+        assertEquals( projectGroup.getDescription(), project1.getProjectGroup().getDescription() );
+
+        assertEquals( projectGroup.getGroupId(), project1.getProjectGroup().getGroupId() );
 
         // ----------------------------------------------------------------------
-        // Now that we have a project we want to add it to the default project group
+        //
         // ----------------------------------------------------------------------
 
-        defaultProjectGroup.addProject( project );
+        MavenTwoProject project2 = makeStubMavenTwoProject( "Typical Project 2" );
 
-        getStore().updateProjectGroup( defaultProjectGroup );
+        project2.setProjectGroup( projectGroup );
 
-        assertEquals( defaultProjectGroup.getName(), project.getProjectGroup().getName() );
+        project2 = addMavenTwoProject( getStore(), project2 );
 
-        assertEquals( defaultProjectGroup.getDescription(), project.getProjectGroup().getDescription() );
+        assertNotNull( project2.getProjectGroup() );
 
-        assertEquals( defaultProjectGroup.getGroupId(), project.getProjectGroup().getGroupId() );
+        assertEquals( projectGroup.getName(), project2.getProjectGroup().getName() );
+
+        assertEquals( projectGroup.getDescription(), project2.getProjectGroup().getDescription() );
+
+        assertEquals( projectGroup.getGroupId(), project2.getProjectGroup().getGroupId() );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        projectGroup = getDefaultProjectGroup( getStore() );
+
+        assertEquals( projectGroupProjectCount + 2, projectGroup.getProjects().size() );
+
+        assertEquals( projectCount + 2, getStore().getAllProjects().size() );
+
+        assertEquals( projectGroupCount, getStore().getProjectGroups().size() );
     }
 }

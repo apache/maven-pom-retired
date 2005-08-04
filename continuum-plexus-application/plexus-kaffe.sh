@@ -8,13 +8,14 @@ PWD=`pwd`
 #JAVA="$JAVA -verbose"
 JAVA=kaffe 
 JAVA=$HOME/opt/kaffe/bin/kaffe
+JAVA=$HOME/opt/Linux-i686/kaffe-cvs/bin/kaffe
 
 #    -fullversion \
 #    -Xbootclasspath/p:$HOME/opt/classpath-HEAD/share/classpath/glibj.zip \
 #    -verbose \
 $JAVA \
     -Xmx128m \
-    -classpath $PWD/target/plexus-test-runtime/core/boot/classworlds-1.1-alpha-1.jar \
+    -classpath $PWD/target/plexus-test-runtime/core/boot/classworlds-1.1-alpha-2.jar \
     -Dclassworlds.conf=$PWD/target/plexus-test-runtime/conf/classworlds.conf \
     -Dplexus.core=$PWD/target/plexus-test-runtime/core \
     -Djava.io.tmpdir=$PWD/target/plexus-test-runtime/temp \

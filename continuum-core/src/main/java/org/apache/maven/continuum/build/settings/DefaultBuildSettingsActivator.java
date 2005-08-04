@@ -1,16 +1,33 @@
 package org.apache.maven.continuum.build.settings;
 
+/*
+ * Copyright 2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.scheduler.ContinuumBuildJob;
 import org.apache.maven.continuum.scheduler.ContinuumScheduler;
+import org.apache.maven.continuum.scheduler.ContinuumSchedulerException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.StringUtils;
 import org.quartz.CronTrigger;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
-import org.quartz.Job;
 import org.quartz.Scheduler;
 
 import java.text.ParseException;
@@ -52,6 +69,15 @@ public class DefaultBuildSettingsActivator
             {
                 ContinuumBuildSettings buildSettings = (ContinuumBuildSettings) i.next();
 
+                if ( StringUtils.isEmpty( buildSettings.getCronExpression() ) )
+                {
+                    // TODO: this can possibly be removed but it's here now to
+                    // weed out any bugs
+                    getLogger().info( "Not scheduling " + buildSettings.getName() );
+
+                    continue;
+                }
+
                 scheduleBuildSettings( buildSettings, continuum );
             }
         }
@@ -82,7 +108,7 @@ public class DefaultBuildSettingsActivator
 
         trigger.setGroup( Scheduler.DEFAULT_GROUP );
 
-        Date startTime = new Date( System.currentTimeMillis() + ( delay * 1000 ) );
+        Date startTime = new Date( System.currentTimeMillis() + delay * 1000 );
 
         trigger.setStartTime( startTime );
 
@@ -103,7 +129,7 @@ public class DefaultBuildSettingsActivator
 
             getLogger().info( trigger.getNextFireTime() + "" );
         }
-        catch ( Exception e )
+        catch ( ContinuumSchedulerException e )
         {
             throw new BuildSettingsActivationException( "Cannot schedule build job.", e );
         }

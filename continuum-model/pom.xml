@@ -27,6 +27,11 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <driverName>org.hsqldb.jdbcDriver</driverName>
+          <url>jdbc:hsqldb:mem:foo</url>
+          <username>sa</username>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.modello</groupId>

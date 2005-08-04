@@ -53,6 +53,8 @@ public class ConfigurationServiceTest
 
         assertEquals( "build-output", service.getBuildOutputDirectory().getName() );
 
+        assertEquals( "working-directory", service.getWorkingDirectory().getName() );
+
         ContinuumJdk jdk = new ContinuumJdk();
 
         jdk.setVersion( "1.3" );
@@ -100,6 +102,5 @@ public class ConfigurationServiceTest
         jdk = (ContinuumJdk) jdks.get( "1.5" );
 
         assertEquals( "/jdks/1.5", jdk.getHome() );
-
     }
 }

@@ -39,7 +39,7 @@ public class ShellBuildExecutor
 
     public static final String CONFIGURATION_EXECUTABLE = "executable";
 
-    public final static String ID = "shell";
+    public static final String ID = "shell";
 
     // ----------------------------------------------------------------------
     //
@@ -59,11 +59,9 @@ public class ShellBuildExecutor
     {
         ShellProject project = (ShellProject) p;
 
-        File workingDirectory = new File( project.getWorkingDirectory() );
-
         String executable = project.getExecutable();
 
-        return executeShellCommand( workingDirectory,
+        return executeShellCommand( project,
                                     executable,
                                     project.getCommandLineArguments(),
                                     buildOutput );

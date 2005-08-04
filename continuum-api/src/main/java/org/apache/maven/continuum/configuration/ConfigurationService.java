@@ -33,21 +33,23 @@ public interface ConfigurationService
     //
     // ----------------------------------------------------------------------
 
-    public static final String CONFIGURATION = "configuration";
+    String CONFIGURATION = "configuration";
 
-    public static final String CONFIGURATION_INITIALIZED = "initialized";
+    String CONFIGURATION_INITIALIZED = "initialized";
 
-    public static final String CONFIGURATION_URL = "url";
+    String CONFIGURATION_URL = "url";
 
-    public static final String CONFIGURATION_BUILD_OUTPUT_DIRECTORY = "build-output-directory";
+    String CONFIGURATION_BUILD_OUTPUT_DIRECTORY = "build-output-directory";
 
-    public static final String CONFIGURATION_JDKS = "jdks";
+    String CONFIGURATION_WORKING_DIRECTORY = "working-directory";
 
-    public static final String CONFIGURATION_JDK = "jdk";
+    String CONFIGURATION_JDKS = "jdks";
 
-    public static final String CONFIGURATION_JDK_VERSION = "jdk-version";
+    String CONFIGURATION_JDK = "jdk";
 
-    public static final String CONFIGURATION_JDK_HOME = "jdk-home";
+    String CONFIGURATION_JDK_VERSION = "jdk-version";
+
+    String CONFIGURATION_JDK_HOME = "jdk-home";
 
     // ----------------------------------------------------------------------
     //
@@ -64,6 +66,10 @@ public interface ConfigurationService
     File getBuildOutputDirectory();
 
     void setBuildOutputDirectory( File buildOutputDirectory );
+
+    File getWorkingDirectory();
+
+    void setWorkingDirectory( File workingDirectory );
 
     Map getJdks();
 

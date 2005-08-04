@@ -20,6 +20,11 @@ import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
+import org.apache.maven.continuum.scm.ScmResult;
+import org.apache.maven.continuum.scm.ScmFile;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
@@ -109,7 +114,7 @@ public abstract class AbstractIntegrationTest
         // in situ like forms, templates and localization resources.
         // ----------------------------------------------------------------------
 
-        File plexusHome = getTestFile( "target/leve1/level2/plexus-home" );
+        File plexusHome = getTestFile( "target/level1/level2/plexus-home" );
 
         if ( !plexusHome.isDirectory() )
         {
@@ -436,11 +441,11 @@ public abstract class AbstractIntegrationTest
         {
             getContinuum().getProject( projectId );
 
-            fail( "Expected exception after removing project '" + projectId + "'." );
+            fail( "Expected ContinuumObjectNotFoundException after removing project '" + projectId + "'." );
         }
-        catch ( ContinuumException e )
+        catch ( ContinuumException t )
         {
-            // expected
+            assertTrue( t.getCause() instanceof ContinuumObjectNotFoundException );
         }
     }
 

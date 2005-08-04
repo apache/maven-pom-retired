@@ -75,6 +75,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import javax.jdo.JDOHelper;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -85,11 +86,6 @@ public class DefaultContinuum
     extends AbstractLogEnabled
     implements Continuum, Initializable,Startable
 {
-    /**
-     * @plexus.requirement
-     */
-    //private ContinuumCore core;
-
     /**
      * @plexus.requirement
      */
@@ -358,7 +354,8 @@ public class DefaultContinuum
             }
             catch ( ContinuumException ex )
             {
-                getLogger().error( "Could not enqueue project: " + project.getId() + " ('" + project.getName() + "').", ex );
+                getLogger().error( "Could not enqueue project: " + project.getId() + " " +
+                                   "('" + project.getName() + "').", ex );
             }
         }
     }
@@ -582,6 +579,10 @@ public class DefaultContinuum
         ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult)
             context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
 
+        getLogger().info( "Created " + result.getProjects().size() + " projects." );
+        getLogger().info( "Created " + result.getProjectGroups().size() + " project groups." );
+        getLogger().info( result.getWarnings().size() + " warnings." );
+
         // ----------------------------------------------------------------------
         // Look for any warnings.
         // ----------------------------------------------------------------------
@@ -596,35 +597,56 @@ public class DefaultContinuum
         // will go into the first project group in the list.
         // ----------------------------------------------------------------------
 
-        ContinuumProjectGroup projectGroup = null;
-
-        for ( Iterator it = result.getProjectGroups().iterator(); it.hasNext(); )
+        if ( result.getProjectGroups().size() != 1 )
         {
-            projectGroup = (ContinuumProjectGroup) it.next();
+            throw new ContinuumException( "The project building result has to contain exactly one project group." );
+        }
 
+        ContinuumProjectGroup projectGroup = (ContinuumProjectGroup) result.getProjectGroups().iterator().next();
+
+        try
+        {
             try
             {
-                try
-                {
-                    projectGroup = store.getProjectGroupByGroupId( projectGroup.getGroupId() );
-                }
-                catch ( ContinuumObjectNotFoundException e )
-                {
-                    Map pgContext = new HashMap();
+                projectGroup = store.getProjectGroupByGroupId( projectGroup.getGroupId() );
 
-                    pgContext.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, getWorkingDirectory() );                    
-
-                    pgContext.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, projectGroup );
-
-                    executeAction( "validate-project-group", pgContext );
-
-                    executeAction( "store-project-group", pgContext );
-                }
+                getLogger().info( "Using existing project group with the group id: '" + projectGroup.getGroupId() + "'." );
             }
-            catch ( ContinuumStoreException e )
+            catch ( ContinuumObjectNotFoundException e )
             {
-                throw new ContinuumException( "Error while querying for project group.", e );
+                getLogger().info("Creating project group with the group id: '" + projectGroup.getGroupId() + "'." );
+
+                Map pgContext = new HashMap();
+
+                pgContext.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
+
+                pgContext.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, projectGroup );
+
+                executeAction( "validate-project-group", pgContext );
+
+                executeAction( "store-project-group", pgContext );
+
+                String projectGroupId = AbstractContinuumAction.getProjectGroupId( pgContext );
+
+                projectGroup = store.getProjectGroup( projectGroupId );
             }
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error while querying for project group.", e );
+        }
+
+        try
+        {
+            System.err.println( "----------------------" );
+            System.err.println( "PRE:" );
+            System.err.println( "projectGroup count: " + store.getProjectGroups().size() );
+            System.err.println( "project count: " + store.getAllProjects().size() );
+            System.err.println( "----------------------" );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error while querying for project group.", e );
         }
 
         // ----------------------------------------------------------------------
@@ -638,22 +660,102 @@ public class DefaultContinuum
         {
             ContinuumProject project = (ContinuumProject) i.next();
 
+//            for ( Iterator it = result.getProjects().iterator(); it.hasNext(); )
+//            {
+//                ContinuumProject p2 = (ContinuumProject) it.next();
+//
+//                getLogger().info( "Adding project " + p2.getName() + ", project.hashCode(): " + p2.hashCode() );
+//            }
+
             project.setExecutorId( buildExecutorId );
 
-            project.setProjectGroup( projectGroup );
+            try
+            {
+//                System.err.println( "=======================" );
+//                System.err.println( "before store" );
+//                System.err.println( "projectGroup.projects.size: " + store.getProjectGroup( projectGroup.getId() ).getProjects().size() );
+//                System.err.println( "projectGroup count: " + store.getProjectGroups().size() );
+//                System.err.println( "project count: " + store.getAllProjects().size() );
+//                for ( Iterator j = store.getAllProjects().iterator(); j.hasNext(); )
+//                {
+//                    project = (ContinuumProject) j.next();
+//                    System.err.println( project.getId() );
+//                }
+//                System.err.println( "=======================" );
+
+                project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
+                System.err.println( "persisting " + project.getName() + ", id: " + project.getId() );
+                project = store.addProject( project );
+                System.err.println( "persisting " + project.getName() + ", id: " + project.getId() );
+
+//                dumpJdoObject( projectGroup, "project group before adding project" );
+//                dumpJdoObject( project, "project before setting project group" );
+                projectGroup.addProject( project );
+//                dumpJdoObject( projectGroup, "project group after adding project" );
+//                dumpJdoObject( project, "project after setting project group" );
+
+                projectGroup = store.updateProjectGroup( projectGroup );
+
+//                System.err.println( "=======================" );
+//                System.err.println( "after store" );
+//                System.err.println( "projectGroup.projects.size: " + store.getProjectGroup( projectGroup.getId() ).getProjects().size() );
+//                System.err.println( "projectGroup count: " + store.getProjectGroups().size() );
+//                System.err.println( "project count: " + store.getAllProjects().size() );
+//                for ( Iterator j = store.getAllProjects().iterator(); j.hasNext(); )
+//                {
+//                    project = (ContinuumProject) j.next();
+//                    System.err.println( "project: id: " + project.getId() + ", name: " + project.getName() );
+//                }
+//                System.err.println( "=======================" );
+            }
+            catch ( ContinuumStoreException e )
+            {
+                throw new ContinuumException( "crap", e );
+            }
+
+//            project.setProjectGroup( projectGroup );
+//
+            context = new HashMap();
 
             context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
-
-            executeAction( "validate-project", context );
-
-            executeAction( "store-project", context );
-
-            project.setId( (String) context.get( StoreProjectAction.KEY_PROJECT_ID ) );
+//
+//            executeAction( "validate-project", context );
+//
+//            executeAction( "store-project", context );
+//
+            context.put( AbstractContinuumAction.KEY_PROJECT_ID, project.getId() );
 
             executeAction( "add-project-to-checkout-queue", context );
         }
 
+//        try
+//        {
+//            System.err.println( "----------------------" );
+//            System.err.println( "POST:" );
+//            System.err.println( "projectGroup count: " + store.getProjectGroups().size() );
+//            System.err.println( "project count: " + store.getAllProjects().size() );
+//            System.err.println( "----------------------" );
+//        }
+//        catch ( ContinuumStoreException e )
+//        {
+//            throw new ContinuumException( "Error while querying for the project group.", e );
+//        }
+
         return result;
+    }
+
+    private void dumpJdoObject( Object object, String message )
+    {
+        System.err.println( "---------- Dumping JDO Object: " + message );
+        System.err.println( "object.hashCode: " + object.hashCode() );
+        System.err.println( "persistent: " + JDOHelper.isPersistent( object ) );
+        System.err.println( "transactional: " + JDOHelper.isTransactional( object ) );
+        System.err.println( "dirty: " + JDOHelper.isDirty( object ) );
+        System.err.println( "new: " + JDOHelper.isNew( object ) );
+        System.err.println( "deleted: " + JDOHelper.isDeleted( object ) );
+        System.err.println( "detached: " + JDOHelper.isDetached( object ) );
+        System.err.println( "object id: " + JDOHelper.getObjectId( object ) );
+        System.err.println( "----------" );
     }
 
     // ----------------------------------------------------------------------
@@ -986,6 +1088,11 @@ public class DefaultContinuum
 
     private ContinuumException logAndCreateException( String message, Throwable cause )
     {
+        if ( cause instanceof ContinuumObjectNotFoundException )
+        {
+            return new ContinuumException( "No such object.", cause );
+        }
+
         getLogger().error( message, cause );
 
         return new ContinuumException( message, cause );
@@ -1044,7 +1151,6 @@ public class DefaultContinuum
     }
 
     private void startMessage()
-        throws StartingException
     {
         getLogger().info( "Starting Continuum." );
 

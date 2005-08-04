@@ -18,6 +18,8 @@ package org.apache.maven.continuum.execution;
 
 import org.apache.maven.continuum.utils.shell.ExecutionResult;
 import org.apache.maven.continuum.utils.shell.ShellCommandHelper;
+import org.apache.maven.continuum.utils.WorkingDirectoryService;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.commandline.ExecutableResolver;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -49,6 +51,11 @@ public abstract class AbstractBuildExecutor
      * @plexus.requirement
      */
     private ExecutableResolver executableResolver;
+
+    /**
+     * @plexus.requirement
+     * */
+    private WorkingDirectoryService workingDirectoryService;
 
     /**
      * @plexus.configuration
@@ -112,7 +119,7 @@ public abstract class AbstractBuildExecutor
     //
     // ----------------------------------------------------------------------
 
-    protected ContinuumBuildExecutionResult executeShellCommand( File workingDirectory,
+    protected ContinuumBuildExecutionResult executeShellCommand( ContinuumProject project,
                                                                  String executable,
                                                                  String arguments,
                                                                  File output )
@@ -125,6 +132,8 @@ public abstract class AbstractBuildExecutor
         // ----------------------------------------------------------------------
 
         String actualExecutable;
+
+        File workingDirectory = workingDirectoryService.getWorkingDirectory( project );
 
         if ( !resolveExecutable )
         {

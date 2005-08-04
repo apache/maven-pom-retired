@@ -16,24 +16,23 @@ package org.apache.maven.continuum.execution.maven.m1;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.AbstractContinuumTest;
+import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
+import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.MavenOneProject;
+import org.codehaus.plexus.util.FileUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
-import org.apache.maven.continuum.project.ContinuumNotifier;
-import org.apache.maven.continuum.project.MavenOneProject;
-
-import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
 public class MavenOneBuildExecutorTest
-    extends PlexusTestCase
+    extends AbstractContinuumTest
 {
     public void testUpdatingAProjectFromScmWithAExistingProjectAndAEmptyMaven1Pom()
         throws Exception

@@ -38,9 +38,9 @@ public class MavenTwoBuildExecutor
     //
     // ----------------------------------------------------------------------
 
-    public final static String CONFIGURATION_GOALS = "goals";
+    public static final String CONFIGURATION_GOALS = "goals";
 
-    public final static String ID = "maven2";
+    public static final String ID = "maven2";
 
     // ----------------------------------------------------------------------
     //
@@ -67,12 +67,10 @@ public class MavenTwoBuildExecutor
     {
         MavenTwoProject project = (MavenTwoProject) p;
 
-        File workingDirectory = new File( project.getWorkingDirectory() );
-
         String arguments = StringUtils.clean( project.getCommandLineArguments() ) + " " +
                            StringUtils.clean( project.getGoals() );
 
-        return executeShellCommand( workingDirectory,
+        return executeShellCommand( project,
                                     null,
                                     arguments,
                                     buildOutput );

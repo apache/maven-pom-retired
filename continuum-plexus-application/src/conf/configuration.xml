@@ -1,3 +1,4 @@
 <configuration>
   <url>http://localhost:8080/continuum/servlet/continuum</url>
+  <working-directory>working-directory</working-directory>
 </configuration>

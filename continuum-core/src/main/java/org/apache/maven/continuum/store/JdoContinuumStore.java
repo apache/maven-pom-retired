@@ -29,6 +29,10 @@ import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import javax.jdo.Extent;
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.JDOUserException;
@@ -36,10 +40,6 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -165,6 +165,24 @@ public class JdoContinuumStore
     public ContinuumProject updateProject( ContinuumProject project )
         throws ContinuumStoreException
     {
+        String checkoutErrorMessage = project.getCheckOutErrorMessage();
+
+        String checkoutErrorException = project.getCheckOutErrorException();
+
+        if ( checkoutErrorMessage != null && checkoutErrorMessage.length() > 255 )
+        {
+            project.setCheckOutErrorMessage( checkoutErrorMessage.substring( 0, 255 ) );
+        }
+
+        if ( checkoutErrorException != null && checkoutErrorException.length() > 255 )
+        {
+            project.setCheckOutErrorException( checkoutErrorException.substring( 0, 255 ) );
+        }
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
         PersistenceManager pm = pmf.getPersistenceManager();
 
         Transaction tx = pm.currentTransaction();
@@ -178,15 +196,25 @@ public class JdoContinuumStore
             // of schedules or they don't get saved.
             // ----------------------------------------------------------------------
 
-            if ( project.getSchedules() != null && project.getSchedules().size() > 0 )
-            {
-                pm.attachCopyAll( project.getSchedules(), true );
-            }
+//            if ( project.getSchedules() != null && project.getSchedules().size() > 0 )
+//            {
+//                pm.attachCopyAll( project.getSchedules(), true );
+//            }
 
-            if ( project.getBuildGroups() != null && project.getBuildGroups().size() > 0 )
-            {
-                pm.attachCopyAll( project.getBuildGroups(), true );
-            }
+//            if ( project.getBuildGroups() != null && project.getBuildGroups().size() > 0 )
+//            {
+//                pm.attachCopyAll( project.getBuildGroups(), true );
+//            }
+
+//            if ( project.getProjectGroup() != null )
+//            {
+//                pm.attachCopy( project.getProjectGroup(), true );
+//            }
+//
+//            if ( project.getScmResult() != null )
+//            {
+//                pm.attachCopy( project.getScmResult(), true );
+//            }
 
             pm.attachCopy( project, true );
 
@@ -253,6 +281,8 @@ public class JdoContinuumStore
 
             Query query = pm.newQuery( extent );
 
+            query.declareImports( "import java.lang.String" );
+
             query.declareParameters( "String name" );
 
             query.setFilter( "this.name == name" );
@@ -294,6 +324,8 @@ public class JdoContinuumStore
             Extent extent = pm.getExtent( ContinuumProject.class, true );
 
             Query query = pm.newQuery( extent );
+
+            query.declareImports( "import java.lang.String" );
 
             query.declareParameters( "String scmUrl" );
 
@@ -636,6 +668,8 @@ public class JdoContinuumStore
             Query query = pm.newQuery( extent );
 
             query.setFilter( "this.project.id == id" );
+
+            query.declareImports( "import java.lang.String" );
 
             query.declareParameters( "String id" );
 
@@ -1104,9 +1138,17 @@ public class JdoContinuumStore
         {
             tx.begin();
 
+            // ----------------------------------------------------------------------
+            // Store the object
+            // ----------------------------------------------------------------------
+
             pm.makePersistent( object );
 
             Object id = pm.getObjectId( object );
+
+            // ----------------------------------------------------------------------
+            // Fetch the object again and return it
+            // ----------------------------------------------------------------------
 
             pm.getFetchPlan().addGroup( detailedFetchGroup );
 
@@ -1191,11 +1233,11 @@ public class JdoContinuumStore
 
             Query query = pm.newQuery( extent );
 
+            query.declareImports( "import java.lang.String" );
+
             query.declareParameters( "String " + idField );
 
             query.setFilter( "this." + idField + " == " + idField );
-
-            query.getFetchPlan().addGroup( fetchGroup );
 
             Collection result = (Collection) query.execute( id );
 
@@ -1210,6 +1252,8 @@ public class JdoContinuumStore
                                                    "type " + clazz.getName() + " on the " +
                                                    "field '" + idField + "' returned more than one object." );
             }
+
+            pm.getFetchPlan().addGroup( fetchGroup );
 
             Object object = pm.detachCopy( result.iterator().next() );
 

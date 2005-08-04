@@ -56,6 +56,8 @@ public class DefaultConfigurationService
 
     private File buildOutputDirectory;
 
+    private File workingDirectory;
+
     private Map jdks;
 
     private static final String LS = System.getProperty( "line.separator" );
@@ -94,6 +96,16 @@ public class DefaultConfigurationService
     public void setBuildOutputDirectory( File buildOutputDirectory )
     {
         this.buildOutputDirectory = buildOutputDirectory;
+    }
+
+    public File getWorkingDirectory()
+    {
+        return workingDirectory;
+    }
+
+    public void setWorkingDirectory( File workingDirectory )
+    {
+        this.workingDirectory = workingDirectory;
     }
 
     public Map getJdks()
@@ -139,14 +151,7 @@ public class DefaultConfigurationService
         {
             String booleanString = initializedDom.getValue();
 
-            if ( booleanString.equals( "true" ) || booleanString.equals( "1" ) )
-            {
-                initialized = true;
-            }
-            else
-            {
-                initialized = false;
-            }
+            initialized = booleanString.equals( "true" ) || booleanString.equals( "1" );
         }
 
         Xpp3Dom urlDom = configuration.getChild( CONFIGURATION_URL );
@@ -162,6 +167,8 @@ public class DefaultConfigurationService
         {
             buildOutputDirectory = getFile( configuration, CONFIGURATION_BUILD_OUTPUT_DIRECTORY );
         }
+
+        workingDirectory = getFile( configuration, CONFIGURATION_WORKING_DIRECTORY );
 
         Xpp3Dom jdksElement = configuration.getChild( CONFIGURATION_JDKS );
 
@@ -196,7 +203,14 @@ public class DefaultConfigurationService
     private File getFile( Xpp3Dom configuration, String elementName )
         throws ConfigurationLoadingException
     {
-        String value = configuration.getChild( elementName ).getValue();
+        Xpp3Dom element = configuration.getChild( elementName );
+
+        if ( element == null )
+        {
+            throw new ConfigurationLoadingException( "Missing required element '" + elementName + "'." );
+        }
+
+        String value = element.getValue();
 
         if ( StringUtils.isEmpty( value ) )
         {
@@ -217,10 +231,6 @@ public class DefaultConfigurationService
     {
         configuration = new Xpp3Dom( CONFIGURATION );
 
-        System.out.println( "initialized = " + initialized );
-
-        System.out.println( ">>>>>>>>>>>>>>>>>>> Boolean.toString( initialized ) = " + Boolean.toString( initialized ) );
-
         configuration.addChild( createDom( CONFIGURATION_INITIALIZED, Boolean.toString( initialized ) ) );
 
         if ( url != null )
@@ -231,6 +241,11 @@ public class DefaultConfigurationService
         if ( buildOutputDirectory != null )
         {
             configuration.addChild( createFileDom( CONFIGURATION_BUILD_OUTPUT_DIRECTORY, buildOutputDirectory ) );
+        }
+
+        if ( workingDirectory != null )
+        {
+            configuration.addChild( createFileDom( CONFIGURATION_WORKING_DIRECTORY, workingDirectory ) );
         }
 
         if ( jdks != null )

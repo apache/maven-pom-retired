@@ -13,5 +13,9 @@
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-jdo2</artifactId>
+    </dependency>
   </dependencies>
 </project>

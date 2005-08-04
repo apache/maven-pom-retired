@@ -1,0 +1,23 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent-notifiers</artifactId>
+    <version>1.0-beta-1-SNAPSHOT</version>
+  </parent>
+  <artifactId>continuum-notifier-irc</artifactId>
+  <name>Continuum IRC Notifier</name>
+  <version>1.0-beta-1-SNAPSHOT</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-api</artifactId>
+      <version>1.0-beta-1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-ircbot</artifactId>
+      <version>1.1-alpha-4</version>
+    </dependency>
+  </dependencies>
+</project>

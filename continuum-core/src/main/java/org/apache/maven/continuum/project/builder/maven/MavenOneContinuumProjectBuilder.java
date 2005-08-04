@@ -20,6 +20,7 @@ import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelperException;
 import org.apache.maven.continuum.project.MavenOneProject;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -64,9 +65,11 @@ public class MavenOneContinuumProjectBuilder
             return result;
         }
 
+        MavenOneProject project;
+
         try
         {
-            MavenOneProject project = new MavenOneProject();
+            project = new MavenOneProject();
 
             metadataHelper.mapMetadata( pomFile, project );
 
@@ -76,6 +79,18 @@ public class MavenOneContinuumProjectBuilder
         {
             result.addWarning( e.getMessage() );
         }
+
+        // ----------------------------------------------------------------------
+        // This is a hack.
+        // ----------------------------------------------------------------------
+
+        ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
+
+        projectGroup.setName( "Maven 1 group" );
+
+        projectGroup.setGroupId( "dummy" );
+
+        result.addProjectGroup( projectGroup );
 
         return result;
     }

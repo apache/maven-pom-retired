@@ -26,6 +26,7 @@ import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
+import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -50,6 +51,9 @@ public class DefaultBuildController
 
     /** @plexus.requirement */
     private ActionManager actionManager;
+
+    /** @plexus.requirement */
+    private WorkingDirectoryService workingDirectoryService;
 
     // ----------------------------------------------------------------------
     // BuildController Implementation
@@ -87,10 +91,6 @@ public class DefaultBuildController
         // methods, even in a case of failure.
         // ----------------------------------------------------------------------
 
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
         try
         {
             notifierDispatcher.buildStarted( project );
@@ -117,7 +117,8 @@ public class DefaultBuildController
                 }
                 else
                 {
-                    actionContext.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY, project.getWorkingDirectory() );
+                    actionContext.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY,
+                                       workingDirectoryService.getWorkingDirectory( project ) );
 
                     actionManager.lookup( "checkout-project" ).execute( actionContext );
 

@@ -40,17 +40,17 @@ $page.setTitle( "Continuum" )
 
       <tr class="$css.nextClass">
         <td>$state.generate( $item )</td>
-        <td>$item.name</td>
-        <td>$item.version</td>
+        <td>$!item.name</td>
+        <td>$!item.version</td>
         <td>$item.buildNumber</td>
-        <td><a href="$link.setPage('View.vm').addPathInfo('fid', "${item.executorId}Project").addPathInfo('id', $item.id)">View</a></td>
+        <td><a href="$link.setPage('View.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">View</a></td>
 
         ## Operations
 
-        <td><a href="$link.setPage('Edit.vm').addPathInfo('fid', "${item.executorId}Project").addPathInfo('id', $item.id)">Edit</a></td>
+        <td><a href="$link.setPage('Edit.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">Edit</a></td>
 
         #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
-        <td><a href="$link.setPage('Delete.vm').addPathInfo('fid', "${item.executorId}Project").addPathInfo('id', $item.id)">Delete</a></td>
+        <td><a href="$link.setPage('Delete.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">Delete</a></td>
         #else
         <td>Delete</td>
         #end

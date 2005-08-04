@@ -28,9 +28,9 @@
       <version>1.2</version>
     </dependency>
     <dependency>
-      <groupId>hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <version>1.7.3.3</version>
+      <groupId>incubator-derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>10.0.2.1</version>
     </dependency>
   </dependencies>
 </project>

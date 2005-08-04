@@ -34,12 +34,21 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.jdo.JdoFactory;
+import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
+import org.codehaus.plexus.jdo.ConfigurableJdoFactory;
 import org.codehaus.plexus.util.FileUtils;
+import org.jpox.SchemaTool;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Iterator;
+import java.util.Map;
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.PersistenceManager;
 import java.io.IOException;
 
 /**
@@ -55,6 +64,8 @@ public abstract class AbstractContinuumTest
      */
     private static ContinuumProjectGroup defaultProjectGroup;
 
+    private ContinuumStore store;
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -65,6 +76,8 @@ public abstract class AbstractContinuumTest
         super.setUp();
 
         setUpConfigurationService( (ConfigurationService) lookup( ConfigurationService.ROLE ) );
+
+        getStore();
     }
 
     public static void setUpConfigurationService( ConfigurationService configurationService )
@@ -73,6 +86,8 @@ public abstract class AbstractContinuumTest
         configurationService.setInMemoryMode( true );
 
         configurationService.setBuildOutputDirectory( getTestFile( "target/build-output" ) );
+
+        configurationService.setWorkingDirectory( getTestFile( "target/working-directory" ) );
     }
 
     public static ContinuumProjectGroup getDefaultProjectGroup( ContinuumStore store )
@@ -102,7 +117,75 @@ public abstract class AbstractContinuumTest
     protected ContinuumStore getStore()
         throws Exception
     {
-        return (ContinuumStore) lookup( ContinuumStore.ROLE );
+        if ( store != null )
+        {
+            return store;
+        }
+
+        // ----------------------------------------------------------------------
+        // Set up the JDO factory
+        // ----------------------------------------------------------------------
+
+        Object o = lookup( JdoFactory.ROLE );
+
+        assertEquals( DefaultConfigurableJdoFactory.class.getName(), o.getClass().getName() );
+
+        ConfigurableJdoFactory jdoFactory = (ConfigurableJdoFactory) o;
+
+        jdoFactory.setPersistenceManagerFactoryClass( "org.jpox.PersistenceManagerFactoryImpl" );
+
+        jdoFactory.setDriverName( "org.hsqldb.jdbcDriver" );
+
+        jdoFactory.setUrl( "jdbc:hsqldb:mem:foo" );
+
+        jdoFactory.setUserName( "sa" );
+
+        jdoFactory.setPassword( "" );
+
+        jdoFactory.setProperty( "org.jpox.transactionIsolation", "READ_UNCOMMITTED" );
+
+        jdoFactory.setProperty( "org.jpox.poid.transactionIsolation", "READ_UNCOMMITTED" );
+
+        // ----------------------------------------------------------------------
+        // Create the tables
+        // ----------------------------------------------------------------------
+
+        Properties properties = jdoFactory.getProperties();
+
+        for ( Iterator it = properties.entrySet().iterator(); it.hasNext(); )
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
+        }
+
+        String[] files = new String[]{
+            getTestPath( "../continuum-model/src/main/resources/META-INF/package.jdo" ),
+        };
+
+        boolean verbose = false;
+
+        SchemaTool.createSchemaTables( files, verbose );
+
+        // ----------------------------------------------------------------------
+        // Check the configuration
+        // ----------------------------------------------------------------------
+
+        PersistenceManagerFactory pmf = jdoFactory.getPersistenceManagerFactory();
+
+        assertNotNull( pmf );
+
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        pm.close();
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        store = (ContinuumStore) lookup( ContinuumStore.ROLE );
+
+        return store;
     }
 
     // ----------------------------------------------------------------------
@@ -181,9 +264,6 @@ public abstract class AbstractContinuumTest
         project.setCommandLineArguments( commandLineArguments );
         project.setExecutorId( executorId );
 
-        // TODO: Remove
-        project.setWorkingDirectory( "/tmp" );
-
         return project;
     }
 
@@ -219,10 +299,14 @@ public abstract class AbstractContinuumTest
                                                       MavenTwoProject project )
         throws Exception
     {
-        if ( project.getProjectGroup() != null )
+        if ( project.getProjectGroup() == null )
         {
             project.setProjectGroup( getDefaultProjectGroup( store ) );
         }
+
+        assertNotNull( "project group == null", project.getProjectGroup() );
+
+        assertTrue( "!JDOHelper.isDetached( project.getProjectGroup() )", JDOHelper.isDetached( project.getProjectGroup() ) );
 
         // ----------------------------------------------------------------------
         //
@@ -231,6 +315,8 @@ public abstract class AbstractContinuumTest
         ContinuumProject addedProject = store.addProject( project );
 
         assertNotNull( addedProject );
+
+        assertNotNull( "project group == null", addedProject.getProjectGroup() );
 
         // ----------------------------------------------------------------------
         //
@@ -250,7 +336,9 @@ public abstract class AbstractContinuumTest
 
         scmResult.addFile( scmFile );
 
-        addedProject = setCheckoutDone( store, addedProject, scmResult, null, null );
+//        addedProject = setCheckoutDone( store, addedProject, scmResult, null, null );
+
+        assertNotNull( "project group == null", addedProject.getProjectGroup() );
 
         return (MavenTwoProject) addedProject;
     }
@@ -313,7 +401,7 @@ public abstract class AbstractContinuumTest
 
         project.setCheckOutErrorMessage( errorMessage );
 
-        project.setCheckOutErrorException( ContinuumUtils.throwableToString( exception ) );
+        project.setCheckOutErrorException( ContinuumUtils.throwableMessagesToString( exception ) );
 
         return store.updateProject( project );
     }

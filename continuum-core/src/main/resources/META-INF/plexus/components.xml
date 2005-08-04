@@ -103,6 +103,9 @@
         <requirement>
           <role>org.codehaus.plexus.action.ActionManager</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+        </requirement>
       </requirements>
     </component>
 
@@ -129,6 +132,9 @@
         <requirement>
           <role>org.apache.maven.scm.manager.ScmManager</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+        </requirement>
       </requirements>
     </component>
 
@@ -145,9 +151,22 @@
       </requirements>
     </component>
 
+    <component>
+      <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+      <implementation>org.apache.maven.continuum.utils.DefaultWorkingDirectoryService</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
+      </requirements>
+    </component>
+
     <!-- TODO: Remove these two once the plexus bug where plexus would pick
-         the first component with role hint if no component without a role hint exists
-         and was looked up -->
+the first component with role hint if no component without a role hint exists
+and was looked up -->
     <component>
       <role>ContinuumStore</role>
       <role-hint>modello</role-hint>
@@ -246,6 +265,9 @@
         <requirement>
           <role>org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+        </requirement>
       </requirements>
     </component>
 
@@ -289,6 +311,9 @@
         <requirement>
           <role>org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+        </requirement>
       </requirements>
     </component>
 
@@ -313,6 +338,9 @@
         <requirement>
           <role>org.codehaus.plexus.commandline.ExecutableResolver</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+        </requirement>
       </requirements>
       <configuration>
         <default-executable>ant</default-executable>
@@ -329,6 +357,9 @@
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.commandline.ExecutableResolver</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
         </requirement>
       </requirements>
     </component>
@@ -478,6 +509,7 @@
      | JDO
      |
      |-->
+<!--
     <component>
       <role>org.codehaus.plexus.jdo.JdoFactory</role>
       <implementation>org.codehaus.plexus.jdo.DefaultJdoFactory</implementation>
@@ -493,9 +525,7 @@
           </property>
           <property>
             <name>javax.jdo.option.ConnectionURL</name>
-            <!--
-            -->
-            <value>jdbc:hsqldb:.</value>
+            <value>jdbc:hsqldb:faen</value>
           </property>
           <property>
             <name>javax.jdo.option.ConnectionUserName</name>
@@ -505,12 +535,6 @@
             <name>javax.jdo.option.ConnectionPassword</name>
             <value></value>
           </property>
-          <!--
-           | NOTE: This is the only value HSQLDB supports so we're hardcoding this value
-           | here to prevent JPOX from complaining about the lack of support when running the
-           | unit tests. When running with Continuum in a production enviroment
-           | READ_COMMITTED should be used.
-           |-->
           <property>
             <name>org.jpox.transactionIsolation</name>
             <value>READ_UNCOMMITTED</value>
@@ -520,27 +544,27 @@
             <value>READ_UNCOMMITTED</value>
           </property>
           <property>
-            <name>org.jpox.autoCreateSchema</name>
-            <value>true</value>
-          </property>
-          <property>
             <name>org.jpox.autoStartMechanism</name>
             <value>SchemaTable</value>
+          </property>
+          <property>
+            <name>org.jpox.autoCreateSchema</name>
+            <value>true</value>
           </property>
           <property>
             <name>org.jpox.autoStartMechanismMode</name>
             <value>Quiet</value>
           </property>
-          <!-- TODO: check if we need this on
+          <!- - TODO: check if we need this on
                     <property>
                       <name>javax.jdo.option.Multithreaded</name>
                       <value>true</value>
                     </property>
-          -->
+          - ->
         </properties>
       </configuration>
     </component>
-
+-->
     <!--
      |
      | Velocity
@@ -585,6 +609,9 @@
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+        </requirement>
       </requirements>
     </component>
     <component>
@@ -607,6 +634,9 @@
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
         </requirement>
       </requirements>
     </component>
@@ -705,14 +735,16 @@
     <component>
       <role>org.codehaus.plexus.action.Action</role>
       <role-hint>update-project-from-working-directory</role-hint>
-      <implementation>
-        org.apache.maven.continuum.core.action.UpdateProjectFromWorkingDirectoryContinuumAction</implementation>
+      <implementation>org.apache.maven.continuum.core.action.UpdateProjectFromWorkingDirectoryContinuumAction</implementation>
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
         </requirement>
       </requirements>
     </component>
@@ -727,8 +759,12 @@
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+        </requirement>
       </requirements>
     </component>
+
     <!--
      |
      | Scheduler
@@ -767,7 +803,6 @@
         </properties>
       </configuration>
     </component>
-
 
   </components>
 </component-set>

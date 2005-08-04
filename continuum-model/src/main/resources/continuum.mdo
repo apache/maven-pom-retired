@@ -32,6 +32,7 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
+        <!-- TODO: Remove -->
         <field>
           <name>scmUrl</name>
           <version>1.0.0</version>
@@ -43,18 +44,10 @@
           <type>String</type>
         </field>
         <field>
-          <name>workingDirectory</name>
+          <name>path</name>
           <version>1.0.0</version>
           <type>String</type>
         </field>
-        <!--
-        add stash.storable="false" to workingDirectory and scmUrl
-                <field>
-                  <name>path</name>
-                  <version>1.0.0</version>
-                  <type>String</type>
-                </field>
-        -->
         <field stash.storable="false">
           <name>state</name>
           <version>1.0.0</version>

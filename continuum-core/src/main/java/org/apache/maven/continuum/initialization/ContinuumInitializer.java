@@ -1,8 +1,5 @@
 package org.apache.maven.continuum.initialization;
 
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
-
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
  *
@@ -19,6 +16,8 @@ import org.apache.maven.continuum.project.ContinuumProjectGroup;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
+
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id:$
@@ -29,8 +28,6 @@ public interface ContinuumInitializer
 
     void initialize()
         throws ContinuumInitializationException;
-
-    ContinuumProjectGroup getDefaultProjectGroup();
 
     ContinuumBuildSettings getDefaultBuildSettings();
 }

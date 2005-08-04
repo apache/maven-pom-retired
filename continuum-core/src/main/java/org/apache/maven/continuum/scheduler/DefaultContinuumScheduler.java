@@ -48,7 +48,7 @@ public class DefaultContinuumScheduler
     public boolean jobExists( String jobName, String jobGroup )
         throws ContinuumSchedulerException
     {
-        String[] jobNames = null;
+        String[] jobNames;
 
         try
         {
@@ -63,9 +63,10 @@ public class DefaultContinuumScheduler
         {
             String name = jobNames[i];
 
-            if ( jobName.equals( name ) );
-
-            return true;
+            if ( jobName.equals( name ) )
+            {
+                return true;
+            }
         }
 
         return false;
@@ -74,9 +75,6 @@ public class DefaultContinuumScheduler
     /**
      * Create job detail for a build job. The detail contains a map of objects that can be utilized
      * by the executing job.
-     *
-     * @param schedule
-     * @return
      */
     protected JobDetail createJobDetail( ContinuumSchedule schedule )
     {
@@ -90,9 +88,6 @@ public class DefaultContinuumScheduler
     /**
      * Create Job data map for a build job. The map of objects created can be utilized by
      * the executing job.
-     *
-     * @param schedule
-     * @return
      */
     protected JobDataMap createJobDataMap( ContinuumSchedule schedule )
     {
@@ -123,7 +118,7 @@ public class DefaultContinuumScheduler
 
         trigger.setGroup( Scheduler.DEFAULT_GROUP );
 
-        Date startTime = new Date( System.currentTimeMillis() + ( schedule.getDelay() * 1000 ) );
+        Date startTime = new Date( System.currentTimeMillis() + schedule.getDelay() * 1000 );
 
         trigger.setStartTime( startTime );
 

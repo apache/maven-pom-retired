@@ -47,8 +47,6 @@ public class StoreProjectGroupAction
 
         projectGroup.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
 
-        projectGroup = store.updateProjectGroup( projectGroup );
-
-        context.put( KEY_UNVALIDATED_PROJECT_GROUP, projectGroup );
+        store.updateProjectGroup( projectGroup );
     }
 }

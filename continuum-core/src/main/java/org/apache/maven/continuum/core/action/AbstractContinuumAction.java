@@ -83,6 +83,11 @@ public abstract class AbstractContinuumAction
         return getString( context, KEY_PROJECT_ID );
     }
 
+    public static String getProjectGroupId( Map context )
+    {
+        return getString( context, KEY_PROJECT_GROUP_ID );
+    }
+
     public static String getBuildId( Map context )
     {
         return getString( context, KEY_BUILD_ID );

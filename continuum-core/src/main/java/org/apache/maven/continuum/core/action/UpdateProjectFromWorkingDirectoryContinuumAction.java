@@ -22,9 +22,9 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.apache.maven.continuum.store.ContinuumStore;
 
-import java.io.File;
 import java.util.Map;
 
 /**
@@ -34,6 +34,9 @@ import java.util.Map;
 public class UpdateProjectFromWorkingDirectoryContinuumAction
     extends AbstractContinuumAction
 {
+    /** @plexus.requirement */
+    private WorkingDirectoryService workingDirectoryService;
+
     private BuildExecutorManager buildExecutorManager;
 
     private ContinuumStore store;
@@ -51,7 +54,8 @@ public class UpdateProjectFromWorkingDirectoryContinuumAction
 
         ContinuumBuildExecutor builder = buildExecutorManager.getBuildExecutor( project.getExecutorId() );
 
-        builder.updateProjectFromCheckOut( new File( project.getWorkingDirectory() ), project );
+        builder.updateProjectFromCheckOut( workingDirectoryService.getWorkingDirectory( project ),
+                                           project );
 
         // ----------------------------------------------------------------------
         // Store the new descriptor

@@ -22,7 +22,6 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.File;
 import java.util.Map;
 
 /**
@@ -50,7 +49,7 @@ public class StoreProjectAction
         // ----------------------------------------------------------------------
         // Set the working directory
         // ----------------------------------------------------------------------
-
+/*
         File projectWorkingDirectory = new File( getWorkingDirectory( context ), project.getId() );
 
         if ( !projectWorkingDirectory.exists() && !projectWorkingDirectory.mkdirs() )
@@ -63,9 +62,9 @@ public class StoreProjectAction
         // figure out what it is.
 
         project.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
-
+*/
         project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
 
-        project = store.updateProject( project );
+        store.updateProject( project );
     }
 }

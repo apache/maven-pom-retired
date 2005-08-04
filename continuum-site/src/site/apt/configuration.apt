@@ -75,9 +75,11 @@ Configuring Continuum
 ** Example Jetty Configuration
 
  This is a example configuration on how to configure Jetty with one normal HTTP
- listener and one proxy HTTP listener. With configuration Jetty will listen on
- two ports, 8080 and 8090. Continuum can be used from either
- http://localhost:8080 or http://www.company.com/continuum.
+ listener and one proxy HTTP listener. With this configuration Jetty will
+ listen on two ports; 8080 and 8090. Continuum can be used from either
+ http://localhost:8080 or http://www.company.com/continuum. Note that the
+ proxying listener will make Continuum write out URLs with the configured proxy
+ host and port.
 
 +----+
 <service>

@@ -64,7 +64,11 @@ public class ValidateProject
 //        assertStringNotEmpty( project.getPath(), "path" );
 //        assertStringNotEmpty( project.getGroupId(), "group id" );
 //        assertStringNotEmpty( project.getArtifactId(), "artifact id" );
-        // TODO: check for project group
+
+//        if ( project.getProjectGroup() == null )
+//        {
+//            throw new ContinuumException( "A project has to belong to a project group." );
+//        }
 
         // TODO: validate that the SCM provider id
 
