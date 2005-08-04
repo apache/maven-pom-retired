@@ -121,7 +121,7 @@ fi
     (
       cd $DIR/continuum
 
-      sh build.sh --settings $HOME_DIR/settings.xml
+      sh build.sh -e --settings $HOME_DIR/settings.xml
       ret=$?; if [ $ret != 0 ]; then exit $ret; fi
     )    
     ret=$?; if [ $ret != 0 ]; then exit $ret; fi
