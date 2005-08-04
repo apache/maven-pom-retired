@@ -15,4 +15,6 @@ case "`uname`" in
 esac
 
   m2 -Denv=test clean:clean install "$@"
+  ret=$?; if [ $ret != 0 ]; then exit $ret; fi
 ) 2>&1 | tee result.log
+ret=$?; if [ $ret != 0 ]; then exit $ret; fi
