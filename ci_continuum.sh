@@ -3,7 +3,6 @@
 # ----------------------------------------------------------------------------------
 
 . $HOME/.profile
-cd $HOME
 
 CMD=$1
 
@@ -40,7 +39,7 @@ DEPLOY_SITE=http://maven.zones.apache.org/~continuum/builds
 DIST=m2-${TIMESTAMP}.tar.gz
 SVN=svn
 
-M2_HOME=$HOME/m2
+M2_HOME=$HOME_DIR/m2
 export M2_HOME
 PATH=$PATH:$JAVA_HOME/bin:$M2_HOME/bin
 export PATH
@@ -162,7 +161,7 @@ fi
     (
       cd $DIR/continuum
 
-      sh build.sh -Dmaven.repo.local="$REPO" -Dmaven.home="$M2_HOME"
+      sh build.sh --settings $HOME_DIR/settings.xml
       ret=$?; if [ $ret != 0 ]; then exit $ret; fi
     )    
     ret=$?; if [ $ret != 0 ]; then exit $ret; fi
