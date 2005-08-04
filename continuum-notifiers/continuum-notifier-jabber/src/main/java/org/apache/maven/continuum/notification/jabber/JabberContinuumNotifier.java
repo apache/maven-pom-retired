@@ -16,11 +16,6 @@ package org.apache.maven.continuum.notification.jabber;
  * limitations under the License.
  */
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
@@ -28,11 +23,14 @@ import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
-
 import org.codehaus.plexus.jabber.JabberClient;
 import org.codehaus.plexus.jabber.JabberClientException;
 import org.codehaus.plexus.notification.NotificationException;
-import org.codehaus.plexus.util.StringUtils;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -153,7 +151,7 @@ public class JabberContinuumNotifier
                               Map configuration )
         throws NotificationException
     {
-        String message = "";
+        String message;
 
         try
         {
@@ -261,9 +259,7 @@ public class JabberContinuumNotifier
     {
         if ( configuration.containsKey( "password" ) )
         {
-            String password = (String) configuration.get( "password" );
-
-            return password;
+            return (String) configuration.get( "password" );
         }
 
         return fromPassword;

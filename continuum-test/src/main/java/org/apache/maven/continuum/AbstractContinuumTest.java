@@ -34,22 +34,22 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.ConfigurableJdoFactory;
+import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
+import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.util.FileUtils;
 import org.jpox.SchemaTool;
 
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Properties;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.PersistenceManager;
-import java.io.IOException;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -406,7 +406,7 @@ public abstract class AbstractContinuumTest
         return store.updateProject( project );
     }
 
-    public static void setBuildResult( ContinuumStore store,
+    public void setBuildResult( ContinuumStore store,
                                        ContinuumBuild build,
                                        int state,
                                        ContinuumBuildExecutionResult result,
@@ -428,10 +428,10 @@ public abstract class AbstractContinuumTest
 
         build.setExitCode( result.getExitCode() );
 
-        String outputFile = store.getBuildOutputFile( build.getId() ).getAbsolutePath();
-
         try
         {
+            String outputFile = store.getBuildOutputFile( build.getId() ).getAbsolutePath();
+
             FileUtils.fileWrite( outputFile, result.getOutput() );
         }
         catch ( IOException e )

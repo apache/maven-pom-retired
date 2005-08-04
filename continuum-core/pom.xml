@@ -29,6 +29,10 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-store</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-test</artifactId>
     </dependency>
     <dependency>

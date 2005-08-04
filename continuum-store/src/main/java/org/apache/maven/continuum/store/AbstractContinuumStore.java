@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
+ * @todo remove this class - these methods belong in the build class or similar
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */

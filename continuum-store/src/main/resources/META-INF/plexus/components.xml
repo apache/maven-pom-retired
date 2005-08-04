@@ -1,0 +1,30 @@
+<component-set>
+  <components>
+    <!-- 
+    <component>
+      <role>org.apache.maven.continuum.store.ContinuumStore</role>
+      <role-hint>modello</role-hint>
+      <implementation>org.apache.maven.continuum.store.ModelloJPoxContinuumStore</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.jdo.JdoFactory</role>
+        </requirement>
+      </requirements>
+    </component>
+    -->
+
+    <component>
+      <role>org.apache.maven.continuum.store.ContinuumStore</role>
+      <role-hint>jdo</role-hint>
+      <implementation>org.apache.maven.continuum.store.JdoContinuumStore</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.jdo.JdoFactory</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
+      </requirements>
+    </component>
+  </components>
+</component-set>

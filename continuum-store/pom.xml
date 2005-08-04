@@ -1,0 +1,56 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
+    <version>1.0-beta-1-SNAPSHOT</version>
+  </parent>
+  <artifactId>continuum-store</artifactId>
+  <version>1.0-beta-1-SNAPSHOT</version>
+  <name>Continuum Store</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-model</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-jdo2</artifactId>
+    </dependency>    
+    <dependency>
+      <groupId>jdo</groupId>
+      <artifactId>jdo</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>1.7.3.0</version>
+      <scope>test</scope>
+    </dependency>
+<!--
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>7.4</version>
+      <classifier>jdbc3</classifier>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>incubator-derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>10.0.2.1</version>
+      <scope>test</scope>
+    </dependency>
+-->
+  </dependencies>
+</project>

@@ -65,6 +65,7 @@ import org.codehaus.plexus.taskqueue.TaskQueueException;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
+import javax.jdo.JDOHelper;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,7 +76,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import javax.jdo.JDOHelper;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -84,7 +84,7 @@ import javax.jdo.JDOHelper;
  */
 public class DefaultContinuum
     extends AbstractLogEnabled
-    implements Continuum, Initializable,Startable
+    implements Continuum, Initializable, Startable
 {
     /**
      * @plexus.requirement
@@ -134,12 +134,6 @@ public class DefaultContinuum
      * @plexus.configuration
      */
     private String appHome;
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private static final String DEFAULT_PROJECT_GROUP_NAME = "Default Project";
 
     // ----------------------------------------------------------------------
     // Projects
@@ -354,8 +348,8 @@ public class DefaultContinuum
             }
             catch ( ContinuumException ex )
             {
-                getLogger().error( "Could not enqueue project: " + project.getId() + " " +
-                                   "('" + project.getName() + "').", ex );
+                getLogger().error(
+                    "Could not enqueue project: " + project.getId() + " " + "('" + project.getName() + "').", ex );
             }
         }
     }
@@ -444,8 +438,7 @@ public class DefaultContinuum
     public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
         throws ContinuumException
     {
-        return executeAddProjectsFromMetadataActivity( metadataUrl,
-                                                       MavenOneContinuumProjectBuilder.ID,
+        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenOneContinuumProjectBuilder.ID,
                                                        MavenOneBuildExecutor.ID );
     }
 
@@ -476,8 +469,7 @@ public class DefaultContinuum
     public ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl )
         throws ContinuumException
     {
-        return executeAddProjectsFromMetadataActivity( metadataUrl,
-                                                       MavenTwoContinuumProjectBuilder.ID,
+        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenTwoContinuumProjectBuilder.ID,
                                                        MavenTwoBuildExecutor.ID );
     }
 
@@ -576,8 +568,8 @@ public class DefaultContinuum
 
         executeAction( "create-projects-from-metadata", context );
 
-        ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult)
-            context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
+        ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context.get(
+            CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
 
         getLogger().info( "Created " + result.getProjects().size() + " projects." );
         getLogger().info( "Created " + result.getProjectGroups().size() + " project groups." );
@@ -610,11 +602,12 @@ public class DefaultContinuum
             {
                 projectGroup = store.getProjectGroupByGroupId( projectGroup.getGroupId() );
 
-                getLogger().info( "Using existing project group with the group id: '" + projectGroup.getGroupId() + "'." );
+                getLogger().info(
+                    "Using existing project group with the group id: '" + projectGroup.getGroupId() + "'." );
             }
             catch ( ContinuumObjectNotFoundException e )
             {
-                getLogger().info("Creating project group with the group id: '" + projectGroup.getGroupId() + "'." );
+                getLogger().info( "Creating project group with the group id: '" + projectGroup.getGroupId() + "'." );
 
                 Map pgContext = new HashMap();
 
@@ -746,16 +739,16 @@ public class DefaultContinuum
 
     private void dumpJdoObject( Object object, String message )
     {
-        System.err.println( "---------- Dumping JDO Object: " + message );
-        System.err.println( "object.hashCode: " + object.hashCode() );
-        System.err.println( "persistent: " + JDOHelper.isPersistent( object ) );
-        System.err.println( "transactional: " + JDOHelper.isTransactional( object ) );
-        System.err.println( "dirty: " + JDOHelper.isDirty( object ) );
-        System.err.println( "new: " + JDOHelper.isNew( object ) );
-        System.err.println( "deleted: " + JDOHelper.isDeleted( object ) );
-        System.err.println( "detached: " + JDOHelper.isDetached( object ) );
-        System.err.println( "object id: " + JDOHelper.getObjectId( object ) );
-        System.err.println( "----------" );
+        getLogger().debug( "---------- Dumping JDO Object: " + message );
+        getLogger().debug( "object.hashCode: " + object.hashCode() );
+        getLogger().debug( "persistent: " + JDOHelper.isPersistent( object ) );
+        getLogger().debug( "transactional: " + JDOHelper.isTransactional( object ) );
+        getLogger().debug( "dirty: " + JDOHelper.isDirty( object ) );
+        getLogger().debug( "new: " + JDOHelper.isNew( object ) );
+        getLogger().debug( "deleted: " + JDOHelper.isDeleted( object ) );
+        getLogger().debug( "detached: " + JDOHelper.isDetached( object ) );
+        getLogger().debug( "object id: " + JDOHelper.getObjectId( object ) );
+        getLogger().debug( "----------" );
     }
 
     // ----------------------------------------------------------------------
@@ -866,16 +859,16 @@ public class DefaultContinuum
         {
             if ( !wdFile.isDirectory() )
             {
-                throw new InitializationException( "The specified working directory isn't a directory: " +
-                                                   "'" + wdFile.getAbsolutePath() + "'." );
+                throw new InitializationException(
+                    "The specified working directory isn't a directory: " + "'" + wdFile.getAbsolutePath() + "'." );
             }
         }
         else
         {
             if ( !wdFile.mkdirs() )
             {
-                throw new InitializationException( "Could not making the working directory: " +
-                                                   "'" + wdFile.getAbsolutePath() + "'." );
+                throw new InitializationException(
+                    "Could not making the working directory: " + "'" + wdFile.getAbsolutePath() + "'." );
             }
         }
 
@@ -916,15 +909,11 @@ public class DefaultContinuum
             // Activate all the Build settings in the system
             // ----------------------------------------------------------------------
 
-            try
-            {
-                buildSettingsActivator.activateBuildSettings( this );
-            }
-            catch ( BuildSettingsActivationException e )
-            {
-                throw new StartingException( "Error activating build settings.", e );
-            }
-
+            buildSettingsActivator.activateBuildSettings( this );
+        }
+        catch ( BuildSettingsActivationException e )
+        {
+            throw new StartingException( "Error activating build settings.", e );
         }
         catch ( ConfigurationLoadingException e )
         {

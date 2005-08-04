@@ -82,6 +82,11 @@
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-store</artifactId>
+        <version>1.0-beta-1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-core</artifactId>
         <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
@@ -244,6 +249,7 @@
     <module>continuum-model</module>
     <module>continuum-notifiers</module>
     <module>continuum-plexus-application</module>
+    <module>continuum-store</module>
     <module>continuum-test</module>
     <module>continuum-web</module>
     <!--

@@ -28,10 +28,10 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
-import java.io.File;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -97,8 +97,6 @@ public class ExecuteBuilderContinuumAction
         // ----------------------------------------------------------------------
 
         build = store.getBuild( buildId );
-
-        String output = null;
 
         try
         {

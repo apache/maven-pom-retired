@@ -1,5 +1,21 @@
 package org.apache.maven.continuum.configuration;
 
+/*
+ * Copyright 2004-2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import org.apache.maven.continuum.profile.ContinuumJdk;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
@@ -7,7 +23,6 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.codehaus.plexus.util.xml.Xpp3DomWriter;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +40,6 @@ import java.util.TreeMap;
  * @version $Id$
  */
 public class DefaultConfigurationService
-    extends AbstractLogEnabled
     implements ConfigurationService
 {
     /**
@@ -68,8 +82,6 @@ public class DefaultConfigurationService
 
     public void setInitialized( boolean initialized )
     {
-        getLogger().info( "Setting the initialization state to " + initialized );
-
         this.initialized = initialized;
     }
 
@@ -151,7 +163,7 @@ public class DefaultConfigurationService
         {
             String booleanString = initializedDom.getValue();
 
-            initialized = booleanString.equals( "true" ) || booleanString.equals( "1" );
+            initialized = "true".equals( booleanString ) || "1".equals( booleanString );
         }
 
         Xpp3Dom urlDom = configuration.getChild( CONFIGURATION_URL );

@@ -19,6 +19,7 @@ package org.apache.maven.continuum.store;
 import java.util.Collection;
 import java.util.List;
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
