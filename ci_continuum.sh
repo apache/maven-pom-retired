@@ -133,18 +133,25 @@ fi
 ) >> $MESSAGE 2>&1
 ret=$?
 
+grep "FATAL ERROR" $MESSAGE > /dev/null 2>&1
+fatal_error=$?
+
 # Only send mail to the list if a build was required.
 
 host=`hostname`
 
-if [ build_m2 != 0 -o build_continuum != 0 ]
+if [ build_continuum != 0 ]
 then
   echo "From: $FROM" > log
   echo "To: $TO" >> log
   if [ $ret != 0 ]; then
     echo "Subject: [continuum build - FAILED - $CMD] $DATE" >> log
   else
-    echo "Subject: [continuum build - SUCCESS - $CMD] $DATE" >> log
+    if [ fatal_error != 0 ]; then
+      echo "Subject: [continuum build - FAILED - $CMD] $DATE" >> log
+    else
+      echo "Subject: [continuum build - SUCCESS - $CMD] $DATE" >> log
+    fi
   fi
   echo "" >> log
   echo "Log:" >> log
