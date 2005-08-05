@@ -30,11 +30,8 @@ import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
-import org.apache.maven.continuum.initialization.ContinuumInitializationException;
-import org.apache.maven.continuum.initialization.ContinuumInitializer;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
@@ -105,11 +102,6 @@ public class DefaultContinuum
      * @plexus.requirement
      */
     private ContinuumStore store;
-
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumInitializer initializer;
 
     /**
      * @plexus.requirement
@@ -333,7 +325,7 @@ public class DefaultContinuum
         }
     }
 
-    public void buildProjectGroup( ContinuumProjectGroup projectGroup, ContinuumBuildSettings buildSettings )
+    public void buildProjectGroup( ContinuumProjectGroup projectGroup )
         throws ContinuumException
     {
         Set projects = projectGroup.getProjects();
@@ -900,8 +892,6 @@ public class DefaultContinuum
 
             if ( !configurationService.isInitialized() )
             {
-                initializer.initialize();
-
                 configurationService.setInitialized( true );
             }
 
@@ -918,10 +908,6 @@ public class DefaultContinuum
         catch ( ConfigurationLoadingException e )
         {
             throw new StartingException( "Error loading the Continuum configuration.", e );
-        }
-        catch ( ContinuumInitializationException e )
-        {
-            throw new StartingException( "Cannot initializing Continuum for the first time.", e );
         }
     }
 
@@ -1041,11 +1027,6 @@ public class DefaultContinuum
         {
             throw logAndCreateException( "Error while removing project from schedule.", e );
         }
-    }
-
-    public ContinuumBuildSettings getDefaultBuildSettings()
-    {
-        return initializer.getDefaultBuildSettings();
     }
 
     // ----------------------------------------------------------------------
