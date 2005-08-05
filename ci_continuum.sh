@@ -140,7 +140,7 @@ fi
     (
       cd $DIR/continuum
 
-      $M2_HOME/bin/m2 -B -e clean:clean install
+      $M2_HOME/bin/m2 --batch-mode --no-plugin-registry --update-snapshots -e clean:clean install
       ret=$?; if [ $ret != 0 ]; then exit $ret; fi
     )    
     ret=$?; if [ $ret != 0 ]; then exit $ret; fi
