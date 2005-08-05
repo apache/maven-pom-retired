@@ -23,9 +23,26 @@ package org.apache.maven.continuum.web.it;
 public class AddRemoveMavenTwoProjectTest
     extends AbstractIntegrationWebTest
 {
-    public void testAddRemove()
+    public void testAddRemoveWithHttp()
     {
         addMavenTwoProject( "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/m2/pom.xml" );
+
+        assertTextInTable( "projectSummaryTable", "New", 1, 0 );
+
+        assertTextInTable( "projectSummaryTable", "Maven 2 Test Project", 1, 1 );
+
+        assertTextInTable( "projectSummaryTable", "2.0-SNAPSHOT", 1, 2 );
+
+        clickLinkWithText( "Delete" );
+
+        assertTextPresent( "Are you sure you want to delete this project?" );
+
+        submit( "deleteEntry" );
+    }
+
+    public void testAddRemoveWithHttps()
+    {
+        addMavenTwoProject( "https://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/m2/pom.xml" );
 
         assertTextInTable( "projectSummaryTable", "New", 1, 0 );
 
