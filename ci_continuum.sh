@@ -27,11 +27,11 @@ if [ ! -z "$RUNNING" ]; then
   exit 1
 fi
 
-HOME_DIR=`pwd`
+HOME_DIR=$HOME
 DIR=$HOME_DIR/checkouts
 SUNREPO=$HOME_DIR/sunrepo
 REPO=$HOME_DIR/maven-repo-local
-SCM_LOG=scm.log
+SCM_LOG=$HOME_DIR/scm.log
 TIMESTAMP=`date +%Y%m%d.%H%M%S`
 WWW=$HOME/public_html
 DEPLOY_DIR=$WWW/builds
@@ -56,9 +56,7 @@ mkdir -p $MESSAGE_DIR
 # ----------------------------------------------------------------------------------
 rm -rf $M2_HOME
 
-mkdir $M2_HOME
-
-cp -r ~maven/m2 ~maven/maven-repo-local .
+cp -r /export/home/maven/m2 $M2_HOME
 
 # ----------------------------------------------------------------------------------
 
@@ -66,6 +64,11 @@ cp -r ~maven/m2 ~maven/maven-repo-local .
 # from scratch.
 
 # ----------------------------------------------------------------------------------
+
+BUILD_REQUIRED=false
+if [ -f $HOME_DIR/build_required ]; then
+  BUILD_REQUIRED=`cat $HOME_DIR/build_required`
+fi
 
 if [ ! -d $DIR/continuum ]; then
   CMD="checkout"
@@ -81,9 +84,7 @@ fi
 
     rm -rf $REPO > /dev/null 2>&1
 
-    mkdir $REPO
-
-    cp -r ~maven/maven-repo-local .
+    cp -r /export/home/maven/maven-repo-local $REPO
 
     cp -R $SUNREPO/* $REPO/
 
@@ -94,9 +95,9 @@ fi
     (
       cd $DIR
 
-      $SVN co http://svn.apache.org/repos/asf/maven/continuum/trunk continuum > $HOME_DIR/$SCM_LOG 2>&1
+      $SVN co http://svn.apache.org/repos/asf/maven/continuum/trunk continuum > $SCM_LOG 2>&1
 
-      build_continuum=1
+      echo "true" > $HOME_DIR/build_required
     )
 
   else
@@ -108,31 +109,38 @@ fi
     (
       cd $DIR/continuum
 
-      $SVN update > $HOME_DIR/$SCM_LOG 2>&1
+      $SVN update > $SCM_LOG 2>&1
 
-      grep "^[PUAD] " $HOME_DIR/$SCM_LOG > /dev/null 2>&1
+      grep "^[PUAD] " $SCM_LOG > /dev/null 2>&1
 
       if [ "$?" = "1" ]
       then
-        build_continuum=0
-      else
-        build_continuum=1
-      fi
 
+        echo $BUILD_REQUIRED > $HOME_DIR/build_required
+
+          else
+        
+        echo "true" > $HOME_DIR/build_required
+
+      fi
     )
 
   fi
 
-  if [ build_continuum != 0 ]
+  BUILD_REQUIRED=`cat $HOME_DIR/build_required`
+
+  if [ "$BUILD_REQUIRED" = "true" ]
   then
       
     echo "Updates occured, build required ..."
+    echo
+    grep "^[PUAD] " $SCM_LOG
     echo
 
     (
       cd $DIR/continuum
 
-      sh build.sh -e --settings $HOME_DIR/settings.xml
+      $M2_HOME/bin/m2 -B -e clean:clean install
       ret=$?; if [ $ret != 0 ]; then exit $ret; fi
     )    
     ret=$?; if [ $ret != 0 ]; then exit $ret; fi
@@ -151,18 +159,19 @@ fatal_error=$?
 
 host=`hostname`
 
-if [ build_continuum != 0 ]
+BUILD_REQUIRED=`cat $HOME_DIR/build_required`
+
+if [ "$BUILD_REQUIRED" = "true" ]
 then
   echo "From: $FROM" > log
   echo "To: $TO" >> log
   if [ $ret != 0 ]; then
     echo "Subject: [continuum build - FAILED - $CMD] $DATE" >> log
+  elif [ $fatal_error != 0 ]; then
+    echo "Subject: [continuum build - FAILED - $CMD] $DATE" >> log
   else
-    if [ fatal_error != 0 ]; then
-      echo "Subject: [continuum build - FAILED - $CMD] $DATE" >> log
-    else
-      echo "Subject: [continuum build - SUCCESS - $CMD] $DATE" >> log
-    fi
+    echo "Subject: [continuum build - SUCCESS - $CMD] $DATE" >> log
+    rm $HOME_DIR/build_required
   fi
   echo "" >> log
   echo "Log:" >> log
