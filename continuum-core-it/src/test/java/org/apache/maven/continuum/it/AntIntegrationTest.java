@@ -107,7 +107,7 @@ public class AntIntegrationTest
         waitForSuccessfulCheckout( projectId );
 
         ContinuumProject project = continuum.getProject( projectId );
-        assertProject( projectId, "Ant CVS Project", "3.0", "-d", AntBuildExecutor.ID, project );
+        assertProject( projectId, "Ant CVS Project", "3.0", "-debug", AntBuildExecutor.ID, project );
 
         progress( "Building CVS Ant project" );
 
