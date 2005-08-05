@@ -16,29 +16,32 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.List;
+
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
-import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumSchedule;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.scm.ScmResult;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.store.ContinuumStore;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public interface Continuum
+ public interface Continuum
 {
     String ROLE = Continuum.class.getName();
 
@@ -93,7 +96,7 @@ public interface Continuum
     void buildProject( String projectId, boolean force )
         throws ContinuumException;
 
-    void buildProjectGroup( ContinuumProjectGroup projectGroup )
+    void buildProjectGroup( ContinuumProjectGroup projectGroup, ContinuumBuildSettings buildSettings )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
@@ -167,6 +170,7 @@ public interface Continuum
     void updateShellProject( ShellProject project )
         throws ContinuumException;
 
+
     // ----------------------------------------------------------------------
     // Notification
     // ----------------------------------------------------------------------
@@ -174,7 +178,7 @@ public interface Continuum
     ContinuumNotifier getNotifier( String projectId, String notifierType )
         throws ContinuumException;
 
-    void updateNotifier( String projectId, String notifierType, Map configuration )
+     void updateNotifier( String projectId, String notifierType, Map configuration )
         throws ContinuumException;
 
     void addNotifier( String projectId, String notifierType, Map configuration )
@@ -187,10 +191,10 @@ public interface Continuum
     // Schedules
     // ----------------------------------------------------------------------
 
-    Collection getSchedules()
+     Collection getSchedules()
         throws ContinuumException;
 
-    ContinuumSchedule getSchedule( String scheduleId )
+     ContinuumSchedule getSchedule( String scheduleId )
         throws ContinuumException;
 
     ContinuumSchedule addSchedule( ContinuumSchedule schedule )
@@ -199,7 +203,7 @@ public interface Continuum
     ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
         throws ContinuumException;
 
-    void removeSchedule( String scheduleId )
+     void removeSchedule( String scheduleId )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
@@ -211,4 +215,18 @@ public interface Continuum
 
     void removeProjectFromSchedule( ContinuumProject project, ContinuumSchedule schedule )
         throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Project groups
+    // ----------------------------------------------------------------------
+
+    // ----------------------------------------------------------------------
+    // Build Settings
+    // ----------------------------------------------------------------------
+
+    // ----------------------------------------------------------------------
+    // Defaults
+    // ----------------------------------------------------------------------
+
+    ContinuumBuildSettings getDefaultBuildSettings();
 }

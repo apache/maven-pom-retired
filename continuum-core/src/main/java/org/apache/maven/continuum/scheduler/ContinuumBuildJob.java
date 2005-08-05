@@ -1,9 +1,16 @@
 package org.apache.maven.continuum.scheduler;
 
+import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.project.ContinuumBuildSettings;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.codehaus.plexus.logging.Logger;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
+
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
