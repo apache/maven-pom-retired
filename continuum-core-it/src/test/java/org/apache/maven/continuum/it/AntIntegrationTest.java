@@ -98,7 +98,7 @@ public class AntIntegrationTest
         p.setName( "Ant CVS Project" );
 //        p.getNotifiers().add( makeMailNotifier( email ) );
         p.setVersion( "3.0" );
-        p.setCommandLineArguments( "-d" );
+        p.setCommandLineArguments( "-debug" );
         p.setExecutable( "ant" );
         p.setTargets( "clean build" );
 
