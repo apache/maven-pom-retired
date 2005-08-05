@@ -49,11 +49,6 @@
         <join/>
       </field>
 
-      <field name="buildGroups" persistence-modifier="persistent" table="project_build_groups">
-        <collection element-type="ContinuumBuildGroup"/>
-        <join/>
-      </field>
-
       <field name="projectGroup" persistence-modifier="persistent"/>
 
       <fetch-group name="project-detail">
@@ -63,7 +58,6 @@
         <field name="notifiers"/>
         <field name="dependencies"/>
         <field name="schedules"/>
-        <field name="buildGroups"/>
         <field name="projectGroup"/>
       </fetch-group>
     </class>
@@ -152,24 +146,6 @@
 
     <!-- New Object Model -->
 
-    <class name="ContinuumBuildGroup" detachable="true" identity-type="application"
-           objectid-class="javax.jdo.identity.StringIdentity" table="build_group">
-      <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
-      <field name="name" persistence-modifier="persistent"/>
-      <field name="description" persistence-modifier="persistent"/>
-      <field name="projects" persistence-modifier="persistent" mapped-by="buildGroups">
-        <collection element-type="ContinuumProject"/>
-      </field>
-      <field name="buildSettings" persistence-modifier="persistent" table="build_group_settings">
-        <collection element-type="ContinuumBuildSettings"/>
-        <join/>
-      </field>
-      <fetch-group name="build-group-detail">
-        <field name="projects"/>
-        <field name="buildSettings"/>
-      </fetch-group>
-    </class>
-
     <class name="ContinuumProjectGroup" detachable="true" identity-type="application"
            objectid-class="javax.jdo.identity.StringIdentity" table="project_group">
       <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
@@ -205,11 +181,7 @@
       <field name="projectGroups" persistence-modifier="persistent" mapped-by="buildSettings">
         <collection element-type="ContinuumProjectGroup"/>
       </field>
-      <field name="buildGroups" persistence-modifier="persistent" mapped-by="buildSettings">
-        <collection element-type="ContinuumBuildGroup"/>
-      </field>
       <fetch-group name="build-settings-detail">
-        <field name="buildGroups"/>
         <field name="projectGroups"/>
       </fetch-group>
     </class>

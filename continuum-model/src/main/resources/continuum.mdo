@@ -159,15 +159,6 @@
           </association>
         </field>
         <field>
-          <name>buildGroups</name>
-          <version>1.0.0</version>
-          <type>Set</type>
-          <association stash.part="false">
-            <type>ContinuumBuildGroup</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
           <name>projectGroup</name>
           <version>1.0.0</version>
           <type>Set</type>
@@ -603,47 +594,6 @@
     <!-- New Object Model -->
 
     <class>
-      <name>ContinuumBuildGroup</name>
-      <version>1.0.0</version>
-      <fields>
-        <field>
-          <name>id</name>
-          <version>1.0.0</version>
-          <type>String</type>
-          <identifier>true</identifier>
-        </field>
-        <field>
-          <name>name</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>description</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>projects</name>
-          <version>1.0.0</version>
-          <type>Set</type>
-          <association stash.part="false">
-            <type>ContinuumProject</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>buildSettings</name>
-          <version>1.0.0</version>
-          <type>Set</type>
-          <association stash.part="false">
-            <type>ContinuumBuildSettings</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-      </fields>
-    </class>
-
-    <class>
       <name>ContinuumProjectGroup</name>
       <version>1.0.0</version>
       <fields>
@@ -748,15 +698,6 @@
           <name>cronExpression</name>
           <version>1.0.0</version>
           <type>String</type>
-        </field>
-        <field>
-          <name>buildGroups</name>
-          <version>1.0.0</version>
-          <type>Set</type>
-          <association stash.part="false">
-            <type>ContinuumBuildGroup</type>
-            <multiplicity>*</multiplicity>
-          </association>
         </field>
         <field>
           <name>projectGroups</name>

@@ -20,7 +20,6 @@ import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildGroup;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -525,17 +524,6 @@ public abstract class AbstractContinuumTest
         buildSettings.setJdkVersion( jdkVersion );
 
         return buildSettings;
-    }
-
-    public ContinuumBuildGroup createStubBuildGroup( String name, String description )
-    {
-        ContinuumBuildGroup buildGroup = new ContinuumBuildGroup();
-
-        buildGroup.setName( name );
-
-        buildGroup.setDescription( description );
-
-        return buildGroup;
     }
 
     public ContinuumProjectGroup createStubProjectGroup( String name, String description )

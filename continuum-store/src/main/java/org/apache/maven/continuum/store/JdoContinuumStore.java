@@ -17,7 +17,6 @@ package org.apache.maven.continuum.store;
  */
 
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildGroup;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -133,18 +132,6 @@ public class JdoContinuumStore
                 }
             }
 
-            if ( project.getBuildGroups() != null && project.getBuildGroups().size() > 0 )
-            {
-                Set buildGroups = project.getBuildGroups();
-
-                for ( Iterator i = buildGroups.iterator(); i.hasNext(); )
-                {
-                    ContinuumBuildGroup buildGroup = (ContinuumBuildGroup) i.next();
-
-                    buildGroup.getProjects().remove( project );
-                }
-            }
-
             if ( project.getProjectGroup() != null )
             {
                 ContinuumProjectGroup pg = project.getProjectGroup();
@@ -200,12 +187,7 @@ public class JdoContinuumStore
 //            {
 //                pm.attachCopyAll( project.getSchedules(), true );
 //            }
-
-//            if ( project.getBuildGroups() != null && project.getBuildGroups().size() > 0 )
-//            {
-//                pm.attachCopyAll( project.getBuildGroups(), true );
-//            }
-
+//
 //            if ( project.getProjectGroup() != null )
 //            {
 //                pm.attachCopy( project.getProjectGroup(), true );
@@ -797,28 +779,6 @@ public class JdoContinuumStore
 
             ContinuumProjectGroup projectGroup = (ContinuumProjectGroup) pm.getObjectById( id );
 
-            // ----------------------------------------------------------------------
-            // We need to remove this projectGroup reference from any project in the
-            // system. So grab the list of projects this projectGroup belongs to
-            // then iterate through the collection of projects removing the
-            // reference to this projectGroup. This seems like a bit much but the
-            // only thing that works.
-            // ----------------------------------------------------------------------
-
-            /*
-            if ( projectGroup.getProjects() != null && projectGroup.getProjects().size() > 0 )
-            {
-                Set projects = projectGroup.getProjects();
-
-                for ( Iterator i = projects.iterator(); i.hasNext(); )
-                {
-                    ContinuumProject project = (ContinuumProject) i.next();
-
-                    project.getBuildGroups().remove( projectGroup );
-                }
-            }
-            */
-
             pm.deletePersistent( projectGroup );
 
             commit( tx );
@@ -857,107 +817,6 @@ public class JdoContinuumStore
     }
 
     // ----------------------------------------------------------------------
-    // Build Group
-    // ----------------------------------------------------------------------
-
-    public ContinuumBuildGroup addBuildGroup( ContinuumBuildGroup buildGroup )
-        throws ContinuumStoreException
-    {
-        return (ContinuumBuildGroup) addObject( buildGroup, BUILD_GROUP_DETAIL_FG );
-    }
-
-    public ContinuumBuildGroup updateBuildGroup( ContinuumBuildGroup schedule )
-        throws ContinuumStoreException
-    {
-        return (ContinuumBuildGroup) updateObject( schedule, BUILD_GROUP_DETAIL_FG );
-    }
-
-    public void removeBuildGroup( String buildGroupId )
-        throws ContinuumStoreException
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            Object id = pm.newObjectIdInstance( ContinuumBuildGroup.class, buildGroupId );
-
-            ContinuumBuildGroup buildGroup = (ContinuumBuildGroup) pm.getObjectById( id );
-
-            // ----------------------------------------------------------------------
-            // We need to remove this buildGroup reference from any project in the
-            // system. So grab the list of projects this buildGroup belongs to
-            // then iterate through the collection of projects removing the
-            // reference to this buildGroup. This seems like a bit much but the
-            // only thing that works.
-            // ----------------------------------------------------------------------
-
-            if ( buildGroup.getProjects() != null && buildGroup.getProjects().size() > 0 )
-            {
-                Set projects = buildGroup.getProjects();
-
-                for ( Iterator i = projects.iterator(); i.hasNext(); )
-                {
-                    ContinuumProject project = (ContinuumProject) i.next();
-
-                    project.getBuildGroups().remove( buildGroup );
-                }
-            }
-
-            pm.deletePersistent( buildGroup );
-
-            commit( tx );
-        }
-        finally
-        {
-            rollback( tx );
-        }
-    }
-
-
-    public ContinuumBuildGroup getBuildGroup( String buildGroupId )
-        throws ContinuumStoreException
-    {
-        return (ContinuumBuildGroup) getDetailedObject( ContinuumBuildGroup.class,
-                                                        buildGroupId,
-                                                        "build-group-detail" );
-    }
-
-    public Collection getBuildGroups()
-        throws ContinuumStoreException
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            Extent extent = pm.getExtent( ContinuumBuildGroup.class, true );
-
-            Query query = pm.newQuery( extent );
-
-            query.setOrdering( "name ascending" );
-
-            Collection result = (Collection) query.execute();
-
-            result = pm.detachCopyAll( result );
-
-            commit( tx );
-
-            return result;
-        }
-        finally
-        {
-            rollback( tx );
-        }
-    }
-
-    // ----------------------------------------------------------------------
     // Build Settings
     // ----------------------------------------------------------------------
 
@@ -987,19 +846,6 @@ public class JdoContinuumStore
             Object id = pm.newObjectIdInstance( ContinuumBuildSettings.class, buildSettingsId );
 
             ContinuumBuildSettings buildSettings = (ContinuumBuildSettings) pm.getObjectById( id );
-
-            // remove references of this buildSettings object in the build groups
-            if ( buildSettings.getBuildGroups() != null && buildSettings.getBuildGroups().size() > 0 )
-            {
-                Set projects = buildSettings.getBuildGroups();
-
-                for ( Iterator i = projects.iterator(); i.hasNext(); )
-                {
-                    ContinuumBuildGroup buildGroup = (ContinuumBuildGroup) i.next();
-
-                    buildGroup.getBuildSettings().remove( buildSettings );
-                }
-            }
 
             // remove references of this buildSettings object in the project groups
             if ( buildSettings.getProjectGroups() != null && buildSettings.getProjectGroups().size() > 0 )

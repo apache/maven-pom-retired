@@ -17,7 +17,6 @@ package org.apache.maven.continuum.store;
  */
 
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildGroup;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -157,21 +156,6 @@ public interface ContinuumStore
     // ----------------------------------------------------------------------
     // Build Group
     // ----------------------------------------------------------------------
-
-    ContinuumBuildGroup addBuildGroup( ContinuumBuildGroup buildGroup )
-        throws ContinuumStoreException;
-
-    ContinuumBuildGroup updateBuildGroup( ContinuumBuildGroup buildGroup )
-        throws ContinuumStoreException;
-
-    void removeBuildGroup( String buildGroupId )
-        throws ContinuumStoreException;
-
-    ContinuumBuildGroup getBuildGroup( String buildGroupId )
-        throws ContinuumStoreException;
-
-    Collection getBuildGroups()
-        throws ContinuumStoreException;
 
     // ----------------------------------------------------------------------
     // Build settings
