@@ -24,15 +24,17 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @todo remove this class - these methods belong in the build class or similar
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ * @todo remove this class - these methods belong in the build class or similar
  */
 public abstract class AbstractContinuumStore
     extends AbstractLogEnabled
     implements ContinuumStore
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ConfigurationService configurationService;
 
     public String getBuildOutput( String buildId )
@@ -59,13 +61,12 @@ public abstract class AbstractContinuumStore
     public File getBuildOutputFile( String buildId )
         throws ContinuumStoreException
     {
-        File dir = new File( configurationService.getBuildOutputDirectory(),
-                             getProjectForBuild( buildId ).getId() );
+        File dir = new File( configurationService.getBuildOutputDirectory(), getProjectForBuild( buildId ).getId() );
 
         if ( !dir.exists() && !dir.mkdirs() )
         {
-            throw new ContinuumStoreException( "Could not make the build output directory: " +
-                                               "'" + dir.getAbsolutePath() + "'." );
+            throw new ContinuumStoreException(
+                "Could not make the build output directory: " + "'" + dir.getAbsolutePath() + "'." );
         }
 
         return new File( dir, buildId + ".log.txt" );

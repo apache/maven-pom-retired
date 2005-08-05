@@ -64,11 +64,6 @@
           <type>String</type>
         </field>
         <field>
-          <name>previousBuildId</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
           <name>buildNumber</name>
           <version>1.0.0</version>
           <type>int</type>
@@ -95,11 +90,6 @@
         </field>
         <field>
           <name>checkOutErrorException</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>mailType</name>
           <version>1.0.0</version>
           <type>String</type>
         </field>

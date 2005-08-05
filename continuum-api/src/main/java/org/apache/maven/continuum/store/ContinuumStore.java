@@ -16,19 +16,18 @@ package org.apache.maven.continuum.store;
  * limitations under the License.
  */
 
-import java.util.Collection;
-import java.util.List;
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumSchedule;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumBuildGroup;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.scm.ScmResult;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

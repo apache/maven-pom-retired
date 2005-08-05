@@ -16,15 +16,14 @@ package org.apache.maven.continuum.it;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.Continuum;
-
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ShellProject;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -88,8 +87,7 @@ public class ShellIntegrationTest
         assertEquals( "Updated command line arguments doesn't match", "a b", shellProject.getCommandLineArguments() );
 
         buildId = buildProject( projectId, false ).getId();
-        assertSuccessfulShellBuild( buildId, "a" + EOL +
-                                             "b" + EOL );
+        assertSuccessfulShellBuild( buildId, "a" + EOL + "b" + EOL );
         removeProject( projectId );
     }
 
@@ -102,7 +100,8 @@ public class ShellIntegrationTest
 
         FileUtils.fileWrite( script.getAbsolutePath(), getScriptContent() );
 
-        if ( !System.getProperty( "os.name" ).startsWith( "Windows" ) || "true".equals( System.getProperty( "cygwin" ) ) )
+        if ( !System.getProperty( "os.name" ).startsWith( "Windows" ) ||
+            "true".equals( System.getProperty( "cygwin" ) ) )
         {
             system( root, "chmod", "+x " + script.getAbsolutePath() );
         }
@@ -110,7 +109,8 @@ public class ShellIntegrationTest
 
     private String getScriptName()
     {
-        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) && !"true".equals( System.getProperty( "cygwin" ) ) )
+        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) &&
+            !"true".equals( System.getProperty( "cygwin" ) ) )
         {
             return "script.bat";
         }
@@ -122,27 +122,25 @@ public class ShellIntegrationTest
 
     private String getScriptContent()
     {
-        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) && !"true".equals( System.getProperty( "cygwin" ) ) )
+        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) &&
+            !"true".equals( System.getProperty( "cygwin" ) ) )
         {
-            return "@ECHO OFF" + EOL +
-                "IF \"%*\" == \"\" GOTO end" + EOL +
-                "FOR %%a IN (%*) DO ECHO %%a" + EOL +
+            return "@ECHO OFF" + EOL + "IF \"%*\" == \"\" GOTO end" + EOL + "FOR %%a IN (%*) DO ECHO %%a" + EOL +
                 ":end" + EOL;
         }
         else
         {
-            return "#!/bin/bash" + EOL +
-                "for arg in \"$@\"; do" + EOL +
-                "  echo $arg" + EOL +
-                "done";
+            return "#!/bin/bash" + EOL + "for arg in \"$@\"; do" + EOL + "  echo $arg" + EOL + "done";
         }
     }
+
     private void addExtraPartInScript( File rootDir, File coDir )
         throws Exception
     {
         File s = new File( coDir, getScriptName() );
         String script = FileUtils.fileRead( s );
-        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) && !"true".equals( System.getProperty( "cygwin" ) ) )
+        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) &&
+            !"true".equals( System.getProperty( "cygwin" ) ) )
         {
             FileUtils.fileWrite( s.getAbsolutePath(), script + EOL + " REM Extra part" );
         }

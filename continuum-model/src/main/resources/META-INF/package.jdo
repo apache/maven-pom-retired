@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE jdo PUBLIC
-  "-//Sun Microsystems, Inc.//DTD Java Data Objects Metadata 2.0//EN"
-  "http://java.sun.com/dtd/jdo_2_0.dtd">
+    "-//Sun Microsystems, Inc.//DTD Java Data Objects Metadata 2.0//EN"
+    "http://java.sun.com/dtd/jdo_2_0.dtd">
 
 <jdo>
   <package name="org.apache.maven.continuum.project">
-    <class name="ContinuumProject" detachable="true" identity-type="application" objectid-class="javax.jdo.identity.StringIdentity" table="project">
+    <class name="ContinuumProject" detachable="true" identity-type="application"
+           objectid-class="javax.jdo.identity.StringIdentity" table="project">
       <inheritance strategy="new-table">
         <discriminator strategy="class-name">
           <column name="PROJECT_TYPE"/>
@@ -20,12 +21,10 @@
       <field name="state" persistence-modifier="none"/>
       <field name="executorId" persistence-modifier="persistent"/>
       <field name="latestBuildId" persistence-modifier="persistent"/>
-      <field name="previousBuildId" persistence-modifier="persistent"/>
       <field name="buildNumber" persistence-modifier="persistent"/>
       <field name="scmResult" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
       <field name="checkOutErrorMessage" persistence-modifier="persistent"/>
       <field name="checkOutErrorException" persistence-modifier="persistent"/>
-      <field name="mailType" persistence-modifier="persistent"/>
       <field name="commandLineArguments" persistence-modifier="persistent"/>
       <field name="url" persistence-modifier="persistent"/>
       <field name="artifactId" persistence-modifier="persistent"/>
@@ -69,11 +68,13 @@
       </fetch-group>
     </class>
 
-    <class name="ContinuumSchedule" detachable="true" identity-type="application" objectid-class="javax.jdo.identity.StringIdentity" table="schedule">
+    <class name="ContinuumSchedule" detachable="true" identity-type="application"
+           objectid-class="javax.jdo.identity.StringIdentity" table="schedule">
       <field name="projects" persistence-modifier="persistent" mapped-by="schedules">
         <collection element-type="ContinuumProject"/>
       </field>
-      <field name="id" persistence-modifier="persistent" null-value="exception" primary-key="true" value-strategy="native"/>
+      <field name="id" persistence-modifier="persistent" null-value="exception" primary-key="true"
+             value-strategy="native"/>
       <field name="name" persistence-modifier="persistent"/>
       <field name="description" persistence-modifier="persistent"/>
       <field name="active" persistence-modifier="persistent"/>
@@ -87,12 +88,14 @@
 
     <class name="ContinuumNotifier" detachable="true" identity-type="datastore" table="notifier">
       <field name="type" persistence-modifier="persistent"/>
-      <field name="configuration" persistence-modifier="persistent" default-fetch-group="true" table="notifier_configuration">
+      <field name="configuration" persistence-modifier="persistent" default-fetch-group="true"
+             table="notifier_configuration">
         <map key-type="java.lang.String" value-type="java.lang.String" dependent-key="true" dependent-value="true"/>
         <join/>
       </field>
     </class>
-    <class name="ContinuumDeveloper" detachable="true" identity-type="application" objectid-class="javax.jdo.identity.StringIdentity" table="developer">
+    <class name="ContinuumDeveloper" detachable="true" identity-type="application"
+           objectid-class="javax.jdo.identity.StringIdentity" table="developer">
       <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
       <field name="name" persistence-modifier="persistent"/>
       <field name="email" persistence-modifier="persistent"/>
@@ -102,32 +105,37 @@
       <field name="artifactId" persistence-modifier="persistent"/>
       <field name="version" persistence-modifier="persistent"/>
     </class>
-    <class name="MavenTwoProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject" detachable="true">
+    <class name="MavenTwoProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
+           detachable="true">
       <inheritance strategy="superclass-table"/>
       <field name="goals" persistence-modifier="persistent">
         <column name="M2_GOALS"/>
       </field>
     </class>
-    <class name="MavenOneProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject" detachable="true">
+    <class name="MavenOneProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
+           detachable="true">
       <inheritance strategy="superclass-table"/>
       <field name="goals" persistence-modifier="persistent">
         <column name="M1_GOALS"/>
       </field>
     </class>
-    <class name="AntProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject" detachable="true">
+    <class name="AntProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
+           detachable="true">
       <inheritance strategy="superclass-table"/>
       <field name="executable" persistence-modifier="persistent">
         <column name="ANT_EXECUTABLE"/>
       </field>
       <field name="targets" persistence-modifier="persistent"/>
     </class>
-    <class name="ShellProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject" detachable="true">
+    <class name="ShellProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
+           detachable="true">
       <inheritance strategy="superclass-table"/>
       <field name="executable" persistence-modifier="persistent">
         <column name="SHELL_EXECUTABLE"/>
       </field>
     </class>
-    <class name="ContinuumBuild" detachable="true" identity-type="application" objectid-class="javax.jdo.identity.StringIdentity" table="build">
+    <class name="ContinuumBuild" detachable="true" identity-type="application"
+           objectid-class="javax.jdo.identity.StringIdentity" table="build">
       <field name="project" persistence-modifier="persistent" null-value="exception" default-fetch-group="false"/>
       <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
       <field name="state" persistence-modifier="persistent"/>
@@ -144,7 +152,8 @@
 
     <!-- New Object Model -->
 
-    <class name="ContinuumBuildGroup" detachable="true" identity-type="application" objectid-class="javax.jdo.identity.StringIdentity" table="build_group">
+    <class name="ContinuumBuildGroup" detachable="true" identity-type="application"
+           objectid-class="javax.jdo.identity.StringIdentity" table="build_group">
       <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
       <field name="name" persistence-modifier="persistent"/>
       <field name="description" persistence-modifier="persistent"/>
@@ -161,7 +170,8 @@
       </fetch-group>
     </class>
 
-    <class name="ContinuumProjectGroup" detachable="true" identity-type="application" objectid-class="javax.jdo.identity.StringIdentity" table="project_group">
+    <class name="ContinuumProjectGroup" detachable="true" identity-type="application"
+           objectid-class="javax.jdo.identity.StringIdentity" table="project_group">
       <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
       <field name="groupId" persistence-modifier="persistent"/>
       <field name="name" persistence-modifier="persistent"/>
@@ -183,7 +193,8 @@
       </fetch-group>
     </class>
 
-    <class name="ContinuumBuildSettings" detachable="true" identity-type="application" objectid-class="javax.jdo.identity.StringIdentity" table="build_settings">
+    <class name="ContinuumBuildSettings" detachable="true" identity-type="application"
+           objectid-class="javax.jdo.identity.StringIdentity" table="build_settings">
       <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
       <field name="name" persistence-modifier="persistent"/>
       <field name="notificationScheme" persistence-modifier="persistent"/>
