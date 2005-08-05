@@ -36,7 +36,7 @@ TIMESTAMP=`date +%Y%m%d.%H%M%S`
 WWW=$HOME/public_html
 DEPLOY_DIR=$WWW/builds
 DEPLOY_SITE=http://maven.zones.apache.org/~continuum/builds
-DIST=m2-${TIMESTAMP}.tar.gz
+DIST=continuum-${TIMESTAMP}.tar.gz
 SVN=svn
 
 M2_HOME=$HOME_DIR/m2
@@ -142,7 +142,25 @@ fi
 
       $M2_HOME/bin/m2 -Denv=test --batch-mode --no-plugin-registry --update-snapshots -e clean:clean install
       ret=$?; if [ $ret != 0 ]; then exit $ret; fi
-    )    
+    )
+    ret=$?; if [ $ret != 0 ]; then exit $ret; fi
+
+    # Only created on success
+
+    echo
+    echo "Creating continuum distribution for public consumption: ${DEPLOY_SITE}/${DIST}"
+    echo
+
+    mkdir -p $DEPLOY_DIR > /dev/null 2>&1
+
+    (
+      cd $DIR/continuum/continuum-plexus-application
+
+      $M2_HOME/bin/m2 -Denv=test --batch-mode --no-plugin-registry --update-snapshots -e assembly:assembly
+      ret=$?; if [ $ret != 0 ]; then exit $ret; fi
+
+      mv target/continuum*.tar.gz $DEPLOY_DIR/$DIST
+    )
     ret=$?; if [ $ret != 0 ]; then exit $ret; fi
 
   else
@@ -171,6 +189,9 @@ then
     echo "Subject: [continuum build - FAILED - $CMD] $DATE" >> log
   else
     echo "Subject: [continuum build - SUCCESS - $CMD] $DATE" >> log
+    echo "" >> log
+    echo "Distribution:" >> log
+    echo "${DEPLOY_SITE}/${DIST}" >>log
     rm $HOME_DIR/build_required
   fi
   echo "" >> log
