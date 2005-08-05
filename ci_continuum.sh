@@ -167,7 +167,7 @@ then
   echo "To: $TO" >> log
   if [ $ret != 0 ]; then
     echo "Subject: [continuum build - FAILED - $CMD] $DATE" >> log
-  elif [ $fatal_error != 0 ]; then
+  elif [ $fatal_error != 1 ]; then
     echo "Subject: [continuum build - FAILED - $CMD] $DATE" >> log
   else
     echo "Subject: [continuum build - SUCCESS - $CMD] $DATE" >> log
