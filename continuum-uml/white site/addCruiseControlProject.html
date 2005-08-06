@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>Continuum</title>
+
+  <link rel="stylesheet" type="text/css" href="continuum_files/tigris.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="continuum_files/print.css" media="print">
+
+  <script src="continuum_files/tigris.js" type="text/javascript"></script></head>
+
+<body onload="focus()" class="composite">
+
+<div id="banner">
+  <table border="1" cellpadding="8" cellspacing="0" width="100%">
+    <tbody><tr>
+      <td>
+        <a href="http://www.apache.org/">
+          Your company logo here
+        </a>
+      </td>
+      <td>
+        <a href="http://maven.apache.org/continuum">
+          <img src="continuum_files/continuum_logo_75.gif" alt="Continuum" align="right" border="0">
+        </a>
+      </td>
+    </tr>
+    </tbody></table>
+</div>
+
+<div id="breadcrumbs">
+  <div align="right">
+    <a href="http://maven.apache.org/continuum">Continuum</a> |
+    <a href="http://maven.apache.org/">Maven</a> |
+    <a href="http://www.apache.org/">Apache</a>
+  </div>
+</div>
+
+<table id="main" border="0" cellpadding="4" cellspacing="0" width="100%">
+<tbody><tr valign="top">
+<td id="leftcol" width="30%">
+  <div id="navcolum">
+    <div id="projectmenu" class="toolgroup">
+      <div class="label">Continuum</div>
+
+      <div class="body">
+        <div><a href="continuum.html">Show Projects</a></div>
+
+        <div><a href="schedule.html">View Build Schedule</a></div>
+      </div>
+    </div>
+
+    <div id="projecttools" class="toolgroup">
+      <div class="label">Add Project</div>
+
+      <div class="body">
+        <div><a href="addMaven2Project.html">Maven 2.0+ Project</a></div>
+
+        <div><a href="addMaven1Project.html">Maven 1.x Project</a></div>
+
+        <div><a href="addAntProject.html">Ant Project</a></div>
+
+        <div><a href="addShellProject.html">Shell Project</a></div>
+      </div>
+    </div>
+
+    <div id="projectimport" class="toolgroup">
+      <div class="label">Import Project</div>
+
+      <div class="body">
+        <div>
+          <a href="addCruiseControlProject.html">CruiseControl</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</td>
+<td>
+  <div id="bodycol">
+    <div class="app">
+      <div id="axial" class="h3">
+        <h3>Import Cruise Control Project</h3>
+
+        <form method="post" action="editProject.html">
+          <input type="hidden" name="fid" value="addMavenTwoProject"/>
+
+          <input type="hidden" name="action" value="addMavenTwoProject"/>
+          <input type="hidden" name="view" value="Summary.vm"/>
+          <input type="hidden" name="id" value="$id"/>
+
+          <div class="axial">
+            <table border="1" cellspacing="2" cellpadding="3" width="100%">
+              <tr>
+                <th>
+                  <input type="radio" checked="checked"/>
+                  URL
+                </th>
+
+
+                <td>
+                  <input type="text" name="m2PomUrl" value="" size="40"/>
+
+                  <p>
+                    Enter the URL of a Cruise Control configuration file <font color="red"><b></b></font>
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>
+                  <strong>OR</strong>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <input type="radio"/>
+                  Upload
+                </th>
+
+
+                <td>
+                  <input type="file" name="m2PomUrl" value="" size="40"/>
+
+                  <p>
+                    Enter the local filename of the Cruise Control configuration to upload <font color="red"><b></b>
+                  </font>
+                  </p>
+                </td>
+              </tr>
+            </table>
+            <div class="functnbar3">
+
+              <input type="submit" value="Submit"/>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</td>
+</tr>
+</tbody>
+</table>
+
+<div id="footer">
+  <table border="0" cellpadding="4" cellspacing="0">
+    <tbody><tr>
+      <td>
+        Continuum &#169; 2005 Apache Software Foundation
+      </td>
+    </tr>
+    </tbody></table>
+</div>
+
+</body></html>
