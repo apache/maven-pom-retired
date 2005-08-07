@@ -75,99 +75,147 @@
       </div>
     </div>
 
+    <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em;">
+      <p>Notes:</p>
+      <ul>
+        <li>Should the IRC host be a dropdown, only configured from the admin interface? How does this correlate with
+          POMs?</li>
+      </ul>
+    </div>
   </div>
 </td>
 <td>
-  <div id="bodycol">
-    <div class="app">
-      <div id="axial" class="h3">
-        <h3>Add (Edit) Notifier</h3>
+<div id="bodycol">
+<div class="app">
+<div id="axial" class="h3">
+<h3>Add (Edit) Notifier</h3>
 
-        <form method="post" action="viewProject.html">
-          <input type="hidden" name="fid" value="antProject"/>
+<form method="post" action="viewProject.html">
+<input type="hidden" name="fid" value="antProject"/>
 
-          <input type="hidden" name="action" value="addEntity"/>
-          <input type="hidden" name="view" value="Summary.vm"/>
-          <input type="hidden" name="id" value="$id"/>
+<input type="hidden" name="action" value="addEntity"/>
+<input type="hidden" name="view" value="Summary.vm"/>
+<input type="hidden" name="id" value="$id"/>
 
-          <div class="axial">
-            <table border="1" cellspacing="2" cellpadding="3" width="100%">
-              <tr>
+<div class="axial">
+<table border="1" cellspacing="2" cellpadding="3" width="100%">
+<tr>
 
-                <th>Type</th>
-
-
-                <td>
-                  <input value="mail" name="type" type="radio" checked="checked"/>&nbsp;Mail
-                  <input value="irc" name="type" type="radio"/>&nbsp;IRC
-                  <input value="msn" name="type" type="radio"/>&nbsp;MSN
-                  <input value="yahoo" name="type" type="radio"/>&nbsp;Yahoo
-                  <input value="jabber" name="type" type="radio"/>&nbsp;Jabber
-                </td>
-              </tr>
-              <tr>
-                <th>Recipients</th>
-                <td>
-                  <table>
-                    <tr>
-                      <td><input value="all" name="recipient" type="radio" checked="checked"/>&nbsp;All Developers</td>
-                      <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <input value="developer" name="recipient" type="radio"/>&nbsp;Single Developer
-                      </td>
-                      <td>
-                        <input type="text" name="config" value="" size="40"/>
-                        <small>(Enter the developer's Continuum ID)</small>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <input value="role" name="recipient" type="radio"/>&nbsp;Developers with Role
-                      </td>
-                      <td>
-                        <select>
-                          <option selected="selected">Build Manager</option>
-                          <option>Hippie</option>
-                          <option>Cowboy</option>
-                        </select>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <input value="single" name="recipient" type="radio"/>&nbsp;Single recipient
-                      </td>
-                      <td>
-                        <input type="text" name="config" value="" size="40"/>
-                        <small>(Enter the e-mail address, Jabber ID, etc. of the recipient)</small>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-              <tr>
-
-                <th>Events</th>
+  <th>Type</th>
 
 
-                <td>
-                  <input value="success" name="event" type="checkbox" checked="checked"/>&nbsp;Build Success
-                  <input value="failure" name="event" type="checkbox" checked="checked"/>&nbsp;Build Failure
-                  <input value="failure" name="event" type="checkbox" checked="checked"/>&nbsp;Build Error
-                </td>
-              </tr>
-            </table>
-            <div class="functnbar3">
-              <input type="submit" value="Submit"/>
-            </div>
-          </div>
-        </form>
+  <td>
+    <table>
+      <tr>
+        <td>
+          <input value="mail" name="type" type="radio" checked="checked"/>&nbsp;Mail
+        </td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+          <input value="irc" name="type" type="radio"/>&nbsp;IRC
+        </td>
+        <td>
+          Host:
+          <input type="text" name="config" value="" size="40"/>
+        </td>
+        <td>
+          Port:
+          <input type="text" name="config" value="" size="5"/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input value="msn" name="type" type="radio"/>&nbsp;MSN
+        </td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+          <input value="yahoo" name="type" type="radio"/>&nbsp;Yahoo
+        </td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+          <input value="jabber" name="type" type="radio"/>&nbsp;Jabber
+        </td>
+        <td>
+          Host:
+          <input type="text" name="config" value="" size="40"/>
+        </td>
+        <td>
+          Port:
+          <input type="text" name="config" value="" size="5"/>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+  <th>Recipients</th>
+  <td>
+    <table>
+      <tr>
+        <td><input value="all" name="recipient" type="radio" checked="checked"/>&nbsp;All Developers</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+          <input value="developer" name="recipient" type="radio"/>&nbsp;Single Developer
+        </td>
+        <td>
+          <input type="text" name="config" value="" size="40"/>
+          <small>(Enter the developer's Continuum ID)</small>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input value="role" name="recipient" type="radio"/>&nbsp;Developers with Role
+        </td>
+        <td>
+          <select>
+            <option selected="selected">Build Manager</option>
+            <option>Hippie</option>
+            <option>Cowboy</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input value="single" name="recipient" type="radio"/>&nbsp;Single recipient
+        </td>
+        <td>
+          <input type="text" name="config" value="" size="40"/>
+          <small>(Enter the e-mail address, Jabber ID, etc. of the recipient)</small>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
 
-      </div>
-    </div>
+  <th>Events</th>
 
-  </div></td>
+
+  <td>
+    <input value="success" name="event" type="checkbox" checked="checked"/>&nbsp;Build Success
+    <input value="failure" name="event" type="checkbox" checked="checked"/>&nbsp;Build Failure
+    <input value="failure" name="event" type="checkbox" checked="checked"/>&nbsp;Build Error
+  </td>
+</tr>
+</table>
+<div class="functnbar3">
+  <input type="submit" value="Submit"/>
+</div>
+</div>
+</form>
+
+</div>
+</div>
+
+</div></td>
 </tr>
 </tbody>
 </table>
