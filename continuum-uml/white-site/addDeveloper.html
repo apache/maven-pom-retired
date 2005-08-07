@@ -34,106 +34,106 @@
 </div>
 
 <table id="main" border="0" cellpadding="4" cellspacing="0" width="100%">
-  <tbody><tr valign="top">
-    <td id="leftcol" width="30%">
-      <div id="navcolum">
-        <div id="projectmenu" class="toolgroup">
-          <div class="label">Continuum</div>
+<tbody><tr valign="top">
+  <td id="leftcol" width="30%">
+    <div id="navcolum">
+      <div id="projectmenu" class="toolgroup">
+        <div class="label">Continuum</div>
 
-          <div class="body">
-            <div><a href="continuum.html">Show Projects</a></div>
+        <div class="body">
+          <div><a href="continuum.html">Show Projects</a></div>
 
-            <div><a href="schedule.html">View Build Schedule</a></div>
-          </div>
+          <div><a href="schedule.html">View Build Schedule</a></div>
         </div>
-
-        <div id="projecttools" class="toolgroup">
-          <div class="label">Add Project</div>
-
-          <div class="body">
-            <div><a href="addMaven2Project.html">Maven 2.0+ Project</a></div>
-
-            <div><a href="addMaven1Project.html">Maven 1.x Project</a></div>
-
-            <div><a href="addAntProject.html">Ant Project</a></div>
-
-            <div><a href="addShellProject.html">Shell Project</a></div>
-          </div>
-        </div>
-
-        <div id="projectimport" class="toolgroup">
-          <div class="label">Import Project</div>
-
-          <div class="body">
-            <div>
-              <a href="addCruiseControlProject.html">CruiseControl</a>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em;">
-          <p>Notes:</p>
-          <ul>
-            <li>This is just the developers relationship to the project</li>
-            <li>Name and email are edited in the user's profile</li>
-            <li>Continuum ID can be put into the POM using a property, but defaults to their SCM ID</li>
-            <li>Roles are also administered through the user profile</li>
-          </ul>
-        </div>
-
       </div>
-    </td>
-    <td>
-      <div id="bodycol">
-        <div class="app">
-          <div id="axial" class="h3">
-            <h3>Add (Edit) Developer Project</h3>
 
-            <form method="post" action="viewProject.html">
-              <input type="hidden" name="fid" value="antProject"/>
+      <div id="projecttools" class="toolgroup">
+        <div class="label">Add Project</div>
 
-              <input type="hidden" name="action" value="addEntity"/>
-              <input type="hidden" name="view" value="Summary.vm"/>
-              <input type="hidden" name="id" value="$id"/>
+        <div class="body">
+          <div><a href="addMaven2Project.html">Maven 2.0+ Project</a></div>
 
-              <div class="axial">
-                <table border="1" cellspacing="2" cellpadding="3" width="100%">
-                  <tr>
+          <div><a href="addMaven1Project.html">Maven 1.x Project</a></div>
 
-                    <th>Username</th>
+          <div><a href="addAntProject.html">Ant Project</a></div>
 
+          <div><a href="addShellProject.html">Shell Project</a></div>
+        </div>
+      </div>
 
-                    <td>
-                      <input type="text" name="project.name" value="" size="40"/>
+      <div id="projectimport" class="toolgroup">
+        <div class="label">Import Project</div>
 
-                      <p>
-                        Enter the Continuum username
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>SCM ID</th>
-                    <td>
-                      <input type="text" name="project.version" value="" size="40"/>
-
-                      <p>
-                        Enter the user's ID in the SCM
-                      </p>
-                    </td>
-                  </tr>
-                </table>
-                <div class="functnbar3">
-                  <input type="submit" value="Submit"/>
-                </div>
-              </div>
-            </form>
-
+        <div class="body">
+          <div>
+            <a href="addCruiseControlProject.html">CruiseControl</a>
           </div>
         </div>
+      </div>
 
-      </div></td>
-  </tr>
-  </tbody>
+      <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em;">
+        <p>Notes:</p>
+        <ul>
+          <li>This is just the developers relationship to the project</li>
+          <li>Name and email are edited in the user's profile</li>
+          <li>Continuum ID can be put into the POM using a property, but defaults to their SCM ID</li>
+          <li>Roles are also administered through the user profile</li>
+        </ul>
+      </div>
+
+    </div>
+  </td>
+  <td>
+    <div id="bodycol">
+      <div class="app">
+        <div id="axial" class="h3">
+          <h3>Add (Edit) Developer</h3>
+
+          <form method="post" action="viewProject.html">
+            <input type="hidden" name="fid" value="antProject"/>
+
+            <input type="hidden" name="action" value="addEntity"/>
+            <input type="hidden" name="view" value="Summary.vm"/>
+            <input type="hidden" name="id" value="$id"/>
+
+            <div class="axial">
+              <table border="1" cellspacing="2" cellpadding="3" width="100%">
+                <tr>
+
+                  <th>Username</th>
+
+
+                  <td>
+                    <input type="text" name="project.name" value="" size="40"/>
+
+                    <p>
+                      Enter the Continuum username
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <th>SCM ID</th>
+                  <td>
+                    <input type="text" name="project.version" value="" size="40"/>
+
+                    <p>
+                      Enter the user's ID in the SCM
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              <div class="functnbar3">
+                <input type="submit" value="Submit"/>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+    </div></td>
+</tr>
+</tbody>
 </table>
 
 <div id="footer">
