@@ -78,20 +78,18 @@
       <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em;">
         <p>Notes:</p>
         <ul>
-          <li>This is just the developers relationship to the project</li>
-          <li>Name and email are edited in the user's profile</li>
-          <li>Continuum ID can be put into the POM using a property, but defaults to their SCM ID</li>
-          <li>Roles are also administered through the user profile</li>
+          <li>Log out only drops you here if Guest does not have priviledges to view access and pages, otherwise logout
+            drops you to the index page</li>
+          <li>Create user link is only present if the system allows anonymous account creation</li>
         </ul>
       </div>
-
     </div>
   </td>
   <td>
     <div id="bodycol">
       <div class="app">
         <div id="axial" class="h3">
-          <h3>Add (Edit) Developer</h3>
+          <h3>Login</h3>
 
           <form method="post" action="viewProject.html">
             <input type="hidden" name="fid" value="antProject"/>
@@ -108,21 +106,25 @@
 
 
                   <td>
-                    <input type="text" name="project.name" value="" size="40"/>
-
-                    <p>
-                      Enter the Continuum username
-                    </p>
+                    <input type="text" name="username" value="" size="40"/>
+                    <small><a href="createUser.html">Create A New Account</a></small>
                   </td>
                 </tr>
                 <tr>
-                  <th>SCM ID</th>
-                  <td>
-                    <input type="text" name="project.version" value="" size="40"/>
+                  <th>Password</th>
 
-                    <p>
-                      Enter the user's ID in the SCM
-                    </p>
+
+                  <td>
+                    <input type="password" value="" size="40"/>
+                    <small><a href="forgotPassword.html">Forgotten password?</a></small>
+                  </td>
+                </tr>
+                <tr>
+                  <th>&nbsp;</th>
+
+
+                  <td>
+                    <input type="checkbox" checked="checked"/>&nbsp;Remember me
                   </td>
                 </tr>
               </table>
