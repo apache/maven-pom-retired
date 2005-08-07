@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>Continuum</title>
+
+  <link rel="stylesheet" type="text/css" href="continuum_files/tigris.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="continuum_files/print.css" media="print">
+
+  <script src="continuum_files/tigris.js" type="text/javascript"></script></head>
+
+<body onload="focus()" class="composite">
+
+<div id="banner">
+  <table border="1" cellpadding="8" cellspacing="0" width="100%">
+    <tbody><tr>
+      <td>
+        <a href="http://www.apache.org/">
+          Your company logo here
+        </a>
+      </td>
+      <td>
+        <a href="http://maven.apache.org/continuum">
+          <img src="continuum_files/continuum_logo_75.gif" alt="Continuum" align="right" border="0">
+        </a>
+      </td>
+    </tr>
+    </tbody></table>
+</div>
+
+<div id="breadcrumbs">
+  <div align="right">
+    <a href="http://maven.apache.org/continuum">Continuum</a> |
+    <a href="http://maven.apache.org/">Maven</a> |
+    <a href="http://www.apache.org/">Apache</a>
+  </div>
+</div>
+
+<table id="main" border="0" cellpadding="4" cellspacing="0" width="100%">
+<tbody><tr valign="top">
+<td id="leftcol" width="30%">
+  <div id="navcolum">
+    <div id="projectmenu" class="toolgroup">
+      <div class="label">Continuum</div>
+
+      <div class="body">
+        <div><a href="continuum.html">Show Projects</a></div>
+
+        <div><a href="schedule.html">View Build Schedule</a></div>
+      </div>
+    </div>
+
+    <div id="projecttools" class="toolgroup">
+      <div class="label">Add Project</div>
+
+      <div class="body">
+        <div><a href="addMaven2Project.html">Maven 2.0+ Project</a></div>
+
+        <div><a href="addMaven1Project.html">Maven 1.x Project</a></div>
+
+        <div><a href="addAntProject.html">Ant Project</a></div>
+
+        <div><a href="addShellProject.html">Shell Project</a></div>
+      </div>
+    </div>
+
+    <div id="projectimport" class="toolgroup">
+      <div class="label">Import Project</div>
+
+      <div class="body">
+        <div>
+          <a href="addCruiseControlProject.html">CruiseControl</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em;">
+      <p>Notes:</p>
+      <ul>
+        <li>Artifacts are omitted if the build was not successful</li>
+        <li>Changes since success do not duplicate those since last build</li>
+        <li>The error on this page obviously doesn't match the result</li>
+      </ul>
+    </div>
+
+  </div>
+</td>
+<td>
+<div id="bodycol">
+<div class="app">
+
+<div>
+  <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
+    <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;"
+       href="viewProject.html">Info</a>
+    <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; font-weight: bold; text-decoration:none;"
+       href="builds.html">Builds</a>
+    <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;"
+       href="workingCopy.html">Working&nbsp;Copy</a>
+  </p>
+</div>
+
+<div id="axial" class="h3">
+  <h3>Build result for Default Plexus Container</h3>
+  <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <tr class="a">
+
+      <th>Start Time</th>
+      <td>Jul 28, 2005 3:40:20 PM</td>
+    </tr>
+    <tr class="a">
+      <th>End Time</th>
+      <td>Jul 28, 2005 3:40:40 PM</td>
+    </tr>
+
+    <tr class="a">
+      <th>Build forced</th>
+      <td>No</td>
+    </tr>
+    <tr class="a">
+      <th>State</th>
+      <td><img src="continuum_files/icon_error_sml.gif" alt="Failed"/></td>
+    </tr>
+    <tr class="a">
+      <th>Build #</th>
+      <td>N/A</td>
+    </tr>
+  </table>
+
+  <h4>Changes Since Last Build</h4>
+
+  <p>
+    <b>No files changed</b>
+  </p>
+
+  <h4>Other Changes Since Last Success</h4>
+
+  <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <tr class="a">
+      <th>Revision</th>
+      <th>Files</th>
+      <th>Developer</th>
+      <th>Comment</th>
+    </tr>
+    <tr class="a">
+      <td>240356</td>
+      <td>
+        pom.xml<br/>
+        src/main/java/org/codehaus/plexus/DefaultPlexusContainer.java
+      </td>
+      <td>Brett Porter</td>
+      <td>
+        Configure the container from a URL
+      </td>
+    </tr>
+  </table>
+
+  <h4>Generated Reports</h4>
+
+  <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <tr class="a">
+      <td><a href="#">JUnit Report</a></td>
+      <td><b style="color: green;">Success</b>: 10; <b style="color: red;">Failed</b>: 1; <b
+              style="color: red;">Error</b>: 3</td>
+    </tr>
+  </table>
+
+  <h4>Build Error</h4>
+
+  <p>
+    <b>Reason: </b> Tests failed.
+
+  <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px; white-space: pre; font-family:monospace;">
+    org.apache.maven.continuum.execution.ContinuumBuildExecutorException: Error while mapping metadata.
+    at
+    org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor.updateProjectFromCheckOut(MavenTwoBuildExecutor.java:92)
+    at
+    org.apache.maven.continuum.core.action.UpdateProjectFromWorkingDirectoryContinuumAction.execute(UpdateProjectFromWorkingDirectoryContinuumAction.java:45)
+    at org.apache.maven.continuum.buildcontroller.DefaultBuildController.build(DefaultBuildController.java:183)
+    at org.apache.maven.continuum.buildcontroller.BuildProjectTaskExecutor.executeTask(BuildProjectTaskExecutor.java:50)
+    at
+    org.codehaus.plexus.taskqueue.execution.ThreadedTaskQueueExecutor$ExecutorRunnable.run(ThreadedTaskQueueExecutor.java:103)
+    at java.lang.Thread.run(Thread.java:595)
+    Caused by: org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException: Cannot build maven project
+    from /export/home/continuum/continuum-1.0-alpha-3/apps/continuum/temp/43/pom.xml.
+    at
+    org.apache.maven.continuum.execution.maven.m2.DefaultMavenBuilderHelper.getMavenProject(DefaultMavenBuilderHelper.java:178)
+    at
+    org.apache.maven.continuum.execution.maven.m2.DefaultMavenBuilderHelper.mapMetadataToProject(DefaultMavenBuilderHelper.java:77)
+    at
+    org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor.updateProjectFromCheckOut(MavenTwoBuildExecutor.java:88)
+    ... 5 more
+    Caused by: org.apache.maven.project.ProjectBuildingException: Failed to parse model from file
+    '/export/home/continuum/.m2/repository/plexus/plexus-root/1.0/plexus-root-1.0.pom'.
+    Error: 'TEXT must be immediately followed by END_TAG and not START_TAG (position: START_TAG seen ...&lt;snapshotRepository&gt;\r\n
+    &lt;id&gt;... @43:11) '
+    at org.apache.maven.project.DefaultMavenProjectBuilder.readModel(DefaultMavenProjectBuilder.java:525)
+    at org.apache.maven.project.DefaultMavenProjectBuilder.findModelFromRepository(DefaultMavenProjectBuilder.java:244)
+    at org.apache.maven.project.DefaultMavenProjectBuilder.assembleLineage(DefaultMavenProjectBuilder.java:491)
+    at org.apache.maven.project.DefaultMavenProjectBuilder.assembleLineage(DefaultMavenProjectBuilder.java:493)
+    at org.apache.maven.project.DefaultMavenProjectBuilder.build(DefaultMavenProjectBuilder.java:297)
+    at org.apache.maven.project.DefaultMavenProjectBuilder.buildFromSourceFile(DefaultMavenProjectBuilder.java:198)
+    at org.apache.maven.project.DefaultMavenProjectBuilder.build(DefaultMavenProjectBuilder.java:186)
+    at
+    org.apache.maven.continuum.execution.maven.m2.DefaultMavenBuilderHelper.getMavenProject(DefaultMavenBuilderHelper.java:170)
+    ... 7 more
+    Caused by: org.codehaus.plexus.util.xml.pull.XmlPullParserException: TEXT must be immediately followed by END_TAG
+    and not START_TAG (position: START_TAG seen ...&lt;snapshotRepository&gt;\r\n      &lgt;id&gt;... @43:11)
+    at org.codehaus.plexus.util.xml.pull.MXParser.nextText(MXParser.java:1060)
+    at org.apache.maven.model.io.xpp3.MavenXpp3Reader.parseDistributionManagement(MavenXpp3Reader.java:847)
+    at org.apache.maven.model.io.xpp3.MavenXpp3Reader.parseModel(MavenXpp3Reader.java:1339)
+    at org.apache.maven.model.io.xpp3.MavenXpp3Reader.read(MavenXpp3Reader.java:2604)
+    at org.apache.maven.project.DefaultMavenProjectBuilder.readModel(DefaultMavenProjectBuilder.java:510)
+    ... 14 more
+  </div>
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody></table>
+
+<div id="footer">
+  <table border="0" cellpadding="4" cellspacing="0">
+    <tbody><tr>
+      <td>
+        Continuum &#169; 2005 Apache Software Foundation
+      </td>
+    </tr>
+    </tbody></table>
+</div>
+
+</body></html>
