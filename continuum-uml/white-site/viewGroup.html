@@ -78,11 +78,13 @@
     <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em;">
       <p>Notes:</p>
       <ul>
-        <li>edit links here go to the add page, which are identical except for being prefilled</li>
+        <li>add/edit links here go to the standard page, which returns to the project, not the group</li>
         <li>in build definitions, targets replace goals for Ant, and it is omitted for shell</li>
         <li>in build definitions, build.xml replace pom file for Ant</li>
         <li>in build definitions, Executable replace pom file for Shell, and it is before the arguments</li>
-        <li>Users with a <b>(?)</b> are those not found in the continuum system</li>
+        <li>later we might allow arbitrary groups, but for now they aren't editable</li>
+        <li>pom.xml is relative to the project basedirs, not the group</li>
+        <li>Do we want an aggregated group mode, where the build is only run on a reactor represented by the group?</li>
       </ul>
     </div>
   </div>
@@ -94,47 +96,34 @@
 <div>
   <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
     <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Info</b>
-    <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="builds.html">Builds</a>
-    <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;"
-       href="workingCopy.html">Working&nbsp;Copy</a>
   </p>
 </div>
 
 <div id="axial" class="h3">
-<h3>Continuum Project</h3>
+<h3>Continuum Project Group</h3>
 
 <div class="axial">
   <table border="1" cellspacing="2" cellpadding="3" width="100%">
 
     <tr class="b">
-      <th>Project Name</th>
-      <td>Default Plexus Container</td>
+      <th>Project Group Name</th>
+      <td>Plexus</td>
     </tr>
     <tr class="b">
-      <th>Scm Url</th>
-      <td>scm:svn:svn://svn.codehaus.org/plexus/scm/trunk/plexus-containers/plexus-container-default</td>
-    </tr>
-    <tr class="b">
-      <th>Version</th>
-
-      <td>1.0-alpha-6-SNAPSHOT</td>
-    </tr>
-    <tr class="b">
-      <th>Group</th>
-      <td><a href="viewGroup.html">Plexus</a></td>
+      <th>Maven Group ID</th>
+      <td>org.codehaus.plexus</td>
     </tr>
   </table>
   <div class="functnbar3">
     <table>
       <tr>
         <td>
-          <form method="post" action="editProject.html">
+          <form method="post" action="editGroup.html">
 
             <input type="hidden" name="action" value="cam"/>
             <input type="hidden" name="cid" value="checkoutProject"/>
             <input type="hidden" name="id" value="43"/>
             <input type="submit" name="edit-project" value="Edit"/>
-            <b style="color: red;">Note: </b> Project details are out of sync with Maven POM
           </form>
         </td>
       </tr>
@@ -142,91 +131,40 @@
   </div>
 </div>
 
-
-<h3>Developers</h3>
+<h3>Projects</h3>
 <table border="1" cellspacing="2" cellpadding="3" width="100%">
   <tr>
 
     <th>Name</th>
-    <th>Email</th>
-    <th width="10%">&nbsp;</th>
   </tr>
   <tr class="b">
-    <td><a href="userProfile.html">Jason van Zyl</a></td>
-    <td><a href="mailto:jason@zenplex.com">jason@zenplex.com</a></td>
-    <td><a href="addDeveloper.html">Edit</a> | <a href="#">Delete</a></td>
+    <td><a href="viewProject.html">Plexus Utils</a></td>
+  </tr>
+  <tr class="b">
+    <td><a href="viewProject.html">Default Plexus Container</a></td>
   </tr>
 
-  <tr class="b">
-    <td>Emmanuel Venisse <b>(?)</b></td>
-    <td><a href="mailto:evenisse@codehaus.org">evenisse@codehaus.org</a></td>
-    <td><a href="addDeveloper.html">Edit</a> | <a href="#">Delete</a></td>
-  </tr>
-  <tr class="a">
-    <td><a href="userProfile.html">Trygve Laugstøl</a></td>
-    <td><a href="mailto:trygvis@codehaus.org">trygvis@codehaus.org</a></td>
-    <td><a href="addDeveloper.html">Edit</a> | <a href="#">Delete</a></td>
-
-  </tr>
-  <tr class="b">
-    <td><a href="userProfile.html">Kenney Westerhof</a></td>
-    <td><a href="mailto:kenney@codehaus.org">kenney@codehaus.org</a></td>
-    <td><a href="addDeveloper.html">Edit</a> | <a href="#">Delete</a></td>
-  </tr>
 </table>
-<div class="functnbar3">
-  <table>
-    <tr>
-      <td>
-        <form method="post" action="addDeveloper.html">
 
-          <input type="hidden" name="action" value="cam"/>
-          <input type="hidden" name="cid" value="checkoutProject"/>
-          <input type="hidden" name="id" value="43"/>
-          <input type="submit" name="add-developer" value="Add"/>
-          <b style="color: red;">Note: </b> Developers are out of sync with Maven POM
-        </form>
-      </td>
-    </tr>
-  </table>
-</div>
-
-<h3>Notifiers</h3>
+<h3>Shared Notifiers</h3>
 <table border="1" cellspacing="2" cellpadding="3" width="100%">
   <tr>
 
     <th>Type</th>
     <th>Recipient</th>
     <th>Events</th>
-    <th>From</th>
     <th width="10%">&nbsp;</th>
   </tr>
   <tr class="b">
     <td>Mail</td>
     <td>dev@plexus.codehaus.org</td>
     <td>Failures</td>
-    <td><a href="viewGroup.html">Group</a></td>
     <td><a href="addNotifier.html">Edit</a> | <a href="#">Delete</a></td>
   </tr>
   <tr class="b">
     <td>Mail</td>
     <td><i>All Project Developers</i></td>
     <td>Failures</td>
-    <td><a href="viewGroup.html">Group</a></td>
-    <td><a href="addNotifier.html">Edit</a> | <a href="#">Delete</a></td>
-  </tr>
-  <tr class="b">
-    <td>Mail</td>
-    <td><i>Project Developers with Role "Build Manager"</i></td>
-    <td>Success, Failures</td>
-    <td>Project</td>
-    <td><a href="addNotifier.html">Edit</a> | <a href="#">Delete</a></td>
-  </tr>
-  <tr class="b">
-    <td>IRC</td>
-    <td>irc.codehaus.org #plexus</td>
-    <td>Success, Failures</td>
-    <td>Project</td>
     <td><a href="addNotifier.html">Edit</a> | <a href="#">Delete</a></td>
   </tr>
 
@@ -241,14 +179,13 @@
           <input type="hidden" name="cid" value="checkoutProject"/>
           <input type="hidden" name="id" value="43"/>
           <input type="submit" name="add-notifier" value="Add"/>
-          <b style="color: red;">Note: </b> Notifiers are out of sync with Maven POM
         </form>
       </td>
     </tr>
   </table>
 </div>
 
-<h3>Build Definitions</h3>
+<h3>Shared Build Definitions</h3>
 <table border="1" cellspacing="2" cellpadding="3" width="100%">
   <tr>
 
@@ -257,7 +194,6 @@
     <th>POM File</th>
     <th>Profile</th>
     <th>Schedule</th>
-    <th>From</th>
     <th width="10%">&nbsp;</th>
   </tr>
   <tr class="b">
@@ -266,16 +202,6 @@
     <td>pom.xml</td>
     <td><a href="viewProfile.html">Maven 2.0 Default</a></td>
     <td><a href="viewSchedule.html">Hourly</a></td>
-    <td><a href="viewGroup.html">Group</a></td>
-    <td><a href="addBuildDef.html">Edit</a> | <a href="#">Delete</a></td>
-  </tr>
-  <tr class="b">
-    <td>clean:clean install</td>
-    <td>--batch-mode</td>
-    <td>pom.xml</td>
-    <td><a href="viewProfile.html">JDK 1.3, clean checkout</a></td>
-    <td><a href="viewSchedule.html">Weekly</a></td>
-    <td>Project</td>
     <td><a href="addBuildDef.html">Edit</a> | <a href="#">Delete</a></td>
   </tr>
 
@@ -295,28 +221,6 @@
     </tr>
   </table>
 </div>
-
-<h3>Dependencies</h3>
-<table border="1" cellspacing="2" cellpadding="3" width="100%">
-  <tr>
-
-    <th>Name</th>
-  </tr>
-  <tr class="b">
-    <td><a href="viewProject.html">Plexus Utils</a></td>
-  </tr>
-</table>
-
-<h3>Used By</h3>
-<table border="1" cellspacing="2" cellpadding="3" width="100%">
-  <tr>
-
-    <th>Name</th>
-  </tr>
-  <tr class="b">
-    <td><a href="viewProject.html">Plexus Artifact Container</a></td>
-  </tr>
-</table>
 
 </div>
 </div>
