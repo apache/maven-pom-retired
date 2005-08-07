@@ -75,13 +75,20 @@
       </div>
     </div>
 
+    <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em;">
+      <p>Notes:</p>
+      <ul>
+        <li>POM filename is replaced by build filename for Ant, script name for shell</li>
+        <li>Goals replaced by targets for Ant, ommitted for shell</li>
+      </ul>
+    </div>
   </div>
 </td>
 <td>
   <div id="bodycol">
     <div class="app">
       <div id="axial" class="h3">
-        <h3>Edit Project - NAME_HERE</h3>
+        <h3>Add Build Definition</h3>
 
         <form method="post" action="viewProject.html">
           <input type="hidden" name="fid" value="antProject"/>
@@ -93,45 +100,63 @@
           <div class="axial">
             <table border="1" cellspacing="2" cellpadding="3" width="100%">
               <tr>
-
-                <th>Project Name</th>
+                <th>POM filename</th>
 
 
                 <td>
-                  <input type="text" name="project.name" value="" size="40"/>
+                  <input type="text" name="project.executable" value="build.xml" size="40"/>
 
                   <p>
-                    Enter the project name <font color="red"><b></b></font>
+                    Relative path of the POM file <font color="red"><b></b></font>
                   </p>
                 </td>
               </tr>
               <tr>
-                <th>Version</th>
+                <th>Goals</th>
 
 
                 <td>
-                  <input type="text" name="project.version" value="" size="40"/>
+                  <input type="text" name="project.targets" value="clean:clean install" size="40"/>
 
                   <p>
-
-                    Enter the version of the project <font color="red"><b></b></font>
+                    Enter one or more goals - leave empty to use the default <font color="red">
+                    <b></b></font>
                   </p>
                 </td>
               </tr>
-
               <tr>
-                <th>Scm Url</th>
+                <th>Arguments</th>
 
 
                 <td>
-                  <input type="text" name="projectScmUrl" value="" size="40"/>
+                  <input type="text" name="project.targets" value="" size="40"/>
 
                   <p>
-                    Enter the <a href="http://maven.apache.org/reference/plugins/scm/scmurl.html">Maven SCM URL</a>
-                    <font color="red">
-                      <b></b></font>
-
+                    Enter one or more command line arguments <font color="red"><b></b></font>
                   </p>
+                </td>
+              </tr>
+              <tr>
+                <th>Profile</th>
+
+
+                <td>
+                  <select>
+                    <option selected="selected">Maven 2.0 Default</option>
+                    <option>JDK 1.3, Clean checkout</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>Schedule</th>
+
+
+                <td>
+                  <select>
+                    <option selected="selected">Weekly</option>
+                    <option>Hourly</option>
+                    <option>Blue moon</option>
+                  </select>
                 </td>
               </tr>
             </table>
