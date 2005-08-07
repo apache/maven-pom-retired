@@ -78,8 +78,8 @@
     <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em;">
       <p>Notes:</p>
       <ul>
-        <li>if the user doesn't have edit priviledges, this should disable the fields</li>
-        <li><!-- TODO --> maybe a view/edit split would be better?</li>
+        <li>different sections for different project types (Maven1 home, Ant home, no Java home for shell projects,
+          etc)</li>
       </ul>
     </div>
   </div>
@@ -118,12 +118,21 @@
               </tr>
 
               <tr>
-                <th>Settings</th>
-
-
+                <th>JDK</th>
                 <td>
-                  <textarea rows="10" cols="40">
-                  </textarea>
+                  <select>
+                    <option selected="selected">Default JDK 1.4 (/usr/local/java)</option>
+                    <option>JDK 1.3 (/usr/local/java-1.3)</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>Maven 2.0 Installation</th>
+                <td>
+                  <select>
+                    <option selected="selected">Default Maven 2.0 (/usr/local/maven2)</option>
+                    <option>Maven 2.0 alpha 3 (/usr/local/maven-2.0-alpha-3)</option>
+                  </select>
                 </td>
               </tr>
               <tr>

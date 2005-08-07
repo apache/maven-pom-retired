@@ -33,7 +33,7 @@
   </div>
 
   <div>
-    Logged in as: <b>Brett Porter</b> | <a href="userProfile.html">Profile</a> | <a href="login.html">Log out</a>
+    Welcome, <b>Guest</b> | <a href="login.html">Login</a>
   </div>
 </div>
 
@@ -73,80 +73,87 @@
           <a href="addCruiseControlProject.html">CruiseControl</a>
         </div>
       </div>
+
     </div>
 
-    <div id="admin" class="toolgroup">
-      <div class="label">Administration</div>
-
-      <div class="body">
-        <div>
-          <a href="profiles.html">Profiles</a>
-        </div>
-
-        <div>
-          <a href="schedules.html">Schedules</a>
-        </div>
-
-        <div>
-          <a href="configuration.html">Configuration</a>
-        </div>
-
-        <div>
-          <a href="users.html">Users</a>
-        </div>
-      </div>
+    <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em;">
+      <p>Notes:</p>
+      <ul>
+        <li>different sections for different project types (Maven1 home, Ant home, no Java home for shell projects,
+          etc)</li>
+      </ul>
     </div>
   </div>
 </td>
 <td>
   <div id="bodycol">
-
-
     <div class="app">
-      <div id="h3">
-        <h3>Schedules</h3>
-        <table border="1" cellspacing="2" cellpadding="3" width="100%">
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Cron</th>
-            <th width="10%">&nbsp;</th>
-          </tr>
-          <tr class="b">
-            <td><a href="viewSchedule.html">Weekly</a></td>
-            <td>Run weekly</td>
-            <td>0 0 0 * *</td>
-            <td><a href="editSchedule.html">Edit</a> | <a href="#">Delete</a></td>
-          </tr>
-          <tr class="b" style="color: silver;">
-            <td><a href="viewSchedule.html">Hourly</a> <strong>(disabled)</strong></td>
-            <td>Run hourly</td>
-            <td>0 * * * *</td>
-            <td><a href="editSchedule.html">Edit</a> | <a href="#">Delete</a></td>
-          </tr>
-        </table>
-        <div class="functnbar3">
-          <table>
-            <tr>
-              <td>
-                <form method="post" action="editSchedule.html">
+      <div id="axial" class="h3">
+        <h3>Profile</h3>
 
-                  <input type="hidden" name="action" value="cam"/>
-                  <input type="hidden" name="cid" value="checkoutProject"/>
-                  <input type="hidden" name="id" value="43"/>
-                  <input type="submit" name="add-build-def" value="Add"/>
-                </form>
+        <div class="axial">
+          <table border="1" cellspacing="2" cellpadding="3" width="100%">
+
+            <tr class="b">
+              <th>Profile Name</th>
+              <td>Maven 2.0 Default</td>
+            </tr>
+            <tr class="b">
+              <th>Description</th>
+              <td>Default profile for Maven 2.0 projects that uses the M2_HOME and JAVA_HOME environment variables</td>
+            </tr>
+            <tr class="b">
+              <th>JDK</th>
+              <td>Default JDK 1.4 (/usr/local/java)</td>
+            </tr>
+            <tr class="b">
+              <th>Maven 2.0 Installation</th>
+              <td>Default Maven 2.0 (/usr/local/maven2)</td>
+            </tr>
+            <tr class="b">
+              <th>SCM</th>
+              <td>
+                <ul>
+                  <li>
+                    <strong>Update</strong> from SCM on build
+                  </li>
+                  <li>
+                    Only build if there are changes.
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr class="b">
+              <th>Enabled</th>
+              <td>
+                <strong style="color: red;">No</strong>
               </td>
             </tr>
           </table>
+          <div class="functnbar3">
+            <table>
+              <tr>
+                <td>
+                  <form method="post" action="editProfile.html">
+
+                    <input type="hidden" name="action" value="cam"/>
+                    <input type="hidden" name="cid" value="checkoutProject"/>
+                    <input type="hidden" name="id" value="43"/>
+                    <input type="submit" name="edit-project" value="Edit"/>
+                  </form>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
+
       </div>
     </div>
 
-  </div>
-</td>
+  </div></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 
 <div id="footer">
   <table border="0" cellpadding="4" cellspacing="0">
