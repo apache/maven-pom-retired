@@ -71,11 +71,30 @@
       </div>
     </div>
 
+    <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em;">
+      <p>Notes:</p>
+      <ul>
+        <li>edit links here go to the add page, which are identical except for being prefilled</li>
+        <li>in build definitions, targets replace goals for Ant, and it is omitted for shell</li>
+        <li>in build definitions, build.xml replace pom file for Ant</li>
+        <li>in build definitions, Executable replace pom file for Shell, and it is before the arguments</li>
+      </ul>
+    </div>
   </div>
 </td>
 <td>
 <div id="bodycol">
 <div class="app">
+
+<div>
+  <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
+    <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Info</b>
+    <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="builds.html">Builds</a>
+    <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;"
+       href="workingCopy.html">Working&nbsp;Copy</a>
+  </p>
+</div>
+
 <div id="axial" class="h3">
 <h3>Continuum Project</h3>
 
@@ -160,7 +179,7 @@
           <input type="hidden" name="cid" value="checkoutProject"/>
           <input type="hidden" name="id" value="43"/>
           <input type="submit" name="add-developer" value="Add"/>
-          <b style="color: red;">Note: </b> Notifiers are out of sync with Maven POM
+          <b style="color: red;">Note: </b> Developers are out of sync with Maven POM
         </form>
       </td>
     </tr>
@@ -184,13 +203,13 @@
   </tr>
   <tr class="b">
     <td>Mail</td>
-    <td>&lt;All Project Developers&gt;</td>
+    <td><i>All Project Developers</i></td>
     <td>Failures</td>
     <td><a href="addNotifier.html">Edit</a> | <a href="#">Delete</a></td>
   </tr>
   <tr class="b">
     <td>Mail</td>
-    <td>&lt;Project Developers with Role "Build Manager"&gt;</td>
+    <td><i>Project Developers with Role "Build Manager"</i></td>
     <td>Success, Failures</td>
     <td><a href="addNotifier.html">Edit</a> | <a href="#">Delete</a></td>
   </tr>
@@ -213,6 +232,51 @@
           <input type="hidden" name="id" value="43"/>
           <input type="submit" name="add-notifier" value="Add"/>
           <b style="color: red;">Note: </b> Notifiers are out of sync with Maven POM
+        </form>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<h3>Build Definitions</h3>
+<table border="1" cellspacing="2" cellpadding="3" width="100%">
+  <tr>
+
+    <th>Goals</th>
+    <th>Arguments</th>
+    <th>POM File</th>
+    <th>Profile</th>
+    <th>Schedule</th>
+    <th width="10%">&nbsp;</th>
+  </tr>
+  <tr class="b">
+    <td>clean:clean install</td>
+    <td>--batch-mode</td>
+    <td>pom.xml</td>
+    <td>Maven 2.0 Default</td>
+    <td>Hourly</td>
+    <td><a href="addBuildDef.html">Edit</a> | <a href="#">Delete</a></td>
+  </tr>
+  <tr class="b">
+    <td>clean:clean install</td>
+    <td>--batch-mode</td>
+    <td>pom.xml</td>
+    <td>JDK 1.3, clean checkout</td>
+    <td>Weekly</td>
+    <td><a href="addBuildDef.html">Edit</a> | <a href="#">Delete</a></td>
+  </tr>
+
+</table>
+<div class="functnbar3">
+  <table>
+    <tr>
+      <td>
+        <form method="post" action="addBuildDef.html">
+
+          <input type="hidden" name="action" value="cam"/>
+          <input type="hidden" name="cid" value="checkoutProject"/>
+          <input type="hidden" name="id" value="43"/>
+          <input type="submit" name="add-build-def" value="Add"/>
         </form>
       </td>
     </tr>
