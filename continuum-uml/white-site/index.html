@@ -100,96 +100,109 @@
   </div>
 </td>
 <td>
-  <div id="bodycol">
+<div id="bodycol">
 
 
-    <div class="app">
-      <div id="h3">
-        <h3>Continuum Projects</h3>
-        <table id="projectSummaryTable" border="1" cellpadding="3" cellspacing="2" width="100%">
+<div class="app">
+  <div id="h3">
+    <h3>Continuum Projects</h3>
+    <table id="projectSummaryTable" border="1" cellpadding="3" cellspacing="2" width="100%">
 
-          <!-- i18n -->
-          <tbody><tr>
-            <th>&nbsp;</th>
-            <th width="100%">Name</th>
-            <th>Version</th>
-            <th>Build</th>
-            <th>Group</th>
-            <th colspan="4"></th>
-          </tr>
+      <!-- i18n -->
+      <tbody><tr>
+        <th>&nbsp;</th>
+        <th width="100%">Name</th>
+        <th>Version</th>
+        <th>Build</th>
+        <th>Group</th>
+        <th colspan="4"></th>
+      </tr>
 
 
-            <tr class="b">
-              <td><img src="continuum_files/icon_warning_sml.gif" alt="Error"></td>
-              <td><a href="viewProject.html">Default Plexus Container</a></td>
-              <td>1.0-alpha-6-SNAPSHOT</td>
-              <td><a href="viewBuild.html">5</a></td>
-              <td><a href="viewGroup.html">Plexus</a></td>
+        <tr class="b">
+          <td><img src="continuum_files/icon_warning_sml.gif" alt="Error"></td>
+          <td><a href="viewProject.html">Default Plexus Container</a></td>
+          <td>1.0-alpha-6-SNAPSHOT</td>
+          <td><a href="viewBuild.html">5</a></td>
+          <td><a href="viewGroup.html">Plexus</a></td>
 
-              <td><a href="#">Build&nbsp;Now</a></td>
-              <td><a href="builds.html">Build&nbsp;History</a></td>
-              <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
-              <td><a href="deleteProject.html">Delete</a></td>
-            </tr>
+          <td><a href="#">Build&nbsp;Now</a></td>
+          <td><a href="builds.html">Build&nbsp;History</a></td>
+          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
+          <td><a href="deleteProject.html">Delete</a></td>
+        </tr>
 
-            <tr class="a">
-              <td><img src="continuum_files/icon_warning_sml.gif" alt="Error"></td>
-              <td><a href="viewProject.html">Plexus Action</a></td>
-              <td>1.0-alpha-6-SNAPSHOT</td>
-              <td><a href="viewBuild.html">2</a></td>
-              <td><a href="viewGroup.html">Plexus</a></td>
+        <tr class="b">
+          <td>&nbsp;</td>
+          <td><a href="viewProject.html">Plexus Utils</a></td>
+          <td>1.0.2-SNAPSHOT</td>
+          <td><strong>In&nbsp;progress</strong></td>
+          <td><a href="viewGroup.html">Plexus</a></td>
 
-              <td><a href="#">Build&nbsp;Now</a></td>
-              <td><a href="builds.html">Build&nbsp;History</a></td>
-              <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
-              <td><a href="deleteProject.html">Delete</a></td>
-            </tr>
+          <td><a href="#">Cancel&nbsp;Build</a></td>
+          <td><a href="builds.html">Build&nbsp;History</a></td>
+          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
+          <td><a href="deleteProject.html">Delete</a></td>
+        </tr>
 
-          </tbody></table>
+        <tr class="a">
+          <td><img src="continuum_files/icon_warning_sml.gif" alt="Error"></td>
+          <td><a href="viewProject.html">Plexus Action</a></td>
+          <td>1.0-alpha-6-SNAPSHOT</td>
+          <td><a href="viewBuild.html">2</a></td>
+          <td><a href="viewGroup.html">Plexus</a></td>
 
-        <div class="functnbar3">
-          <form method="post" action="#">
-            <img src="continuum_files/icon_success_sml.gif" alt="Success"> 0
-            <img src="continuum_files/icon_error_sml.gif" alt="Failed"> 0
-            <img src="continuum_files/icon_warning_sml.gif" alt="Error"> 2
-            <input name="action" value="cam" type="hidden">
-            <input name="cid" value="buildAllProjects" type="hidden">
-            <input name="build-broken" value="Build All In Error" type="submit">
-            <input name="build-all" value="Build All" type="submit">
-          </form>
-        </div>
-      </div>
+          <td><a href="#">Build&nbsp;Now</a></td>
+          <td><a href="builds.html">Build&nbsp;History</a></td>
+          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
+          <td><a href="deleteProject.html">Delete</a></td>
+        </tr>
+
+      </tbody></table>
+
+    <div class="functnbar3">
+      <form method="post" action="#">
+        <img src="continuum_files/icon_success_sml.gif" alt="Success"> 0
+        <img src="continuum_files/icon_error_sml.gif" alt="Failed"> 0
+        <img src="continuum_files/icon_warning_sml.gif" alt="Error"> 2
+        <input name="action" value="cam" type="hidden">
+        <input name="cid" value="buildAllProjects" type="hidden">
+        <input name="build-broken" value="Build All In Error" type="submit">
+        <input name="build-all" value="Build All" type="submit">
+      </form>
     </div>
-
-    <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em; width: 75%; margin-left: auto; margin-right: auto;">
-      <p>Other thoughts:</p>
-      <ul>
-        <li>
-          Not sure I like the links on the name and build#, but the number of links on the right was making it hard to
-          view in a smaller resolution.
-          Maybe we can work on replacing them by icons.
-        </li>
-        <li>
-          I think edit can stand to be on the view page (gotten to by the link on the project here)
-        </li>
-        <li>
-          Project group could be represented by a banner over the set of projects it represents instead of a column,
-          perhaps with a show/hide button to fold it
-          up and down, and a view/edit button.
-        </li>
-        <li>
-          I'm not sure a front page with just groups and then drilling down is useful, hence the fold up,down idea. What
-          might be good when we
-          have user accounts is to have a dashboard and to make certain project groups portlets that can go on a
-          dashboard. Later.
-        </li>
-        <li>
-          Build summary could be inside each group as well as at the bottom for all. Any folded groups could just have
-          the summary.
-        </li>
-      </ul></div>
-
   </div>
+</div>
+
+<div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em; width: 75%; margin-left: auto; margin-right: auto;">
+  <p>Other thoughts:</p>
+  <ul>
+    <li>
+      Not sure I like the links on the name and build#, but the number of links on the right was making it hard to
+      view in a smaller resolution.
+      Maybe we can work on replacing them by icons.
+    </li>
+    <li>
+      I think edit can stand to be on the view page (gotten to by the link on the project here)
+    </li>
+    <li>
+      Project group could be represented by a banner over the set of projects it represents instead of a column,
+      perhaps with a show/hide button to fold it
+      up and down, and a view/edit button.
+    </li>
+    <li>
+      I'm not sure a front page with just groups and then drilling down is useful, hence the fold up,down idea. What
+      might be good when we
+      have user accounts is to have a dashboard and to make certain project groups portlets that can go on a
+      dashboard. Later.
+    </li>
+    <li>
+      Build summary could be inside each group as well as at the bottom for all. Any folded groups could just have
+      the summary.
+    </li>
+  </ul></div>
+
+</div>
 </td>
 </tr>
 </tbody></table>
