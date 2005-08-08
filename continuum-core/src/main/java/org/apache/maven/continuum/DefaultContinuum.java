@@ -581,6 +581,11 @@ public class DefaultContinuum
 
         if ( result.getWarnings().size() > 0 )
         {
+            for ( Iterator i = result.getWarnings().iterator(); i.hasNext(); )
+            {
+                getLogger().info( (String) i.next() );
+            }
+
             return result;
         }
 
