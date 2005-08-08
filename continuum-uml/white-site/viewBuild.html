@@ -81,6 +81,8 @@
         <li>Artifacts are omitted if the build was not successful</li>
         <li>Changes since success do not duplicate those since last build</li>
         <li>The error on this page obviously doesn't match the result</li>
+        <li>Deleting a build should prompt to delete the artifacts too</li>
+        <li>Build trigger is one of scheduled, remote (perhaps with reason - eg SCM), forced</li>
       </ul>
     </div>
 
@@ -115,8 +117,8 @@
   </tr>
 
   <tr class="a">
-    <th>Build forced</th>
-    <td>No</td>
+    <th>Build trigger</th>
+    <td>Scheduled</td>
   </tr>
   <tr class="a">
     <th>State</th>
@@ -127,6 +129,8 @@
     <td>N/A</td>
   </tr>
 </table>
+
+<p><a href="#">Delete Build</a></p>
 
 <h4>Changes Since Last Build</h4>
 
