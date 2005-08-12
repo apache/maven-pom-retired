@@ -61,10 +61,7 @@ public class ShellBuildExecutor
 
         String executable = project.getExecutable();
 
-        return executeShellCommand( project,
-                                    executable,
-                                    project.getCommandLineArguments(),
-                                    buildOutput );
+        return executeShellCommand( project, executable, project.getCommandLineArguments(), buildOutput );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject p )
@@ -76,8 +73,8 @@ public class ShellBuildExecutor
 
         if ( new File( executable ).isAbsolute() )
         {
-            throw new ContinuumBuildExecutorException( "The shell script must be a relative path. " +
-                                                       "It will be relative to the checkout" );
+            throw new ContinuumBuildExecutorException(
+                "The shell script must be a relative path. " + "It will be relative to the checkout" );
         }
     }
 }

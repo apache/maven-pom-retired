@@ -53,19 +53,29 @@ public class DefaultMavenBuilderHelper
 {
     public static final String DEFAULT_TEST_OUTPUT_DIRECTORY = "target/surefire-reports";
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private MavenProjectBuilder projectBuilder;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ArtifactRepositoryFactory artifactRepositoryFactory;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ArtifactRepositoryLayout repositoryLayout;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private MavenSettingsBuilder mavenSettingsBuilder;
 
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private String localRepository;
 
     // ----------------------------------------------------------------------
@@ -107,7 +117,7 @@ public class DefaultMavenBuilderHelper
 
         if ( StringUtils.isEmpty( mavenProject.getGroupId() ) )
         {
-           continuumProject.setGroupId( mavenProject.getGroupId() );
+            continuumProject.setGroupId( mavenProject.getGroupId() );
         }
 
         // ----------------------------------------------------------------------
@@ -116,7 +126,7 @@ public class DefaultMavenBuilderHelper
 
         if ( StringUtils.isEmpty( mavenProject.getArtifactId() ) )
         {
-           continuumProject.setArtifactId( mavenProject.getArtifactId() );
+            continuumProject.setArtifactId( mavenProject.getArtifactId() );
         }
 
         // ----------------------------------------------------------------------
@@ -125,14 +135,8 @@ public class DefaultMavenBuilderHelper
 
         if ( StringUtils.isEmpty( mavenProject.getUrl() ) )
         {
-           continuumProject.setUrl( mavenProject.getUrl() );
+            continuumProject.setUrl( mavenProject.getUrl() );
         }
-
-        // ----------------------------------------------------------------------
-        // Test output directory
-        // ----------------------------------------------------------------------
-
-        continuumProject.setTestOutputDirectory( DEFAULT_TEST_OUTPUT_DIRECTORY );
 
         // ----------------------------------------------------------------------
         // Developers
@@ -218,8 +222,6 @@ public class DefaultMavenBuilderHelper
         // Validate the MavenProject using some Continuum rules
         // ----------------------------------------------------------------------
 
-
-
         // Nag email address
         CiManagement ciManagement = project.getCiManagement();
 
@@ -230,7 +232,8 @@ public class DefaultMavenBuilderHelper
 
         if ( getNotifiers( project ).isEmpty() )
         {
-            throw new MavenBuilderHelperException( "Missing 'notifiers' element in the 'ciManagement' element in the POM." );
+            throw new MavenBuilderHelperException(
+                "Missing 'notifiers' element in the 'ciManagement' element in the POM." );
         }
 
         // SCM connection
@@ -336,10 +339,7 @@ public class DefaultMavenBuilderHelper
             getLogger().warn( "Error while building Maven settings.", e );
         }
 
-        return artifactRepositoryFactory.createArtifactRepository( "local",
-                                                                   "file://" + localRepository,
-                                                                   repositoryLayout,
-                                                                   null,
-                                                                   null );
+        return artifactRepositoryFactory.createArtifactRepository( "local", "file://" + localRepository,
+                                                                   repositoryLayout, null, null );
     }
 }

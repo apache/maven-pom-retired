@@ -38,7 +38,9 @@ public class MavenOneBuildExecutor
 
     public final static String ID = "maven-1";
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private MavenOneMetadataHelper metadataHelper;
 
     // ----------------------------------------------------------------------
@@ -60,12 +62,9 @@ public class MavenOneBuildExecutor
         MavenOneProject project = (MavenOneProject) p;
 
         String commandLine = StringUtils.clean( project.getCommandLineArguments() ) + " " +
-                             StringUtils.clean( project.getGoals() );
+            StringUtils.clean( project.getGoals() );
 
-        return executeShellCommand( project,
-                                    null,
-                                    commandLine,
-                                    buildOutput );
+        return executeShellCommand( project, null, commandLine, buildOutput );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

@@ -528,7 +528,6 @@ public abstract class AbstractIntegrationTest
         assertEquals( "project.id", projectId, project.getId() );
         assertEquals( "project.name", name, project.getName() );
         assertEquals( "project.version", version, project.getVersion() );
-        assertEquals( "project.commandLineArguments", commandLineArguments, project.getCommandLineArguments() );
         assertEquals( "project.executorId", executorId, project.getExecutorId() );
     }
 

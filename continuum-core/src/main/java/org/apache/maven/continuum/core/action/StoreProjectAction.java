@@ -18,9 +18,8 @@ package org.apache.maven.continuum.core.action;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.store.ContinuumStore;
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 
 import java.util.Map;
 
@@ -63,8 +62,6 @@ public class StoreProjectAction
 
         project.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
 */
-        project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
-
         store.updateProject( project );
     }
 }

@@ -681,7 +681,6 @@ public class DefaultContinuum
 //                }
 //                System.err.println( "=======================" );
 
-                project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
                 System.err.println( "persisting " + project.getName() + ", id: " + project.getId() );
                 project = store.addProject( project );
                 System.err.println( "persisting " + project.getName() + ", id: " + project.getId() );
@@ -1001,19 +1000,6 @@ public class DefaultContinuum
         }
     }
 
-    public void removeSchedule( String scheduleId )
-        throws ContinuumException
-    {
-        try
-        {
-            store.removeSchedule( scheduleId );
-        }
-        catch ( ContinuumStoreException ex )
-        {
-            throw logAndCreateException( "Error while removing schedule.", ex );
-        }
-    }
-
     // ----------------------------------------------------------------------
     // Project scheduling
     // ----------------------------------------------------------------------
@@ -1103,8 +1089,6 @@ public class DefaultContinuum
     {
         try
         {
-            project.setCommandLineArguments( StringUtils.clean( project.getCommandLineArguments() ) );
-
             return store.updateProject( project );
         }
         catch ( ContinuumStoreException ex )

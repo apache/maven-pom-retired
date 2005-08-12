@@ -127,7 +127,5 @@ public class DefaultContinuumTest
         continuum.updateMavenTwoProject( project );
 
         project = continuum.getMavenTwoProject( project.getId() );
-
-        assertNotNull( "The command line arguments are null.", project.getCommandLineArguments() );
     }
 }
