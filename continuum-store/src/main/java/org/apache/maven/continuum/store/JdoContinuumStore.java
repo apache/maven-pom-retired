@@ -28,7 +28,6 @@ import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
@@ -150,26 +149,6 @@ public class JdoContinuumStore
         try
         {
             tx.begin();
-
-            // ----------------------------------------------------------------------
-            // Work around for bug with M:N relationships. We must persist the list
-            // of schedules or they don't get saved.
-            // ----------------------------------------------------------------------
-
-//            if ( project.getSchedules() != null && project.getSchedules().size() > 0 )
-//            {
-//                pm.attachCopyAll( project.getSchedules(), true );
-//            }
-//
-//            if ( project.getProjectGroup() != null )
-//            {
-//                pm.attachCopy( project.getProjectGroup(), true );
-//            }
-//
-//            if ( project.getScmResult() != null )
-//            {
-//                pm.attachCopy( project.getScmResult(), true );
-//            }
 
             pm.attachCopy( project, true );
 
@@ -351,79 +330,6 @@ public class JdoContinuumStore
         {
             rollback( tx );
         }
-    }
-
-    public ContinuumSchedule addSchedule( ContinuumSchedule schedule )
-        throws ContinuumStoreException
-    {
-        return (ContinuumSchedule) addObject( schedule, SCHEDULE_DETAIL_FG );
-    }
-
-    public ContinuumSchedule getSchedule( String projectId )
-        throws ContinuumStoreException
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            ContinuumSchedule schedule = getContinuumSchedule( pm, projectId, true );
-
-            schedule = (ContinuumSchedule) pm.detachCopy( schedule );
-
-            tx.commit();
-
-            return schedule;
-        }
-        catch ( JDOObjectNotFoundException e )
-        {
-            throw new ContinuumObjectNotFoundException( ContinuumProject.class.getName(), projectId );
-        }
-        finally
-        {
-            rollback( tx );
-        }
-    }
-
-    public Collection getSchedules()
-        throws ContinuumStoreException
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            Extent extent = pm.getExtent( ContinuumSchedule.class, true );
-
-            Query query = pm.newQuery( extent );
-
-            query.setOrdering( "name ascending" );
-
-            Collection result = (Collection) query.execute();
-
-            result = pm.detachCopyAll( result );
-
-            tx.commit();
-
-            return result;
-        }
-        finally
-        {
-            rollback( tx );
-        }
-    }
-
-    public ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
-        throws ContinuumStoreException
-    {
-        updateObject( schedule );
-        return schedule;
     }
 
     public ContinuumBuild addBuild( String projectId, ContinuumBuild build )
@@ -704,18 +610,6 @@ public class JdoContinuumStore
         Object id = pm.newObjectIdInstance( ContinuumBuild.class, buildId );
 
         return (ContinuumBuild) pm.getObjectById( id );
-    }
-
-    private ContinuumSchedule getContinuumSchedule( PersistenceManager pm, String projectId, boolean details )
-    {
-        if ( details )
-        {
-            pm.getFetchPlan().addGroup( "schedule-detail" );
-        }
-
-        Object id = pm.newObjectIdInstance( ContinuumSchedule.class, projectId );
-
-        return (ContinuumSchedule) pm.getObjectById( id );
     }
 
     private Object addObject( Object object, String detailedFetchGroup )

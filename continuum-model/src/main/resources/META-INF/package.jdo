@@ -54,12 +54,6 @@
       </fetch-group>
     </class>
 
-    <class name="ContinuumSchedule" detachable="true">
-      <field name="name" persistence-modifier="persistent"/>
-      <field name="delay" persistence-modifier="persistent"/>
-      <field name="cronExpression" persistence-modifier="persistent"/>
-    </class>
-
     <class name="MavenTwoProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
            detachable="true">
       <inheritance strategy="new-table"/>

@@ -39,14 +39,12 @@ import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
-import org.apache.maven.continuum.scheduler.ContinuumScheduler;
 import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
@@ -88,11 +86,6 @@ public class DefaultContinuum
      * @plexus.requirement
      */
     private ActionManager actionManager;
-
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumScheduler scheduler;
 
     /**
      * @plexus.requirement
@@ -842,66 +835,6 @@ public class DefaultContinuum
 
         stopMessage();
     }
-
-    // ----------------------------------------------------------------------
-    // Build Scheduling
-    // ----------------------------------------------------------------------
-
-    public ContinuumSchedule getSchedule( String scheduleId )
-        throws ContinuumException
-    {
-        try
-        {
-            return store.getSchedule( scheduleId );
-        }
-        catch ( ContinuumStoreException ex )
-        {
-            throw logAndCreateException( "Exception while getting schedule '" + scheduleId + "'.", ex );
-        }
-    }
-
-    public Collection getSchedules()
-        throws ContinuumException
-    {
-        try
-        {
-            return store.getSchedules();
-        }
-        catch ( ContinuumStoreException ex )
-        {
-            throw logAndCreateException( "Exception while getting schedules.", ex );
-        }
-    }
-
-    public ContinuumSchedule addSchedule( ContinuumSchedule schedule )
-        throws ContinuumException
-    {
-        try
-        {
-            return store.addSchedule( schedule );
-        }
-        catch ( ContinuumStoreException ex )
-        {
-            throw logAndCreateException( "Error while removing schedule.", ex );
-        }
-    }
-
-    public ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
-        throws ContinuumException
-    {
-        try
-        {
-            return store.updateSchedule( schedule );
-        }
-        catch ( ContinuumStoreException ex )
-        {
-            throw logAndCreateException( "Error while removing schedule.", ex );
-        }
-    }
-
-    // ----------------------------------------------------------------------
-    // Project scheduling
-    // ----------------------------------------------------------------------
 
     public ContinuumBuildSettings getDefaultBuildSettings()
     {

@@ -22,7 +22,6 @@ import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
@@ -183,18 +182,6 @@ public interface Continuum
     // ----------------------------------------------------------------------
     // Schedules
     // ----------------------------------------------------------------------
-
-    Collection getSchedules()
-        throws ContinuumException;
-
-    ContinuumSchedule getSchedule( String scheduleId )
-        throws ContinuumException;
-
-    ContinuumSchedule addSchedule( ContinuumSchedule schedule )
-        throws ContinuumException;
-
-    ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
-        throws ContinuumException;
 
     // ----------------------------------------------------------------------
     // Project scheduling

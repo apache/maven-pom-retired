@@ -27,7 +27,6 @@ import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumSchedule;
 
 import java.io.File;
 import java.util.Collection;
@@ -94,18 +93,6 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     ProjectNotifier storeNotifier( ProjectNotifier notifier )
-        throws ContinuumStoreException;
-
-    ContinuumSchedule addSchedule( ContinuumSchedule schedule )
-        throws ContinuumStoreException;
-
-    ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
-        throws ContinuumStoreException;
-
-    Collection getSchedules()
-        throws ContinuumStoreException;
-
-    ContinuumSchedule getSchedule( String scheduleId )
         throws ContinuumStoreException;
 
     ContinuumBuildSettings addBuildSettings( ContinuumBuildSettings buildSettings )

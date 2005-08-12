@@ -23,7 +23,6 @@ import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
@@ -342,24 +341,6 @@ public abstract class ContinuumXmlRpcClient
     // ----------------------------------------------------------------------
     // Schedules
     // ----------------------------------------------------------------------
-
-    public ContinuumSchedule getSchedule( String scheduleId )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    public ContinuumSchedule addSchedule( ContinuumSchedule schedule )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    public ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
 
     // ----------------------------------------------------------------------
     //

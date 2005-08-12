@@ -1,7 +1,22 @@
 package org.apache.maven.continuum.scheduler;
 
+/*
+ * Copyright 2004-2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
@@ -14,21 +29,15 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Startable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StoppingException;
-import org.quartz.CronTrigger;
-import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobListener;
-import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.Trigger;
 import org.quartz.TriggerListener;
-import org.quartz.Job;
 import org.quartz.impl.StdScheduler;
 import org.quartz.impl.StdSchedulerFactory;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.Properties;
 
 public class DefaultContinuumScheduler
@@ -45,14 +54,14 @@ public class DefaultContinuumScheduler
     //
     // ----------------------------------------------------------------------
 
-    public boolean jobExists( String jobName, String jobGroup )
+    private boolean jobExists( String jobName, String jobGroup )
         throws ContinuumSchedulerException
     {
         String[] jobNames;
 
         try
         {
-             jobNames = scheduler.getJobNames( jobGroup );
+            jobNames = scheduler.getJobNames( jobGroup );
         }
         catch ( SchedulerException e )
         {
@@ -72,76 +81,13 @@ public class DefaultContinuumScheduler
         return false;
     }
 
-    /**
-     * Create job detail for a build job. The detail contains a map of objects that can be utilized
-     * by the executing job.
-     */
-    protected JobDetail createJobDetail( ContinuumSchedule schedule )
-    {
-        JobDetail jobDetail = new JobDetail( schedule.getName(), Scheduler.DEFAULT_GROUP, ContinuumBuildJob.class );
-
-        jobDetail.setJobDataMap( createJobDataMap( schedule ) );
-
-        return jobDetail;
-    }
-
-    /**
-     * Create Job data map for a build job. The map of objects created can be utilized by
-     * the executing job.
-     */
-    protected JobDataMap createJobDataMap( ContinuumSchedule schedule )
-    {
-        JobDataMap dataMap = new JobDataMap();
-
-        dataMap.put( ContinuumSchedulerConstants.CONTINUUM, continuum );
-
-        dataMap.put( ContinuumSchedulerConstants.LOGGER, getLogger() );
-
-        dataMap.put( ContinuumSchedulerConstants.SCHEDULE, schedule );
-
-        return dataMap;
-    }
-
-    /**
-     * Create the trigger for the build job.
-     *
-     * @param schedule
-     * @return
-     * @throws ContinuumSchedulerException
-     */
-    protected Trigger createTrigger( ContinuumSchedule schedule )
-        throws ContinuumSchedulerException
-    {
-        CronTrigger trigger = new CronTrigger();
-
-        trigger.setName( schedule.getName() );
-
-        trigger.setGroup( Scheduler.DEFAULT_GROUP );
-
-        Date startTime = new Date( System.currentTimeMillis() + schedule.getDelay() * 1000 );
-
-        trigger.setStartTime( startTime );
-
-        trigger.setNextFireTime( startTime );
-
-        try
-        {
-            trigger.setCronExpression( schedule.getCronExpression() );
-        }
-        catch ( ParseException e )
-        {
-            throw new ContinuumSchedulerException( "Error parsing cron expression.", e );
-        }
-
-        return trigger;
-    }
-
     public void scheduleJob( JobDetail jobDetail, Trigger trigger )
         throws ContinuumSchedulerException
     {
-        if ( jobExists( jobDetail.getName(), jobDetail.getGroup()) )
+        if ( jobExists( jobDetail.getName(), jobDetail.getGroup() ) )
         {
-            getLogger().warn( "Will not schedule this job as a job {" + jobDetail.getName() + ":" + jobDetail.getGroup() + "} already exists." );
+            getLogger().warn( "Will not schedule this job as a job {" + jobDetail.getName() + ":" +
+                jobDetail.getGroup() + "} already exists." );
 
             return;
         }
