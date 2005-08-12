@@ -374,7 +374,7 @@ public class JdoContinuumStore
 
             ContinuumProject project = getContinuumProject( pm, projectId, false );
 
-            ScmResult scmResult = project.getScmResult();
+            ScmResult scmResult = project.getCheckoutResult();
 
             if ( scmResult == null )
             {
@@ -393,12 +393,6 @@ public class JdoContinuumStore
         {
             rollback( tx );
         }
-    }
-
-    public ContinuumBuild addBuild( String projectId, ContinuumBuild build )
-        throws ContinuumStoreException
-    {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public ContinuumSchedule addSchedule( ContinuumSchedule schedule )
@@ -519,7 +513,7 @@ public class JdoContinuumStore
         }
     }
 
-    public ContinuumBuild addBuild( int projectId, ContinuumBuild build )
+    public ContinuumBuild addBuild( String projectId, ContinuumBuild build )
         throws ContinuumStoreException
     {
         PersistenceManager pm = pmf.getPersistenceManager();
@@ -530,7 +524,7 @@ public class JdoContinuumStore
         {
             tx.begin();
 
-            ContinuumProject project = getContinuumProject( pm, Integer.toString( projectId ), false );
+            ContinuumProject project = getContinuumProject( pm, projectId, false );
 
             build.setProject( project );
 
