@@ -93,9 +93,7 @@ public class DefaultContinuumNotificationDispatcher
     //
     // ----------------------------------------------------------------------
 
-    private void sendNotification( String messageId,
-                                   ContinuumProject project,
-                                   ContinuumBuild build )
+    private void sendNotification( String messageId, ContinuumProject project, ContinuumBuild build )
     {
         Map context = new HashMap();
 
@@ -107,10 +105,12 @@ public class DefaultContinuumNotificationDispatcher
 
         try
         {
+            // TODO: remove re-reading?
             context.put( CONTEXT_PROJECT, store.getProject( project.getId() ) );
 
             if ( build != null )
             {
+                // TODO: remove?
                 build = store.getBuild( build.getId() );
 
                 context.put( CONTEXT_BUILD, build );

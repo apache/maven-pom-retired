@@ -17,8 +17,7 @@ package org.apache.maven.continuum.buildqueue;
  */
 
 import org.apache.maven.continuum.AbstractContinuumTest;
-import org.apache.maven.continuum.project.ContinuumProject;
-
+import org.apache.maven.continuum.model.project.Project;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 
@@ -42,9 +41,9 @@ public class BuildQueueTest
     public void testTestTheQueueWithASingleProject()
         throws Exception
     {
-        ContinuumProject project = addMavenTwoProject( getStore(), "Build Queue Project 1" );
+        Project project = addProject( getStore(), "Build Queue Project 1" );
 
-        String projectId = project.getId();
+        int projectId = project.getId();
 
         buildProject( projectId, false );
 
@@ -67,9 +66,9 @@ public class BuildQueueTest
     public void testTheQueueWithMultipleProjects()
         throws Exception
     {
-        String projectId1 = addMavenTwoProject( getStore(), "Build Queue Project 2" ).getId();
+        int projectId1 = addProject( getStore(), "Build Queue Project 2" ).getId();
 
-        String projectId2 = addMavenTwoProject( getStore(), "Build Queue Project 3" ).getId();
+        int projectId2 = addProject( getStore(), "Build Queue Project 3" ).getId();
 
         buildProject( projectId1, false );
 
@@ -105,7 +104,7 @@ public class BuildQueueTest
     {
         String name = "Build Queue Project 4";
 
-        String projectId = addMavenTwoProject( getStore(), name ).getId();
+        int projectId = addProject( getStore(), name ).getId();
 
         buildProject( projectId, true );
 
@@ -132,22 +131,23 @@ public class BuildQueueTest
     //
     // ----------------------------------------------------------------------
 
-    private void buildProject( String projectId, boolean force )
+    private void buildProject( int projectId, boolean force )
         throws Exception
     {
-        buildQueue.put( new BuildProjectTask( projectId, force ) );
+        buildQueue.put( new BuildProjectTask( Integer.toString( projectId ), force ) );
     }
 
-    private void assertNextBuildIs( String expectedProjectId )
+    private void assertNextBuildIs( int expectedProjectId )
         throws Exception
     {
         Task task = buildQueue.take();
 
         assertEquals( BuildProjectTask.class.getName(), task.getClass().getName() );
 
-        BuildProjectTask buildProjectTask = ( BuildProjectTask ) task;
+        BuildProjectTask buildProjectTask = (BuildProjectTask) task;
 
-        assertEquals( "Didn't get the expected project id.", expectedProjectId, buildProjectTask.getProjectId() );
+        assertEquals( "Didn't get the expected project id.", Integer.toString( expectedProjectId ),
+                      buildProjectTask.getProjectId() );
     }
 
     private void assertNextBuildIsNull()

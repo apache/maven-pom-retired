@@ -16,6 +16,12 @@ package org.apache.maven.continuum.store;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Profile;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumNotifier;
@@ -28,21 +34,24 @@ import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import javax.jdo.Extent;
+import javax.jdo.JDOHelper;
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.JDOUserException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
+ * @todo cleanup old stuff
  */
 public class JdoContinuumStore
     extends AbstractContinuumStore
@@ -67,15 +76,21 @@ public class JdoContinuumStore
 
     private static final String BUILD_DETAIL_FG = "build-detail";
 
-    private static final String NOTIFIER_DETAIL_FG = "notifier-detail";
-
-    private static final String BUILD_GROUP_DETAIL_FG = "build-group-detail";
-
     private static final String PROJECT_GROUP_DETAIL_FG = "project-group-detail";
 
     private static final String SCHEDULE_DETAIL_FG = "schedule-detail";
 
     private static final String BUILD_SETTINGS_DETAIL_FG = "build-settings-detail";
+
+    private static final String PROJECT_WITH_BUILDS_FETCH_GROUP = "project-with-builds";
+
+    private static final String PROJECT_WITH_CHECKOUT_RESULT_FETCH_GROUP = "project-with-checkout-result";
+
+    private static final String BUILD_RESULT_WITH_DETAILS_FETCH_GROUP = "build-result-with-details";
+
+    private static final String PROJECT_BUILD_DETAILS_FETCH_GROUP = "project-build-details";
+
+    private static final String PROJECT_ALL_DETAILS_FETCH_GROUP = "project-all-details";
 
     // ----------------------------------------------------------------------
     // Component Lifecycle
@@ -141,7 +156,7 @@ public class JdoContinuumStore
 
             pm.deletePersistent( project );
 
-            commit( tx );
+            tx.commit();
         }
         finally
         {
@@ -200,11 +215,9 @@ public class JdoContinuumStore
 
             pm.attachCopy( project, true );
 
-            commit( tx );
+            tx.commit();
 
-            return (ContinuumProject) getDetailedObject( ContinuumProject.class,
-                                                         project.getId(),
-                                                         PROJECT_DETAIL_FG );
+            return (ContinuumProject) getDetailedObject( ContinuumProject.class, project.getId(), PROJECT_DETAIL_FG );
         }
         finally
         {
@@ -238,7 +251,7 @@ public class JdoContinuumStore
                 setProjectState( (ContinuumProject) it.next() );
             }
 
-            commit( tx );
+            tx.commit();
 
             return result;
         }
@@ -275,58 +288,14 @@ public class JdoContinuumStore
 
             if ( result.size() == 0 )
             {
-                commit( tx );
+                tx.commit();
 
                 return null;
             }
 
             Object object = pm.detachCopy( result.iterator().next() );
 
-            commit( tx );
-
-            return (ContinuumProject) object;
-        }
-        finally
-        {
-            rollback( tx );
-        }
-    }
-
-    public ContinuumProject getProjectByScmUrl( String scmUrl )
-        throws ContinuumStoreException
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            Extent extent = pm.getExtent( ContinuumProject.class, true );
-
-            Query query = pm.newQuery( extent );
-
-            query.declareImports( "import java.lang.String" );
-
-            query.declareParameters( "String scmUrl" );
-
-            query.setFilter( "this.scmUrl == scmUrl" );
-
-            query.getFetchPlan().addGroup( PROJECT_DETAIL_FG );
-
-            Collection result = (Collection) query.execute( scmUrl );
-
-            if ( result.size() == 0 )
-            {
-                commit( tx );
-
-                return null;
-            }
-
-            Object object = pm.detachCopy( result.iterator().next() );
-
-            commit( tx );
+            tx.commit();
 
             return (ContinuumProject) object;
         }
@@ -351,7 +320,7 @@ public class JdoContinuumStore
 
             project = (ContinuumProject) pm.detachCopy( project );
 
-            commit( tx );
+            tx.commit();
 
             return project;
         }
@@ -382,7 +351,7 @@ public class JdoContinuumStore
 
             ContinuumProject project = getContinuumProject( pm, projectId, true );
 
-            commit( tx );
+            tx.commit();
 
             return project;
         }
@@ -409,14 +378,14 @@ public class JdoContinuumStore
 
             if ( scmResult == null )
             {
-                commit( tx );
+                tx.commit();
 
                 return null;
             }
 
             scmResult = (ScmResult) pm.detachCopy( scmResult );
 
-            commit( tx );
+            tx.commit();
 
             return scmResult;
         }
@@ -426,9 +395,11 @@ public class JdoContinuumStore
         }
     }
 
-    // ----------------------------------------------------------------------
-    // Schedules
-    // ----------------------------------------------------------------------
+    public ContinuumBuild addBuild( String projectId, ContinuumBuild build )
+        throws ContinuumStoreException
+    {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
     public ContinuumSchedule addSchedule( ContinuumSchedule schedule )
         throws ContinuumStoreException
@@ -451,7 +422,7 @@ public class JdoContinuumStore
 
             schedule = (ContinuumSchedule) pm.detachCopy( schedule );
 
-            commit( tx );
+            tx.commit();
 
             return schedule;
         }
@@ -486,7 +457,7 @@ public class JdoContinuumStore
 
             result = pm.detachCopyAll( result );
 
-            commit( tx );
+            tx.commit();
 
             return result;
         }
@@ -499,7 +470,8 @@ public class JdoContinuumStore
     public ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
         throws ContinuumStoreException
     {
-        return (ContinuumSchedule) updateObject( schedule, SCHEDULE_DETAIL_FG );
+        updateObject( schedule );
+        return schedule;
     }
 
     public void removeSchedule( String scheduleId )
@@ -539,7 +511,7 @@ public class JdoContinuumStore
 
             pm.deletePersistent( schedule );
 
-            commit( tx );
+            tx.commit();
         }
         finally
         {
@@ -547,11 +519,7 @@ public class JdoContinuumStore
         }
     }
 
-    // ----------------------------------------------------------------------
-    // Builds
-    // ----------------------------------------------------------------------
-
-    public ContinuumBuild addBuild( String projectId, ContinuumBuild build )
+    public ContinuumBuild addBuild( int projectId, ContinuumBuild build )
         throws ContinuumStoreException
     {
         PersistenceManager pm = pmf.getPersistenceManager();
@@ -562,7 +530,7 @@ public class JdoContinuumStore
         {
             tx.begin();
 
-            ContinuumProject project = getContinuumProject( pm, projectId, false );
+            ContinuumProject project = getContinuumProject( pm, Integer.toString( projectId ), false );
 
             build.setProject( project );
 
@@ -574,7 +542,7 @@ public class JdoContinuumStore
 
             project.getBuilds().add( build );
 
-            commit( tx );
+            tx.commit();
 
             return (ContinuumBuild) getDetailedObject( ContinuumBuild.class, build.getId(), BUILD_DETAIL_FG );
         }
@@ -587,7 +555,8 @@ public class JdoContinuumStore
     public ContinuumBuild updateBuild( ContinuumBuild build )
         throws ContinuumStoreException
     {
-        return (ContinuumBuild) updateObject( build, BUILD_DETAIL_FG );
+        updateObject( build );
+        return build;
     }
 
     public ContinuumBuild getBuild( String buildId )
@@ -613,7 +582,7 @@ public class JdoContinuumStore
 
             if ( buildId == null )
             {
-                commit( tx );
+                tx.commit();
 
                 return null;
             }
@@ -624,7 +593,7 @@ public class JdoContinuumStore
 
             ContinuumBuild build = (ContinuumBuild) pm.detachCopy( object );
 
-            commit( tx );
+            tx.commit();
 
             return build;
         }
@@ -661,7 +630,7 @@ public class JdoContinuumStore
 
             builds = pm.detachCopyAll( builds );
 
-            commit( tx );
+            tx.commit();
 
             return builds;
         }
@@ -688,14 +657,14 @@ public class JdoContinuumStore
 
             if ( scmResult == null )
             {
-                commit( tx );
+                tx.commit();
 
                 return null;
             }
 
             List files = (List) pm.detachCopyAll( scmResult.getFiles() );
 
-            commit( tx );
+            tx.commit();
 
             return files;
         }
@@ -714,12 +683,9 @@ public class JdoContinuumStore
     public ContinuumNotifier storeNotifier( ContinuumNotifier notifier )
         throws ContinuumStoreException
     {
-        return (ContinuumNotifier) updateObject( notifier, NOTIFIER_DETAIL_FG );
+        updateObject( notifier );
+        return notifier;
     }
-
-    // ----------------------------------------------------------------------
-    // Project Groups
-    // ----------------------------------------------------------------------
 
     public ContinuumProjectGroup addProjectGroup( ContinuumProjectGroup projectGroup )
         throws ContinuumStoreException
@@ -730,7 +696,8 @@ public class JdoContinuumStore
     public ContinuumProjectGroup updateProjectGroup( ContinuumProjectGroup projectGroup )
         throws ContinuumStoreException
     {
-        return (ContinuumProjectGroup) updateObject( projectGroup, PROJECT_GROUP_DETAIL_FG );
+        updateObject( projectGroup );
+        return projectGroup;
     }
 
     public Collection getProjectGroups()
@@ -754,7 +721,7 @@ public class JdoContinuumStore
 
             result = pm.detachCopyAll( result );
 
-            commit( tx );
+            tx.commit();
 
             return result;
         }
@@ -781,7 +748,7 @@ public class JdoContinuumStore
 
             pm.deletePersistent( projectGroup );
 
-            commit( tx );
+            tx.commit();
         }
         finally
         {
@@ -792,33 +759,17 @@ public class JdoContinuumStore
     public ContinuumProjectGroup getProjectGroup( String projectGroupId )
         throws ContinuumStoreException
     {
-        return (ContinuumProjectGroup) getDetailedObject( ContinuumProjectGroup.class,
-                                                          projectGroupId,
+        return (ContinuumProjectGroup) getDetailedObject( ContinuumProjectGroup.class, projectGroupId,
                                                           PROJECT_GROUP_DETAIL_FG );
-    }
-
-    public ContinuumProjectGroup getProjectGroupByName( String name )
-        throws ContinuumStoreException
-    {
-        return (ContinuumProjectGroup) getObjectFromQuery( ContinuumProjectGroup.class,
-                                                           "name",
-                                                           name,
-                                                           PROJECT_GROUP_DETAIL_FG );
     }
 
     public ContinuumProjectGroup getProjectGroupByGroupId( String groupId )
         throws ContinuumStoreException
     {
-        return (ContinuumProjectGroup) getObjectFromQuery( ContinuumProjectGroup.class,
-                                                           "groupId",
-                                                           groupId,
+        return (ContinuumProjectGroup) getObjectFromQuery( ContinuumProjectGroup.class, "groupId", groupId,
                                                            PROJECT_GROUP_DETAIL_FG );
 
     }
-
-    // ----------------------------------------------------------------------
-    // Build Settings
-    // ----------------------------------------------------------------------
 
     public ContinuumBuildSettings addBuildSettings( ContinuumBuildSettings buildSettings )
         throws ContinuumStoreException
@@ -829,7 +780,8 @@ public class JdoContinuumStore
     public ContinuumBuildSettings updateBuildSettings( ContinuumBuildSettings buildSettings )
         throws ContinuumStoreException
     {
-        return (ContinuumBuildSettings) updateObject( buildSettings, BUILD_SETTINGS_DETAIL_FG );
+        updateObject( buildSettings );
+        return buildSettings;
     }
 
     public void removeBuildSettings( String buildSettingsId )
@@ -862,7 +814,7 @@ public class JdoContinuumStore
 
             pm.deletePersistent( buildSettings );
 
-            commit( tx );
+            tx.commit();
         }
         finally
         {
@@ -873,8 +825,7 @@ public class JdoContinuumStore
     public ContinuumBuildSettings getBuildSettings( String buildSettingsId )
         throws ContinuumStoreException
     {
-        return (ContinuumBuildSettings) getDetailedObject( ContinuumBuildSettings.class,
-                                                           buildSettingsId,
+        return (ContinuumBuildSettings) getDetailedObject( ContinuumBuildSettings.class, buildSettingsId,
                                                            "build-settings-detail" );
     }
 
@@ -899,7 +850,7 @@ public class JdoContinuumStore
 
             result = pm.detachCopyAll( result );
 
-            commit( tx );
+            tx.commit();
 
             return result;
         }
@@ -908,10 +859,6 @@ public class JdoContinuumStore
             rollback( tx );
         }
     }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
 
     private ContinuumProject setProjectState( ContinuumProject project )
         throws ContinuumStoreException
@@ -930,13 +877,7 @@ public class JdoContinuumStore
         return project;
     }
 
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private ContinuumProject getContinuumProject( PersistenceManager pm,
-                                                  String projectId,
-                                                  boolean details )
+    private ContinuumProject getContinuumProject( PersistenceManager pm, String projectId, boolean details )
     {
         if ( details )
         {
@@ -948,17 +889,14 @@ public class JdoContinuumStore
         return (ContinuumProject) pm.getObjectById( id );
     }
 
-    private ContinuumBuild getContinuumBuild( PersistenceManager pm,
-                                              String buildId )
+    private ContinuumBuild getContinuumBuild( PersistenceManager pm, String buildId )
     {
         Object id = pm.newObjectIdInstance( ContinuumBuild.class, buildId );
 
         return (ContinuumBuild) pm.getObjectById( id );
     }
 
-    private ContinuumSchedule getContinuumSchedule( PersistenceManager pm,
-                                                    String projectId,
-                                                    boolean details )
+    private ContinuumSchedule getContinuumSchedule( PersistenceManager pm, String projectId, boolean details )
     {
         if ( details )
         {
@@ -969,10 +907,6 @@ public class JdoContinuumStore
 
         return (ContinuumSchedule) pm.getObjectById( id );
     }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
 
     private Object addObject( Object object, String detailedFetchGroup )
     {
@@ -1002,7 +936,7 @@ public class JdoContinuumStore
 
             addedObject = pm.detachCopy( addedObject );
 
-            commit( tx );
+            tx.commit();
 
             return addedObject;
         }
@@ -1047,7 +981,7 @@ public class JdoContinuumStore
 
             object = pm.detachCopy( object );
 
-            commit( tx );
+            tx.commit();
 
             return object;
         }
@@ -1061,10 +995,7 @@ public class JdoContinuumStore
         }
     }
 
-    private Object getObjectFromQuery( Class clazz,
-                                       String idField,
-                                       String id,
-                                       String fetchGroup )
+    private Object getObjectFromQuery( Class clazz, String idField, String id, String fetchGroup )
         throws ContinuumStoreException
     {
         PersistenceManager pm = pmf.getPersistenceManager();
@@ -1094,16 +1025,15 @@ public class JdoContinuumStore
 
             if ( result.size() > 1 )
             {
-                throw new ContinuumStoreException( "A query for object of " +
-                                                   "type " + clazz.getName() + " on the " +
-                                                   "field '" + idField + "' returned more than one object." );
+                throw new ContinuumStoreException( "A query for object of " + "type " + clazz.getName() + " on the " +
+                    "field '" + idField + "' returned more than one object." );
             }
 
             pm.getFetchPlan().addGroup( fetchGroup );
 
             Object object = pm.detachCopy( result.iterator().next() );
 
-            commit( tx );
+            tx.commit();
 
             return object;
         }
@@ -1127,7 +1057,7 @@ public class JdoContinuumStore
 
             pm.deletePersistent( object );
 
-            commit( tx );
+            tx.commit();
         }
         finally
         {
@@ -1135,50 +1065,11 @@ public class JdoContinuumStore
         }
     }
 
-    private Object updateObject( Object object, String detailedFetchGroup )
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            pm.attachCopy( object, true );
-
-            commit( tx );
-
-            tx.begin();
-
-            tx = pm.currentTransaction();
-
-            Object id = pm.getObjectId( object );
-
-            pm.getFetchPlan().addGroup( detailedFetchGroup );
-
-            object = pm.getObjectById( id, true );
-
-            object = pm.detachCopy( object );
-
-            commit( tx );
-
-            return object;
-        }
-        finally
-        {
-            rollback( tx );
-        }
-    }
+    // TODO ^^^^ REMOVE ^^^^
 
     // ----------------------------------------------------------------------
     // Transaction Management
     // ----------------------------------------------------------------------
-
-    private void commit( Transaction tx )
-    {
-        tx.commit();
-    }
 
     private void rollback( Transaction tx )
     {
@@ -1208,4 +1099,354 @@ public class JdoContinuumStore
             getLogger().warn( "Error while closing the persistence manager.", e );
         }
     }
+
+    public ProjectGroup getProjectGroup( int projectGroupId )
+        throws ContinuumObjectNotFoundException
+    {
+        return (ProjectGroup) getObjectById( ProjectGroup.class, projectGroupId );
+    }
+
+    private Object getObjectById( Class clazz, int id )
+        throws ContinuumObjectNotFoundException
+    {
+        return getObjectById( clazz, id, null );
+    }
+
+    private Object getObjectById( Class clazz, int id, String fetchGroup )
+        throws ContinuumObjectNotFoundException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            if ( fetchGroup != null )
+            {
+                pm.getFetchPlan().addGroup( fetchGroup );
+            }
+
+            Object objectId = pm.newObjectIdInstance( clazz, new Integer( id ) );
+
+            Object object = pm.getObjectById( objectId );
+
+            object = pm.detachCopy( object );
+
+            tx.commit();
+
+            return object;
+        }
+        catch ( JDOObjectNotFoundException e )
+        {
+            throw new ContinuumObjectNotFoundException( clazz.getName(), Integer.toString( id ) );
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public void updateProjectGroup( ProjectGroup group )
+        throws ContinuumStoreException
+    {
+        updateObject( group );
+    }
+
+    private void updateObject( Object object )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            if ( !JDOHelper.isDetached( object ) )
+            {
+                throw new ContinuumStoreException( "Not detached: " + object );
+            }
+
+            pm.attachCopy( object, true );
+
+            tx.commit();
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public Collection getAllProjectGroupsWithProjects()
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( ProjectGroup.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.setOrdering( "name ascending" );
+
+            Collection result = (Collection) query.execute();
+
+            result = pm.detachCopyAll( result );
+
+            tx.commit();
+
+            return result;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public List getAllProjectsByName()
+    {
+        return getAllObjectsDetached( Project.class, "name ascending", null );
+    }
+
+    public List getAllSchedulesByName()
+    {
+        return getAllObjectsDetached( Schedule.class, "name ascending", null );
+    }
+
+    public Schedule addSchedule( Schedule schedule )
+    {
+        return (Schedule) addObject( schedule );
+    }
+
+    public List getAllProfilesByName()
+    {
+        return getAllObjectsDetached( Profile.class, "name ascending", null );
+    }
+
+    public Profile addProfile( Profile profile )
+    {
+        return (Profile) addObject( profile );
+    }
+
+    public Installation addInstallation( Installation installation )
+    {
+        return (Installation) addObject( installation );
+    }
+
+    public List getAllInstallations()
+    {
+        return getAllObjectsDetached( Installation.class, "name ascending, version ascending", null );
+    }
+
+    public List getAllBuildsForAProjectByDate( int projectId )
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Query q = pm.newQuery( "SELECT FROM " + BuildResult.class.getName() +
+                " WHERE project.id == :projectId PARAMETERS int projectId ORDER BY endTime DESC" );
+
+            List result = (List) q.execute( new Integer( projectId ) );
+
+            result = (List) pm.detachCopyAll( result );
+
+            tx.commit();
+
+            return result;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public Project getProject( int projectId )
+        throws ContinuumObjectNotFoundException
+    {
+        return (Project) getObjectById( Project.class, projectId );
+    }
+
+    public void updateProject( Project project )
+        throws ContinuumStoreException
+    {
+        updateObject( project );
+    }
+
+    public void updateProfile( Profile profile )
+        throws ContinuumStoreException
+    {
+        updateObject( profile );
+    }
+
+    public void updateSchedule( Schedule schedule )
+        throws ContinuumStoreException
+    {
+        updateObject( schedule );
+    }
+
+    public Project getProjectWithBuilds( int projectId )
+        throws ContinuumObjectNotFoundException
+    {
+        return (Project) getObjectById( Project.class, projectId, PROJECT_WITH_BUILDS_FETCH_GROUP );
+    }
+
+    public void removeProfile( Profile profile )
+    {
+        removeObject( profile );
+    }
+
+    public void removeSchedule( Schedule schedule )
+    {
+        removeObject( schedule );
+    }
+
+    public Project getProjectWithCheckoutResult( int projectId )
+        throws ContinuumObjectNotFoundException
+    {
+        return (Project) getObjectById( Project.class, projectId, PROJECT_WITH_CHECKOUT_RESULT_FETCH_GROUP );
+    }
+
+    public BuildResult getBuildResult( int buildId )
+        throws ContinuumObjectNotFoundException
+    {
+        return (BuildResult) getObjectById( BuildResult.class, buildId, BUILD_RESULT_WITH_DETAILS_FETCH_GROUP );
+    }
+
+    public void removeProject( Project project )
+    {
+        removeObject( project );
+    }
+
+    public void removeProjectGroup( ProjectGroup projectGroup )
+    {
+        removeObject( projectGroup );
+    }
+
+    public ProjectGroup getProjectGroupWithBuildDetails( int projectGroupId )
+        throws ContinuumObjectNotFoundException
+    {
+        return (ProjectGroup) getObjectById( ProjectGroup.class, projectGroupId, PROJECT_BUILD_DETAILS_FETCH_GROUP );
+    }
+
+    public List getAllProjectGroupsWithBuildDetails()
+    {
+        return getAllObjectsDetached( ProjectGroup.class, "name ascending", PROJECT_BUILD_DETAILS_FETCH_GROUP );
+    }
+
+    public Project getProjectWithAllDetails( int projectId )
+        throws ContinuumObjectNotFoundException
+    {
+        return (Project) getObjectById( Project.class, projectId, PROJECT_ALL_DETAILS_FETCH_GROUP );
+    }
+
+    public Schedule getSchedule( int scheduleId )
+        throws ContinuumObjectNotFoundException
+    {
+        return (Schedule) getObjectById( Schedule.class, scheduleId );
+    }
+
+    public Profile getProfile( int profileId )
+        throws ContinuumObjectNotFoundException
+    {
+        return (Profile) getObjectById( Profile.class, profileId );
+    }
+
+    private void removeObject( Object o )
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            o = pm.getObjectById( pm.getObjectId( o ) );
+
+            pm.deletePersistent( o );
+
+            tx.commit();
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    private List getAllObjectsDetached( Class clazz, String ordering, String fetchGroup )
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( clazz, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.setOrdering( ordering );
+
+            if ( fetchGroup != null )
+            {
+                pm.getFetchPlan().addGroup( fetchGroup );
+            }
+
+            List result = (List) query.execute();
+
+            result = (List) pm.detachCopyAll( result );
+
+            tx.commit();
+
+            return result;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public ProjectGroup addProjectGroup( ProjectGroup group )
+    {
+        return (ProjectGroup) addObject( group );
+    }
+
+    private Object addObject( Object object )
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            pm.makePersistent( object );
+
+            object = pm.detachCopy( object );
+
+            tx.commit();
+
+            return object;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
 }

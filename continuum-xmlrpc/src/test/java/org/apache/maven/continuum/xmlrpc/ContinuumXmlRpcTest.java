@@ -17,7 +17,8 @@ package org.apache.maven.continuum.xmlrpc;
  */
 
 import org.apache.maven.continuum.AbstractContinuumTest;
-import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.store.ContinuumStore;
 
 import java.util.Hashtable;
@@ -44,15 +45,19 @@ public class ContinuumXmlRpcTest
         //
         // ----------------------------------------------------------------------
 
-        MavenTwoProject project = makeStubMavenTwoProject( "My Project" );
+        Project project = makeStubProject( "My Project" );
 
-        project = (MavenTwoProject) store.addProject( project );
+        ProjectGroup projectGroup = getDefaultProjectGroup( store );
+
+        projectGroup.addProject( project );
+
+        store.updateProjectGroup( projectGroup );
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        Hashtable hashtable = xmlRpc.getProject( project.getId() );
+        Hashtable hashtable = xmlRpc.getProject( Integer.toString( project.getId() ) );
 
         dumpValue( 0, "result", hashtable );
     }

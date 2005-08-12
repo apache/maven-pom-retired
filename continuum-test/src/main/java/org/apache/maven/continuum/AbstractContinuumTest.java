@@ -17,37 +17,23 @@ package org.apache.maven.continuum;
  */
 
 import org.apache.maven.continuum.configuration.ConfigurationService;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
-import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
-import org.apache.maven.continuum.project.ContinuumNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
-import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.scm.ScmFile;
-import org.apache.maven.continuum.scm.ScmResult;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.jdo.ConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.util.FileUtils;
-import org.jpox.SchemaTool;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -61,7 +47,7 @@ public abstract class AbstractContinuumTest
      * When adding projects using addProject( project ) the project will be
      * put in this group. All project has to belong to a group.
      */
-    private static ContinuumProjectGroup defaultProjectGroup;
+    private static ProjectGroup defaultProjectGroup;
 
     private ContinuumStore store;
 
@@ -89,19 +75,18 @@ public abstract class AbstractContinuumTest
         configurationService.setWorkingDirectory( getTestFile( "target/working-directory" ) );
     }
 
-    public static ContinuumProjectGroup getDefaultProjectGroup( ContinuumStore store )
-        throws ContinuumStoreException
+    public static ProjectGroup getDefaultProjectGroup( ContinuumStore store )
     {
         if ( defaultProjectGroup == null )
         {
-            ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
+            ProjectGroup projectGroup = new ProjectGroup();
 
             projectGroup.setName( "Test Project Group" );
 
             projectGroup.setGroupId( "foo.test" );
 
-            projectGroup.setDescription( "This is the default group that all projects will be " +
-                                         "added to when using addProject()." );
+            projectGroup.setDescription(
+                "This is the default group that all projects will be " + "added to when using addProject()." );
 
             defaultProjectGroup = store.addProjectGroup( projectGroup );
         }
@@ -135,7 +120,7 @@ public abstract class AbstractContinuumTest
 
         jdoFactory.setDriverName( "org.hsqldb.jdbcDriver" );
 
-        jdoFactory.setUrl( "jdbc:hsqldb:mem:foo" );
+        jdoFactory.setUrl( "jdbc:hsqldb:mem:" + getClass().getName() + "." + getName() );
 
         jdoFactory.setUserName( "sa" );
 
@@ -145,26 +130,9 @@ public abstract class AbstractContinuumTest
 
         jdoFactory.setProperty( "org.jpox.poid.transactionIsolation", "READ_UNCOMMITTED" );
 
-        // ----------------------------------------------------------------------
-        // Create the tables
-        // ----------------------------------------------------------------------
+        jdoFactory.setProperty( "org.jpox.autoCreateTables", "true" );
 
-        Properties properties = jdoFactory.getProperties();
-
-        for ( Iterator it = properties.entrySet().iterator(); it.hasNext(); )
-        {
-            Map.Entry entry = (Map.Entry) it.next();
-
-            System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
-        }
-
-        String[] files = new String[]{
-            getTestPath( "../continuum-model/src/main/resources/META-INF/package.jdo" ),
-        };
-
-        boolean verbose = false;
-
-        SchemaTool.createSchemaTables( files, verbose );
+        jdoFactory.setProperty( "org.jpox.autoCreateColumns", "true" );
 
         // ----------------------------------------------------------------------
         // Check the configuration
@@ -205,26 +173,16 @@ public abstract class AbstractContinuumTest
     // Maven 2 Project Generators
     // ----------------------------------------------------------------------
 
-    public static MavenTwoProject makeStubMavenTwoProject( String name )
+    public static Project makeStubProject( String name )
     {
-        return makeMavenTwoProject( name,
-                                    "foo@bar.com",
-                                    "1.0",
-                                    "" );
+        return makeProject( name, "foo@bar.com", "1.0" );
     }
 
-    public static MavenTwoProject makeMavenTwoProject( String name,
-                                                       String emailAddress,
-                                                       String version,
-                                                       String commandLineArguments )
+    public static Project makeProject( String name, String emailAddress, String version )
     {
-        MavenTwoProject project = new MavenTwoProject();
+        Project project = new Project();
 
-        makeProject( project,
-                     name,
-                     version,
-                     commandLineArguments,
-                     "maven2" );
+        makeProject( project, name, version );
 
         List notifiers = createMailNotifierList( emailAddress );
 
@@ -237,31 +195,19 @@ public abstract class AbstractContinuumTest
     // Shell Project Generators
     // ----------------------------------------------------------------------
 
-    public static ShellProject makeStubShellProject( String name )
+    public static Project makeStubShellProject( String name )
     {
-        ShellProject project = new ShellProject();
+        Project project = new Project();
 
-        makeProject( project,
-                     name,
-                     "1.0",
-                     "",
-                     "shell" );
-
-        project.setExecutable( "script.sh" );
+        makeProject( project, name, "1.0" );
 
         return project;
     }
 
-    public static ContinuumProject makeProject( ContinuumProject project,
-                                                String name,
-                                                String version,
-                                                String commandLineArguments,
-                                                String executorId )
+    public static Project makeProject( Project project, String name, String version )
     {
         project.setName( name );
         project.setVersion( version );
-        project.setCommandLineArguments( commandLineArguments );
-        project.setExecutorId( executorId );
 
         return project;
     }
@@ -273,7 +219,7 @@ public abstract class AbstractContinuumTest
             return null;
         }
 
-        ContinuumNotifier notifier = new ContinuumNotifier();
+        ProjectNotifier notifier = new ProjectNotifier();
 
         notifier.setType( "mail" );
 
@@ -294,8 +240,7 @@ public abstract class AbstractContinuumTest
     // Public utility methods
     // ----------------------------------------------------------------------
 
-    public static MavenTwoProject addMavenTwoProject( ContinuumStore store,
-                                                      MavenTwoProject project )
+    public static Project addProject( ContinuumStore store, Project project )
         throws Exception
     {
         if ( project.getProjectGroup() == null )
@@ -305,17 +250,17 @@ public abstract class AbstractContinuumTest
 
         assertNotNull( "project group == null", project.getProjectGroup() );
 
-        assertTrue( "!JDOHelper.isDetached( project.getProjectGroup() )", JDOHelper.isDetached( project.getProjectGroup() ) );
+        assertTrue( "!JDOHelper.isDetached( project.getProjectGroup() )",
+                    JDOHelper.isDetached( project.getProjectGroup() ) );
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        ContinuumProject addedProject = store.addProject( project );
+        getDefaultProjectGroup( store ).addProject( project );
+        store.updateProjectGroup( getDefaultProjectGroup( store ) );
 
-        assertNotNull( addedProject );
-
-        assertNotNull( "project group == null", addedProject.getProjectGroup() );
+        assertNotNull( "project group == null", project.getProjectGroup() );
 
         // ----------------------------------------------------------------------
         //
@@ -329,154 +274,58 @@ public abstract class AbstractContinuumTest
 
         scmResult.setProviderMessage( "providerMessage" );
 
-        ScmFile scmFile = new ScmFile();
-
-        scmFile.setPath( "/foo" );
-
-        scmResult.addFile( scmFile );
-
-//        addedProject = setCheckoutDone( store, addedProject, scmResult, null, null );
-
-        assertNotNull( "project group == null", addedProject.getProjectGroup() );
-
-        return (MavenTwoProject) addedProject;
+        return project;
     }
 
-    public static MavenTwoProject addMavenTwoProject( ContinuumStore store,
-                                                      String name )
+    public static Project addProject( ContinuumStore store, String name )
         throws Exception
     {
-        return addMavenTwoProject( store, makeStubMavenTwoProject( name ) );
+        return addProject( store, makeStubProject( name ) );
     }
 
-    public static MavenTwoProject addMavenTwoProject( ContinuumStore store,
-                                                      String name,
-                                                      String nagEmailAddress,
-                                                      String version,
-                                                      String commandLineArguments )
+    public static Project addProject( ContinuumStore store, String name, String nagEmailAddress, String version )
         throws Exception
     {
-        ContinuumProject project = store.addProject(
-            makeMavenTwoProject( name,
-                                 nagEmailAddress,
-                                 version,
-                                 commandLineArguments ) );
+        Project project = makeProject( name, nagEmailAddress, version );
+
+        ProjectGroup defaultProjectGroup = getDefaultProjectGroup( store );
+        defaultProjectGroup.addProject( project );
+        store.updateProjectGroup( defaultProjectGroup );
 
         ScmResult scmResult = new ScmResult();
 
         scmResult.setSuccess( true );
 
-        project = setCheckoutDone( store, project, scmResult, null, null );
+        setCheckoutDone( store, project, scmResult );
 
         assertNotNull( project );
 
-        return (MavenTwoProject) project;
+        return project;
     }
 
-    public static ContinuumBuild createBuild( ContinuumStore store,
-                                              String projectId,
-                                              boolean forced )
+    public static void setCheckoutDone( ContinuumStore store, Project project, ScmResult scmResult )
         throws ContinuumStoreException
     {
-        ContinuumBuild build = new ContinuumBuild();
+        project.setCheckoutResult( scmResult );
 
-        build.setStartTime( System.currentTimeMillis() );
-
-        build.setState( ContinuumProjectState.BUILDING );
-
-        build.setForced( forced );
-
-        return store.addBuild( projectId, build );
-    }
-
-    public static ContinuumProject setCheckoutDone( ContinuumStore store,
-                                                    ContinuumProject project,
-                                                    ScmResult scmResult,
-                                                    String errorMessage,
-                                                    Throwable exception )
-        throws ContinuumStoreException
-    {
-        project.setScmResult( scmResult );
-
-        project.setCheckOutErrorMessage( errorMessage );
-
-        project.setCheckOutErrorException( ContinuumUtils.throwableMessagesToString( exception ) );
-
-        return store.updateProject( project );
-    }
-
-    public void setBuildResult( ContinuumStore store,
-                                       ContinuumBuild build,
-                                       int state,
-                                       ContinuumBuildExecutionResult result,
-                                       ScmResult scmResult,
-                                       Throwable error )
-        throws ContinuumStoreException
-    {
-        build.setState( state );
-
-        build.setEndTime( new Date().getTime() );
-
-        build.setError( ContinuumUtils.throwableToString( error ) );
-
-        build.setScmResult( scmResult );
-
-        // ----------------------------------------------------------------------
-        // Copy over the build result
-        // ----------------------------------------------------------------------
-
-        build.setExitCode( result.getExitCode() );
-
-        try
-        {
-            String outputFile = store.getBuildOutputFile( build.getId() ).getAbsolutePath();
-
-            FileUtils.fileWrite( outputFile, result.getOutput() );
-        }
-        catch ( IOException e )
-        {
-            // do nothing
-        }
-
-        store.updateBuild( build );
+        store.updateProject( project );
     }
 
     // ----------------------------------------------------------------------
     // Assertions
     // ----------------------------------------------------------------------
 
-    public void assertProjectEquals( ContinuumProject expected,
-                                     ContinuumProject actual )
+    public void assertProjectEquals( Project expected, Project actual )
     {
-        assertProjectEquals( expected.getName(),
-                             expected.getNotifiers(),
-                             expected.getVersion(),
-                             expected.getCommandLineArguments(),
-                             expected.getExecutorId(),
-                             actual );
+        assertProjectEquals( expected.getName(), expected.getNotifiers(), expected.getVersion(), actual );
     }
 
-    public void assertProjectEquals( String name,
-                                     String emailAddress,
-                                     String version,
-                                     String commandLineArguments,
-                                     String builderId,
-                                     ContinuumProject actual )
+    public void assertProjectEquals( String name, String emailAddress, String version, Project actual )
     {
-        assertProjectEquals( name,
-                             createMailNotifierList( emailAddress ),
-                             version,
-                             commandLineArguments,
-                             builderId,
-                             actual );
+        assertProjectEquals( name, createMailNotifierList( emailAddress ), version, actual );
     }
 
-    public void assertProjectEquals( String name,
-                                     List notifiers,
-                                     String version,
-                                     String commandLineArguments,
-                                     String builderId,
-                                     ContinuumProject actual )
+    public void assertProjectEquals( String name, List notifiers, String version, Project actual )
     {
         assertEquals( "project.name", name, actual.getName() );
 
@@ -490,9 +339,9 @@ public abstract class AbstractContinuumTest
 
             for ( int i = 0; i < notifiers.size(); i++ )
             {
-                ContinuumNotifier notifier = (ContinuumNotifier) notifiers.get( i );
+                ProjectNotifier notifier = (ProjectNotifier) notifiers.get( i );
 
-                ContinuumNotifier actualNotifier = (ContinuumNotifier) actual.getNotifiers().get( i );
+                ProjectNotifier actualNotifier = (ProjectNotifier) actual.getNotifiers().get( i );
 
                 assertEquals( "project.notifiers.notifier.type", notifier.getType(), actualNotifier.getType() );
 
@@ -503,32 +352,15 @@ public abstract class AbstractContinuumTest
         }
 
         assertEquals( "project.version", version, actual.getVersion() );
-
-        assertEquals( "project.commandLineArguments", commandLineArguments, actual.getCommandLineArguments() );
-
-        assertEquals( "project.executorId", builderId, actual.getExecutorId() );
-
-//        assertEquals( "project.workingDirectory", workingDirectory, actual.getWorkingDirectory() );
     }
 
     // ----------------------------------------------------------------------
     // Simple utils
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildSettings createStubBuildSettings( String name, String jdkVersion )
+    public ProjectGroup createStubProjectGroup( String name, String description )
     {
-        ContinuumBuildSettings buildSettings = new ContinuumBuildSettings();
-
-        buildSettings.setName( name );
-
-        buildSettings.setJdkVersion( jdkVersion );
-
-        return buildSettings;
-    }
-
-    public ContinuumProjectGroup createStubProjectGroup( String name, String description )
-    {
-        ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
+        ProjectGroup projectGroup = new ProjectGroup();
 
         projectGroup.setName( name );
 

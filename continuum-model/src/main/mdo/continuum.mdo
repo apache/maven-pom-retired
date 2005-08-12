@@ -255,7 +255,7 @@
         <field>
           <name>continuumId</name>
           <version>1.0.0+</version>
-          <type>String</type>
+          <type>int</type>
         </field>
       </fields>
     </class>
@@ -298,10 +298,15 @@
           </association>
         </field>
         <field>
-          <name>buildNumber</name>
+          <name>id</name>
           <version>1.0.0+</version>
           <type>int</type>
           <identifier>true</identifier>
+        </field>
+        <field>
+          <name>buildNumber</name>
+          <version>1.0.0+</version>
+          <type>int</type>
         </field>
         <field>
           <name>state</name>
@@ -316,12 +321,14 @@
         <field>
           <name>startTime</name>
           <version>1.0.0+</version>
-          <type>Date</type>
+          <!-- TODO: Because JPOX persists as UTC and pulls back using the local time, we have to take over -->
+          <type>long</type>
         </field>
         <field>
           <name>endTime</name>
           <version>1.0.0+</version>
-          <type>Date</type>
+          <!-- TODO: Because JPOX persists as UTC and pulls back using the local time, we have to take over -->
+          <type>long</type>
         </field>
         <field>
           <name>error</name>
@@ -370,33 +377,12 @@
           <type>String</type>
         </field>
         <field>
-          <name>files</name>
-          <version>1.0.0+</version>
-          <association>
-            <type>ScmFile</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
           <name>changes</name>
           <version>1.0.0+</version>
           <association>
             <type>ChangeSet</type>
             <multiplicity>*</multiplicity>
           </association>
-        </field>
-      </fields>
-    </class>
-
-    <class>
-      <name>ScmFile</name>
-      <packageName>org.apache.maven.continuum.model.scm</packageName>
-      <version>1.0.0+</version>
-      <fields>
-        <field>
-          <name>path</name>
-          <version>1.0.0+</version>
-          <type>String</type>
         </field>
       </fields>
     </class>
@@ -419,7 +405,8 @@
         <field>
           <name>date</name>
           <version>1.0.0+</version>
-          <type>Date</type>
+          <!-- TODO: Because JPOX persists as UTC and pulls back using the local time, we have to take over -->
+          <type>long</type>
         </field>
         <field>
           <name>files</name>
@@ -494,6 +481,12 @@
       ]]></description>
       <fields>
         <field>
+          <name>id</name>
+          <identifier>true</identifier>
+          <version>1.0.0+</version>
+          <type>int</type>
+        </field>
+        <field>
           <name>active</name>
           <version>1.0.0+</version>
           <type>boolean</type>
@@ -528,6 +521,12 @@
       <name>Profile</name>
       <version>1.0.0+</version>
       <fields>
+        <field>
+          <name>id</name>
+          <identifier>true</identifier>
+          <version>1.0.0+</version>
+          <type>int</type>
+        </field>
         <field>
           <name>active</name>
           <version>1.0.0+</version>
