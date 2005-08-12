@@ -40,6 +40,10 @@ import java.util.Set;
 public class MailContinuumNotifierTest
     extends AbstractContinuumTest
 {
+    public void testDummy()
+    {
+    }
+
 /* TODO
     public void testSuccessfulBuild()
         throws Exception

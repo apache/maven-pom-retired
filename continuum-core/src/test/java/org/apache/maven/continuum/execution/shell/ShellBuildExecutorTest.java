@@ -25,6 +25,10 @@ import org.apache.maven.continuum.AbstractContinuumTest;
 public class ShellBuildExecutorTest
     extends AbstractContinuumTest
 {
+    public void testDummy()
+    {
+    }
+
 /* TODO
     public void testNonAbsolutePath()
         throws Exception
