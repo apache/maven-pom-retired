@@ -65,7 +65,7 @@ public class ExecuteBuilderContinuumAction
         // This is really a precondition for this action to execute
         // ----------------------------------------------------------------------
 
-        if ( scmResult.getFiles().size() == 0 && !forced && !isNew( project ) )
+        if ( scmResult.getChanges().size() == 0 && !forced && !isNew( project ) )
         {
             getLogger().info( "No files updated, not building. Project id '" + project.getId() + "'." );
 

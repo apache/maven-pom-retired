@@ -361,9 +361,9 @@
             <type>ContinuumProject</type>
           </association>
         </field>
+        <!-- TODO: this is often used as a build number - it shouldn't be user facing -->
         <field>
           <name>id</name>
-          <!--buildnumber?-->
           <version>1.0.0</version>
           <type>String</type>
           <identifier>true</identifier>
@@ -450,14 +450,6 @@
           <type>String</type>
         </field>
         <field>
-          <name>files</name>
-          <version>1.0.0</version>
-          <association stash.part="true">
-            <type>ScmFile</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
           <name>changes</name>
           <version>1.0.0</version>
           <association stash.part="true">
@@ -465,26 +457,6 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
-      </fields>
-    </class>
-
-    <class>
-      <name>ScmFile</name>
-      <packageName>org.apache.maven.continuum.scm</packageName>
-      <version>1.0.0</version>
-      <fields>
-        <field>
-          <name>path</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <!-- TODO: Use some form of enumeration
-                <field>
-                  <name>status</name>
-                  <version>1.0.0</version>
-                  <type>ScmFileStatus</type>
-                </field>
-        -->
       </fields>
     </class>
 
@@ -506,13 +478,14 @@
         <field>
           <name>date</name>
           <version>1.0.0</version>
-          <type>Date</type>
+          <type>long</type>
         </field>
         <field>
-          <name>file</name>
+          <name>files</name>
           <version>1.0.0</version>
           <association stash.part="true">
             <type>ChangeFile</type>
+            <multiplicity>*</multiplicity>
           </association>
         </field>
       </fields>

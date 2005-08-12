@@ -31,6 +31,7 @@ import org.codehaus.plexus.util.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -59,9 +60,8 @@ public class DefaultContinuumScm
     {
         try
         {
-            getLogger().info( "Checking out project: '" + project.getName() + "', " +
-                              "id: '" + project.getId() + "' " +
-                              "to '" + workingDirectory + "'." );
+            getLogger().info( "Checking out project: '" + project.getName() + "', " + "id: '" + project.getId() + "' " +
+                "to '" + workingDirectory + "'." );
 
             ScmRepository repository = scmManager.makeScmRepository( project.getScmUrl() );
 
@@ -73,7 +73,8 @@ public class DefaultContinuumScm
                 {
                     if ( !workingDirectory.mkdirs() )
                     {
-                        throw new ContinuumScmException( "Could not make directory: " + workingDirectory.getAbsolutePath() );
+                        throw new ContinuumScmException(
+                            "Could not make directory: " + workingDirectory.getAbsolutePath() );
                     }
                 }
                 else
@@ -84,7 +85,8 @@ public class DefaultContinuumScm
                     }
                     catch ( IOException e )
                     {
-                        throw new ContinuumScmException( "Could not clean directory : " + workingDirectory.getAbsolutePath(), e );
+                        throw new ContinuumScmException(
+                            "Could not clean directory : " + workingDirectory.getAbsolutePath(), e );
                     }
                 }
 
@@ -92,21 +94,24 @@ public class DefaultContinuumScm
 
                 ScmFileSet fileSet = new ScmFileSet( workingDirectory );
 
-                result = convertScmResult( scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, tag ) );
+                result = convertScmResult(
+                    scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, tag ) );
             }
 
             if ( !result.isSuccess() )
             {
-                getLogger().warn( "Error while checking out the code for project: '" + project.getName() + "', id: '" + project.getId() + "' to '" + workingDirectory.getAbsolutePath() + "'." );
+                getLogger().warn( "Error while checking out the code for project: '" + project.getName() + "', id: '" +
+                    project.getId() + "' to '" + workingDirectory.getAbsolutePath() + "'." );
 
                 getLogger().warn( "Command output: " + result.getCommandOutput() );
 
-                getLogger().warn( "Provider message: " + result.getProviderMessage());
+                getLogger().warn( "Provider message: " + result.getProviderMessage() );
 
                 throw new ContinuumScmException( "Error while checking out the project.", result );
             }
 
-            getLogger().info( "Checked out " + result.getFiles().size() + " files." );
+            ChangeSet changeSet = (ChangeSet) result.getChanges().get( 0 );
+            getLogger().info( "Checked out " + changeSet.getFiles().size() + " files." );
 
             return result;
         }
@@ -133,7 +138,8 @@ public class DefaultContinuumScm
 
         if ( workingDirectory == null )
         {
-            throw new ContinuumScmException( "The working directory for the project has to be set. Project: '" + project.getName() + "', id: '" + project.getId() + "'.");
+            throw new ContinuumScmException( "The working directory for the project has to be set. Project: '" +
+                project.getName() + "', id: '" + project.getId() + "'." );
         }
 
         return checkOut( project, workingDirectory );
@@ -150,8 +156,8 @@ public class DefaultContinuumScm
 
             if ( !workingDirectory.exists() )
             {
-                throw new ContinuumScmException( "The working directory for the project doesn't exist " +
-                                                 "(" + workingDirectory.getAbsolutePath() + ")." );
+                throw new ContinuumScmException( "The working directory for the project doesn't exist " + "(" +
+                    workingDirectory.getAbsolutePath() + ")." );
             }
 
             ScmRepository repository = scmManager.makeScmRepository( project.getScmUrl() );
@@ -164,12 +170,14 @@ public class DefaultContinuumScm
 
             synchronized ( this )
             {
-                result = convertScmResult( scmManager.getProviderByRepository( repository ).update( repository, fileSet, tag ) );
+                result = convertScmResult(
+                    scmManager.getProviderByRepository( repository ).update( repository, fileSet, tag ) );
             }
 
             if ( !result.isSuccess() )
             {
-                getLogger().warn( "Error while updating the code for project: '" + project.getName() + "', id: '" + project.getId() + "' to '" + workingDirectory.getAbsolutePath() + "'." );
+                getLogger().warn( "Error while updating the code for project: '" + project.getName() + "', id: '" +
+                    project.getId() + "' to '" + workingDirectory.getAbsolutePath() + "'." );
 
                 getLogger().warn( "Command output: " + result.getCommandOutput() );
 
@@ -178,7 +186,8 @@ public class DefaultContinuumScm
                 throw new ContinuumScmException( "Error while checking out the project.", result );
             }
 
-            getLogger().info( "Updated " + result.getFiles().size() + " files." );
+            // TODO: total the number of files in the changesets
+//            getLogger().info( "Updated " + result.getFiles().size() + " files." );
 
             return result;
         }
@@ -206,21 +215,34 @@ public class DefaultContinuumScm
 
         result.setProviderMessage( scmResult.getProviderMessage() );
 
-        if ( scmResult.getCheckedOutFiles() != null )
+        // TODO: is this valid? Does it ever return a changeset itself?
+        ChangeSet changeSet = convertScmFileSetToChangeSet( scmResult.getCheckedOutFiles() );
+        result.addChange( changeSet );
+
+        return result;
+    }
+
+    private static ChangeSet convertScmFileSetToChangeSet( List files )
+    {
+        ChangeSet changeSet = new ChangeSet();
+
+        if ( files != null && !files.isEmpty() )
         {
-            for ( Iterator it = scmResult.getCheckedOutFiles().iterator(); it.hasNext(); )
+            // TODO: author, etc.
+            for ( Iterator it = files.iterator(); it.hasNext(); )
             {
                 org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
 
-                ScmFile file = new ScmFile();
+                ChangeFile file = new ChangeFile();
 
-                file.setPath( scmFile.getPath() );
+                file.setName( scmFile.getPath() );
 
-                result.addFile( file );
+                // TODO: revision?
+
+                changeSet.addFile( file );
             }
         }
-
-        return result;
+        return changeSet;
     }
 
     private ScmResult convertScmResult( UpdateScmResult scmResult )
@@ -233,41 +255,31 @@ public class DefaultContinuumScm
 
         result.setProviderMessage( scmResult.getProviderMessage() );
 
-        if ( scmResult.getUpdatedFiles() != null )
-        {
-            for ( Iterator it = scmResult.getUpdatedFiles().iterator(); it.hasNext(); )
-            {
-                org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
-
-                ScmFile file = new ScmFile();
-
-                file.setPath( scmFile.getPath() );
-
-                result.addFile( file );
-            }
-        }
+        // TODO: is this valid?
+        ChangeSet changeSet = convertScmFileSetToChangeSet( scmResult.getUpdatedFiles() );
+        result.addChange( changeSet );
 
         if ( scmResult.getChanges() != null )
         {
             for ( Iterator it = scmResult.getChanges().iterator(); it.hasNext(); )
             {
-                org.apache.maven.scm.ChangeSet changeSet = (org.apache.maven.scm.ChangeSet) it.next();
+                org.apache.maven.scm.ChangeSet scmChangeSet = (org.apache.maven.scm.ChangeSet) it.next();
 
                 ChangeSet change = new ChangeSet();
 
-                change.setAuthor( changeSet.getAuthor() );
+                change.setAuthor( scmChangeSet.getAuthor() );
 
-                change.setComment( changeSet.getComment() );
+                change.setComment( scmChangeSet.getComment() );
 
-                change.setDate( changeSet.getDate() );
+                change.setDate( scmChangeSet.getDate().getTime() );
 
-                if ( changeSet.getFile() != null )
+                if ( scmChangeSet.getFile() != null )
                 {
                     ChangeFile file = new ChangeFile();
 
-                    file.setName( changeSet.getFile().getName() );
+                    file.setName( scmChangeSet.getFile().getName() );
 
-                    file.setRevision( changeSet.getFile().getRevision() );
+                    file.setRevision( scmChangeSet.getFile().getRevision() );
                 }
 
                 result.addChange( change );

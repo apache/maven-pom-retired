@@ -572,7 +572,7 @@ public class JdoContinuumStore
                 return null;
             }
 
-            List files = (List) pm.detachCopyAll( scmResult.getFiles() );
+            List files = (List) pm.detachCopyAll( scmResult.getChanges() );
 
             tx.commit();
 

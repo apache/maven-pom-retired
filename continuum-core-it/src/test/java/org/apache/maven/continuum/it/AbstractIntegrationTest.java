@@ -24,7 +24,7 @@ import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.scm.ScmFile;
+import org.apache.maven.continuum.scm.ChangeSet;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
@@ -537,7 +537,11 @@ public abstract class AbstractIntegrationTest
 
         ScmResult scmResult = project.getCheckoutResult();
 
-        List actualCheckedOutFiles = scmResult.getFiles();
+        assertEquals( "check # change sets", 1, scmResult.getChanges().size() );
+
+        ChangeSet changeSet = (ChangeSet) scmResult.getChanges().get( 0 );
+
+        List actualCheckedOutFiles = changeSet.getFiles();
 
         if ( expectedCheckedOutFiles.length != actualCheckedOutFiles.size() )
         {
