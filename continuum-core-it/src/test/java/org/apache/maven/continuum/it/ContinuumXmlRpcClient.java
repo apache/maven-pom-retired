@@ -25,7 +25,6 @@ import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
 import org.apache.xmlrpc.XmlRpcClient;
@@ -283,28 +282,6 @@ public abstract class ContinuumXmlRpcClient
     }
 
     public void updateAntProject( AntProject antProject )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    // ----------------------------------------------------------------------
-    // Shell projects
-    // ----------------------------------------------------------------------
-
-    public String addShellProject( ShellProject shellProject )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    public ShellProject getShellProject( String s )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    public void updateShellProject( ShellProject shellProject )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();

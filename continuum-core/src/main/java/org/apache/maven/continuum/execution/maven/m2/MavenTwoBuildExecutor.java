@@ -20,6 +20,7 @@ import org.apache.maven.continuum.execution.AbstractBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.codehaus.plexus.util.StringUtils;
@@ -46,7 +47,9 @@ public class MavenTwoBuildExecutor
     //
     // ----------------------------------------------------------------------
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private MavenBuilderHelper builderHelper;
 
     // ----------------------------------------------------------------------
@@ -62,18 +65,22 @@ public class MavenTwoBuildExecutor
     // ContinuumBuilder Implementation
     // ----------------------------------------------------------------------
 
+    public ContinuumBuildExecutionResult build( ContinuumProject project, BuildDefinition buildDefinition,
+                                                File buildOutput )
+        throws ContinuumBuildExecutorException
+    {
+        return build( project, buildOutput );
+    }
+
     public ContinuumBuildExecutionResult build( ContinuumProject p, File buildOutput )
         throws ContinuumBuildExecutorException
     {
         MavenTwoProject project = (MavenTwoProject) p;
 
         String arguments = StringUtils.clean( project.getCommandLineArguments() ) + " " +
-                           StringUtils.clean( project.getGoals() );
+            StringUtils.clean( project.getGoals() );
 
-        return executeShellCommand( project,
-                                    null,
-                                    arguments,
-                                    buildOutput );
+        return executeShellCommand( project, null, arguments, buildOutput );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

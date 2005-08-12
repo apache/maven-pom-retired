@@ -29,7 +29,6 @@ import org.apache.maven.continuum.core.action.StoreProjectAction;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.initialization.ContinuumInitializationException;
 import org.apache.maven.continuum.initialization.ContinuumInitializer;
 import org.apache.maven.continuum.model.project.ProjectGroup;
@@ -41,7 +40,6 @@ import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
@@ -393,7 +391,7 @@ public class DefaultContinuum
     public void updateAntProject( AntProject project )
         throws ContinuumException
     {
-        executeUpdateProjectActivity( project );
+        updateProject( (ContinuumProject) project );
     }
 
     // ----------------------------------------------------------------------
@@ -424,7 +422,7 @@ public class DefaultContinuum
     public void updateMavenOneProject( MavenOneProject project )
         throws ContinuumException
     {
-        executeUpdateProjectActivity( project );
+        updateProject( (ContinuumProject) project );
     }
 
     // ----------------------------------------------------------------------
@@ -455,42 +453,24 @@ public class DefaultContinuum
     public void updateMavenTwoProject( MavenTwoProject project )
         throws ContinuumException
     {
-        executeUpdateProjectActivity( project );
+        updateProject( (ContinuumProject) project );
     }
 
     // ----------------------------------------------------------------------
     // Shell projects
     // ----------------------------------------------------------------------
 
-    public String addShellProject( ShellProject project )
+    public String addProject( ContinuumProject project, String executorId )
         throws ContinuumException
     {
-        project.setExecutorId( ShellBuildExecutor.ID );
+        project.setExecutorId( executorId );
 
         return executeAddProjectFromScmActivity( project );
-    }
-
-    public ShellProject getShellProject( String projectId )
-        throws ContinuumException
-    {
-        return (ShellProject) getProject( projectId );
-    }
-
-    public void updateShellProject( ShellProject project )
-        throws ContinuumException
-    {
-        executeUpdateProjectActivity( project );
     }
 
     // ----------------------------------------------------------------------
     // Activities. These should end up as workflows in werkflow
     // ----------------------------------------------------------------------
-
-    private void executeUpdateProjectActivity( ContinuumProject project )
-        throws ContinuumException
-    {
-        updateProject( project );
-    }
 
     private String executeAddProjectFromScmActivity( ContinuumProject project )
         throws ContinuumException
@@ -881,12 +861,12 @@ public class DefaultContinuum
 
     // core
 
-    public ContinuumProject updateProject( ContinuumProject project )
+    public void updateProject( ContinuumProject project )
         throws ContinuumException
     {
         try
         {
-            return store.updateProject( project );
+            store.updateProject( project );
         }
         catch ( ContinuumStoreException ex )
         {

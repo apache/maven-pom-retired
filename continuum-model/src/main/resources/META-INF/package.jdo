@@ -41,6 +41,10 @@
         <collection element-type="org.apache.maven.continuum.model.project.ProjectDependency" dependent-element="true"/>
         <join/>
       </field>
+      <field name="buildDefinitions" persistence-modifier="persistent" default-fetch-group="true">
+        <collection element-type="org.apache.maven.continuum.model.project.BuildDefinition" dependent-element="true"/>
+        <join/>
+      </field>
 
       <field name="projectGroup" persistence-modifier="persistent"/>
 
@@ -78,14 +82,6 @@
         <column name="ANT_EXECUTABLE"/>
       </field>
       <field name="targets" persistence-modifier="persistent"/>
-    </class>
-    <class name="ShellProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
-           detachable="true">
-      <inheritance strategy="new-table"/>
-      <field name="commandLineArguments" persistence-modifier="persistent"/>
-      <field name="executable" persistence-modifier="persistent">
-        <column name="SHELL_EXECUTABLE"/>
-      </field>
     </class>
     <class name="ContinuumBuild" detachable="true" identity-type="application"
            objectid-class="javax.jdo.identity.StringIdentity" table="build">

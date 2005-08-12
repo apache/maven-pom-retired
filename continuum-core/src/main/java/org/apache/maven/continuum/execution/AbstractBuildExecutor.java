@@ -16,10 +16,11 @@ package org.apache.maven.continuum.execution;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.apache.maven.continuum.utils.shell.ExecutionResult;
 import org.apache.maven.continuum.utils.shell.ShellCommandHelper;
-import org.apache.maven.continuum.utils.WorkingDirectoryService;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.commandline.ExecutableResolver;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -54,7 +55,7 @@ public abstract class AbstractBuildExecutor
 
     /**
      * @plexus.requirement
-     * */
+     */
     private WorkingDirectoryService workingDirectoryService;
 
     /**
@@ -95,7 +96,7 @@ public abstract class AbstractBuildExecutor
             if ( StringUtils.isEmpty( defaultExecutable ) )
             {
                 getLogger().warn( "The default executable for build executor '" + id + "' is not set. " +
-                                  "This will cause a problem unless the project has a executable configured." );
+                    "This will cause a problem unless the project has a executable configured." );
             }
             else
             {
@@ -103,13 +104,13 @@ public abstract class AbstractBuildExecutor
 
                 if ( resolvedExecutable == null )
                 {
-                    getLogger().warn( "Could not find the executable '" + defaultExecutable + "' in the " +
-                                      "path '" + path + "'." );
+                    getLogger().warn(
+                        "Could not find the executable '" + defaultExecutable + "' in the " + "path '" + path + "'." );
                 }
                 else
                 {
-                    getLogger().info( "Resolved the executable '" + defaultExecutable + "' to " +
-                                      "'" + resolvedExecutable.getAbsolutePath() + "'.");
+                    getLogger().info( "Resolved the executable '" + defaultExecutable + "' to " + "'" +
+                        resolvedExecutable.getAbsolutePath() + "'." );
                 }
             }
         }
@@ -119,10 +120,8 @@ public abstract class AbstractBuildExecutor
     //
     // ----------------------------------------------------------------------
 
-    protected ContinuumBuildExecutionResult executeShellCommand( ContinuumProject project,
-                                                                 String executable,
-                                                                 String arguments,
-                                                                 File output )
+    protected ContinuumBuildExecutionResult executeShellCommand( ContinuumProject project, String executable,
+                                                                 String arguments, File output )
         throws ContinuumBuildExecutorException
     {
         // ----------------------------------------------------------------------
@@ -181,10 +180,8 @@ public abstract class AbstractBuildExecutor
 
         try
         {
-            ExecutionResult result = shellCommandHelper.executeShellCommand( workingDirectory,
-                                                                             actualExecutable,
-                                                                             arguments,
-                                                                             output );
+            ExecutionResult result = shellCommandHelper.executeShellCommand( workingDirectory, actualExecutable,
+                                                                             arguments, output );
 
             getLogger().info( "Exit code: " + result.getExitCode() );
 
@@ -193,8 +190,16 @@ public abstract class AbstractBuildExecutor
         catch ( Exception e )
         {
             throw new ContinuumBuildExecutorException( "Error while executing shell command. " +
-                                                       "The most common error is that '" + executable + "' " +
-                                                       "is not in your path.", e );
+                "The most common error is that '" + executable + "' " + "is not in your path.", e );
         }
     }
+
+    public ContinuumBuildExecutionResult build( ContinuumProject project, File buildOutput )
+        throws ContinuumBuildExecutorException
+    {
+        // TODO: remove
+        BuildDefinition buildDefinition = (BuildDefinition) project.getBuildDefinitions().iterator().next();
+        return build( project, buildDefinition, buildOutput );
+    }
+
 }

@@ -16,9 +16,10 @@ package org.apache.maven.continuum.execution;
  * limitations under the License.
  */
 
-import java.io.File;
-
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.project.ContinuumProject;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -38,7 +39,13 @@ public interface ContinuumBuildExecutor
 
     String SHELL_EXECUTOR_ID = "shell";
 
+    /**
+     * @deprecated you need to give a build definition
+     */
     ContinuumBuildExecutionResult build( ContinuumProject project, File buildOutput )
+        throws ContinuumBuildExecutorException;
+
+    ContinuumBuildExecutionResult build( ContinuumProject project, BuildDefinition buildDefinition, File buildOutput )
         throws ContinuumBuildExecutorException;
 
     void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )

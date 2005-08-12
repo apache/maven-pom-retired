@@ -24,7 +24,6 @@ import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
@@ -154,13 +153,10 @@ public interface Continuum
     // Shell projects
     // ----------------------------------------------------------------------
 
-    String addShellProject( ShellProject project )
+    String addProject( ContinuumProject project, String executorId )
         throws ContinuumException;
 
-    ShellProject getShellProject( String id )
-        throws ContinuumException;
-
-    void updateShellProject( ShellProject project )
+    void updateProject( ContinuumProject project )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------

@@ -17,13 +17,13 @@ package org.apache.maven.continuum.xmlrpc;
  */
 
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -418,11 +418,11 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            ShellProject project = new ShellProject();
+            ContinuumProject project = new ContinuumProject();
 
             xmlRpcHelper.hashtableToObject( shellProject, project );
 
-            String projectId = continuum.addShellProject( project );
+            String projectId = continuum.addProject( project, ShellBuildExecutor.SHELL_EXECUTOR_ID );
 
             Collection projectIds = new ArrayList();
 
@@ -442,11 +442,11 @@ public class DefaultContinuumXmlRpc
 
         try
         {
-            ShellProject project = continuum.getShellProject( id );
+            ContinuumProject project = continuum.getProject( id );
 
             xmlRpcHelper.hashtableToObject( shellProject, project );
 
-            continuum.updateShellProject( project );
+            continuum.updateProject( project );
 
             return makeHashtable();
         }

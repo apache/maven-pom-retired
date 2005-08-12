@@ -20,8 +20,8 @@ import org.apache.maven.continuum.execution.AbstractBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ShellProject;
 
 import java.io.File;
 
@@ -54,27 +54,24 @@ public class ShellBuildExecutor
     // ContinuumBuilder implementation
     // ----------------------------------------------------------------------
 
-    public synchronized ContinuumBuildExecutionResult build( ContinuumProject p, File buildOutput )
+    public synchronized ContinuumBuildExecutionResult build( ContinuumProject project, BuildDefinition buildDefinition,
+                                                             File buildOutput )
         throws ContinuumBuildExecutorException
     {
-        ShellProject project = (ShellProject) p;
-
-        String executable = project.getExecutable();
-
-        return executeShellCommand( project, executable, project.getCommandLineArguments(), buildOutput );
-    }
-
-    public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject p )
-        throws ContinuumBuildExecutorException
-    {
-        ShellProject project = (ShellProject) p;
-
-        String executable = project.getExecutable();
+        // TODO: this should be validated earlier?
+        String executable = buildDefinition.getBuildFile();
 
         if ( new File( executable ).isAbsolute() )
         {
             throw new ContinuumBuildExecutorException(
                 "The shell script must be a relative path. " + "It will be relative to the checkout" );
         }
+
+        return executeShellCommand( project, executable, buildDefinition.getArguments(), buildOutput );
+    }
+
+    public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
+        throws ContinuumBuildExecutorException
+    {
     }
 }
