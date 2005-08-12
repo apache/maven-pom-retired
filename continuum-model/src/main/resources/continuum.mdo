@@ -363,6 +363,7 @@
         </field>
         <field>
           <name>id</name>
+          <!--buildnumber?-->
           <version>1.0.0</version>
           <type>String</type>
           <identifier>true</identifier>
@@ -378,9 +379,9 @@
           -->
         </field>
         <field>
-          <name>forced</name>
+          <name>trigger</name>
           <version>1.0.0</version>
-          <type>boolean</type>
+          <type>int</type>
         </field>
         <field>
           <name>startTime</name>

@@ -16,18 +16,18 @@ package org.apache.maven.continuum.it;
  * limitations under the License.
  */
 
-import java.io.IOException;
-import java.io.File;
-import java.util.Map;
-
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-
+import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -51,18 +51,14 @@ public class MavenTwoIntegrationTest
 
         progress( "Adding Maven 2 project" );
 
-        String projectId = getProjectId( continuum.addMavenTwoProject( "file:" + root.getAbsolutePath() + "/pom.xml" ) );
+        String projectId = getProjectId(
+            continuum.addMavenTwoProject( "file:" + root.getAbsolutePath() + "/pom.xml" ) );
 
         waitForSuccessfulCheckout( projectId );
 
         ContinuumProject project = continuum.getProject( projectId );
 
-        assertProject( projectId,
-                       "Maven 2 Project",
-                       "2.0-SNAPSHOT",
-                       "-N -B",
-                       MavenTwoBuildExecutor.ID,
-                       project );
+        assertProject( projectId, "Maven 2 Project", "2.0-SNAPSHOT", "-N -B", MavenTwoBuildExecutor.ID, project );
 
         assertEquals( "project.notifiers.size", 2, project.getNotifiers().size() );
 
@@ -71,7 +67,7 @@ public class MavenTwoIntegrationTest
 
         //assertEquals( "project.notifiers.size", 1, project.getNotifiers().size() );
 
-        Map configuration = ((ContinuumNotifier) project.getNotifiers().get( 0 )).getConfiguration();
+        Map configuration = ( (ContinuumNotifier) project.getNotifiers().get( 0 ) ).getConfiguration();
 
         assertEquals( "project.notifiers[1].configuration.size", 1, configuration.size() );
 
@@ -101,7 +97,7 @@ public class MavenTwoIntegrationTest
 
         ContinuumBuild build = assertSuccessfulMaven2Build( buildId );
 
-        assertTrue( "The 'build forced' flag wasn't true", build.isForced() );
+        assertEquals( "The 'build forced' flag wasn't true", ContinuumProjectState.TRIGGER_FORCED, build.getTrigger() );
 
         removeProject( projectId );
     }
@@ -113,40 +109,20 @@ public class MavenTwoIntegrationTest
 
         deleteAndCreateDirectory( basedir );
 
-        FileUtils.fileWrite( new File( basedir, "pom.xml" ).getAbsolutePath(),
-            "<project>\n" +
-            "  <modelVersion>4.0.0</modelVersion>\n" +
-            "  <groupId>continuum</groupId>\n" +
-            "  <artifactId>" + artifactId + "</artifactId>\n" +
-            "  <version>2.0-SNAPSHOT</version>\n" +
-            "  <name>Maven 2 Project</name>\n" +
-            "  <ciManagement>\n" +
-            "    <notifiers>\n" +
-            "      <notifier>\n" +
-            "        <type>mail</type>\n" +
-            "        <configuration>\n" +
-            "          <address>" + getEmail() + "</address>\n" +
-            "        </configuration>\n" +
-            "      </notifier>\n" +
-            "      <notifier>\n" +
-            "        <type>irc</type>\n" +
-            "        <configuration>\n" +
-            "          <host>irc.codehaus.org</host>\n" +
-            "          <port>6667</port>\n" +
-            "          <channel>#test</channel>\n" +
-            "        </configuration>\n" +
-            "      </notifier>\n" +
-            "    </notifiers>\n" +
-            "  </ciManagement>\n" +
-            "  <scm>\n" +
-            "    <connection>" + makeScmUrl( "cvs", cvsRoot, artifactId ) + "</connection>\n" +
-            "  </scm>\n" +
-            "</project>" );
+        FileUtils.fileWrite( new File( basedir, "pom.xml" ).getAbsolutePath(), "<project>\n" +
+            "  <modelVersion>4.0.0</modelVersion>\n" + "  <groupId>continuum</groupId>\n" + "  <artifactId>" +
+            artifactId + "</artifactId>\n" + "  <version>2.0-SNAPSHOT</version>\n" +
+            "  <name>Maven 2 Project</name>\n" + "  <ciManagement>\n" + "    <notifiers>\n" + "      <notifier>\n" +
+            "        <type>mail</type>\n" + "        <configuration>\n" + "          <address>" + getEmail() +
+            "</address>\n" + "        </configuration>\n" + "      </notifier>\n" + "      <notifier>\n" +
+            "        <type>irc</type>\n" + "        <configuration>\n" + "          <host>irc.codehaus.org</host>\n" +
+            "          <port>6667</port>\n" + "          <channel>#test</channel>\n" + "        </configuration>\n" +
+            "      </notifier>\n" + "    </notifiers>\n" + "  </ciManagement>\n" + "  <scm>\n" + "    <connection>" +
+            makeScmUrl( "cvs", cvsRoot, artifactId ) + "</connection>\n" + "  </scm>\n" + "</project>" );
 
         assertTrue( new File( basedir + "/src/main/java" ).mkdirs() );
 
-        FileUtils.fileWrite( new File( basedir + "/src/main/java/Foo.java" ).getAbsolutePath(),
-                             "class Foo { }" );
+        FileUtils.fileWrite( new File( basedir + "/src/main/java/Foo.java" ).getAbsolutePath(), "class Foo { }" );
 
         cvsImport( basedir, artifactId, getCvsRoot() );
     }
@@ -157,7 +133,7 @@ public class MavenTwoIntegrationTest
         {
             getContinuum().removeNotifier( projectId, notifierType );
         }
-        catch( Exception e )
+        catch ( Exception e )
         {
             e.printStackTrace();
 

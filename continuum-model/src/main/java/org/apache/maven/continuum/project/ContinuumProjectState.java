@@ -68,6 +68,9 @@ public class ContinuumProjectState
     // TODO: maybe move these to another class
     public static final int TRIGGER_FORCED = 1;
 
+    // TODO: remove
+    public static final int TRIGGER_UNKNOWN = 0;
+
     protected ContinuumProjectState( String name )
     {
         this.name = name;

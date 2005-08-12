@@ -43,16 +43,24 @@ public class DefaultBuildController
     extends AbstractLogEnabled
     implements BuildController
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ContinuumStore store;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ContinuumNotificationDispatcher notifierDispatcher;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ActionManager actionManager;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private WorkingDirectoryService workingDirectoryService;
 
     // ----------------------------------------------------------------------
@@ -107,9 +115,8 @@ public class DefaultBuildController
             {
                 actionManager.lookup( "check-working-directory" ).execute( actionContext );
 
-                boolean workingDirectoryExists =
-                    AbstractContinuumAction.getBoolean( actionContext,
-                                                        AbstractContinuumAction.KEY_WORKING_DIRECTORY_EXISTS );
+                boolean workingDirectoryExists = AbstractContinuumAction.getBoolean( actionContext,
+                                                                                     AbstractContinuumAction.KEY_WORKING_DIRECTORY_EXISTS );
 
                 if ( workingDirectoryExists )
                 {
@@ -124,17 +131,18 @@ public class DefaultBuildController
 
                     ScmResult checkOutScmResult = AbstractContinuumAction.getCheckoutResult( actionContext, null );
 
-                    String checkoutErrorMessage = AbstractContinuumAction.getCheckoutErrorMessage( actionContext, null );
+                    String checkoutErrorMessage = AbstractContinuumAction.getCheckoutErrorMessage( actionContext,
+                                                                                                   null );
 
-                    String checkoutErrorException = AbstractContinuumAction.getCheckoutErrorException( actionContext, null );
+                    String checkoutErrorException = AbstractContinuumAction.getCheckoutErrorException( actionContext,
+                                                                                                       null );
 
                     // ----------------------------------------------------------------------
                     // Check to see if there was a error while checking out the project
                     // ----------------------------------------------------------------------
 
                     if ( !StringUtils.isEmpty( checkoutErrorMessage ) ||
-                         !StringUtils.isEmpty( checkoutErrorException ) ||
-                         checkOutScmResult == null )
+                        !StringUtils.isEmpty( checkoutErrorException ) || checkOutScmResult == null )
                     {
                         ContinuumBuild build = makeBuildResult( scmResult, startTime, forced );
 
@@ -157,7 +165,7 @@ public class DefaultBuildController
                         buildId = storeBuild( project, build ).getId();
 
                         return;
-                     }
+                    }
 
                     actionContext.put( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT, checkOutScmResult );
                 }
@@ -190,11 +198,15 @@ public class DefaultBuildController
 
                     if ( result != null )
                     {
-                        error += "Provider message: " + StringUtils.clean( result.getProviderMessage() ) + System.getProperty( "line.separator" );
+                        error += "Provider message: " + StringUtils.clean( result.getProviderMessage() ) +
+                            System.getProperty( "line.separator" );
                         error += "Command output: " + System.getProperty( "line.separator" );
-                        error += "-------------------------------------------------------------------------------" + System.getProperty( "line.separator" );
-                        error += StringUtils.clean( result.getCommandOutput() ) + System.getProperty( "line.separator" );
-                        error += "-------------------------------------------------------------------------------" + System.getProperty( "line.separator" );
+                        error += "-------------------------------------------------------------------------------" +
+                            System.getProperty( "line.separator" );
+                        error += StringUtils.clean( result.getCommandOutput() ) +
+                            System.getProperty( "line.separator" );
+                        error += "-------------------------------------------------------------------------------" +
+                            System.getProperty( "line.separator" );
                     }
 
                     error += "Exception:" + System.getProperty( "line.separator" );
@@ -253,15 +265,14 @@ public class DefaultBuildController
         return build;
     }
 
-    private ContinuumBuild makeBuildResult( ScmResult scmResult,
-                                            long startTime,
-                                            boolean forced )
+    private ContinuumBuild makeBuildResult( ScmResult scmResult, long startTime, boolean forced )
     {
         ContinuumBuild build = new ContinuumBuild();
 
         build.setState( ContinuumProjectState.ERROR );
 
-        build.setForced( forced );
+        // TODO: set trigger properly
+        build.setTrigger( forced ? ContinuumProjectState.TRIGGER_FORCED : ContinuumProjectState.TRIGGER_UNKNOWN );
 
         build.setStartTime( startTime );
 

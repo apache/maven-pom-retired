@@ -65,9 +65,7 @@ public class ExecuteBuilderContinuumAction
         // This is really a precondition for this action to execute
         // ----------------------------------------------------------------------
 
-        if ( scmResult.getFiles().size() == 0 &&
-             !forced &&
-             !isNew( project ) )
+        if ( scmResult.getFiles().size() == 0 && !forced && !isNew( project ) )
         {
             getLogger().info( "No files updated, not building. Project id '" + project.getId() + "'." );
 
@@ -84,7 +82,8 @@ public class ExecuteBuilderContinuumAction
 
         build.setState( ContinuumProjectState.BUILDING );
 
-        build.setForced( forced );
+        // TODO: set trigger properly
+        build.setTrigger( forced ? ContinuumProjectState.TRIGGER_FORCED : ContinuumProjectState.TRIGGER_UNKNOWN );
 
         build.setScmResult( scmResult );
 
@@ -106,12 +105,11 @@ public class ExecuteBuilderContinuumAction
 
             ContinuumBuildExecutionResult result = buildExecutor.build( project, buildOutputFile );
 
-            build.setState( result.getExitCode() == 0 ?
-                            ContinuumProjectState.OK : ContinuumProjectState.FAILED );
+            build.setState( result.getExitCode() == 0 ? ContinuumProjectState.OK : ContinuumProjectState.FAILED );
 
             build.setExitCode( result.getExitCode() );
         }
-        catch( Throwable e )
+        catch ( Throwable e )
         {
             build.setState( ContinuumProjectState.ERROR );
 

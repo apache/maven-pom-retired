@@ -20,6 +20,7 @@ import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.ScmFile;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.codehaus.plexus.mailsender.MailMessage;
@@ -172,7 +173,7 @@ public class MailContinuumNotifierTest
 
         build.setState( state );
 
-        build.setForced( true );
+        build.setTrigger( ContinuumProjectState.TRIGGER_FORCED );
 
         build.setExitCode( 10 );
 
