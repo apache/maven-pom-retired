@@ -603,35 +603,11 @@
           <type>String</type>
         </field>
         <field>
-          <name>issueManagementUrl</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>scmUrl</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>workingDirectory</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
           <name>projects</name>
           <version>1.0.0</version>
           <type>Set</type>
           <association stash.part="false">
             <type>ContinuumProject</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>buildSettings</name>
-          <version>1.0.0</version>
-          <type>Set</type>
-          <association stash.part="false">
-            <type>ContinuumBuildSettings</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
@@ -677,15 +653,6 @@
           <name>cronExpression</name>
           <version>1.0.0</version>
           <type>String</type>
-        </field>
-        <field>
-          <name>projectGroups</name>
-          <version>1.0.0</version>
-          <type>Set</type>
-          <association stash.part="false">
-            <type>ContinuumProjectGroup</type>
-            <multiplicity>*</multiplicity>
-          </association>
         </field>
       </fields>
     </class>

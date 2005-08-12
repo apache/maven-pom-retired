@@ -26,7 +26,6 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.utils.ContinuumUtils;
-import org.apache.maven.model.IssueManagement;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -211,6 +210,7 @@ public class MavenTwoContinuumProjectBuilder
 
         projectGroup.setUrl( mavenProject.getUrl() );
 
+/*
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
@@ -226,6 +226,7 @@ public class MavenTwoContinuumProjectBuilder
 
         projectGroup.setIssueManagementUrl( issueManagementUrl );
 
+*/
         return projectGroup;
     }
 }

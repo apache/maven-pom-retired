@@ -146,19 +146,11 @@
       <field name="name" persistence-modifier="persistent"/>
       <field name="description" persistence-modifier="persistent"/>
       <field name="url" persistence-modifier="persistent"/>
-      <field name="issueManagementUrl" persistence-modifier="persistent"/>
-      <field name="scmUrl" persistence-modifier="persistent"/>
-      <field name="workingDirectory" persistence-modifier="persistent"/>
       <field name="projects" persistence-modifier="persistent" mapped-by="projectGroup">
         <collection element-type="ContinuumProject"/>
       </field>
-      <field name="buildSettings" persistence-modifier="persistent" table="pg_build_settings">
-        <collection element-type="ContinuumBuildSettings"/>
-        <join/>
-      </field>
       <fetch-group name="project-group-detail">
         <field name="projects"/>
-        <field name="buildSettings"/>
       </fetch-group>
     </class>
 
@@ -171,12 +163,6 @@
       <field name="scmMode" persistence-modifier="persistent"/>
       <field name="jdkVersion" persistence-modifier="persistent"/>
       <field name="cronExpression" persistence-modifier="persistent"/>
-      <field name="projectGroups" persistence-modifier="persistent" mapped-by="buildSettings">
-        <collection element-type="ContinuumProjectGroup"/>
-      </field>
-      <fetch-group name="build-settings-detail">
-        <field name="projectGroups"/>
-      </fetch-group>
     </class>
 
   </package>

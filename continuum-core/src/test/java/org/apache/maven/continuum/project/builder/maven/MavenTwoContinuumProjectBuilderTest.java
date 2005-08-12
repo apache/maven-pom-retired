@@ -16,21 +16,20 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.codehaus.plexus.PlexusTestCase;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.apache.maven.continuum.project.ContinuumNotifier;
-import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-
-import org.codehaus.plexus.PlexusTestCase;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -42,8 +41,8 @@ public class MavenTwoContinuumProjectBuilderTest
     public void testGetEmailAddressWhenTypeIsSetToEmail()
         throws Exception
     {
-        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder)
-            lookup( ContinuumProjectBuilder.ROLE, MavenTwoContinuumProjectBuilder.ID );
+        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE,
+                                                                                   MavenTwoContinuumProjectBuilder.ID );
 
         File pom = getTestFile( "src/test/repository/maven-builder-helper-1.xml" );
 
@@ -57,13 +56,13 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getProjects().size() );
 
-        MavenTwoProject project = ( MavenTwoProject ) result.getProjects().get( 0 );
+        MavenTwoProject project = (MavenTwoProject) result.getProjects().get( 0 );
 
         assertNotNull( project.getNotifiers() );
 
         assertEquals( 1, project.getNotifiers().size() );
 
-        ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get(0);
+        ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get( 0 );
 
         assertEquals( "mail", notifier.getType() );
 
@@ -73,8 +72,8 @@ public class MavenTwoContinuumProjectBuilderTest
     public void testGetEmailAddressWhenTypeIsntSet()
         throws Exception
     {
-        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder)
-            lookup( ContinuumProjectBuilder.ROLE, MavenTwoContinuumProjectBuilder.ID );
+        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE,
+                                                                                   MavenTwoContinuumProjectBuilder.ID );
 
         File pom = getTestFile( "src/test/repository/maven-builder-helper-2.xml" );
 
@@ -94,7 +93,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, project.getNotifiers().size() );
 
-        ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get(0);
+        ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get( 0 );
 
         assertEquals( "mail", notifier.getType() );
 
@@ -104,8 +103,8 @@ public class MavenTwoContinuumProjectBuilderTest
     public void testCreateProjectsWithModules()
         throws Exception
     {
-        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder)
-            lookup( ContinuumProjectBuilder.ROLE, MavenTwoContinuumProjectBuilder.ID );
+        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE,
+                                                                                   MavenTwoContinuumProjectBuilder.ID );
 
         String url = getTestFile( "src/test/resources/projects/continuum/pom.xml" ).toURL().toExternalForm();
 
@@ -148,9 +147,6 @@ public class MavenTwoContinuumProjectBuilderTest
         assertEquals( "projectGroup.description", "Continuum Project Description", projectGroup.getDescription() );
 
         assertEquals( "projectGroup.url", "http://cvs.continuum.codehaus.org/", projectGroup.getUrl() );
-
-        assertEquals( "projectGroup.issueManagementUrl", "http://jira.codehaus.org/browse/CONTINUUM",
-                      projectGroup.getIssueManagementUrl() );
 
         // ----------------------------------------------------------------------
         // Assert the projects built

@@ -45,7 +45,6 @@ import javax.jdo.Transaction;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -709,19 +708,6 @@ public class JdoContinuumStore
             Object id = pm.newObjectIdInstance( ContinuumBuildSettings.class, buildSettingsId );
 
             ContinuumBuildSettings buildSettings = (ContinuumBuildSettings) pm.getObjectById( id );
-
-            // remove references of this buildSettings object in the project groups
-            if ( buildSettings.getProjectGroups() != null && buildSettings.getProjectGroups().size() > 0 )
-            {
-                Set projects = buildSettings.getProjectGroups();
-
-                for ( Iterator i = projects.iterator(); i.hasNext(); )
-                {
-                    ContinuumProjectGroup project = (ContinuumProjectGroup) i.next();
-
-                    project.getBuildSettings().remove( buildSettings );
-                }
-            }
 
             pm.deletePersistent( buildSettings );
 

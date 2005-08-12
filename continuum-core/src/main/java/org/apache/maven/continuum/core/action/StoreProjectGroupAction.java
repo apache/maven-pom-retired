@@ -2,10 +2,9 @@ package org.apache.maven.continuum.core.action;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 
-import java.io.File;
 import java.util.Map;
 
 /**
@@ -29,23 +28,6 @@ public class StoreProjectGroupAction
         projectGroup = store.addProjectGroup( projectGroup );
 
         context.put( KEY_PROJECT_GROUP_ID, projectGroup.getId() );
-
-        // ----------------------------------------------------------------------
-        // Set the working directory
-        // ----------------------------------------------------------------------
-
-        File projectWorkingDirectory = new File( getWorkingDirectory( context ), projectGroup.getId() );
-
-        if ( !projectWorkingDirectory.exists() && !projectWorkingDirectory.mkdirs() )
-        {
-            throw new ContinuumException( "Could not make the working directory for the project " +
-                                          "'" + projectWorkingDirectory.getAbsolutePath() + "'." );
-        }
-
-        // The working directory is created based on the project id so we can always
-        // figure out what it is.
-
-        projectGroup.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
 
         store.updateProjectGroup( projectGroup );
     }
