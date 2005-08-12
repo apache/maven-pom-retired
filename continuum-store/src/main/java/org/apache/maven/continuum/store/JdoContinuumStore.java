@@ -374,7 +374,7 @@ public class JdoContinuumStore
 
             ContinuumProject project = getContinuumProject( pm, projectId, false );
 
-            ScmResult scmResult = project.getCheckoutResult();
+            ScmResult scmResult = project.getScmResult();
 
             if ( scmResult == null )
             {
