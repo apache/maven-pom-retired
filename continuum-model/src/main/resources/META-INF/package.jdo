@@ -77,9 +77,8 @@
         <join/>
       </field>
     </class>
-    <class name="ContinuumDeveloper" detachable="true" identity-type="application"
-           objectid-class="javax.jdo.identity.StringIdentity" table="developer">
-      <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
+    <class name="ContinuumDeveloper" detachable="true" table="developer">
+      <field name="scmId" persistence-modifier="persistent"/>
       <field name="name" persistence-modifier="persistent"/>
       <field name="email" persistence-modifier="persistent"/>
     </class>
@@ -126,7 +125,7 @@
       <field name="project" persistence-modifier="persistent" null-value="exception" default-fetch-group="false"/>
       <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
       <field name="state" persistence-modifier="persistent"/>
-      <field name="forced" persistence-modifier="persistent"/>
+      <field name="trigger" persistence-modifier="persistent"/>
       <field name="startTime" persistence-modifier="persistent"/>
       <field name="endTime" persistence-modifier="persistent"/>
       <field name="error" persistence-modifier="persistent">
@@ -173,21 +172,17 @@
       </field>
       <field name="commandOutput" persistence-modifier="persistent">
       </field>
-      <field name="files" persistence-modifier="persistent" default-fetch-group="true">
-        <collection element-type="ScmFile" dependent-element="true"/>
-      </field>
       <field name="changes" persistence-modifier="persistent" default-fetch-group="true">
         <collection element-type="ChangeSet" dependent-element="true"/>
       </field>
-    </class>
-    <class name="ScmFile" detachable="true" identity-type="datastore" table="scm_file">
-      <field name="path" persistence-modifier="persistent"/>
     </class>
     <class name="ChangeSet" detachable="true" identity-type="datastore" table="change_set">
       <field name="author" persistence-modifier="persistent"/>
       <field name="comment" persistence-modifier="persistent"/>
       <field name="date" persistence-modifier="persistent"/>
-      <field name="file" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
+      <field name="files" persistence-modifier="persistent">
+        <collection dependent-element="true" element-type="ChangeFile"/>
+      </field>
     </class>
     <class name="ChangeFile" detachable="true" identity-type="datastore" table="change_file">
       <field name="name" persistence-modifier="persistent"/>
