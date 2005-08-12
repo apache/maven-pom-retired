@@ -31,12 +31,15 @@
       </field>
       <field name="developers" persistence-modifier="persistent">
         <collection element-type="org.apache.maven.continuum.model.project.ProjectDeveloper" dependent-element="true"/>
+        <join/>
       </field>
       <field name="notifiers" persistence-modifier="persistent">
         <collection element-type="org.apache.maven.continuum.model.project.ProjectNotifier" dependent-element="true"/>
+        <join/>
       </field>
       <field name="dependencies" persistence-modifier="persistent">
         <collection element-type="org.apache.maven.continuum.model.project.ProjectDependency" dependent-element="true"/>
+        <join/>
       </field>
 
       <field name="projectGroup" persistence-modifier="persistent"/>
