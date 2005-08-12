@@ -101,7 +101,7 @@ public class ExecuteBuilderContinuumAction
         {
             notifier.runningGoals( project, build );
 
-            File buildOutputFile = store.getBuildOutputFile( buildId );
+            File buildOutputFile = store.getBuildOutputFile( buildId, project.getId() );
 
             ContinuumBuildExecutionResult result = buildExecutor.build( project, buildOutputFile );
 

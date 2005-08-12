@@ -70,7 +70,7 @@ public class ShellIntegrationTest
         assertProject( projectId, "Shell Project", "3.0", "", "shell", project );
         progress( "Building Shell project" );
         String buildId = buildProject( projectId, false ).getId();
-        assertSuccessfulShellBuild( buildId, "" );
+        assertSuccessfulShellBuild( buildId, projectId, "" );
 
         // Test project reconfiguration
         // Test that a project will be built after a changed file is committed
@@ -95,7 +95,7 @@ public class ShellIntegrationTest
         assertEquals( "Updated command line arguments doesn't match", "a b", bd.getArguments() );
 
         buildId = buildProject( projectId, false ).getId();
-        assertSuccessfulShellBuild( buildId, "a" + EOL + "b" + EOL );
+        assertSuccessfulShellBuild( buildId, projectId, "a" + EOL + "b" + EOL );
 
         removeProject( projectId );
     }

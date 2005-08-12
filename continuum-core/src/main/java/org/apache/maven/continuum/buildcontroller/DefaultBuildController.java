@@ -125,7 +125,7 @@ public class DefaultBuildController
                 else
                 {
                     actionContext.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY,
-                                       workingDirectoryService.getWorkingDirectory( project ) );
+                                       workingDirectoryService.getWorkingDirectory( project ).getAbsolutePath() );
 
                     actionManager.lookup( "checkout-project" ).execute( actionContext );
 

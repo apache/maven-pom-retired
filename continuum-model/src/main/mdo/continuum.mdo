@@ -925,14 +925,6 @@
           any builder specific objects/variables.</description>
         ]]></description>
       <fields>
-        <field>
-          <name>project</name>
-          <version>1.0.0</version>
-          <required>true</required>
-          <association stash.part="false">
-            <type>ContinuumProject</type>
-          </association>
-        </field>
         <!-- TODO: this is often used as a build number - it shouldn't be user facing -->
         <field>
           <name>id</name>

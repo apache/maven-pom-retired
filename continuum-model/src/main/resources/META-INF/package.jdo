@@ -28,6 +28,7 @@
       <!-- Collections -->
       <field name="builds" persistence-modifier="persistent">
         <collection element-type="ContinuumBuild" dependent-element="true"/>
+        <join/>
       </field>
       <field name="developers" persistence-modifier="persistent">
         <collection element-type="org.apache.maven.continuum.model.project.ProjectDeveloper" dependent-element="true"/>
@@ -55,6 +56,7 @@
         <field name="notifiers"/>
         <field name="dependencies"/>
         <field name="projectGroup"/>
+        <field name="buildDefinitions"/>
       </fetch-group>
     </class>
 
@@ -85,7 +87,6 @@
     </class>
     <class name="ContinuumBuild" detachable="true" identity-type="application"
            objectid-class="javax.jdo.identity.StringIdentity" table="build">
-      <field name="project" persistence-modifier="persistent" null-value="exception" default-fetch-group="false"/>
       <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
       <field name="state" persistence-modifier="persistent"/>
       <field name="trigger" persistence-modifier="persistent"/>

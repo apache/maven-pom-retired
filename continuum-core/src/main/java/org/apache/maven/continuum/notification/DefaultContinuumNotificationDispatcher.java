@@ -117,7 +117,7 @@ public class DefaultContinuumNotificationDispatcher
 
                 if ( build.getEndTime() != 0 )
                 {
-                    context.put( CONTEXT_BUILD_OUTPUT, store.getBuildOutput( build.getId() ) );
+                    context.put( CONTEXT_BUILD_OUTPUT, store.getBuildOutput( build.getId(), project.getId() ) );
                 }
 
                 context.put( CONTEXT_UPDATE_SCM_RESULT, build.getScmResult() );

@@ -40,7 +40,10 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -271,33 +274,6 @@ public class JdoContinuumStore
         }
     }
 
-    public ContinuumProject getProjectForBuild( String buildId )
-        throws ContinuumStoreException
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            ContinuumBuild build = getContinuumBuild( pm, buildId );
-
-            String projectId = build.getProject().getId();
-
-            ContinuumProject project = getContinuumProject( pm, projectId, true );
-
-            tx.commit();
-
-            return project;
-        }
-        finally
-        {
-            rollback( tx );
-        }
-    }
-
     public ScmResult getScmResultForProject( String projectId )
         throws ContinuumStoreException
     {
@@ -344,8 +320,6 @@ public class JdoContinuumStore
             tx.begin();
 
             ContinuumProject project = getContinuumProject( pm, projectId, false );
-
-            build.setProject( project );
 
             build = (ContinuumBuild) makePersistent( pm, build, false );
 
@@ -419,6 +393,21 @@ public class JdoContinuumStore
     public Collection getBuildsForProject( String projectId, int start, int end )
         throws ContinuumStoreException
     {
+        ContinuumProject project = (ContinuumProject) getDetailedObject( ContinuumProject.class, projectId,
+                                                                         PROJECT_DETAIL_FG );
+        List builds = new ArrayList( project.getBuilds() );
+        Collections.sort( builds, new Comparator()
+        {
+            public int compare( Object o1, Object o2 )
+            {
+                ContinuumBuild b1 = (ContinuumBuild) o1;
+                ContinuumBuild b2 = (ContinuumBuild) o2;
+
+                return (int) ( ( b2 != null ? b2.getStartTime() : 0 ) - ( b1 != null ? b1.getStartTime() : 0 ) );
+            }
+        } );
+        return builds;
+/* TODO: remove - check usages and replace by project.getBuilds
         PersistenceManager pm = pmf.getPersistenceManager();
 
         Transaction tx = pm.currentTransaction();
@@ -451,6 +440,7 @@ public class JdoContinuumStore
         {
             rollback( tx );
         }
+*/
     }
 
     public List getChangedFilesForBuild( String buildId )

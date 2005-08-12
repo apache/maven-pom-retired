@@ -77,7 +77,7 @@ public class MavenTwoIntegrationTest
 
         String buildId = buildProject( projectId, false ).getId();
 
-        assertSuccessfulMaven2Build( buildId );
+        assertSuccessfulMaven2Build( buildId, projectId );
 
         progress( "Test that a build without any files changed won't execute the executor" );
 
@@ -95,7 +95,7 @@ public class MavenTwoIntegrationTest
 
         buildId = buildProject( projectId, true ).getId();
 
-        ContinuumBuild build = assertSuccessfulMaven2Build( buildId );
+        ContinuumBuild build = assertSuccessfulMaven2Build( buildId, projectId );
 
         assertEquals( "The 'build forced' flag wasn't true", ContinuumProjectState.TRIGGER_FORCED, build.getTrigger() );
 

@@ -72,7 +72,7 @@ public class AntIntegrationTest
 
         String buildId = buildProject( project.getId(), false ).getId();
 
-        assertSuccessfulAntBuild( buildId );
+        assertSuccessfulAntBuild( buildId, project.getId() );
 
         removeProject( projectId );
     }
@@ -112,7 +112,7 @@ public class AntIntegrationTest
 
         String buildId = buildProject( projectId, false ).getId();
 
-        assertSuccessfulAntBuild( buildId );
+        assertSuccessfulAntBuild( buildId, projectId );
 
         removeProject( projectId );
     }

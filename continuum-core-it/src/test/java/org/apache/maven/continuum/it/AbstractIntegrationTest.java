@@ -590,7 +590,7 @@ public abstract class AbstractIntegrationTest
         return build;
     }
 
-    public ContinuumBuild assertSuccessfulBuild( String buildId )
+    public ContinuumBuild assertSuccessfulBuild( String buildId, String projectId )
         throws Exception
     {
         ContinuumBuild build = waitForBuild( buildId );
@@ -602,37 +602,37 @@ public abstract class AbstractIntegrationTest
             line();
             print( "Output" );
             line();
-            print( getStore().getBuildOutput( buildId ) );
+            print( getStore().getBuildOutput( buildId, projectId ) );
             line();
 
             fail( "The build was not successful" );
         }
 
-        String output = getStore().getBuildOutput( buildId );
+        String output = getStore().getBuildOutput( buildId, projectId );
 
         assertNotNull( "Output was null.", output );
 
         return build;
     }
 
-    public ContinuumBuild assertSuccessfulMaven1Build( String buildId )
+    public ContinuumBuild assertSuccessfulMaven1Build( String buildId, String projectId )
         throws Exception
     {
-        return assertSuccessfulAntBuild( buildId );
+        return assertSuccessfulAntBuild( buildId, projectId );
     }
 
-    public ContinuumBuild assertSuccessfulMaven2Build( String buildId )
+    public ContinuumBuild assertSuccessfulMaven2Build( String buildId, String projectId )
         throws Exception
     {
-        return assertSuccessfulMaven1Build( buildId );
+        return assertSuccessfulMaven1Build( buildId, projectId );
     }
 
-    public ContinuumBuild assertSuccessfulAntBuild( String buildId )
+    public ContinuumBuild assertSuccessfulAntBuild( String buildId, String projectId )
         throws Exception
     {
-        ContinuumBuild build = assertSuccessfulBuild( buildId );
+        ContinuumBuild build = assertSuccessfulBuild( buildId, projectId );
 
-        String output = getStore().getBuildOutput( buildId );
+        String output = getStore().getBuildOutput( buildId, projectId );
 
         if ( output.indexOf( "BUILD SUCCESSFUL" ) < 0 )
         {
@@ -643,12 +643,12 @@ public abstract class AbstractIntegrationTest
         return build;
     }
 
-    public ContinuumBuild assertSuccessfulShellBuild( String buildId, String expectedStandardOutput )
+    public ContinuumBuild assertSuccessfulShellBuild( String buildId, String projectId, String expectedStandardOutput )
         throws Exception
     {
-        ContinuumBuild build = assertSuccessfulBuild( buildId );
+        ContinuumBuild build = assertSuccessfulBuild( buildId, projectId );
 
-        String output = getStore().getBuildOutput( buildId );
+        String output = getStore().getBuildOutput( buildId, projectId );
 
         assertEquals( "Standard output didn't contain the expected output.", expectedStandardOutput, output );
 

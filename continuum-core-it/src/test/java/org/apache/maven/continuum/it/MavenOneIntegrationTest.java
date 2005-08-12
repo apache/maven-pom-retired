@@ -16,17 +16,16 @@ package org.apache.maven.continuum.it;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.cli.CommandLineException;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
-import org.apache.maven.continuum.project.ContinuumProject;
-
-import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.cli.CommandLineException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -58,7 +57,7 @@ public class MavenOneIntegrationTest
 
         assertProject( projectId, "Maven 1 Project", "1.0", "", MavenOneBuildExecutor.ID, project );
 
-        assertCheckedOutFiles( project, new String[]{ "/project.xml", "/src/main/java/Foo.java" } );
+        assertCheckedOutFiles( project, new String[]{"/project.xml", "/src/main/java/Foo.java"} );
 
         // ----------------------------------------------------------------------
         //
@@ -68,7 +67,7 @@ public class MavenOneIntegrationTest
 
         String buildId = buildProject( projectId, false ).getId();
 
-        assertSuccessfulMaven1Build( buildId );
+        assertSuccessfulMaven1Build( buildId, projectId );
 
         // ----------------------------------------------------------------------
         //
@@ -102,21 +101,17 @@ public class MavenOneIntegrationTest
         removeProject( project.getId() );
     }
 
-    private void initMaven1Project( File root,
-                                    String artifactId, String scm,
-                                    File scmRoot )
+    private void initMaven1Project( File root, String artifactId, String scm, File scmRoot )
         throws IOException, CommandLineException
     {
         deleteAndCreateDirectory( root );
 
-        writeMavenOnePom( new File( root, "/project.xml" ),
-                          artifactId,
-                          makeScmUrl( scm, scmRoot, artifactId ),
+        writeMavenOnePom( new File( root, "/project.xml" ), artifactId, makeScmUrl( scm, scmRoot, artifactId ),
                           getEmail() );
 
         assertTrue( new File( root, "/src/main/java" ).mkdirs() );
 
-        PrintWriter writer = new PrintWriter( new FileWriter( new File( root, "/src/main/java/Foo.java" )  ) );
+        PrintWriter writer = new PrintWriter( new FileWriter( new File( root, "/src/main/java/Foo.java" ) ) );
         writer.write( "class Foo { }" );
         writer.close();
 

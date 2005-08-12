@@ -59,9 +59,6 @@ public interface ContinuumStore
     ContinuumProject getProject( String projectId )
         throws ContinuumStoreException;
 
-    ContinuumProject getProjectForBuild( String buildId )
-        throws ContinuumStoreException;
-
     ScmResult getScmResultForProject( String projectId )
         throws ContinuumStoreException;
 
@@ -74,7 +71,7 @@ public interface ContinuumStore
     ContinuumBuild getBuild( String buildId )
         throws ContinuumStoreException;
 
-    String getBuildOutput( String buildId )
+    String getBuildOutput( String buildId, String projectId )
         throws ContinuumStoreException;
 
     ContinuumBuild getLatestBuildForProject( String projectId )
@@ -86,7 +83,7 @@ public interface ContinuumStore
     List getChangedFilesForBuild( String buildId )
         throws ContinuumStoreException;
 
-    File getBuildOutputFile( String buildId )
+    File getBuildOutputFile( String buildId, String projectId )
         throws ContinuumStoreException;
 
     void removeNotifier( ProjectNotifier notifier )
