@@ -16,8 +16,6 @@ package org.apache.maven.continuum.configuration;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.profile.ContinuumJdk;
-
 import java.io.File;
 import java.util.Map;
 
@@ -43,14 +41,6 @@ public interface ConfigurationService
 
     String CONFIGURATION_WORKING_DIRECTORY = "working-directory";
 
-    String CONFIGURATION_JDKS = "jdks";
-
-    String CONFIGURATION_JDK = "jdk";
-
-    String CONFIGURATION_JDK_VERSION = "jdk-version";
-
-    String CONFIGURATION_JDK_HOME = "jdk-home";
-
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -70,10 +60,6 @@ public interface ConfigurationService
     File getWorkingDirectory();
 
     void setWorkingDirectory( File workingDirectory );
-
-    Map getJdks();
-
-    void addJdk( ContinuumJdk jdk );
 
     void setJdks( Map jdks );
 

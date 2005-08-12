@@ -16,7 +16,6 @@ package org.apache.maven.continuum.initialization;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.build.settings.BuildSettingsConstants;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
@@ -60,7 +59,9 @@ public class DefaultContinuumInitializer
     //  Requirements
     // ----------------------------------------------------------------------
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ContinuumStore store;
 
     // ----------------------------------------------------------------------
@@ -100,16 +101,7 @@ public class DefaultContinuumInitializer
 
         buildSettings.setName( DEFAULT_BUILD_SETTINGS_NAME );
 
-        buildSettings.setNotificationScheme( BuildSettingsConstants.NOTIFICATION_STRATEGY_ON_FAILURE );
-
-        buildSettings.setLabelingScheme( BuildSettingsConstants.LABELLING_STRATEGY_NEVER );
-
-        buildSettings.setScmMode( BuildSettingsConstants.SCM_MODE_UPDATE );
-
         buildSettings.setCronExpression( DEFAULT_BUILD_SETTINGS_CRON_EXPRESSION );
-
-        // Setting the jdk version to null means fall back to the default JAVA_HOME.
-        buildSettings.setJdkVersion( null );
 
         return buildSettings;
     }

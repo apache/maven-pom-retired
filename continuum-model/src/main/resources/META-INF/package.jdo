@@ -138,27 +138,9 @@
       </fetch-group>
     </class>
 
-    <class name="ContinuumBuildSettings" detachable="true" identity-type="application"
-           objectid-class="javax.jdo.identity.StringIdentity" table="build_settings">
-      <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
+    <class name="ContinuumBuildSettings" detachable="true">
       <field name="name" persistence-modifier="persistent"/>
-      <field name="notificationScheme" persistence-modifier="persistent"/>
-      <field name="labelingScheme" persistence-modifier="persistent"/>
-      <field name="scmMode" persistence-modifier="persistent"/>
-      <field name="jdkVersion" persistence-modifier="persistent"/>
       <field name="cronExpression" persistence-modifier="persistent"/>
-    </class>
-
-  </package>
-  <!-- Profiles -->
-
-  <package name="org.apache.maven.continuum.profile">
-    <class name="ContinuumProfile" detachable="true" identity-type="datastore" table="profile">
-      <field name="jdk" persistence-modifier="persistent"/>
-    </class>
-    <class name="ContinuumJdk" detachable="true" identity-type="datastore" table="jdk">
-      <field name="version" persistence-modifier="persistent"/>
-      <field name="home" persistence-modifier="persistent"/>
     </class>
   </package>
 

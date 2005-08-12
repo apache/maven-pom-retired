@@ -16,7 +16,6 @@ package org.apache.maven.continuum.configuration;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.profile.ContinuumJdk;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -31,9 +30,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -120,21 +117,6 @@ public class DefaultConfigurationService
         this.workingDirectory = workingDirectory;
     }
 
-    public Map getJdks()
-    {
-        return jdks;
-    }
-
-    public void addJdk( ContinuumJdk jdk )
-    {
-        if ( jdks == null )
-        {
-            jdks = new TreeMap();
-        }
-
-        jdks.put( jdk.getVersion(), jdk );
-    }
-
     public void setJdks( Map jdks )
     {
         this.jdks = jdks;
@@ -181,35 +163,6 @@ public class DefaultConfigurationService
         }
 
         workingDirectory = getFile( configuration, CONFIGURATION_WORKING_DIRECTORY );
-
-        Xpp3Dom jdksElement = configuration.getChild( CONFIGURATION_JDKS );
-
-        if ( jdksElement != null )
-        {
-            jdks = new TreeMap();
-
-            Xpp3Dom[] jdkElements = jdksElement.getChildren( CONFIGURATION_JDK );
-
-            for ( int i = 0; i < jdkElements.length; i++ )
-            {
-                Xpp3Dom jdkElement = jdkElements[i];
-
-                String version = jdkElement.getChild( CONFIGURATION_JDK_VERSION ).getValue();
-
-                String home = jdkElement.getChild( CONFIGURATION_JDK_HOME ).getValue();
-
-                if ( version != null & home != null )
-                {
-                    ContinuumJdk jdk = new ContinuumJdk();
-
-                    jdk.setVersion( version );
-
-                    jdk.setHome( home );
-
-                    jdks.put( version, jdk );
-                }
-            }
-        }
     }
 
     private File getFile( Xpp3Dom configuration, String elementName )
@@ -259,28 +212,6 @@ public class DefaultConfigurationService
         {
             configuration.addChild( createFileDom( CONFIGURATION_WORKING_DIRECTORY, workingDirectory ) );
         }
-
-        if ( jdks != null )
-        {
-            Xpp3Dom jdksDom = new Xpp3Dom( CONFIGURATION_JDKS );
-
-            for ( Iterator i = jdks.keySet().iterator(); i.hasNext(); )
-            {
-                String version = (String) i.next();
-
-                ContinuumJdk jdk = (ContinuumJdk) jdks.get( version );
-
-                Xpp3Dom jdkDom = new Xpp3Dom( CONFIGURATION_JDK );
-
-                jdkDom.addChild( createDom( CONFIGURATION_JDK_VERSION, version ) );
-
-                jdkDom.addChild( createDom( CONFIGURATION_JDK_HOME, jdk.getHome() ) );
-
-                jdksDom.addChild( jdkDom );
-            }
-
-            configuration.addChild( jdksDom );
-        }
     }
 
     protected Xpp3Dom createDom( String elementName, String value )
@@ -322,7 +253,8 @@ public class DefaultConfigurationService
         }
         catch ( FileNotFoundException e )
         {
-            throw new ConfigurationLoadingException( "Specified location of configuration '" + source + "' doesn't exist." );
+            throw new ConfigurationLoadingException(
+                "Specified location of configuration '" + source + "' doesn't exist." );
         }
         catch ( IOException e )
         {

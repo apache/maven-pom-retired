@@ -1069,41 +1069,6 @@
       </fields>
     </class>
 
-    <!-- Profiles -->
-
-    <class>
-      <name>ContinuumProfile</name>
-      <packageName>org.apache.maven.continuum.profile</packageName>
-      <version>1.0.0</version>
-      <fields>
-        <field>
-          <name>jdk</name>
-          <version>1.0.0</version>
-          <association>
-            <type>ContinuumJdk</type>
-          </association>
-        </field>
-      </fields>
-    </class>
-
-    <class>
-      <name>ContinuumJdk</name>
-      <packageName>org.apache.maven.continuum.profile</packageName>
-      <version>1.0.0</version>
-      <fields>
-        <field>
-          <name>version</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>home</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-      </fields>
-    </class>
-
     <!-- New Object Model -->
 
     <class>
@@ -1155,33 +1120,7 @@
       <version>1.0.0</version>
       <fields>
         <field>
-          <name>id</name>
-          <version>1.0.0</version>
-          <type>String</type>
-          <identifier>true</identifier>
-        </field>
-        <field>
           <name>name</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>notificationScheme</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-        <field>
-          <name>labelingScheme</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-        <field>
-          <name>scmMode</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-        <field>
-          <name>jdkVersion</name>
           <version>1.0.0</version>
           <type>String</type>
         </field>

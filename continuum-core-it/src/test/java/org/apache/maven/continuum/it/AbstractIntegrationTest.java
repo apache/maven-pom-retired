@@ -30,7 +30,6 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult
 import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
-import org.apache.maven.scm.ScmFile;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.context.Context;
 import org.codehaus.plexus.util.FileUtils;
@@ -574,10 +573,10 @@ public abstract class AbstractIntegrationTest
         {
             String expectedCheckedOutFile = expectedCheckedOutFiles[i];
 
-            ScmFile actualCheckedOutFile = (ScmFile) actualCheckedOutFiles.get( i );
+            ChangeFile actualCheckedOutFile = (ChangeFile) actualCheckedOutFiles.get( i );
 
             assertEquals( "File #" + i + " doesn't match the expected path.", expectedCheckedOutFile,
-                          actualCheckedOutFile.getPath() );
+                          actualCheckedOutFile.getName() );
         }
     }
 
