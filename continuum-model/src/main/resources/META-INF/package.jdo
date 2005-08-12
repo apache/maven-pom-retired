@@ -101,21 +101,21 @@
     </class>
     <class name="MavenTwoProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
            detachable="true">
-      <inheritance strategy="superclass-table"/>
+      <inheritance strategy="new-table" />
       <field name="goals" persistence-modifier="persistent">
         <column name="M2_GOALS"/>
       </field>
     </class>
     <class name="MavenOneProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
            detachable="true">
-      <inheritance strategy="superclass-table"/>
+      <inheritance strategy="new-table" />
       <field name="goals" persistence-modifier="persistent">
         <column name="M1_GOALS"/>
       </field>
     </class>
     <class name="AntProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
            detachable="true">
-      <inheritance strategy="superclass-table"/>
+      <inheritance strategy="new-table" />
       <field name="executable" persistence-modifier="persistent">
         <column name="ANT_EXECUTABLE"/>
       </field>
@@ -123,7 +123,7 @@
     </class>
     <class name="ShellProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
            detachable="true">
-      <inheritance strategy="superclass-table"/>
+      <inheritance strategy="new-table" />
       <field name="executable" persistence-modifier="persistent">
         <column name="SHELL_EXECUTABLE"/>
       </field>
