@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.core.action;
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
@@ -19,7 +19,7 @@ public class StoreProjectGroupAction
     public void execute( Map context )
         throws ContinuumException, ContinuumStoreException
     {
-        ContinuumProjectGroup projectGroup = getUnvalidatedProjectGroup( context );
+        ProjectGroup projectGroup = getUnvalidatedProjectGroup( context );
 
         // ----------------------------------------------------------------------
         //
@@ -27,7 +27,7 @@ public class StoreProjectGroupAction
 
         projectGroup = store.addProjectGroup( projectGroup );
 
-        context.put( KEY_PROJECT_GROUP_ID, projectGroup.getId() );
+        context.put( KEY_PROJECT_GROUP_ID, Integer.toString( projectGroup.getId() ) );
 
         store.updateProjectGroup( projectGroup );
     }

@@ -32,13 +32,13 @@ import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.initialization.ContinuumInitializationException;
 import org.apache.maven.continuum.initialization.ContinuumInitializer;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
@@ -65,7 +65,6 @@ import org.codehaus.plexus.taskqueue.TaskQueueException;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
-import javax.jdo.JDOHelper;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,7 +74,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -333,27 +331,6 @@ public class DefaultContinuum
         }
     }
 
-    public void buildProjectGroup( ContinuumProjectGroup projectGroup, ContinuumBuildSettings buildSettings )
-        throws ContinuumException
-    {
-        Set projects = projectGroup.getProjects();
-
-        for ( Iterator j = projects.iterator(); j.hasNext(); )
-        {
-            ContinuumProject project = (ContinuumProject) j.next();
-
-            try
-            {
-                buildProject( project.getId(), false );
-            }
-            catch ( ContinuumException ex )
-            {
-                getLogger().error(
-                    "Could not enqueue project: " + project.getId() + " " + "('" + project.getName() + "').", ex );
-            }
-        }
-    }
-
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -599,7 +576,7 @@ public class DefaultContinuum
             throw new ContinuumException( "The project building result has to contain exactly one project group." );
         }
 
-        ContinuumProjectGroup projectGroup = (ContinuumProjectGroup) result.getProjectGroups().iterator().next();
+        ProjectGroup projectGroup = (ProjectGroup) result.getProjectGroups().iterator().next();
 
         try
         {
@@ -624,23 +601,10 @@ public class DefaultContinuum
 
                 executeAction( "store-project-group", pgContext );
 
-                String projectGroupId = AbstractContinuumAction.getProjectGroupId( pgContext );
+                int projectGroupId = AbstractContinuumAction.getProjectGroupId( pgContext );
 
                 projectGroup = store.getProjectGroup( projectGroupId );
             }
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new ContinuumException( "Error while querying for project group.", e );
-        }
-
-        try
-        {
-            System.err.println( "----------------------" );
-            System.err.println( "PRE:" );
-            System.err.println( "projectGroup count: " + store.getProjectGroups().size() );
-            System.err.println( "project count: " + store.getAllProjects().size() );
-            System.err.println( "----------------------" );
         }
         catch ( ContinuumStoreException e )
         {
@@ -658,60 +622,22 @@ public class DefaultContinuum
         {
             ContinuumProject project = (ContinuumProject) i.next();
 
-//            for ( Iterator it = result.getProjects().iterator(); it.hasNext(); )
-//            {
-//                ContinuumProject p2 = (ContinuumProject) it.next();
-//
-//                getLogger().info( "Adding project " + p2.getName() + ", project.hashCode(): " + p2.hashCode() );
-//            }
-
             project.setExecutorId( buildExecutorId );
 
             try
             {
-//                System.err.println( "=======================" );
-//                System.err.println( "before store" );
-//                System.err.println( "projectGroup.projects.size: " + store.getProjectGroup( projectGroup.getId() ).getProjects().size() );
-//                System.err.println( "projectGroup count: " + store.getProjectGroups().size() );
-//                System.err.println( "project count: " + store.getAllProjects().size() );
-//                for ( Iterator j = store.getAllProjects().iterator(); j.hasNext(); )
-//                {
-//                    project = (ContinuumProject) j.next();
-//                    System.err.println( project.getId() );
-//                }
-//                System.err.println( "=======================" );
-
-                System.err.println( "persisting " + project.getName() + ", id: " + project.getId() );
                 project = store.addProject( project );
-                System.err.println( "persisting " + project.getName() + ", id: " + project.getId() );
 
-//                dumpJdoObject( projectGroup, "project group before adding project" );
-//                dumpJdoObject( project, "project before setting project group" );
-                projectGroup.addProject( project );
-//                dumpJdoObject( projectGroup, "project group after adding project" );
-//                dumpJdoObject( project, "project after setting project group" );
+                // TODO: store operation for this instead
+//                projectGroup.addProject( project );
 
-                projectGroup = store.updateProjectGroup( projectGroup );
-
-//                System.err.println( "=======================" );
-//                System.err.println( "after store" );
-//                System.err.println( "projectGroup.projects.size: " + store.getProjectGroup( projectGroup.getId() ).getProjects().size() );
-//                System.err.println( "projectGroup count: " + store.getProjectGroups().size() );
-//                System.err.println( "project count: " + store.getAllProjects().size() );
-//                for ( Iterator j = store.getAllProjects().iterator(); j.hasNext(); )
-//                {
-//                    project = (ContinuumProject) j.next();
-//                    System.err.println( "project: id: " + project.getId() + ", name: " + project.getName() );
-//                }
-//                System.err.println( "=======================" );
+                store.updateProjectGroup( projectGroup );
             }
             catch ( ContinuumStoreException e )
             {
                 throw new ContinuumException( "crap", e );
             }
 
-//            project.setProjectGroup( projectGroup );
-//
             context = new HashMap();
 
             context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
@@ -725,34 +651,7 @@ public class DefaultContinuum
             executeAction( "add-project-to-checkout-queue", context );
         }
 
-//        try
-//        {
-//            System.err.println( "----------------------" );
-//            System.err.println( "POST:" );
-//            System.err.println( "projectGroup count: " + store.getProjectGroups().size() );
-//            System.err.println( "project count: " + store.getAllProjects().size() );
-//            System.err.println( "----------------------" );
-//        }
-//        catch ( ContinuumStoreException e )
-//        {
-//            throw new ContinuumException( "Error while querying for the project group.", e );
-//        }
-
         return result;
-    }
-
-    private void dumpJdoObject( Object object, String message )
-    {
-        getLogger().debug( "---------- Dumping JDO Object: " + message );
-        getLogger().debug( "object.hashCode: " + object.hashCode() );
-        getLogger().debug( "persistent: " + JDOHelper.isPersistent( object ) );
-        getLogger().debug( "transactional: " + JDOHelper.isTransactional( object ) );
-        getLogger().debug( "dirty: " + JDOHelper.isDirty( object ) );
-        getLogger().debug( "new: " + JDOHelper.isNew( object ) );
-        getLogger().debug( "deleted: " + JDOHelper.isDeleted( object ) );
-        getLogger().debug( "detached: " + JDOHelper.isDetached( object ) );
-        getLogger().debug( "object id: " + JDOHelper.getObjectId( object ) );
-        getLogger().debug( "----------" );
     }
 
     // ----------------------------------------------------------------------

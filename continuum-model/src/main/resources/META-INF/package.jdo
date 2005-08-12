@@ -109,23 +109,6 @@
       <field name="scmResult" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
     </class>
 
-    <!-- New Object Model -->
-
-    <class name="ContinuumProjectGroup" detachable="true" identity-type="application"
-           objectid-class="javax.jdo.identity.StringIdentity" table="project_group">
-      <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
-      <field name="groupId" persistence-modifier="persistent"/>
-      <field name="name" persistence-modifier="persistent"/>
-      <field name="description" persistence-modifier="persistent"/>
-      <field name="url" persistence-modifier="persistent"/>
-      <field name="projects" persistence-modifier="persistent" mapped-by="projectGroup">
-        <collection element-type="ContinuumProject"/>
-      </field>
-      <fetch-group name="project-group-detail">
-        <field name="projects"/>
-      </fetch-group>
-    </class>
-
     <class name="ContinuumBuildSettings" detachable="true">
       <field name="name" persistence-modifier="persistent"/>
       <field name="cronExpression" persistence-modifier="persistent"/>

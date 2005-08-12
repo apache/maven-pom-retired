@@ -16,9 +16,9 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.codehaus.plexus.action.AbstractAction;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -83,9 +83,9 @@ public abstract class AbstractContinuumAction
         return getString( context, KEY_PROJECT_ID );
     }
 
-    public static String getProjectGroupId( Map context )
+    public static int getProjectGroupId( Map context )
     {
-        return getString( context, KEY_PROJECT_GROUP_ID );
+        return Integer.valueOf( getString( context, KEY_PROJECT_GROUP_ID ) ).intValue();
     }
 
     public static String getBuildId( Map context )
@@ -103,9 +103,9 @@ public abstract class AbstractContinuumAction
         return (ContinuumProject) getObject( context, KEY_UNVALIDATED_PROJECT );
     }
 
-    public static ContinuumProjectGroup getUnvalidatedProjectGroup( Map context )
+    public static ProjectGroup getUnvalidatedProjectGroup( Map context )
     {
-        return (ContinuumProjectGroup) getObject( context, KEY_UNVALIDATED_PROJECT_GROUP );
+        return (ProjectGroup) getObject( context, KEY_UNVALIDATED_PROJECT_GROUP );
     }
 
     public static File getWorkingDirectory( Map context )

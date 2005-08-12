@@ -19,7 +19,7 @@ package org.apache.maven.continuum.project.builder.maven;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
@@ -104,7 +104,7 @@ public class MavenTwoContinuumProjectBuilder
 
         if ( groupPom )
         {
-            ContinuumProjectGroup projectGroup = buildProjectGroup( mavenProject );
+            ProjectGroup projectGroup = buildProjectGroup( mavenProject );
 
             if ( projectGroup != null )
             {
@@ -170,9 +170,9 @@ public class MavenTwoContinuumProjectBuilder
         }
     }
 
-    private ContinuumProjectGroup buildProjectGroup( MavenProject mavenProject )
+    private ProjectGroup buildProjectGroup( MavenProject mavenProject )
     {
-        ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
+        ProjectGroup projectGroup = new ProjectGroup();
 
         // ----------------------------------------------------------------------
         // Group id
@@ -208,9 +208,9 @@ public class MavenTwoContinuumProjectBuilder
         // URL
         // ----------------------------------------------------------------------
 
+/*
         projectGroup.setUrl( mavenProject.getUrl() );
 
-/*
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------

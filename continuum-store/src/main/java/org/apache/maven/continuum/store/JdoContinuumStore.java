@@ -27,7 +27,6 @@ import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.codehaus.plexus.jdo.JdoFactory;
@@ -74,8 +73,6 @@ public class JdoContinuumStore
     private static final String PROJECT_DETAIL_FG = "project-detail";
 
     private static final String BUILD_DETAIL_FG = "build-detail";
-
-    private static final String PROJECT_GROUP_DETAIL_FG = "project-group-detail";
 
     private static final String SCHEDULE_DETAIL_FG = "schedule-detail";
 
@@ -128,7 +125,7 @@ public class JdoContinuumStore
 
             if ( project.getProjectGroup() != null )
             {
-                ContinuumProjectGroup pg = project.getProjectGroup();
+                ProjectGroup pg = project.getProjectGroup();
 
                 pg.getProjects().remove( project );
             }
@@ -595,90 +592,6 @@ public class JdoContinuumStore
     {
         updateObject( notifier );
         return notifier;
-    }
-
-    public ContinuumProjectGroup addProjectGroup( ContinuumProjectGroup projectGroup )
-        throws ContinuumStoreException
-    {
-        return (ContinuumProjectGroup) addObject( projectGroup, PROJECT_GROUP_DETAIL_FG );
-    }
-
-    public ContinuumProjectGroup updateProjectGroup( ContinuumProjectGroup projectGroup )
-        throws ContinuumStoreException
-    {
-        updateObject( projectGroup );
-        return projectGroup;
-    }
-
-    public Collection getProjectGroups()
-        throws ContinuumStoreException
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            Extent extent = pm.getExtent( ContinuumProjectGroup.class, true );
-
-            Query query = pm.newQuery( extent );
-
-            query.setOrdering( "name ascending" );
-
-            Collection result = (Collection) query.execute();
-
-            result = pm.detachCopyAll( result );
-
-            tx.commit();
-
-            return result;
-        }
-        finally
-        {
-            rollback( tx );
-        }
-    }
-
-    public void removeProjectGroup( String projectGroupId )
-        throws ContinuumStoreException
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            Object id = pm.newObjectIdInstance( ContinuumProjectGroup.class, projectGroupId );
-
-            ContinuumProjectGroup projectGroup = (ContinuumProjectGroup) pm.getObjectById( id );
-
-            pm.deletePersistent( projectGroup );
-
-            tx.commit();
-        }
-        finally
-        {
-            rollback( tx );
-        }
-    }
-
-    public ContinuumProjectGroup getProjectGroup( String projectGroupId )
-        throws ContinuumStoreException
-    {
-        return (ContinuumProjectGroup) getDetailedObject( ContinuumProjectGroup.class, projectGroupId,
-                                                          PROJECT_GROUP_DETAIL_FG );
-    }
-
-    public ContinuumProjectGroup getProjectGroupByGroupId( String groupId )
-        throws ContinuumStoreException
-    {
-        return (ContinuumProjectGroup) getObjectFromQuery( ContinuumProjectGroup.class, "groupId", groupId,
-                                                           PROJECT_GROUP_DETAIL_FG );
-
     }
 
     public ContinuumBuildSettings addBuildSettings( ContinuumBuildSettings buildSettings )
@@ -1346,4 +1259,9 @@ public class JdoContinuumStore
         }
     }
 
+    public ProjectGroup getProjectGroupByGroupId( String groupId )
+        throws ContinuumStoreException
+    {
+        return (ProjectGroup) getObjectFromQuery( ProjectGroup.class, "groupId", groupId, null );
+    }
 }

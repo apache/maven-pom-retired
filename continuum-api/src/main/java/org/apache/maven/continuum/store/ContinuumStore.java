@@ -27,7 +27,6 @@ import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumSchedule;
 
 import java.io.File;
@@ -107,24 +106,6 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     ContinuumSchedule getSchedule( String scheduleId )
-        throws ContinuumStoreException;
-
-    ContinuumProjectGroup addProjectGroup( ContinuumProjectGroup projectGroup )
-        throws ContinuumStoreException;
-
-    ContinuumProjectGroup updateProjectGroup( ContinuumProjectGroup projectGroup )
-        throws ContinuumStoreException;
-
-    void removeProjectGroup( String projectGroupId )
-        throws ContinuumStoreException;
-
-    ContinuumProjectGroup getProjectGroup( String projectGroupId )
-        throws ContinuumStoreException;
-
-    ContinuumProjectGroup getProjectGroupByGroupId( String groupId )
-        throws ContinuumStoreException;
-
-    Collection getProjectGroups()
         throws ContinuumStoreException;
 
     ContinuumBuildSettings addBuildSettings( ContinuumBuildSettings buildSettings )
@@ -210,4 +191,7 @@ public interface ContinuumStore
 
     Profile getProfile( int profileId )
         throws ContinuumObjectNotFoundException;
+
+    ProjectGroup getProjectGroupByGroupId( String groupId )
+        throws ContinuumStoreException;
 }

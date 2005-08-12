@@ -3,7 +3,7 @@
  */
 package org.apache.maven.continuum.core.action;
 
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public class ValidateProjectGroup
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProjectGroup projectGroup = getUnvalidatedProjectGroup( context );
+        ProjectGroup projectGroup = getUnvalidatedProjectGroup( context );
 
         // TODO: assert that the name is unique
 

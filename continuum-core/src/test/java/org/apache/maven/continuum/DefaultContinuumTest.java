@@ -60,7 +60,7 @@ public class DefaultContinuumTest
 
         int projectCount = getStore().getAllProjects().size();
 
-        int projectGroupCount = getStore().getProjectGroups().size();
+        int projectGroupCount = getStore().getAllProjectGroupsWithProjects().size();
 
         File rootPom = getTestFile( "src/test/resources/projects/continuum/continuum-notifiers/pom.xml" );
 
@@ -76,11 +76,12 @@ public class DefaultContinuumTest
 
         System.err.println( "number of projects: " + getStore().getAllProjects().size() );
 
-        System.err.println( "number of project groups: " + getStore().getProjectGroups().size() );
+        System.err.println( "number of project groups: " + getStore().getAllProjectGroupsWithProjects().size() );
 
         assertEquals( "Total project count", projectCount + 2, getStore().getAllProjects().size() );
 
-        assertEquals( "Total project group count.", projectGroupCount + 1, getStore().getProjectGroups().size() );
+        assertEquals( "Total project group count.", projectGroupCount + 1,
+                      getStore().getAllProjectGroupsWithProjects().size() );
 
         Map projects = new HashMap();
 

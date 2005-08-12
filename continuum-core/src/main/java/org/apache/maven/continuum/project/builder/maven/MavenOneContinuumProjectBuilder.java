@@ -19,8 +19,8 @@ package org.apache.maven.continuum.project.builder.maven;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelperException;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.project.MavenOneProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -39,7 +39,9 @@ public class MavenOneContinuumProjectBuilder
 {
     public static final String ID = "maven-one-builder";
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private MavenOneMetadataHelper metadataHelper;
 
     // ----------------------------------------------------------------------
@@ -84,7 +86,7 @@ public class MavenOneContinuumProjectBuilder
         // This is a hack.
         // ----------------------------------------------------------------------
 
-        ContinuumProjectGroup projectGroup = new ContinuumProjectGroup();
+        ProjectGroup projectGroup = new ProjectGroup();
 
         projectGroup.setName( "Maven 1 group" );
 

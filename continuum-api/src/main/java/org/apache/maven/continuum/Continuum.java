@@ -22,7 +22,6 @@ import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
@@ -92,9 +91,6 @@ public interface Continuum
         throws ContinuumException;
 
     void buildProject( String projectId, boolean force )
-        throws ContinuumException;
-
-    void buildProjectGroup( ContinuumProjectGroup projectGroup, ContinuumBuildSettings buildSettings )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------

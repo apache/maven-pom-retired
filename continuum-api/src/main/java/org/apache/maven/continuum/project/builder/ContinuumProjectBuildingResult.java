@@ -16,11 +16,11 @@ package org.apache.maven.continuum.project.builder;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.project.ContinuumProject;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectGroup;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -39,7 +39,7 @@ public class ContinuumProjectBuildingResult
         projects.add( project );
     }
 
-    public void addProjectGroup( ContinuumProjectGroup projectGroup )
+    public void addProjectGroup( ProjectGroup projectGroup )
     {
         projectGroups.add( projectGroup );
     }
