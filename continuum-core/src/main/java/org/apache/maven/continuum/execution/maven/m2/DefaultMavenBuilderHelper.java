@@ -152,7 +152,7 @@ public class DefaultMavenBuilderHelper
 
                 ContinuumDeveloper cd = new ContinuumDeveloper();
 
-                cd.setId( d.getId() );
+                cd.setScmId( d.getId() );
 
                 cd.setName( d.getName() );
 

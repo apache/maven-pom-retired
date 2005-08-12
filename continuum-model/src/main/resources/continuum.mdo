@@ -222,7 +222,7 @@
       <version>1.0.0</version>
       <fields>
         <field>
-          <name>id</name>
+          <name>scmId</name>
           <identifier>true</identifier>
           <version>1.0.0</version>
           <type>String</type>
