@@ -228,10 +228,12 @@ public class DefaultContinuumScm
 
     private static ChangeSet convertScmFileSetToChangeSet( List files )
     {
-        ChangeSet changeSet = new ChangeSet();
+        ChangeSet changeSet = null;
 
         if ( files != null && !files.isEmpty() )
         {
+            changeSet = new ChangeSet();
+
             // TODO: author, etc.
             for ( Iterator it = files.iterator(); it.hasNext(); )
             {
@@ -261,7 +263,10 @@ public class DefaultContinuumScm
 
         // TODO: is this valid?
         ChangeSet changeSet = convertScmFileSetToChangeSet( scmResult.getUpdatedFiles() );
-        result.addChange( changeSet );
+        if ( changeSet != null )
+        {
+            result.addChange( changeSet );
+        }
 
         if ( scmResult.getChanges() != null )
         {
