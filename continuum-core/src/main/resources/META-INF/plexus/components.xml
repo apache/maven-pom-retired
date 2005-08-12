@@ -27,7 +27,6 @@
         </requirement>
       </requirements>
       <configuration>
-        <app-home>${plexus.home}</app-home>
         <working-directory>${plexus.home}/temp</working-directory>
       </configuration>
     </component>
