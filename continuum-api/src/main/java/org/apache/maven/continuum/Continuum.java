@@ -204,12 +204,6 @@ public interface Continuum
     // Project scheduling
     // ----------------------------------------------------------------------
 
-    ContinuumSchedule addProjectToSchedule( ContinuumProject project, ContinuumSchedule schedule )
-        throws ContinuumException;
-
-    void removeProjectFromSchedule( ContinuumProject project, ContinuumSchedule schedule )
-        throws ContinuumException;
-
     // ----------------------------------------------------------------------
     // Project groups
     // ----------------------------------------------------------------------

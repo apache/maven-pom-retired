@@ -54,22 +54,10 @@
       </fetch-group>
     </class>
 
-    <class name="ContinuumSchedule" detachable="true" identity-type="application"
-           objectid-class="javax.jdo.identity.StringIdentity" table="schedule">
-      <field name="projects" persistence-modifier="persistent" mapped-by="schedules">
-        <collection element-type="ContinuumProject"/>
-      </field>
-      <field name="id" persistence-modifier="persistent" null-value="exception" primary-key="true"
-             value-strategy="native"/>
+    <class name="ContinuumSchedule" detachable="true">
       <field name="name" persistence-modifier="persistent"/>
-      <field name="description" persistence-modifier="persistent"/>
-      <field name="active" persistence-modifier="persistent"/>
-      <field name="scmMode" persistence-modifier="persistent"/>
       <field name="delay" persistence-modifier="persistent"/>
       <field name="cronExpression" persistence-modifier="persistent"/>
-      <fetch-group name="schedule-detail">
-        <field name="projects"/>
-      </fetch-group>
     </class>
 
     <class name="MavenTwoProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
