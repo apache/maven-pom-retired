@@ -32,25 +32,6 @@
     </div>
   </div>
 
-  <div id="projecttools" class="toolgroup">
-    <div class="label">Schedules</div>
-    <div class="body">
-      <div>
-        <a href="$link.setPage('schedule,ScheduleSummary.vm')">Schedules</a>
-      </div>
-    </div>
-  </div>
-
-  <div id="projecttools" class="toolgroup">
-    <div class="label">Schedules</div>
-    <div class="body">
-      <div>
-        <a href="$link.setPage('BuildOrder.vm')">Build Order</a>
-      </div>
-    </div>
-  </div>
-
-
   <!--
   <div id="projecttools" class="toolgroup">
    <div class="label">Import Project</div>

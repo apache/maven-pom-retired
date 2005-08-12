@@ -121,11 +121,6 @@ public class DefaultContinuum
      */
     private String workingDirectory;
 
-    /**
-     * @plexus.configuration
-     */
-    private String appHome;
-
     // ----------------------------------------------------------------------
     // Projects
     // ----------------------------------------------------------------------
