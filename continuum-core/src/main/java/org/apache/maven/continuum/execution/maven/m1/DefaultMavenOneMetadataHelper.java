@@ -16,8 +16,8 @@ package org.apache.maven.continuum.execution.maven.m1;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -109,8 +109,7 @@ public class DefaultMavenOneMetadataHelper
 
         String version = getValue( mavenProject, "currentVersion", project.getVersion() );
 
-        if ( StringUtils.isEmpty( project.getVersion() ) &&
-             StringUtils.isEmpty( version ) )
+        if ( StringUtils.isEmpty( project.getVersion() ) && StringUtils.isEmpty( version ) )
         {
             throw new MavenOneMetadataHelperException( "Missing 'version' element in the POM." );
         }
@@ -121,8 +120,7 @@ public class DefaultMavenOneMetadataHelper
 
         String name = getValue( mavenProject, "name", project.getName() );
 
-        if ( StringUtils.isEmpty( project.getName() ) &&
-             StringUtils.isEmpty( name ) )
+        if ( StringUtils.isEmpty( project.getName() ) && StringUtils.isEmpty( name ) )
         {
             throw new MavenOneMetadataHelperException( "Missing 'name' element in POM." );
         }
@@ -154,7 +152,8 @@ public class DefaultMavenOneMetadataHelper
 
             if ( StringUtils.isEmpty( scmConnection ) )
             {
-                throw new MavenOneMetadataHelperException( "Missing both anonymous and developer SCM connection URLs." );
+                throw new MavenOneMetadataHelperException(
+                    "Missing both anonymous and developer SCM connection URLs." );
             }
         }
 
@@ -166,7 +165,7 @@ public class DefaultMavenOneMetadataHelper
 
         List notifiers = null;
 
-        ContinuumNotifier notifier = new ContinuumNotifier();
+        ProjectNotifier notifier = new ProjectNotifier();
 
         if ( build == null )
         {
@@ -187,12 +186,13 @@ public class DefaultMavenOneMetadataHelper
             {
                 for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
                 {
-                    ContinuumNotifier notif = (ContinuumNotifier) i.next();
+                    ProjectNotifier notif = (ProjectNotifier) i.next();
 
                     // Can we have an other type for maven 1 project?
                     if ( "mail".equals( notif.getType() ) )
                     {
-                        currentNagEmailAddress = (String) notif.getConfiguration().get( ContinuumRecipientSource.ADDRESS_FIELD );
+                        currentNagEmailAddress = (String) notif.getConfiguration().get(
+                            ContinuumRecipientSource.ADDRESS_FIELD );
                     }
                 }
             }
@@ -211,7 +211,8 @@ public class DefaultMavenOneMetadataHelper
 
         if ( notifiers == null && notifier.getConfiguration().isEmpty() )
         {
-            throw new MavenOneMetadataHelperException( "Missing 'nagEmailAddress' element in the 'build' element in the POM." );
+            throw new MavenOneMetadataHelperException(
+                "Missing 'nagEmailAddress' element in the 'build' element in the POM." );
         }
         else
         {

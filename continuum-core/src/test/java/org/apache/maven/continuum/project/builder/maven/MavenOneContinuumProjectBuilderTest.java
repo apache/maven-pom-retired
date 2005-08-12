@@ -16,14 +16,13 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
-import java.util.Iterator;
-
-import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-
 import org.codehaus.plexus.PlexusTestCase;
+
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -35,9 +34,11 @@ public class MavenOneContinuumProjectBuilderTest
     public void testBuildingAProjectFromMetadataWithACompleteMaven1Pom()
         throws Exception
     {
-        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE, MavenOneContinuumProjectBuilder.ID );
+        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE,
+                                                                                   MavenOneContinuumProjectBuilder.ID );
 
-        ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( getTestFile( "src/test/resources/projects/maven-1.pom.xml" ).toURL() );
+        ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata(
+            getTestFile( "src/test/resources/projects/maven-1.pom.xml" ).toURL() );
 
         assertNotNull( result.getWarnings() );
 
@@ -62,7 +63,7 @@ public class MavenOneContinuumProjectBuilderTest
 
         assertEquals( "scm:svn:http://svn.apache.org/repos/asf:maven/maven-1/core/trunk/", project.getScmUrl() );
 
-        ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get( 0 );
+        ProjectNotifier notifier = (ProjectNotifier) project.getNotifiers().get( 0 );
 
         assertEquals( "mail", notifier.getType() );
 

@@ -16,6 +16,19 @@ package org.apache.maven.continuum.project.builder.cc;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.project.AntProject;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenOneProject;
+import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -23,42 +36,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
-import org.apache.maven.continuum.project.AntProject;
-import org.apache.maven.continuum.project.ContinuumNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenOneProject;
-import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-
-import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
 /**
- * @plexus.component
- *   role="org.apache.maven.continuum.project.builder.ContinuumProjectBuilder"
-     role-hint="cc-builder"
- *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ * @plexus.component role="org.apache.maven.continuum.project.builder.ContinuumProjectBuilder"
+ * role-hint="cc-builder"
  */
 public class CruiseControlProjectBuilder
     extends AbstractContinuumProjectBuilder
 {
     public static final String ID = "cc-builder";
 
-    private final static String[] IGNORED_MODIFICATION_SET_TYPES = new String[]{
-        "alwaysbuild",
-        "buildstatus",
-        "forceonly",
-    };
+    private final static String[] IGNORED_MODIFICATION_SET_TYPES = new String[]{"alwaysbuild", "buildstatus",
+        "forceonly",};
 
-    private final static String[] IGNORED_SCHEDULE_TYPES = new String[]{
-        "pause",
-    };
+    private final static String[] IGNORED_SCHEDULE_TYPES = new String[]{"pause",};
 
     // ----------------------------------------------------------------------
     // ContinuumProjectBuilder Implementation
@@ -75,7 +67,7 @@ public class CruiseControlProjectBuilder
 
         for ( int i = 0; i < projects.length; i++ )
         {
-            Xpp3Dom project = projects[ i ];
+            Xpp3Dom project = projects[i];
 
             ContinuumProject continuumProject = findProject( project.getChild( "schedule" ) );
 
@@ -87,7 +79,8 @@ public class CruiseControlProjectBuilder
 
             if ( StringUtils.isEmpty( name ) )
             {
-                throw new ContinuumProjectBuilderException( "Missing required attribute 'name' from 'project' element." );
+                throw new ContinuumProjectBuilderException(
+                    "Missing required attribute 'name' from 'project' element." );
             }
 
             continuumProject.setName( name );
@@ -100,7 +93,8 @@ public class CruiseControlProjectBuilder
 
             if ( modifactionsets == null )
             {
-                throw new ContinuumProjectBuilderException( "The configuration must contain at a 'modificationset' element." );
+                throw new ContinuumProjectBuilderException(
+                    "The configuration must contain at a 'modificationset' element." );
             }
 
             String scmUrl = findScmUrl( modifactionsets.getChildren() );
@@ -122,7 +116,7 @@ public class CruiseControlProjectBuilder
                     emailAddress = findNagEmailAddress( publishers.getChild( "htmlemail" ) );
                 }
 
-                ContinuumNotifier notifier = new ContinuumNotifier();
+                ProjectNotifier notifier = new ProjectNotifier();
 
                 Properties props = new Properties();
 
@@ -161,7 +155,7 @@ public class CruiseControlProjectBuilder
 
         for ( int i = 0; i < children.length; i++ )
         {
-            Xpp3Dom child = children[ i ];
+            Xpp3Dom child = children[i];
 
             if ( contains( child.getName(), IGNORED_SCHEDULE_TYPES ) )
             {
@@ -172,7 +166,8 @@ public class CruiseControlProjectBuilder
             {
                 if ( project != null )
                 {
-                    throw new ContinuumProjectBuilderException( "A configuration can only have a single 'ant' or 'maven' schedule." );
+                    throw new ContinuumProjectBuilderException(
+                        "A configuration can only have a single 'ant' or 'maven' schedule." );
                 }
 
                 project = new AntProject();
@@ -183,7 +178,8 @@ public class CruiseControlProjectBuilder
             {
                 if ( project != null )
                 {
-                    throw new ContinuumProjectBuilderException( "A configuration can only have a single 'ant' or 'maven' schedule." );
+                    throw new ContinuumProjectBuilderException(
+                        "A configuration can only have a single 'ant' or 'maven' schedule." );
                 }
 
                 project = new MavenOneProject();
@@ -192,13 +188,15 @@ public class CruiseControlProjectBuilder
             }
             else
             {
-                throw new ContinuumProjectBuilderException( "Can't handle schedule '" + schedule.getName() + "'. Continuum only supports 'ant' and 'maven' schedules." );
+                throw new ContinuumProjectBuilderException( "Can't handle schedule '" + schedule.getName() +
+                    "'. Continuum only supports 'ant' and 'maven' schedules." );
             }
         }
 
         if ( project == null )
         {
-            throw new ContinuumProjectBuilderException( "There must be exactly one 'ant' or 'maven' build scheduled.." );
+            throw new ContinuumProjectBuilderException(
+                "There must be exactly one 'ant' or 'maven' build scheduled.." );
         }
 
         return project;
@@ -211,7 +209,7 @@ public class CruiseControlProjectBuilder
 
         for ( int j = 0; j < modifactionsets.length; j++ )
         {
-            Xpp3Dom modifactionset = modifactionsets[ j ];
+            Xpp3Dom modifactionset = modifactionsets[j];
 
             if ( contains( modifactionset.getName(), IGNORED_MODIFICATION_SET_TYPES ) )
             {
@@ -222,14 +220,16 @@ public class CruiseControlProjectBuilder
             {
                 if ( scmUrl != null )
                 {
-                    throw new ContinuumProjectBuilderException( "A 'modificationset' element can only contain a single 'cvs' or 'svn' element." );
+                    throw new ContinuumProjectBuilderException(
+                        "A 'modificationset' element can only contain a single 'cvs' or 'svn' element." );
                 }
 
                 String cvsrot = modifactionset.getAttribute( "cvsroot" );
 
                 if ( StringUtils.isEmpty( cvsrot ) )
                 {
-                    throw new ContinuumProjectBuilderException( "A 'cvsroot' attribute is required when using a cvs modification set. The usage of 'localworkingcopy' is not supported." );
+                    throw new ContinuumProjectBuilderException(
+                        "A 'cvsroot' attribute is required when using a cvs modification set. The usage of 'localworkingcopy' is not supported." );
                 }
 
                 String tag = modifactionset.getAttribute( "tag" );
@@ -245,21 +245,24 @@ public class CruiseControlProjectBuilder
             {
                 if ( scmUrl != null )
                 {
-                    throw new ContinuumProjectBuilderException( "A 'modificationset' element can only contain a single 'cvs' or 'svn' element." );
+                    throw new ContinuumProjectBuilderException(
+                        "A 'modificationset' element can only contain a single 'cvs' or 'svn' element." );
                 }
 
                 String repositoryLocation = modifactionset.getAttribute( "repositoryLocation" );
 
                 if ( StringUtils.isEmpty( repositoryLocation ) )
                 {
-                    throw new ContinuumProjectBuilderException( "A 'repositoryLocation' attribute is required when using a svn modification set. The usage of 'localworkingcopy' is not supported." );
+                    throw new ContinuumProjectBuilderException(
+                        "A 'repositoryLocation' attribute is required when using a svn modification set. The usage of 'localworkingcopy' is not supported." );
                 }
 
                 scmUrl = "scm:svn:" + repositoryLocation;
             }
             else
             {
-                throw new ContinuumProjectBuilderException( "Unsupported modification set found '" + modifactionset.getName() + "'." );
+                throw new ContinuumProjectBuilderException(
+                    "Unsupported modification set found '" + modifactionset.getName() + "'." );
             }
 
             break;
@@ -267,7 +270,8 @@ public class CruiseControlProjectBuilder
 
         if ( scmUrl == null )
         {
-            throw new ContinuumProjectBuilderException( "The configuration must contain at least one 'modificationset'." );
+            throw new ContinuumProjectBuilderException(
+                "The configuration must contain at least one 'modificationset'." );
         }
 
         return scmUrl;
@@ -287,7 +291,7 @@ public class CruiseControlProjectBuilder
             return null;
         }
 
-        String nagEmailAddress = failure[ 0 ].getAttribute( "address" );
+        String nagEmailAddress = failure[0].getAttribute( "address" );
 
         if ( StringUtils.isEmpty( nagEmailAddress ) )
         {
@@ -305,7 +309,7 @@ public class CruiseControlProjectBuilder
     {
         for ( int i = 0; i < data.length; i++ )
         {
-            if ( data[ i ].equals( target ) )
+            if ( data[i].equals( target ) )
             {
                 return true;
             }
@@ -325,11 +329,13 @@ public class CruiseControlProjectBuilder
         }
         catch ( XmlPullParserException e )
         {
-            throw new ContinuumProjectBuilderException( "Error while parsing the CruiseControl configuration file.", e );
+            throw new ContinuumProjectBuilderException( "Error while parsing the CruiseControl configuration file.",
+                                                        e );
         }
         catch ( IOException e )
         {
-            throw new ContinuumProjectBuilderException( "Error while downloading the CruiseControl configuration file.", e );
+            throw new ContinuumProjectBuilderException( "Error while downloading the CruiseControl configuration file.",
+                                                        e );
         }
     }
 }

@@ -16,12 +16,12 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.scm.ContinuumScmException;
-import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.scm.ContinuumScm;
-import org.apache.maven.continuum.utils.ContinuumUtils;
+import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -88,11 +88,14 @@ public class CheckoutProjectContinuumAction
                 if ( result != null )
                 {
                     errorMessage = "";
-                    errorMessage += "Provider message: "  + StringUtils.clean( result.getProviderMessage() ) + System.getProperty( "line.separator" );
+                    errorMessage += "Provider message: " + StringUtils.clean( result.getProviderMessage() ) +
+                        System.getProperty( "line.separator" );
                     errorMessage += "Command output: " + System.getProperty( "line.separator" );
-                    errorMessage += "-------------------------------------------------------------------------------" + System.getProperty( "line.separator" );
+                    errorMessage += "-------------------------------------------------------------------------------" +
+                        System.getProperty( "line.separator" );
                     errorMessage += StringUtils.clean( result.getCommandOutput() );
-                    errorMessage += "-------------------------------------------------------------------------------" + System.getProperty( "line.separator" );
+                    errorMessage += "-------------------------------------------------------------------------------" +
+                        System.getProperty( "line.separator" );
                 }
                 else
                 {

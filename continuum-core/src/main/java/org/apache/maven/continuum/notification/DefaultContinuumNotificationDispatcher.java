@@ -16,8 +16,8 @@ package org.apache.maven.continuum.notification;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
@@ -132,11 +132,11 @@ public class DefaultContinuumNotificationDispatcher
 
         for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
         {
-            ContinuumNotifier continuumNotifier = (ContinuumNotifier) i.next();
+            ProjectNotifier projectNotifier = (ProjectNotifier) i.next();
 
-            String notifierType = continuumNotifier.getType();
+            String notifierType = projectNotifier.getType();
 
-            Map configuration = continuumNotifier.getConfiguration();
+            Map configuration = projectNotifier.getConfiguration();
 
             try
             {
@@ -144,7 +144,7 @@ public class DefaultContinuumNotificationDispatcher
 
                 Set recipients = recipientSource.getRecipients( notifierType, messageId, configuration, context );
 
-                notifier.sendNotification( messageId, recipients, continuumNotifier.getConfiguration(), context );
+                notifier.sendNotification( messageId, recipients, projectNotifier.getConfiguration(), context );
             }
             catch ( NotificationException e )
             {

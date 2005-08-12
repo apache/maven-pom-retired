@@ -16,7 +16,7 @@ package org.apache.maven.continuum.utils;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumDependency;
+import org.apache.maven.continuum.model.project.ProjectDependency;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 import org.codehaus.plexus.util.dag.DAG;
@@ -79,7 +79,7 @@ public class ProjectSorter
 
             for ( Iterator j = project.getDependencies().iterator(); j.hasNext(); )
             {
-                ContinuumDependency dependency = (ContinuumDependency) j.next();
+                ProjectDependency dependency = (ProjectDependency) j.next();
 
                 String dependencyId = getDependencyId( dependency );
 
@@ -107,7 +107,7 @@ public class ProjectSorter
         return project.getGroupId() + ":" + project.getArtifactId();
     }
 
-    private static String getDependencyId( ContinuumDependency project )
+    private static String getDependencyId( ProjectDependency project )
     {
         return project.getGroupId() + ":" + project.getArtifactId();
     }

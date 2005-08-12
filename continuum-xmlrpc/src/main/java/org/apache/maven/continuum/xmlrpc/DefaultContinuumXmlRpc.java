@@ -16,6 +16,18 @@ package org.apache.maven.continuum.xmlrpc;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.model.scm.ScmResult;
+import org.apache.maven.continuum.project.AntProject;
+import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.MavenOneProject;
+import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.StringUtils;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -27,25 +39,10 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenOneProject;
-import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.AntProject;
-import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.scm.ScmResult;
-
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.StringUtils;
-
 /**
- * @plexus.component
- *   role="org.apache.maven.continuum.xmlrpc.ContinuumXmlRpc"
- *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ * @plexus.component role="org.apache.maven.continuum.xmlrpc.ContinuumXmlRpc"
  */
 public class DefaultContinuumXmlRpc
     extends AbstractLogEnabled
@@ -75,8 +72,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.removeProject()",
-                                    "Project id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.removeProject()", "Project id: '" + projectId + "'.", e );
         }
     }
 
@@ -90,8 +86,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getProject()",
-                                    "Project id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.getProject()", "Project id: '" + projectId + "'.", e );
         }
     }
 
@@ -126,8 +121,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getScmResultForProject()",
-                                    "Project id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.getScmResultForProject()", "Project id: '" + projectId + "'.", e );
         }
     }
 
@@ -141,8 +135,8 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getLatestBuildForProject()",
-                                    "Project id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.getLatestBuildForProject()", "Project id: '" + projectId + "'.",
+                                    e );
         }
 
     }
@@ -151,8 +145,7 @@ public class DefaultContinuumXmlRpc
     // Build handling
     // ----------------------------------------------------------------------
 
-    public Hashtable buildProject( String projectId,
-                                   boolean force )
+    public Hashtable buildProject( String projectId, boolean force )
     {
         try
         {
@@ -162,8 +155,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.buildProject()",
-                                    "Project id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.buildProject()", "Project id: '" + projectId + "'.", e );
         }
     }
 
@@ -177,21 +169,18 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getBuild()",
-                                    "Build id: '" + buildId + "'.", e );
+            return handleException( "ContinuumXmlRpc.getBuild()", "Build id: '" + buildId + "'.", e );
         }
     }
 
-    public Hashtable getBuildsForProject( String projectId,
-                                          int start,
-                                          int end )
+    public Hashtable getBuildsForProject( String projectId, int start, int end )
     {
         try
         {
             if ( start != 0 || end != 0 )
             {
                 getLogger().warn( "ContinuumXmlRpc.getBuildsForProject() " +
-                                  "doesn't support usage of the start and end parameters yet." );
+                    "doesn't support usage of the start and end parameters yet." );
             }
 
             // TODO: use start and end
@@ -208,8 +197,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getBuildsForProject()",
-                                    "Project id: '" + projectId + "'.", e );
+            return handleException( "ContinuumXmlRpc.getBuildsForProject()", "Project id: '" + projectId + "'.", e );
         }
     }
 
@@ -230,8 +218,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.getBuildResultForProject()",
-                                    "Build id: '" + buildId + "'.", e );
+            return handleException( "ContinuumXmlRpc.getBuildResultForProject()", "Build id: '" + buildId + "'.", e );
         }
     }
 
@@ -260,8 +247,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.addMavenTwoProject()",
-                                    "URL: '" + url + "'.", e );
+            return handleException( "ContinuumXmlRpc.addMavenTwoProject()", "URL: '" + url + "'.", e );
         }
     }
 
@@ -303,8 +289,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.updateMavenTwoProject()",
-                                    "Project id: '" + id + "'.", e );
+            return handleException( "ContinuumXmlRpc.updateMavenTwoProject()", "Project id: '" + id + "'.", e );
         }
     }
 
@@ -333,8 +318,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.addMavenOneProject()",
-                                    "URL: '" + url + "'.", e );
+            return handleException( "ContinuumXmlRpc.addMavenOneProject()", "URL: '" + url + "'.", e );
         }
     }
 
@@ -356,8 +340,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.addMavenOneProject()",
-                                    null, e );
+            return handleException( "ContinuumXmlRpc.addMavenOneProject()", null, e );
         }
     }
 
@@ -377,8 +360,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.updateMavenTwoProject()",
-                                    "Project id: '" + id + "'.", e );
+            return handleException( "ContinuumXmlRpc.updateMavenTwoProject()", "Project id: '" + id + "'.", e );
         }
     }
 
@@ -404,8 +386,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.addAntProject()",
-                                    null, e );
+            return handleException( "ContinuumXmlRpc.addAntProject()", null, e );
         }
     }
 
@@ -425,8 +406,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.updateMavenTwoProject()",
-                                    "Project id: '" + id + "'", e );
+            return handleException( "ContinuumXmlRpc.updateMavenTwoProject()", "Project id: '" + id + "'", e );
         }
     }
 
@@ -452,8 +432,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.ShellProject()",
-                                    null, e );
+            return handleException( "ContinuumXmlRpc.ShellProject()", null, e );
         }
     }
 
@@ -473,8 +452,7 @@ public class DefaultContinuumXmlRpc
         }
         catch ( Throwable e )
         {
-            return handleException( "ContinuumXmlRpc.updateMavenTwoProject()",
-                                    "Project id: '" + id + "'", e );
+            return handleException( "ContinuumXmlRpc.updateMavenTwoProject()", "Project id: '" + id + "'", e );
         }
     }
 

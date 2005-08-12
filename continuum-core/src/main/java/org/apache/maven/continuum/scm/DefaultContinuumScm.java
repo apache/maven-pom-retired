@@ -16,9 +16,13 @@ package org.apache.maven.continuum.scm;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.scm.ChangeFile;
+import org.apache.maven.continuum.model.scm.ChangeSet;
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.apache.maven.scm.ScmException;
+import org.apache.maven.scm.ScmFile;
 import org.apache.maven.scm.ScmFileSet;
 import org.apache.maven.scm.command.checkout.CheckOutScmResult;
 import org.apache.maven.scm.command.update.UpdateScmResult;
@@ -231,7 +235,7 @@ public class DefaultContinuumScm
             // TODO: author, etc.
             for ( Iterator it = files.iterator(); it.hasNext(); )
             {
-                org.apache.maven.scm.ScmFile scmFile = (org.apache.maven.scm.ScmFile) it.next();
+                ScmFile scmFile = (ScmFile) it.next();
 
                 ChangeFile file = new ChangeFile();
 

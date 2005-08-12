@@ -18,16 +18,16 @@ package org.apache.maven.continuum.it;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumSchedule;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcClientLite;
@@ -315,7 +315,7 @@ public abstract class ContinuumXmlRpcClient
     // Notification
     // ----------------------------------------------------------------------
 
-    public ContinuumNotifier getNotifier( String projectId, String notifierType )
+    public ProjectNotifier getNotifier( String projectId, String notifierType )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();

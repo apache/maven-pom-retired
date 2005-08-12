@@ -18,8 +18,8 @@ package org.apache.maven.continuum.it;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.AntProject;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -117,9 +117,9 @@ public class AntIntegrationTest
         removeProject( projectId );
     }
 
-    private ContinuumNotifier makeMailNotifier( String address )
+    private ProjectNotifier makeMailNotifier( String address )
     {
-        ContinuumNotifier notifier = new ContinuumNotifier();
+        ProjectNotifier notifier = new ProjectNotifier();
 
         notifier.setType( "mail" );
 

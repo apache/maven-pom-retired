@@ -32,10 +32,11 @@ import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.initialization.ContinuumInitializationException;
 import org.apache.maven.continuum.initialization.ContinuumInitializer;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumSchedule;
@@ -46,7 +47,6 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
 import org.apache.maven.continuum.scheduler.ContinuumScheduler;
-import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
@@ -762,18 +762,18 @@ public class DefaultContinuum
     // This whole section needs a scrub but will need to be dealt with generally
     // when we add schedules and profiles to the mix.
 
-    public ContinuumNotifier getNotifier( String projectId, String notifierType )
+    public ProjectNotifier getNotifier( String projectId, String notifierType )
         throws ContinuumException
     {
         ContinuumProject project = getProject( projectId );
 
         List notifiers = project.getNotifiers();
 
-        ContinuumNotifier notifier = null;
+        ProjectNotifier notifier = null;
 
         for ( Iterator i = notifiers.iterator(); i.hasNext(); )
         {
-            notifier = (ContinuumNotifier) i.next();
+            notifier = (ProjectNotifier) i.next();
 
             if ( notifier.getType().equals( notifierType ) )
             {
@@ -787,7 +787,7 @@ public class DefaultContinuum
     public void updateNotifier( String projectId, String notifierType, Map configuration )
         throws ContinuumException
     {
-        ContinuumNotifier notifier = getNotifier( projectId, notifierType );
+        ProjectNotifier notifier = getNotifier( projectId, notifierType );
 
         Properties notifierProperties = createNotifierProperties( configuration );
 
@@ -818,7 +818,7 @@ public class DefaultContinuum
     public void addNotifier( String projectId, String notifierType, Map configuration )
         throws ContinuumException
     {
-        ContinuumNotifier notifier = new ContinuumNotifier();
+        ProjectNotifier notifier = new ProjectNotifier();
 
         notifier.setType( notifierType );
 
@@ -840,7 +840,7 @@ public class DefaultContinuum
     public void removeNotifier( String projectId, String notifierType )
         throws ContinuumException
     {
-        ContinuumNotifier n = getNotifier( projectId, notifierType );
+        ProjectNotifier n = getNotifier( projectId, notifierType );
 
         if ( n != null )
         {
@@ -1097,7 +1097,7 @@ public class DefaultContinuum
         }
     }
 
-    public void removeNotifier( ContinuumNotifier notifier )
+    public void removeNotifier( ProjectNotifier notifier )
         throws ContinuumException
     {
         try
@@ -1110,7 +1110,7 @@ public class DefaultContinuum
         }
     }
 
-    public ContinuumNotifier storeNotifier( ContinuumNotifier notifier )
+    public ProjectNotifier storeNotifier( ProjectNotifier notifier )
         throws ContinuumException
     {
         try

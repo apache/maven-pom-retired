@@ -20,16 +20,16 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Profile;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.ContinuumSchedule;
-import org.apache.maven.continuum.scm.ScmResult;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
@@ -584,13 +584,13 @@ public class JdoContinuumStore
         }
     }
 
-    public void removeNotifier( ContinuumNotifier notifier )
+    public void removeNotifier( ProjectNotifier notifier )
         throws ContinuumStoreException
     {
         attachAndDelete( notifier );
     }
 
-    public ContinuumNotifier storeNotifier( ContinuumNotifier notifier )
+    public ProjectNotifier storeNotifier( ProjectNotifier notifier )
         throws ContinuumStoreException
     {
         updateObject( notifier );

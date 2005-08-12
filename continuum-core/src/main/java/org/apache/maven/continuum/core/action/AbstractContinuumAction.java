@@ -16,9 +16,9 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
-import org.apache.maven.continuum.scm.ScmResult;
 import org.codehaus.plexus.action.AbstractAction;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -133,7 +133,7 @@ public abstract class AbstractContinuumAction
         return (ScmResult) getObject( context, KEY_UPDATE_SCM_RESULT );
     }
 
-    public static ScmResult getUpdateScmResult(  Map context, ScmResult defaultValue )
+    public static ScmResult getUpdateScmResult( Map context, ScmResult defaultValue )
     {
         return (ScmResult) getObject( context, KEY_UPDATE_SCM_RESULT, defaultValue );
     }

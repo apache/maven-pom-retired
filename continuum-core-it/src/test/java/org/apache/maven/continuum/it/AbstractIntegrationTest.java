@@ -20,15 +20,17 @@ import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.model.scm.ChangeFile;
+import org.apache.maven.continuum.model.scm.ChangeSet;
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.scm.ChangeSet;
-import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
+import org.apache.maven.scm.ScmFile;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.context.Context;
 import org.codehaus.plexus.util.FileUtils;
@@ -558,9 +560,9 @@ public abstract class AbstractIntegrationTest
 
             for ( Iterator it = actualCheckedOutFiles.iterator(); it.hasNext(); )
             {
-                ScmFile scmFile = (ScmFile) it.next();
+                ChangeFile scmFile = (ChangeFile) it.next();
 
-                print( " " + scmFile.getPath() );
+                print( " " + scmFile.getName() );
             }
 
             assertEquals(

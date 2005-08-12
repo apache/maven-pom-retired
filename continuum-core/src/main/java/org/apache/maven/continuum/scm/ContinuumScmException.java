@@ -1,5 +1,7 @@
 package org.apache.maven.continuum.scm;
 
+import org.apache.maven.continuum.model.scm.ScmResult;
+
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
  *

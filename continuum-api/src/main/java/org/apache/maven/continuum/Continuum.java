@@ -16,10 +16,11 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumSchedule;
@@ -27,7 +28,6 @@ import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.ShellProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.scm.ScmResult;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
 import java.util.Collection;
@@ -172,7 +172,7 @@ public interface Continuum
     // Notification
     // ----------------------------------------------------------------------
 
-    ContinuumNotifier getNotifier( String projectId, String notifierType )
+    ProjectNotifier getNotifier( String projectId, String notifierType )
         throws ContinuumException;
 
     void updateNotifier( String projectId, String notifierType, Map configuration )

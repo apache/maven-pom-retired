@@ -16,7 +16,7 @@ package org.apache.maven.continuum.notification;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.notification.AbstractRecipientSource;
 import org.codehaus.plexus.notification.NotificationException;
@@ -39,7 +39,9 @@ public class ContinuumRecipientSource
 {
     public static String ADDRESS_FIELD = "address";
 
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private String toOverride;
 
     // ----------------------------------------------------------------------
@@ -54,7 +56,8 @@ public class ContinuumRecipientSource
 
         if ( StringUtils.isEmpty( toOverride ) )
         {
-            getLogger().info( "To override address is not configured, will use the nag email address from the project." );
+            getLogger().info(
+                "To override address is not configured, will use the nag email address from the project." );
         }
         else
         {
@@ -86,9 +89,10 @@ public class ContinuumRecipientSource
         {
             for ( Iterator notifierIterator = project.getNotifiers().iterator(); notifierIterator.hasNext(); )
             {
-                ContinuumNotifier notifier = (ContinuumNotifier) notifierIterator.next();
+                ProjectNotifier notifier = (ProjectNotifier) notifierIterator.next();
 
-                if ( notifier.getType().equals( notifierType ) && notifier.getConfiguration().containsKey( ADDRESS_FIELD ) )
+                if ( notifier.getType().equals( notifierType ) &&
+                    notifier.getConfiguration().containsKey( ADDRESS_FIELD ) )
                 {
                     String addressField = (String) notifier.getConfiguration().get( ADDRESS_FIELD );
 

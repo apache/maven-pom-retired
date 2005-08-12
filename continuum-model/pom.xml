@@ -36,23 +36,10 @@
         <configuration>
           <version>1.0.0</version>
           <packageWithVersion>false</packageWithVersion>
+          <model>src/main/mdo/continuum.mdo</model>
         </configuration>
         <executions>
-          <!-- TODO: remove -->
           <execution>
-            <id>old</id>
-            <configuration>
-              <model>src/main/resources/continuum.mdo</model>
-            </configuration>
-            <goals>
-              <goal>java</goal>
-            </goals>
-          </execution>
-          <execution>
-            <!-- TODO: push back up -->
-            <configuration>
-              <model>src/main/mdo/continuum.mdo</model>
-            </configuration>
             <goals>
               <goal>java</goal>
               <!--

@@ -16,6 +16,7 @@ package org.apache.maven.continuum.scm;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 
 import java.io.File;

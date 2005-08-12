@@ -16,7 +16,7 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
@@ -62,7 +62,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, project.getNotifiers().size() );
 
-        ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get( 0 );
+        ProjectNotifier notifier = (ProjectNotifier) project.getNotifiers().get( 0 );
 
         assertEquals( "mail", notifier.getType() );
 
@@ -93,7 +93,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, project.getNotifiers().size() );
 
-        ContinuumNotifier notifier = (ContinuumNotifier) project.getNotifiers().get( 0 );
+        ProjectNotifier notifier = (ProjectNotifier) project.getNotifiers().get( 0 );
 
         assertEquals( "mail", notifier.getType() );
 

@@ -19,9 +19,9 @@ package org.apache.maven.continuum.execution.maven.m2;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.apache.maven.continuum.project.ContinuumDependency;
-import org.apache.maven.continuum.project.ContinuumDeveloper;
-import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.model.project.ProjectDependency;
+import org.apache.maven.continuum.model.project.ProjectDeveloper;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Dependency;
@@ -150,7 +150,7 @@ public class DefaultMavenBuilderHelper
             {
                 Developer d = (Developer) i.next();
 
-                ContinuumDeveloper cd = new ContinuumDeveloper();
+                ProjectDeveloper cd = new ProjectDeveloper();
 
                 cd.setScmId( d.getId() );
 
@@ -176,7 +176,7 @@ public class DefaultMavenBuilderHelper
             {
                 Dependency dependency = (Dependency) i.next();
 
-                ContinuumDependency cd = new ContinuumDependency();
+                ProjectDependency cd = new ProjectDependency();
 
                 cd.setGroupId( dependency.getGroupId() );
 
@@ -284,7 +284,7 @@ public class DefaultMavenBuilderHelper
         {
             Notifier projectNotifier = (Notifier) i.next();
 
-            ContinuumNotifier notifier = new ContinuumNotifier();
+            ProjectNotifier notifier = new ProjectNotifier();
 
             if ( StringUtils.isEmpty( projectNotifier.getType() ) )
             {

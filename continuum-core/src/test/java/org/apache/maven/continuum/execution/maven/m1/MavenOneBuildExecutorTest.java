@@ -18,7 +18,7 @@ package org.apache.maven.continuum.execution.maven.m1;
 
 import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
-import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -39,7 +39,8 @@ public class MavenOneBuildExecutorTest
     {
         BuildExecutorManager builderManager = (BuildExecutorManager) lookup( BuildExecutorManager.ROLE );
 
-        MavenOneBuildExecutor executor = (MavenOneBuildExecutor) builderManager.getBuildExecutor( MavenOneBuildExecutor.ID );
+        MavenOneBuildExecutor executor = (MavenOneBuildExecutor) builderManager.getBuildExecutor(
+            MavenOneBuildExecutor.ID );
 
         // ----------------------------------------------------------------------
         // Make a checkout
@@ -66,11 +67,11 @@ public class MavenOneBuildExecutorTest
 
         project.setGroupId( "org.apache.maven" );
 
-        project.setArtifactId( "maven");
+        project.setArtifactId( "maven" );
 
         project.setScmUrl( "scm:svn:http://svn.apache.org/repos/asf:maven/maven-1/core/trunk/" );
 
-        ContinuumNotifier notifier = new ContinuumNotifier();
+        ProjectNotifier notifier = new ProjectNotifier();
 
         Properties props = new Properties();
 
@@ -104,7 +105,7 @@ public class MavenOneBuildExecutorTest
 
         assertEquals( "scm:svn:http://svn.apache.org/repos/asf:maven/maven-1/core/trunk/", project.getScmUrl() );
 
-        ContinuumNotifier actualNotifier = (ContinuumNotifier) project.getNotifiers().get( 0 );
+        ProjectNotifier actualNotifier = (ProjectNotifier) project.getNotifiers().get( 0 );
 
         assertEquals( "dev@maven.apache.org", actualNotifier.getConfiguration().get( "address" ) );
 

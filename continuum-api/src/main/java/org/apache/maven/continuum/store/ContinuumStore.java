@@ -20,15 +20,15 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Profile;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectGroup;
 import org.apache.maven.continuum.project.ContinuumSchedule;
-import org.apache.maven.continuum.scm.ScmResult;
 
 import java.io.File;
 import java.util.Collection;
@@ -91,10 +91,10 @@ public interface ContinuumStore
     File getBuildOutputFile( String buildId )
         throws ContinuumStoreException;
 
-    void removeNotifier( ContinuumNotifier notifier )
+    void removeNotifier( ProjectNotifier notifier )
         throws ContinuumStoreException;
 
-    ContinuumNotifier storeNotifier( ContinuumNotifier notifier )
+    ProjectNotifier storeNotifier( ProjectNotifier notifier )
         throws ContinuumStoreException;
 
     ContinuumSchedule addSchedule( ContinuumSchedule schedule )

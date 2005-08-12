@@ -30,13 +30,13 @@
         <collection element-type="ContinuumBuild" dependent-element="true"/>
       </field>
       <field name="developers" persistence-modifier="persistent">
-        <collection element-type="ContinuumDeveloper" dependent-element="true"/>
+        <collection element-type="org.apache.maven.continuum.model.project.ProjectDeveloper" dependent-element="true"/>
       </field>
       <field name="notifiers" persistence-modifier="persistent">
-        <collection element-type="ContinuumNotifier" dependent-element="true"/>
+        <collection element-type="org.apache.maven.continuum.model.project.ProjectNotifier" dependent-element="true"/>
       </field>
       <field name="dependencies" persistence-modifier="persistent">
-        <collection element-type="ContinuumDependency" dependent-element="true"/>
+        <collection element-type="org.apache.maven.continuum.model.project.ProjectDependency" dependent-element="true"/>
       </field>
 
       <field name="projectGroup" persistence-modifier="persistent"/>
@@ -69,24 +69,6 @@
       </fetch-group>
     </class>
 
-    <class name="ContinuumNotifier" detachable="true" identity-type="datastore" table="notifier">
-      <field name="type" persistence-modifier="persistent"/>
-      <field name="configuration" persistence-modifier="persistent" default-fetch-group="true"
-             table="notifier_configuration">
-        <map key-type="java.lang.String" value-type="java.lang.String" dependent-key="true" dependent-value="true"/>
-        <join/>
-      </field>
-    </class>
-    <class name="ContinuumDeveloper" detachable="true" table="developer">
-      <field name="scmId" persistence-modifier="persistent"/>
-      <field name="name" persistence-modifier="persistent"/>
-      <field name="email" persistence-modifier="persistent"/>
-    </class>
-    <class name="ContinuumDependency" detachable="true" identity-type="datastore" table="dependency">
-      <field name="groupId" persistence-modifier="persistent"/>
-      <field name="artifactId" persistence-modifier="persistent"/>
-      <field name="version" persistence-modifier="persistent"/>
-    </class>
     <class name="MavenTwoProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
            detachable="true">
       <inheritance strategy="new-table"/>
@@ -165,31 +147,6 @@
     </class>
 
   </package>
-  <package name="org.apache.maven.continuum.scm">
-    <class name="ScmResult" detachable="true" identity-type="datastore" table="scm_result">
-      <field name="success" persistence-modifier="persistent"/>
-      <field name="providerMessage" persistence-modifier="persistent">
-      </field>
-      <field name="commandOutput" persistence-modifier="persistent">
-      </field>
-      <field name="changes" persistence-modifier="persistent" default-fetch-group="true">
-        <collection element-type="ChangeSet" dependent-element="true"/>
-      </field>
-    </class>
-    <class name="ChangeSet" detachable="true" identity-type="datastore" table="change_set">
-      <field name="author" persistence-modifier="persistent"/>
-      <field name="comment" persistence-modifier="persistent"/>
-      <field name="date" persistence-modifier="persistent"/>
-      <field name="files" persistence-modifier="persistent">
-        <collection dependent-element="true" element-type="ChangeFile"/>
-      </field>
-    </class>
-    <class name="ChangeFile" detachable="true" identity-type="datastore" table="change_file">
-      <field name="name" persistence-modifier="persistent"/>
-      <field name="revision" persistence-modifier="persistent"/>
-    </class>
-  </package>
-
   <!-- Profiles -->
 
   <package name="org.apache.maven.continuum.profile">

@@ -18,8 +18,8 @@ package org.apache.maven.continuum.it;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.ContinuumNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.util.FileUtils;
@@ -63,11 +63,11 @@ public class MavenTwoIntegrationTest
         assertEquals( "project.notifiers.size", 2, project.getNotifiers().size() );
 
         //TODO: Activate this test when CONTINUUM-252 will be fixed
-        //removeNotifier( projectId, ( (ContinuumNotifier) project.getNotifiers().get( 1 ) ).getType() );
+        //removeNotifier( projectId, ( (ProjectNotifier) project.getNotifiers().get( 1 ) ).getType() );
 
         //assertEquals( "project.notifiers.size", 1, project.getNotifiers().size() );
 
-        Map configuration = ( (ContinuumNotifier) project.getNotifiers().get( 0 ) ).getConfiguration();
+        Map configuration = ( (ProjectNotifier) project.getNotifiers().get( 0 ) ).getConfiguration();
 
         assertEquals( "project.notifiers[1].configuration.size", 1, configuration.size() );
 
