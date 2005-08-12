@@ -80,14 +80,14 @@ public class MavenTwoContinuumProjectBuilder
     //
     // ----------------------------------------------------------------------
 
-    private void readModules( URL url,
-                              ContinuumProjectBuildingResult result,
-                              boolean groupPom )
+    private void readModules( URL url, ContinuumProjectBuildingResult result, boolean groupPom )
     {
         MavenProject mavenProject;
 
         try
         {
+            // TODO: this isn't finding parents due to relocating to the URL
+            // TODO: the whole modules resolution is funky
             mavenProject = builderHelper.getMavenProject( createMetadataFile( url ) );
         }
         catch ( MavenBuilderHelperException e )
@@ -219,7 +219,7 @@ public class MavenTwoContinuumProjectBuilder
 
         IssueManagement issueManagement = mavenProject.getIssueManagement();
 
-        if( issueManagement != null )
+        if ( issueManagement != null )
         {
             issueManagementUrl = issueManagement.getUrl();
         }

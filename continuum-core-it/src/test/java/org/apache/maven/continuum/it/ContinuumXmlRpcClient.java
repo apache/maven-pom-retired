@@ -16,35 +16,34 @@ package org.apache.maven.continuum.it;
  * limitations under the License.
  */
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Vector;
-import java.util.Hashtable;
-import java.util.List;
-import java.net.MalformedURLException;
-import java.io.IOException;
-import java.beans.IntrospectionException;
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.project.AntProject;
+import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumSchedule;
+import org.apache.maven.continuum.project.MavenOneProject;
+import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.ShellProject;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.scm.ScmResult;
 import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumBuild;
-import org.apache.maven.continuum.project.MavenTwoProject;
-import org.apache.maven.continuum.project.MavenOneProject;
-import org.apache.maven.continuum.project.AntProject;
-import org.apache.maven.continuum.project.ShellProject;
-import org.apache.maven.continuum.project.ContinuumNotifier;
-import org.apache.maven.continuum.project.ContinuumSchedule;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.xmlrpc.XmlRpcClientLite;
 import org.apache.xmlrpc.XmlRpcClient;
+import org.apache.xmlrpc.XmlRpcClientLite;
 import org.apache.xmlrpc.XmlRpcException;
-
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
+
+import java.beans.IntrospectionException;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -118,9 +117,7 @@ public abstract class ContinuumXmlRpcClient
     public Collection getAllProjects( int start, int end )
         throws ContinuumException
     {
-        return (Collection) invoke( "getProjects",
-                                    new Object[]{},
-                                    ContinuumProject.class );
+        return (Collection) invoke( "getProjects", new Object[]{}, ContinuumProject.class );
     }
 
     public List getProjectsInBuildOrder()
@@ -248,10 +245,8 @@ public abstract class ContinuumXmlRpcClient
     public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
         throws ContinuumException
     {
-        return (ContinuumProjectBuildingResult)
-            invoke( "addMavenOneProject",
-                    new Object[]{ metadataUrl, },
-                    ContinuumProjectBuildingResult.class );
+        return (ContinuumProjectBuildingResult) invoke( "addMavenOneProject", new Object[]{metadataUrl,},
+                                                        ContinuumProjectBuildingResult.class );
     }
 
     public String addMavenOneProject( MavenOneProject mavenOneProject )
@@ -366,12 +361,6 @@ public abstract class ContinuumXmlRpcClient
         throw new UnsupportedOperationException();
     }
 
-    public void removeSchedule( String scheduleId )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -383,7 +372,7 @@ public abstract class ContinuumXmlRpcClient
 
         for ( int i = 0; i < arguments.length; i++ )
         {
-            Object argument = arguments[ i ];
+            Object argument = arguments[i];
 
             vector.add( argument );
         }
@@ -414,10 +403,8 @@ public abstract class ContinuumXmlRpcClient
             String stackTrace = (String) returnValue.get( "stackTrace" );
 
             throw new ContinuumException( "Error while calling the remote method '" + method + "'. " + EOL +
-                                          "Result code: " + result + EOL +
-                                          "Remote method: " + remoteMethod + EOL +
-                                          "Message: " + message + "." + EOL +
-                                          "Stack trace: " + stackTrace );
+                "Result code: " + result + EOL + "Remote method: " + remoteMethod + EOL + "Message: " + message + "." +
+                EOL + "Stack trace: " + stackTrace );
         }
 
         System.err.println( "return value: " + returnValue );
@@ -431,12 +418,12 @@ public abstract class ContinuumXmlRpcClient
         catch ( InstantiationException e )
         {
             throw new ContinuumException( "Could not instantiate the return type '" + returnType.getName() + "'. " +
-                                          "Make sure this type has a empy public constructor.", e );
+                "Make sure this type has a empy public constructor.", e );
         }
         catch ( IllegalAccessException e )
         {
             throw new ContinuumException( "Could not instantiate the return type '" + returnType.getName() + "'. " +
-                                          "Make sure this type has a empy public constructor.", e );
+                "Make sure this type has a empy public constructor.", e );
         }
 
         try
@@ -445,21 +432,18 @@ public abstract class ContinuumXmlRpcClient
         }
         catch ( IntrospectionException e )
         {
-            throw new ContinuumException( "Error while building the return object. " +
-                                          "XMLRPC return value type: " + returnValue.getClass().getName() + ". " +
-                                          "Method return type: " + returnType.getName() + ".", e );
+            throw new ContinuumException( "Error while building the return object. " + "XMLRPC return value type: " +
+                returnValue.getClass().getName() + ". " + "Method return type: " + returnType.getName() + ".", e );
         }
         catch ( IllegalAccessException e )
         {
-            throw new ContinuumException( "Error while building the return object. " +
-                                          "XMLRPC return value type: " + returnValue.getClass().getName() + ". " +
-                                          "Method return type: " + returnType.getName() + ".", e );
+            throw new ContinuumException( "Error while building the return object. " + "XMLRPC return value type: " +
+                returnValue.getClass().getName() + ". " + "Method return type: " + returnType.getName() + ".", e );
         }
         catch ( InvocationTargetException e )
         {
-            throw new ContinuumException( "Error while building the return object. " +
-                                          "XMLRPC return value type: " + returnValue.getClass().getName() + ". " +
-                                          "Method return type: " + returnType.getName() + ".", e );
+            throw new ContinuumException( "Error while building the return object. " + "XMLRPC return value type: " +
+                returnValue.getClass().getName() + ". " + "Method return type: " + returnType.getName() + ".", e );
         }
 
         return object;

@@ -17,19 +17,14 @@
       <field name="name" persistence-modifier="persistent"/>
       <field name="scmUrl" persistence-modifier="persistent"/>
       <field name="version" persistence-modifier="persistent"/>
-      <field name="path" persistence-modifier="persistent"/>
       <field name="state" persistence-modifier="none"/>
       <field name="executorId" persistence-modifier="persistent"/>
       <field name="latestBuildId" persistence-modifier="persistent"/>
       <field name="buildNumber" persistence-modifier="persistent"/>
-      <field name="scmResult" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
-      <field name="checkOutErrorMessage" persistence-modifier="persistent"/>
-      <field name="checkOutErrorException" persistence-modifier="persistent"/>
-      <field name="commandLineArguments" persistence-modifier="persistent"/>
+      <field name="checkoutResult" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
       <field name="url" persistence-modifier="persistent"/>
       <field name="artifactId" persistence-modifier="persistent"/>
       <field name="groupId" persistence-modifier="persistent"/>
-      <field name="testOutputDirectory" persistence-modifier="persistent"/>
       <!-- Collections -->
       <field name="builds" persistence-modifier="persistent">
         <collection element-type="ContinuumBuild" dependent-element="true"/>
@@ -43,21 +38,15 @@
       <field name="dependencies" persistence-modifier="persistent">
         <collection element-type="ContinuumDependency" dependent-element="true"/>
       </field>
-      <!-- Schedules exist on their own, so we don't want cascading deletes affect them. -->
-      <field name="schedules" persistence-modifier="persistent" table="project_schedules">
-        <collection element-type="ContinuumSchedule"/>
-        <join/>
-      </field>
 
       <field name="projectGroup" persistence-modifier="persistent"/>
 
       <fetch-group name="project-detail">
-        <field name="scmResult"/>
+        <field name="checkoutResult"/>
         <field name="builds"/>
         <field name="developers"/>
         <field name="notifiers"/>
         <field name="dependencies"/>
-        <field name="schedules"/>
         <field name="projectGroup"/>
       </fetch-group>
     </class>
@@ -101,21 +90,24 @@
     </class>
     <class name="MavenTwoProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
            detachable="true">
-      <inheritance strategy="new-table" />
+      <inheritance strategy="new-table"/>
+      <field name="commandLineArguments" persistence-modifier="persistent"/>
       <field name="goals" persistence-modifier="persistent">
         <column name="M2_GOALS"/>
       </field>
     </class>
     <class name="MavenOneProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
            detachable="true">
-      <inheritance strategy="new-table" />
+      <inheritance strategy="new-table"/>
+      <field name="commandLineArguments" persistence-modifier="persistent"/>
       <field name="goals" persistence-modifier="persistent">
         <column name="M1_GOALS"/>
       </field>
     </class>
     <class name="AntProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
            detachable="true">
-      <inheritance strategy="new-table" />
+      <inheritance strategy="new-table"/>
+      <field name="commandLineArguments" persistence-modifier="persistent"/>
       <field name="executable" persistence-modifier="persistent">
         <column name="ANT_EXECUTABLE"/>
       </field>
@@ -123,7 +115,8 @@
     </class>
     <class name="ShellProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
            detachable="true">
-      <inheritance strategy="new-table" />
+      <inheritance strategy="new-table"/>
+      <field name="commandLineArguments" persistence-modifier="persistent"/>
       <field name="executable" persistence-modifier="persistent">
         <column name="SHELL_EXECUTABLE"/>
       </field>

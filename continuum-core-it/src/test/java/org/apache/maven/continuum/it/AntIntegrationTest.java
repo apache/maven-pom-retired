@@ -16,17 +16,16 @@ package org.apache.maven.continuum.it;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
+import org.apache.maven.continuum.project.AntProject;
+import org.apache.maven.continuum.project.ContinuumNotifier;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.codehaus.plexus.util.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
-
-import org.apache.maven.continuum.project.AntProject;
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumNotifier;
-import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
-
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -140,21 +139,13 @@ public class AntIntegrationTest
 
         File buildXml = new File( root, "build.xml" );
 
-        FileUtils.fileWrite( buildXml.getAbsolutePath(),
-            "<project default=\"foo\">\n" +
-            "  <target name=\"build\">\n" +
-            "    <property name=\"classes\" value=\"target/classes\"/>\n" +
-            "    <mkdir dir=\"${classes}\"/>\n" +
-            "    <javac srcdir=\"src/main/java\" destdir=\"${classes}\"/>\n" +
-            "  </target>\n" +
-            "  <target name=\"clean\">\n" +
-            "    <delete dir=\"${classes}\"/>\n" +
-            "  </target>\n" +
-            "</project>" );
+        FileUtils.fileWrite( buildXml.getAbsolutePath(), "<project default=\"foo\">\n" + "  <target name=\"build\">\n" +
+            "    <property name=\"classes\" value=\"target/classes\"/>\n" + "    <mkdir dir=\"${classes}\"/>\n" +
+            "    <javac srcdir=\"src/main/java\" destdir=\"${classes}\"/>\n" + "  </target>\n" +
+            "  <target name=\"clean\">\n" + "    <delete dir=\"${classes}\"/>\n" + "  </target>\n" + "</project>" );
 
         assertTrue( new File( root, "src/main/java" ).mkdirs() );
 
-        FileUtils.fileWrite( new File( root, "src/main/java/Foo.java" ).getAbsolutePath(),
-                             "class Foo { }" );
+        FileUtils.fileWrite( new File( root, "src/main/java/Foo.java" ).getAbsolutePath(), "class Foo { }" );
     }
 }

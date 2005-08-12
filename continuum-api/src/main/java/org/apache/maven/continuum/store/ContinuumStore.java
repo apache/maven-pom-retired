@@ -103,9 +103,6 @@ public interface ContinuumStore
     ContinuumSchedule updateSchedule( ContinuumSchedule schedule )
         throws ContinuumStoreException;
 
-    void removeSchedule( String scheduleId )
-        throws ContinuumStoreException;
-
     Collection getSchedules()
         throws ContinuumStoreException;
 

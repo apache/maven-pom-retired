@@ -89,6 +89,11 @@
           <type>String</type>
         </field>
         <field>
+          <name>executorId</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
           <name>name</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -113,10 +118,16 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
+        <!-- TODO: should these 3 just be queried from the builds list? -->
         <field>
           <name>state</name>
           <version>1.0.0+</version>
           <type>int</type>
+        </field>
+        <field>
+          <name>latestBuildId</name>
+          <version>1.0.0</version>
+          <type>String</type>
         </field>
         <field>
           <name>buildNumber</name>

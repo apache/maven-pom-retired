@@ -43,11 +43,6 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
-        <field>
-          <name>path</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
         <field stash.storable="false">
           <name>state</name>
           <version>1.0.0</version>
@@ -77,28 +72,11 @@
           </association>
         </field>
         <field>
-          <name>scmResult</name>
+          <name>checkoutResult</name>
           <version>1.0.0</version>
           <association>
             <type>ScmResult</type>
           </association>
-        </field>
-        <field>
-          <name>checkOutErrorMessage</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>checkOutErrorException</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <!-- TODO: Move to the executor configuration. -->
-        <!-- TODO: Uh, oh, and rename FooProject to FooExecutorConfiguration -->
-        <field>
-          <name>commandLineArguments</name>
-          <version>1.0.0</version>
-          <type>String</type>
         </field>
         <field>
           <name>url</name>
@@ -113,16 +91,6 @@
         <field>
           <name>groupId</name>
           <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>testOutputDirectory</name>
-          <version>1.0.0</version>
-          <description><![CDATA[
-            The directory where test output is generated. This value is relative to the project's
-            working directory and is typically contained somewhere within the working directory. In
-            m2's case it would be target/surefire-reports.
-          ]]></description>
           <type>String</type>
         </field>
         <field>
@@ -146,15 +114,6 @@
           <version>1.0.0</version>
           <association stash.part="true">
             <type>ContinuumDependency</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>schedules</name>
-          <version>1.0.0</version>
-          <type>Set</type>
-          <association stash.part="false">
-            <type>ContinuumSchedule</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
@@ -313,6 +272,11 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
+        <field>
+          <name>commandLineArguments</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
       </fields>
     </class>
 
@@ -323,6 +287,11 @@
       <fields>
         <field>
           <name>goals</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>commandLineArguments</name>
           <version>1.0.0</version>
           <type>String</type>
         </field>
@@ -344,6 +313,11 @@
           <version>1.0.0</version>
           <type>String</type>
         </field>
+        <field>
+          <name>commandLineArguments</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
       </fields>
     </class>
 
@@ -354,6 +328,11 @@
       <fields>
         <field>
           <name>executable</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>commandLineArguments</name>
           <version>1.0.0</version>
           <type>String</type>
         </field>

@@ -47,7 +47,7 @@ public class ContinuumXmlRpcTest
 
         Project project = makeStubProject( "My Project" );
 
-        ProjectGroup projectGroup = getDefaultProjectGroup( store );
+        ProjectGroup projectGroup = getDefaultProjectGroup();
 
         projectGroup.addProject( project );
 

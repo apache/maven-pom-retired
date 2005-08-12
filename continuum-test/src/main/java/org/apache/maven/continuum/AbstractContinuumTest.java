@@ -29,7 +29,6 @@ import org.codehaus.plexus.jdo.ConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.JdoFactory;
 
-import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public abstract class AbstractContinuumTest
      * When adding projects using addProject( project ) the project will be
      * put in this group. All project has to belong to a group.
      */
-    private static ProjectGroup defaultProjectGroup;
+    private ProjectGroup defaultProjectGroup;
 
     private ContinuumStore store;
 
@@ -63,6 +62,17 @@ public abstract class AbstractContinuumTest
         setUpConfigurationService( (ConfigurationService) lookup( ConfigurationService.ROLE ) );
 
         getStore();
+
+        ProjectGroup projectGroup = new ProjectGroup();
+
+        projectGroup.setName( "Test Project Group" );
+
+        projectGroup.setGroupId( "foo.test" );
+
+        projectGroup.setDescription(
+            "This is the default group that all projects will be " + "added to when using addProject()." );
+
+        defaultProjectGroup = store.addProjectGroup( projectGroup );
     }
 
     public static void setUpConfigurationService( ConfigurationService configurationService )
@@ -75,22 +85,8 @@ public abstract class AbstractContinuumTest
         configurationService.setWorkingDirectory( getTestFile( "target/working-directory" ) );
     }
 
-    public static ProjectGroup getDefaultProjectGroup( ContinuumStore store )
+    protected ProjectGroup getDefaultProjectGroup()
     {
-        if ( defaultProjectGroup == null )
-        {
-            ProjectGroup projectGroup = new ProjectGroup();
-
-            projectGroup.setName( "Test Project Group" );
-
-            projectGroup.setGroupId( "foo.test" );
-
-            projectGroup.setDescription(
-                "This is the default group that all projects will be " + "added to when using addProject()." );
-
-            defaultProjectGroup = store.addProjectGroup( projectGroup );
-        }
-
         return defaultProjectGroup;
     }
 
@@ -240,27 +236,10 @@ public abstract class AbstractContinuumTest
     // Public utility methods
     // ----------------------------------------------------------------------
 
-    public static Project addProject( ContinuumStore store, Project project )
+    public Project addProject( ContinuumStore store, Project project )
         throws Exception
     {
-        if ( project.getProjectGroup() == null )
-        {
-            project.setProjectGroup( getDefaultProjectGroup( store ) );
-        }
-
-        assertNotNull( "project group == null", project.getProjectGroup() );
-
-        assertTrue( "!JDOHelper.isDetached( project.getProjectGroup() )",
-                    JDOHelper.isDetached( project.getProjectGroup() ) );
-
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        getDefaultProjectGroup( store ).addProject( project );
-        store.updateProjectGroup( getDefaultProjectGroup( store ) );
-
-        assertNotNull( "project group == null", project.getProjectGroup() );
+        ProjectGroup defaultProjectGroup = getDefaultProjectGroup();
 
         // ----------------------------------------------------------------------
         //
@@ -274,33 +253,27 @@ public abstract class AbstractContinuumTest
 
         scmResult.setProviderMessage( "providerMessage" );
 
+        project.setCheckoutResult( scmResult );
+
+        defaultProjectGroup.addProject( project );
+        store.updateProjectGroup( defaultProjectGroup );
+
+        project = store.getProject( project.getId() );
+        assertNotNull( "project group == null", project.getProjectGroup() );
+
         return project;
     }
 
-    public static Project addProject( ContinuumStore store, String name )
+    public Project addProject( ContinuumStore store, String name )
         throws Exception
     {
         return addProject( store, makeStubProject( name ) );
     }
 
-    public static Project addProject( ContinuumStore store, String name, String nagEmailAddress, String version )
+    public Project addProject( ContinuumStore store, String name, String nagEmailAddress, String version )
         throws Exception
     {
-        Project project = makeProject( name, nagEmailAddress, version );
-
-        ProjectGroup defaultProjectGroup = getDefaultProjectGroup( store );
-        defaultProjectGroup.addProject( project );
-        store.updateProjectGroup( defaultProjectGroup );
-
-        ScmResult scmResult = new ScmResult();
-
-        scmResult.setSuccess( true );
-
-        setCheckoutDone( store, project, scmResult );
-
-        assertNotNull( project );
-
-        return project;
+        return addProject( store, makeProject( name, nagEmailAddress, version ) );
     }
 
     public static void setCheckoutDone( ContinuumStore store, Project project, ScmResult scmResult )

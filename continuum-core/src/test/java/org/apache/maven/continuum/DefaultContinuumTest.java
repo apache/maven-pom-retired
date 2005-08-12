@@ -25,8 +25,8 @@ import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>

@@ -127,26 +127,6 @@ public class JdoContinuumStore
 
             ContinuumProject project = (ContinuumProject) pm.getObjectById( id );
 
-            // ----------------------------------------------------------------------
-            // We need to remove this project reference from any schedule in the
-            // system. So grab the list of schedules this project belongs to
-            // then iterate through the collection of schedules removing the
-            // reference to this project. This seems like a bit much but the
-            // only thing that works.
-            // ----------------------------------------------------------------------
-
-            if ( project.getSchedules() != null && project.getSchedules().size() > 0 )
-            {
-                Set schedules = project.getSchedules();
-
-                for ( Iterator i = schedules.iterator(); i.hasNext(); )
-                {
-                    ContinuumSchedule schedule = (ContinuumSchedule) i.next();
-
-                    schedule.getProjects().remove( project );
-                }
-            }
-
             if ( project.getProjectGroup() != null )
             {
                 ContinuumProjectGroup pg = project.getProjectGroup();
@@ -167,24 +147,6 @@ public class JdoContinuumStore
     public ContinuumProject updateProject( ContinuumProject project )
         throws ContinuumStoreException
     {
-        String checkoutErrorMessage = project.getCheckOutErrorMessage();
-
-        String checkoutErrorException = project.getCheckOutErrorException();
-
-        if ( checkoutErrorMessage != null && checkoutErrorMessage.length() > 255 )
-        {
-            project.setCheckOutErrorMessage( checkoutErrorMessage.substring( 0, 255 ) );
-        }
-
-        if ( checkoutErrorException != null && checkoutErrorException.length() > 255 )
-        {
-            project.setCheckOutErrorException( checkoutErrorException.substring( 0, 255 ) );
-        }
-
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
         PersistenceManager pm = pmf.getPersistenceManager();
 
         Transaction tx = pm.currentTransaction();
@@ -374,7 +336,7 @@ public class JdoContinuumStore
 
             ContinuumProject project = getContinuumProject( pm, projectId, false );
 
-            ScmResult scmResult = project.getScmResult();
+            ScmResult scmResult = project.getCheckoutResult();
 
             if ( scmResult == null )
             {
@@ -466,51 +428,6 @@ public class JdoContinuumStore
     {
         updateObject( schedule );
         return schedule;
-    }
-
-    public void removeSchedule( String scheduleId )
-        throws ContinuumStoreException
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            Object id = pm.newObjectIdInstance( ContinuumSchedule.class, scheduleId );
-
-            ContinuumSchedule schedule = (ContinuumSchedule) pm.getObjectById( id );
-
-            // ----------------------------------------------------------------------
-            // We need to remove this schedule reference from any project in the
-            // system. So grab the list of projects this schedule belongs to
-            // then iterate through the collection of projects removing the
-            // reference to this schedule. This seems like a bit much but the
-            // only thing that works.
-            // ----------------------------------------------------------------------
-
-            if ( schedule.getProjects() != null && schedule.getProjects().size() > 0 )
-            {
-                Set projects = schedule.getProjects();
-
-                for ( Iterator i = projects.iterator(); i.hasNext(); )
-                {
-                    ContinuumProject project = (ContinuumProject) i.next();
-
-                    project.getSchedules().remove( schedule );
-                }
-            }
-
-            pm.deletePersistent( schedule );
-
-            tx.commit();
-        }
-        finally
-        {
-            rollback( tx );
-        }
     }
 
     public ContinuumBuild addBuild( String projectId, ContinuumBuild build )

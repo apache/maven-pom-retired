@@ -454,8 +454,7 @@ public abstract class AbstractIntegrationTest
 
         ContinuumProject project = getContinuum().getProject( projectId );
 
-        while ( project.getScmResult() == null &&
-            project.getCheckOutErrorMessage() == null & project.getCheckOutErrorException() == null )
+        while ( project.getCheckoutResult() == null )
         {
             if ( System.currentTimeMillis() - start > timeout )
             {
@@ -477,18 +476,22 @@ public abstract class AbstractIntegrationTest
 
         String message = "The check out was not successful for project #" + project.getId() + ": ";
 
-        if ( project.getScmResult() == null )
+        if ( project.getCheckoutResult() == null )
         {
+/* TODO
             print( "check out error message: " + project.getCheckOutErrorMessage() );
             print( "check out error exception: " );
             print( project.getCheckOutErrorException() );
+*/
 
             fail( "project.scmResult == null" );
         }
 
+/* TODO
         assertEquals( message + "Checkout error message != null", null, project.getCheckOutErrorMessage() );
         assertEquals( message + "Checkout error exception != null", null, project.getCheckOutErrorException() );
-        assertTrue( message + "scmResult.success != true", project.getScmResult().isSuccess() );
+*/
+        assertTrue( message + "scmResult.success != true", project.getCheckoutResult().isSuccess() );
     }
 
     public ContinuumBuild waitForBuild( String buildId )
@@ -531,9 +534,9 @@ public abstract class AbstractIntegrationTest
 
     public void assertCheckedOutFiles( ContinuumProject project, String[] expectedCheckedOutFiles )
     {
-        assertNotNull( "project.scmResult", project.getScmResult() );
+        assertNotNull( "project.scmResult", project.getCheckoutResult() );
 
-        ScmResult scmResult = project.getScmResult();
+        ScmResult scmResult = project.getCheckoutResult();
 
         List actualCheckedOutFiles = scmResult.getFiles();
 
