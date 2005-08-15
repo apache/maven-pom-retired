@@ -19,17 +19,15 @@ package org.apache.maven.continuum.core.action;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
@@ -76,7 +74,7 @@ public class ExecuteBuilderContinuumAction
         // Make the build
         // ----------------------------------------------------------------------
 
-        ContinuumBuild build = new ContinuumBuild();
+        BuildResult build = new BuildResult();
 
         build.setStartTime( new Date().getTime() );
 
@@ -87,21 +85,15 @@ public class ExecuteBuilderContinuumAction
 
         build.setScmResult( scmResult );
 
-        String buildId = store.addBuild( project.getId(), build ).getId();
+        build = store.addBuildResult( project, build );
 
-        context.put( KEY_BUILD_ID, buildId );
-
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        build = store.getBuild( buildId );
+        context.put( KEY_BUILD_ID, Integer.toString( build.getId() ) );
 
         try
         {
             notifier.runningGoals( project, build );
 
-            File buildOutputFile = store.getBuildOutputFile( buildId, project.getId() );
+            File buildOutputFile = store.getBuildOutputFile( build.getId(), project.getId() );
 
             ContinuumBuildExecutionResult result = buildExecutor.build( project, buildOutputFile );
 
@@ -123,7 +115,7 @@ public class ExecuteBuilderContinuumAction
             // Copy over the build result
             // ----------------------------------------------------------------------
 
-            build = store.updateBuild( build );
+            store.updateBuildResult( build );
 
             notifier.goalsCompleted( project, build );
         }
@@ -134,10 +126,7 @@ public class ExecuteBuilderContinuumAction
     // ----------------------------------------------------------------------
 
     private boolean isNew( ContinuumProject project )
-        throws ContinuumStoreException
     {
-        Collection builds = store.getBuildsForProject( project.getId(), 0, 0 );
-
-        return builds.size() == 0;
+        return project.getBuilds().size() == 0;
     }
 }

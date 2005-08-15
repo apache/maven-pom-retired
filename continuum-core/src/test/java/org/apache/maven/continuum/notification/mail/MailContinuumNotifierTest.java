@@ -33,13 +33,11 @@ public class MailContinuumNotifierTest
     public void testSuccessfulBuild()
         throws Exception
     {
-        ContinuumProject project = makeStubMavenTwoProject( "Test Project" );
+        Project project = makeStubProject( "Test Project" );
 
-        ContinuumBuild build = makeBuild( ContinuumProjectState.OK );
+        BuildResult build = makeBuild( ContinuumProjectState.OK );
 
-        MailMessage mailMessage = sendNotificationAndGetMessage( project,
-                                                                 build,
-                                                                 "lots out build output" );
+        MailMessage mailMessage = sendNotificationAndGetMessage( project, build, "lots out build output" );
 
         dumpContent( mailMessage );
     }
@@ -47,13 +45,11 @@ public class MailContinuumNotifierTest
     public void testFailedBuild()
         throws Exception
     {
-        ContinuumProject project = makeStubMavenTwoProject( "Test Project" );
+        Project project = makeStubProject( "Test Project" );
 
-        ContinuumBuild build = makeBuild( ContinuumProjectState.FAILED );
+        BuildResult build = makeBuild( ContinuumProjectState.FAILED );
 
-        MailMessage mailMessage = sendNotificationAndGetMessage( project,
-                                                                 build,
-                                                                 "output" );
+        MailMessage mailMessage = sendNotificationAndGetMessage( project, build, "output" );
 
         dumpContent( mailMessage );
     }
@@ -61,15 +57,13 @@ public class MailContinuumNotifierTest
     public void testErrorenousBuild()
         throws Exception
     {
-        ContinuumProject project = makeStubMavenTwoProject( "Test Project" );
+        Project project = makeStubProject( "Test Project" );
 
-        ContinuumBuild build = makeBuild( ContinuumProjectState.ERROR );
+        BuildResult build = makeBuild( ContinuumProjectState.ERROR );
 
         build.setError( "Big long error message" );
 
-        MailMessage mailMessage = sendNotificationAndGetMessage( project,
-                                                                 build,
-                                                                 "lots of stack traces" );
+        MailMessage mailMessage = sendNotificationAndGetMessage( project, build, "lots of stack traces" );
 
         dumpContent( mailMessage );
     }
@@ -87,8 +81,7 @@ public class MailContinuumNotifierTest
     //
     // ----------------------------------------------------------------------
 
-    private MailMessage sendNotificationAndGetMessage( ContinuumProject project, ContinuumBuild build,
-                                                       String buildOutput )
+    private MailMessage sendNotificationAndGetMessage( Project project, BuildResult build, String buildOutput )
         throws Exception
     {
         Set recipients = new HashSet();
@@ -144,11 +137,11 @@ public class MailContinuumNotifierTest
         return mailMessage;
     }
 
-    private ContinuumBuild makeBuild( int state )
+    private BuildResult makeBuild( int state )
     {
-        ContinuumBuild build = new ContinuumBuild();
+        BuildResult build = new BuildResult();
 
-        build.setId( "17" );
+        build.setId( 17 );
 
         build.setStartTime( System.currentTimeMillis() );
 
@@ -159,16 +152,6 @@ public class MailContinuumNotifierTest
         build.setTrigger( ContinuumProjectState.TRIGGER_FORCED );
 
         build.setExitCode( 10 );
-
-        ScmResult scmResult = new ScmResult();
-
-        ScmFile file = new ScmFile();
-
-        file.setPath( "/hey/yo/lets/go" );
-
-        scmResult.getFiles().add( file );
-
-        build.setScmResult( scmResult );
 
         return build;
     }

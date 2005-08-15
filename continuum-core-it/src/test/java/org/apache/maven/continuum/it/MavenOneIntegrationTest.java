@@ -65,7 +65,7 @@ public class MavenOneIntegrationTest
 
         progress( "Building Maven 1 project" );
 
-        String buildId = buildProject( projectId, false ).getId();
+        int buildId = buildProject( projectId, false ).getId();
 
         assertSuccessfulMaven1Build( buildId, projectId );
 

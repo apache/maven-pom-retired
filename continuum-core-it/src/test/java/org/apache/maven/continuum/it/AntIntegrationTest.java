@@ -70,7 +70,7 @@ public class AntIntegrationTest
 
         progress( "Building SVN Ant project" );
 
-        String buildId = buildProject( project.getId(), false ).getId();
+        int buildId = buildProject( project.getId(), false ).getId();
 
         assertSuccessfulAntBuild( buildId, project.getId() );
 
@@ -110,7 +110,7 @@ public class AntIntegrationTest
 
         progress( "Building CVS Ant project" );
 
-        String buildId = buildProject( projectId, false ).getId();
+        int buildId = buildProject( projectId, false ).getId();
 
         assertSuccessfulAntBuild( buildId, projectId );
 

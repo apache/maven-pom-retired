@@ -18,13 +18,12 @@ package org.apache.maven.continuum.notification.mail;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.codehaus.plexus.mailsender.MailMessage;
@@ -162,15 +161,12 @@ public class MailContinuumNotifier
     // Notifier Implementation
     // ----------------------------------------------------------------------
 
-    public void sendNotification( String source,
-                                  Set recipients,
-                                  Map configuration,
-                                  Map context )
+    public void sendNotification( String source, Set recipients, Map configuration, Map context )
         throws NotificationException
     {
         ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
-        ContinuumBuild build = (ContinuumBuild) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
+        BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
         String buildOutput = (String) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD_OUTPUT );
 
@@ -191,12 +187,7 @@ public class MailContinuumNotifier
         {
             if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
             {
-                buildComplete( project,
-                               build,
-                               buildOutput,
-                               source,
-                               recipients,
-                               configuration );
+                buildComplete( project, build, buildOutput, source, recipients, configuration );
             }
         }
         catch ( ContinuumException e )
@@ -205,19 +196,15 @@ public class MailContinuumNotifier
         }
     }
 
-    private void buildComplete( ContinuumProject project,
-                                ContinuumBuild build,
-                                String buildOutput,
-                                String source,
-                                Set recipients,
-                                Map configuration )
+    private void buildComplete( ContinuumProject project, BuildResult build, String buildOutput, String source,
+                                Set recipients, Map configuration )
         throws ContinuumException
     {
         // ----------------------------------------------------------------------
         // Check if the mail should be sent at all
         // ----------------------------------------------------------------------
 
-        ContinuumBuild previousBuild = getPreviousBuild( project, build );
+        BuildResult previousBuild = getPreviousBuild( project, build );
 
         if ( !shouldNotify( build, previousBuild ) )
         {
@@ -278,7 +265,7 @@ public class MailContinuumNotifier
         }
         catch ( Exception e )
         {
-            throw new ContinuumException( "Error while generating mail contents." , e );
+            throw new ContinuumException( "Error while generating mail contents.", e );
         }
 
         // ----------------------------------------------------------------------
@@ -294,7 +281,7 @@ public class MailContinuumNotifier
     //
     // ----------------------------------------------------------------------
 
-    private String generateSubject( ContinuumProject project, ContinuumBuild build )
+    private String generateSubject( ContinuumProject project, BuildResult build )
     {
         int state = build.getState();
 
@@ -318,10 +305,7 @@ public class MailContinuumNotifier
         }
     }
 
-    private void sendMessage( ContinuumProject project,
-                              Set recipients,
-                              String subject,
-                              String content,
+    private void sendMessage( ContinuumProject project, Set recipients, String subject, String content,
                               Map configuration )
         throws ContinuumException
     {
@@ -339,7 +323,8 @@ public class MailContinuumNotifier
 
         if ( fromMailbox == null )
         {
-            getLogger().warn( project.getName() + ": Project is missing nag email and global from mailbox is missing, not sending mail." );
+            getLogger().warn( project.getName() +
+                ": Project is missing nag email and global from mailbox is missing, not sending mail." );
 
             return;
         }
@@ -369,7 +354,7 @@ public class MailContinuumNotifier
                 String mailbox = (String) it.next();
 
                 // TODO: set a proper name
-                MailMessage.Address to = new MailMessage.Address( mailbox  );
+                MailMessage.Address to = new MailMessage.Address( mailbox );
 
                 getLogger().info( "Recipient: To '" + to + "'." );
 
@@ -406,7 +391,7 @@ public class MailContinuumNotifier
         return address;
     }
 
-    private boolean shouldNotify( ContinuumBuild build, ContinuumBuild previousBuild )
+    private boolean shouldNotify( BuildResult build, BuildResult previousBuild )
     {
         if ( build == null )
         {
@@ -414,8 +399,7 @@ public class MailContinuumNotifier
         }
 
         // Always send if the project failed
-        if ( build.getState() == ContinuumProjectState.FAILED ||
-             build.getState() == ContinuumProjectState.ERROR)
+        if ( build.getState() == ContinuumProjectState.FAILED || build.getState() == ContinuumProjectState.ERROR )
         {
             return true;
         }
@@ -427,7 +411,8 @@ public class MailContinuumNotifier
         }
 
         // Send if the state has changed
-        getLogger().info( "Current build state: " + build.getState() + ", previous build state: " + previousBuild.getState() );
+        getLogger().info(
+            "Current build state: " + build.getState() + ", previous build state: " + previousBuild.getState() );
 
         if ( build.getState() != previousBuild.getState() )
         {
@@ -439,33 +424,23 @@ public class MailContinuumNotifier
         return false;
     }
 
-    private ContinuumBuild getPreviousBuild( ContinuumProject project, ContinuumBuild currentBuild )
+    private BuildResult getPreviousBuild( ContinuumProject project, BuildResult currentBuild )
         throws ContinuumException
     {
-        Collection builds;
-
-        try
-        {
-            builds = store.getBuildsForProject( project.getId(), 0, 0 );
-        }
-        catch ( ContinuumStoreException ex )
-        {
-            throw new ContinuumException( "Error while finding the last project build.", ex );
-        }
+        Collection builds = project.getBuilds();
 
         if ( builds.size() == 0 )
         {
             return null;
         }
 
-        Iterator itr =  builds.iterator();
-        ContinuumBuild build = (ContinuumBuild) itr.next();
+        Iterator itr = builds.iterator();
+        BuildResult build = (BuildResult) itr.next();
 
-        if ( currentBuild != null && !build.getId().equals( currentBuild.getId() ) )
+        if ( currentBuild != null && build.getId() != currentBuild.getId() )
         {
             throw new ContinuumException( "INTERNAL ERROR: The current build wasn't the first in the build list. " +
-                                          "Current build: '" + currentBuild.getId() + "', " +
-                                          "first build: '" + build.getId() + "'." );
+                "Current build: '" + currentBuild.getId() + "', " + "first build: '" + build.getId() + "'." );
         }
 
         if ( !itr.hasNext() )
@@ -473,7 +448,7 @@ public class MailContinuumNotifier
             return null;
         }
 
-        return (ContinuumBuild) itr.next();
+        return (BuildResult) itr.next();
     }
 
     /**

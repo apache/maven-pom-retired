@@ -24,7 +24,6 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.model.system.Installation;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 
@@ -62,28 +61,10 @@ public interface ContinuumStore
     ScmResult getScmResultForProject( String projectId )
         throws ContinuumStoreException;
 
-    ContinuumBuild addBuild( String projectId, ContinuumBuild build )
+    String getBuildOutput( int buildId, String projectId )
         throws ContinuumStoreException;
 
-    ContinuumBuild updateBuild( ContinuumBuild build )
-        throws ContinuumStoreException;
-
-    ContinuumBuild getBuild( String buildId )
-        throws ContinuumStoreException;
-
-    String getBuildOutput( String buildId, String projectId )
-        throws ContinuumStoreException;
-
-    ContinuumBuild getLatestBuildForProject( String projectId )
-        throws ContinuumStoreException;
-
-    Collection getBuildsForProject( String projectId, int start, int end )
-        throws ContinuumStoreException;
-
-    List getChangedFilesForBuild( String buildId )
-        throws ContinuumStoreException;
-
-    File getBuildOutputFile( String buildId, String projectId )
+    File getBuildOutputFile( int buildId, String projectId )
         throws ContinuumStoreException;
 
     void removeNotifier( ProjectNotifier notifier )
@@ -177,5 +158,14 @@ public interface ContinuumStore
         throws ContinuumObjectNotFoundException;
 
     ProjectGroup getProjectGroupByGroupId( String groupId )
+        throws ContinuumStoreException;
+
+    BuildResult getLatestBuildResultForProject( String projectId )
+        throws ContinuumStoreException;
+
+    BuildResult addBuildResult( ContinuumProject project, BuildResult build )
+        throws ContinuumStoreException;
+
+    void updateBuildResult( BuildResult build )
         throws ContinuumStoreException;
 }

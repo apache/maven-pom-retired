@@ -16,14 +16,13 @@ package org.apache.maven.continuum.web.tool;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.formica.web.ContentGenerator;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.ContinuumProjectState;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.codehaus.plexus.formica.web.ContentGenerator;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -33,7 +32,9 @@ public class ContinuumStateContentGenerator
     extends AbstractLogEnabled
     implements ContentGenerator
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
     public String generate( Object item )
@@ -44,9 +45,10 @@ public class ContinuumStateContentGenerator
         {
             ContinuumProject project = (ContinuumProject) item;
 
+            // TODO: can't we just use project.getState()?
             try
             {
-                ContinuumBuild build = continuum.getLatestBuildForProject( project.getId() );
+                BuildResult build = continuum.getLatestBuildResultForProject( project.getId() );
 
                 if ( build == null )
                 {
@@ -64,7 +66,7 @@ public class ContinuumStateContentGenerator
         }
         else
         {
-            state = ( (ContinuumBuild) item ).getState();
+            state = ( (BuildResult) item ).getState();
         }
 
         if ( state == ContinuumProjectState.NEW )

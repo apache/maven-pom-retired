@@ -18,16 +18,14 @@ package org.apache.maven.continuum.notification.irc;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
-
-import org.codehaus.plexus.notification.NotificationException;
 import org.codehaus.plexus.ircbot.IrcBot;
+import org.codehaus.plexus.notification.NotificationException;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -65,15 +63,12 @@ public class IrcContinuumNotifier
     // Notifier Implementation
     // ----------------------------------------------------------------------
 
-    public void sendNotification( String source,
-                                  Set recipients,
-                                  Map configuration,
-                                  Map context )
+    public void sendNotification( String source, Set recipients, Map configuration, Map context )
         throws NotificationException
     {
         ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
-        ContinuumBuild build = (ContinuumBuild) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
+        BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
         // ----------------------------------------------------------------------
         // If there wasn't any building done, don't notify
@@ -101,16 +96,14 @@ public class IrcContinuumNotifier
         }
     }
 
-    private void buildComplete( ContinuumProject project,
-                                ContinuumBuild build,
-                                Map configuration )
+    private void buildComplete( ContinuumProject project, BuildResult build, Map configuration )
         throws ContinuumException
     {
         // ----------------------------------------------------------------------
         // Check if the message should be sent at all
         // ----------------------------------------------------------------------
 
-        ContinuumBuild previousBuild = getPreviousBuild( project, build );
+        BuildResult previousBuild = getPreviousBuild( project, build );
 
         if ( !shouldNotify( build, previousBuild ) )
         {
@@ -139,7 +132,7 @@ public class IrcContinuumNotifier
 
             ircClient.sendMessageToChannel( channel, generateMessage( project, build ) );
         }
-        catch( Exception e )
+        catch ( Exception e )
         {
             throw new ContinuumException( "Exception while sending message.", e );
         }
@@ -149,7 +142,7 @@ public class IrcContinuumNotifier
             {
                 ircClient.logoff();
             }
-            catch( Exception e )
+            catch ( Exception e )
             {
                 throw new ContinuumException( "Exception while logoff.", e );
             }
@@ -159,7 +152,7 @@ public class IrcContinuumNotifier
                 {
                     ircClient.disconnect();
                 }
-                catch( Exception e )
+                catch ( Exception e )
                 {
                     throw new ContinuumException( "Exception while disconnecting.", e );
                 }
@@ -167,7 +160,7 @@ public class IrcContinuumNotifier
         }
     }
 
-    private String generateMessage( ContinuumProject project, ContinuumBuild build )
+    private String generateMessage( ContinuumProject project, BuildResult build )
         throws ContinuumException
     {
         int state = build.getState();
@@ -196,7 +189,7 @@ public class IrcContinuumNotifier
         return message + " " + getReportUrl( project, build, configurationService );
     }
 
-    private boolean shouldNotify( ContinuumBuild build, ContinuumBuild previousBuild )
+    private boolean shouldNotify( BuildResult build, BuildResult previousBuild )
     {
         if ( build == null )
         {
@@ -217,8 +210,7 @@ public class IrcContinuumNotifier
 
         // Send if the state has changed
         getLogger().info(
-                          "Current build state: " + build.getState() + ", previous build state: "
-                              + previousBuild.getState() );
+            "Current build state: " + build.getState() + ", previous build state: " + previousBuild.getState() );
 
         if ( build.getState() != previousBuild.getState() )
         {
@@ -230,19 +222,10 @@ public class IrcContinuumNotifier
         return false;
     }
 
-    private ContinuumBuild getPreviousBuild( ContinuumProject project, ContinuumBuild currentBuild )
+    private BuildResult getPreviousBuild( ContinuumProject project, BuildResult currentBuild )
         throws ContinuumException
     {
-        Collection builds;
-
-        try
-        {
-            builds = store.getBuildsForProject( project.getId(), 0, 0 );
-        }
-        catch ( ContinuumStoreException ex )
-        {
-            throw new ContinuumException( "Error while finding the last project build.", ex );
-        }
+        Collection builds = project.getBuilds();
 
         if ( builds.size() == 0 )
         {
@@ -250,13 +233,12 @@ public class IrcContinuumNotifier
         }
 
         Iterator itr = builds.iterator();
-        ContinuumBuild build = (ContinuumBuild) itr.next();
+        BuildResult build = (BuildResult) itr.next();
 
-        if ( currentBuild != null && !build.getId().equals( currentBuild.getId() ) )
+        if ( currentBuild != null && build.getId() != currentBuild.getId() )
         {
-            throw new ContinuumException( "INTERNAL ERROR: The current build wasn't the first in the build list. "
-                                          + "Current build: '" + currentBuild.getId() + "', " + "first build: '"
-                                          + build.getId() + "'." );
+            throw new ContinuumException( "INTERNAL ERROR: The current build wasn't the first in the build list. " +
+                "Current build: '" + currentBuild.getId() + "', " + "first build: '" + build.getId() + "'." );
         }
 
         if ( !itr.hasNext() )
@@ -264,7 +246,7 @@ public class IrcContinuumNotifier
             return null;
         }
 
-        return (ContinuumBuild) itr.next();
+        return (BuildResult) itr.next();
     }
 
     /**

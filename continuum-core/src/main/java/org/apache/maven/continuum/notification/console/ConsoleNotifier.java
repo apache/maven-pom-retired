@@ -16,8 +16,8 @@ package org.apache.maven.continuum.notification.console;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.notification.NotificationException;
 import org.codehaus.plexus.notification.notifier.AbstractNotifier;
@@ -43,7 +43,7 @@ public class ConsoleNotifier
     {
         ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
-        ContinuumBuild build = (ContinuumBuild) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
+        BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_STARTED ) )
         {
@@ -94,12 +94,12 @@ public class ConsoleNotifier
         out( project, null, "Checkout complete." );
     }
 
-    private void runningGoals( ContinuumProject project, ContinuumBuild build )
+    private void runningGoals( ContinuumProject project, BuildResult build )
     {
         out( project, build, "Running goals." );
     }
 
-    private void goalsCompleted( ContinuumProject project, ContinuumBuild build )
+    private void goalsCompleted( ContinuumProject project, BuildResult build )
     {
         if ( build.getError() == null )
         {
@@ -111,7 +111,7 @@ public class ConsoleNotifier
         }
     }
 
-    private void buildComplete( ContinuumProject project, ContinuumBuild build )
+    private void buildComplete( ContinuumProject project, BuildResult build )
     {
         if ( build.getError() == null )
         {
@@ -123,7 +123,7 @@ public class ConsoleNotifier
         }
     }
 
-    private void out( ContinuumProject project, ContinuumBuild build, String msg )
+    private void out( ContinuumProject project, BuildResult build, String msg )
     {
         System.out.println( "Build event for project '" + project.getName() + "':" + msg );
 

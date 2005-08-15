@@ -37,7 +37,7 @@ public abstract class AbstractContinuumStore
      */
     private ConfigurationService configurationService;
 
-    public String getBuildOutput( String buildId, String projectId )
+    public String getBuildOutput( int buildId, String projectId )
         throws ContinuumStoreException
     {
         File file = getBuildOutputFile( buildId, projectId );
@@ -58,7 +58,7 @@ public abstract class AbstractContinuumStore
     //
     // ----------------------------------------------------------------------
 
-    public File getBuildOutputFile( String buildId, String projectId )
+    public File getBuildOutputFile( int buildId, String projectId )
         throws ContinuumStoreException
     {
         File dir = new File( configurationService.getBuildOutputDirectory(), projectId );

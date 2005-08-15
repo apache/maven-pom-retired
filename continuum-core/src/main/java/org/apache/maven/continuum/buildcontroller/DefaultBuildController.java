@@ -17,9 +17,9 @@ package org.apache.maven.continuum.buildcontroller;
  */
 
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.ContinuumScmException;
@@ -31,7 +31,6 @@ import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +66,9 @@ public class DefaultBuildController
     // BuildController Implementation
     // ----------------------------------------------------------------------
 
+    /**
+     * @todo structure of this method is a bit of a mess (too much exception/finally code)
+     */
     public void build( String projectId, boolean forced )
     {
         long startTime = System.currentTimeMillis();
@@ -80,7 +82,7 @@ public class DefaultBuildController
 
         ContinuumProject project;
 
-        String buildId = null;
+        int buildId = 0;
 
         try
         {
@@ -144,7 +146,7 @@ public class DefaultBuildController
                     if ( !StringUtils.isEmpty( checkoutErrorMessage ) ||
                         !StringUtils.isEmpty( checkoutErrorException ) || checkOutScmResult == null )
                     {
-                        ContinuumBuild build = makeBuildResult( scmResult, startTime, forced );
+                        BuildResult build = makeBuildResult( scmResult, startTime, forced );
 
                         String error = "";
 
@@ -176,13 +178,14 @@ public class DefaultBuildController
 
                 actionManager.lookup( "execute-builder" ).execute( actionContext );
 
-                buildId = (String) actionContext.get( AbstractContinuumAction.KEY_BUILD_ID );
+                buildId = Integer.valueOf(
+                    (String) actionContext.get( AbstractContinuumAction.KEY_BUILD_ID ) ).intValue();
             }
             catch ( Throwable e )
             {
                 getLogger().error( "Error while building project.", e );
 
-                ContinuumBuild build = makeBuildResult( scmResult, startTime, forced );
+                BuildResult build = makeBuildResult( scmResult, startTime, forced );
 
                 // This can happen if the "update project from scm" action fails
 
@@ -233,13 +236,13 @@ public class DefaultBuildController
         }
         finally
         {
-            ContinuumBuild build = null;
+            BuildResult build = null;
 
-            if ( buildId != null )
+            if ( buildId > 0 )
             {
                 try
                 {
-                    build = store.getBuild( buildId );
+                    build = store.getBuildResult( buildId );
                 }
                 catch ( ContinuumStoreException e )
                 {
@@ -255,19 +258,20 @@ public class DefaultBuildController
     //
     // ----------------------------------------------------------------------
 
-    private ContinuumBuild storeBuild( ContinuumProject project, ContinuumBuild build )
+    // TODO: can we remove? surely you only need one add (see ExecuteBuilderContinuumAction). This only ever creates errored builds, maybe it occurs before that
+    private BuildResult storeBuild( ContinuumProject project, BuildResult build )
         throws ContinuumStoreException
     {
-        build = store.addBuild( project.getId(), build );
+        build = store.addBuildResult( project, build );
 
         getLogger().info( "Build id: '" + build.getId() + "'." );
 
         return build;
     }
 
-    private ContinuumBuild makeBuildResult( ScmResult scmResult, long startTime, boolean forced )
+    private BuildResult makeBuildResult( ScmResult scmResult, long startTime, boolean forced )
     {
-        ContinuumBuild build = new ContinuumBuild();
+        BuildResult build = new BuildResult();
 
         build.setState( ContinuumProjectState.ERROR );
 
@@ -287,8 +291,6 @@ public class DefaultBuildController
     public boolean isNew( ContinuumProject project )
         throws ContinuumStoreException
     {
-        Collection builds = store.getBuildsForProject( project.getId(), 0, 0 );
-
-        return builds.size() == 0;
+        return project.getBuilds().size() == 0;
     }
 }

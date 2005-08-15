@@ -20,7 +20,6 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.AntProject;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
@@ -125,22 +124,6 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-    public Hashtable getLatestBuildForProject( String projectId )
-    {
-        try
-        {
-            ContinuumBuild build = continuum.getLatestBuildForProject( projectId );
-
-            return makeHashtable( "latestBuild", convertContinuumBuild( build ) );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.getLatestBuildForProject()", "Project id: '" + projectId + "'.",
-                                    e );
-        }
-
-    }
-
     // ----------------------------------------------------------------------
     // Build handling
     // ----------------------------------------------------------------------
@@ -156,69 +139,6 @@ public class DefaultContinuumXmlRpc
         catch ( Throwable e )
         {
             return handleException( "ContinuumXmlRpc.buildProject()", "Project id: '" + projectId + "'.", e );
-        }
-    }
-
-    public Hashtable getBuild( String buildId )
-    {
-        try
-        {
-            ContinuumBuild build = continuum.getBuild( buildId );
-
-            return makeHashtable( "build", convertContinuumBuild( build ) );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.getBuild()", "Build id: '" + buildId + "'.", e );
-        }
-    }
-
-    public Hashtable getBuildsForProject( String projectId, int start, int end )
-    {
-        try
-        {
-            if ( start != 0 || end != 0 )
-            {
-                getLogger().warn( "ContinuumXmlRpc.getBuildsForProject() " +
-                    "doesn't support usage of the start and end parameters yet." );
-            }
-
-            // TODO: use start and end
-            Collection builds = continuum.getBuildsForProject( projectId );
-
-            Vector result = new Vector( builds.size() );
-
-            for ( Iterator it = builds.iterator(); it.hasNext(); )
-            {
-                result.add( convertContinuumBuild( it.next() ) );
-            }
-
-            return makeHashtable( "builds", result );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.getBuildsForProject()", "Project id: '" + projectId + "'.", e );
-        }
-    }
-
-    public Hashtable getChangedFilesForBuild( String buildId )
-    {
-        try
-        {
-            Collection changedFiles = continuum.getChangedFilesForBuild( buildId );
-
-            Vector result = new Vector( changedFiles.size() );
-
-            for ( Iterator it = changedFiles.iterator(); it.hasNext(); )
-            {
-                result.add( convertScmFile( it.next() ) );
-            }
-
-            return makeHashtable( "changedFiles", result );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.getBuildResultForProject()", "Build id: '" + buildId + "'.", e );
         }
     }
 

@@ -778,7 +778,7 @@
           <name>builds</name>
           <version>1.0.0</version>
           <association stash.part="true">
-            <type>ContinuumBuild</type>
+            <type>BuildResult</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
@@ -906,84 +906,6 @@
           <name>commandLineArguments</name>
           <version>1.0.0</version>
           <type>String</type>
-        </field>
-      </fields>
-    </class>
-
-    <!--
-    |
-    | Builds
-    |
-    -->
-    <class stash.storable="true">
-      <packageName>org.apache.maven.continuum.project</packageName>
-      <name>ContinuumBuild</name>
-      <version>1.0.0</version>
-      <description><![CDATA[
-          This class is a single continuum build.
-          It has a reference to a {@link BuilderBuildResult} which contains
-          any builder specific objects/variables.</description>
-        ]]></description>
-      <fields>
-        <!-- TODO: this is often used as a build number - it shouldn't be user facing -->
-        <field>
-          <name>id</name>
-          <version>1.0.0</version>
-          <type>String</type>
-          <identifier>true</identifier>
-        </field>
-        <field>
-          <name>state</name>
-          <version>1.0.0</version>
-          <type>int</type>
-          <!--
-          <association>
-            <type>BuildResultState</type>
-          </association>
-          -->
-        </field>
-        <field>
-          <name>trigger</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-        <field>
-          <name>startTime</name>
-          <version>1.0.0</version>
-          <type>long</type>
-        </field>
-        <field>
-          <name>endTime</name>
-          <version>1.0.0</version>
-          <type>long</type>
-        </field>
-        <field stash.maxSize="8000">
-          <name>error</name>
-          <version>1.0.0</version>
-          <type>String</type>
-          <!--
-          <association>
-            <type>java.lang.Throwable</type>
-          </association>
-          -->
-        </field>
-
-        <field>
-          <name>success</name>
-          <version>1.0.0</version>
-          <type>boolean</type>
-        </field>
-        <field>
-          <name>exitCode</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-        <field>
-          <name>scmResult</name>
-          <version>1.0.0</version>
-          <association stash.part="true">
-            <type>ScmResult</type>
-          </association>
         </field>
       </fields>
     </class>

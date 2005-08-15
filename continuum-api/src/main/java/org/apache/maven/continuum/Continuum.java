@@ -16,10 +16,10 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.AntProject;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
@@ -62,7 +62,7 @@ public interface Continuum
     Collection getProjects()
         throws ContinuumException;
 
-    ContinuumBuild getLatestBuildForProject( String id )
+    BuildResult getLatestBuildResultForProject( String projectId )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
@@ -95,13 +95,7 @@ public interface Continuum
     // Build information
     // ----------------------------------------------------------------------
 
-    ContinuumBuild getBuild( String buildId )
-        throws ContinuumException;
-
-    Collection getBuildsForProject( String projectId )
-        throws ContinuumException;
-
-    Collection getChangedFilesForBuild( String buildId )
+    BuildResult getBuildResult( int buildId )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
@@ -175,25 +169,8 @@ public interface Continuum
     void removeNotifier( String projectId, String notifierType )
         throws ContinuumException;
 
-    // ----------------------------------------------------------------------
-    // Schedules
-    // ----------------------------------------------------------------------
-
-    // ----------------------------------------------------------------------
-    // Project scheduling
-    // ----------------------------------------------------------------------
-
-    // ----------------------------------------------------------------------
-    // Project groups
-    // ----------------------------------------------------------------------
-
-    // ----------------------------------------------------------------------
-    // Build Settings
-    // ----------------------------------------------------------------------
-
-    // ----------------------------------------------------------------------
-    // Defaults
-    // ----------------------------------------------------------------------
-
     ContinuumBuildSettings getDefaultBuildSettings();
+
+    Collection getBuildResultsForProject( String projectId )
+        throws ContinuumException;
 }

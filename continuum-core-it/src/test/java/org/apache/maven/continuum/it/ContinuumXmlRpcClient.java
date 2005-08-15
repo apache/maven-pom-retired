@@ -18,10 +18,10 @@ package org.apache.maven.continuum.it;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.AntProject;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
@@ -142,7 +142,7 @@ public abstract class ContinuumXmlRpcClient
         throw new UnsupportedOperationException();
     }
 
-    public ContinuumBuild getLatestBuildForProject( String projectId )
+    public BuildResult getLatestBuildResultForProject( String projectId )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
@@ -181,28 +181,6 @@ public abstract class ContinuumXmlRpcClient
     }
 
     public void buildProject( String projectId, boolean force )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    // ----------------------------------------------------------------------
-    // Build information
-    // ----------------------------------------------------------------------
-
-    public ContinuumBuild getBuild( String buildId )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    public Collection getBuildsForProject( String projectId )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    public Collection getChangedFilesForBuild( String buildId )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();

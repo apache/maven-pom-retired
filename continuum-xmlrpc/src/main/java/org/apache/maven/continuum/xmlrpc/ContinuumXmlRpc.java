@@ -43,26 +43,15 @@ public interface ContinuumXmlRpc
 
     Hashtable getScmResultForProject( String projectId );
 
-    Hashtable getLatestBuildForProject( String projectId );
-
     // ----------------------------------------------------------------------
     // Building
     // ----------------------------------------------------------------------
 
-    Hashtable buildProject( String projectId,
-                            boolean force );
+    Hashtable buildProject( String projectId, boolean force );
 
     // ----------------------------------------------------------------------
     // Builds
     // ----------------------------------------------------------------------
-
-    Hashtable getBuild( String buildId );
-
-    Hashtable getBuildsForProject( String projectId,
-                                   int start,
-                                   int end );
-
-    Hashtable getChangedFilesForBuild( String buildId );
 
     // ----------------------------------------------------------------------
     // Maven 2.x projects

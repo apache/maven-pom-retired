@@ -27,7 +27,7 @@
       <field name="groupId" persistence-modifier="persistent"/>
       <!-- Collections -->
       <field name="builds" persistence-modifier="persistent">
-        <collection element-type="ContinuumBuild" dependent-element="true"/>
+        <collection element-type="org.apache.maven.continuum.model.project.BuildResult" dependent-element="true"/>
         <join/>
       </field>
       <field name="developers" persistence-modifier="persistent">
@@ -85,21 +85,6 @@
       </field>
       <field name="targets" persistence-modifier="persistent"/>
     </class>
-    <class name="ContinuumBuild" detachable="true" identity-type="application"
-           objectid-class="javax.jdo.identity.StringIdentity" table="build">
-      <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
-      <field name="state" persistence-modifier="persistent"/>
-      <field name="trigger" persistence-modifier="persistent"/>
-      <field name="startTime" persistence-modifier="persistent"/>
-      <field name="endTime" persistence-modifier="persistent"/>
-      <field name="error" persistence-modifier="persistent">
-        <extension vendor-name="jpox" key="length" value="max 8000"/>
-      </field>
-      <field name="success" persistence-modifier="persistent"/>
-      <field name="exitCode" persistence-modifier="persistent"/>
-      <field name="scmResult" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
-    </class>
-
     <class name="ContinuumBuildSettings" detachable="true">
       <field name="name" persistence-modifier="persistent"/>
       <field name="cronExpression" persistence-modifier="persistent"/>
@@ -145,6 +130,7 @@
       <field name="url"/>
       <field name="artifactId"/>
       <field name="groupId"/>
+      <!-- TODO: these could grow large. lazy load, or perhaps archive old builds? Maybe they shouldn't be objects in here, but just extracted by id -->
       <field name="buildResults" mapped-by="project">
         <collection element-type="BuildResult" dependent-element="true"/>
       </field>

@@ -17,7 +17,9 @@ package org.apache.maven.continuum.notification;
  */
 
 import org.apache.maven.continuum.AbstractContinuumTest;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
 
 /**
@@ -37,13 +39,13 @@ public class ContinuumNotificationDispatcherTest
 
         Project project = addProject( store, "Notification Dispatcher Test Project" );
 
-/* TODO
-        ContinuumBuild build = new ContinuumBuild();
+        BuildResult build = new BuildResult();
         build.setStartTime( System.currentTimeMillis() );
         build.setState( ContinuumProjectState.BUILDING );
-        build.setForced( false );
+        build.setTrigger( ContinuumProjectState.TRIGGER_UNKNOWN ); // TODO
 
-        build = store.addBuild( Integer.toString( project.getId() ), build );
+/* TODO
+        build = store.addBuildResult( project, build );
 
         notificationDispatcher.buildComplete( project, build );
 */

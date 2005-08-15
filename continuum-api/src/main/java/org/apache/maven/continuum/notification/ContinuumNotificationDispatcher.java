@@ -16,12 +16,13 @@ package org.apache.maven.continuum.notification;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ * @todo use build result for all of these? need project for those that do?
  */
 public interface ContinuumNotificationDispatcher
 {
@@ -63,9 +64,9 @@ public interface ContinuumNotificationDispatcher
 
     void checkoutComplete( ContinuumProject project );
 
-    void runningGoals( ContinuumProject project, ContinuumBuild build );
+    void runningGoals( ContinuumProject project, BuildResult build );
 
-    void goalsCompleted( ContinuumProject project, ContinuumBuild build );
+    void goalsCompleted( ContinuumProject project, BuildResult build );
 
-    void buildComplete( ContinuumProject project, ContinuumBuild build );
+    void buildComplete( ContinuumProject project, BuildResult build );
 }

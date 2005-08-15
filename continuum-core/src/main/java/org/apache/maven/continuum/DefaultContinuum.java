@@ -31,11 +31,11 @@ import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.initialization.ContinuumInitializationException;
 import org.apache.maven.continuum.initialization.ContinuumInitializer;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.AntProject;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
@@ -136,12 +136,12 @@ public class DefaultContinuum
         }
     }
 
-    public ContinuumBuild getLatestBuildForProject( String id )
+    public BuildResult getLatestBuildResultForProject( String id )
         throws ContinuumException
     {
         try
         {
-            return store.getLatestBuildForProject( id );
+            return store.getLatestBuildResultForProject( id );
         }
         catch ( ContinuumStoreException e )
         {
@@ -317,6 +317,19 @@ public class DefaultContinuum
         }
     }
 
+    public BuildResult getBuildResult( int buildId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getBuildResult( buildId );
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            throw logAndCreateException( "Exception while getting build result for project.", e );
+        }
+    }
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -330,45 +343,6 @@ public class DefaultContinuum
     // ----------------------------------------------------------------------
     // Build inforation
     // ----------------------------------------------------------------------
-
-    public ContinuumBuild getBuild( String buildId )
-        throws ContinuumException
-    {
-        try
-        {
-            return store.getBuild( buildId );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw logAndCreateException( "Unable to retrieve build with id = " + buildId, e );
-        }
-    }
-
-    public Collection getBuildsForProject( String projectId )
-        throws ContinuumException
-    {
-        try
-        {
-            return store.getBuildsForProject( projectId, 0, 0 );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw logAndCreateException( "Cannot retrieve builds for project with id = " + projectId, e );
-        }
-    }
-
-    public Collection getChangedFilesForBuild( String buildId )
-        throws ContinuumException
-    {
-        try
-        {
-            return store.getChangedFilesForBuild( buildId );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw logAndCreateException( "Cannot retrieve build result for build with id = " + buildId, e );
-        }
-    }
 
     // ----------------------------------------------------------------------
     // Ant Projects
@@ -814,6 +788,19 @@ public class DefaultContinuum
     public ContinuumBuildSettings getDefaultBuildSettings()
     {
         return initializer.getDefaultBuildSettings();
+    }
+
+    public Collection getBuildResultsForProject( String projectId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getProject( projectId ).getBuilds();
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Unable to get builds for project", e );
+        }
     }
 
     // ----------------------------------------------------------------------

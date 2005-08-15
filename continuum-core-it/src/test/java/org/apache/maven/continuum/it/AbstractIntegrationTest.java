@@ -20,10 +20,10 @@ import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.scm.ChangeFile;
 import org.apache.maven.continuum.model.scm.ChangeSet;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -400,27 +400,30 @@ public abstract class AbstractIntegrationTest
         return ( (ContinuumProject) projects.get( 0 ) ).getId();
     }
 
-    public ContinuumBuild buildProject( String projectId, boolean force )
+    /**
+     * @todo use a notify mechanism rather than polling. That's what queues are for. Really, buildProject should create the build result with a WAITING state, return the ID, and let the queue take it from there
+     */
+    public BuildResult buildProject( String projectId, boolean force )
         throws Exception
     {
         int count = 600;
 
-        int originalSize = getContinuum().getBuildsForProject( projectId ).size();
+        BuildResult previousBuild = getContinuum().getLatestBuildResultForProject( projectId );
 
         getContinuum().buildProject( projectId, force );
 
         while ( true )
         {
-            Collection builds = getContinuum().getBuildsForProject( projectId );
+            BuildResult latestBuildResult = getContinuum().getLatestBuildResultForProject( projectId );
+
+            if ( latestBuildResult != null && !latestBuildResult.equals( previousBuild ) )
+            {
+                return latestBuildResult;
+            }
 
             if ( count == 0 )
             {
                 fail( "Timeout while waiting for build. Project id: " + projectId );
-            }
-
-            if ( builds.size() != originalSize )
-            {
-                return (ContinuumBuild) builds.iterator().next();
             }
 
             count--;
@@ -495,13 +498,16 @@ public abstract class AbstractIntegrationTest
         assertTrue( message + "scmResult.success != true", project.getCheckoutResult().isSuccess() );
     }
 
-    public ContinuumBuild waitForBuild( String buildId )
+    /**
+     * @todo share with other methods doing the same thing
+     */
+    public BuildResult waitForBuild( int buildId )
         throws Exception
     {
         int timeout = 120 * 1000;
         long start = System.currentTimeMillis();
 
-        ContinuumBuild build = getContinuum().getBuild( buildId );
+        BuildResult build = getContinuum().getBuildResult( buildId );
 
         while ( build.getState() == ContinuumProjectState.UPDATING ||
             build.getState() == ContinuumProjectState.BUILDING )
@@ -513,7 +519,7 @@ public abstract class AbstractIntegrationTest
 
             Thread.yield();
 
-            build = getContinuum().getBuild( buildId );
+            build = getContinuum().getBuildResult( buildId );
         }
 
         return build;
@@ -580,20 +586,20 @@ public abstract class AbstractIntegrationTest
         }
     }
 
-    public ContinuumBuild assertSuccessfulNoBuildPerformed( String buildId )
+    public BuildResult assertSuccessfulNoBuildPerformed( int buildId )
         throws Exception
     {
-        ContinuumBuild build = waitForBuild( buildId );
+        BuildResult build = waitForBuild( buildId );
 
         assertEquals( "The build wasn't successful.", ContinuumProjectState.OK, build.getState() );
 
         return build;
     }
 
-    public ContinuumBuild assertSuccessfulBuild( String buildId, String projectId )
+    public BuildResult assertSuccessfulBuild( int buildId, String projectId )
         throws Exception
     {
-        ContinuumBuild build = waitForBuild( buildId );
+        BuildResult build = waitForBuild( buildId );
 
         if ( build.getState() != ContinuumProjectState.OK )
         {
@@ -615,22 +621,22 @@ public abstract class AbstractIntegrationTest
         return build;
     }
 
-    public ContinuumBuild assertSuccessfulMaven1Build( String buildId, String projectId )
+    public BuildResult assertSuccessfulMaven1Build( int buildId, String projectId )
         throws Exception
     {
         return assertSuccessfulAntBuild( buildId, projectId );
     }
 
-    public ContinuumBuild assertSuccessfulMaven2Build( String buildId, String projectId )
+    public BuildResult assertSuccessfulMaven2Build( int buildId, String projectId )
         throws Exception
     {
         return assertSuccessfulMaven1Build( buildId, projectId );
     }
 
-    public ContinuumBuild assertSuccessfulAntBuild( String buildId, String projectId )
+    public BuildResult assertSuccessfulAntBuild( int buildId, String projectId )
         throws Exception
     {
-        ContinuumBuild build = assertSuccessfulBuild( buildId, projectId );
+        BuildResult build = assertSuccessfulBuild( buildId, projectId );
 
         String output = getStore().getBuildOutput( buildId, projectId );
 
@@ -643,10 +649,10 @@ public abstract class AbstractIntegrationTest
         return build;
     }
 
-    public ContinuumBuild assertSuccessfulShellBuild( String buildId, String projectId, String expectedStandardOutput )
+    public BuildResult assertSuccessfulShellBuild( int buildId, String projectId, String expectedStandardOutput )
         throws Exception
     {
-        ContinuumBuild build = assertSuccessfulBuild( buildId, projectId );
+        BuildResult build = assertSuccessfulBuild( buildId, projectId );
 
         String output = getStore().getBuildOutput( buildId, projectId );
 

@@ -17,7 +17,7 @@ package org.apache.maven.continuum;
  */
 
 import junit.framework.Assert;
-import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
 
@@ -33,34 +33,37 @@ public class TestUtils
     // Wait for build
     // ----------------------------------------------------------------------
 
-    public final static ContinuumBuild waitForSuccessfulBuild( ContinuumStore continuumStore, String buildId )
+    public static final BuildResult waitForSuccessfulBuild( ContinuumStore continuumStore, int buildId )
         throws Exception
     {
-        ContinuumBuild build = waitForBuild( continuumStore, buildId );
+        BuildResult build = waitForBuild( continuumStore, buildId );
 
         Assert.assertEquals( ContinuumProjectState.OK, build.getState() );
 
         return build;
     }
 
-    public final static ContinuumBuild waitForFailedBuild( ContinuumStore continuumStore, String buildId )
+    public static final BuildResult waitForFailedBuild( ContinuumStore continuumStore, int buildId )
         throws Exception
     {
-        ContinuumBuild build = waitForBuild( continuumStore, buildId );
+        BuildResult build = waitForBuild( continuumStore, buildId );
 
         Assert.assertEquals( ContinuumProjectState.FAILED, build.getState() );
 
         return build;
     }
 
-    public final static ContinuumBuild waitForBuild( ContinuumStore continuumStore, String buildId )
+    /**
+     * @todo use proper thread notification
+     */
+    public static final BuildResult waitForBuild( ContinuumStore continuumStore, int buildId )
         throws Exception
     {
         int time = buildTimeout;
 
         int interval = 100;
 
-        ContinuumBuild result;
+        BuildResult result;
 
         while ( time > 0 )
         {
@@ -68,7 +71,7 @@ public class TestUtils
 
             time -= interval;
 
-            result = continuumStore.getBuild( buildId );
+            result = continuumStore.getBuildResult( buildId );
 
             Assert.assertNotNull( result );
 

@@ -18,8 +18,8 @@ package org.apache.maven.continuum.it;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.util.FileUtils;
@@ -75,19 +75,25 @@ public class MavenTwoIntegrationTest
 
         progress( "Building Maven 2 project" );
 
-        String buildId = buildProject( projectId, false ).getId();
+        int originalSize = project.getBuilds().size();
+
+        int buildId = buildProject( projectId, false ).getId();
 
         assertSuccessfulMaven2Build( buildId, projectId );
 
         progress( "Test that a build without any files changed won't execute the executor" );
 
-        int expectedSize = continuum.getBuildsForProject( projectId ).size();
+        project = continuum.getProject( projectId );
+        int expectedSize = project.getBuilds().size();
+
+        assertEquals( "build list was not updated", originalSize + 1, expectedSize );
 
         continuum.buildProject( projectId, false );
 
         Thread.sleep( 3000 );
 
-        int actualSize = continuum.getBuildsForProject( projectId ).size();
+        project = continuum.getProject( projectId );
+        int actualSize = project.getBuilds().size();
 
         assertEquals( "A build has unexpectedly been executed.", expectedSize, actualSize );
 
@@ -95,7 +101,7 @@ public class MavenTwoIntegrationTest
 
         buildId = buildProject( projectId, true ).getId();
 
-        ContinuumBuild build = assertSuccessfulMaven2Build( buildId, projectId );
+        BuildResult build = assertSuccessfulMaven2Build( buildId, projectId );
 
         assertEquals( "The 'build forced' flag wasn't true", ContinuumProjectState.TRIGGER_FORCED, build.getTrigger() );
 

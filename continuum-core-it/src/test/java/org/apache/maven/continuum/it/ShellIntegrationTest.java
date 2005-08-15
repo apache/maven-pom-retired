@@ -69,7 +69,7 @@ public class ShellIntegrationTest
         ContinuumProject project = continuum.getProject( projectId );
         assertProject( projectId, "Shell Project", "3.0", "", "shell", project );
         progress( "Building Shell project" );
-        String buildId = buildProject( projectId, false ).getId();
+        int buildId = buildProject( projectId, false ).getId();
         assertSuccessfulShellBuild( buildId, projectId, "" );
 
         // Test project reconfiguration

@@ -19,7 +19,7 @@ package org.apache.maven.continuum.notification;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationLoadingException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
-import org.apache.maven.continuum.project.ContinuumBuild;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.notification.notifier.AbstractNotifier;
 
@@ -32,7 +32,7 @@ public abstract class AbstractContinuumNotifier
      * @param project The project
      * @param build The build
      */
-    public String getReportUrl( ContinuumProject project, ContinuumBuild build, ConfigurationService configurationService )
+    public String getReportUrl( ContinuumProject project, BuildResult build, ConfigurationService configurationService )
         throws ContinuumException
     {
         try
@@ -47,7 +47,8 @@ public abstract class AbstractContinuumNotifier
                 buf.append( "/" );
             }
 
-            buf.append( "target/ProjectBuild.vm/view/ProjectBuild/id/" ).append( project.getId() ).append( "/buildId/" ).append( build.getId() );
+            buf.append( "target/ProjectBuild.vm/view/ProjectBuild/id/" ).append( project.getId() ).append(
+                "/buildId/" ).append( build.getId() );
 
             return buf.toString();
         }

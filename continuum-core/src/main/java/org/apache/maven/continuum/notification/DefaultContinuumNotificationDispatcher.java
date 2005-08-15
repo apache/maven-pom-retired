@@ -16,8 +16,8 @@ package org.apache.maven.continuum.notification;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
@@ -74,17 +74,17 @@ public class DefaultContinuumNotificationDispatcher
         sendNotification( MESSAGE_ID_CHECKOUT_COMPLETE, project, null );
     }
 
-    public void runningGoals( ContinuumProject project, ContinuumBuild build )
+    public void runningGoals( ContinuumProject project, BuildResult build )
     {
         sendNotification( MESSAGE_ID_RUNNING_GOALS, project, build );
     }
 
-    public void goalsCompleted( ContinuumProject project, ContinuumBuild build )
+    public void goalsCompleted( ContinuumProject project, BuildResult build )
     {
         sendNotification( MESSAGE_ID_GOALS_COMPLETED, project, build );
     }
 
-    public void buildComplete( ContinuumProject project, ContinuumBuild build )
+    public void buildComplete( ContinuumProject project, BuildResult build )
     {
         sendNotification( MESSAGE_ID_BUILD_COMPLETE, project, build );
     }
@@ -93,7 +93,7 @@ public class DefaultContinuumNotificationDispatcher
     //
     // ----------------------------------------------------------------------
 
-    private void sendNotification( String messageId, ContinuumProject project, ContinuumBuild build )
+    private void sendNotification( String messageId, ContinuumProject project, BuildResult build )
     {
         Map context = new HashMap();
 
@@ -106,12 +106,15 @@ public class DefaultContinuumNotificationDispatcher
         try
         {
             // TODO: remove re-reading?
+            // Here we need to get all the project details
+            //  - builds are used to detect if the state has changed (TODO: maybe previousState field is better)
+            //  - notifiers are used to send the notification
             context.put( CONTEXT_PROJECT, store.getProject( project.getId() ) );
 
             if ( build != null )
             {
                 // TODO: remove?
-                build = store.getBuild( build.getId() );
+                build = store.getBuildResult( build.getId() );
 
                 context.put( CONTEXT_BUILD, build );
 

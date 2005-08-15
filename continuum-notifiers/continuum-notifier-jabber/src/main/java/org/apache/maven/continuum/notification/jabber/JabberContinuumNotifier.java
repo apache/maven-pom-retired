@@ -18,9 +18,9 @@ package org.apache.maven.continuum.notification.jabber;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumBuild;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.jabber.JabberClient;
@@ -81,15 +81,12 @@ public class JabberContinuumNotifier
     // Notifier Implementation
     // ----------------------------------------------------------------------
 
-    public void sendNotification( String source,
-                                  Set recipients,
-                                  Map configuration,
-                                  Map context )
+    public void sendNotification( String source, Set recipients, Map configuration, Map context )
         throws NotificationException
     {
         ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
-        ContinuumBuild build = (ContinuumBuild) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
+        BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
         // ----------------------------------------------------------------------
         //
@@ -116,7 +113,7 @@ public class JabberContinuumNotifier
     //
     // ----------------------------------------------------------------------
 
-    private String generateMessage( ContinuumProject project, ContinuumBuild build )
+    private String generateMessage( ContinuumProject project, BuildResult build )
         throws ContinuumException
     {
         int state = build.getState();
@@ -145,10 +142,7 @@ public class JabberContinuumNotifier
         return message + " " + getReportUrl( project, build, configurationService );
     }
 
-    private void sendMessage( ContinuumProject project,
-                              ContinuumBuild build,
-                              Set recipients,
-                              Map configuration )
+    private void sendMessage( ContinuumProject project, BuildResult build, Set recipients, Map configuration )
         throws NotificationException
     {
         String message;
