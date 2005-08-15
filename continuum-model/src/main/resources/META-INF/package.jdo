@@ -59,15 +59,6 @@
         <field name="buildDefinitions"/>
       </fetch-group>
     </class>
-
-    <class name="MavenTwoProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
-           detachable="true">
-      <inheritance strategy="new-table"/>
-      <field name="commandLineArguments" persistence-modifier="persistent"/>
-      <field name="goals" persistence-modifier="persistent">
-        <column name="M2_GOALS"/>
-      </field>
-    </class>
     <class name="ContinuumBuildSettings" detachable="true">
       <field name="name" persistence-modifier="persistent"/>
       <field name="cronExpression" persistence-modifier="persistent"/>

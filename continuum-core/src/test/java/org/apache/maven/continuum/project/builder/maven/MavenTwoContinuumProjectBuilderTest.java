@@ -18,7 +18,7 @@ package org.apache.maven.continuum.project.builder.maven;
 
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.PlexusTestCase;
@@ -56,7 +56,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getProjects().size() );
 
-        MavenTwoProject project = (MavenTwoProject) result.getProjects().get( 0 );
+        ContinuumProject project = (ContinuumProject) result.getProjects().get( 0 );
 
         assertNotNull( project.getNotifiers() );
 
@@ -87,7 +87,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getProjects().size() );
 
-        MavenTwoProject project = (MavenTwoProject) result.getProjects().get( 0 );
+        ContinuumProject project = (ContinuumProject) result.getProjects().get( 0 );
 
         assertNotNull( project.getNotifiers() );
 
@@ -160,7 +160,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         for ( Iterator it = result.getProjects().iterator(); it.hasNext(); )
         {
-            MavenTwoProject project = (MavenTwoProject) it.next();
+            ContinuumProject project = (ContinuumProject) it.next();
 
             assertNotNull( project.getName() );
 
@@ -180,7 +180,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
     private void assertMavenTwoProject( String name, Map projects )
     {
-        MavenTwoProject project = (MavenTwoProject) projects.get( name );
+        ContinuumProject project = (ContinuumProject) projects.get( name );
 
         assertNotNull( project );
 
@@ -189,7 +189,5 @@ public class MavenTwoContinuumProjectBuilderTest
         String scmUrl = "scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk";
 
         assertTrue( project.getScmUrl().startsWith( scmUrl ) );
-
-        assertEquals( "clean:clean install", project.getGoals() );
     }
 }

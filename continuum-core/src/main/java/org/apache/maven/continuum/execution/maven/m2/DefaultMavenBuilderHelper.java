@@ -19,10 +19,11 @@ package org.apache.maven.continuum.execution.maven.m2;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.ProjectDependency;
 import org.apache.maven.continuum.model.project.ProjectDeveloper;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Developer;
@@ -82,13 +83,13 @@ public class DefaultMavenBuilderHelper
     // MavenBuilderHelper Implementation
     // ----------------------------------------------------------------------
 
-    public void mapMetadataToProject( File metadata, MavenTwoProject continuumProject )
+    public void mapMetadataToProject( File metadata, ContinuumProject continuumProject )
         throws MavenBuilderHelperException
     {
         mapMavenProjectToContinuumProject( getMavenProject( metadata ), continuumProject );
     }
 
-    public void mapMavenProjectToContinuumProject( MavenProject mavenProject, MavenTwoProject continuumProject )
+    public void mapMavenProjectToContinuumProject( MavenProject mavenProject, ContinuumProject continuumProject )
         throws MavenBuilderHelperException
     {
         continuumProject.setName( getProjectName( mavenProject ) );
@@ -97,19 +98,11 @@ public class DefaultMavenBuilderHelper
 
         continuumProject.setVersion( getVersion( mavenProject ) );
 
-        if ( StringUtils.isEmpty( continuumProject.getCommandLineArguments() ) )
-        {
-            // ----------------------------------------------------------------------
-            // Run in non-interactive mode and non-recursive mode
-            // ----------------------------------------------------------------------
-
-            continuumProject.setCommandLineArguments( "-N -B" );
-        }
-
-        if ( StringUtils.isEmpty( continuumProject.getGoals() ) )
-        {
-            continuumProject.setGoals( "clean:clean install" );
-        }
+        BuildDefinition bd = new BuildDefinition();
+        bd.setArguments( "--batch-mode --non-recursive" );
+        bd.setGoals( "clean:clean install" );
+        bd.setBuildFile( "pom.xml" );
+        continuumProject.addBuildDefinition( bd );
 
         // ----------------------------------------------------------------------
         // GroupId

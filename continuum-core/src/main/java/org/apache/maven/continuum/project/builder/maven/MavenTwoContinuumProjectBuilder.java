@@ -20,7 +20,7 @@ import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.project.MavenTwoProject;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
@@ -114,7 +114,7 @@ public class MavenTwoContinuumProjectBuilder
 
         if ( !excludedPackagingTypes.contains( mavenProject.getPackaging() ) )
         {
-            MavenTwoProject continuumProject = new MavenTwoProject();
+            ContinuumProject continuumProject = new ContinuumProject();
 
             try
             {

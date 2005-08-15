@@ -17,7 +17,6 @@ package org.apache.maven.continuum;
  */
 
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
@@ -117,16 +116,14 @@ public class DefaultContinuumTest
 
         assertEquals( 1, projects.size() );
 
-        assertEquals( MavenTwoProject.class, projects.get( 0 ).getClass() );
+        assertEquals( ContinuumProject.class, projects.get( 0 ).getClass() );
 
-        MavenTwoProject project = (MavenTwoProject) projects.get( 0 );
+        ContinuumProject project = (ContinuumProject) projects.get( 0 );
 
         project.setName( project.getName() + " 2" );
 
-        project.setCommandLineArguments( null );
+        continuum.updateProject( project );
 
-        continuum.updateMavenTwoProject( project );
-
-        project = continuum.getMavenTwoProject( project.getId() );
+        project = continuum.getProject( project.getId() );
     }
 }

@@ -16,6 +16,7 @@ package org.apache.maven.continuum.execution.maven.m1;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
 import org.apache.maven.continuum.project.ContinuumProject;
@@ -239,6 +240,12 @@ public class DefaultMavenOneMetadataHelper
         project.setScmUrl( scmConnection );
 
         project.setNotifiers( notifiers );
+
+        BuildDefinition bd = new BuildDefinition();
+        bd.setArguments( "" );
+        bd.setGoals( "clean:clean jar:install" );
+        bd.setBuildFile( "project.xml" );
+        project.addBuildDefinition( bd );
     }
 
     // ----------------------------------------------------------------------

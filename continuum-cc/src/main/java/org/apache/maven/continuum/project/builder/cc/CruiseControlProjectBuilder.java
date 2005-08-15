@@ -17,6 +17,7 @@ package org.apache.maven.continuum.project.builder.cc;
  */
 
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
@@ -171,6 +172,13 @@ public class CruiseControlProjectBuilder
                 project = new ContinuumProject();
 
                 project.setExecutorId( ContinuumBuildExecutor.ANT_EXECUTOR_ID );
+
+                // TODO: shared construction of the default build definition
+                BuildDefinition bd = new BuildDefinition();
+                bd.setArguments( "" );
+                bd.setGoals( "clean build" );
+                bd.setBuildFile( "build.xml" );
+                project.addBuildDefinition( bd );
             }
             else if ( child.getName().equals( "maven" ) )
             {
@@ -183,6 +191,13 @@ public class CruiseControlProjectBuilder
                 project = new ContinuumProject();
 
                 project.setExecutorId( ContinuumBuildExecutor.MAVEN_ONE_EXECUTOR_ID );
+
+                // TODO: shared construction of the default build definition
+                BuildDefinition bd = new BuildDefinition();
+                bd.setArguments( "" );
+                bd.setGoals( "clean:clean jar:install" );
+                bd.setBuildFile( "project.xml" );
+                project.addBuildDefinition( bd );
             }
             else
             {

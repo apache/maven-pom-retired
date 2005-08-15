@@ -21,7 +21,6 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -174,11 +173,11 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            MavenTwoProject project = new MavenTwoProject();
+            ContinuumProject project = new ContinuumProject();
 
             xmlRpcHelper.hashtableToObject( mavenTwoProject, project );
 
-            String projectId = continuum.addMavenTwoProject( project );
+            String projectId = continuum.addProject( project, ContinuumBuildExecutor.MAVEN_TWO_EXECUTOR_ID );
 
             Collection projectIds = new Vector();
 
@@ -198,11 +197,11 @@ public class DefaultContinuumXmlRpc
 
         try
         {
-            MavenTwoProject project = continuum.getMavenTwoProject( id );
+            ContinuumProject project = continuum.getProject( id );
 
             xmlRpcHelper.hashtableToObject( mavenTwoProject, project );
 
-            continuum.updateMavenTwoProject( project );
+            continuum.updateProject( project );
 
             return makeHashtable();
         }

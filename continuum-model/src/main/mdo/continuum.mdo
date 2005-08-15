@@ -848,25 +848,6 @@
       </fields>
     </class>
 
-    <class stash.storable="true">
-      <packageName>org.apache.maven.continuum.project</packageName>
-      <name>MavenTwoProject</name>
-      <version>1.0.0</version>
-      <superClass>ContinuumProject</superClass>
-      <fields>
-        <field>
-          <name>goals</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>commandLineArguments</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-      </fields>
-    </class>
-
     <class>
       <packageName>org.apache.maven.continuum.project</packageName>
       <name>ContinuumBuildSettings</name>

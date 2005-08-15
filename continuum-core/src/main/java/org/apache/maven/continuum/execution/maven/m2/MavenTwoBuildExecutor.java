@@ -22,7 +22,6 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenTwoProject;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -69,18 +68,14 @@ public class MavenTwoBuildExecutor
                                                 File buildOutput )
         throws ContinuumBuildExecutorException
     {
-        return build( project, buildOutput );
-    }
+        // TODO: get from installation
+//        String executable = project.getExecutable();
+        String executable = "m2";
 
-    public ContinuumBuildExecutionResult build( ContinuumProject p, File buildOutput )
-        throws ContinuumBuildExecutorException
-    {
-        MavenTwoProject project = (MavenTwoProject) p;
+        String arguments = StringUtils.clean( buildDefinition.getArguments() ) + " " +
+            StringUtils.clean( buildDefinition.getGoals() );
 
-        String arguments = StringUtils.clean( project.getCommandLineArguments() ) + " " +
-            StringUtils.clean( project.getGoals() );
-
-        return executeShellCommand( project, null, arguments, buildOutput );
+        return executeShellCommand( project, executable, arguments, buildOutput );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
@@ -90,7 +85,7 @@ public class MavenTwoBuildExecutor
 
         try
         {
-            builderHelper.mapMetadataToProject( f, (MavenTwoProject) project );
+            builderHelper.mapMetadataToProject( f, project );
         }
         catch ( MavenBuilderHelperException e )
         {

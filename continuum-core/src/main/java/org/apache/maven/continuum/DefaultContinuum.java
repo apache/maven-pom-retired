@@ -36,7 +36,6 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
@@ -357,26 +356,6 @@ public class DefaultContinuum
     {
         return executeAddProjectsFromMetadataActivity( metadataUrl, MavenTwoContinuumProjectBuilder.ID,
                                                        MavenTwoBuildExecutor.ID );
-    }
-
-    public String addMavenTwoProject( MavenTwoProject project )
-        throws ContinuumException
-    {
-        project.setExecutorId( MavenTwoBuildExecutor.ID );
-
-        return executeAddProjectFromScmActivity( project );
-    }
-
-    public MavenTwoProject getMavenTwoProject( String projectId )
-        throws ContinuumException
-    {
-        return (MavenTwoProject) getProject( projectId );
-    }
-
-    public void updateMavenTwoProject( MavenTwoProject project )
-        throws ContinuumException
-    {
-        updateProject( (ContinuumProject) project );
     }
 
     // ----------------------------------------------------------------------
