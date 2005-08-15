@@ -24,7 +24,6 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.model.system.Installation;
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.jdo.JdoFactory;
@@ -388,82 +387,6 @@ public class JdoContinuumStore
     {
         updateObject( notifier );
         return notifier;
-    }
-
-    public ContinuumBuildSettings addBuildSettings( ContinuumBuildSettings buildSettings )
-        throws ContinuumStoreException
-    {
-        return (ContinuumBuildSettings) addObject( buildSettings, BUILD_SETTINGS_DETAIL_FG );
-    }
-
-    public ContinuumBuildSettings updateBuildSettings( ContinuumBuildSettings buildSettings )
-        throws ContinuumStoreException
-    {
-        updateObject( buildSettings );
-        return buildSettings;
-    }
-
-    public void removeBuildSettings( String buildSettingsId )
-        throws ContinuumStoreException
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            Object id = pm.newObjectIdInstance( ContinuumBuildSettings.class, buildSettingsId );
-
-            ContinuumBuildSettings buildSettings = (ContinuumBuildSettings) pm.getObjectById( id );
-
-            pm.deletePersistent( buildSettings );
-
-            tx.commit();
-        }
-        finally
-        {
-            rollback( tx );
-        }
-    }
-
-    public ContinuumBuildSettings getBuildSettings( String buildSettingsId )
-        throws ContinuumStoreException
-    {
-        return (ContinuumBuildSettings) getDetailedObject( ContinuumBuildSettings.class, buildSettingsId,
-                                                           "build-settings-detail" );
-    }
-
-    public Collection getBuildSettings()
-        throws ContinuumStoreException
-    {
-        PersistenceManager pm = pmf.getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            Extent extent = pm.getExtent( ContinuumBuildSettings.class, true );
-
-            Query query = pm.newQuery( extent );
-
-            query.setOrdering( "name ascending" );
-
-            Collection result = (Collection) query.execute();
-
-            result = pm.detachCopyAll( result );
-
-            tx.commit();
-
-            return result;
-        }
-        finally
-        {
-            rollback( tx );
-        }
     }
 
     private ContinuumProject setProjectState( ContinuumProject project )

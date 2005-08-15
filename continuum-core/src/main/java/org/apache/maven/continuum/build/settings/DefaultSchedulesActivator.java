@@ -17,12 +17,11 @@ package org.apache.maven.continuum.build.settings;
  */
 
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
+import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.scheduler.ContinuumBuildJob;
 import org.apache.maven.continuum.scheduler.ContinuumScheduler;
 import org.apache.maven.continuum.scheduler.ContinuumSchedulerException;
 import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.quartz.CronTrigger;
@@ -39,9 +38,9 @@ import java.util.Iterator;
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id:$
  */
-public class DefaultBuildSettingsActivator
+public class DefaultSchedulesActivator
     extends AbstractLogEnabled
-    implements BuildSettingsActivator
+    implements SchedulesActivator
 {
     /**
      * @plexus.requirement
@@ -56,39 +55,32 @@ public class DefaultBuildSettingsActivator
     //private int delay = 3600;
     private int delay = 1;
 
-    public void activateBuildSettings( Continuum continuum )
-        throws BuildSettingsActivationException
+    public void activateSchedules( Continuum continuum )
+        throws SchedulesActivationException
     {
         getLogger().info( "Activating build settings ..." );
 
-        try
-        {
-            Collection buildSettingsCollection = store.getBuildSettings();
+        Collection schedules = store.getAllSchedulesByName();
 
-            for ( Iterator i = buildSettingsCollection.iterator(); i.hasNext(); )
+        for ( Iterator i = schedules.iterator(); i.hasNext(); )
+        {
+            Schedule schedule = (Schedule) i.next();
+
+            if ( StringUtils.isEmpty( schedule.getCronExpression() ) )
             {
-                ContinuumBuildSettings buildSettings = (ContinuumBuildSettings) i.next();
+                // TODO: this can possibly be removed but it's here now to
+                // weed out any bugs
+                getLogger().info( "Not scheduling " + schedule.getName() );
 
-                if ( StringUtils.isEmpty( buildSettings.getCronExpression() ) )
-                {
-                    // TODO: this can possibly be removed but it's here now to
-                    // weed out any bugs
-                    getLogger().info( "Not scheduling " + buildSettings.getName() );
-
-                    continue;
-                }
-
-                scheduleBuildSettings( buildSettings, continuum );
+                continue;
             }
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new BuildSettingsActivationException( "Error activating build settings.", e );
+
+            schedule( schedule, continuum );
         }
     }
 
-    protected void scheduleBuildSettings( ContinuumBuildSettings buildSettings, Continuum continuum )
-        throws BuildSettingsActivationException
+    protected void schedule( Schedule schedule, Continuum continuum )
+        throws SchedulesActivationException
     {
         JobDataMap dataMap = new JobDataMap();
 
@@ -98,13 +90,13 @@ public class DefaultBuildSettingsActivator
 
         //the name + group makes the job unique
 
-        JobDetail jobDetail = new JobDetail( buildSettings.getName(), Scheduler.DEFAULT_GROUP, ContinuumBuildJob.class );
+        JobDetail jobDetail = new JobDetail( schedule.getName(), Scheduler.DEFAULT_GROUP, ContinuumBuildJob.class );
 
         jobDetail.setJobDataMap( dataMap );
 
         CronTrigger trigger = new CronTrigger();
 
-        trigger.setName( buildSettings.getName() );
+        trigger.setName( schedule.getName() );
 
         trigger.setGroup( Scheduler.DEFAULT_GROUP );
 
@@ -116,11 +108,11 @@ public class DefaultBuildSettingsActivator
 
         try
         {
-            trigger.setCronExpression( buildSettings.getCronExpression() );
+            trigger.setCronExpression( schedule.getCronExpression() );
         }
         catch ( ParseException e )
         {
-            throw new BuildSettingsActivationException( "Error parsing cron expression.", e );
+            throw new SchedulesActivationException( "Error parsing cron expression.", e );
         }
 
         try
@@ -131,7 +123,7 @@ public class DefaultBuildSettingsActivator
         }
         catch ( ContinuumSchedulerException e )
         {
-            throw new BuildSettingsActivationException( "Cannot schedule build job.", e );
+            throw new SchedulesActivationException( "Cannot schedule build job.", e );
         }
     }
 }

@@ -24,7 +24,6 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.model.system.Installation;
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 
 import java.io.File;
@@ -71,21 +70,6 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     ProjectNotifier storeNotifier( ProjectNotifier notifier )
-        throws ContinuumStoreException;
-
-    ContinuumBuildSettings addBuildSettings( ContinuumBuildSettings buildSettings )
-        throws ContinuumStoreException;
-
-    ContinuumBuildSettings updateBuildSettings( ContinuumBuildSettings buildSettings )
-        throws ContinuumStoreException;
-
-    void removeBuildSettings( String buildSettingsId )
-        throws ContinuumStoreException;
-
-    ContinuumBuildSettings getBuildSettings( String buildSettingsId )
-        throws ContinuumStoreException;
-
-    Collection getBuildSettings()
         throws ContinuumStoreException;
 
     ProjectGroup addProjectGroup( ProjectGroup group );

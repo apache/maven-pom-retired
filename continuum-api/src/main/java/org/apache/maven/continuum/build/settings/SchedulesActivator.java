@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.initialization;
+package org.apache.maven.continuum.build.settings;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,15 +16,23 @@ package org.apache.maven.continuum.initialization;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.Continuum;
+
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id:$
  */
-public interface ContinuumInitializer
+public interface SchedulesActivator
 {
-    String ROLE = ContinuumInitializer.class.getName();
+    String ROLE = SchedulesActivator.class.getName();
 
-    void initialize()
-        throws ContinuumInitializationException;
-
+    /**
+     * Grab all the stored {@link org.apache.maven.continuum.model.project.Schedule} objects
+     * and activate them by looking at the scheduling information contained within and submitting a
+     * Job to the scheduler.
+     *
+     * @throws SchedulesActivationException
+     */
+    void activateSchedules( Continuum continuum )
+        throws SchedulesActivationException;
 }

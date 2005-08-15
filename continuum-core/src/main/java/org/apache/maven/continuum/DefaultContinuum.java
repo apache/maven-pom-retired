@@ -16,8 +16,8 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.build.settings.BuildSettingsActivationException;
-import org.apache.maven.continuum.build.settings.BuildSettingsActivator;
+import org.apache.maven.continuum.build.settings.SchedulesActivationException;
+import org.apache.maven.continuum.build.settings.SchedulesActivator;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
 import org.apache.maven.continuum.configuration.ConfigurationLoadingException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
@@ -34,7 +34,6 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
@@ -99,7 +98,7 @@ public class DefaultContinuum
     /**
      * @plexus.requirement
      */
-    private BuildSettingsActivator buildSettingsActivator;
+    private SchedulesActivator schedulesActivator;
 
     // ----------------------------------------------------------------------
     // Moved from core
@@ -682,9 +681,9 @@ public class DefaultContinuum
             // Activate all the Build settings in the system
             // ----------------------------------------------------------------------
 
-            buildSettingsActivator.activateBuildSettings( this );
+            schedulesActivator.activateSchedules( this );
         }
-        catch ( BuildSettingsActivationException e )
+        catch ( SchedulesActivationException e )
         {
             throw new StartingException( "Error activating build settings.", e );
         }
@@ -711,11 +710,6 @@ public class DefaultContinuum
         }
 
         stopMessage();
-    }
-
-    public ContinuumBuildSettings getDefaultBuildSettings()
-    {
-        return initializer.getDefaultBuildSettings();
     }
 
     public Collection getBuildResultsForProject( String projectId )

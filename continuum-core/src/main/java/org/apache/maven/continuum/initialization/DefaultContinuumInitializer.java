@@ -16,14 +16,14 @@ package org.apache.maven.continuum.initialization;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
+import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id:$
+ * @todo use this, reintroduce default project group
  */
 public class DefaultContinuumInitializer
     extends AbstractLogEnabled
@@ -43,17 +43,13 @@ public class DefaultContinuumInitializer
     // Default values for the default build settings
     // ----------------------------------------------------------------------
 
-    public static final String DEFAULT_BUILD_SETTINGS_NAME = "DEFAULT_BUILD_SETTINGS";
+    public static final String DEFAULT_SCHEDULE_NAME = "DEFAULT_BUILD_SETTINGS";
 
     // Cron expression for execution every hour.
     //public static final String DEFAULT_BUILD_SETTINGS_CRON_EXPRESSION = "0 0 * * * ?";
-    public static final String DEFAULT_BUILD_SETTINGS_CRON_EXPRESSION = "0 * * * * ?";
+    public static final String DEFAULT_SCHEDULE_CRON_EXPRESSION = "0 * * * * ?";
 
-    // ----------------------------------------------------------------------
-    // Default project group and build settings
-    // ----------------------------------------------------------------------
-
-    private ContinuumBuildSettings defaultBuildSettings;
+    private Schedule defaultSchedule;
 
     // ----------------------------------------------------------------------
     //  Requirements
@@ -73,36 +69,24 @@ public class DefaultContinuumInitializer
     {
         getLogger().info( "Continuum initializer running ..." );
 
-        defaultBuildSettings = createDefaultBuildSettings();
+        defaultSchedule = createDefaultSchedule();
 
-        try
-        {
-            defaultBuildSettings = store.addBuildSettings( defaultBuildSettings );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new ContinuumInitializationException( "Error storing default Continuum build settings.", e );
-        }
-    }
-
-    public ContinuumBuildSettings getDefaultBuildSettings()
-    {
-        return defaultBuildSettings;
+        defaultSchedule = store.addSchedule( defaultSchedule );
     }
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildSettings createDefaultBuildSettings()
+    public Schedule createDefaultSchedule()
         throws ContinuumInitializationException
     {
-        ContinuumBuildSettings buildSettings = new ContinuumBuildSettings();
+        Schedule schedule = new Schedule();
 
-        buildSettings.setName( DEFAULT_BUILD_SETTINGS_NAME );
+        schedule.setName( DEFAULT_SCHEDULE_NAME );
 
-        buildSettings.setCronExpression( DEFAULT_BUILD_SETTINGS_CRON_EXPRESSION );
+        schedule.setCronExpression( DEFAULT_SCHEDULE_CRON_EXPRESSION );
 
-        return buildSettings;
+        return schedule;
     }
 }

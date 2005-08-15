@@ -19,7 +19,6 @@ package org.apache.maven.continuum;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
@@ -134,8 +133,6 @@ public interface Continuum
 
     void removeNotifier( String projectId, String notifierType )
         throws ContinuumException;
-
-    ContinuumBuildSettings getDefaultBuildSettings();
 
     Collection getBuildResultsForProject( String projectId )
         throws ContinuumException;

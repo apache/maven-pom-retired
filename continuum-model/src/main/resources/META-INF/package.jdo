@@ -59,10 +59,6 @@
         <field name="buildDefinitions"/>
       </fetch-group>
     </class>
-    <class name="ContinuumBuildSettings" detachable="true">
-      <field name="name" persistence-modifier="persistent"/>
-      <field name="cronExpression" persistence-modifier="persistent"/>
-    </class>
   </package>
 
   <!-- Really new stuff, TODO: remove the rest -->

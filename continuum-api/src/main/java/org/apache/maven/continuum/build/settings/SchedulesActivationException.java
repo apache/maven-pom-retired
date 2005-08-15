@@ -4,20 +4,20 @@ package org.apache.maven.continuum.build.settings;
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id:$
  */
-public class BuildSettingsActivationException
+public class SchedulesActivationException
     extends Exception
 {
-    public BuildSettingsActivationException( String message )
+    public SchedulesActivationException( String message )
     {
         super( message );
     }
 
-    public BuildSettingsActivationException( Throwable cause )
+    public SchedulesActivationException( Throwable cause )
     {
         super( cause );
     }
 
-    public BuildSettingsActivationException( String message, Throwable cause )
+    public SchedulesActivationException( String message, Throwable cause )
     {
         super( message, cause );
     }
