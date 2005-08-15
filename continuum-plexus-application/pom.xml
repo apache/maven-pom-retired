@@ -82,12 +82,12 @@
       <artifactId>plexus-container-artifact</artifactId>
       <version>1.0-alpha-3</version>
     </dependency>
-    
+
     <!--
-     |
-     | Plexus services
-     |
-     |-->
+    |
+    | Plexus services
+    |
+    |-->
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-service-jetty</artifactId>
@@ -203,7 +203,7 @@
         <configuration>
           <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
           <configurationsDirectory>src/conf</configurationsDirectory>
-          <configurationProperties>app.properties</configurationProperties>
+          <configurationProperties>${appProperties}</configurationProperties>
           <applicationName>continuum</applicationName>
           <runtimeConfiguration>src/test/conf/test-runtime-configuration.xml</runtimeConfiguration>
           <runtimeConfigurationProperties>${appProperties}</runtimeConfigurationProperties>
