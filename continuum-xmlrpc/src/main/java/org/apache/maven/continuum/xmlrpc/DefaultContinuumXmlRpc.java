@@ -17,10 +17,10 @@ package org.apache.maven.continuum.xmlrpc;
  */
 
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -245,11 +245,11 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            MavenOneProject project = new MavenOneProject();
+            ContinuumProject project = new ContinuumProject();
 
             xmlRpcHelper.hashtableToObject( mavenOneProject, project );
 
-            String projectId = continuum.addMavenOneProject( project );
+            String projectId = continuum.addProject( project, ContinuumBuildExecutor.MAVEN_ONE_EXECUTOR_ID );
 
             Collection projectIds = new ArrayList();
 
@@ -269,11 +269,11 @@ public class DefaultContinuumXmlRpc
 
         try
         {
-            MavenOneProject project = continuum.getMavenOneProject( id );
+            ContinuumProject project = continuum.getProject( id );
 
             xmlRpcHelper.hashtableToObject( mavenOneProject, project );
 
-            continuum.updateMavenOneProject( project );
+            continuum.updateProject( project );
 
             return makeHashtable();
         }

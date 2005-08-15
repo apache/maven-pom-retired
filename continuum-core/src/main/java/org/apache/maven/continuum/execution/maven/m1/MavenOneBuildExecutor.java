@@ -22,7 +22,6 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenOneProject;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -57,22 +56,18 @@ public class MavenOneBuildExecutor
     // Builder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildExecutionResult build( ContinuumProject p, File buildOutput )
-        throws ContinuumBuildExecutorException
-    {
-        MavenOneProject project = (MavenOneProject) p;
-
-        String commandLine = StringUtils.clean( project.getCommandLineArguments() ) + " " +
-            StringUtils.clean( project.getGoals() );
-
-        return executeShellCommand( project, null, commandLine, buildOutput );
-    }
-
     public ContinuumBuildExecutionResult build( ContinuumProject project, BuildDefinition buildDefinition,
                                                 File buildOutput )
         throws ContinuumBuildExecutorException
     {
-        return build( project, buildOutput );
+        // TODO: get from installation
+//        String executable = project.getExecutable();
+        String executable = "maven";
+
+        String arguments = StringUtils.clean( buildDefinition.getArguments() ) + " " +
+            StringUtils.clean( buildDefinition.getGoals() );
+
+        return executeShellCommand( project, executable, arguments, buildOutput );
     }
 
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
@@ -87,7 +82,7 @@ public class MavenOneBuildExecutor
 
         try
         {
-            metadataHelper.mapMetadata( projectXmlFile, (MavenOneProject) project );
+            metadataHelper.mapMetadata( projectXmlFile, project );
         }
         catch ( MavenOneMetadataHelperException e )
         {

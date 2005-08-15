@@ -17,7 +17,7 @@ package org.apache.maven.continuum.project.builder.maven;
  */
 
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.MavenOneProject;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.PlexusTestCase;
@@ -55,7 +55,7 @@ public class MavenOneContinuumProjectBuilderTest
 
         assertEquals( "result.projects.length", 1, result.getProjects().size() );
 
-        MavenOneProject project = (MavenOneProject) result.getProjects().get( 0 );
+        ContinuumProject project = (ContinuumProject) result.getProjects().get( 0 );
 
         assertNotNull( project );
 
@@ -70,7 +70,5 @@ public class MavenOneContinuumProjectBuilderTest
         assertEquals( "dev@maven.apache.org", notifier.getConfiguration().get( "address" ) );
 
         assertEquals( "1.1-SNAPSHOT", project.getVersion() );
-
-        assertEquals( "clean:clean jar:install", project.getGoals() );
     }
 }

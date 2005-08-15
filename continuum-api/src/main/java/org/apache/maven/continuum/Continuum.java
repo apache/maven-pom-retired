@@ -21,7 +21,6 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
@@ -118,15 +117,6 @@ public interface Continuum
     // ----------------------------------------------------------------------
 
     ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
-        throws ContinuumException;
-
-    String addMavenOneProject( MavenOneProject project )
-        throws ContinuumException;
-
-    MavenOneProject getMavenOneProject( String id )
-        throws ContinuumException;
-
-    void updateMavenOneProject( MavenOneProject project )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------

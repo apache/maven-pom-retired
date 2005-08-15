@@ -1,20 +1,22 @@
 <form>
   <extend>continuumProject</extend>
   <id>maven-1Project</id>
-  <target-class>org.apache.maven.continuum.project.MavenOneProject</target-class>
-  <lookup-expression>getMavenOneProject(#id)</lookup-expression>
+  <target-class>org.apache.maven.continuum.project.ContinuumProject</target-class>
+  <lookup-expression>getProject(#id)</lookup-expression>
   <elements>
-    <element>
-      <id>project.goals</id>
-      <validators>
-        <validator>
-          <id>required</id>
-          <error-message-key>project.goals.error</error-message-key>
-        </validator>
-      </validators>
-      <expression>goals</expression>
-      <type>text</type>
-    </element>
+    <!-- TODO - build definition
+        <element>
+          <id>project.goals</id>
+          <validators>
+            <validator>
+              <id>required</id>
+              <error-message-key>project.goals.error</error-message-key>
+            </validator>
+          </validators>
+          <expression>goals</expression>
+          <type>text</type>
+        </element>
+    -->
   </elements>
 
   <!-- Add -->
@@ -23,17 +25,7 @@
     <action>addEntity</action>
     <view>Summary.vm</view>
     <view-on-failure>Add.vm</view-on-failure>
-    <fid-on-failure>maven-1Project</fid-on-failure>        
-    <expression>addMavenOneProject(#entity)</expression>
+    <fid-on-failure>maven-1Project</fid-on-failure>
+    <expression>addProject(#entity,"maven-one")</expression>
   </add>
-
-  <!-- Update -->
-  <update>
-    <title-key>project.title.update</title-key>
-    <action>updateEntity</action>
-    <view>Summary.vm</view>
-    <view-on-failure>Edit.vm</view-on-failure>
-    <expression>updateMavenOneProject(#entity)</expression>
-  </update>
-
 </form>

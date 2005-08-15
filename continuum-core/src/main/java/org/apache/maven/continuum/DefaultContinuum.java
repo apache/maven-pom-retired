@@ -36,7 +36,6 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
@@ -339,14 +338,6 @@ public class DefaultContinuum
     }
 
     // ----------------------------------------------------------------------
-    // Build inforation
-    // ----------------------------------------------------------------------
-
-    // ----------------------------------------------------------------------
-    // Ant Projects
-    // ----------------------------------------------------------------------
-
-    // ----------------------------------------------------------------------
     // Maven 1.x projects
     // ----------------------------------------------------------------------
 
@@ -355,26 +346,6 @@ public class DefaultContinuum
     {
         return executeAddProjectsFromMetadataActivity( metadataUrl, MavenOneContinuumProjectBuilder.ID,
                                                        MavenOneBuildExecutor.ID );
-    }
-
-    public String addMavenOneProject( MavenOneProject project )
-        throws ContinuumException
-    {
-        project.setExecutorId( MavenOneBuildExecutor.ID );
-
-        return executeAddProjectFromScmActivity( project );
-    }
-
-    public MavenOneProject getMavenOneProject( String projectId )
-        throws ContinuumException
-    {
-        return (MavenOneProject) getProject( projectId );
-    }
-
-    public void updateMavenOneProject( MavenOneProject project )
-        throws ContinuumException
-    {
-        updateProject( (ContinuumProject) project );
     }
 
     // ----------------------------------------------------------------------

@@ -22,7 +22,6 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
@@ -223,28 +222,6 @@ public abstract class ContinuumXmlRpcClient
         return (ContinuumProjectBuildingResult) invoke( "addMavenOneProject", new Object[]{metadataUrl,},
                                                         ContinuumProjectBuildingResult.class );
     }
-
-    public String addMavenOneProject( MavenOneProject mavenOneProject )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    public MavenOneProject getMavenOneProject( String s )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    public void updateMavenOneProject( MavenOneProject mavenOneProject )
-        throws ContinuumException
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    // ----------------------------------------------------------------------
-    // Ant Projects
-    // ----------------------------------------------------------------------
 
     // ----------------------------------------------------------------------
     // Notification

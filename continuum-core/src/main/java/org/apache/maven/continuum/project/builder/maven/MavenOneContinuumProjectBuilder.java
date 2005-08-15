@@ -20,7 +20,7 @@ import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelperException;
 import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.project.MavenOneProject;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -67,11 +67,9 @@ public class MavenOneContinuumProjectBuilder
             return result;
         }
 
-        MavenOneProject project;
-
         try
         {
-            project = new MavenOneProject();
+            ContinuumProject project = new ContinuumProject();
 
             metadataHelper.mapMetadata( pomFile, project );
 

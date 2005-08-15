@@ -16,7 +16,7 @@ package org.apache.maven.continuum.execution.maven.m1;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.MavenOneProject;
+import org.apache.maven.continuum.project.ContinuumProject;
 
 import java.io.File;
 
@@ -28,6 +28,6 @@ public interface MavenOneMetadataHelper
 {
     String ROLE = MavenOneMetadataHelper.class.getName();
 
-    void mapMetadata( File metadata, MavenOneProject project )
+    void mapMetadata( File metadata, ContinuumProject project )
         throws MavenOneMetadataHelperException;
 }

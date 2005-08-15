@@ -19,7 +19,7 @@ package org.apache.maven.continuum.execution.maven.m1;
 import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.MavenOneProject;
+import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
@@ -61,7 +61,7 @@ public class MavenOneBuildExecutorTest
         // Make the "existing" project
         // ----------------------------------------------------------------------
 
-        MavenOneProject project = new MavenOneProject();
+        ContinuumProject project = new ContinuumProject();
 
         project.setName( "Maven" );
 
@@ -87,8 +87,6 @@ public class MavenOneBuildExecutorTest
 
         project.setVersion( "1.1-SNAPSHOT" );
 
-        project.setGoals( "clean:clean jar:install" );
-
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
@@ -110,7 +108,5 @@ public class MavenOneBuildExecutorTest
         assertEquals( "dev@maven.apache.org", actualNotifier.getConfiguration().get( "address" ) );
 
         assertEquals( "1.1-SNAPSHOT", project.getVersion() );
-
-        assertEquals( "clean:clean jar:install", project.getGoals() );
     }
 }
