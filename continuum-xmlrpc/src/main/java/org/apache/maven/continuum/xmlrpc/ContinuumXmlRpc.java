@@ -21,6 +21,7 @@ import java.util.Hashtable;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ * @todo - do we need the per-type variations?
  */
 public interface ContinuumXmlRpc
 {

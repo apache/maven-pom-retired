@@ -64,7 +64,7 @@ public class ShellBuildExecutor
         if ( new File( executable ).isAbsolute() )
         {
             throw new ContinuumBuildExecutorException(
-                "The shell script must be a relative path. " + "It will be relative to the checkout" );
+                "The shell script must be a relative path. It will be relative to the checkout." );
         }
 
         return executeShellCommand( project, executable, buildDefinition.getArguments(), buildOutput );

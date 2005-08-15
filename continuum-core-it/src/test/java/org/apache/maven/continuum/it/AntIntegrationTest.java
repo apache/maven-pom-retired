@@ -17,9 +17,10 @@ package org.apache.maven.continuum.it;
  */
 
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -51,16 +52,19 @@ public class AntIntegrationTest
 
         progress( "Adding Ant SVN project" );
 
-        AntProject p = new AntProject();
+        ContinuumProject p = new ContinuumProject();
         p.setScmUrl( makeScmUrl( "svn", getSvnRoot(), "ant-svn" ) );
         p.setName( "Ant SVN Project" );
 //        p.getNotifiers().add( makeMailNotifier( email ) );
         p.setVersion( "3.0" );
-        p.setCommandLineArguments( "-v" );
-        p.setExecutable( "ant" );
-        p.setTargets( "clean build" );
 
-        String projectId = continuum.addAntProject( p );
+        BuildDefinition bd = new BuildDefinition();
+        bd.setArguments( "-v" );
+        bd.setBuildFile( "build.xml" );
+        bd.setGoals( "clean build" );
+        p.addBuildDefinition( bd );
+
+        String projectId = continuum.addProject( p, ContinuumBuildExecutor.ANT_EXECUTOR_ID );
 
         waitForSuccessfulCheckout( projectId );
 
@@ -92,16 +96,19 @@ public class AntIntegrationTest
 
         cvsImport( root, "ant-cvs", getCvsRoot() );
 
-        AntProject p = new AntProject();
+        ContinuumProject p = new ContinuumProject();
         p.setScmUrl( makeScmUrl( "cvs", getCvsRoot(), "ant-cvs" ) );
         p.setName( "Ant CVS Project" );
 //        p.getNotifiers().add( makeMailNotifier( email ) );
         p.setVersion( "3.0" );
-        p.setCommandLineArguments( "-debug" );
-        p.setExecutable( "ant" );
-        p.setTargets( "clean build" );
 
-        String projectId = continuum.addAntProject( p );
+        BuildDefinition bd = new BuildDefinition();
+        bd.setArguments( "-debug" );
+        bd.setBuildFile( "build.xml" );
+        bd.setGoals( "clean build" );
+        p.addBuildDefinition( bd );
+
+        String projectId = continuum.addProject( p, ContinuumBuildExecutor.ANT_EXECUTOR_ID );
 
         waitForSuccessfulCheckout( projectId );
 

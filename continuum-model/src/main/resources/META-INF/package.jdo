@@ -76,15 +76,6 @@
         <column name="M1_GOALS"/>
       </field>
     </class>
-    <class name="AntProject" persistence-capable-superclass="org.apache.maven.continuum.project.ContinuumProject"
-           detachable="true">
-      <inheritance strategy="new-table"/>
-      <field name="commandLineArguments" persistence-modifier="persistent"/>
-      <field name="executable" persistence-modifier="persistent">
-        <column name="ANT_EXECUTABLE"/>
-      </field>
-      <field name="targets" persistence-modifier="persistent"/>
-    </class>
     <class name="ContinuumBuildSettings" detachable="true">
       <field name="name" persistence-modifier="persistent"/>
       <field name="cronExpression" persistence-modifier="persistent"/>

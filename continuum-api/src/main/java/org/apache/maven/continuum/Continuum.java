@@ -19,7 +19,6 @@ package org.apache.maven.continuum;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
@@ -131,20 +130,7 @@ public interface Continuum
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
-    // Ant Projects
-    // ----------------------------------------------------------------------
-
-    String addAntProject( AntProject project )
-        throws ContinuumException;
-
-    AntProject getAntProject( String id )
-        throws ContinuumException;
-
-    void updateAntProject( AntProject project )
-        throws ContinuumException;
-
-    // ----------------------------------------------------------------------
-    // Shell projects
+    // Projects
     // ----------------------------------------------------------------------
 
     String addProject( ContinuumProject project, String executorId )

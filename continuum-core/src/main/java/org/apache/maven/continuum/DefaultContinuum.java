@@ -26,7 +26,6 @@ import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction;
 import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
 import org.apache.maven.continuum.core.action.StoreProjectAction;
-import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.initialization.ContinuumInitializationException;
@@ -35,7 +34,6 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumBuildSettings;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
@@ -347,26 +345,6 @@ public class DefaultContinuum
     // ----------------------------------------------------------------------
     // Ant Projects
     // ----------------------------------------------------------------------
-
-    public String addAntProject( AntProject project )
-        throws ContinuumException
-    {
-        project.setExecutorId( AntBuildExecutor.ID );
-
-        return executeAddProjectFromScmActivity( project );
-    }
-
-    public AntProject getAntProject( String projectId )
-        throws ContinuumException
-    {
-        return (AntProject) getProject( projectId );
-    }
-
-    public void updateAntProject( AntProject project )
-        throws ContinuumException
-    {
-        updateProject( (ContinuumProject) project );
-    }
 
     // ----------------------------------------------------------------------
     // Maven 1.x projects

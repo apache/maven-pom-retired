@@ -18,7 +18,6 @@ package org.apache.maven.continuum.project.builder.cc;
 
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
@@ -170,7 +169,7 @@ public class CruiseControlProjectBuilder
                         "A configuration can only have a single 'ant' or 'maven' schedule." );
                 }
 
-                project = new AntProject();
+                project = new ContinuumProject();
 
                 project.setExecutorId( ContinuumBuildExecutor.ANT_EXECUTOR_ID );
             }

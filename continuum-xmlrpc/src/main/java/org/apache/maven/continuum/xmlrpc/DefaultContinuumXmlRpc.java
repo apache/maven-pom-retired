@@ -19,7 +19,6 @@ package org.apache.maven.continuum.xmlrpc;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.MavenOneProject;
 import org.apache.maven.continuum.project.MavenTwoProject;
@@ -292,11 +291,11 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            AntProject project = new AntProject();
+            ContinuumProject project = new ContinuumProject();
 
             xmlRpcHelper.hashtableToObject( antProject, project );
 
-            String projectId = continuum.addAntProject( project );
+            String projectId = continuum.addProject( project, ShellBuildExecutor.ANT_EXECUTOR_ID );
 
             Collection projectIds = new ArrayList();
 
@@ -316,11 +315,11 @@ public class DefaultContinuumXmlRpc
 
         try
         {
-            AntProject project = continuum.getAntProject( id );
+            ContinuumProject project = continuum.getProject( id );
 
             xmlRpcHelper.hashtableToObject( antProject, project );
 
-            continuum.updateAntProject( project );
+            continuum.updateProject( project );
 
             return makeHashtable();
         }

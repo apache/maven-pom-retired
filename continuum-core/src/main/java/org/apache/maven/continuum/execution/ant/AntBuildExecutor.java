@@ -21,7 +21,6 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.project.AntProject;
 import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -62,18 +61,12 @@ public class AntBuildExecutor
                                                 File buildOutput )
         throws ContinuumBuildExecutorException
     {
-        return build( project, buildOutput );
-    }
+        // TODO: get from installation
+//        String executable = project.getExecutable();
+        String executable = "ant";
 
-    public ContinuumBuildExecutionResult build( ContinuumProject p, File buildOutput )
-        throws ContinuumBuildExecutorException
-    {
-        AntProject project = (AntProject) p;
-
-        String executable = project.getExecutable();
-
-        String arguments = StringUtils.clean( project.getCommandLineArguments() ) + " " +
-            StringUtils.clean( project.getTargets() );
+        String arguments = StringUtils.clean( buildDefinition.getArguments() ) + " " +
+            StringUtils.clean( buildDefinition.getGoals() );
 
         return executeShellCommand( project, executable, arguments, buildOutput );
     }
@@ -81,11 +74,5 @@ public class AntBuildExecutor
     public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject p )
         throws ContinuumBuildExecutorException
     {
-        AntProject project = (AntProject) p;
-
-        if ( project.getTargets() == null )
-        {
-            project.setTargets( "" );
-        }
     }
 }
