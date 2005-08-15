@@ -1,43 +1,36 @@
 <form>
   <extend>continuumProject</extend>
   <id>shellProject</id>
-  <!--
-    <target-class>org.apache.maven.continuum.project.ShellProject</target-class>
-    <lookup-expression>getShellProject(#id)</lookup-expression>
-    <elements>
-      <element>
-        <id>project.executable</id>
-        <validators>
-          <validator>
-            <id>required</id>
-            <error-message-key>project.executable.error</error-message-key>
-          </validator>
-          <validator>
-            <id>safe-path</id>
-            <error-message-key>project.executable.safepath.error</error-message-key>
-          </validator>
-        </validators>
-        <expression>executable</expression>
-        <type>text</type>
-      </element>
-    </elements>
+  <!-- TODO: why not inherited? -->
+  <target-class>org.apache.maven.continuum.project.ContinuumProject</target-class>
+  <lookup-expression>getProject(#id)</lookup-expression>
+  <elements>
+    <!-- TODO: remove
+        <element>
+          <id>project.executable</id>
+          <validators>
+            <validator>
+              <id>required</id>
+              <error-message-key>project.executable.error</error-message-key>
+            </validator>
+            <validator>
+              <id>safe-path</id>
+              <error-message-key>project.executable.safepath.error</error-message-key>
+            </validator>
+          </validators>
+          <expression>executable</expression>
+          <type>text</type>
+        </element>
+    -->
+  </elements>
 
-    <add>
-      <title-key>project.title.add</title-key>
-      <action>addEntity</action>
-      <view>Summary.vm</view>
-      <view-on-failure>Add.vm</view-on-failure>
-      <fid-on-failure>shellProject</fid-on-failure>
-      <expression>addShellProject(#entity)</expression>
-    </add>
+  <add>
+    <title-key>project.title.add</title-key>
+    <action>addEntity</action>
+    <view>Summary.vm</view>
+    <view-on-failure>Add.vm</view-on-failure>
+    <fid-on-failure>shellProject</fid-on-failure>
+    <expression>addProject(#entity,"shell")</expression>
+  </add>
 
-    <update>
-      <title-key>project.title.update</title-key>
-      <action>updateEntity</action>
-      <view>Summary.vm</view>
-      <view-on-failure>Edit.vm</view-on-failure>
-      <expression>updateShellProject(#entity)</expression>
-    </update>
-
-  -->
 </form>
