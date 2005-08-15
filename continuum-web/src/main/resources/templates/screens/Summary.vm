@@ -56,7 +56,8 @@ $page.setTitle( "Continuum" )
         #end
 
         #if ( $item.latestBuildId )
-        #set ( $build = $continuum.getLatestBuildForProject($item.id) )
+        ## TODO: get rid of this call back to $continuum
+        #set ( $build = $continuum.getLatestBuildResultForProject($item.id) )
         <td><a href="$link.setPage('ProjectBuild.vm').addPathInfo('view', "ProjectBuild").addPathInfo('id', $item.id).addPathInfo('buildId', $build.id)">Last Result</a></td>
         #else
         <td>Last Result</td>
