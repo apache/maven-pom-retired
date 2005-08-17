@@ -16,7 +16,7 @@ package org.apache.maven.continuum.utils;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 
 import java.io.File;
 
@@ -28,5 +28,5 @@ public interface WorkingDirectoryService
 {
     String ROLE = WorkingDirectoryService.class.getName();
 
-    File getWorkingDirectory( ContinuumProject project );
+    File getWorkingDirectory( Project project );
 }

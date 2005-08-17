@@ -16,7 +16,7 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
@@ -57,7 +57,7 @@ public class DefaultContinuumTest
     {
         Continuum continuum = (Continuum) lookup( Continuum.ROLE );
 
-        int projectCount = getStore().getAllProjects().size();
+        int projectCount = getStore().getAllProjectsByName().size();
 
         int projectGroupCount = getStore().getAllProjectGroupsWithProjects().size();
 
@@ -73,20 +73,20 @@ public class DefaultContinuumTest
 
         assertEquals( "result.projectGroups.size", 1, result.getProjectGroups().size() );
 
-        System.err.println( "number of projects: " + getStore().getAllProjects().size() );
+        System.err.println( "number of projects: " + getStore().getAllProjectsByName().size() );
 
         System.err.println( "number of project groups: " + getStore().getAllProjectGroupsWithProjects().size() );
 
-        assertEquals( "Total project count", projectCount + 2, getStore().getAllProjects().size() );
+        assertEquals( "Total project count", projectCount + 2, getStore().getAllProjectsByName().size() );
 
         assertEquals( "Total project group count.", projectGroupCount + 1,
                       getStore().getAllProjectGroupsWithProjects().size() );
 
         Map projects = new HashMap();
 
-        for ( Iterator i = getStore().getAllProjects().iterator(); i.hasNext(); )
+        for ( Iterator i = getStore().getAllProjectsByName().iterator(); i.hasNext(); )
         {
-            ContinuumProject project = (ContinuumProject) i.next();
+            Project project = (Project) i.next();
 
             projects.put( project.getName(), project );
         }
@@ -116,9 +116,12 @@ public class DefaultContinuumTest
 
         assertEquals( 1, projects.size() );
 
-        assertEquals( ContinuumProject.class, projects.get( 0 ).getClass() );
+        assertEquals( Project.class, projects.get( 0 ).getClass() );
 
-        ContinuumProject project = (ContinuumProject) projects.get( 0 );
+        Project project = (Project) projects.get( 0 );
+
+        // reattach
+        project = continuum.getProject( project.getId() );
 
         project.setName( project.getName() + " 2" );
 

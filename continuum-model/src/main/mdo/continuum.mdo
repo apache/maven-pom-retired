@@ -123,11 +123,13 @@
           <name>state</name>
           <version>1.0.0+</version>
           <type>int</type>
+          <defaultValue>1</defaultValue>
         </field>
+        <!-- TODO: maybe buildresult itself? -->
         <field>
           <name>latestBuildId</name>
           <version>1.0.0</version>
-          <type>String</type>
+          <type>int</type>
         </field>
         <field>
           <name>buildNumber</name>
@@ -718,130 +720,6 @@
           <type>Map</type>
           <association xml.mapStyle="inline" stash.part="true" stash.keyType="java.lang.String">
             <type>String</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-      </fields>
-    </class>
-
-    <!-- TODO: old ones to remove -->
-
-    <class>
-      <packageName>org.apache.maven.continuum.project</packageName>
-      <name>ContinuumProject</name>
-      <version>1.0.0</version>
-      <fields>
-        <field>
-          <name>id</name>
-          <required>true</required>
-          <identifier>true</identifier>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>name</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <!-- TODO: Remove -->
-        <field>
-          <name>scmUrl</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>version</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field stash.storable="false">
-          <name>state</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-        <field>
-          <name>executorId</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>latestBuildId</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>buildNumber</name>
-          <version>1.0.0</version>
-          <type>int</type>
-        </field>
-        <field>
-          <name>builds</name>
-          <version>1.0.0</version>
-          <association stash.part="true">
-            <type>BuildResult</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>checkoutResult</name>
-          <version>1.0.0</version>
-          <association>
-            <type>ScmResult</type>
-          </association>
-        </field>
-        <field>
-          <name>url</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>artifactId</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>groupId</name>
-          <version>1.0.0</version>
-          <type>String</type>
-        </field>
-        <field>
-          <name>developers</name>
-          <version>1.0.0</version>
-          <association stash.part="true">
-            <type>ProjectDeveloper</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>notifiers</name>
-          <version>1.0.0</version>
-          <association stash.part="true">
-            <type>ProjectNotifier</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>dependencies</name>
-          <version>1.0.0</version>
-          <association stash.part="true">
-            <type>ProjectDependency</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>projectGroup</name>
-          <version>1.0.0</version>
-          <type>Set</type>
-          <association stash.part="false">
-            <type>ProjectGroup</type>
-          </association>
-        </field>
-        <field>
-          <name>buildDefinitions</name>
-          <version>1.0.0</version>
-          <type>Set</type>
-          <association>
-            <type>BuildDefinition</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>

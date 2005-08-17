@@ -1,7 +1,7 @@
 <form>
   <extend>continuumProject</extend>
   <id>maven-1Project</id>
-  <target-class>org.apache.maven.continuum.project.ContinuumProject</target-class>
+  <target-class>org.apache.maven.continuum.model.project.Project</target-class>
   <lookup-expression>getProject(#id)</lookup-expression>
   <elements>
     <!-- TODO - build definition

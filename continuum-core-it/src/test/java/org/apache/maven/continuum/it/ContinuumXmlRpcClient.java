@@ -19,9 +19,9 @@ package org.apache.maven.continuum.it;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.xmlrpc.XmlRpcHelper;
 import org.apache.xmlrpc.XmlRpcClient;
@@ -91,19 +91,19 @@ public abstract class ContinuumXmlRpcClient
     // Project
     // ----------------------------------------------------------------------
 
-    public void removeProject( String projectId )
+    public void removeProject( int projectId )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void checkoutProject( String projectId )
+    public void checkoutProject( int projectId )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
     }
 
-    public ContinuumProject getProject( String projectId )
+    public Project getProject( int projectId )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
@@ -112,7 +112,7 @@ public abstract class ContinuumXmlRpcClient
     public Collection getAllProjects( int start, int end )
         throws ContinuumException
     {
-        return (Collection) invoke( "getProjects", new Object[]{}, ContinuumProject.class );
+        return (Collection) invoke( "getProjects", new Object[]{}, Project.class );
     }
 
     public List getProjectsInBuildOrder()
@@ -121,13 +121,13 @@ public abstract class ContinuumXmlRpcClient
         throw new UnsupportedOperationException();
     }
 
-    public ScmResult getScmResultForProject( String projectId )
+    public ScmResult getScmResultForProject( int projectId )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
     }
 
-    public ScmResult getCheckOutScmResultForProject( String projectId )
+    public ScmResult getCheckOutScmResultForProject( int projectId )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
@@ -139,7 +139,7 @@ public abstract class ContinuumXmlRpcClient
         throw new UnsupportedOperationException();
     }
 
-    public BuildResult getLatestBuildResultForProject( String projectId )
+    public BuildResult getLatestBuildResultForProject( int projectId )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
@@ -149,7 +149,7 @@ public abstract class ContinuumXmlRpcClient
     // Queues
     // ----------------------------------------------------------------------
 
-    public boolean isInBuildingQueue( String projectId )
+    public boolean isInBuildingQueue( int projectId )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
@@ -171,13 +171,13 @@ public abstract class ContinuumXmlRpcClient
         throw new UnsupportedOperationException();
     }
 
-    public void buildProject( String projectId )
+    public void buildProject( int projectId )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void buildProject( String projectId, boolean force )
+    public void buildProject( int projectId, boolean force )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
@@ -208,25 +208,25 @@ public abstract class ContinuumXmlRpcClient
     // Notification
     // ----------------------------------------------------------------------
 
-    public ProjectNotifier getNotifier( String projectId, String notifierType )
+    public ProjectNotifier getNotifier( int projectId, String notifierType )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateNotifier( String projectId, String notifierType, Map configuration )
+    public void updateNotifier( int projectId, String notifierType, Map configuration )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void addNotifier( String projectId, String notifierType, Map configuration )
+    public void addNotifier( int projectId, String notifierType, Map configuration )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void removeNotifier( String projectId, String notifierType )
+    public void removeNotifier( int projectId, String notifierType )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();

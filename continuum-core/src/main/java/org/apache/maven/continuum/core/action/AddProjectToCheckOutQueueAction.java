@@ -16,10 +16,10 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.scm.queue.CheckOutTask;
-import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 
 import java.util.Map;
@@ -31,7 +31,9 @@ import java.util.Map;
 public class AddProjectToCheckOutQueueAction
     extends AbstractContinuumAction
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private WorkingDirectoryService workingDirectoryService;
 
     private TaskQueue checkOutQueue;
@@ -41,7 +43,7 @@ public class AddProjectToCheckOutQueueAction
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = store.getProject( getProjectId( context ) );
+        Project project = store.getProject( getProjectId( context ) );
 
         CheckOutTask checkOutTask = new CheckOutTask( project.getId(),
                                                       workingDirectoryService.getWorkingDirectory( project ) );

@@ -19,8 +19,7 @@ package org.apache.maven.continuum.xmlrpc;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
-import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -59,7 +58,7 @@ public class DefaultContinuumXmlRpc
     // ContinuumXmlRpc Implementation
     // ----------------------------------------------------------------------
 
-    public Hashtable removeProject( String projectId )
+    public Hashtable removeProject( int projectId )
     {
         try
         {
@@ -73,11 +72,11 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-    public Hashtable getProject( String projectId )
+    public Hashtable getProject( int projectId )
     {
         try
         {
-            ContinuumProject project = continuum.getProject( projectId );
+            Project project = continuum.getProject( projectId );
 
             return makeHashtable( "project", convertContinuumProject( project, false ) );
         }
@@ -108,25 +107,11 @@ public class DefaultContinuumXmlRpc
         }
     }
 
-    public Hashtable getScmResultForProject( String projectId )
-    {
-        try
-        {
-            ScmResult result = continuum.getScmResultForProject( projectId );
-
-            return makeHashtable( "scmResult", convertScmResult( result ) );
-        }
-        catch ( Throwable e )
-        {
-            return handleException( "ContinuumXmlRpc.getScmResultForProject()", "Project id: '" + projectId + "'.", e );
-        }
-    }
-
     // ----------------------------------------------------------------------
     // Build handling
     // ----------------------------------------------------------------------
 
-    public Hashtable buildProject( String projectId, boolean force )
+    public Hashtable buildProject( int projectId, boolean force )
     {
         try
         {
@@ -156,9 +141,9 @@ public class DefaultContinuumXmlRpc
 
             for ( Iterator it = projects.iterator(); it.hasNext(); )
             {
-                ContinuumProject project = (ContinuumProject) it.next();
+                Project project = (Project) it.next();
 
-                projectIds.add( project.getId() );
+                projectIds.add( new Integer( project.getId() ) );
             }
 
             return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
@@ -173,15 +158,15 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            ContinuumProject project = new ContinuumProject();
+            Project project = new Project();
 
             xmlRpcHelper.hashtableToObject( mavenTwoProject, project );
 
-            String projectId = continuum.addProject( project, ContinuumBuildExecutor.MAVEN_TWO_EXECUTOR_ID );
+            int projectId = continuum.addProject( project, ContinuumBuildExecutor.MAVEN_TWO_EXECUTOR_ID );
 
             Collection projectIds = new Vector();
 
-            projectIds.add( projectId );
+            projectIds.add( Integer.toString( projectId ) );
 
             return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
         }
@@ -193,11 +178,11 @@ public class DefaultContinuumXmlRpc
 
     public Hashtable updateMavenTwoProject( Hashtable mavenTwoProject )
     {
-        String id = getId( mavenTwoProject );
+        int id = getId( mavenTwoProject );
 
         try
         {
-            ContinuumProject project = continuum.getProject( id );
+            Project project = continuum.getProject( id );
 
             xmlRpcHelper.hashtableToObject( mavenTwoProject, project );
 
@@ -227,9 +212,9 @@ public class DefaultContinuumXmlRpc
 
             for ( Iterator it = projects.iterator(); it.hasNext(); )
             {
-                ContinuumProject project = (ContinuumProject) it.next();
+                Project project = (Project) it.next();
 
-                projectIds.add( project.getId() );
+                projectIds.add( new Integer( project.getId() ) );
             }
 
             return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
@@ -244,15 +229,15 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            ContinuumProject project = new ContinuumProject();
+            Project project = new Project();
 
             xmlRpcHelper.hashtableToObject( mavenOneProject, project );
 
-            String projectId = continuum.addProject( project, ContinuumBuildExecutor.MAVEN_ONE_EXECUTOR_ID );
+            int projectId = continuum.addProject( project, ContinuumBuildExecutor.MAVEN_ONE_EXECUTOR_ID );
 
             Collection projectIds = new ArrayList();
 
-            projectIds.add( projectId );
+            projectIds.add( Integer.toString( projectId ) );
 
             return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
         }
@@ -264,11 +249,11 @@ public class DefaultContinuumXmlRpc
 
     public Hashtable updateMavenOneProject( Hashtable mavenOneProject )
     {
-        String id = getId( mavenOneProject );
+        int id = getId( mavenOneProject );
 
         try
         {
-            ContinuumProject project = continuum.getProject( id );
+            Project project = continuum.getProject( id );
 
             xmlRpcHelper.hashtableToObject( mavenOneProject, project );
 
@@ -290,15 +275,15 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            ContinuumProject project = new ContinuumProject();
+            Project project = new Project();
 
             xmlRpcHelper.hashtableToObject( antProject, project );
 
-            String projectId = continuum.addProject( project, ShellBuildExecutor.ANT_EXECUTOR_ID );
+            int projectId = continuum.addProject( project, ShellBuildExecutor.ANT_EXECUTOR_ID );
 
             Collection projectIds = new ArrayList();
 
-            projectIds.add( projectId );
+            projectIds.add( Integer.toString( projectId ) );
 
             return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
         }
@@ -310,11 +295,11 @@ public class DefaultContinuumXmlRpc
 
     public Hashtable updateAntProject( Hashtable antProject )
     {
-        String id = getId( antProject );
+        int id = getId( antProject );
 
         try
         {
-            ContinuumProject project = continuum.getProject( id );
+            Project project = continuum.getProject( id );
 
             xmlRpcHelper.hashtableToObject( antProject, project );
 
@@ -336,15 +321,15 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            ContinuumProject project = new ContinuumProject();
+            Project project = new Project();
 
             xmlRpcHelper.hashtableToObject( shellProject, project );
 
-            String projectId = continuum.addProject( project, ShellBuildExecutor.SHELL_EXECUTOR_ID );
+            int projectId = continuum.addProject( project, ShellBuildExecutor.SHELL_EXECUTOR_ID );
 
             Collection projectIds = new ArrayList();
 
-            projectIds.add( projectId );
+            projectIds.add( Integer.toString( projectId ) );
 
             return makeHashtable( "projectIds", xmlRpcHelper.collectionToVector( projectIds, false ) );
         }
@@ -356,11 +341,11 @@ public class DefaultContinuumXmlRpc
 
     public Hashtable updateShellProject( Hashtable shellProject )
     {
-        String id = getId( shellProject );
+        int id = getId( shellProject );
 
         try
         {
-            ContinuumProject project = continuum.getProject( id );
+            Project project = continuum.getProject( id );
 
             xmlRpcHelper.hashtableToObject( shellProject, project );
 
@@ -378,9 +363,9 @@ public class DefaultContinuumXmlRpc
     //
     // ----------------------------------------------------------------------
 
-    private String getId( Hashtable hashtable )
+    private int getId( Hashtable hashtable )
     {
-        return (String) hashtable.get( "id" );
+        return Integer.valueOf( (String) hashtable.get( "id" ) ).intValue();
     }
 
     // ----------------------------------------------------------------------
@@ -403,7 +388,7 @@ public class DefaultContinuumXmlRpc
             excludedProperties.add( "checkOutScmResult" );
         }
 
-        ContinuumProject project = (ContinuumProject) object;
+        Project project = (Project) object;
 
         Hashtable hashtable = xmlRpcHelper.objectToHashtable( project, excludedProperties );
 

@@ -19,11 +19,12 @@ package org.apache.maven.continuum.notification.mail;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.codehaus.plexus.mailsender.MailMessage;
@@ -164,7 +165,7 @@ public class MailContinuumNotifier
     public void sendNotification( String source, Set recipients, Map configuration, Map context )
         throws NotificationException
     {
-        ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
+        Project project = (Project) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
         BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
@@ -196,8 +197,8 @@ public class MailContinuumNotifier
         }
     }
 
-    private void buildComplete( ContinuumProject project, BuildResult build, String buildOutput, String source,
-                                Set recipients, Map configuration )
+    private void buildComplete( Project project, BuildResult build, String buildOutput, String source, Set recipients,
+                                Map configuration )
         throws ContinuumException
     {
         // ----------------------------------------------------------------------
@@ -281,7 +282,7 @@ public class MailContinuumNotifier
     //
     // ----------------------------------------------------------------------
 
-    private String generateSubject( ContinuumProject project, BuildResult build )
+    private String generateSubject( Project project, BuildResult build )
     {
         int state = build.getState();
 
@@ -305,8 +306,7 @@ public class MailContinuumNotifier
         }
     }
 
-    private void sendMessage( ContinuumProject project, Set recipients, String subject, String content,
-                              Map configuration )
+    private void sendMessage( Project project, Set recipients, String subject, String content, Map configuration )
         throws ContinuumException
     {
         if ( recipients.size() == 0 )
@@ -333,7 +333,7 @@ public class MailContinuumNotifier
 
         message.addHeader( "X-Continuum-Build-Host", buildHost );
 
-        message.addHeader( "X-Continuum-Project-Id", project.getId() );
+        message.addHeader( "X-Continuum-Project-Id", Integer.toString( project.getId() ) );
 
         message.addHeader( "X-Continuum-Project-Name", project.getName() );
 
@@ -424,10 +424,18 @@ public class MailContinuumNotifier
         return false;
     }
 
-    private BuildResult getPreviousBuild( ContinuumProject project, BuildResult currentBuild )
+    private BuildResult getPreviousBuild( Project project, BuildResult currentBuild )
         throws ContinuumException
     {
-        Collection builds = project.getBuilds();
+        try
+        {
+            project = store.getProjectWithBuilds( project.getId() );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Unable to obtain project builds", e );
+        }
+        Collection builds = project.getBuildResults();
 
         if ( builds.size() == 0 )
         {

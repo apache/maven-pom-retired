@@ -22,9 +22,7 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
-import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.model.system.Installation;
-import org.apache.maven.continuum.project.ContinuumProject;
 
 import java.io.File;
 import java.util.Collection;
@@ -39,31 +37,13 @@ public interface ContinuumStore
 {
     String ROLE = ContinuumStore.class.getName();
 
-    ContinuumProject addProject( ContinuumProject project )
+    Project getProjectByName( String name )
         throws ContinuumStoreException;
 
-    void removeProject( String projectId )
+    String getBuildOutput( int buildId, int projectId )
         throws ContinuumStoreException;
 
-    ContinuumProject updateProject( ContinuumProject project )
-        throws ContinuumStoreException;
-
-    Collection getAllProjects()
-        throws ContinuumStoreException;
-
-    ContinuumProject getProjectByName( String name )
-        throws ContinuumStoreException;
-
-    ContinuumProject getProject( String projectId )
-        throws ContinuumStoreException;
-
-    ScmResult getScmResultForProject( String projectId )
-        throws ContinuumStoreException;
-
-    String getBuildOutput( int buildId, String projectId )
-        throws ContinuumStoreException;
-
-    File getBuildOutputFile( int buildId, String projectId )
+    File getBuildOutputFile( int buildId, int projectId )
         throws ContinuumStoreException;
 
     void removeNotifier( ProjectNotifier notifier )
@@ -75,7 +55,7 @@ public interface ContinuumStore
     ProjectGroup addProjectGroup( ProjectGroup group );
 
     ProjectGroup getProjectGroup( int projectGroupId )
-        throws ContinuumObjectNotFoundException;
+        throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
     void updateProjectGroup( ProjectGroup group )
         throws ContinuumStoreException;
@@ -99,7 +79,7 @@ public interface ContinuumStore
     List getAllBuildsForAProjectByDate( int projectId );
 
     Project getProject( int projectId )
-        throws ContinuumObjectNotFoundException;
+        throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
     void updateProject( Project project )
         throws ContinuumStoreException;
@@ -111,45 +91,50 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     Project getProjectWithBuilds( int projectId )
-        throws ContinuumObjectNotFoundException;
+        throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
     void removeProfile( Profile profile );
 
     void removeSchedule( Schedule schedule );
 
     Project getProjectWithCheckoutResult( int projectId )
-        throws ContinuumObjectNotFoundException;
+        throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
     BuildResult getBuildResult( int buildId )
-        throws ContinuumObjectNotFoundException;
+        throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
     void removeProject( Project project );
 
     void removeProjectGroup( ProjectGroup projectGroup );
 
     ProjectGroup getProjectGroupWithBuildDetails( int projectGroupId )
-        throws ContinuumObjectNotFoundException;
+        throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
     List getAllProjectGroupsWithBuildDetails();
 
     Project getProjectWithAllDetails( int projectId )
-        throws ContinuumObjectNotFoundException;
+        throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
     Schedule getSchedule( int scheduleId )
-        throws ContinuumObjectNotFoundException;
+        throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
     Profile getProfile( int profileId )
-        throws ContinuumObjectNotFoundException;
+        throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
     ProjectGroup getProjectGroupByGroupId( String groupId )
+        throws ContinuumStoreException, ContinuumObjectNotFoundException;
+
+    BuildResult getLatestBuildResultForProject( int projectId )
         throws ContinuumStoreException;
 
-    BuildResult getLatestBuildResultForProject( String projectId )
-        throws ContinuumStoreException;
-
-    BuildResult addBuildResult( ContinuumProject project, BuildResult build )
-        throws ContinuumStoreException;
+    void addBuildResult( Project project, BuildResult build )
+        throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
     void updateBuildResult( BuildResult build )
         throws ContinuumStoreException;
+
+    Project addProject( Project project );
+
+    Project getProjectWithBuildDetails( int projectId )
+        throws ContinuumObjectNotFoundException, ContinuumStoreException;
 }

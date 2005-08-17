@@ -17,8 +17,8 @@ package org.apache.maven.continuum.notification;
  */
 
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -59,32 +59,32 @@ public class DefaultContinuumNotificationDispatcher
     // ContinuumNotificationDispatcher Implementation
     // ----------------------------------------------------------------------
 
-    public void buildStarted( ContinuumProject project )
+    public void buildStarted( Project project )
     {
         sendNotification( MESSAGE_ID_BUILD_STARTED, project, null );
     }
 
-    public void checkoutStarted( ContinuumProject project )
+    public void checkoutStarted( Project project )
     {
         sendNotification( MESSAGE_ID_CHECKOUT_STARTED, project, null );
     }
 
-    public void checkoutComplete( ContinuumProject project )
+    public void checkoutComplete( Project project )
     {
         sendNotification( MESSAGE_ID_CHECKOUT_COMPLETE, project, null );
     }
 
-    public void runningGoals( ContinuumProject project, BuildResult build )
+    public void runningGoals( Project project, BuildResult build )
     {
         sendNotification( MESSAGE_ID_RUNNING_GOALS, project, build );
     }
 
-    public void goalsCompleted( ContinuumProject project, BuildResult build )
+    public void goalsCompleted( Project project, BuildResult build )
     {
         sendNotification( MESSAGE_ID_GOALS_COMPLETED, project, build );
     }
 
-    public void buildComplete( ContinuumProject project, BuildResult build )
+    public void buildComplete( Project project, BuildResult build )
     {
         sendNotification( MESSAGE_ID_BUILD_COMPLETE, project, build );
     }
@@ -93,7 +93,7 @@ public class DefaultContinuumNotificationDispatcher
     //
     // ----------------------------------------------------------------------
 
-    private void sendNotification( String messageId, ContinuumProject project, BuildResult build )
+    private void sendNotification( String messageId, Project project, BuildResult build )
     {
         Map context = new HashMap();
 
@@ -109,13 +109,12 @@ public class DefaultContinuumNotificationDispatcher
             // Here we need to get all the project details
             //  - builds are used to detect if the state has changed (TODO: maybe previousState field is better)
             //  - notifiers are used to send the notification
-            context.put( CONTEXT_PROJECT, store.getProject( project.getId() ) );
+            project = store.getProjectWithAllDetails( project.getId() );
+
+            context.put( CONTEXT_PROJECT, project );
 
             if ( build != null )
             {
-                // TODO: remove?
-                build = store.getBuildResult( build.getId() );
-
                 context.put( CONTEXT_BUILD, build );
 
                 if ( build.getEndTime() != 0 )

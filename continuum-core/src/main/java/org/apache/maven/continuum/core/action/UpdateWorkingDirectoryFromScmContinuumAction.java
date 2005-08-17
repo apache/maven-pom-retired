@@ -16,9 +16,9 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.store.ContinuumStore;
 
@@ -40,9 +40,9 @@ public class UpdateWorkingDirectoryFromScmContinuumAction
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = store.getProject( getProjectId( context ) );
+        Project project = store.getProject( getProjectId( context ) );
 
-        ScmResult scmResult = null;
+        ScmResult scmResult;
 
         try
         {

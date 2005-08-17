@@ -36,19 +36,17 @@ public interface ContinuumXmlRpc
     // Projects
     // ----------------------------------------------------------------------
 
-    Hashtable removeProject( String projectId );
+    Hashtable removeProject( int projectId );
 
-    Hashtable getProject( String projectId );
+    Hashtable getProject( int projectId );
 
     Hashtable getProjects();
-
-    Hashtable getScmResultForProject( String projectId );
 
     // ----------------------------------------------------------------------
     // Building
     // ----------------------------------------------------------------------
 
-    Hashtable buildProject( String projectId, boolean force );
+    Hashtable buildProject( int projectId, boolean force );
 
     // ----------------------------------------------------------------------
     // Builds

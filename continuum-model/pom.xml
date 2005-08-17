@@ -20,7 +20,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jpox-plugin</artifactId>
-        <version>1.0</version>
+        <version>1.0.1-SNAPSHOT</version>
         <executions>
           <execution>
             <goals>

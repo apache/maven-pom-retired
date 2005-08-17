@@ -21,10 +21,10 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.scm.ChangeFile;
 import org.apache.maven.continuum.model.scm.ChangeSet;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
@@ -83,6 +83,8 @@ public abstract class AbstractIntegrationTest
     public static final String REMOTING_METHOD_XMLRPC = "xmlrpc";
 
     public static final String REMOTING_METHOD_XFIRE = "xfire";
+
+    private static final String CVS_COMMAND = "c:/cygwin/bin/cvs";
 
     // ----------------------------------------------------------------------
     //
@@ -169,7 +171,7 @@ public abstract class AbstractIntegrationTest
 
         for ( Iterator it = collection.iterator(); it.hasNext(); )
         {
-            ContinuumProject project = (ContinuumProject) it.next();
+            Project project = (Project) it.next();
 
             continuum.removeProject( project.getId() );
         }
@@ -182,6 +184,7 @@ public abstract class AbstractIntegrationTest
     {
         Date endTime = new Date();
 
+        progress( "Tearing down test - ignore any interrupted exceptions" );
         super.tearDown();
 
         long diff = endTime.getTime() - startTime.getTime();
@@ -357,7 +360,7 @@ public abstract class AbstractIntegrationTest
     //
     // ----------------------------------------------------------------------
 
-    protected String getProjectId( ContinuumProjectBuildingResult buildingResult )
+    protected int getProjectId( ContinuumProjectBuildingResult buildingResult )
     {
         List warnings = buildingResult.getWarnings();
 
@@ -383,11 +386,11 @@ public abstract class AbstractIntegrationTest
         }
         else if ( projects.size() > 1 )
         {
-            String ids = "[" + ( (ContinuumProject) projects.get( 0 ) ).getId();
+            String ids = "[" + ( (Project) projects.get( 0 ) ).getId();
 
             for ( Iterator it = projects.iterator(); it.hasNext(); )
             {
-                ContinuumProject project = (ContinuumProject) it.next();
+                Project project = (Project) it.next();
 
                 ids += ", " + project.getId();
             }
@@ -397,20 +400,22 @@ public abstract class AbstractIntegrationTest
             fail( "When adding a project only a single project was expected to be added, project ids: " + ids );
         }
 
-        return ( (ContinuumProject) projects.get( 0 ) ).getId();
+        return ( (Project) projects.get( 0 ) ).getId();
     }
 
     /**
      * @todo use a notify mechanism rather than polling. That's what queues are for. Really, buildProject should create the build result with a WAITING state, return the ID, and let the queue take it from there
      */
-    public BuildResult buildProject( String projectId, boolean force )
+    public BuildResult buildProject( int projectId, boolean force )
         throws Exception
     {
-        int count = 600;
+        int timeout = 60 * 1000;
 
         BuildResult previousBuild = getContinuum().getLatestBuildResultForProject( projectId );
 
         getContinuum().buildProject( projectId, force );
+
+        long start = System.currentTimeMillis();
 
         while ( true )
         {
@@ -421,18 +426,16 @@ public abstract class AbstractIntegrationTest
                 return latestBuildResult;
             }
 
-            if ( count == 0 )
+            if ( System.currentTimeMillis() - start > timeout )
             {
                 fail( "Timeout while waiting for build. Project id: " + projectId );
             }
-
-            count--;
 
             Thread.yield();
         }
     }
 
-    public void removeProject( String projectId )
+    public void removeProject( int projectId )
         throws Exception
     {
         getContinuum().removeProject( projectId );
@@ -449,34 +452,34 @@ public abstract class AbstractIntegrationTest
         }
     }
 
-    public ContinuumProject waitForCheckout( String projectId )
+    public Project waitForCheckout( int projectId )
         throws Exception
     {
         long timeout = 60 * 1000;
 
         long start = System.currentTimeMillis();
 
-        ContinuumProject project = getContinuum().getProject( projectId );
+        Project project = getContinuum().getProjectWithCheckoutResult( projectId );
 
         while ( project.getCheckoutResult() == null )
         {
             if ( System.currentTimeMillis() - start > timeout )
             {
-                fail( "Timeout while waiting for project '" + project.getName() + "' to be checked out." );
+                fail( "Timeout while waiting for project '" + projectId + "' to be checked out." );
             }
 
             Thread.yield();
 
-            project = getContinuum().getProject( projectId );
+            project = getContinuum().getProjectWithCheckoutResult( projectId );
         }
 
         return project;
     }
 
-    public void waitForSuccessfulCheckout( String projectId )
+    public void waitForSuccessfulCheckout( int projectId )
         throws Exception
     {
-        ContinuumProject project = waitForCheckout( projectId );
+        Project project = waitForCheckout( projectId );
 
         String message = "The check out was not successful for project #" + project.getId() + ": ";
 
@@ -529,8 +532,8 @@ public abstract class AbstractIntegrationTest
     // Assertions
     // ----------------------------------------------------------------------
 
-    public void assertProject( String projectId, String name, String version, String commandLineArguments,
-                               String executorId, ContinuumProject project )
+    public void assertProject( int projectId, String name, String version, String commandLineArguments,
+                               String executorId, Project project )
     {
         assertEquals( "project.id", projectId, project.getId() );
         assertEquals( "project.name", name, project.getName() );
@@ -538,7 +541,7 @@ public abstract class AbstractIntegrationTest
         assertEquals( "project.executorId", executorId, project.getExecutorId() );
     }
 
-    public void assertCheckedOutFiles( ContinuumProject project, String[] expectedCheckedOutFiles )
+    public void assertCheckedOutFiles( Project project, String[] expectedCheckedOutFiles )
     {
         assertNotNull( "project.scmResult", project.getCheckoutResult() );
 
@@ -596,7 +599,7 @@ public abstract class AbstractIntegrationTest
         return build;
     }
 
-    public BuildResult assertSuccessfulBuild( int buildId, String projectId )
+    public BuildResult assertSuccessfulBuild( int buildId, int projectId )
         throws Exception
     {
         BuildResult build = waitForBuild( buildId );
@@ -621,19 +624,19 @@ public abstract class AbstractIntegrationTest
         return build;
     }
 
-    public BuildResult assertSuccessfulMaven1Build( int buildId, String projectId )
+    public BuildResult assertSuccessfulMaven1Build( int buildId, int projectId )
         throws Exception
     {
         return assertSuccessfulAntBuild( buildId, projectId );
     }
 
-    public BuildResult assertSuccessfulMaven2Build( int buildId, String projectId )
+    public BuildResult assertSuccessfulMaven2Build( int buildId, int projectId )
         throws Exception
     {
         return assertSuccessfulMaven1Build( buildId, projectId );
     }
 
-    public BuildResult assertSuccessfulAntBuild( int buildId, String projectId )
+    public BuildResult assertSuccessfulAntBuild( int buildId, int projectId )
         throws Exception
     {
         BuildResult build = assertSuccessfulBuild( buildId, projectId );
@@ -649,7 +652,7 @@ public abstract class AbstractIntegrationTest
         return build;
     }
 
-    public BuildResult assertSuccessfulShellBuild( int buildId, String projectId, String expectedStandardOutput )
+    public BuildResult assertSuccessfulShellBuild( int buildId, int projectId, String expectedStandardOutput )
         throws Exception
     {
         BuildResult build = assertSuccessfulBuild( buildId, projectId );
@@ -672,7 +675,7 @@ public abstract class AbstractIntegrationTest
 
         deleteAndCreateDirectory( cvsRoot );
 
-        system( cvsRoot, "cvs", " -d " + cvsRoot.getAbsolutePath() + " init" );
+        system( cvsRoot, CVS_COMMAND, " -d " + cvsRoot.getAbsolutePath() + " init" );
     }
 
     protected void scmImport( File root, String artifactId, String scm, File scmRoot )
@@ -691,7 +694,7 @@ public abstract class AbstractIntegrationTest
     protected void cvsImport( File root, String artifactId, File scmRoot )
         throws CommandLineException
     {
-        system( root, "cvs",
+        system( root, CVS_COMMAND,
                 "-d " + scmRoot.getAbsolutePath() + " import -m yo_yo " + artifactId + " continuum_test start" );
     }
 
@@ -704,14 +707,14 @@ public abstract class AbstractIntegrationTest
     protected void cvsCheckout( File cvsRoot, String module, File coDir )
         throws CommandLineException
     {
-        system( new File( getBasedir() ), "cvs",
+        system( new File( getBasedir() ), CVS_COMMAND,
                 "-d " + cvsRoot.getAbsolutePath() + " checkout -d " + coDir.getAbsolutePath() + " " + module );
     }
 
     protected void cvsCommit( File coDir )
         throws CommandLineException
     {
-        system( coDir, "cvs", new String[]{"commit -m ", "-"} );
+        system( coDir, CVS_COMMAND, new String[]{"commit -m ", "-"} );
     }
 
     protected void initializeSvnRoot()

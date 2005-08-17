@@ -17,7 +17,7 @@ package org.apache.maven.continuum.execution;
  */
 
 import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 
 import java.io.File;
 
@@ -39,15 +39,9 @@ public interface ContinuumBuildExecutor
 
     String SHELL_EXECUTOR_ID = "shell";
 
-    /**
-     * @deprecated you need to give a build definition
-     */
-    ContinuumBuildExecutionResult build( ContinuumProject project, File buildOutput )
+    ContinuumBuildExecutionResult build( Project project, BuildDefinition buildDefinition, File buildOutput )
         throws ContinuumBuildExecutorException;
 
-    ContinuumBuildExecutionResult build( ContinuumProject project, BuildDefinition buildDefinition, File buildOutput )
-        throws ContinuumBuildExecutorException;
-
-    void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
+    void updateProjectFromCheckOut( File workingDirectory, Project project )
         throws ContinuumBuildExecutorException;
 }

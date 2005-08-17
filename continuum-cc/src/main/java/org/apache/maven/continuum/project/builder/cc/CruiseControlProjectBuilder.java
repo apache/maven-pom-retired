@@ -18,8 +18,8 @@ package org.apache.maven.continuum.project.builder.cc;
 
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -68,7 +68,7 @@ public class CruiseControlProjectBuilder
         {
             Xpp3Dom project = projects[i];
 
-            ContinuumProject continuumProject = findProject( project.getChild( "schedule" ) );
+            Project continuumProject = findProject( project.getChild( "schedule" ) );
 
             // ----------------------------------------------------------------------
             // Create the project
@@ -140,7 +140,7 @@ public class CruiseControlProjectBuilder
         return result;
     }
 
-    private ContinuumProject findProject( Xpp3Dom schedule )
+    private Project findProject( Xpp3Dom schedule )
         throws ContinuumProjectBuilderException
     {
         if ( schedule == null )
@@ -148,7 +148,7 @@ public class CruiseControlProjectBuilder
             throw new ContinuumProjectBuilderException( "The configuration has to include a 'schedule' element." );
         }
 
-        ContinuumProject project = null;
+        Project project = null;
 
         Xpp3Dom[] children = schedule.getChildren();
 
@@ -169,7 +169,7 @@ public class CruiseControlProjectBuilder
                         "A configuration can only have a single 'ant' or 'maven' schedule." );
                 }
 
-                project = new ContinuumProject();
+                project = new Project();
 
                 project.setExecutorId( ContinuumBuildExecutor.ANT_EXECUTOR_ID );
 
@@ -188,7 +188,7 @@ public class CruiseControlProjectBuilder
                         "A configuration can only have a single 'ant' or 'maven' schedule." );
                 }
 
-                project = new ContinuumProject();
+                project = new Project();
 
                 project.setExecutorId( ContinuumBuildExecutor.MAVEN_ONE_EXECUTOR_ID );
 

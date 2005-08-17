@@ -19,11 +19,10 @@ package org.apache.maven.continuum.execution.maven.m2;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectDependency;
 import org.apache.maven.continuum.model.project.ProjectDeveloper;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Developer;
@@ -40,7 +39,6 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -83,13 +81,13 @@ public class DefaultMavenBuilderHelper
     // MavenBuilderHelper Implementation
     // ----------------------------------------------------------------------
 
-    public void mapMetadataToProject( File metadata, ContinuumProject continuumProject )
+    public void mapMetadataToProject( File metadata, Project continuumProject )
         throws MavenBuilderHelperException
     {
         mapMavenProjectToContinuumProject( getMavenProject( metadata ), continuumProject );
     }
 
-    public void mapMavenProjectToContinuumProject( MavenProject mavenProject, ContinuumProject continuumProject )
+    public void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject )
         throws MavenBuilderHelperException
     {
         continuumProject.setName( getProjectName( mavenProject ) );
@@ -97,12 +95,6 @@ public class DefaultMavenBuilderHelper
         continuumProject.setScmUrl( getScmUrl( mavenProject ) );
 
         continuumProject.setVersion( getVersion( mavenProject ) );
-
-        BuildDefinition bd = new BuildDefinition();
-        bd.setArguments( "--batch-mode --non-recursive" );
-        bd.setGoals( "clean:clean install" );
-        bd.setBuildFile( "pom.xml" );
-        continuumProject.addBuildDefinition( bd );
 
         // ----------------------------------------------------------------------
         // GroupId

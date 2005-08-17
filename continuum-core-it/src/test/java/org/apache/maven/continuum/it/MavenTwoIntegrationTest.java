@@ -19,8 +19,8 @@ package org.apache.maven.continuum.it;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
@@ -51,12 +51,11 @@ public class MavenTwoIntegrationTest
 
         progress( "Adding Maven 2 project" );
 
-        String projectId = getProjectId(
-            continuum.addMavenTwoProject( "file:" + root.getAbsolutePath() + "/pom.xml" ) );
+        int projectId = getProjectId( continuum.addMavenTwoProject( "file:" + root.getAbsolutePath() + "/pom.xml" ) );
 
         waitForSuccessfulCheckout( projectId );
 
-        ContinuumProject project = continuum.getProject( projectId );
+        Project project = continuum.getProjectWithAllDetails( projectId );
 
         assertProject( projectId, "Maven 2 Project", "2.0-SNAPSHOT", "-N -B", MavenTwoBuildExecutor.ID, project );
 
@@ -75,7 +74,8 @@ public class MavenTwoIntegrationTest
 
         progress( "Building Maven 2 project" );
 
-        int originalSize = project.getBuilds().size();
+        project = continuum.getProjectWithBuilds( projectId );
+        int originalSize = project.getBuildResults().size();
 
         int buildId = buildProject( projectId, false ).getId();
 
@@ -83,8 +83,8 @@ public class MavenTwoIntegrationTest
 
         progress( "Test that a build without any files changed won't execute the executor" );
 
-        project = continuum.getProject( projectId );
-        int expectedSize = project.getBuilds().size();
+        project = continuum.getProjectWithBuilds( projectId );
+        int expectedSize = project.getBuildResults().size();
 
         assertEquals( "build list was not updated", originalSize + 1, expectedSize );
 
@@ -92,8 +92,8 @@ public class MavenTwoIntegrationTest
 
         Thread.sleep( 3000 );
 
-        project = continuum.getProject( projectId );
-        int actualSize = project.getBuilds().size();
+        project = continuum.getProjectWithBuilds( projectId );
+        int actualSize = project.getBuildResults().size();
 
         assertEquals( "A build has unexpectedly been executed.", expectedSize, actualSize );
 
@@ -133,7 +133,7 @@ public class MavenTwoIntegrationTest
         cvsImport( basedir, artifactId, getCvsRoot() );
     }
 
-    private void removeNotifier( String projectId, String notifierType )
+    private void removeNotifier( int projectId, String notifierType )
     {
         try
         {

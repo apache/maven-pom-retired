@@ -16,7 +16,7 @@ package org.apache.maven.continuum.execution.maven.m2;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
@@ -29,12 +29,12 @@ public interface MavenBuilderHelper
 {
     String ROLE = MavenBuilderHelper.class.getName();
 
-    void mapMetadataToProject( File metadata, ContinuumProject project )
+    void mapMetadataToProject( File metadata, Project project )
         throws MavenBuilderHelperException;
 
     MavenProject getMavenProject( File file )
         throws MavenBuilderHelperException;
 
-    void mapMavenProjectToContinuumProject( MavenProject mavenProject, ContinuumProject continuumProject )
+    void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject )
         throws MavenBuilderHelperException;
 }

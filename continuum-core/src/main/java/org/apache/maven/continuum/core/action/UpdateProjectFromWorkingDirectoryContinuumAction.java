@@ -20,10 +20,10 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.WorkingDirectoryService;
-import org.apache.maven.continuum.store.ContinuumStore;
 
 import java.util.Map;
 
@@ -34,7 +34,9 @@ import java.util.Map;
 public class UpdateProjectFromWorkingDirectoryContinuumAction
     extends AbstractContinuumAction
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private WorkingDirectoryService workingDirectoryService;
 
     private BuildExecutorManager buildExecutorManager;
@@ -44,7 +46,7 @@ public class UpdateProjectFromWorkingDirectoryContinuumAction
     public void execute( Map context )
         throws ContinuumStoreException, ContinuumException, ContinuumBuildExecutorException
     {
-        ContinuumProject project = store.getProject( getProjectId( context ) );
+        Project project = store.getProjectWithBuildDetails( getProjectId( context ) );
 
         getLogger().info( "Updating project '" + project.getName() + "' from checkout." );
 
@@ -54,8 +56,7 @@ public class UpdateProjectFromWorkingDirectoryContinuumAction
 
         ContinuumBuildExecutor builder = buildExecutorManager.getBuildExecutor( project.getExecutorId() );
 
-        builder.updateProjectFromCheckOut( workingDirectoryService.getWorkingDirectory( project ),
-                                           project );
+        builder.updateProjectFromCheckOut( workingDirectoryService.getWorkingDirectory( project ), project );
 
         // ----------------------------------------------------------------------
         // Store the new descriptor

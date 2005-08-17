@@ -18,7 +18,7 @@ package org.apache.maven.continuum.core.action;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.store.ContinuumStore;
 
 import java.util.Map;
@@ -37,7 +37,7 @@ public class ValidateProject
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = getUnvalidatedProject( context );
+        Project project = getUnvalidatedProject( context );
 
         // ----------------------------------------------------------------------
         // Make sure that the builder id is correct before starting to check

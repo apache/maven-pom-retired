@@ -33,10 +33,12 @@ import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.jdo.ConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.JdoFactory;
+import org.jpox.SchemaTool;
 
 import javax.jdo.JDODetachedFieldAccessException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -71,9 +73,13 @@ public class ContinuumStoreTest
 
     private Schedule testSchedule2;
 
+    private Schedule testSchedule3;
+
     private Profile testProfile1;
 
     private Profile testProfile2;
+
+    private Profile testProfile3;
 
     private Installation testInstallationJava13;
 
@@ -109,11 +115,13 @@ public class ContinuumStoreTest
         testProject1 = createTestProject( "artifactId1", 1, "description1", defaultProjectGroup.getGroupId(), "name1",
                                           "scmUrl1", 1, "url1", "version1", "workingDirectory1" );
 
+        // state must be 1 unless we setup a build in the correct state
         testProject2 = createTestProject( "artifactId2", 2, "description2", defaultProjectGroup.getGroupId(), "name2",
-                                          "scmUrl2", 2, "url2", "version2", "workingDirectory2" );
+                                          "scmUrl2", 1, "url2", "version2", "workingDirectory2" );
 
         testSchedule1 = createTestSchedule( "name1", "description1", 1, "cronExpression1", true );
         testSchedule2 = createTestSchedule( "name2", "description2", 2, "cronExpression2", true );
+        testSchedule3 = createTestSchedule( "name3", "description3", 3, "cronExpression3", true );
 
         testInstallationJava13 = createTestInstallation( "JDK", "/usr/local/java-1.3", "1.3" );
         testInstallationJava14 = createTestInstallation( "JDK", "/usr/local/java-1.4", "1.4" );
@@ -168,6 +176,10 @@ public class ContinuumStoreTest
         schedule1 = store.addSchedule( schedule1 );
         testSchedule1.setId( schedule1.getId() );
 
+        Schedule schedule3 = createTestSchedule( testSchedule3 );
+        schedule3 = store.addSchedule( schedule3 );
+        testSchedule3.setId( schedule3.getId() );
+
         Installation installationJava14 = createTestInstallation( testInstallationJava14 );
         installationJava14 = store.addInstallation( installationJava14 );
 
@@ -181,6 +193,8 @@ public class ContinuumStoreTest
                                           installationMaven20a3 );
         testProfile2 = createTestProfile( "name2", "description2", 2, false, true, installationJava14,
                                           installationMaven20a3 );
+        testProfile3 = createTestProfile( "name3", "description3", 3, true, false, installationJava14,
+                                          installationMaven20a3 );
 
         Profile profile1 = createTestProfile( testProfile1 );
         profile1 = store.addProfile( profile1 );
@@ -189,6 +203,10 @@ public class ContinuumStoreTest
         Profile profile2 = createTestProfile( testProfile2 );
         profile2 = store.addProfile( profile2 );
         testProfile2.setId( profile2.getId() );
+
+        Profile profile3 = createTestProfile( testProfile3 );
+        profile3 = store.addProfile( profile3 );
+        testProfile3.setId( profile3.getId() );
 
         BuildDefinition testGroupBuildDefinition1 = createTestBuildDefinition( "arguments1", "buildFile1", "goals1",
                                                                                profile1, schedule2 );
@@ -305,7 +323,7 @@ public class ContinuumStoreTest
     // ----------------------------------------------------------------------
 
     public void testAddProjectGroup()
-        throws ContinuumObjectNotFoundException
+        throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
         String name = "testAddProjectGroup";
         String description = "testAddProjectGroup description";
@@ -321,7 +339,7 @@ public class ContinuumStoreTest
     }
 
     public void testGetProjectGroup()
-        throws ContinuumObjectNotFoundException
+        throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
         ProjectGroup retrievedGroup = store.getProjectGroup( defaultProjectGroup.getId() );
         assertProjectGroupEquals( retrievedGroup, defaultProjectGroup );
@@ -345,6 +363,7 @@ public class ContinuumStoreTest
     }
 
     public void testGetInvalidProjectGroup()
+        throws ContinuumStoreException
     {
         try
         {
@@ -358,7 +377,7 @@ public class ContinuumStoreTest
     }
 
     public void testEditProjectGroup()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         ProjectGroup newGroup = store.getProjectGroup( testProjectGroup2.getId() );
 
@@ -432,7 +451,7 @@ public class ContinuumStoreTest
     }
 
     public void testGetProject()
-        throws ContinuumObjectNotFoundException
+        throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
         Project retrievedProject = store.getProject( testProject1.getId() );
         assertProjectEquals( retrievedProject, testProject1 );
@@ -440,7 +459,7 @@ public class ContinuumStoreTest
     }
 
     public void testGetProjectWithDetails()
-        throws ContinuumObjectNotFoundException
+        throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
         Project retrievedProject = store.getProjectWithAllDetails( testProject1.getId() );
         assertProjectEquals( retrievedProject, testProject1 );
@@ -453,7 +472,7 @@ public class ContinuumStoreTest
     }
 
     public void testGetProjectWithCheckoutResult()
-        throws ContinuumObjectNotFoundException
+        throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
         Project retrievedProject = store.getProjectWithCheckoutResult( testProject1.getId() );
         assertProjectEquals( retrievedProject, testProject1 );
@@ -462,6 +481,7 @@ public class ContinuumStoreTest
     }
 
     public void testGetInvalidProject()
+        throws ContinuumStoreException
     {
         try
         {
@@ -475,7 +495,7 @@ public class ContinuumStoreTest
     }
 
     public void testEditProject()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project newProject = store.getProject( testProject2.getId() );
 
@@ -560,12 +580,14 @@ public class ContinuumStoreTest
     public void testRemoveSchedule()
         throws ContinuumStoreException
     {
-        Schedule schedule = (Schedule) store.getAllSchedulesByName().get( 0 );
+        Schedule schedule = (Schedule) store.getAllSchedulesByName().get( 2 );
+
+        // TODO: test if it has any attachments
 
         store.removeSchedule( schedule );
 
         List schedules = store.getAllSchedulesByName();
-        assertEquals( "check size", 1, schedules.size() );
+        assertEquals( "check size", 2, schedules.size() );
         assertFalse( "check not there", schedules.contains( schedule ) );
     }
 
@@ -573,13 +595,15 @@ public class ContinuumStoreTest
     {
         List schedules = store.getAllSchedulesByName();
 
-        assertEquals( "check item count", 2, schedules.size() );
+        assertEquals( "check item count", 3, schedules.size() );
 
         // check equality and order
         Schedule schedule = (Schedule) schedules.get( 0 );
         assertScheduleEquals( schedule, testSchedule1 );
         schedule = (Schedule) schedules.get( 1 );
         assertScheduleEquals( schedule, testSchedule2 );
+        schedule = (Schedule) schedules.get( 2 );
+        assertScheduleEquals( schedule, testSchedule3 );
     }
 
     public void testAddProfile()
@@ -622,12 +646,14 @@ public class ContinuumStoreTest
     public void testRemoveProfile()
         throws ContinuumStoreException
     {
-        Profile profile = (Profile) store.getAllProfilesByName().get( 0 );
+        Profile profile = (Profile) store.getAllProfilesByName().get( 2 );
+
+        // TODO: test if it has any attachments
 
         store.removeProfile( profile );
 
         List profiles = store.getAllProfilesByName();
-        assertEquals( "check size", 1, profiles.size() );
+        assertEquals( "check size", 2, profiles.size() );
         assertFalse( "check not there", profiles.contains( profile ) );
     }
 
@@ -635,7 +661,7 @@ public class ContinuumStoreTest
     {
         List profiles = store.getAllProfilesByName();
 
-        assertEquals( "check item count", 2, profiles.size() );
+        assertEquals( "check item count", 3, profiles.size() );
 
         // check equality and order
         Profile profile = (Profile) profiles.get( 0 );
@@ -646,6 +672,10 @@ public class ContinuumStoreTest
         assertProfileEquals( profile, testProfile2 );
         assertInstallationEquals( profile.getBuilder(), testProfile2.getBuilder() );
         assertInstallationEquals( profile.getJdk(), testProfile2.getJdk() );
+        profile = (Profile) profiles.get( 2 );
+        assertProfileEquals( profile, testProfile3 );
+        assertInstallationEquals( profile.getBuilder(), testProfile3.getBuilder() );
+        assertInstallationEquals( profile.getJdk(), testProfile3.getJdk() );
     }
 
     public void testGetAllInstallations()
@@ -664,7 +694,7 @@ public class ContinuumStoreTest
     }
 
     public void testDeleteProject()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithBuilds( testProject1.getId() );
 
@@ -678,7 +708,7 @@ public class ContinuumStoreTest
     }
 
     public void testDeleteProjectGroup()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         store.removeProjectGroup( store.getProjectGroup( defaultProjectGroup.getId() ) );
 
@@ -699,7 +729,7 @@ public class ContinuumStoreTest
     }
 
     public void testDeleteBuildResult()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithBuilds( testProject1.getId() );
 
@@ -728,6 +758,7 @@ public class ContinuumStoreTest
     }
 
     public void testGetInvalidBuildResult()
+        throws ContinuumStoreException
     {
         try
         {
@@ -758,7 +789,7 @@ public class ContinuumStoreTest
     }
 
     public void testGetBuildResult()
-        throws ContinuumObjectNotFoundException
+        throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
         BuildResult buildResult = store.getBuildResult( testBuildResult3.getId() );
         assertBuildResultEquals( buildResult, testBuildResult3 );
@@ -768,7 +799,7 @@ public class ContinuumStoreTest
     }
 
     public void testGetProjectGroupWithDetails()
-        throws ContinuumObjectNotFoundException
+        throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
         ProjectGroup retrievedGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
         assertProjectGroupEquals( retrievedGroup, defaultProjectGroup );
@@ -828,7 +859,7 @@ public class ContinuumStoreTest
     }
 
     public void testAddDeveloperToProject()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
 
@@ -843,7 +874,7 @@ public class ContinuumStoreTest
     }
 
     public void testEditDeveloper()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
 
@@ -862,7 +893,7 @@ public class ContinuumStoreTest
     }
 
     public void testDeleteDeveloper()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
         project.getDevelopers().remove( 0 );
@@ -876,7 +907,7 @@ public class ContinuumStoreTest
     }
 
     public void testAddDependencyToProject()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
 
@@ -891,7 +922,7 @@ public class ContinuumStoreTest
     }
 
     public void testEditDependency()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
 
@@ -910,7 +941,7 @@ public class ContinuumStoreTest
     }
 
     public void testDeleteDependency()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
         ProjectDependency dependency = (ProjectDependency) project.getDependencies().get( 1 );
@@ -926,7 +957,7 @@ public class ContinuumStoreTest
     }
 
     public void testAddNotifierToProject()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
 
@@ -941,7 +972,7 @@ public class ContinuumStoreTest
     }
 
     public void testEditNotifier()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
 
@@ -958,7 +989,7 @@ public class ContinuumStoreTest
     }
 
     public void testDeleteNotifier()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
         project.getNotifiers().remove( 0 );
@@ -972,7 +1003,7 @@ public class ContinuumStoreTest
     }
 
     public void testAddBuildDefinitionToProject()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
 
@@ -993,7 +1024,7 @@ public class ContinuumStoreTest
     }
 
     public void testEditBuildDefinition()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
 
@@ -1013,7 +1044,7 @@ public class ContinuumStoreTest
     }
 
     public void testDeleteBuildDefinition()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
         BuildDefinition buildDefinition = (BuildDefinition) project.getBuildDefinitions().get( 1 );
@@ -1033,7 +1064,7 @@ public class ContinuumStoreTest
     }
 
     public void testAddNotifierToProjectGroup()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
 
@@ -1048,7 +1079,7 @@ public class ContinuumStoreTest
     }
 
     public void testEditGroupNotifier()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
 
@@ -1065,7 +1096,7 @@ public class ContinuumStoreTest
     }
 
     public void testDeleteGroupNotifier()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
         ProjectNotifier notifier = (ProjectNotifier) projectGroup.getNotifiers().get( 1 );
@@ -1081,7 +1112,7 @@ public class ContinuumStoreTest
     }
 
     public void testAddBuildDefinitionToProjectGroup()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
 
@@ -1102,7 +1133,7 @@ public class ContinuumStoreTest
     }
 
     public void testEditGroupBuildDefinition()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
 
@@ -1122,7 +1153,7 @@ public class ContinuumStoreTest
     }
 
     public void testDeleteGroupBuildDefinition()
-        throws ContinuumStoreException
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
         projectGroup.getBuildDefinitions().remove( 0 );
@@ -1184,6 +1215,7 @@ public class ContinuumStoreTest
     }
 
     private void confirmProjectDeletion( Project project )
+        throws ContinuumStoreException
     {
         try
         {
@@ -1465,6 +1497,7 @@ public class ContinuumStoreTest
                 assertTrue( true );
             }
         }
+
         if ( !checkoutFetchGroup )
         {
             try
@@ -1477,6 +1510,7 @@ public class ContinuumStoreTest
                 assertTrue( true );
             }
         }
+
         if ( !buildResultsFetchGroup )
         {
             try
@@ -1713,7 +1747,7 @@ public class ContinuumStoreTest
         // TODO: add ability to test with various
         jdoFactory.setDriverName( "org.hsqldb.jdbcDriver" );
 
-        jdoFactory.setUrl( "jdbc:hsqldb:mem:" + getClass().getName() + "." + getName() );
+        jdoFactory.setUrl( "jdbc:hsqldb:mem:" + getName() );
 
         jdoFactory.setUserName( "sa" );
 
@@ -1723,9 +1757,7 @@ public class ContinuumStoreTest
 
         jdoFactory.setProperty( "org.jpox.poid.transactionIsolation", "READ_UNCOMMITTED" );
 
-        jdoFactory.setProperty( "org.jpox.autoCreateTables", "true" );
-
-        jdoFactory.setProperty( "org.jpox.autoCreateColumns", "true" );
+        jdoFactory.setProperty( "org.jpox.autoCreateSchema", "true" );
 
         Properties properties = jdoFactory.getProperties();
 
@@ -1735,6 +1767,9 @@ public class ContinuumStoreTest
 
             System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
         }
+
+        File file = getTestFile( "../continuum-model/src/main/resources/META-INF/package.jdo" );
+        SchemaTool.createSchemaTables( new String[]{file.getAbsolutePath()}, false );
 
         PersistenceManagerFactory pmf = jdoFactory.getPersistenceManagerFactory();
 

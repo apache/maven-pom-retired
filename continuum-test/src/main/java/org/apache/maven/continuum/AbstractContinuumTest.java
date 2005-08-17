@@ -28,11 +28,15 @@ import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.jdo.ConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.JdoFactory;
+import org.jpox.SchemaTool;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -128,7 +132,17 @@ public abstract class AbstractContinuumTest
 
         jdoFactory.setProperty( "org.jpox.autoCreateTables", "true" );
 
-        jdoFactory.setProperty( "org.jpox.autoCreateColumns", "true" );
+        Properties properties = jdoFactory.getProperties();
+
+        for ( Iterator it = properties.entrySet().iterator(); it.hasNext(); )
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
+        }
+
+        File file = getTestFile( "../continuum-model/src/main/resources/META-INF/package.jdo" );
+        SchemaTool.createSchemaTables( new String[]{file.getAbsolutePath()}, false );
 
         // ----------------------------------------------------------------------
         // Check the configuration

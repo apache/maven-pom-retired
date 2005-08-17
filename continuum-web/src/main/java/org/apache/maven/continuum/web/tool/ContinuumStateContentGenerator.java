@@ -19,7 +19,7 @@ package org.apache.maven.continuum.web.tool;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildResult;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.formica.web.ContentGenerator;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -41,9 +41,9 @@ public class ContinuumStateContentGenerator
     {
         int state = 0;
 
-        if ( item instanceof ContinuumProject )
+        if ( item instanceof Project )
         {
-            ContinuumProject project = (ContinuumProject) item;
+            Project project = (Project) item;
 
             // TODO: can't we just use project.getState()?
             try

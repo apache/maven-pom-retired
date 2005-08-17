@@ -17,9 +17,9 @@ package org.apache.maven.continuum.execution.maven.m1;
  */
 
 import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -44,7 +44,7 @@ public class DefaultMavenOneMetadataHelper
     // MavenOneMetadataHelper Implementation
     // ----------------------------------------------------------------------
 
-    public void mapMetadata( File metadata, ContinuumProject project )
+    public void mapMetadata( File metadata, Project project )
         throws MavenOneMetadataHelperException
     {
         Xpp3Dom mavenProject;

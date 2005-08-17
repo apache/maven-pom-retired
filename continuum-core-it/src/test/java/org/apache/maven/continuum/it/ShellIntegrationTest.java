@@ -19,7 +19,7 @@ package org.apache.maven.continuum.it;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 
@@ -52,7 +52,7 @@ public class ShellIntegrationTest
 
         progress( "Adding CVS Shell project" );
 
-        ContinuumProject p = new ContinuumProject();
+        Project p = new Project();
         p.setScmUrl( "scm|cvs|local|" + getCvsRoot() + "|shell" );
         p.setName( "Shell Project" );
 //        p.getNotifiers().add( makeMailNotifier( email ) );
@@ -63,10 +63,10 @@ public class ShellIntegrationTest
         bd.setBuildFile( getScriptName() );
         p.addBuildDefinition( bd );
 
-        String projectId = continuum.addProject( p, ShellBuildExecutor.SHELL_EXECUTOR_ID );
+        int projectId = continuum.addProject( p, ShellBuildExecutor.SHELL_EXECUTOR_ID );
         waitForSuccessfulCheckout( projectId );
 
-        ContinuumProject project = continuum.getProject( projectId );
+        Project project = continuum.getProject( projectId );
         assertProject( projectId, "Shell Project", "3.0", "", "shell", project );
         progress( "Building Shell project" );
         int buildId = buildProject( projectId, false ).getId();
@@ -84,12 +84,13 @@ public class ShellIntegrationTest
 
         cvsCommit( coDir );
 
-        ContinuumProject shellProject = continuum.getProject( projectId );
+        Project shellProject = continuum.getProjectWithAllDetails( projectId );
         bd = (BuildDefinition) shellProject.getBuildDefinitions().iterator().next();
         bd.setArguments( "a b" );
         continuum.updateProject( shellProject );
 
-        shellProject = continuum.getProject( projectId );
+        // TODO: change all details to build details
+        shellProject = continuum.getProjectWithAllDetails( projectId );
         // TODO: better way?
         bd = (BuildDefinition) shellProject.getBuildDefinitions().iterator().next();
         assertEquals( "Updated command line arguments doesn't match", "a b", bd.getArguments() );

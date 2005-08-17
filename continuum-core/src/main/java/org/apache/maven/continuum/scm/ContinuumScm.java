@@ -16,8 +16,8 @@ package org.apache.maven.continuum.scm;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.ContinuumProject;
 
 import java.io.File;
 
@@ -29,12 +29,12 @@ public interface ContinuumScm
 {
     String ROLE = ContinuumScm.class.getName();
 
-    ScmResult checkOut( ContinuumProject project, File workingDirectory )
+    ScmResult checkOut( Project project, File workingDirectory )
         throws ContinuumScmException;
 
-    ScmResult checkOutProject( ContinuumProject project )
+    ScmResult checkOutProject( Project project )
         throws ContinuumScmException;
 
-    ScmResult updateProject( ContinuumProject project )
+    ScmResult updateProject( Project project )
         throws ContinuumScmException;
 }

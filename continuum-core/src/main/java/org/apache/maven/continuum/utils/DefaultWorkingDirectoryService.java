@@ -16,9 +16,9 @@ package org.apache.maven.continuum.utils;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.store.ContinuumStore;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.io.File;
@@ -45,7 +45,7 @@ public class DefaultWorkingDirectoryService
     // WorkingDirectoryService Implementation
     // ----------------------------------------------------------------------
 
-    public File getWorkingDirectory( ContinuumProject project )
+    public File getWorkingDirectory( Project project )
     {
 //        TODO: Enable, this is what we really want
 //        ContinuumProjectGroup projectGroup = project.getProjectGroup();
@@ -53,7 +53,6 @@ public class DefaultWorkingDirectoryService
 //        return new File( projectGroup.getWorkingDirectory(),
 //                         project.getPath() );
 
-        return new File( configurationService.getWorkingDirectory(),
-                         project.getId() );
+        return new File( configurationService.getWorkingDirectory(), Integer.toString( project.getId() ) );
     }
 }

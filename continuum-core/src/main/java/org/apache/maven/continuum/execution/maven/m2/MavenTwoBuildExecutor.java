@@ -21,7 +21,7 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -64,8 +64,7 @@ public class MavenTwoBuildExecutor
     // ContinuumBuilder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumBuildExecutionResult build( ContinuumProject project, BuildDefinition buildDefinition,
-                                                File buildOutput )
+    public ContinuumBuildExecutionResult build( Project project, BuildDefinition buildDefinition, File buildOutput )
         throws ContinuumBuildExecutorException
     {
         // TODO: get from installation
@@ -78,7 +77,7 @@ public class MavenTwoBuildExecutor
         return executeShellCommand( project, executable, arguments, buildOutput );
     }
 
-    public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
+    public void updateProjectFromCheckOut( File workingDirectory, Project project )
         throws ContinuumBuildExecutorException
     {
         File f = new File( workingDirectory, "pom.xml" );

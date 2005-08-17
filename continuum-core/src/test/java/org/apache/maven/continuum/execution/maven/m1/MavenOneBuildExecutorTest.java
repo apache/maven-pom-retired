@@ -18,8 +18,8 @@ package org.apache.maven.continuum.execution.maven.m1;
 
 import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
@@ -61,7 +61,7 @@ public class MavenOneBuildExecutorTest
         // Make the "existing" project
         // ----------------------------------------------------------------------
 
-        ContinuumProject project = new ContinuumProject();
+        Project project = new Project();
 
         project.setName( "Maven" );
 

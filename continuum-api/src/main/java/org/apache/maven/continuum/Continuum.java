@@ -17,9 +17,8 @@ package org.apache.maven.continuum;
  */
 
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
@@ -40,32 +39,29 @@ public interface Continuum
     // Project
     // ----------------------------------------------------------------------
 
-    void removeProject( String projectId )
+    void removeProject( int projectId )
         throws ContinuumException;
 
-    void checkoutProject( String id )
+    void checkoutProject( int projectId )
         throws ContinuumException;
 
-    ContinuumProject getProject( String projectId )
+    Project getProject( int projectId )
         throws ContinuumException;
 
     Collection getAllProjects( int start, int end )
         throws ContinuumException;
 
-    ScmResult getScmResultForProject( String projectId )
-        throws ContinuumException;
-
     Collection getProjects()
         throws ContinuumException;
 
-    BuildResult getLatestBuildResultForProject( String projectId )
+    BuildResult getLatestBuildResultForProject( int projectId )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
     // Queues
     // ----------------------------------------------------------------------
 
-    boolean isInBuildingQueue( String id )
+    boolean isInBuildingQueue( int projectId )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
@@ -81,10 +77,10 @@ public interface Continuum
     void buildProjects( boolean force )
         throws ContinuumException;
 
-    void buildProject( String projectId )
+    void buildProject( int projectId )
         throws ContinuumException;
 
-    void buildProject( String projectId, boolean force )
+    void buildProject( int projectId, boolean force )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
@@ -94,46 +90,47 @@ public interface Continuum
     BuildResult getBuildResult( int buildId )
         throws ContinuumException;
 
-    // ----------------------------------------------------------------------
-    // Maven 2.x projects.
-    // ----------------------------------------------------------------------
-
-    ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl )
-        throws ContinuumException;
-
-    // ----------------------------------------------------------------------
-    // Maven 1.x projects
-    // ----------------------------------------------------------------------
-
-    ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
+    Collection getBuildResultsForProject( int projectId )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
     // Projects
     // ----------------------------------------------------------------------
 
-    String addProject( ContinuumProject project, String executorId )
+    int addProject( Project project, String executorId )
         throws ContinuumException;
 
-    void updateProject( ContinuumProject project )
+    ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl )
+        throws ContinuumException;
+
+    ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
+        throws ContinuumException;
+
+    void updateProject( Project project )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
     // Notification
     // ----------------------------------------------------------------------
 
-    ProjectNotifier getNotifier( String projectId, String notifierType )
+    ProjectNotifier getNotifier( int projectId, String notifierType )
         throws ContinuumException;
 
-    void updateNotifier( String projectId, String notifierType, Map configuration )
+    void updateNotifier( int projectId, String notifierType, Map configuration )
         throws ContinuumException;
 
-    void addNotifier( String projectId, String notifierType, Map configuration )
+    void addNotifier( int projectId, String notifierType, Map configuration )
         throws ContinuumException;
 
-    void removeNotifier( String projectId, String notifierType )
+    void removeNotifier( int projectId, String notifierType )
         throws ContinuumException;
 
-    Collection getBuildResultsForProject( String projectId )
+    Project getProjectWithCheckoutResult( int projectId )
+        throws ContinuumException;
+
+    Project getProjectWithAllDetails( int projectId )
+        throws ContinuumException;
+
+    Project getProjectWithBuilds( int projectId )
         throws ContinuumException;
 }

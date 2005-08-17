@@ -16,8 +16,8 @@ package org.apache.maven.continuum.notification;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.notification.AbstractRecipientSource;
 import org.codehaus.plexus.notification.NotificationException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -72,7 +72,7 @@ public class ContinuumRecipientSource
     public Set getRecipients( String notifierType, String messageId, Map configuration, Map context )
         throws NotificationException
     {
-        ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
+        Project project = (Project) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
         if ( project == null )
         {

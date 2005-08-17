@@ -16,8 +16,8 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.PlexusTestCase;
@@ -55,7 +55,7 @@ public class MavenOneContinuumProjectBuilderTest
 
         assertEquals( "result.projects.length", 1, result.getProjects().size() );
 
-        ContinuumProject project = (ContinuumProject) result.getProjects().get( 0 );
+        Project project = (Project) result.getProjects().get( 0 );
 
         assertNotNull( project );
 

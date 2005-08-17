@@ -57,7 +57,7 @@ public class ContinuumXmlRpcTest
         //
         // ----------------------------------------------------------------------
 
-        Hashtable hashtable = xmlRpc.getProject( Integer.toString( project.getId() ) );
+        Hashtable hashtable = xmlRpc.getProject( project.getId() );
 
         dumpValue( 0, "result", hashtable );
     }

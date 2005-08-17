@@ -27,18 +27,18 @@ import java.io.File;
 public class CheckOutTask
     implements Task
 {
-    private String projectId;
+    private int projectId;
 
     private File workingDirectory;
 
-    public CheckOutTask( String projectId, File workingDirectory )
+    public CheckOutTask( int projectId, File workingDirectory )
     {
         this.projectId = projectId;
 
         this.workingDirectory = workingDirectory;
     }
 
-    public String getProjectId()
+    public int getProjectId()
     {
         return projectId;
     }

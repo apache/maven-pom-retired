@@ -16,8 +16,8 @@ package org.apache.maven.continuum.project.builder;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.project.ContinuumProject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class ContinuumProjectBuildingResult
 
     private List warnings = new ArrayList();
 
-    public void addProject( ContinuumProject project )
+    public void addProject( Project project )
     {
         projects.add( project );
     }
@@ -44,7 +44,7 @@ public class ContinuumProjectBuildingResult
         projectGroups.add( projectGroup );
     }
 
-    public void addProject( ContinuumProject project, String executorId )
+    public void addProject( Project project, String executorId )
     {
         project.setExecutorId( executorId );
 

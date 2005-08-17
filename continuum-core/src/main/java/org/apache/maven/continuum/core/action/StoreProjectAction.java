@@ -17,7 +17,7 @@ package org.apache.maven.continuum.core.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
@@ -35,15 +35,17 @@ public class StoreProjectAction
     public void execute( Map context )
         throws ContinuumException, ContinuumStoreException
     {
-        ContinuumProject project = getUnvalidatedProject( context );
+        Project project = getUnvalidatedProject( context );
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
+        // TODO: group!
+
         project = store.addProject( project );
 
-        context.put( KEY_PROJECT_ID, project.getId() );
+        context.put( KEY_PROJECT_ID, new Integer( project.getId() ) );
 
         // ----------------------------------------------------------------------
         // Set the working directory
@@ -62,6 +64,6 @@ public class StoreProjectAction
 
         project.setWorkingDirectory( projectWorkingDirectory.getAbsolutePath() );
 */
-        store.updateProject( project );
+//        store.updateProject( project );
     }
 }

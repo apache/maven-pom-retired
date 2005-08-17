@@ -34,7 +34,9 @@ public class CheckOutTaskExecutor
     extends AbstractLogEnabled
     implements TaskExecutor
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ActionManager actionManager;
 
     // ----------------------------------------------------------------------
@@ -46,13 +48,13 @@ public class CheckOutTaskExecutor
     {
         CheckOutTask task = (CheckOutTask) t;
 
-        String projectId = task.getProjectId();
+        int projectId = task.getProjectId();
 
         String workingDirectory = task.getWorkingDirectory().getAbsolutePath();
 
         Map context = new HashMap();
 
-        context.put( CheckoutProjectContinuumAction.KEY_PROJECT_ID, projectId );
+        context.put( CheckoutProjectContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
 
         context.put( CheckoutProjectContinuumAction.KEY_WORKING_DIRECTORY, workingDirectory );
 

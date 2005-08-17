@@ -134,7 +134,7 @@ public class BuildQueueTest
     private void buildProject( int projectId, boolean force )
         throws Exception
     {
-        buildQueue.put( new BuildProjectTask( Integer.toString( projectId ), force ) );
+        buildQueue.put( new BuildProjectTask( projectId, force ) );
     }
 
     private void assertNextBuildIs( int expectedProjectId )
@@ -146,8 +146,7 @@ public class BuildQueueTest
 
         BuildProjectTask buildProjectTask = (BuildProjectTask) task;
 
-        assertEquals( "Didn't get the expected project id.", Integer.toString( expectedProjectId ),
-                      buildProjectTask.getProjectId() );
+        assertEquals( "Didn't get the expected project id.", expectedProjectId, buildProjectTask.getProjectId() );
     }
 
     private void assertNextBuildIsNull()

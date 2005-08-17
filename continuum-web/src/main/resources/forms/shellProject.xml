@@ -2,7 +2,7 @@
   <extend>continuumProject</extend>
   <id>shellProject</id>
   <!-- TODO: why not inherited? -->
-  <target-class>org.apache.maven.continuum.project.ContinuumProject</target-class>
+  <target-class>org.apache.maven.continuum.model.project.Project</target-class>
   <lookup-expression>getProject(#id)</lookup-expression>
   <elements>
     <!-- TODO: remove

@@ -19,9 +19,9 @@ package org.apache.maven.continuum.notification.msn;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.msn.MsnClient;
 import org.codehaus.plexus.msn.MsnException;
@@ -78,7 +78,7 @@ public class MsnContinuumNotifier
     public void sendNotification( String source, Set recipients, Map configuration, Map context )
         throws NotificationException
     {
-        ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
+        Project project = (Project) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
         BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
@@ -107,7 +107,7 @@ public class MsnContinuumNotifier
     //
     // ----------------------------------------------------------------------
 
-    private String generateMessage( ContinuumProject project, BuildResult build )
+    private String generateMessage( Project project, BuildResult build )
         throws ContinuumException
     {
         int state = build.getState();
@@ -136,7 +136,7 @@ public class MsnContinuumNotifier
         return message + " " + getReportUrl( project, build, configurationService );
     }
 
-    private void sendMessage( ContinuumProject project, BuildResult build, Set recipients, Map configuration )
+    private void sendMessage( Project project, BuildResult build, Set recipients, Map configuration )
         throws NotificationException
     {
         String message;

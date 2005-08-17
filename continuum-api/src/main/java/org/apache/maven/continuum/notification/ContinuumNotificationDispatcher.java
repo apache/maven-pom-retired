@@ -17,7 +17,7 @@ package org.apache.maven.continuum.notification;
  */
 
 import org.apache.maven.continuum.model.project.BuildResult;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -58,15 +58,15 @@ public interface ContinuumNotificationDispatcher
     //
     // ----------------------------------------------------------------------
 
-    void buildStarted( ContinuumProject project );
+    void buildStarted( Project project );
 
-    void checkoutStarted( ContinuumProject project );
+    void checkoutStarted( Project project );
 
-    void checkoutComplete( ContinuumProject project );
+    void checkoutComplete( Project project );
 
-    void runningGoals( ContinuumProject project, BuildResult build );
+    void runningGoals( Project project, BuildResult build );
 
-    void goalsCompleted( ContinuumProject project, BuildResult build );
+    void goalsCompleted( Project project, BuildResult build );
 
-    void buildComplete( ContinuumProject project, BuildResult build );
+    void buildComplete( Project project, BuildResult build );
 }

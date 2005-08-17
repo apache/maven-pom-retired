@@ -255,28 +255,12 @@
             <value>true</value>
           </property>
           <property>
-            <name>org.jpox.autoCreateColumns</name>
-            <value>true</value>
-          </property>
-          <property>
             <name>org.jpox.autoStartMechanism</name>
             <value>SchemaTable</value>
           </property>
           <property>
             <name>org.jpox.autoStartMechanismMode</name>
             <value>Ignored</value>
-          </property>
-          <property>
-            <name>org.jpox.validateTables</name>
-            <value>false</value>
-          </property>
-          <property>
-            <name>org.jpox.validateColumns</name>
-            <value>false</value>
-          </property>
-          <property>
-            <name>org.jpox.validateConstraints</name>
-            <value>false</value>
           </property>
           <!-- Apache Derby Configuration -->
           <property>
@@ -322,24 +306,32 @@
             HSQLDB keeps all data in memory at all times.
           -->
           <!--
-          <property>
-            <name>javax.jdo.option.ConnectionDriverName</name>
-            <value>org.hsqldb.jdbcDriver</value>
-          </property>
-          <property>
-            <name>javax.jdo.option.ConnectionURL</name>
-            <value>jdbc:hsqldb:${plexus.home}/database</value>
-          </property>
-          <property>
-            <name>javax.jdo.option.ConnectionUserName</name>
-            <value>sa</value>
-          </property>
-          <property>
-            <name>javax.jdo.option.ConnectionPassword</name>
-            <value></value>
-          </property>
-          -->
+                    <property>
+                      <name>javax.jdo.option.ConnectionDriverName</name>
+                      <value>org.hsqldb.jdbcDriver</value>
+                    </property>
+                    <property>
+                      <name>javax.jdo.option.ConnectionURL</name>
+                      <value>jdbc:hsqldb:${plexus.home}/database</value>
+                    </property>
+                    <property>
+                      <name>javax.jdo.option.ConnectionUserName</name>
+                      <value>sa</value>
+                    </property>
+                    <property>
+                      <name>javax.jdo.option.ConnectionPassword</name>
+                      <value></value>
+                    </property>
 
+                    <property>
+                      <name>org.jpox.transactionIsolation</name>
+                      <value>READ_UNCOMMITTED</value>
+                    </property>
+                    <property>
+                      <name>org.jpox.poid.transactionIsolation</name>
+                      <value>READ_UNCOMMITTED</value>
+                    </property>
+          -->
           <property>
             <name>org.jpox.transactionIsolation</name>
             <value>READ_COMMITTED</value>

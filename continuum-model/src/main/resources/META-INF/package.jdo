@@ -5,63 +5,6 @@
     "http://java.sun.com/dtd/jdo_2_0.dtd">
 
 <jdo>
-  <package name="org.apache.maven.continuum.project">
-    <class name="ContinuumProject" detachable="true" identity-type="application"
-           objectid-class="javax.jdo.identity.StringIdentity">
-      <inheritance strategy="new-table">
-        <discriminator strategy="class-name">
-          <column name="PROJECT_TYPE"/>
-        </discriminator>
-      </inheritance>
-      <field name="id" persistence-modifier="persistent" primary-key="true" value-strategy="native"/>
-      <field name="name" persistence-modifier="persistent"/>
-      <field name="scmUrl" persistence-modifier="persistent"/>
-      <field name="version" persistence-modifier="persistent"/>
-      <field name="state" persistence-modifier="none"/>
-      <field name="executorId" persistence-modifier="persistent"/>
-      <field name="latestBuildId" persistence-modifier="persistent"/>
-      <field name="buildNumber" persistence-modifier="persistent"/>
-      <field name="checkoutResult" persistence-modifier="persistent" default-fetch-group="true" dependent="true"/>
-      <field name="url" persistence-modifier="persistent"/>
-      <field name="artifactId" persistence-modifier="persistent"/>
-      <field name="groupId" persistence-modifier="persistent"/>
-      <!-- Collections -->
-      <field name="builds" persistence-modifier="persistent">
-        <collection element-type="org.apache.maven.continuum.model.project.BuildResult" dependent-element="true"/>
-        <join/>
-      </field>
-      <field name="developers" persistence-modifier="persistent">
-        <collection element-type="org.apache.maven.continuum.model.project.ProjectDeveloper" dependent-element="true"/>
-        <join/>
-      </field>
-      <field name="notifiers" persistence-modifier="persistent">
-        <collection element-type="org.apache.maven.continuum.model.project.ProjectNotifier" dependent-element="true"/>
-        <join/>
-      </field>
-      <field name="dependencies" persistence-modifier="persistent">
-        <collection element-type="org.apache.maven.continuum.model.project.ProjectDependency" dependent-element="true"/>
-        <join/>
-      </field>
-      <field name="buildDefinitions" persistence-modifier="persistent" default-fetch-group="true">
-        <collection element-type="org.apache.maven.continuum.model.project.BuildDefinition" dependent-element="true"/>
-        <join/>
-      </field>
-
-      <field name="projectGroup" persistence-modifier="persistent"/>
-
-      <fetch-group name="project-detail">
-        <field name="checkoutResult"/>
-        <field name="builds"/>
-        <field name="developers"/>
-        <field name="notifiers"/>
-        <field name="dependencies"/>
-        <field name="projectGroup"/>
-        <field name="buildDefinitions"/>
-      </fetch-group>
-    </class>
-  </package>
-
-  <!-- Really new stuff, TODO: remove the rest -->
   <package name="org.apache.maven.continuum.model.project">
     <class name="ProjectGroup" identity-type="application" detachable="true"
            objectid-class="javax.jdo.identity.IntIdentity">

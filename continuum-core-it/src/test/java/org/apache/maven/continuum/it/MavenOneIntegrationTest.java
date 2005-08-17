@@ -18,7 +18,7 @@ package org.apache.maven.continuum.it;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 
@@ -49,11 +49,11 @@ public class MavenOneIntegrationTest
 
         progress( "Adding Maven 1 project" );
 
-        String projectId = getProjectId( continuum.addMavenOneProject( getFileUrl( root ) + "/project.xml" ) );
+        int projectId = getProjectId( continuum.addMavenOneProject( getFileUrl( root ) + "/project.xml" ) );
 
         waitForSuccessfulCheckout( projectId );
 
-        ContinuumProject project = continuum.getProject( projectId );
+        Project project = continuum.getProjectWithCheckoutResult( projectId );
 
         assertProject( projectId, "Maven 1 Project", "1.0", "", MavenOneBuildExecutor.ID, project );
 

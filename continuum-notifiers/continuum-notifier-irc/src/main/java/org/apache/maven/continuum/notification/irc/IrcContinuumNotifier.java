@@ -19,11 +19,12 @@ package org.apache.maven.continuum.notification.irc;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.ircbot.IrcBot;
 import org.codehaus.plexus.notification.NotificationException;
 
@@ -66,7 +67,7 @@ public class IrcContinuumNotifier
     public void sendNotification( String source, Set recipients, Map configuration, Map context )
         throws NotificationException
     {
-        ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
+        Project project = (Project) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
         BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
@@ -96,7 +97,7 @@ public class IrcContinuumNotifier
         }
     }
 
-    private void buildComplete( ContinuumProject project, BuildResult build, Map configuration )
+    private void buildComplete( Project project, BuildResult build, Map configuration )
         throws ContinuumException
     {
         // ----------------------------------------------------------------------
@@ -160,7 +161,7 @@ public class IrcContinuumNotifier
         }
     }
 
-    private String generateMessage( ContinuumProject project, BuildResult build )
+    private String generateMessage( Project project, BuildResult build )
         throws ContinuumException
     {
         int state = build.getState();
@@ -222,10 +223,18 @@ public class IrcContinuumNotifier
         return false;
     }
 
-    private BuildResult getPreviousBuild( ContinuumProject project, BuildResult currentBuild )
+    private BuildResult getPreviousBuild( Project project, BuildResult currentBuild )
         throws ContinuumException
     {
-        Collection builds = project.getBuilds();
+        try
+        {
+            project = store.getProjectWithBuilds( project.getId() );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Unable to obtain project builds", e );
+        }
+        Collection builds = project.getBuildResults();
 
         if ( builds.size() == 0 )
         {

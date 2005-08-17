@@ -17,8 +17,8 @@ package org.apache.maven.continuum.notification.console;
  */
 
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.notification.NotificationException;
 import org.codehaus.plexus.notification.notifier.AbstractNotifier;
 import org.codehaus.plexus.util.StringUtils;
@@ -41,7 +41,7 @@ public class ConsoleNotifier
     public void sendNotification( String source, Set recipients, Map configuration, Map context )
         throws NotificationException
     {
-        ContinuumProject project = (ContinuumProject) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
+        Project project = (Project) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
         BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
@@ -79,27 +79,27 @@ public class ConsoleNotifier
     //
     // ----------------------------------------------------------------------
 
-    private void buildStarted( ContinuumProject project )
+    private void buildStarted( Project project )
     {
         out( project, null, "Build started." );
     }
 
-    private void checkoutStarted( ContinuumProject project )
+    private void checkoutStarted( Project project )
     {
         out( project, null, "Checkout started." );
     }
 
-    private void checkoutComplete( ContinuumProject project )
+    private void checkoutComplete( Project project )
     {
         out( project, null, "Checkout complete." );
     }
 
-    private void runningGoals( ContinuumProject project, BuildResult build )
+    private void runningGoals( Project project, BuildResult build )
     {
         out( project, build, "Running goals." );
     }
 
-    private void goalsCompleted( ContinuumProject project, BuildResult build )
+    private void goalsCompleted( Project project, BuildResult build )
     {
         if ( build.getError() == null )
         {
@@ -111,7 +111,7 @@ public class ConsoleNotifier
         }
     }
 
-    private void buildComplete( ContinuumProject project, BuildResult build )
+    private void buildComplete( Project project, BuildResult build )
     {
         if ( build.getError() == null )
         {
@@ -123,7 +123,7 @@ public class ConsoleNotifier
         }
     }
 
-    private void out( ContinuumProject project, BuildResult build, String msg )
+    private void out( Project project, BuildResult build, String msg )
     {
         System.out.println( "Build event for project '" + project.getName() + "':" + msg );
 

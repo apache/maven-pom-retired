@@ -20,8 +20,8 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
@@ -52,7 +52,7 @@ public class AntIntegrationTest
 
         progress( "Adding Ant SVN project" );
 
-        ContinuumProject p = new ContinuumProject();
+        Project p = new Project();
         p.setScmUrl( makeScmUrl( "svn", getSvnRoot(), "ant-svn" ) );
         p.setName( "Ant SVN Project" );
 //        p.getNotifiers().add( makeMailNotifier( email ) );
@@ -64,11 +64,11 @@ public class AntIntegrationTest
         bd.setGoals( "clean build" );
         p.addBuildDefinition( bd );
 
-        String projectId = continuum.addProject( p, ContinuumBuildExecutor.ANT_EXECUTOR_ID );
+        int projectId = continuum.addProject( p, ContinuumBuildExecutor.ANT_EXECUTOR_ID );
 
         waitForSuccessfulCheckout( projectId );
 
-        ContinuumProject project = continuum.getProject( projectId );
+        Project project = continuum.getProject( projectId );
 
         assertProject( projectId, "Ant SVN Project", "3.0", "-v", "ant", project );
 
@@ -96,7 +96,7 @@ public class AntIntegrationTest
 
         cvsImport( root, "ant-cvs", getCvsRoot() );
 
-        ContinuumProject p = new ContinuumProject();
+        Project p = new Project();
         p.setScmUrl( makeScmUrl( "cvs", getCvsRoot(), "ant-cvs" ) );
         p.setName( "Ant CVS Project" );
 //        p.getNotifiers().add( makeMailNotifier( email ) );
@@ -108,11 +108,11 @@ public class AntIntegrationTest
         bd.setGoals( "clean build" );
         p.addBuildDefinition( bd );
 
-        String projectId = continuum.addProject( p, ContinuumBuildExecutor.ANT_EXECUTOR_ID );
+        int projectId = continuum.addProject( p, ContinuumBuildExecutor.ANT_EXECUTOR_ID );
 
         waitForSuccessfulCheckout( projectId );
 
-        ContinuumProject project = continuum.getProject( projectId );
+        Project project = continuum.getProject( projectId );
         assertProject( projectId, "Ant CVS Project", "3.0", "-debug", AntBuildExecutor.ID, project );
 
         progress( "Building CVS Ant project" );

@@ -19,8 +19,9 @@ package org.apache.maven.continuum.project.builder.maven;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
@@ -114,7 +115,13 @@ public class MavenTwoContinuumProjectBuilder
 
         if ( !excludedPackagingTypes.contains( mavenProject.getPackaging() ) )
         {
-            ContinuumProject continuumProject = new ContinuumProject();
+            Project continuumProject = new Project();
+
+            BuildDefinition bd = new BuildDefinition();
+            bd.setArguments( "--batch-mode --non-recursive" );
+            bd.setGoals( "clean:clean install" );
+            bd.setBuildFile( "pom.xml" );
+            continuumProject.addBuildDefinition( bd );
 
             try
             {

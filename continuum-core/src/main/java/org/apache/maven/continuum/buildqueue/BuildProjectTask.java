@@ -25,13 +25,13 @@ import org.codehaus.plexus.taskqueue.Task;
 public class BuildProjectTask
     implements Task
 {
-    private String projectId;
+    private int projectId;
 
     private long timestamp;
 
     private boolean forced;
 
-    public BuildProjectTask( String projectId, boolean forced )
+    public BuildProjectTask( int projectId, boolean forced )
     {
         this.projectId = projectId;
 
@@ -40,7 +40,7 @@ public class BuildProjectTask
         this.forced = forced;
     }
 
-    public String getProjectId()
+    public int getProjectId()
     {
         return projectId;
     }

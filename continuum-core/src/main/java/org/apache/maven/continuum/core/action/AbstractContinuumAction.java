@@ -16,9 +16,9 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.codehaus.plexus.action.AbstractAction;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -78,9 +78,9 @@ public abstract class AbstractContinuumAction
     //
     // ----------------------------------------------------------------------
 
-    public static String getProjectId( Map context )
+    public static int getProjectId( Map context )
     {
-        return getString( context, KEY_PROJECT_ID );
+        return getInteger( context, KEY_PROJECT_ID );
     }
 
     public static int getProjectGroupId( Map context )
@@ -98,9 +98,9 @@ public abstract class AbstractContinuumAction
         return getBoolean( context, KEY_FORCED );
     }
 
-    public static ContinuumProject getUnvalidatedProject( Map context )
+    public static Project getUnvalidatedProject( Map context )
     {
-        return (ContinuumProject) getObject( context, KEY_UNVALIDATED_PROJECT );
+        return (Project) getObject( context, KEY_UNVALIDATED_PROJECT );
     }
 
     public static ProjectGroup getUnvalidatedProjectGroup( Map context )
@@ -155,6 +155,11 @@ public abstract class AbstractContinuumAction
     public static boolean getBoolean( Map context, String key )
     {
         return ( (Boolean) getObject( context, key ) ).booleanValue();
+    }
+
+    private static int getInteger( Map context, String key )
+    {
+        return ( (Integer) getObject( context, key, null ) ).intValue();
     }
 
     private static Object getObject( Map context, String key )

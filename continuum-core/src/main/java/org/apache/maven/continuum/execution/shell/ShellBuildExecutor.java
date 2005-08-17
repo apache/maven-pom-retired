@@ -21,7 +21,7 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 
 import java.io.File;
 
@@ -54,7 +54,7 @@ public class ShellBuildExecutor
     // ContinuumBuilder implementation
     // ----------------------------------------------------------------------
 
-    public synchronized ContinuumBuildExecutionResult build( ContinuumProject project, BuildDefinition buildDefinition,
+    public synchronized ContinuumBuildExecutionResult build( Project project, BuildDefinition buildDefinition,
                                                              File buildOutput )
         throws ContinuumBuildExecutorException
     {
@@ -70,7 +70,7 @@ public class ShellBuildExecutor
         return executeShellCommand( project, executable, buildDefinition.getArguments(), buildOutput );
     }
 
-    public void updateProjectFromCheckOut( File workingDirectory, ContinuumProject project )
+    public void updateProjectFromCheckOut( File workingDirectory, Project project )
         throws ContinuumBuildExecutorException
     {
     }

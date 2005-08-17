@@ -16,8 +16,7 @@ package org.apache.maven.continuum.execution;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.project.ContinuumProject;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.apache.maven.continuum.utils.shell.ExecutionResult;
 import org.apache.maven.continuum.utils.shell.ShellCommandHelper;
@@ -120,8 +119,8 @@ public abstract class AbstractBuildExecutor
     //
     // ----------------------------------------------------------------------
 
-    protected ContinuumBuildExecutionResult executeShellCommand( ContinuumProject project, String executable,
-                                                                 String arguments, File output )
+    protected ContinuumBuildExecutionResult executeShellCommand( Project project, String executable, String arguments,
+                                                                 File output )
         throws ContinuumBuildExecutorException
     {
         // ----------------------------------------------------------------------
@@ -192,14 +191,6 @@ public abstract class AbstractBuildExecutor
             throw new ContinuumBuildExecutorException( "Error while executing shell command. " +
                 "The most common error is that '" + executable + "' " + "is not in your path.", e );
         }
-    }
-
-    public ContinuumBuildExecutionResult build( ContinuumProject project, File buildOutput )
-        throws ContinuumBuildExecutorException
-    {
-        // TODO: remove
-        BuildDefinition buildDefinition = (BuildDefinition) project.getBuildDefinitions().iterator().next();
-        return build( project, buildDefinition, buildOutput );
     }
 
 }

@@ -16,10 +16,10 @@ package org.apache.maven.continuum.scm;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.scm.ChangeFile;
 import org.apache.maven.continuum.model.scm.ChangeSet;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.ScmFile;
@@ -59,7 +59,7 @@ public class DefaultContinuumScm
     // ContinuumScm implementation
     // ----------------------------------------------------------------------
 
-    public ScmResult checkOut( ContinuumProject project, File workingDirectory )
+    public ScmResult checkOut( Project project, File workingDirectory )
         throws ContinuumScmException
     {
         try
@@ -135,7 +135,7 @@ public class DefaultContinuumScm
      * @param project The project to check out.
      * @throws ContinuumScmException Thrown in case of a exception while checking out the sources.
      */
-    public ScmResult checkOutProject( ContinuumProject project )
+    public ScmResult checkOutProject( Project project )
         throws ContinuumScmException
     {
         File workingDirectory = workingDirectoryService.getWorkingDirectory( project );
@@ -149,7 +149,7 @@ public class DefaultContinuumScm
         return checkOut( project, workingDirectory );
     }
 
-    public ScmResult updateProject( ContinuumProject project )
+    public ScmResult updateProject( Project project )
         throws ContinuumScmException
     {
         try

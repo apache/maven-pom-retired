@@ -16,9 +16,9 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.PlexusTestCase;
@@ -56,7 +56,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getProjects().size() );
 
-        ContinuumProject project = (ContinuumProject) result.getProjects().get( 0 );
+        Project project = (Project) result.getProjects().get( 0 );
 
         assertNotNull( project.getNotifiers() );
 
@@ -87,7 +87,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getProjects().size() );
 
-        ContinuumProject project = (ContinuumProject) result.getProjects().get( 0 );
+        Project project = (Project) result.getProjects().get( 0 );
 
         assertNotNull( project.getNotifiers() );
 
@@ -160,7 +160,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         for ( Iterator it = result.getProjects().iterator(); it.hasNext(); )
         {
-            ContinuumProject project = (ContinuumProject) it.next();
+            Project project = (Project) it.next();
 
             assertNotNull( project.getName() );
 
@@ -180,7 +180,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
     private void assertMavenTwoProject( String name, Map projects )
     {
-        ContinuumProject project = (ContinuumProject) projects.get( name );
+        Project project = (Project) projects.get( name );
 
         assertNotNull( project );
 

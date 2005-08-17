@@ -35,7 +35,9 @@ public class BuildProjectTaskViabilityEvaluator
     extends AbstractLogEnabled
     implements TaskViabilityEvaluator
 {
-    /** @plexus.configuration */
+    /**
+     * @plexus.configuration
+     */
     private long requiredBuildInterval;
 
     // ----------------------------------------------------------------------
@@ -58,13 +60,14 @@ public class BuildProjectTaskViabilityEvaluator
         {
             BuildProjectTask task = (BuildProjectTask) it.next();
 
-            List projectTasks = (List) projects.get( task.getProjectId() );
+            Integer key = new Integer( task.getProjectId() );
+            List projectTasks = (List) projects.get( key );
 
             if ( projectTasks == null )
             {
                 projectTasks = new ArrayList();
 
-                projects.put( task.getProjectId(), projectTasks );
+                projects.put( key, projectTasks );
             }
 
             projectTasks.add( task );

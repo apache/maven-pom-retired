@@ -19,16 +19,18 @@ package org.apache.maven.continuum.core.action;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,7 +53,7 @@ public class ExecuteBuilderContinuumAction
         // Get parameters from the context
         // ----------------------------------------------------------------------
 
-        ContinuumProject project = store.getProject( getProjectId( context ) );
+        Project project = store.getProjectWithBuildDetails( getProjectId( context ) );
 
         boolean forced = isForced( context );
 
@@ -83,11 +85,17 @@ public class ExecuteBuilderContinuumAction
         // TODO: set trigger properly
         build.setTrigger( forced ? ContinuumProjectState.TRIGGER_FORCED : ContinuumProjectState.TRIGGER_UNKNOWN );
 
+        // TODO: select actualy build def
+        List buildDefinitions = project.getBuildDefinitions();
+        BuildDefinition buildDefinition = (BuildDefinition) buildDefinitions.iterator().next();
+
         build.setScmResult( scmResult );
 
-        build = store.addBuildResult( project, build );
+        store.addBuildResult( project, build );
 
         context.put( KEY_BUILD_ID, Integer.toString( build.getId() ) );
+
+        build = store.getBuildResult( build.getId() );
 
         try
         {
@@ -95,7 +103,7 @@ public class ExecuteBuilderContinuumAction
 
             File buildOutputFile = store.getBuildOutputFile( build.getId(), project.getId() );
 
-            ContinuumBuildExecutionResult result = buildExecutor.build( project, buildOutputFile );
+            ContinuumBuildExecutionResult result = buildExecutor.build( project, buildDefinition, buildOutputFile );
 
             build.setState( result.getExitCode() == 0 ? ContinuumProjectState.OK : ContinuumProjectState.FAILED );
 
@@ -103,6 +111,8 @@ public class ExecuteBuilderContinuumAction
         }
         catch ( Throwable e )
         {
+            getLogger().error( "Error running build", e );
+
             build.setState( ContinuumProjectState.ERROR );
 
             build.setError( ContinuumUtils.throwableToString( e ) );
@@ -125,8 +135,8 @@ public class ExecuteBuilderContinuumAction
     //
     // ----------------------------------------------------------------------
 
-    private boolean isNew( ContinuumProject project )
+    private boolean isNew( Project project )
     {
-        return project.getBuilds().size() == 0;
+        return project.getState() == ContinuumProjectState.NEW;
     }
 }

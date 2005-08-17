@@ -16,8 +16,8 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.project.ContinuumProject;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.store.ContinuumStore;
@@ -42,7 +42,7 @@ public class CheckoutProjectContinuumAction
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = store.getProject( getProjectId( context ) );
+        Project project = store.getProject( getProjectId( context ) );
 
         File workingDirectory = getWorkingDirectory( context );
 

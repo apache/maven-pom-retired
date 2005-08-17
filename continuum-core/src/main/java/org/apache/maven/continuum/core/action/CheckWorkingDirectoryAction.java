@@ -16,9 +16,9 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.project.ContinuumProject;
-import org.apache.maven.continuum.utils.WorkingDirectoryService;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.utils.WorkingDirectoryService;
 
 import java.io.File;
 import java.util.Map;
@@ -43,7 +43,7 @@ public class CheckWorkingDirectoryAction
     public void execute( Map context )
         throws Exception
     {
-        ContinuumProject project = store.getProject( getProjectId( context ) );
+        Project project = store.getProject( getProjectId( context ) );
 
         File workingDirectory = workingDirectoryService.getWorkingDirectory( project );
 
