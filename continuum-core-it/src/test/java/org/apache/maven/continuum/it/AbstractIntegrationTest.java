@@ -84,7 +84,7 @@ public abstract class AbstractIntegrationTest
 
     public static final String REMOTING_METHOD_XFIRE = "xfire";
 
-    private static final String CVS_COMMAND = "c:/cygwin/bin/cvs";
+    private static final String CVS_COMMAND = "cvs";
 
     // ----------------------------------------------------------------------
     //
