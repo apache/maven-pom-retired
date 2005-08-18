@@ -296,6 +296,19 @@ public class DefaultContinuum
         }
     }
 
+    public String getBuildOutput( int projectId, int buildId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getBuildOutput( buildId, projectId );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Exception while getting build result for project.", e );
+        }
+    }
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------

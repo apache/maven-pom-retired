@@ -186,6 +186,10 @@
                 <id>build</id>
                 <expression>getBuildResult(#buildId)</expression>
               </scalar>
+              <scalar>
+                <id>output</id>
+                <expression>getBuildOutput(#id,#buildId)</expression>
+              </scalar>
             </scalars>
           </view>
           <!--

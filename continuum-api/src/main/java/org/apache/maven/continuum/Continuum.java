@@ -90,6 +90,9 @@ public interface Continuum
     BuildResult getBuildResult( int buildId )
         throws ContinuumException;
 
+    String getBuildOutput( int projectId, int buildId )
+        throws ContinuumException;
+
     Collection getBuildResultsForProject( int projectId )
         throws ContinuumException;
 
