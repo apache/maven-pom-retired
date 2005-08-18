@@ -111,11 +111,11 @@ public class DefaultContinuumXmlRpc
     // Build handling
     // ----------------------------------------------------------------------
 
-    public Hashtable buildProject( int projectId, boolean force )
+    public Hashtable buildProject( int projectId, int trigger )
     {
         try
         {
-            continuum.buildProject( projectId, force );
+            continuum.buildProject( projectId, trigger );
 
             return makeHashtable();
         }

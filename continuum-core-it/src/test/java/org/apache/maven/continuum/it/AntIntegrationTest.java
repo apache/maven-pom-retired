@@ -22,6 +22,7 @@ import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
@@ -74,7 +75,7 @@ public class AntIntegrationTest
 
         progress( "Building SVN Ant project" );
 
-        int buildId = buildProject( project.getId(), false ).getId();
+        int buildId = buildProject( project.getId(), ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
 
         assertSuccessfulAntBuild( buildId, project.getId() );
 
@@ -117,7 +118,7 @@ public class AntIntegrationTest
 
         progress( "Building CVS Ant project" );
 
-        int buildId = buildProject( projectId, false ).getId();
+        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
 
         assertSuccessfulAntBuild( buildId, projectId );
 

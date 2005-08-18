@@ -46,7 +46,7 @@ public interface ContinuumXmlRpc
     // Building
     // ----------------------------------------------------------------------
 
-    Hashtable buildProject( int projectId, boolean force );
+    Hashtable buildProject( int projectId, int trigger );
 
     // ----------------------------------------------------------------------
     // Builds

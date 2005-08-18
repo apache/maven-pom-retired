@@ -32,6 +32,7 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
@@ -218,17 +219,17 @@ public class DefaultContinuum
     public void buildProjects()
         throws ContinuumException
     {
-        buildProjects( true );
+        buildProjects( ContinuumProjectState.TRIGGER_FORCED );
     }
 
-    public void buildProjects( boolean force )
+    public void buildProjects( int trigger )
         throws ContinuumException
     {
         for ( Iterator i = getProjects().iterator(); i.hasNext(); )
         {
             Project project = (Project) i.next();
 
-            buildProject( project.getId(), force );
+            buildProject( project.getId(), trigger );
         }
 
         /*
@@ -258,10 +259,10 @@ public class DefaultContinuum
     public void buildProject( int projectId )
         throws ContinuumException
     {
-        buildProject( projectId, true );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_FORCED );
     }
 
-    public void buildProject( int projectId, boolean force )
+    public void buildProject( int projectId, int trigger )
         throws ContinuumException
     {
         try
@@ -270,7 +271,7 @@ public class DefaultContinuum
 
             getLogger().info( "Enqueuing '" + project.getName() + "'." );
 
-            buildQueue.put( new BuildProjectTask( projectId, force ) );
+            buildQueue.put( new BuildProjectTask( projectId, trigger ) );
         }
         catch ( ContinuumStoreException e )
         {

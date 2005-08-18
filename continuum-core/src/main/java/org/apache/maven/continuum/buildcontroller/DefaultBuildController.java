@@ -69,7 +69,7 @@ public class DefaultBuildController
     /**
      * @todo structure of this method is a bit of a mess (too much exception/finally code)
      */
-    public void build( int projectId, boolean forced )
+    public void build( int projectId, int trigger )
     {
         long startTime = System.currentTimeMillis();
 
@@ -109,7 +109,7 @@ public class DefaultBuildController
 
             actionContext.put( AbstractContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
 
-            actionContext.put( AbstractContinuumAction.KEY_FORCED, Boolean.valueOf( forced ) );
+            actionContext.put( AbstractContinuumAction.KEY_TRIGGER, new Integer( trigger ) );
 
             ScmResult scmResult = null;
 
@@ -146,7 +146,7 @@ public class DefaultBuildController
                     if ( !StringUtils.isEmpty( checkoutErrorMessage ) ||
                         !StringUtils.isEmpty( checkoutErrorException ) || checkOutScmResult == null )
                     {
-                        build = makeBuildResult( scmResult, startTime, forced );
+                        build = makeBuildResult( scmResult, startTime, trigger );
 
                         String error = "";
 
@@ -195,7 +195,7 @@ public class DefaultBuildController
                 }
                 else
                 {
-                    build = makeBuildResult( scmResult, startTime, forced );
+                    build = makeBuildResult( scmResult, startTime, trigger );
                 }
 
                 // This can happen if the "update project from scm" action fails
@@ -262,14 +262,13 @@ public class DefaultBuildController
     //
     // ----------------------------------------------------------------------
 
-    private BuildResult makeBuildResult( ScmResult scmResult, long startTime, boolean forced )
+    private BuildResult makeBuildResult( ScmResult scmResult, long startTime, int trigger )
     {
         BuildResult build = new BuildResult();
 
         build.setState( ContinuumProjectState.ERROR );
 
-        // TODO: set trigger properly
-        build.setTrigger( forced ? ContinuumProjectState.TRIGGER_FORCED : ContinuumProjectState.TRIGGER_UNKNOWN );
+        build.setTrigger( trigger );
 
         build.setStartTime( startTime );
 

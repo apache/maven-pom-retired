@@ -406,14 +406,14 @@ public abstract class AbstractIntegrationTest
     /**
      * @todo use a notify mechanism rather than polling. That's what queues are for. Really, buildProject should create the build result with a WAITING state, return the ID, and let the queue take it from there
      */
-    public BuildResult buildProject( int projectId, boolean force )
+    public BuildResult buildProject( int projectId, int trigger )
         throws Exception
     {
         int timeout = 60 * 1000;
 
         BuildResult previousBuild = getContinuum().getLatestBuildResultForProject( projectId );
 
-        getContinuum().buildProject( projectId, force );
+        getContinuum().buildProject( projectId, trigger );
 
         long start = System.currentTimeMillis();
 

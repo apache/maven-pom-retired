@@ -18,6 +18,7 @@ package org.apache.maven.continuum.buildqueue;
 
 import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 
@@ -45,18 +46,18 @@ public class BuildQueueTest
 
         int projectId = project.getId();
 
-        buildProject( projectId, false );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
 
         assertNextBuildIs( projectId );
 
         assertNextBuildIsNull();
 
-        buildProject( projectId, false );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
 
-        buildProject( projectId, false );
-        buildProject( projectId, false );
-        buildProject( projectId, false );
-        buildProject( projectId, false );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
 
         assertNextBuildIs( projectId );
 
@@ -70,9 +71,9 @@ public class BuildQueueTest
 
         int projectId2 = addProject( getStore(), "Build Queue Project 3" ).getId();
 
-        buildProject( projectId1, false );
+        buildProject( projectId1, ContinuumProjectState.TRIGGER_UNKNOWN );
 
-        buildProject( projectId2, false );
+        buildProject( projectId2, ContinuumProjectState.TRIGGER_UNKNOWN );
 
         assertNextBuildIs( projectId1 );
 
@@ -80,18 +81,11 @@ public class BuildQueueTest
 
         assertNextBuildIsNull();
 
-        buildProject( projectId1, false );
-
-        buildProject( projectId2, false );
-
-        buildProject( projectId1, false );
-        buildProject( projectId2, false );
-        buildProject( projectId1, false );
-        buildProject( projectId2, false );
-        buildProject( projectId1, false );
-        buildProject( projectId2, false );
-        buildProject( projectId1, false );
-        buildProject( projectId2, false );
+        for ( int i = 0; i < 5; i++ )
+        {
+            buildProject( projectId1, ContinuumProjectState.TRIGGER_UNKNOWN );
+            buildProject( projectId2, ContinuumProjectState.TRIGGER_UNKNOWN );
+        }
 
         assertNextBuildIs( projectId1 );
         assertNextBuildIs( projectId2 );
@@ -106,17 +100,16 @@ public class BuildQueueTest
 
         int projectId = addProject( getStore(), name ).getId();
 
-        buildProject( projectId, true );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_FORCED );
 
         assertNextBuildIs( projectId );
 
         assertNextBuildIsNull();
 
-        buildProject( projectId, true );
-        buildProject( projectId, true );
-        buildProject( projectId, true );
-        buildProject( projectId, true );
-        buildProject( projectId, true );
+        for ( int i = 0; i < 5; i++ )
+        {
+            buildProject( projectId, ContinuumProjectState.TRIGGER_FORCED );
+        }
 
         assertNextBuildIs( projectId );
         assertNextBuildIs( projectId );
@@ -131,10 +124,10 @@ public class BuildQueueTest
     //
     // ----------------------------------------------------------------------
 
-    private void buildProject( int projectId, boolean force )
+    private void buildProject( int projectId, int trigger )
         throws Exception
     {
-        buildQueue.put( new BuildProjectTask( projectId, force ) );
+        buildQueue.put( new BuildProjectTask( projectId, trigger ) );
     }
 
     private void assertNextBuildIs( int expectedProjectId )

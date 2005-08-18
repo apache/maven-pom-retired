@@ -55,7 +55,7 @@ public class ExecuteBuilderContinuumAction
 
         Project project = store.getProjectWithBuildDetails( getProjectId( context ) );
 
-        boolean forced = isForced( context );
+        int trigger = getTrigger( context );
 
         ScmResult scmResult = getUpdateScmResult( context );
 
@@ -65,7 +65,8 @@ public class ExecuteBuilderContinuumAction
         // This is really a precondition for this action to execute
         // ----------------------------------------------------------------------
 
-        if ( scmResult.getChanges().size() == 0 && !forced && !isNew( project ) )
+        if ( scmResult.getChanges().size() == 0 && trigger != ContinuumProjectState.TRIGGER_FORCED &&
+            !isNew( project ) )
         {
             getLogger().info( "No files updated, not building. Project id '" + project.getId() + "'." );
 
@@ -82,8 +83,7 @@ public class ExecuteBuilderContinuumAction
 
         build.setState( ContinuumProjectState.BUILDING );
 
-        // TODO: set trigger properly
-        build.setTrigger( forced ? ContinuumProjectState.TRIGGER_FORCED : ContinuumProjectState.TRIGGER_UNKNOWN );
+        build.setTrigger( trigger );
 
         // TODO: select actualy build def
         List buildDefinitions = project.getBuildDefinitions();

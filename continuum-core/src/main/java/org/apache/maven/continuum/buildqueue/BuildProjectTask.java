@@ -29,15 +29,15 @@ public class BuildProjectTask
 
     private long timestamp;
 
-    private boolean forced;
+    private int trigger;
 
-    public BuildProjectTask( int projectId, boolean forced )
+    public BuildProjectTask( int projectId, int trigger )
     {
         this.projectId = projectId;
 
         this.timestamp = System.currentTimeMillis();
 
-        this.forced = forced;
+        this.trigger = trigger;
     }
 
     public int getProjectId()
@@ -50,8 +50,8 @@ public class BuildProjectTask
         return timestamp;
     }
 
-    public boolean isForced()
+    public int getTrigger()
     {
-        return forced;
+        return trigger;
     }
 }

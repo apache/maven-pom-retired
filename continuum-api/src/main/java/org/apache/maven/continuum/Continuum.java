@@ -74,13 +74,13 @@ public interface Continuum
     void buildProjects()
         throws ContinuumException;
 
-    void buildProjects( boolean force )
+    void buildProjects( int trigger )
         throws ContinuumException;
 
     void buildProject( int projectId )
         throws ContinuumException;
 
-    void buildProject( int projectId, boolean force )
+    void buildProject( int projectId, int trigger )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------

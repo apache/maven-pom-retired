@@ -20,6 +20,7 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 
@@ -69,7 +70,7 @@ public class ShellIntegrationTest
         Project project = continuum.getProject( projectId );
         assertProject( projectId, "Shell Project", "3.0", "", "shell", project );
         progress( "Building Shell project" );
-        int buildId = buildProject( projectId, false ).getId();
+        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
         assertSuccessfulShellBuild( buildId, projectId, "" );
 
         // Test project reconfiguration
@@ -95,7 +96,7 @@ public class ShellIntegrationTest
         bd = (BuildDefinition) shellProject.getBuildDefinitions().iterator().next();
         assertEquals( "Updated command line arguments doesn't match", "a b", bd.getArguments() );
 
-        buildId = buildProject( projectId, false ).getId();
+        buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
         assertSuccessfulShellBuild( buildId, projectId, "a" + EOL + "b" + EOL );
 
         removeProject( projectId );

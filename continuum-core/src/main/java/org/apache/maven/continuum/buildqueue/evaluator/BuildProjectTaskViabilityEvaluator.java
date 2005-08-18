@@ -17,6 +17,7 @@ package org.apache.maven.continuum.buildqueue.evaluator;
  */
 
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.TaskQueueException;
 import org.codehaus.plexus.taskqueue.TaskViabilityEvaluator;
@@ -108,7 +109,7 @@ public class BuildProjectTaskViabilityEvaluator
             // If this build is forces, don't remove it
             // ----------------------------------------------------------------------
 
-            if ( buildProjectTask.isForced() )
+            if ( buildProjectTask.getTrigger() == ContinuumProjectState.TRIGGER_FORCED )
             {
                 continue;
             }

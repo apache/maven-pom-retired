@@ -19,6 +19,7 @@ package org.apache.maven.continuum.it;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 
@@ -65,7 +66,7 @@ public class MavenOneIntegrationTest
 
         progress( "Building Maven 1 project" );
 
-        int buildId = buildProject( projectId, false ).getId();
+        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
 
         assertSuccessfulMaven1Build( buildId, projectId );
 

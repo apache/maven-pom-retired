@@ -77,7 +77,7 @@ public class MavenTwoIntegrationTest
         project = continuum.getProjectWithBuilds( projectId );
         int originalSize = project.getBuildResults().size();
 
-        int buildId = buildProject( projectId, false ).getId();
+        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
 
         assertSuccessfulMaven2Build( buildId, projectId );
 
@@ -88,7 +88,7 @@ public class MavenTwoIntegrationTest
 
         assertEquals( "build list was not updated", originalSize + 1, expectedSize );
 
-        continuum.buildProject( projectId, false );
+        continuum.buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
 
         Thread.sleep( 3000 );
 
@@ -99,7 +99,7 @@ public class MavenTwoIntegrationTest
 
         progress( "Test that a forced build without any files changed executes the executor" );
 
-        buildId = buildProject( projectId, true ).getId();
+        buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_FORCED ).getId();
 
         BuildResult build = assertSuccessfulMaven2Build( buildId, projectId );
 

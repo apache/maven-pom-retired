@@ -31,10 +31,14 @@ public class BuildProjectTaskExecutor
     extends AbstractLogEnabled
     implements TaskExecutor
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private BuildController controller;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ContinuumStore store;
 
     // ----------------------------------------------------------------------
@@ -46,6 +50,6 @@ public class BuildProjectTaskExecutor
     {
         BuildProjectTask buildProjectTask = (BuildProjectTask) task;
 
-        controller.build( buildProjectTask.getProjectId(), buildProjectTask.isForced() );
+        controller.build( buildProjectTask.getProjectId(), buildProjectTask.getTrigger() );
     }
 }

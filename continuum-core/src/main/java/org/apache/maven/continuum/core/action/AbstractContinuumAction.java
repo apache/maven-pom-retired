@@ -58,7 +58,7 @@ public abstract class AbstractContinuumAction
 
     public static final String KEY_UPDATE_SCM_RESULT = "update-result";
 
-    public static final String KEY_FORCED = "forced";
+    public static final String KEY_TRIGGER = "forced";
 
     // ----------------------------------------------------------------------
     // Utils
@@ -93,9 +93,9 @@ public abstract class AbstractContinuumAction
         return getString( context, KEY_BUILD_ID );
     }
 
-    public static boolean isForced( Map context )
+    public static int getTrigger( Map context )
     {
-        return getBoolean( context, KEY_FORCED );
+        return getInteger( context, KEY_TRIGGER );
     }
 
     public static Project getUnvalidatedProject( Map context )

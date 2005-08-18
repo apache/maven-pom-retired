@@ -24,5 +24,5 @@ public interface BuildController
 {
     String ROLE = BuildController.class.getName();
 
-    void build( int projectId, boolean forced );
+    void build( int projectId, int trigger );
 }
