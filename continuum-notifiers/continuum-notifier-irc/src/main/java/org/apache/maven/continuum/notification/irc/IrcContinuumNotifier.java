@@ -28,8 +28,7 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.ircbot.IrcBot;
 import org.codehaus.plexus.notification.NotificationException;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -234,15 +233,15 @@ public class IrcContinuumNotifier
         {
             throw new ContinuumException( "Unable to obtain project builds", e );
         }
-        Collection builds = project.getBuildResults();
 
-        if ( builds.size() == 0 )
+        List builds = project.getBuildResults();
+
+        if ( builds.size() < 2 )
         {
             return null;
         }
 
-        Iterator itr = builds.iterator();
-        BuildResult build = (BuildResult) itr.next();
+        BuildResult build = (BuildResult) builds.get( builds.size() - 1 );
 
         if ( currentBuild != null && build.getId() != currentBuild.getId() )
         {
@@ -250,12 +249,7 @@ public class IrcContinuumNotifier
                 "Current build: '" + currentBuild.getId() + "', " + "first build: '" + build.getId() + "'." );
         }
 
-        if ( !itr.hasNext() )
-        {
-            return null;
-        }
-
-        return (BuildResult) itr.next();
+        return (BuildResult) builds.get( builds.size() - 2 );
     }
 
     /**
