@@ -17,7 +17,6 @@ package org.apache.maven.continuum.web.tool;
  */
 
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.project.ContinuumProjectState;
@@ -39,34 +38,17 @@ public class ContinuumStateContentGenerator
 
     public String generate( Object item )
     {
-        int state = 0;
+        int state;
 
         if ( item instanceof Project )
         {
             Project project = (Project) item;
-
-            // TODO: can't we just use project.getState()?
-            try
-            {
-                BuildResult build = continuum.getLatestBuildResultForProject( project.getId() );
-
-                if ( build == null )
-                {
-                    return "New";
-                }
-
-                state = build.getState();
-            }
-            catch ( ContinuumException e )
-            {
-                getLogger().warn( "Error while getting latest build for project '" + project.getId() + "'.", e );
-
-                return "Unknown";
-            }
+            state = project.getState();
         }
         else
         {
-            state = ( (BuildResult) item ).getState();
+            BuildResult buildResult = (BuildResult) item;
+            state = buildResult.getState();
         }
 
         if ( state == ContinuumProjectState.NEW )
