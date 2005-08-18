@@ -74,7 +74,7 @@ public abstract class AbstractContinuumTest
         projectGroup.setGroupId( "foo.test" );
 
         projectGroup.setDescription(
-            "This is the default group that all projects will be " + "added to when using addProject()." );
+            "This is the default group that all projects will be added to when using addProject()." );
 
         defaultProjectGroup = store.addProjectGroup( projectGroup );
     }

@@ -55,7 +55,7 @@ $page.setTitle( "Continuum" )
         <td>Delete</td>
         #end
 
-        #if ( $item.latestBuildId )
+        #if ( $item.latestBuildId > 0 )
         ## TODO: get rid of this call back to $continuum
         #set ( $build = $continuum.getLatestBuildResultForProject($item.id) )
         <td><a href="$link.setPage('ProjectBuild.vm').addPathInfo('view', "ProjectBuild").addPathInfo('id', $item.id).addPathInfo('buildId', $build.id)">Last Result</a></td>
@@ -63,7 +63,7 @@ $page.setTitle( "Continuum" )
         <td>Last Result</td>
         #end
 
-        #if ( $item.latestBuildId )
+        #if ( $item.latestBuildId > 0 )
         <td><a href="$link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id)">All Results</a></td>
         #else
         <td>All Results</td>

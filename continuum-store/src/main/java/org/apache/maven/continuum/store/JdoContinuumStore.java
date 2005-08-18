@@ -23,7 +23,6 @@ import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.Installation;
-import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
@@ -44,7 +43,6 @@ import java.util.List;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
- * @todo cleanup old stuff
  */
 public class JdoContinuumStore
     extends AbstractContinuumStore
@@ -135,10 +133,37 @@ public class JdoContinuumStore
     public void updateBuildResult( BuildResult build )
         throws ContinuumStoreException
     {
-        updateObject( build );
+        PersistenceManager pm = pmf.getPersistenceManager();
 
-        // TODO: merge requests
-        setProjectState( build.getProject() );
+        Transaction tx = pm.currentTransaction();
+
+        Project project = build.getProject();
+        try
+        {
+            tx.begin();
+
+            if ( !JDOHelper.isDetached( build ) )
+            {
+                throw new ContinuumStoreException( "Not detached: " + build );
+            }
+
+            pm.attachCopy( build, true );
+
+            if ( !JDOHelper.isDetached( project ) )
+            {
+                throw new ContinuumStoreException( "Not detached: " + project );
+            }
+
+            project.setState( build.getState() );
+
+            pm.attachCopy( project, true );
+
+            tx.commit();
+        }
+        finally
+        {
+            rollback( tx );
+        }
     }
 
     public void addBuildResult( Project project, BuildResult build )
@@ -222,25 +247,6 @@ public class JdoContinuumStore
     {
         updateObject( notifier );
         return notifier;
-    }
-
-    private Project setProjectState( Project project )
-        throws ContinuumStoreException
-    {
-        BuildResult build = getLatestBuildResultForProject( project.getId() );
-
-        if ( build == null )
-        {
-            project.setState( ContinuumProjectState.NEW );
-        }
-        else
-        {
-            project.setState( build.getState() );
-        }
-
-        updateProject( project );
-
-        return project;
     }
 
     private Object makePersistent( PersistenceManager pm, Object object, boolean detach )
@@ -328,8 +334,6 @@ public class JdoContinuumStore
             rollback( tx );
         }
     }
-
-    // TODO ^^^^ REMOVE ^^^^
 
     // ----------------------------------------------------------------------
     // Transaction Management
