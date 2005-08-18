@@ -13,12 +13,8 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
         <td>$date.format('medium',$build.endTime)</td>
       </tr>
       <tr class="a">
-        <th>Build forced</th>
-        #if ( $build.forced )
-        <td>Yes</td>
-        #else
-        <td>No</td>
-        #end
+        <th>Triggered By</th>
+        <td>$formatter.formatTrigger( $build.trigger )</td>
       </tr>
     </table>
   </p>

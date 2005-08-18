@@ -165,7 +165,7 @@ public abstract class ContinuumXmlRpcClient
         throw new UnsupportedOperationException();
     }
 
-    public void buildProjects( boolean force )
+    public void buildProjects( int trigger )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();
@@ -177,7 +177,7 @@ public abstract class ContinuumXmlRpcClient
         throw new UnsupportedOperationException();
     }
 
-    public void buildProject( int projectId, boolean force )
+    public void buildProject( int projectId, int trigger )
         throws ContinuumException
     {
         throw new UnsupportedOperationException();

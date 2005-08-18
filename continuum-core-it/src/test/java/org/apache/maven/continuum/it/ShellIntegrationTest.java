@@ -64,7 +64,7 @@ public class ShellIntegrationTest
         bd.setBuildFile( getScriptName() );
         p.addBuildDefinition( bd );
 
-        int projectId = continuum.addProject( p, ShellBuildExecutor.SHELL_EXECUTOR_ID );
+        int projectId = continuum.addProject( p, ShellBuildExecutor.ID );
         waitForSuccessfulCheckout( projectId );
 
         Project project = continuum.getProject( projectId );

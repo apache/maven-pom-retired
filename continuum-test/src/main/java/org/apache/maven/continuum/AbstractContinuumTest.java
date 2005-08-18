@@ -18,6 +18,7 @@ package org.apache.maven.continuum;
 
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
@@ -189,17 +190,23 @@ public abstract class AbstractContinuumTest
     // Shell Project Generators
     // ----------------------------------------------------------------------
 
-    public static Project makeStubShellProject( String name )
+    public static Project makeStubShellProject( String name, String script )
     {
         Project project = new Project();
 
         makeProject( project, name, "1.0" );
+        project.setExecutorId( "shell" );
+
+        BuildDefinition def = new BuildDefinition();
+        def.setBuildFile( script );
+        project.addBuildDefinition( def );
 
         return project;
     }
 
     public static Project makeProject( Project project, String name, String version )
     {
+        project.setExecutorId( "maven2" );
         project.setName( name );
         project.setVersion( version );
 

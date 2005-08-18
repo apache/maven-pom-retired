@@ -29,16 +29,6 @@ public interface ContinuumBuildExecutor
 {
     String ROLE = ContinuumBuildExecutor.class.getName();
 
-    //TODO: i know we won't have many more build executors but this really isn't very
-    // scalable having constants for specific builders in the api
-    String ANT_EXECUTOR_ID = "ant";
-
-    String MAVEN_ONE_EXECUTOR_ID = "maven-one";
-
-    String MAVEN_TWO_EXECUTOR_ID = "maven-two";
-
-    String SHELL_EXECUTOR_ID = "shell";
-
     ContinuumBuildExecutionResult build( Project project, BuildDefinition buildDefinition, File buildOutput )
         throws ContinuumBuildExecutorException;
 

@@ -16,7 +16,8 @@ package org.apache.maven.continuum.project.builder.cc;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
@@ -171,7 +172,7 @@ public class CruiseControlProjectBuilder
 
                 project = new Project();
 
-                project.setExecutorId( ContinuumBuildExecutor.ANT_EXECUTOR_ID );
+                project.setExecutorId( AntBuildExecutor.ID );
 
                 // TODO: shared construction of the default build definition
                 BuildDefinition bd = new BuildDefinition();
@@ -190,7 +191,7 @@ public class CruiseControlProjectBuilder
 
                 project = new Project();
 
-                project.setExecutorId( ContinuumBuildExecutor.MAVEN_ONE_EXECUTOR_ID );
+                project.setExecutorId( MavenOneBuildExecutor.ID );
 
                 // TODO: shared construction of the default build definition
                 BuildDefinition bd = new BuildDefinition();

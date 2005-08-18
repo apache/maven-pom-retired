@@ -17,7 +17,9 @@ package org.apache.maven.continuum.xmlrpc;
  */
 
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
+import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -162,7 +164,7 @@ public class DefaultContinuumXmlRpc
 
             xmlRpcHelper.hashtableToObject( mavenTwoProject, project );
 
-            int projectId = continuum.addProject( project, ContinuumBuildExecutor.MAVEN_TWO_EXECUTOR_ID );
+            int projectId = continuum.addProject( project, MavenTwoBuildExecutor.ID );
 
             Collection projectIds = new Vector();
 
@@ -233,7 +235,7 @@ public class DefaultContinuumXmlRpc
 
             xmlRpcHelper.hashtableToObject( mavenOneProject, project );
 
-            int projectId = continuum.addProject( project, ContinuumBuildExecutor.MAVEN_ONE_EXECUTOR_ID );
+            int projectId = continuum.addProject( project, MavenOneBuildExecutor.ID );
 
             Collection projectIds = new ArrayList();
 
@@ -279,7 +281,7 @@ public class DefaultContinuumXmlRpc
 
             xmlRpcHelper.hashtableToObject( antProject, project );
 
-            int projectId = continuum.addProject( project, ShellBuildExecutor.ANT_EXECUTOR_ID );
+            int projectId = continuum.addProject( project, AntBuildExecutor.ID );
 
             Collection projectIds = new ArrayList();
 
@@ -325,7 +327,7 @@ public class DefaultContinuumXmlRpc
 
             xmlRpcHelper.hashtableToObject( shellProject, project );
 
-            int projectId = continuum.addProject( project, ShellBuildExecutor.SHELL_EXECUTOR_ID );
+            int projectId = continuum.addProject( project, ShellBuildExecutor.ID );
 
             Collection projectIds = new ArrayList();
 

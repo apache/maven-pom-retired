@@ -65,6 +65,23 @@ public class FormatterTool
         }
     }
 
+    public String formatTrigger( int trigger )
+    {
+        if ( trigger == ContinuumProjectState.TRIGGER_UNKNOWN )
+        {
+            // TODO: fix this
+            return "Schedule";
+        }
+        else if ( trigger == ContinuumProjectState.TRIGGER_FORCED )
+        {
+            return "Forced";
+        }
+        else
+        {
+            return "Unknown build trigger: '" + trigger + "'";
+        }
+    }
+
     public String formatTimestamp( long timestamp )
     {
         return getSimpleDateFormat( timestampFormat, timestampFormatString ).format( new Date( timestamp ) );
@@ -88,15 +105,12 @@ public class FormatterTool
 
         if ( hours > 0 )
         {
-            return Long.toString( hours ) + "h " +
-                   Long.toString( minutes ) + "m " +
-                   Long.toString( seconds ) + "s";
+            return Long.toString( hours ) + "h " + Long.toString( minutes ) + "m " + Long.toString( seconds ) + "s";
         }
 
         if ( minutes > 0 )
         {
-            return Long.toString( minutes ) + "m " +
-                   Long.toString( seconds ) + "s";
+            return Long.toString( minutes ) + "m " + Long.toString( seconds ) + "s";
         }
 
         return Long.toString( seconds ) + "s";

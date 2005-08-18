@@ -17,6 +17,20 @@ package org.apache.maven.continuum.notification.mail;
  */
 
 import org.apache.maven.continuum.AbstractContinuumTest;
+import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
+import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.codehaus.plexus.mailsender.MailMessage;
+import org.codehaus.plexus.mailsender.test.MockMailSender;
+import org.codehaus.plexus.notification.notifier.Notifier;
+import org.codehaus.plexus.util.CollectionUtils;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -25,11 +39,6 @@ import org.apache.maven.continuum.AbstractContinuumTest;
 public class MailContinuumNotifierTest
     extends AbstractContinuumTest
 {
-    public void testDummy()
-    {
-    }
-
-/* TODO
     public void testSuccessfulBuild()
         throws Exception
     {
@@ -155,5 +164,4 @@ public class MailContinuumNotifierTest
 
         return build;
     }
-*/
 }

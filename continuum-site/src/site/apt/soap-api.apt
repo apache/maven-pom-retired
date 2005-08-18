@@ -53,14 +53,14 @@ ContinuumWebService continuum = ContinuumClientFactory.createClient( url );
 
 +--+
 Project project = new Project();
-project.setType("maven-two");
+project.setType("maven2");
 project.setScmUrl("scm:svn....");
 
 continuum.addProject(project);
 +--+
 
  The project type tells Continuum what type of project to expect. Valid values are
- "ant", "shell", "maven-one", and "maven-two".
+ "ant", "shell", "maven-1", and "maven2".
 
 * Getting the latest build
 

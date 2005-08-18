@@ -17,7 +17,6 @@ package org.apache.maven.continuum.it;
  */
 
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ant.AntBuildExecutor;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
@@ -65,7 +64,7 @@ public class AntIntegrationTest
         bd.setGoals( "clean build" );
         p.addBuildDefinition( bd );
 
-        int projectId = continuum.addProject( p, ContinuumBuildExecutor.ANT_EXECUTOR_ID );
+        int projectId = continuum.addProject( p, AntBuildExecutor.ID );
 
         waitForSuccessfulCheckout( projectId );
 
@@ -109,7 +108,7 @@ public class AntIntegrationTest
         bd.setGoals( "clean build" );
         p.addBuildDefinition( bd );
 
-        int projectId = continuum.addProject( p, ContinuumBuildExecutor.ANT_EXECUTOR_ID );
+        int projectId = continuum.addProject( p, AntBuildExecutor.ID );
 
         waitForSuccessfulCheckout( projectId );
 

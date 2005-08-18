@@ -54,7 +54,7 @@ public abstract class AbstractContinuumAction
 
     public static final String KEY_UPDATE_SCM_RESULT = "update-result";
 
-    public static final String KEY_TRIGGER = "forced";
+    public static final String KEY_TRIGGER = "trigger";
 
     // ----------------------------------------------------------------------
     // Utils
