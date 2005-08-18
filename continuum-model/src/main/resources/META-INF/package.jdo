@@ -31,7 +31,7 @@
     <class name="Project" detachable="true" identity-type="application"
            objectid-class="javax.jdo.identity.IntIdentity">
       <field name="id" primary-key="true" value-strategy="native"/>
-      <field name="projectGroup" default-fetch-group="true"/>
+      <field name="projectGroup" default-fetch-group="true" null-value="exception"/>
       <!-- Foreign key -->
       <field name="name"/>
       <field name="description"/>

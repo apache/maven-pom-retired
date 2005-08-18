@@ -354,6 +354,15 @@ public class DefaultContinuum
 
         context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
 
+        try
+        {
+            context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, store.getDefaultProjectGroup() );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error getting the default project group to work with" );
+        }
+
         executeAction( "validate-project", context );
 
         executeAction( "store-project", context );

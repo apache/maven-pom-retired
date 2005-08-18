@@ -18,6 +18,7 @@ package org.apache.maven.continuum.core.action;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 
@@ -37,13 +38,15 @@ public class StoreProjectAction
     {
         Project project = getUnvalidatedProject( context );
 
+        ProjectGroup projectGroup = getUnvalidatedProjectGroup( context );
+
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        // TODO: group!
+        projectGroup.addProject( project );
 
-        project = store.addProject( project );
+        store.updateProjectGroup( projectGroup );
 
         context.put( KEY_PROJECT_ID, new Integer( project.getId() ) );
 

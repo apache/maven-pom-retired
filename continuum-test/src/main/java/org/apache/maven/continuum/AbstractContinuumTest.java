@@ -46,12 +46,6 @@ import java.util.Properties;
 public abstract class AbstractContinuumTest
     extends PlexusTestCase
 {
-    /**
-     * When adding projects using addProject( project ) the project will be
-     * put in this group. All project has to belong to a group.
-     */
-    private ProjectGroup defaultProjectGroup;
-
     private ContinuumStore store;
 
     // ----------------------------------------------------------------------
@@ -66,17 +60,6 @@ public abstract class AbstractContinuumTest
         setUpConfigurationService( (ConfigurationService) lookup( ConfigurationService.ROLE ) );
 
         getStore();
-
-        ProjectGroup projectGroup = new ProjectGroup();
-
-        projectGroup.setName( "Test Project Group" );
-
-        projectGroup.setGroupId( "foo.test" );
-
-        projectGroup.setDescription(
-            "This is the default group that all projects will be added to when using addProject()." );
-
-        defaultProjectGroup = store.addProjectGroup( projectGroup );
     }
 
     public static void setUpConfigurationService( ConfigurationService configurationService )
@@ -90,8 +73,9 @@ public abstract class AbstractContinuumTest
     }
 
     protected ProjectGroup getDefaultProjectGroup()
+        throws ContinuumStoreException
     {
-        return defaultProjectGroup;
+        return store.getDefaultProjectGroup();
     }
 
     // ----------------------------------------------------------------------

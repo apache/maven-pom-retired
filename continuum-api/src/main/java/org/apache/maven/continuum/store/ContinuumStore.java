@@ -133,8 +133,9 @@ public interface ContinuumStore
     void updateBuildResult( BuildResult build )
         throws ContinuumStoreException;
 
-    Project addProject( Project project );
-
     Project getProjectWithBuildDetails( int projectId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException;
+
+    ProjectGroup getDefaultProjectGroup()
+        throws ContinuumStoreException;
 }

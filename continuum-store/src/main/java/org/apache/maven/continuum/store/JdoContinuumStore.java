@@ -37,6 +37,7 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -72,6 +73,8 @@ public class JdoContinuumStore
     private static final String PROJECT_BUILD_DETAILS_FETCH_GROUP = "project-build-details";
 
     private static final String PROJECT_ALL_DETAILS_FETCH_GROUP = "project-all-details";
+
+    private static final String DEFAULT_GROUP_ID = "default";
 
     // ----------------------------------------------------------------------
     // Component Lifecycle
@@ -603,6 +606,11 @@ public class JdoContinuumStore
 
     public void removeProjectGroup( ProjectGroup projectGroup )
     {
+        // TODO: why do we need to do this? if not - build results are not removed and a integrity constraint is violated. I assume its because of the fetch groups
+        for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
+        {
+            removeProject( (Project) i.next() );
+        }
         removeObject( projectGroup );
     }
 
@@ -727,19 +735,28 @@ public class JdoContinuumStore
         return (ProjectGroup) getObjectFromQuery( ProjectGroup.class, "groupId", groupId, null );
     }
 
-    /**
-     * @param project
-     * @return
-     * @todo REMOVE
-     */
-    public Project addProject( Project project )
-    {
-        return (Project) addObject( project );
-    }
-
     public Project getProjectWithBuildDetails( int projectId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
         return (Project) getObjectById( Project.class, projectId, PROJECT_BUILD_DETAILS_FETCH_GROUP );
+    }
+
+    public ProjectGroup getDefaultProjectGroup()
+        throws ContinuumStoreException
+    {
+        ProjectGroup group;
+        try
+        {
+            group = (ProjectGroup) getObjectFromQuery( ProjectGroup.class, "groupId", DEFAULT_GROUP_ID, null );
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            group = new ProjectGroup();
+            group.setName( "Default Project Group" );
+            group.setGroupId( DEFAULT_GROUP_ID );
+            group.setDescription( "Contains all projects that do not have a group of their own" );
+            group = addProjectGroup( group );
+        }
+        return group;
     }
 }
