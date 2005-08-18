@@ -39,6 +39,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -192,7 +193,7 @@ public class DefaultMavenBuilderHelper
             // TODO: we probably need to pass in some profiles here, perhaps from settings.xml
             //   This seems like code that is shared with DefaultMaven, so it should be mobed to the project
             //   builder perhaps
-            project = projectBuilder.build( file, getRepository(), null );
+            project = projectBuilder.build( file, getRepository(), Collections.EMPTY_LIST );
         }
         catch ( Exception e )
         {
