@@ -23,6 +23,7 @@ import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.Installation;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
@@ -190,8 +191,8 @@ public class JdoContinuumStore
 
             // TODO: these are in the wrong spot - set them on success (though currently some depend on latest build being the one in progress)
             project.setLatestBuildId( build.getId() );
-
             project.setBuildNumber( project.getBuildNumber() + 1 );
+            project.setState( ContinuumProjectState.BUILDING );
 
             project.addBuildResult( build );
 
