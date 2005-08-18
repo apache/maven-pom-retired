@@ -131,36 +131,17 @@ public class DefaultBuildController
 
                     actionManager.lookup( "checkout-project" ).execute( actionContext );
 
-                    ScmResult checkOutScmResult = AbstractContinuumAction.getCheckoutResult( actionContext, null );
-
-                    String checkoutErrorMessage = AbstractContinuumAction.getCheckoutErrorMessage( actionContext,
-                                                                                                   null );
-
-                    String checkoutErrorException = AbstractContinuumAction.getCheckoutErrorException( actionContext,
-                                                                                                       null );
+                    scmResult = AbstractContinuumAction.getCheckoutResult( actionContext, null );
 
                     // ----------------------------------------------------------------------
                     // Check to see if there was a error while checking out the project
                     // ----------------------------------------------------------------------
 
-                    if ( !StringUtils.isEmpty( checkoutErrorMessage ) ||
-                        !StringUtils.isEmpty( checkoutErrorException ) || checkOutScmResult == null )
+                    if ( scmResult == null || !scmResult.isSuccess() )
                     {
                         build = makeBuildResult( scmResult, startTime, trigger );
 
-                        String error = "";
-
-                        if ( !StringUtils.isEmpty( checkoutErrorMessage ) )
-                        {
-                            error = "Error message:" + System.getProperty( "line.separator" );
-                            error += checkoutErrorException;
-                        }
-
-                        if ( !StringUtils.isEmpty( checkoutErrorException ) )
-                        {
-                            error += "Exception:" + System.getProperty( "line.separator" );
-                            error += checkoutErrorException;
-                        }
+                        String error = convertScmResultToError( scmResult );
 
                         build.setError( error );
 
@@ -169,7 +150,7 @@ public class DefaultBuildController
                         return;
                     }
 
-                    actionContext.put( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT, checkOutScmResult );
+                    actionContext.put( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT, scmResult );
                 }
 
                 scmResult = (ScmResult) actionContext.get( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT );
@@ -200,7 +181,7 @@ public class DefaultBuildController
 
                 // This can happen if the "update project from scm" action fails
 
-                String error;
+                String error = null;
 
                 if ( e instanceof ContinuumScmException )
                 {
@@ -208,25 +189,13 @@ public class DefaultBuildController
 
                     ScmResult result = ex.getResult();
 
-                    error = "";
-
                     if ( result != null )
                     {
-                        error += "Provider message: " + StringUtils.clean( result.getProviderMessage() ) +
-                            System.getProperty( "line.separator" );
-                        error += "Command output: " + System.getProperty( "line.separator" );
-                        error += "-------------------------------------------------------------------------------" +
-                            System.getProperty( "line.separator" );
-                        error += StringUtils.clean( result.getCommandOutput() ) +
-                            System.getProperty( "line.separator" );
-                        error += "-------------------------------------------------------------------------------" +
-                            System.getProperty( "line.separator" );
+                        error = convertScmResultToError( result );
                     }
 
-                    error += "Exception:" + System.getProperty( "line.separator" );
-                    error += ContinuumUtils.throwableToString( e );
                 }
-                else
+                if ( error == null )
                 {
                     error = ContinuumUtils.throwableToString( e );
                 }
@@ -256,6 +225,31 @@ public class DefaultBuildController
         {
             notifierDispatcher.buildComplete( project, build );
         }
+    }
+
+    private String convertScmResultToError( ScmResult result )
+    {
+        String error = "";
+        if ( result.getProviderMessage() != null )
+        {
+            error = "Provider message: " + StringUtils.clean( result.getProviderMessage() ) +
+                System.getProperty( "line.separator" );
+        }
+        if ( result.getCommandOutput() != null )
+        {
+            error += "Command output: " + System.getProperty( "line.separator" );
+            error += "-------------------------------------------------------------------------------" +
+                System.getProperty( "line.separator" );
+            error += StringUtils.clean( result.getCommandOutput() ) + System.getProperty( "line.separator" );
+            error += "-------------------------------------------------------------------------------" +
+                System.getProperty( "line.separator" );
+        }
+        if ( result.getException() != null )
+        {
+            error += "Exception:" + System.getProperty( "line.separator" );
+            error += result.getException();
+        }
+        return error;
     }
 
     // ----------------------------------------------------------------------

@@ -485,20 +485,11 @@ public abstract class AbstractIntegrationTest
 
         if ( project.getCheckoutResult() == null )
         {
-/* TODO
-            print( "check out error message: " + project.getCheckOutErrorMessage() );
-            print( "check out error exception: " );
-            print( project.getCheckOutErrorException() );
-*/
-
             fail( "project.scmResult == null" );
         }
 
-/* TODO
-        assertEquals( message + "Checkout error message != null", null, project.getCheckOutErrorMessage() );
-        assertEquals( message + "Checkout error exception != null", null, project.getCheckOutErrorException() );
-*/
         assertTrue( message + "scmResult.success != true", project.getCheckoutResult().isSuccess() );
+        assertEquals( message + "Checkout error exception != null", null, project.getCheckoutResult().getException() );
     }
 
     /**

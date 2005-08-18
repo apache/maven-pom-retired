@@ -52,10 +52,6 @@ public abstract class AbstractContinuumAction
 
     public static final String KEY_CHECKOUT_SCM_RESULT = "checkout-result";
 
-    public static final String KEY_CHECKOUT_ERROR_MESSAGE = "checkout-error-message";
-
-    public static final String KEY_CHECKOUT_ERROR_EXCEPTION = "checkout-error-exception";
-
     public static final String KEY_UPDATE_SCM_RESULT = "update-result";
 
     public static final String KEY_TRIGGER = "forced";
@@ -116,16 +112,6 @@ public abstract class AbstractContinuumAction
     public static ScmResult getCheckoutResult( Map context, Object defaultValue )
     {
         return (ScmResult) getObject( context, KEY_CHECKOUT_SCM_RESULT, defaultValue );
-    }
-
-    public static String getCheckoutErrorMessage( Map context, String defaultValue )
-    {
-        return getString( context, KEY_CHECKOUT_ERROR_MESSAGE, defaultValue );
-    }
-
-    public static String getCheckoutErrorException( Map context, String defaultValue )
-    {
-        return getString( context, KEY_CHECKOUT_ERROR_EXCEPTION, defaultValue );
     }
 
     public static ScmResult getUpdateScmResult( Map context )

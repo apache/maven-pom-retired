@@ -44,25 +44,10 @@ public class StoreCheckOutScmResultAction
 
             ScmResult scmResult = AbstractContinuumAction.getCheckoutResult( context, null );
 
-            // TODO: delete
-            String checkoutErrorMessage = AbstractContinuumAction.getCheckoutErrorMessage( context, null );
-
-            String checkoutErrorException = AbstractContinuumAction.getCheckoutErrorException( context, null );
-
-            // ----------------------------------------------------------------------
-            //
-            // ----------------------------------------------------------------------
-
             Project project = store.getProject( getProjectId( context ) );
 
             project.setCheckoutResult( scmResult );
 
-/* TODO: these should be in the SCM result?
-            project.setCheckOutErrorMessage( checkoutErrorMessage );
-
-            project.setCheckOutErrorException( checkoutErrorException );
-
-*/
             store.updateProject( project );
         }
         catch ( ContinuumStoreException e )

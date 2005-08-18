@@ -42,12 +42,12 @@ public class ContinuumNotificationDispatcherTest
         BuildResult build = new BuildResult();
         build.setStartTime( System.currentTimeMillis() );
         build.setState( ContinuumProjectState.BUILDING );
-        build.setTrigger( ContinuumProjectState.TRIGGER_UNKNOWN ); // TODO
+        build.setTrigger( ContinuumProjectState.TRIGGER_UNKNOWN );
 
-/* TODO
-        build = store.addBuildResult( project, build );
+        store.addBuildResult( project, build );
+
+        build = store.getBuildResult( build.getId() );
 
         notificationDispatcher.buildComplete( project, build );
-*/
     }
 }

@@ -23,7 +23,6 @@ import org.apache.maven.continuum.scm.ContinuumScmException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.Map;
@@ -50,70 +49,40 @@ public class CheckoutProjectContinuumAction
         // Check out the project
         // ----------------------------------------------------------------------
 
+        ScmResult result;
         try
         {
-            ScmResult result = scm.checkOut( project, workingDirectory );
-
-            context.put( KEY_CHECKOUT_SCM_RESULT, result );
+            result = scm.checkOut( project, workingDirectory );
         }
-        catch ( Throwable e )
-        {
-            handleThrowable( e, context );
-        }
-    }
-
-    public static void handleThrowable( Throwable e, Map context )
-    {
-        String errorMessage;
-
-        Throwable exception;
-
-        if ( e instanceof ContinuumScmException )
+        catch ( ContinuumScmException e )
         {
             // TODO: Dissect the scm exception to be able to give better feedback
             Throwable cause = e.getCause();
 
             if ( cause instanceof NoSuchScmProviderException )
             {
-                errorMessage = cause.getMessage();
-
-                exception = null;
+                result = new ScmResult();
+                result.setSuccess( false );
+                result.setProviderMessage( cause.getMessage() );
+            }
+            else if ( e.getResult() != null )
+            {
+                result = e.getResult();
             }
             else
             {
-                ContinuumScmException ex = (ContinuumScmException) e;
-
-                ScmResult result = ex.getResult();
-
-                if ( result != null )
-                {
-                    errorMessage = "";
-                    errorMessage += "Provider message: " + StringUtils.clean( result.getProviderMessage() ) +
-                        System.getProperty( "line.separator" );
-                    errorMessage += "Command output: " + System.getProperty( "line.separator" );
-                    errorMessage += "-------------------------------------------------------------------------------" +
-                        System.getProperty( "line.separator" );
-                    errorMessage += StringUtils.clean( result.getCommandOutput() );
-                    errorMessage += "-------------------------------------------------------------------------------" +
-                        System.getProperty( "line.separator" );
-                }
-                else
-                {
-                    errorMessage = "";
-                }
-
-                exception = e;
+                result = new ScmResult();
+                result.setSuccess( false );
+                result.setException( ContinuumUtils.throwableMessagesToString( e ) );
             }
         }
-        else
+        catch ( Throwable t )
         {
-            errorMessage = "Unknown exception, type: " + e.getClass().getName();
-
-            exception = e;
+            // TODO: do we want this here, or should it be to the logs?
+            result = new ScmResult();
+            result.setSuccess( false );
+            result.setException( ContinuumUtils.throwableMessagesToString( t ) );
         }
-
-        context.put( KEY_CHECKOUT_ERROR_MESSAGE, errorMessage );
-
-        context.put( KEY_CHECKOUT_ERROR_EXCEPTION, ContinuumUtils.throwableToString( exception ) );
+        context.put( KEY_CHECKOUT_SCM_RESULT, result );
     }
 }

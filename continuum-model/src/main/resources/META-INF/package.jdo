@@ -150,6 +150,9 @@
       <field name="success"/>
       <field name="providerMessage"/>
       <field name="commandOutput"/>
+      <field name="exception">
+        <column length="8192"/>
+      </field>
       <field name="changes" default-fetch-group="true">
         <collection element-type="ChangeSet" dependent-element="true"/>
       </field>

@@ -390,6 +390,11 @@
           <type>String</type>
         </field>
         <field>
+          <name>exception</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
           <name>changes</name>
           <version>1.0.0+</version>
           <association>
