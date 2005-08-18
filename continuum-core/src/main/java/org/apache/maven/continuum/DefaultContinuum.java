@@ -700,7 +700,7 @@ public class DefaultContinuum
     {
         try
         {
-            return store.getProject( projectId ).getBuildResults();
+            return store.getProjectWithBuilds( projectId ).getBuildResults();
         }
         catch ( ContinuumStoreException e )
         {
