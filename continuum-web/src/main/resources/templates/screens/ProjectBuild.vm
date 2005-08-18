@@ -14,7 +14,7 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
       </tr>
       <tr class="a">
         <th>Triggered By</th>
-        <td>$formatter.formatTrigger( $build.trigger )</td>
+        <td>$trigger.generate($build)</td>
       </tr>
     </table>
   </p>
@@ -22,13 +22,20 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
   #if ( $build.scmResult )
   <h4>Changes</h4>
   <p>
-    #if ( $build.scmResult.files.size() == 0 )
-    <b>No files changed</b>
+    #if ( $build.scmResult.changes.size() == 0 )
+    <b>No changes</b>
     #else
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
-      #foreach ( $file in $build.scmResult.files )
+      #foreach ( $changeSet in $build.scmResult.changes )
       <tr class="a">
-        <td>$file.path</td>
+        #if ($changeSet.author) <td>$changeSet.author</td> #end
+        #if ($changeSet.date > 0) <td>$date.format('medium',$changeSet.date)</td> #end
+        #if ($changeSet.comment) <td>$changeSet.comment</td> #end
+        <td>
+          #foreach ( $file in $changeSet.files )
+            <code>$!file.name</code><br/>
+          #end
+        </td>
       </tr>
       #end
     </table>

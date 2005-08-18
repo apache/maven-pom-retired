@@ -16,7 +16,6 @@ package org.apache.maven.continuum.web.tool;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.project.ContinuumProjectState;
@@ -31,11 +30,6 @@ public class ContinuumStateContentGenerator
     extends AbstractLogEnabled
     implements ContentGenerator
 {
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
-
     public String generate( Object item )
     {
         int state;

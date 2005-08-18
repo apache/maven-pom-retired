@@ -97,6 +97,12 @@
             <scope>global</scope>
           </tool>
           <tool>
+            <name>trigger</name>
+            <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
+            <role-hint>continuum-trigger</role-hint>
+            <scope>global</scope>
+          </tool>
+          <tool>
             <name>formtool</name>
             <role>org.apache.maven.continuum.web.tool.FormicaTool</role>
             <scope>global</scope>
@@ -165,7 +171,7 @@
               </scalar>
               <scalar>
                 <id>builds</id>
-                <expression>getBuildsForProject(#id)</expression>
+                <expression>getBuildResultsForProject(#id)</expression>
               </scalar>
             </scalars>
           </view>
@@ -178,7 +184,7 @@
               </scalar>
               <scalar>
                 <id>build</id>
-                <expression>getBuild(#buildId)</expression>
+                <expression>getBuildResult(#buildId)</expression>
               </scalar>
             </scalars>
           </view>
@@ -407,11 +413,12 @@
       <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
       <role-hint>continuum-state</role-hint>
       <implementation>org.apache.maven.continuum.web.tool.ContinuumStateContentGenerator</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.Continuum</role>
-        </requirement>
-      </requirements>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
+      <role-hint>continuum-trigger</role-hint>
+      <implementation>org.apache.maven.continuum.web.tool.ContinuumTriggerContentGenerator</implementation>
     </component>
 
   </components>
