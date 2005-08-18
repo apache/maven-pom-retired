@@ -29,5 +29,6 @@ copy()
 copy ../continuum-api/target/
 copy ../continuum-core/target/
 copy ../continuum-model/target/
+copy ../continuum-store/target/
 copy ../continuum-web/target/
 copy ../continuum-xmlrpc/target/
