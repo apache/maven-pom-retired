@@ -200,6 +200,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plexus-plugin</artifactId>
+        <extensions>true</extensions>
         <configuration>
           <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
           <configurationsDirectory>src/conf</configurationsDirectory>
