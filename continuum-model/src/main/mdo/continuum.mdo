@@ -40,15 +40,15 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field jpox.mappedBy="projectGroup">
           <name>projects</name>
           <version>1.0.0+</version>
-          <association>
+          <association stash.part="true" jpox.join="false">
             <type>Project</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field>
+        <field jpox.fetchGroupNames="project-build-details">
           <name>notifiers</name>
           <version>1.0.0+</version>
           <association>
@@ -56,7 +56,7 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field>
+        <field jpox.fetchGroupNames="project-build-details">
           <name>buildDefinitions</name>
           <version>1.0.0+</version>
           <association>
@@ -141,34 +141,34 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field jpox.mappedBy="project" jpox.fetchGroupNames="project-with-builds">
           <name>buildResults</name>
           <version>1.0.0+</version>
-          <association>
+          <association jpox.join="false">
             <type>BuildResult</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
         <!-- TODO: remove -->
-        <field>
+        <field jpox.fetchGroupNames="project-with-checkout-result">
           <name>checkoutResult</name>
           <version>1.0.0+</version>
           <association>
             <type>ScmResult</type>
           </association>
         </field>
-        <field>
+        <field jpox.fetchGroupNames="project-all-details">
           <name>developers</name>
           <version>1.0.0+</version>
-          <association>
+          <association jpox.join="false">
             <type>ProjectDeveloper</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field>
+        <field jpox.fetchGroupNames="project-all-details">
           <name>dependencies</name>
           <version>1.0.0+</version>
-          <association>
+          <association jpox.join="false">
             <type>ProjectDependency</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -176,11 +176,12 @@
         <field>
           <name>projectGroup</name>
           <version>1.0.0+</version>
-          <association>
+          <required>true</required>
+          <association stash.part="true" jpox.dependent="false">
             <type>ProjectGroup</type>
           </association>
         </field>
-        <field>
+        <field jpox.fetchGroupNames="project-build-details project-all-details">
           <name>notifiers</name>
           <version>1.0.0+</version>
           <association>
@@ -188,7 +189,7 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field>
+        <field jpox.fetchGroupNames="project-build-details project-all-details">
           <name>buildDefinitions</name>
           <version>1.0.0+</version>
           <association>
@@ -305,8 +306,8 @@
         <field>
           <name>project</name>
           <version>1.0.0+</version>
-          <required>true</required>
-          <association>
+          <!-- required>true</required -->
+          <association stash.part="true" jpox.dependent="false">
             <type>Project</type>
           </association>
         </field>
@@ -358,7 +359,7 @@
           <version>1.0.0+</version>
           <type>int</type>
         </field>
-        <field>
+        <field jpox.fetchGroupNames="build-result-with-details">
           <name>scmResult</name>
           <version>1.0.0+</version>
           <association>
@@ -389,7 +390,7 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field stash.maxSize="8192">
           <name>exception</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -397,7 +398,7 @@
         <field>
           <name>changes</name>
           <version>1.0.0+</version>
-          <association>
+          <association stash.part="true" jpox.join="false">
             <type>ChangeSet</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -429,7 +430,7 @@
         <field>
           <name>files</name>
           <version>1.0.0+</version>
-          <association>
+          <association stash.part="true" jpox.join="false">
             <type>ChangeFile</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -477,14 +478,14 @@
         <field>
           <name>schedule</name>
           <version>1.0.0+</version>
-          <association>
+          <association stash.part="true" jpox.dependent="false">
             <type>Schedule</type>
           </association>
         </field>
         <field>
           <name>profile</name>
           <version>1.0.0+</version>
-          <association>
+          <association stash.part="true" jpox.dependent="false">
             <type>Profile</type>
           </association>
         </field>
@@ -573,14 +574,14 @@
         <field>
           <name>jdk</name>
           <version>1.0.0+</version>
-          <association>
+          <association stash.part="true" jpox.dependent="false">
             <type>Installation</type>
           </association>
         </field>
         <field>
           <name>builder</name>
           <version>1.0.0+</version>
-          <association>
+          <association stash.part="true" jpox.dependent="false">
             <type>Installation</type>
           </association>
         </field>

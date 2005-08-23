@@ -1768,7 +1768,7 @@ public class ContinuumStoreTest
             System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
         }
 
-        File file = getTestFile( "../continuum-model/src/main/resources/META-INF/package.jdo" );
+        File file = getTestFile( "../continuum-model/target/classes/META-INF/package.jdo" );
         SchemaTool.createSchemaTables( new String[]{file.getAbsolutePath()}, false );
 
         PersistenceManagerFactory pmf = jdoFactory.getPersistenceManagerFactory();
