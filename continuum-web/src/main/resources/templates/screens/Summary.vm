@@ -19,11 +19,12 @@ $page.setTitle( "Continuum" )
     <table border="1" cellspacing="2" cellpadding="3" width="100%" id="projectSummaryTable">
 
       <!-- i18n -->
-      <tr>
-        <th>Status</th>
-        <th>Name</th>
+      <tbody><tr>
+        <th>&nbsp;</th>
+        <th width="100%">Name</th>
         <th>Version</th>
         <th>Build</th>
+        <th>Group</th>
         <th colspan="7"></th>
       </tr>
 
@@ -39,15 +40,41 @@ $page.setTitle( "Continuum" )
       #end
 
       <tr class="$css.nextClass">
-        <td>$state.generate( $item )</td>
-        <td>$!item.name</td>
+        <td>
+          #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+            $state.generate( $item )
+          #else
+            &nbsp;
+          #end
+        </td>
+        <td><a href="$link.setPage('View.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">$!item.name</a></td>
         <td>$!item.version</td>
-        <td>$item.buildNumber</td>
-        <td><a href="$link.setPage('View.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">View</a></td>
+        <td>
+          #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+            $item.buildNumber
+          #else
+            <b>In&nbsp;progress</b>
+          #end
+        </td>
+        <td>&nbsp;</td>
 
         ## Operations
 
-        <td><a href="$link.setPage('Edit.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">Edit</a></td>
+        #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+        <td><a href="$link.addPathInfo('action', 'cam').addPathInfo('cid','buildProject').addPathInfo('id', $item.id)">Build&nbsp;Now</a></td>
+        #else
+        <td>Build</td>
+        #end
+
+        #if ( $item.latestBuildId > 0 )
+        <td><a href="$link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id)">Build&nbsp;History</a></td>
+        #else
+        <td>All Results</td>
+        #end
+
+        #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+        <!-- td>Working&nbsp;Copy</td -->
+        #end
 
         #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
         <td><a href="$link.setPage('Delete.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">Delete</a></td>
@@ -55,37 +82,20 @@ $page.setTitle( "Continuum" )
         <td>Delete</td>
         #end
 
-        #if ( $item.latestBuildId > 0 )
-        ## TODO: get rid of this call back to $continuum
-        #set ( $build = $continuum.getLatestBuildResultForProject($item.id) )
-        <td><a href="$link.setPage('ProjectBuild.vm').addPathInfo('view', "ProjectBuild").addPathInfo('id', $item.id).addPathInfo('buildId', $build.id)">Last Result</a></td>
-        #else
-        <td>Last Result</td>
-        #end
-
-        #if ( $item.latestBuildId > 0 )
-        <td><a href="$link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id)">All Results</a></td>
-        #else
-        <td>All Results</td>
-        #end
-
-        #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
-        <td><a href="$link.addPathInfo('action', 'cam').addPathInfo('cid','buildProject').addPathInfo('id', $item.id)">Build</a></td>
-        #else
-        <td>Build</td>
-        #end
-
-        <td><a href="$link.setPage('ProjectNotifiers.vm').addPathInfo('view', "ProjectNotifiers").addPathInfo('id', $item.id )">Notifiers</a></td>
-
       </tr>
       #end
+      </tbody>
     </table>
 
     <div class="functnbar3">
       <form method="post" action="$link">
+        <img src="/continuum/images/icon_success_sml.gif" alt="Success"/> $success
+        <img src="/continuum/images/icon_error_sml.gif" alt="Failed"/> $failures
+        <img src="/continuum/images/icon_warning_sml.gif" alt="Error"/> $errors
         #if ( $items && $items.size() > 0 )
         #hidden ( "action" "cam" )
         #hidden ( "cid" "buildAllProjects" )
+        <!-- input type="submit" name="build-broken" value="Build All In Error" -->
         <input type="submit" name="build-all" value="Build All"/>
         #end
       </form>
@@ -96,9 +106,6 @@ $page.setTitle( "Continuum" )
 <table>
   <tr>
     <td align="right">
-      <img src="/continuum/images/icon_success_sml.gif" alt="Success"/> $success
-      <img src="/continuum/images/icon_error_sml.gif" alt="Failed"/> $failures
-      <img src="/continuum/images/icon_warning_sml.gif" alt="Error"/> $errors
     </td>
   </tr>
 </table>

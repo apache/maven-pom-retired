@@ -1,6 +1,17 @@
 $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$build.startTime)" )
 
 <div class="app">
+
+  <div>
+    <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
+      #set ( $infoLink = $link.setPage('View.vm').addPathInfo('fid', "$!{project.executorId}Project").addPathInfo('id', $project.id) )
+      <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$infoLink">Info</a>
+      <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Builds</b>
+      <!-- a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;"
+         href="workingCopy.html">Working&nbsp;Copy</a -->
+    </p>
+  </div>
+
   <h3>Build result for $project.name</h3>
   <p>
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
@@ -13,8 +24,16 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
         <td>$date.format('medium',$build.endTime)</td>
       </tr>
       <tr class="a">
-        <th>Triggered By</th>
+        <th>Build Trigger</th>
         <td>$trigger.generate($build)</td>
+      </tr>
+      <tr class="a">
+        <th>State</th>
+        <td>$state.generate($build)</td>
+      </tr>
+      <tr class="a">
+        <th>Build#</th>
+        <td>$build.buildNumber</td>
       </tr>
     </table>
   </p>

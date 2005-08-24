@@ -1,10 +1,22 @@
 $page.setTitle( "Continuum - ${project.name} Builds" )
 
 <div class="app">
+
+  <div>
+    <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
+      #set ( $infoLink = $link.setPage('View.vm').addPathInfo('fid', "$!{project.executorId}Project").addPathInfo('id', $project.id) )
+      <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$infoLink">Info</a>
+      <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Builds</b>
+      <!-- a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;"
+         href="workingCopy.html">Working&nbsp;Copy</a -->
+    </p>
+  </div>
+
   <h3>Build results for $project.name</h3>
   <p>
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
       <tr>
+        <th>Build #</th>
         <th>Start Time</th>
         <th>End Time</th>
         <th>State</th>
@@ -12,6 +24,7 @@ $page.setTitle( "Continuum - ${project.name} Builds" )
       </tr>
       #foreach ( $build in $builds )
       <tr class="$css.nextClass">
+        <td>$build.buildNumber</td>
         <td>$date.format('medium',$build.startTime)</td>
         <td>$date.format('medium',$build.endTime)</td>
         <td>$state.generate($build)</td>

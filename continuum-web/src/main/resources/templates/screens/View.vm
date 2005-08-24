@@ -1,84 +1,212 @@
 $page.setTitle( "Continuum - Project View: ${item.name}" )
 
 <div class="app">
+
+  <div>
+    <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
+      #set ( $buildsLink = $link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id) )
+      <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Info</b>
+      <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$buildsLink">Builds</a>
+      <!-- a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;"
+         href="workingCopy.html">Working&nbsp;Copy</a -->
+    </p>
+  </div>
+
   <div id="axial" class="h3">
     <h3>$i18n.getString( $form.view.titleKey )</h3>
+
     <div class="axial">
       <table border="1" cellspacing="2" cellpadding="3" width="100%">
-        #foreach ( $element in $form.elements )
-        #if ( !$element.immutable )
         <tr class="b">
-          <th>$i18n.getString( $element.labelKey )</th>
-          <td>$formtool.getItem( $form, $element, $item )</td>
+          <th>$i18n.getString( "project.name.label" )</th>
+          <td>$item.name</td>
         </tr>
-        #end
-        #end
+        <tr class="b">
+          <th>$i18n.getString( "projectScmUrl.label" )</th>
+          <td>$item.scmUrl</td>
+        </tr>
+        <tr class="b">
+          <th>$i18n.getString( "project.version.label" )</th>
+          <td>$item.version</td>
+        </tr>
+        <tr class="b">
+          <th>$i18n.getString( "project.group.label" )</th>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+      <div class="functnbar3">
+        <table>
+          <tr>
+            <td>
+              <form method="post" action="$link.setPage('Edit.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">
+                <input type="submit" name="edit-project" value="Edit"/>
+                <b style="color: red;">$i18n.getString( "message.note" ) </b> Project details are out of sync with Maven POM
+              </form>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!--
+    <h3>$i18n.getString( "project.buildDefinitions.label" )</h3>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <tr>
+        <th>Goals</th>
+        <th>Arguments</th>
+        <th>POM File</th>
+        <th>Profile</th>
+        <th>Schedule</th>
+        <th>From</th>
+        <th width="10%">&nbsp;</th>
+      </tr>
+      #foreach ( $buildDefinition in $project.buildDefinitions )
+      <tr class="b">
+        <td>$buildDefinition.goals</td>
+        <td>$buildDefinition.arguments</td>
+        <td>$buildDefinition.buildFile</td>
+        <td>$buildDefinition.profile.name</td>
+        <td>$buildDefinition.schedule.name</td>
+        <td>Project</td>
+        <td><a href="#">Edit</a> | <a href="#">Delete</a></td>
+      </tr>
+      #end
     </table>
     <div class="functnbar3">
       <table>
         <tr>
           <td>
             <form method="post" action="$link">
-            #hidden ( "action" "cam" )
-            #hidden ( "cid" "checkoutProject" )
-            #hidden ( "id" "$item.id" )
-            <input type="submit" name="checkout-project" value="Checkout"/>
+              <input type="submit" name="add-build-def" value="Add"/>
             </form>
           </td>
-
-          #if ( $item.lastBuildId )
-          #set ( $build = $continuum.getLatestBuildForProject($item.id) )
-          <td><a href="$link.setPage('ProjectBuild.vm').addPathInfo('view', "ProjectBuild").addPathInfo('id', $item.id).addPathInfo('buildId', $build.id)">Last Result</a></td>
-          #end
-
-          #if ( $item.lastBuildId )
-          <td><a href="$link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id)">All Results</a></td>
-          #end
-
         </tr>
       </table>
     </div>
-  </div>
+    -->
 
-  ## This is an extension which could be done by a parse or include
-  ## TODO: internationalize and use forms instead of this hardcoded layout - tryg
+    #if ( $project.notifier )
+    <h3>$i18n.getString( "project.notifiers.label" )</h3>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <tr>
+        <th>Type</th>
+        <th>Recipient</th>
+        <th>Events</th>
+        <th>From</th>
+        <th width="10%">&nbsp;</th>
+      </tr>
+      #foreach ( $notifier in $project.notifiers )
+        <tr class="b">
+          #if ( $notifier.type == "irc" )
+            <td>IRC</td>
+          #elseif ( $notifier.type == "mail" )
+            <td>Mail</td>
+          #elseif ( $notifier.type == "msn" )
+            <td>MSN</td>
+          #elseif ( $notifier.type == "jabber" )
+            <td>Jabber</td>
+          #end
+          <td>$notifier.configuration.address</td>
+          <td>Success, Failures</td>
+          <td>Project</td>
+          #set ( $deleteNotifierLink = $link.setPage('ProjectNotifiers.vm').addPathInfo('notifierType', $notifier.type).addPathInfo('action','cam').addPathInfo('cid','deleteNotifier').addPathInfo('id', $item.id) )
+          #if ( $notifier.type == "irc" )
+            <td>
+              #set ( $editNotifierLink = $link.setPage('EditIrcNotifier.vm').addPathInfo('view','EditIrcNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $item.id) )
+              <a href="$editNotifierLink">Edit</a> | <a href="$deleteNotifierLink">Delete</a>
+            </td>
+          #elseif ( $notifier.type == "mail" )
+            <td>
+              #set ( $editNotifierLink = $link.setPage('EditMailNotifier.vm').addPathInfo('view','EditMailNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $item.id) )
+              <a href="$editNotifierLink">Edit</a> | <a href="$deleteNotifierLink">Delete</a>
+            </td>
+          #elseif ( $notifier.type == "msn" )
+            <td>
+              #set ( $editNotifierLink = $link.setPage('EditMsnNotifier.vm').addPathInfo('view','EditMsnNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $item.id) )
+              <a href="$editNotifierLink">Edit</a> | <a href="$deleteNotifierLink">Delete</a>
+            </td>
+          #elseif ( $notifier.type == "jabber" )
+            <td>
+              #set ( $editNotifierLink = $link.setPage('EditJabberNotifier.vm').addPathInfo('view','EditJabberNotifier').addPathInfo('notifierType', $notifier.type).addPathInfo('id', $item.id) )
+              <a href="$editNotifierLink">Edit</a> | <a href="$deleteNotifierLink">Delete</a>
+            </td>
+          #end
+        </tr>
+      #end
+    </table>
+    <!--
+    <div class="functnbar3">
+      <table>
+        <tr>
+          <td>
+            <form method="post" action="$link.setPage('SelectNotifier.vm').addPathInfo('id', $project.id )">
+              <input type="submit" name="add-notifier" value="Add"/>
+              <b style="color: red;">$i18n.getString( "message.note" ) </b> Notifiers are out of sync with Maven POM
+            </form>
+          </td>
+        </tr>
+      </table>
+    </div>
+    -->
+    #end
 
-  #if ( $item.developers.size() > 0 )
-  <div id="h3">
-    <h3>Developers</h3>
+    #if ( $project.dependencies )
+    <h3>$i18n.getString( "project.dependencies.label" )</h3>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <tr>
+        <th>Name</th>
+      </tr>
+      #foreach ( $dependency in $project.dependencies )
+      <tr class="b">
+        <td>$dependency.name</td>
+      </tr>
+      #end
+    </table>
+    #end
+
+    <!--
+    <h3>$i18n.getString( "project.usedBy.label" )</h3>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <tr>
+        <th>Name</th>
+      </tr>
+      <tr class="b">
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    -->
+
+    #if ( $project.developers )
+    <h3>$i18n.getString( "project.developers.label" )</h3>
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
       <tr>
         <th>Name</th>
         <th>Email</th>
+        <th width="10%">&nbsp;</th>
       </tr>
-      #foreach ( $developer in $item.developers )
-      <tr class="$css.nextClass">
-        <td>${developer.name}</th>
-        <td><a href="mailto:${developer.email}">${developer.email}</a></td>
+      #foreach ( $developer in $project.developers )
+      <tr class="b">
+        <td>$developer.name</td>
+        <td>$developer.email</td>
+        <td>&nbsp;</td>
       </tr>
       #end
     </table>
-    #bar()
-  </div>
-  #end
-
-  #if ( ( $item.checkOutException && $item.checkOutException != "" ) || ( $item.checkOutErrorMessage && $item.checkOutErrorMessage != "" ) )
-  <div id="h3">
-    <h3>Checkout Error</h3>
-    <p>
-      There was a error while checking out the project.
-    </p>
-    #if ( $item.checkOutErrorMessage && $item.checkOutErrorMessage != "" )
-    <p>
-    <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px"><code><pre>$item.checkOutErrorMessage</pre></code></div>
-    </p>
+    <!--
+    <div class="functnbar3">
+      <table>
+        <tr>
+          <td>
+            <form method="post" action="$link">
+              <input type="submit" name="add-developer" value="Add"/>
+              <b style="color: red;">$i18n.getString( "message.note" ) </b> Developers are out of sync with Maven POM
+            </form>
+          </td>
+        </tr>
+      </table>
+    </div>
+    -->
     #end
 
-    #if ( $item.checkOutErrorException && $item.checkOutErrorException != "" )
-    <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px"><code><pre>$item.checkOutErrorException</pre></code></div>
-    #end
-    </p>
   </div>
-  #end
-
 </div>
