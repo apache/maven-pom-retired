@@ -21,7 +21,10 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult
 import org.codehaus.plexus.formica.Form;
 import org.codehaus.plexus.formica.action.AbstractEntityAction;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
+import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
 
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -37,11 +40,36 @@ public class AddMavenOneProject
     {
         Continuum continuum = (Continuum) container.lookup( Continuum.ROLE );
 
-        ContinuumProjectBuildingResult result = continuum.addMavenOneProject( (String) parameters.get( "m1PomUrl" ) );
+        String m1PomUrl = (String) parameters.get( "m1PomUrl" );
 
-        if ( result.getWarnings().size() > 0 )
+        String m1PomFile = (String) parameters.get( "m1PomFile" );
+
+        String m1Pom = null;
+
+        if ( !StringUtils.isEmpty( m1PomUrl ) )
         {
-            setResultMessages( result.getWarnings(), parameters );
+            m1Pom = m1PomUrl;
+        }
+        else
+        {
+            URL url = new URL( m1PomFile );
+
+            String content = IOUtil.toString( url.openStream() );
+
+            if ( !StringUtils.isEmpty( content ) )
+            {
+                m1Pom = m1PomFile;
+            }
+        }
+
+        if ( !StringUtils.isEmpty( m1Pom ) )
+        {
+            ContinuumProjectBuildingResult result = continuum.addMavenOneProject( m1Pom );
+
+            if ( result.getWarnings().size() > 0 )
+            {
+                setResultMessages( result.getWarnings(), parameters );
+            }
         }
     }
 }

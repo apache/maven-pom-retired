@@ -17,17 +17,6 @@
       <expression>name</expression>
     </element>
     <element>
-      <id>projectScmUrl</id>
-      <validators>
-        <validator>
-          <id>scm-url</id>
-          <error-message-key>projectScmUrl.error</error-message-key>
-        </validator>
-      </validators>
-      <type>text</type>
-      <expression>scmUrl</expression>
-    </element>
-    <element>
       <id>project.version</id>
       <validators>
         <validator>
@@ -37,6 +26,17 @@
       </validators>
       <type>text</type>
       <expression>version</expression>
+    </element>
+    <element>
+      <id>projectScmUrl</id>
+      <validators>
+        <validator>
+          <id>scm-url</id>
+          <error-message-key>projectScmUrl.error</error-message-key>
+        </validator>
+      </validators>
+      <type>text</type>
+      <expression>scmUrl</expression>
     </element>
     <element>
       <id>project.type</id>

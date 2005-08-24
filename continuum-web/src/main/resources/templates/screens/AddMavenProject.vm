@@ -1,0 +1,32 @@
+$page.setTitle( "Add Project" )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>$i18n.getString( $form.add.titleKey )</h3>
+    <form method="post" action="$link" #if( $form.attributes.multipart )enctype="multipart/form-data"#end>
+      #hidden ( "fid" $form.id )
+      #hidden ( "action" $form.add.action )
+      #hidden ( "view" $form.add.view )
+      #hidden ( "id" $id )
+
+      <div class="axial">
+        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+          <tr>
+            #field( $i18n $data $form.elements.get(0) $item $formtool )
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>
+              <strong>$i18n.getString( "message.or" )</strong>
+            </td>
+          </tr>
+          <tr>
+            #field( $i18n $data $form.elements.get(1) $item $formtool )
+          </tr>
+        </table>
+
+        #submitBar( "Submit" )
+      </div>
+    </form>
+  </div>
+</div>

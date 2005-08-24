@@ -1,6 +1,7 @@
 <div id="navcolum">
-  <div id="projecttools" class="toolgroup">
+  <div id="projectmenu" class="toolgroup">
     <div class="label">Continuum</div>
+
     <div class="body">
       <div>
         <a href="$link.setPage('Summary.vm').addPathInfo( 'fid', 'continuumProject')">Show Projects</a>
@@ -10,24 +11,19 @@
 
   <div id="projecttools" class="toolgroup">
     <div class="label">Add Project</div>
+
     <div class="body">
       <div>
-        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenTwoProject')">Add M2 Project</a>
+        <a href="$link.setPage('AddMavenProject.vm').addPathInfo( 'fid', 'addMavenTwoProject')">Maven 2.0+ Project</a>
       </div>
       <div>
-        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'uploadMavenTwoProject')">Upload M2 Project</a>
+        <a href="$link.setPage('AddMavenProject.vm').addPathInfo( 'fid', 'addMavenOneProject')">Maven 1.x Project</a>
       </div>
       <div>
-        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'addMavenOneProject')">Add M1 Project</a>
+        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'antProject')">Ant Project</a>
       </div>
       <div>
-        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'uploadMavenOneProject')">Upload M1 Project</a>
-      </div>
-      <div>
-        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'antProject')">Add Ant Project</a>
-      </div>
-      <div>
-        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'shellProject')">Add Shell Project</a>
+        <a href="$link.setPage('Add.vm').addPathInfo( 'fid', 'shellProject')">Shell Project</a>
       </div>
     </div>
   </div>

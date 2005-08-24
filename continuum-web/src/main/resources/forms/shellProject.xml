@@ -25,7 +25,7 @@
   </elements>
 
   <add>
-    <title-key>project.title.add</title-key>
+    <title-key>project.title.shell.add</title-key>
     <action>addEntity</action>
     <view>Summary.vm</view>
     <view-on-failure>Add.vm</view-on-failure>
