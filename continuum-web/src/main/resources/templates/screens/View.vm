@@ -31,7 +31,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         </tr>
         <tr class="b">
           <th>$i18n.getString( "project.group.label" )</th>
-          <td>&nbsp;</td>
+          <td>$item.projectGroup.name</td>
         </tr>
       </table>
       <div class="functnbar3">

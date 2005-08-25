@@ -56,7 +56,7 @@ $page.setTitle( "Continuum" )
             <b>In&nbsp;progress</b>
           #end
         </td>
-        <td>&nbsp;</td>
+        <td>$item.projectGroup.name</td>
 
         ## Operations
 
@@ -69,7 +69,7 @@ $page.setTitle( "Continuum" )
         #if ( $item.latestBuildId > 0 )
         <td><a href="$link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id)">Build&nbsp;History</a></td>
         #else
-        <td>All Results</td>
+        <td>All&nbsp;Results</td>
         #end
 
         #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
