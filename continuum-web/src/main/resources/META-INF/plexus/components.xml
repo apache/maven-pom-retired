@@ -159,6 +159,20 @@
         <views>
           <!--
            |
+           | Project View
+           |
+           -->
+          <view>
+            <id>View</id>
+            <scalars>
+              <scalar>
+                <id>project</id>
+                <expression>getProjectWithAllDetails(#id)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <!--
+           |
            | Project Builds
            |
            -->
