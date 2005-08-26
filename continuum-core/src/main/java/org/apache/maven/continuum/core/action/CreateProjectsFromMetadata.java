@@ -14,6 +14,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import org.codehaus.plexus.formica.util.MungedHttpsURL;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
@@ -38,18 +40,36 @@ public class CreateProjectsFromMetadata
 
         URL url;
 
+        ContinuumProjectBuilder projectBuilder = projectBuilderManager.getProjectBuilder( projectBuilderId );
+        ContinuumProjectBuildingResult result = null;
+
         try
         {
-            url = new URL( u );
+            if ( !u.startsWith( "https" ) )
+            {
+                url = new URL( u );
+                result = projectBuilder.buildProjectsFromMetadata( url, null, null );
+            }
+            else
+            {
+                MungedHttpsURL mungedURL = new MungedHttpsURL( u );
+                if ( mungedURL.isValid() )
+                {
+                    url = mungedURL.getURL();
+                    result = projectBuilder.buildProjectsFromMetadata( url, mungedURL.getUsername(), mungedURL
+                        .getPassword() );
+                }
+                else
+                {
+                    throw new ContinuumException( "'" + u + "' is not a valid secureURL." );
+                }
+            }
+
         }
         catch ( MalformedURLException e )
         {
             throw new ContinuumException( "'" + u + "' is not a valid URL.", e );
         }
-
-        ContinuumProjectBuilder projectBuilder = projectBuilderManager.getProjectBuilder( projectBuilderId );
-
-        ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( url );
 
         context.put( KEY_PROJECT_BUILDING_RESULT, result );
     }

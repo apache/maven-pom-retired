@@ -26,6 +26,6 @@ public interface ContinuumProjectBuilder
 {
     String ROLE = ContinuumProjectBuilder.class.getName();
 
-    ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url )
+    ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url, String username, String password )
         throws ContinuumProjectBuilderException;
 }

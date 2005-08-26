@@ -13,6 +13,10 @@
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-formica</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

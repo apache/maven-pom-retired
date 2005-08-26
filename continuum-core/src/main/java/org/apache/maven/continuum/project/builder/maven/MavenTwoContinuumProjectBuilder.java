@@ -62,7 +62,7 @@ public class MavenTwoContinuumProjectBuilder
     // AbstractContinuumProjectBuilder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url )
+    public ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url, String username, String password )
         throws ContinuumProjectBuilderException
     {
         // ----------------------------------------------------------------------
@@ -71,7 +71,7 @@ public class MavenTwoContinuumProjectBuilder
 
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
 
-        readModules( url, result, true );
+        readModules( url, result, true, username, password );
 
         return result;
     }
@@ -80,7 +80,7 @@ public class MavenTwoContinuumProjectBuilder
     //
     // ----------------------------------------------------------------------
 
-    private void readModules( URL url, ContinuumProjectBuildingResult result, boolean groupPom )
+    private void readModules( URL url, ContinuumProjectBuildingResult result, boolean groupPom, String username, String password )
     {
         MavenProject mavenProject;
 
@@ -88,7 +88,7 @@ public class MavenTwoContinuumProjectBuilder
         {
             // TODO: this isn't finding parents due to relocating to the URL
             // TODO: the whole modules resolution is funky
-            mavenProject = builderHelper.getMavenProject( createMetadataFile( url ) );
+            mavenProject = builderHelper.getMavenProject( createMetadataFile( url, username, password ) );
         }
         catch ( MavenBuilderHelperException e )
         {
@@ -173,7 +173,7 @@ public class MavenTwoContinuumProjectBuilder
                 continue;
             }
 
-            readModules( moduleUrl, result, false );
+            readModules( moduleUrl, result, false, username, password );
         }
     }
 

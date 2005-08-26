@@ -38,6 +38,6 @@ public class CruiseControlProjectBuilderTest
 
         URL url = getTestFile( "src/test/resources/config.xml" ).toURL();
 
-        ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( url );
+        ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( url, null, null );
     }
 }

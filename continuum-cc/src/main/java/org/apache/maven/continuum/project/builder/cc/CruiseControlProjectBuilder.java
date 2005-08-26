@@ -24,6 +24,7 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.codehaus.plexus.formica.util.MungedHttpsURL;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
@@ -56,12 +57,12 @@ public class CruiseControlProjectBuilder
     // ContinuumProjectBuilder Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url )
+    public ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url, String username, String password )
         throws ContinuumProjectBuilderException
     {
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
 
-        Xpp3Dom dom = downloadAndBuildDom( url );
+        Xpp3Dom dom = downloadAndBuildDom( url, username, password );
 
         Xpp3Dom[] projects = dom.getChildren( "project" );
 
@@ -332,14 +333,21 @@ public class CruiseControlProjectBuilder
         return false;
     }
 
-    private Xpp3Dom downloadAndBuildDom( URL url )
+    private Xpp3Dom downloadAndBuildDom( URL url, String username, String password )
         throws ContinuumProjectBuilderException
     {
         try
         {
             getLogger().info( "Downloading " + url );
 
-            return Xpp3DomBuilder.build( new InputStreamReader( url.openStream() ) );
+            URL u = url;
+
+            if ( "https".equals( url.getProtocol() ) )
+            {
+                u = new MungedHttpsURL( url.toString() ).getURL();
+            }
+
+            return Xpp3DomBuilder.build( new InputStreamReader( u.openStream() ) );
         }
         catch ( XmlPullParserException e )
         {

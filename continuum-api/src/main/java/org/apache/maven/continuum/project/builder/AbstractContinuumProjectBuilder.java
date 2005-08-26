@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.codehaus.plexus.formica.util.MungedHttpsURL;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -33,12 +35,21 @@ public abstract class AbstractContinuumProjectBuilder
     extends AbstractLogEnabled
     implements ContinuumProjectBuilder
 {
-    protected File createMetadataFile( URL metadata )
+    protected File createMetadataFile( URL metadata, String username, String password )
         throws IOException
     {
         getLogger().info( "Downloading " + metadata.toExternalForm() );
 
-        InputStream is = metadata.openStream();
+        InputStream is = null;
+
+        if ( metadata.getProtocol().equals( "https" ) )
+        {
+            is = new MungedHttpsURL( metadata.toExternalForm(), username, password ).getURL().openStream();
+        }
+        else
+        {
+            is = metadata.openStream();
+        }
 
         File file = File.createTempFile( "continuum-", ".tmp" );
 
@@ -54,4 +65,5 @@ public abstract class AbstractContinuumProjectBuilder
 
         return file;
     }
+
 }

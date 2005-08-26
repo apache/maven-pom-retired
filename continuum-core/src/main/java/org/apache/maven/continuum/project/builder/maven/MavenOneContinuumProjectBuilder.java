@@ -48,7 +48,7 @@ public class MavenOneContinuumProjectBuilder
     // ProjectCreator Implementation
     // ----------------------------------------------------------------------
 
-    public ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url )
+    public ContinuumProjectBuildingResult buildProjectsFromMetadata( URL url, String username, String password )
     {
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
 
@@ -56,7 +56,7 @@ public class MavenOneContinuumProjectBuilder
 
         try
         {
-            pomFile = createMetadataFile( url );
+            pomFile = createMetadataFile( url, username, password );
         }
         catch ( IOException e )
         {
