@@ -143,7 +143,7 @@ public class MavenTwoIntegrationTest
         {
             e.printStackTrace();
 
-            fail( "Unexpected exception after removing notifier '" + notifierType + "' for project '" + projectId );
+            fail( "Unexpected exception after removing notifier '" + notifierId + "' for project '" + projectId );
         }
     }
 }
