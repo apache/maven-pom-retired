@@ -16,6 +16,7 @@ package org.apache.maven.continuum.store;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Profile;
 import org.apache.maven.continuum.model.project.Project;
@@ -50,6 +51,9 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     ProjectNotifier storeNotifier( ProjectNotifier notifier )
+        throws ContinuumStoreException;
+
+    BuildDefinition storeBuildDefinition( BuildDefinition buildDefinition )
         throws ContinuumStoreException;
 
     ProjectGroup addProjectGroup( ProjectGroup group );

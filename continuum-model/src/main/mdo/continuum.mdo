@@ -467,6 +467,13 @@
       <version>1.0.0+</version>
       <fields>
         <field>
+          <name>id</name>
+          <required>true</required>
+          <identifier>true</identifier>
+          <version>1.0.0+</version>
+          <type>int</type>
+        </field>
+        <field>
           <name>goals</name>
           <version>1.0.0+</version>
           <type>String</type>

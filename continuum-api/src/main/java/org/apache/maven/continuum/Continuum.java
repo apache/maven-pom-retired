@@ -16,6 +16,7 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
@@ -135,5 +136,15 @@ public interface Continuum
         throws ContinuumException;
 
     Project getProjectWithBuilds( int projectId )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Build Definition
+    // ----------------------------------------------------------------------
+
+    BuildDefinition getBuildDefinition( int projectId, int buildDefinitionId )
+        throws ContinuumException;
+
+    void updateBuildDefinition( int projectId, int buildDefinitionId, Map configuration )
         throws ContinuumException;
 }

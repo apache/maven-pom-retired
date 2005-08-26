@@ -208,6 +208,24 @@
           </view>
           <!--
            |
+           | Project Builds Definitions
+           |
+           -->
+          <view>
+            <id>BuildDefinition</id>
+            <scalars>
+              <scalar>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
+              </scalar>
+              <scalar>
+                <id>buildDefinition</id>
+                <expression>getBuildDefinition(#id,#buildDefinitionId)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <!--
+           |
            | Notification
            |
            -->
@@ -393,6 +411,15 @@
           <call>
             <cid>updateNotifier</cid>
             <expression>updateNotifier(#id,#notifierId,#parameters)</expression>
+          </call>
+          <!--
+           |
+           | Build Definition
+           |
+           -->
+          <call>
+            <cid>updateBuildDefinition</cid>
+            <expression>updateBuildDefinition(#id,#buildDefinitionId,#parameters)</expression>
           </call>
         </calls>
       </configuration>

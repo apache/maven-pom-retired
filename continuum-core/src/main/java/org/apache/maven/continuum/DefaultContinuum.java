@@ -28,6 +28,7 @@ import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
 import org.apache.maven.continuum.core.action.StoreProjectAction;
 import org.apache.maven.continuum.initialization.ContinuumInitializationException;
 import org.apache.maven.continuum.initialization.ContinuumInitializer;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
@@ -603,6 +604,59 @@ public class DefaultContinuum
         if ( n != null )
         {
             removeNotifier( n );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Build Definition
+    // ----------------------------------------------------------------------
+
+    public BuildDefinition getBuildDefinition( int projectId, int buildDefinitionId )
+        throws ContinuumException
+    {
+        Project project = getProjectWithAllDetails( projectId );
+
+        List buildDefinitions = project.getBuildDefinitions();
+
+        BuildDefinition buildDefinition = null;
+
+        for ( Iterator i = buildDefinitions.iterator(); i.hasNext(); )
+        {
+            buildDefinition = (BuildDefinition) i.next();
+
+            if ( buildDefinition.getId() == buildDefinitionId )
+            {
+                break;
+            }
+        }
+
+        return buildDefinition;
+    }
+
+    public void updateBuildDefinition( int projectId, int buildDefinitionId, Map configuration )
+        throws ContinuumException
+    {
+        BuildDefinition buildDefinition = getBuildDefinition( projectId, buildDefinitionId );
+
+        buildDefinition.setBuildFile( (String) configuration.get( "buildFile" ) );
+
+        buildDefinition.setGoals( (String) configuration.get( "goals" ) );
+
+        buildDefinition.setArguments( (String) configuration.get( "arguments" ) );
+
+        storeBuildDefinition( buildDefinition );
+    }
+
+    public BuildDefinition storeBuildDefinition( BuildDefinition buildDefinition )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.storeBuildDefinition( buildDefinition );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while storing buildDefinition.", ex );
         }
     }
 
