@@ -54,11 +54,6 @@ public class DefaultViewContextPopulator
 
                 try
                 {
-                    for ( Iterator j = parameters.keySet().iterator(); j.hasNext(); )
-                    {
-                        String key = (String) j.next();
-                        getLogger().info( "key=" + key + "-value=" + parameters.get(key).getClass().getName() + "/" + parameters.get(key) );
-                    }
                     Object value = Ognl.getValue( scalar.getExpression(), parameters, model );
 
                     contextScalars.put( scalar.getId(), value );
