@@ -116,16 +116,16 @@ public interface Continuum
     // Notification
     // ----------------------------------------------------------------------
 
-    ProjectNotifier getNotifier( int projectId, String notifierType )
+    ProjectNotifier getNotifier( int projectId, int notifierId )
         throws ContinuumException;
 
-    void updateNotifier( int projectId, String notifierType, Map configuration )
+    void updateNotifier( int projectId, int notifierId, Map configuration )
         throws ContinuumException;
 
     void addNotifier( int projectId, String notifierType, Map configuration )
         throws ContinuumException;
 
-    void removeNotifier( int projectId, String notifierType )
+    void removeNotifier( int projectId, int notifierId )
         throws ContinuumException;
 
     Project getProjectWithCheckoutResult( int projectId )

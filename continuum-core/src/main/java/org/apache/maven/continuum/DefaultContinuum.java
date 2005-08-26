@@ -520,10 +520,10 @@ public class DefaultContinuum
     // This whole section needs a scrub but will need to be dealt with generally
     // when we add schedules and profiles to the mix.
 
-    public ProjectNotifier getNotifier( int projectId, String notifierType )
+    public ProjectNotifier getNotifier( int projectId, int notifierId )
         throws ContinuumException
     {
-        Project project = getProject( projectId );
+        Project project = getProjectWithAllDetails( projectId );
 
         List notifiers = project.getNotifiers();
 
@@ -533,7 +533,7 @@ public class DefaultContinuum
         {
             notifier = (ProjectNotifier) i.next();
 
-            if ( notifier.getType().equals( notifierType ) )
+            if ( notifier.getId() == notifierId )
             {
                 break;
             }
@@ -542,10 +542,10 @@ public class DefaultContinuum
         return notifier;
     }
 
-    public void updateNotifier( int projectId, String notifierType, Map configuration )
+    public void updateNotifier( int projectId, int notifierId, Map configuration )
         throws ContinuumException
     {
-        ProjectNotifier notifier = getNotifier( projectId, notifierType );
+        ProjectNotifier notifier = getNotifier( projectId, notifierId );
 
         Properties notifierProperties = createNotifierProperties( configuration );
 
@@ -595,10 +595,10 @@ public class DefaultContinuum
         updateProject( project );
     }
 
-    public void removeNotifier( int projectId, String notifierType )
+    public void removeNotifier( int projectId, int notifierId )
         throws ContinuumException
     {
-        ProjectNotifier n = getNotifier( projectId, notifierType );
+        ProjectNotifier n = getNotifier( projectId, notifierId );
 
         if ( n != null )
         {

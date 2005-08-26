@@ -234,7 +234,7 @@
             <scalars>
               <scalar>
                 <id>notifier</id>
-                <expression>getNotifier(#id,#notifierType)</expression>
+                <expression>getNotifier(#id,#notifierId)</expression>
               </scalar>
             </scalars>
           </view>
@@ -243,7 +243,7 @@
             <scalars>
               <scalar>
                 <id>notifier</id>
-                <expression>getNotifier(#id,#notifierType)</expression>
+                <expression>getNotifier(#id,#notifierId)</expression>
               </scalar>
             </scalars>
           </view>
@@ -252,7 +252,7 @@
             <scalars>
               <scalar>
                 <id>notifier</id>
-                <expression>getNotifier(#id,#notifierType)</expression>
+                <expression>getNotifier(#id,#notifierId)</expression>
               </scalar>
               <scalar>
                 <id>project</id>
@@ -265,7 +265,7 @@
             <scalars>
               <scalar>
                 <id>notifier</id>
-                <expression>getNotifier(#id,#notifierType)</expression>
+                <expression>getNotifier(#id,#notifierId)</expression>
               </scalar>
               <scalar>
                 <id>project</id>
@@ -388,11 +388,11 @@
            -->
           <call>
             <cid>deleteNotifier</cid>
-            <expression>removeNotifier(#id,#notifierType)</expression>
+            <expression>removeNotifier(#id,#notifierId)</expression>
           </call>
           <call>
             <cid>updateNotifier</cid>
-            <expression>updateNotifier(#id,#notifierType,#parameters)</expression>
+            <expression>updateNotifier(#id,#notifierId,#parameters)</expression>
           </call>
         </calls>
       </configuration>

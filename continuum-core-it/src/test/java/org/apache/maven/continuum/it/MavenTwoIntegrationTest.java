@@ -62,7 +62,7 @@ public class MavenTwoIntegrationTest
         assertEquals( "project.notifiers.size", 2, project.getNotifiers().size() );
 
         //TODO: Activate this test when CONTINUUM-252 will be fixed
-        //removeNotifier( projectId, ( (ProjectNotifier) project.getNotifiers().get( 1 ) ).getType() );
+        //removeNotifier( projectId, ( (ProjectNotifier) project.getNotifiers().get( 1 ) ).getId() );
 
         //assertEquals( "project.notifiers.size", 1, project.getNotifiers().size() );
 
@@ -133,11 +133,11 @@ public class MavenTwoIntegrationTest
         cvsImport( basedir, artifactId, getCvsRoot() );
     }
 
-    private void removeNotifier( int projectId, String notifierType )
+    private void removeNotifier( int projectId, int notifierId )
     {
         try
         {
-            getContinuum().removeNotifier( projectId, notifierType );
+            getContinuum().removeNotifier( projectId, notifierId );
         }
         catch ( Exception e )
         {

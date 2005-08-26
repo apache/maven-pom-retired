@@ -12,7 +12,6 @@
   <classes>
     <!--
      TODO: need another root element that encases all the independant trees here
-     TODO: add stash attributes and generate package.jdo later
     -->
 
     <class rootElement="true">
@@ -207,6 +206,13 @@
         Configures one method for notifying users/developers when a build breaks.
       </description>
       <fields>
+        <field>
+          <name>id</name>
+          <required>true</required>
+          <identifier>true</identifier>
+          <version>1.0.0+</version>
+          <type>int</type>
+        </field>
         <field>
           <name>type</name>
           <version>1.0.0+</version>
