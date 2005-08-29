@@ -18,7 +18,7 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
+        <groupId>org.codehaus.mojo</groupId>
         <artifactId>maven-jpox-plugin</artifactId>
         <version>1.0.1-SNAPSHOT</version>
         <executions>
