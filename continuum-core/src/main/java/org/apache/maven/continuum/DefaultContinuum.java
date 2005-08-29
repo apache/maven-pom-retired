@@ -599,11 +599,15 @@ public class DefaultContinuum
     public void removeNotifier( int projectId, int notifierId )
         throws ContinuumException
     {
+        Project project = getProjectWithAllDetails( projectId );
+
         ProjectNotifier n = getNotifier( projectId, notifierId );
 
         if ( n != null )
         {
-            removeNotifier( n );
+            project.removeNotifier( n );
+
+            updateProject( project );
         }
     }
 
@@ -690,8 +694,6 @@ public class DefaultContinuum
             project.removeBuildDefinition( buildDefinition );
 
             updateProject( project );
-
-    //        removeBuildDefinition( buildDefinition );
         }
     }
 
