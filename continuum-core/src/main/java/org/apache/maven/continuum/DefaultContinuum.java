@@ -681,11 +681,17 @@ public class DefaultContinuum
     public void removeBuildDefinition( int projectId, int buildDefinitionId )
         throws ContinuumException
     {
+        Project project = getProjectWithAllDetails( projectId );
+
         BuildDefinition buildDefinition = getBuildDefinition( projectId, buildDefinitionId );
 
         if ( buildDefinition != null )
         {
-            removeBuildDefinition( buildDefinition );
+            project.removeBuildDefinition( buildDefinition );
+
+            updateProject( project );
+
+    //        removeBuildDefinition( buildDefinition );
         }
     }
 

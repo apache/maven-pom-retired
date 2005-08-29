@@ -82,7 +82,9 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         <td>Project</td>
         <td>
           #set ( $buildDefinitionLink = $link.setPage('BuildDefinition.vm').addPathInfo('view','BuildDefinition').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id) )
-          <a href="$buildDefinitionLink">Edit</a><!--  | <a href="#">Delete</a> -->
+          <a href="$buildDefinitionLink">Edit</a> |
+          #set ( $deleteBuildDefinitionLink = $link.setPage('Summary.vm').addPathInfo('action','cam').addPathInfo('cid','deleteBuildDefinition').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id) )
+          <a href="$deleteBuildDefinitionLink">Delete</a>
         </td>
       </tr>
       #end

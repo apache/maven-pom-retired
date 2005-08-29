@@ -4,16 +4,16 @@
   <lookup-expression>getBuildDefinition(#id,#buildDefinitionId)</lookup-expression>  
   <elements>
     <element>
-      <id>pomFilename</id>
+      <id>buildFile</id>
       <validators>
         <validator>
           <id>required</id>
-          <error-message-key>project.pomFilename.error</error-message-key>
+          <error-message-key>project.buildFile.error</error-message-key>
         </validator>
       </validators>
       <type>text</type>
-      <label-key>buildDefinition.pomFilename.label</label-key>
-      <message-key>buildDefinition.pomFilename.message</message-key>
+      <label-key>buildDefinition.buildFile.label</label-key>
+      <message-key>buildDefinition.buildFile.message</message-key>
     </element>
     <element>
       <id>goals</id>
