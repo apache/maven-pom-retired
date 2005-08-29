@@ -418,6 +418,14 @@
            |
            -->
           <call>
+            <cid>addBuildDefinition</cid>
+            <expression>addBuildDefinition(#id,#parameters)</expression>
+          </call>
+          <call>
+            <cid>deleteBuildDefinition</cid>
+            <expression>removeBuildDefinition(#id,#buildDefinitionId)</expression>
+          </call>
+          <call>
             <cid>updateBuildDefinition</cid>
             <expression>updateBuildDefinition(#id,#buildDefinitionId,#parameters)</expression>
           </call>

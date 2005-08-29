@@ -1,8 +1,8 @@
-$page.setTitle( $i18n.getString( "project.title.buildDefinition" ) )
+$page.setTitle( $i18n.getString( "project.title.buildDefinition.update" ) )
 
 <div class="app">
   <div id="axial" class="h3">
-    <h3>$i18n.getString( "project.title.buildDefinition" )</h3>
+    <h3>$i18n.getString( "project.title.buildDefinition.update" )</h3>
     <form method="post" action="$link">
       #hidden ( "action" "cam" )
       #hidden ( "cid" "updateBuildDefinition" )

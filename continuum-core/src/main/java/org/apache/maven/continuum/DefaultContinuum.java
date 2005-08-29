@@ -660,8 +660,50 @@ public class DefaultContinuum
         }
     }
 
+    public void addBuildDefinition( int projectId, Map configuration )
+        throws ContinuumException
+    {
+        BuildDefinition buildDefinition = new BuildDefinition();
+
+        buildDefinition.setBuildFile( (String) configuration.get( "buildFile" ) );
+
+        buildDefinition.setGoals( (String) configuration.get( "goals" ) );
+
+        buildDefinition.setArguments( (String) configuration.get( "arguments" ) );
+
+        Project project = getProjectWithAllDetails( projectId );
+
+        project.addBuildDefinition( buildDefinition );
+
+        updateProject( project );
+    }
+
+    public void removeBuildDefinition( int projectId, int buildDefinitionId )
+        throws ContinuumException
+    {
+        BuildDefinition buildDefinition = getBuildDefinition( projectId, buildDefinitionId );
+
+        if ( buildDefinition != null )
+        {
+            removeBuildDefinition( buildDefinition );
+        }
+    }
+
+    public void removeBuildDefinition( BuildDefinition buildDefinition )
+        throws ContinuumException
+    {
+        try
+        {
+            store.removeBuildDefinition( buildDefinition );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while removing build definition.", ex );
+        }
+    }
+
     // ----------------------------------------------------------------------
-    // Lifecylce Management
+    // Lifecycle Management
     // ----------------------------------------------------------------------
 
     public void initialize()

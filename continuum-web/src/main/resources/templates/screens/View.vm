@@ -87,19 +87,17 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
       </tr>
       #end
     </table>
-    <!--
     <div class="functnbar3">
       <table>
         <tr>
           <td>
-            <form method="post" action="$link">
+            <form method="post" action="$link.setPage('AddBuildDefinition.vm').addPathInfo('view','BuildDefinition').addPathInfo('fid', 'buildDefinition').addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId)">
               <input type="submit" name="add-build-def" value="Add"/>
             </form>
           </td>
         </tr>
       </table>
     </div>
-    -->
     
     #if ( $project.notifiers )
     <h3>$i18n.getString( "project.notifiers.label" )</h3>

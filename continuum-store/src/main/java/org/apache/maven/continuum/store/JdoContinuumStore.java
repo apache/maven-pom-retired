@@ -255,6 +255,12 @@ public class JdoContinuumStore
         return notifier;
     }
 
+    public void removeBuildDefinition( BuildDefinition buildDefinition )
+        throws ContinuumStoreException
+    {
+        attachAndDelete( buildDefinition );
+    }
+
     public BuildDefinition storeBuildDefinition( BuildDefinition buildDefinition )
         throws ContinuumStoreException
     {

@@ -147,4 +147,10 @@ public interface Continuum
 
     void updateBuildDefinition( int projectId, int buildDefinitionId, Map configuration )
         throws ContinuumException;
+
+    void addBuildDefinition( int projectId, Map configuration )
+        throws ContinuumException;
+
+    void removeBuildDefinition( int projectId, int buildDefinitionId )
+        throws ContinuumException;
 }

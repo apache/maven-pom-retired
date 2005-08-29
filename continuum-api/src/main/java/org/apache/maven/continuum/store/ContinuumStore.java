@@ -53,6 +53,9 @@ public interface ContinuumStore
     ProjectNotifier storeNotifier( ProjectNotifier notifier )
         throws ContinuumStoreException;
 
+    void removeBuildDefinition( BuildDefinition buildDefinition )
+        throws ContinuumStoreException;
+
     BuildDefinition storeBuildDefinition( BuildDefinition buildDefinition )
         throws ContinuumStoreException;
 
