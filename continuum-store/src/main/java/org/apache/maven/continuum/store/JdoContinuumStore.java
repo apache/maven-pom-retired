@@ -223,7 +223,7 @@ public class JdoContinuumStore
 
             if ( buildId > 0 )
             {
-                id = pm.newObjectIdInstance( BuildResult.class, Integer.valueOf( buildId ) );
+                id = pm.newObjectIdInstance( BuildResult.class, new Integer( buildId ) );
 
                 Object object = pm.getObjectById( id );
 
