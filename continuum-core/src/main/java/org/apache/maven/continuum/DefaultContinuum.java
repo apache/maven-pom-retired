@@ -866,7 +866,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException ex )
         {
-            throw logAndCreateException( "Error while removing project.", ex );
+            throw logAndCreateException( "Error while updating project.", ex );
         }
     }
 
@@ -892,7 +892,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumStoreException ex )
         {
-            throw logAndCreateException( "Error while removing notifier.", ex );
+            throw logAndCreateException( "Error while storing notifier.", ex );
         }
     }
 
