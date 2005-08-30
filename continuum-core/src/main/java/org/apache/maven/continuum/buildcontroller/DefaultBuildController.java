@@ -236,25 +236,36 @@ public class DefaultBuildController
     private String convertScmResultToError( ScmResult result )
     {
         String error = "";
-        if ( result.getProviderMessage() != null )
+
+        if ( scmResult == null )
         {
-            error = "Provider message: " + StringUtils.clean( result.getProviderMessage() ) +
-                System.getProperty( "line.separator" );
+            error = "Scm result is null.";
         }
-        if ( result.getCommandOutput() != null )
+        else
         {
-            error += "Command output: " + System.getProperty( "line.separator" );
-            error += "-------------------------------------------------------------------------------" +
-                System.getProperty( "line.separator" );
-            error += StringUtils.clean( result.getCommandOutput() ) + System.getProperty( "line.separator" );
-            error += "-------------------------------------------------------------------------------" +
-                System.getProperty( "line.separator" );
+            if ( result.getProviderMessage() != null )
+            {
+                error = "Provider message: " + StringUtils.clean( result.getProviderMessage() ) +
+                    System.getProperty( "line.separator" );
+            }
+
+            if ( result.getCommandOutput() != null )
+            {
+                error += "Command output: " + System.getProperty( "line.separator" );
+                error += "-------------------------------------------------------------------------------" +
+                    System.getProperty( "line.separator" );
+                error += StringUtils.clean( result.getCommandOutput() ) + System.getProperty( "line.separator" );
+                error += "-------------------------------------------------------------------------------" +
+                    System.getProperty( "line.separator" );
+            }
+
+            if ( result.getException() != null )
+            {
+                error += "Exception:" + System.getProperty( "line.separator" );
+                error += result.getException();
+            }
         }
-        if ( result.getException() != null )
-        {
-            error += "Exception:" + System.getProperty( "line.separator" );
-            error += result.getException();
-        }
+
         return error;
     }
 
