@@ -123,6 +123,8 @@ public class DefaultBuildController
                 if ( workingDirectoryExists )
                 {
                     actionManager.lookup( "update-working-directory-from-scm" ).execute( actionContext );
+
+                    scmResult = AbstractContinuumAction.getUpdateScmResult( actionContext, null );
                 }
                 else
                 {
@@ -130,9 +132,9 @@ public class DefaultBuildController
                                        workingDirectoryService.getWorkingDirectory( project ).getAbsolutePath() );
 
                     actionManager.lookup( "checkout-project" ).execute( actionContext );
-                }
 
-                scmResult = AbstractContinuumAction.getCheckoutResult( actionContext, null );
+                    scmResult = AbstractContinuumAction.getCheckoutResult( actionContext, null );
+                }
 
                 // ----------------------------------------------------------------------
                 // Check to see if there was a error while checking out/updating the project
