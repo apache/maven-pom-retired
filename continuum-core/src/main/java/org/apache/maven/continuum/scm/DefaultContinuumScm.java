@@ -187,7 +187,7 @@ public class DefaultContinuumScm
 
                 getLogger().warn( "Provider message: " + result.getProviderMessage() );
 
-                throw new ContinuumScmException( "Error while checking out the project.", result );
+                throw new ContinuumScmException( "Error while updating the project.", result );
             }
 
             // TODO: total the number of files in the changesets
