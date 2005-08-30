@@ -130,32 +130,32 @@ public class DefaultBuildController
                                        workingDirectoryService.getWorkingDirectory( project ).getAbsolutePath() );
 
                     actionManager.lookup( "checkout-project" ).execute( actionContext );
-
-                    scmResult = AbstractContinuumAction.getCheckoutResult( actionContext, null );
-
-                    // ----------------------------------------------------------------------
-                    // Check to see if there was a error while checking out the project
-                    // ----------------------------------------------------------------------
-
-                    if ( scmResult == null || !scmResult.isSuccess() )
-                    {
-                        build = makeBuildResult( scmResult, startTime, trigger );
-
-                        String error = convertScmResultToError( scmResult );
-
-                        build.setError( error );
-
-                        store.addBuildResult( project, build );
-
-                        project.setState( ContinuumProjectState.ERROR );
-
-                        store.updateProject( project );
-
-                        return;
-                    }
-
-                    actionContext.put( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT, scmResult );
                 }
+
+                scmResult = AbstractContinuumAction.getCheckoutResult( actionContext, null );
+
+                // ----------------------------------------------------------------------
+                // Check to see if there was a error while checking out/updating the project
+                // ----------------------------------------------------------------------
+
+                if ( scmResult == null || !scmResult.isSuccess() )
+                {
+                    build = makeBuildResult( scmResult, startTime, trigger );
+
+                    String error = convertScmResultToError( scmResult );
+
+                    build.setError( error );
+
+                    store.addBuildResult( project, build );
+
+                    project.setState( ContinuumProjectState.ERROR );
+
+                    store.updateProject( project );
+
+                    return;
+                }
+
+                actionContext.put( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT, scmResult );
 
                 scmResult = (ScmResult) actionContext.get( AbstractContinuumAction.KEY_UPDATE_SCM_RESULT );
 
