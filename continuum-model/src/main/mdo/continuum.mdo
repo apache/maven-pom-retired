@@ -350,7 +350,7 @@
           <!-- TODO: Because JPOX persists as UTC and pulls back using the local time, we have to take over -->
           <type>long</type>
         </field>
-        <field>
+        <field stash.maxSize="8192">
           <name>error</name>
           <version>1.0.0+</version>
           <type>String</type>

@@ -147,6 +147,10 @@ public class DefaultBuildController
 
                         store.addBuildResult( project, build );
 
+                        project.setState( ContinuumProjectState.ERROR );
+
+                        store.updateProject( project );
+
                         return;
                     }
 
@@ -212,6 +216,8 @@ public class DefaultBuildController
                 }
 
                 project.setState( ContinuumProjectState.ERROR );
+
+                store.updateProject( project );
             }
         }
         catch ( Exception ex )
