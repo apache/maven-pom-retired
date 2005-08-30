@@ -245,6 +245,12 @@ public class DefaultBuildController
         }
         else
         {
+            if ( result.getCommandLine() != null )
+            {
+                error = "Command line: " + StringUtils.clean( result.getCommandLine() ) +
+                    System.getProperty( "line.separator" );
+            }
+
             if ( result.getProviderMessage() != null )
             {
                 error = "Provider message: " + StringUtils.clean( result.getProviderMessage() ) +

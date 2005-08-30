@@ -386,6 +386,11 @@
           <type>boolean</type>
         </field>
         <field>
+          <name>commandLine</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
           <name>providerMessage</name>
           <version>1.0.0+</version>
           <type>String</type>
