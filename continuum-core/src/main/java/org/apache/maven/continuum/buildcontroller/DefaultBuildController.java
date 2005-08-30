@@ -237,7 +237,7 @@ public class DefaultBuildController
     {
         String error = "";
 
-        if ( scmResult == null )
+        if ( result == null )
         {
             error = "Scm result is null.";
         }
