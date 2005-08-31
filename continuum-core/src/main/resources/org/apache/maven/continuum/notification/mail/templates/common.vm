@@ -24,13 +24,13 @@ Build statistics:
   Started at: $formatter.formatTimestamp( $build.startTime )
   Finished at: $formatter.formatTimestamp( $build.endTime )
   Total time: $formatter.formatInterval( $build.startTime, $build.endTime )
-  Trigger: $formatter.formatTrigger( $build.trigger )
+  Build Trigger: $formatter.formatTrigger( $build.trigger )
   Exit code: $build.exitCode
   Building machine hostname: $buildHost
 
 #if ( $build.scmResult )
 Changes
-#if ( $build.scmResult.files.size() == 0 )
+#if ( $build.scmResult.files.isEmpty() )
  No files changed
 #else
  #foreach ( $file in $build.scmResult.files )
@@ -48,8 +48,8 @@ $build.error
 ****************************************************************************
 Output:
 ****************************************************************************
-#if ( $build.output && $build.output != "" )
-$build.output
+#if ( $buildOutput && $buildOutput != "" )
+$buildOutput
 #else
 There was no output.
 #end
