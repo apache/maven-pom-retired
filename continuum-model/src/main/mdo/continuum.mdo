@@ -221,6 +221,18 @@
           <description>The mechanism used to deliver notifications.</description>
         </field>
         <field>
+          <name>from</name>
+          <version>1.0.0+</version>
+          <type>int</type>
+          <description>The origin of the notifier (pom or user).</description>
+        </field>
+        <field>
+          <name>enabled</name>
+          <version>1.0.0+</version>
+          <defaultValue>true</defaultValue>
+          <type>boolean</type>
+        </field>
+        <field>
           <name>recipientType</name>
           <version>1.0.0+</version>
           <type>int</type>
@@ -251,6 +263,27 @@
           </association>
         </field>
       </fields>
+      <codeSegments>
+        <codeSegment>
+          <version>1.0.0+</version>
+          <code><![CDATA[
+
+              public static final int FROM_PROJECT = 1;
+
+              public static final int FROM_USER = 2;
+
+              public boolean isFromProject()
+              {
+                  return from == FROM_PROJECT;
+              }
+
+              public boolean isFromUser()
+              {
+                  return from == FROM_USER;
+              }
+          ]]></code>
+        </codeSegment>
+      </codeSegments>
     </class>
 
     <class>

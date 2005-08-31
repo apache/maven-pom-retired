@@ -174,13 +174,41 @@ public class DefaultMavenBuilderHelper
             }
 
             continuumProject.setDependencies( dependencies );
+            
         }
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
+        List userNotifiers = new ArrayList();
+
+        for ( int i = 0; i < continuumProject.getNotifiers().size(); i++ )
+        {
+            ProjectNotifier notifier = (ProjectNotifier) continuumProject.getNotifiers().get( i );
+
+            if ( notifier.isFromUser() )
+            {
+                ProjectNotifier userNotifier = new ProjectNotifier();
+
+                userNotifier.setType( notifier.getType() );
+
+                userNotifier.setConfiguration( notifier.getConfiguration() );
+
+                userNotifier.setFrom( notifier.getFrom() );
+
+                userNotifiers.add( userNotifier );
+            }
+        }
+
         continuumProject.setNotifiers( getNotifiers( mavenProject ) );
+        
+        for ( Iterator i = userNotifiers.iterator(); i.hasNext(); )
+        {
+            ProjectNotifier notifier = (ProjectNotifier) i.next();
+
+            continuumProject.addNotifier( notifier );
+        }
     }
 
     public MavenProject getMavenProject( File file )
@@ -285,6 +313,8 @@ public class DefaultMavenBuilderHelper
             }
 
             notifier.setConfiguration( projectNotifier.getConfiguration() );
+
+            notifier.setFrom( ProjectNotifier.FROM_PROJECT );
 
             notifiers.add( notifier );
         }

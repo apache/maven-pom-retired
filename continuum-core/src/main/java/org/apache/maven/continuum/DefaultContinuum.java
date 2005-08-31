@@ -546,13 +546,18 @@ public class DefaultContinuum
     public void updateNotifier( int projectId, int notifierId, Map configuration )
         throws ContinuumException
     {
+        Project project = getProjectWithAllDetails( projectId );
+
         ProjectNotifier notifier = getNotifier( projectId, notifierId );
 
-        Properties notifierProperties = createNotifierProperties( configuration );
+        String notifierType = notifier.getType();
 
-        notifier.setConfiguration( notifierProperties );
+        // I remove notifier then add it instead of update it due to a ClassCastException in jpox
+        project.removeNotifier( notifier );
 
-        storeNotifier( notifier );
+        updateProject( project );
+
+        addNotifier( projectId, notifierType, configuration );
     }
 
     private Properties createNotifierProperties( Map configuration )
@@ -589,7 +594,9 @@ public class DefaultContinuum
 
         notifier.setConfiguration( notifierProperties );
 
-        Project project = getProject( projectId );
+        notifier.setFrom( ProjectNotifier.FROM_USER );
+
+        Project project = getProjectWithAllDetails( projectId );
 
         project.addNotifier( notifier );
 
@@ -605,9 +612,18 @@ public class DefaultContinuum
 
         if ( n != null )
         {
-            project.removeNotifier( n );
+            if ( n.isFromProject() )
+            {
+                n.setEnabled( false );
 
-            updateProject( project );
+                storeNotifier( n );
+            }
+            else
+            {
+                project.removeNotifier( n );
+
+                updateProject( project );
+            }
         }
     }
 

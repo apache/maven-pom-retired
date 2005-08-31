@@ -6,9 +6,9 @@ $page.setTitle( "Continuum - Jabber Notifier" )
     <form method="post" action="$link">
       #hidden ( "action" "cam" )
       #hidden ( "cid" "updateNotifier" )
-      #hidden ( "view" "ProjectNotifiers.vm" )
+      #hidden ( "view" "Summary.vm" )
       #hidden ( "id" $project.id )
-      #hidden ( "notifierType" "jabber" )
+      #hidden ( "notifierId" $notifier.id )
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
           <tr>

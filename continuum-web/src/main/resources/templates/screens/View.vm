@@ -112,7 +112,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         <th width="10%">&nbsp;</th>
       </tr>
       #foreach ( $notifier in $project.notifiers )
-        <tr class="b">
+        <tr class="b" #if ( !$notifier.isEnabled() ) style="color: silver;" #end>
           #if ( $notifier.type == "irc" )
             <td>IRC</td>
           #elseif ( $notifier.type == "mail" )
@@ -128,30 +128,40 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
             #else
               $notifier.configuration.address
             #end
+            #if ( !$notifier.isEnabled() )
+              (DISABLED)
+            #end
           </td>
           <td>Success, Failures</td>
-          <td>Project</td>
           <td>
-            #if ( $notifier.type == "irc" )
-              #set ( $editNotifierLink = $link.setPage('EditIrcNotifier.vm').addPathInfo('view','EditIrcNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
-              <a href="$editNotifierLink">Edit</a>
-            #elseif ( $notifier.type == "mail" )
-              #set ( $editNotifierLink = $link.setPage('EditMailNotifier.vm').addPathInfo('view','EditMailNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
-              <a href="$editNotifierLink">Edit</a>
-            #elseif ( $notifier.type == "msn" )
-              #set ( $editNotifierLink = $link.setPage('EditMsnNotifier.vm').addPathInfo('view','EditMsnNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
-              <a href="$editNotifierLink">Edit</a>
-            #elseif ( $notifier.type == "jabber" )
-              #set ( $editNotifierLink = $link.setPage('EditJabberNotifier.vm').addPathInfo('view','EditJabberNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
-              <a href="$editNotifierLink">Edit</a>
+            #if ( $notifier.isFromProject() )
+              Project
+            #else
+              User
             #end
-            #set ( $deleteNotifierLink = $link.setPage('Summary.vm').addPathInfo('notifierId', $notifier.id).addPathInfo('action','cam').addPathInfo('cid','deleteNotifier').addPathInfo('id', $project.id) )
-            | <a href="$deleteNotifierLink">Delete</a>
+          </td>
+          <td>
+            #if ( $notifier.isFromUser() )
+              #if ( $notifier.type == "irc" )
+                #set ( $editNotifierLink = $link.setPage('EditIrcNotifier.vm').addPathInfo('view','EditIrcNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                <a href="$editNotifierLink">Edit</a>
+              #elseif ( $notifier.type == "mail" )
+                #set ( $editNotifierLink = $link.setPage('EditMailNotifier.vm').addPathInfo('view','EditMailNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                <a href="$editNotifierLink">Edit</a>
+              #elseif ( $notifier.type == "msn" )
+                #set ( $editNotifierLink = $link.setPage('EditMsnNotifier.vm').addPathInfo('view','EditMsnNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                <a href="$editNotifierLink">Edit</a>
+              #elseif ( $notifier.type == "jabber" )
+                #set ( $editNotifierLink = $link.setPage('EditJabberNotifier.vm').addPathInfo('view','EditJabberNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                <a href="$editNotifierLink">Edit</a>
+              #end
+              #set ( $deleteNotifierLink = $link.setPage('Summary.vm').addPathInfo('notifierId', $notifier.id).addPathInfo('action','cam').addPathInfo('cid','deleteNotifier').addPathInfo('id', $project.id) )
+              | <a href="$deleteNotifierLink">Delete</a>
+            #end
           </td>
         </tr>
       #end
     </table>
-    <!--
     <div class="functnbar3">
       <table>
         <tr>
@@ -164,7 +174,6 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         </tr>
       </table>
     </div>
-    -->
     #end
 
     #if ( $project.dependencies )
@@ -199,13 +208,13 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
       <tr>
         <th>Name</th>
         <th>Email</th>
-        <th width="10%">&nbsp;</th>
+        <!-- th width="10%">&nbsp;</th -->
       </tr>
       #foreach ( $developer in $project.developers )
       <tr class="b">
         <td>$developer.name</td>
         <td>$developer.email</td>
-        <td>&nbsp;</td>
+        <!-- td>&nbsp;</td -->
       </tr>
       #end
     </table>

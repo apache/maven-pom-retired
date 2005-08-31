@@ -138,6 +138,13 @@ public class DefaultContinuumNotificationDispatcher
 
             String notifierType = projectNotifier.getType();
 
+            if ( !projectNotifier.isEnabled() )
+            {
+                getLogger().info( notifierType + " notifier (id=" + projectNotifier.getId() + ") is disabled." );
+
+                continue;
+            }
+
             Map configuration = projectNotifier.getConfiguration();
 
             try
