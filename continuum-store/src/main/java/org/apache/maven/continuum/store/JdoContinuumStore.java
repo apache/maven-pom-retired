@@ -517,6 +517,56 @@ public class JdoContinuumStore
         return (Schedule) addObject( schedule );
     }
 
+    public Schedule getScheduleByName( String name )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( Schedule.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.declareImports( "import java.lang.String" );
+
+            query.declareParameters( "String name" );
+
+            query.setFilter( "this.name == name" );
+
+            Collection result = (Collection) query.execute( name );
+
+            if ( result.size() == 0 )
+            {
+                tx.commit();
+
+                return null;
+            }
+
+            Object object = pm.detachCopy( result.iterator().next() );
+
+            tx.commit();
+
+            return (Schedule) object;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public Schedule storeSchedule( Schedule schedule )
+        throws ContinuumStoreException
+    {
+        updateObject( schedule );
+
+        return schedule;
+    }
+
     public List getAllProfilesByName()
     {
         return getAllObjectsDetached( Profile.class, "name ascending", null );

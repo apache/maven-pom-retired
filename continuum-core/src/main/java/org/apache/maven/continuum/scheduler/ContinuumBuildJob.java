@@ -16,6 +16,9 @@ package org.apache.maven.continuum.scheduler;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Schedule;
 import org.codehaus.plexus.logging.Logger;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -42,7 +45,22 @@ public class ContinuumBuildJob
 
         Logger logger = (Logger) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.LOGGER );
 
-        logger.info( ">>>>>>>>>>>>>>>>>>>>> Executing build job ..." );
+        String jobName = jobDetail.getName();
+
+        logger.info( ">>>>>>>>>>>>>>>>>>>>> Executing build job (" + jobName + ")..." );
+
+        Continuum continuum = (Continuum) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.CONTINUUM );
+
+        Schedule schedule = (Schedule) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.SCHEDULE );
+
+        try
+        {
+            continuum.buildProjects( schedule );
+        }
+        catch ( ContinuumException e )
+        {
+            logger.error( "Error building projects for job" + jobName + ".", e );
+        }
 
         /*
 

@@ -20,12 +20,16 @@ import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
@@ -52,6 +56,11 @@ public class MavenTwoContinuumProjectBuilder
      * @plexus.requirement
      */
     private MavenBuilderHelper builderHelper;
+
+    /**
+     * @plexus.requirement
+     */
+    private ContinuumStore store;
 
     /**
      * @plexus.configuration
@@ -118,9 +127,24 @@ public class MavenTwoContinuumProjectBuilder
             Project continuumProject = new Project();
 
             BuildDefinition bd = new BuildDefinition();
+
             bd.setArguments( "--batch-mode --non-recursive" );
+
             bd.setGoals( "clean:clean install" );
+
             bd.setBuildFile( "pom.xml" );
+
+            try
+            {
+                Schedule schedule = store.getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME );
+
+                bd.setSchedule( schedule );
+            }
+            catch ( ContinuumStoreException e )
+            {
+                getLogger().warn( "Can't get default schedule.", e );
+            }
+
             continuumProject.addBuildDefinition( bd );
 
             try

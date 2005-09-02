@@ -76,7 +76,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
           #if ( $buildDefinition.schedule )
             $buildDefinition.schedule.name
           #else
-            DEFAULT
+            NONE
           #end
         </td>
         <td>Project</td>

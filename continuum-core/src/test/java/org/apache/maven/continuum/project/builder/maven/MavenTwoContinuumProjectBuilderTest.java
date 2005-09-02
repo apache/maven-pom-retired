@@ -16,12 +16,12 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,7 +36,7 @@ import java.util.Map;
  * @version $Id$
  */
 public class MavenTwoContinuumProjectBuilderTest
-    extends PlexusTestCase
+    extends AbstractContinuumTest
 {
     public void testGetEmailAddressWhenTypeIsSetToEmail()
         throws Exception

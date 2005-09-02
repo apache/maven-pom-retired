@@ -16,11 +16,11 @@ package org.apache.maven.continuum.project.builder.maven;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.codehaus.plexus.PlexusTestCase;
 
 import java.util.Iterator;
 
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * @version $Id$
  */
 public class MavenOneContinuumProjectBuilderTest
-    extends PlexusTestCase
+    extends AbstractContinuumTest
 {
     public void testBuildingAProjectFromMetadataWithACompleteMaven1Pom()
         throws Exception

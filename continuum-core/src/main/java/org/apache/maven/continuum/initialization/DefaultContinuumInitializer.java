@@ -18,6 +18,7 @@ package org.apache.maven.continuum.initialization;
 
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
@@ -40,14 +41,16 @@ public class DefaultContinuumInitializer
     public static final String DEFAULT_PROJECT_GROUP_DESCRIPTION = "Default Project Group";
 
     // ----------------------------------------------------------------------
-    // Default values for the default build settings
+    // Default values for the default schedule
     // ----------------------------------------------------------------------
 
-    public static final String DEFAULT_SCHEDULE_NAME = "DEFAULT_BUILD_SETTINGS";
+    //TODO: move this to an other place
+    public static final String DEFAULT_SCHEDULE_NAME = "DEFAULT_SCHEDULE";
+
+    public static final String DEFAULT_SCHEDULE_DESCRIPTION = "Run hourly";
 
     // Cron expression for execution every hour.
-    //public static final String DEFAULT_BUILD_SETTINGS_CRON_EXPRESSION = "0 0 * * * ?";
-    public static final String DEFAULT_SCHEDULE_CRON_EXPRESSION = "0 * * * * ?";
+    public static final String DEFAULT_SCHEDULE_CRON_EXPRESSION = "0 0 * * * ?";
 
     private Schedule defaultSchedule;
 
@@ -69,9 +72,25 @@ public class DefaultContinuumInitializer
     {
         getLogger().info( "Continuum initializer running ..." );
 
-        defaultSchedule = createDefaultSchedule();
+        try
+        {
+            Schedule s = store.getScheduleByName( DEFAULT_SCHEDULE_NAME );
 
-        defaultSchedule = store.addSchedule( defaultSchedule );
+            if ( s != null )
+            {
+                defaultSchedule = s;
+            }
+            else
+            {
+                defaultSchedule = createDefaultSchedule();
+
+                defaultSchedule = store.addSchedule( defaultSchedule );
+            }
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumInitializationException( "Can't initialize default schedule.", e );
+        }
     }
 
     // ----------------------------------------------------------------------
@@ -85,7 +104,11 @@ public class DefaultContinuumInitializer
 
         schedule.setName( DEFAULT_SCHEDULE_NAME );
 
+        schedule.setDescription( DEFAULT_SCHEDULE_DESCRIPTION );
+
         schedule.setCronExpression( DEFAULT_SCHEDULE_CRON_EXPRESSION );
+
+        schedule.setActive( true );
 
         return schedule;
     }

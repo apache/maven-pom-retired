@@ -20,6 +20,7 @@ import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
@@ -76,6 +77,9 @@ public interface Continuum
         throws ContinuumException;
 
     void buildProjects( int trigger )
+        throws ContinuumException;
+
+    void buildProjects( Schedule schedule )
         throws ContinuumException;
 
     void buildProject( int projectId )
@@ -152,5 +156,27 @@ public interface Continuum
         throws ContinuumException;
 
     void removeBuildDefinition( int projectId, int buildDefinitionId )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Build Definition
+    // ----------------------------------------------------------------------
+
+    Schedule getSchedule( int id )
+        throws ContinuumException;
+
+    Collection getSchedules()
+        throws ContinuumException;
+
+    void addSchedule( Schedule schedule )
+        throws ContinuumException;
+
+    void updateSchedule( Schedule schedule )
+        throws ContinuumException;
+
+    void updateSchedule( int scheduleId, Map configuration )
+        throws ContinuumException;
+
+    void removeSchedule( int scheduleId )
         throws ContinuumException;
 }

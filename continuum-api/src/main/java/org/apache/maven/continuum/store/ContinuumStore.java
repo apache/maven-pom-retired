@@ -75,6 +75,12 @@ public interface ContinuumStore
 
     Schedule addSchedule( Schedule schedule );
 
+    Schedule getScheduleByName( String name )
+        throws ContinuumStoreException;
+
+    Schedule storeSchedule( Schedule schedule )
+        throws ContinuumStoreException;
+
     List getAllProfilesByName();
 
     Profile addProfile( Profile profile );

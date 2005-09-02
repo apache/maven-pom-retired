@@ -33,6 +33,7 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
@@ -255,6 +256,28 @@ public class DefaultContinuum
             }
         }
         */
+    }
+
+    public void buildProjects( Schedule schedule )
+        throws ContinuumException
+    {
+        for ( Iterator projectIterator = getProjects().iterator(); projectIterator.hasNext(); )
+        {
+            Project p = (Project) projectIterator.next();
+
+            Project project = getProjectWithAllDetails( p.getId() );
+
+            for ( Iterator bdIterator = project.getBuildDefinitions().iterator(); bdIterator.hasNext(); )
+            {
+                BuildDefinition buildDef = (BuildDefinition) bdIterator.next();
+
+                if ( schedule.getId() == buildDef.getSchedule().getId() )
+                {
+                    //TODO: Fix trigger name
+                    buildProject( project.getId(), ContinuumProjectState.TRIGGER_UNKNOWN );
+                }
+            }
+        }
     }
 
     public void buildProject( int projectId )
@@ -723,6 +746,108 @@ public class DefaultContinuum
         catch ( ContinuumStoreException ex )
         {
             throw logAndCreateException( "Error while removing build definition.", ex );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Schedule
+    // ----------------------------------------------------------------------
+
+    public Schedule getSchedule( int scheduleId )
+        throws ContinuumException
+    {
+        List schedules = store.getAllSchedulesByName();
+
+        for ( Iterator i = schedules.iterator(); i.hasNext(); )
+        {
+            Schedule schedule = (Schedule) i.next();
+
+            if ( schedule.getId() == scheduleId )
+            {
+                return schedule;
+            }
+        }
+
+        return null;
+    }
+
+    public Collection getSchedules()
+        throws ContinuumException
+    {
+        return store.getAllSchedulesByName();
+    }
+
+    public void addSchedule( Schedule schedule )
+        throws ContinuumException
+    {
+        Schedule s = null;
+
+        try
+        {
+            s = store.getScheduleByName( schedule.getName() );
+        }
+        catch ( ContinuumStoreException e )
+        {
+        }
+
+        if ( s == null )
+        {
+            store.addSchedule( schedule );
+        }
+        else
+        {
+            throw logAndCreateException( "Can't create schedule. A schedule with the same name already exists.", null );
+        }
+    }
+
+    public void updateSchedule( Schedule schedule )
+        throws ContinuumException
+    {
+        storeSchedule( schedule );
+    }
+
+    public void updateSchedule( int scheduleId, Map configuration )
+        throws ContinuumException
+    {
+        Schedule schedule = getSchedule( scheduleId );
+
+        schedule.setName( (String) configuration.get( "schedule.name" ) );
+
+        schedule.setDescription( (String) configuration.get( "schedule.description" ) );
+
+        schedule.setCronExpression( (String) configuration.get( "schedule.cronExpression" ) );
+
+        schedule.setDelay( new Integer( (String) configuration.get( "schedule.delay" ) ).intValue() );
+
+        schedule.setActive( new Boolean( (String) configuration.get( "schedule.active" ) ).booleanValue() );
+
+        storeSchedule( schedule );
+    }
+
+    public void removeSchedule( int scheduleId )
+        throws ContinuumException
+    {
+        Schedule schedule = getSchedule( scheduleId );
+
+        removeSchedule( schedule );
+    }
+
+    private void removeSchedule( Schedule schedule )
+        throws ContinuumException
+    {
+        store.removeSchedule( schedule );
+    }
+
+    public Schedule storeSchedule( Schedule schedule )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.storeSchedule( schedule );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while storing schedule.", ex );
         }
     }
 

@@ -20,6 +20,7 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.scheduler.ContinuumBuildJob;
 import org.apache.maven.continuum.scheduler.ContinuumScheduler;
+import org.apache.maven.continuum.scheduler.ContinuumSchedulerConstants;
 import org.apache.maven.continuum.scheduler.ContinuumSchedulerException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -88,11 +89,15 @@ public class DefaultSchedulesActivator
 
         dataMap.put( "logger", getLogger() );
 
+        dataMap.put( ContinuumSchedulerConstants.SCHEDULE, schedule );
+
         //the name + group makes the job unique
 
         JobDetail jobDetail = new JobDetail( schedule.getName(), Scheduler.DEFAULT_GROUP, ContinuumBuildJob.class );
 
         jobDetail.setJobDataMap( dataMap );
+
+        jobDetail.setDescription( schedule.getDescription() );
 
         CronTrigger trigger = new CronTrigger();
 
