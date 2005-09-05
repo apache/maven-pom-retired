@@ -805,7 +805,7 @@ public class DefaultContinuum
 
             try
             {
-                schedulesActivator.activateSchedules( s, this );
+                schedulesActivator.activateSchedule( s, this );
             }
             catch ( SchedulesActivationException e )
             {
