@@ -23,8 +23,10 @@ $page.setTitle( "Continuum" )
           <td>$schedule.cronExpression</td>
           <td>$schedule.delay</td>
           <td width="10%">
-            <a href="$link.setPage('Edit.vm').addPathInfo( 'fid', 'schedules').addPathInfo('id', $schedule.id)">Edit</a>
-            | <a href="$link.setPage('Delete.vm').addPathInfo('fid', "schedules").addPathInfo('id', $schedule.id)">Delete</a></td>
+            #if ( $schedule.name != "DEFAULT_SCHEDULE" )
+              <a href="$link.setPage('Edit.vm').addPathInfo( 'fid', 'schedules').addPathInfo('id', $schedule.id)">Edit</a>
+              | <a href="$link.setPage('Delete.vm').addPathInfo('fid', "schedules").addPathInfo('id', $schedule.id)">Delete</a></td>
+            #end
         </tr>
       #end
     </table>

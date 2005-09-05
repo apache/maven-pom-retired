@@ -13,11 +13,11 @@ $page.setTitle( $i18n.getString( "project.title.buildDefinition.update" ) )
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
           <tr>
-            <th>$i18n.getString( "buildDefinition.pomFilename.label" )</th>
+            <th>$i18n.getString( "buildDefinition.buildFile.label" )</th>
             <td>
               <input type="text" name="buildFile" value="$buildDefinition.buildFile" size="40"/>
                   <p>
-                    $i18n.getString( "buildDefinition.pomFilename.message" ) <font color="red"><b></b></font>
+                    $i18n.getString( "buildDefinition.buildFile.message" ) <font color="red"><b></b></font>
                   </p>
             </td>
           </tr>
@@ -37,6 +37,16 @@ $page.setTitle( $i18n.getString( "project.title.buildDefinition.update" ) )
                   <p>
                     $i18n.getString( "buildDefinition.arguments.message" ) <font color="red"><b></b></font>
                   </p>
+            </td>
+          </tr>
+          <tr>
+            <th>$i18n.getString( "buildDefinition.schedule.label" )</th>
+            <td>
+              <select name="schedule">
+                #foreach ( $schedule in $continuum.getSchedules() )
+                  <option value="$schedule.id" #if ( $schedule.id == $buildDefinition.schedule.id ) selected="selected" #end>$schedule.name</option>
+                #end
+              </select>
             </td>
           </tr>
         </table>

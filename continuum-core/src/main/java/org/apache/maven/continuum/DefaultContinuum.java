@@ -687,6 +687,10 @@ public class DefaultContinuum
 
         buildDefinition.setArguments( (String) configuration.get( "arguments" ) );
 
+        Schedule schedule = getSchedule( new Integer( (String) configuration.get( "schedule" ) ).intValue() );
+
+        buildDefinition.setSchedule( schedule );
+
         storeBuildDefinition( buildDefinition );
     }
 
@@ -713,6 +717,10 @@ public class DefaultContinuum
         buildDefinition.setGoals( (String) configuration.get( "goals" ) );
 
         buildDefinition.setArguments( (String) configuration.get( "arguments" ) );
+
+        Schedule schedule = getSchedule( new Integer( (String) configuration.get( "schedule" ) ).intValue() );
+
+        buildDefinition.setSchedule( schedule );
 
         Project project = getProjectWithAllDetails( projectId );
 
@@ -756,6 +764,7 @@ public class DefaultContinuum
     public Schedule getSchedule( int scheduleId )
         throws ContinuumException
     {
+        //TODO: Add a store.getScheduleById() method
         List schedules = store.getAllSchedulesByName();
 
         for ( Iterator i = schedules.iterator(); i.hasNext(); )
@@ -792,7 +801,16 @@ public class DefaultContinuum
 
         if ( s == null )
         {
-            store.addSchedule( schedule );
+            s = store.addSchedule( schedule );
+
+            try
+            {
+                schedulesActivator.activateSchedules( s, this );
+            }
+            catch ( SchedulesActivationException e )
+            {
+                throw new ContinuumException( "Error activating schedule " + s.getName() + ".", e );
+            }
         }
         else
         {
@@ -913,7 +931,7 @@ public class DefaultContinuum
         }
         catch ( SchedulesActivationException e )
         {
-            throw new StartingException( "Error activating build settings.", e );
+            throw new StartingException( "Error activating schedules.", e );
         }
         catch ( ConfigurationLoadingException e )
         {

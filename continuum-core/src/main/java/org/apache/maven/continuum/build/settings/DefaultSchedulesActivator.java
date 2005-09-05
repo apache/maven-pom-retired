@@ -59,7 +59,7 @@ public class DefaultSchedulesActivator
     public void activateSchedules( Continuum continuum )
         throws SchedulesActivationException
     {
-        getLogger().info( "Activating build settings ..." );
+        getLogger().info( "Activating schedules ..." );
 
         Collection schedules = store.getAllSchedulesByName();
 
@@ -80,9 +80,24 @@ public class DefaultSchedulesActivator
         }
     }
 
+    public void activateSchedule( Schedule schedule, Continuum continuum )
+        throws SchedulesActivationException
+    {
+        getLogger().info( "Activating schedule " + schedule.getName() );
+
+        schedule( schedule, continuum );
+    }
+
     protected void schedule( Schedule schedule, Continuum continuum )
         throws SchedulesActivationException
     {
+        if ( !schedule.isActive() )
+        {
+            getLogger().info( "Schedule \"" + schedule.getName() + "\" is disabled." );
+
+            return;
+        }
+
         JobDataMap dataMap = new JobDataMap();
 
         dataMap.put( "continuum", continuum );

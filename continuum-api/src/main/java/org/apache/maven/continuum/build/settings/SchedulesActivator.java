@@ -17,6 +17,7 @@ package org.apache.maven.continuum.build.settings;
  */
 
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.model.project.Schedule;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -34,5 +35,14 @@ public interface SchedulesActivator
      * @throws SchedulesActivationException
      */
     void activateSchedules( Continuum continuum )
+        throws SchedulesActivationException;
+
+    /**
+     * Activate schedule by looking at the scheduling information contained within and submitting a
+     * Job to the scheduler.
+     *
+     * @throws SchedulesActivationException
+     */
+    void activateSchedule( Schedule schedule, Continuum continuum )
         throws SchedulesActivationException;
 }

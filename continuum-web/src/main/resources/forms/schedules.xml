@@ -47,6 +47,12 @@
     </element>
     <element>
       <id>schedule.quietPeriod</id>
+      <validators>
+        <validator>
+          <id>required</id>
+          <error-message-key>schedule.quietPeriod.error</error-message-key>
+        </validator>
+      </validators>
       <type>text</type>
       <label-key>schedule.quietPeriod.label</label-key>
       <message-key>schedule.quietPeriod.message</message-key>
@@ -60,7 +66,7 @@
       <type>checkbox</type>
       <label-key>schedule.active.label</label-key>
       <message-key>schedule.active.message</message-key>
-      <default-value>true</default-value>
+      <default-value>false</default-value>
       <expression>active</expression>
     </element>
   </elements>
