@@ -256,6 +256,7 @@
     <module>continuum-plexus-application</module>
     <module>continuum-store</module>
     <module>continuum-test</module>
+    <module>continuum-updater</module>
     <module>continuum-web</module>
     <!--
     <module>continuum-xfire</module>

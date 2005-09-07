@@ -8,6 +8,8 @@ package org.apache.maven.continuum.project.v1_0_alpha_3;
  //- Imported classes and packages -/
 //---------------------------------/
 
+import org.apache.maven.continuum.scm.v1_0_alpha_3.CheckOutScmResult;
+
 import java.util.*;
 import java.util.List;
 
