@@ -342,7 +342,7 @@ public class CruiseControlProjectBuilder
 
             URL u = url;
 
-            if ( "https".equals( url.getProtocol() ) )
+            if ( url.getProtocol().startsWith("http") )
             {
                 u = new MungedHttpsURL( url.toString() ).getURL();
             }

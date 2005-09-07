@@ -45,7 +45,7 @@ public class CreateProjectsFromMetadata
 
         try
         {
-            if ( !u.startsWith( "https" ) )
+            if ( !u.startsWith( "http" ) )
             {
                 url = new URL( u );
                 result = projectBuilder.buildProjectsFromMetadata( url, null, null );

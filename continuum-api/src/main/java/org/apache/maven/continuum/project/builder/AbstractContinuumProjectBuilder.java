@@ -42,7 +42,7 @@ public abstract class AbstractContinuumProjectBuilder
 
         InputStream is = null;
 
-        if ( metadata.getProtocol().equals( "https" ) )
+        if ( metadata.getProtocol().startsWith( "http" ) )
         {
             is = new MungedHttpsURL( metadata.toExternalForm(), username, password ).getURL().openStream();
         }
