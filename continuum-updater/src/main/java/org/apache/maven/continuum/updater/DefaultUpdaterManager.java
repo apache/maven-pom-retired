@@ -21,9 +21,11 @@ import org.apache.maven.continuum.updater.model.UpdaterModel;
 import org.apache.maven.continuum.updater.model.Version;
 import org.apache.maven.continuum.updater.model.io.xpp3.ContinuumUpdaterXpp3Reader;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.FileUtils;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.File;
 import java.util.Iterator;
 import java.util.Map;
@@ -45,7 +47,7 @@ public class DefaultUpdaterManager
      */
     private Map updaters;
 
-    public void execute( String version, File continuumHome )
+    public void execute( String userVersion, File continuumHome )
         throws UpdaterException
     {
         InputStream confAsStream;
@@ -73,20 +75,20 @@ public class DefaultUpdaterManager
         {
             Version v = (Version) i.next();
 
-            if ( v.getName().equals( version ) )
+            if ( v.getName().equals( userVersion ) )
             {
                 versionFounded = true;
             }
 
             if ( versionFounded && v.getComponentRole() != null )
             {
-                update( v, continuumHome );
+                update( userVersion, v, continuumHome );
             }
         }
 
         if ( !versionFounded )
         {
-            getLogger().warn( "There are no updater for your version(" + version + ")\n" + getAvailableVersions( model ) );
+            getLogger().warn( "There are no updater for your version(" + userVersion + ")\n" + getAvailableVersions( model ) );
         }
     }
 
@@ -112,7 +114,7 @@ public class DefaultUpdaterManager
         return sb.toString();
     }
 
-    private void update( Version version, File continuumHome )
+    private void update( String userVersion, Version version, File continuumHome )
         throws UpdaterException
     {
         getLogger().info( "************************************************************************" );
@@ -121,16 +123,69 @@ public class DefaultUpdaterManager
 
         Updater updater = (Updater) updaters.get( version.getComponentRole() );
 
-        getLogger().info( "Update database" );
+        if ( updater == null )
+        {
+            throw new UpdaterException( "Updater " + version.getComponentRole() + " doesn't exist." );
+        }
 
-        updater.updateDatabase();
+        if ( version.equals( version.getName() ) )
+        {
+            backup( continuumHome, userVersion );
+        }
 
-        getLogger().info( "Update librairies" );
+        try
+        {
+            getLogger().info( "==> Update database" );
 
-        updater.updateLibraries();
+            updater.updateDatabase();
 
-        getLogger().info( "Update file system" );
+            getLogger().info( "==> Update librairies" );
 
-        updater.updateFileSystem();
+            updater.updateLibraries();
+
+            getLogger().info( "==> Update file system" );
+
+            updater.updateFileSystem();
+        }
+        catch( UpdaterException e )
+        {
+            restore( continuumHome, userVersion );
+
+            throw e;
+        }
+    }
+
+    private void backup( File continuumHome, String userVersion )
+        throws UpdaterException
+    {
+        getLogger().info( "==> Backup Continuum " + userVersion );
+
+        try
+        {
+            FileUtils.copyDirectoryStructure( continuumHome,
+                                              new File( continuumHome.getParentFile(), "continuum-" + userVersion ) );
+        }
+        catch( IOException e )
+        {
+            throw new UpdaterException( "Can't create a continuum backup.", e );
+        }
+    }
+
+    private void restore( File continuumHome, String userVersion )
+        throws UpdaterException
+    {
+        getLogger().info( "==> Restore Continuum " + userVersion );
+
+        try
+        {
+            FileUtils.cleanDirectory( continuumHome );
+
+            FileUtils.copyDirectoryStructure( new File( continuumHome.getParentFile(), "continuum-" + userVersion ),
+                                              continuumHome );
+        }
+        catch( IOException e )
+        {
+            throw new UpdaterException( "Can't restore continuum.", e );
+        }
     }
 }

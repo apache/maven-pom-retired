@@ -167,7 +167,7 @@ public class UpdaterCli
 
     static class CLIManager
     {
-        public static final char CONTINUUM_HOME = 'c';
+        public static final char CONTINUUM_HOME = 'p';
 
         public static final char VERSION = 'v';
 

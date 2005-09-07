@@ -21,6 +21,7 @@ import org.apache.maven.continuum.updater.exception.UpdaterException;
 /**
  * @plexus.component
  *   role="org.apache.maven.continuum.updater.Updater"
+ *   role-hint="updateTo1.0-alpha-4"
  *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
