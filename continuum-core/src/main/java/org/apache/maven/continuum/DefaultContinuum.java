@@ -741,6 +741,8 @@ public class DefaultContinuum
             project.removeBuildDefinition( buildDefinition );
 
             updateProject( project );
+
+            removeBuildDefinition( buildDefinition );
         }
     }
 
