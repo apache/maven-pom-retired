@@ -8,6 +8,13 @@
   <artifactId>continuum-model</artifactId>
   <version>1.0-beta-1-SNAPSHOT</version>
   <name>Continuum Model</name>
+  <dependencies>
+    <!-- TODO: remove -->
+    <dependency>
+      <groupId>jpox</groupId>
+      <artifactId>jpox-enhancer</artifactId>
+    </dependency>
+  </dependencies>
   <build>
     <plugins>
       <plugin>
