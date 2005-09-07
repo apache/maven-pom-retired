@@ -83,7 +83,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         <td>
           #set ( $buildDefinitionLink = $link.setPage('BuildDefinition.vm').addPathInfo('view','BuildDefinition').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id) )
           <a href="$buildDefinitionLink">Edit</a> |
-          #set ( $deleteBuildDefinitionLink = $link.setPage('Summary.vm').addPathInfo('action','cam').addPathInfo('cid','deleteBuildDefinition').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id) )
+          #set ( $deleteBuildDefinitionLink = $link.setPage('DeleteBuildDefinition.vm').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id) )
           <a href="$deleteBuildDefinitionLink">Delete</a>
         </td>
       </tr>
@@ -155,7 +155,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
                 #set ( $editNotifierLink = $link.setPage('EditJabberNotifier.vm').addPathInfo('view','EditJabberNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
                 <a href="$editNotifierLink">Edit</a>
               #end
-              #set ( $deleteNotifierLink = $link.setPage('Summary.vm').addPathInfo('notifierId', $notifier.id).addPathInfo('action','cam').addPathInfo('cid','deleteNotifier').addPathInfo('id', $project.id) )
+              #set ( $deleteNotifierLink = $link.setPage('DeleteNotifier.vm').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
               | <a href="$deleteNotifierLink">Delete</a>
             #end
           </td>

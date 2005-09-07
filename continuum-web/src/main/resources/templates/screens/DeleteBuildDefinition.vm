@@ -1,0 +1,23 @@
+$page.setTitle( "Delete Build Definition" )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>Delete Build Definition</h3>
+    <div class="warningmessage">
+      <p>
+        <strong>$i18n.getString( "delete.confirmation.message" )</strong>
+      </p>
+    </div>
+    <form method="post" action="$link">
+      #hidden ( "cid" "deleteBuildDefinition" )
+      #hidden ( "action" "cam" )
+      #hidden ( "view" "Summary.vm" )
+      #hidden ( "id" $data.getParameters().getString( "id" ) )
+      #hidden ( "buildDefinitionId" $data.getParameters().getString( "buildDefinitionId" ) )
+      <div class="functnbar3">
+        <input type="submit" name="deleteEntry" value="Delete"/>
+        <input type="submit" name="cancel" value="Cancel"/>
+      </div>
+  </form>
+  </div>
+</div>
