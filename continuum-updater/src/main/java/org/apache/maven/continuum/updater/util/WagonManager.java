@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.updater;
+package org.apache.maven.continuum.updater.util;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
@@ -16,18 +16,21 @@ package org.apache.maven.continuum.updater;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.updater.exception.UpdaterException;
+import org.apache.maven.wagon.ResourceDoesNotExistException;
+import org.apache.maven.wagon.TransferFailedException;
+
+import java.io.File;
+import java.net.URL;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public interface Updater
+public interface WagonManager
 {
-    static String ROLE = Updater.class.getName();
+    static String ROLE = WagonManager.class.getName();
 
-    String getReleaseUrl();
+    void getFile( URL url, File destination, String checksumPolicy )
+        throws TransferFailedException, ResourceDoesNotExistException, ChecksumFailedException;
 
-    void updateDatabase()
-        throws UpdaterException;
 }

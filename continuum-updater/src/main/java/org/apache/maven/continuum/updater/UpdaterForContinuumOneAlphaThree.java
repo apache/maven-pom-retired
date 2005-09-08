@@ -29,18 +29,14 @@ import org.apache.maven.continuum.updater.exception.UpdaterException;
 public class UpdaterForContinuumOneAlphaThree
     implements Updater
 {
+    public String getReleaseUrl()
+    {
+        return "http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-4-bin.zip";
+    }
+
     public void updateDatabase()
         throws UpdaterException
     {
-    }
-
-    public void updateLibraries()
-        throws UpdaterException
-    {
-    }
-
-    public void updateFileSystem()
-        throws UpdaterException
-    {
+        //throw new UpdaterException( "Not implemented." );
     }
 }

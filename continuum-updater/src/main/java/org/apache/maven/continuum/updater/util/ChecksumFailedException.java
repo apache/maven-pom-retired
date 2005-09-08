@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.updater;
+package org.apache.maven.continuum.updater.util;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
@@ -16,18 +16,23 @@ package org.apache.maven.continuum.updater;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.updater.exception.UpdaterException;
+import org.apache.maven.wagon.TransferFailedException;
 
 /**
- * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
+ * Occurs when a download checksum fails.
+ *
+ * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
  */
-public interface Updater
+public class ChecksumFailedException extends TransferFailedException
 {
-    static String ROLE = Updater.class.getName();
-
-    String getReleaseUrl();
-
-    void updateDatabase()
-        throws UpdaterException;
+    public ChecksumFailedException( String s )
+    {
+        super( s );
+    }
+    
+    public ChecksumFailedException( String message, Throwable cause )
+    {
+        super( message, cause );
+    }
 }
