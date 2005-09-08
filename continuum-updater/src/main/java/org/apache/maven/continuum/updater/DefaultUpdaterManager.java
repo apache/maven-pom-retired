@@ -63,8 +63,6 @@ public class DefaultUpdaterManager
 
     private PlexusContainer container;
 
-    private File newContinuumFile;
-
     public void execute( String userVersion, File continuumHome )
         throws UpdaterException
     {
@@ -89,8 +87,6 @@ public class DefaultUpdaterManager
 
         boolean versionFounded = false;
 
-        newContinuumFile = downloadContinuum( model, continuumHome );
-
         for( Iterator i = model.getVersions().iterator(); i.hasNext(); )
         {
             Version v = (Version) i.next();
@@ -102,7 +98,7 @@ public class DefaultUpdaterManager
 
             if ( versionFounded && v.getComponentRole() != null )
             {
-                update( userVersion, v, continuumHome );
+                update( userVersion, v, continuumHome, model );
             }
         }
 
@@ -169,7 +165,7 @@ public class DefaultUpdaterManager
         return downloadedFile;
     }
 
-    private void update( String userVersion, Version version, File continuumHome )
+    private void update( String userVersion, Version version, File continuumHome, UpdaterModel model )
         throws UpdaterException
     {
         getLogger().info( "************************************************************************" );
@@ -188,9 +184,9 @@ public class DefaultUpdaterManager
             if ( userVersion.equals( version.getName() ) )
             {
                 backup( continuumHome, userVersion );
-
-                updateContinuumFiles( continuumHome );
             }
+
+            updateContinuumFiles( continuumHome, model );
 
             getLogger().info( "==> Update database" );
 
@@ -243,9 +239,11 @@ public class DefaultUpdaterManager
         }
     }
 
-    private void updateContinuumFiles( File continuumHome )
+    private void updateContinuumFiles( File continuumHome, UpdaterModel model )
         throws UpdaterException
     {
+        File newContinuumFile = downloadContinuum( model, continuumHome );
+
         getLogger().info( "==> Update Continuum files." );
 
         try
