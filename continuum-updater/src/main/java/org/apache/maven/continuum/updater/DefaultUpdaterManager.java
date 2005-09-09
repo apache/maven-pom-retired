@@ -181,10 +181,7 @@ public class DefaultUpdaterManager
 
         try
         {
-            if ( userVersion.equals( version.getName() ) )
-            {
-                backup( continuumHome, userVersion );
-            }
+            backup( continuumHome, userVersion );
 
             updateContinuumFiles( continuumHome, model );
 
