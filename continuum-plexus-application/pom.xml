@@ -145,13 +145,13 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-mail-sender-javamail</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-2</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-mail-sender-api</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0-alpha-2</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
