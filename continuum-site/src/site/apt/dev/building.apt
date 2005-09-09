@@ -24,8 +24,11 @@ $ svn co http://svn.apache.org/repos/asf/maven/continuum/trunk/ continuum
 
 Building Continuum
 
- <<NOTE:>> Continuum requires Maven 2 Alpha 2 or newer to build. While we use
- the Alpha 2 release to build it should build with newer versions of Maven 2.
+ <<NOTE:>> Continuum requires a recent build of Maven 2 to build. If you are
+ running into fundamental problems running the <<<build.sh>>> script (i.e. problems
+ parsing pom.xml, etc) you probably need a newer version of Maven 2 and that
+ may require you to build it.  You can find out how
+ {{{http://maven.apache.org/maven2/developers/building.html}here}}.
 
  Continuum consists of 6 Maven 2 projects:
 
@@ -59,8 +62,22 @@ Building Continuum
 continuum$ sh build.sh
 +--+
 
- A complete copy of the output of the build will be in <<<build.log>>>.
+ A complete copy of the output of the build will be in <<<result.log>>>.
 
       [Note:] For Windows, you need to check out the sources at the root of your disk
               because continuum build use long path name and Windows doesn't accept
               path length greater than 250 characters.
+
+ A working version of the Continuum server resides in <<<continuum-plexus-application/target/plexus-test-runtime>>>.
+ That is the server that was used in the execution of the test suite.  Most likely, you'll want the full distribution
+ package.  You can create that by executing the <<<assembly:assembly>>> goal in the <<<continuum-plexus-application>>>
+ module.
+  
++--+
+$ cd continuum-plexus-application
+$ m2 assembly:assembly
+$ ls -l target/continuum*
+-rw-r--r--  1 foo bar 13298032 Sep  9 14:38 target/continuum-[VERSION]-bin.tar.bz2
+-rw-r--r--  1 foo bar 13202991 Sep  9 14:38 target/continuum-[VERSION]-bin.tar.gz
+-rw-r--r--  1 foo bar 13207990 Sep  9 14:38 target/continuum-[VERSION]-bin.zip
++--+
