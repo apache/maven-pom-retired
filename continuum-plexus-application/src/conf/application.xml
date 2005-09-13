@@ -91,6 +91,7 @@
         <from-mailbox>@mail.override.from.mailbox@</from-mailbox>
         <from-name>@mail.override.from.name@</from-name>
         <timestamp-format>EEE, d MMM yyyy HH:mm:ss Z</timestamp-format>
+        <includeBuildResult>true</includeBuildResult>
       </configuration>
     </component>
 

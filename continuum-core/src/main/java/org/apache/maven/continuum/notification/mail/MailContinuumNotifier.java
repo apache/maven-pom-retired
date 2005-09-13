@@ -20,6 +20,7 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
 import org.apache.maven.continuum.project.ContinuumProjectState;
@@ -31,7 +32,6 @@ import org.codehaus.plexus.mailsender.MailMessage;
 import org.codehaus.plexus.mailsender.MailSender;
 import org.codehaus.plexus.mailsender.MailSenderException;
 import org.codehaus.plexus.notification.NotificationException;
-import org.codehaus.plexus.notification.notifier.AbstractNotifier;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.velocity.VelocityComponent;
@@ -50,7 +50,7 @@ import java.util.Set;
  * @version $Id$
  */
 public class MailContinuumNotifier
-    extends AbstractNotifier
+    extends AbstractContinuumNotifier
     implements Initializable
 {
     // ----------------------------------------------------------------------
@@ -95,6 +95,11 @@ public class MailContinuumNotifier
      * @plexus.configuration
      */
     private String timestampFormat;
+
+    /**
+     * @plexus.configuration
+     */
+    private boolean includeBuildResult = true;
 
     // ----------------------------------------------------------------------
     //
@@ -226,37 +231,44 @@ public class MailContinuumNotifier
 
         try
         {
-            VelocityContext context = new VelocityContext();
+            if ( includeBuildResult )
+            {
+                VelocityContext context = new VelocityContext();
 
-            // ----------------------------------------------------------------------
-            // Data objects
-            // ----------------------------------------------------------------------
+                // ----------------------------------------------------------------------
+                // Data objects
+                // ----------------------------------------------------------------------
 
-            context.put( "project", project );
+                context.put( "project", project );
 
-            context.put( "build", build );
+                context.put( "build", build );
 
-            context.put( "buildOutput", buildOutput );
+                context.put( "buildOutput", buildOutput );
 
-            context.put( "previousBuild", previousBuild );
+                context.put( "previousBuild", previousBuild );
 
-            // ----------------------------------------------------------------------
-            // Tools
-            // ----------------------------------------------------------------------
+                // ----------------------------------------------------------------------
+                // Tools
+                // ----------------------------------------------------------------------
 
-            context.put( "formatter", formatterTool );
+                context.put( "formatter", formatterTool );
 
-            // TODO: Make the build host a part of the build
+                // TODO: Make the build host a part of the build
 
-            context.put( "buildHost", buildHost );
+                context.put( "buildHost", buildHost );
 
-            // ----------------------------------------------------------------------
-            //
-            // ----------------------------------------------------------------------
+                // ----------------------------------------------------------------------
+                // Generate
+                // ----------------------------------------------------------------------
 
-            velocity.getEngine().mergeTemplate( templateName, context, writer );
+                velocity.getEngine().mergeTemplate( templateName, context, writer );
 
-            content = writer.getBuffer().toString();
+                content = writer.getBuffer().toString();
+            }
+            else
+            {
+                content = getReportUrl( project, build, configurationService );
+            }
         }
         catch ( ResourceNotFoundException e )
         {

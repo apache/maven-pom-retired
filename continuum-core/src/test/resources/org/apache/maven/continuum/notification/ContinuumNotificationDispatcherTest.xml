@@ -35,11 +35,15 @@
         <requirement>
           <role>org.codehaus.plexus.mailsender.MailSender</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
       </requirements>
       <configuration>
         <fromMailbox>continuum@localhost</fromMailbox>
         <fromName>Continuum</fromName>
         <timestampFormat>EEE, d MMM yyyy HH:mm:ss Z</timestampFormat>
+        <includeBuildResult>true</includeBuildResult>
       </configuration>
     </component>
 
