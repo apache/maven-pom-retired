@@ -17,5 +17,9 @@
       <groupId>plexus</groupId>
       <artifactId>plexus-jdo2</artifactId>
     </dependency>
+    <dependency>
+      <groupId>jpox</groupId>
+      <artifactId>jpox-enhancer</artifactId>
+    </dependency>
   </dependencies>
 </project>
