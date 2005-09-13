@@ -6,6 +6,10 @@
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
   <url>http://maven.apache.org/continuum/</url>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/CONTINUUM</url>
+  </issueManagement>
   <ciManagement>
     <system>continuum</system>
     <url>http://maven.zones.apache.org/continuum/</url>
