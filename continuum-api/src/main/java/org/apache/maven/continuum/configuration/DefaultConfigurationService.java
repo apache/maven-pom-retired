@@ -274,6 +274,16 @@ public class DefaultConfigurationService
         {
             configuration.addChild( createDom( CONFIGURATION_COMPANY_LOGO, companyLogoUrl ) );
         }
+
+        if ( companyName != null )
+        {
+            configuration.addChild( createDom( CONFIGURATION_COMPANY_NAME, companyName ) );
+        }
+
+        if ( companyUrl != null )
+        {
+            configuration.addChild( createDom( CONFIGURATION_COMPANY_URL, companyUrl ) );
+        }
     }
 
     protected Xpp3Dom createDom( String elementName, String value )
