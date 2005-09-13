@@ -24,6 +24,10 @@
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
       <artifactId>plexus-log4j-logging</artifactId>
       <version>1.0</version>
     </dependency>
