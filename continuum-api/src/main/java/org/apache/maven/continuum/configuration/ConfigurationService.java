@@ -41,6 +41,12 @@ public interface ConfigurationService
 
     String CONFIGURATION_WORKING_DIRECTORY = "working-directory";
 
+    String CONFIGURATION_COMPANY_LOGO = "company-logo";
+
+    String CONFIGURATION_COMPANY_NAME = "company-name";
+
+    String CONFIGURATION_COMPANY_URL = "company-url";
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -66,6 +72,18 @@ public interface ConfigurationService
     void setInMemoryMode( boolean inMemoryMode );
 
     boolean inMemoryMode();
+
+    String getCompanyLogo();
+
+    void setCompanyLogo( String companyLogoUrl );
+
+    String getCompanyName();
+
+    void setCompanyName( String companyName );
+
+    String getCompanyUrl();
+
+    void setCompanyUrl( String companyUrl );
 
     // ----------------------------------------------------------------------
     //

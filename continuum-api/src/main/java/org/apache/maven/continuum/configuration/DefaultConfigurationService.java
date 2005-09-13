@@ -71,6 +71,12 @@ public class DefaultConfigurationService
 
     private Map jdks;
 
+    private String companyLogoUrl;
+
+    private String companyName;
+
+    private String companyUrl;
+
     private static final String LS = System.getProperty( "line.separator" );
 
     // ----------------------------------------------------------------------
@@ -132,6 +138,36 @@ public class DefaultConfigurationService
         return inMemoryMode;
     }
 
+    public String getCompanyLogo()
+    {
+        return companyLogoUrl;
+    }
+
+    public void setCompanyLogo( String companyLogoUrl )
+    {
+        this.companyLogoUrl = companyLogoUrl;
+    }
+
+    public String getCompanyName()
+    {
+        return companyName;
+    }
+
+    public void setCompanyName( String companyName )
+    {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyUrl()
+    {
+        return companyUrl;
+    }
+
+    public void setCompanyUrl( String companyUrl )
+    {
+        this.companyUrl = companyUrl;
+    }
+
     // ----------------------------------------------------------------------
     // Process configuration to glean application specific values
     // ----------------------------------------------------------------------
@@ -163,6 +199,27 @@ public class DefaultConfigurationService
         }
 
         workingDirectory = getFile( configuration, CONFIGURATION_WORKING_DIRECTORY );
+
+        Xpp3Dom companyLogoUrlDom = configuration.getChild( CONFIGURATION_COMPANY_LOGO );
+
+        if ( companyLogoUrlDom != null )
+        {
+            companyLogoUrl = companyLogoUrlDom.getValue();
+        }
+
+        Xpp3Dom companyNameDom = configuration.getChild( CONFIGURATION_COMPANY_NAME );
+
+        if ( companyNameDom != null )
+        {
+            companyName = companyNameDom.getValue();
+        }
+
+        Xpp3Dom companyUrlDom = configuration.getChild( CONFIGURATION_COMPANY_URL );
+
+        if ( companyUrlDom != null )
+        {
+            companyUrl = companyUrlDom.getValue();
+        }
     }
 
     private File getFile( Xpp3Dom configuration, String elementName )
@@ -211,6 +268,11 @@ public class DefaultConfigurationService
         if ( workingDirectory != null )
         {
             configuration.addChild( createFileDom( CONFIGURATION_WORKING_DIRECTORY, workingDirectory ) );
+        }
+
+        if ( companyLogoUrl != null )
+        {
+            configuration.addChild( createDom( CONFIGURATION_COMPANY_LOGO, companyLogoUrl ) );
         }
     }
 

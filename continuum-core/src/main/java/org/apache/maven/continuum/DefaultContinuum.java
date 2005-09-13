@@ -870,6 +870,28 @@ public class DefaultContinuum
     }
 
     // ----------------------------------------------------------------------
+    // Configuration
+    // ----------------------------------------------------------------------
+
+    public ConfigurationService getConfiguration()
+    {
+        return configurationService;
+    }
+
+    public void reloadConfiguration()
+        throws ContinuumException
+    {
+        try
+        {
+            configurationService.load();
+        }
+        catch( ConfigurationLoadingException e )
+        {
+            throw new ContinuumException( "Can't reload configuration.", e );
+        }
+    }
+
+    // ----------------------------------------------------------------------
     // Lifecycle Management
     // ----------------------------------------------------------------------
 

@@ -16,6 +16,7 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
@@ -159,7 +160,7 @@ public interface Continuum
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
-    // Build Definition
+    // Schedule
     // ----------------------------------------------------------------------
 
     Schedule getSchedule( int id )
@@ -178,5 +179,14 @@ public interface Continuum
         throws ContinuumException;
 
     void removeSchedule( int scheduleId )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Configuration
+    // ----------------------------------------------------------------------
+
+    ConfigurationService getConfiguration();
+
+    void reloadConfiguration()
         throws ContinuumException;
 }

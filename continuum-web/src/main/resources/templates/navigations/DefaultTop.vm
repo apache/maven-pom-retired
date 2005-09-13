@@ -3,9 +3,19 @@
     <tbody>
       <tr>
         <td>
-          <a href="http://www.apache.org/">
-            Your company logo here
-          </a>
+          #if ( $continuum.getConfiguration().getCompanyLogo() )
+            #if ( $continuum.getConfiguration().getCompanyUrl() )
+              <a href="$continuum.getConfiguration().getCompanyUrl()">
+            #end
+                <img src="$continuum.getConfiguration().getCompanyLogo()" #if ( $continuum.getConfiguration().getCompanyName() ) alt="$continuum.getConfiguration().getCompanyName()" #end>
+            #if ( $continuum.getConfiguration().getCompanyUrl() )
+              </a>
+            #end
+          #else
+            <a href="http://maven.apache.org/continuum/">
+              [Your company logo here]
+            </a>
+          #end
         </td>
         <td>
           <a href="http://maven.apache.org/continuum">
