@@ -17,6 +17,9 @@ package org.apache.maven.continuum.updater;
  */
 
 import org.apache.maven.continuum.updater.exception.UpdaterException;
+import org.codehaus.plexus.jdo.JdoFactory;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -28,6 +31,10 @@ public interface Updater
 
     String getReleaseUrl();
 
-    void updateDatabase()
+    File getOldApplicationXml( File continuumHome );
+
+    File getNewApplicationXml( File continuumHome );
+
+    void updateDatabase( JdoFactory oldFactory, JdoFactory newFactory )
         throws UpdaterException;
 }

@@ -24,16 +24,21 @@ import org.apache.maven.continuum.updater.util.WagonManager;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.archiver.UnArchiver;
+import org.codehaus.plexus.component.repository.io.PlexusTools;
+import org.codehaus.plexus.configuration.PlexusConfiguration;
 import org.codehaus.plexus.context.Context;
 import org.codehaus.plexus.context.ContextException;
+import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.File;
+import java.io.FileReader;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
@@ -181,15 +186,62 @@ public class DefaultUpdaterManager
 
         try
         {
-            backup( continuumHome, userVersion );
+            backup( continuumHome, version.getName() );
 
             updateContinuumFiles( continuumHome, model );
 
             getLogger().info( "==> Update database" );
 
-            updater.updateDatabase();
+            File oldApplicationXml = updater.getOldApplicationXml( getBackupDirectory( continuumHome,
+                                                                                       version.getName() ) );
+
+            FileUtils.copyFile( oldApplicationXml, getApplicationXmlBackup( oldApplicationXml ) );
+
+            String applicationXmlContent = FileUtils.fileRead( oldApplicationXml );
+
+            StringUtils.replace( applicationXmlContent, "<role>org.codehaus.plexus.jdo.JdoFactory</role>",
+                "<role>org.codehaus.plexus.jdo.JdoFactory</role>\n<role-hint>"+ version.getName() + "</role-hint>");
+
+            FileUtils.fileWrite( oldApplicationXml.getAbsolutePath(), applicationXmlContent );
+
+            //Load old application.xml
+            addConfiguration( oldApplicationXml );
+
+            File newApplicationXml = updater.getNewApplicationXml( continuumHome );
+
+            FileUtils.copyFile( newApplicationXml, getApplicationXmlBackup( newApplicationXml ) );
+
+            applicationXmlContent = FileUtils.fileRead( newApplicationXml );
+
+            StringUtils.replace( applicationXmlContent, "<role>org.codehaus.plexus.jdo.JdoFactory</role>",
+                "<role>org.codehaus.plexus.jdo.JdoFactory</role>\n<role-hint>"+ version.getName() + "-new</role-hint>");
+
+            FileUtils.fileWrite( newApplicationXml.getAbsolutePath(), applicationXmlContent );
+
+            //Load new application.xml
+            addConfiguration( newApplicationXml );
+
+            try
+            {
+                //load jdo factories
+                JdoFactory oldFactory = (JdoFactory) container.lookup( JdoFactory.ROLE, version.getName() );
+
+                JdoFactory newFactory = (JdoFactory) container.lookup( JdoFactory.ROLE, version.getName() + "-new" );
+
+                updater.updateDatabase( oldFactory, newFactory );
+            }
+            finally
+            {
+                FileUtils.copyFile( getApplicationXmlBackup( oldApplicationXml ), oldApplicationXml );
+
+                getApplicationXmlBackup( oldApplicationXml ).delete();
+
+                FileUtils.copyFile( getApplicationXmlBackup( newApplicationXml ), newApplicationXml );
+
+                getApplicationXmlBackup( newApplicationXml ).delete();
+            }
         }
-        catch( UpdaterException e )
+        catch( Exception e )
         {
             e.printStackTrace();
 
@@ -199,12 +251,12 @@ public class DefaultUpdaterManager
         }
     }
 
-    private void backup( File continuumHome, String userVersion )
+    private void backup( File continuumHome, String version )
         throws UpdaterException
     {
-        File backupDir = new File( continuumHome.getParentFile(), "continuum-" + userVersion );
+        File backupDir = getBackupDirectory( continuumHome, version );
 
-        getLogger().info( "==> Backup Continuum " + userVersion + " to " + backupDir.getAbsolutePath() );
+        getLogger().info( "==> Backup Continuum " + version + " to " + backupDir.getAbsolutePath() );
 
         try
         {
@@ -227,13 +279,23 @@ public class DefaultUpdaterManager
         {
             FileUtils.cleanDirectory( continuumHome );
 
-            FileUtils.copyDirectoryStructure( new File( continuumHome.getParentFile(), "continuum-" + userVersion ),
+            FileUtils.copyDirectoryStructure( getBackupDirectory( continuumHome, userVersion ),
                                               continuumHome );
         }
         catch( IOException e )
         {
             throw new UpdaterException( "Can't restore continuum.", e );
         }
+    }
+
+    private File getBackupDirectory( File continuumHome, String version )
+    {
+        return new File( continuumHome.getParentFile(), "continuum-" + version );
+    }
+
+    private File getApplicationXmlBackup( File applicationXml )
+    {
+        return new File( applicationXml.getParentFile(), "application.xml.backup" );
     }
 
     private void updateContinuumFiles( File continuumHome, UpdaterModel model )
@@ -308,5 +370,13 @@ public class DefaultUpdaterManager
         throws ContextException
     {
         container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
+    }
+
+    private void addConfiguration( File config )
+        throws Exception
+    {
+        PlexusConfiguration appConfig = PlexusTools.buildConfiguration( config.getPath(), new FileReader( config ) );
+
+        //TODO: Add configuration to the container
     }
 }
