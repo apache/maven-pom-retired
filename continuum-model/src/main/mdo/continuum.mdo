@@ -241,16 +241,25 @@
           <name>sendOnSuccess</name>
           <version>1.0.0+</version>
           <type>boolean</type>
+          <defaultValue>true</defaultValue>
         </field>
         <field>
           <name>sendOnFailure</name>
           <version>1.0.0+</version>
           <type>boolean</type>
+          <defaultValue>true</defaultValue>
         </field>
         <field>
           <name>sendOnError</name>
           <version>1.0.0+</version>
           <type>boolean</type>
+          <defaultValue>true</defaultValue>
+        </field>
+        <field>
+          <name>sendOnWarning</name>
+          <version>1.0.0+</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
         </field>
         <field>
           <name>configuration</name>
