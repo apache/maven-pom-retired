@@ -50,18 +50,11 @@
       <groupId>plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
     </dependency>
-
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
       <version>1.0</version>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>jdo</groupId>
-      <artifactId>jdo</artifactId>
-    </dependency>
-    -->
     <dependency>
       <groupId>servletapi</groupId>
       <artifactId>servletapi</artifactId>

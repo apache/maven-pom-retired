@@ -154,12 +154,6 @@
       <artifactId>plexus-mail-sender-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>jdo</groupId>
-      <artifactId>jdo</artifactId>
-    </dependency>
-    -->
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>

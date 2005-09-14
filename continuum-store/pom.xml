@@ -27,12 +27,6 @@
       <groupId>plexus</groupId>
       <artifactId>plexus-jdo2</artifactId>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>jdo</groupId>
-      <artifactId>jdo</artifactId>
-    </dependency>
-    -->
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
