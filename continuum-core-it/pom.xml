@@ -29,7 +29,6 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-log4j-logging</artifactId>
-      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>xmlrpc</groupId>
@@ -39,7 +38,6 @@
     <dependency>
       <groupId>incubator-derby</groupId>
       <artifactId>derby</artifactId>
-      <version>10.0.2.1</version>
     </dependency>
   </dependencies>
 </project>

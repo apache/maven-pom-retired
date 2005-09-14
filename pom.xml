@@ -71,6 +71,51 @@
       </dependency>
       <!--
        |
+       | Maven SCM
+       |
+       -->
+      <dependency>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-manager-plexus</artifactId>
+        <version>1.0-alpha-2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-cvs</artifactId>
+        <version>1.0-alpha-2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-svn</artifactId>
+        <version>1.0-alpha-2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-local</artifactId>
+        <version>1.0-alpha-2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-starteam</artifactId>
+        <version>1.0-alpha-2-SNAPSHOT</version>
+      </dependency>
+      <!--
+       |
+       | Wagon
+       |
+       -->
+      <dependency>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-provider-api</artifactId>
+        <version>1.0-alpha-4</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-http-lightweight</artifactId>
+        <version>1.0-alpha-4</version>
+      </dependency>
+      <!--
+       |
        | Continuum
        |
        -->
@@ -167,7 +212,7 @@
       <dependency>
         <groupId>plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
       </dependency>       
       <dependency>
         <groupId>plexus</groupId>
@@ -179,14 +224,64 @@
           <artifactId>plexus-formica</artifactId>
           <version>1.0-beta-5</version>
        </dependency>
-    </dependencies>    
+      <dependency>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-velocity</artifactId>
+        <version>1.1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-mail-sender-api</artifactId>
+        <version>1.0-alpha-2</version>
+      </dependency>
+      <dependency>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-mail-sender-simple</artifactId>
+        <version>1.0-alpha-2</version>
+      </dependency>
+      <dependency>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-mail-sender-test</artifactId>
+        <version>1.0-alpha-2</version>
+      </dependency>
+      <dependency>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-mail-sender-javamail</artifactId>
+        <version>1.0-alpha-2</version>
+      </dependency>
+      <dependency>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-log4j-logging</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-notification</artifactId>
+        <version>1.0-alpha-4</version>
+      </dependency>
+      <!--
+       |
+       | Misc
+       |
+       -->
+      <dependency>
+        <groupId>incubator-derby</groupId>
+        <artifactId>derby</artifactId>
+        <version>10.0.2.1</version>
+      </dependency>
+      <dependency>
+        <groupId>hsqldb</groupId>
+        <artifactId>hsqldb</artifactId>
+      <version>1.7.3.3</version>
+      </dependency>
+    </dependencies>
   </dependencyManagement>
   
   <dependencies>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
-      <version>1.0-alpha-5</version>
+      <version>1.0-alpha-6</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

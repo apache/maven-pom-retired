@@ -26,7 +26,6 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-log4j-logging</artifactId>
-      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
@@ -50,7 +49,6 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
-      <version>1.0</version>
     </dependency>
 
     <dependency>
@@ -62,7 +60,6 @@
     <dependency>
       <groupId>jdo</groupId>
       <artifactId>jdo</artifactId>
-      <version>1.0.1</version>
     </dependency>
     -->
     <dependency>

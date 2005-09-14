@@ -60,7 +60,6 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
-      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
@@ -70,12 +69,10 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-notification</artifactId>
-      <version>1.0-alpha-4</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-mail-sender-api</artifactId>
-      <version>1.0-alpha-2</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
@@ -125,21 +122,18 @@
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-provider-api</artifactId>
-      <version>1.0-alpha-4</version>
     </dependency>
-    <!-- Plexus SCM -->
+    <!-- Maven SCM -->
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-manager-plexus</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
     </dependency>
-
+    <!-- Misc -->
     <dependency>
       <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
       <version>1.4</version>
     </dependency>
-
     <!--
      |
      | Test Dependencies
@@ -148,31 +142,27 @@
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-local</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-mail-sender-simple</artifactId>
-      <version>1.0-alpha-2</version>
-      <!--
       <scope>test</scope>
-      -->
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-mail-sender-test</artifactId>
-      <version>1.0-alpha-2</version>
       <scope>test</scope>
     </dependency>
+    <!--
     <dependency>
       <groupId>jdo</groupId>
       <artifactId>jdo</artifactId>
     </dependency>
+    -->
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-      <version>1.7.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -185,7 +175,6 @@
     <dependency>
       <groupId>incubator-derby</groupId>
       <artifactId>derby</artifactId>
-      <version>10.0.2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
