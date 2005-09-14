@@ -257,6 +257,20 @@ public class MailContinuumNotifier
 
                 context.put( "buildHost", buildHost );
 
+                String osName = System.getProperty( "os.name" );
+
+                String osPatchLevel = System.getProperty( "sun.os.patch.level" );
+
+                if ( osPatchLevel != null )
+                {
+                    osName = osName + "(" + osPatchLevel + ")";
+                }
+
+                context.put( "osName", osName );
+
+                context.put( "javaVersion", System.getProperty( "java.version" ) + "("
+                    + System.getProperty( "java.vendor" ) + ")" );
+
                 // ----------------------------------------------------------------------
                 // Generate
                 // ----------------------------------------------------------------------

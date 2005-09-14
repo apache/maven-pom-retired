@@ -27,6 +27,8 @@ Build statistics:
   Build Trigger: $formatter.formatTrigger( $build.trigger )
   Exit code: $build.exitCode
   Building machine hostname: $buildHost
+  Operating system : $osName
+  Java version : $javaVersion
 
 #if ( $build.scmResult )
 Changes
