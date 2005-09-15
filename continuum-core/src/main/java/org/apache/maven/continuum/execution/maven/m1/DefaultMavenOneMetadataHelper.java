@@ -16,14 +16,9 @@ package org.apache.maven.continuum.execution.maven.m1;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
-import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
-import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -44,11 +39,6 @@ public class DefaultMavenOneMetadataHelper
     extends AbstractLogEnabled
     implements MavenOneMetadataHelper
 {
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumStore store;
-
     // ----------------------------------------------------------------------
     // MavenOneMetadataHelper Implementation
     // ----------------------------------------------------------------------
@@ -249,27 +239,6 @@ public class DefaultMavenOneMetadataHelper
         project.setScmUrl( scmConnection );
 
         project.setNotifiers( notifiers );
-
-        BuildDefinition bd = new BuildDefinition();
-
-        bd.setArguments( "" );
-
-        bd.setGoals( "clean:clean jar:install" );
-
-        bd.setBuildFile( "project.xml" );
-
-        try
-        {
-            Schedule schedule = store.getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME );
-
-            bd.setSchedule( schedule );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            getLogger().warn( "Can't get default schedule.", e );
-        }
-
-        project.addBuildDefinition( bd );
     }
 
     // ----------------------------------------------------------------------

@@ -19,11 +19,16 @@ package org.apache.maven.continuum.project.builder.maven;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper;
 import org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelperException;
+import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +48,11 @@ public class MavenOneContinuumProjectBuilder
      * @plexus.requirement
      */
     private MavenOneMetadataHelper metadataHelper;
+
+    /**
+     * @plexus.requirement
+     */
+    private ContinuumStore store;
 
     // ----------------------------------------------------------------------
     // ProjectCreator Implementation
@@ -72,6 +82,27 @@ public class MavenOneContinuumProjectBuilder
             Project project = new Project();
 
             metadataHelper.mapMetadata( pomFile, project );
+
+            BuildDefinition bd = new BuildDefinition();
+
+            bd.setArguments( "" );
+
+            bd.setGoals( "clean:clean jar:install" );
+
+            bd.setBuildFile( "project.xml" );
+
+            try
+            {
+                Schedule schedule = store.getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME );
+
+                bd.setSchedule( schedule );
+            }
+            catch ( ContinuumStoreException e )
+            {
+                getLogger().warn( "Can't get default schedule.", e );
+            }
+
+            project.addBuildDefinition( bd );
 
             result.addProject( project, MavenOneBuildExecutor.ID );
         }

@@ -54,6 +54,8 @@ public class MavenOneIntegrationTest
 
         waitForSuccessfulCheckout( projectId );
 
+        assertEquals(1, continuum.getProjectWithAllDetails( projectId ).getBuildDefinitions().size());
+
         Project project = continuum.getProjectWithCheckoutResult( projectId );
 
         assertProject( projectId, "Maven 1 Project", "1.0", "", MavenOneBuildExecutor.ID, project );
@@ -69,6 +71,8 @@ public class MavenOneIntegrationTest
         int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
 
         assertSuccessfulMaven1Build( buildId, projectId );
+
+        assertEquals(1, continuum.getProjectWithAllDetails( projectId ).getBuildDefinitions().size());
 
         // ----------------------------------------------------------------------
         //

@@ -255,11 +255,6 @@
     <component>
       <role>org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper</role>
       <implementation>org.apache.maven.continuum.execution.maven.m1.DefaultMavenOneMetadataHelper</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.store.ContinuumStore</role>
-        </requirement>
-      </requirements>
     </component>
 
     <component>
@@ -317,6 +312,9 @@
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
       </requirements>
     </component>
