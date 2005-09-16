@@ -156,7 +156,7 @@ fi
     (
       cd $DIR/continuum/continuum-plexus-application
 
-      $M2_HOME/bin/m2 -Denv=production --batch-mode --no-plugin-registry --update-snapshots -e assembly:assembly
+      $M2_HOME/bin/m2 -Denv=production --batch-mode --no-plugin-registry --update-snapshots -e clean:clean assembly:assembly
       ret=$?; if [ $ret != 0 ]; then exit $ret; fi
 
       mv target/continuum*.tar.gz $DEPLOY_DIR/$DIST
