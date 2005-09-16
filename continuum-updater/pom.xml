@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.apache.maven.continuum</groupId>
     <artifactId>continuum-parent</artifactId>
-    <version>1.0-beta-1-SNAPSHOT</version>
+    <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>continuum-updater</artifactId>
-  <version>1.0-beta-1-SNAPSHOT</version>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Updater</name>
   <dependencies>
     <dependency>
@@ -47,7 +47,7 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <descriptor>src/assemble/bin.xml</descriptor>
-          <finalName>continuum-updater-1.0-beta-1</finalName>
+          <finalName>continuum-updater-1.0-alpha-4-SNAPSHOT</finalName>
         </configuration>
       </plugin>
       <plugin>

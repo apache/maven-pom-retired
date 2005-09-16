@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.apache.maven.continuum</groupId>
     <artifactId>continuum-parent</artifactId>
-    <version>1.0-beta-1-SNAPSHOT</version>
+    <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>continuum-plexus-application</artifactId>
-  <version>1.0-beta-1-SNAPSHOT</version>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Plexus Application</name>
   <packaging>plexus-application</packaging>
   <repositories>
@@ -211,7 +211,7 @@
         <configuration>
           <descriptor>src/assembly/bin.xml</descriptor>
           <!-- TODO: isn't this the default? if not, can we use the ${pom.} expression? -->
-          <finalName>continuum-1.0-beta-1-SNAPSHOT</finalName>
+          <finalName>continuum-1.0-alpha-4-SNAPSHOT</finalName>
         </configuration>
         <executions>
           <execution>
