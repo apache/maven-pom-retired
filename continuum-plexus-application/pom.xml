@@ -183,8 +183,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plexus-plugin</artifactId>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
         <configuration>
           <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
           <configurationsDirectory>src/conf</configurationsDirectory>
@@ -207,7 +207,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.0-beta-1-SNAPSHOT</version>
+        <version>2.0-beta-1</version>
         <configuration>
           <descriptor>src/assembly/bin.xml</descriptor>
           <!-- TODO: isn't this the default? if not, can we use the ${pom.} expression? -->

@@ -77,27 +77,27 @@
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-manager-plexus</artifactId>
-        <version>1.0-alpha-2-SNAPSHOT</version>
+        <version>1.0-alpha-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-cvs</artifactId>
-        <version>1.0-alpha-2-SNAPSHOT</version>
+        <version>1.0-alpha-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-svn</artifactId>
-        <version>1.0-alpha-2-SNAPSHOT</version>
+        <version>1.0-alpha-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-local</artifactId>
-        <version>1.0-alpha-2-SNAPSHOT</version>
+        <version>1.0-alpha-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-starteam</artifactId>
-        <version>1.0-alpha-2-SNAPSHOT</version>
+        <version>1.0-alpha-2</version>
       </dependency>
       <!--
        |
@@ -212,7 +212,7 @@
       <dependency>
         <groupId>plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
       </dependency>       
       <dependency>
         <groupId>plexus</groupId>
@@ -322,24 +322,14 @@
       </releases>
     </repository>
   </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>snapshots-plugins</id>
-      <name>Maven Snapshot Plugins Development Repository</name>
-      <url>http://snapshots.maven.codehaus.org/maven2/plugins</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </pluginRepository>
-  </pluginRepositories>
 
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-plexus-plugin</artifactId>
-          <version>1.1-alpha-6-SNAPSHOT</version>
+          <groupId>plexus</groupId>
+          <artifactId>plexus-maven-plugin</artifactId>
+          <version>1.1-alpha-6</version>
           <extensions>true</extensions>
         </plugin>
       </plugins>
@@ -355,7 +345,9 @@
     <module>continuum-plexus-application</module>
     <module>continuum-store</module>
     <module>continuum-test</module>
+    <!--
     <module>continuum-updater</module>
+    -->
     <module>continuum-web</module>
     <!--
     <module>continuum-xfire</module>

@@ -31,7 +31,8 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-plexus-plugin</artifactId>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
         <executions>
           <execution>
             <id>foo</id>

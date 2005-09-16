@@ -21,8 +21,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plexus-plugin</artifactId>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
         <executions>
           <execution>
             <goals>
