@@ -13,47 +13,97 @@
         <include>NOTICE*</include>
       </includes>
     </fileSet>
-<!--
-    <fileSet>
-      <directory>src/bin</directory>
-      <outputDirectory>bin</outputDirectory>
-    </fileSet>
--->
     <fileSet>
       <!-- TODO: use expressions instead: ${project.build.directory}, ${project.build.finalName}, or have a <build /> tag to include the built artifact -->
-      <directory>target/plexus-test-runtime</directory>
-      <outputDirectory>.</outputDirectory>
-<!--
+      <directory>target/plexus-test-runtime/apps</directory>
+      <outputDirectory>apps</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/conf</directory>
+      <outputDirectory>conf</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/core</directory>
+      <outputDirectory>core</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/logs</directory>
+      <outputDirectory>logs</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/services</directory>
+      <outputDirectory>services</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/temp</directory>
+      <outputDirectory>temp</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/bin</directory>
+      <outputDirectory>bin</outputDirectory>
       <includes>
-        <include>maven-core-*.jar</include>
+        <include>plexus.sh</include>
       </includes>
--->
+      <lineEnding>unix</lineEnding>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/bin</directory>
+      <outputDirectory>bin</outputDirectory>
+      <includes>
+        <include>plexus.bat</include>
+      </includes>
+      <lineEnding>dos</lineEnding>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/bin/linux</directory>
+      <outputDirectory>bin/linux</outputDirectory>
+      <includes>
+        <include>run.sh</include>
+      </includes>
+      <lineEnding>unix</lineEnding>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/bin/linux</directory>
+      <outputDirectory>bin/linux</outputDirectory>
+      <includes>
+        <include>libwrapper.so</include>
+        <include>wrapper</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/bin/macosx</directory>
+      <outputDirectory>bin/macosx</outputDirectory>
+      <includes>
+        <include>run.sh</include>
+      </includes>
+      <lineEnding>unix</lineEnding>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/bin/macosx</directory>
+      <outputDirectory>bin/macosx</outputDirectory>
+      <includes>
+        <include>libwrapper.jnilib</include>
+        <include>wrapper</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/bin/win32</directory>
+      <outputDirectory>bin/win32</outputDirectory>
+      <includes>
+        <include>*.bat</include>
+      </includes>
+      <lineEnding>dos</lineEnding>
+    </fileSet>
+    <fileSet>
+      <directory>target/plexus-test-runtime/bin/win32</directory>
+      <outputDirectory>bin/win32</outputDirectory>
+      <includes>
+        <include>wrapper.*</include>
+      </includes>
     </fileSet>
   </fileSets>
-<!--
-  <dependencySets>
-    <dependencySet>
-      <outputDirectory>core</outputDirectory>
-      <includes>
-        <include>plexus:plexus-container-default</include>
-      </includes>
-    </dependencySet>
-    <dependencySet>
-      <outputDirectory>core/boot</outputDirectory>
-      <includes>
-        <include>classworlds:classworlds</include>
-      </includes>
-    </dependencySet>
-    <dependencySet>
-      <outputDirectory>lib</outputDirectory>
-      <excludes>
-        <exclude>plexus:plexus-container-default</exclude>
-        <exclude>classworlds:classworlds</exclude>
-        <exclude>plexus:plexus-utils</exclude>
-        <exclude>junit:junit</exclude>
-      </excludes>
-    </dependencySet>
-  </dependencySets>
--->
 </assembly>
 
