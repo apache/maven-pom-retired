@@ -28,13 +28,13 @@
       <name>Continuum Dev List</name>
       <subscribe>continuum-dev-subscribe@maven.apache.org</subscribe>
       <unsubscribe>continuum-dev-unsubscribe@maven.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/mod_mbox/</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/maven-continuum-dev/</archive>
     </mailingList>
     <mailingList>
       <name>Continuum User List</name>
       <subscribe>continuum-user-subscribe@maven.apache.org</subscribe>
       <unsubscribe>continuum-user-unsubscribe@maven.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/mod_mbox</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/maven-continuum-users/</archive>
     </mailingList>
   </mailingLists>
   <dependencyManagement>
