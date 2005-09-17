@@ -20,9 +20,7 @@
     </dependency>
   </dependencies>
   <modules>
-    <module>continuum-notifier-api</module>
     <module>continuum-notifier-irc</module>
     <module>continuum-notifier-jabber</module>
-    <module>continuum-notifier-msn</module>
   </modules>
 </project>
