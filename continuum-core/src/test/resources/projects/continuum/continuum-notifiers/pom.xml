@@ -3,27 +3,26 @@
   <parent>
     <groupId>org.apache.maven.continuum</groupId>
     <artifactId>continuum-parent</artifactId>
-    <version>1.0-beta-1-SNAPSHOT</version>
+    <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>continuum-parent-notifiers</artifactId>
-  <version>1.0-beta-1-SNAPSHOT</version>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Notifiers</name>
   <packaging>pom</packaging>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-api</artifactId>
-      <!-- TODO: remove -->
-      <version>1.0-beta-1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-notification</artifactId>
-      <version>1.0-alpha-4</version>
     </dependency>
   </dependencies>
   <modules>
+    <module>continuum-notifier-api</module>
     <module>continuum-notifier-irc</module>
     <module>continuum-notifier-jabber</module>
+    <module>continuum-notifier-msn</module>
   </modules>
 </project>
