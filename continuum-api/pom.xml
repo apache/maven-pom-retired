@@ -1,21 +1,21 @@
 <project>
-  <parent>
-    <artifactId>continuum-parent</artifactId>
-    <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-alpha-4</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>continuum-api</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum API</name>
-  <version>1.0-alpha-4</version>
   <dependencies>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-formica</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-model</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-formica</artifactId>
     </dependency>
   </dependencies>
 </project>

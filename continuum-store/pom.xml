@@ -1,18 +1,18 @@
 <project>
-  <parent>
-    <artifactId>continuum-parent</artifactId>
-    <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-alpha-4</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>continuum-store</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Store</name>
-  <version>1.0-alpha-4</version>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-test</artifactId>
-      <scope>test</scope>
+      <artifactId>continuum-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
@@ -20,16 +20,17 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
+      <artifactId>continuum-test</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-jdo2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

@@ -1,26 +1,17 @@
 <project>
-  <parent>
-    <artifactId>continuum-parent</artifactId>
-    <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-alpha-4</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>continuum-core-it</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Core Integration Test</name>
-  <version>1.0-alpha-4</version>
   <dependencies>
     <dependency>
-      <groupId>xmlrpc</groupId>
-      <artifactId>xmlrpc</artifactId>
-      <version>1.2</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-xmlrpc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>incubator-derby</groupId>
-      <artifactId>derby</artifactId>
+      <artifactId>continuum-plexus-application</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
@@ -28,16 +19,25 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-xmlrpc</artifactId>
+    </dependency>
+    <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-utils</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-plexus-application</artifactId>
-    </dependency>
-    <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-log4j-logging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>xmlrpc</groupId>
+      <artifactId>xmlrpc</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>incubator-derby</groupId>
+      <artifactId>derby</artifactId>
     </dependency>
   </dependencies>
 </project>
