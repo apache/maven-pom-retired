@@ -101,7 +101,7 @@ stuff
 #macro ( submitBar $labelKey )
 <div class="functnbar3">
 <input type="submit" value="$labelKey"/>
-<input type="submit" value="Cancel" onclick="history.back()"/>
+<input type="button" value="Cancel" onClick="history.back()"/>
 </div>
 #end
 
