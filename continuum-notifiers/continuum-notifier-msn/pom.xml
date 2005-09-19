@@ -1,23 +1,22 @@
 <project>
-  <parent>
-    <artifactId>continuum-parent-notifiers</artifactId>
-    <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-alpha-5-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent-notifiers</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>continuum-notifier-msn</artifactId>
   <name>Continuum MSN Notifier</name>
-  <version>1.0-alpha-5-SNAPSHOT</version>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-api</artifactId>
+    </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-msn</artifactId>
       <version>1.0-alpha-1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-notifier-api</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

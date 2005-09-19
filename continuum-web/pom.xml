@@ -1,46 +1,31 @@
 <project>
-  <parent>
-    <artifactId>continuum-parent</artifactId>
-    <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-alpha-5-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>continuum-web</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Web</name>
-  <version>1.0-alpha-5-SNAPSHOT</version>
   <dependencies>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-velocity</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-summit</artifactId>
-      <version>1.0-beta-7</version>
-    </dependency>
-    <dependency>
-      <groupId>servletapi</groupId>
-      <artifactId>servletapi</artifactId>
-      <version>2.3</version>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-formica</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-fileupload</groupId>
-      <artifactId>commons-fileupload</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-formica-web</artifactId>
-      <version>1.0-alpha-4</version>
-    </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-model</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-core</artifactId>
+    </dependency>
+
+    <!--
+     |
+     | Plexus Dependencies
+     |
+     |-->
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-log4j-logging</artifactId>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
@@ -49,12 +34,31 @@
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
-      <artifactId>plexus-log4j-logging</artifactId>
+      <artifactId>plexus-formica</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-core</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-formica-web</artifactId>
+      <version>1.0-alpha-4</version>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-summit</artifactId>
+      <version>1.0-beta-7</version>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-velocity</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>servletapi</groupId>
+      <artifactId>servletapi</artifactId>
+      <version>2.3</version>
     </dependency>
     <dependency>
       <groupId>ognl</groupId>

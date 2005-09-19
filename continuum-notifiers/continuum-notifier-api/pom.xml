@@ -1,11 +1,11 @@
 <project>
-  <parent>
-    <artifactId>continuum-parent-notifiers</artifactId>
-    <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-alpha-5-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent-notifiers</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>continuum-notifier-api</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Notifier API</name>
-  <version>1.0-alpha-5-SNAPSHOT</version>
 </project>

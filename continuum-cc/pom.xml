@@ -1,19 +1,28 @@
 <project>
-  <parent>
-    <artifactId>continuum-parent</artifactId>
-    <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-alpha-5-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>continuum-cc</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Cruise Control Importer</name>
-  <version>1.0-alpha-5-SNAPSHOT</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-formica</artifactId>
+    </dependency>
+  </dependencies>
   <build>
     <plugins>
       <plugin>
         <groupId>plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
-        <version>1.1-alpha-6</version>
         <executions>
           <execution>
             <goals>
@@ -24,15 +33,4 @@
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-formica</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-core</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-    </dependency>
-  </dependencies>
 </project>

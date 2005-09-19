@@ -1,13 +1,14 @@
 <project>
-  <parent>
-    <artifactId>continuum-parent</artifactId>
-    <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-alpha-5-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>continuum-core</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Core</name>
-  <version>1.0-alpha-5-SNAPSHOT</version>
+
   <repositories>
     <repository>
       <id>apache.snapshots</id>
@@ -15,22 +16,147 @@
       <layout>legacy</layout>
     </repository>
   </repositories>
+
   <dependencies>
+    <!--
+     |
+     | Continuum
+     |
+     -->
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-store</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jpox</groupId>
+      <artifactId>jpox</artifactId>
+    </dependency>
+    <!--
+     |
+     | Plexus Dependencies
+     |
+     |-->     
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>     
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-jdo2</artifactId>
+    </dependency>    
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
+      <artifactId>plexus-taskqueue</artifactId>
+      <version>1.0-alpha-2</version>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-notification</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
       <artifactId>plexus-mail-sender-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>jpox</groupId>
-      <artifactId>jpox</artifactId>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-action</artifactId>
+      <version>1.0-alpha-5</version>
     </dependency>
     <dependency>
-      <groupId>incubator-derby</groupId>
-      <artifactId>derby</artifactId>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-command-line</artifactId>
+      <version>1.0-alpha-1</version>
+    </dependency>
+    <dependency>
+      <groupId>quartz</groupId>
+      <artifactId>quartz</artifactId>
+      <version>1.4.5</version>
+   </dependency>
+   <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-formica</artifactId>
+   </dependency>
+    <!--
+     |
+     | Maven Dependencies
+     |
+     |-->
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-settings</artifactId>
+    </dependency>
+    <!-- Maven Wagon -->
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-provider-api</artifactId>
+    </dependency>
+    <!-- Maven SCM -->
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-manager-plexus</artifactId>
+    </dependency>
+    <!-- Misc -->
+    <dependency>
+      <groupId>velocity</groupId>
+      <artifactId>velocity</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <!--
+     |
+     | Test Dependencies
+     |
+     |-->
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-local</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-mail-sender-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-mail-sender-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -41,47 +167,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-notification</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-taskqueue</artifactId>
-      <version>1.0-alpha-2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-test</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
+      <groupId>incubator-derby</groupId>
+      <artifactId>derby</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-action</artifactId>
-      <version>1.0-alpha-5</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.scm</groupId>
-      <artifactId>maven-scm-provider-local</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-jdo2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-mail-sender-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-settings</artifactId>
     </dependency>
     <dependency>
       <groupId>xml-apis</groupId>
@@ -90,77 +178,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-formica</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-mail-sender-simple</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-notifier-api</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-model</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-api</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-command-line</artifactId>
-      <version>1.0-alpha-1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-artifact</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.wagon</groupId>
-      <artifactId>wagon-provider-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>quartz</groupId>
-      <artifactId>quartz</artifactId>
-      <version>1.4.5</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
-    </dependency>
-    <dependency>
       <groupId>xerces</groupId>
       <artifactId>xercesImpl</artifactId>
       <version>2.6.2</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-store</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.scm</groupId>
-      <artifactId>maven-scm-manager-plexus</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>velocity</groupId>
-      <artifactId>velocity</artifactId>
-      <version>1.4</version>
     </dependency>
   </dependencies>
 </project>
