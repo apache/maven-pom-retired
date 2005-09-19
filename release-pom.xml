@@ -59,6 +59,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-release-plugin</artifactId>
+        <version>RELEASE</version>
         <configuration>
           <tagBase>https://svn.codehaus.org/mojo/tags</tagBase>
         </configuration>
@@ -93,12 +94,25 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
-      <scope>test</scope>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>classworlds</groupId>
+      <artifactId>classworlds</artifactId>
+      <version>1.1-alpha-2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>1.0.2</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
       <version>1.0-alpha-6</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
   <dependencyManagement>
