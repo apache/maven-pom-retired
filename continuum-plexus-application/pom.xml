@@ -211,7 +211,7 @@
         <configuration>
           <descriptor>src/assembly/bin.xml</descriptor>
           <!-- TODO: isn't this the default? if not, can we use the ${pom.} expression? -->
-          <finalName>continuum-1.0-alpha-4-SNAPSHOT</finalName>
+          <finalName>continuum-1.0-alpha-4</finalName>
         </configuration>
         <executions>
           <execution>

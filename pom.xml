@@ -149,11 +149,13 @@
         <artifactId>continuum-web</artifactId>
         <version>1.0-alpha-4-SNAPSHOT</version>
       </dependency>
+      <!--
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-xfire</artifactId>
         <version>1.0-alpha-4-SNAPSHOT</version>
       </dependency>
+      -->
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-xmlrpc</artifactId>
