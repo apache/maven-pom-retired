@@ -2,8 +2,9 @@
  Welcome to Continuum
  ------
  Trygve Laugstøl
+ Emmanuel Venisse
  ------
- Fri May 20 2005
+ Tue September 20 2005
 
 Welcome to Continuum
 
@@ -19,6 +20,13 @@ Welcome to Continuum
  * Shell scripts
 
 * Latest news
+
+ * <<Continuum 1.0 Alpha 4 Release Available>> - <September 20 2005>
+
+   The fourth release of Continuum is available. This release contains both new
+   features and bug fixes. A document describing the main changes is available
+   {{{change-log.html}here}}. See the {{{download.html}download}} page for
+   instructions on how to download the release.
 
  * <<Continuum 1.0 Alpha 3 Release Available>> - <July 10 2005>
 
