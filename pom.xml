@@ -2,9 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.continuum</groupId>
   <artifactId>continuum-parent</artifactId>
-  <version>1.0-alpha-4-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
+  <version>1.0-alpha-4</version>
   <url>http://maven.apache.org/continuum/</url>
   <issueManagement>
     <system>jira</system>
@@ -15,7 +15,6 @@
     <url>http://maven.zones.apache.org/continuum/</url>
     <notifiers>
       <notifier>
-        <type>mail</type>
         <configuration>
           <address>continuum-dev@maven.apache.org</address>
         </configuration>
@@ -37,13 +36,65 @@
       <archive>http://mail-archives.apache.org/mod_mbox/maven-continuum-users/</archive>
     </mailingList>
   </mailingLists>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-1.0-alpha-4/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/tags/continuum-1.0-alpha-4/</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/tags/continuum-1.0-alpha-4/</url>
+  </scm>
+  <organization>
+    <name>Apache</name>
+    <url>http://www.apache.org/</url>
+  </organization>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>plexus</groupId>
+          <artifactId>plexus-maven-plugin</artifactId>
+          <version>1.1-alpha-6</version>
+          <extensions>true</extensions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  <modules>
+    <module>continuum-api</module>
+    <module>continuum-cc</module>
+    <module>continuum-core-it</module>
+    <module>continuum-core</module>
+    <module>continuum-model</module>
+    <module>continuum-notifiers</module>
+    <module>continuum-plexus-application</module>
+    <module>continuum-store</module>
+    <module>continuum-test</module>
+    <module>continuum-web</module>
+    <module>continuum-xmlrpc</module>
+  </modules>
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <id>snapshots</id>
+      <name>Maven Snapshot Development Repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <version>1.0-alpha-6</version>
+    </dependency>
+  </dependencies>
   <dependencyManagement>
     <dependencies>
-      <!--
-       |
-       | Maven
-       |
-       -->
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-core</artifactId>
@@ -69,11 +120,6 @@
         <artifactId>maven-settings</artifactId>
         <version>2.0-beta-1</version>
       </dependency>
-      <!--
-       |
-       | Maven SCM
-       |
-       -->
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-manager-plexus</artifactId>
@@ -99,11 +145,6 @@
         <artifactId>maven-scm-provider-starteam</artifactId>
         <version>1.0-alpha-2</version>
       </dependency>
-      <!--
-       |
-       | Wagon
-       |
-       -->
       <dependency>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-provider-api</artifactId>
@@ -114,83 +155,66 @@
         <artifactId>wagon-http-lightweight</artifactId>
         <version>1.0-alpha-4</version>
       </dependency>
-      <!--
-       |
-       | Continuum
-       |
-       -->
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-model</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-api</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-store</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-core</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-test</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-web</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
-      <!--
-      <dependency>
-        <groupId>org.apache.maven.continuum</groupId>
-        <artifactId>continuum-xfire</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
-      </dependency>
-      -->
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-xmlrpc</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-plexus-application</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-notifier-api</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-notifier-irc</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-notifier-jabber</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-notifier-msn</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
-      <!--
-       |
-       | JDO
-       |
-       -->
       <dependency>
         <groupId>jdo</groupId>
         <artifactId>jdo</artifactId>
@@ -206,26 +230,21 @@
         <artifactId>jpox-enhancer</artifactId>
         <version>1.1.0-beta-4</version>
       </dependency>
-      <!--
-       |
-       | Plexus
-       |
-       -->
       <dependency>
         <groupId>plexus</groupId>
         <artifactId>plexus-utils</artifactId>
         <version>1.0.3</version>
-      </dependency>       
+      </dependency>
       <dependency>
         <groupId>plexus</groupId>
         <artifactId>plexus-jdo2</artifactId>
         <version>1.0-alpha-2</version>
-      </dependency>       
-       <dependency>
-          <groupId>plexus</groupId>
-          <artifactId>plexus-formica</artifactId>
-          <version>1.0-beta-5</version>
-       </dependency>
+      </dependency>
+      <dependency>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-formica</artifactId>
+        <version>1.0-beta-5</version>
+      </dependency>
       <dependency>
         <groupId>plexus</groupId>
         <artifactId>plexus-velocity</artifactId>
@@ -261,11 +280,6 @@
         <artifactId>plexus-notification</artifactId>
         <version>1.0-alpha-4</version>
       </dependency>
-      <!--
-       |
-       | Misc
-       |
-       -->
       <dependency>
         <groupId>incubator-derby</groupId>
         <artifactId>derby</artifactId>
@@ -274,33 +288,10 @@
       <dependency>
         <groupId>hsqldb</groupId>
         <artifactId>hsqldb</artifactId>
-      <version>1.7.3.3</version>
+        <version>1.7.3.3</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
-  <dependencies>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-container-default</artifactId>
-      <version>1.0-alpha-6</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/trunk/</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/trunk/</url>
-  </scm>
-  <organization>
-    <name>Apache</name>
-    <url>http://www.apache.org/</url>
-  </organization>
   <distributionManagement>
     <repository>
       <id>repo1</id>
@@ -313,47 +304,4 @@
       <url>scp://repo1.maven.org/home/projects/maven/repository-staging/snapshots/maven2</url>
     </snapshotRepository>
   </distributionManagement>
-
-  <repositories>
-    <repository>
-      <id>snapshots</id>
-      <name>Maven Snapshot Development Repository</name>
-      <url>http://snapshots.maven.codehaus.org/maven2</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
-  </repositories>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>plexus</groupId>
-          <artifactId>plexus-maven-plugin</artifactId>
-          <version>1.1-alpha-6</version>
-          <extensions>true</extensions>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-  <modules>
-    <module>continuum-api</module>
-    <module>continuum-cc</module>
-    <module>continuum-core-it</module>
-    <module>continuum-core</module>
-    <module>continuum-model</module>
-    <module>continuum-notifiers</module>
-    <module>continuum-plexus-application</module>
-    <module>continuum-store</module>
-    <module>continuum-test</module>
-    <!--
-    <module>continuum-updater</module>
-    -->
-    <module>continuum-web</module>
-    <!--
-    <module>continuum-xfire</module>
-    -->
-    <module>continuum-xmlrpc</module>
-  </modules>
 </project>

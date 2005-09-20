@@ -1,15 +1,33 @@
 <project>
-  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.maven.continuum</groupId>
     <artifactId>continuum-parent</artifactId>
-    <version>1.0-alpha-4-SNAPSHOT</version>
+    <groupId>org.apache.maven.continuum</groupId>
+    <version>1.0-alpha-4</version>
   </parent>
+  <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-model</artifactId>
-  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Model</name>
+  <version>1.0-alpha-4</version>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-maven-plugin</artifactId>
+        <version>1.0-alpha-4</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+              <goal>jpox-jdo-mapping</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <version>1.0.0</version>
+          <packageWithVersion>false</packageWithVersion>
+          <model>src/main/mdo/continuum.mdo</model>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>maven-jpox-plugin</artifactId>
@@ -18,24 +36,6 @@
           <execution>
             <goals>
               <goal>enhance</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.modello</groupId>
-        <artifactId>modello-maven-plugin</artifactId>
-        <version>1.0-alpha-4</version>
-        <configuration>
-          <version>1.0.0</version>
-          <packageWithVersion>false</packageWithVersion>
-          <model>src/main/mdo/continuum.mdo</model>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>java</goal>
-              <goal>jpox-jdo-mapping</goal>
             </goals>
           </execution>
         </executions>
