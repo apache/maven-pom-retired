@@ -1,28 +1,28 @@
 <project>
-  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.maven.continuum</groupId>
     <artifactId>continuum-parent</artifactId>
-    <version>1.0-alpha-4-SNAPSHOT</version>
+    <groupId>org.apache.maven.continuum</groupId>
+    <version>1.0-alpha-4</version>
   </parent>
+  <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-parent-notifiers</artifactId>
-  <version>1.0-alpha-4-SNAPSHOT</version>
-  <name>Continuum Notifiers</name>
   <packaging>pom</packaging>
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-notification</artifactId>
-    </dependency>
-  </dependencies>
+  <name>Continuum Notifiers</name>
+  <version>1.0-alpha-4</version>
   <modules>
     <module>continuum-notifier-api</module>
     <module>continuum-notifier-irc</module>
     <module>continuum-notifier-jabber</module>
     <module>continuum-notifier-msn</module>
   </modules>
+  <dependencies>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-notification</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-api</artifactId>
+    </dependency>
+  </dependencies>
 </project>

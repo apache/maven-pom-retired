@@ -1,23 +1,13 @@
 <project>
-  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.maven.continuum</groupId>
     <artifactId>continuum-parent</artifactId>
-    <version>1.0-alpha-4-SNAPSHOT</version>
+    <groupId>org.apache.maven.continuum</groupId>
+    <version>1.0-alpha-4</version>
   </parent>
+  <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-cc</artifactId>
-  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Cruise Control Importer</name>
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-formica</artifactId>
-    </dependency>
-  </dependencies>
+  <version>1.0-alpha-4</version>
   <build>
     <plugins>
       <plugin>
@@ -33,4 +23,14 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-formica</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-core</artifactId>
+    </dependency>
+  </dependencies>
 </project>
