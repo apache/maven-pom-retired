@@ -4,7 +4,7 @@
   <artifactId>continuum-parent</artifactId>
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
-  <version>1.0-alpha-5-SNAPSHOT</version>
+  <version>1.0-beta-1-SNAPSHOT</version>
   <url>http://maven.apache.org/continuum/</url>
   <issueManagement>
     <system>jira</system>
@@ -158,62 +158,62 @@
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-model</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-api</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-store</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-core</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-test</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-web</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-xmlrpc</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-plexus-application</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-notifier-api</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-notifier-irc</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-notifier-jabber</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-notifier-msn</artifactId>
-        <version>1.0-alpha-4</version>
+        <version>1.0-beta-1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>jdo</groupId>
