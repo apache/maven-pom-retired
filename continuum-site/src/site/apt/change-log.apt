@@ -2,13 +2,19 @@
  Change Log
  ------
  Trygve Laugstøl
+ Emmanuel Venisse
  ------
- Fri May 23 2005
+ TUE September 20 2005
 
 Change Log
 
  This page lists the most important and noteworthy changes. For the complete
  list of issues look in JIRA for the respective version.
+
+* Changes from 1.0 Alpha 3 to 1.0 Alpha 4
+
+  {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10540&styleName=Html&version=11665}The
+  complete change log}}.
 
 * Changes from 1.0 Alpha 2 to 1.0 Alpha 3
 
