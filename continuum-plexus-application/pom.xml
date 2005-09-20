@@ -1,76 +1,14 @@
 <project>
-  <parent>
-    <artifactId>continuum-parent</artifactId>
-    <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-alpha-5-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>continuum-plexus-application</artifactId>
-  <packaging>plexus-application</packaging>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Plexus Application</name>
-  <version>1.0-alpha-5-SNAPSHOT</version>
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.0-beta-1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>assembly</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <descriptor>src/assembly/bin.xml</descriptor>
-          <finalName>continuum-1.0-alpha-4</finalName>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>plexus</groupId>
-        <artifactId>plexus-maven-plugin</artifactId>
-        <version>1.1-alpha-6</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>runtime</goal>
-              <goal>add-app</goal>
-              <goal>add-services</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
-          <configurationsDirectory>src/conf</configurationsDirectory>
-          <configurationProperties>${appProperties}</configurationProperties>
-          <applicationName>continuum</applicationName>
-          <runtimeConfiguration>src/test/conf/test-runtime-configuration.xml</runtimeConfiguration>
-          <runtimeConfigurationProperties>${appProperties}</runtimeConfigurationProperties>
-          <runtimePath>target/plexus-test-runtime</runtimePath>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  <profiles>
-    <profile>
-      <id>env-test</id>
-      <activation>
-        <property>
-          <name>env</name>
-          <value>test</value>
-        </property>
-      </activation>
-    </profile>
-    <profile>
-      <id>env-production</id>
-      <activation>
-        <property>
-          <name>env</name>
-          <value>production</value>
-        </property>
-      </activation>
-    </profile>
-  </profiles>
+  <packaging>plexus-application</packaging>
   <repositories>
     <repository>
       <id>apache.snapshots</id>
@@ -78,15 +16,54 @@
       <layout>legacy</layout>
     </repository>
   </repositories>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-xmlrpc</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
+      <artifactId>continuum-web</artifactId>
     </dependency>
+    <!--
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-xfire</artifactId>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-xmlrpc</artifactId>
+    </dependency>
+    <!-- Version overrides -->
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
+    </dependency>
+
+    <!--
+     |
+     | Continuum notifiers
+     |
+     |-->
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-irc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-jabber</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-msn</artifactId>
+    </dependency>
+
+    <!--
+     |
+     | Plexus appserver
+     |
+     |-->
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
@@ -98,66 +75,12 @@
       <artifactId>plexus-container-artifact</artifactId>
       <version>1.0-alpha-3</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.maven.wagon</groupId>
-      <artifactId>wagon-http-lightweight</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-mail-sender-api</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.scm</groupId>
-      <artifactId>maven-scm-provider-starteam</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-artifact</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>incubator-derby</groupId>
-      <artifactId>derby</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-service-xmlrpc</artifactId>
-      <version>1.0-alpha-2</version>
-      <type>plexus-service</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-notifier-jabber</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-notifier-msn</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-web</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-notifier-irc</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.scm</groupId>
-      <artifactId>maven-scm-provider-local</artifactId>
-      <scope>runtime</scope>
-    </dependency>
+
+    <!--
+    |
+    | Plexus services
+    |
+    |-->
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-service-jetty</artifactId>
@@ -166,9 +89,18 @@
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
-      <artifactId>plexus-mail-sender-javamail</artifactId>
-      <scope>runtime</scope>
+      <artifactId>plexus-service-xmlrpc</artifactId>
+      <version>1.0-alpha-2</version>
+      <type>plexus-service</type>
     </dependency>
+
+    <!--
+     |
+     | Implementations of required services
+     |
+     |-->
+
+    <!-- Maven SCM Providers -->
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-cvs</artifactId>
@@ -179,5 +111,116 @@
       <artifactId>maven-scm-provider-svn</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-local</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-starteam</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Maven Wagons -->
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-http-lightweight</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Misc -->
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-mail-sender-javamail</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-mail-sender-api</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>incubator-derby</groupId>
+      <artifactId>derby</artifactId>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>env-test</id>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>test</value>
+        </property>
+      </activation>
+      <properties>
+        <appProperties>test.properties</appProperties>
+      </properties>
+    </profile>
+    <profile>
+      <id>env-production</id>
+      <activation>
+        <property>
+          <name>env</name>
+          <value>production</value>
+        </property>
+      </activation>
+      <properties>
+        <appProperties>app.properties</appProperties>
+      </properties>
+    </profile>
+  </profiles>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
+        <configuration>
+          <applicationConfiguration>src/conf/application.xml</applicationConfiguration>
+          <configurationsDirectory>src/conf</configurationsDirectory>
+          <configurationProperties>${appProperties}</configurationProperties>
+          <applicationName>continuum</applicationName>
+          <runtimeConfiguration>src/test/conf/test-runtime-configuration.xml</runtimeConfiguration>
+          <runtimeConfigurationProperties>${appProperties}</runtimeConfigurationProperties>
+          <runtimePath>target/plexus-test-runtime</runtimePath>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>runtime</goal>
+              <goal>add-app</goal>
+              <goal>add-services</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.0-beta-1</version>
+        <configuration>
+          <descriptor>src/assembly/bin.xml</descriptor>
+          <!-- TODO: isn't this the default? if not, can we use the ${pom.} expression? -->
+          <finalName>continuum-1.0-alpha-4</finalName>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>assembly</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

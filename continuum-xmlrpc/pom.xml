@@ -1,19 +1,38 @@
 <project>
-  <parent>
-    <artifactId>continuum-parent</artifactId>
-    <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-alpha-5-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>continuum-xmlrpc</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum XMLRPC Interface</name>
-  <version>1.0-alpha-5-SNAPSHOT</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-model</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
   <build>
     <plugins>
       <plugin>
         <groupId>plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
-        <version>1.1-alpha-6</version>
         <executions>
           <execution>
             <id>foo</id>
@@ -25,27 +44,4 @@
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-test</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-model</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-core</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 </project>

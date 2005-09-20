@@ -1,26 +1,25 @@
 <project>
-  <parent>
-    <artifactId>continuum-parent</artifactId>
-    <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-alpha-5-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.continuum</groupId>
+    <artifactId>continuum-parent</artifactId>
+    <version>1.0-alpha-4-SNAPSHOT</version>
+  </parent>
   <artifactId>continuum-test</artifactId>
+  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Continuum Test</name>
-  <version>1.0-alpha-5-SNAPSHOT</version>
   <dependencies>
-    <dependency>
-      <groupId>jpox</groupId>
-      <artifactId>jpox-enhancer</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-api</artifactId>
-      <version>1.0-alpha-5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-jdo2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jpox</groupId>
+      <artifactId>jpox-enhancer</artifactId>
     </dependency>
   </dependencies>
 </project>
