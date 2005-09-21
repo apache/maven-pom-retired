@@ -7,7 +7,7 @@
             #if ( $continuum.getConfiguration().getCompanyUrl() )
               <a href="$continuum.getConfiguration().getCompanyUrl()">
             #end
-                <img src="$continuum.getConfiguration().getCompanyLogo()" #if ( $continuum.getConfiguration().getCompanyName() ) alt="$continuum.getConfiguration().getCompanyName()" #end>
+                <img src="$continuum.getConfiguration().getCompanyLogo()" #if ( $continuum.getConfiguration().getCompanyName() ) alt="$continuum.getConfiguration().getCompanyName()" #end border="0">
             #if ( $continuum.getConfiguration().getCompanyUrl() )
               </a>
             #end
