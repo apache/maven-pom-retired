@@ -31,8 +31,8 @@
     </mailingList>
     <mailingList>
       <name>Continuum User List</name>
-      <subscribe>continuum-user-subscribe@maven.apache.org</subscribe>
-      <unsubscribe>continuum-user-unsubscribe@maven.apache.org</unsubscribe>
+      <subscribe>continuum-users-subscribe@maven.apache.org</subscribe>
+      <unsubscribe>continuum-users-unsubscribe@maven.apache.org</unsubscribe>
       <archive>http://mail-archives.apache.org/mod_mbox/maven-continuum-users/</archive>
     </mailingList>
     <mailingList>
