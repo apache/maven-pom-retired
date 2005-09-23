@@ -59,7 +59,9 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -985,7 +987,11 @@ public class DefaultContinuum
     {
         try
         {
-            return store.getProjectWithBuilds( projectId ).getBuildResults();
+            ArrayList buildResults = new ArrayList( store.getProjectWithBuilds( projectId ).getBuildResults() );
+
+            Collections.reverse( buildResults );
+
+            return buildResults;
         }
         catch ( ContinuumStoreException e )
         {
