@@ -87,6 +87,7 @@ public class ExecuteBuilderContinuumAction
 
         // TODO: select actualy build def
         List buildDefinitions = project.getBuildDefinitions();
+
         BuildDefinition buildDefinition = (BuildDefinition) buildDefinitions.iterator().next();
 
         build.setScmResult( scmResult );
@@ -121,11 +122,19 @@ public class ExecuteBuilderContinuumAction
         {
             build.setEndTime( new Date().getTime() );
 
+            project.setBuildNumber( project.getBuildNumber() + 1 );
+
+            project.setLatestBuildId( build.getId() );
+
+            build.setBuildNumber( project.getBuildNumber() );
+
             // ----------------------------------------------------------------------
             // Copy over the build result
             // ----------------------------------------------------------------------
 
             store.updateBuildResult( build );
+
+            store.updateProject( project );
 
             notifier.goalsCompleted( project, build );
         }
