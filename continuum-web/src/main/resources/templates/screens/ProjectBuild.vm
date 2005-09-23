@@ -42,7 +42,7 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
   <h4>Changes</h4>
   <p>
     #if ( $build.scmResult.changes.size() == 0 )
-    <b>No changes</b>
+    <b>No files changed</b>
     #else
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
       #foreach ( $changeSet in $build.scmResult.changes )
