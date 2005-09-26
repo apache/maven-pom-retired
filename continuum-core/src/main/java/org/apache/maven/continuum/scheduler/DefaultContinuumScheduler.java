@@ -100,6 +100,10 @@ public class DefaultContinuumScheduler
         {
             throw new ContinuumSchedulerException( "Error scheduling job.", e );
         }
+        catch ( Exception e )
+        {
+            throw new ContinuumSchedulerException( "Error scheduling job (Verify your cron expression).", e );
+        }
     }
 
     // ----------------------------------------------------------------------
