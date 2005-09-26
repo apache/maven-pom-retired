@@ -335,6 +335,72 @@ public class DefaultContinuum
         }
     }
 
+    public List getChangesSinceLastSuccess( int projectId, int buildResultId )
+        throws ContinuumException
+    {
+        ArrayList buildResults = null;
+
+        try
+        {
+            buildResults = new ArrayList( store.getProjectWithBuilds( projectId ).getBuildResults() );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Exception while getting build results for project.", e );
+        }
+
+        Collections.reverse( buildResults );
+
+        Iterator buildResultsIterator = buildResults.iterator();
+
+        boolean stop = false;
+
+        while( !stop )
+        {
+            if ( buildResultsIterator.hasNext() )
+            {
+                BuildResult buildResult = (BuildResult) buildResultsIterator.next();
+
+                if ( buildResult.getId() == buildResultId )
+                {
+                    stop = true;
+                }
+            }
+            else
+            {
+                stop = true;
+            }
+        }
+
+        if ( !buildResultsIterator.hasNext() )
+        {
+            return null;
+        }
+
+        BuildResult buildResult = (BuildResult) buildResultsIterator.next();
+
+        List changes = null;
+
+        while (  buildResult.getState() != ContinuumProjectState.OK )
+        {
+            if ( changes == null )
+            {
+                changes = new ArrayList();
+            }
+
+            changes.addAll( buildResult.getScmResult().getChanges() );
+
+            if ( !buildResultsIterator.hasNext() )
+            {
+                return changes;
+            }
+
+            buildResult = (BuildResult) buildResultsIterator.next();
+        }
+
+        return changes;
+    }
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------

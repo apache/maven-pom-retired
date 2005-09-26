@@ -62,6 +62,27 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
   </p>
   #end
 
+  #set ( $changeSets = $continuum.getChangesSinceLastSuccess( $id, $build.id ) )
+  #if ( $changeSets )
+  <h4>Other Changes Since Last Success</h4>
+  <p>
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      #foreach ( $changeSet in $changeSets )
+      <tr class="a">
+        #if ($changeSet.author) <td>$changeSet.author</td> #end
+        #if ($changeSet.date > 0) <td>$date.format('medium',$changeSet.date)</td> #end
+        #if ($changeSet.comment) <td>$changeSet.comment</td> #end
+        <td>
+          #foreach ( $file in $changeSet.files )
+            <code>$!file.name</code><br/>
+          #end
+        </td>
+      </tr>
+      #end
+    </table>
+  </p>
+  #end
+
 #if ( $build.state == 4 )
   <h4>Build Error</h4>
   <p>

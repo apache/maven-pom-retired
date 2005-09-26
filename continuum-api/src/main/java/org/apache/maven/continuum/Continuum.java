@@ -102,6 +102,9 @@ public interface Continuum
     Collection getBuildResultsForProject( int projectId )
         throws ContinuumException;
 
+    List getChangesSinceLastSuccess( int projectId, int buildResultId )
+        throws ContinuumException;
+
     // ----------------------------------------------------------------------
     // Projects
     // ----------------------------------------------------------------------
