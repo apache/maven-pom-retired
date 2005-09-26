@@ -428,6 +428,7 @@
           <allowedScheme implementation="java.lang.String">http</allowedScheme>
           <allowedScheme implementation="java.lang.String">https</allowedScheme>
           <allowedScheme implementation="java.lang.String">ftp</allowedScheme>
+          <!-- <allowedScheme implementation="java.lang.String">file</allowedScheme> -->
         </allowedSchemes>
       </configuration>
     </component>
