@@ -25,6 +25,9 @@
           <role-hint>build-project</role-hint>
           <field-name>buildQueue</field-name>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+        </requirement>
       </requirements>
       <configuration>
         <working-directory>${plexus.home}/temp</working-directory>

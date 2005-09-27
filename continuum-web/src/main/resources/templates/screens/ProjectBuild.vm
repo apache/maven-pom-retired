@@ -7,8 +7,8 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
       #set ( $infoLink = $link.setPage('View.vm').addPathInfo('fid', "$!{project.executorId}Project").addPathInfo('id', $project.id) )
       <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$infoLink">Info</a>
       <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Builds</b>
-      <!-- a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;"
-         href="workingCopy.html">Working&nbsp;Copy</a -->
+      #set ( $workingCopy = $link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $project.id) )
+      <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$workingCopy">Working&nbsp;Copy</a>
     </p>
   </div>
 

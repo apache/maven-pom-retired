@@ -103,6 +103,11 @@
             <scope>global</scope>
           </tool>
           <tool>
+            <name>workingCopy</name>
+            <role>workingCopy</role>
+            <scope>request</scope>
+          </tool>
+          <tool>
             <name>formtool</name>
             <role>org.apache.maven.continuum.web.tool.FormicaTool</role>
             <scope>global</scope>
@@ -146,6 +151,11 @@
       </requirements>
     </component>
 
+    <component>
+      <role>workingCopy</role>
+      <implementation>org.apache.maven.continuum.web.tool.WorkingCopyContentGenerator</implementation>
+    </component>
+
     <!--
      |
      | Valves
@@ -168,6 +178,20 @@
               <scalar>
                 <id>project</id>
                 <expression>getProjectWithAllDetails(#id)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <!--
+           |
+           | Working Copy
+           |
+           -->
+          <view>
+            <id>WorkingCopy</id>
+            <scalars>
+              <scalar>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
               </scalar>
             </scalars>
           </view>

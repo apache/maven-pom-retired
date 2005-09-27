@@ -4,11 +4,11 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
 
   <div>
     <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
-      #set ( $buildsLink = $link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id) )
       <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Info</b>
+      #set ( $buildsLink = $link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id) )
       <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$buildsLink">Builds</a>
-      <!-- a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;"
-         href="workingCopy.html">Working&nbsp;Copy</a -->
+      #set ( $workingCopy = $link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $item.id) )
+      <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$workingCopy">Working&nbsp;Copy</a>
     </p>
   </div>
 

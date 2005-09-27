@@ -42,6 +42,7 @@ import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ProjectSorter;
+import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.codehaus.plexus.action.Action;
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.action.ActionNotFoundException;
@@ -53,6 +54,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.StartingException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.StoppingException;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.TaskQueueException;
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
@@ -115,6 +117,11 @@ public class DefaultContinuum
      * @plexus.configuration
      */
     private String workingDirectory;
+
+    /**
+     * @plexus.requirement
+     */
+    private WorkingDirectoryService workingDirectoryService;
 
     // ----------------------------------------------------------------------
     // Projects
@@ -935,6 +942,97 @@ public class DefaultContinuum
         {
             throw logAndCreateException( "Error while storing schedule.", ex );
         }
+    }
+
+    // ----------------------------------------------------------------------
+    // Working copy
+    // ----------------------------------------------------------------------
+
+    public File getWorkingDirectory( int projectId )
+        throws ContinuumException
+    {
+        try
+        {
+            return workingDirectoryService.getWorkingDirectory( store.getProject( projectId ) );
+        }
+        catch( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Can't get files list.", e );
+        }
+    }
+
+    public String getFileContent( int projectId, String directory, String filename )
+        throws ContinuumException
+    {
+        File workingDirectory = getWorkingDirectory( projectId );
+
+        File fileDirectory = new File( workingDirectory, directory );
+
+        File userFile = new File( fileDirectory, filename );
+
+        try
+        {
+            return FileUtils.fileRead( userFile );
+        }
+        catch( IOException e )
+        {
+            throw new ContinuumException( "Can't read file " + filename, e );
+        }
+    }
+
+    public List getFiles( int projectId, String userDirectory )
+        throws ContinuumException
+    {
+        File workingDirectory = getWorkingDirectory( projectId );
+
+        return getFiles( workingDirectory, null, userDirectory );
+    }
+
+    private List getFiles( File baseDirectory, String currentSubDirectory, String userDirectory )
+    {
+        List dirs = new ArrayList();
+
+        File workingDirectory = null;
+
+        if ( currentSubDirectory != null )
+        {
+            workingDirectory = new File( baseDirectory, currentSubDirectory);
+        }
+        else
+        {
+            workingDirectory = baseDirectory;
+        }
+
+        String[] files = workingDirectory.list();
+
+        for ( int i = 0; i < files.length; i++ )
+        {
+            File current = new File( workingDirectory, files[i] );
+
+            String currentFile = null;
+
+            if ( currentSubDirectory == null )
+            {
+                currentFile = files[i];
+            }
+            else
+            {
+                currentFile = currentSubDirectory + "/" + files[i];
+            }
+
+            if ( userDirectory != null && current.isDirectory() && userDirectory.startsWith( currentFile ) )
+            {
+                dirs.add( current );
+
+                dirs.add( getFiles( baseDirectory, currentFile, userDirectory ) );
+            }
+            else
+            {
+                dirs.add( current );
+            }
+        }
+
+        return dirs;
     }
 
     // ----------------------------------------------------------------------

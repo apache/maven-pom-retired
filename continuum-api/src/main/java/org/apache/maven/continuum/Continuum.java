@@ -25,6 +25,7 @@ import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -182,6 +183,19 @@ public interface Continuum
         throws ContinuumException;
 
     void removeSchedule( int scheduleId )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Working copy
+    // ----------------------------------------------------------------------
+
+    File getWorkingDirectory( int projectId )
+        throws ContinuumException;
+
+    String getFileContent( int projectId, String directory, String filename )
+        throws ContinuumException;
+
+    List getFiles( int projectId, String currentDirectory )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------
