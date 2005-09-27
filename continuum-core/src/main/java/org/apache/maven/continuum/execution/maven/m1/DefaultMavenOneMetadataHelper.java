@@ -17,6 +17,8 @@ package org.apache.maven.continuum.execution.maven.m1;
  */
 
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectDependency;
+import org.apache.maven.continuum.model.project.ProjectDeveloper;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -158,6 +160,75 @@ public class DefaultMavenOneMetadataHelper
         }
 
         // ----------------------------------------------------------------------
+        // Developers
+        // ----------------------------------------------------------------------
+
+        Xpp3Dom developers = mavenProject.getChild( "developers" );
+
+        if ( developers != null )
+        {
+            Xpp3Dom[] developersList = developers.getChildren();
+
+            List cds = new ArrayList();
+
+            for ( int i = 0; i < developersList.length; i++ )
+            {
+                Xpp3Dom developer = developersList[i];
+
+                ProjectDeveloper cd = new ProjectDeveloper();
+
+                cd.setScmId( getValue( developer, "id", null ) );
+
+                cd.setName( getValue( developer, "name", null ) );
+
+                cd.setEmail( getValue( developer, "email", null ) );
+
+                cds.add( cd );
+            }
+
+            project.setDevelopers( cds );
+        }
+
+        // ----------------------------------------------------------------------
+        // Dependencies
+        // ----------------------------------------------------------------------
+
+        Xpp3Dom dependencies = mavenProject.getChild( "dependencies" );
+
+        if ( dependencies != null )
+        {
+            Xpp3Dom[] dependenciesList = dependencies.getChildren();
+
+            List deps = new ArrayList();
+
+            for ( int i = 0; i < dependenciesList.length; i++ )
+            {
+                Xpp3Dom dependency = dependenciesList[i];
+
+                ProjectDependency cd = new ProjectDependency();
+
+                if ( getValue( dependency, "groupId", null ) != null )
+                {
+                    cd.setGroupId( getValue( dependency, "groupId", null ) );
+
+                    cd.setArtifactId( getValue( dependency, "artifactId", null ) );
+                }
+                else
+                {
+                    cd.setGroupId( getValue( dependency, "id", null ) );
+
+                    cd.setArtifactId( getValue( dependency, "id", null ) );
+                }
+
+                cd.setVersion( getValue( dependency, "version", null ) );
+
+                deps.add( cd );
+            }
+
+            project.setDependencies( deps );
+        }
+
+        // ----------------------------------------------------------------------
         // notifiers
         // ----------------------------------------------------------------------
 
@@ -206,10 +277,12 @@ public class DefaultMavenOneMetadataHelper
                 props.put( ContinuumRecipientSource.ADDRESS_FIELD, nagEmailAddress );
 
                 notifier.setConfiguration( props );
+
+                notifier.setFrom( ProjectNotifier.FROM_PROJECT );
             }
         }
 
-        if ( notifiers == null && notifier.getConfiguration().isEmpty() )
+        if ( notifier == null && notifier.getConfiguration().isEmpty() )
         {
             throw new MavenOneMetadataHelperException(
                 "Missing 'nagEmailAddress' element in the 'build' element in the POM." );
@@ -220,8 +293,27 @@ public class DefaultMavenOneMetadataHelper
             {
                 notifiers = new ArrayList();
             }
-
             notifiers.add( notifier );
+
+            // Add notifier defined by user
+            for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
+            {
+                ProjectNotifier notif = (ProjectNotifier) i.next();
+
+                if ( notif.isFromUser() )
+                {
+                    ProjectNotifier userNotifier = new ProjectNotifier();
+
+                    userNotifier.setType( notif.getType() );
+
+                    userNotifier.setConfiguration( notif.getConfiguration() );
+
+                    userNotifier.setFrom( notif.getFrom() );
+
+                    notifiers.add( userNotifier );
+                }
+            }
+
         }
 
         // ----------------------------------------------------------------------
