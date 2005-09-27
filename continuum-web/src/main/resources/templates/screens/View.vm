@@ -184,7 +184,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
       </tr>
       #foreach ( $dependency in $project.dependencies )
       <tr class="b">
-        <td>$dependency.groupId:$dependency.artifactId</td>
+        <td>$dependency.groupId:$dependency.artifactId:$dependency.version</td>
       </tr>
       #end
     </table>
