@@ -51,6 +51,11 @@
       <artifactId>plexus-log4j-logging</artifactId>
     </dependency>
     <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-security</artifactId>
+      <version>1.0-alpha-1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-core</artifactId>
     </dependency>

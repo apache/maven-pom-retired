@@ -38,9 +38,7 @@
         <!-- This indicates that we do not wanted pages cached on the client side -->
         <nocache>true</nocache>
         <valves>
-          <!--
           <valve>org.apache.maven.continuum.web.pipeline.valve.LoginValve</valve>
-          -->
           <!-- This is required because actions may need to put things in the context -->
           <valve>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextValve</valve>
           <valve>org.codehaus.plexus.summit.pipeline.valve.ActionValve</valve>
@@ -357,6 +355,11 @@
       <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
       <role-hint>org.apache.maven.continuum.web.pipeline.valve.LoginValve</role-hint>
       <implementation>org.apache.maven.continuum.web.pipeline.valve.LoginValve</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
+      </requirements>
     </component>
 
     <component>
@@ -496,6 +499,17 @@
       <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
       <role-hint>continuum-trigger</role-hint>
       <implementation>org.apache.maven.continuum.web.tool.ContinuumTriggerContentGenerator</implementation>
+    </component>
+
+    <!--
+     |
+     | Rundata
+     |
+     -->
+    <component>
+      <role>org.codehaus.plexus.summit.rundata.RunData</role>
+      <implementation>org.codehaus.plexus.security.summit.SecureRunData</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
 
   </components>

@@ -77,6 +77,8 @@ public class DefaultConfigurationService
 
     private String companyUrl;
 
+    private boolean allowGuest;
+
     private static final String LS = System.getProperty( "line.separator" );
 
     // ----------------------------------------------------------------------
@@ -168,6 +170,16 @@ public class DefaultConfigurationService
         this.companyUrl = companyUrl;
     }
 
+    public boolean isAllowedGuest()
+    {
+        return allowGuest;
+    }
+
+    public void setAllowGuest( boolean allow )
+    {
+        allowGuest = allow;
+    }
+
     // ----------------------------------------------------------------------
     // Process configuration to glean application specific values
     // ----------------------------------------------------------------------
@@ -219,6 +231,13 @@ public class DefaultConfigurationService
         if ( companyUrlDom != null )
         {
             companyUrl = companyUrlDom.getValue();
+        }
+
+        Xpp3Dom allowGuestDom = configuration.getChild( CONFIGURATION_ALLOW_GUEST );
+
+        if ( allowGuestDom != null )
+        {
+            allowGuest = Boolean.valueOf( allowGuestDom.getValue() ).booleanValue();
         }
     }
 
@@ -284,6 +303,8 @@ public class DefaultConfigurationService
         {
             configuration.addChild( createDom( CONFIGURATION_COMPANY_URL, companyUrl ) );
         }
+
+        configuration.addChild( createDom( CONFIGURATION_ALLOW_GUEST, String.valueOf( allowGuest ) ) );
     }
 
     protected Xpp3Dom createDom( String elementName, String value )
@@ -301,7 +322,7 @@ public class DefaultConfigurationService
 
         if ( path.startsWith( applicationHome.getAbsolutePath() ) )
         {
-            path = path.substring( applicationHome.getAbsolutePath().length() );
+            path = path.substring( applicationHome.getAbsolutePath().length() + 1 );
         }
 
         return createDom( elementName, path );

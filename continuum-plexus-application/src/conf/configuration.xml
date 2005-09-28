@@ -2,6 +2,7 @@
   <url>http://localhost:8080/continuum/servlet/continuum</url>
   <working-directory>working-directory</working-directory>
   <build-output-directory>build-output-directory</build-output-directory>
+  <allow-guest>true</allow-guest>
   <!--
   <company-logo>/continuum/images/your_logo.png</company-logo>
   <company-name>YOUR_COMPANY_NAME</company-name>

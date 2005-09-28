@@ -16,35 +16,24 @@ package org.apache.maven.continuum.web.pipeline.valve;
  * limitations under the License.
  */
 
-import java.io.IOException;
-
-import org.codehaus.plexus.summit.exception.SummitException;
-import org.codehaus.plexus.summit.pipeline.valve.AbstractValve;
-import org.codehaus.plexus.summit.pipeline.valve.ValveInvocationException;
-import org.codehaus.plexus.summit.rundata.RunData;
+import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.codehaus.plexus.security.summit.AbstractSessionValidatorValve;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
 public class LoginValve
-    extends AbstractValve
+    extends AbstractSessionValidatorValve
 {
-    public void invoke( RunData data )
-        throws IOException, ValveInvocationException
+    /**
+     * @plexus.requirement
+     */
+    private ConfigurationService configurationService;
+
+    public boolean isAllowedGuest()
     {
-        String skip = data.getRequest().getParameter( "skipLogin" );
-
-        if ( skip != null && skip.equals( "true" ) )
-        {
-            return;
-        }
-
-        String loggedIn = (String) data.getRequest().getSession().getAttribute( "loggedIn" );
-
-        if ( loggedIn == null )
-        {
-            data.setTarget( "login.form" );
-        }
+        return configurationService.isAllowedGuest();
     }
 }

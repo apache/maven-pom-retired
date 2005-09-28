@@ -47,6 +47,8 @@ public interface ConfigurationService
 
     String CONFIGURATION_COMPANY_URL = "company-url";
 
+    String CONFIGURATION_ALLOW_GUEST = "allow-guest";
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -84,6 +86,10 @@ public interface ConfigurationService
     String getCompanyUrl();
 
     void setCompanyUrl( String companyUrl );
+
+    boolean isAllowedGuest();
+
+    void setAllowGuest( boolean allow );
 
     // ----------------------------------------------------------------------
     //
