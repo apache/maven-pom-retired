@@ -1,12 +1,4 @@
 <component-set>
   <components>
-    <component>
-      <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
-      <implementation>org.apache.maven.continuum.configuration.DefaultConfigurationService</implementation>
-      <configuration>
-        <source>${plexus.home}/conf/configuration.xml</source>
-        <application-home>${plexus.home}</application-home>
-      </configuration>
-    </component>
   </components>
 </component-set>

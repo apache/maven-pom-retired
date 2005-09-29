@@ -17,6 +17,7 @@ package org.apache.maven.continuum.initialization;
  */
 
 import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.system.SystemConfiguration;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -47,12 +48,9 @@ public class DefaultContinuumInitializer
     //TODO: move this to an other place
     public static final String DEFAULT_SCHEDULE_NAME = "DEFAULT_SCHEDULE";
 
-    public static final String DEFAULT_SCHEDULE_DESCRIPTION = "Run hourly";
-
-    // Cron expression for execution every hour.
-    public static final String DEFAULT_SCHEDULE_CRON_EXPRESSION = "0 0 * * * ?";
-
     private Schedule defaultSchedule;
+
+    private SystemConfiguration systemConf;
 
     // ----------------------------------------------------------------------
     //  Requirements
@@ -74,11 +72,28 @@ public class DefaultContinuumInitializer
 
         try
         {
+            // System Configuration
+            systemConf = store.getSystemConfiguration();
+
+            if ( systemConf == null )
+            {
+                systemConf = new SystemConfiguration();
+
+                systemConf = store.addSystemConfiguration( systemConf );
+            }
+
+            // Schedule
             Schedule s = store.getScheduleByName( DEFAULT_SCHEDULE_NAME );
 
             if ( s != null )
             {
                 defaultSchedule = s;
+
+                defaultSchedule.setDescription( systemConf.getDefaultScheduleDescription() );
+
+                defaultSchedule.setCronExpression( systemConf.getDefaultScheduleCronExpression() );
+
+                defaultSchedule = store.storeSchedule( defaultSchedule );
             }
             else
             {
@@ -104,9 +119,9 @@ public class DefaultContinuumInitializer
 
         schedule.setName( DEFAULT_SCHEDULE_NAME );
 
-        schedule.setDescription( DEFAULT_SCHEDULE_DESCRIPTION );
+        schedule.setDescription( systemConf.getDefaultScheduleDescription() );
 
-        schedule.setCronExpression( DEFAULT_SCHEDULE_CRON_EXPRESSION );
+        schedule.setCronExpression( systemConf.getDefaultScheduleCronExpression() );
 
         schedule.setActive( true );
 

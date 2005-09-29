@@ -24,6 +24,7 @@ import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.Installation;
+import org.apache.maven.continuum.model.system.SystemConfiguration;
 
 import java.io.File;
 import java.util.Collection;
@@ -39,12 +40,6 @@ public interface ContinuumStore
     String ROLE = ContinuumStore.class.getName();
 
     Project getProjectByName( String name )
-        throws ContinuumStoreException;
-
-    String getBuildOutput( int buildId, int projectId )
-        throws ContinuumStoreException;
-
-    File getBuildOutputFile( int buildId, int projectId )
         throws ContinuumStoreException;
 
     void removeNotifier( ProjectNotifier notifier )
@@ -150,5 +145,13 @@ public interface ContinuumStore
         throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
     ProjectGroup getDefaultProjectGroup()
+        throws ContinuumStoreException;
+
+    SystemConfiguration addSystemConfiguration( SystemConfiguration systemConf );
+
+    void updateSystemConfiguration( SystemConfiguration systemConf )
+        throws ContinuumStoreException;
+
+    SystemConfiguration getSystemConfiguration()
         throws ContinuumStoreException;
 }

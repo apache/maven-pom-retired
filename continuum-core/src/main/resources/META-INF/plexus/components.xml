@@ -37,6 +37,11 @@
     <component>
       <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
       <implementation>org.apache.maven.continuum.configuration.DefaultConfigurationService</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
       <configuration>
         <source>${plexus.home}/conf/configuration.xml</source>
         <application-home>${plexus.home}</application-home>
@@ -112,6 +117,9 @@
       <role>org.apache.maven.continuum.notification.ContinuumNotificationDispatcher</role>
       <implementation>org.apache.maven.continuum.notification.DefaultContinuumNotificationDispatcher</implementation>
       <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
         <requirement>
           <role>org.codehaus.plexus.notification.notifier.manager.NotifierManager</role>
         </requirement>
@@ -599,6 +607,9 @@
       <role-hint>execute-builder</role-hint>
       <implementation>org.apache.maven.continuum.core.action.ExecuteBuilderContinuumAction</implementation>
       <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
         <requirement>
           <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
         </requirement>

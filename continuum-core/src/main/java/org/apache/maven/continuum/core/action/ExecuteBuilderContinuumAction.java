@@ -16,6 +16,7 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutionResult;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
@@ -40,10 +41,24 @@ import java.util.Map;
 public class ExecuteBuilderContinuumAction
     extends AbstractContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
+    private ConfigurationService configurationService;
+
+    /**
+     * @plexus.requirement
+     */
     private BuildExecutorManager buildExecutorManager;
 
+    /**
+     * @plexus.requirement
+     */
     private ContinuumStore store;
 
+    /**
+     * @plexus.requirement
+     */
     private ContinuumNotificationDispatcher notifier;
 
     public void execute( Map context )
@@ -102,7 +117,7 @@ public class ExecuteBuilderContinuumAction
         {
             notifier.runningGoals( project, build );
 
-            File buildOutputFile = store.getBuildOutputFile( build.getId(), project.getId() );
+            File buildOutputFile = configurationService.getBuildOutputFile( build.getId(), project.getId() );
 
             ContinuumBuildExecutionResult result = buildExecutor.build( project, buildDefinition, buildOutputFile );
 

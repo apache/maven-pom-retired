@@ -34,6 +34,6 @@ public class LoginValve
 
     public boolean isAllowedGuest()
     {
-        return configurationService.isAllowedGuest();
+        return configurationService.isGuestAccountEnabled();
     }
 }

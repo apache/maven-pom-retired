@@ -682,6 +682,24 @@
           <type>boolean</type>
           <defaultValue>true</defaultValue>
         </field>
+        <field>
+          <name>defaultScheduleDescription</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <defaultValue>Run hourly</defaultValue>
+        </field>
+        <field>
+          <name>defaultScheduleCronExpression</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <defaultValue>0 0 * * * ?</defaultValue>
+        </field>
+        <field>
+          <name>initialized</name>
+          <version>1.0.0+</version>
+          <type>boolean</type>
+          <defaultValue>false</defaultValue>
+        </field>
       </fields>
     </class>
 

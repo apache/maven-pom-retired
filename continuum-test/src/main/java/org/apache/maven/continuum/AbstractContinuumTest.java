@@ -58,9 +58,9 @@ public abstract class AbstractContinuumTest
     {
         super.setUp();
 
-        setUpConfigurationService( (ConfigurationService) lookup( ConfigurationService.ROLE ) );
-
         getStore();
+
+        setUpConfigurationService( (ConfigurationService) lookup( ConfigurationService.ROLE ) );
     }
 
     public static void setUpConfigurationService( ConfigurationService configurationService )

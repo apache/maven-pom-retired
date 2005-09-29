@@ -16,6 +16,10 @@ package org.apache.maven.continuum.configuration;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.system.SystemConfiguration;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -37,6 +41,7 @@ import java.util.Map;
  * @version $Id$
  */
 public class DefaultConfigurationService
+    extends AbstractLogEnabled
     implements ConfigurationService
 {
     /**
@@ -49,11 +54,18 @@ public class DefaultConfigurationService
      */
     private File applicationHome;
 
+    /**
+     * @plexus.requirement
+     */
+    private ContinuumStore store;
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
     private Xpp3Dom configuration;
+
+    private SystemConfiguration systemConf;
 
     // ----------------------------------------------------------------------
     // Continuum specifics we'll refactor out later
@@ -77,7 +89,7 @@ public class DefaultConfigurationService
 
     private String companyUrl;
 
-    private boolean allowGuest;
+    private boolean guestAccountEnabled;
 
     private static final String LS = System.getProperty( "line.separator" );
 
@@ -87,12 +99,12 @@ public class DefaultConfigurationService
 
     public void setInitialized( boolean initialized )
     {
-        this.initialized = initialized;
+        systemConf.setInitialized( initialized );
     }
 
     public boolean isInitialized()
     {
-        return initialized;
+        return systemConf.isInitialized();
     }
 
     public String getUrl()
@@ -170,14 +182,49 @@ public class DefaultConfigurationService
         this.companyUrl = companyUrl;
     }
 
-    public boolean isAllowedGuest()
+    public boolean isGuestAccountEnabled()
     {
-        return allowGuest;
+        return systemConf.isGuestAccountEnabled();
     }
 
-    public void setAllowGuest( boolean allow )
+    public void setGuestAccountEnabled( boolean enabled )
     {
-        allowGuest = allow;
+        systemConf.setGuestAccountEnabled( enabled );
+    }
+
+    public String getBuildOutput( int buildId, int projectId )
+        throws ConfigurationException
+    {
+        File file = getBuildOutputFile( buildId, projectId );
+
+        try
+        {
+            return FileUtils.fileRead( file.getAbsolutePath() );
+        }
+        catch ( IOException e )
+        {
+            getLogger().warn( "Error reading build output for build '" + buildId + "'.", e );
+
+            return null;
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    public File getBuildOutputFile( int buildId, int projectId )
+        throws ConfigurationException
+    {
+        File dir = new File( getBuildOutputDirectory(), Integer.toString( projectId ) );
+
+        if ( !dir.exists() && !dir.mkdirs() )
+        {
+            throw new ConfigurationException(
+                "Could not make the build output directory: " + "'" + dir.getAbsolutePath() + "'." );
+        }
+
+        return new File( dir, buildId + ".log.txt" );
     }
 
     // ----------------------------------------------------------------------
@@ -187,15 +234,6 @@ public class DefaultConfigurationService
     protected void processInboundConfiguration()
         throws ConfigurationLoadingException
     {
-        Xpp3Dom initializedDom = configuration.getChild( CONFIGURATION_INITIALIZED );
-
-        if ( initializedDom != null )
-        {
-            String booleanString = initializedDom.getValue();
-
-            initialized = "true".equals( booleanString ) || "1".equals( booleanString );
-        }
-
         Xpp3Dom urlDom = configuration.getChild( CONFIGURATION_URL );
 
         if ( urlDom != null )
@@ -232,13 +270,6 @@ public class DefaultConfigurationService
         {
             companyUrl = companyUrlDom.getValue();
         }
-
-        Xpp3Dom allowGuestDom = configuration.getChild( CONFIGURATION_ALLOW_GUEST );
-
-        if ( allowGuestDom != null )
-        {
-            allowGuest = Boolean.valueOf( allowGuestDom.getValue() ).booleanValue();
-        }
     }
 
     private File getFile( Xpp3Dom configuration, String elementName )
@@ -272,8 +303,6 @@ public class DefaultConfigurationService
     {
         configuration = new Xpp3Dom( CONFIGURATION );
 
-        configuration.addChild( createDom( CONFIGURATION_INITIALIZED, Boolean.toString( initialized ) ) );
-
         if ( url != null )
         {
             configuration.addChild( createDom( CONFIGURATION_URL, url ) );
@@ -303,8 +332,6 @@ public class DefaultConfigurationService
         {
             configuration.addChild( createDom( CONFIGURATION_COMPANY_URL, companyUrl ) );
         }
-
-        configuration.addChild( createDom( CONFIGURATION_ALLOW_GUEST, String.valueOf( allowGuest ) ) );
     }
 
     protected Xpp3Dom createDom( String elementName, String value )
@@ -335,6 +362,22 @@ public class DefaultConfigurationService
     public void load()
         throws ConfigurationLoadingException
     {
+        try
+        {
+            systemConf = store.getSystemConfiguration();
+
+            if ( systemConf == null )
+            {
+                systemConf = new SystemConfiguration();
+
+                systemConf = store.addSystemConfiguration( systemConf );
+            }
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ConfigurationLoadingException( "Error reading configuration from database.", e );
+        }
+
         if ( inMemoryMode )
         {
             return;
@@ -364,6 +407,15 @@ public class DefaultConfigurationService
     public void store()
         throws ConfigurationStoringException
     {
+        try
+        {
+            store.updateSystemConfiguration( systemConf );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ConfigurationStoringException( "Error writting configuration to database.", e );
+        }
+
         if ( inMemoryMode )
         {
             return;
@@ -389,7 +441,7 @@ public class DefaultConfigurationService
         }
         catch ( IOException e )
         {
-            throw new ConfigurationStoringException( "Error reading configuration '" + source + "'.", e );
+            throw new ConfigurationStoringException( "Error writting configuration '" + source + "'.", e );
         }
     }
 }

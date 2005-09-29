@@ -16,7 +16,7 @@ package org.apache.maven.continuum.configuration;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.apache.maven.continuum.AbstractContinuumTest;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
@@ -26,7 +26,7 @@ import java.io.File;
  * @version $Id$
  */
 public class ConfigurationServiceTest
-    extends PlexusTestCase
+    extends AbstractContinuumTest
 {
     protected void setUp()
         throws Exception
@@ -44,6 +44,8 @@ public class ConfigurationServiceTest
         throws Exception
     {
         ConfigurationService service = (ConfigurationService) lookup( ConfigurationService.ROLE );
+
+        service.setInMemoryMode( false );
 
         service.load();
 

@@ -64,6 +64,8 @@ import java.util.Properties;
 public abstract class AbstractIntegrationTest
     extends PlexusTestCase
 {
+    private ConfigurationService configurationService;
+
     private static final DateFormat progressDateFormat = new SimpleDateFormat( "yyyy.MM.dd HH:mm:ss" );
 
     private Date startTime;
@@ -177,6 +179,8 @@ public abstract class AbstractIntegrationTest
         }
 
         AbstractContinuumTest.setUpConfigurationService( (ConfigurationService) lookup( ConfigurationService.ROLE ) );
+
+        configurationService = (ConfigurationService) lookup( ConfigurationService.ROLE );
     }
 
     public final void tearDown()
@@ -602,13 +606,13 @@ public abstract class AbstractIntegrationTest
             line();
             print( "Output" );
             line();
-            print( getStore().getBuildOutput( buildId, projectId ) );
+            print( configurationService.getBuildOutput( buildId, projectId ) );
             line();
 
             fail( "The build was not successful" );
         }
 
-        String output = getStore().getBuildOutput( buildId, projectId );
+        String output = configurationService.getBuildOutput( buildId, projectId );
 
         assertNotNull( "Output was null.", output );
 
@@ -632,7 +636,7 @@ public abstract class AbstractIntegrationTest
     {
         BuildResult build = assertSuccessfulBuild( buildId, projectId );
 
-        String output = getStore().getBuildOutput( buildId, projectId );
+        String output = configurationService.getBuildOutput( buildId, projectId );
 
         if ( output.indexOf( "BUILD SUCCESSFUL" ) < 0 )
         {
@@ -648,7 +652,7 @@ public abstract class AbstractIntegrationTest
     {
         BuildResult build = assertSuccessfulBuild( buildId, projectId );
 
-        String output = getStore().getBuildOutput( buildId, projectId );
+        String output = configurationService.getBuildOutput( buildId, projectId );
 
         assertEquals( "Standard output didn't contain the expected output.", expectedStandardOutput, output );
 

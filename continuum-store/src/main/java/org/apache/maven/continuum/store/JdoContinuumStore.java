@@ -24,6 +24,7 @@ import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.Installation;
+import org.apache.maven.continuum.model.system.SystemConfiguration;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -732,6 +733,16 @@ public class JdoContinuumStore
         }
     }
 
+    private List getAllObjectsDetached( Class clazz )
+    {
+        return getAllObjectsDetached( clazz, null, null );
+    }
+
+    private List getAllObjectsDetached( Class clazz, String fetchGroup )
+    {
+        return getAllObjectsDetached( clazz, null, fetchGroup );
+    }
+
     private List getAllObjectsDetached( Class clazz, String ordering, String fetchGroup )
     {
         PersistenceManager pm = pmf.getPersistenceManager();
@@ -746,7 +757,10 @@ public class JdoContinuumStore
 
             Query query = pm.newQuery( extent );
 
-            query.setOrdering( ordering );
+            if ( ordering != null )
+            {
+                query.setOrdering( ordering );
+            }
 
             if ( fetchGroup != null )
             {
@@ -825,5 +839,35 @@ public class JdoContinuumStore
             group = addProjectGroup( group );
         }
         return group;
+    }
+
+    public SystemConfiguration addSystemConfiguration( SystemConfiguration systemConf )
+    {
+        return (SystemConfiguration) addObject( systemConf );
+    }
+
+    public void updateSystemConfiguration( SystemConfiguration systemConf )
+        throws ContinuumStoreException
+    {
+        updateObject( systemConf );
+    }
+
+    public SystemConfiguration getSystemConfiguration()
+        throws ContinuumStoreException
+    {
+        List systemConfs = getAllObjectsDetached( SystemConfiguration.class );
+
+        if ( systemConfs == null || systemConfs.isEmpty() )
+        {
+            return null;
+        }
+        else if ( systemConfs.size() > 1 )
+        {
+            throw new ContinuumStoreException( "Database is corrupted. There are more than one systemConfiguration object." );
+        }
+        else
+        {
+            return (SystemConfiguration) systemConfs.get( 0 );
+        }
     }
 }

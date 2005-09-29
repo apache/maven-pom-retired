@@ -33,8 +33,6 @@ public interface ConfigurationService
 
     String CONFIGURATION = "configuration";
 
-    String CONFIGURATION_INITIALIZED = "initialized";
-
     String CONFIGURATION_URL = "url";
 
     String CONFIGURATION_BUILD_OUTPUT_DIRECTORY = "build-output-directory";
@@ -47,15 +45,13 @@ public interface ConfigurationService
 
     String CONFIGURATION_COMPANY_URL = "company-url";
 
-    String CONFIGURATION_ALLOW_GUEST = "allow-guest";
-
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
-    void setInitialized( boolean initialized );
-
     boolean isInitialized();
+
+    void setInitialized( boolean initialized );
 
     String getUrl();
 
@@ -87,9 +83,15 @@ public interface ConfigurationService
 
     void setCompanyUrl( String companyUrl );
 
-    boolean isAllowedGuest();
+    boolean isGuestAccountEnabled();
 
-    void setAllowGuest( boolean allow );
+    void setGuestAccountEnabled( boolean enabled );
+
+    String getBuildOutput( int buildId, int projectId )
+        throws ConfigurationException;
+
+    File getBuildOutputFile( int buildId, int projectId )
+        throws ConfigurationException;
 
     // ----------------------------------------------------------------------
     //

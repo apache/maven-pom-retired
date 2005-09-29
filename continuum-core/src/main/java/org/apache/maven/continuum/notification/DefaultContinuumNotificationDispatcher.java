@@ -16,6 +16,8 @@ package org.apache.maven.continuum.notification;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.configuration.ConfigurationException;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
@@ -40,6 +42,11 @@ public class DefaultContinuumNotificationDispatcher
     extends AbstractLogEnabled
     implements ContinuumNotificationDispatcher
 {
+    /**
+     * @plexus.requirement
+     */
+    private ConfigurationService configurationService;
+
     /**
      * @plexus.requirement
      */
@@ -119,13 +126,19 @@ public class DefaultContinuumNotificationDispatcher
 
                 if ( build.getEndTime() != 0 )
                 {
-                    context.put( CONTEXT_BUILD_OUTPUT, store.getBuildOutput( build.getId(), project.getId() ) );
+                    context.put( CONTEXT_BUILD_OUTPUT, configurationService.getBuildOutput( build.getId(), project.getId() ) );
                 }
 
                 context.put( CONTEXT_UPDATE_SCM_RESULT, build.getScmResult() );
             }
         }
         catch ( ContinuumStoreException e )
+        {
+            getLogger().error( "Error while population the notification context.", e );
+
+            return;
+        }
+        catch ( ConfigurationException e )
         {
             getLogger().error( "Error while population the notification context.", e );
 

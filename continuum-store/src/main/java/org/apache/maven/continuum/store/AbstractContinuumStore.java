@@ -32,43 +32,4 @@ public abstract class AbstractContinuumStore
     extends AbstractLogEnabled
     implements ContinuumStore
 {
-    /**
-     * @plexus.requirement
-     */
-    private ConfigurationService configurationService;
-
-    public String getBuildOutput( int buildId, int projectId )
-        throws ContinuumStoreException
-    {
-        File file = getBuildOutputFile( buildId, projectId );
-
-        try
-        {
-            return FileUtils.fileRead( file.getAbsolutePath() );
-        }
-        catch ( IOException e )
-        {
-            getLogger().warn( "Error reading build output for build '" + buildId + "'.", e );
-
-            return null;
-        }
-    }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    public File getBuildOutputFile( int buildId, int projectId )
-        throws ContinuumStoreException
-    {
-        File dir = new File( configurationService.getBuildOutputDirectory(), Integer.toString( projectId ) );
-
-        if ( !dir.exists() && !dir.mkdirs() )
-        {
-            throw new ContinuumStoreException(
-                "Could not make the build output directory: " + "'" + dir.getAbsolutePath() + "'." );
-        }
-
-        return new File( dir, buildId + ".log.txt" );
-    }
 }

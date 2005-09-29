@@ -21,6 +21,7 @@ import org.apache.maven.continuum.build.settings.SchedulesActivator;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
 import org.apache.maven.continuum.configuration.ConfigurationLoadingException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.configuration.ConfigurationException;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction;
@@ -334,9 +335,9 @@ public class DefaultContinuum
     {
         try
         {
-            return store.getBuildOutput( buildId, projectId );
+            return configurationService.getBuildOutput( buildId, projectId );
         }
-        catch ( ContinuumStoreException e )
+        catch ( ConfigurationException e )
         {
             throw logAndCreateException( "Exception while getting build result for project.", e );
         }
@@ -1102,14 +1103,9 @@ public class DefaultContinuum
 
         try
         {
+            initializer.initialize();
+
             configurationService.load();
-
-            if ( !configurationService.isInitialized() )
-            {
-                initializer.initialize();
-
-                configurationService.setInitialized( true );
-            }
 
             // ----------------------------------------------------------------------
             // Activate all the Build settings in the system
