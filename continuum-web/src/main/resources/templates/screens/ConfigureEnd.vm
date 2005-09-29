@@ -1,0 +1,7 @@
+$page.setTitle( "Configure Continuum" )
+
+<div class="app">
+  <div id="axial" class="h3">
+    Continuum is configured.
+  </div>
+</div>

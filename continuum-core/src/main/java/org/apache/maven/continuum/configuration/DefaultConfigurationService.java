@@ -228,6 +228,22 @@ public class DefaultConfigurationService
     }
 
     // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    public File getFile( String filename )
+    {
+        File f = new File( filename );
+
+        if ( !f.isAbsolute() )
+        {
+            f = new File( applicationHome, filename );
+        }
+
+        return f;
+    }
+
+    // ----------------------------------------------------------------------
     // Process configuration to glean application specific values
     // ----------------------------------------------------------------------
 
@@ -289,14 +305,7 @@ public class DefaultConfigurationService
             throw new ConfigurationLoadingException( "Missing required element '" + elementName + "'." );
         }
 
-        File f = new File( value );
-
-        if ( !f.isAbsolute() )
-        {
-            f = new File( applicationHome, value );
-        }
-
-        return f;
+        return getFile( value );
     }
 
     protected void processOutboundConfiguration()
