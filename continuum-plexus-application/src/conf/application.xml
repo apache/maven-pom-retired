@@ -434,6 +434,19 @@
     </component>
 
     <!--
+     |
+     | Rundata
+     | TODO : Remove it and put it in continuum-web when it'll work on Solaris
+     |
+     -->
+    <component>
+      <role>org.codehaus.plexus.summit.rundata.RunData</role>
+      <implementation>org.codehaus.plexus.security.summit.SecureRunData</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+    </component>
+
+
+    <!--
      | Logger manager
      -->
     <component>

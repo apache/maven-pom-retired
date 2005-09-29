@@ -501,16 +501,5 @@
       <implementation>org.apache.maven.continuum.web.tool.ContinuumTriggerContentGenerator</implementation>
     </component>
 
-    <!--
-     |
-     | Rundata
-     |
-     -->
-    <component>
-      <role>org.codehaus.plexus.summit.rundata.RunData</role>
-      <implementation>org.codehaus.plexus.security.summit.SecureRunData</implementation>
-      <instantiation-strategy>per-lookup</instantiation-strategy>
-    </component>
-
   </components>
 </component-set>
