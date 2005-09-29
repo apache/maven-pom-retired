@@ -25,6 +25,7 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
+import org.apache.maven.continuum.model.system.User;
 
 import java.io.File;
 import java.util.Collection;
@@ -153,5 +154,10 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     SystemConfiguration getSystemConfiguration()
+        throws ContinuumStoreException;
+
+    User addUser( User user );
+
+    User getUserByUsername( String username )
         throws ContinuumStoreException;
 }

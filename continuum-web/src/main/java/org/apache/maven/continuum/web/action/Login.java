@@ -16,18 +16,27 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.summit.rundata.RunData;
+import org.apache.maven.continuum.model.system.User;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.web.model.SessionUser;
+import org.codehaus.plexus.security.summit.SecureRunData;
 import org.codehaus.plexus.action.AbstractAction;
 
 import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
 public class Login
     extends AbstractAction
 {
+    /**
+     * @plexus.requirement
+     */
+    private ContinuumStore store;
+
     public void execute( Map map )
         throws Exception
     {
@@ -37,13 +46,23 @@ public class Login
 
         String password = (String) map.get( "login.password" );
 
-        if ( login.equals( "admin" ) && password.equals( "admin" ) )
+        User user = store.getUserByUsername( login );
+
+        if ( user != null && user.equalsPassword( password ) )
         {
-            RunData data = (RunData) map.get( "data" );
+            SecureRunData secData = (SecureRunData) map.get( "data" );
 
-            data.getRequest().getSession().setAttribute( "loggedIn", "true" );
+            SessionUser usr = new SessionUser( user.getUsername() );
 
-            data.setTarget( "Index.vm" );
+            usr.setLoggedIn( true );
+
+            secData.setUser( usr );
+
+            secData.setTarget( "Index.vm" );
+        }
+        else
+        {
+            throw new Exception( "Your login/password is incorrect" );
         }
     }
 }

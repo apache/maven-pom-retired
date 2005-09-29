@@ -25,6 +25,7 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
+import org.apache.maven.continuum.model.system.User;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -868,6 +869,53 @@ public class JdoContinuumStore
         else
         {
             return (SystemConfiguration) systemConfs.get( 0 );
+        }
+    }
+
+    public User addUser( User user )
+    {
+        return (User) addObject( user );
+    }
+
+    public User getUserByUsername( String username )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( User.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.declareImports( "import java.lang.String" );
+
+            query.declareParameters( "String username" );
+
+            query.setFilter( "this.username == username" );
+
+            Collection result = (Collection) query.execute( username );
+
+            if ( result.size() == 0 )
+            {
+                tx.commit();
+
+                return null;
+            }
+
+            Object object = pm.detachCopy( result.iterator().next() );
+
+            tx.commit();
+
+            return (User) object;
+        }
+        finally
+        {
+            rollback( tx );
         }
     }
 }

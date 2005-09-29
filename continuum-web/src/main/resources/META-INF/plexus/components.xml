@@ -38,6 +38,7 @@
         <!-- This indicates that we do not wanted pages cached on the client side -->
         <nocache>true</nocache>
         <valves>
+          <valve>org.apache.maven.continuum.web.pipeline.valve.InitializationCheckerValve</valve>
           <valve>org.apache.maven.continuum.web.pipeline.valve.LoginValve</valve>
           <!-- This is required because actions may need to put things in the context -->
           <valve>org.apache.maven.continuum.web.pipeline.valve.ContinuumViewContextValve</valve>
@@ -353,6 +354,17 @@
 
     <component>
       <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
+      <role-hint>org.apache.maven.continuum.web.pipeline.valve.InitializationCheckerValve</role-hint>
+      <implementation>org.apache.maven.continuum.web.pipeline.valve.InitializationCheckerValve</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.summit.pipeline.valve.Valve</role>
       <role-hint>org.apache.maven.continuum.web.pipeline.valve.LoginValve</role-hint>
       <implementation>org.apache.maven.continuum.web.pipeline.valve.LoginValve</implementation>
       <requirements>
@@ -381,8 +393,27 @@
 
     <component>
       <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>initializationChecker</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.InitializationChecker</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
       <role-hint>login</role-hint>
       <implementation>org.apache.maven.continuum.web.action.Login</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
     </component>
 
     <component>
