@@ -40,7 +40,6 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
             <td>
               <form method="post" action="$link.setPage('Edit.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">
                 <input type="submit" name="edit-project" value="Edit"/>
-                <b style="color: red;">$i18n.getString( "message.note" ) </b> Project details are out of sync with Maven POM
               </form>
             </td>
           </tr>
@@ -168,7 +167,6 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
           <td>
             <form method="post" action="$link.setPage('SelectNotifier.vm').addPathInfo('id', $project.id )">
               <input type="submit" name="add-notifier" value="Add"/>
-              <b style="color: red;">$i18n.getString( "message.note" ) </b> Notifiers are out of sync with Maven POM
             </form>
           </td>
         </tr>
@@ -225,7 +223,6 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
           <td>
             <form method="post" action="$link">
               <input type="submit" name="add-developer" value="Add"/>
-              <b style="color: red;">$i18n.getString( "message.note" ) </b> Developers are out of sync with Maven POM
             </form>
           </td>
         </tr>
