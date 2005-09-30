@@ -17,9 +17,8 @@ package org.apache.maven.jxr.pacman;
  * ====================================================================
  */
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.tools.ant.DirectoryScanner;
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.apache.maven.jxr.log.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,10 +32,7 @@ import java.util.Hashtable;
  */
 public class PackageManager
 {
-    /**
-     * Log
-     */
-    private static final Log LOG = LogFactory.getLog( PackageManager.class );
+    private final Log log;
 
     private Hashtable directories = new Hashtable();
 
@@ -49,6 +45,14 @@ public class PackageManager
      * The default Java package.
      */
     private PackageType defaultPackage = new PackageType();
+
+    private FileManager fileManager;
+
+    public PackageManager( Log log, FileManager fileManager )
+    {
+        this.log = log;
+        this.fileManager = fileManager;
+    }
 
     /**
      * Given the name of a package (Ex: org.apache.maven.util) obtain it from
@@ -89,7 +93,7 @@ public class PackageManager
     {
         // Go through each directory and get the java source 
         // files for this dir.
-        LOG.info( "Scanning " + directory );
+        log.info( "Scanning " + directory );
         DirectoryScanner directoryScanner = new DirectoryScanner();
         File baseDir = new File( directory );
         directoryScanner.setBasedir( baseDir );
@@ -100,13 +104,13 @@ public class PackageManager
 
         for ( int j = 0; j < files.length; ++j )
         {
-            LOG.debug( "parsing... " + files[j] );
+            log.debug( "parsing... " + files[j] );
 
             //now parse out this file to get the packages/classname/etc
             try
             {
                 String fileName = new File( baseDir, files[j] ).getAbsolutePath();
-                JavaFile jfi = FileManager.getInstance().getFile( fileName );
+                JavaFile jfi = fileManager.getFile( fileName );
 
                 // now that we have this parsed out blend its information
                 // with the current package structure
@@ -160,20 +164,12 @@ public class PackageManager
     }
 
     /**
-     * Simple logging facility
-     */
-    public final static void log( String message )
-    {
-        System.out.println( " PackageManager -> " + message );
-    }
-
-    /**
      * Dump the package information to STDOUT. FOR DEBUG ONLY
      */
     public void dump()
     {
 
-        LOG.debug( "Dumping out PackageManager structure" );
+        log.debug( "Dumping out PackageManager structure" );
 
         Enumeration pts = this.getPackageTypes();
 
@@ -183,7 +179,7 @@ public class PackageManager
             //get the current package and print it.
             PackageType current = (PackageType) pts.nextElement();
 
-            LOG.debug( current.getName() );
+            log.debug( current.getName() );
 
             //get the classes under the package and print those too.
             Enumeration classes = current.getClassTypes();
@@ -193,10 +189,15 @@ public class PackageManager
 
                 ClassType currentClass = (ClassType) classes.nextElement();
 
-                LOG.debug( "\t" + currentClass.getName() );
+                log.debug( "\t" + currentClass.getName() );
 
             }
         }
+    }
+
+    public FileManager getFileManager()
+    {
+        return fileManager;
     }
 }
 

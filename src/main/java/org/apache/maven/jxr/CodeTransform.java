@@ -30,7 +30,6 @@ package org.apache.maven.jxr;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.maven.jxr.pacman.ClassType;
 import org.apache.maven.jxr.pacman.FileManager;
 import org.apache.maven.jxr.pacman.ImportType;
@@ -39,11 +38,11 @@ import org.apache.maven.jxr.pacman.PackageManager;
 import org.apache.maven.jxr.pacman.PackageType;
 import org.apache.maven.jxr.util.SimpleWordTokenizer;
 import org.apache.maven.jxr.util.StringEntry;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -57,6 +56,7 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Vector;
 
 /**
@@ -195,7 +195,7 @@ public class CodeTransform
 
     private String outputEncoding = null;
 
-    private String lang = null;
+    private Locale locale = null;
 
     /**
      * Relative path to javadocs, suitable for hyperlinking
@@ -207,6 +207,8 @@ public class CodeTransform
      */
     private PackageManager packageManager;
 
+    private FileManager fileManager;
+
     /**
      * Constructor for the CodeTransform object
      *
@@ -216,6 +218,7 @@ public class CodeTransform
     {
         this.packageManager = packageManager;
         loadHash();
+        this.fileManager = packageManager.getFileManager();
     }
 
     /**
@@ -494,11 +497,8 @@ public class CodeTransform
         int i = 0;
         while ( ( i = line.indexOf( oldString, i ) ) >= 0 )
         {
-            line = ( new StringBuffer()
-                .append( line.substring( 0, i ) )
-                .append( newString )
-                .append( line.substring( i + oldString.length() ) ) )
-                .toString();
+            line = ( new StringBuffer().append( line.substring( 0, i ) ).append( newString ).append(
+                line.substring( i + oldString.length() ) ) ).toString();
             i += newString.length();
         }
         return line;
@@ -630,11 +630,6 @@ public class CodeTransform
     {
         StringBuffer buffer = new StringBuffer();
 
-        String lang = this.lang;
-        if ( lang == null )
-        {
-            lang = "en";
-        }
         String outputEncoding = this.outputEncoding;
         if ( outputEncoding == null )
         {
@@ -645,19 +640,16 @@ public class CodeTransform
         buffer
             .append(
                 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n" )
-            .append( "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"" ).append( lang ).append(
-            "\" lang=\"" ).append( lang ).append( "\">\n" )
-            .append( "<head>\n" )
-            .append( "<meta http-equiv=\"content-type\" content=\"text/html; charset=" ).append(
-            outputEncoding ).append( "\" />" );
+            .append( "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"" ).append( locale )
+            .append( "\" lang=\"" ).append( locale ).append( "\">\n" ).append( "<head>\n" )
+            .append( "<meta http-equiv=\"content-type\" content=\"text/html; charset=" ).append( outputEncoding )
+            .append( "\" />" );
 
         // title ("classname xref")
         try
         {
-            buffer
-                .append( "<title>" )
-                .append( FileManager.getInstance().getFile( this.getCurrentFilename() ).getClassType().getName() )
-                .append( " xref</title>\n" );
+            buffer.append( "<title>" ).append( fileManager.getFile( this.getCurrentFilename() )
+                .getClassType().getName() ).append( " xref</title>\n" );
 
         }
         catch ( IOException e )
@@ -667,11 +659,8 @@ public class CodeTransform
         }
 
         // stylesheet link
-        buffer
-            .append( "<link type=\"text/css\" rel=\"stylesheet\" href=\"" )
-            .append( this.getPackageRoot() )
-            .append( STYLESHEET_FILENAME )
-            .append( "\" />\n" );
+        buffer.append( "<link type=\"text/css\" rel=\"stylesheet\" href=\"" ).append( this.getPackageRoot() )
+            .append( STYLESHEET_FILENAME ).append( "\" />\n" );
 
         buffer.append( "</head>\n" ).append( "<body>\n" ).append( this.getFileOverview() );
 
@@ -696,14 +685,14 @@ public class CodeTransform
      *
      * @param sourcefile String
      * @param destfile String
-     * @param lang String
+     * @param locale String
      * @param inputEncoding String
      * @param outputEncoding String
      * @param javadocLinkDir String
      * @param revision String
      * @throws IOException
      */
-    public final void transform( String sourcefile, String destfile, String lang, String inputEncoding,
+    public final void transform( String sourcefile, String destfile, Locale locale, String inputEncoding,
                                  String outputEncoding, String javadocLinkDir, String revision )
         throws IOException
     {
@@ -712,7 +701,7 @@ public class CodeTransform
 
         this.sourcefile = sourcefile;
         this.destfile = destfile;
-        this.lang = lang;
+        this.locale = locale;
         this.inputEncoding = inputEncoding;
         this.outputEncoding = outputEncoding;
         this.javadocLinkDir = javadocLinkDir;
@@ -766,15 +755,9 @@ public class CodeTransform
             out.println( getFooter() );
             out.flush();
         }
-        catch ( FileNotFoundException e )
-        {
-            System.out.println(
-                "IGNORING: FileNotFoundException - file is probably in use by another process! Unable to process " +
-                    sourcefile + " => " + destfile );
-        }
         catch ( RuntimeException e )
         {
-            System.out.println( "Unable to process " + sourcefile + " => " + destfile );
+            System.out.println( "Unable to processPath " + sourcefile + " => " + destfile );
             throw e;
         }
         finally
@@ -824,7 +807,7 @@ public class CodeTransform
 
             try
             {
-                JavaFile jf = FileManager.getInstance().getFile( this.getCurrentFilename() );
+                JavaFile jf = fileManager.getFile( this.getCurrentFilename() );
 
                 javadocURI.append( StringUtils.replace( jf.getPackageType().getName(), ".", "/" ) );
                 javadocURI.append( "/" );
@@ -898,7 +881,7 @@ public class CodeTransform
                 return line;
             }
 
-            jf = FileManager.getInstance().getFile( this.getCurrentFilename() );
+            jf = fileManager.getFile( this.getCurrentFilename() );
         }
         catch ( IOException e )
         {
@@ -1129,12 +1112,12 @@ public class CodeTransform
         int start = -1;
 
         /*
-        Used for determining if this is a package declaration.  If it is
-        then we can make some additional assumptions:
-            - that this isn't a Class import so the full String is valid
-            - that it WILL be on the disk since this is based on the current
-            - file.
-        */
+         Used for determining if this is a package declaration.  If it is
+         then we can make some additional assumptions:
+         - that this isn't a Class import so the full String is valid
+         - that it WILL be on the disk since this is based on the current
+         - file.
+         */
         boolean isPackage = line.trim().startsWith( "package " );
         boolean isImport = line.trim().startsWith( "import " );
 
@@ -1235,7 +1218,7 @@ public class CodeTransform
 
         try
         {
-            jf = FileManager.getInstance().getFile( this.getCurrentFilename() );
+            jf = fileManager.getFile( this.getCurrentFilename() );
         }
         catch ( IOException e )
         {

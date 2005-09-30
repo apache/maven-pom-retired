@@ -1,33 +1,48 @@
 package org.apache.maven.jxr;
 
+/*
+ * Copyright 2001-2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import junit.framework.TestCase;
+
+import java.util.Collections;
 
 public class JxrBeanTest
     extends TestCase
 {
 
-    private JxrBean jxrBean;
+    private JXR jxrBean;
 
     protected void setUp()
         throws Exception
     {
         super.setUp();
-        jxrBean = new JxrBean();
-        jxrBean.setSourceDir( System.getProperty( "basedir" ) + "/src/test" );
-        jxrBean.setDestDir( System.getProperty( "basedir" ) + "/target" );
+        jxrBean = new JXR();
+        jxrBean.setDest( System.getProperty( "basedir" ) + "/target" );
         jxrBean.setInputEncoding( "ISO-8859-1" );
         jxrBean.setOutputEncoding( "ISO-8859-1" );
-        jxrBean.setTemplateDir( System.getProperty( "basedir" ) + "/src/plugin-resources/templates" );
-        jxrBean.setJavadocDir( "" );
-        jxrBean.setWindowTitle( "title" );
-        jxrBean.setDocTitle( "title" );
-        jxrBean.setBottom( "copyright" );
+        jxrBean.setJavadocLinkDir( "" );
+        jxrBean.setLog( new DummyLog() );
     }
 
     public void testXref()
         throws Exception
     {
-        jxrBean.xref();
+        jxrBean.xref( Collections.singletonList( System.getProperty( "basedir" ) + "/src/test/java" ), "templates",
+                      "title", "title", "copyright" );
     }
 
 }

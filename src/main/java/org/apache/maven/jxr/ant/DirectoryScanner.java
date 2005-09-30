@@ -8,7 +8,7 @@ import java.io.File;
  * @author Carlos Sanchez
  */
 public class DirectoryScanner
-    extends org.apache.tools.ant.DirectoryScanner
+    extends org.codehaus.plexus.util.DirectoryScanner
 {
 
     public void addDefaultExcludes()

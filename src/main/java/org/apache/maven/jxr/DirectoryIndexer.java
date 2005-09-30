@@ -17,17 +17,23 @@ package org.apache.maven.jxr;
  * ====================================================================
  */
 
-import org.apache.commons.jelly.JellyContext;
-import org.apache.commons.jelly.XMLOutput;
 import org.apache.maven.jxr.pacman.ClassType;
 import org.apache.maven.jxr.pacman.PackageManager;
 import org.apache.maven.jxr.pacman.PackageType;
+import org.apache.maven.jxr.log.VelocityLogger;
+import org.apache.maven.jxr.log.Log;
 import org.apache.oro.text.perl.Perl5Util;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.MethodInvocationException;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.apache.velocity.app.VelocityEngine;
+import org.codehaus.plexus.util.IOUtil;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,6 +58,7 @@ import java.util.TreeMap;
  * </ul>
  * </ul>
  *
+ * @author <a href="mailto:bellingard@gmail.com">Fabrice Bellingard </a>
  * @author <a href="mailto:brian@brainslug.org">Brian Leonard</a>
  * @version $Id$
  */
@@ -74,8 +81,8 @@ public class DirectoryIndexer
     private PackageManager packageManager;
 
     /*
-    * see the getter/setter docs for these properties
-    */
+     * see the getter/setter docs for these properties
+     */
     private String outputEncoding;
 
     private String templateDir;
@@ -85,7 +92,6 @@ public class DirectoryIndexer
     private String docTitle;
 
     private String bottom;
-
 
     /**
      * Constructor for the DirectoryIndexer object
@@ -111,8 +117,6 @@ public class DirectoryIndexer
 
     /**
      * see setOutputEncoding(String)
-     *
-     * @see setOutputEncoding(String)
      */
     public String getOutputEncoding()
     {
@@ -132,8 +136,6 @@ public class DirectoryIndexer
 
     /**
      * see setTemplateDir(String)
-     *
-     * @see setTemplateDir(String)
      */
     public String getTemplateDir()
     {
@@ -206,107 +208,132 @@ public class DirectoryIndexer
     /**
      * Does the actual indexing.
      *
-     * @throws Exception If something went wrong with jelly's processing.
+     * @throws JxrException If something went wrong
      */
-    public void process()
-        throws Exception
+    public void process( Log log )
+        throws JxrException
     {
         Map info = getPackageInfo();
 
-        JellyContext mainContext = new JellyContext();
-        mainContext.setVariable( "outputEncoding", getOutputEncoding() );
-        mainContext.setVariable( "windowTitle", getWindowTitle() );
-        mainContext.setVariable( "docTitle", getDocTitle() );
-        mainContext.setVariable( "bottom", getBottom() );
-        mainContext.setVariable( "info", info );
+        VelocityEngine engine = new VelocityEngine();
+        setProperties( engine, log );
+        try
+        {
+            engine.init();
+        }
+        catch ( Exception e )
+        {
+            throw new JxrException( "Error initialising Velocity", e );
+        }
 
-        doJellyFile( "index", root, mainContext );
-        doJellyFile( "overview-frame", root, mainContext );
-        doJellyFile( "allclasses-frame", root, mainContext );
-        doJellyFile( "overview-summary", root, mainContext );
+        VelocityContext context = new VelocityContext();
+        context.put( "outputEncoding", getOutputEncoding() );
+        context.put( "windowTitle", getWindowTitle() );
+        context.put( "docTitle", getDocTitle() );
+        context.put( "bottom", getBottom() );
+        context.put( "info", info );
+
+        doVelocity( "index", root, context, engine );
+        doVelocity( "overview-frame", root, context, engine );
+        doVelocity( "allclasses-frame", root, context, engine );
+        doVelocity( "overview-summary", root, context, engine );
 
         Iterator iter = ( (Map) info.get( "allPackages" ) ).values().iterator();
         while ( iter.hasNext() )
         {
             Map pkgInfo = (Map) iter.next();
 
-            JellyContext subContext = mainContext.newJellyContext();
-            subContext.setVariable( "pkgInfo", pkgInfo );
+            VelocityContext subContext = new VelocityContext( context );
+            subContext.put( "pkgInfo", pkgInfo );
 
             String outDir = root + "/" + (String) pkgInfo.get( "dir" );
-            doJellyFile( "package-summary", outDir, subContext );
-            doJellyFile( "package-frame", outDir, subContext );
+            doVelocity( "package-summary", outDir, subContext, engine );
+            doVelocity( "package-frame", outDir, subContext, engine );
         }
     }
 
     /*
-     * executes a given jelly file with the given context and places the
-     * generated file in outDir.  File names are assumed to be
-     * {templateName}.jelly for input and {templateName}.html for output
-     *
+     * Set Velocity properties to find templates
      */
-    private void doJellyFile( String templateName, String outDir, JellyContext context )
-        throws Exception
+    private void setProperties( VelocityEngine engine, Log log )
     {
-        String outFile = outDir + "/" + templateName + ".html";
-        OutputStream out = null;
+        File templateDirFile = new File( getTemplateDir() );
+        if ( templateDirFile.isAbsolute() )
+        {
+            // the property has been overriden: need to use a FileResourceLoader
+            engine.setProperty( "resource.loader", "file" );
+            engine.setProperty( "file.resource.loader.class",
+                                "org.apache.velocity.runtime.resource.loader.FileResourceLoader" );
+            engine.setProperty( "file.resource.loader.path", templateDirFile.toString() );
+        }
+        else
+        {
+            // use of the default templates
+            engine.setProperty( "resource.loader", "classpath" );
+            engine.setProperty( "classpath.resource.loader.class",
+                                "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader" );
+        }
+        engine.setProperty( Log.class.getName(), log );
+        engine.setProperty( "runtime.log.logsystem.class", VelocityLogger.class.getName() );
+    }
+
+    /*
+     * Generate the HTML file according to the Velocity template
+     */
+    private void doVelocity( String templateName, String outDir, VelocityContext context, VelocityEngine engine )
+        throws JxrException
+    {
+        // output file
+        File file = new File( outDir, templateName + ".html" );
+        file.getParentFile().mkdirs();
+        FileWriter writer = null;
+
         try
         {
-            // Throws FileNotFoundException
-            out = new FileOutputStream( outFile );
+            writer = new FileWriter( file );
 
-            String templateFileName = getTemplateDir() + "/" + templateName + ".jelly";
-            File templateFile = new File( templateFileName );
-
-            File theFile = new File( outFile );
-            File dir = theFile.getParentFile();
-            if ( dir != null )
+            // template file
+            StringBuffer templateFile = new StringBuffer();
+            File templateDirFile = new File( getTemplateDir() );
+            if ( !templateDirFile.isAbsolute() )
             {
-                dir.mkdirs();
+                // default templates
+                templateFile.append( getTemplateDir() );
+                templateFile.append( "/" );
             }
+            templateFile.append( templateName );
+            templateFile.append( ".vm" );
+            Template template = engine.getTemplate( templateFile.toString() );
 
-            XMLOutput xmlOutput = XMLOutput.createXMLOutput( out, false );
-            context.runScript( templateFile, xmlOutput );
-            xmlOutput.flush();
+            // do the merge
+            template.merge( context, writer );
+            writer.flush();
         }
-        catch ( Throwable e )
+        catch ( Exception e )
         {
-            System.out.println(
-                "IGNORING: Failed to process file [" + outFile + "]. Closing streams and moving on. Exception: " + e );
+            throw new JxrException( "Error merging velocity template", e );
         }
         finally
         {
-            try
-            {
-                if ( out != null )
-                {
-                    out.close();
-                }
-            }
-            catch ( IOException e )
-            {
-                System.out.println( "Failed to close outputstream for file [" + outFile + "], which is a bad thing!" );
-                throw e;
-            }
+            IOUtil.close( writer );
         }
     }
 
-
     /*
-    * Creates a Map of other Maps containing information about
-    * this project's packages and classes, obtained from the PackageManager.
-    *
-    * allPackages collection of Maps with package info, with the following format
-    *   {name}    package name (e.g., "org.apache.maven.jxr")
-    *   {dir}     package dir relative to the root output dir (e.g., "org/apache/maven/jxr")
-    *   {rootRef} relative link to root output dir (e.g., "../../../../") note trailing slash
-    *   {classes} collection of Maps with class info
-    *      {name}  class name (e.g., "DirectoryIndexer")
-    *      {dir}   duplicate of package {dir}
-    *
-    * allClasses collection of Maps with class info, format as above
-    *
-    */
+     * Creates a Map of other Maps containing information about
+     * this project's packages and classes, obtained from the PackageManager.
+     *
+     * allPackages collection of Maps with package info, with the following format
+     *   {name}    package name (e.g., "org.apache.maven.jxr")
+     *   {dir}     package dir relative to the root output dir (e.g., "org/apache/maven/jxr")
+     *   {rootRef} relative link to root output dir (e.g., "../../../../") note trailing slash
+     *   {classes} collection of Maps with class info
+     *      {name}  class name (e.g., "DirectoryIndexer")
+     *      {dir}   duplicate of package {dir}
+     *
+     * allClasses collection of Maps with class info, format as above
+     *
+     */
     private Map getPackageInfo()
     {
         TreeMap allPackages = new TreeMap();
