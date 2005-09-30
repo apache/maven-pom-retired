@@ -683,6 +683,64 @@ public class CodeTransform
     /**
      * This is the public method for doing all transforms of code.
      *
+     * @param sourceReader Reader
+     * @param destWriter Writer
+     * @param locale String
+     * @param inputEncoding String
+     * @param outputEncoding String
+     * @param javadocLinkDir String
+     * @param revision String
+     * @param showHeader boolean
+     * @param showFooter boolean
+     * @throws IOException
+     */
+    public final void transform( Reader sourceReader, Writer destWriter, Locale locale, String inputEncoding,
+                                 String outputEncoding, String javadocLinkDir, String revision, boolean showHeader,
+                                 boolean showFooter )
+        throws IOException
+    {
+        this.locale = locale;
+        this.inputEncoding = inputEncoding;
+        this.outputEncoding = outputEncoding;
+        this.javadocLinkDir = javadocLinkDir;
+        this.revision = revision;
+
+        BufferedReader in = new BufferedReader( sourceReader );
+
+        PrintWriter out = new PrintWriter( destWriter );
+
+        String line = "";
+
+        if ( showHeader )
+        {
+            out.println( getHeader() );
+        }
+
+        int linenumber = 1;
+        while ( ( line = in.readLine() ) != null )
+        {
+            if ( LINE_NUMBERS )
+            {
+                out.print( "<a name=\"" + linenumber + "\" " + "href=\"#" + linenumber + "\">" + linenumber +
+                    "</a>" + getLineWidth( linenumber ) );
+            }
+
+            out.println( this.syntaxHighlight( line ) );
+
+            ++linenumber;
+        }
+
+        if ( showFooter )
+        {
+            out.println( getFooter() );
+        }
+
+        out.flush();
+    }
+
+    /**
+     * This is the public method for doing all transforms of code.
+     *
      * @param sourcefile String
      * @param destfile String
      * @param locale String
@@ -701,11 +759,6 @@ public class CodeTransform
 
         this.sourcefile = sourcefile;
         this.destfile = destfile;
-        this.locale = locale;
-        this.inputEncoding = inputEncoding;
-        this.outputEncoding = outputEncoding;
-        this.javadocLinkDir = javadocLinkDir;
-        this.revision = revision;
 
         //make sure that the parent directories exist...
         new File( new File( destfile ).getParent() ).mkdirs();
@@ -730,30 +783,8 @@ public class CodeTransform
             {
                 fw = new FileWriter( destfile );
             }
-            BufferedReader in = new BufferedReader( fr );
 
-            PrintWriter out = new PrintWriter( fw );
-
-            String line = "";
-
-            out.println( getHeader() );
-
-            int linenumber = 1;
-            while ( ( line = in.readLine() ) != null )
-            {
-                if ( LINE_NUMBERS )
-                {
-                    out.print( "<a name=\"" + linenumber + "\" " + "href=\"#" + linenumber + "\">" + linenumber +
-                        "</a>" + getLineWidth( linenumber ) );
-                }
-
-                out.println( this.syntaxHighlight( line ) );
-
-                ++linenumber;
-            }
-
-            out.println( getFooter() );
-            out.flush();
+            transform( fr, fw, locale, inputEncoding, outputEncoding, javadocLinkDir, revision, true, true );
         }
         catch ( RuntimeException e )
         {
