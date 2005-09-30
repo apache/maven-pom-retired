@@ -17,10 +17,14 @@ package org.apache.maven.jxr.pacman;
  * ====================================================================
  */
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
-/** Represents a Java package and its subclasses.  */
-public class PackageType extends BaseType
+/**
+ * Represents a Java package and its subclasses.
+ */
+public class PackageType
+    extends BaseType
 {
 
     private Hashtable classes = new Hashtable();
@@ -30,27 +34,35 @@ public class PackageType extends BaseType
      *
      * @param name
      */
-    public PackageType(String name)
+    public PackageType( String name )
     {
-        this.setName(name);
+        this.setName( name );
     }
 
-    /** Create a Java package with no name IE the default Java package.  */
-    public PackageType() { }
+    /**
+     * Create a Java package with no name IE the default Java package.
+     */
+    public PackageType()
+    {
+    }
 
 
-    /** Get all the known classes  */
+    /**
+     * Get all the known classes
+     */
     public Enumeration getClassTypes()
     {
 
         return classes.elements();
     }
 
-    /** Add a class to this package.  */
-    public void addClassType(ClassType classType)
+    /**
+     * Add a class to this package.
+     */
+    public void addClassType( ClassType classType )
     {
 
-        this.classes.put(classType.getName(), classType);
+        this.classes.put( classType.getName(), classType );
 
     }
 
@@ -58,10 +70,10 @@ public class PackageType extends BaseType
      * Given the name of a class, get it from this package or null if it does
      * not exist
      */
-    public ClassType getClassType(String classType)
+    public ClassType getClassType( String classType )
     {
 
-        return (ClassType) this.classes.get(classType);
+        return (ClassType) this.classes.get( classType );
     }
 
 }

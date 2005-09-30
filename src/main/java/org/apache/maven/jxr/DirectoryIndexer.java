@@ -17,6 +17,13 @@ package org.apache.maven.jxr;
  * ====================================================================
  */
 
+import org.apache.commons.jelly.JellyContext;
+import org.apache.commons.jelly.XMLOutput;
+import org.apache.maven.jxr.pacman.ClassType;
+import org.apache.maven.jxr.pacman.PackageManager;
+import org.apache.maven.jxr.pacman.PackageType;
+import org.apache.oro.text.perl.Perl5Util;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,31 +34,23 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.commons.jelly.JellyContext;
-import org.apache.commons.jelly.XMLOutput;
-import org.apache.maven.jxr.pacman.ClassType;
-import org.apache.maven.jxr.pacman.PackageManager;
-import org.apache.maven.jxr.pacman.PackageType;
-import org.apache.oro.text.perl.Perl5Util;
-
 /**
  * This class creates the navigational pages for jxr's cross-referenced source
  * files.  The navigation is inspired by javadoc, so it should have a familiar feel.
  *
  * Creates the following files:
  * <ul>
- *   <li>index.html            main index containing the frameset</li>
- *   <li>overview-frame.html   list of the project's packages              (top left)</li>
- *   <li>allclasses-frame.html list of all classes in the project          (bottom left)</li>
- *   <li>overview-summary.html top-level listing of the project's packages (main frame)</li>
+ * <li>index.html            main index containing the frameset</li>
+ * <li>overview-frame.html   list of the project's packages              (top left)</li>
+ * <li>allclasses-frame.html list of all classes in the project          (bottom left)</li>
+ * <li>overview-summary.html top-level listing of the project's packages (main frame)</li>
  *
- *   <ul>
- *   Package specific:
- *     <li>package-summary.html listing of all classes in this package    (main frame)</li>
- *     <li>package-frame.html   listing of all classes in this package    (bottom left)</li>
- *   </ul>
+ * <ul>
+ * Package specific:
+ * <li>package-summary.html listing of all classes in this package    (main frame)</li>
+ * <li>package-frame.html   listing of all classes in this package    (bottom left)</li>
  * </ul>
- *
+ * </ul>
  *
  * @author <a href="mailto:brian@brainslug.org">Brian Leonard</a>
  * @version $Id$
@@ -73,24 +72,28 @@ public class DirectoryIndexer
      * Package Manager for this project.
      */
     private PackageManager packageManager;
-    
+
     /*
-     * see the getter/setter docs for these properties
-     */
+    * see the getter/setter docs for these properties
+    */
     private String outputEncoding;
+
     private String templateDir;
+
     private String windowTitle;
+
     private String docTitle;
+
     private String bottom;
-    
+
 
     /**
      * Constructor for the DirectoryIndexer object
      *
-     * @param packageManager  PackageManager for this project
-     * @param root            Path of the root output directory
+     * @param packageManager PackageManager for this project
+     * @param root Path of the root output directory
      */
-    public DirectoryIndexer(PackageManager packageManager, String root)
+    public DirectoryIndexer( PackageManager packageManager, String root )
     {
         this.packageManager = packageManager;
         this.root = root;
@@ -101,11 +104,11 @@ public class DirectoryIndexer
      *
      * @param outputEncoding output Encoding
      */
-    public void setOutputEncoding(String outputEncoding)
+    public void setOutputEncoding( String outputEncoding )
     {
         this.outputEncoding = outputEncoding;
     }
-    
+
     /**
      * see setOutputEncoding(String)
      *
@@ -122,7 +125,7 @@ public class DirectoryIndexer
      *
      * @param templateDir location of the template directory
      */
-    public void setTemplateDir(String templateDir)
+    public void setTemplateDir( String templateDir )
     {
         this.templateDir = templateDir;
     }
@@ -136,14 +139,14 @@ public class DirectoryIndexer
     {
         return templateDir;
     }
-    
+
     /**
      * WindowTitle is used in the output's &lt;title&gt; tags
      * see the javadoc documentation for the property of the same name
      *
      * @param windowTitle the &lt;title&gt; attribute
      */
-    public void setWindowTitle(String windowTitle)
+    public void setWindowTitle( String windowTitle )
     {
         this.windowTitle = windowTitle;
     }
@@ -164,7 +167,7 @@ public class DirectoryIndexer
      *
      * @param docTitle major page heading
      */
-    public void setDocTitle(String docTitle)
+    public void setDocTitle( String docTitle )
     {
         this.docTitle = docTitle;
     }
@@ -185,7 +188,7 @@ public class DirectoryIndexer
      *
      * @param bottom page footer
      */
-    public void setBottom(String bottom)
+    public void setBottom( String bottom )
     {
         this.bottom = bottom;
     }
@@ -199,7 +202,7 @@ public class DirectoryIndexer
     {
         return bottom;
     }
-    
+
     /**
      * Does the actual indexing.
      *
@@ -211,28 +214,28 @@ public class DirectoryIndexer
         Map info = getPackageInfo();
 
         JellyContext mainContext = new JellyContext();
-        mainContext.setVariable("outputEncoding", getOutputEncoding());
-        mainContext.setVariable("windowTitle", getWindowTitle());
-        mainContext.setVariable("docTitle", getDocTitle());
-        mainContext.setVariable("bottom", getBottom());
-        mainContext.setVariable("info", info);
-        
-        doJellyFile("index",            root, mainContext);
-        doJellyFile("overview-frame",   root, mainContext);
-        doJellyFile("allclasses-frame", root, mainContext);
-        doJellyFile("overview-summary", root, mainContext);
+        mainContext.setVariable( "outputEncoding", getOutputEncoding() );
+        mainContext.setVariable( "windowTitle", getWindowTitle() );
+        mainContext.setVariable( "docTitle", getDocTitle() );
+        mainContext.setVariable( "bottom", getBottom() );
+        mainContext.setVariable( "info", info );
 
-        Iterator iter = ((Map)info.get("allPackages")).values().iterator();
-        while (iter.hasNext())
+        doJellyFile( "index", root, mainContext );
+        doJellyFile( "overview-frame", root, mainContext );
+        doJellyFile( "allclasses-frame", root, mainContext );
+        doJellyFile( "overview-summary", root, mainContext );
+
+        Iterator iter = ( (Map) info.get( "allPackages" ) ).values().iterator();
+        while ( iter.hasNext() )
         {
-            Map pkgInfo = (Map)iter.next();
+            Map pkgInfo = (Map) iter.next();
 
             JellyContext subContext = mainContext.newJellyContext();
-            subContext.setVariable("pkgInfo", pkgInfo);
+            subContext.setVariable( "pkgInfo", pkgInfo );
 
-            String outDir = root + "/" + (String)pkgInfo.get("dir");
-            doJellyFile("package-summary", outDir, subContext);
-            doJellyFile("package-frame",   outDir, subContext);
+            String outDir = root + "/" + (String) pkgInfo.get( "dir" );
+            doJellyFile( "package-summary", outDir, subContext );
+            doJellyFile( "package-frame", outDir, subContext );
         }
     }
 
@@ -242,7 +245,7 @@ public class DirectoryIndexer
      * {templateName}.jelly for input and {templateName}.html for output
      *
      */
-    private void doJellyFile(String templateName, String outDir, JellyContext context)
+    private void doJellyFile( String templateName, String outDir, JellyContext context )
         throws Exception
     {
         String outFile = outDir + "/" + templateName + ".html";
@@ -250,76 +253,77 @@ public class DirectoryIndexer
         try
         {
             // Throws FileNotFoundException
-            out = new FileOutputStream(outFile);
+            out = new FileOutputStream( outFile );
 
             String templateFileName = getTemplateDir() + "/" + templateName + ".jelly";
-            File templateFile = new File(templateFileName);
-        
-            File theFile = new File(outFile);
+            File templateFile = new File( templateFileName );
+
+            File theFile = new File( outFile );
             File dir = theFile.getParentFile();
-            if (dir != null)
+            if ( dir != null )
             {
                 dir.mkdirs();
             }
 
-            XMLOutput xmlOutput = XMLOutput.createXMLOutput(out, false);
-            context.runScript(templateFile, xmlOutput);
+            XMLOutput xmlOutput = XMLOutput.createXMLOutput( out, false );
+            context.runScript( templateFile, xmlOutput );
             xmlOutput.flush();
         }
-        catch (Throwable e)
+        catch ( Throwable e )
         {
-            System.out.println("IGNORING: Failed to process file [" + outFile + "]. Closing streams and moving on. Exception: " + e);
+            System.out.println(
+                "IGNORING: Failed to process file [" + outFile + "]. Closing streams and moving on. Exception: " + e );
         }
         finally
         {
             try
             {
-                if (out != null)
+                if ( out != null )
                 {
                     out.close();
-                }        
+                }
             }
-            catch (IOException e)
+            catch ( IOException e )
             {
-                System.out.println("Failed to close outputstream for file [" + outFile + "], which is a bad thing!");
+                System.out.println( "Failed to close outputstream for file [" + outFile + "], which is a bad thing!" );
                 throw e;
             }
         }
     }
-        
+
 
     /*
-     * Creates a Map of other Maps containing information about
-     * this project's packages and classes, obtained from the PackageManager.
-     *
-     * allPackages collection of Maps with package info, with the following format
-     *   {name}    package name (e.g., "org.apache.maven.jxr")
-     *   {dir}     package dir relative to the root output dir (e.g., "org/apache/maven/jxr")
-     *   {rootRef} relative link to root output dir (e.g., "../../../../") note trailing slash
-     *   {classes} collection of Maps with class info
-     *      {name}  class name (e.g., "DirectoryIndexer")
-     *      {dir}   duplicate of package {dir}
-     *
-     * allClasses collection of Maps with class info, format as above
-     *
-     */
+    * Creates a Map of other Maps containing information about
+    * this project's packages and classes, obtained from the PackageManager.
+    *
+    * allPackages collection of Maps with package info, with the following format
+    *   {name}    package name (e.g., "org.apache.maven.jxr")
+    *   {dir}     package dir relative to the root output dir (e.g., "org/apache/maven/jxr")
+    *   {rootRef} relative link to root output dir (e.g., "../../../../") note trailing slash
+    *   {classes} collection of Maps with class info
+    *      {name}  class name (e.g., "DirectoryIndexer")
+    *      {dir}   duplicate of package {dir}
+    *
+    * allClasses collection of Maps with class info, format as above
+    *
+    */
     private Map getPackageInfo()
     {
         TreeMap allPackages = new TreeMap();
-        TreeMap allClasses  = new TreeMap();
+        TreeMap allClasses = new TreeMap();
         Perl5Util perl = new Perl5Util();
 
         Enumeration packages = packageManager.getPackageTypes();
-        while (packages.hasMoreElements())
+        while ( packages.hasMoreElements() )
         {
-            PackageType pkg = (PackageType)packages.nextElement();
+            PackageType pkg = (PackageType) packages.nextElement();
             String pkgName = pkg.getName();
-            String pkgDir  = perl.substitute("s/\\./\\//g", pkgName);
-            String rootRef = perl.substitute("s/[^\\.]*(\\.|$)/\\.\\.\\//g", pkgName);
-            
+            String pkgDir = perl.substitute( "s/\\./\\//g", pkgName );
+            String rootRef = perl.substitute( "s/[^\\.]*(\\.|$)/\\.\\.\\//g", pkgName );
+
             // special case for the default package
             // javadoc doesn't deal with it, but it's easy for us
-            if (pkgName.length() == 0)
+            if ( pkgName.length() == 0 )
             {
                 pkgName = "(default package)";
                 pkgDir = ".";
@@ -328,30 +332,30 @@ public class DirectoryIndexer
 
             TreeMap pkgClasses = new TreeMap();
             Enumeration classes = pkg.getClassTypes();
-            while (classes.hasMoreElements())
+            while ( classes.hasMoreElements() )
             {
-                ClassType clazz = (ClassType)classes.nextElement();
-                
+                ClassType clazz = (ClassType) classes.nextElement();
+
                 String className = clazz.getName();
                 Map classInfo = new HashMap();
-                classInfo.put("name", className);
-                classInfo.put("dir", pkgDir);
+                classInfo.put( "name", className );
+                classInfo.put( "dir", pkgDir );
 
-                pkgClasses.put(className, classInfo);
-                allClasses.put(className, classInfo);
+                pkgClasses.put( className, classInfo );
+                allClasses.put( className, classInfo );
             }
 
             Map pkgInfo = new HashMap();
-            pkgInfo.put("name", pkgName);
-            pkgInfo.put("dir", pkgDir);
-            pkgInfo.put("classes", pkgClasses);
-            pkgInfo.put("rootRef", rootRef);
-            allPackages.put(pkgName, pkgInfo);
+            pkgInfo.put( "name", pkgName );
+            pkgInfo.put( "dir", pkgDir );
+            pkgInfo.put( "classes", pkgClasses );
+            pkgInfo.put( "rootRef", rootRef );
+            allPackages.put( pkgName, pkgInfo );
         }
 
         Map info = new HashMap();
-        info.put("allPackages", allPackages);
-        info.put("allClasses",  allClasses);
+        info.put( "allPackages", allPackages );
+        info.put( "allClasses", allClasses );
 
         return info;
     }

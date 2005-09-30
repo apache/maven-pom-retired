@@ -17,12 +17,17 @@ package org.apache.maven.jxr.pacman;
  * ====================================================================
  */
 
-/** Represents an entry in a java "import" statement  */
-public class ImportType extends BaseType
+/**
+ * Represents an entry in a java "import" statement
+ */
+public class ImportType
+    extends BaseType
 {
 
     private boolean isclass = false;
+
     private boolean ispackage = false;
+
     private String packagename = null;
 
     /**
@@ -30,31 +35,35 @@ public class ImportType extends BaseType
      *
      * @param name
      */
-    public ImportType(String name)
+    public ImportType( String name )
     {
-        this.setName(name);
+        this.setName( name );
 
         //compute member variables
 
-        this.isclass = this.getName().indexOf("*") == -1;
+        this.isclass = this.getName().indexOf( "*" ) == -1;
 
-        this.ispackage = this.getName().indexOf("*") != -1;
+        this.ispackage = this.getName().indexOf( "*" ) != -1;
 
-        int end = this.getName().lastIndexOf(".");
-        if (end != -1)
+        int end = this.getName().lastIndexOf( "." );
+        if ( end != -1 )
         {
-            this.packagename = this.getName().substring(0, end);
+            this.packagename = this.getName().substring( 0, end );
         }
 
     }
 
-    /** Return true if this is a class import. Ex: test.Test  */
+    /**
+     * Return true if this is a class import. Ex: test.Test
+     */
     public boolean isClass()
     {
         return this.isclass;
     }
 
-    /** Return true if this is a package import. Ex: test.*  */
+    /**
+     * Return true if this is a package import. Ex: test.*
+     */
     public boolean isPackage()
     {
         return this.ispackage;

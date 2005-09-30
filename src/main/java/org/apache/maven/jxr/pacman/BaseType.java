@@ -35,7 +35,7 @@ public abstract class BaseType
      */
     public String getName()
     {
-        if (name == null)
+        if ( name == null )
         {
             return "";
         }
@@ -48,7 +48,7 @@ public abstract class BaseType
      *
      * @param name The new name value
      */
-    public void setName(String name)
+    public void setName( String name )
     {
         this.name = name;
     }

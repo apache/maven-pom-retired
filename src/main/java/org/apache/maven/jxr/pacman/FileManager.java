@@ -17,8 +17,8 @@ package org.apache.maven.jxr.pacman;
  * ====================================================================
  */
 
-import java.util.*;
 import java.io.IOException;
+import java.util.Hashtable;
 
 /**
  * <p>
@@ -34,13 +34,18 @@ import java.io.IOException;
 public class FileManager
 {
 
-    /** The Singleton instance of this FileManager  */
+    /**
+     * The Singleton instance of this FileManager
+     */
     private static FileManager instance = new FileManager();
 
     private Hashtable files = new Hashtable();
+
     private String encoding = null;
 
-    /** Get an instance of the FileManager  */
+    /**
+     * Get an instance of the FileManager
+     */
     public static FileManager getInstance()
     {
         return instance;
@@ -50,25 +55,27 @@ public class FileManager
      * Get a file from it's name. If the file does not exist within the
      * FileManager, create a new one and return it.
      */
-    public JavaFile getFile(String name)
+    public JavaFile getFile( String name )
         throws IOException
     {
 
-        JavaFile real = (JavaFile) this.files.get(name);
+        JavaFile real = (JavaFile) this.files.get( name );
 
-        if (real == null)
+        if ( real == null )
         {
-            real = new JavaFileImpl(name, this.getEncoding());
-            this.addFile(real);
+            real = new JavaFileImpl( name, this.getEncoding() );
+            this.addFile( real );
         }
 
         return real;
     }
 
-    /** Add a file to this filemanager.  */
-    public void addFile(JavaFile file)
+    /**
+     * Add a file to this filemanager.
+     */
+    public void addFile( JavaFile file )
     {
-        this.files.put(file.getFilename(), file);
+        this.files.put( file.getFilename(), file );
     }
 
     /**
@@ -76,7 +83,7 @@ public class FileManager
      *
      * @param encoding encoding of source files
      */
-    public void setEncoding(String encoding)
+    public void setEncoding( String encoding )
     {
         this.encoding = encoding;
     }

@@ -17,7 +17,8 @@ package org.apache.maven.jxr.util;
  * ====================================================================
  */
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Vector;
 
 /**
  * This is a small and fast word tokenizer. It has different characteristics
@@ -28,29 +29,31 @@ import java.util.*;
 public class SimpleWordTokenizer
 {
 
-    /** Description of the Field */
+    /**
+     * Description of the Field
+     */
     public final static char[] BREAKERS = {'(', ')', '[', ' ', '{', '}'};
 
-    /** Break the given line into multiple StringUtils  */
-    public static StringEntry[] tokenize(String line)
+    /**
+     * Break the given line into multiple StringUtils
+     */
+    public static StringEntry[] tokenize( String line )
     {
 
         /*
         determine where to start processing this String... this could
         either be the start of the line or just keep going until the first
         */
-        int start = getStart(line);
+        int start = getStart( line );
 
         //find the first non-BREAKER char and assume that is where you want to start
 
-        if (line == null ||
-            line.length() == 0 ||
-            start == -1)
+        if ( line == null || line.length() == 0 || start == -1 )
         {
             return new StringEntry[0];
         }
 
-        return tokenize(line, start);
+        return tokenize( line, start );
     }
 
 
@@ -61,31 +64,33 @@ public class SimpleWordTokenizer
      * @param line String to search in
      * @param find String to match.
      */
-    public static StringEntry[] tokenize(String line, String find)
+    public static StringEntry[] tokenize( String line, String find )
     {
 
         Vector v = new Vector();
 
-        StringEntry[] se = tokenize(line);
+        StringEntry[] se = tokenize( line );
 
-        for (int i = 0; i < se.length; ++i)
+        for ( int i = 0; i < se.length; ++i )
         {
 
-            if (se[i].toString().equals(find))
+            if ( se[i].toString().equals( find ) )
             {
-                v.addElement(se[i]);
+                v.addElement( se[i] );
             }
 
         }
 
         StringEntry[] found = new StringEntry[v.size()];
-        Collections.sort(v);
-        v.copyInto(found);
+        Collections.sort( v );
+        v.copyInto( found );
         return found;
     }
 
-    /** Internal impl. Specify the start and end.  */
-    private static StringEntry[] tokenize(String line, int start)
+    /**
+     * Internal impl. Specify the start and end.
+     */
+    private static StringEntry[] tokenize( String line, int start )
     {
 
         Vector words = new Vector();
@@ -93,29 +98,28 @@ public class SimpleWordTokenizer
         //algorithm works like this... break the line out into segments
         //that are separated by spaces, and if the entire String doesn't contain
         //a non-Alpha char then assume it is a word.
-        while (true)
+        while ( true )
         {
 
-            int next = getNextBreak(line, start);
+            int next = getNextBreak( line, start );
 
-            if (next < 0 ||
-                next <= start)
+            if ( next < 0 || next <= start )
             {
                 break;
             }
 
-            String word = line.substring(start, next);
+            String word = line.substring( start, next );
 
-            if (isWord(word))
+            if ( isWord( word ) )
             {
-                words.addElement(new StringEntry(word, start));
+                words.addElement( new StringEntry( word, start ) );
             }
 
             start = next + 1;
         }
 
         StringEntry[] found = new StringEntry[words.size()];
-        words.copyInto(found);
+        words.copyInto( found );
         return found;
     }
 
@@ -124,23 +128,21 @@ public class SimpleWordTokenizer
      * Go through the entire String and if any character is not a Letter( a, b,
      * c, d, etc) then return false.
      */
-    private static boolean isWord(String string)
+    private static boolean isWord( String string )
     {
 
-        if (string == null ||
-            string.length() == 0)
+        if ( string == null || string.length() == 0 )
         {
 
             return false;
         }
 
-        for (int i = 0; i < string.length(); ++i)
+        for ( int i = 0; i < string.length(); ++i )
         {
 
-            char c = string.charAt(i);
+            char c = string.charAt( i );
 
-            if (Character.isLetter(c) == false &&
-                c != '.')
+            if ( Character.isLetter( c ) == false && c != '.' )
             {
                 return false;
             }
@@ -150,20 +152,20 @@ public class SimpleWordTokenizer
         return true;
     }
 
-    /** Go through the list of BREAKERS and find the closes one.  */
-    private static int getNextBreak(String string, int start)
+    /**
+     * Go through the list of BREAKERS and find the closes one.
+     */
+    private static int getNextBreak( String string, int start )
     {
 
         int breakPoint = -1;
 
-        for (int i = 0; i < BREAKERS.length; ++i)
+        for ( int i = 0; i < BREAKERS.length; ++i )
         {
 
-            int next = string.indexOf(BREAKERS[i], start);
+            int next = string.indexOf( BREAKERS[i], start );
 
-            if (breakPoint == -1 ||
-                next < breakPoint &&
-                next != -1)
+            if ( breakPoint == -1 || next < breakPoint && next != -1 )
             {
 
                 breakPoint = next;
@@ -173,7 +175,7 @@ public class SimpleWordTokenizer
         }
 
         //if the breakPoint is still -1 go to the end of the string
-        if (breakPoint == -1)
+        if ( breakPoint == -1 )
         {
             breakPoint = string.length();
         }
@@ -181,14 +183,16 @@ public class SimpleWordTokenizer
         return breakPoint;
     }
 
-    /** Go through the list of BREAKERS and find the closes one.  */
-    private static int getStart(String string)
+    /**
+     * Go through the list of BREAKERS and find the closes one.
+     */
+    private static int getStart( String string )
     {
 
-        for (int i = 0; i < string.length(); ++i)
+        for ( int i = 0; i < string.length(); ++i )
         {
 
-            if (isBreaker(string.charAt(i)) == false)
+            if ( isBreaker( string.charAt( i ) ) == false )
             {
                 return i;
             }
@@ -199,14 +203,16 @@ public class SimpleWordTokenizer
     }
 
 
-    /** Return true if the given char is considered a breaker.  */
-    private static boolean isBreaker(char c)
+    /**
+     * Return true if the given char is considered a breaker.
+     */
+    private static boolean isBreaker( char c )
     {
 
-        for (int i = 0; i < BREAKERS.length; ++i)
+        for ( int i = 0; i < BREAKERS.length; ++i )
         {
 
-            if (BREAKERS[i] == c)
+            if ( BREAKERS[i] == c )
             {
                 return true;
             }

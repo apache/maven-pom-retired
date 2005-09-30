@@ -17,23 +17,17 @@ package org.apache.maven.jxr;
  * ====================================================================
  */
 
-import org.apache.maven.jxr.JXR;
-import org.apache.maven.jxr.DirectoryIndexer;
-import org.apache.maven.jxr.pacman.FileManager;
-import org.apache.maven.jxr.pacman.PackageManager;
-import org.apache.maven.jxr.pacman.PackageType;
-import org.apache.maven.jxr.pacman.ClassType;
-import java.util.Enumeration;
-
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Iterator;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.maven.jxr.pacman.FileManager;
+import org.apache.maven.jxr.pacman.PackageManager;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Creates an html-based, cross referenced  version of Java source code
@@ -46,21 +40,32 @@ import org.apache.commons.logging.LogFactory;
  */
 public class JxrBean
 {
-    /** Log. */
-    private static final Log log = LogFactory.getLog(JxrBean.class);
+    /**
+     * Log.
+     */
+    private static final Log log = LogFactory.getLog( JxrBean.class );
 
     /*
      * See the doc comments for the corresponding getter/setter methods
      */
     private List sourceDirs;
+
     private String destDir;
+
     private String lang;
+
     private String inputEncoding;
+
     private String outputEncoding;
+
     private String javadocDir;
+
     private String windowTitle;
+
     private String docTitle;
+
     private String bottom;
+
     private String templateDir;
 
     /**
@@ -81,52 +86,52 @@ public class JxrBean
     {
         // get a relative link to the javadocs
         String javadocLinkDir = null;
-        if (javadocDir != null) {
-            javadocLinkDir = getRelativeLink(destDir, javadocDir);
+        if ( javadocDir != null )
+        {
+            javadocLinkDir = getRelativeLink( destDir, javadocDir );
         }
-        
+
         // first collect package and class info
         PackageManager pkgmgr = new PackageManager();
 
-        FileManager.getInstance().setEncoding(inputEncoding);
-        
+        FileManager.getInstance().setEncoding( inputEncoding );
+
         // go through each source directory and xref the java files
-        for (Iterator i = sourceDirs.iterator(); i.hasNext();)
+        for ( Iterator i = sourceDirs.iterator(); i.hasNext(); )
         {
             String path = (String) i.next();
-            path = new File(path).getCanonicalPath();
-            
-            pkgmgr.process(path);
-            
-            new JXR(pkgmgr, path, destDir, lang, inputEncoding, outputEncoding, javadocLinkDir, "HEAD");
+            path = new File( path ).getCanonicalPath();
+
+            pkgmgr.process( path );
+
+            new JXR( pkgmgr, path, destDir, lang, inputEncoding, outputEncoding, javadocLinkDir, "HEAD" );
         }
-        
+
         // once we have all the source files xref'd, create the index pages
-        DirectoryIndexer indexer = new DirectoryIndexer(pkgmgr, destDir);
-        indexer.setOutputEncoding(outputEncoding);
-        indexer.setTemplateDir(getTemplateDir());
-        indexer.setWindowTitle(getWindowTitle());
-        indexer.setDocTitle(getDocTitle());
-        indexer.setBottom(getBottom());
+        DirectoryIndexer indexer = new DirectoryIndexer( pkgmgr, destDir );
+        indexer.setOutputEncoding( outputEncoding );
+        indexer.setTemplateDir( getTemplateDir() );
+        indexer.setWindowTitle( getWindowTitle() );
+        indexer.setDocTitle( getDocTitle() );
+        indexer.setBottom( getBottom() );
         indexer.process();
     }
-    
+
     /**
      * Creates a relative link from one directory to another.
      *
      * Example:
-     *   given /foo/bar/baz/oink
-     *     and /foo/bar/schmoo
+     * given /foo/bar/baz/oink
+     * and /foo/bar/schmoo
      *
      * this method will return a string of "../../schmoo/"
      *
      * @param fromDir The directory from which the link is relative.
-     * @param toDir   The directory into which the link points.
-     * @throws IOException
-     *    If a problem is encountered while navigating through the directories.
+     * @param toDir The directory into which the link points.
      * @return a string of format "../../schmoo/"
+     * @throws IOException If a problem is encountered while navigating through the directories.
      */
-    private String getRelativeLink(String fromDir, String toDir)
+    private String getRelativeLink( String fromDir, String toDir )
         throws IOException
     {
         StringBuffer toLink = new StringBuffer();   // up from fromDir
@@ -134,48 +139,47 @@ public class JxrBean
 
         // create a List of toDir's parent directories
         LinkedList parents = new LinkedList();
-        File f = new File(toDir);
+        File f = new File( toDir );
         f = f.getCanonicalFile();
-        while (f != null)
+        while ( f != null )
         {
-            parents.add(f);
+            parents.add( f );
             f = f.getParentFile();
         }
-            
+
         // walk up fromDir to find the common parent
-        f = new File(fromDir);
+        f = new File( fromDir );
         f = f.getCanonicalFile();
         f = f.getParentFile();
         boolean found = false;
-        while (f != null && !found)
+        while ( f != null && !found )
         {
-            for (int i = 0; i < parents.size(); ++i)
+            for ( int i = 0; i < parents.size(); ++i )
             {
-                File parent = (File) parents.get(i);
-                if (f.equals(parent))
+                File parent = (File) parents.get( i );
+                if ( f.equals( parent ) )
                 {
                     // when we find the common parent, add the subdirectories 
                     // down to toDir itself
-                    for (int j = 0; j < i; ++j)
+                    for ( int j = 0; j < i; ++j )
                     {
-                        File p = (File) parents.get(j);
-                        toLink.insert(0, p.getName() + "/");
+                        File p = (File) parents.get( j );
+                        toLink.insert( 0, p.getName() + "/" );
                     }
                     found = true;
                     break;
                 }
             }
             f = f.getParentFile();
-            fromLink.append("../");
+            fromLink.append( "../" );
         }
 
-        if (!found)
+        if ( !found )
         {
-            throw new FileNotFoundException(fromDir + " and " + toDir +
-                                            " have no common parent.");
+            throw new FileNotFoundException( fromDir + " and " + toDir + " have no common parent." );
         }
 
-        return fromLink.append(toLink.toString()).toString();
+        return fromLink.append( toLink.toString() ).toString();
     }
 
     /**
@@ -183,13 +187,13 @@ public class JxrBean
      *
      * @param sourceDir The source directory to be cross-referenced.
      */
-    public void setSourceDir(String sourceDir)
+    public void setSourceDir( String sourceDir )
     {
-        if (!sourceDirs.isEmpty())
+        if ( !sourceDirs.isEmpty() )
         {
             sourceDirs.clear();
         }
-        addSourceDir(sourceDir);
+        addSourceDir( sourceDir );
     }
 
     /**
@@ -197,9 +201,9 @@ public class JxrBean
      *
      * @param sourceDir The source directory to be cross-referenced.
      */
-    public void addSourceDir(String sourceDir)
+    public void addSourceDir( String sourceDir )
     {
-        sourceDirs.add(sourceDir);
+        sourceDirs.add( sourceDir );
     }
 
 
@@ -208,7 +212,7 @@ public class JxrBean
      *
      * @param destDir the destination directory for jxr output
      */
-    public void setDestDir(String destDir)
+    public void setDestDir( String destDir )
     {
         this.destDir = destDir;
     }
@@ -229,7 +233,7 @@ public class JxrBean
      *
      * @param lang lang attribute of output files.
      */
-    public void setLang(String lang)
+    public void setLang( String lang )
     {
         this.lang = lang;
     }
@@ -250,7 +254,7 @@ public class JxrBean
      *
      * @param inputEncoding encoding of source files
      */
-    public void setInputEncoding(String inputEncoding)
+    public void setInputEncoding( String inputEncoding )
     {
         this.inputEncoding = inputEncoding;
     }
@@ -271,7 +275,7 @@ public class JxrBean
      *
      * @param outputEncoding encoding of output files
      */
-    public void setOutputEncoding(String outputEncoding)
+    public void setOutputEncoding( String outputEncoding )
     {
         this.outputEncoding = outputEncoding;
     }
@@ -290,12 +294,12 @@ public class JxrBean
     /**
      * JavadocDir is used to cross-reference the source code with
      * the appropriate javadoc pages.
-     * 
+     *
      * If <code>null</code>, no javadoc link will be added.
      *
      * @param javadocDir The root directory containing javadocs
      */
-    public void setJavadocDir(String javadocDir)
+    public void setJavadocDir( String javadocDir )
     {
         this.javadocDir = javadocDir;
     }
@@ -316,7 +320,7 @@ public class JxrBean
      * @param windowTitle used by DirectoryIndexer
      * @see DirectoryIndexer#setWindowTitle(String) setWindowTitle(String)
      */
-    public void setWindowTitle(String windowTitle)
+    public void setWindowTitle( String windowTitle )
     {
         this.windowTitle = windowTitle;
     }
@@ -337,7 +341,7 @@ public class JxrBean
      * @param docTitle used by DirectoryIndexer
      * @see DirectoryIndexer#setDocTitle(String) setDocTitle(String)
      */
-    public void setDocTitle(String docTitle)
+    public void setDocTitle( String docTitle )
     {
         this.docTitle = docTitle;
     }
@@ -358,7 +362,7 @@ public class JxrBean
      * @param bottom used by DirectoryIndexer
      * @see DirectoryIndexer#setBottom(String) setBottom(String)
      */
-    public void setBottom(String bottom)
+    public void setBottom( String bottom )
     {
         this.bottom = bottom;
     }
@@ -378,7 +382,7 @@ public class JxrBean
      *
      * @param templateDir the template directory
      */
-    public void setTemplateDir(String templateDir)
+    public void setTemplateDir( String templateDir )
     {
         this.templateDir = templateDir;
     }

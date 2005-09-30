@@ -17,8 +17,13 @@ package org.apache.maven.jxr.pacman;
  * ====================================================================
  */
 
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StreamTokenizer;
 
 /**
  * PacMan implementation of a JavaFile. This will parse out the file and
@@ -27,7 +32,8 @@ import java.io.*;
  * @author <a href="mailto:burton@apache.org">Kevin A. Burton</a>
  * @version $Id$
  */
-public class JavaFileImpl extends JavaFile
+public class JavaFileImpl
+    extends JavaFile
 {
     private Reader reader;
 
@@ -35,19 +41,19 @@ public class JavaFileImpl extends JavaFile
      * Create a new JavaFileImpl that points to a given file...
      *
      * @param filename
-     * @exception IOException
+     * @throws IOException
      */
-    public JavaFileImpl(String filename, String encoding)
+    public JavaFileImpl( String filename, String encoding )
         throws IOException
     {
-        this.setFilename(filename);
-        this.setEncoding(encoding);
+        this.setFilename( filename );
+        this.setEncoding( encoding );
 
         //always add java.lang.* to the package imports because the JVM always
         //does this implicitly.  Unless we add this to the ImportTypes JXR
         //won't pick up on this.
 
-        this.addImportType(new ImportType("java.lang.*"));
+        this.addImportType( new ImportType( "java.lang.*" ) );
 
         //now parse out this file.
 
@@ -65,29 +71,29 @@ public class JavaFileImpl extends JavaFile
         try
         {
             stok = this.getTokenizer();
-    
-            while (stok.nextToken() != StreamTokenizer.TT_EOF)
+
+            while ( stok.nextToken() != StreamTokenizer.TT_EOF )
             {
-    
-                if (stok.sval == null)
+
+                if ( stok.sval == null )
                 {
                     continue;
                 }
-    
+
                 //set the package
-                if (stok.sval.equals("package"))
+                if ( stok.sval.equals( "package" ) )
                 {
                     stok.nextToken();
-                    this.setPackageType(new PackageType(stok.sval));
+                    this.setPackageType( new PackageType( stok.sval ) );
                 }
-    
+
                 //set the imports
-                if (stok.sval.equals("import"))
+                if ( stok.sval.equals( "import" ) )
                 {
                     stok.nextToken();
-    
+
                     String name = stok.sval;
-    
+
                     /*
                     WARNING: this is a bug/non-feature in the current
                     StreamTokenizer.  We needed to set the comment char as "*"
@@ -95,65 +101,66 @@ public class JavaFileImpl extends JavaFile
                     stripped( and become "test." ).  Here we need to test for this
                     and if necessary re-add the char.
                     */
-                    if (name.charAt(name.length() - 1) == '.')
+                    if ( name.charAt( name.length() - 1 ) == '.' )
                     {
                         name = name + "*";
                     }
-    
-                    this.addImportType(new ImportType(name));
+
+                    this.addImportType( new ImportType( name ) );
                 }
-    
+
                 //set the Class... if the class is found no more information is
                 //valid so just break out of the while loop at this point.
                 //set the imports
-                if (stok.sval.equals("class") ||
-                    stok.sval.equals("interface") ||
-                    stok.sval.equals("enum"))
+                if ( stok.sval.equals( "class" ) || stok.sval.equals( "interface" ) || stok.sval.equals( "enum" ) )
                 {
                     stok.nextToken();
-                    this.setClassType(new ClassType(stok.sval));
+                    this.setClassType( new ClassType( stok.sval ) );
                     break;
                 }
-    
+
             }
         }
         finally
         {
             stok = null;
-            if (this.reader != null) {
+            if ( this.reader != null )
+            {
                 this.reader.close();
             }
         }
     }
 
-    /** Get a StreamTokenizer for this file.  */
+    /**
+     * Get a StreamTokenizer for this file.
+     */
     private StreamTokenizer getTokenizer()
         throws IOException
     {
 
-        if (!new File(this.getFilename()).exists())
+        if ( !new File( this.getFilename() ).exists() )
         {
-            throw new IOException(this.getFilename() + " does not exist!");
+            throw new IOException( this.getFilename() + " does not exist!" );
         }
 
-        if (this.getEncoding() != null)
+        if ( this.getEncoding() != null )
         {
-            this.reader = new InputStreamReader(new FileInputStream(this.getFilename()), this.getEncoding());
+            this.reader = new InputStreamReader( new FileInputStream( this.getFilename() ), this.getEncoding() );
         }
         else
         {
-            this.reader = new FileReader(this.getFilename());
+            this.reader = new FileReader( this.getFilename() );
         }
 
-        StreamTokenizer stok = new StreamTokenizer(reader);
+        StreamTokenizer stok = new StreamTokenizer( reader );
         //int tok;
 
-        stok.commentChar('*');
-        stok.wordChars('_', '_'); 
+        stok.commentChar( '*' );
+        stok.wordChars( '_', '_' );
 
         // set tokenizer to skip comments
-        stok.slashStarComments(true);
-        stok.slashSlashComments(true);
+        stok.slashStarComments( true );
+        stok.slashSlashComments( true );
 
         return stok;
     }

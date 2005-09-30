@@ -17,7 +17,7 @@ package org.apache.maven.jxr.pacman;
  * ====================================================================
  */
 
-import java.util.*;
+import java.util.Vector;
 
 /**
  * Interface for objects which wish to provide metainfo about a JavaFile.
@@ -31,73 +31,95 @@ public abstract class JavaFile
     private Vector imports = new Vector();
 
     private ClassType classType = null;
+
     private PackageType packageType = new PackageType();
 
     private String filename = null;
+
     private String encoding = null;
 
-    /** Get the imported packages/files that this package has.  */
+    /**
+     * Get the imported packages/files that this package has.
+     */
     public ImportType[] getImportTypes()
     {
 
         ImportType[] it = new ImportType[this.imports.size()];
-        this.imports.copyInto(it);
+        this.imports.copyInto( it );
         return it;
     }
 
-    /** Get the name of this class.  */
+    /**
+     * Get the name of this class.
+     */
     public ClassType getClassType()
     {
         return this.classType;
     }
 
-    /** Get the package of this class.  */
+    /**
+     * Get the package of this class.
+     */
     public PackageType getPackageType()
     {
         return this.packageType;
     }
 
 
-    /** Add an ImportType to the current imports  */
-    public void addImportType(ImportType importType)
+    /**
+     * Add an ImportType to the current imports
+     */
+    public void addImportType( ImportType importType )
     {
-        this.imports.addElement(importType);
+        this.imports.addElement( importType );
     }
 
-    /** Set the name of this class.  */
-    public void setClassType(ClassType classType)
+    /**
+     * Set the name of this class.
+     */
+    public void setClassType( ClassType classType )
     {
         this.classType = classType;
     }
 
-    /** Set the PackageType of this class.  */
-    public void setPackageType(PackageType packageType)
+    /**
+     * Set the PackageType of this class.
+     */
+    public void setPackageType( PackageType packageType )
     {
         this.packageType = packageType;
     }
 
 
-    /** Gets the filename attribute of the JavaFile object */
+    /**
+     * Gets the filename attribute of the JavaFile object
+     */
     public String getFilename()
     {
         return this.filename;
     }
 
-    /** Sets the filename attribute of the JavaFile object */
-    public void setFilename(String filename)
+    /**
+     * Sets the filename attribute of the JavaFile object
+     */
+    public void setFilename( String filename )
     {
         this.filename = filename;
     }
 
 
-    /** Gets the encoding attribute of the JavaFile object */
+    /**
+     * Gets the encoding attribute of the JavaFile object
+     */
     public String getEncoding()
     {
         return this.encoding;
     }
 
-    /** Sets the encoding attribute of the JavaFile object */
-    public void setEncoding(String encoding)
+    /**
+     * Sets the encoding attribute of the JavaFile object
+     */
+    public void setEncoding( String encoding )
     {
         this.encoding = encoding;
     }

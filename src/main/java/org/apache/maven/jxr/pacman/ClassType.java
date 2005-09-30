@@ -17,8 +17,11 @@ package org.apache.maven.jxr.pacman;
  * ====================================================================
  */
 
-/** Represents a Java class or interface  */
-public class ClassType extends BaseType
+/**
+ * Represents a Java class or interface
+ */
+public class ClassType
+    extends BaseType
 {
 
     /**
@@ -26,9 +29,9 @@ public class ClassType extends BaseType
      *
      * @param name
      */
-    public ClassType(String name)
+    public ClassType( String name )
     {
-        this.setName(name);
+        this.setName( name );
     }
 
 }
