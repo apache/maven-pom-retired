@@ -5,6 +5,7 @@ $page.setTitle( "Login" )
     <form method="post" action="$link">
       #hidden ( "action" "login" )
 
+      <h3>Authentication</h3>
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="250">
           <tr>
