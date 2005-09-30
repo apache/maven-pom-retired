@@ -97,17 +97,17 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field stash.maxSize="8192">
           <name>description</name>
           <version>1.0.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field stash.maxSize="256">
           <name>url</name>
           <version>1.0.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field stash.maxSize="256">
           <name>scmUrl</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -135,7 +135,7 @@
           <version>1.0.0+</version>
           <type>int</type>
         </field>
-        <field>
+        <field stash.maxSize="256">
           <name>workingDirectory</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -432,7 +432,7 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field stash.maxSize="1024">
           <name>providerMessage</name>
           <version>1.0.0+</version>
           <type>String</type>
@@ -469,7 +469,7 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field stash.maxSize="8192">
           <name>comment</name>
           <version>1.0.0+</version>
           <type>String</type>
