@@ -26,18 +26,39 @@ import org.codehaus.plexus.security.summit.session.SessionBindingEvent;
 public class SessionUser
     implements User
 {
+    private int userId;
+
     private String username;
+
+    private String fullName;
 
     private boolean loggedIn;
 
-    public SessionUser( String username )
+    public SessionUser( int id, String username )
     {
+        this.userId = id;
+
         this.username = username;
+    }
+
+    public int getUserId()
+    {
+        return userId;
     }
 
     public String getUserName()
     {
         return username;
+    }
+
+    public String getFullName()
+    {
+        return fullName;
+    }
+
+    public void setFullName( String fullName)
+    {
+        this.fullName =  fullName;
     }
 
     public boolean isLoggedIn()

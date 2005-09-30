@@ -35,6 +35,10 @@
   </div>
 
   <div>
-    Welcome, <b>Guest</b>
+    #if ( $data.getUser() )
+      Welcome, <b>$data.user.fullName</b>
+    #else
+      Welcome, <b>Guest</b>
+    #end
   </div>
 </div>

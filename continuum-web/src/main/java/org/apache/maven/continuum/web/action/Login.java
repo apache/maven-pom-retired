@@ -52,7 +52,9 @@ public class Login
         {
             SecureRunData secData = (SecureRunData) map.get( "data" );
 
-            SessionUser usr = new SessionUser( user.getUsername() );
+            SessionUser usr = new SessionUser( user.getAccountId(), user.getUsername() );
+
+            usr.setFullName( user.getFullName() );
 
             usr.setLoggedIn( true );
 
