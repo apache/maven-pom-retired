@@ -191,7 +191,7 @@ public class JXR
         log.debug( source + " -> " + dest );
 
         // get a relative link to the javadocs
-        String javadocLinkDir = getRelativeLink( dest, this.javadocLinkDir );
+        String javadocLinkDir = this.javadocLinkDir != null ? getRelativeLink( dest, this.javadocLinkDir ) : null;
         transformer.transform( source, dest, locale, inputEncoding, outputEncoding, javadocLinkDir, this.revision );
     }
 
