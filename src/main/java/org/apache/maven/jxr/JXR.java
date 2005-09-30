@@ -109,7 +109,7 @@ public class JXR
         {
             String src = source + System.getProperty( "file.separator" ) + files[i];
 
-            if ( isJavaFile( source ) )
+            if ( isJavaFile( src ) )
             {
                 transform( src, getDestination( source, src ) );
             }
