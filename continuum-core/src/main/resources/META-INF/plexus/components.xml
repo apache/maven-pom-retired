@@ -14,6 +14,9 @@
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
         <requirement>
+          <role>org.apache.maven.continuum.security.ContinuumSecurity</role>
+        </requirement>
+        <requirement>
           <role>org.apache.maven.continuum.initialization.ContinuumInitializer</role>
         </requirement>
         <requirement>
@@ -46,6 +49,16 @@
         <source>${plexus.home}/conf/configuration.xml</source>
         <application-home>${plexus.home}</application-home>
       </configuration>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.security.ContinuumSecurity</role>
+      <implementation>org.apache.maven.continuum.security.DefaultContinuumSecurity</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
     </component>
 
     <component>

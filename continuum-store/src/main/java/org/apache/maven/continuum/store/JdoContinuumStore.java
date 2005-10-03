@@ -24,8 +24,10 @@ import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.Installation;
+import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
-import org.apache.maven.continuum.model.system.User;
+import org.apache.maven.continuum.model.system.Permission;
+import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -872,12 +874,12 @@ public class JdoContinuumStore
         }
     }
 
-    public User addUser( User user )
+    public ContinuumUser addUser( ContinuumUser user )
     {
-        return (User) addObject( user );
+        return (ContinuumUser) addObject( user );
     }
 
-    public User getUserByUsername( String username )
+    public ContinuumUser getGuestUser()
         throws ContinuumStoreException
     {
         PersistenceManager pm = pmf.getPersistenceManager();
@@ -888,7 +890,45 @@ public class JdoContinuumStore
         {
             tx.begin();
 
-            Extent extent = pm.getExtent( User.class, true );
+            Extent extent = pm.getExtent( ContinuumUser.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.setFilter( "this.guest == true" );
+
+            Collection result = (Collection) query.execute();
+
+            if ( result.size() == 0 )
+            {
+                tx.commit();
+
+                return null;
+            }
+
+            Object object = pm.detachCopy( result.iterator().next() );
+
+            tx.commit();
+
+            return (ContinuumUser) object;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public ContinuumUser getUserByUsername( String username )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( ContinuumUser.class, true );
 
             Query query = pm.newQuery( extent );
 
@@ -911,7 +951,112 @@ public class JdoContinuumStore
 
             tx.commit();
 
-            return (User) object;
+            return (ContinuumUser) object;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public List getPermissions()
+        throws ContinuumStoreException
+    {
+        return getAllObjectsDetached( Permission.class );
+    }
+
+    public Permission getPermission( String name )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( Permission.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.declareImports( "import java.lang.String" );
+
+            query.declareParameters( "String name" );
+
+            query.setFilter( "this.name == name" );
+
+            Collection result = (Collection) query.execute( name );
+
+            if ( result.size() == 0 )
+            {
+                tx.commit();
+
+                return null;
+            }
+
+            Object object = pm.detachCopy( result.iterator().next() );
+
+            tx.commit();
+
+            return (Permission) object;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public Permission addPermission( Permission perm )
+    {
+        return (Permission) addObject( perm );
+    }
+
+    public UserGroup addUserGroup( UserGroup group)
+    {
+        return (UserGroup) addObject( group );
+    }
+
+    public void updateUserGroup( UserGroup group )
+        throws ContinuumStoreException
+    {
+        updateObject( group );
+    }
+
+    public UserGroup getUserGroup( String name )
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( UserGroup.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.declareImports( "import java.lang.String" );
+
+            query.declareParameters( "String name" );
+
+            query.setFilter( "this.name == name" );
+
+            Collection result = (Collection) query.execute( name );
+
+            if ( result.size() == 0 )
+            {
+                tx.commit();
+
+                return null;
+            }
+
+            Object object = pm.detachCopy( result.iterator().next() );
+
+            tx.commit();
+
+            return (UserGroup) object;
         }
         finally
         {

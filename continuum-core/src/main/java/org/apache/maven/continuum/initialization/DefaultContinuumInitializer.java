@@ -17,14 +17,21 @@ package org.apache.maven.continuum.initialization;
  */
 
 import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.system.ContinuumUser;
+import org.apache.maven.continuum.model.system.Permission;
+import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
+import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id:$
+ * @version $Id$
  * @todo use this, reintroduce default project group
  */
 public class DefaultContinuumInitializer
@@ -101,6 +108,13 @@ public class DefaultContinuumInitializer
 
                 defaultSchedule = store.addSchedule( defaultSchedule );
             }
+
+            // Permission
+            createPermissions();
+
+            createGroups();
+
+            createGuestUser();
         }
         catch ( ContinuumStoreException e )
         {
@@ -126,5 +140,123 @@ public class DefaultContinuumInitializer
         schedule.setActive( true );
 
         return schedule;
+    }
+
+    private void createPermissions()
+        throws ContinuumStoreException
+    {
+        createPermission( "addProject", "Add Projects" );
+
+        createPermission( "editProject", "Edit Projects" );
+
+        createPermission( "deleteProject", "Delete Projects" );
+
+        createPermission( "buildProject", "Build Projects" );
+
+        createPermission( "showProject", "Show Projects" );
+
+        createPermission( "addBuildDefinition", "Add Build Definitions" );
+
+        createPermission( "editBuildDefinition", "Edit Build Definitions" );
+
+        createPermission( "deleteBuildDefinition", "Delete Build Definitions" );
+
+        createPermission( "addNotifier", "Add Notifiers" );
+
+        createPermission( "editNotifier", "Edit Notifiers" );
+
+        createPermission( "deleteNotifier", "Delete Notifiers" );
+
+        createPermission( "manageConfiguration", "Manage Continuum Configuration" );
+
+        createPermission( "manageSchedule", "Manage Schedules" );
+
+        createPermission( "manageUsers", "Manage Users/Groups" );
+    }
+
+    private Permission createPermission( String name, String description)
+        throws ContinuumStoreException
+    {
+        Permission perm = store.getPermission( name );
+
+        if ( perm == null )
+        {
+            perm = new Permission();
+
+            perm.setName( name );
+
+            perm.setDescription( description );
+
+            perm = store.addPermission( perm );
+        }
+
+        return perm;
+    }
+
+    private void createGroups()
+        throws ContinuumStoreException
+    {
+        // Continuum Administrator
+        List adminPermissions = store.getPermissions();
+
+        UserGroup adminGroup = new UserGroup();
+
+        adminGroup.setName( ContinuumSecurity.ADMIN_GROUP_NAME );
+
+        adminGroup.setDescription( "Continuum Admin Group" );
+
+        adminGroup.setPermissions( adminPermissions );
+
+        adminGroup = store.addUserGroup( adminGroup );
+
+        // Continuum Guest
+        UserGroup guestGroup = new UserGroup();
+
+        guestGroup.setName( ContinuumSecurity.GUEST_GROUP_NAME );
+
+        guestGroup.setDescription( "Continuum Guest Group" );
+
+        List guestPermissions = new ArrayList();
+
+        guestPermissions.add( store.getPermission( "addProject" ) );
+
+        guestPermissions.add( store.getPermission( "editProject" ) );
+
+        guestPermissions.add( store.getPermission( "deleteProject" ) );
+
+        guestPermissions.add( store.getPermission( "buildProject" ) );
+
+        guestPermissions.add( store.getPermission( "showProject" ) );
+
+        guestPermissions.add( store.getPermission( "addBuildDefinition" ) );
+
+        guestPermissions.add( store.getPermission( "editBuildDefinition" ) );
+
+        guestPermissions.add( store.getPermission( "deleteBuildDefinition" ) );
+
+        guestPermissions.add( store.getPermission( "addNotifier" ) );
+
+        guestPermissions.add( store.getPermission( "editNotifier" ) );
+
+        guestPermissions.add( store.getPermission( "deleteNotifier" ) );
+
+        guestGroup.setPermissions( guestPermissions );
+
+        guestGroup = store.addUserGroup( guestGroup );
+    }
+
+    private void createGuestUser()
+    {
+        ContinuumUser guest = new ContinuumUser();
+
+        guest.setUsername( "guest" );
+
+        guest.setFullName( "Anonymous User" );
+
+        guest.setGroup( store.getUserGroup( ContinuumSecurity.GUEST_GROUP_NAME ) );
+
+        guest.setGuest( true );
+
+        guest = store.addUser( guest );
     }
 }

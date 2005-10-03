@@ -16,7 +16,7 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.model.system.User;
+import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.web.model.SessionUser;
 import org.codehaus.plexus.security.summit.SecureRunData;
@@ -46,7 +46,7 @@ public class Login
 
         String password = (String) map.get( "login.password" );
 
-        User user = store.getUserByUsername( login );
+        ContinuumUser user = store.getUserByUsername( login );
 
         if ( user != null && user.equalsPassword( password ) )
         {

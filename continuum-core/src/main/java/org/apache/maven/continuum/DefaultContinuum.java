@@ -39,6 +39,7 @@ import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
+import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
@@ -104,6 +105,11 @@ public class DefaultContinuum
      * @plexus.requirement
      */
     private SchedulesActivator schedulesActivator;
+
+    /**
+     * @plexus.requirement
+     */
+    private ContinuumSecurity security;
 
     // ----------------------------------------------------------------------
     // Moved from core
@@ -1056,6 +1062,15 @@ public class DefaultContinuum
         {
             throw new ContinuumException( "Can't reload configuration.", e );
         }
+    }
+
+    // ----------------------------------------------------------------------
+    // Security
+    // ----------------------------------------------------------------------
+
+    public ContinuumSecurity getSecurity()
+    {
+        return security;
     }
 
     // ----------------------------------------------------------------------

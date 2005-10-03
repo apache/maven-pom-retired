@@ -16,8 +16,10 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.model.system.User;
+import org.apache.maven.continuum.model.system.ContinuumUser;
+import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.codehaus.plexus.summit.rundata.RunData;
 import org.codehaus.plexus.action.AbstractAction;
@@ -45,7 +47,7 @@ public class InitializationChecker
     public void execute( Map map )
         throws Exception
     {
-        User adminUser = new User();
+        ContinuumUser adminUser = new ContinuumUser();
 
         String username = getValue( map, "username" );
 
@@ -80,8 +82,6 @@ public class InitializationChecker
             throw new Exception( "You must set a full name." );
         }
 
-        store.addUser( adminUser );
-
         String email = getValue( map, "email" );
 
         if ( !StringUtils.isEmpty( email) )
@@ -92,6 +92,10 @@ public class InitializationChecker
         {
             throw new Exception( "You must set an email." );
         }
+
+        adminUser.setGroup( store.getUserGroup( ContinuumSecurity.ADMIN_GROUP_NAME ) );
+
+        store.addUser( adminUser );
 
         String workingDirectory = getValue( map, "workingDirectory" );
 
@@ -147,7 +151,20 @@ public class InitializationChecker
             configuration.setCompanyUrl( companyUrl );
         }
 
-        configuration.setGuestAccountEnabled( getBooleanValue( map, "guestAccountEnabled" ) );
+        boolean guestAccountEnabled = getBooleanValue( map, "guestAccountEnabled" );
+
+        if ( guestAccountEnabled )
+        {
+            configuration.setGuestAccountEnabled( guestAccountEnabled );
+        }
+        else
+        {
+            UserGroup guestGroup = store.getUserGroup( "guest" );
+
+            guestGroup.setPermissions( null );
+
+            store.updateUserGroup( guestGroup );
+        }
 
         configuration.setInitialized( true );
 

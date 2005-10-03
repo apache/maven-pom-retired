@@ -24,8 +24,10 @@ import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.Installation;
+import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
-import org.apache.maven.continuum.model.system.User;
+import org.apache.maven.continuum.model.system.Permission;
+import org.apache.maven.continuum.model.system.UserGroup;
 
 import java.io.File;
 import java.util.Collection;
@@ -156,8 +158,26 @@ public interface ContinuumStore
     SystemConfiguration getSystemConfiguration()
         throws ContinuumStoreException;
 
-    User addUser( User user );
+    ContinuumUser addUser( ContinuumUser user );
 
-    User getUserByUsername( String username )
+    ContinuumUser getGuestUser()
         throws ContinuumStoreException;
+
+    ContinuumUser getUserByUsername( String username )
+        throws ContinuumStoreException;
+
+    List getPermissions()
+        throws ContinuumStoreException;
+
+    Permission getPermission( String name )
+        throws ContinuumStoreException;
+
+    Permission addPermission( Permission perm );
+
+    UserGroup addUserGroup( UserGroup group);
+
+    void updateUserGroup( UserGroup group )
+        throws ContinuumStoreException;
+
+    UserGroup getUserGroup( String name );
 }

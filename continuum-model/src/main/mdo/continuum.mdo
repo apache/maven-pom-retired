@@ -704,20 +704,57 @@
     </class>
 
     <class>
-      <name>User</name>
+      <name>UserGroup</name>
       <packageName>org.apache.maven.continuum.model.system</packageName>
       <version>1.0.0+</version>
       <fields>
+        <field>
+          <name>id</name>
+          <identifier>true</identifier>
+          <version>1.0.0+</version>
+          <type>int</type>
+        </field>
+        <field>
+          <name>name</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>description</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>permissions</name>
+          <version>1.0.0+</version>
+          <association stash.part="true">
+            <type>Permission</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>ContinuumUser</name>
+      <packageName>org.apache.maven.continuum.model.system</packageName>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>accountId</name>
+          <version>1.0.0+</version>
+          <type>int</type>
+          <identifier>true</identifier>
+        </field>
         <field>
           <name>username</name>
           <version>1.0.0+</version>
           <type>String</type>
         </field>
         <field>
-          <name>accountId</name>
+          <name>guest</name>
           <version>1.0.0+</version>
-          <type>int</type>
-          <identifier>true</identifier>
+          <type>boolean</type>
+          <defaultValue>false</defaultValue>
         </field>
         <field>
           <name>hashedPassword</name>
@@ -735,11 +772,10 @@
           <type>String</type>
         </field>
         <field>
-          <name>permissions</name>
+          <name>group</name>
           <version>1.0.0+</version>
-          <association>
-            <type>Permission</type>
-            <multiplicity>*</multiplicity>
+          <association stash.part="true">
+            <type>UserGroup</type>
           </association>
         </field>
         <field>

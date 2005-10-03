@@ -22,6 +22,7 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
@@ -206,4 +207,10 @@ public interface Continuum
 
     void reloadConfiguration()
         throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Security
+    // ----------------------------------------------------------------------
+
+    ContinuumSecurity getSecurity();
 }
