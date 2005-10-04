@@ -43,6 +43,8 @@
    <div class="label">Administration</div>
    <div class="body">
      <div><a href="$link.setPage('Schedules.vm').addPathInfo( 'fid', 'schedules')">Schedules</a></div>
+     <div><a href="$link.setPage('UserGroups.vm')">User Groups Management</a></div>
+     <div><a href="$link.setPage('Users.vm')">Users Management</a></div>
    </div>
   </div>
   #end

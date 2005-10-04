@@ -879,6 +879,12 @@ public class JdoContinuumStore
         return (ContinuumUser) addObject( user );
     }
 
+    public void updateUser( ContinuumUser user )
+        throws ContinuumStoreException
+    {
+        updateObject( user );
+    }
+
     public ContinuumUser getGuestUser()
         throws ContinuumStoreException
     {
@@ -915,6 +921,18 @@ public class JdoContinuumStore
         {
             rollback( tx );
         }
+    }
+
+    public List getUsers()
+        throws ContinuumStoreException
+    {
+        return getAllObjectsDetached( ContinuumUser.class );
+    }
+
+    public ContinuumUser getUser( int userId )
+        throws ContinuumObjectNotFoundException, ContinuumStoreException
+    {
+        return (ContinuumUser) getObjectById( ContinuumUser.class, userId );
     }
 
     public ContinuumUser getUserByUsername( String username )
@@ -957,6 +975,11 @@ public class JdoContinuumStore
         {
             rollback( tx );
         }
+    }
+
+    public void removeUser( ContinuumUser user )
+    {
+        removeObject( user );
     }
 
     public List getPermissions()
@@ -1023,6 +1046,18 @@ public class JdoContinuumStore
         updateObject( group );
     }
 
+    public List getUserGroups()
+        throws ContinuumStoreException
+    {
+        return getAllObjectsDetached( UserGroup.class );
+    }
+
+    public UserGroup getUserGroup( int userGroupId )
+        throws ContinuumObjectNotFoundException, ContinuumStoreException
+    {
+        return (UserGroup) getObjectById( UserGroup.class, userGroupId );
+    }
+
     public UserGroup getUserGroup( String name )
     {
         PersistenceManager pm = pmf.getPersistenceManager();
@@ -1062,5 +1097,10 @@ public class JdoContinuumStore
         {
             rollback( tx );
         }
+    }
+
+    public void removeUserGroup( UserGroup group )
+    {
+        removeObject( group );
     }
 }

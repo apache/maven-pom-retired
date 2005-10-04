@@ -197,66 +197,76 @@ public class DefaultContinuumInitializer
         throws ContinuumStoreException
     {
         // Continuum Administrator
-        List adminPermissions = store.getPermissions();
+        if ( store.getUserGroup( ContinuumSecurity.ADMIN_GROUP_NAME ) == null )
+        {
+            List adminPermissions = store.getPermissions();
 
-        UserGroup adminGroup = new UserGroup();
+            UserGroup adminGroup = new UserGroup();
 
-        adminGroup.setName( ContinuumSecurity.ADMIN_GROUP_NAME );
+            adminGroup.setName( ContinuumSecurity.ADMIN_GROUP_NAME );
 
-        adminGroup.setDescription( "Continuum Admin Group" );
+            adminGroup.setDescription( "Continuum Admin Group" );
 
-        adminGroup.setPermissions( adminPermissions );
+            adminGroup.setPermissions( adminPermissions );
 
-        adminGroup = store.addUserGroup( adminGroup );
+            adminGroup = store.addUserGroup( adminGroup );
+        }
 
         // Continuum Guest
-        UserGroup guestGroup = new UserGroup();
+        if ( store.getUserGroup( ContinuumSecurity.GUEST_GROUP_NAME ) == null )
+        {
+            UserGroup guestGroup = new UserGroup();
 
-        guestGroup.setName( ContinuumSecurity.GUEST_GROUP_NAME );
+            guestGroup.setName( ContinuumSecurity.GUEST_GROUP_NAME );
 
-        guestGroup.setDescription( "Continuum Guest Group" );
+            guestGroup.setDescription( "Continuum Guest Group" );
 
-        List guestPermissions = new ArrayList();
+            List guestPermissions = new ArrayList();
 
-        guestPermissions.add( store.getPermission( "addProject" ) );
+            guestPermissions.add( store.getPermission( "addProject" ) );
 
-        guestPermissions.add( store.getPermission( "editProject" ) );
+            guestPermissions.add( store.getPermission( "editProject" ) );
 
-        guestPermissions.add( store.getPermission( "deleteProject" ) );
+            guestPermissions.add( store.getPermission( "deleteProject" ) );
 
-        guestPermissions.add( store.getPermission( "buildProject" ) );
+            guestPermissions.add( store.getPermission( "buildProject" ) );
 
-        guestPermissions.add( store.getPermission( "showProject" ) );
+            guestPermissions.add( store.getPermission( "showProject" ) );
 
-        guestPermissions.add( store.getPermission( "addBuildDefinition" ) );
+            guestPermissions.add( store.getPermission( "addBuildDefinition" ) );
 
-        guestPermissions.add( store.getPermission( "editBuildDefinition" ) );
+            guestPermissions.add( store.getPermission( "editBuildDefinition" ) );
 
-        guestPermissions.add( store.getPermission( "deleteBuildDefinition" ) );
+            guestPermissions.add( store.getPermission( "deleteBuildDefinition" ) );
 
-        guestPermissions.add( store.getPermission( "addNotifier" ) );
+            guestPermissions.add( store.getPermission( "addNotifier" ) );
 
-        guestPermissions.add( store.getPermission( "editNotifier" ) );
+            guestPermissions.add( store.getPermission( "editNotifier" ) );
 
-        guestPermissions.add( store.getPermission( "deleteNotifier" ) );
+            guestPermissions.add( store.getPermission( "deleteNotifier" ) );
 
-        guestGroup.setPermissions( guestPermissions );
+            guestGroup.setPermissions( guestPermissions );
 
-        guestGroup = store.addUserGroup( guestGroup );
+            guestGroup = store.addUserGroup( guestGroup );
+        }
     }
 
     private void createGuestUser()
+        throws ContinuumStoreException
     {
-        ContinuumUser guest = new ContinuumUser();
+        if ( store.getGuestUser() == null )
+        {
+            ContinuumUser guest = new ContinuumUser();
 
-        guest.setUsername( "guest" );
+            guest.setUsername( "guest" );
 
-        guest.setFullName( "Anonymous User" );
+            guest.setFullName( "Anonymous User" );
 
-        guest.setGroup( store.getUserGroup( ContinuumSecurity.GUEST_GROUP_NAME ) );
+            guest.setGroup( store.getUserGroup( ContinuumSecurity.GUEST_GROUP_NAME ) );
 
-        guest.setGuest( true );
+            guest.setGuest( true );
 
-        guest = store.addUser( guest );
+            guest = store.addUser( guest );
+        }
     }
 }

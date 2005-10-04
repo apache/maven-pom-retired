@@ -727,7 +727,7 @@
         <field>
           <name>permissions</name>
           <version>1.0.0+</version>
-          <association stash.part="true">
+          <association stash.part="true" jpox.dependent="false">
             <type>Permission</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -774,14 +774,14 @@
         <field>
           <name>group</name>
           <version>1.0.0+</version>
-          <association stash.part="true">
+          <association stash.part="true" jpox.dependent="false">
             <type>UserGroup</type>
           </association>
         </field>
         <field>
           <name>notificationAddresses</name>
           <version>1.0.0+</version>
-          <association>
+          <association stash.part="true" >
             <type>NotificationAddress</type>
             <multiplicity>*</multiplicity>
           </association>

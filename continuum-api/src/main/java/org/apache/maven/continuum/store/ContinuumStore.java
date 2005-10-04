@@ -160,11 +160,22 @@ public interface ContinuumStore
 
     ContinuumUser addUser( ContinuumUser user );
 
+    void updateUser( ContinuumUser user )
+        throws ContinuumStoreException;
+
+    ContinuumUser getUser( int userId )
+        throws ContinuumObjectNotFoundException, ContinuumStoreException;
+
     ContinuumUser getGuestUser()
+        throws ContinuumStoreException;
+
+    List getUsers()
         throws ContinuumStoreException;
 
     ContinuumUser getUserByUsername( String username )
         throws ContinuumStoreException;
+
+    void removeUser( ContinuumUser user );
 
     List getPermissions()
         throws ContinuumStoreException;
@@ -179,5 +190,13 @@ public interface ContinuumStore
     void updateUserGroup( UserGroup group )
         throws ContinuumStoreException;
 
+    List getUserGroups()
+        throws ContinuumStoreException;
+
+    UserGroup getUserGroup( int userGroupId )
+        throws ContinuumObjectNotFoundException, ContinuumStoreException;
+
     UserGroup getUserGroup( String name );
+
+    void removeUserGroup( UserGroup group );
 }

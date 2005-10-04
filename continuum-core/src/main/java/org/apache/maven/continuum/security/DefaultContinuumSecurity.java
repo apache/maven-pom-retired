@@ -75,6 +75,26 @@ public class DefaultContinuumSecurity
         return false;
     }
 
+    public boolean isAuthorized( UserGroup group, String action )
+        throws ContinuumSecurityException
+    {
+        List perms = getPermissions( group );
+
+        if ( perms != null )
+        {
+            for ( Iterator i = perms.iterator(); i.hasNext(); )
+            {
+                Permission perm = (Permission) i.next();
+                if ( perm.getName().equals( action ) )
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public ContinuumUser getGuestUser()
         throws ContinuumSecurityException
     {

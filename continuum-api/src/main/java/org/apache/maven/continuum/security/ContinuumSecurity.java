@@ -42,6 +42,9 @@ public interface ContinuumSecurity
     boolean isAuthorized( ContinuumUser user, String action )
         throws ContinuumSecurityException;
 
+    boolean isAuthorized( UserGroup group, String action )
+        throws ContinuumSecurityException;
+
     ContinuumUser getGuestUser()
         throws ContinuumSecurityException;
 }

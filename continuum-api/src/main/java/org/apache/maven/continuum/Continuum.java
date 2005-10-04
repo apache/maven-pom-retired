@@ -22,6 +22,8 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.system.ContinuumUser;
+import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
@@ -213,4 +215,38 @@ public interface Continuum
     // ----------------------------------------------------------------------
 
     ContinuumSecurity getSecurity();
+
+    // ----------------------------------------------------------------------
+    // User
+    // ----------------------------------------------------------------------
+
+    List getUsers()
+        throws ContinuumException;
+
+    ContinuumUser getUser( int userId )
+        throws ContinuumException;
+
+    void removeUser( int userId )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // User Group
+    // ----------------------------------------------------------------------
+
+    void addUserGroup( UserGroup userGroup );
+
+    void addUserGroup( Map configuration )
+        throws ContinuumException;
+
+    void updateUserGroup( int userGroupId, Map configuration )
+        throws ContinuumException;
+
+    List getUserGroups()
+        throws ContinuumException;
+
+    UserGroup getUserGroup( int userGroupId )
+        throws ContinuumException;
+
+    void removeUserGroup( int userGroupId )
+        throws ContinuumException;
 }

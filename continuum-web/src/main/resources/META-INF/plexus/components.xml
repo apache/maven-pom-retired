@@ -314,6 +314,20 @@
               </scalar>
             </scalars>
           </view>
+          <!--
+           |
+           | Project Builds Definitions
+           |
+           -->
+          <view>
+            <id>UserGroup</id>
+            <scalars>
+              <scalar>
+                <id>userGroup</id>
+                <expression>getuserGroup(#id)</expression>
+              </scalar>
+            </scalars>
+          </view>
         </views>
       </configuration>
     </component>
@@ -486,6 +500,23 @@
           <call>
             <cid>updateBuildDefinition</cid>
             <expression>updateBuildDefinition(#id,#buildDefinitionId,#parameters)</expression>
+          </call>
+          <!--
+           |
+           | User Group
+           |
+           -->
+          <call>
+            <cid>addUserGroup</cid>
+            <expression>addUserGroup(#parameters)</expression>
+          </call>
+          <call>
+            <cid>deleteUserGroup</cid>
+            <expression>removeUserGroup(#id)</expression>
+          </call>
+          <call>
+            <cid>updateUserGroup</cid>
+            <expression>updateUserGroup(#id,#parameters)</expression>
           </call>
         </calls>
       </configuration>

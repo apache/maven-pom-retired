@@ -1,0 +1,156 @@
+$page.setTitle( $i18n.getString( $form.add.titleKey ) )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>$i18n.getString( $form.add.titleKey )</h3>
+    <form method="post" action="$link" #if( $form.attributes.multipart )enctype="multipart/form-data"#end>
+      #hidden ( "action" "cam" )
+      #hidden ( "cid" "addUserGroup" )
+      #hidden ( "view" "$form.add.view" )
+      #hidden ( "id" $id )
+      <div class="axial">
+        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+          #foreach ( $element in $form.elements )
+            #if ( !$element.immutable )
+            <tr>
+              #field( $i18n $data $element $item $formtool )
+            </tr>
+            #else
+              #if ( $element.defaultValue )
+                #hidden ( $element.id $element.defaultValue )
+              #end
+            #end
+          #end
+        <tr>
+          <th>Add Projects</th>
+          <td >
+            <input type="checkbox" name="group.permission.addProject" />
+            <p>
+              group.permission.addProject.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Edit Projects</th>
+          <td >
+            <input type="checkbox" name="group.permission.editProject" />
+            <p>
+              group.permission.editProject.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Delete Projects</th>
+          <td >
+            <input type="checkbox" name="group.permission.deleteProject" />
+            <p>
+              group.permission.deleteProject.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Build Projects</th>
+          <td >
+            <input type="checkbox" name="group.permission.buildProject" />
+            <p>
+              group.permission.buildProject.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Show Projects</th>
+          <td >
+            <input type="checkbox" name="group.permission.showProject" />
+            <p>
+              group.permission.showProject.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Add Build Definitions</th>
+          <td >
+            <input type="checkbox" name="group.permission.addBuildDefinition" />
+            <p>
+              group.permission.addBuildDefinition.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Edit Build Definitions</th>
+          <td >
+            <input type="checkbox" name="group.permission.editBuildDefinition" />
+            <p>
+              group.permission.editBuildDefinition.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Delete Build Definitions</th>
+          <td >
+            <input type="checkbox" name="group.permission.deleteBuildDefinition" />
+            <p>
+              group.permission.deleteBuildDefinition.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Add Notifiers</th>
+          <td >
+            <input type="checkbox" name="group.permission.addNotifier" />
+            <p>
+              group.permission.addNotifier.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Edit Notifiers</th>
+          <td >
+            <input type="checkbox" name="group.permission.editNotifier" />
+            <p>
+              group.permission.editNotifier.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Delete Notifiers</th>
+          <td >
+            <input type="checkbox" name="group.permission.deleteNotifier" />
+            <p>
+              group.permission.deleteNotifier.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Manage Continuum Configuration</th>
+          <td >
+            <input type="checkbox" name="group.permission.manageConfiguration" />
+            <p>
+              group.permission.manageConfiguration.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Manage Schedules</th>
+          <td >
+            <input type="checkbox" name="group.permission.manageSchedule" />
+            <p>
+              group.permission.manageSchedule.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <th>Manage Users/Group</th>
+          <td >
+            <input type="checkbox" name="group.permission.manageUsers" />
+            <p>
+              group.permission.manageUsers.message <font color="red"><b></b></font>
+            </p>
+          </td>
+        </tr>
+        </table>
+
+        #submitBar( "Submit" )
+      </div>
+    </form>
+  </div>
+</div>
