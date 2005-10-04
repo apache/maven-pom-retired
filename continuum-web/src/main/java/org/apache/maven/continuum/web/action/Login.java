@@ -60,7 +60,7 @@ public class Login
 
             secData.setUser( usr );
 
-            secData.setTarget( "Index.vm" );
+            secData.setTarget( "Summary.vm" );
         }
         else
         {
