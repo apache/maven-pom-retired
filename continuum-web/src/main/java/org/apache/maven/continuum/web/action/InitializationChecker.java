@@ -168,6 +168,8 @@ public class InitializationChecker
 
         configuration.setInitialized( true );
 
+        configuration.store();
+
         RunData data = (RunData) map.get( "data" );
 
         data.setTarget( "ConfigureEnd.vm" );
