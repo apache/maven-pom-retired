@@ -35,11 +35,11 @@ $page.setTitle( "Configure Continuum" )
       <table cellspacing="2" cellpadding="3" width="450">
         <tr>
           <td>Working Directory :</td>
-          <td><input type="text" name="workingDirectory" value="working-directory" size="50"></td>
+          <td><input type="text" name="workingDirectory" value="working-directory" size="50"> If you define a relative path, it will be relative to $CONTINUUM_HOME/apps/continuum/</td>
         </tr>
         <tr>
           <td>Build Output Directory :</td>
-          <td><input type="text" name="buildOutputDirectory" value="build-output-directory" size="50"></td>
+          <td><input type="text" name="buildOutputDirectory" value="build-output-directory" size="50"> If you define a relative path, it will be relative to $CONTINUUM_HOME/apps/continuum/</td>
         </tr>
       </table>
 
