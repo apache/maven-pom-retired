@@ -1,0 +1,65 @@
+$page.setTitle( "Configure Continuum" )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>General Configuration</h3>
+
+    <div class="axial">
+      <table border="1" cellspacing="2" cellpadding="3" width="100%">
+
+        <tr class="b">
+          <th>Guests</th>
+          <td>
+            #if ( $continuum.configuration.isGuestAccountEnabled() )
+              #set ( $guestAccess = "Enabled" )
+            #else
+              #set ( $guestAccess = "Disabled" )
+            #end
+            Guest user is <strong style="color: green;">$guestAccess</strong>
+          </td>
+        </tr>
+        <tr class="b">
+          <th>Working Directory</th>
+          <td>$continuum.configuration.workingDirectory</td>
+        </tr>
+        <tr class="b">
+          <th>Build Output Directory</th>
+          <td>$continuum.configuration.buildOutputDirectory</td>
+        </tr>
+        <tr class="b">
+          <th>Base URL</th>
+          <td>$continuum.configuration.url</td>
+        </tr>
+        <tr class="b">
+          <th>Company Name</th>
+          <td>#if ( $continuum.configuration.companyName ) $continuum.configuration.companyName #end</td>
+        </tr>
+        <tr class="b">
+          <th>Company Logo</th>
+          <td>#if ( $continuum.configuration.companyLogo ) $continuum.configuration.companyLogo #end</td>
+        </tr>
+        <tr class="b">
+          <th>Company URL</th>
+          <td>#if ( $continuum.configuration.companyUrl ) $continuum.configuration.companyUrl #end</td>
+        </tr>
+      </table>
+      <!--
+      <div class="functnbar3">
+        <table>
+          <tr>
+            <td>
+              <form method="post" action="editConfiguration.html">
+
+                <input type="hidden" name="action" value="cam"/>
+
+                <input type="hidden" name="cid" value="checkoutProject"/>
+                <input type="hidden" name="id" value="43"/>
+                <input type="submit" name="edit-project" value="Edit"/>
+              </form>
+            </td>
+          </tr>
+        </table>
+      </div>
+      -->
+    </div>
+</div>

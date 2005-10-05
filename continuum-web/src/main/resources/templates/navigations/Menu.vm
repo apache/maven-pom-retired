@@ -55,6 +55,9 @@
      #if ( $continuum.security.isAuthorized( $c1user, "manageSchedule" ) )
      <div><a href="$link.setPage('Schedules.vm').addPathInfo( 'fid', 'schedules')">Schedules</a></div>
      #end
+     #if ( $continuum.security.isAuthorized( $c1user, "manageConfiguration" ) )
+     <div><a href="$link.setPage('ConfigureContinuum.vm')">Configuration</a></div>
+     #end
      #if ( $continuum.security.isAuthorized( $c1user, "manageUsers" ) )
      <div><a href="$link.setPage('UserGroups.vm')">User Groups Management</a></div>
      <div><a href="$link.setPage('Users.vm')">Users Management</a></div>
