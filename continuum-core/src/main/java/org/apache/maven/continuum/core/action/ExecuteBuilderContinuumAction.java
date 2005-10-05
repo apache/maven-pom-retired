@@ -143,6 +143,11 @@ public class ExecuteBuilderContinuumAction
 
             build.setBuildNumber( project.getBuildNumber() );
 
+            if ( build.getState() != ContinuumProjectState.OK && build.getState() != ContinuumProjectState.FAILED && build.getState() != ContinuumProjectState.ERROR )
+            {
+                build.setState( ContinuumProjectState.ERROR );
+            }
+
             // ----------------------------------------------------------------------
             // Copy over the build result
             // ----------------------------------------------------------------------
