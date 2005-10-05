@@ -3,7 +3,7 @@
   <groupId>org.apache.maven</groupId>
   <artifactId>maven-jxr</artifactId>
   <name>Maven JXR</name>
-  <version>1.0-beta-1</version>
+  <version>1.0-beta-2-SNAPSHOT</version>
   <description>Source cross reference library</description>
   <url>http://maven.apache.org/jxr/</url>
   <issueManagement>
