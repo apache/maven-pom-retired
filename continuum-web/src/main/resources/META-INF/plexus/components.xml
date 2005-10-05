@@ -316,7 +316,7 @@
           </view>
           <!--
            |
-           | Project Builds Definitions
+           | User Group
            |
            -->
           <view>
@@ -324,7 +324,21 @@
             <scalars>
               <scalar>
                 <id>userGroup</id>
-                <expression>getuserGroup(#id)</expression>
+                <expression>getUserGroup(#id)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <!--
+           |
+           | User
+           |
+           -->
+          <view>
+            <id>User</id>
+            <scalars>
+              <scalar>
+                <id>user</id>
+                <expression>getUser(#id)</expression>
               </scalar>
             </scalars>
           </view>
@@ -432,6 +446,12 @@
 
     <component>
       <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>logout</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.Logout</implementation>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
       <role-hint>addMavenTwoProject</role-hint>
       <implementation>org.apache.maven.continuum.web.action.AddMavenTwoProject</implementation>
       <requirements>
@@ -517,6 +537,23 @@
           <call>
             <cid>updateUserGroup</cid>
             <expression>updateUserGroup(#id,#parameters)</expression>
+          </call>
+          <!--
+           |
+           | User
+           |
+           -->
+          <call>
+            <cid>addUser</cid>
+            <expression>addUser(#parameters)</expression>
+          </call>
+          <call>
+            <cid>deleteUser</cid>
+            <expression>removeUser(#id)</expression>
+          </call>
+          <call>
+            <cid>updateUser</cid>
+            <expression>updateUser(#id,#parameters)</expression>
           </call>
         </calls>
       </configuration>

@@ -1,5 +1,11 @@
 $page.setTitle( "Continuum" )
 
+#if ( $data.user )
+  #set ( $c1user = $continuum.getUser( $data.user.userId ) )
+#else
+  #set ( $c1user = $continuum.security.getGuestUser() )
+#end
+
 #set ( $items = $continuum.schedules )
 
 <div class="app">
@@ -23,13 +29,16 @@ $page.setTitle( "Continuum" )
           <td>$schedule.cronExpression</td>
           <td>$schedule.delay</td>
           <td width="10%">
-            #if ( $schedule.name != "DEFAULT_SCHEDULE" )
-              <a href="$link.setPage('Edit.vm').addPathInfo( 'fid', 'schedules').addPathInfo('id', $schedule.id)">Edit</a>
-              | <a href="$link.setPage('Delete.vm').addPathInfo('fid', "schedules").addPathInfo('id', $schedule.id)">Delete</a></td>
+            #if ( $continuum.security.isAuthorized( $c1user, "manageSchedule" ) )
+              #if ( $schedule.name != "DEFAULT_SCHEDULE" )
+                <a href="$link.setPage('Edit.vm').addPathInfo( 'fid', 'schedules').addPathInfo('id', $schedule.id)">Edit</a>
+                | <a href="$link.setPage('Delete.vm').addPathInfo('fid', "schedules").addPathInfo('id', $schedule.id)">Delete</a></td>
+              #end
             #end
         </tr>
       #end
     </table>
+    #if ( $continuum.security.isAuthorized( $c1user, "manageSchedule" ) )
     <div class="functnbar3">
       <table>
         <tr>
@@ -41,6 +50,7 @@ $page.setTitle( "Continuum" )
         </tr>
       </table>
     </div>
+    #end
   </div>
 </div>
 

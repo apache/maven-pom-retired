@@ -1,7 +1,14 @@
 $page.setTitle( "Continuum - Project View: ${item.name}" )
 
+#if ( $data.user )
+  #set ( $c1user = $continuum.getUser( $data.user.userId ) )
+#else
+  #set ( $c1user = $continuum.security.getGuestUser() )
+#end
+
 <div class="app">
 
+  #if ( $continuum.security.isAuthorized( $c1user, "showProject" ) )
   <div>
     <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
       <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Info</b>
@@ -11,6 +18,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
       <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$workingCopy">Working&nbsp;Copy</a>
     </p>
   </div>
+  #end
 
   <div id="axial" class="h3">
     <h3>$i18n.getString( $form.view.titleKey )</h3>
@@ -34,6 +42,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
           <td>$item.projectGroup.name</td>
         </tr>
       </table>
+      #if ( $continuum.security.isAuthorized( $c1user, "editProject" ) )
       <div class="functnbar3">
         <table>
           <tr>
@@ -45,6 +54,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
           </tr>
         </table>
       </div>
+      #end
     </div>
 
     
@@ -80,14 +90,19 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         </td>
         <td>Project</td>
         <td>
+          #if ( $continuum.security.isAuthorized( $c1user, "editBuildDefinition" ) )
           #set ( $buildDefinitionLink = $link.setPage('BuildDefinition.vm').addPathInfo('view','BuildDefinition').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id) )
           <a href="$buildDefinitionLink">Edit</a> |
+          #end
+          #if ( $continuum.security.isAuthorized( $c1user, "deleteBuildDefinition" ) )
           #set ( $deleteBuildDefinitionLink = $link.setPage('DeleteBuildDefinition.vm').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id) )
           <a href="$deleteBuildDefinitionLink">Delete</a>
+          #end
         </td>
       </tr>
       #end
     </table>
+    #if ( $continuum.security.isAuthorized( $c1user, "addBuildDefinition" ) )
     <div class="functnbar3">
       <table>
         <tr>
@@ -99,6 +114,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         </tr>
       </table>
     </div>
+    #end
     
     #if ( $project.notifiers )
     <h3>$i18n.getString( "project.notifiers.label" )</h3>
@@ -141,26 +157,31 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
           </td>
           <td>
             #if ( $notifier.isFromUser() )
-              #if ( $notifier.type == "irc" )
-                #set ( $editNotifierLink = $link.setPage('EditIrcNotifier.vm').addPathInfo('view','EditIrcNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
-                <a href="$editNotifierLink">Edit</a>
-              #elseif ( $notifier.type == "mail" )
-                #set ( $editNotifierLink = $link.setPage('EditMailNotifier.vm').addPathInfo('view','EditMailNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
-                <a href="$editNotifierLink">Edit</a>
-              #elseif ( $notifier.type == "msn" )
-                #set ( $editNotifierLink = $link.setPage('EditMsnNotifier.vm').addPathInfo('view','EditMsnNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
-                <a href="$editNotifierLink">Edit</a>
-              #elseif ( $notifier.type == "jabber" )
-                #set ( $editNotifierLink = $link.setPage('EditJabberNotifier.vm').addPathInfo('view','EditJabberNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
-                <a href="$editNotifierLink">Edit</a>
+              #if ( $continuum.security.isAuthorized( $c1user, "editNotifier" ) )
+                #if ( $notifier.type == "irc" )
+                  #set ( $editNotifierLink = $link.setPage('EditIrcNotifier.vm').addPathInfo('view','EditIrcNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                  <a href="$editNotifierLink">Edit</a>
+                #elseif ( $notifier.type == "mail" )
+                  #set ( $editNotifierLink = $link.setPage('EditMailNotifier.vm').addPathInfo('view','EditMailNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                  <a href="$editNotifierLink">Edit</a>
+                #elseif ( $notifier.type == "msn" )
+                  #set ( $editNotifierLink = $link.setPage('EditMsnNotifier.vm').addPathInfo('view','EditMsnNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                  <a href="$editNotifierLink">Edit</a>
+                #elseif ( $notifier.type == "jabber" )
+                  #set ( $editNotifierLink = $link.setPage('EditJabberNotifier.vm').addPathInfo('view','EditJabberNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                  <a href="$editNotifierLink">Edit</a>
+                #end
               #end
-              #set ( $deleteNotifierLink = $link.setPage('DeleteNotifier.vm').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+              #if ( $continuum.security.isAuthorized( $c1user, "deleteNotifier" ) )
+                #set ( $deleteNotifierLink = $link.setPage('DeleteNotifier.vm').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
               | <a href="$deleteNotifierLink">Delete</a>
+              #end
             #end
           </td>
         </tr>
       #end
     </table>
+    #if ( $continuum.security.isAuthorized( $c1user, "addNotifier" ) )
     <div class="functnbar3">
       <table>
         <tr>
@@ -172,6 +193,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         </tr>
       </table>
     </div>
+    #end
     #end
 
     #if ( $project.dependencies )

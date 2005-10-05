@@ -9,6 +9,12 @@
 
 $page.setTitle( "Continuum" )
 
+#if ( $data.user )
+  #set ( $c1user = $continuum.getUser( $data.user.userId ) )
+#else
+  #set ( $c1user = $continuum.security.getGuestUser() )
+#end
+
 #set( $success = 0 )
 #set( $failures = 0 )
 #set( $errors = 0 )
@@ -60,10 +66,12 @@ $page.setTitle( "Continuum" )
 
         ## Operations
 
-        #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
-        <td><a href="$link.addPathInfo('action', 'cam').addPathInfo('cid','buildProject').addPathInfo('id', $item.id)">Build&nbsp;Now</a></td>
-        #else
-        <td>Build</td>
+        #if ( $continuum.security.isAuthorized( $c1user, "buildProject" ) )
+          #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+          <td><a href="$link.addPathInfo('action', 'cam').addPathInfo('cid','buildProject').addPathInfo('id', $item.id)">Build&nbsp;Now</a></td>
+          #else
+          <td>Build</td>
+          #end
         #end
 
         #if ( $item.latestBuildId > 0 )
@@ -73,13 +81,15 @@ $page.setTitle( "Continuum" )
         #end
 
         #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
-        <!-- td>Working&nbsp;Copy</td -->
+        <td><a href="$link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $item.id)">Working&nbsp;Copy</a></td>
         #end
 
-        #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
-        <td><a href="$link.setPage('Delete.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">Delete</a></td>
-        #else
-        <td>Delete</td>
+        #if ( $continuum.security.isAuthorized( $c1user, "deleteProject" ) )
+          #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+          <td><a href="$link.setPage('Delete.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">Delete</a></td>
+          #else
+          <td>Delete</td>
+          #end
         #end
 
       </tr>
@@ -87,6 +97,7 @@ $page.setTitle( "Continuum" )
       </tbody>
     </table>
 
+    #if ( $continuum.security.isAuthorized( $c1user, "buildProject" ) )
     <div class="functnbar3">
       <form method="post" action="$link">
         <img src="/continuum/images/icon_success_sml.gif" alt="Success"/> $success
@@ -100,6 +111,7 @@ $page.setTitle( "Continuum" )
         #end
       </form>
     </div>
+    #end
   </div>
 </div>
 

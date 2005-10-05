@@ -1091,6 +1091,24 @@ public class DefaultContinuum
         store.addUser( user );
     }
 
+    public void addUser( Map configuration )
+        throws ContinuumException
+    {
+        ContinuumUser user = new ContinuumUser();
+
+        user.setUsername( (String) configuration.get( "user.username" ) );
+
+        user.setFullName( (String) configuration.get( "user.fullName" ) );
+
+        user.setPassword( (String) configuration.get( "user.password" ) );
+
+        user.setEmail( (String) configuration.get( "user.email" ) );
+
+        user.setGroup( getUserGroup( new Integer( (String) configuration.get( "user.group" ) ).intValue() ) );
+
+        addUser( user );
+    }
+
     public void updateUser( ContinuumUser user )
         throws ContinuumException
     {
@@ -1102,6 +1120,24 @@ public class DefaultContinuum
         {
             throw logAndCreateException( "Error while storing user.", ex );
         }
+    }
+
+    public void updateUser( int userId, Map configuration )
+        throws ContinuumException
+    {
+        ContinuumUser user = getUser( userId );
+
+        user.setUsername( (String) configuration.get( "user.username" ) );
+
+        user.setFullName( (String) configuration.get( "user.fullName" ) );
+
+        user.setPassword( (String) configuration.get( "user.password" ) );
+
+        user.setEmail( (String) configuration.get( "user.email" ) );
+
+        user.setGroup( getUserGroup( new Integer( (String) configuration.get( "user.group" ) ).intValue() ) );
+
+        updateUser( user );
     }
 
     public ContinuumUser getUser( int userId )
@@ -1158,81 +1194,11 @@ public class DefaultContinuum
 
             userGroup.setDescription( (String) configuration.get( "group.description" ) );
 
-            List perms = new ArrayList();
-
-            if ( convert( (String) configuration.get( "group.permission.addProject" ) ) )
-            {
-                perms.add( store.getPermission( "addProject" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.editProject" ) ) )
-            {
-                perms.add( store.getPermission( "editProject" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.deleteProject" ) ) )
-            {
-                perms.add( store.getPermission( "deleteProject" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.buildProject" ) ) )
-            {
-                perms.add( store.getPermission( "buildProject" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.showProject" ) ) )
-            {
-                perms.add( store.getPermission( "showProject" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.addBuildDefinition" ) ) )
-            {
-                perms.add( store.getPermission( "addBuildDefinition" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.editBuildDefinition" ) ) )
-            {
-                perms.add( store.getPermission( "editBuildDefinition" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.deleteBuildDefinition" ) ) )
-            {
-                perms.add( store.getPermission( "deleteBuildDefinition" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.addNotifier" ) ) )
-            {
-                perms.add( store.getPermission( "addNotifier" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.editNotifier" ) ) )
-            {
-                perms.add( store.getPermission( "editNotifier" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.deleteNotifier" ) ) )
-            {
-                perms.add( store.getPermission( "deleteNotifier" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.manageConfiguration" ) ) )
-            {
-                perms.add( store.getPermission( "manageConfiguration" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.manageSchedule" ) ) )
-            {
-                perms.add( store.getPermission( "manageSchedule" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.manageUsers" ) ) )
-            {
-                perms.add( store.getPermission( "manageUsers" ) );
-            }
+            List perms = parsePermissionConf( configuration );
 
             userGroup.setPermissions( perms );
 
-            store.addUserGroup( userGroup );
+            addUserGroup( userGroup );
         }
         catch ( ContinuumStoreException e )
         {
@@ -1251,85 +1217,106 @@ public class DefaultContinuum
 
             userGroup.setDescription( (String) configuration.get( "group.description" ) );
 
-            List perms = new ArrayList();
-
-            if ( convert( (String) configuration.get( "group.permission.addProject" ) ) )
-            {
-                perms.add( store.getPermission( "addProject" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.editProject" ) ) )
-            {
-                perms.add( store.getPermission( "editProject" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.deleteProject" ) ) )
-            {
-                perms.add( store.getPermission( "deleteProject" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.buildProject" ) ) )
-            {
-                perms.add( store.getPermission( "buildProject" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.showProject" ) ) )
-            {
-                perms.add( store.getPermission( "showProject" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.addBuildDefinition" ) ) )
-            {
-                perms.add( store.getPermission( "addBuildDefinition" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.editBuildDefinition" ) ) )
-            {
-                perms.add( store.getPermission( "editBuildDefinition" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.deleteBuildDefinition" ) ) )
-            {
-                perms.add( store.getPermission( "deleteBuildDefinition" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.addNotifier" ) ) )
-            {
-                perms.add( store.getPermission( "addNotifier" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.editNotifier" ) ) )
-            {
-                perms.add( store.getPermission( "editNotifier" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.deleteNotifier" ) ) )
-            {
-                perms.add( store.getPermission( "deleteNotifier" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.manageConfiguration" ) ) )
-            {
-                perms.add( store.getPermission( "manageConfiguration" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.manageSchedule" ) ) )
-            {
-                perms.add( store.getPermission( "manageSchedule" ) );
-            }
-
-            if ( convert( (String) configuration.get( "group.permission.manageUsers" ) ) )
-            {
-                perms.add( store.getPermission( "manageUsers" ) );
-            }
+            List perms = parsePermissionConf( configuration );
 
             userGroup.setPermissions( perms );
 
-            store.updateUserGroup( userGroup );
+            updateUserGroup( userGroup );
         }
         catch ( ContinuumStoreException ex )
         {
             throw logAndCreateException( "Error while storing user group.", ex );
+        }
+    }
+
+    private List parsePermissionConf( Map configuration )
+        throws ContinuumStoreException
+    {
+        List perms = new ArrayList();
+
+        if ( convert( (String) configuration.get( "group.permission.addProject" ) ) )
+        {
+            perms.add( store.getPermission( "addProject" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.editProject" ) ) )
+        {
+            perms.add( store.getPermission( "editProject" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.deleteProject" ) ) )
+        {
+            perms.add( store.getPermission( "deleteProject" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.buildProject" ) ) )
+        {
+            perms.add( store.getPermission( "buildProject" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.showProject" ) ) )
+        {
+            perms.add( store.getPermission( "showProject" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.addBuildDefinition" ) ) )
+        {
+            perms.add( store.getPermission( "addBuildDefinition" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.editBuildDefinition" ) ) )
+        {
+            perms.add( store.getPermission( "editBuildDefinition" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.deleteBuildDefinition" ) ) )
+        {
+            perms.add( store.getPermission( "deleteBuildDefinition" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.addNotifier" ) ) )
+        {
+            perms.add( store.getPermission( "addNotifier" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.editNotifier" ) ) )
+        {
+            perms.add( store.getPermission( "editNotifier" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.deleteNotifier" ) ) )
+        {
+            perms.add( store.getPermission( "deleteNotifier" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.manageConfiguration" ) ) )
+        {
+            perms.add( store.getPermission( "manageConfiguration" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.manageSchedule" ) ) )
+        {
+            perms.add( store.getPermission( "manageSchedule" ) );
+        }
+
+        if ( convert( (String) configuration.get( "group.permission.manageUsers" ) ) )
+        {
+            perms.add( store.getPermission( "manageUsers" ) );
+        }
+
+        return perms;
+    }
+
+    public void updateUserGroup( UserGroup userGroup )
+        throws ContinuumException
+    {
+        try
+        {
+            store.updateUserGroup( userGroup );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Error while storing user group.", e );
         }
     }
 

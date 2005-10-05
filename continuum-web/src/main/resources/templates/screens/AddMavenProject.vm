@@ -7,7 +7,6 @@ $page.setTitle( "Add Project" )
       #hidden ( "fid" $form.id )
       #hidden ( "action" $form.add.action )
       #hidden ( "view" $form.add.view )
-      #hidden ( "id" $id )
 
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">

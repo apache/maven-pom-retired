@@ -7,7 +7,6 @@ $page.setTitle( $i18n.getString( $form.add.titleKey ) )
       #hidden ( "action" "cam" )
       #hidden ( "cid" "addUserGroup" )
       #hidden ( "view" "$form.add.view" )
-      #hidden ( "id" $id )
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
           #foreach ( $element in $form.elements )
@@ -22,128 +21,128 @@ $page.setTitle( $i18n.getString( $form.add.titleKey ) )
             #end
           #end
         <tr>
-          <th>Add Projects</th>
+          <th>$i18n.getString( "group.permission.addProject.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.addProject" />
             <p>
-              group.permission.addProject.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.addProject.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Edit Projects</th>
+          <th>$i18n.getString( "group.permission.editProject.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.editProject" />
             <p>
-              group.permission.editProject.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.editProject.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Delete Projects</th>
+          <th>$i18n.getString( "group.permission.deleteProject.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.deleteProject" />
             <p>
-              group.permission.deleteProject.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.deleteProject.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Build Projects</th>
+          <th>$i18n.getString( "group.permission.buildProject.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.buildProject" />
             <p>
-              group.permission.buildProject.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.buildProject.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Show Projects</th>
+          <th>$i18n.getString( "group.permission.showProject.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.showProject" />
             <p>
-              group.permission.showProject.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.showProject.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Add Build Definitions</th>
+          <th>$i18n.getString( "group.permission.addBuildDefinition.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.addBuildDefinition" />
             <p>
-              group.permission.addBuildDefinition.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.addBuildDefinition.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Edit Build Definitions</th>
+          <th>$i18n.getString( "group.permission.editBuildDefinition.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.editBuildDefinition" />
             <p>
-              group.permission.editBuildDefinition.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.editBuildDefinition.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Delete Build Definitions</th>
+          <th>$i18n.getString( "group.permission.deleteBuildDefinition.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.deleteBuildDefinition" />
             <p>
-              group.permission.deleteBuildDefinition.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.deleteBuildDefinition.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Add Notifiers</th>
+          <th>$i18n.getString( "group.permission.addNotifier.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.addNotifier" />
             <p>
-              group.permission.addNotifier.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.addNotifier.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Edit Notifiers</th>
+          <th>$i18n.getString( "group.permission.editNotifier.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.editNotifier" />
             <p>
-              group.permission.editNotifier.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.editNotifier.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Delete Notifiers</th>
+          <th>$i18n.getString( "group.permission.deleteNotifier.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.deleteNotifier" />
             <p>
-              group.permission.deleteNotifier.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.deleteNotifier.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Manage Continuum Configuration</th>
+          <th>$i18n.getString( "group.permission.manageConfiguration.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.manageConfiguration" />
             <p>
-              group.permission.manageConfiguration.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.manageConfiguration.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Manage Schedules</th>
+          <th>$i18n.getString( "group.permission.manageSchedule.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.manageSchedule" />
             <p>
-              group.permission.manageSchedule.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.manageSchedule.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>
         <tr>
-          <th>Manage Users/Group</th>
+          <th>$i18n.getString( "group.permission.manageUsers.label" )</th>
           <td >
             <input type="checkbox" name="group.permission.manageUsers" />
             <p>
-              group.permission.manageUsers.message <font color="red"><b></b></font>
+              $i18n.getString( "group.permission.manageUsers.message" ) <font color="red"><b></b></font>
             </p>
           </td>
         </tr>

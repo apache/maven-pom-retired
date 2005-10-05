@@ -36,7 +36,7 @@
 
   <div>
     #if ( $data.getUser() )
-      Welcome, <b>$data.user.fullName</b>
+      Welcome, <b>$data.user.fullName</b> - <a href="$link?action=logout">Disconnect</a>
     #else
       Welcome, <b>Guest</b> - <a href="$link.setPage('Login.vm')">Login</a>
     #end

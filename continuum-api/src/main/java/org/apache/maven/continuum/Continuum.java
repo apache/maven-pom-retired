@@ -220,6 +220,17 @@ public interface Continuum
     // User
     // ----------------------------------------------------------------------
 
+    void addUser( ContinuumUser user );
+
+    void addUser( Map configuration )
+        throws ContinuumException;
+
+    void updateUser( ContinuumUser user )
+        throws ContinuumException;
+
+    void updateUser( int userId, Map configuration )
+        throws ContinuumException;
+
     List getUsers()
         throws ContinuumException;
 
@@ -236,6 +247,9 @@ public interface Continuum
     void addUserGroup( UserGroup userGroup );
 
     void addUserGroup( Map configuration )
+        throws ContinuumException;
+
+    void updateUserGroup( UserGroup userGroup )
         throws ContinuumException;
 
     void updateUserGroup( int userGroupId, Map configuration )

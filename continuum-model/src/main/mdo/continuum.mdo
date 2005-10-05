@@ -791,10 +791,16 @@
         <codeSegment>
           <version>1.0.0+</version>
           <code><![CDATA[
+            public String getPassword()
+            {
+                return "";
+            }
+
             public void setPassword( String password )
             {
                 setHashedPassword( crypt( password ) );
             }
+
             public boolean equalsPassword( String password )
             {
                 if ( hashedPassword == null && password == null )

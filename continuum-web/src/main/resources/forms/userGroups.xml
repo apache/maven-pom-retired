@@ -51,7 +51,7 @@
     <view>UserGroups.vm</view>
     <view-on-failure>Edit.vm</view-on-failure>
     <fid-on-failure>userGroups</fid-on-failure>
-    <expression>updateUserGroups(#entity)</expression>
+    <expression>updateUserGroup(#entity)</expression>
   </update>
 
   <!-- Delete -->

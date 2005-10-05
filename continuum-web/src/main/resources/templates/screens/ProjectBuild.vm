@@ -1,7 +1,14 @@
 $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$build.startTime)" )
 
+#if ( $data.user )
+  #set ( $c1user = $continuum.getUser( $data.user.userId ) )
+#else
+  #set ( $c1user = $continuum.security.getGuestUser() )
+#end
+
 <div class="app">
 
+  #if ( $continuum.security.isAuthorized( $c1user, "showProject" ) )
   <div>
     <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
       #set ( $infoLink = $link.setPage('View.vm').addPathInfo('fid', "$!{project.executorId}Project").addPathInfo('id', $project.id) )
@@ -11,6 +18,7 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
       <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$workingCopy">Working&nbsp;Copy</a>
     </p>
   </div>
+  #end
 
   <h3>Build result for $project.name</h3>
   <p>

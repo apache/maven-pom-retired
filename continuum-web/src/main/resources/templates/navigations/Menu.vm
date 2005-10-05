@@ -1,14 +1,23 @@
+#if ( $data.user )
+  #set ( $c1user = $continuum.getUser( $data.user.userId ) )
+#else
+  #set ( $c1user = $continuum.security.getGuestUser() )
+#end
+
 <div id="navcolum">
   <div id="projectmenu" class="toolgroup">
     <div class="label">Continuum</div>
 
+    #if ( $continuum.security.isAuthorized( $c1user, "showProject" ) )
     <div class="body">
       <div>
         <a href="$link.setPage('Summary.vm').addPathInfo( 'fid', 'continuumProject')">Show Projects</a>
       </div>
     </div>
+    #end
   </div>
 
+  #if ( $continuum.security.isAuthorized( $c1user, "addProject" ) )
   <div id="projecttools" class="toolgroup">
     <div class="label">Add Project</div>
 
@@ -27,6 +36,7 @@
       </div>
     </div>
   </div>
+  #end
 
   <!--
   <div id="projecttools" class="toolgroup">
@@ -38,13 +48,17 @@
   </div>
   -->
 
-  #if ( $data.user )
+  #if ( $continuum.security.isAuthorized( $c1user, "manageSchedule" ) || $continuum.security.isAuthorized( $c1user, "manageUsers" ) )
   <div id="projecttools" class="toolgroup">
    <div class="label">Administration</div>
    <div class="body">
+     #if ( $continuum.security.isAuthorized( $c1user, "manageSchedule" ) )
      <div><a href="$link.setPage('Schedules.vm').addPathInfo( 'fid', 'schedules')">Schedules</a></div>
+     #end
+     #if ( $continuum.security.isAuthorized( $c1user, "manageUsers" ) )
      <div><a href="$link.setPage('UserGroups.vm')">User Groups Management</a></div>
      <div><a href="$link.setPage('Users.vm')">Users Management</a></div>
+     #end
    </div>
   </div>
   #end

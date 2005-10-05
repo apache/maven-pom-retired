@@ -1,0 +1,35 @@
+$page.setTitle( $i18n.getString( $form.update.titleKey ) )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>$i18n.getString( $form.update.titleKey )</h3>
+    <form method="post" action="$link">
+      #hidden ( "action" "cam" )
+      #hidden ( "cid" "updateUser" )
+      #hidden ( "view" "$form.update.view" )
+      #hidden ( "id" $item.accountId )
+      <div class="axial">
+        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+          #foreach ( $element in $form.elements )
+          #if ( !$element.immutable )
+          <tr>
+            #field( $i18n $data $element $item $formtool )
+          </tr>
+          #end
+          #end
+          <tr>
+            <th>$i18n.getString( "user.groupName.label" )</th>
+            <td>
+              <select name="user.group">
+                #foreach ( $group in $continuum.getUserGroups() )
+                  <option value="$group.id" #if ( $group.id == $item.group.id ) selected="selected" #end>$group.name</option>
+                #end
+              </select>
+            </td>
+          </tr>
+        </table>
+        #submitBar( "Submit" )
+      </div>
+    </form>
+  </div>
+</div>
