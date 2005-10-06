@@ -2,12 +2,12 @@
   <parent>
     <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-beta-1</version>
+    <version>1.0-beta-2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-test</artifactId>
   <name>Continuum Test</name>
-  <version>1.0-beta-1</version>
+  <version>1.0-beta-2-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>jpox</groupId>
@@ -16,6 +16,7 @@
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-api</artifactId>
+      <version>1.0-beta-2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
