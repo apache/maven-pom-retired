@@ -4,7 +4,7 @@
   <artifactId>continuum-parent</artifactId>
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
-  <version>1.0-beta-2-SNAPSHOT</version>
+  <version>1.0-beta-1-SNAPSHOT</version>
   <url>http://maven.apache.org/continuum/</url>
   <issueManagement>
     <system>jira</system>
