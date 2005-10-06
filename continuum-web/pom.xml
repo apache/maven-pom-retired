@@ -2,12 +2,12 @@
   <parent>
     <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-beta-1-SNAPSHOT</version>
+    <version>1.0-beta-1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-web</artifactId>
   <name>Continuum Web</name>
-  <version>1.0-beta-1-SNAPSHOT</version>
+  <version>1.0-beta-1</version>
   <dependencies>
     <dependency>
       <groupId>plexus</groupId>
@@ -42,6 +42,11 @@
       <artifactId>continuum-model</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-security</artifactId>
+      <version>1.0-alpha-1</version>
+    </dependency>
+    <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-i18n</artifactId>
       <version>1.0-beta-4</version>
@@ -49,11 +54,6 @@
     <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-log4j-logging</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-security</artifactId>
-      <version>1.0-alpha-1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
