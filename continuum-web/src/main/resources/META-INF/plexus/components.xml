@@ -555,6 +555,15 @@
             <cid>updateUser</cid>
             <expression>updateUser(#id,#parameters)</expression>
           </call>
+          <!--
+           |
+           | Configuration
+           |
+           -->
+          <call>
+            <cid>updateConfiguration</cid>
+            <expression>updateConfiguration(#parameters)</expression>
+          </call>
         </calls>
       </configuration>
     </component>

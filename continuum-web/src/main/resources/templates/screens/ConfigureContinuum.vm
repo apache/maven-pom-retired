@@ -1,5 +1,11 @@
 $page.setTitle( "Configure Continuum" )
 
+#if ( $data.user )
+  #set ( $c1user = $continuum.getUser( $data.user.userId ) )
+#else
+  #set ( $c1user = $continuum.security.getGuestUser() )
+#end
+
 <div class="app">
   <div id="axial" class="h3">
     <h3>General Configuration</h3>
@@ -43,23 +49,18 @@ $page.setTitle( "Configure Continuum" )
           <td>#if ( $continuum.configuration.companyUrl ) $continuum.configuration.companyUrl #end</td>
         </tr>
       </table>
-      <!--
+      #if ( $continuum.security.isAuthorized( $c1user, "manageConfiguration" ) )
       <div class="functnbar3">
         <table>
           <tr>
             <td>
-              <form method="post" action="editConfiguration.html">
-
-                <input type="hidden" name="action" value="cam"/>
-
-                <input type="hidden" name="cid" value="checkoutProject"/>
-                <input type="hidden" name="id" value="43"/>
-                <input type="submit" name="edit-project" value="Edit"/>
+              <form method="post" action="$link.setPage('EditContinuumConfiguration.vm')">
+                <input type="submit" name="edit-configuration" value="Edit"/>
               </form>
             </td>
           </tr>
         </table>
       </div>
-      -->
+      #end
     </div>
 </div>

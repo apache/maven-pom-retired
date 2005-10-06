@@ -7,7 +7,7 @@ $page.setTitle( "Configure Continuum" )
 
       <h3>Admin account</h3>
       <div class="axial">
-        <table cellspacing="2" cellpadding="3" width="450">
+        <table cellspacing="2" cellpadding="3" width="700">
           <tr>
             <td>Username :</td>
             <td><input type="text" name="username" size="50"></td>
@@ -32,7 +32,7 @@ $page.setTitle( "Configure Continuum" )
       </div>
 
       <h3>Directories</h3>
-      <table cellspacing="2" cellpadding="3" width="450">
+      <table cellspacing="2" cellpadding="3" width="700">
         <tr>
           <td>Working Directory :</td>
           <td><input type="text" name="workingDirectory" value="working-directory" size="50"> If you define a relative path, it will be relative to $CONTINUUM_HOME/apps/continuum/</td>
@@ -44,7 +44,7 @@ $page.setTitle( "Configure Continuum" )
       </table>
 
       <h3>Base URL</h3>
-      <table cellspacing="2" cellpadding="3" width="450">
+      <table cellspacing="2" cellpadding="3" width="700">
         <tr>
           <td>Base URL :</td>
           <td><input type="text" name="baseUrl" value="http://localhost:8080/continuum/servlet/continuum" size="50"></td>
@@ -52,7 +52,7 @@ $page.setTitle( "Configure Continuum" )
       </table>
 
       <h3>Company Informations</h3>
-      <table cellspacing="2" cellpadding="3" width="450">
+      <table cellspacing="2" cellpadding="3" width="700">
         <tr>
           <td>Name :</td>
           <td><input type="text" name="companyName" size="50"></td>
@@ -68,7 +68,7 @@ $page.setTitle( "Configure Continuum" )
       </table>
 
       <h3>Guest access</h3>
-      <table cellspacing="2" cellpadding="3" width="450">
+      <table cellspacing="2" cellpadding="3" width="700">
         <tr>
           <td>Allow Guest :</td>
           <td><input type="checkbox" name="guestAccountEnabled" checked="checked"></td>

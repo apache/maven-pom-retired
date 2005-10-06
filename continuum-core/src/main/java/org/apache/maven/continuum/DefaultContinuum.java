@@ -1047,6 +1047,30 @@ public class DefaultContinuum
         return configurationService;
     }
 
+    public void updateConfiguration( Map configuration )
+    {
+        if ( convertBoolean( (String) configuration.get( "conf.enableGuest" ) ) )
+        {
+            configurationService.setGuestAccountEnabled( true );
+        }
+        else
+        {
+            configurationService.setGuestAccountEnabled( false );
+        }
+
+        configurationService.setWorkingDirectory( configurationService.getFile( (String) configuration.get( "conf.workingDirectory" ) ) );
+
+        configurationService.setBuildOutputDirectory( configurationService.getFile( (String) configuration.get( "conf.buildOutputDirectory" ) ) );
+
+        configurationService.setUrl( (String) configuration.get( "conf.url" ) );
+
+        configurationService.setCompanyName( (String) configuration.get( "conf.companyName" ) );
+
+        configurationService.setCompanyLogo( (String) configuration.get( "conf.companyLogo" ) );
+
+        configurationService.setCompanyUrl( (String) configuration.get( "conf.companyUrl" ) );
+    }
+
     public void reloadConfiguration()
         throws ContinuumException
     {
@@ -1234,72 +1258,72 @@ public class DefaultContinuum
     {
         List perms = new ArrayList();
 
-        if ( convert( (String) configuration.get( "group.permission.addProject" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.addProject" ) ) )
         {
             perms.add( store.getPermission( "addProject" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.editProject" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.editProject" ) ) )
         {
             perms.add( store.getPermission( "editProject" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.deleteProject" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.deleteProject" ) ) )
         {
             perms.add( store.getPermission( "deleteProject" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.buildProject" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.buildProject" ) ) )
         {
             perms.add( store.getPermission( "buildProject" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.showProject" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.showProject" ) ) )
         {
             perms.add( store.getPermission( "showProject" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.addBuildDefinition" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.addBuildDefinition" ) ) )
         {
             perms.add( store.getPermission( "addBuildDefinition" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.editBuildDefinition" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.editBuildDefinition" ) ) )
         {
             perms.add( store.getPermission( "editBuildDefinition" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.deleteBuildDefinition" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.deleteBuildDefinition" ) ) )
         {
             perms.add( store.getPermission( "deleteBuildDefinition" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.addNotifier" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.addNotifier" ) ) )
         {
             perms.add( store.getPermission( "addNotifier" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.editNotifier" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.editNotifier" ) ) )
         {
             perms.add( store.getPermission( "editNotifier" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.deleteNotifier" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.deleteNotifier" ) ) )
         {
             perms.add( store.getPermission( "deleteNotifier" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.manageConfiguration" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.manageConfiguration" ) ) )
         {
             perms.add( store.getPermission( "manageConfiguration" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.manageSchedule" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.manageSchedule" ) ) )
         {
             perms.add( store.getPermission( "manageSchedule" ) );
         }
 
-        if ( convert( (String) configuration.get( "group.permission.manageUsers" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.manageUsers" ) ) )
         {
             perms.add( store.getPermission( "manageUsers" ) );
         }
@@ -1341,7 +1365,7 @@ public class DefaultContinuum
         store.removeUserGroup( group );
     }
 
-    private boolean convert( String value )
+    private boolean convertBoolean( String value )
     {
         if ( "true".equalsIgnoreCase( value ) || "on".equalsIgnoreCase( value ) || "yes".equalsIgnoreCase( value ) )
         {

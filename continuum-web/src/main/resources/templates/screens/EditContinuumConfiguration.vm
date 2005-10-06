@@ -1,0 +1,49 @@
+$page.setTitle( "Edit Continuum Configuration" )
+
+#set ( $conf = $continuum.configuration )
+
+<div class="app">
+  <div id="axial" class="h3">
+    <h3>Edit Continuum Configuration</h3>
+    <form method="post" action="$link">
+      #hidden ( "action" "cam" )
+      #hidden ( "cid" "updateConfiguration" )
+      #hidden ( "view" "ConfigureContinuum.vm" )
+      <div class="axial">
+        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        <tr class="b">
+          <th>Guests</th>
+          <td>
+            <input type="checkbox" name="conf.enableGuest" #if ( $continuum.configuration.isGuestAccountEnabled() ) checked="checked" #end />
+          </td>
+        </tr>
+        <tr class="b">
+          <th>Working Directory</th>
+          <td><input type="text" name="conf.workingDirectory" value="$continuum.configuration.workingDirectory" size="100"/></td>
+        </tr>
+        <tr class="b">
+          <th>Build Output Directory</th>
+          <td><input type="text" name="conf.buildOutputDirectory" value="$continuum.configuration.buildOutputDirectory" size="100"/></td>
+        </tr>
+        <tr class="b">
+          <th>Base URL</th>
+          <td><input type="text" name="conf.url" value="$continuum.configuration.url" size="100"/></td>
+        </tr>
+        <tr class="b">
+          <th>Company Name</th>
+          <td><input type="text" name="conf.companyName" #if ( $continuum.configuration.companyName ) value="$continuum.configuration.companyName" #end size="100"/></td>
+        </tr>
+        <tr class="b">
+          <th>Company Logo</th>
+          <td><input type="text" name="conf.companyLogo" #if ( $continuum.configuration.companyLogo ) value="$continuum.configuration.companyLogo" #end size="100"/></td>
+        </tr>
+        <tr class="b">
+          <th>Company URL</th>
+          <td><input type="text" name="conf.companyUrl" #if ( $continuum.configuration.companyUrl ) value="$continuum.configuration.companyUrl" #end size="100"/></td>
+        </tr>
+        </table>
+        #submitBar( "Submit" )
+      </div>
+    </form>
+  </div>
+</div>

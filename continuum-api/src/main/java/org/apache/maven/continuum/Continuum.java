@@ -207,6 +207,8 @@ public interface Continuum
 
     ConfigurationService getConfiguration();
 
+    void updateConfiguration( Map parameters );
+
     void reloadConfiguration()
         throws ContinuumException;
 
