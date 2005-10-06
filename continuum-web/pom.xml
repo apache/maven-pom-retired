@@ -51,7 +51,7 @@
       <artifactId>plexus-log4j-logging</artifactId>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-security</artifactId>
       <version>1.0-alpha-1</version>
     </dependency>
