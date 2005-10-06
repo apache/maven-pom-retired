@@ -2,13 +2,13 @@
   <parent>
     <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0-beta-1-SNAPSHOT</version>
+    <version>1.0-beta-1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-plexus-application</artifactId>
   <packaging>plexus-application</packaging>
   <name>Continuum Plexus Application</name>
-  <version>1.0-beta-1-SNAPSHOT</version>
+  <version>1.0-beta-1</version>
   <build>
     <plugins>
       <plugin>
