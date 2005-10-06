@@ -66,11 +66,13 @@ public abstract class AbstractContinuumTest
     public static void setUpConfigurationService( ConfigurationService configurationService )
         throws Exception
     {
-        configurationService.setInMemoryMode( true );
+        configurationService.load();
 
         configurationService.setBuildOutputDirectory( getTestFile( "target/build-output" ) );
 
         configurationService.setWorkingDirectory( getTestFile( "target/working-directory" ) );
+
+        configurationService.store();
     }
 
     protected ProjectGroup getDefaultProjectGroup()

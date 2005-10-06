@@ -23,18 +23,5 @@
       </configuration>
     </component>
 
-    <component>
-      <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
-      <implementation>org.apache.maven.continuum.configuration.DefaultConfigurationService</implementation>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.store.ContinuumStore</role>
-        </requirement>
-      </requirements>
-      <configuration>
-        <inMemoryMode>true</inMemoryMode>
-      </configuration>
-    </component>
-
   </components>
 </plexus>

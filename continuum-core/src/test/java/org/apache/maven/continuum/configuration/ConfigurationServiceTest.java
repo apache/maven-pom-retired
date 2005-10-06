@@ -45,11 +45,7 @@ public class ConfigurationServiceTest
     {
         ConfigurationService service = (ConfigurationService) lookup( ConfigurationService.ROLE );
 
-        service.setInMemoryMode( false );
-
         service.load();
-
-        assertEquals( "http://localhost:8080/continuum/servlet/continuum", service.getUrl() );
 
         assertEquals( "build-output", service.getBuildOutputDirectory().getName() );
 

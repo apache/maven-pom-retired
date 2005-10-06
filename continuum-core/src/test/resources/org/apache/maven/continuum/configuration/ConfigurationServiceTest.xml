@@ -10,7 +10,6 @@
       </requirements>
       <configuration>
         <application-home>${basedir}/target/continuum</application-home>
-        <source>${basedir}/target/configuration.xml</source>
       </configuration>
     </component>
   </components>

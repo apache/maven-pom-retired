@@ -1048,27 +1048,37 @@ public class DefaultContinuum
     }
 
     public void updateConfiguration( Map configuration )
+        throws ContinuumException
     {
-        if ( convertBoolean( (String) configuration.get( "conf.enableGuest" ) ) )
+        try
         {
-            configurationService.setGuestAccountEnabled( true );
+            if ( convertBoolean( (String) configuration.get( "conf.enableGuest" ) ) )
+            {
+                configurationService.setGuestAccountEnabled( true );
+            }
+            else
+            {
+                configurationService.setGuestAccountEnabled( false );
+            }
+
+            configurationService.setWorkingDirectory( configurationService.getFile( (String) configuration.get( "conf.workingDirectory" ) ) );
+
+            configurationService.setBuildOutputDirectory( configurationService.getFile( (String) configuration.get( "conf.buildOutputDirectory" ) ) );
+
+            configurationService.setUrl( (String) configuration.get( "conf.url" ) );
+
+            configurationService.setCompanyName( (String) configuration.get( "conf.companyName" ) );
+
+            configurationService.setCompanyLogo( (String) configuration.get( "conf.companyLogo" ) );
+
+            configurationService.setCompanyUrl( (String) configuration.get( "conf.companyUrl" ) );
+
+            configurationService.store();
         }
-        else
+        catch ( ConfigurationStoringException e )
         {
-            configurationService.setGuestAccountEnabled( false );
+            throw new ContinuumException( "Can't store configuration.", e );
         }
-
-        configurationService.setWorkingDirectory( configurationService.getFile( (String) configuration.get( "conf.workingDirectory" ) ) );
-
-        configurationService.setBuildOutputDirectory( configurationService.getFile( (String) configuration.get( "conf.buildOutputDirectory" ) ) );
-
-        configurationService.setUrl( (String) configuration.get( "conf.url" ) );
-
-        configurationService.setCompanyName( (String) configuration.get( "conf.companyName" ) );
-
-        configurationService.setCompanyLogo( (String) configuration.get( "conf.companyLogo" ) );
-
-        configurationService.setCompanyUrl( (String) configuration.get( "conf.companyUrl" ) );
     }
 
     public void reloadConfiguration()

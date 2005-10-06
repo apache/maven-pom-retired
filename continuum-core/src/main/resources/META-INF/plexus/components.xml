@@ -46,7 +46,6 @@
         </requirement>
       </requirements>
       <configuration>
-        <source>${plexus.home}/conf/configuration.xml</source>
         <application-home>${plexus.home}</application-home>
       </configuration>
     </component>

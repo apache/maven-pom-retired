@@ -695,6 +695,36 @@
           <defaultValue>0 0 * * * ?</defaultValue>
         </field>
         <field>
+          <name>workingDirectory</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>buildOutputDirectory</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>baseUrl</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>companyName</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>companyLogoUrl</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>companyUrl</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
           <name>initialized</name>
           <version>1.0.0+</version>
           <type>boolean</type>
