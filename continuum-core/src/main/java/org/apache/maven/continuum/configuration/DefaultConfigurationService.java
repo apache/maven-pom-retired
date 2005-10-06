@@ -67,6 +67,11 @@ public class DefaultConfigurationService
     //
     // ----------------------------------------------------------------------
 
+    public File getApplicationHome()
+    {
+        return applicationHome;
+    }
+
     public void setInitialized( boolean initialized )
     {
         systemConf.setInitialized( initialized );

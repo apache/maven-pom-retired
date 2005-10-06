@@ -1061,11 +1061,32 @@ public class DefaultContinuum
                 configurationService.setGuestAccountEnabled( false );
             }
 
-            configurationService.setWorkingDirectory( configurationService.getFile( (String) configuration.get( "conf.workingDirectory" ) ) );
+            if ( configuration.get( "conf.workingDirectory" ) == null )
+            {
+                configurationService.setWorkingDirectory( configurationService.getFile( (String) configuration.get( "conf.workingDirectory" ) ) );
+            }
+            else
+            {
+                throw new ContinuumException( "working directory can't be null" );
+            }
 
-            configurationService.setBuildOutputDirectory( configurationService.getFile( (String) configuration.get( "conf.buildOutputDirectory" ) ) );
+            if ( configuration.get( "conf.buildOutputDirectory" ) == null )
+            {
+                configurationService.setBuildOutputDirectory( configurationService.getFile( (String) configuration.get( "conf.buildOutputDirectory" ) ) );
+            }
+            else
+            {
+                throw new ContinuumException( "build output directory can't be null" );
+            }
 
-            configurationService.setUrl( (String) configuration.get( "conf.url" ) );
+            if ( configuration.get( "conf.url" ) == null )
+            {
+                configurationService.setUrl( (String) configuration.get( "conf.url" ) );
+            }
+            else
+            {
+                throw new ContinuumException( "base url can't be null" );
+            }
 
             configurationService.setCompanyName( (String) configuration.get( "conf.companyName" ) );
 

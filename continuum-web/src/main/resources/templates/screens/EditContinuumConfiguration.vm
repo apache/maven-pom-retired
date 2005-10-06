@@ -19,11 +19,11 @@ $page.setTitle( "Edit Continuum Configuration" )
         </tr>
         <tr class="b">
           <th>Working Directory</th>
-          <td><input type="text" name="conf.workingDirectory" value="$continuum.configuration.workingDirectory" size="100"/></td>
+          <td><input type="text" name="conf.workingDirectory" value="$continuum.configuration.workingDirectory" size="100"/> If you define a relative path, it will be relative to $continuum.configuration.applicationHome</td>
         </tr>
         <tr class="b">
           <th>Build Output Directory</th>
-          <td><input type="text" name="conf.buildOutputDirectory" value="$continuum.configuration.buildOutputDirectory" size="100"/></td>
+          <td><input type="text" name="conf.buildOutputDirectory" value="$continuum.configuration.buildOutputDirectory" size="100"/> If you define a relative path, it will be relative to $continuum.configuration.applicationHome</td>
         </tr>
         <tr class="b">
           <th>Base URL</th>

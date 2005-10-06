@@ -31,6 +31,8 @@ public interface ConfigurationService
     //
     // ----------------------------------------------------------------------
 
+    File getApplicationHome();
+
     boolean isInitialized();
 
     void setInitialized( boolean initialized );
