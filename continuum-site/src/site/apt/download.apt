@@ -4,23 +4,23 @@
  Trygve Laugstøl
  Emmanuel Venisse
  ------
- TUE September 20 2005
+ TUE October 07 2005
 
-Download Continuum 1.0-alpha-4 Technology Preview
+Download Continuum 1.0-beta-1 Technology Preview
 
  Continuum is distributed in several formats for your convenience.
 
  You will be prompted for a mirror - please be patient, as it may take 24 hours
  to reach all mirrors.
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-alpha-4-bin.tar.bz2}.tar.bz2}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-4-bin.tar.bz2.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-4-bin.tar.bz2.asc}PGP}})
+ * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-beta-1-bin.tar.bz2}.tar.bz2}} archive
+   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-beta-1-bin.tar.bz2.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-beta-1-bin.tar.bz2.asc}PGP}})
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-alpha-4-bin.tar.gz}.tar.gz}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-4-bin.tar.gz.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-4-bin.tar.gz.asc}PGP}})
+ * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-beta-1-bin.tar.gz}.tar.gz}} archive
+   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-beta-1-bin.tar.gz.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-beta-1-bin.tar.gz.asc}PGP}})
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-alpha-4-bin.zip}.zip}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-4-bin.zip.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-alpha-4-bin.zip.asc}PGP}})
+ * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-beta-1-bin.zip}.zip}} archive
+   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0-beta-1-bin.zip.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0-beta-1-bin.zip.asc}PGP}})
 
  []
 
