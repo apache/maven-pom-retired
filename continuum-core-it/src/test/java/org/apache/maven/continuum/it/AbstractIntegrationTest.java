@@ -122,16 +122,6 @@ public abstract class AbstractIntegrationTest
             assertTrue( plexusHome.mkdirs() );
         }
 
-        // ----------------------------------------------------------------------
-        // Use configuration file from the continuum-plexus-application
-        // ----------------------------------------------------------------------
-
-        File configurationSource = getTestFile( "../continuum-plexus-application/src/conf/configuration.xml" );
-
-        File configurationForIT = new File( plexusHome, "conf/configuration.xml" );
-
-        FileUtils.copyFile( configurationSource, configurationForIT );
-
         context.put( "plexus.home", plexusHome.getAbsolutePath() );
     }
 
