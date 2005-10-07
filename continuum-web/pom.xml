@@ -14,7 +14,7 @@
       <artifactId>plexus-velocity</artifactId>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-summit</artifactId>
       <version>1.0-beta-8-SNAPSHOT</version>
     </dependency>
