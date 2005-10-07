@@ -80,7 +80,7 @@ $page.setTitle( "Continuum" )
         <td>All&nbsp;Results</td>
         #end
 
-        #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+        #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 || $item.state == 6 )
         <td><a href="$link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $item.id)">Working&nbsp;Copy</a></td>
         #end
 
