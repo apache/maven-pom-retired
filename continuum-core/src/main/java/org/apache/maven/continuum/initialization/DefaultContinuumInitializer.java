@@ -223,27 +223,9 @@ public class DefaultContinuumInitializer
 
             List guestPermissions = new ArrayList();
 
-            guestPermissions.add( store.getPermission( "addProject" ) );
-
-            guestPermissions.add( store.getPermission( "editProject" ) );
-
-            guestPermissions.add( store.getPermission( "deleteProject" ) );
-
             guestPermissions.add( store.getPermission( "buildProject" ) );
 
             guestPermissions.add( store.getPermission( "showProject" ) );
-
-            guestPermissions.add( store.getPermission( "addBuildDefinition" ) );
-
-            guestPermissions.add( store.getPermission( "editBuildDefinition" ) );
-
-            guestPermissions.add( store.getPermission( "deleteBuildDefinition" ) );
-
-            guestPermissions.add( store.getPermission( "addNotifier" ) );
-
-            guestPermissions.add( store.getPermission( "editNotifier" ) );
-
-            guestPermissions.add( store.getPermission( "deleteNotifier" ) );
 
             guestGroup.setPermissions( guestPermissions );
 
