@@ -70,6 +70,18 @@ Change Log
    is a very powerful feature as it makes it possible to add all the modules
    a entire project in a single operation.
 
+ * Security
+
+   Continuum support now user/group access on pages. Guest account can be disabled.
+
+ * Working copy browser
+
+   Each project files checkouted on continuum platform can be view in browser.
+
+ * Blame mechanism
+
+   Continuum inform users on which files were modified since laste successful build.
+
 ** Technical Changes
 
  These changes are more of a technical nature and mainly aimed at developers
