@@ -64,28 +64,38 @@ public class WorkingCopyContentGenerator
 
             if ( !f.isDirectory() )
             {
-                String userDirectory = null;
+                String fileName = f.getName();
 
-                if ( f.getParentFile().getAbsolutePath().equals( basedir.getAbsolutePath() ) )
+                if ( !".cvsignore".equals( fileName ) && !"vssver.scc".equals( fileName ) && !".DS_Store".equals( fileName ) )
                 {
-                    userDirectory = "/";
-                }
-                else
-                {
-                    userDirectory = f.getParentFile().getAbsolutePath().substring( basedir.getAbsolutePath().length() + 1 );
-                }
+                    String userDirectory = null;
 
-                userDirectory = StringUtils.replace( userDirectory, "\\", "/" );
+                    if ( f.getParentFile().getAbsolutePath().equals( basedir.getAbsolutePath() ) )
+                    {
+                        userDirectory = "/";
+                    }
+                    else
+                    {
+                        userDirectory = f.getParentFile().getAbsolutePath().substring( basedir.getAbsolutePath().length() + 1 );
+                    }
 
-                buf.append( indent + "&nbsp;&nbsp;&nbsp;<a href=\"" + baseUrl + "?userDirectory=" + userDirectory + "&file=" + f.getName() + "\">" + f.getName() + "</a><br />" );
+                    userDirectory = StringUtils.replace( userDirectory, "\\", "/" );
+
+                    buf.append( indent + "&nbsp;&nbsp;&nbsp;<a href=\"" + baseUrl + "?userDirectory=" + userDirectory + "&file=" + fileName + "\">" + fileName + "</a><br />" );
+                }
             }
             else
             {
-                String userDirectory = f.getAbsolutePath().substring( basedir.getAbsolutePath().length() + 1 );
+                String directoryName = f.getName();
 
-                userDirectory = StringUtils.replace( userDirectory, "\\", "/" );
+                if ( !"CVS".equals( directoryName ) && !".svn".equals( directoryName ) && !"SCCS".equals( directoryName ) )
+                {
+                    String userDirectory = f.getAbsolutePath().substring( basedir.getAbsolutePath().length() + 1 );
 
-                buf.append( indent + "+&nbsp;<a href=\"" + baseUrl + "?userDirectory=" + userDirectory + "\">" + f.getName() + "</a><br />" );
+                    userDirectory = StringUtils.replace( userDirectory, "\\", "/" );
+
+                    buf.append( indent + "+&nbsp;<a href=\"" + baseUrl + "?userDirectory=" + userDirectory + "\">" + directoryName + "</a><br />" );
+                }
             }
         }
         else
