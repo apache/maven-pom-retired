@@ -195,11 +195,11 @@ public class DefaultContinuum
     {
         try
         {
-            store.removeProject( store.getProject( projectId ) );
-
             File workingDirectory = getWorkingDirectory( projectId );
 
             FileUtils.deleteDirectory( workingDirectory );
+
+            store.removeProject( store.getProject( projectId ) );
         }
         catch ( ContinuumStoreException ex )
         {
