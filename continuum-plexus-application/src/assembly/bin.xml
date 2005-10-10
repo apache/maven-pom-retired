@@ -71,6 +71,7 @@
         <include>libwrapper.so</include>
         <include>wrapper</include>
       </includes>
+      <fileMode>0755</fileMode>
     </fileSet>
     <fileSet>
       <directory>target/plexus-test-runtime/bin/macosx</directory>
@@ -88,6 +89,7 @@
         <include>libwrapper.jnilib</include>
         <include>wrapper</include>
       </includes>
+      <fileMode>0755</fileMode>
     </fileSet>
     <fileSet>
       <directory>target/plexus-test-runtime/bin/win32</directory>
