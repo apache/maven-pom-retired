@@ -32,13 +32,18 @@ Build statistics:
 
 #if ( $build.scmResult )
 Changes
-#if ( $build.scmResult.files.isEmpty() )
- No files changed
-#else
- #foreach ( $file in $build.scmResult.files )
- * $file.path
- #end
-#end
+  #if ( $build.scmResult.changes.size() == 0 )
+    No files changed
+  #else
+  #foreach ( $changeSet in $build.scmResult.changes )
+    #if ($changeSet.author) $changeSet.author #end
+    #if ($changeSet.date > 0) $date.format('medium',$changeSet.date) #end
+    #if ($changeSet.comment) $changeSet.comment #end
+    #foreach ( $file in $changeSet.files )
+        $!file.name
+    #end
+  #end
+  #end
 #end
 
 #if ( $build.state == 4 )
