@@ -40,4 +40,12 @@
       <artifactId>plexus-log4j-logging</artifactId>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 </project>
