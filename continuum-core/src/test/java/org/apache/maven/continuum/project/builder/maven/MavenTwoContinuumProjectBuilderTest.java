@@ -154,7 +154,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertNotNull( result.getProjects() );
 
-        assertEquals( 5, result.getProjects().size() );
+        assertEquals( 6, result.getProjects().size() );
 
         Map projects = new HashMap();
 

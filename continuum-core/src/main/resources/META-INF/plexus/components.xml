@@ -356,7 +356,9 @@
       </requirements>
       <configuration>
         <excludedPackagingTypes>
+          <!--
           <packaging implementation="java.lang.String">pom</packaging>
+          -->
         </excludedPackagingTypes>
       </configuration>
     </component>

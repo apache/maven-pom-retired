@@ -69,7 +69,7 @@ public class DefaultContinuumTest
 
         assertEquals( "result.warnings.size", 0, result.getWarnings().size() );
 
-        assertEquals( "result.projects.size", 2, result.getProjects().size() );
+        assertEquals( "result.projects.size", 3, result.getProjects().size() );
 
         assertEquals( "result.projectGroups.size", 1, result.getProjectGroups().size() );
 
@@ -77,7 +77,7 @@ public class DefaultContinuumTest
 
         System.err.println( "number of project groups: " + getStore().getAllProjectGroupsWithProjects().size() );
 
-        assertEquals( "Total project count", projectCount + 2, getStore().getAllProjectsByName().size() );
+        assertEquals( "Total project count", projectCount + 3, getStore().getAllProjectsByName().size() );
 
         assertEquals( "Total project group count.", projectGroupCount + 1,
                       getStore().getAllProjectGroupsWithProjects().size() );
