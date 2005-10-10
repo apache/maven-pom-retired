@@ -128,6 +128,14 @@ public class DefaultMavenOneMetadataHelper
         }
 
         // ----------------------------------------------------------------------
+        // description
+        // ----------------------------------------------------------------------
+
+        String shortDescription = getValue( mavenProject, "shortDescription", project.getDescription() );
+
+        String description = getValue( mavenProject, "description", project.getDescription() );
+
+        // ----------------------------------------------------------------------
         // scm
         // ----------------------------------------------------------------------
 
@@ -327,6 +335,15 @@ public class DefaultMavenOneMetadataHelper
         project.setVersion( version );
 
         project.setName( name );
+
+        if ( StringUtils.isEmpty( shortDescription ) )
+        {
+            project.setDescription( description );
+        }
+        else
+        {
+            project.setDescription( shortDescription );
+        }
 
         project.setScmUrl( scmConnection );
 

@@ -224,7 +224,7 @@ public class MavenTwoContinuumProjectBuilder
 
         if ( StringUtils.isEmpty( name ) )
         {
-            name = mavenProject.getId();
+            name = mavenProject.getGroupId();
         }
 
         projectGroup.setName( name );
@@ -235,29 +235,6 @@ public class MavenTwoContinuumProjectBuilder
 
         projectGroup.setDescription( mavenProject.getDescription() );
 
-        // ----------------------------------------------------------------------
-        // URL
-        // ----------------------------------------------------------------------
-
-/*
-        projectGroup.setUrl( mavenProject.getUrl() );
-
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        String issueManagementUrl = null;
-
-        IssueManagement issueManagement = mavenProject.getIssueManagement();
-
-        if ( issueManagement != null )
-        {
-            issueManagementUrl = issueManagement.getUrl();
-        }
-
-        projectGroup.setIssueManagementUrl( issueManagementUrl );
-
-*/
         return projectGroup;
     }
 }

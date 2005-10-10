@@ -29,6 +29,7 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,10 +78,10 @@ public class MavenOneContinuumProjectBuilder
             return result;
         }
 
+        Project project = new Project();
+
         try
         {
-            Project project = new Project();
-
             metadataHelper.mapMetadata( pomFile, project );
 
             BuildDefinition bd = new BuildDefinition();
@@ -111,15 +112,37 @@ public class MavenOneContinuumProjectBuilder
             result.addWarning( e.getMessage() );
         }
 
-        // ----------------------------------------------------------------------
-        // This is a hack.
-        // ----------------------------------------------------------------------
-
         ProjectGroup projectGroup = new ProjectGroup();
 
-        projectGroup.setName( "Maven 1 group" );
+        // ----------------------------------------------------------------------
+        // Group id
+        // ----------------------------------------------------------------------
 
-        projectGroup.setGroupId( "dummy" );
+        if ( StringUtils.isEmpty( project.getGroupId() ) )
+        {
+            return null;
+        }
+
+        projectGroup.setGroupId( project.getGroupId() );
+
+        // ----------------------------------------------------------------------
+        // Name
+        // ----------------------------------------------------------------------
+
+        String name = project.getName();
+
+        if ( StringUtils.isEmpty( name ) )
+        {
+            name = project.getGroupId();
+        }
+
+        projectGroup.setName( name );
+
+        // ----------------------------------------------------------------------
+        // Description
+        // ----------------------------------------------------------------------
+
+        projectGroup.setDescription( project.getDescription() );
 
         result.addProjectGroup( projectGroup );
 
