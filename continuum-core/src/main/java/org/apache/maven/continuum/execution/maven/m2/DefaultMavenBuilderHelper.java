@@ -221,7 +221,7 @@ public class DefaultMavenBuilderHelper
             // TODO: we probably need to pass in some profiles here, perhaps from settings.xml
             //   This seems like code that is shared with DefaultMaven, so it should be mobed to the project
             //   builder perhaps
-            project = projectBuilder.build( file, getRepository(), Collections.EMPTY_LIST );
+            project = projectBuilder.build( file, getRepository(), null );
         }
         catch ( Exception e )
         {
