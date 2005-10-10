@@ -196,10 +196,18 @@ public class DefaultContinuum
         try
         {
             store.removeProject( store.getProject( projectId ) );
+
+            File workingDirectory = getWorkingDirectory( projectId );
+
+            FileUtils.deleteDirectory( workingDirectory );
         }
         catch ( ContinuumStoreException ex )
         {
-            throw logAndCreateException( "Error while removing project.", ex );
+            throw logAndCreateException( "Error while removing project in database.", ex );
+        }
+        catch ( IOException e )
+        {
+            throw logAndCreateException( "Error while deleting project working directory.", e );
         }
     }
 
