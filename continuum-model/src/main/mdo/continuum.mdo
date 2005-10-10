@@ -165,6 +165,13 @@
           </association>
         </field>
         <field jpox.fetchGroupNames="project-all-details">
+          <name>parent</name>
+          <version>1.0.0+</version>
+          <association jpox.join="false">
+            <type>ProjectDependency</type>
+          </association>
+        </field>
+        <field jpox.fetchGroupNames="project-all-details">
           <name>dependencies</name>
           <version>1.0.0+</version>
           <association jpox.join="false">

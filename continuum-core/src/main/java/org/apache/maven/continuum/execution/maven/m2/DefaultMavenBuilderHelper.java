@@ -151,6 +151,25 @@ public class DefaultMavenBuilderHelper
         }
 
         // ----------------------------------------------------------------------
+        // Parent
+        // ----------------------------------------------------------------------
+
+        if ( mavenProject.getParent() != null )
+        {
+            MavenProject parentProject = mavenProject.getParent();
+
+            ProjectDependency parent = new ProjectDependency();
+
+            parent.setGroupId( parentProject.getGroupId() );
+
+            parent.setArtifactId( parentProject.getArtifactId() );
+
+            parent.setVersion( parentProject.getVersion() );
+
+            continuumProject.setParent( parent );
+        }
+
+        // ----------------------------------------------------------------------
         // Dependencies
         // ----------------------------------------------------------------------
 
@@ -174,7 +193,6 @@ public class DefaultMavenBuilderHelper
             }
 
             continuumProject.setDependencies( dependencies );
-            
         }
 
         // ----------------------------------------------------------------------

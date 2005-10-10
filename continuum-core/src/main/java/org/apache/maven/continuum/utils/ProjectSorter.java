@@ -77,6 +77,20 @@ public class ProjectSorter
 
             String id = getProjectId( project );
 
+            // Parent
+            ProjectDependency parent = project.getParent();
+
+            if ( parent != null )
+            {
+                String dependencyId = getDependencyId( parent );
+
+                if ( dag.getVertex( dependencyId ) != null )
+                {
+                    dag.addEdge( id, dependencyId );
+                }
+            }
+
+            // Dependencies
             for ( Iterator j = project.getDependencies().iterator(); j.hasNext(); )
             {
                 ProjectDependency dependency = (ProjectDependency) j.next();
