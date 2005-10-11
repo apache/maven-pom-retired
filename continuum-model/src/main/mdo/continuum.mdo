@@ -445,7 +445,7 @@
           <type>String</type>
         </field>
         <!-- TODO: page to disk? -->
-        <field>
+        <field stash.maxSize="1024">
           <name>commandOutput</name>
           <version>1.0.0+</version>
           <type>String</type>
