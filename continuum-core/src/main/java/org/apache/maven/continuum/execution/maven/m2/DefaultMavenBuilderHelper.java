@@ -259,13 +259,13 @@ public class DefaultMavenBuilderHelper
 
         if ( ciManagement == null )
         {
-            throw new MavenBuilderHelperException( "Missing 'ciManagement' element in the POM." );
+            throw new MavenBuilderHelperException( "Missing 'ciManagement' element in the " + getProjectName( project ) + " POM." );
         }
 
         if ( getNotifiers( project ).isEmpty() )
         {
             throw new MavenBuilderHelperException(
-                "Missing 'notifiers' element in the 'ciManagement' element in the POM." );
+                "Missing 'notifiers' element in the 'ciManagement' element in the " + getProjectName( project ) + " POM." );
         }
 
         // SCM connection
@@ -273,14 +273,14 @@ public class DefaultMavenBuilderHelper
 
         if ( scm == null )
         {
-            throw new MavenBuilderHelperException( "Missing 'scm' element in the POM." );
+            throw new MavenBuilderHelperException( "Missing 'scm' element in the " + getProjectName( project ) + " POM." );
         }
 
         String url = scm.getConnection();
 
         if ( StringUtils.isEmpty( url ) )
         {
-            throw new MavenBuilderHelperException( "Missing 'connection' element in the 'scm' element in the POM." );
+            throw new MavenBuilderHelperException( "Missing 'connection' element in the 'scm' element in the " + getProjectName( project ) + " POM." );
         }
 
         return project;
