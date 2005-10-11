@@ -1,0 +1,10 @@
+$page.setTitle( "Continuum - About" )
+
+<div class="app">
+
+  <div id="axial" class="h3">
+    <h3>About Continuum</h3>
+    <p> Version: ${project.version}
+  </div>
+</div>
+

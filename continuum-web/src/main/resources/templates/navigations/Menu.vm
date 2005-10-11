@@ -7,14 +7,17 @@
 <div id="navcolum">
   <div id="projectmenu" class="toolgroup">
     <div class="label">Continuum</div>
-
-    #if ( $continuum.security.isAuthorized( $c1user, "showProject" ) )
     <div class="body">
+      <div>
+        <a href="$link.setPage('About.vm')">About</a>
+      </div>
+
+      #if ( $continuum.security.isAuthorized( $c1user, "showProject" ) )
       <div>
         <a href="$link.setPage('Summary.vm').addPathInfo( 'fid', 'continuumProject')">Show Projects</a>
       </div>
+      #end
     </div>
-    #end
   </div>
 
   #if ( $continuum.security.isAuthorized( $c1user, "addProject" ) )
