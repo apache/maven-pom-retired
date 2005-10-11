@@ -326,7 +326,7 @@ public class MailContinuumNotifier
         }
         else
         {
-            getLogger().warn( "Unknown build state " + build.getState() + " for " + project.getName() + " project" );
+            getLogger().warn( "Unknown build state " + build.getState() + " for project " + project.getId() );
 
             return "[continuum] ERROR: Unknown build state " + build.getState() + " for " + project.getName() + " project";
         }
