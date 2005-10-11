@@ -136,7 +136,7 @@ public class JabberContinuumNotifier
         {
             getLogger().warn( "Unknown build state " + build.getState() + " for project " + project.getId() );
 
-            message = "ERROR: Unknown build state " + build.getState() + " for project " + project.getId() );
+            message = "ERROR: Unknown build state " + build.getState() + " for project " + project.getId();
         }
 
         return message + " " + getReportUrl( project, build, configurationService );
