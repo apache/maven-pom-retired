@@ -137,7 +137,10 @@ public class ExecuteBuilderContinuumAction
         {
             build.setEndTime( new Date().getTime() );
 
-            project.setBuildNumber( project.getBuildNumber() + 1 );
+            if ( build.getState() == ContinuumProjectState.OK )
+            {
+                project.setBuildNumber( project.getBuildNumber() + 1 );
+            }
 
             project.setLatestBuildId( build.getId() );
 
