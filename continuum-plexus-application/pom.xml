@@ -94,9 +94,9 @@
       <artifactId>plexus-velocity</artifactId>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-appserver</artifactId>
-      <version>1.0-alpha-4</version>
+      <version>1.0-alpha-5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
@@ -129,9 +129,9 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-service-xmlrpc</artifactId>
-      <version>1.0-alpha-2</version>
+      <version>1.0-alpha-3-SNAPSHOT</version>
       <type>plexus-service</type>
     </dependency>
     <dependency>
@@ -164,9 +164,9 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.</groupId>
       <artifactId>plexus-service-jetty</artifactId>
-      <version>1.0-alpha-2</version>
+      <version>1.0-alpha-3-SNAPSHOT</version>
       <type>plexus-service</type>
     </dependency>
     <dependency>

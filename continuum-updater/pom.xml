@@ -19,13 +19,13 @@
       <version>1.0</version>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-jdo2</artifactId>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
-      <version>1.0-alpha-2</version>
+      <version>1.0-alpha-3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
@@ -70,7 +70,7 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>plexus</groupId>
+        <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
         <executions>
           <execution>
