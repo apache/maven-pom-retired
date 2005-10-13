@@ -28,6 +28,7 @@ import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.utils.ContinuumUtils;
+import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
 import java.util.Date;
@@ -115,15 +116,24 @@ public class ExecuteBuilderContinuumAction
 
         try
         {
-            notifier.runningGoals( project, build );
-
             File buildOutputFile = configurationService.getBuildOutputFile( build.getId(), project.getId() );
 
-            ContinuumBuildExecutionResult result = buildExecutor.build( project, buildDefinition, buildOutputFile );
+            if ( !scmResult.isSuccess() )
+            {
+                notifier.runningGoals( project, build );
 
-            build.setState( result.getExitCode() == 0 ? ContinuumProjectState.OK : ContinuumProjectState.FAILED );
+                ContinuumBuildExecutionResult result = buildExecutor.build( project, buildDefinition, buildOutputFile );
 
-            build.setExitCode( result.getExitCode() );
+                build.setState( result.getExitCode() == 0 ? ContinuumProjectState.OK : ContinuumProjectState.FAILED );
+
+                build.setExitCode( result.getExitCode() );
+            }
+            else
+            {
+                build.setState( ContinuumProjectState.ERROR );
+
+                FileUtils.fileWrite( buildOutputFile.getAbsolutePath(), "" );
+            }
         }
         catch ( Throwable e )
         {
@@ -156,6 +166,8 @@ public class ExecuteBuilderContinuumAction
             // ----------------------------------------------------------------------
 
             store.updateBuildResult( build );
+
+            project.setState( build.getState() );
 
             store.updateProject( project );
 
