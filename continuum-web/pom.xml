@@ -24,7 +24,7 @@
       <version>2.3</version>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-formica</artifactId>
     </dependency>
     <dependency>
@@ -33,15 +33,9 @@
       <version>1.0</version>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-formica-web</artifactId>
-      <version>1.0-alpha-4</version>
-      <exclusions>
-        <exclusion>
-          <groupId>plexus</groupId>
-          <artifactId>plexus-summit</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>1.0-alpha-5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
@@ -54,9 +48,9 @@
       <version>1.0-alpha-2-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-i18n</artifactId>
-      <version>1.0-beta-4</version>
+      <version>1.0-beta-6-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>

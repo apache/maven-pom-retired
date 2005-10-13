@@ -56,9 +56,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-action</artifactId>
-      <version>1.0-alpha-5</version>
+      <version>1.0-alpha-6-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
@@ -71,7 +71,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-jdo2</artifactId>
     </dependency>
     <dependency>
@@ -90,7 +90,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-formica</artifactId>
     </dependency>
     <dependency>
@@ -145,7 +145,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
     </dependency>
     <dependency>

@@ -10,7 +10,7 @@
   <version>1.0-beta-2-SNAPSHOT</version>
   <dependencies>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-formica</artifactId>
     </dependency>
     <dependency>
