@@ -164,7 +164,7 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-service-jetty</artifactId>
       <version>1.0-alpha-3-SNAPSHOT</version>
       <type>plexus-service</type>
