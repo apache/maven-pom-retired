@@ -145,7 +145,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
+      <groupId>plexus</groupId>
       <artifactId>plexus-utils</artifactId>
     </dependency>
     <dependency>
