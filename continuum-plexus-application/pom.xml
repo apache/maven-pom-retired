@@ -109,7 +109,7 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-mail-sender-api</artifactId>
       <scope>runtime</scope>
     </dependency>
@@ -170,7 +170,7 @@
       <type>plexus-service</type>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-mail-sender-javamail</artifactId>
       <scope>runtime</scope>
     </dependency>

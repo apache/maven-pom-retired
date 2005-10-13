@@ -319,24 +319,24 @@
         <version>1.1.2</version>
       </dependency>
       <dependency>
-        <groupId>plexus</groupId>
+        <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-mail-sender-api</artifactId>
-        <version>1.0-alpha-2</version>
+        <version>1.0-alpha-3-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>plexus</groupId>
+        <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-mail-sender-simple</artifactId>
-        <version>1.0-alpha-2</version>
+        <version>1.0-alpha-3-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>plexus</groupId>
+        <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-mail-sender-test</artifactId>
-        <version>1.0-alpha-2</version>
+        <version>1.0-alpha-3-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>plexus</groupId>
+        <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-mail-sender-javamail</artifactId>
-        <version>1.0-alpha-2</version>
+        <version>1.0-alpha-3-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>plexus</groupId>
