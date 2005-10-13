@@ -17,7 +17,7 @@
   </modules>
   <dependencies>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-notification</artifactId>
     </dependency>
     <dependency>
