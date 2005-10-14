@@ -1469,11 +1469,10 @@ public class ContinuumStoreTest
             try
             {
                 project.getDependencies();
-                fail( "dependencies should not be in the default fetch group" );
             }
             catch ( JDODetachedFieldAccessException expected )
             {
-                assertTrue( true );
+                fail( "dependencies should be in the default fetch group" );
             }
         }
         if ( !detailsFetchGroup )
