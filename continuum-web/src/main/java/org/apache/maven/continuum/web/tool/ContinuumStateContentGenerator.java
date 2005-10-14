@@ -55,11 +55,11 @@ public class ContinuumStateContentGenerator
         }
         else if ( state == ContinuumProjectState.FAILED )
         {
-            return "<img src=\"/continuum/images/icon_error_sml.gif\" alt=\"Failed\"/>";
+            return "<img src=\"/continuum/images/icon_warning_sml.gif\" alt=\"Failed\"/>";
         }
         else if ( state == ContinuumProjectState.ERROR )
         {
-            return "<img src=\"/continuum/images/icon_warning_sml.gif\" alt=\"Error\"/>";
+            return "<img src=\"/continuum/images/icon_error_sml.gif\" alt=\"Error\"/>";
         }
         else if ( state == ContinuumProjectState.BUILDING )
         {

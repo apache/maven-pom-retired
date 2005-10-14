@@ -105,8 +105,8 @@ $page.setTitle( "Continuum" )
     <div class="functnbar3">
       <form method="post" action="$link">
         <img src="/continuum/images/icon_success_sml.gif" alt="Success"/> $success
-        <img src="/continuum/images/icon_error_sml.gif" alt="Failed"/> $failures
-        <img src="/continuum/images/icon_warning_sml.gif" alt="Error"/> $errors
+        <img src="/continuum/images/icon_warning_sml.gif" alt="Failed"/> $failures
+        <img src="/continuum/images/icon_error_sml.gif" alt="Error"/> $errors
         #if ( $items && $items.size() > 0 )
         #hidden ( "action" "cam" )
         #hidden ( "cid" "buildAllProjects" )
