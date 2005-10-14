@@ -13,6 +13,12 @@
       <groupId>plexus</groupId>
       <artifactId>plexus-msn</artifactId>
       <version>1.0-alpha-1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>plexus</groupId>
+          <artifactId>plexus-container-default</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
