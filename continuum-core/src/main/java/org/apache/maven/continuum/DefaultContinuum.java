@@ -195,6 +195,10 @@ public class DefaultContinuum
     {
         try
         {
+            Project project = store.getProject( projectId );
+
+            getLogger().info( "Remove project " + project.getName() + "(" + projectId + ")" );
+
             File workingDirectory = getWorkingDirectory( projectId );
 
             FileUtils.deleteDirectory( workingDirectory );
@@ -253,41 +257,53 @@ public class DefaultContinuum
     public void buildProjects( int trigger )
         throws ContinuumException
     {
+        /*
         for ( Iterator i = getProjects().iterator(); i.hasNext(); )
         {
             Project project = (Project) i.next();
 
             buildProject( project.getId(), trigger );
         }
+        */
 
-        /*
+        Collection projectsList = null;
+
         try
         {
-            for ( Iterator i = getProjectsInBuildOrder().iterator(); i.hasNext(); )
-            {
-                ContinuumProject project = (ContinuumProject) i.next();
-
-                buildProject( project.getId(), force );
-            }
+            projectsList = getProjectsInBuildOrder();
         }
         catch ( CycleDetectedException e )
         {
             getLogger().warn( "Cycle detected while sorting projects for building, falling back to unsorted build." );
 
-            for ( Iterator i = getProjects().iterator(); i.hasNext(); )
-            {
-                ContinuumProject project = (ContinuumProject) i.next();
-
-                buildProject( project.getId(), force );
-            }
+            projectsList = getProjects();
         }
-        */
+
+        for ( Iterator i = projectsList.iterator(); i.hasNext(); )
+        {
+            Project project = (Project) i.next();
+
+            buildProject( project.getId(), trigger );
+        }
     }
 
     public void buildProjects( Schedule schedule )
         throws ContinuumException
     {
-        for ( Iterator projectIterator = getProjects().iterator(); projectIterator.hasNext(); )
+        Collection projectsList = null;
+
+        try
+        {
+            projectsList = getProjectsInBuildOrder();
+        }
+        catch ( CycleDetectedException e )
+        {
+            getLogger().warn( "Cycle detected while sorting projects for building, falling back to unsorted build." );
+
+            projectsList = getProjects();
+        }
+
+        for ( Iterator projectIterator = projectsList.iterator(); projectIterator.hasNext(); )
         {
             Project p = (Project) projectIterator.next();
 
