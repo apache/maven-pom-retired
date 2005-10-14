@@ -101,25 +101,33 @@ public class DefaultMavenBuilderHelper
         // GroupId
         // ----------------------------------------------------------------------
 
-        if ( StringUtils.isEmpty( mavenProject.getGroupId() ) )
+        if ( !StringUtils.isEmpty( mavenProject.getGroupId() ) )
         {
             continuumProject.setGroupId( mavenProject.getGroupId() );
+        }
+        else
+        {
+            throw new MavenBuilderHelperException( "Missing 'groupId' element in the POM." );
         }
 
         // ----------------------------------------------------------------------
         // artifactId
         // ----------------------------------------------------------------------
 
-        if ( StringUtils.isEmpty( mavenProject.getArtifactId() ) )
+        if ( !StringUtils.isEmpty( mavenProject.getArtifactId() ) )
         {
             continuumProject.setArtifactId( mavenProject.getArtifactId() );
+        }
+        else
+        {
+            throw new MavenBuilderHelperException( "Missing 'artifactId' element in the POM." );
         }
 
         // ----------------------------------------------------------------------
         // Project Url
         // ----------------------------------------------------------------------
 
-        if ( StringUtils.isEmpty( mavenProject.getUrl() ) )
+        if ( !StringUtils.isEmpty( mavenProject.getUrl() ) )
         {
             continuumProject.setUrl( mavenProject.getUrl() );
         }
