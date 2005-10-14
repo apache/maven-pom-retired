@@ -1069,7 +1069,7 @@ public class DefaultContinuum
                 configurationService.setGuestAccountEnabled( false );
             }
 
-            if ( configuration.get( "conf.workingDirectory" ) == null )
+            if ( configuration.get( "conf.workingDirectory" ) != null )
             {
                 configurationService.setWorkingDirectory( configurationService.getFile( (String) configuration.get( "conf.workingDirectory" ) ) );
             }
@@ -1078,7 +1078,7 @@ public class DefaultContinuum
                 throw new ContinuumException( "working directory can't be null" );
             }
 
-            if ( configuration.get( "conf.buildOutputDirectory" ) == null )
+            if ( configuration.get( "conf.buildOutputDirectory" ) != null )
             {
                 configurationService.setBuildOutputDirectory( configurationService.getFile( (String) configuration.get( "conf.buildOutputDirectory" ) ) );
             }
@@ -1087,7 +1087,7 @@ public class DefaultContinuum
                 throw new ContinuumException( "build output directory can't be null" );
             }
 
-            if ( configuration.get( "conf.url" ) == null )
+            if ( configuration.get( "conf.url" ) != null )
             {
                 configurationService.setUrl( (String) configuration.get( "conf.url" ) );
             }
