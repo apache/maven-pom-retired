@@ -66,6 +66,10 @@
       <artifactId>ognl</artifactId>
       <version>2.6.7</version>
     </dependency>
+    <dependency>
+      <groupId>quartz</groupId>
+      <artifactId>quartz</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <resources>

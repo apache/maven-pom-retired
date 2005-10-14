@@ -364,6 +364,11 @@
         <artifactId>hsqldb</artifactId>
         <version>1.7.3.3</version>
       </dependency>
+      <dependency>
+        <groupId>quartz</groupId>
+        <artifactId>quartz</artifactId>
+        <version>1.4.5</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <distributionManagement>

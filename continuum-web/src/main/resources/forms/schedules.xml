@@ -39,6 +39,10 @@
           <id>required</id>
           <error-message-key>schedule.cronExpression.error</error-message-key>
         </validator>
+        <validator>
+          <id>cron</id>
+          <error-message-key>schedule.cronExpression.error</error-message-key>
+        </validator>
       </validators>
       <type>text</type>
       <label-key>schedule.cronExpression.label</label-key>

@@ -591,6 +591,12 @@
       <implementation>org.apache.maven.continuum.web.validation.SafePathValidator</implementation>
     </component>
 
+    <component>
+      <role>org.codehaus.plexus.formica.validation.Validator</role>
+      <role-hint>cron</role-hint>
+      <implementation>org.apache.maven.continuum.web.validation.CronExpressionValidator</implementation>
+    </component>
+
     <!--
      |
      | Content Generators
