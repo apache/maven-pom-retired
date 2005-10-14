@@ -24,6 +24,7 @@
       <item name="Getting Started" href="getting-started.html"/>
       <item name="Configuration" href="configuration.html"/>
       <item name="SOAP API" href="soap-api.html"/>
+      <item name="Linux Boot Configuration " href="linux-boot.html"/>
       <!--
       <item name="CruiseControl Support" href="cc-support.html"/>
       -->
