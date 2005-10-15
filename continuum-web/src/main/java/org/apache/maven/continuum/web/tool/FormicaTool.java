@@ -150,7 +150,10 @@ public class FormicaTool
 
                 data = Ognl.getValue( element.getExpression(), item );
 
-                return data.toString();
+                if ( data != null )
+                {
+                    return data.toString();
+                }
             }
             catch ( OgnlException e )
             {

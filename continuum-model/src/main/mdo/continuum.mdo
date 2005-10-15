@@ -113,6 +113,16 @@
           <type>String</type>
         </field>
         <field>
+          <name>scmUsername</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>scmPassword</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
           <name>version</name>
           <version>1.0.0+</version>
           <type>String</type>

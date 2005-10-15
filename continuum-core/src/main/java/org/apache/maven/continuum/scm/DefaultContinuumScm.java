@@ -27,6 +27,7 @@ import org.apache.maven.scm.ScmFileSet;
 import org.apache.maven.scm.command.checkout.CheckOutScmResult;
 import org.apache.maven.scm.command.update.UpdateScmResult;
 import org.apache.maven.scm.manager.ScmManager;
+import org.apache.maven.scm.manager.NoSuchScmProviderException;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.apache.maven.scm.repository.ScmRepositoryException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -67,7 +68,7 @@ public class DefaultContinuumScm
             getLogger().info( "Checking out project: '" + project.getName() + "', " + "id: '" + project.getId() + "' " +
                 "to '" + workingDirectory + "'." );
 
-            ScmRepository repository = scmManager.makeScmRepository( project.getScmUrl() );
+            ScmRepository repository = getScmRepositorty( project );
 
             ScmResult result;
 
@@ -164,7 +165,7 @@ public class DefaultContinuumScm
                     workingDirectory.getAbsolutePath() + ")." );
             }
 
-            ScmRepository repository = scmManager.makeScmRepository( project.getScmUrl() );
+            ScmRepository repository = getScmRepositorty( project );
 
             String tag = null;
 
@@ -208,6 +209,28 @@ public class DefaultContinuumScm
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
+
+    private ScmRepository getScmRepositorty( Project project )
+        throws ScmRepositoryException, NoSuchScmProviderException
+    {
+        ScmRepository repository = scmManager.makeScmRepository( project.getScmUrl() );
+
+        if ( project.getScmUsername() != null )
+        {
+            repository.getProviderRepository().setUser( project.getScmUsername() );
+
+            if ( project.getScmPassword() != null )
+            {
+                repository.getProviderRepository().setPassword( project.getScmPassword() );
+            }
+            else
+            {
+                repository.getProviderRepository().setPassword( "" );
+            }
+        }
+
+        return repository;
+    }
 
     private ScmResult convertScmResult( CheckOutScmResult scmResult )
     {

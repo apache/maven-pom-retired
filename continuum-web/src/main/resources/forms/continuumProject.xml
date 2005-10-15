@@ -39,6 +39,20 @@
       <expression>scmUrl</expression>
     </element>
     <element>
+      <id>projectScmUsername</id>
+      <validators>
+      </validators>
+      <type>text</type>
+      <expression>scmUsername</expression>
+    </element>
+    <element>
+      <id>projectScmPassword</id>
+      <validators>
+      </validators>
+      <type>text</type>
+      <expression>scmPassword</expression>
+    </element>
+    <element>
       <id>project.type</id>
       <validators>
         <validator>
