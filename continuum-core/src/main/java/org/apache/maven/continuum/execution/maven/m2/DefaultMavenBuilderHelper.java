@@ -30,6 +30,7 @@ import org.apache.maven.model.Notifier;
 import org.apache.maven.model.Scm;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.project.DefaultMavenProjectBuilder;
 import org.apache.maven.settings.MavenSettingsBuilder;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -247,7 +248,7 @@ public class DefaultMavenBuilderHelper
             // TODO: we probably need to pass in some profiles here, perhaps from settings.xml
             //   This seems like code that is shared with DefaultMaven, so it should be mobed to the project
             //   builder perhaps
-            project = projectBuilder.build( file, getRepository(), null );
+            project = ( (DefaultMavenProjectBuilder) projectBuilder).build( file, getRepository(), null, false );
         }
         catch ( Exception e )
         {
