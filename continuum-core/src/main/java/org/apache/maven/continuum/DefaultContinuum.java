@@ -331,7 +331,7 @@ public class DefaultContinuum
     public void buildProject( int projectId, int trigger )
         throws ContinuumException
     {
-        if ( isInBuildingQueue( projectId )
+        if ( isInBuildingQueue( projectId ) )
         {
             return;
         }
