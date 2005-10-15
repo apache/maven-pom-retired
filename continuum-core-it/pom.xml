@@ -19,7 +19,7 @@
       <artifactId>continuum-xmlrpc</artifactId>
     </dependency>
     <dependency>
-      <groupId>incubator-derby</groupId>
+      <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
     </dependency>
     <dependency>

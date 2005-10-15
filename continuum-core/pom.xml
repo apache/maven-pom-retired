@@ -29,7 +29,7 @@
       <artifactId>jpox</artifactId>
     </dependency>
     <dependency>
-      <groupId>incubator-derby</groupId>
+      <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
       <scope>test</scope>
     </dependency>
