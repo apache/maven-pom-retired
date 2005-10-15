@@ -197,8 +197,6 @@ public class JdoContinuumStore
             // TODO: these are in the wrong spot - set them on success (though currently some depend on latest build being the one in progress)
             project.setLatestBuildId( build.getId() );
 
-            project.setBuildNumber( project.getBuildNumber() + 1 );
-
             project.setState( build.getState() );
 
             project.addBuildResult( build );
