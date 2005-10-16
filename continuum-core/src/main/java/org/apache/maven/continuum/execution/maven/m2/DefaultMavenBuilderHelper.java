@@ -248,6 +248,7 @@ public class DefaultMavenBuilderHelper
             // TODO: we probably need to pass in some profiles here, perhaps from settings.xml
             //   This seems like code that is shared with DefaultMaven, so it should be mobed to the project
             //   builder perhaps
+            // TODO: Remove cast
             project = ( (DefaultMavenProjectBuilder) projectBuilder).build( file, getRepository(), null, false );
         }
         catch ( Exception e )
