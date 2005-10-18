@@ -40,8 +40,11 @@ public class ContinuumNotificationDispatcherTest
         Project project = addProject( store, "Notification Dispatcher Test Project" );
 
         BuildResult build = new BuildResult();
+
         build.setStartTime( System.currentTimeMillis() );
+ 
         build.setState( ContinuumProjectState.BUILDING );
+ 
         build.setTrigger( ContinuumProjectState.TRIGGER_UNKNOWN );
 
         store.addBuildResult( project, build );

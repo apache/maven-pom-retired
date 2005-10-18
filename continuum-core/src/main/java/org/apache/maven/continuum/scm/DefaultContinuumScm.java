@@ -111,8 +111,6 @@ public class DefaultContinuumScm
                 getLogger().warn( "Command output: " + result.getCommandOutput() );
 
                 getLogger().warn( "Provider message: " + result.getProviderMessage() );
-
-                throw new ContinuumScmException( "Error while checking out the project.", result );
             }
 
             ChangeSet changeSet = (ChangeSet) result.getChanges().get( 0 );
@@ -187,8 +185,6 @@ public class DefaultContinuumScm
                 getLogger().warn( "Command output: " + result.getCommandOutput() );
 
                 getLogger().warn( "Provider message: " + result.getProviderMessage() );
-
-                throw new ContinuumScmException( "Error while updating the project.", result );
             }
 
             // TODO: total the number of files in the changesets

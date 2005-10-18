@@ -142,15 +142,17 @@ public class DefaultBuildController
 
                 if ( scmResult == null || !scmResult.isSuccess() )
                 {
-                    build = makeBuildResult( scmResult, startTime, trigger );
+                    build = makeAndStoreBuildResult( project, scmResult, startTime, trigger );
 
                     String error = convertScmResultToError( scmResult );
 
                     build.setError( error );
 
-                    store.addBuildResult( project, build );
+                    store.updateBuildResult( build );
 
-                    project.setState( ContinuumProjectState.ERROR );
+                    build = store.getBuildResult( build.getId() );
+
+                    project.setState( build.getState() );
 
                     store.updateProject( project );
 
@@ -166,6 +168,7 @@ public class DefaultBuildController
                 actionManager.lookup( "execute-builder" ).execute( actionContext );
 
                 String s = (String) actionContext.get( AbstractContinuumAction.KEY_BUILD_ID );
+
                 if ( s != null )
                 {
                     build = store.getBuildResult( Integer.valueOf( s ).intValue() );
@@ -176,13 +179,14 @@ public class DefaultBuildController
                 getLogger().error( "Error while building project.", e );
 
                 String s = (String) actionContext.get( AbstractContinuumAction.KEY_BUILD_ID );
+
                 if ( s != null )
                 {
                     build = store.getBuildResult( Integer.valueOf( s ).intValue() );
                 }
                 else
                 {
-                    build = makeBuildResult( scmResult, startTime, trigger );
+                    build = makeAndStoreBuildResult( project, scmResult, startTime, trigger );
                 }
 
                 // This can happen if the "update project from scm" action fails
@@ -208,16 +212,11 @@ public class DefaultBuildController
 
                 build.setError( error );
 
-                if ( s != null )
-                {
-                    store.updateBuildResult( build );
-                }
-                else
-                {
-                    store.addBuildResult( project, build );
-                }
+                store.updateBuildResult( build );
 
-                project.setState( ContinuumProjectState.ERROR );
+                build = store.getBuildResult( build.getId() );
+
+                project.setState( build.getState() );
 
                 store.updateProject( project );
             }
@@ -281,7 +280,8 @@ public class DefaultBuildController
     //
     // ----------------------------------------------------------------------
 
-    private BuildResult makeBuildResult( ScmResult scmResult, long startTime, int trigger )
+    private BuildResult makeAndStoreBuildResult( Project project, ScmResult scmResult, long startTime, int trigger )
+        throws ContinuumStoreException
     {
         BuildResult build = new BuildResult();
 
@@ -295,6 +295,8 @@ public class DefaultBuildController
 
         build.setScmResult( scmResult );
 
-        return build;
+        store.addBuildResult( project, build );
+
+        return store.getBuildResult( build.getId() );
     }
 }

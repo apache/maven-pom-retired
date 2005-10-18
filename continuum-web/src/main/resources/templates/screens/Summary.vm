@@ -86,6 +86,8 @@ $page.setTitle( "Continuum" )
 
         #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 || $item.state == 6 )
         <td><a href="$link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $item.id)">Working&nbsp;Copy</a></td>
+        #else
+        <td>Working&nbsp;Copy</td>
         #end
 
         #if ( $continuum.security.isAuthorized( $c1user, "deleteProject" ) )
