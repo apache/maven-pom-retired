@@ -69,7 +69,7 @@ public class ContinuumRecipientSource
     // RecipientSource Implementation
     // ----------------------------------------------------------------------
 
-    public Set getRecipients( String notifierType, String messageId, Map configuration, Map context )
+    public Set getRecipients( String notifierId, String messageId, Map configuration, Map context )
         throws NotificationException
     {
         Project project = (Project) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
@@ -91,7 +91,7 @@ public class ContinuumRecipientSource
             {
                 ProjectNotifier notifier = (ProjectNotifier) notifierIterator.next();
 
-                if ( notifier.getType().equals( notifierType ) &&
+                if ( notifier.getId() == new Integer( notifierId ).intValue() &&
                     notifier.getConfiguration().containsKey( ADDRESS_FIELD ) )
                 {
                     String addressField = (String) notifier.getConfiguration().get( ADDRESS_FIELD );

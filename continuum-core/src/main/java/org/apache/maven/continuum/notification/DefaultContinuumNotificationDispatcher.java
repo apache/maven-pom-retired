@@ -164,7 +164,8 @@ public class DefaultContinuumNotificationDispatcher
             {
                 Notifier notifier = notifierManager.getNotifier( notifierType );
 
-                Set recipients = recipientSource.getRecipients( notifierType, messageId, configuration, context );
+                Set recipients = recipientSource.getRecipients( String.valueOf( projectNotifier.getId() ),
+                                                                messageId, configuration, context );
 
                 notifier.sendNotification( messageId, recipients, projectNotifier.getConfiguration(), context );
             }
