@@ -7,70 +7,70 @@ $page.setTitle( "Configure Continuum" )
 
       <h3>Admin account</h3>
       <div class="axial">
-        <table cellspacing="2" cellpadding="3" width="700">
+        <table cellspacing="2" cellpadding="3" width="900">
           <tr>
-            <td>Username :</td>
-            <td><input type="text" name="username" size="50"></td>
+            <td width="20%">Username :</td>
+            <td><input type="text" name="username" size="100"></td>
           </tr>
           <tr>
             <td>Password :</td>
-            <td><input type="password" name="password" size="50"></td>
+            <td><input type="password" name="password" size="100"></td>
           </tr>
           <tr>
             <td>Re-enter Password :</td>
-            <td><input type="password" name="password.two" size="50"></td>
+            <td><input type="password" name="password.two" size="100"></td>
           </tr>
           <tr>
             <td>Full Name :</td>
-            <td><input type="text" name="fullName" size="50"></td>
+            <td><input type="text" name="fullName" size="100"></td>
           </tr>
           <tr>
             <td>Email :</td>
-            <td><input type="text" name="email" size="50"></td>
+            <td><input type="text" name="email" size="100"></td>
           </tr>
         </table>
       </div>
 
       <h3>Directories</h3>
-      <table cellspacing="2" cellpadding="3" width="700">
+      <table cellspacing="2" cellpadding="3" width="900">
         <tr>
-          <td>Working Directory :</td>
-          <td><input type="text" name="workingDirectory" value="working-directory" size="50"> If you define a relative path, it will be relative to $continuum.configuration.applicationHome</td>
+          <td width="20%">Working Directory :</td>
+          <td><input type="text" name="workingDirectory" value="working-directory" size="100"><br>If you define a relative path, it will be relative to $continuum.configuration.applicationHome</td>
         </tr>
         <tr>
           <td>Build Output Directory :</td>
-          <td><input type="text" name="buildOutputDirectory" value="build-output-directory" size="50"> If you define a relative path, it will be relative to $continuum.configuration.applicationHome</td>
+          <td><input type="text" name="buildOutputDirectory" value="build-output-directory" size="100"><br>If you define a relative path, it will be relative to $continuum.configuration.applicationHome</td>
         </tr>
       </table>
 
       <h3>Base URL</h3>
-      <table cellspacing="2" cellpadding="3" width="700">
+      <table cellspacing="2" cellpadding="3" width="900">
         <tr>
-          <td>Base URL :</td>
-          <td><input type="text" name="baseUrl" value="http://localhost:8080/continuum/servlet/continuum" size="50"></td>
+          <td width="20%">Base URL :</td>
+          <td><input type="text" name="baseUrl" value="http://localhost:8080/continuum/servlet/continuum" size="100"></td>
         </tr>
       </table>
 
       <h3>Company Informations</h3>
-      <table cellspacing="2" cellpadding="3" width="700">
+      <table cellspacing="2" cellpadding="3" width="900">
         <tr>
-          <td>Name :</td>
-          <td><input type="text" name="companyName" size="50"></td>
+          <td width="20%">Name :</td>
+          <td><input type="text" name="companyName" size="100"></td>
         </tr>
         <tr>
           <td>Logo :</td>
-          <td><input type="text" name="companyLogo" size="50"></td>
+          <td><input type="text" name="companyLogo" size="100"></td>
         </tr>
         <tr>
           <td>URL :</td>
-          <td><input type="text" name="companyUrl" size="50"></td>
+          <td><input type="text" name="companyUrl" size="100"></td>
         </tr>
       </table>
 
       <h3>Guest access</h3>
-      <table cellspacing="2" cellpadding="3" width="700">
+      <table cellspacing="2" cellpadding="3" width="900">
         <tr>
-          <td>Allow Guest :</td>
+          <td width="20%">Allow Guest :</td>
           <td><input type="checkbox" name="guestAccountEnabled" checked="checked"></td>
         </tr>
       </table>

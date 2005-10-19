@@ -15,7 +15,7 @@ $page.setTitle( $i18n.getString( "project.title.buildDefinition.update" ) )
           <tr>
             <th>$i18n.getString( "buildDefinition.buildFile.label" )</th>
             <td>
-              <input type="text" name="buildFile" value="$buildDefinition.buildFile" size="40"/>
+              <input type="text" name="buildFile" value="$buildDefinition.buildFile" size="100"/>
                   <p>
                     $i18n.getString( "buildDefinition.buildFile.message" ) <font color="red"><b></b></font>
                   </p>
@@ -24,7 +24,7 @@ $page.setTitle( $i18n.getString( "project.title.buildDefinition.update" ) )
           <tr>
             <th>$i18n.getString( "buildDefinition.goals.label" )</th>
             <td>
-              <input type="text" name="goals" value="$buildDefinition.goals" size="40"/>
+              <input type="text" name="goals" value="$buildDefinition.goals" size="100"/>
                   <p>
                     $i18n.getString( "buildDefinition.goals.message" ) <font color="red"><b></b></font>
                   </p>
@@ -33,7 +33,7 @@ $page.setTitle( $i18n.getString( "project.title.buildDefinition.update" ) )
           <tr>
             <th>$i18n.getString( "buildDefinition.arguments.label" )</th>
             <td>
-              <input type="text" name="arguments" value="$buildDefinition.arguments" size="40"/>
+              <input type="text" name="arguments" value="$buildDefinition.arguments" size="100"/>
                   <p>
                     $i18n.getString( "buildDefinition.arguments.message" ) <font color="red"><b></b></font>
                   </p>

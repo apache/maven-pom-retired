@@ -10,11 +10,11 @@ $page.setTitle( "Login" )
         <table border="1" cellspacing="2" cellpadding="3" width="250">
           <tr>
             <td>Username :</td>
-            <td><input type="text" name="login.username"></td>
+            <td><input type="text" name="login.username" size="100"></td>
           </tr>
           <tr>
             <td>Password :</td>
-            <td><input type="password" name="login.password"></td>
+            <td><input type="password" name="login.password" size="100"></td>
           </tr>
         </table>
 

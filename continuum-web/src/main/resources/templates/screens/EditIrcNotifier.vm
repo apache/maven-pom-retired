@@ -14,19 +14,19 @@ $page.setTitle( "Continuum - IRC Notifier" )
           <tr>
             <th>IRC Host</th>
             <td>
-              <input type="text" name="host" value="$notifier.configuration.host" size="40"/>
+              <input type="text" name="host" value="$notifier.configuration.host" size="100"/>
             </td>
           </tr>
           <tr>
             <th>IRC Port</th>
             <td>
-              <input type="text" name="port" value="$notifier.configuration.port" size="40"/>
+              <input type="text" name="port" value="$notifier.configuration.port" size="100"/>
             </td>
           </tr>
           <tr>
             <th>IRC Channel</th>
             <td>
-              <input type="text" name="channel" value="$notifier.configuration.channel" size="40"/>
+              <input type="text" name="channel" value="$notifier.configuration.channel" size="100"/>
             </td>
             ##field( $i18n $data $element $item $formtool )
             ##validateField( $fvr $element )

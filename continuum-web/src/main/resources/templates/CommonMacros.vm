@@ -58,20 +58,20 @@
 #if ( $element && $element.attributes && $element.attributes.size > 0 )
 <input type="text" name="$element.id" value="$elementData" size="$element.attributes.size"/>
 #else
-<input type="text" name="$element.id" value="$elementData" size="40"/>
+<input type="text" name="$element.id" value="$elementData" size="100"/>
 #end
 #end
 
 #macro ( textarea $element $elementData )
-<input type="text" name="$element.id" value="$elementData" size="40"/>
+<input type="text" name="$element.id" value="$elementData" size="100"/>
 #end
 
 #macro ( upload $element $elementData )
-<input type="file" name="$element.id" value="$elementData" size="40"/>
+<input type="file" name="$element.id" value="$elementData" size="100"/>
 #end
 
 #macro ( password $element $elementData )
-<input type="password" name="$element.id" value="$elementData" size="40"/>
+<input type="password" name="$element.id" value="$elementData" size="100"/>
 #end
 
 #macro ( radio $element $elementData )

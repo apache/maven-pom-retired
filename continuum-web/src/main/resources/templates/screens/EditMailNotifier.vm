@@ -14,7 +14,7 @@ $page.setTitle( "Continuum - Mail Notifier" )
           <tr>
             <th>Mail Address</th>
             <td>
-              <input type="text" name="address" value="$notifier.configuration.address" size="40"/>
+              <input type="text" name="address" value="$notifier.configuration.address" size="100"/>
             </td>
             ##field( $i18n $data $element $item $formtool )
             ##validateField( $fvr $element )

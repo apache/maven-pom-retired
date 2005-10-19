@@ -14,19 +14,19 @@ $page.setTitle( "Continuum - MSN Notifier" )
           <tr>
             <th>MSN Login</th>
             <td>
-              <input type="text" name="port" value="$notifier.configuration.login" size="40"/>
+              <input type="text" name="port" value="$notifier.configuration.login" size="100"/>
             </td>
           </tr>
           <tr>
             <th>MSN Password</th>
             <td>
-              <input type="password" name="password" value="$notifier.configuration.password" size="40"/>
+              <input type="password" name="password" value="$notifier.configuration.password" size="100"/>
             </td>
           </tr>
           <tr>
             <th>MSN Recipient</th>
             <td>
-              <input type="text" name="address" value="$notifier.configuration.address" size="40"/>
+              <input type="text" name="address" value="$notifier.configuration.address" size="100"/>
             </td>
             ##field( $i18n $data $element $item $formtool )
             ##validateField( $fvr $element )
