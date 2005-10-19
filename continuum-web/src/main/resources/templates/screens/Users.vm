@@ -20,7 +20,7 @@ $page.setTitle( "Continuum - User Management" )
         <th width="10%">&nbsp;</th>
       </tr>
       #foreach ( $user in $items )
-      <tr class="b">
+      <tr class="$css.nextClass">
         <td>$user.username</td>
         <td>$user.fullName</td>
         <td>#if ( $user.email ) $user.email #end</td>

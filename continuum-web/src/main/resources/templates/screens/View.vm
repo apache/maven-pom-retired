@@ -70,7 +70,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         <th width="10%">&nbsp;</th>
       </tr>
       #foreach ( $buildDefinition in $project.buildDefinitions )
-      <tr class="b">
+      <tr class="$css.nextClass">
         <td>$buildDefinition.goals</td>
         <td>$buildDefinition.arguments</td>
         <td>$buildDefinition.buildFile</td>
@@ -127,7 +127,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         <th width="10%">&nbsp;</th>
       </tr>
       #foreach ( $notifier in $project.notifiers )
-        <tr class="b" #if ( !$notifier.isEnabled() ) style="color: silver;" #end>
+        <tr class="$css.nextClass" #if ( !$notifier.isEnabled() ) style="color: silver;" #end>
           #if ( $notifier.type == "irc" )
             <td>IRC</td>
           #elseif ( $notifier.type == "mail" )
@@ -203,7 +203,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         <th>Name</th>
       </tr>
       #foreach ( $dependency in $project.dependencies )
-      <tr class="b">
+      <tr class="$css.nextClass">
         <td>$dependency.groupId:$dependency.artifactId:$dependency.version</td>
       </tr>
       #end
@@ -231,7 +231,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         <!-- th width="10%">&nbsp;</th -->
       </tr>
       #foreach ( $developer in $project.developers )
-      <tr class="b">
+      <tr class="$css.nextClass">
         <td>$developer.name</td>
         <td>$developer.email</td>
         <!-- td>&nbsp;</td -->

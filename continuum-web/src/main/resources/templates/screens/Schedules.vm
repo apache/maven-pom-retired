@@ -20,7 +20,7 @@ $page.setTitle( "Continuum" )
         <th width="10%">&nbsp;</th>
       </tr>
       #foreach ( $schedule in $items )
-        <tr class="b" #if ( !$schedule.active ) style="color: silver;" #end>
+        <tr class="$css.nextClass" #if ( !$schedule.active ) style="color: silver;" #end>
           <td>$schedule.name #if ( !$schedule.active ) (DISABLED) #end</td>
           <td>
             #if ( $schedule.description )

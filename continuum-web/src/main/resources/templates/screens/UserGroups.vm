@@ -31,7 +31,7 @@ $page.setTitle( $i18n.getString( "group.management.label" ) )
         <th width="10%">&nbsp;</th>
       </tr>
       #foreach ( $group in $items )
-      <tr class="b">
+      <tr class="$css.nextClass">
         <td>$group.name</td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "addProject" ) )
