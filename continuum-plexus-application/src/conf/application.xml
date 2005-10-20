@@ -117,6 +117,7 @@
       <configuration>
         <smtp-host>localhost</smtp-host>
         <smtp-port>25</smtp-port>
+        <sslProvider>com.sun.net.ssl.internal.ssl.Provider</sslProvider>
         <!--
         <username>mylogin</username>
         <password>mypassword</password>
