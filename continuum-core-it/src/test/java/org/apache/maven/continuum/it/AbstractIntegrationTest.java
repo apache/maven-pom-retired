@@ -449,7 +449,7 @@ public abstract class AbstractIntegrationTest
     public Project waitForCheckout( int projectId )
         throws Exception
     {
-        long timeout = 60 * 1000;
+        long timeout = 120 * 1000;
 
         long start = System.currentTimeMillis();
 
@@ -492,7 +492,7 @@ public abstract class AbstractIntegrationTest
     public BuildResult waitForBuild( int buildId )
         throws Exception
     {
-        int timeout = 120 * 1000;
+        int timeout = 240 * 1000;
         long start = System.currentTimeMillis();
 
         BuildResult build = getContinuum().getBuildResult( buildId );
