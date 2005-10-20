@@ -142,6 +142,10 @@ public class DefaultContinuumScm
         {
             throw new ContinuumScmException( "Cannot checkout sources.", e );
         }
+        catch ( Exception e )
+        {
+            throw new ContinuumScmException( "Cannot checkout sources.", e );
+        }
     }
 
     /**
@@ -230,6 +234,10 @@ public class DefaultContinuumScm
         catch ( ScmException ex )
         {
             throw new ContinuumScmException( "Error while update sources.", ex );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumScmException( "Cannot checkout sources.", e );
         }
     }
 
