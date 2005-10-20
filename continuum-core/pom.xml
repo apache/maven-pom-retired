@@ -66,6 +66,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-svn</artifactId>
+    </dependency>
+    <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
       <scope>test</scope>

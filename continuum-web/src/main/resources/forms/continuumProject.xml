@@ -53,6 +53,20 @@
       <expression>scmPassword</expression>
     </element>
     <element>
+      <id>projectScmTagBase</id>
+      <validators>
+      </validators>
+      <type>text</type>
+      <expression>scmTagBase</expression>
+    </element>
+    <element>
+      <id>projectScmTag</id>
+      <validators>
+      </validators>
+      <type>text</type>
+      <expression>scmTag</expression>
+    </element>
+    <element>
       <id>project.type</id>
       <validators>
         <validator>

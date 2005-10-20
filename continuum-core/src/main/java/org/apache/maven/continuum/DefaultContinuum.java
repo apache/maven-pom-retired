@@ -1588,9 +1588,50 @@ public class DefaultContinuum
     {
         try
         {
+            boolean removeWorkingDirectory = false;
+
+            Project p = store.getProject( project.getId() );
+
+            if ( StringUtils.isEmpty( p.getScmTagBase() ) && !StringUtils.isEmpty( project.getScmTagBase() ) )
+            {
+                removeWorkingDirectory = true;
+            }
+            else if ( !StringUtils.isEmpty( p.getScmTagBase() ) && StringUtils.isEmpty( project.getScmTagBase() ) )
+            {
+                removeWorkingDirectory = true;
+            }
+            else if ( !StringUtils.isEmpty( p.getScmTagBase() ) && !p.getScmTagBase().equals( project.getScmTagBase() ) )
+            {
+                removeWorkingDirectory = true;
+            }
+
+            if ( StringUtils.isEmpty( p.getScmTag() ) && !StringUtils.isEmpty( project.getScmTag() ) )
+            {
+                removeWorkingDirectory = true;
+            }
+            else if ( !StringUtils.isEmpty( p.getScmTag() ) && StringUtils.isEmpty( project.getScmTag() ) )
+            {
+                removeWorkingDirectory = true;
+            }
+            else if ( !StringUtils.isEmpty( p.getScmTag() ) && !p.getScmTag().equals( project.getScmTag() ) )
+            {
+                removeWorkingDirectory = true;
+            }
+
+            if ( removeWorkingDirectory )
+            {
+                File workingDirectory = getWorkingDirectory( project.getId() );
+
+                FileUtils.deleteDirectory( workingDirectory );
+            }
+
             store.updateProject( project );
         }
         catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Error while updating project.", ex );
+        }
+        catch ( IOException ex )
         {
             throw logAndCreateException( "Error while updating project.", ex );
         }

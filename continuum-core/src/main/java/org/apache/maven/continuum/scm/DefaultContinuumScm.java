@@ -28,6 +28,8 @@ import org.apache.maven.scm.command.checkout.CheckOutScmResult;
 import org.apache.maven.scm.command.update.UpdateScmResult;
 import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
+import org.apache.maven.scm.provider.ScmProviderRepository;
+import org.apache.maven.scm.provider.svn.repository.SvnScmProviderRepository;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.apache.maven.scm.repository.ScmRepositoryException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -63,12 +65,28 @@ public class DefaultContinuumScm
     public ScmResult checkOut( Project project, File workingDirectory )
         throws ContinuumScmException
     {
+        String tag = project.getScmTag();
+
+        String tagMessage = "";
+
+        if ( tag != null )
+        {
+            tagMessage = " with branch/tag " + tag;
+        }
+
         try
         {
             getLogger().info( "Checking out project: '" + project.getName() + "', " + "id: '" + project.getId() + "' " +
-                "to '" + workingDirectory + "'." );
+                "to '" + workingDirectory + "'" + tagMessage + "." );
 
             ScmRepository repository = getScmRepositorty( project );
+
+            ScmProviderRepository providerRepository = repository.getProviderRepository();
+
+            if ( providerRepository instanceof SvnScmProviderRepository && project.getScmTagBase() != null )
+            {
+                ( (SvnScmProviderRepository) providerRepository ).setTagBase( project.getScmTagBase() );
+            }
 
             ScmResult result;
 
@@ -95,8 +113,6 @@ public class DefaultContinuumScm
                     }
                 }
 
-                String tag = null;
-
                 ScmFileSet fileSet = new ScmFileSet( workingDirectory );
 
                 result = convertScmResult(
@@ -106,7 +122,7 @@ public class DefaultContinuumScm
             if ( !result.isSuccess() )
             {
                 getLogger().warn( "Error while checking out the code for project: '" + project.getName() + "', id: '" +
-                    project.getId() + "' to '" + workingDirectory.getAbsolutePath() + "'." );
+                    project.getId() + "' to '" + workingDirectory.getAbsolutePath() + "'" + tagMessage + "." );
 
                 getLogger().warn( "Command output: " + result.getCommandOutput() );
 
@@ -151,9 +167,19 @@ public class DefaultContinuumScm
     public ScmResult updateProject( Project project )
         throws ContinuumScmException
     {
+        String tag = project.getScmTag();
+
+        String tagMessage = "";
+
+        if ( tag != null )
+        {
+            tagMessage = " with branch/tag " + tag;
+        }
+
         try
         {
-            getLogger().info( "Updating project: id: '" + project.getId() + "', name '" + project.getName() + "'." );
+            getLogger().info( "Updating project: id: '" + project.getId() + "', name '" + project.getName() + "'" +
+                tagMessage + "." );
 
             File workingDirectory = workingDirectoryService.getWorkingDirectory( project );
 
@@ -165,7 +191,12 @@ public class DefaultContinuumScm
 
             ScmRepository repository = getScmRepositorty( project );
 
-            String tag = null;
+            ScmProviderRepository providerRepository = repository.getProviderRepository();
+
+            if ( providerRepository instanceof SvnScmProviderRepository && project.getScmTagBase() != null )
+            {
+                ( (SvnScmProviderRepository) providerRepository ).setTagBase( project.getScmTagBase() );
+            }
 
             ScmResult result;
 
@@ -180,7 +211,7 @@ public class DefaultContinuumScm
             if ( !result.isSuccess() )
             {
                 getLogger().warn( "Error while updating the code for project: '" + project.getName() + "', id: '" +
-                    project.getId() + "' to '" + workingDirectory.getAbsolutePath() + "'." );
+                    project.getId() + "' to '" + workingDirectory.getAbsolutePath() + "'" + tagMessage + "." );
 
                 getLogger().warn( "Command output: " + result.getCommandOutput() );
 
