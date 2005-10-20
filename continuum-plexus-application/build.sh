@@ -1,1 +1,1 @@
-m2 -Denv=test clean:clean install
+mvn -Denv=test clean:clean install

@@ -1,3 +1,3 @@
 @echo off
 
-call m2 -Denv=test clean:clean install
+call mvn -Denv=test clean:clean install

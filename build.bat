@@ -29,4 +29,4 @@ goto Win9xApp
 @REM Reaching here means variables are defined and arguments have been captured
 :endInit
 
-call m2 -Denv=test clean:clean install %MAVEN_CMD_LINE_ARGS%
+call mvn -Denv=test clean:clean install %MAVEN_CMD_LINE_ARGS%
