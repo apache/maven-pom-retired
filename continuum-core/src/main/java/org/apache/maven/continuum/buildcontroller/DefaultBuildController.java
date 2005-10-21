@@ -232,6 +232,20 @@ public class DefaultBuildController
         }
         finally
         {
+            try
+            {
+                project = store.getProject( project.getId() );
+
+                if ( ContinuumProjectState.BUILDING == project.getState() )
+                {
+                    project.setState( ContinuumProjectState.ERROR );
+                }
+            }
+            catch ( ContinuumStoreException e )
+            {
+                getLogger().error( "Can't store the project state for project " + project.getName() );
+            }
+
             notifierDispatcher.buildComplete( project, build );
         }
     }

@@ -344,6 +344,10 @@ public class DefaultContinuum
             getLogger().info( "Enqueuing '" + project.getName() + "' (Build definition id=" + buildDefinitionId + "." );
 
             buildQueue.put( new BuildProjectTask( projectId, buildDefinitionId, trigger ) );
+
+            project.setState( ContinuumProjectState.BUILDING );
+
+            store.updateProject( project );
         }
         catch ( ContinuumStoreException e )
         {
