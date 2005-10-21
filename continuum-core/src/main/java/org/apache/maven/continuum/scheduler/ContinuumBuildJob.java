@@ -62,6 +62,11 @@ public class ContinuumBuildJob
             logger.error( "Error building projects for job" + jobName + ".", e );
         }
 
+        if ( schedule.getDelay() > 0 )
+        {
+            Thread.currentThread().sleep( schedule.getDelay() * 1000 );
+        }
+
         /*
 
         Continuum continuum = (Continuum) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.CONTINUUM );
