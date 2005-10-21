@@ -126,6 +126,11 @@ public class MailContinuumNotifier
             InetAddress address = InetAddress.getLocalHost();
 
             buildHost = StringUtils.clean( address.getHostName() );
+
+            if ( buildHost == null )
+            {
+                buildHost = "localhost";
+            }
         }
         catch ( UnknownHostException ex )
         {
