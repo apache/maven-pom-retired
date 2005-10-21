@@ -35,6 +35,15 @@
       <label-key>buildDefinition.arguments.label</label-key>
       <message-key>buildDefinition.arguments.message</message-key>
     </element>
+    <element>
+      <id>defaultForProject</id>
+      <validators>
+      </validators>
+      <type>checkbox</type>
+      <label-key>buildDefinition.default.label</label-key>
+      <message-key>buildDefinition.default.message</message-key>
+      <default-value>false</default-value>
+    </element>
   </elements>
 
   <!-- Add -->

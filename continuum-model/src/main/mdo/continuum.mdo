@@ -548,6 +548,12 @@
           <type>int</type>
         </field>
         <field>
+          <name>defaultForProject</name>
+          <version>1.0.0+</version>
+          <type>boolean</type>
+          <defaultValue>false</defaultValue>
+        </field>
+        <field>
           <name>goals</name>
           <version>1.0.0+</version>
           <type>String</type>

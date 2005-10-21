@@ -259,6 +259,12 @@ public class JdoContinuumStore
         return notifier;
     }
 
+    public BuildDefinition getBuildDefinition( int buildDefinitionId )
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
+    {
+        return (BuildDefinition) getObjectById( BuildDefinition.class, buildDefinitionId );
+    }
+
     public void removeBuildDefinition( BuildDefinition buildDefinition )
         throws ContinuumStoreException
     {

@@ -257,15 +257,6 @@ public class DefaultContinuum
     public void buildProjects( int trigger )
         throws ContinuumException
     {
-        /*
-        for ( Iterator i = getProjects().iterator(); i.hasNext(); )
-        {
-            Project project = (Project) i.next();
-
-            buildProject( project.getId(), trigger );
-        }
-        */
-
         Collection projectsList = null;
 
         try
@@ -316,7 +307,7 @@ public class DefaultContinuum
                 if ( schedule.getId() == buildDef.getSchedule().getId() )
                 {
                     //TODO: Fix trigger name
-                    buildProject( project.getId(), ContinuumProjectState.TRIGGER_UNKNOWN );
+                    buildProject( project.getId(), buildDef.getId(), ContinuumProjectState.TRIGGER_UNKNOWN );
                 }
             }
         }
@@ -325,10 +316,20 @@ public class DefaultContinuum
     public void buildProject( int projectId )
         throws ContinuumException
     {
-        buildProject( projectId, ContinuumProjectState.TRIGGER_FORCED );
+        BuildDefinition buildDef = getDefaultBuildDefinition( projectId );
+
+        buildProject( projectId, buildDef.getId(), ContinuumProjectState.TRIGGER_FORCED );
     }
 
     public void buildProject( int projectId, int trigger )
+        throws ContinuumException
+    {
+        BuildDefinition buildDef = getDefaultBuildDefinition( projectId );
+
+        buildProject( projectId, buildDef.getId(), trigger );
+    }
+
+    public void buildProject( int projectId, int buildDefinitionId, int trigger )
         throws ContinuumException
     {
         if ( isInBuildingQueue( projectId ) )
@@ -340,9 +341,9 @@ public class DefaultContinuum
         {
             Project project = store.getProject( projectId );
 
-            getLogger().info( "Enqueuing '" + project.getName() + "'." );
+            getLogger().info( "Enqueuing '" + project.getName() + "' (Build definition id=" + buildDefinitionId + "." );
 
-            buildQueue.put( new BuildProjectTask( projectId, trigger ) );
+            buildQueue.put( new BuildProjectTask( projectId, buildDefinitionId, trigger ) );
         }
         catch ( ContinuumStoreException e )
         {
@@ -767,12 +768,38 @@ public class DefaultContinuum
     // Build Definition
     // ----------------------------------------------------------------------
 
-    public BuildDefinition getBuildDefinition( int projectId, int buildDefinitionId )
+    public List getBuildDefinitions( int projectId )
         throws ContinuumException
     {
         Project project = getProjectWithAllDetails( projectId );
 
-        List buildDefinitions = project.getBuildDefinitions();
+        return project.getBuildDefinitions();
+    }
+
+    public BuildDefinition getDefaultBuildDefinition( int projectId )
+        throws ContinuumException
+    {
+        List buildDefinitions = getBuildDefinitions( projectId );
+
+        BuildDefinition buildDefinition = null;
+
+        for ( Iterator i = buildDefinitions.iterator(); i.hasNext(); )
+        {
+            buildDefinition = (BuildDefinition) i.next();
+
+            if ( buildDefinition.isDefaultForProject() )
+            {
+                break;
+            }
+        }
+
+        return buildDefinition;
+    }
+
+    public BuildDefinition getBuildDefinition( int projectId, int buildDefinitionId )
+        throws ContinuumException
+    {
+        List buildDefinitions = getBuildDefinitions( projectId );
 
         BuildDefinition buildDefinition = null;
 
@@ -804,6 +831,27 @@ public class DefaultContinuum
 
         buildDefinition.setSchedule( schedule );
 
+        if ( convertBoolean( (String) configuration.get( "defaultForProject" ) ) && !buildDefinition.isDefaultForProject() )
+        {
+            buildDefinition.setDefaultForProject( true );
+            
+            List buildDefinitions = getBuildDefinitions( projectId );
+
+            for ( Iterator i = buildDefinitions.iterator(); i.hasNext(); )
+            {
+                BuildDefinition bd = (BuildDefinition) i.next();
+
+                if ( bd.isDefaultForProject() )
+                {
+                    bd.setDefaultForProject( false );
+
+                    storeBuildDefinition( bd );
+
+                    break;
+                }
+            }
+        }
+
         storeBuildDefinition( buildDefinition );
     }
 
@@ -832,6 +880,27 @@ public class DefaultContinuum
         buildDefinition.setArguments( (String) configuration.get( "arguments" ) );
 
         Schedule schedule = getSchedule( new Integer( (String) configuration.get( "schedule" ) ).intValue() );
+
+        if ( convertBoolean( (String) configuration.get( "defaultForProject" ) ) )
+        {
+            buildDefinition.setDefaultForProject( true );
+            
+            List buildDefinitions = getBuildDefinitions( projectId );
+
+            for ( Iterator i = buildDefinitions.iterator(); i.hasNext(); )
+            {
+                BuildDefinition bd = (BuildDefinition) i.next();
+
+                if ( bd.isDefaultForProject() )
+                {
+                    bd.setDefaultForProject( false );
+
+                    storeBuildDefinition( bd );
+
+                    break;
+                }
+            }
+        }
 
         buildDefinition.setSchedule( schedule );
 

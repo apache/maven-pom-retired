@@ -50,6 +50,6 @@ public class BuildProjectTaskExecutor
     {
         BuildProjectTask buildProjectTask = (BuildProjectTask) task;
 
-        controller.build( buildProjectTask.getProjectId(), buildProjectTask.getTrigger() );
+        controller.build( buildProjectTask.getProjectId(), buildProjectTask.getBuildDefinitionId(), buildProjectTask.getTrigger() );
     }
 }

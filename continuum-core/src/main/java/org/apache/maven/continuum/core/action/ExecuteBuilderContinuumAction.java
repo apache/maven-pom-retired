@@ -103,7 +103,7 @@ public class ExecuteBuilderContinuumAction
         // TODO: select actualy build def
         List buildDefinitions = project.getBuildDefinitions();
 
-        BuildDefinition buildDefinition = (BuildDefinition) buildDefinitions.iterator().next();
+        BuildDefinition buildDefinition = store.getBuildDefinition( getBuildDefinitionId( context ) );
 
         build.setScmResult( scmResult );
 

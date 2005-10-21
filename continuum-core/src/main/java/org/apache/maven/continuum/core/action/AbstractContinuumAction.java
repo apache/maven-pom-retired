@@ -38,6 +38,8 @@ public abstract class AbstractContinuumAction
 
     public static final String KEY_PROJECT_ID = "project-id";
 
+    public static final String KEY_BUILD_DEFINITION_ID = "build-definition-id";
+
     public static final String KEY_UNVALIDATED_PROJECT = "unvalidated-project";
 
     public static final String KEY_PROJECT_GROUP_ID = "project-group-id";
@@ -82,6 +84,11 @@ public abstract class AbstractContinuumAction
     public static int getProjectGroupId( Map context )
     {
         return Integer.valueOf( getString( context, KEY_PROJECT_GROUP_ID ) ).intValue();
+    }
+
+    public static int getBuildDefinitionId( Map context )
+    {
+        return getInteger( context, KEY_BUILD_DEFINITION_ID );
     }
 
     public static String getBuildId( Map context )

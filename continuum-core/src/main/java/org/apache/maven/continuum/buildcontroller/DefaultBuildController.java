@@ -69,7 +69,7 @@ public class DefaultBuildController
     /**
      * @todo structure of this method is a bit of a mess (too much exception/finally code)
      */
-    public void build( int projectId, int trigger )
+    public void build( int projectId, int buildDefinitionId, int trigger )
     {
         long startTime = System.currentTimeMillis();
 
@@ -108,6 +108,8 @@ public class DefaultBuildController
             Map actionContext = new HashMap();
 
             actionContext.put( AbstractContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
+
+            actionContext.put( AbstractContinuumAction.KEY_BUILD_DEFINITION_ID, new Integer( buildDefinitionId ) );
 
             actionContext.put( AbstractContinuumAction.KEY_TRIGGER, new Integer( trigger ) );
 

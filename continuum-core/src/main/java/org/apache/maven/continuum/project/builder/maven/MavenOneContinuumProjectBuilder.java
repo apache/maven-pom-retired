@@ -86,6 +86,8 @@ public class MavenOneContinuumProjectBuilder
 
             BuildDefinition bd = new BuildDefinition();
 
+            bd.setDefaultForProject( true );
+
             bd.setArguments( "" );
 
             bd.setGoals( "clean:clean jar:install" );

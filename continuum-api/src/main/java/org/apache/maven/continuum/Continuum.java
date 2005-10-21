@@ -93,6 +93,9 @@ public interface Continuum
     void buildProject( int projectId, int trigger )
         throws ContinuumException;
 
+    void buildProject( int projectId, int buildDefinitionId, int trigger )
+        throws ContinuumException;
+
     // ----------------------------------------------------------------------
     // Build information
     // ----------------------------------------------------------------------
@@ -153,6 +156,12 @@ public interface Continuum
     // ----------------------------------------------------------------------
     // Build Definition
     // ----------------------------------------------------------------------
+
+    List getBuildDefinitions( int projectId )
+        throws ContinuumException;
+
+    BuildDefinition getDefaultBuildDefinition( int projectId )
+        throws ContinuumException;
 
     BuildDefinition getBuildDefinition( int projectId, int buildDefinitionId )
         throws ContinuumException;

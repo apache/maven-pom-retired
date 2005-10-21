@@ -27,13 +27,17 @@ public class BuildProjectTask
 {
     private int projectId;
 
+    private int buildDefinitionId;
+
     private long timestamp;
 
     private int trigger;
 
-    public BuildProjectTask( int projectId, int trigger )
+    public BuildProjectTask( int projectId, int buildDefinitionId, int trigger )
     {
         this.projectId = projectId;
+
+        this.buildDefinitionId = buildDefinitionId;
 
         this.timestamp = System.currentTimeMillis();
 
@@ -43,6 +47,11 @@ public class BuildProjectTask
     public int getProjectId()
     {
         return projectId;
+    }
+
+    public int getBuildDefinitionId()
+    {
+        return buildDefinitionId;
     }
 
     public long getTimestamp()

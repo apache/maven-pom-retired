@@ -40,6 +40,15 @@ $page.setTitle( $i18n.getString( "project.title.buildDefinition.update" ) )
             </td>
           </tr>
           <tr>
+            <th>$i18n.getString( "buildDefinition.default.label" )</th>
+            <td>
+              <input type="checkbox" name="defaultForProject" #if( $buildDefinition.defaultForProject ) checked="checked" #end/>
+                  <p>
+                    $i18n.getString( "buildDefinition.default.message" ) <font color="red"><b></b></font>
+                  </p>
+            </td>
+          </tr>
+          <tr>
             <th>$i18n.getString( "buildDefinition.schedule.label" )</th>
             <td>
               <select name="schedule">

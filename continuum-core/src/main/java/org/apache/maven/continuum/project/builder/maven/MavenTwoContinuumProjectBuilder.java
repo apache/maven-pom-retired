@@ -128,6 +128,8 @@ public class MavenTwoContinuumProjectBuilder
 
             BuildDefinition bd = new BuildDefinition();
 
+            bd.setDefaultForProject( true );
+
             bd.setArguments( "--batch-mode --non-recursive" );
 
             bd.setGoals( "clean:clean install" );
