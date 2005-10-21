@@ -62,9 +62,15 @@ public class ContinuumBuildJob
             logger.error( "Error building projects for job" + jobName + ".", e );
         }
 
-        if ( schedule.getDelay() > 0 )
+        try
         {
-            Thread.currentThread().sleep( schedule.getDelay() * 1000 );
+            if ( schedule.getDelay() > 0 )
+            {
+                Thread.currentThread().sleep( schedule.getDelay() * 1000 );
+            }
+        }
+        catch( InterruptedException e )
+        {
         }
 
         /*
