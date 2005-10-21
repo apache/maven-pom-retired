@@ -69,7 +69,7 @@ public class MavenTwoBuildExecutor
     {
         // TODO: get from installation
 //        String executable = project.getExecutable();
-        String executable = "m2";
+        String executable = "mvn";
 
         String arguments = StringUtils.clean( buildDefinition.getArguments() ) + " " +
             StringUtils.clean( buildDefinition.getGoals() );
