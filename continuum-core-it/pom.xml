@@ -36,7 +36,7 @@
       <artifactId>continuum-plexus-application</artifactId>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-log4j-logging</artifactId>
     </dependency>
   </dependencies>
