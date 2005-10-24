@@ -25,6 +25,7 @@ import org.codehaus.plexus.summit.rundata.RunData;
 import org.codehaus.plexus.action.AbstractAction;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -163,7 +164,7 @@ public class InitializationChecker
 
             UserGroup guestGroup = store.getUserGroup( ContinuumSecurity.GUEST_GROUP_NAME );
 
-            guestGroup.setPermissions( null );
+            guestGroup.setPermissions( Collections.EMPTY_LIST );
 
             store.updateUserGroup( guestGroup );
         }
