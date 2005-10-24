@@ -211,7 +211,7 @@
       <role-hint>maven2</role-hint>
       <implementation>org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor</implementation>
       <configuration>
-        <default-executable>m2</default-executable>
+        <default-executable>mvn</default-executable>
       </configuration>
       <requirements>
         <requirement>
