@@ -19,6 +19,7 @@ package org.apache.maven.continuum.core.action;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.scm.ContinuumScm;
 import org.apache.maven.continuum.store.ContinuumStore;
 
@@ -42,6 +43,12 @@ public class UpdateWorkingDirectoryFromScmContinuumAction
     {
         Project project = store.getProject( getProjectId( context ) );
 
+        int state = project.getState();
+
+        project.setState( ContinuumProjectState.UPDATING );
+
+        store.updateProject( project );
+
         ScmResult scmResult;
 
         try
@@ -54,6 +61,10 @@ public class UpdateWorkingDirectoryFromScmContinuumAction
         }
         finally
         {
+            project.setState( state );
+
+            store.updateProject( project );
+
             notifier.checkoutComplete( project );
         }
     }

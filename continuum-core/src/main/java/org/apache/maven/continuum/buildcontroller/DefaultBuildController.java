@@ -232,6 +232,32 @@ public class DefaultBuildController
         }
         finally
         {
+            try
+            {
+                project = store.getProject( projectId );
+            }
+            catch ( ContinuumStoreException ex )
+            {
+                getLogger().error( "Internal error while building the project.", ex );
+            }
+
+            if ( project.getState() != ContinuumProjectState.NEW &&
+                 project.getState() != ContinuumProjectState.OK &&
+                 project.getState() != ContinuumProjectState.FAILED &&
+                 project.getState() != ContinuumProjectState.ERROR )
+            {
+                try
+                {
+                    project.setState( ContinuumProjectState.ERROR );
+
+                    store.updateProject( project );
+                }
+                catch ( ContinuumStoreException e )
+                {
+                    getLogger().error( "Internal error while storing the project.", e );
+                }
+            }
+
             notifierDispatcher.buildComplete( project, build );
         }
     }

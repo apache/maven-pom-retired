@@ -80,10 +80,18 @@ public class ExecuteBuilderContinuumAction
         // This is really a precondition for this action to execute
         // ----------------------------------------------------------------------
 
-        if ( scmResult.getChanges().size() == 0 && trigger != ContinuumProjectState.TRIGGER_FORCED &&
+        if ( project.getOldState() != ContinuumProjectState.NEW &&
+             scmResult.getChanges().size() == 0 &&
+             trigger != ContinuumProjectState.TRIGGER_FORCED &&
             !isNew( project ) )
         {
             getLogger().info( "No files updated, not building. Project id '" + project.getId() + "'." );
+
+            project.setState( project.getOldState() );
+
+            project.setOldState( 0 );
+
+            store.updateProject( project );
 
             return;
         }

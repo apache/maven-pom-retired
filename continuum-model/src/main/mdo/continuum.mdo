@@ -144,6 +144,11 @@
           <type>int</type>
           <defaultValue>1</defaultValue>
         </field>
+        <field>
+          <name>oldState</name>
+          <version>1.0.0+</version>
+          <type>int</type>
+        </field>
         <!-- TODO: maybe buildresult itself? -->
         <field>
           <name>latestBuildId</name>
