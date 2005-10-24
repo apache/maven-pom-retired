@@ -92,7 +92,7 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            Collection projects = continuum.getAllProjects( 0, 0 );
+            Collection projects = continuum.getAllProjectsWithAllDetails( 0, 0 );
 
             Vector results = new Vector( projects.size() );
 

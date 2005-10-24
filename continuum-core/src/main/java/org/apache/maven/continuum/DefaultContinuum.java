@@ -1815,6 +1815,11 @@ public class DefaultContinuum
         }
     }
 
+    public List getAllProjectsWithAllDetails( int start, int end )
+    {
+        return store.getAllProjectsWithAllDetails();
+    }
+
     public Project getProjectWithAllDetails( int projectId )
         throws ContinuumException
     {

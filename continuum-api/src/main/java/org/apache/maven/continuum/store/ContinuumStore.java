@@ -126,6 +126,8 @@ public interface ContinuumStore
 
     List getAllProjectGroupsWithBuildDetails();
 
+    List getAllProjectsWithAllDetails();
+
     Project getProjectWithAllDetails( int projectId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException;
 

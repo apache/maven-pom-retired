@@ -55,6 +55,8 @@ public interface Continuum
     Project getProject( int projectId )
         throws ContinuumException;
 
+    List getAllProjectsWithAllDetails( int start, int end );
+
     Collection getAllProjects( int start, int end )
         throws ContinuumException;
 

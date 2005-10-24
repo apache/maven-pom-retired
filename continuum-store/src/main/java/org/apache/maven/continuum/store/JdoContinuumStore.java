@@ -702,6 +702,11 @@ public class JdoContinuumStore
         return getAllObjectsDetached( ProjectGroup.class, "name ascending", PROJECT_BUILD_DETAILS_FETCH_GROUP );
     }
 
+    public List getAllProjectsWithAllDetails()
+    {
+        return getAllObjectsDetached( Project.class, "name ascending", PROJECT_ALL_DETAILS_FETCH_GROUP );
+    }
+
     public Project getProjectWithAllDetails( int projectId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
