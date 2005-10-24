@@ -159,7 +159,9 @@ public class InitializationChecker
         }
         else
         {
-            UserGroup guestGroup = store.getUserGroup( "guest" );
+            configuration.setGuestAccountEnabled( false );
+
+            UserGroup guestGroup = store.getUserGroup( ContinuumSecurity.GUEST_GROUP_NAME );
 
             guestGroup.setPermissions( null );
 
