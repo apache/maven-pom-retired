@@ -4,12 +4,17 @@
  Trygve Laugstøl
  Emmanuel Venisse
  ------
- TUE September 20 2005
+ TUE October 25 2005
 
 Change Log
 
  This page lists the most important and noteworthy changes. For the complete
  list of issues look in JIRA for the respective version.
+
+* Changes from 1.0 Beta 1 to 1.0 Final
+
+  {{{http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10540&styleName=Html&version=12022}The
+  complete change log}}.
 
 * Changes from 1.0 Alpha 4 to 1.0 Beta 1
 
@@ -69,6 +74,10 @@ Change Log
    and recursivley turn each Maven 2 project into a Continuum project. This
    is a very powerful feature as it makes it possible to add all the modules
    a entire project in a single operation.
+
+ * Maven 2 Final
+
+   Continuum use maven 2 final for building m2 projects.
 
  * Security
 
