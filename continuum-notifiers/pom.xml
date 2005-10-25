@@ -2,13 +2,13 @@
   <parent>
     <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0</version>
+    <version>1.0-beta-2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-parent-notifiers</artifactId>
   <packaging>pom</packaging>
   <name>Continuum Notifiers</name>
-  <version>1.0</version>
+  <version>1.0-beta-2-SNAPSHOT</version>
   <modules>
     <module>continuum-notifier-api</module>
     <module>continuum-notifier-irc</module>
@@ -17,13 +17,13 @@
   </modules>
   <dependencies>
     <dependency>
-      <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-api</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-notification</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-api</artifactId>
+      <version>1.0-beta-2-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

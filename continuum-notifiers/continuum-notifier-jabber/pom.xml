@@ -2,17 +2,17 @@
   <parent>
     <artifactId>continuum-parent-notifiers</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0</version>
+    <version>1.0-beta-2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-notifier-jabber</artifactId>
   <name>Continuum Jabber Notifier</name>
-  <version>1.0</version>
+  <version>1.0-beta-2-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-notifier-api</artifactId>
-      <version>1.0</version>
+      <version>1.0-beta-2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
