@@ -22,7 +22,7 @@
         </executions>
         <configuration>
           <descriptor>src/assembly/bin.xml</descriptor>
-          <finalName>continuum-1.0</finalName>
+          <finalName>continuum-1.1-SNAPSHOT</finalName>
         </configuration>
       </plugin>
       <plugin>
@@ -86,7 +86,6 @@
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-xmlrpc</artifactId>
-      <version>1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.derby</groupId>
@@ -142,22 +141,18 @@
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-notifier-jabber</artifactId>
-      <version>1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-notifier-msn</artifactId>
-      <version>1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-web</artifactId>
-      <version>1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-notifier-irc</artifactId>
-      <version>1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
