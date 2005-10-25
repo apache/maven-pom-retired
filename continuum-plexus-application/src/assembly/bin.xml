@@ -60,6 +60,7 @@
       <outputDirectory>bin/linux</outputDirectory>
       <includes>
         <include>run.sh</include>
+        <include>wrapper.conf</include>
       </includes>
       <lineEnding>unix</lineEnding>
       <fileMode>0755</fileMode>
@@ -78,6 +79,7 @@
       <outputDirectory>bin/macosx</outputDirectory>
       <includes>
         <include>run.sh</include>
+        <include>wrapper.conf</include>
       </includes>
       <lineEnding>unix</lineEnding>
       <fileMode>0755</fileMode>
@@ -96,6 +98,7 @@
       <outputDirectory>bin/solaris</outputDirectory>
       <includes>
         <include>run.sh</include>
+        <include>wrapper.conf</include>
       </includes>
       <lineEnding>unix</lineEnding>
       <fileMode>0755</fileMode>
@@ -114,15 +117,19 @@
       <outputDirectory>bin/win32</outputDirectory>
       <includes>
         <include>*.bat</include>
+        <include>wrapper.conf</include>
       </includes>
+      <fileMode>0755</fileMode>
       <lineEnding>dos</lineEnding>
     </fileSet>
     <fileSet>
       <directory>target/plexus-test-runtime/bin/win32</directory>
       <outputDirectory>bin/win32</outputDirectory>
       <includes>
-        <include>wrapper.*</include>
+        <include>wrapper.exe</include>
+        <include>wrapper.dll</include>
       </includes>
+      <fileMode>0755</fileMode>
     </fileSet>
   </fileSets>
 </assembly>
