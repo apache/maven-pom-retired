@@ -4,7 +4,9 @@
       <question>How can I add my maven 1 project with extends?</question>
       <answer>
         <p>
-          [Add parent project]
+          If you want to add a project that extends an other, you must add the parent project.
+          When you add a project with sub-projects, continuum will add all sub-projects, so you
+          need to provide an url instead to upload a pom, and Continuum will can find all sub-projects.
         </p>
       </answer>
     </faq>
@@ -12,7 +14,9 @@
       <question>How can I add my maven 2 project with modules?</question>
       <answer>
         <p>
-          [Add url to project, can't add it with an upload]
+          If your project has modules, you need to provied an url for adding it and not uploading the pom.
+          When you add a project with modules, continuum will add all sub-projects, so you
+          need to provide an url instead to upload a pom, and Continuum will can find all sub-projects.
         </p>
       </answer>
     </faq>
