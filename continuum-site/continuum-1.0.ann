@@ -1,0 +1,26 @@
+The Maven team is pleased to announce the 1.0-alpha-2 release of Continuum.  
+This release offers users both an advance look at what's in Continuum 1.0 and 
+a headstart in helping to shape the final Continuum  release.
+
+Continuum 1.0 features includes:
+
+o Support for Maven 2.x
+o Support for Maven 1.x
+o Support for Ant
+o Support for shell scripts
+o Easy to use web interface
+o An XML-RPC interface for integration, automation and remoting
+o Easy to use command line shell interface using Python and the XML-RPC interface
+o Pluggable project registrars
+o Pluggable project build triggers
+o Pluggable notification schemes
+
+This alpha-2 release focuses on improving the internals and improving the web
+interface. For a complete break down of the changes in this alpha you
+can look here:
+
+http://maven.apache.org/continuum/change-log.html
+
+We plan to release another alpha and 1-2 betas prior to posting the release candidates,
+which will be followed by the final release. We welcome any and all
+feedback and look forward to your comments!
