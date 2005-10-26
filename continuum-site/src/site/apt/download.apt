@@ -56,5 +56,3 @@ System Requirements
   [[1]] Extract the distribution archive to the directory you wish to install Continuum 1.0. These instructions
         assume you chose <<</usr/local/continuum-1.0>>>. The directory <<<continuum-1.0>>> will be created from
         the archive.
-[EOB]
-
