@@ -1,0 +1,28 @@
+<faqs title="Continuum Faqs">
+  <part id="faqs">
+    <faq id="How-can-I-add-my-maven-1-project-with-extends">
+      <question>How can I add my maven 1 project with extends?</question>
+      <answer>
+        <p>
+          [Add parent project]
+        </p>
+      </answer>
+    </faq>
+    <faq id="How-can-I-add-my-maven-2-project-with-modules">
+      <question>How can I add my maven 2 project with modules?</question>
+      <answer>
+        <p>
+          [Add url to project, can't add it with an upload]
+        </p>
+      </answer>
+    </faq>
+    <faq id="how-does-continuum-detect-a-successful-build">
+      <question>How does Continuum detect a successful build?</question>
+      <answer>
+        <p>
+          Continuum use the command line return code for detecting a successful or failed execution.
+        </p>
+      </answer>
+    </faq>
+  </part>
+</faqs>
