@@ -46,23 +46,6 @@
 
       </answer>
     </faq>
-    <faq id="features">
-      <question>What are the features of Continuum?</question>
-      <answer>
-        <p>
-          Continuum has the following major features:
-        </p>
-        <ul>
-          <li>A easy to use web interface</li>
-          <li>A very easy way to add new projects, see the
-            <a href="getting-started.html#Adding_projects">adding projects</a> section page for
-              more information
-          </li>
-          <li>A XML-RPC interface for automation and remoting</li>
-          <li>Mail notification</li>
-        </ul>
-      </answer>
-    </faq>
     <faq id="get-help">
       <question>Where do I get help with Continuum?</question>
       <answer>

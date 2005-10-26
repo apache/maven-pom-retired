@@ -14,26 +14,32 @@
       <item name="Apache" href="http://www.apache.org/"/>
       <item name="Maven 1.x" href="http://maven.apache.org/maven-1.x"/>
       <item name="Maven 2.x" href="http://maven.apache.org/"/>
-      <item name="Continuum" href="http://maven.apache.org/continuum"/>      
+      <item name="Continuum" href="http://maven.apache.org/continuum"/>
       <item name="Maven SCM" href="http://maven.apache.org/scm"/>
       <item name="Maven Wagon" href="http://maven.apache.org/wagon"/>
     </links>
+
     <menu name="Quick Links">
       <item name="Features" href="continuum-features.html"/>
       <item name="Download" href="download.html"/>
+      <item name="Installation Instructions" href="download.html#installation"/>
       <item name="Getting Started" href="getting-started.html"/>
       <item name="General Information" href="about.html"/>
       <item name="Planned Features" href="planned-features.html"/>
     </menu>
+
     <menu name="User's Guide">
       <item name="Configuration" href="configuration.html"/>
       <item name="SOAP API" href="soap-api.html"/>
       <item name="Linux Boot Configuration " href="linux-boot.html"/>
     </menu>
+
     <menu name="Developer's Guide">
       <item name="Building" href="dev/building.html"/>
       <item name="Change Log" href="change-log.html"/>
     </menu>
+
     ${reports}
+
   </body>
 </project>
