@@ -6,7 +6,7 @@
   </bannerLeft>
   <bannerRight>
     <name>Apache Maven Continuum</name>
-    <src>images/continuum_logo_75.gif</src>
+    <src>images/continuum_logo.jpg</src>
     <href>http://maven.apache.org/continuum</href>
   </bannerRight>
   <body>
