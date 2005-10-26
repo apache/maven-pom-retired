@@ -39,7 +39,7 @@ System Requirements
 | Operating System | No minimum requirement. Tested on Windows XP, Debian, Fedora Core and Mac OS X                                                 |
 *------------------*--------------------------------------------------------------------------------------------------------------------------------*
 
- After downloading Continuum see the {{{getting-started.html}Getting Started}}
+ After downloading Continuum see the {{{guides/getting-started/index.html}Getting Started}}
  document for instructions on how to install and start Continuum.
 
 * {Installation} Instructions
