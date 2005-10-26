@@ -1,12 +1,12 @@
 <faqs title="Continuum Faqs">
   <part id="faqs">
     <faq id="How-can-I-add-my-maven-1-project-with-extends">
-      <question>How can I add my maven 1 project with extends?</question>
+      <question>How can I add my maven 1 project which uses extends?</question>
       <answer>
         <p>
           If you want to add a project that extends an other, you must add the parent project.
-          When you add a project with sub-projects, continuum will add all sub-projects, so you
-          need to provide an url instead to upload a pom, and Continuum will can find all sub-projects.
+          When you add a project with sub-projects, Continuum will add all sub-projects, so you
+          need to provide an URL instead to uploading a POM so that Continuum can find all sub-projects.
         </p>
       </answer>
     </faq>
@@ -14,9 +14,9 @@
       <question>How can I add my maven 2 project with modules?</question>
       <answer>
         <p>
-          If your project has modules, you need to provied an url for adding it and not uploading the pom.
-          When you add a project with modules, continuum will add all sub-projects, so you
-          need to provide an url instead to upload a pom, and Continuum will can find all sub-projects.
+          If your project has modules, you need to provide an URL instead of uploading a POM.
+          When you add a project with modules, Continuum will add all sub-projects, and this
+          only works by submitting an URL.
         </p>
       </answer>
     </faq>
@@ -24,7 +24,7 @@
       <question>How does Continuum detect a successful build?</question>
       <answer>
         <p>
-          Continuum use the command line return code for detecting a successful or failed execution.
+          Continuum uses the command line return code for detecting a successful or failed execution.
         </p>
       </answer>
     </faq>
