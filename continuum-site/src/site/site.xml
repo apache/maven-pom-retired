@@ -15,20 +15,17 @@
       <item name="Maven SCM" href="http://maven.apache.org/scm"/>
       <item name="Apache" href="http://www.apache.org"/>
     </links>
-    <menu name="Continuum">
-      <item name="Introduction" href="index.html"/>
+    <menu name="Quick Links">
+      <item name="Features" href="continuum-features.html"/>
       <item name="Download" href="download.html"/>
+      <item name="Getting Started" href="getting-started.html"/>
       <item name="General Information" href="about.html"/>
       <item name="Planned Features" href="planned-features.html"/>
     </menu>
     <menu name="User's Guide">
-      <item name="Getting Started" href="getting-started.html"/>
       <item name="Configuration" href="configuration.html"/>
       <item name="SOAP API" href="soap-api.html"/>
       <item name="Linux Boot Configuration " href="linux-boot.html"/>
-      <!--
-      <item name="CruiseControl Support" href="cc-support.html"/>
-      -->
     </menu>
     <menu name="Developer's Guide">
       <item name="Building" href="dev/building.html"/>
