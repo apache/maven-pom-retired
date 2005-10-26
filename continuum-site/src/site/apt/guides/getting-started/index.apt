@@ -10,9 +10,14 @@ Installing Continuum
  After you have downloaded and unpacked the bundle execute :
  
  * <<<bin/linux/run.sh>>> if you are on a UNIX platform
+ 
  * <<<bin/solaris/run.sh>>> if you are on a Solaris platform
+ 
  * <<<bin/win32/run.bat>>> if you are using Windows
+ 
  * <<<bin/macosx/run.sh>>> if you are using MacOS X.
+ 
+ * <<<bin/plexus.sh>>> for others
 
  When Continuum is running you can access it with your browser on
  {{http://localhost:8080/continuum/}} or by using the XMLRPC interface on port 8000.
