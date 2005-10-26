@@ -15,7 +15,12 @@
       <url>scpexe://minotaur.apache.org//www/maven.apache.org/continuum/</url>
     </site>
   </distributionManagement>
-   <build>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/</connection>
+    <developerConnection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/trunk/</url>
+  </scm>
+  <build>
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
