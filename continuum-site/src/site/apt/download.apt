@@ -44,6 +44,8 @@ System Requirements
 
 * {Installation} Instructions
 
+ The installation of Continuum consists solely of unpacking the archive in the desired directory. It's that simple!
+
 ** Windows 2000/XP
 
   [[1]] Unzip <<<continuum-1.0-bin.zip>>> to the directory you wish to install Continuum 1.0. These instructions
