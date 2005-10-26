@@ -12,7 +12,7 @@
   </issueManagement>
   <ciManagement>
     <system>continuum</system>
-    <url>http://maven.zones.apache.org/continuum/</url>
+    <url>http://maven.zones.apache.org:8080/continuum</url>
     <notifiers>
       <notifier>
         <configuration>
