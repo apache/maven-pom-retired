@@ -1,5 +1,7 @@
-The Maven team is pleased to announce the 1.0 of Continuum. We have
-progressively improved Continuum over five previous releases and now provides
+The Maven team is pleased to announce the 1.0 of Continuum. Continuum is a
+continous integration server.
+
+We have progressively improved Continuum over five previous releases and now provides
 the following features:
 
  * Support for Maven 2.x
