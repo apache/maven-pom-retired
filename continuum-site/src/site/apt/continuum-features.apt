@@ -1,0 +1,42 @@
+ ------
+ Continuum Feature
+ ------
+ Jason van Zyl
+ ------
+ 25 October 2005
+ -----
+
+Continuum Features
+
+ * Tight integration with Maven 2.x
+
+ * Tight integration with {{{http://maven.apache.org/scm}Maven SCM}}
+   
+   * Subversion
+   
+   * CVS
+   
+   * Starteam
+
+ * Easy to use web-based setup and interface
+
+ * {{{http://www.opensymphony.com/quartz}Quartz}}-based scheduling
+
+ * An easy way to add new projects, see the adding projects section page for more information
+ 
+ * An XML-RPC and SOAP interface for automation and remoting
+ 
+ * Mail notification
+ 
+ * IM notification
+ 
+   * IRC
+   
+   * Jabber
+   
+   * Yahoo!
+   
+   * MSN
+ 
+ * Blame Mechanism
+        
