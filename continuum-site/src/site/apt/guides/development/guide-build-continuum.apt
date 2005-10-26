@@ -30,13 +30,18 @@ Building Continuum
  may require you to build it.  You can find out how
  {{{http://maven.apache.org/maven2/developers/building.html}here}}.
 
- Continuum consists of 6 Maven 2 projects:
+ Continuum consists of 8 Maven 2 projects:
 
  [continuum-model] is the object model that continuum uses.
+
+ [continuum-api] is Continuum's APIs. It contains all Continuum interfaces.
 
  [continuum-core] is Continuum's core. It contains all the code for checking
                   out and building the projects. It also contains the mail
                   notifier and socket listeners.
+
+ [continuum-store] is Continuum database interaction. It contains all code
+                   for reading/storing Continuum datas in database.
 
  [continuum-web] is the web interface for Continuum. It contains the form
                  definitions used in the web application and
@@ -75,7 +80,7 @@ continuum$ sh build.sh
   
 +--+
 $ cd continuum-plexus-application
-$ m2 assembly:assembly
+$ m2 -Denv=production assembly:assembly
 $ ls -l target/continuum*
 -rw-r--r--  1 foo bar 13298032 Sep  9 14:38 target/continuum-[VERSION]-bin.tar.bz2
 -rw-r--r--  1 foo bar 13202991 Sep  9 14:38 target/continuum-[VERSION]-bin.tar.gz
