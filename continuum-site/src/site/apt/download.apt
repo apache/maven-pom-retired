@@ -1,7 +1,7 @@
  ------
  Download
  ------
- Trygve Laugstøl
+ Trygve Laugstï¿½l
  Emmanuel Venisse
  ------
  TUE October 25 2005
@@ -41,3 +41,18 @@ System Requirements
 
  After downloading Continuum see the {{{getting-started.html}Getting Started}}
  document for instructions on how to install and start Continuum.
+
+* {Installation} Instructions
+
+** Windows 2000/XP
+
+  [[1]] Unzip <<<continuum-1.0-bin.zip>>> to the directory you wish to install Continuum 1.0. These instructions
+        assume you chose <<<C:\Program Files\Apache Software Foundation\continuum-1.0>>>
+
+** Unix-based Operating Systems (Linux, Solaris and Mac OS X)
+
+  [[1]] Extract the distribution archive to the directory you wish to install Continuum 1.0. These instructions
+        assume you chose <<</usr/local/continuum-1.0>>>. The directory <<<continuum-1.0>>> will be created from
+        the archive.
+[EOB]
+
