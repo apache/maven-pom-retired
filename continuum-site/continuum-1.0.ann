@@ -1,5 +1,5 @@
 The Maven team is pleased to announce the 1.0 of Continuum. We have
-progressively improved Continuum over five previous releases and now provide
+progressively improved Continuum over five previous releases and now provides
 the following features:
 
  * Support for Maven 2.x
@@ -20,14 +20,10 @@ the following features:
 
  * Easy to use web-based setup and  interface
  
- * An XML-RPC and SOAP interface for integration, automation and remoting
- 
- * Easy to use command line shell interface using Python and the XML-RPC interface
+ * XML-RPC and SOAP interfaces for integration, automation and remoting
  
  * Mail Notification
  
- * Blame Mechanism 
-
  * IM notification
 
    * IRC
@@ -37,7 +33,18 @@ the following features:
    * Yahoo!
                 
    * MSN
-   
+
+ * Blame Mechanism 
+
 For a complete list of changes please refer to the complete changelog:
 
 http://maven.apache.org/continuum/change-log.html
+
+To get started with Continuum take a look at the download and install 
+instructions:
+
+http://maven.apache.org/continuum/download.html
+
+And then take a look at our getting started guide:
+
+http://maven.apache.org/continuum/guides/getting-started/index.html
