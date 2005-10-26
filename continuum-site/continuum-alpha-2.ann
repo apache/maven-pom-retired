@@ -1,6 +1,6 @@
-The Maven team is pleased to announce the 1.0 of Continuum.  
-
-Continuum 1.0 features includes:
+The Maven team is pleased to announce the 1.0 of Continuum. We have
+progressively improved Continuum over five previous releases and now provide
+the following features:
 
  * Support for Maven 2.x
  
@@ -38,6 +38,6 @@ Continuum 1.0 features includes:
                 
    * MSN
    
-For a complete list of changes please refer to:
+For a complete list of changes please refer to the complete changelog:
 
 http://maven.apache.org/continuum/change-log.html
