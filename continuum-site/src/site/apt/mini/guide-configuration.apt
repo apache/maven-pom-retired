@@ -1,0 +1,129 @@
+ ------
+ Guide to Configuring Continuum
+ ------
+ Trygve Laugstøl
+ ------
+ Fri May 20 2005
+ ------
+
+Configuring Continuum
+
+ The configuration file for Continuum is inside the Plexus runtime under
+ <<<apps/continuum/conf/application.xml>>>. <NOTE>: You have to start and stop
+ the application at least once before configuring Continuum. This is required
+ because the application container has to unpack the application.
+
+* Mail Notification
+
+ There are three components used by the mail notification system in Continuum:
+
+ * The Mail notifier itself. There are three configurable properties:
+
+  * <<<from-mailbox>>> and <<<from-name>>>: The mailbox and name that will be
+    set as the <<<From>>> header for all mails sent. It is important to ensure
+    that the mailbox is a real account as most SMTP servers will verify that
+    the mailbox actually exists before accepting the mail. If the from mailbox
+    is empty or not specified the nag email address for the project will be
+    used.
+
+  * <<<timestamp-format>>>: This is the timestamp format used for the dates in
+    email messages.
+
+ * The recipient source. This is the component that decides who should receive
+   the email. The only thing that can be configured here is a address that will
+   be used as the recipient for all email sent. This configuration is mostly
+   useful for people who want to make sure all email is sent to a specific
+   account during testing or development.
+
+ * The mail sender is the component that will send the email to the SMTP
+   server. The two properties that can be configured are:
+
+  * <<<smtp-host>>>: The SMTP host. Make sure that this host will accept email.
+
+  * <<<smtp-port>>>: The port to use on the SMTP host.
+
+* Alarm Trigger
+
+ The alarm trigger will trigger a build of all the projects on a timed
+ interval.
+
+ * <<<interval>>>: The number of seconds between each round of scheduling.
+
+ * <<<delay>>>: The number of seconds to wait before starting the first round
+   of scheduling post startup.
+
+* Jetty Configuration
+
+ Jetty is configured in a special way as it's a service, not a component. You
+ can configure a set of listeners for the ports that Jetty should listen on.
+
+ There are two types of listeners:
+
+ * <<<http-listener>>>: This is a normal HTTP listener and must have
+   <<<<port>>>> and optionaly <<<<host>>>> configured. The host is name or IP
+   of the interface the Jetty instance will listen on. If not configured Jetty
+   will listen on all interfaces.
+
+ * <<<proxy-http-listener>>>: This is a special HTTP listener used when having
+   another web server as a front end to Continuum. It can be configured like
+   the normal HTTP listener by using <<<<port>>>> and <<<<host>>>> but has also
+   two other arguments:
+
+   * <<<proxy-host>>>: Set this to the host name of the public web server.
+
+   * <<<proxy-port>>>: Set this to the port number of the public web server.
+
+** Example Jetty Configuration
+
+ This is a example configuration on how to configure Jetty with one normal HTTP
+ listener and one proxy HTTP listener. With this configuration Jetty will
+ listen on two ports; 8080 and 8090. Continuum can be used from either
+ http://localhost:8080 or http://www.company.com/continuum. Note that the
+ proxying listener will make Continuum write out URLs with the configured proxy
+ host and port.
+
++----+
+<service>
+  <id>jetty</id>
+  <configuration>
+    <webapps>
+      <webapp>
+        <file>${plexus.home}/lib/continuum-web-1.0-alpha-3-SNAPSHOT.jar</file>
+        <context>/continuum</context>
+        <extraction-path>${plexus.home}/webapp</extraction-path>
+        <listeners>
+          <http-listener>
+            <port>8080</port>
+          </http-listener>
+          <proxy-http-listener>
+            <port>8090</port>
+            <proxy-host>www.company.com</proxy-host>
+            <proxy-port>80</proxy-port>
+          </proxy-http-listener>
+        </listeners>
+      </webapp>
+    </webapps>
+  </configuration>
+</service>
++----+
+
+** Example Apache Configuration
+ 
+ This is a example configuration on how to configure Apache to work as a front
+ end to Continuum. Make sure <<<mod_proxy>>> is installed and loaded and that
+ Jetty is configured with a proxy HTTP listener on the proxy port.
+
++----+
+ProxyPass /continuum http://localhost:8090/continuum/
+ProxyPassReverse /continuum http://localhost:8090/continuum/
++----+
+
+* Socket Listeners
+
+ There are two services listening on sockets that can be configured:
+
+ * <<<url-registrar-server>>>: This registrar will read POM URLs for the Maven
+   1.x and 2.x project builders.
+
+ * <<<simple-socket-trigger-server>>>: This registrar will read project IDs off
+   the wire and schedule a build for that project.
