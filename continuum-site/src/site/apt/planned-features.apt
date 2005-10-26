@@ -15,10 +15,6 @@ Planned Features for Continuum
 
  Support for notification through these mechanisms is planned:
 
- * {{{http://jira.codehaus.org/browse/CONTINUUM-5}Jabber}}
-
- * {{{http://jira.codehaus.org/browse/CONTINUUM-215}MSN}}
-
  * {{{http://jira.codehaus.org/browse/CONTINUUM-187}Yahoo}}
 
 * SCM Support
@@ -30,8 +26,6 @@ Planned Features for Continuum
  * ClearCase
 
  * Perforce
-
- * StarTeam
 
  * Visual Source Safe
 
@@ -48,19 +42,3 @@ Planned Features for Continuum
         has changed. This is useful for several reasons: builds occur only
         when necessary and you don't have to change the way your SCM is
         setup.
-
-Completed Features
-
-* Notification
-
- Support for notification through these mechanisms is completed:
-
- * {{{http://jira.codehaus.org/browse/CONTINUUM-33}IRC}}
-
-* Asynchronous checkouts
-
- Currently all checkouts are done while the user presses the "add project"
- button which can take up to several minutes to complete. Continuum need to do
- this in the background and show that the prjoect currently are beeing checked
- out in the overview pages. For status updates on this issues take a look at
- the {{{http://jira.codehaus.org/browse/CONTINUUM-60}JIRA issue}}.
