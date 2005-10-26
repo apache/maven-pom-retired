@@ -19,7 +19,7 @@ Configuring Continuum to start automatically on Linux 2
 
 * Prerequisites
 
- * Download continuum from {{{download.html}here}}.
+ * Download continuum from {{{../../download.html}here}}.
  
  * extract the archive in <<</usr/local>>>
 
@@ -30,7 +30,7 @@ Configuring Continuum to start automatically on Linux 2
  All you need to do, as root, is:
 
 +--+
-ln -s /usr/local/continuum-1.0-beta-1/bin/linux/run.sh /etc/init.d/continuum
+ln -s /usr/local/continuum-[VERSION]/bin/linux/run.sh /etc/init.d/continuum
 +--+
 
  At this point you have continuum ready to be symlinked from different runlevels. This might 
