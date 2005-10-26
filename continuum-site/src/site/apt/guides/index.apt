@@ -1,0 +1,30 @@
+ ------ 
+ Summary of Continuum 1.x documentation 
+ ------ 
+ Jason van Zyl 
+ ------ 
+ 12 October 2005 
+ ------ 
+
+Documentation
+
+* Getting Started Guide
+
+ * {{{getting-started/index.html}Getting Started Guide}}
+
+* Mini Guides
+
+ * {{{mini/guide-configuration.html}Guide to Configuring Continuum}}
+
+ * {{{mini/guide-linux-boot.html}Guide to Configuring Continuum to start automatically on Linux}}
+
+ * {{{mini/guide-soap-api.html}Guide to using the SOAP API}}
+
+
+* Introductory Material
+
+
+* Development Guides
+
+ * {{{development/guide-build-continuum.html}Guide to Building Continuum}}
+

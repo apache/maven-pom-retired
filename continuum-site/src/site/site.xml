@@ -27,16 +27,6 @@
       <item name="Documentation" href="/guides/index.html"/>
       <item name="General Information" href="about.html"/>
       <item name="Planned Features" href="planned-features.html"/>
-    </menu>
-
-    <menu name="User's Guide">
-      <item name="Configuration" href="configuration.html"/>
-      <item name="SOAP API" href="soap-api.html"/>
-      <item name="Linux Boot Configuration " href="linux-boot.html"/>
-    </menu>
-
-    <menu name="Developer's Guide">
-      <item name="Building" href="dev/building.html"/>
       <item name="Change Log" href="change-log.html"/>
     </menu>
 
