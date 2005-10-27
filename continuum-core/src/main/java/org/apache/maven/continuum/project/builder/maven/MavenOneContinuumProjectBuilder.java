@@ -122,7 +122,7 @@ public class MavenOneContinuumProjectBuilder
 
         if ( StringUtils.isEmpty( project.getGroupId() ) )
         {
-            return null;
+            result.addWarning( "groupId is null." );
         }
 
         projectGroup.setGroupId( project.getGroupId() );

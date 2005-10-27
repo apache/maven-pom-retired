@@ -213,6 +213,8 @@ public class MavenTwoContinuumProjectBuilder
 
         if ( StringUtils.isEmpty( mavenProject.getGroupId() ) )
         {
+            result.addWarning( "groupId is null." );
+
             return null;
         }
 
