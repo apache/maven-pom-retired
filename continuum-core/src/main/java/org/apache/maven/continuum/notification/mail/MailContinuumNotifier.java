@@ -244,6 +244,8 @@ public class MailContinuumNotifier
                 // Data objects
                 // ----------------------------------------------------------------------
 
+                context.put( "reportUrl", getReportUrl( project, build, configurationService ) );
+
                 context.put( "project", project );
 
                 context.put( "build", build );

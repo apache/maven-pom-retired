@@ -14,6 +14,7 @@
  * limitations under the License.
  *#
 #macro( shellBuildResult )
+Online report : $reportUrl
 Build statistics:
   State: $formatter.formatProjectState( $build.state )
 #if ( $previousBuild )
