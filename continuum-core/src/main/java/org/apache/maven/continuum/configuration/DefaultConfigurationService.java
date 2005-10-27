@@ -164,7 +164,14 @@ public class DefaultConfigurationService
 
         try
         {
-            return FileUtils.fileRead( file.getAbsolutePath() );
+            if ( file.exists() )
+            {
+                return FileUtils.fileRead( file.getAbsolutePath() );
+            }
+            else
+            {
+                return "There are no output for this build.";
+            }
         }
         catch ( IOException e )
         {
