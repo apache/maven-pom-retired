@@ -96,6 +96,8 @@ public class DefaultMavenBuilderHelper
 
         continuumProject.setScmUrl( getScmUrl( mavenProject ) );
 
+        continuumProject.setScmTag( mavenProject.getScm().getTag() );
+
         continuumProject.setVersion( getVersion( mavenProject ) );
 
         // ----------------------------------------------------------------------
