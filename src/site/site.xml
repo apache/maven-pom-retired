@@ -6,8 +6,9 @@
     <href>http://maven.apache.org/jxr</href>
   </bannerLeft>
   <bannerRight>
-    <src>http://maven.apache.org/maven2/images/maven-logo-2.gif</src>
+    <src>http://maven.apache.org/maven2/images/maven-logo-2.gif</src>  
   </bannerRight>
+  <body>
     <links>
       <item name="Apache" href="http://www.apache.org/"/>
       <item name="Maven 1.x" href="http://maven.apache.org/maven-1.x"/>
@@ -16,12 +17,6 @@
       <item name="Maven SCM" href="http://maven.apache.org/scm"/>
       <item name="Maven Wagon" href="http://maven.apache.org/wagon"/>
     </links>
-    <!--
-    <menu name="Quick Links">
-      <item name="Features" href="/maven-features.html"/>
-      <item name="Download" href="/download.html"/>
-    </menu>
-    -->
     ${reports}
   </body>
 </project>
