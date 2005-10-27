@@ -551,8 +551,14 @@ public class DefaultContinuum
         ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context.get(
             CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
 
-        getLogger().info( "Created " + result.getProjects().size() + " projects." );
-        getLogger().info( "Created " + result.getProjectGroups().size() + " project groups." );
+        if ( result.getProjects() != null )
+        {
+            getLogger().info( "Created " + result.getProjects().size() + " projects." );
+        }
+        if ( result.getProjectGroups() != null )
+        {
+            getLogger().info( "Created " + result.getProjectGroups().size() + " project groups." );
+        }
         getLogger().info( result.getWarnings().size() + " warnings." );
 
         // ----------------------------------------------------------------------
