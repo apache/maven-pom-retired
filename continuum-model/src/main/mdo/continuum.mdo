@@ -34,7 +34,7 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field stash.maxSize="8192">
           <name>description</name>
           <version>1.0.0+</version>
           <type>String</type>
