@@ -176,6 +176,7 @@
         <from-password/>
         <host/>
         <port/>
+        <sslConnection>true</sslConnection>
       </configuration -->
     </component>
 

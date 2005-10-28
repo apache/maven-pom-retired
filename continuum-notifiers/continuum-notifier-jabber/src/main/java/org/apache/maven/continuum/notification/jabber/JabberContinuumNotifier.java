@@ -77,6 +77,11 @@ public class JabberContinuumNotifier
      */
     private String port;
 
+    /**
+     * @plexus.configuration
+     */
+    private boolean sslConnection;
+
     // ----------------------------------------------------------------------
     // Notifier Implementation
     // ----------------------------------------------------------------------
@@ -166,6 +171,8 @@ public class JabberContinuumNotifier
         jabberClient.setUser( getUsername( configuration ) );
 
         jabberClient.setPassword( getPassword( configuration ) );
+
+        jabberClient.setSslConnection( true );
 
         try
         {
