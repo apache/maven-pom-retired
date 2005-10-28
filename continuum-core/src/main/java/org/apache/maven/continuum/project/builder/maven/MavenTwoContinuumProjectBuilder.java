@@ -114,7 +114,7 @@ public class MavenTwoContinuumProjectBuilder
 
         if ( groupPom )
         {
-            ProjectGroup projectGroup = buildProjectGroup( mavenProject );
+            ProjectGroup projectGroup = buildProjectGroup( mavenProject, result );
 
             if ( projectGroup != null )
             {
@@ -203,7 +203,7 @@ public class MavenTwoContinuumProjectBuilder
         }
     }
 
-    private ProjectGroup buildProjectGroup( MavenProject mavenProject )
+    private ProjectGroup buildProjectGroup( MavenProject mavenProject, ContinuumProjectBuildingResult result )
     {
         ProjectGroup projectGroup = new ProjectGroup();
 
