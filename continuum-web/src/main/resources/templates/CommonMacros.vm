@@ -79,7 +79,7 @@
 #end
 
 #macro ( checkbox $element $elementData )
-<input type="checkbox" name="$element.id" #if( $elementData == "true" )checked#end/>
+<input type="checkbox" name="$element.id" #if( $elementData == "true" ) checked=checked #end/>
 #end
 
 #macro ( pulldown $element $elementData )
