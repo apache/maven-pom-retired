@@ -124,6 +124,13 @@ public class MavenTwoContinuumProjectBuilder
 
         if ( !excludedPackagingTypes.contains( mavenProject.getPackaging() ) )
         {
+            String defaultGoal = "clean:clean install";
+
+            if (mavenProject.getBuild() != null && mavenProject.getBuild().getDefaultGoal() != null )
+            {
+                defaultGoal = mavenProject.getBuild().getDefaultGoal();
+            }
+
             Project continuumProject = new Project();
 
             BuildDefinition bd = new BuildDefinition();
@@ -132,7 +139,7 @@ public class MavenTwoContinuumProjectBuilder
 
             bd.setArguments( "--batch-mode --non-recursive" );
 
-            bd.setGoals( "clean:clean install" );
+            bd.setGoals( defaultGoal );
 
             bd.setBuildFile( "pom.xml" );
 
