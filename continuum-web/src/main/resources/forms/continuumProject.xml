@@ -49,7 +49,7 @@
       <id>projectScmPassword</id>
       <validators>
       </validators>
-      <type>text</type>
+      <type>password</type>
       <expression>scmPassword</expression>
     </element>
     <element>
