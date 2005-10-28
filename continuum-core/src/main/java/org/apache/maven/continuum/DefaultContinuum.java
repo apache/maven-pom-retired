@@ -1706,6 +1706,11 @@ public class DefaultContinuum
                 FileUtils.deleteDirectory( workingDirectory );
             }
 
+            if ( StringUtils.isEmpty( project.getScmTag() ) )
+            {
+                project.setScmTag( null );
+            }
+
             store.updateProject( project );
         }
         catch ( ContinuumStoreException ex )
