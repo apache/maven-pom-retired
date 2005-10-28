@@ -84,7 +84,14 @@ public class DefaultConfigurationService
 
     public String getUrl()
     {
-        return systemConf.getBaseUrl();
+        if ( systemConf.getBaseUrl() != null )
+        {
+            return systemConf.getBaseUrl();
+        }
+        else
+        {
+            return "";
+        }
     }
 
     public void setUrl( String url )
