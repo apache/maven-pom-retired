@@ -39,7 +39,7 @@ DEPLOY_SITE=http://maven.zones.apache.org/~continuum/builds
 DIST=continuum-${TIMESTAMP}.tar.gz
 SVN=svn
 
-M2_HOME=$HOME_DIR/m2
+M2_HOME=$HOME_DIR/maven-2.0
 export M2_HOME
 PATH=$PATH:$JAVA_HOME/bin:$M2_HOME/bin
 export PATH
@@ -50,13 +50,6 @@ MESSAGE=${MESSAGE_DIR}/${MESSAGE_NAME}
 
 mkdir -p $DEPLOY_DIR
 mkdir -p $MESSAGE_DIR
-
-# ----------------------------------------------------------------------------------
-# Prepapre environment
-# ----------------------------------------------------------------------------------
-rm -rf $M2_HOME
-
-cp -r /export/home/maven/m2 $M2_HOME
 
 # ----------------------------------------------------------------------------------
 
@@ -83,8 +76,6 @@ fi
     mkdir $DIR
 
     rm -rf $REPO > /dev/null 2>&1
-
-    cp -r /export/home/maven/maven-repo-local $REPO
 
     cp -R $SUNREPO/* $REPO/
 
