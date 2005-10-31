@@ -317,7 +317,12 @@ public class MailContinuumNotifier
 
     private String generateSubject( Project project, BuildResult build )
     {
-        int state = build.getState();
+        int state = -1;
+
+        if ( build != null )
+        {
+            state = build.getState();
+        }
 
         if ( state == ContinuumProjectState.OK )
         {
@@ -333,9 +338,9 @@ public class MailContinuumNotifier
         }
         else
         {
-            getLogger().warn( "Unknown build state " + build.getState() + " for project " + project.getId() );
+            getLogger().warn( "Unknown build state " + state + " for project " + project.getId() );
 
-            return "[continuum] ERROR: Unknown build state " + build.getState() + " for " + project.getName() + " project";
+            return "[continuum] ERROR: Unknown build state " + state + " for " + project.getName() + " project";
         }
     }
 

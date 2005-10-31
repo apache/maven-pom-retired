@@ -121,7 +121,12 @@ public class JabberContinuumNotifier
     private String generateMessage( Project project, BuildResult build )
         throws ContinuumException
     {
-        int state = build.getState();
+        int state = -1;
+
+        if ( build != null )
+        {
+            state = build.getState();
+        }
 
         String message;
 
@@ -139,9 +144,9 @@ public class JabberContinuumNotifier
         }
         else
         {
-            getLogger().warn( "Unknown build state " + build.getState() + " for project " + project.getId() );
+            getLogger().warn( "Unknown build state " + state + " for project " + project.getId() );
 
-            message = "ERROR: Unknown build state " + build.getState() + " for " + project.getName() + " project";
+            message = "ERROR: Unknown build state " + state + " for " + project.getName() + " project";
         }
 
         return message + " " + getReportUrl( project, build, configurationService );
