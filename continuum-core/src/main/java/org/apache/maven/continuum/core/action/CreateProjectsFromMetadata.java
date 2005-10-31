@@ -41,6 +41,7 @@ public class CreateProjectsFromMetadata
         URL url;
 
         ContinuumProjectBuilder projectBuilder = projectBuilderManager.getProjectBuilder( projectBuilderId );
+
         ContinuumProjectBuildingResult result = null;
 
         try
@@ -48,14 +49,17 @@ public class CreateProjectsFromMetadata
             if ( !u.startsWith( "http" ) )
             {
                 url = new URL( u );
+
                 result = projectBuilder.buildProjectsFromMetadata( url, null, null );
             }
             else
             {
                 MungedHttpsURL mungedURL = new MungedHttpsURL( u );
+
                 if ( mungedURL.isValid() )
                 {
                     url = mungedURL.getURL();
+
                     result = projectBuilder.buildProjectsFromMetadata( url, mungedURL.getUsername(), mungedURL
                         .getPassword() );
                 }

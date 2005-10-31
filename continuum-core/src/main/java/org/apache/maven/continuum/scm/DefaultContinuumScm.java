@@ -315,6 +315,8 @@ public class DefaultContinuumScm
     {
         ScmResult result = new ScmResult();
 
+        result.setCommandLine( scmResult.getCommandLine() );
+
         result.setSuccess( scmResult.isSuccess() );
 
         result.setCommandOutput( scmResult.getCommandOutput() );

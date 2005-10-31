@@ -144,9 +144,10 @@ public class DefaultBuildController
 
                 if ( scmResult == null || !scmResult.isSuccess() )
                 {
-                    build = makeAndStoreBuildResult( project, scmResult, startTime, trigger );
-
+                    // scmResult must be converted before sotring it because jpox modify value of all fields to null
                     String error = convertScmResultToError( scmResult );
+
+                    build = makeAndStoreBuildResult( project, scmResult, startTime, trigger );
 
                     build.setError( error );
 
