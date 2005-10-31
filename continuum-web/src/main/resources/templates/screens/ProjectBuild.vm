@@ -41,7 +41,13 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
       </tr>
       <tr class="a">
         <th>Build#</th>
-        <td>$build.buildNumber</td>
+        <td>
+        #if ( $build.buildNumber != 0 )
+          $build.buildNumber
+        #else
+          &nbsp;
+        #end
+        </td>
       </tr>
     </table>
   </p>
