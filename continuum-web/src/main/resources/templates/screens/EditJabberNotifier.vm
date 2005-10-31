@@ -20,7 +20,7 @@ $page.setTitle( "Continuum - Jabber Notifier" )
           <tr>
             <th>Jabber Login</th>
             <td>
-              <input type="text" name="port" value="$notifier.configuration.login" size="100"/>
+              <input type="text" name="login" value="$notifier.configuration.login" size="100"/>
             </td>
           </tr>
           <tr>
@@ -38,7 +38,7 @@ $page.setTitle( "Continuum - Jabber Notifier" )
           <tr>
             <th>Is Jabber Group?</th>
             <td>
-              <input type="check" name="isGroup" value="$notifier.configuration.isGroup"/>
+              <input type="checkbox" name="isGroup" #if( $notifier.configuration.isGroup == "on" ) checked="checked" #end/>
             </td>
             ##field( $i18n $data $element $item $formtool )
             ##validateField( $fvr $element )

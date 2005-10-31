@@ -314,6 +314,32 @@
               </scalar>
             </scalars>
           </view>
+          <view>
+            <id>EditMsnNotifier</id>
+            <scalars>
+              <scalar>
+                <id>notifier</id>
+                <expression>getNotifier(#id,#notifierId)</expression>
+              </scalar>
+              <scalar>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
+              </scalar>
+            </scalars>
+          </view>
+          <view>
+            <id>EditJabberNotifier</id>
+            <scalars>
+              <scalar>
+                <id>notifier</id>
+                <expression>getNotifier(#id,#notifierId)</expression>
+              </scalar>
+              <scalar>
+                <id>project</id>
+                <expression>getProject(#id)</expression>
+              </scalar>
+            </scalars>
+          </view>
           <!--
            |
            | User Group
