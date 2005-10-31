@@ -32,7 +32,7 @@ $page.setTitle( "Continuum" )
             #if ( $continuum.security.isAuthorized( $c1user, "manageSchedule" ) )
               #if ( $schedule.name != "DEFAULT_SCHEDULE" )
                 <a href="$link.setPage('Edit.vm').addPathInfo( 'fid', 'schedules').addPathInfo('id', $schedule.id)">Edit</a>
-                | <a href="$link.setPage('Delete.vm').addPathInfo('fid', "schedules").addPathInfo('id', $schedule.id)">Delete</a></td>
+                | <a href="$link.setPage('DeleteSchedule.vm').addPathInfo('fid', "schedules").addPathInfo('id', $schedule.id)">Delete</a></td>
               #end
             #end
         </tr>
