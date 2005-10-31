@@ -5,7 +5,7 @@ $page.setTitle( "Delete Build Definition" )
     <h3>Delete Build Definition</h3>
     <div class="warningmessage">
       <p>
-        <strong>$i18n.getString( "delete.confirmation.message" )</strong>
+        <strong>$i18n.getString( "buildDefinition.delete.confirmation.message" )</strong>
       </p>
     </div>
     <form method="post" action="$link">
