@@ -740,7 +740,14 @@ public class DefaultContinuum
 
             if ( value instanceof String )
             {
-                notifierProperties.setProperty( (String) key, (String) value );
+                String val = (String) value;
+                if ( !"sendOnSuccess".equals( val ) &&
+                     !"sendOnFailure".equals( val ) &&
+                     !"sendOnError".equals( val ) &&
+                     !"sendOnWarning".equals( val ) )
+                {
+                    notifierProperties.setProperty( (String) key, val );
+                }
             }
         }
 
@@ -759,6 +766,22 @@ public class DefaultContinuum
         // ----------------------------------------------------------------------
 
         Properties notifierProperties = createNotifierProperties( configuration );
+
+        boolean sendOnSuccess = convertBoolean( (String) configuration.get( "sendOnSuccess" ) );
+
+        notifier.setSendOnSuccess( sendOnSuccess );
+
+        boolean sendOnFailure = convertBoolean( (String) configuration.get( "sendOnFailure" ) );
+
+        notifier.setSendOnFailure( sendOnFailure );
+
+        boolean sendOnError = convertBoolean( (String) configuration.get( "sendOnError" ) );
+
+        notifier.setSendOnError( sendOnError );
+
+        boolean sendOnWarning = convertBoolean( (String) configuration.get( "sendOnWarning" ) );
+
+        notifier.setSendOnWarning( sendOnWarning );
 
         notifier.setConfiguration( notifierProperties );
 

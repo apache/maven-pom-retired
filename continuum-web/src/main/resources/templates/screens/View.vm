@@ -147,7 +147,20 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
               (DISABLED)
             #end
           </td>
-          <td>Success, Failures</td>
+          <td>
+            #if ( $notifier.sendOnSuccess )
+              Success
+            #end
+            #if ( $notifier.sendOnFailure )
+              Failures
+            #end
+            #if ( $notifier.sendOnError )
+              Error
+            #end
+            #if ( $notifier.sendOnWarning )
+              Warnings
+            #end
+          </td>
           <td>
             #if ( $notifier.isFromProject() )
               Project

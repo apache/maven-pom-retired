@@ -28,8 +28,30 @@ $page.setTitle( "Continuum - MSN Notifier" )
             <td>
               <input type="text" name="address" value="$notifier.configuration.address" size="100"/>
             </td>
-            ##field( $i18n $data $element $item $formtool )
-            ##validateField( $fvr $element )
+          </tr>
+          <tr>
+            <th>Send on success</th>
+            <td>
+              <input type="checkbox" name="sendOnSuccess" #if( $notifier.sendOnSuccess ) checked="checked" #end/>
+            </td>
+          </tr>
+          <tr>
+            <th>Send on failure</th>
+            <td>
+              <input type="checkbox" name="sendOnFailure" #if( $notifier.sendOnFailure ) checked="checked" #end/>
+            </td>
+          </tr>
+          <tr>
+            <th>Send on error</th>
+            <td>
+              <input type="checkbox" name="sendOnError" #if( $notifier.sendOnError ) checked="checked" #end/>
+            </td>
+          </tr>
+          <tr>
+            <th>Send on warning</th>
+            <td>
+              <input type="checkbox" name="sendOnWarning" #if( $notifier.sendOnWarning ) checked="checked" #end/>
+            </td>
           </tr>
         </table>
         #submitBar( "Submit" )
