@@ -273,7 +273,7 @@ public class DefaultContinuumScm
 
         result.setSuccess( scmResult.isSuccess() );
 
-        result.setCommandLine( scmResult.getCommandLine() );
+        result.setCommandLine( writeCommandLine( scmResult.getCommandLine() ) );
 
         result.setCommandOutput( scmResult.getCommandOutput() );
 
@@ -315,7 +315,7 @@ public class DefaultContinuumScm
     {
         ScmResult result = new ScmResult();
 
-        result.setCommandLine( scmResult.getCommandLine() );
+        result.setCommandLine( writeCommandLine( scmResult.getCommandLine() ) );
 
         result.setSuccess( scmResult.isSuccess() );
 
@@ -358,5 +358,29 @@ public class DefaultContinuumScm
         }
 
         return result;
+    }
+
+    /**
+     * Remove password from command line
+     */
+    private String writeCommandLine( String commandLine )
+    {
+        String cmd = commandLine;
+        
+        if ( cmd.startsWith( "svn" ) )
+        {
+            String pwdString = "--password";
+
+            if ( cmd.indexOf( pwdString ) > 0 )
+            {
+                int index = cmd.indexOf( pwdString ) + pwdString.length() + 1;
+
+                int nextSpace = cmd.indexOf( " ", index );
+
+                cmd = cmd.substring( 0, index ) + "********" + cmd.substring( nextSpace );
+            }
+        }
+
+        return cmd;
     }
 }
