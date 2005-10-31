@@ -318,6 +318,11 @@ public class DefaultContinuum
     {
         BuildDefinition buildDef = getDefaultBuildDefinition( projectId );
 
+        if ( buildDef == null )
+        {
+            throw new ContinuumException( "Project (id=" + projectId + " doens't have a default build definition." );
+        }
+
         buildProject( projectId, buildDef.getId(), ContinuumProjectState.TRIGGER_FORCED );
     }
 
@@ -325,6 +330,11 @@ public class DefaultContinuum
         throws ContinuumException
     {
         BuildDefinition buildDef = getDefaultBuildDefinition( projectId );
+
+        if ( buildDef == null )
+        {
+            throw new ContinuumException( "Project (id=" + projectId + " doens't have a default build definition." );
+        }
 
         buildProject( projectId, buildDef.getId(), trigger );
     }
@@ -340,6 +350,15 @@ public class DefaultContinuum
         try
         {
             Project project = store.getProject( projectId );
+
+            if ( project.getState != ContinuumProjectState.NEW &&
+                 project.getState != ContinuumProjectState.SUCCESS &&
+                 project.getState != ContinuumProjectState.FAILURE &&
+                 project.getState != ContinuumProjectState.ERROR )
+            {
+                // project is building
+                return;
+            }
 
             project.setOldState( project.getState() );
 
