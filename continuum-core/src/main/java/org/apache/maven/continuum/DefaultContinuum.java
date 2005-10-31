@@ -351,10 +351,10 @@ public class DefaultContinuum
         {
             Project project = store.getProject( projectId );
 
-            if ( project.getState != ContinuumProjectState.NEW &&
-                 project.getState != ContinuumProjectState.SUCCESS &&
-                 project.getState != ContinuumProjectState.FAILURE &&
-                 project.getState != ContinuumProjectState.ERROR )
+            if ( project.getState() != ContinuumProjectState.NEW &&
+                 project.getState() != ContinuumProjectState.OK &&
+                 project.getState() != ContinuumProjectState.FAILED &&
+                 project.getState() != ContinuumProjectState.ERROR )
             {
                 // project is building
                 return;
