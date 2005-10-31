@@ -349,6 +349,14 @@ public class DefaultMavenBuilderHelper
 
             notifier.setFrom( ProjectNotifier.FROM_PROJECT );
 
+            notifier.setSendOnSuccess( projectNotifier.isSendOnSuccess() );
+
+            notifier.setSendOnFailure( projectNotifier.isSendOnFailure() );
+
+            notifier.setSendOnError( projectNotifier.isSendOnError() );
+
+            notifier.setSendOnWarning( projectNotifier.isSendOnWarning() );
+
             notifiers.add( notifier );
         }
 
