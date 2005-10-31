@@ -1,11 +1,13 @@
 $page.setTitle( "Delete Project" )
 
+#set ( $project = $continuum.getProject( $stringtool.toInt( $id ) ) )
+
 <div class="app">
   <div id="axial" class="h3">
     <h3>$i18n.getString( $form.delete.titleKey )</h3>
     <div class="warningmessage">
       <p>
-        <strong>$i18n.getString( "delete.confirmation.message" )</strong>
+        <strong>$i18n.getString( "delete.confirmation.message" ) ($project.name)</strong>
       </p>
     </div>
     <form method="post" action="$link">

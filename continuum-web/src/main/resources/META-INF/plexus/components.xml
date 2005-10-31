@@ -116,6 +116,11 @@
             <role>org.apache.maven.continuum.web.tool.FormDataTool</role>
             <scope>global</scope>
           </tool>
+          <tool>
+            <name>stringtool</name>
+            <role>org.apache.maven.continuum.web.tool.StringTool</role>
+            <scope>global</scope>
+          </tool>
         </tools>
       </configuration>
     </component>
@@ -136,6 +141,12 @@
     <component>
       <role>org.apache.maven.continuum.web.tool.FormDataTool</role>
       <implementation>org.apache.maven.continuum.web.tool.FormDataTool</implementation>
+      <configuration/>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.web.tool.StringTool</role>
+      <implementation>org.apache.maven.continuum.web.tool.StringTool</implementation>
       <configuration/>
     </component>
 
