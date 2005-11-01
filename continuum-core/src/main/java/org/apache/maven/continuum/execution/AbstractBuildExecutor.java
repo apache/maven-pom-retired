@@ -167,6 +167,12 @@ public abstract class AbstractBuildExecutor
             }
         }
 
+        //sometimes executable isn't found in path but it exit (CONTINUUM-365)
+        if ( !actualExecutable.exists() )
+        {
+            actualExecutable = executable;
+        }
+
         // ----------------------------------------------------------------------
         // Execute the build
         // ----------------------------------------------------------------------
