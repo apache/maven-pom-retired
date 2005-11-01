@@ -27,6 +27,7 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.ircbot.IrcBot;
 import org.codehaus.plexus.notification.NotificationException;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -119,6 +120,20 @@ public class IrcContinuumNotifier
         int port = Integer.parseInt( (String) configuration.get( "port" ) );
 
         String channel = (String) configuration.get( "channel" );
+
+        String login = (String) configuration.get( "nick" );
+
+        if ( !StringUtils.isEmpty( login ) )
+        {
+            ircClient.setLogin( login );
+        }
+
+        String fullName = (String) configuration.get( "fullName" );
+
+        if ( !StringUtils.isEmpty( fullName ) )
+        {
+            ircClient.setFullName( fullName );
+        }
 
         // ----------------------------------------------------------------------
         // Send message

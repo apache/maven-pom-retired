@@ -30,6 +30,18 @@ $page.setTitle( "Continuum - IRC Notifier" )
             </td>
           </tr>
           <tr>
+            <th>Nick Name</th>
+            <td>
+              <input type="text" name="nick" value="$notifier.configuration.nick" size="100"/>
+            </td>
+          </tr>
+          <tr>
+            <th>Full Name</th>
+            <td>
+              <input type="text" name="fullName" value="$notifier.configuration.fullName" size="100"/>
+            </td>
+          </tr>
+          <tr>
             <th>Send on success</th>
             <td>
               <input type="checkbox" name="sendOnSuccess" #if( $notifier.sendOnSuccess ) checked="checked" #end/>
