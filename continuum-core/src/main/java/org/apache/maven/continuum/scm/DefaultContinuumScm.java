@@ -128,9 +128,11 @@ public class DefaultContinuumScm
 
                 getLogger().warn( "Provider message: " + result.getProviderMessage() );
             }
-
-            ChangeSet changeSet = (ChangeSet) result.getChanges().get( 0 );
-            getLogger().info( "Checked out " + changeSet.getFiles().size() + " files." );
+            else
+            {
+                ChangeSet changeSet = (ChangeSet) result.getChanges().get( 0 );
+                getLogger().info( "Checked out " + changeSet.getFiles().size() + " files." );
+            }
 
             return result;
         }
