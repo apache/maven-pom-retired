@@ -61,12 +61,6 @@ public class ShellBuildExecutor
         // TODO: this should be validated earlier?
         String executable = buildDefinition.getBuildFile();
 
-        if ( new File( executable ).isAbsolute() )
-        {
-            throw new ContinuumBuildExecutorException(
-                "The shell script must be a relative path. It will be relative to the checkout." );
-        }
-
         return executeShellCommand( project, executable, buildDefinition.getArguments(), buildOutput );
     }
 
