@@ -68,6 +68,42 @@
       <label-key>jabber.isGroup.label</label-key>
       <message-key>jabber.isGroup.message</message-key>
     </element>
+    <element>
+      <id>sendOnSuccess</id>
+      <validators>
+      </validators>
+      <type>checkbox</type>
+      <default-value>true</default-value>
+      <label-key>notifier.sendOnSuccess.label</label-key>
+      <message-key>notifier.sendOnSuccess.message</message-key>
+    </element>
+    <element>
+      <id>sendOnFailure</id>
+      <validators>
+      </validators>
+      <type>checkbox</type>
+      <default-value>false</default-value>
+      <label-key>notifier.sendOnFailure.label</label-key>
+      <message-key>notifier.sendOnFailure.message</message-key>
+    </element>
+    <element>
+      <id>sendOnError</id>
+      <validators>
+      </validators>
+      <type>checkbox</type>
+      <default-value>true</default-value>
+      <label-key>notifier.sendOnError.label</label-key>
+      <message-key>notifier.sendOnError.message</message-key>
+    </element>
+    <element>
+      <id>sendOnWarning</id>
+      <validators>
+      </validators>
+      <type>checkbox</type>
+      <default-value>true</default-value>
+      <label-key>notifier.sendOnWarning.label</label-key>
+      <message-key>notifier.sendOnWarning.message</message-key>
+    </element>
   </elements>
 
   <!-- Add -->
