@@ -55,10 +55,15 @@
 ## ----------------------------------------------------------------------------
 
 #macro ( text $element $elementData )
-#if ( $element && $element.attributes && $element.attributes.size > 0 )
-<input type="text" name="$element.id" value="$elementData" size="$element.attributes.size"/>
+#if ( $elementData == "" && $element.defaultValue )
+#set ( $value = $element.defaultValue )
 #else
-<input type="text" name="$element.id" value="$elementData" size="100"/>
+#set ( $value = $elementData )
+#end
+#if ( $element && $element.attributes && $element.attributes.size > 0 )
+<input type="text" name="$element.id" value="$value" size="$element.attributes.size"/>
+#else
+<input type="text" name="$element.id" value="$value" size="100"/>
 #end
 #end
 
@@ -79,7 +84,12 @@
 #end
 
 #macro ( checkbox $element $elementData )
-<input type="checkbox" name="$element.id" #if( $elementData == "true" ) checked="checked" #end/>
+#if ( $elementData == "" && $element.defaultValue )
+#set ( $value = $element.defaultValue )
+#else
+#set ( $value = $elementData )
+#end
+<input type="checkbox" name="$element.id" #if( $value == "true" ) checked="checked" #end/>
 #end
 
 #macro ( pulldown $element $elementData )
