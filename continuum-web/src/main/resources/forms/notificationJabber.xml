@@ -82,7 +82,7 @@
       <validators>
       </validators>
       <type>checkbox</type>
-      <default-value>false</default-value>
+      <default-value>true</default-value>
       <label-key>notifier.sendOnFailure.label</label-key>
       <message-key>notifier.sendOnFailure.message</message-key>
     </element>
