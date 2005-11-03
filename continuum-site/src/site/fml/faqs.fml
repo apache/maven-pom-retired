@@ -27,11 +27,13 @@
           Continuum uses the command line return code for detecting a successful or failed execution.
         </p>
         <p>
-          If you use maven 1.0.2 or ant, you need to add at the end of maven.bat and ant.bat, the following command :
+          If you use maven or ant, you need to add at the end of maven.bat and ant.bat, the following lines :
         </p>
         <pre>
-exit /B errorlevel
+if "%MAVEN_TERMINATE_CMD%" == "on" exit %ERROR_CODE%
+exit /B %ERROR_CODE%
         </pre>
+         and define the MAVEN_TERMINATE_CMD environment var to "on".
       </answer>
     </faq>
   </part>
