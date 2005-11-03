@@ -80,6 +80,11 @@ public class JabberContinuumNotifier
     /**
      * @plexus.configuration
      */
+    private String imDomainName;
+
+    /**
+     * @plexus.configuration
+     */
     private boolean sslConnection;
 
     // ----------------------------------------------------------------------
@@ -177,7 +182,9 @@ public class JabberContinuumNotifier
 
         jabberClient.setPassword( getPassword( configuration ) );
 
-        jabberClient.setSslConnection( true );
+        jabberClient.setImDomainName( getImDomainName( configuration ) );
+
+        jabberClient.setSslConnection( isSslConnection( configuration ) );
 
         try
         {
@@ -269,6 +276,26 @@ public class JabberContinuumNotifier
         }
 
         return fromPassword;
+    }
+
+    private boolean isSslConnection( Map configuration )
+    {
+        if ( configuration.containsKey( "sslConnection" ) )
+        {
+            return Boolean.getBoolean( (String ) configuration.get( "sslConnection" ) );
+        }
+
+        return sslConnection;
+    }
+
+    private String getImDomainName( Map configuration )
+    {
+        if ( configuration.containsKey( "domainName" ) )
+        {
+            return (String) configuration.get( "domainName" );
+        }
+
+        return imDomainName;
     }
 
     private boolean isGroup( Map configuration )
