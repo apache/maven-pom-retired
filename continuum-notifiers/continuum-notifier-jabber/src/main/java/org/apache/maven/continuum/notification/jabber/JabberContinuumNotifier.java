@@ -75,7 +75,7 @@ public class JabberContinuumNotifier
     /**
      * @plexus.configuration
      */
-    private String port;
+    private int port;
 
     /**
      * @plexus.configuration
