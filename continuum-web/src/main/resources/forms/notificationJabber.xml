@@ -45,6 +45,14 @@
       <message-key>jabber.password.message</message-key>
     </element>
     <element>
+      <id>domainName</id>
+      <validators>
+      </validators>
+      <type>text</type>
+      <label-key>jabber.domainName.label</label-key>
+      <message-key>jabber.domainName.message</message-key>
+    </element>
+    <element>
       <id>address</id>
       <validators>
         <validator>
@@ -55,6 +63,15 @@
       <type>text</type>
       <label-key>jabber.address.label</label-key>
       <message-key>jabber.address.message</message-key>
+    </element>
+    <element>
+      <id>sslConnection</id>
+      <validators>
+      </validators>
+      <type>checkbox</type>
+      <default-value>false</default-value>
+      <label-key>jabber.sslConnection.label</label-key>
+      <message-key>jabber.sslConnection.message</message-key>
     </element>
     <element>
       <id>isGroup</id>

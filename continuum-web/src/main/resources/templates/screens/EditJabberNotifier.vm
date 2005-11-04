@@ -30,13 +30,25 @@ $page.setTitle( "Continuum - Jabber Notifier" )
             </td>
           </tr>
           <tr>
+            <th>Jabber Domain Name</th>
+            <td>
+              <input type="text" name="domainName" value="$notifier.configuration.domainName" size="100"/>
+            </td>
+          </tr>
+          <tr>
             <th>Jabber Recipient</th>
             <td>
               <input type="text" name="address" value="$notifier.configuration.address" size="100"/>
             </td>
           </tr>
           <tr>
-            <th>Is Jabber Group?</th>
+            <th>Is it a SSL Connection?</th>
+            <td>
+              <input type="checkbox" name="sslConnection" #if( $notifier.configuration.sslConnection == "on" ) checked="checked" #end/>
+            </td>
+          </tr>
+          <tr>
+            <th>Is it a Jabber Group?</th>
             <td>
               <input type="checkbox" name="isGroup" #if( $notifier.configuration.isGroup == "on" ) checked="checked" #end/>
             </td>
