@@ -256,7 +256,11 @@ public class JabberContinuumNotifier
         }
         else
         {
-            if ( isSslConnection ( configuration ) )
+            if ( port > 0 )
+            {
+                return port;
+            }
+            else if ( isSslConnection ( configuration ) )
             {
                 return 5223;
             }
