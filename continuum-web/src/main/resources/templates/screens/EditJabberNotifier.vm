@@ -18,6 +18,12 @@ $page.setTitle( "Continuum - Jabber Notifier" )
             </td>
           </tr>
           <tr>
+            <th>Jabber Port</th>
+            <td>
+              <input type="text" name="port" value="$notifier.configuration.port" size="100"/>
+            </td>
+          </tr>
+          <tr>
             <th>Jabber Login</th>
             <td>
               <input type="text" name="login" value="$notifier.configuration.login" size="100"/>

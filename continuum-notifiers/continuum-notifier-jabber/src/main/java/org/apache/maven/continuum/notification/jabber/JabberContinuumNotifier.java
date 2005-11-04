@@ -173,10 +173,7 @@ public class JabberContinuumNotifier
 
         jabberClient.setHost( getHost( configuration ) );
 
-        if ( configuration.containsKey( "port" ) )
-        {
-            jabberClient.setPort( ( (Integer) configuration.get( "port" ) ).intValue() );
-        }
+        jabberClient.setPort( getPort( configuration ) );
 
         jabberClient.setUser( getUsername( configuration ) );
 
@@ -249,6 +246,25 @@ public class JabberContinuumNotifier
         }
 
         return host;
+    }
+
+    private int getPort( Map configuration )
+    {
+        if ( configuration.containsKey( "port" ) )
+        {
+            return ( (Integer) configuration.get( "port" ) ).intValue();
+        }
+        else
+        {
+            if ( isSslConnection ( configuration ) )
+            {
+                return 5223;
+            }
+            else
+            {
+                return 5222;
+            }
+        }
     }
 
     private String getUsername( Map configuration )

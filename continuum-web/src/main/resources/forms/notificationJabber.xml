@@ -21,6 +21,13 @@
       <message-key>jabber.host.message</message-key>
     </element>
     <element>
+      <id>port</id>
+      <type>text</type>
+      <default-value>5222</default-value>
+      <label-key>jabber.port.label</label-key>
+      <message-key>jabber.port.message</message-key>
+    </element>
+    <element>
       <id>login</id>
       <validators>
         <validator>
