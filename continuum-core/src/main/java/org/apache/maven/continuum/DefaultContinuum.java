@@ -1718,15 +1718,7 @@ public class DefaultContinuum
 
             Project p = store.getProject( project.getId() );
 
-            if ( StringUtils.isEmpty( p.getScmTagBase() ) && !StringUtils.isEmpty( project.getScmTagBase() ) )
-            {
-                removeWorkingDirectory = true;
-            }
-            else if ( !StringUtils.isEmpty( p.getScmTagBase() ) && StringUtils.isEmpty( project.getScmTagBase() ) )
-            {
-                removeWorkingDirectory = true;
-            }
-            else if ( !StringUtils.isEmpty( p.getScmTagBase() ) && !p.getScmTagBase().equals( project.getScmTagBase() ) )
+            if ( !p.getScmUrl().equals( project.getScmUrl() ) )
             {
                 removeWorkingDirectory = true;
             }

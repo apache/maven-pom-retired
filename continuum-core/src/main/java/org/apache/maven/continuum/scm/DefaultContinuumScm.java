@@ -29,7 +29,6 @@ import org.apache.maven.scm.command.update.UpdateScmResult;
 import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
 import org.apache.maven.scm.provider.ScmProviderRepository;
-import org.apache.maven.scm.provider.svn.repository.SvnScmProviderRepository;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.apache.maven.scm.repository.ScmRepositoryException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -82,11 +81,6 @@ public class DefaultContinuumScm
             ScmRepository repository = getScmRepositorty( project );
 
             ScmProviderRepository providerRepository = repository.getProviderRepository();
-
-            if ( providerRepository instanceof SvnScmProviderRepository && project.getScmTagBase() != null )
-            {
-                ( (SvnScmProviderRepository) providerRepository ).setTagBase( project.getScmTagBase() );
-            }
 
             ScmResult result;
 
@@ -198,11 +192,6 @@ public class DefaultContinuumScm
             ScmRepository repository = getScmRepositorty( project );
 
             ScmProviderRepository providerRepository = repository.getProviderRepository();
-
-            if ( providerRepository instanceof SvnScmProviderRepository && project.getScmTagBase() != null )
-            {
-                ( (SvnScmProviderRepository) providerRepository ).setTagBase( project.getScmTagBase() );
-            }
 
             ScmResult result;
 

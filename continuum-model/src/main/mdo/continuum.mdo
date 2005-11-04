@@ -112,11 +112,6 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
-        <field stash.maxSize="256">
-          <name>scmTagBase</name>
-          <version>1.0.0+</version>
-          <type>String</type>
-        </field>
         <field>
           <name>scmTag</name>
           <version>1.0.0+</version>
