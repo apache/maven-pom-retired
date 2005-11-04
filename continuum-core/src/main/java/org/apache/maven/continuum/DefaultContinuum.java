@@ -746,7 +746,10 @@ public class DefaultContinuum
                      !"sendOnError".equals( val ) &&
                      !"sendOnWarning".equals( val ) )
                 {
-                    notifierProperties.setProperty( (String) key, val );
+                    if ( !StringUtils.isEmpty( val ) )
+                    {
+                        notifierProperties.setProperty( (String) key, val );
+                    }
                 }
             }
         }

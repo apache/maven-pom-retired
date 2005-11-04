@@ -135,6 +135,13 @@ public class IrcContinuumNotifier
             ircClient.setFullName( fullName );
         }
 
+        String password = (String) configuration.get( "password" );
+
+        if ( !StringUtils.isEmpty( password ) )
+        {
+            ircClient.setPassword( password );
+        }
+
         // ----------------------------------------------------------------------
         // Send message
         // ----------------------------------------------------------------------
