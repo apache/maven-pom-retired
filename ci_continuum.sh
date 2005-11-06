@@ -77,6 +77,8 @@ fi
 
     rm -rf $REPO > /dev/null 2>&1
 
+    mkdir -p $REPO
+
     cp -R $SUNREPO/* $REPO/
 
     echo
