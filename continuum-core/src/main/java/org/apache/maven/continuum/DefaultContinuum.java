@@ -366,7 +366,7 @@ public class DefaultContinuum
 
             store.updateProject( project );
 
-            getLogger().info( "Enqueuing '" + project.getName() + "' (Build definition id=" + buildDefinitionId + "." );
+            getLogger().info( "Enqueuing '" + project.getName() + "' (Build definition id=" + buildDefinitionId + ")." );
 
             buildQueue.put( new BuildProjectTask( projectId, buildDefinitionId, trigger ) );
         }
