@@ -96,7 +96,6 @@
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.8</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>
@@ -138,6 +137,12 @@
       <artifactId>plexus-service-jetty</artifactId>
       <version>1.0-alpha-3</version>
       <type>plexus-service</type>
+      <exclusions>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -165,6 +170,12 @@
       <artifactId>plexus-service-xmlrpc</artifactId>
       <version>1.0-alpha-3</version>
       <type>plexus-service</type>
+      <exclusions>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
