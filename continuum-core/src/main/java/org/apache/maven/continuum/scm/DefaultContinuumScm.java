@@ -335,13 +335,20 @@ public class DefaultContinuumScm
 
                 change.setDate( scmChangeSet.getDate().getTime() );
 
-                if ( scmChangeSet.getFile() != null )
+                if ( scmChangeSet.getFiles() != null )
                 {
-                    ChangeFile file = new ChangeFile();
+                    for ( Iterator i = scmChangeSet.getFiles().iterator(); i.hasNext(); )
+                    {
+                        org.apache.maven.scm.ChangeFile f = (org.apache.maven.scm.ChangeFile) i.next();
 
-                    file.setName( scmChangeSet.getFile().getName() );
+                        ChangeFile file = new ChangeFile();
 
-                    file.setRevision( scmChangeSet.getFile().getRevision() );
+                        file.setName( f.getName() );
+
+                        file.setRevision( f.getRevision() );
+
+                        change.addFile( file );
+                    }
                 }
 
                 result.addChange( change );
