@@ -78,12 +78,13 @@ public class DefaultContinuumXmlRpc
     {
         try
         {
-            Project project = continuum.getProject( projectId );
+            Project project = continuum.getProjectWithAllDetails( projectId );
 
             return makeHashtable( "project", convertContinuumProject( project, false ) );
         }
         catch ( Throwable e )
         {
+            e.printStackTrace();
             return handleException( "ContinuumXmlRpc.getProject()", "Project id: '" + projectId + "'.", e );
         }
     }
@@ -379,7 +380,11 @@ public class DefaultContinuumXmlRpc
     {
         Set excludedProperties = new HashSet();
 
-        excludedProperties.add( "builds" );
+        excludedProperties.add( "buildResults" );
+
+        excludedProperties.add( "projectGroup" );
+
+        excludedProperties.add( "checkoutResult" );
 
         if ( summary )
         {
