@@ -17,9 +17,11 @@ package org.apache.maven.continuum.scm;
  */
 
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.scm.ChangeFile;
 import org.apache.maven.continuum.model.scm.ChangeSet;
 import org.apache.maven.continuum.model.scm.ScmResult;
+import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.ScmFile;
@@ -36,6 +38,7 @@ import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -56,6 +59,11 @@ public class DefaultContinuumScm
      * @plexus.requirement
      */
     private WorkingDirectoryService workingDirectoryService;
+
+    /**
+     * @plexus.requirement
+     */
+    private ContinuumStore store;
 
     // ----------------------------------------------------------------------
     // ContinuumScm implementation
@@ -200,7 +208,7 @@ public class DefaultContinuumScm
             synchronized ( this )
             {
                 result = convertScmResult(
-                    scmManager.getProviderByRepository( repository ).update( repository, fileSet, tag ) );
+                    scmManager.getProviderByRepository( repository ).update( repository, fileSet, tag, getLatestUpdateDate( project ) ) );
             }
 
             if ( !result.isSuccess() )
@@ -235,6 +243,21 @@ public class DefaultContinuumScm
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
+
+    private Date getLatestUpdateDate( Project project )
+    {
+        try
+        {
+            BuildResult result = store.getLatestBuildResultForProject( project.getId() );
+
+            return new Date( result.getStartTime() );
+        }
+        catch ( Exception e )
+        {
+        }
+
+        return null;
+    }
 
     private ScmRepository getScmRepositorty( Project project )
         throws ScmRepositoryException, NoSuchScmProviderException
