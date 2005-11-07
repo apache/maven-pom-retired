@@ -252,22 +252,27 @@ public class JabberContinuumNotifier
     {
         if ( configuration.containsKey( "port" ) )
         {
-            return ( (Integer) configuration.get( "port" ) ).intValue();
+            try
+            {
+                return Integer.parseInt( (String) configuration.get( "port" ) );
+            }
+            catch ( NumberFormatException e )
+            {
+                getLogger().error( "jabber port isn't a number.", e );
+            }
+        }
+
+        if ( port > 0 )
+        {
+            return port;
+        }
+        else if ( isSslConnection ( configuration ) )
+        {
+            return 5223;
         }
         else
         {
-            if ( port > 0 )
-            {
-                return port;
-            }
-            else if ( isSslConnection ( configuration ) )
-            {
-                return 5223;
-            }
-            else
-            {
-                return 5222;
-            }
+            return 5222;
         }
     }
 
@@ -302,7 +307,7 @@ public class JabberContinuumNotifier
     {
         if ( configuration.containsKey( "sslConnection" ) )
         {
-            return Boolean.getBoolean( (String ) configuration.get( "sslConnection" ) );
+            return convertBoolean( (String ) configuration.get( "sslConnection" ) );
         }
 
         return sslConnection;
@@ -322,7 +327,19 @@ public class JabberContinuumNotifier
     {
         if ( configuration.containsKey( "isGroup" ) )
         {
-            return ( (Boolean) configuration.get( "isGroup" ) ).booleanValue();
+            return convertBoolean( (String) configuration.get( "isGroup" ) );
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private boolean convertBoolean( String value )
+    {
+        if ( "true".equalsIgnoreCase( value ) || "on".equalsIgnoreCase( value ) || "yes".equalsIgnoreCase( value ) )
+        {
+            return true;
         }
         else
         {
