@@ -95,7 +95,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
           <a href="$buildDefinitionLink">Edit</a> |
           #end
           #if ( $continuum.security.isAuthorized( $c1user, "deleteBuildDefinition" ) )
-          #set ( $deleteBuildDefinitionLink = $link.setPage('DeleteBuildDefinition.vm').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id) )
+          #set ( $deleteBuildDefinitionLink = $link.setPage('DeleteBuildDefinition.vm').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
           <a href="$deleteBuildDefinitionLink">Delete</a>
           #end
         </td>
@@ -172,21 +172,21 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
             #if ( $notifier.isFromUser() )
               #if ( $continuum.security.isAuthorized( $c1user, "editNotifier" ) )
                 #if ( $notifier.type == "irc" )
-                  #set ( $editNotifierLink = $link.setPage('EditIrcNotifier.vm').addPathInfo('view','EditIrcNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                  #set ( $editNotifierLink = $link.setPage('EditIrcNotifier.vm').addPathInfo('view','EditIrcNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
                   <a href="$editNotifierLink">Edit</a>
                 #elseif ( $notifier.type == "mail" )
-                  #set ( $editNotifierLink = $link.setPage('EditMailNotifier.vm').addPathInfo('view','EditMailNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                  #set ( $editNotifierLink = $link.setPage('EditMailNotifier.vm').addPathInfo('view','EditMailNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
                   <a href="$editNotifierLink">Edit</a>
                 #elseif ( $notifier.type == "msn" )
-                  #set ( $editNotifierLink = $link.setPage('EditMsnNotifier.vm').addPathInfo('view','EditMsnNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                  #set ( $editNotifierLink = $link.setPage('EditMsnNotifier.vm').addPathInfo('view','EditMsnNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
                   <a href="$editNotifierLink">Edit</a>
                 #elseif ( $notifier.type == "jabber" )
-                  #set ( $editNotifierLink = $link.setPage('EditJabberNotifier.vm').addPathInfo('view','EditJabberNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                  #set ( $editNotifierLink = $link.setPage('EditJabberNotifier.vm').addPathInfo('view','EditJabberNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
                   <a href="$editNotifierLink">Edit</a>
                 #end
               #end
               #if ( $continuum.security.isAuthorized( $c1user, "deleteNotifier" ) )
-                #set ( $deleteNotifierLink = $link.setPage('DeleteNotifier.vm').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id) )
+                #set ( $deleteNotifierLink = $link.setPage('DeleteNotifier.vm').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
               | <a href="$deleteNotifierLink">Delete</a>
               #end
             #end

@@ -50,7 +50,7 @@
   <add>
     <title-key>project.title.buildDefinition.add</title-key>
     <action>cam</action>
-    <view>Summary.vm</view>
+    <view>View.vm</view>
     <view-on-failure>AddBuildDefinition.vm</view-on-failure>
     <fid-on-failure>buildDefinition</fid-on-failure>    
     <expression>addBuildDefinition(#id)</expression>

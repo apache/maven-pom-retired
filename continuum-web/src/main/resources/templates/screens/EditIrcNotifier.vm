@@ -1,50 +1,53 @@
 $page.setTitle( "Continuum - IRC Notifier" )
 
+#set ( $executorId = $data.getParameters().getString("executorId") )
+
 <div class="app">
   <div id="axial" class="h3">
     <h3>Edit IRC Notifier</h3>
     <form method="post" action="$link">
       #hidden ( "action" "cam" )
       #hidden ( "cid" "updateNotifier" )
-      #hidden ( "view" "Summary.vm" )
+      #hidden ( "view" "View.vm" )
       #hidden ( "id" $project.id )
+      #hidden ( "fid" "${executorId}Project" )
       #hidden ( "notifierId" $notifier.id )
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
           <tr>
             <th>IRC Host</th>
             <td>
-              <input type="text" name="host" value="$notifier.configuration.host" size="100"/>
+              <input type="text" name="host" value="#if($notifier.configuration.host)$notifier.configuration.host#end" size="100"/>
             </td>
           </tr>
           <tr>
             <th>IRC Port</th>
             <td>
-              <input type="text" name="port" value="$notifier.configuration.port" size="100"/>
+              <input type="text" name="port" value="#if($notifier.configuration.port)$notifier.configuration.port#end" size="100"/>
             </td>
           </tr>
           <tr>
             <th>IRC Channel</th>
             <td>
-              <input type="text" name="channel" value="$notifier.configuration.channel" size="100"/>
+              <input type="text" name="channel" value="#if($notifier.configuration.channel)$notifier.configuration.channel#end" size="100"/>
             </td>
           </tr>
           <tr>
             <th>Nick Name</th>
             <td>
-              <input type="text" name="nick" value="$notifier.configuration.nick" size="100"/>
+              <input type="text" name="nick" value="#if($notifier.configuration.nick)$notifier.configuration.nick#end" size="100"/>
             </td>
           </tr>
           <tr>
             <th>Full Name</th>
             <td>
-              <input type="text" name="fullName" value="$notifier.configuration.fullName" size="100"/>
+              <input type="text" name="fullName" value="#if($notifier.configuration.fullName)$notifier.configuration.fullName#end" size="100"/>
             </td>
           </tr>
           <tr>
             <th>Password</th>
             <td>
-              <input type="password" name="password" value="$notifier.configuration.password" size="100"/>
+              <input type="password" name="password" value="#if($notifier.configuration.password)$notifier.configuration.password#end" size="100"/>
             </td>
           </tr>
           <tr>

@@ -1,5 +1,7 @@
 $page.setTitle( "Delete Notifier" )
 
+#set ( $executorId = $data.getParameters().getString("executorId") )
+
 <div class="app">
   <div id="axial" class="h3">
     <h3>Delete Notifier</h3>
@@ -11,8 +13,9 @@ $page.setTitle( "Delete Notifier" )
     <form method="post" action="$link">
       #hidden ( "cid" "deleteNotifier" )
       #hidden ( "action" "cam" )
-      #hidden ( "view" "Summary.vm" )
+      #hidden ( "view" "View.vm" )
       #hidden ( "id" $data.getParameters().getString( "id" ) )
+      #hidden ( "fid" "${executorId}Project" )
       #hidden ( "notifierId" $data.getParameters().getString( "notifierId" ) )
       <div class="functnbar3">
         <input type="submit" name="deleteEntry" value="Delete"/>

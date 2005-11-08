@@ -1,20 +1,23 @@
 $page.setTitle( "Continuum - Mail Notifier" )
 
+#set ( $executorId = $data.getParameters().getString("executorId") )
+
 <div class="app">
   <div id="axial" class="h3">
     <h3>Edit Mail Notifier</h3>
     <form method="post" action="$link">
       #hidden ( "action" "cam" )
       #hidden ( "cid" "updateNotifier" )
-      #hidden ( "view" "Summary.vm" )
+      #hidden ( "view" "View.vm" )
       #hidden ( "id" $project.id )
+      #hidden ( "fid" "${executorId}Project" )
       #hidden ( "notifierId" $notifier.id )
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
           <tr>
             <th>Mail Address</th>
             <td>
-              <input type="text" name="address" value="$notifier.configuration.address" size="100"/>
+              <input type="text" name="address" value="#if($notifier.configuration.address)$notifier.configuration.address#end" size="100"/>
             </td>
           </tr>
           <tr>
