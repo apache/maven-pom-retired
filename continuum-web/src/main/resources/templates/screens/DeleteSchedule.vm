@@ -1,4 +1,4 @@
-$page.setTitle( "Delete Project" )
+$page.setTitle( $i18n.getString( $form.delete.titleKey ) )
 
 <div class="app">
   <div id="axial" class="h3">

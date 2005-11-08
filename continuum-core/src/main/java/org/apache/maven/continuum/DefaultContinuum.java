@@ -1054,7 +1054,32 @@ public class DefaultContinuum
     public void updateSchedule( Schedule schedule )
         throws ContinuumException
     {
+        updateSchedule( schedule, true );
+    }
+
+    private void updateSchedule( Schedule schedule, boolean updateScheduler )
+        throws ContinuumException
+    {
         storeSchedule( schedule );
+
+        if ( updateScheduler )
+        {
+            try
+            {
+                if ( schedule.isActive() )
+                {
+                    schedulesActivator.activateSchedule( schedule, this );
+                }
+                else
+                {
+                    schedulesActivator.unactivateSchedule( schedule, this );
+                }
+            }
+            catch ( SchedulesActivationException e )
+            {
+                getLogger().error( "Can't unactivate schedule. You need to restart Continuum.", e );
+            }
+        }
     }
 
     public void updateSchedule( int scheduleId, Map configuration )
@@ -1070,9 +1095,18 @@ public class DefaultContinuum
 
         schedule.setDelay( new Integer( (String) configuration.get( "schedule.delay" ) ).intValue() );
 
+        boolean isActive = schedule.isActive();
+
         schedule.setActive( new Boolean( (String) configuration.get( "schedule.active" ) ).booleanValue() );
 
-        storeSchedule( schedule );
+        if ( schedule.isActive() == isActive )
+        {
+            updateSchedule( schedule, false );
+        }
+        else
+        {
+            updateSchedule( schedule, true );
+        }
     }
 
     public void removeSchedule( int scheduleId )
@@ -1080,12 +1114,15 @@ public class DefaultContinuum
     {
         Schedule schedule = getSchedule( scheduleId );
 
-        removeSchedule( schedule );
-    }
+        try
+        {
+            schedulesActivator.unactivateSchedule( schedule, this );
+        }
+        catch ( SchedulesActivationException e )
+        {
+            getLogger().error( "Can't unactivate schedule. You need to restart Continuum.", e );
+        }
 
-    private void removeSchedule( Schedule schedule )
-        throws ContinuumException
-    {
         store.removeSchedule( schedule );
     }
 

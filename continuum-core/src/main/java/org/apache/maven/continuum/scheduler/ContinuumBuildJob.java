@@ -20,19 +20,27 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.codehaus.plexus.logging.Logger;
-import org.quartz.Job;
+import org.quartz.InterruptableJob;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
+import org.quartz.UnableToInterruptJobException;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
 public class ContinuumBuildJob
-    implements Job
+    implements InterruptableJob
 {
+    private boolean interrupted;
+
     public void execute( JobExecutionContext context )
     {
+        if ( interrupted )
+        {
+            return;
+        }
+
         // ----------------------------------------------------------------------
         // Get the job detail
         // ----------------------------------------------------------------------
@@ -72,33 +80,11 @@ public class ContinuumBuildJob
         catch( InterruptedException e )
         {
         }
+    }
 
-        /*
-
-        Continuum continuum = (Continuum) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.CONTINUUM );
-
-        ContinuumBuildSettings buildSettings = (ContinuumBuildSettings) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.BUILD_SETTINGS );
-
-        // ----------------------------------------------------------------------
-        // Lookup all the project groups that belong to these build settings
-        // ----------------------------------------------------------------------
-
-        Set projectGroups = buildSettings.getProjectGroups();
-
-        for ( Iterator iterator = projectGroups.iterator(); iterator.hasNext(); )
-        {
-            ContinuumProjectGroup projectGroup = (ContinuumProjectGroup) iterator.next();
-
-            try
-            {
-                continuum.buildProjectGroup( projectGroup, buildSettings );
-            }
-            catch ( ContinuumException e )
-            {
-                logger.error( "Error building project group.", e );
-            }
-        }
-
-        */
+    public void interrupt()
+        throws UnableToInterruptJobException
+    {
+        interrupted = true;
     }
 }

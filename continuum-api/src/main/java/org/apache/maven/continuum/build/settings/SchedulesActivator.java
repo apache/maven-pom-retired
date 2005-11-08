@@ -45,4 +45,12 @@ public interface SchedulesActivator
      */
     void activateSchedule( Schedule schedule, Continuum continuum )
         throws SchedulesActivationException;
+
+    /**
+     * Unactivate schedule by looking at the scheduling information contained within.
+     *
+     * @throws SchedulesActivationException
+     */
+    void unactivateSchedule( Schedule schedule, Continuum continuum )
+        throws SchedulesActivationException;
 }

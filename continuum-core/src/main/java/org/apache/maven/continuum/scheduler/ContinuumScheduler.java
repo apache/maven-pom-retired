@@ -32,4 +32,9 @@ public interface ContinuumScheduler
 
     void addGlobalTriggerListener( TriggerListener listener );
 
+    void unscheduleJob( String jobName, String groupName )
+        throws ContinuumSchedulerException;
+
+    boolean interruptSchedule( String jobName, String groupName )
+        throws ContinuumSchedulerException;
 }

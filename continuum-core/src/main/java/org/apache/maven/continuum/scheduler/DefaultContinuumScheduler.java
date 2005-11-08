@@ -106,6 +106,35 @@ public class DefaultContinuumScheduler
         }
     }
 
+    public void unscheduleJob( String jobName, String groupName )
+        throws ContinuumSchedulerException
+    {
+        try
+        {
+            if ( jobExists( jobName, groupName ) )
+            {
+                scheduler.deleteJob( jobName, groupName );
+            }
+        }
+        catch ( SchedulerException e )
+        {
+            throw new ContinuumSchedulerException( "Error unscheduling job.", e );
+        }
+    }
+
+    public boolean interruptSchedule( String jobName, String groupName )
+        throws ContinuumSchedulerException
+    {
+        try
+        {
+            return scheduler.interrupt( jobName, groupName );
+        }
+        catch ( Exception e )
+        {
+            throw new ContinuumSchedulerException( "Can't interrup job \"" + jobName + "\".", e );
+        }
+    }
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------

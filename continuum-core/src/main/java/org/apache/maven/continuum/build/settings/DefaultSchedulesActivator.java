@@ -88,6 +88,14 @@ public class DefaultSchedulesActivator
         schedule( schedule, continuum );
     }
 
+    public void unactivateSchedule( Schedule schedule, Continuum continuum )
+        throws SchedulesActivationException
+    {
+        getLogger().info( "Unactivating schedule " + schedule.getName() );
+
+        unschedule( schedule, continuum );
+    }
+
     protected void schedule( Schedule schedule, Continuum continuum )
         throws SchedulesActivationException
     {
@@ -144,6 +152,26 @@ public class DefaultSchedulesActivator
         catch ( ContinuumSchedulerException e )
         {
             throw new SchedulesActivationException( "Cannot schedule build job.", e );
+        }
+    }
+
+    protected void unschedule( Schedule schedule, Continuum continuum )
+        throws SchedulesActivationException
+    {
+        try
+        {
+            if ( schedule.isActive() )
+            {
+                getLogger().info( "Stopping active schedule \"" + schedule.getName() + "\"." );
+
+                scheduler.interruptSchedule( schedule.getName(), Scheduler.DEFAULT_GROUP );
+            }
+
+            scheduler.unscheduleJob( schedule.getName(), Scheduler.DEFAULT_GROUP );
+        }
+        catch ( ContinuumSchedulerException e )
+        {
+            throw new SchedulesActivationException( "Cannot unschedule build job \"" + schedule.getName() + "\".", e );
         }
     }
 }
