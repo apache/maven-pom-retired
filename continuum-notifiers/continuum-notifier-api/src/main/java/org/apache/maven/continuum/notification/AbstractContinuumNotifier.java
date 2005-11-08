@@ -42,13 +42,16 @@ public abstract class AbstractContinuumNotifier
 
             StringBuffer buf = new StringBuffer( configurationService.getUrl() );
 
-            if ( !buf.toString().endsWith( "/" ) )
+            if ( project != null || build != null )
             {
-                buf.append( "/" );
-            }
+                if ( !buf.toString().endsWith( "/" ) )
+                {
+                    buf.append( "/" );
+                }
 
-            buf.append( "target/ProjectBuild.vm/view/ProjectBuild/id/" ).append( project.getId() ).append(
-                "/buildId/" ).append( build.getId() );
+                buf.append( "target/ProjectBuild.vm/view/ProjectBuild/id/" ).append( project.getId() ).append(
+                    "/buildId/" ).append( build.getId() );
+            }
 
             return buf.toString();
         }
