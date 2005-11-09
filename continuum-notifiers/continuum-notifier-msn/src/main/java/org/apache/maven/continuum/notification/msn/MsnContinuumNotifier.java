@@ -23,11 +23,14 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumProjectState;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.msn.MsnClient;
 import org.codehaus.plexus.msn.MsnException;
 import org.codehaus.plexus.notification.NotificationException;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -52,6 +55,11 @@ public class MsnContinuumNotifier
      * @plexus.requirement
      */
     private ConfigurationService configurationService;
+
+    /**
+     * @plexus.configuration
+     */
+    private ContinuumStore store;
 
     // ----------------------------------------------------------------------
     // Configuration
@@ -110,7 +118,12 @@ public class MsnContinuumNotifier
     private String generateMessage( Project project, BuildResult build )
         throws ContinuumException
     {
-        int state = build.getState();
+        int state = project.getState();
+
+        if ( build != null )
+        {
+            state = build.getState();
+        }
 
         String message;
 
@@ -140,6 +153,17 @@ public class MsnContinuumNotifier
         throws NotificationException
     {
         String message;
+
+        // ----------------------------------------------------------------------
+        // Check if the message should be sent at all
+        // ----------------------------------------------------------------------
+
+        BuildResult previousBuild = getPreviousBuild( project, build );
+
+        if ( !shouldNotify( build, previousBuild ) )
+        {
+            return;
+        }
 
         try
         {
@@ -180,6 +204,39 @@ public class MsnContinuumNotifier
 
             }
         }
+    }
+
+    private BuildResult getPreviousBuild( Project project, BuildResult currentBuild )
+        throws NotificationException
+    {
+        try
+        {
+            // TODO: prefer to remove this and get them up front
+            if ( project.getId() > 0 )
+            {
+                project = store.getProjectWithBuilds( project.getId() );
+            }
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new NotificationException( "Unable to obtain project builds", e );
+        }
+        List builds = project.getBuildResults();
+
+        if ( builds.size() < 2 )
+        {
+            return null;
+        }
+
+        BuildResult build = (BuildResult) builds.get( builds.size() - 1 );
+
+        if ( currentBuild != null && build.getId() != currentBuild.getId() )
+        {
+            throw new NotificationException( "INTERNAL ERROR: The current build wasn't the first in the build list. " +
+                "Current build: '" + currentBuild.getId() + "', " + "first build: '" + build.getId() + "'." );
+        }
+
+        return (BuildResult) builds.get( builds.size() - 2 );
     }
 
     /**

@@ -317,7 +317,7 @@ public class MailContinuumNotifier
 
     private String generateSubject( Project project, BuildResult build )
     {
-        int state = -1;
+        int state = project.getState();
 
         if ( build != null )
         {
@@ -427,39 +427,6 @@ public class MailContinuumNotifier
         }
 
         return address;
-    }
-
-    private boolean shouldNotify( BuildResult build, BuildResult previousBuild )
-    {
-        if ( build == null )
-        {
-            return true;
-        }
-
-        // Always send if the project failed
-        if ( build.getState() == ContinuumProjectState.FAILED || build.getState() == ContinuumProjectState.ERROR )
-        {
-            return true;
-        }
-
-        // Send if this is the first build
-        if ( previousBuild == null )
-        {
-            return true;
-        }
-
-        // Send if the state has changed
-        getLogger().info(
-            "Current build state: " + build.getState() + ", previous build state: " + previousBuild.getState() );
-
-        if ( build.getState() != previousBuild.getState() )
-        {
-            return true;
-        }
-
-        getLogger().info( "Same state, not sending mail." );
-
-        return false;
     }
 
     private BuildResult getPreviousBuild( Project project, BuildResult currentBuild )
