@@ -1068,6 +1068,9 @@ public class DefaultContinuum
             {
                 if ( schedule.isActive() )
                 {
+                    // I unactivate it before if it's already active
+                    schedulesActivator.unactivateSchedule( schedule, this );
+
                     schedulesActivator.activateSchedule( schedule, this );
                 }
                 else
@@ -1095,18 +1098,9 @@ public class DefaultContinuum
 
         schedule.setDelay( new Integer( (String) configuration.get( "schedule.delay" ) ).intValue() );
 
-        boolean isActive = schedule.isActive();
-
         schedule.setActive( new Boolean( (String) configuration.get( "schedule.active" ) ).booleanValue() );
 
-        if ( schedule.isActive() == isActive )
-        {
-            updateSchedule( schedule, false );
-        }
-        else
-        {
-            updateSchedule( schedule, true );
-        }
+        updateSchedule( schedule, true );
     }
 
     public void removeSchedule( int scheduleId )
