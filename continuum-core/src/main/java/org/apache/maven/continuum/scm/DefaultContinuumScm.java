@@ -77,7 +77,7 @@ public class DefaultContinuumScm
 
         String tagMessage = "";
 
-        if ( tag != null && !StringUtils.isEmty( tag.trim() ) )
+        if ( tag != null && !StringUtils.isEmpty( tag.trim() ) )
         {
             tagMessage = " with branch/tag " + tag;
 
@@ -186,7 +186,7 @@ public class DefaultContinuumScm
 
         String tagMessage = "";
 
-        if ( tag != null && !StringUtils.isEmty( tag.trim() ) )
+        if ( tag != null && !StringUtils.isEmpty( tag.trim() ) )
         {
             tagMessage = " with branch/tag " + tag;
 
