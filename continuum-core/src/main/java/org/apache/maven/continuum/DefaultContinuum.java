@@ -339,7 +339,7 @@ public class DefaultContinuum
         buildProject( projectId, buildDef.getId(), trigger );
     }
 
-    public void buildProject( int projectId, int buildDefinitionId, int trigger )
+    public synchronized void buildProject( int projectId, int buildDefinitionId, int trigger )
         throws ContinuumException
     {
         if ( isInBuildingQueue( projectId ) )
