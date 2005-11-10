@@ -388,7 +388,7 @@ public class DefaultContinuumScm
     {
         String cmd = commandLine;
         
-        if ( cmd.startsWith( "svn" ) )
+        if ( cmd != null && cmd.startsWith( "svn" ) )
         {
             String pwdString = "--password";
 
