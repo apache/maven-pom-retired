@@ -83,6 +83,10 @@ public class DefaultContinuumScm
 
             tag = tag.trim();
         }
+        else
+        {
+            tag = null;
+        }
 
         try
         {
@@ -187,6 +191,10 @@ public class DefaultContinuumScm
             tagMessage = " with branch/tag " + tag;
 
             tag = tag.trim();
+        }
+        else
+        {
+            tag = null;
         }
 
         try
