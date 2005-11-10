@@ -18,6 +18,7 @@ package org.apache.maven.continuum.web.validation;
 
 import org.codehaus.plexus.formica.FormicaException;
 import org.codehaus.plexus.formica.validation.AbstractValidator;
+import org.codehaus.plexus.util.StringUtils;
 import org.quartz.CronTrigger;
 
 import java.text.ParseException;
@@ -34,11 +35,22 @@ public class CronExpressionValidator
     {
         try
         {
+            String[] cronParams = StringUtils.split( cronExpression );
+            if ( cronParams.length != 6 )
+            {
+                return false;
+            }
+
             CronTrigger cronTrigger = new CronTrigger();
 
             cronTrigger.setCronExpression( cronExpression );
 
-            return true;
+            if ( cronParams[3].equals( "?" ) || cronParams[5].equals( "?" ) )
+            {
+                return true;
+            }
+
+            return false;
         }
         catch ( ParseException e )
         {
