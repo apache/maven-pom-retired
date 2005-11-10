@@ -124,7 +124,7 @@ public class MavenTwoContinuumProjectBuilder
 
         if ( !excludedPackagingTypes.contains( mavenProject.getPackaging() ) )
         {
-            String defaultGoal = "clean:clean install";
+            String defaultGoal = "clean install";
 
             if (mavenProject.getBuild() != null && mavenProject.getBuild().getDefaultGoal() != null )
             {
