@@ -29,15 +29,31 @@
         <p>
           If you use maven or ant, you need to add at the end of maven.bat and ant.bat, the following line :
         </p>
-        <pre>
+        <source>
 if "%MAVEN_TERMINATE_CMD%" == "on" exit %ERROR_CODE%
-        </pre>
+        </source>
+        <p>
         If your bat file contains at the end an exit /B, this line must be copy before it.
         You must add too, at the begin of $CONTINUUM/bin/win32/run.bat, the following lines :
-         <pre>
+        </p>
+        <source>
 @echo off
 set MAVEN_TERMINATE_CMD=on
-         </pre>
+        </source>
+      </answer>
+    </faq>
+    <faq id="can-i-use-file-protocol-in-add-project-view">
+      <question>Can i use file protocol in Add Project view?</question>
+      <answer>
+        <p>
+          File protocol is disabled by default for security reasons. You can allow it in $CONTINUUM_HOME/apps/continuum/conf/application.xml
+        </p>
+        <p>
+          Uncomment the following line :
+        </p>
+        <source><![CDATA[
+          <allowedScheme implementation="java.lang.String">file</allowedScheme>
+        ]]></source>
       </answer>
     </faq>
   </part>
