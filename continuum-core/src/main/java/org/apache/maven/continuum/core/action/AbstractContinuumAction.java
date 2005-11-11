@@ -150,12 +150,12 @@ public abstract class AbstractContinuumAction
         return ( (Boolean) getObject( context, key ) ).booleanValue();
     }
 
-    private static int getInteger( Map context, String key )
+    protected static int getInteger( Map context, String key )
     {
         return ( (Integer) getObject( context, key, null ) ).intValue();
     }
 
-    private static Object getObject( Map context, String key )
+    protected static Object getObject( Map context, String key )
     {
         if ( !context.containsKey( key ) )
         {
@@ -172,7 +172,7 @@ public abstract class AbstractContinuumAction
         return value;
     }
 
-    private static Object getObject( Map context, String key, Object defaultValue )
+    protected static Object getObject( Map context, String key, Object defaultValue )
     {
         Object value = context.get( key );
 
