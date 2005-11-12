@@ -425,7 +425,7 @@ public abstract class AbstractIntegrationTest
                 fail( "Timeout while waiting for build. Project id: " + projectId );
             }
 
-            Thread.yield();
+            Thread.sleep( 1000 );
         }
     }
 
@@ -462,7 +462,7 @@ public abstract class AbstractIntegrationTest
                 fail( "Timeout while waiting for project '" + projectId + "' to be checked out." );
             }
 
-            Thread.yield();
+            Thread.sleep( 1000 );
 
             project = getContinuum().getProjectWithCheckoutResult( projectId );
         }
@@ -505,7 +505,7 @@ public abstract class AbstractIntegrationTest
                 fail( "Timeout while waiting for build #" + buildId + " to complete." );
             }
 
-            Thread.yield();
+            Thread.sleep( 1000 );
 
             build = getContinuum().getBuildResult( buildId );
         }
