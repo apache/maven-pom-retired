@@ -1,5 +1,4 @@
 @echo off
-set MAVEN_TERMINATE_CMD=on
 @REM Decide how to startup depending on the version of windows
 
 @REM -- Win98ME
