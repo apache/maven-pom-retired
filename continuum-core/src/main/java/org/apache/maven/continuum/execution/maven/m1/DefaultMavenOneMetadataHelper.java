@@ -261,22 +261,7 @@ public class DefaultMavenOneMetadataHelper
         {
             String currentNagEmailAddress = null;
 
-            if ( project.getNotifiers() != null && !project.getNotifiers().isEmpty() )
-            {
-                for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
-                {
-                    ProjectNotifier notif = (ProjectNotifier) i.next();
-
-                    // Can we have an other type for maven 1 project?
-                    if ( "mail".equals( notif.getType() ) )
-                    {
-                        currentNagEmailAddress = (String) notif.getConfiguration().get(
-                            ContinuumRecipientSource.ADDRESS_FIELD );
-                    }
-                }
-            }
-
-            String nagEmailAddress = getValue( build, "nagEmailAddress", currentNagEmailAddress );
+            String nagEmailAddress = getValue( build, "nagEmailAddress", null );
 
             if ( nagEmailAddress != null )
             {
@@ -290,7 +275,7 @@ public class DefaultMavenOneMetadataHelper
             }
         }
 
-        if ( notifier == null && notifier.getConfiguration().isEmpty() )
+        if ( notifier == null && ( notifiers == null || notifiers.isEmpty() ) )
         {
             throw new MavenOneMetadataHelperException(
                 "Missing 'nagEmailAddress' element in the 'build' element in the POM." );
