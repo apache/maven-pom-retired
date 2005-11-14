@@ -2,13 +2,13 @@
   <parent>
     <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0.1</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-plexus-application</artifactId>
   <packaging>plexus-application</packaging>
   <name>Continuum Plexus Application</name>
-  <version>1.0.1</version>
+  <version>1.1-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
@@ -86,6 +86,7 @@
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-xmlrpc</artifactId>
+      <version>1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.derby</groupId>
@@ -152,18 +153,22 @@
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-notifier-jabber</artifactId>
+      <version>1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-notifier-msn</artifactId>
+      <version>1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-web</artifactId>
+      <version>1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-notifier-irc</artifactId>
+      <version>1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
