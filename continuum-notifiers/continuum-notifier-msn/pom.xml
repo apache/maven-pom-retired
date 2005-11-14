@@ -2,12 +2,12 @@
   <parent>
     <artifactId>continuum-notifiers</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0.1</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-notifier-msn</artifactId>
   <name>Continuum MSN Notifier</name>
-  <version>1.0.1</version>
+  <version>1.1-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
