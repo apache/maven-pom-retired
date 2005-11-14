@@ -35,100 +35,100 @@ $page.setTitle( $i18n.getString( "group.management.label" ) )
         <td>$group.name</td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "addProject" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "editProject" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "deleteProject" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "buildProject" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "showProject" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "addBuildDefinition" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "editBuildDefinition" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "deleteBuildDefinition" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "addNotifier" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "editNotifier" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "deleteNotifier" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "manageConfiguration" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "manageSchedule" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "manageUsers" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized"/>
+            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized"/>
+            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
