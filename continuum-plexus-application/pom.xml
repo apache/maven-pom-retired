@@ -2,13 +2,13 @@
   <parent>
     <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0.1</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-plexus-application</artifactId>
   <packaging>plexus-application</packaging>
   <name>Continuum Plexus Application</name>
-  <version>1.0.1</version>
+  <version>1.1-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
@@ -93,6 +93,11 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.8</version>
+    </dependency>
+    <dependency>
       <groupId>plexus</groupId>
       <artifactId>plexus-container-artifact</artifactId>
       <version>1.0-alpha-3</version>
@@ -134,15 +139,10 @@
       <type>plexus-service</type>
       <exclusions>
         <exclusion>
-          <artifactId>log4j</artifactId>
           <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.8</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -172,8 +172,8 @@
       <type>plexus-service</type>
       <exclusions>
         <exclusion>
-          <artifactId>log4j</artifactId>
           <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
