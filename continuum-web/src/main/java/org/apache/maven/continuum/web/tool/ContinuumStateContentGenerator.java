@@ -51,15 +51,15 @@ public class ContinuumStateContentGenerator
         }
         else if ( state == ContinuumProjectState.OK )
         {
-            return "<img src=\"/continuum/images/icon_success_sml.gif\" alt=\"Success\"/>";
+            return "<img src=\"/continuum/images/icon_success_sml.gif\" alt=\"Success\" title=\"Success\" border=\"0\" />";
         }
         else if ( state == ContinuumProjectState.FAILED )
         {
-            return "<img src=\"/continuum/images/icon_warning_sml.gif\" alt=\"Failed\"/>";
+            return "<img src=\"/continuum/images/icon_warning_sml.gif\" alt=\"Failed\" title=\"Failed\" border=\"0\" />";
         }
         else if ( state == ContinuumProjectState.ERROR )
         {
-            return "<img src=\"/continuum/images/icon_error_sml.gif\" alt=\"Error\"/>";
+            return "<img src=\"/continuum/images/icon_error_sml.gif\" alt=\"Error\" title=\"Error\" border=\"0\" />";
         }
         else if ( state == ContinuumProjectState.BUILDING )
         {

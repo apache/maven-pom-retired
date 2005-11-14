@@ -155,6 +155,39 @@ public class DefaultContinuum
         }
     }
 
+    public BuildResult getBuildResultByBuildNumber( int projectId, int buildNumber )
+        throws ContinuumException
+    {
+        //TODO : Get build result with a store request
+
+        List buildResults;
+
+        try
+        {
+            buildResults = new ArrayList( store.getProjectWithBuilds( projectId ).getBuildResults() );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw logAndCreateException( "Exception while getting build results for project.", e );
+        }
+
+        Collections.reverse( buildResults );
+
+        Iterator buildResultsIterator = buildResults.iterator();
+
+        for ( Iterator i = buildResults.iterator(); i.hasNext(); )
+        {
+            BuildResult br = (BuildResult) i.next();
+
+            if ( br.getBuildNumber() == buildNumber )
+            {
+                return br;
+            }
+        }
+
+        return null;
+    }
+
     // ----------------------------------------------------------------------
     // Queues
     // ----------------------------------------------------------------------
