@@ -43,7 +43,7 @@ public abstract class AbstractContinuumNotifier
 
             StringBuffer buf = new StringBuffer( configurationService.getUrl() );
 
-            if ( project != null || build != null )
+            if ( project != null && build != null )
             {
                 if ( !buf.toString().endsWith( "/" ) )
                 {
