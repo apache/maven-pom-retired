@@ -4,7 +4,7 @@
   <artifactId>continuum-parent</artifactId>
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <url>http://maven.apache.org/continuum/</url>
   <issueManagement>
     <system>jira</system>
@@ -43,13 +43,6 @@
       <archive>mail-archives.apache.org/mod_mbox/www-announce/</archive>
     </mailingList>
   </mailingLists>
-   <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
   <developers>
     <developer>
       <id>jvanzyl</id>
@@ -96,10 +89,17 @@
       <timezone>+1</timezone>
     </developer>
   </developers>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/</connection>
-    <developerConnection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/trunk/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-1.0.1/</connection>
+    <developerConnection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-1.0.1/</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/tags/continuum-1.0.1/</url>
   </scm>
   <organization>
     <name>Apache</name>
