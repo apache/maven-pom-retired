@@ -73,6 +73,8 @@ public interface Continuum
     boolean isInBuildingQueue( int projectId )
         throws ContinuumException;
 
+    boolean isInCheckoutQueue( int projectId )
+        throws ContinuumException;
     // ----------------------------------------------------------------------
     // Building
     // ----------------------------------------------------------------------

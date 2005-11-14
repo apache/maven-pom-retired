@@ -62,7 +62,7 @@ $page.setTitle( "Continuum" )
         <td><a href="$link.setPage('View.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">$!item.name</a></td>
         <td>$!item.version</td>
         <td>
-          #if ( $continuum.isInBuildingQueue( $item.id ) )
+          #if ( $continuum.isInBuildingQueue( $item.id ) || $continuum.isInCheckoutQueue( $item.id ) )
             <b>In&nbsp;queue</b>
           #elseif ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
             #if ( $item.buildNumber != 0 )
@@ -80,7 +80,7 @@ $page.setTitle( "Continuum" )
         ## Operations
 
         #if ( $continuum.security.isAuthorized( $c1user, "buildProject" ) )
-          #if ( $continuum.isInBuildingQueue( $item.id ) )
+          #if ( $continuum.isInBuildingQueue( $item.id ) || $continuum.isInCheckoutQueue( $item.id ) )
           <td>Build</td>
           #elseif ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
           <td><a href="$link.addPathInfo('action', 'cam').addPathInfo('cid','buildProject').addPathInfo('id', $item.id)">Build&nbsp;Now</a></td>

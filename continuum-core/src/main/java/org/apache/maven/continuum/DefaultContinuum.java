@@ -41,6 +41,7 @@ import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.maven.MavenOneContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.maven.MavenTwoContinuumProjectBuilder;
+import org.apache.maven.continuum.scm.queue.CheckOutTask;
 import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
@@ -123,6 +124,11 @@ public class DefaultContinuum
     private TaskQueue buildQueue;
 
     /**
+     * @plexus.requirement
+     */
+    private TaskQueue checkoutQueue;
+
+    /**
      * @plexus.configuration
      */
     private String workingDirectory;
@@ -203,12 +209,39 @@ public class DefaultContinuum
         }
         catch ( TaskQueueException e )
         {
-            throw new ContinuumException( "Error while getting the queue snapshot.", e );
+            throw new ContinuumException( "Error while getting the building queue.", e );
         }
 
         for ( Iterator it = queue.iterator(); it.hasNext(); )
         {
             BuildProjectTask task = (BuildProjectTask) it.next();
+
+            if ( task.getProjectId() == projectId )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isInCheckoutQueue( int projectId )
+        throws ContinuumException
+    {
+        List queue;
+
+        try
+        {
+            queue = checkoutQueue.getQueueSnapshot();
+        }
+        catch ( TaskQueueException e )
+        {
+            throw new ContinuumException( "Error while getting the checkout queue.", e );
+        }
+
+        for ( Iterator it = queue.iterator(); it.hasNext(); )
+        {
+            CheckOutTask task = (CheckOutTask) it.next();
 
             if ( task.getProjectId() == projectId )
             {

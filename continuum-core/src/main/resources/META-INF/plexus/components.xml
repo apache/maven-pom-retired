@@ -29,6 +29,11 @@
           <field-name>buildQueue</field-name>
         </requirement>
         <requirement>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>check-out-project</role-hint>
+          <field-name>checkoutQueue</field-name>
+        </requirement>
+        <requirement>
           <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
         </requirement>
       </requirements>
