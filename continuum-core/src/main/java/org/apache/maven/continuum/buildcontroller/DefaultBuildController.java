@@ -230,6 +230,25 @@ public class DefaultBuildController
             {
                 getLogger().error( "Internal error while building the project.", ex );
             }
+
+            String error = ContinuumUtils.throwableToString( ex );
+
+            build.setError( error );
+
+            try
+            {
+                store.updateBuildResult( build );
+
+                build = store.getBuildResult( build.getId() );
+
+                project.setState( build.getState() );
+
+                store.updateProject( project );
+            }
+            catch ( Exception e )
+            {
+                getLogger().error( "Can't store updating project.", e );
+            }
         }
         finally
         {
