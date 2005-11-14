@@ -68,7 +68,7 @@ public class MailContinuumNotifier
     private ConfigurationService configurationService;
 
     /**
-     * @plexus.configuration
+     * @plexus.requirement
      */
     private ContinuumStore store;
 
