@@ -336,11 +336,11 @@
           -->
           <property>
             <name>org.jpox.transactionIsolation</name>
-            <value>READ_COMMITTED</value>
+            <value>READ_UNCOMMITTED</value>
           </property>
           <property>
             <name>org.jpox.poid.transactionIsolation</name>
-            <value>READ_COMMITTED</value>
+            <value>READ_UNCOMMITTED</value>
           </property>
         </properties>
       </configuration>
