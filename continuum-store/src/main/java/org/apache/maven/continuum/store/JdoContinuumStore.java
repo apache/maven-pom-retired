@@ -472,7 +472,15 @@ public class JdoContinuumStore
                 throw new ContinuumStoreException( "Not detached: " + object );
             }
 
-            pm.attachCopy( object, true );
+            try
+            {
+                pm.attachCopy( object, true );
+            }
+            catch ( Exception e )
+            {
+                //We retry if we obtain an exceptio like a dead lock
+                pm.attachCopy( object, true );
+            }
 
             tx.commit();
         }
