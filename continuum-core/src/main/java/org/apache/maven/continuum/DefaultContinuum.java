@@ -408,7 +408,7 @@ public class DefaultContinuum
     public synchronized void buildProject( int projectId, int buildDefinitionId, int trigger )
         throws ContinuumException
     {
-        if ( isInBuildingQueue( projectId ) )
+        if ( isInBuildingQueue( projectId ) || isInCheckoutQueue( projectId ) )
         {
             return;
         }
