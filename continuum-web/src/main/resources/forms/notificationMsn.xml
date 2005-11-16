@@ -84,7 +84,7 @@
 
   <!-- Add -->
   <add>
-    <title-key>jabberNotificationTitle</title-key>
+    <title-key>msnNotificationTitle</title-key>
     <action>callMethod</action>
     <view>Summary.vm</view>
     <view-on-failure>Add.vm</view-on-failure>
