@@ -14,6 +14,10 @@
       <artifactId>plexus-formica</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-model</artifactId>
     </dependency>
