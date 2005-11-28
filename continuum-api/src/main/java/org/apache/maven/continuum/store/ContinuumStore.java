@@ -32,6 +32,7 @@ import org.apache.maven.continuum.model.system.UserGroup;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -50,6 +51,10 @@ public interface ContinuumStore
 
     ProjectNotifier storeNotifier( ProjectNotifier notifier )
         throws ContinuumStoreException;
+
+    Map getDefaultBuildDefinitions();
+
+    BuildDefinition getDefaultBuildDefinition( int projectId );
 
     BuildDefinition getBuildDefinition( int buildDefinitionId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
@@ -140,8 +145,13 @@ public interface ContinuumStore
     ProjectGroup getProjectGroupByGroupId( String groupId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
-    BuildResult getLatestBuildResultForProject( int projectId )
-        throws ContinuumStoreException;
+    BuildResult getLatestBuildResultForProject( int projectId );
+
+    Map getLatestBuildResults();
+
+    List getBuildResultByBuildNumber( int projectId, int buildNumber );
+
+    Map getBuildResultsInSuccess();
 
     void addBuildResult( Project project, BuildResult build )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;

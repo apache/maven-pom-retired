@@ -148,50 +148,34 @@ public class DefaultContinuum
         return store.getAllProjectsByName();
     }
 
-    public BuildResult getLatestBuildResultForProject( int projectId )
-        throws ContinuumException
+    public Map getLatestBuildResults()
     {
-        try
-        {
-            return store.getLatestBuildResultForProject( projectId );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw logAndCreateException( "Error while getting the last build for project '" + projectId + "'.", e );
-        }
+        return store.getLatestBuildResults();
+    }
+
+    public Map getBuildResultsInSuccess()
+    {
+        return store.getBuildResultsInSuccess();
+    }
+
+    public BuildResult getLatestBuildResultForProject( int projectId )
+    {
+        return store.getLatestBuildResultForProject( projectId );
     }
 
     public BuildResult getBuildResultByBuildNumber( int projectId, int buildNumber )
         throws ContinuumException
     {
-        //TODO : Get build result with a store request
+        List builds = store.getBuildResultByBuildNumber( projectId, buildNumber );
 
-        List buildResults;
-
-        try
+        if ( builds.isEmpty() )
         {
-            buildResults = new ArrayList( store.getProjectWithBuilds( projectId ).getBuildResults() );
+            return null;
         }
-        catch ( ContinuumStoreException e )
+        else
         {
-            throw logAndCreateException( "Exception while getting build results for project.", e );
+            return (BuildResult) builds.get( 0 );
         }
-
-        Collections.reverse( buildResults );
-
-        Iterator buildResultsIterator = buildResults.iterator();
-
-        for ( Iterator i = buildResults.iterator(); i.hasNext(); )
-        {
-            BuildResult br = (BuildResult) i.next();
-
-            if ( br.getBuildNumber() == buildNumber )
-            {
-                return br;
-            }
-        }
-
-        return null;
     }
 
     // ----------------------------------------------------------------------
@@ -336,11 +320,20 @@ public class DefaultContinuum
             projectsList = getProjects();
         }
 
+        Map buildDefinitionsIds = store.getDefaultBuildDefinitions();
+
         for ( Iterator i = projectsList.iterator(); i.hasNext(); )
         {
             Project project = (Project) i.next();
 
-            buildProject( project.getId(), trigger );
+            Integer buildDefId = (Integer) buildDefinitionsIds.get( new Integer( project.getId() ) );
+
+            if ( buildDefId == null )
+            {
+                throw new ContinuumException( "Project (id=" + project.getId() + " doens't have a default build definition." );
+            }
+
+            buildProject( project.getId(), buildDefId.intValue(), trigger );
         }
     }
 
@@ -364,16 +357,19 @@ public class DefaultContinuum
         {
             Project p = (Project) projectIterator.next();
 
-            Project project = getProjectWithAllDetails( p.getId() );
-
-            for ( Iterator bdIterator = project.getBuildDefinitions().iterator(); bdIterator.hasNext(); )
+            if ( !isInBuildingQueue( p.getId() ) && !isInCheckoutQueue( p.getId() ) )
             {
-                BuildDefinition buildDef = (BuildDefinition) bdIterator.next();
+                Project project = getProjectWithAllDetails( p.getId() );
 
-                if ( schedule.getId() == buildDef.getSchedule().getId() )
+                for ( Iterator bdIterator = project.getBuildDefinitions().iterator(); bdIterator.hasNext(); )
                 {
-                    //TODO: Fix trigger name
-                    buildProject( project.getId(), buildDef.getId(), ContinuumProjectState.TRIGGER_UNKNOWN );
+                    BuildDefinition buildDef = (BuildDefinition) bdIterator.next();
+
+                    if ( schedule.getId() == buildDef.getSchedule().getId() )
+                    {
+                        //TODO: Fix trigger name
+                        buildProject( project.getId(), buildDef.getId(), ContinuumProjectState.TRIGGER_UNKNOWN, false );
+                    }
                 }
             }
         }
@@ -382,19 +378,17 @@ public class DefaultContinuum
     public void buildProject( int projectId )
         throws ContinuumException
     {
-        BuildDefinition buildDef = getDefaultBuildDefinition( projectId );
-
-        if ( buildDef == null )
-        {
-            throw new ContinuumException( "Project (id=" + projectId + " doens't have a default build definition." );
-        }
-
-        buildProject( projectId, buildDef.getId(), ContinuumProjectState.TRIGGER_FORCED );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_FORCED );
     }
 
     public void buildProject( int projectId, int trigger )
         throws ContinuumException
     {
+        if ( isInBuildingQueue( projectId ) || isInCheckoutQueue( projectId ) )
+        {
+            return;
+        }
+
         BuildDefinition buildDef = getDefaultBuildDefinition( projectId );
 
         if ( buildDef == null )
@@ -402,15 +396,24 @@ public class DefaultContinuum
             throw new ContinuumException( "Project (id=" + projectId + " doens't have a default build definition." );
         }
 
-        buildProject( projectId, buildDef.getId(), trigger );
+        buildProject( projectId, buildDef.getId(), trigger, false );
     }
 
-    public synchronized void buildProject( int projectId, int buildDefinitionId, int trigger )
+    public void buildProject( int projectId, int buildDefinitionId, int trigger )
         throws ContinuumException
     {
-        if ( isInBuildingQueue( projectId ) || isInCheckoutQueue( projectId ) )
+        buildProject( projectId, buildDefinitionId, trigger, true );
+    }
+
+    private synchronized void buildProject( int projectId, int buildDefinitionId, int trigger, boolean checkQueues )
+        throws ContinuumException
+    {
+        if ( checkQueues )
         {
-            return;
+            if ( isInBuildingQueue( projectId ) || isInCheckoutQueue( projectId ) )
+            {
+                return;
+            }
         }
 
         try
@@ -902,21 +905,7 @@ public class DefaultContinuum
     public BuildDefinition getDefaultBuildDefinition( int projectId )
         throws ContinuumException
     {
-        List buildDefinitions = getBuildDefinitions( projectId );
-
-        BuildDefinition buildDefinition = null;
-
-        for ( Iterator i = buildDefinitions.iterator(); i.hasNext(); )
-        {
-            buildDefinition = (BuildDefinition) i.next();
-
-            if ( buildDefinition.isDefaultForProject() )
-            {
-                break;
-            }
-        }
-
-        return buildDefinition;
+        return store.getDefaultBuildDefinition( projectId );
     }
 
     public BuildDefinition getBuildDefinition( int projectId, int buildDefinitionId )
@@ -958,20 +947,13 @@ public class DefaultContinuum
         {
             buildDefinition.setDefaultForProject( true );
             
-            List buildDefinitions = getBuildDefinitions( projectId );
+            BuildDefinition bd = getDefaultBuildDefinition( projectId );
 
-            for ( Iterator i = buildDefinitions.iterator(); i.hasNext(); )
+            if ( bd != null )
             {
-                BuildDefinition bd = (BuildDefinition) i.next();
+                bd.setDefaultForProject( false );
 
-                if ( bd.isDefaultForProject() )
-                {
-                    bd.setDefaultForProject( false );
-
-                    storeBuildDefinition( bd );
-
-                    break;
-                }
+                storeBuildDefinition( bd );
             }
         }
 
@@ -1008,20 +990,13 @@ public class DefaultContinuum
         {
             buildDefinition.setDefaultForProject( true );
             
-            List buildDefinitions = getBuildDefinitions( projectId );
+            BuildDefinition bd = getDefaultBuildDefinition( projectId );
 
-            for ( Iterator i = buildDefinitions.iterator(); i.hasNext(); )
+            if ( bd != null )
             {
-                BuildDefinition bd = (BuildDefinition) i.next();
+                bd.setDefaultForProject( false );
 
-                if ( bd.isDefaultForProject() )
-                {
-                    bd.setDefaultForProject( false );
-
-                    storeBuildDefinition( bd );
-
-                    break;
-                }
+                storeBuildDefinition( bd );
             }
         }
 
@@ -1694,6 +1669,25 @@ public class DefaultContinuum
         {
             Project project = (Project) it.next();
 
+            if ( project.getState() != ContinuumProjectState.NEW &&
+                 project.getState() != ContinuumProjectState.OK &&
+                 project.getState() != ContinuumProjectState.FAILED &&
+                 project.getState() != ContinuumProjectState.ERROR )
+            {
+                project.setState( project.getOldState() );
+
+                project.setOldState( 0 );
+
+                try
+                {
+                    store.updateProject( project );
+                }
+                catch( ContinuumStoreException e )
+                {
+                    throw new InitializationException( "Database is corrupted.", e );
+                }
+            }
+            
             getLogger().info( " " + project.getId() + ":" + project.getName() + ":" + project.getExecutorId() );
         }
     }

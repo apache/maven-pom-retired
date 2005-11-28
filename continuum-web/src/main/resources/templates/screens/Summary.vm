@@ -35,6 +35,8 @@ $page.setTitle( "Continuum" )
       </tr>
 
       #set ( $items = $continuum.projects )
+      #set ( $buildResults = $continuum.getLatestBuildResults() )
+      #set ( $buildResultsInSuccess = $continuum.getBuildResultsInSuccess() )
 
       #foreach ( $item in $items )
       #if ( $item.state == 2 )
@@ -48,7 +50,7 @@ $page.setTitle( "Continuum" )
       <tr class="$css.nextClass">
         <td>
           #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
-            #set ( $latestBuild = $continuum.getLatestBuildResultForProject( $item.id ) )
+            #set ( $latestBuild = $buildResults.get( $item.id ) )
             #set ( $generatedState = $state.generate( $item ) )
             #if ( $latestBuild && $generatedState != "New" )
               <a href="$link.setPage('ProjectBuild.vm').addQueryData('view','ProjectBuild').addQueryData('buildId',$latestBuild.id).addQueryData('id',$item.id)">$generatedState</a></td>
@@ -66,7 +68,7 @@ $page.setTitle( "Continuum" )
             <b>In&nbsp;queue</b>
           #elseif ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
             #if ( $item.buildNumber != 0 )
-              #set ( $build = $continuum.getBuildResultByBuildNumber( $item.id, $item.buildNumber ) )
+              #set ( $build = $buildResultsInSuccess.get( $item.id ) )
               <a href="$link.setPage('ProjectBuild.vm').addQueryData('view','ProjectBuild').addQueryData('buildId',$build.id).addQueryData('id',$item.id)">$item.buildNumber</a>
             #else
               $item.buildNumber

@@ -33,6 +33,12 @@ import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import javax.jdo.Extent;
 import javax.jdo.JDOException;
 import javax.jdo.JDOHelper;
@@ -42,9 +48,6 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -219,29 +222,73 @@ public class JdoContinuumStore
         {
             tx.begin();
 
-            Object id = pm.newObjectIdInstance( Project.class, new Integer( projectId ) );
+            Extent extent = pm.getExtent( BuildResult.class, true );
 
-            Project project = (Project) pm.getObjectById( id );
+            Query query = pm.newQuery( extent );
 
-            int buildId = project.getLatestBuildId();
+            query.declareParameters( "int projectId" );
 
-            if ( buildId > 0 )
+            query.setFilter( "this.project.id == projectId && this.project.latestBuildId == this.id" );
+
+            List result = (List) query.execute( new Integer( projectId ) );
+
+            result = (List) pm.detachCopyAll( result );
+
+            tx.commit();
+
+            if ( result != null && !result.isEmpty() )
             {
-                id = pm.newObjectIdInstance( BuildResult.class, new Integer( buildId ) );
-
-                Object object = pm.getObjectById( id );
-
-                BuildResult build = (BuildResult) pm.detachCopy( object );
-
-                tx.commit();
-
-                return build;
+                return (BuildResult) result.get( 0 );
             }
         }
         finally
         {
             rollback( tx );
         }
+        return null;
+    }
+
+    public Map getLatestBuildResults()
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( BuildResult.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.setFilter( "this.project.latestBuildId == this.id" );
+
+            List result = (List) query.execute();
+
+            result = (List) pm.detachCopyAll( result );
+
+            tx.commit();
+
+            if ( result != null && !result.isEmpty() )
+            {
+                Map builds = new HashMap();
+
+                for ( Iterator i = result.iterator(); i.hasNext(); )
+                {
+                    BuildResult br = (BuildResult) i.next();
+
+                    builds.put( new Integer( br.getProject().getId() ), br );
+                }
+
+                return builds;
+            }
+        }
+        finally
+        {
+            rollback( tx );
+        }
+
         return null;
     }
 
@@ -257,6 +304,105 @@ public class JdoContinuumStore
         updateObject( notifier );
 
         return notifier;
+    }
+
+    public BuildDefinition getDefaultBuildDefinition( int projectId )
+    {
+        getLogger().info( "project :" + projectId );
+        long startDate = System.currentTimeMillis();
+
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( Project.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.declareImports( "import org.apache.maven.continuum.model.project.BuildDefinition" );
+
+            query.declareParameters( "int projectId" );
+
+            query.declareVariables ("BuildDefinition buildDef");
+
+            query.setFilter( "this.buildDefinitions.contains(buildDef) && buildDef.defaultForProject == true && this.id == projectId" );
+
+            query.setResult( "buildDef" );
+
+            List result = (List) query.execute( new Integer( projectId ) );
+
+            result = (List) pm.detachCopyAll( result );
+
+            tx.commit();
+
+            if ( result != null && !result.isEmpty() )
+            {
+                BuildDefinition bd = (BuildDefinition) result.get( 0 );
+                getLogger().info( "nb bd for project " + projectId + " : " + result.size() + " - bd id : " + bd.getId() );
+                return bd;
+            }
+        }
+        finally
+        {
+            rollback( tx );
+            getLogger().info( "getDefaultBuildDefinition : " + ( System.currentTimeMillis() - startDate ) + "ms" );
+        }
+
+        return null;
+    }
+
+    public Map getDefaultBuildDefinitions()
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( Project.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.declareImports( "import org.apache.maven.continuum.model.project.BuildDefinition" );
+
+            query.setFilter( "this.buildDefinitions.contains(buildDef) && buildDef.defaultForProject == true" );
+
+            query.declareVariables ("BuildDefinition buildDef");
+
+            query.setResult( "this.id, buildDef.id" );
+
+            List result = (List) query.execute();
+
+            //result = (List) pm.detachCopyAll( result );
+
+            Map builds = new HashMap();
+
+            if ( result != null && !result.isEmpty() )
+            {
+                for ( Iterator i = result.iterator(); i.hasNext(); )
+                {
+                    Object[] obj = (Object[]) i.next();
+
+                    builds.put( (Integer) obj[0], (Integer) obj[1] );
+                }
+
+                return builds;
+            }
+        }
+        finally
+        {
+            tx.commit();
+
+            rollback( tx );
+        }
+
+        return null;
     }
 
     public BuildDefinition getBuildDefinition( int buildDefinitionId )
@@ -682,6 +828,82 @@ public class JdoContinuumStore
         throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
         return (BuildResult) getObjectById( BuildResult.class, buildId, BUILD_RESULT_WITH_DETAILS_FETCH_GROUP );
+    }
+
+    public List getBuildResultByBuildNumber( int projectId, int buildNumber )
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( BuildResult.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.declareParameters( "int projectId, int buildNumber" );
+
+            query.setFilter( "this.project.id == projectId && this.buildNumber == buildNumber" );
+
+            List result = (List) query.execute( new Integer( projectId ), new Integer( buildNumber ) );
+
+            result = (List) pm.detachCopyAll( result );
+
+            tx.commit();
+
+            return result;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public Map getBuildResultsInSuccess()
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( BuildResult.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.setFilter( "this.project.buildNumber == this.buildNumber" );
+
+            List result = (List) query.execute();
+
+            result = (List) pm.detachCopyAll( result );
+
+            tx.commit();
+
+            if ( result != null && !result.isEmpty() )
+            {
+                Map builds = new HashMap();
+
+                for ( Iterator i = result.iterator(); i.hasNext(); )
+                {
+                    BuildResult br = (BuildResult) i.next();
+
+                    builds.put( new Integer( br.getProject().getId() ), br );
+                }
+
+                return builds;
+            }
+        }
+        finally
+        {
+            rollback( tx );
+        }
+
+        return null;
     }
 
     public void removeProject( Project project )

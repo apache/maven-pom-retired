@@ -63,8 +63,11 @@ public interface Continuum
     Collection getProjects()
         throws ContinuumException;
 
-    BuildResult getLatestBuildResultForProject( int projectId )
-        throws ContinuumException;
+    BuildResult getLatestBuildResultForProject( int projectId );
+
+    Map getLatestBuildResults();
+
+    Map getBuildResultsInSuccess();
 
     // ----------------------------------------------------------------------
     // Queues
