@@ -1235,30 +1235,33 @@ public class DefaultContinuum
 
         String[] files = workingDirectory.list();
 
-        for ( int i = 0; i < files.length; i++ )
+        if ( files != null )
         {
-            File current = new File( workingDirectory, files[i] );
-
-            String currentFile = null;
-
-            if ( currentSubDirectory == null )
+            for ( int i = 0; i < files.length; i++ )
             {
-                currentFile = files[i];
-            }
-            else
-            {
-                currentFile = currentSubDirectory + "/" + files[i];
-            }
+                File current = new File( workingDirectory, files[i] );
 
-            if ( userDirectory != null && current.isDirectory() && userDirectory.startsWith( currentFile ) )
-            {
-                dirs.add( current );
+                String currentFile = null;
 
-                dirs.add( getFiles( baseDirectory, currentFile, userDirectory ) );
-            }
-            else
-            {
-                dirs.add( current );
+                if ( currentSubDirectory == null )
+                {
+                    currentFile = files[i];
+                }
+                else
+                {
+                    currentFile = currentSubDirectory + "/" + files[i];
+                }
+
+                if ( userDirectory != null && current.isDirectory() && userDirectory.startsWith( currentFile ) )
+                {
+                    dirs.add( current );
+
+                    dirs.add( getFiles( baseDirectory, currentFile, userDirectory ) );
+                }
+                else
+                {
+                    dirs.add( current );
+                }
             }
         }
 
