@@ -118,11 +118,35 @@ public class ProjectSorter
 
     private static String getProjectId( Project project )
     {
-        return project.getGroupId() + ":" + project.getArtifactId();
+        String groupId;
+
+        String artifactId;
+
+        if ( project.getGroupId() == null )
+        {
+            groupId = project.getName();
+        }
+        else
+        {
+            groupId = project.getGroupId();
+        }
+
+        if ( project.getArtifactId() == null )
+        {
+            artifactId = project.getName();
+        }
+        else
+        {
+            artifactId = project.getArtifactId();
+        }
+        
+        String id = groupId + ":" + artifactId + ":" + project.getVersion();
+
+        return id;
     }
 
     private static String getDependencyId( ProjectDependency project )
     {
-        return project.getGroupId() + ":" + project.getArtifactId();
+        return project.getGroupId() + ":" + project.getArtifactId() + ":" + project.getVersion();
     }
 }
