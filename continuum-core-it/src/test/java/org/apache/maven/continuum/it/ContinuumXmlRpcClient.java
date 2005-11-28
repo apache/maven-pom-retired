@@ -140,7 +140,6 @@ public abstract class ContinuumXmlRpcClient
     }
 
     public BuildResult getLatestBuildResultForProject( int projectId )
-        throws ContinuumException
     {
         throw new UnsupportedOperationException();
     }
