@@ -62,6 +62,7 @@ public class ShellIntegrationTest
         BuildDefinition bd = new BuildDefinition();
         bd.setArguments( "" );
         bd.setBuildFile( getScriptName() );
+        bd.setDefaultForProject( true );
         p.addBuildDefinition( bd );
 
         int projectId = continuum.addProject( p, ShellBuildExecutor.ID );

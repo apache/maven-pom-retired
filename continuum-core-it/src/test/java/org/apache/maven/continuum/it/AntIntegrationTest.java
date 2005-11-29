@@ -62,6 +62,8 @@ public class AntIntegrationTest
         bd.setArguments( "-v" );
         bd.setBuildFile( "build.xml" );
         bd.setGoals( "clean build" );
+        bd.setDefaultForProject( true );
+        
         p.addBuildDefinition( bd );
 
         int projectId = continuum.addProject( p, AntBuildExecutor.ID );
@@ -74,7 +76,7 @@ public class AntIntegrationTest
 
         progress( "Building SVN Ant project" );
 
-        int buildId = buildProject( project.getId(), ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
+        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
 
         assertSuccessfulAntBuild( buildId, project.getId() );
 
@@ -106,6 +108,7 @@ public class AntIntegrationTest
         bd.setArguments( "-debug" );
         bd.setBuildFile( "build.xml" );
         bd.setGoals( "clean build" );
+        bd.setDefaultForProject( true );
         p.addBuildDefinition( bd );
 
         int projectId = continuum.addProject( p, AntBuildExecutor.ID );
