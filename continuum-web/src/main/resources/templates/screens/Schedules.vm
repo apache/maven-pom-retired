@@ -30,8 +30,8 @@ $page.setTitle( "Continuum" )
           <td>$schedule.delay</td>
           <td width="10%">
             #if ( $continuum.security.isAuthorized( $c1user, "manageSchedule" ) )
+              <a href="$link.setPage('Edit.vm').addPathInfo( 'fid', 'schedules').addPathInfo('id', $schedule.id)">Edit</a>
               #if ( $schedule.name != "DEFAULT_SCHEDULE" )
-                <a href="$link.setPage('Edit.vm').addPathInfo( 'fid', 'schedules').addPathInfo('id', $schedule.id)">Edit</a>
                 | <a href="$link.setPage('DeleteSchedule.vm').addPathInfo('fid', "schedules").addPathInfo('id', $schedule.id)">Delete</a></td>
               #end
             #end
