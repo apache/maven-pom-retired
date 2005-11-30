@@ -92,17 +92,7 @@ public class DefaultContinuumInitializer
             // Schedule
             Schedule s = store.getScheduleByName( DEFAULT_SCHEDULE_NAME );
 
-            if ( s != null )
-            {
-                defaultSchedule = s;
-
-                defaultSchedule.setDescription( systemConf.getDefaultScheduleDescription() );
-
-                defaultSchedule.setCronExpression( systemConf.getDefaultScheduleCronExpression() );
-
-                defaultSchedule = store.storeSchedule( defaultSchedule );
-            }
-            else
+            if ( s == null )
             {
                 defaultSchedule = createDefaultSchedule();
 
