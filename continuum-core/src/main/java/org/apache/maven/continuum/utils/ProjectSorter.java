@@ -139,7 +139,7 @@ public class ProjectSorter
         {
             artifactId = project.getArtifactId();
         }
-        
+
         String id = groupId + ":" + artifactId + ":" + project.getVersion();
 
         return id;

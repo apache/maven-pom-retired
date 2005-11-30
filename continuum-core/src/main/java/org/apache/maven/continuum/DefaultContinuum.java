@@ -341,10 +341,17 @@ public class DefaultContinuum
         throws ContinuumException
     {
         Collection projectsList = null;
+        Map projectsMap = null;
 
         try
         {
+            projectsMap = store.getProjectIdsAndBuildDefinitionIdsBySchedule( schedule.getId() );
+
             projectsList = getProjectsInBuildOrder();
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Can't get project list for schedule " + schedule.getName(), e );
         }
         catch ( CycleDetectedException e )
         {
@@ -357,20 +364,12 @@ public class DefaultContinuum
         {
             Project p = (Project) projectIterator.next();
 
+            int buildDefId = ( (Integer) projectsMap.get( new Integer( p.getId() ) ) ).intValue();
+
             if ( !isInBuildingQueue( p.getId() ) && !isInCheckoutQueue( p.getId() ) )
             {
-                Project project = getProjectWithAllDetails( p.getId() );
-
-                for ( Iterator bdIterator = project.getBuildDefinitions().iterator(); bdIterator.hasNext(); )
-                {
-                    BuildDefinition buildDef = (BuildDefinition) bdIterator.next();
-
-                    if ( schedule.getId() == buildDef.getSchedule().getId() )
-                    {
-                        //TODO: Fix trigger name
-                        buildProject( project.getId(), buildDef.getId(), ContinuumProjectState.TRIGGER_UNKNOWN, false );
-                    }
-                }
+                //TODO: Fix trigger name
+                buildProject( p.getId(), buildDefId, ContinuumProjectState.TRIGGER_UNKNOWN, false );
             }
         }
     }
@@ -548,7 +547,18 @@ public class DefaultContinuum
     public List getProjectsInBuildOrder()
         throws CycleDetectedException, ContinuumException
     {
-        return ProjectSorter.getSortedProjects( getProjects() );
+        return getProjectsInBuildOrder( getProjects() );
+    }
+
+    private List getProjectsInBuildOrder( Collection projects )
+        throws CycleDetectedException, ContinuumException
+    {
+        if ( projects == null || projects.isEmpty() )
+        {
+            return new ArrayList();
+        }
+
+        return ProjectSorter.getSortedProjects( projects );
     }
 
     // ----------------------------------------------------------------------

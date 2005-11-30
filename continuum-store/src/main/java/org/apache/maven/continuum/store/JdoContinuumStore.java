@@ -141,6 +141,57 @@ public class JdoContinuumStore
         }
     }
 
+    public Map getProjectIdsAndBuildDefinitionIdsBySchedule( int scheduleId )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( Project.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.declareParameters( "int scheduleId" );
+
+            query.declareImports( "import org.apache.maven.continuum.model.project.BuildDefinition" );
+
+            query.declareVariables ("BuildDefinition buildDef");
+
+            query.setFilter( "buildDefinitions.contains(buildDef) && buildDef.schedule.id == scheduleId" );
+
+            query.setResult( "this.id, buildDef.id" );
+
+            List result = (List) query.execute( new Integer( scheduleId ) );
+
+            Map projects = new HashMap();
+
+            if ( result != null && !result.isEmpty() )
+            {
+                getLogger().info( "nb result : " + result.size() );
+                for ( Iterator i = result.iterator(); i.hasNext(); )
+                {
+                    Object[] obj = (Object[]) i.next();
+
+                    projects.put( (Integer) obj[0], (Integer) obj[1] );
+                }
+
+                return projects;
+            }
+        }
+        finally
+        {
+            tx.commit();
+
+            rollback( tx );
+        }
+
+        return null;
+    }
 
     public void updateBuildResult( BuildResult build )
         throws ContinuumStoreException
