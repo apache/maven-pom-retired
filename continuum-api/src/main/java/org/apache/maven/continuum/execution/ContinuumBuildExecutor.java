@@ -32,6 +32,6 @@ public interface ContinuumBuildExecutor
     ContinuumBuildExecutionResult build( Project project, BuildDefinition buildDefinition, File buildOutput )
         throws ContinuumBuildExecutorException;
 
-    void updateProjectFromCheckOut( File workingDirectory, Project project )
+    void updateProjectFromCheckOut( File workingDirectory, Project project, BuildDefinition buildDefinition )
         throws ContinuumBuildExecutorException;
 }

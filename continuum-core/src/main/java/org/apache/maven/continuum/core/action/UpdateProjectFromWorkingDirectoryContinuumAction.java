@@ -20,6 +20,7 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
@@ -50,13 +51,15 @@ public class UpdateProjectFromWorkingDirectoryContinuumAction
 
         getLogger().info( "Updating project '" + project.getName() + "' from checkout." );
 
+        BuildDefinition buildDefinition = store.getBuildDefinition( getBuildDefinitionId( context ) );
+
         // ----------------------------------------------------------------------
         // Make a new descriptor
         // ----------------------------------------------------------------------
 
         ContinuumBuildExecutor builder = buildExecutorManager.getBuildExecutor( project.getExecutorId() );
 
-        builder.updateProjectFromCheckOut( workingDirectoryService.getWorkingDirectory( project ), project );
+        builder.updateProjectFromCheckOut( workingDirectoryService.getWorkingDirectory( project ), project, buildDefinition );
 
         // ----------------------------------------------------------------------
         // Store the new descriptor

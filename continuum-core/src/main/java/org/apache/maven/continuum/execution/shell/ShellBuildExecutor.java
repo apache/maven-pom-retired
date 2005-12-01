@@ -64,7 +64,7 @@ public class ShellBuildExecutor
         return executeShellCommand( project, executable, buildDefinition.getArguments(), buildOutput );
     }
 
-    public void updateProjectFromCheckOut( File workingDirectory, Project project )
+    public void updateProjectFromCheckOut( File workingDirectory, Project project, BuildDefinition buildDefinition )
         throws ContinuumBuildExecutorException
     {
     }

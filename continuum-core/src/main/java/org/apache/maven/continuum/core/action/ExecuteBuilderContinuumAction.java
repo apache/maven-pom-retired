@@ -108,9 +108,6 @@ public class ExecuteBuilderContinuumAction
 
         build.setTrigger( trigger );
 
-        // TODO: select actualy build def
-        List buildDefinitions = project.getBuildDefinitions();
-
         BuildDefinition buildDefinition = store.getBuildDefinition( getBuildDefinitionId( context ) );
 
         build.setScmResult( scmResult );

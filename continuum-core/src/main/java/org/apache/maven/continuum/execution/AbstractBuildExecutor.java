@@ -131,7 +131,7 @@ public abstract class AbstractBuildExecutor
 
         String actualExecutable;
 
-        File workingDirectory = workingDirectoryService.getWorkingDirectory( project );
+        File workingDirectory = getWorkingDirectory( project );
 
         if ( !resolveExecutable )
         {
@@ -201,4 +201,8 @@ public abstract class AbstractBuildExecutor
         }
     }
 
+    public File getWorkingDirectory( Project project )
+    {
+        return workingDirectoryService.getWorkingDirectory( project );
+    }
 }

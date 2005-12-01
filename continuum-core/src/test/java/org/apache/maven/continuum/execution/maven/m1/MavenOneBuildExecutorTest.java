@@ -91,7 +91,7 @@ public class MavenOneBuildExecutorTest
         //
         // ----------------------------------------------------------------------
 
-        executor.updateProjectFromCheckOut( checkOut, project );
+        executor.updateProjectFromCheckOut( checkOut, project, null );
 
         // ----------------------------------------------------------------------
         //

@@ -71,16 +71,45 @@ public class MavenTwoBuildExecutor
 //        String executable = project.getExecutable();
         String executable = "mvn";
 
-        String arguments = StringUtils.clean( buildDefinition.getArguments() ) + " " +
+        String arguments = "";
+
+        String buildFile = StringUtils.clean( buildDefinition.getBuildFile() );
+
+        if ( !StringUtils.isEmpty( buildFile ) && !"pom.xml".equals( buildFile ) )
+        {
+            arguments = "-f " + buildFile + " ";
+        }
+
+        arguments += StringUtils.clean( buildDefinition.getArguments() ) + " " +
             StringUtils.clean( buildDefinition.getGoals() );
 
         return executeShellCommand( project, executable, arguments, buildOutput );
     }
 
-    public void updateProjectFromCheckOut( File workingDirectory, Project project )
+    public void updateProjectFromCheckOut( File workingDirectory, Project project, BuildDefinition buildDefinition )
         throws ContinuumBuildExecutorException
     {
-        File f = new File( workingDirectory, "pom.xml" );
+        File f = null;
+
+        if ( buildDefinition != null )
+        {
+            String buildFile = StringUtils.clean( buildDefinition.getBuildFile() );
+
+            if ( !StringUtils.isEmpty( buildFile ) )
+            {
+                f = new File( workingDirectory, buildFile );
+            }
+        }
+
+        if ( f == null )
+        {
+            f = new File( workingDirectory, "pom.xml" );
+        }
+
+        if ( !f.exists() )
+        {
+            throw new ContinuumBuildExecutorException( "Could not find Maven project descriptor." );
+        }
 
         try
         {

@@ -70,7 +70,7 @@ public class AntBuildExecutor
         return executeShellCommand( project, executable, arguments, buildOutput );
     }
 
-    public void updateProjectFromCheckOut( File workingDirectory, Project p )
+    public void updateProjectFromCheckOut( File workingDirectory, Project p, BuildDefinition buildDefinition )
         throws ContinuumBuildExecutorException
     {
     }

@@ -63,18 +63,42 @@ public class MavenOneBuildExecutor
 //        String executable = project.getExecutable();
         String executable = "maven";
 
-        String arguments = StringUtils.clean( buildDefinition.getArguments() ) + " " +
+        String arguments = "";
+
+        String buildFile = StringUtils.clean( buildDefinition.getBuildFile() );
+
+        if ( !StringUtils.isEmpty( buildFile ) && !"project.xml".equals( buildFile ) )
+        {
+            arguments = "-p " + buildFile + " ";
+        }
+
+        arguments += StringUtils.clean( buildDefinition.getArguments() ) + " " +
             StringUtils.clean( buildDefinition.getGoals() );
 
         return executeShellCommand( project, executable, arguments, buildOutput );
     }
 
-    public void updateProjectFromCheckOut( File workingDirectory, Project project )
+    public void updateProjectFromCheckOut( File workingDirectory, Project project, BuildDefinition buildDefinition )
         throws ContinuumBuildExecutorException
     {
-        File projectXmlFile = new File( workingDirectory, "project.xml" );
+        File projectXmlFile = null;
 
-        if ( !projectXmlFile.isFile() )
+        if ( buildDefinition != null )
+        {
+            String buildFile = StringUtils.clean( buildDefinition.getBuildFile() );
+
+            if ( !StringUtils.isEmpty( buildFile ) )
+            {
+                projectXmlFile = new File( workingDirectory, buildFile );
+            }
+        }
+
+        if ( projectXmlFile == null )
+        {
+            projectXmlFile = new File( workingDirectory, "project.xml" );
+        }
+
+        if ( !projectXmlFile.exists() )
         {
             throw new ContinuumBuildExecutorException( "Could not find Maven project descriptor." );
         }
