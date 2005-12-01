@@ -68,6 +68,10 @@ public class DefaultShellCommandHelper
 
         Commandline cl = new Commandline();
 
+        cl.addSystemEnvironment();
+
+        cl.addEnvironment( "MAVEN_TERMINATE_CMD", "on" );
+
         cl.setExecutable( executable );
 
         cl.setWorkingDirectory( workingDirectory.getAbsolutePath() );
