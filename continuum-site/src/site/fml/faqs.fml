@@ -34,11 +34,17 @@ if "%MAVEN_TERMINATE_CMD%" == "on" exit %ERROR_CODE%
         </source>
         <p>
         If your bat file contains at the end an exit /B, this line must be copy before it.
-        You must add too, at the begin of $CONTINUUM/bin/win32/run.bat, the following lines :
+        You must add too, at the begin of $CONTINUUM/bin/win32/run.bat, the following lines if you run Continuum from command line :
         </p>
         <source>
 @echo off
 set MAVEN_TERMINATE_CMD=on
+        </source>
+        <p>
+        or this line in wrapper.conf, if you run Continuum as a service (works too with command line) :
+        </p>
+        <source>
+set.MAVEN_TERMINATE_CMD=on
         </source>
       </answer>
     </faq>
