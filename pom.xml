@@ -324,6 +324,12 @@
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-velocity</artifactId>
         <version>1.1.2</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>plexus-utils</artifactId>
+            <groupId>plexus</groupId>
+          </exclusion>
+      </exclusions>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
