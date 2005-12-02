@@ -461,6 +461,10 @@ public class DateTool
     public String format(String format, Object obj, 
                          Locale locale, TimeZone timezone)
     {
+        if ( obj == null )
+        {
+            return null;
+        }
         Date date = toDate(obj);
         DateFormat df = getDateFormat(format, locale, timezone);
         if (date == null || df == null)

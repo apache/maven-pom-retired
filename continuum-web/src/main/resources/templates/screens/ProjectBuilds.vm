@@ -33,8 +33,8 @@ $page.setTitle( "Continuum - ${project.name} Builds" )
       #foreach ( $build in $builds )
       <tr class="$css.nextClass">
         <td>#if ( $build.state == 2 ) $build.buildNumber #end</td>
-        <td>$date.format('medium',$build.startTime)</td>
-        <td>$date.format('medium',$build.endTime)</td>
+        <td>$!{date.format('medium',$build.startTime)}</td>
+        <td>$!{date.format('medium',$build.endTime)}</td>
         <td>$state.generate($build)</td>
         <td><a href="$link.setPage('ProjectBuild.vm').addQueryData('view','ProjectBuild').addQueryData('buildId',$build.id).addQueryData('id',$project.id)">Result</a></td>
       </tr>
