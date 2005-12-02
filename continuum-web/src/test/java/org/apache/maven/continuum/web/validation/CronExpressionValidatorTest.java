@@ -36,8 +36,46 @@ public class CronExpressionValidatorTest
 
         assertTrue( validator.validate( "0 0,15,30,45 * * * ?" ) );
 
+        assertTrue( validator.validate( "0 0 12 * * ?" ) );
+
+        assertTrue( validator.validate( "0 15 10 ? * *" ) );
+
+        assertTrue( validator.validate( "0 15 10 * * ?" ) );
+
+        assertTrue( validator.validate( "0 15 10 * * ? *" ) );
+
+        assertTrue( validator.validate( "0 15 10 * * ? 2005" ) );
+
+        assertTrue( validator.validate( "0 * 14 * * ?" ) );
+
+        assertTrue( validator.validate( "0 0/5 14 * * ?" ) );
+
+        assertTrue( validator.validate( "0 0/5 14,18 * * ?" ) );
+
+        assertTrue( validator.validate( "0 0-5 14 * * ?" ) );
+
+        assertTrue( validator.validate( "0 10,44 14 ? 3 WED" ) );
+
+        assertTrue( validator.validate( "0 15 10 ? * MON-FRI" ) );
+
+        assertTrue( validator.validate( "0 15 10 15 * ?" ) );
+
+        assertTrue( validator.validate( "0 15 10 L * ?" ) );
+
+        assertTrue( validator.validate( "0 15 10 ? * 6L" ) );
+
+        assertTrue( validator.validate( "0 15 10 ? * 6L" ) );
+
+        assertTrue( validator.validate( "0 15 10 ? * 6L 2002-2005" ) );
+
+        assertTrue( validator.validate( "0 15 10 ? * 6#3" ) );
+
         assertFalse( validator.validate( "0 0" ) );
 
         assertFalse( validator.validate( "0 0 * * * *" ) );
+
+        assertFalse( validator.validate( "a a a a a a" ) );
+
+        assertFalse( validator.validate( "0 0 0 ? 0 A" ) );
     }
 }

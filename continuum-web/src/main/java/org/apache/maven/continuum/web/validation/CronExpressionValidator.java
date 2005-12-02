@@ -36,7 +36,7 @@ public class CronExpressionValidator
         try
         {
             String[] cronParams = StringUtils.split( cronExpression );
-            if ( cronParams.length != 6 )
+            if ( cronParams.length < 6 || cronParams.length > 7 )
             {
                 return false;
             }
