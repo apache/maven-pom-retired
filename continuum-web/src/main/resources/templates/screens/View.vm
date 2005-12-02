@@ -139,9 +139,9 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
           #end
           <td>
             #if ( $notifier.type == "irc" )
-              $notifier.configuration.host:$notifier.configuration.port$notifier.configuration.channel
+              $!{notifier.configuration.host}:$!{notifier.configuration.port}$!{notifier.configuration.channel}
             #else
-              $notifier.configuration.address
+              $!{notifier.configuration.address}
             #end
             #if ( !$notifier.isEnabled() )
               (DISABLED)
@@ -217,7 +217,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
       </tr>
       #foreach ( $dependency in $project.dependencies )
       <tr class="$css.nextClass">
-        <td>$dependency.groupId:$dependency.artifactId:$dependency.version</td>
+        <td>$!{dependency.groupId}:$!{dependency.artifactId}:$!{dependency.version}</td>
       </tr>
       #end
     </table>
@@ -245,8 +245,8 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
       </tr>
       #foreach ( $developer in $project.developers )
       <tr class="$css.nextClass">
-        <td>$developer.name</td>
-        <td>$developer.email</td>
+        <td>#if ( $developer.name ) $developer.name #else $!{developer.id}</td>
+        <td>$!{developer.email}</td>
         <!-- td>&nbsp;</td -->
       </tr>
       #end
