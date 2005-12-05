@@ -78,5 +78,17 @@ cvs -d :pserver:account@cvsserver:2401:/rootfolder login
         </p>
       </answer>
     </faq>
+    <faq id="how-to-configure-jabber-notifier-for-google-talk">
+      <question>How to configure jabber notifier for google talk?</question>
+      <answer>
+        <p>
+          <b>Jabber Host :</b> talk.google.com<br/>
+          <b>Jabber Port :</b> 5222<br/>
+          <b>Jabber Login :</b> your google talk login without '@gmail.com'<br/>
+          <b>Jabber Domain Name :</b> gmail.com<br/>
+          <b>Is it a SSL Connection?</b> false
+        </p>
+      </answer>
+    </faq>
   </part>
 </faqs>
