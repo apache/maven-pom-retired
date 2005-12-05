@@ -245,7 +245,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
       </tr>
       #foreach ( $developer in $project.developers )
       <tr class="$css.nextClass">
-        <td>#if ( $developer.name ) $developer.name #else $!{developer.id}</td>
+        <td>#if ( $developer.name ) $developer.name #else $!{developer.id}#end</td>
         <td>$!{developer.email}</td>
         <!-- td>&nbsp;</td -->
       </tr>
