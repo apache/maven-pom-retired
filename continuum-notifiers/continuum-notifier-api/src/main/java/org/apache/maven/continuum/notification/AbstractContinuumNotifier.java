@@ -66,7 +66,7 @@ public abstract class AbstractContinuumNotifier
     {
         if ( build == null )
         {
-            return true;
+            return false;
         }
 
         // Always send if the project failed

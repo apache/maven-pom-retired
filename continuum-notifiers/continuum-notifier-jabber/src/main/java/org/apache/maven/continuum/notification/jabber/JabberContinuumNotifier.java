@@ -107,6 +107,15 @@ public class JabberContinuumNotifier
         BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
         // ----------------------------------------------------------------------
+        // If there wasn't any building done, don't notify
+        // ----------------------------------------------------------------------
+
+        if ( build == null )
+        {
+            return;
+        }
+
+        // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
