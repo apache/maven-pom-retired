@@ -194,22 +194,15 @@ public class MailContinuumNotifier
         // Generate and send email
         // ----------------------------------------------------------------------
 
-        try
+        if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
         {
-            if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
-            {
-                buildComplete( project, build, buildOutput, source, recipients, configuration );
-            }
-        }
-        catch ( ContinuumException e )
-        {
-            throw new NotificationException( "Error while notifiying.", e );
+            buildComplete( project, build, buildOutput, source, recipients, configuration );
         }
     }
 
     private void buildComplete( Project project, BuildResult build, String buildOutput, String source, Set recipients,
                                 Map configuration )
-        throws ContinuumException
+        throws NotificationException
     {
         // ----------------------------------------------------------------------
         // Check if the mail should be sent at all
@@ -299,7 +292,7 @@ public class MailContinuumNotifier
         }
         catch ( Exception e )
         {
-            throw new ContinuumException( "Error while generating mail contents.", e );
+            throw new NotificationException( "Error while generating mail contents.", e );
         }
 
         // ----------------------------------------------------------------------
@@ -430,7 +423,7 @@ public class MailContinuumNotifier
     }
 
     private BuildResult getPreviousBuild( Project project, BuildResult currentBuild )
-        throws ContinuumException
+        throws NotificationException
     {
         try
         {
