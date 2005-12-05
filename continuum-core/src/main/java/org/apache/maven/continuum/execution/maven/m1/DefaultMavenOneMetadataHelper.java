@@ -252,10 +252,6 @@ public class DefaultMavenOneMetadataHelper
             {
                 notifiers = project.getNotifiers();
             }
-            else
-            {
-                throw new MavenOneMetadataHelperException( "Missing 'build' element in the POM." );
-            }
         }
         else
         {
@@ -277,8 +273,6 @@ public class DefaultMavenOneMetadataHelper
 
         if ( notifier == null && ( notifiers == null || notifiers.isEmpty() ) )
         {
-            throw new MavenOneMetadataHelperException(
-                "Missing 'nagEmailAddress' element in the 'build' element in the POM." );
         }
         else
         {

@@ -215,21 +215,24 @@ public class DefaultMavenBuilderHelper
 
         List userNotifiers = new ArrayList();
 
-        for ( int i = 0; i < continuumProject.getNotifiers().size(); i++ )
+        if ( continuumProject.getNotifiers() != null )
         {
-            ProjectNotifier notifier = (ProjectNotifier) continuumProject.getNotifiers().get( i );
-
-            if ( notifier.isFromUser() )
+            for ( int i = 0; i < continuumProject.getNotifiers().size(); i++ )
             {
-                ProjectNotifier userNotifier = new ProjectNotifier();
+                ProjectNotifier notifier = (ProjectNotifier) continuumProject.getNotifiers().get( i );
 
-                userNotifier.setType( notifier.getType() );
+                if ( notifier.isFromUser() )
+                {
+                    ProjectNotifier userNotifier = new ProjectNotifier();
 
-                userNotifier.setConfiguration( notifier.getConfiguration() );
+                    userNotifier.setType( notifier.getType() );
 
-                userNotifier.setFrom( notifier.getFrom() );
+                    userNotifier.setConfiguration( notifier.getConfiguration() );
 
-                userNotifiers.add( userNotifier );
+                    userNotifier.setFrom( notifier.getFrom() );
+
+                    userNotifiers.add( userNotifier );
+                }
             }
         }
 
@@ -268,20 +271,6 @@ public class DefaultMavenBuilderHelper
         // ----------------------------------------------------------------------
         // Validate the MavenProject using some Continuum rules
         // ----------------------------------------------------------------------
-
-        // Nag email address
-        CiManagement ciManagement = project.getCiManagement();
-
-        if ( ciManagement == null )
-        {
-            throw new MavenBuilderHelperException( "Missing 'ciManagement' element in the " + getProjectName( project ) + " POM." );
-        }
-
-        if ( getNotifiers( project ).isEmpty() )
-        {
-            throw new MavenBuilderHelperException(
-                "Missing 'notifiers' element in the 'ciManagement' element in the " + getProjectName( project ) + " POM." );
-        }
 
         // SCM connection
         Scm scm = project.getScm();
@@ -327,37 +316,40 @@ public class DefaultMavenBuilderHelper
     {
         List notifiers = new ArrayList();
 
-        for ( Iterator i = mavenProject.getCiManagement().getNotifiers().iterator(); i.hasNext(); )
+        if ( mavenProject.getCiManagement() != null && mavenProject.getCiManagement().getNotifiers() != null )
         {
-            Notifier projectNotifier = (Notifier) i.next();
-
-            ProjectNotifier notifier = new ProjectNotifier();
-
-            if ( StringUtils.isEmpty( projectNotifier.getType() ) )
+            for ( Iterator i = mavenProject.getCiManagement().getNotifiers().iterator(); i.hasNext(); )
             {
-                throw new MavenBuilderHelperException( "Missing type from notifier." );
+                Notifier projectNotifier = (Notifier) i.next();
+
+                ProjectNotifier notifier = new ProjectNotifier();
+
+                if ( StringUtils.isEmpty( projectNotifier.getType() ) )
+                {
+                    throw new MavenBuilderHelperException( "Missing type from notifier." );
+                }
+
+                notifier.setType( projectNotifier.getType() );
+
+                if ( projectNotifier.getConfiguration() == null )
+                {
+                    throw new MavenBuilderHelperException( "Notifier configuration cannot be null." );
+                }
+
+                notifier.setConfiguration( projectNotifier.getConfiguration() );
+
+                notifier.setFrom( ProjectNotifier.FROM_PROJECT );
+
+                notifier.setSendOnSuccess( projectNotifier.isSendOnSuccess() );
+
+                notifier.setSendOnFailure( projectNotifier.isSendOnFailure() );
+
+                notifier.setSendOnError( projectNotifier.isSendOnError() );
+
+                notifier.setSendOnWarning( projectNotifier.isSendOnWarning() );
+
+                notifiers.add( notifier );
             }
-
-            notifier.setType( projectNotifier.getType() );
-
-            if ( projectNotifier.getConfiguration() == null )
-            {
-                throw new MavenBuilderHelperException( "Notifier configuration cannot be null." );
-            }
-
-            notifier.setConfiguration( projectNotifier.getConfiguration() );
-
-            notifier.setFrom( ProjectNotifier.FROM_PROJECT );
-
-            notifier.setSendOnSuccess( projectNotifier.isSendOnSuccess() );
-
-            notifier.setSendOnFailure( projectNotifier.isSendOnFailure() );
-
-            notifier.setSendOnError( projectNotifier.isSendOnError() );
-
-            notifier.setSendOnWarning( projectNotifier.isSendOnWarning() );
-
-            notifiers.add( notifier );
         }
 
         return notifiers;
