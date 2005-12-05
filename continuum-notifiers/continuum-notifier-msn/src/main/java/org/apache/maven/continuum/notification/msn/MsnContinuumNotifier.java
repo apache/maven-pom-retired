@@ -107,7 +107,7 @@ public class MsnContinuumNotifier
 
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
         {
-            sendMessage( project, build, recipients, configuration );
+            buildComplete( project, build, recipients, configuration );
         }
     }
 
@@ -149,7 +149,7 @@ public class MsnContinuumNotifier
         return message + " " + getReportUrl( project, build, configurationService );
     }
 
-    private void sendMessage( Project project, BuildResult build, Set recipients, Map configuration )
+    private void buildComplete( Project project, BuildResult build, Set recipients, Map configuration )
         throws NotificationException
     {
         String message;

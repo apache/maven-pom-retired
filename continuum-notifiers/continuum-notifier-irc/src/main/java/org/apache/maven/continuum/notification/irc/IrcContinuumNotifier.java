@@ -221,13 +221,16 @@ public class IrcContinuumNotifier
     {
         try
         {
-            project = store.getProjectWithBuilds( project.getId() );
+            // TODO: prefer to remove this and get them up front
+            if ( project.getId() > 0 )
+            {
+                project = store.getProjectWithBuilds( project.getId() );
+            }
         }
         catch ( ContinuumStoreException e )
         {
             throw new ContinuumException( "Unable to obtain project builds", e );
         }
-
         List builds = project.getBuildResults();
 
         if ( builds.size() < 2 )
