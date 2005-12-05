@@ -338,7 +338,7 @@ public class MailContinuumNotifier
     }
 
     private void sendMessage( Project project, Set recipients, String subject, String content, Map configuration )
-        throws ContinuumException
+        throws NotificationException
     {
         if ( recipients.size() == 0 )
         {
@@ -396,7 +396,7 @@ public class MailContinuumNotifier
         }
         catch ( MailSenderException ex )
         {
-            throw new ContinuumException( "Exception while sending message.", ex );
+            throw new NotificationException( "Exception while sending message.", ex );
         }
     }
 
@@ -435,7 +435,7 @@ public class MailContinuumNotifier
         }
         catch ( ContinuumStoreException e )
         {
-            throw new ContinuumException( "Unable to obtain project builds", e );
+            throw new NotificationException( "Unable to obtain project builds", e );
         }
         List builds = project.getBuildResults();
 
@@ -448,7 +448,7 @@ public class MailContinuumNotifier
 
         if ( currentBuild != null && build.getId() != currentBuild.getId() )
         {
-            throw new ContinuumException( "INTERNAL ERROR: The current build wasn't the first in the build list. " +
+            throw new NotificationException( "INTERNAL ERROR: The current build wasn't the first in the build list. " +
                 "Current build: '" + currentBuild.getId() + "', " + "first build: '" + build.getId() + "'." );
         }
 
