@@ -29,6 +29,7 @@ import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
 import org.apache.maven.continuum.core.action.StoreProjectAction;
 import org.apache.maven.continuum.initialization.ContinuumInitializationException;
 import org.apache.maven.continuum.initialization.ContinuumInitializer;
+import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
@@ -589,6 +590,32 @@ public class DefaultContinuum
         throws ContinuumException
     {
         project.setExecutorId( executorId );
+
+        if ( "executorId".equalsIgnoreCase( "ant" ) )
+        {
+            try
+            {
+                BuildDefinition bd = new BuildDefinition();
+
+                bd.setDefaultForProject( true );
+
+                bd.setArguments( "" );
+
+                bd.setGoals( "build" );
+
+                bd.setBuildFile( "build.xml" );
+
+                Schedule schedule = store.getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME );
+
+                bd.setSchedule( schedule );
+
+                project.addBuildDefinition( bd );       
+            }
+            catch ( ContinuumStoreException e )
+            {
+                getLogger().warn( "Can't get default schedule.", e );
+            }
+        }
 
         return executeAddProjectFromScmActivity( project );
     }
