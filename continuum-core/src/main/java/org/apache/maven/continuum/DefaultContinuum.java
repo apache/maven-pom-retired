@@ -601,8 +601,6 @@ public class DefaultContinuum
 
                 bd.setArguments( "" );
 
-                bd.setGoals( "build" );
-
                 bd.setBuildFile( "build.xml" );
 
                 Schedule schedule = store.getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME );
