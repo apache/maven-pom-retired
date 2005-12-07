@@ -591,7 +591,7 @@ public class DefaultContinuum
     {
         project.setExecutorId( executorId );
 
-        if ( "executorId".equalsIgnoreCase( "ant" ) )
+        if ( executorId.equalsIgnoreCase( "ant" ) )
         {
             try
             {
