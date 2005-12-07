@@ -303,6 +303,10 @@
             <groupId>javax.security</groupId>
             <artifactId>jaas</artifactId>
           </exclusion>
+          <exclusion>
+            <groupId>ojdbc</groupId>
+            <artifactId>ojdbc</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
