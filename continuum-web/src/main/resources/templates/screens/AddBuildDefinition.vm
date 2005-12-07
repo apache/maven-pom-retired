@@ -14,6 +14,38 @@ $page.setTitle( $i18n.getString( $form.add.titleKey ) )
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
           #foreach ( $element in $form.elements )
+          #if($executorId == "ant" && $element.id == "buildFile")
+          <tr>
+            <th>$i18n.getString( "buildDefinition.antBuildXmlFile.label" )</th>
+            <td>
+              <input type="text" name="buildFile" value="" size="100"/>
+                  <p>
+                    $i18n.getString( "buildDefinition.antBuildXmlFile.message" ) <font color="red"><b></b></font>
+                  </p>
+            </td>
+          </tr>
+          #elseif($executorId == "shell" && $element.id == "buildFile")
+          <tr>
+            <th>$i18n.getString( "buildDefinition.shellExecutableFile.label" )</th>
+            <td>
+              <input type="text" name="buildFile" value="" size="100"/>
+                  <p>
+                    $i18n.getString( "buildDefinition.shellExecutableFile.message" ) <font color="red"><b></b></font>
+                  </p>
+            </td>
+          </tr>
+          #elseif($executorId == "ant" && $element.id == "goals")
+          <tr>
+            <th>$i18n.getString( "buildDefinition.targets.label" )</th>
+            <td>
+              <input type="text" name="goals" value="" size="100"/>
+                  <p>
+                    $i18n.getString( "buildDefinition.targets.message" ) <font color="red"><b></b></font>
+                  </p>
+            </td>
+          </tr>
+          #elseif($executorId == "shell" && $element.id == "goals")
+          #else
             #if ( !$element.immutable )
             <tr>
               #field( $i18n $data $element $item $formtool )
@@ -23,6 +55,7 @@ $page.setTitle( $i18n.getString( $form.add.titleKey ) )
                 #hidden ( $element.id $element.defaultValue )
               #end
             #end
+          #end
           #end
           <tr>
             <th>$i18n.getString( "buildDefinition.schedule.label" )</th>

@@ -71,9 +71,9 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
       </tr>
       #foreach ( $buildDefinition in $project.buildDefinitions )
       <tr class="$css.nextClass">
-        <td>$buildDefinition.goals</td>
-        <td>$buildDefinition.arguments</td>
-        <td>$buildDefinition.buildFile</td>
+        <td>$!buildDefinition.goals</td>
+        <td>$!buildDefinition.arguments</td>
+        <td>$!buildDefinition.buildFile</td>
         <td>
           #if ( $buildDefinition.profile )
             $buildDefinition.profile.name
