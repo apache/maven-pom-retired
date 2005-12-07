@@ -63,8 +63,16 @@ public class AntBuildExecutor
         // TODO: get from installation
 //        String executable = project.getExecutable();
         String executable = "ant";
+        
+        String arguments = "";
+        
+        String buildFile = buildDefinition.getBuildFile();
 
-        String arguments = StringUtils.clean( buildDefinition.getArguments() ) + " " +
+        if (!StringUtils.isEmpty(buildFile)) {
+            arguments = "-f " + buildFile + " ";
+        }
+
+        arguments += StringUtils.clean( buildDefinition.getArguments() ) + " " +
             StringUtils.clean( buildDefinition.getGoals() );
 
         return executeShellCommand( project, executable, arguments, buildOutput );

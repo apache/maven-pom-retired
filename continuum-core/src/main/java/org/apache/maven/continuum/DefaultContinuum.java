@@ -599,6 +599,8 @@ public class DefaultContinuum
 
                 bd.setDefaultForProject( true );
 
+                bd.setGoals( "" );
+
                 bd.setArguments( "" );
 
                 bd.setBuildFile( "build.xml" );
