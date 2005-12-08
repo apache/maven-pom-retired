@@ -111,7 +111,7 @@
         <plugin>
           <groupId>org.codehaus.plexus</groupId>
           <artifactId>plexus-maven-plugin</artifactId>
-          <version>1.2-SNAPSHOT</version>
+          <version>1.1.3</version>
           <extensions>true</extensions>
         </plugin>
       </plugins>
@@ -193,42 +193,42 @@
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-api</artifactId>
-        <version>1.0-beta-2-SNAPSHOT</version>
+        <version>1.0-beta-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-manager-plexus</artifactId>
-        <version>1.0-beta-2-SNAPSHOT</version>
+        <version>1.0-beta-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-clearcase</artifactId>
-        <version>1.0-beta-2-SNAPSHOT</version>
+        <version>1.0-beta-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-cvs</artifactId>
-        <version>1.0-beta-2-SNAPSHOT</version>
+        <version>1.0-beta-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-local</artifactId>
-        <version>1.0-beta-1</version>
+        <version>1.0-beta-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-perforce</artifactId>
-        <version>1.0-beta-2-SNAPSHOT</version>
+        <version>1.0-beta-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-starteam</artifactId>
-        <version>1.0-beta-2-SNAPSHOT</version>
+        <version>1.0-beta-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-svn</artifactId>
-        <version>1.0-beta-2-SNAPSHOT</version>
+        <version>1.0-beta-2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.wagon</groupId>
@@ -337,7 +337,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-formica</artifactId>
-        <version>1.0-beta-9-SNAPSHOT</version>
+        <version>1.0-beta-9</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -373,7 +373,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-log4j-logging</artifactId>
-        <version>1.1-alpha-2-SNAPSHOT</version>
+        <version>1.1-alpha-2</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
