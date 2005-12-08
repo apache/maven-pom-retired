@@ -46,6 +46,9 @@ set MAVEN_TERMINATE_CMD=on
         <source>
 set.MAVEN_TERMINATE_CMD=on
         </source>
+        <p>
+          <b>You can download fixed scripts for ant and maven <a href="scripts">here</a></b>.
+        </p>
       </answer>
     </faq>
     <faq id="can-i-use-file-protocol-in-add-project-view">
