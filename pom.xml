@@ -4,7 +4,7 @@
   <artifactId>continuum-parent</artifactId>
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
-  <version>1.0.2</version>
+  <version>1.1-SNAPSHOT</version>
   <url>http://maven.apache.org/continuum/</url>
   <issueManagement>
     <system>jira</system>
@@ -97,9 +97,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/tags/continuum-1.0.2</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/tags/continuum-1.0.2</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/tags/continuum-1.0.2</url>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/trunk/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/trunk/</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/trunk/</url>
   </scm>
   <organization>
     <name>Apache</name>
