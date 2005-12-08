@@ -22,7 +22,7 @@
         </executions>
         <configuration>
           <descriptor>src/assembly/bin.xml</descriptor>
-          <finalName>continuum-1.0.2</finalName>
+          <finalName>continuum-1.1-SNAPSHOT</finalName>
         </configuration>
       </plugin>
       <plugin>
