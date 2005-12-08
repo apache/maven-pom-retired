@@ -2,12 +2,12 @@
   <parent>
     <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
-    <version>1.0.2</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-core</artifactId>
   <name>Continuum Core</name>
-  <version>1.0.2</version>
+  <version>1.1-SNAPSHOT</version>
   <repositories>
     <repository>
       <id>apache.snapshots</id>
