@@ -97,8 +97,8 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/</connection>
-    <developerConnection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/</developerConnection>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/trunk/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/trunk/</developerConnection>
     <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/trunk/</url>
   </scm>
   <organization>
