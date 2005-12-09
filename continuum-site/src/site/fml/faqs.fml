@@ -93,5 +93,38 @@ cvs -d :pserver:account@cvsserver:2401:/rootfolder login
         </p>
       </answer>
     </faq>
+    <faq id="builds-keep-failing-because-continuum-cant-checkout-sources">
+      <question>Why Continuum builds keep failing with password is required even if I'm using anonymous or no password in CVS?</question>
+      <answer>
+        <p>
+          If you keep getting this build error on your projects:
+        </p>
+        <source>
+Exception:
+Cannot checkout sources.
+Exception while executing SCM command.
+password is required
+        </source>
+        <p>
+        Modify the SCM URL of your Continuum Project from something like this:
+        </p>
+        <source>
+scm:cvs:pserver:username@servername:path_to_repository:module_name
+        </source>
+        <p>
+        to something like this:
+        </p>
+        <source>
+scm:cvs:pserver:username:@servername:path_to_repository:module_name
+        </source>
+        <p>
+        Please note the : before @servername. Save changes and try to build again, this time checkout should succeed.
+        </p>
+        <p>
+          <b>You can learn more about SCM URLs <a href="http://maven.apache.org/scm/scm-url-format.html">here</a></b>.
+        </p>
+      </answer>
+    </faq>
+
   </part>
 </faqs>
