@@ -18,6 +18,10 @@ Continuum Features
    
    * Starteam
 
+   * Clearcase
+
+   * Perforce
+
  * Easy to use web-based setup and interface
 
  * {{{http://www.opensymphony.com/quartz}Quartz}}-based scheduling

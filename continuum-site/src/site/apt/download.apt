@@ -4,23 +4,23 @@
  Trygve Laugstol
  Emmanuel Venisse
  ------
- TUE November 15 2005
+ FRI December 09 2005
 
-Download Continuum 1.0.1
+Download Continuum 1.0.2
 
  Continuum is distributed in several formats for your convenience.
 
  You will be prompted for a mirror - please be patient, as it may take 24 hours
  to reach all mirrors.
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.1-bin.tar.bz2}.tar.bz2}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.tar.bz2.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.tar.bz2.asc}PGP}})
+ * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.2-bin.tar.bz2}.tar.bz2}} archive
+   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.bz2.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.bz2.asc}PGP}})
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.1-bin.tar.gz}.tar.gz}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.tar.gz.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.tar.gz.asc}PGP}})
+ * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.2-bin.tar.gz}.tar.gz}} archive
+   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.gz.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.gz.asc}PGP}})
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.1-bin.zip}.zip}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.zip.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.zip.asc}PGP}})
+ * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.2-bin.zip}.zip}} archive
+   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.zip.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.zip.asc}PGP}})
 
  []
 
@@ -48,11 +48,11 @@ System Requirements
 
 ** Windows 2000/XP
 
-  [[1]] Unzip <<<continuum-1.0.1-bin.zip>>> to the directory you wish to install Continuum 1.0.1. These instructions
+  [[1]] Unzip <<<continuum-1.0.2-bin.zip>>> to the directory you wish to install Continuum 1.0.2. These instructions
         assume you chose <<<C:\Program Files\Apache Software Foundation\continuum-1.0>>>
 
 ** Unix-based Operating Systems (Linux, Solaris and Mac OS X)
 
-  [[1]] Extract the distribution archive to the directory you wish to install Continuum 1.0.1. These instructions
-        assume you chose <<</usr/local/continuum-1.0.1>>>. The directory <<<continuum-1.0.1>>> will be created from
+  [[1]] Extract the distribution archive to the directory you wish to install Continuum 1.0.2. These instructions
+        assume you chose <<</usr/local/continuum-1.0.2>>>. The directory <<<continuum-1.0.2>>> will be created from
         the archive.
