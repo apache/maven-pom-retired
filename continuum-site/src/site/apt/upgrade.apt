@@ -1,0 +1,41 @@
+ ------
+ Upgrade
+ ------
+ Dan T. Tran
+ <dantran@apache.org>
+ ------
+ December 9, 2005
+
+Upgrade
+
+  The following contains migration instructions between Continuum releases. 
+  
+
+* 1.0.1 to 1.0.2
+
+  Since there is no changes in database schema, the migration steps are mainly to replace Continuum 1.0.2's database 
+  with Continuum 1.0.1's database.  Here are detailed instructions:
+  
+  * Shutdown your Continuum 1.0.1.  
+  
+  * Install your Continuum 1.0.2
+  
+  * Initialize your Continuum 1.0.2 by starting it from command line, wait for it to complete the initialization,
+    and then shut it down.
+    
+  * Replace Continuum 1.0.2's apps/continuum/conf/application.xml with Continuum 1.0.1's apps/continuum/conf/application.xml.
+    Edit application.xml to replace any reference of 1.0.1 to become to 1.0.2.
+    
+  * Replace Continuum 1.0.2's apps/continuum/database with Continuum 1.0.1's apps/continuum/database.
+  
+  * Start your Continuum 1.0.2. 
+  
+  * Login and change "Working Directory" and "Build Output Directory" if needed. If you use default values for these directories,
+    you only need to copy them from apps/continuum/.
+  
+  []
+  
+  If you have Continuum running as UNIX daemon or Windows NT service, make sure to modify the configuration 
+  to point to new Continuum.
+  
+  

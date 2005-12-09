@@ -18,6 +18,7 @@
       <item name="SCM" href="http://maven.apache.org/scm"/>
       <item name="Wagon" href="http://maven.apache.org/wagon"/>
       <item name="JXR" href="http://maven.apache.org/jxr"/>
+      <item name="DOXIA" href="http://maven.apache.org/doxia"/>
     </links>
 
     <menu name="Quick Links">
@@ -28,6 +29,7 @@
       <item name="Documentation" href="/guides/index.html"/>
       <item name="General Information" href="about.html"/>
       <item name="Faqs" href="faqs.html"/>
+      <item name="Upgrade" href="upgrade.html"/>
       <item name="Planned Features" href="planned-features.html"/>
       <item name="Change Log" href="change-log.html"/>
     </menu>
