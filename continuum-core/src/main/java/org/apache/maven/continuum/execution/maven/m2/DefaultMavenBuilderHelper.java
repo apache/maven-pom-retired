@@ -261,7 +261,7 @@ public class DefaultMavenBuilderHelper
         }
         catch ( Exception e )
         {
-            String msg = "Cannot build maven project from " + file + ".";
+            String msg = "Cannot build maven project from " + file + " (" + e.getMessage() + ).";
 
             getLogger().error( msg, e );
 

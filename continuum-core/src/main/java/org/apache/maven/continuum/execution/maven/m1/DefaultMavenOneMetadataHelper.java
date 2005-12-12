@@ -56,7 +56,7 @@ public class DefaultMavenOneMetadataHelper
         }
         catch ( Exception e )
         {
-            throw new MavenOneMetadataHelperException( "Error while reading maven POM.", e );
+            throw new MavenOneMetadataHelperException( "Error while reading maven POM (" + e.getMessage() + )".", e );
         }
 
         // ----------------------------------------------------------------------
