@@ -8,7 +8,7 @@
         <default-interceptor-ref name="completeStack"/>
 
         <action name="summary"
-                class="org.apache.maven.continuum.web.action.SummaryAction">
+                class="summaryAction">
             <result name="success">summary.jsp</result>
         </action>
     </package>

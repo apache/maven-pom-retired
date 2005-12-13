@@ -1,0 +1,12 @@
+<component-set>
+  <components>
+    <!--
+     | Actions
+     |-->
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>summaryAction</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.SummaryAction</implementation>
+    </component>
+  </components>
+</component-set>
