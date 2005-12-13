@@ -7,10 +7,9 @@
     <package name="default" extends="webwork-default">
         <default-interceptor-ref name="completeStack"/>
 
-        <action name="helloWorld"
-                class="ch2.example1.HelloWorld">
-            <result name="success">hello.jsp</result>
-            <result name="input">name.jsp</result>
+        <action name="summary"
+                class="org.apache.maven.continuum.web.action.SummaryAction">
+            <result name="success">summary.jsp</result>
         </action>
     </package>
 </xwork>

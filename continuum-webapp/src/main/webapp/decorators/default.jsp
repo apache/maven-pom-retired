@@ -3,43 +3,33 @@
 <html>
   <head>
     <title><decorator:title/></title>
-    <style type="text/css">
-    <!--
-    @import url("<ww:url value="/shared/styles/main.css"/>");
-    -->
-    </style>
-    <link rel="StyleSheet" href="dtree.css" type="text/css" />
-    <script type="text/javascript" src="<%= request.getContextPath() %>dtree.js"></script>
+    <link rel="stylesheet" type="text/css" href="<ww:url value="/css/tigris.css"/>" media="screen" />
+    <link rel="stylesheet" type="text/css" href="<ww:url value="/css/print.css"/>" media="print" />
+
+    <script src="<ww:url value="/scripts/tigris.js"/>" type="text/javascript"></script>
     <decorator:head/>
   </head>
 
-  <body>
-    <table>
-      <tr>
-        <td colspan="2">
-          <img src="<ww:url value="/shared/images/logo.png"/> "/>
-        </td>
-      </tr>
-      <tr>
-        <td valign="top">
-          <div id="nav_items">
-            * <a href="<ww:url value="updateProfile!default.action"/>">My Account</a><br/>
+  <body onload="focus()" marginwidth="0" marginheight="0" class="composite">
+    <ww:include value="/navigations/DefaultTop.jsp"/>
 
-            <p/>
-
-            <ww:form theme="simple" action="search">
-                <ww:textfield label="Search" theme="simple" name="query" size="10"/>
-                <ww:submit theme="simple" value="Go"/>
-            </ww:form>
-
-
-<%--            <ww:action name="categoryTree" executeResult="true"/>--%>
-          </div>
-        </td>
-        <td valign="top">
-          <decorator:body/>
-        </td>
-      </tr>
+    <table id="main" border="0" cellpadding="4" cellspacing="0" width="100%">
+      <tbody>
+        <tr valign="top">
+          <td id="leftcol" width="30%">
+            <ww:include value="/navigations/Menu.jsp"/>
+          </td>
+          <td>
+            <div id="bodycol">
+                <div class="app">
+                  <decorator:body/>
+                </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
     </table>
+
+    <ww:include value="/navigations/DefaultBottom.jsp"/>
   </body>
 </html>
