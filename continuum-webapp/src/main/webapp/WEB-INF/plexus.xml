@@ -1,8 +1,85 @@
 <plexus>
+  <load-on-start>
+    <component>
+      <role>org.apache.maven.continuum.Continuum</role>
+    </component>
+  </load-on-start>
+
   <components>
+
+    <!--
+     | Object factory for WebWork
+     -->
     <component>
       <role>com.opensymphony.xwork.ObjectFactory</role>
       <implementation>org.codehaus.plexus.xwork.PlexusObjectFactory</implementation>
     </component>
+
+    <!--
+     | Logger manager
+     -->
+    <component>
+      <role>org.codehaus.plexus.logging.LoggerManager</role>
+      <implementation>org.codehaus.plexus.logging.log4j.Log4JLoggerManager</implementation>
+      <lifecycle-handler>basic</lifecycle-handler>
+
+      <configuration>
+        <threshold>DEBUG</threshold>
+        <default-appender>console,rolling</default-appender>
+        <appenders>
+          <appender>
+            <id>console</id>
+            <threshold>DEBUG</threshold>
+            <type>org.apache.log4j.ConsoleAppender</type>
+            <conversion-pattern>%d [%t] %-5p %-30c{1} - %m%n</conversion-pattern>
+          </appender>
+
+          <appender>
+            <id>rolling</id>
+            <threshold>DEBUG</threshold>
+            <type>org.apache.log4j.RollingFileAppender</type>
+            <conversion-pattern>%-4r [%t] %-5p %c %x - %m%n</conversion-pattern>
+
+            <properties>
+              <property>
+                <name>file</name>
+                <value>${plexus.home}/logs/continuum.log</value>
+              </property>
+              <property>
+                <name>append</name>
+                <value>true</value>
+              </property>
+              <property>
+                <name>maxBackupIndex</name>
+                <value>10</value>
+              </property>
+              <property>
+                <name>maxFileSize</name>
+                <value>10MB</value>
+              </property>
+            </properties>
+          </appender>
+        </appenders>
+        <levels>
+          <level>
+            <hierarchy>org.codehaus.plexus.velocity</hierarchy>
+            <level>WARN</level>
+          </level>
+          <level>
+            <hierarchy>org.codehaus.plexus.mailsender.MailSender</hierarchy>
+            <level>INFO</level>
+          </level>
+          <level>
+            <hierarchy>JPOX</hierarchy>
+            <level>INFO</level>
+          </level>
+          <level>
+            <hierarchy>JPOX.Cache</hierarchy>
+            <level>WARN</level>
+          </level>
+        </levels>
+      </configuration>
+    </component>
   </components>
+
 </plexus>
