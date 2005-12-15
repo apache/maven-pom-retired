@@ -11,5 +11,10 @@
                 class="summaryAction">
             <result name="success">summary.jsp</result>
         </action>
+        <action name="login"
+                class="loginAction">
+            <result name="input">login.jsp</result>
+            <result name="success" type="redirect">summary.action</result>
+        </action>
     </package>
 </xwork>

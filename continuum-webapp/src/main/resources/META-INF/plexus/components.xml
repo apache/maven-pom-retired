@@ -3,15 +3,25 @@
     <!--
      | Actions
      |-->
+
+    <!-- NOTE: ALL ACTIONS MUST USE PER-LOOKUP INSTANCIATION STRATEGY -->
+
     <component>
       <role>com.opensymphony.xwork.Action</role>
       <role-hint>summaryAction</role-hint>
       <implementation>org.apache.maven.continuum.web.action.SummaryAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.Continuum</role>
         </requirement>
       </requirements>
+    </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>loginAction</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.LoginAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
 
     <!--

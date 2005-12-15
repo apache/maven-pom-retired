@@ -1,11 +1,12 @@
 <%@ taglib uri="webwork" prefix="ww" %>
+<ww:i18n name="localization.Continuum">
 <div id="banner">
   <table border="1" cellspacing="0" cellpadding="8" width="100%">
     <tbody>
       <tr>
         <td>
             <a href="http://maven.apache.org/continuum/">
-              <b><font color="red">TODO</font></b>[Your company logo here]
+              <b><font color="red">TODO</font></b><ww:text name="top.logo.default"/>
             </a>
         </td>
         <td>
@@ -26,6 +27,7 @@
   </div>
 
   <div>
-      <b><font color="red">TODO</font></b>Welcome, <b>Guest</b> - <a href="$link.setPage('Login.vm')">Login</a>
+      <b><font color="red">TODO</font></b>Welcome, <b>Guest</b> - <a href="<ww:url value="login!default.action"/>">Login</a>
   </div>
 </div>
+</ww:i18n>
