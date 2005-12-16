@@ -9,7 +9,6 @@
         <h3><ww:text name="summary.section.title"/></h3>
         <table border="1" cellspacing="2" cellpadding="3" width="100%" id="projectSummaryTable">
     
-          <!-- i18n -->
           <tbody><tr>
             <th>&nbsp;</th>
             <th width="100%"><ww:text name="summary.projectTable.name"/></th>
@@ -18,6 +17,11 @@
             <th><ww:text name="summary.projectTable.group"/></th>
             <th colspan="7"></th>
           </tr>
+          <ww:iterator value="projects">
+            <tr>
+              <td colspan="6"><ww:property value="name"/></td>
+            </tr>
+          </ww:iterator>
         </table>
         <div class="functnbar3">
           <img src="<ww:url value="/images/icon_success_sml.gif"/>" alt="<ww:text name="message.success"/>" title="<ww:text name="message.success"/>"/> <font color="red">TODO</font>
