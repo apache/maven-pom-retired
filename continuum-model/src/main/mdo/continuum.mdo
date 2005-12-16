@@ -731,11 +731,13 @@
           <name>workingDirectory</name>
           <version>1.0.0+</version>
           <type>String</type>
+          <defaultValue>working-directory</defaultValue>
         </field>
         <field>
           <name>buildOutputDirectory</name>
           <version>1.0.0+</version>
           <type>String</type>
+          <defaultValue>build-output-directory</defaultValue>
         </field>
         <field>
           <name>baseUrl</name>
