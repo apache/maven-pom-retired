@@ -17,6 +17,7 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -24,9 +25,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.opensymphony.xwork.ActionSupport;
+import com.opensymphony.xwork.Preparable;
 
 public class ConfigurationAction
     extends ActionSupport
+    implements Preparable
 {
     private Continuum continuum;
 
@@ -44,68 +47,52 @@ public class ConfigurationAction
 
     private String companyUrl;
 
+    public void prepare()
+    {
+        guestAccountEnabled = continuum.getConfiguration().isGuestAccountEnabled();
+
+        workingDirectory = continuum.getConfiguration().getWorkingDirectory().getAbsolutePath();
+
+        buildOutputDirectory = continuum.getConfiguration().getBuildOutputDirectory().getAbsolutePath();
+
+        baseUrl = continuum.getConfiguration().getUrl();
+
+        companyLogo = continuum.getConfiguration().getCompanyLogo();
+
+        companyName = continuum.getConfiguration().getCompanyName();
+
+        companyUrl = continuum.getConfiguration().getCompanyUrl();
+    }
+
     public String execute()
         throws Exception
     {
-        boolean hasErrors = false;
+        continuum.getConfiguration().setGuestAccountEnabled( guestAccountEnabled );
 
-        // TODO : Using WebWork Validators
-        if ( StringUtils.isEmpty( workingDirectory ) )
+        continuum.getConfiguration().setWorkingDirectory( new File( workingDirectory ) );
+
+        continuum.getConfiguration().setBuildOutputDirectory( new File( buildOutputDirectory ) );
+
+        continuum.getConfiguration().setUrl( baseUrl );
+
+        continuum.getConfiguration().setCompanyLogo( companyLogo );
+
+        continuum.getConfiguration().setCompanyName( companyName );
+
+        continuum.getConfiguration().setCompanyUrl( companyUrl );
+
+        try
         {
-            addFieldError( "workingDirectory", getText( "configuration.missing.workingDirectory" ) );
-
-            hasErrors = true;
+            continuum.getConfiguration().store();
         }
-
-        if ( StringUtils.isEmpty( buildOutputDirectory ) )
+        catch ( ConfigurationStoringException e )
         {
-            addFieldError( "buildOutputDirectory", getText( "configuration.missing.buildOutputDirectory" ) );
+            addActionError( "Can't store configuration :" + e.getMessage() );
 
-            hasErrors = true;
-        }
-
-        if ( StringUtils.isEmpty( baseUrl ) )
-        {
-            addFieldError( "baseUrl", getText( "configuration.missing.baseUrl" ) );
-
-            hasErrors = true;
-        }
-        else
-        {
-            try
-            {
-                URL url = new URL( baseUrl );
-            }
-            catch ( MalformedURLException e )
-            {
-                addFieldError( "baseUrl", getText( "configuration.invalid.baseUrl" ) );
-
-                hasErrors = true;
-            }
-        }
-
-        if ( hasErrors )
-        {
             return INPUT;
         }
-        else
-        {
-            continuum.getConfiguration().setGuestAccountEnabled( guestAccountEnabled );
 
-            continuum.getConfiguration().setWorkingDirectory( new File( workingDirectory ) );
-
-            continuum.getConfiguration().setBuildOutputDirectory( new File( buildOutputDirectory ) );
-
-            continuum.getConfiguration().setUrl( baseUrl );
-
-            continuum.getConfiguration().setCompanyLogo( companyLogo );
-
-            continuum.getConfiguration().setCompanyName( companyName );
-
-            continuum.getConfiguration().setCompanyUrl( companyUrl );
-
-            return SUCCESS;
-        }
+        return SUCCESS;
     }
 
     public String doDefault()
@@ -122,7 +109,7 @@ public class ConfigurationAction
 
     public boolean isGuestAccountEnabled()
     {
-        return continuum.getConfiguration().isGuestAccountEnabled();
+        return guestAccountEnabled;
     }
 
     public void setGuestAccountEnabled( boolean guestAccountEnabled )
@@ -132,7 +119,7 @@ public class ConfigurationAction
 
     public String getWorkingDirectory()
     {
-        return continuum.getConfiguration().getWorkingDirectory().getAbsolutePath();
+        return workingDirectory;
     }
 
     public void setWorkingDirectory( String workingDirectory )
@@ -142,7 +129,7 @@ public class ConfigurationAction
 
     public String getBuildOutputDirectory()
     {
-        return continuum.getConfiguration().getBuildOutputDirectory().getAbsolutePath();
+        return buildOutputDirectory;
     }
 
     public void setBuildOutputDirectory( String buildOutputDirectory )
@@ -152,7 +139,7 @@ public class ConfigurationAction
 
     public String getBaseUrl()
     {
-        return continuum.getConfiguration().getUrl();
+        return baseUrl;
     }
 
     public void setBaseUrl( String baseUrl )
@@ -162,7 +149,7 @@ public class ConfigurationAction
 
     public String getCompanyLogo()
     {
-        return continuum.getConfiguration().getCompanyLogo();
+        return companyLogo;
     }
 
     public void setCompanyLogo( String companyLogo )
@@ -172,7 +159,7 @@ public class ConfigurationAction
 
     public String getCompanyName()
     {
-        return continuum.getConfiguration().getCompanyName();
+        return companyName;
     }
 
     public void setCompanyName( String companyName )
@@ -182,7 +169,7 @@ public class ConfigurationAction
 
     public String getCompanyUrl()
     {
-        return continuum.getConfiguration().getCompanyUrl();
+        return companyUrl;
     }
 
     public void setCompanyUrl( String companyUrl )

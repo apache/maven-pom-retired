@@ -22,25 +22,22 @@ import org.codehaus.plexus.util.StringUtils;
 public class LoginAction
     extends ActionSupport
 {
-    private String username;
+    private String username = "";
 
-    private String password;
+    private String password = "";
 
+    /**
+     * Execute the login action
+     */
     public String execute()
         throws Exception
     {
-        //TODO
-        if ( StringUtils.isEmpty( username ) || StringUtils.isEmpty( password ) || !"testuser".equals( username ) )
-        {
-            //TODO : i18n
-            addFieldError( "username", getText( "login.bad_login_password" ) );
-
-            return INPUT;
-        }
-
         return SUCCESS;
     }
 
+    /**
+     * Redirect to login view
+     */
     public String doDefault()
     {
         return INPUT;
@@ -49,6 +46,11 @@ public class LoginAction
     public String getUsername()
     {
         return username;
+    }
+
+    public String getPassword()
+    {
+        return password;
     }
 
     public void setUsername( String username )

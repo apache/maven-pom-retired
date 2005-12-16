@@ -1,0 +1,22 @@
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork Validator 1.0//EN" "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="workingDirectory">
+        <field-validator type="requiredstring">
+            <message key="configuration.missing.workingDirectory"/>
+        </field-validator>
+    </field>
+    <field name="buildOutputDirectory">
+        <field-validator type="requiredstring">
+            <message key="configuration.missing.buildOutputDirectory"/>
+        </field-validator>
+    </field>
+    <field name="baseUrl">
+        <field-validator type="requiredstring" short-circuit="true">
+            <message key="configuration.missing.baseUrl"/>
+        </field-validator>
+        <field-validator type="url">
+            <message key="configuration.invalid.baseUrl"/>
+        </field-validator>
+    </field>
+</validators>

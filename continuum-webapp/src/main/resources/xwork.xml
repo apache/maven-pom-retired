@@ -5,7 +5,23 @@
     <include file="webwork-default.xml"/>
 
     <package name="default" extends="webwork-default">
-        <default-interceptor-ref name="completeStack"/>
+        <interceptors>
+            <interceptor-stack name="defaultContinuumStack">
+                <interceptor-ref name="prepare"/>
+                <interceptor-ref name="servlet-config"/>
+                <interceptor-ref name="chain"/>
+                <interceptor-ref name="model-driven"/>
+                <interceptor-ref name="component"/>
+                <interceptor-ref name="fileUpload"/>
+                <interceptor-ref name="static-params"/>
+                <interceptor-ref name="params"/>
+                <!-- interceptor-ref name="conversionError"/ -->
+                <interceptor-ref name="validation"/>
+                <interceptor-ref name="workflow"/>
+            </interceptor-stack>
+        </interceptors>
+
+        <default-interceptor-ref name="defaultContinuumStack"/>
 
         <action name="configuration"
                 class="configurationAction">
