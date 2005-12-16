@@ -8,6 +8,17 @@
 
     <component>
       <role>com.opensymphony.xwork.Action</role>
+      <role-hint>checkConfigurationAction</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.CheckConfigurationAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
       <role-hint>configurationAction</role-hint>
       <implementation>org.apache.maven.continuum.web.action.ConfigurationAction</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>

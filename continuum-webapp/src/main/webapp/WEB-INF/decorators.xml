@@ -1,7 +1,7 @@
 <decorators defaultdir="/decorators">
-    <!-- decorator name="none" page="none.jsp">
-        <pattern>/login*</pattern>
-    </decorator -->
+    <decorator name="none" page="none.jsp">
+        <pattern>/initializeConfiguration*</pattern>
+    </decorator>
     <decorator name="default" page="default.jsp">
         <pattern>/*</pattern>
     </decorator>

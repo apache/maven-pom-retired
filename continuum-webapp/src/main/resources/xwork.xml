@@ -23,6 +23,10 @@
 
         <default-interceptor-ref name="defaultContinuumStack"/>
 
+        <action name="checkConfiguration"
+                class="checkConfigurationAction">
+            <result name="input">/redirectToContinuumInitialization.jsp</result>
+        </action>
         <action name="configuration"
                 class="configurationAction">
             <result name="input">configurationEdit.jsp</result>

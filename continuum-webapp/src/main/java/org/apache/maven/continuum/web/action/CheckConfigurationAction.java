@@ -16,49 +16,22 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.Continuum;
+
 import com.opensymphony.xwork.ActionSupport;
 
-public class LoginAction
+public class CheckConfigurationAction
     extends ActionSupport
 {
-    private String username = "";
+    private Continuum continuum;
 
-    private String password = "";
-
-    /**
-     * Execute the login action
-     */
     public String execute()
-        throws Exception
     {
+        if ( !continuum.getConfiguration().isInitialized() )
+        {
+            return INPUT;
+        }
+
         return SUCCESS;
-    }
-
-    /**
-     * Redirect to login view
-     */
-    public String doDefault()
-    {
-        return INPUT;
-    }
-
-    public String getUsername()
-    {
-        return username;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setUsername( String username )
-    {
-        this.username = username;
-    }
-
-    public void setPassword( String password )
-    {
-        this.password = password;
     }
 }
