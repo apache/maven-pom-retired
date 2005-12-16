@@ -9,7 +9,14 @@
       <div>
         <a href="<ww:url value="/summary.action"/>">Show Projects</a>
       </div>
-
+    </div>
+  </div>
+  <div id="projectmenu" class="toolgroup">
+    <div class="label">Administration</div>
+    <div class="body">
+      <div>
+        <a href="<ww:url value="configuration!default.action"/>">Configuration</a>
+      </div>
     </div>
   </div>
 </div>

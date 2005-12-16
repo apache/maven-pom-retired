@@ -16,11 +16,8 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
-
 import com.opensymphony.xwork.ActionSupport;
-
-import java.util.Collection;
+import org.codehaus.plexus.util.StringUtils;
 
 public class LoginAction
     extends ActionSupport
@@ -33,16 +30,14 @@ public class LoginAction
         throws Exception
     {
         //TODO
-        if ( username == null || password == null || !"testuser".equals( username ) )
+        if ( StringUtils.isEmpty( username ) || StringUtils.isEmpty( password ) || !"testuser".equals( username ) )
         {
             //TODO : i18n
-            addFieldError( "username", "Username/password incorrect");
-
-            System.out.println( "Username=" + username + " - password = " + password);
+            addFieldError( "username", getText( "login.bad_login_password" ) );
 
             return INPUT;
         }
-        System.out.println( "SUCESS" + "Username=" + username + " - password = " + password);
+
         return SUCCESS;
     }
 

@@ -2,6 +2,22 @@
 	
 	This file defines basic default formatting for HTML conforming to Tigris application style. To extend or override these rules for your instance, edit inst.css instead of this file. */
 
+/* TODO REPLACE these styles used by webwork component */
+.maintable {cellpadding:10;cellspacing:10;}
+
+#nav_items {
+    font-weight: bold;
+}
+
+.wwFormTable {}
+.label {font-style:italic; }
+.errorLabel {font-style:italic; color:red; }
+.errorMessage {font-weight:bold; text-align: center; color:red; }
+.checkboxLabel {}
+.checkboxErrorLabel {color:red; }
+.required {color:red;}
+/* END TODO */
+
 /* colors, backgrounds, borders, link indication */
 body {
 	background: #fff;
