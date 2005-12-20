@@ -16,6 +16,10 @@ package org.apache.maven.continuum.web.model;
  * limitations under the License.
  */
 
+/**
+ * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
+ * @version $Id$
+ */
 public class SummaryProjectModel
 {
     private int id = -1;

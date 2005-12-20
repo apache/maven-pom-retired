@@ -20,6 +20,10 @@ import org.apache.maven.continuum.Continuum;
 
 import com.opensymphony.xwork.ActionSupport;
 
+/**
+ * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
+ * @version $Id$
+ */
 public class CheckConfigurationAction
     extends ActionSupport
 {

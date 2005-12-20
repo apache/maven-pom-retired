@@ -29,6 +29,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
+ * @version $Id$
+ */
 public class SummaryAction
     extends ActionSupport
 {

@@ -27,6 +27,10 @@ import java.net.URL;
 import com.opensymphony.xwork.ActionSupport;
 import com.opensymphony.xwork.Preparable;
 
+/**
+ * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
+ * @version $Id$
+ */
 public class ConfigurationAction
     extends ActionSupport
     implements Preparable

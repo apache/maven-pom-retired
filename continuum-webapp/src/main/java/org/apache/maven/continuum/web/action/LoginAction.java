@@ -18,6 +18,10 @@ package org.apache.maven.continuum.web.action;
 
 import com.opensymphony.xwork.ActionSupport;
 
+/**
+ * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
+ * @version $Id$
+ */
 public class LoginAction
     extends ActionSupport
 {
