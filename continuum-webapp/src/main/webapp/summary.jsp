@@ -20,9 +20,17 @@
                 <a href="TO_BE_DEFINE">${pageScope.project.name}</a>
             </ec:column>
             <ec:column property="version"/>
-            <ec:column property="buildNumber" title="summary.projectTable.build"  cell="org.apache.maven.continuum.web.view.BuildCell"/>
-            <ec:column property="groupName" title="summary.projectTable.group">
-                ${pageScope.project.projectGroupName}
+            <ec:column property="buildNumber" title="summary.projectTable.build" cell="org.apache.maven.continuum.web.view.BuildCell"/>
+            <ec:column property="projectGroupName" title="summary.projectTable.group"/>
+            <ec:column property="buildNowAction" title="&nbsp;" cell="org.apache.maven.continuum.web.view.BuildNowCell"/>
+            <ec:column property="buildHistoryAction" title="&nbsp;">
+                TODO
+            </ec:column>
+            <ec:column property="workingCopyAction" title="&nbsp;">
+                TODO
+            </ec:column>
+            <ec:column property="deleteAction" title="&nbsp;">
+                <a href="${pageContext.request.contextPath}/deleteProject.action?projectId=${pageScope.project.id}">Delete</a>
             </ec:column>
           </ec:row>
         </ec:table>
