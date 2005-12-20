@@ -19,6 +19,7 @@ package org.apache.maven.continuum.web.action;
 import org.apache.maven.continuum.Continuum;
 
 import com.opensymphony.xwork.ActionSupport;
+import com.opensymphony.webwork.ServletActionContext;
 
 import java.util.Collection;
 
@@ -35,6 +36,7 @@ public class SummaryAction
         try
         {
             projects = continuum.getProjects();
+            ServletActionContext.getRequest().setAttribute( "projects", projects );
         }
         catch( Exception e )
         {

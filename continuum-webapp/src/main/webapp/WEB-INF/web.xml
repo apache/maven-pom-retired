@@ -73,6 +73,11 @@
     <url-pattern>*.vm</url-pattern>
   </servlet-mapping>
 
+  <context-param>
+    <param-name>extremecomponentsResourceBundleLocation</param-name>
+    <param-value>localization/Continuum</param-value>
+  </context-param>
+
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>Index.action</welcome-file>
@@ -91,5 +96,10 @@
   <taglib>
     <taglib-uri>webwork</taglib-uri>
     <taglib-location>/WEB-INF/lib/webwork-2.1.7.jar</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tld/extremecomponents</taglib-uri>
+    <taglib-location>/WEB-INF/extremecomponents.tld</taglib-location>
   </taglib>
 </web-app>
