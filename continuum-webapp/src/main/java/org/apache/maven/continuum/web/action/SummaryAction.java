@@ -37,6 +37,10 @@ public class SummaryAction
     extends ActionSupport
 {
     private Continuum continuum;
+
+    private int nbSuccesses;
+    private int nbFailures;
+    private int nbErrors;
     
     public String execute()
         throws Exception
@@ -45,7 +49,9 @@ public class SummaryAction
         {
             //TODO: Create a summary jpox request so code will be more simple and performance will be better
             Collection projects = continuum.getProjects();
+
             Map buildResults = continuum.getLatestBuildResults();
+
             Map buildResultsInSuccess = continuum.getBuildResultsInSuccess();
 
             Collection summary = new ArrayList();
@@ -53,11 +59,17 @@ public class SummaryAction
             for ( Iterator i = projects.iterator(); i.hasNext(); )
             {
                 Project project = (Project) i.next();
+
                 SummaryProjectModel model = new SummaryProjectModel();
+
                 model.setId( project.getId() );
+
                 model.setName( project.getName() );
+
                 model.setVersion( project.getVersion() );
+
                 model.setProjectGroupName( project.getProjectGroup().getName() );
+
                 if ( continuum.isInBuildingQueue( project.getId() ) || continuum.isInCheckoutQueue( project.getId() ) )
                 {
                     model.setInQueue( true );
@@ -66,18 +78,38 @@ public class SummaryAction
                 {
                     model.setInQueue( false );
                 }
+
                 model.setState( project.getState() );
+
+                if ( project.getState() == 2 )
+                {
+                    nbSuccesses++;
+                }
+                else if ( project.getState() == 3 )
+                {
+                    nbFailures++;
+                }
+                else if ( project.getState() == 4 )
+                {
+                    nbErrors++;
+                }
+
                 model.setBuildNumber( project.getBuildNumber() );
+
                 BuildResult buildInSuccess = (BuildResult) buildResultsInSuccess.get( new Integer( project.getId() ) );
+
                 if ( buildInSuccess != null )
                 {
                     model.setBuildInSuccessId( buildInSuccess.getId() );
                 }
+
                 BuildResult latestBuild = (BuildResult) buildResults.get( new Integer( project.getId() ) );
+
                 if ( latestBuild != null )
                 {
                     model.setLatestBuildId( latestBuild.getId() );
                 }
+
                 summary.add( model );
             }
 
@@ -88,5 +120,20 @@ public class SummaryAction
             e.printStackTrace();
         }
         return SUCCESS;
+    }
+
+    public int getNbSuccesses()
+    {
+        return nbSuccesses;
+    }
+
+    public int getNbFailures()
+    {
+        return nbFailures;
+    }
+
+    public int getNbErrors()
+    {
+        return nbErrors;
     }
 }
