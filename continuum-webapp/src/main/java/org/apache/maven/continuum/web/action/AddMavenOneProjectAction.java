@@ -16,10 +16,6 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
@@ -28,6 +24,11 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 import com.opensymphony.xwork.ActionSupport;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * @author Nick Gonzalez
@@ -40,39 +41,50 @@ public class AddMavenOneProjectAction
 
     private String m1PomUrl;
 
-    private String m1PomFile;
+    private File m1PomFile;
 
     private String m1Pom = null;
 
     public String execute()
-        throws IOException, MalformedURLException, ContinuumException
     {
-		if ( !StringUtils.isEmpty( m1PomUrl ) )
-		{
-		    m1Pom = m1PomUrl;
-		}
-		else
-		{
+        if ( !StringUtils.isEmpty( m1PomUrl ) )
+        {
+            m1Pom = m1PomUrl;
+        }
+        else
+        {
+            if ( m1PomFile != null )
+            {
+                try
+                {
+                    m1Pom = m1PomFile.toURL().toString();
+                }
+                catch ( MalformedURLException e )
+                {
+                    return INPUT;
+                }
+            }
+            else
+            {
+                return INPUT;
+            }
+        }
 
-			URL url = new URL( "file:/" + m1PomFile );
+        ContinuumProjectBuildingResult result = null;
 
-			String content = IOUtil.toString( url.openStream() ); 
+        try
+        {
+            result = continuum.addMavenOneProject( m1Pom );
+        }
+        catch ( ContinuumException e )
+        {
+            return INPUT;
+        }
 
-		    if ( !StringUtils.isEmpty( content ) )
-		    {
-		        m1Pom = url.toString();
-		    }
-		}
-
-		if ( !StringUtils.isEmpty( m1Pom ) )
-		{
-			ContinuumProjectBuildingResult result = continuum.addMavenOneProject( m1Pom );
-
-		    if( result.getWarnings().size() > 0 )
-		    {
-		    	addActionMessage( result.getWarnings().toArray().toString() );
-		    }
-		}
+        if( result.getWarnings().size() > 0 )
+        {
+            addActionMessage( result.getWarnings().toArray().toString() );
+        }
 
         return SUCCESS;
     }
@@ -82,33 +94,33 @@ public class AddMavenOneProjectAction
         return INPUT;
     }
 
-	public String getM1Pom()
-	{
-		return m1Pom;
-	}
+    public String getM1Pom()
+    {
+        return m1Pom;
+    }
 
-	public void setM1Pom(String pom)
-	{
-		m1Pom = pom;
-	}
+    public void setM1Pom( String pom )
+    {
+        m1Pom = pom;
+    }
 
-	public String getM1PomFile()
-	{
-		return m1PomFile;
-	}
+    public File getM1PomFile()
+    {
+        return m1PomFile;
+    }
 
-	public void setM1PomFile(String pomFile)
-	{
-		m1PomFile = pomFile;
-	}
+    public void setM1PomFile( File pomFile )
+    {
+        m1PomFile = pomFile;
+    }
 
-	public String getM1PomUrl()
-	{
-		return m1PomUrl;
-	}
+    public String getM1PomUrl()
+    {
+        return m1PomUrl;
+    }
 
-	public void setM1PomUrl(String pomUrl)
-	{
-		m1PomUrl = pomUrl;
-	}
+    public void setM1PomUrl( String pomUrl )
+    {
+        m1PomUrl = pomUrl;
+    }
 }

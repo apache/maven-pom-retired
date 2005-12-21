@@ -48,19 +48,19 @@
         <action name="addMavenTwoProject"
                 class="addMavenTwoProject">
             <result name="input">addMavenTwoProject.jsp</result>
-            <result name="success">summary.jsp</result>
+            <result name="success" type="redirect">summary.action</result>
         </action>
 
         <action name="addMavenOneProject"
                 class="addMavenOneProject">
             <result name="input">addMavenOneProject.jsp</result>
-            <result name="success">summary.jsp</result>
+            <result name="success" type="redirect">summary.action</result>
         </action>
 
         <action name="addProject"
                 class="addProject">
             <result name="input">addProject.jsp</result>
-            <result name="success">summary.jsp</result>
+            <result name="success" type="redirect">summary.action</result>
         </action>
     </package>
 </xwork>

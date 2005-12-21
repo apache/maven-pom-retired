@@ -16,13 +16,14 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import java.util.Map;
-
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
 
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.xwork.ActionSupport;
+
+import java.util.Map;
 
 /**
  * @author Nick Gonzalez
@@ -31,7 +32,7 @@ import com.opensymphony.xwork.ActionSupport;
 public class AddProjectAction
     extends ActionSupport
 {
-	private Continuum continuum;
+    private Continuum continuum;
 
     private Project project;
 
@@ -48,10 +49,9 @@ public class AddProjectAction
     private String projectScmTag;
 
     private String projectType;
-	
-	public String execute()
-	    throws Exception
-	{
+    
+    public String execute()
+    {
         project = new Project();
 
         project.setName( projectName );
@@ -66,84 +66,91 @@ public class AddProjectAction
 
         project.setScmTag( projectScmTag );
 
-        continuum.addProject( project, projectType );
+        try
+        {
+            continuum.addProject( project, projectType );
+        }
+        catch ( ContinuumException e )
+        {
+            return INPUT;
+        }
 
         return SUCCESS;
-	}
+    }
 
-	public String doDefault()
+    public String doDefault()
     {
-		setProjectType( ServletActionContext.getRequest().getParameter( "projectType" ) );		
+        setProjectType( ServletActionContext.getRequest().getParameter( "projectType" ) );        
 
         return INPUT;
     }
 
-	public String getProjectName()
-	{
-		return projectName;
-	}
+    public String getProjectName()
+    {
+        return projectName;
+    }
 
-	public void setProjectName( String projectName )
-	{
-		this.projectName = projectName;
-	}
+    public void setProjectName( String projectName )
+    {
+        this.projectName = projectName;
+    }
 
-	public String getProjectScmPassword()
-	{
-		return projectScmPassword;
-	}
+    public String getProjectScmPassword()
+    {
+        return projectScmPassword;
+    }
 
-	public void setProjectScmPassword( String projectScmPassword )
-	{
-		this.projectScmPassword = projectScmPassword;
-	}
+    public void setProjectScmPassword( String projectScmPassword )
+    {
+        this.projectScmPassword = projectScmPassword;
+    }
 
-	public String getProjectScmTag()
-	{
-		return projectScmTag;
-	}
+    public String getProjectScmTag()
+    {
+        return projectScmTag;
+    }
 
-	public void setProjectScmTag( String projectScmTag )
-	{
-		this.projectScmTag = projectScmTag;
-	}
+    public void setProjectScmTag( String projectScmTag )
+    {
+        this.projectScmTag = projectScmTag;
+    }
 
-	public String getProjectScmUrl() {
-		return projectScmUrl;
-	}
+    public String getProjectScmUrl() {
+        return projectScmUrl;
+    }
 
-	public void setProjectScmUrl( String projectScmUrl )
-	{
-		this.projectScmUrl = projectScmUrl;
-	}
+    public void setProjectScmUrl( String projectScmUrl )
+    {
+        this.projectScmUrl = projectScmUrl;
+    }
 
-	public String getProjectScmUsername()
-	{
-		return projectScmUsername;
-	}
+    public String getProjectScmUsername()
+    {
+        return projectScmUsername;
+    }
 
-	public void setProjectScmUsername( String projectScmUsername )
-	{
-		this.projectScmUsername = projectScmUsername;
-	}
+    public void setProjectScmUsername( String projectScmUsername )
+    {
+        this.projectScmUsername = projectScmUsername;
+    }
 
-	public String getProjectType()
-	{
-		return projectType;
-	}
+    public String getProjectType()
+    {
+        return projectType;
+    }
 
-	public void setProjectType( String projectType )
-	{
-		this.projectType = projectType;
-	}
+    public void setProjectType( String projectType )
+    {
+        this.projectType = projectType;
+    }
 
-	public String getProjectVersion()
-	{
-		return projectVersion;
-	}
+    public String getProjectVersion()
+    {
+        return projectVersion;
+    }
 
-	public void setProjectVersion( String projectVersion )
-	{
-		this.projectVersion = projectVersion;
-	}
+    public void setProjectVersion( String projectVersion )
+    {
+        this.projectVersion = projectVersion;
+    }
 }

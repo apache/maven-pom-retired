@@ -16,7 +16,6 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import com.opensymphony.xwork.ActionSupport;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
@@ -24,6 +23,9 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
+import com.opensymphony.xwork.ActionSupport;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,38 +41,55 @@ public class AddMavenTwoProjectAction
 
     private String m2PomUrl;
 
-    private String m2PomFile;
+    private File m2PomFile;
 
     private String m2Pom = null;
 
     public String execute()
-        throws IOException, MalformedURLException, ContinuumException
     {
-		if ( !StringUtils.isEmpty( m2PomUrl ) )
-		{
-		    m2Pom = m2PomUrl;
-		}
-		else
-		{
-			URL url = new URL( "file:/" + m2PomFile );
+        if ( !StringUtils.isEmpty( m2PomUrl ) )
+        {
+            m2Pom = m2PomUrl;
+        }
+        else
+        {
+            if ( m2PomFile != null )
+            {
+                try
+                {
+                    m2Pom = m2PomFile.toURL().toString();
+                }
+                catch ( MalformedURLException e )
+                {
+                    System.out.println( "aaa" );
+                    return INPUT;
+                }
+            }
+            else
+            {
+                System.out.println( "bbb" );
+                return INPUT;
+            }
+        }
 
-			String content = IOUtil.toString( url.openStream() ); 
-				
-		    if ( !StringUtils.isEmpty( content ) )
-		    {
-		        m2Pom = url.toString();
-		    }
-		}
+        ContinuumProjectBuildingResult result = null;
 
-		if ( !StringUtils.isEmpty( m2Pom ) )
-		{
-			ContinuumProjectBuildingResult result = continuum.addMavenTwoProject( m2Pom );
-		    
-		    if( result.getWarnings().size() > 0 )
-		    {
-		    	addActionMessage( result.getWarnings().toArray().toString() );
-		    }
-		}
+        try
+        {
+            result = continuum.addMavenTwoProject( m2Pom );
+        }
+        catch ( ContinuumException e )
+        {
+            System.out.println( "ccc" );
+            return INPUT;
+        }
+        
+        if( result.getWarnings().size() > 0 )
+        {
+            addActionMessage( result.getWarnings().toArray().toString() );
+
+            return INPUT;
+        }
 
         return SUCCESS;
     }
@@ -80,23 +99,22 @@ public class AddMavenTwoProjectAction
         return INPUT;
     }
 
-	public void setM2Pom( String pom ) {
-		m2Pom = pom;
-	}
+    public File getM2PomFile() {
+        return m2PomFile;
+    }
 
-	public String getM2PomFile() {
-		return m2PomFile;
-	}
+    public void setM2PomFile( File pomFile )
+    {
+        m2PomFile = pomFile;
+    }
 
-	public void setM2PomFile( String pomFile ){
-			m2PomFile = pomFile;
-	}
+    public String getM2PomUrl()
+    {
+        return m2PomUrl;
+    }
 
-	public String getM2PomUrl() {
-		return m2PomUrl;
-	}
-
-	public void setM2PomUrl( String pomUrl ) {
-		m2PomUrl = pomUrl;
-	}
+    public void setM2PomUrl( String pomUrl )
+    {
+        m2PomUrl = pomUrl;
+    }
 }

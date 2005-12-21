@@ -8,8 +8,7 @@
 <div class="app">
     <div id="axial" class="h3">
     <h3><ww:text name="add.m2.project.section.title"/></h3>
-    <ww:form method="post" action="addMavenTwoProject.action" name="addMavenTwoProject" ><!--enctype="multipart/form-data"-->
-        <input type="hidden" name="m2PomFile" value="">
+    <ww:form method="post" action="addMavenTwoProject.action" name="addMavenTwoProject" enctype="multipart/form-data">
         <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
         <tr>
@@ -28,7 +27,7 @@
         <tr>
             <th><ww:text name="add.m2.project.m2PomFile.label"/></th>
             <td >
-                <input type="file" name="m2PomFileBox" value="" size="100" onChange="addMavenTwoProject.m2PomFile.value = this.value"/>
+                <input type="file" name="m2PomFile" value="" size="100"/>
                 <p><ww:text name="add.m2.project.m2PomFile.message"/></p>
             </td>
         </tr>
