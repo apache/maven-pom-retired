@@ -57,5 +57,9 @@ public class StateCell
                 column.setValue( state );
             }
         }
+        else
+        {
+            column.setValue( "&nbsp;" );
+        }
     }
 }
