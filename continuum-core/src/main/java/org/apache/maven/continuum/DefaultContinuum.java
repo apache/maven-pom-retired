@@ -365,12 +365,12 @@ public class DefaultContinuum
         {
             Project p = (Project) projectIterator.next();
 
-            int buildDefId = ( (Integer) projectsMap.get( new Integer( p.getId() ) ) ).intValue();
+            Integer buildDefId = ( (Integer) projectsMap.get( new Integer( p.getId() ) ) );
 
-            if ( !isInBuildingQueue( p.getId() ) && !isInCheckoutQueue( p.getId() ) )
+            if ( buildDefId != null && !isInBuildingQueue( p.getId() ) && !isInCheckoutQueue( p.getId() ) )
             {
                 //TODO: Fix trigger name
-                buildProject( p.getId(), buildDefId, ContinuumProjectState.TRIGGER_UNKNOWN, false );
+                buildProject( p.getId(), buildDefId.intValue(), ContinuumProjectState.TRIGGER_UNKNOWN, false );
             }
         }
     }
