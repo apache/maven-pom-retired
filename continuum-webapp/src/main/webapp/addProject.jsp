@@ -71,8 +71,8 @@
         </tr>                                                                                                                
         </table>
         <div class="functnbar3">
-        <input type="submit" value="Submit"/>
-        <input type="button" value="Cancel" onClick="history.back()"/>
+            <input type="submit" value="<ww:text name="submit"/>"/>
+            <input type="button" value="<ww:text name="cancel"/>" onClick="history.back()"/>
         </div>
         </div>
     </ww:form>

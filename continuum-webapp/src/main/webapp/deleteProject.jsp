@@ -15,12 +15,15 @@
                     <ww:param><ww:property value="projectName"/></ww:param>
                 </ww:text>
             </strong>
-            <ww:form action="deleteProject.action" method="post">
-                <ww:hidden name="projectId"/>
-                <ww:submit value="%{getText('delete.submit')}"/>
-            </ww:form>
           </p>
         </div>
+        <ww:form action="deleteProject.action" method="post">
+            <ww:hidden name="projectId"/>
+            <div class="functnbar3">
+            <input type="submit" value="<ww:text name="delete.submit"/>"/>
+            <input type="button" name="Cancel" value="<ww:text name="cancel"/>" onClick="history.back()"/>
+            </div>
+        </ww:form>
       </div>
     </body>
   </ww:i18n>

@@ -61,13 +61,11 @@ public class AddMavenTwoProjectAction
                 }
                 catch ( MalformedURLException e )
                 {
-                    System.out.println( "aaa" );
                     return INPUT;
                 }
             }
             else
             {
-                System.out.println( "bbb" );
                 return INPUT;
             }
         }
@@ -80,7 +78,6 @@ public class AddMavenTwoProjectAction
         }
         catch ( ContinuumException e )
         {
-            System.out.println( "ccc" );
             return INPUT;
         }
         

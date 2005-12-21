@@ -27,17 +27,17 @@
         <tr>
             <th><ww:text name="add.m1.project.m1PomFile.label"/></th>
             <td >
-                <input type="file" name="m1PomFile" value="" size="100"/>
+                <ww:file name="m1PomFile" value="" size="100"/>
                 <p><ww:text name="add.m1.project.m1PomFile.message"/></p>
             </td>
         </tr>
         </table>
-    <div class="functnbar3">
-    <input type="submit" value="Submit"/>
-    <input type="button" name="Cancel" value="Cancel" onClick="history.back()"/>
-    </div>
-    </ww:form>
+        <div class="functnbar3">
+            <input type="submit" value="<ww:text name="delete.submit"/>"/>
+            <input type="button" name="Cancel" value="<ww:text name="cancel"/>" onClick="history.back()"/>
         </div>
+        </div>
+    </ww:form>
     </div>
 </div>
     </body>

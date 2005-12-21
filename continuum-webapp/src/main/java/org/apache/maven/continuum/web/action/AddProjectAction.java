@@ -80,8 +80,6 @@ public class AddProjectAction
 
     public String doDefault()
     {
-        setProjectType( ServletActionContext.getRequest().getParameter( "projectType" ) );        
-
         return INPUT;
     }
 
