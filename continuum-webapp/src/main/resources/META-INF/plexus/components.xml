@@ -45,6 +45,39 @@
         </requirement>
       </requirements>
     </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>addMavenTwoProject</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.AddMavenTwoProjectAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>addProject</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.AddProjectAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>addMavenOneProject</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.AddMavenOneProjectAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
 
     <!--
      | Components
