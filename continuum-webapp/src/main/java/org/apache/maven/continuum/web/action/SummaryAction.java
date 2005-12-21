@@ -96,18 +96,24 @@ public class SummaryAction
 
                 model.setBuildNumber( project.getBuildNumber() );
 
-                BuildResult buildInSuccess = (BuildResult) buildResultsInSuccess.get( new Integer( project.getId() ) );
-
-                if ( buildInSuccess != null )
+                if ( buildResultsInSuccess != null )
                 {
-                    model.setBuildInSuccessId( buildInSuccess.getId() );
+                    BuildResult buildInSuccess = (BuildResult) buildResultsInSuccess.get( new Integer( project.getId() ) );
+
+                    if ( buildInSuccess != null )
+                    {
+                        model.setBuildInSuccessId( buildInSuccess.getId() );
+                    }
                 }
 
-                BuildResult latestBuild = (BuildResult) buildResults.get( new Integer( project.getId() ) );
-
-                if ( latestBuild != null )
+                if ( buildResults != null )
                 {
-                    model.setLatestBuildId( latestBuild.getId() );
+                    BuildResult latestBuild = (BuildResult) buildResults.get( new Integer( project.getId() ) );
+
+                    if ( latestBuild != null )
+                    {
+                        model.setLatestBuildId( latestBuild.getId() );
+                    }
                 }
 
                 summary.add( model );
@@ -119,6 +125,7 @@ public class SummaryAction
         {
             e.printStackTrace();
         }
+
         return SUCCESS;
     }
 
