@@ -72,5 +72,10 @@
             <result name="delete">deleteProject.jsp</result>
             <result name="success" type="redirect">summary.action</result>
         </action>
+
+        <action name="buildProject"
+                class="buildProject">
+            <result name="success" type="redirect">summary.action</result>
+        </action>
     </package>
 </xwork>

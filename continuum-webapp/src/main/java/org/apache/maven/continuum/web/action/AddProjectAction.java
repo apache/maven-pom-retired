@@ -34,8 +34,6 @@ public class AddProjectAction
 {
     private Continuum continuum;
 
-    private Project project;
-
     private String projectName;
 
     private String projectVersion;
@@ -52,7 +50,7 @@ public class AddProjectAction
     
     public String execute()
     {
-        project = new Project();
+        Project project = new Project();
 
         project.setName( projectName );
 

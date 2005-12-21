@@ -18,31 +18,40 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Project;
 
+import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.xwork.ActionSupport;
+
+import java.util.Map;
 
 /**
  * @author Nick Gonzalez
  * @version $Id$
  */
-public class DeleteProjectAction
+public class BuildProjectAction
     extends ActionSupport
 {
     private Continuum continuum;
 
     private int projectId;
 
-    private String projectName;
-
     public String execute()
     {
         try
         {
-            continuum.removeProject( projectId );
+            if ( projectId > 0 )
+            {
+                continuum.buildProject( projectId );
+            }
+            else
+            {
+                continuum.buildProjects();
+            }
         }
         catch ( ContinuumException e )
         {
-            addActionMessage( "Can't delete project (id=" + projectId + ") : " + e.getMessage() );
+            addActionMessage( "Can't build project (id=" + projectId + ") : " + e.getMessage() );
 
             e.printStackTrace();
 
@@ -50,11 +59,6 @@ public class DeleteProjectAction
         }
 
         return SUCCESS;
-    }
-
-    public String doDefault()
-    {
-        return "delete";
     }
 
     public void setProjectId( int projectId )
@@ -65,15 +69,5 @@ public class DeleteProjectAction
     public int getProjectId()
     {
         return projectId;
-    }
-
-    public void setProjectName( String projectName )
-    {
-        this.projectName = projectName;
-    }
-
-    public String getProjectName()
-    {
-        return projectName;
     }
 }
