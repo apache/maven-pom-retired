@@ -23,6 +23,10 @@
 
         <default-interceptor-ref name="defaultContinuumStack"/>
 
+        <global-results>
+            <result name="error">error.jsp</result>
+        </global-results>
+
         <action name="checkConfiguration"
                 class="checkConfigurationAction">
             <result name="input">/redirectToContinuumInitialization.jsp</result>
@@ -60,6 +64,12 @@
         <action name="addProject"
                 class="addProject">
             <result name="input">addProject.jsp</result>
+            <result name="success" type="redirect">summary.action</result>
+        </action>
+
+        <action name="deleteProject"
+                class="deleteProject">
+            <result name="delete">deleteProject.jsp</result>
             <result name="success" type="redirect">summary.action</result>
         </action>
     </package>

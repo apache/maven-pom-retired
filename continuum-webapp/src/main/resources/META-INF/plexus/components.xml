@@ -78,6 +78,17 @@
         </requirement>
       </requirements>
     </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>deleteProject</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.DeleteProjectAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
 
     <!--
      | Components
