@@ -1,5 +1,21 @@
 package org.apache.maven.continuum.web.action;
 
+/*
+ * Copyright 2004-2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import java.util.Map;
 
 import org.apache.maven.continuum.Continuum;
@@ -8,71 +24,87 @@ import org.apache.maven.continuum.model.project.Project;
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.xwork.ActionSupport;
 
-public class AddProjectAction extends ActionSupport{
-    
+/**
+ * @author Nick Gonzalez
+ * @version $Id$
+ */
+public class AddProjectAction
+    extends ActionSupport
+{
 	private Continuum continuum;
-    
+
     private Project project;
-    
+
     private String projectName;
-    
+
     private String projectVersion;
-    
+
     private String projectScmUrl;
-    
+
     private String projectScmUsername;
-    
+
     private String projectScmPassword;
-    
+
     private String projectScmTag;
 
     private String projectType;
 	
-    /*public void addParam(String name, Object value) {
-    	System.out.println(name+" = "+value);
-    	getParams().put(name,value);
-	}*/
-
-	public String execute() throws Exception {
+	public String execute()
+	    throws Exception
+	{
         project = new Project();
-        project.setName(projectName);
-        project.setVersion(projectVersion);
-        project.setScmUrl(projectScmUrl);
-        project.setScmUsername(projectScmUsername);
-        project.setScmPassword(projectScmPassword);
-        project.setScmTag(projectScmTag);
-        
-        continuum.addProject(project, projectType);
+
+        project.setName( projectName );
+
+        project.setVersion( projectVersion );
+
+        project.setScmUrl( projectScmUrl );
+
+        project.setScmUsername( projectScmUsername );
+
+        project.setScmPassword( projectScmPassword );
+
+        project.setScmTag( projectScmTag );
+
+        continuum.addProject( project, projectType );
+
         return SUCCESS;
 	}
 
 	public String doDefault()
     {
-		setProjectType(ServletActionContext.getRequest().getParameter("projectType"));		
+		setProjectType( ServletActionContext.getRequest().getParameter( "projectType" ) );		
+
         return INPUT;
     }
 
-	public String getProjectName() {
+	public String getProjectName()
+	{
 		return projectName;
 	}
 
-	public void setProjectName(String projectName) {
+	public void setProjectName( String projectName )
+	{
 		this.projectName = projectName;
 	}
 
-	public String getProjectScmPassword() {
+	public String getProjectScmPassword()
+	{
 		return projectScmPassword;
 	}
 
-	public void setProjectScmPassword(String projectScmPassword) {
+	public void setProjectScmPassword( String projectScmPassword )
+	{
 		this.projectScmPassword = projectScmPassword;
 	}
 
-	public String getProjectScmTag() {
+	public String getProjectScmTag()
+	{
 		return projectScmTag;
 	}
 
-	public void setProjectScmTag(String projectScmTag) {
+	public void setProjectScmTag( String projectScmTag )
+	{
 		this.projectScmTag = projectScmTag;
 	}
 
@@ -80,32 +112,38 @@ public class AddProjectAction extends ActionSupport{
 		return projectScmUrl;
 	}
 
-	public void setProjectScmUrl(String projectScmUrl) {
+	public void setProjectScmUrl( String projectScmUrl )
+	{
 		this.projectScmUrl = projectScmUrl;
 	}
 
-	public String getProjectScmUsername() {
+	public String getProjectScmUsername()
+	{
 		return projectScmUsername;
 	}
 
-	public void setProjectScmUsername(String projectScmUsername) {
+	public void setProjectScmUsername( String projectScmUsername )
+	{
 		this.projectScmUsername = projectScmUsername;
 	}
 
-	public String getProjectType() {
+	public String getProjectType()
+	{
 		return projectType;
 	}
 
-	public void setProjectType(String projectType) {
+	public void setProjectType( String projectType )
+	{
 		this.projectType = projectType;
 	}
 
-	public String getProjectVersion() {
+	public String getProjectVersion()
+	{
 		return projectVersion;
 	}
 
-	public void setProjectVersion(String projectVersion) {
+	public void setProjectVersion( String projectVersion )
+	{
 		this.projectVersion = projectVersion;
 	}
-
 }
