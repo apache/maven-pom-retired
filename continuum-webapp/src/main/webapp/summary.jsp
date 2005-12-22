@@ -17,7 +17,7 @@
           <ec:row highlightRow="true">
             <ec:column property="state" title="&nbsp;" cell="org.apache.maven.continuum.web.view.StateCell"/>
             <ec:column property="name">
-                <a href="TO_BE_DEFINE">${pageScope.project.name}</a>
+                <a href="${pageContext.request.contextPath}/projectView.action?projectId=${pageScope.project.id}">${pageScope.project.name}</a>
             </ec:column>
             <ec:column property="version"/>
             <ec:column property="buildNumber" title="summary.projectTable.build" cell="org.apache.maven.continuum.web.view.BuildCell"/>

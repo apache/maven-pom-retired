@@ -18,6 +18,7 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Project;
 
 import com.opensymphony.xwork.ActionSupport;
 
@@ -25,24 +26,24 @@ import com.opensymphony.xwork.ActionSupport;
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class DeleteProjectAction
+public class ProjectViewAction
     extends ActionSupport
 {
     private Continuum continuum;
 
-    private int projectId;
+    private Project project;
 
-    private String projectName;
+    private int projectId;
 
     public String execute()
     {
         try
         {
-            continuum.removeProject( projectId );
+            project = continuum.getProjectWithAllDetails( projectId );
         }
         catch ( ContinuumException e )
         {
-            addActionMessage( "Can't delete project (id=" + projectId + ") : " + e.getMessage() );
+            addActionMessage( "Can't get project informations (id=" + projectId + ") : " + e.getMessage() );
 
             e.printStackTrace();
 
@@ -52,28 +53,13 @@ public class DeleteProjectAction
         return SUCCESS;
     }
 
-    public String doDefault()
-    {
-        return "delete";
-    }
-
     public void setProjectId( int projectId )
     {
         this.projectId = projectId;
     }
 
-    public int getProjectId()
+    public Project getProject()
     {
-        return projectId;
-    }
-
-    public void setProjectName( String projectName )
-    {
-        this.projectName = projectName;
-    }
-
-    public String getProjectName()
-    {
-        return projectName;
+        return project;
     }
 }

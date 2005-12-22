@@ -26,7 +26,7 @@ import com.opensymphony.xwork.ActionSupport;
 import java.util.Map;
 
 /**
- * @author Nick Gonzalez
+ * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
 public class BuildProjectAction

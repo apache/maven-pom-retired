@@ -6,7 +6,7 @@
     </head>
     <body>
       <div id="axial" class="h3">
-        <h3><ww:text name="delete.page.title"/></h3>
+        <h3><ww:text name="delete.section.title"/></h3>
 
         <div class="warningmessage">
           <p>

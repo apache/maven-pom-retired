@@ -77,5 +77,10 @@
                 class="buildProject">
             <result name="success" type="redirect">summary.action</result>
         </action>
+
+        <action name="projectView"
+                class="projectView">
+            <result name="success">projectView.jsp</result>
+        </action>
     </package>
 </xwork>
