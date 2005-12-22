@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Apache Maven Continuum">
   <bannerLeft>
     <name>Maven</name>
@@ -9,6 +10,7 @@
     <src>images/continuum_logo.jpg</src>
     <href>http://maven.apache.org/continuum</href>
   </bannerRight>
+  <publishDate format="dd MMM yyyy" />
   <body>
     <links>
       <item name="Apache" href="http://www.apache.org/"/>
