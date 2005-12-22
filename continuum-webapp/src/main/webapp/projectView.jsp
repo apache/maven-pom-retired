@@ -15,7 +15,7 @@
               <th><ww:text name="projectView.project.name"/></th>
               <td><ww:property value="project.name"/></td>
             </tr>
-            <tr class="a">
+            <tr class="b">
               <th><ww:text name="projectView.project.version"/></th>
               <td><ww:property value="project.version"/></td>
             </tr>
@@ -23,7 +23,7 @@
               <th><ww:text name="projectView.project.scmUrl"/></th>
               <td><ww:property value="project.scmUrl"/></td>
             </tr>
-            <tr class="a">
+            <tr class="b">
               <th><ww:text name="projectView.project.group"/></th>
               <td><ww:property value="project.projectGroup.name"/></td>
             </tr>
@@ -31,13 +31,13 @@
         </div>
 
         <h3><ww:text name="projectView.buildDefinitions"/></h3>
-            
+
         <h3><ww:text name="projectView.notifiers"/></h3>
-            
+
         <h3><ww:text name="projectView.dependencies"/></h3>
-            
+
         <h3><ww:text name="projectView.developers"/></h3>
-            
+
       </div>
     </body>
   </ww:i18n>
