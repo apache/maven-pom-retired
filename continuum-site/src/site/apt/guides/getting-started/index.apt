@@ -22,7 +22,7 @@ Installing Continuum
  When Continuum is running you can access it with your browser on
  {{http://localhost:8080/continuum/}} or by using the XMLRPC interface on port 8000.
 
-Fixing Maven and ant scripts
+Fixing Maven and ant scripts for Windows
 
  {{{../../faqs.html#how-does-continuum-detect-a-successful-build}How does Continuum detect a successful build?}}
 
