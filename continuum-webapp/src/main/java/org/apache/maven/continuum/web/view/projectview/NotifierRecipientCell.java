@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.web.view;
+package org.apache.maven.continuum.web.view.projectview;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,48 +16,52 @@ package org.apache.maven.continuum.web.view;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.web.model.SummaryProjectModel;
-import org.apache.maven.continuum.web.util.StateGenerator;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
 import org.extremecomponents.table.core.BaseModel;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
- * Used in Summary view
+ * Used in Project view
  *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class BuildCell
+public class NotifierRecipientCell
     extends DisplayCell
 {
     public void init(BaseModel model, Column column)
     {
         super.init(model, column);
 
-        SummaryProjectModel project = (SummaryProjectModel) model.getCurrentCollectionBean();
+        ProjectNotifier notifier = (ProjectNotifier) model.getCurrentCollectionBean();
 
-        int buildNumber = project.getBuildNumber();
+        if ( "irc".equals( notifier.getType() ) )
+        {
+            String address = "";
 
-        if ( project.isInQueue() )
-        {
-            column.setValue( "In&nbsp;queue" );
-        }
-        else if ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 || project.getState() == 4 )
-        {
-            if ( project.getBuildNumber() > 0 )
+            if ( notifier.getConfiguration().get( "host" ) != null )
             {
-                column.setValue( "<a href=\"TO_BE_DEFINE\">" + project.getBuildNumber() + "</a>" );
+                address += notifier.getConfiguration().get( "host" ) + ":";
             }
-            else
+
+            if ( notifier.getConfiguration().get( "port" ) != null )
             {
-                column.setValue( "&nbsp;" );
             }
+
+            if ( notifier.getConfiguration().get( "channel" ) != null )
+            {
+                address += notifier.getConfiguration().get( "channel" );
+            }
+
+            column.setValue( address );
         }
         else
         {
-            column.setValue( "In&nbsp;progress" );
+            column.setValue( notifier.getConfiguration().get( "address" ) );
         }
     }
 }

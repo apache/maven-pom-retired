@@ -56,8 +56,37 @@
         </ec:table>
 
         <h3><ww:text name="projectView.notifiers"/></h3>
+        <ww:set name="notifiers" value="project.notifiers" scope="request"/>
+        <ec:table items="notifiers"
+                  showExports="false"
+                  showPagination="false"
+                  showStatusBar="false"
+                  filterable="false">
+          <ec:row highlightRow="true">
+            <ec:column property="type" title="projectView.notifier.type"/>
+            <ec:column property="recipient" title="projectView.notifier.recipient" cell="org.apache.maven.continuum.web.view.projectview.NotifierRecipientCell"/>
+            <ec:column property="events" title="projectView.notifier.events" cell="org.apache.maven.continuum.web.view.projectview.NotifierEventCell"/>
+            <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
+            <ec:column property="actions" title="&nbsp;">
+                Edit&nbsp;Delete
+            </ec:column>
+          </ec:row>
+        </ec:table>
 
         <h3><ww:text name="projectView.dependencies"/></h3>
+        <ww:set name="dependencies" value="project.dependencies" scope="request"/>
+        <ec:table items="dependencies"
+                  var="dependency"
+                  showExports="false"
+                  showPagination="false"
+                  showStatusBar="false"
+                  filterable="false">
+          <ec:row highlightRow="true">
+            <ec:column property="name" title="projectView.dependency.name">
+                ${pageScope.dependency.groupId}:${pageScope.dependency.artifactId}:${pageScope.dependency.version}
+            </ec:column>
+          </ec:row>
+        </ec:table>
 
         <h3><ww:text name="projectView.developers"/></h3>
         <ww:set name="developers" value="project.developers" scope="request"/>
