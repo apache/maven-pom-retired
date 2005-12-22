@@ -31,6 +31,7 @@
         </div>
 
         <h3><ww:text name="projectView.buildDefinitions"/></h3>
+        <ww:set name="buildDefinitions" value="project.buildDefinitions" scope="request"/>
         <ec:table items="buildDefinitions"
                   var="buildDefinition"
                   showExports="false"
@@ -59,6 +60,7 @@
         <h3><ww:text name="projectView.dependencies"/></h3>
 
         <h3><ww:text name="projectView.developers"/></h3>
+        <ww:set name="developers" value="project.developers" scope="request"/>
         <ec:table items="developers"
                   showExports="false"
                   showPagination="false"

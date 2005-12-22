@@ -51,14 +51,6 @@ public class ProjectViewAction
             return ERROR;
         }
 
-        ServletActionContext.getRequest().setAttribute( "buildDefinitions", project.getBuildDefinitions() );
-
-        ServletActionContext.getRequest().setAttribute( "notifiers", project.getNotifiers() );
-
-        ServletActionContext.getRequest().setAttribute( "dependencies", project.getDependencies() );
-
-        ServletActionContext.getRequest().setAttribute( "developers", project.getDevelopers() );
-
         return SUCCESS;
     }
 
