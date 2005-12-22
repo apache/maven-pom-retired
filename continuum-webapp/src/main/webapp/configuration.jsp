@@ -21,7 +21,7 @@
                 </ww:text>
               </td>
             </tr>
-            <tr class="a">
+            <tr class="b">
               <th><ww:text name="configuration.workingDirectory.label"/></th>
               <td><ww:property value="workingDirectory"/></td>
             </tr>
@@ -29,7 +29,7 @@
               <th><ww:text name="configuration.buildOutputDirectory.label"/></th>
               <td><ww:property value="buildOutputDirectory"/></td>
             </tr>
-            <tr class="a">
+            <tr class="b">
               <th><ww:text name="configuration.baseUrl.label"/></th>
               <td><ww:property value="baseUrl"/></td>
             </tr>
@@ -37,7 +37,7 @@
               <th><ww:text name="configuration.companyName.label"/></th>
               <td><ww:property value="companyName"/></td>
             </tr>
-            <tr class="a">
+            <tr class="b">
               <th><ww:text name="configuration.companyLogo.label"/></th>
               <td><ww:property value="companyLogo"/></td>
             </tr>
@@ -48,7 +48,7 @@
           </table>
           <div class="functnbar3">
             <ww:form action="configuration!edit.action">
-                <ww:submit value="%{getText('configuration.submit.edit')}"/>
+                <ww:submit value="%{getText('edit')}"/>
             </ww:form>
           </div>
         </div>

@@ -37,7 +37,8 @@
                   showExports="false"
                   showPagination="false"
                   showStatusBar="false"
-                  filterable="false">
+                  filterable="false"
+                  sortable="false">
           <ec:row highlightRow="true">
             <ec:column property="goals" title="projectView.buildDefinition.goals"/>
             <ec:column property="arguments" title="projectView.buildDefinition.arguments"/>
@@ -50,7 +51,7 @@
                 PROJECT
             </ec:column>
             <ec:column property="actions" title="&nbsp;">
-                Edit&nbsp;Delete
+                <ww:text name="edit"/>&nbsp;<ww:text name="delete"/>
             </ec:column>
           </ec:row>
         </ec:table>
@@ -61,14 +62,15 @@
                   showExports="false"
                   showPagination="false"
                   showStatusBar="false"
-                  filterable="false">
+                  filterable="false"
+                  sortable="false">
           <ec:row highlightRow="true">
             <ec:column property="type" title="projectView.notifier.type"/>
             <ec:column property="recipient" title="projectView.notifier.recipient" cell="org.apache.maven.continuum.web.view.projectview.NotifierRecipientCell"/>
             <ec:column property="events" title="projectView.notifier.events" cell="org.apache.maven.continuum.web.view.projectview.NotifierEventCell"/>
             <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
             <ec:column property="actions" title="&nbsp;">
-                Edit&nbsp;Delete
+                <ww:text name="edit"/>&nbsp;<ww:text name="delete"/>
             </ec:column>
           </ec:row>
         </ec:table>
@@ -80,7 +82,8 @@
                   showExports="false"
                   showPagination="false"
                   showStatusBar="false"
-                  filterable="false">
+                  filterable="false"
+                  sortable="false">
           <ec:row highlightRow="true">
             <ec:column property="name" title="projectView.dependency.name">
                 ${pageScope.dependency.groupId}:${pageScope.dependency.artifactId}:${pageScope.dependency.version}
@@ -94,7 +97,8 @@
                   showExports="false"
                   showPagination="false"
                   showStatusBar="false"
-                  filterable="false">
+                  filterable="false"
+                  sortable="false">
           <ec:row highlightRow="true">
             <ec:column property="name" title="projectView.developer.name"/>
             <ec:column property="email" title="projectView.developer.email"/>

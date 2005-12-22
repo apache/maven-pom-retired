@@ -31,7 +31,7 @@
                 TODO
             </ec:column>
             <ec:column property="deleteAction" title="&nbsp;">
-                <a href="${pageContext.request.contextPath}/deleteProject!default.action?projectId=${pageScope.project.id}&projectName=${pageScope.project.name}">Delete</a>
+                <a href="${pageContext.request.contextPath}/deleteProject!default.action?projectId=${pageScope.project.id}&projectName=${pageScope.project.name}"><ww:text name="delete"/></a>
             </ec:column>
           </ec:row>
         </ec:table>

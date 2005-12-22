@@ -7,9 +7,14 @@
     <body>
       <div id="axial" class="h3">
         <h3><ww:text name="about.section.title"/></h3>
-        <p>
-            <ww:text name="about.version"/>
-        </p>
+        <div class="axial">
+          <table border="1" cellspacing="2" cellpadding="3" width="100%">
+            <tr class="b">
+              <th><ww:text name="about.version.label"/></th>
+              <td><ww:text name="about.version.number"/></td>
+            </tr>
+          </table>
+        </div>
       </div>
     </body>
   </ww:i18n>

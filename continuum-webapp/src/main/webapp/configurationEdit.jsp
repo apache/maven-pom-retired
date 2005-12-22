@@ -17,7 +17,7 @@
             <ww:textfield label="%{getText('configuration.companyName.label')}" name="companyName"/>
             <ww:textfield label="%{getText('configuration.companyLogo.label')}" name="companyLogo"/>
             <ww:textfield label="%{getText('configuration.companyUrl.label')}" name="companyUrl"/>
-            <ww:submit value="%{getText('configuration.submit.edit')}"/>
+            <ww:submit value="%{getText('save')}"/>
           </ww:form>
         </div>
       </div>
