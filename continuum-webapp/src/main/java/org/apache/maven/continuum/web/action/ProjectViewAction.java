@@ -21,6 +21,7 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
 
 import com.opensymphony.xwork.ActionSupport;
+import com.opensymphony.webwork.ServletActionContext;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -49,6 +50,14 @@ public class ProjectViewAction
 
             return ERROR;
         }
+
+        ServletActionContext.getRequest().setAttribute( "buildDefinitions", project.getBuildDefinitions() );
+
+        ServletActionContext.getRequest().setAttribute( "notifiers", project.getNotifiers() );
+
+        ServletActionContext.getRequest().setAttribute( "dependencies", project.getDependencies() );
+
+        ServletActionContext.getRequest().setAttribute( "developers", project.getDevelopers() );
 
         return SUCCESS;
     }

@@ -31,12 +31,44 @@
         </div>
 
         <h3><ww:text name="projectView.buildDefinitions"/></h3>
+        <ec:table items="buildDefinitions"
+                  var="buildDefinition"
+                  showExports="false"
+                  showPagination="false"
+                  showStatusBar="false"
+                  filterable="false">
+          <ec:row highlightRow="true">
+            <ec:column property="goals" title="projectView.buildDefinition.goals"/>
+            <ec:column property="arguments" title="projectView.buildDefinition.arguments"/>
+            <ec:column property="buildFile" title="projectView.buildDefinition.buildFile"/>
+            <ec:column property="profile" title="projectView.buildDefinition.profile"/>
+            <ec:column property="schedule" title="schedule">
+                ${pageScope.buildDefinition.schedule.name}
+            </ec:column>
+            <ec:column property="from" title="projectView.buildDefinition.from">
+                PROJECT
+            </ec:column>
+            <ec:column property="actions" title="&nbsp;">
+                Edit&nbsp;Delete
+            </ec:column>
+          </ec:row>
+        </ec:table>
 
         <h3><ww:text name="projectView.notifiers"/></h3>
 
         <h3><ww:text name="projectView.dependencies"/></h3>
 
         <h3><ww:text name="projectView.developers"/></h3>
+        <ec:table items="developers"
+                  showExports="false"
+                  showPagination="false"
+                  showStatusBar="false"
+                  filterable="false">
+          <ec:row highlightRow="true">
+            <ec:column property="name" title="projectView.developer.name"/>
+            <ec:column property="email" title="projectView.developer.email"/>
+          </ec:row>
+        </ec:table>
 
       </div>
     </body>
