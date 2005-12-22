@@ -27,6 +27,7 @@ import com.opensymphony.webwork.ServletActionContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,8 +40,12 @@ public class SummaryAction
     private Continuum continuum;
 
     private int nbSuccesses;
+
     private int nbFailures;
+
     private int nbErrors;
+
+    private List summary;
     
     public String execute()
         throws Exception
@@ -54,7 +59,7 @@ public class SummaryAction
 
             Map buildResultsInSuccess = continuum.getBuildResultsInSuccess();
 
-            Collection summary = new ArrayList();
+            summary = new ArrayList();
 
             for ( Iterator i = projects.iterator(); i.hasNext(); )
             {
@@ -118,8 +123,6 @@ public class SummaryAction
 
                 summary.add( model );
             }
-
-            ServletActionContext.getRequest().setAttribute( "projects", summary );
         }
         catch( Exception e )
         {
@@ -142,5 +145,10 @@ public class SummaryAction
     public int getNbErrors()
     {
         return nbErrors;
+    }
+
+    public List getProjects()
+    {
+        return summary;
     }
 }
