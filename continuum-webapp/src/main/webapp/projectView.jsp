@@ -46,7 +46,7 @@
                   showStatusBar="false"
                   filterable="false"
                   sortable="false">
-          <ec:row highlightRow="true">
+          <ec:row>
             <ec:column property="goals" title="projectView.buildDefinition.goals"/>
             <ec:column property="arguments" title="projectView.buildDefinition.arguments"/>
             <ec:column property="buildFile" title="projectView.buildDefinition.buildFile"/>
@@ -58,10 +58,18 @@
                 PROJECT
             </ec:column>
             <ec:column property="actions" title="&nbsp;">
-                <ww:text name="edit"/>&nbsp;<ww:text name="delete"/>
+                <a href="${pageContext.request.contextPath}/buildDefinitionEdit!default.action?projectId=<ww:property value="project.id"/>&buildDefinitionId=${pageScope.buildDefinition.id}"><ww:text name="edit"/></a>
+                &nbsp;
+                <a href="${pageContext.request.contextPath}/deleteBuildDefinition!default.action?projectId=<ww:property value="project.id"/>&buildDefinitionId=${pageScope.buildDefinition.id}"><ww:text name="delete"/></a>
             </ec:column>
           </ec:row>
         </ec:table>
+        <div class="functnbar3">
+          <form method="post" action="addBuildDefinition!default.action">
+              <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+              <input type="submit" name="addBuildDef" value="<ww:text name="add"/>"/>
+          </form>
+        </div>
 
         <h3><ww:text name="projectView.notifiers"/></h3>
         <ww:set name="notifiers" value="project.notifiers" scope="request"/>
@@ -72,7 +80,7 @@
                   showStatusBar="false"
                   filterable="false"
                   sortable="false">
-          <ec:row highlightRow="true">
+          <ec:row>
             <ec:column property="type" title="projectView.notifier.type"/>
             <ec:column property="recipient" title="projectView.notifier.recipient" cell="org.apache.maven.continuum.web.view.projectview.NotifierRecipientCell"/>
             <ec:column property="events" title="projectView.notifier.events" cell="org.apache.maven.continuum.web.view.projectview.NotifierEventCell"/>
@@ -94,7 +102,7 @@
                   showStatusBar="false"
                   filterable="false"
                   sortable="false">
-          <ec:row highlightRow="true">
+          <ec:row>
             <ec:column property="name" title="projectView.dependency.name">
                 ${pageScope.dependency.groupId}:${pageScope.dependency.artifactId}:${pageScope.dependency.version}
             </ec:column>
@@ -109,7 +117,7 @@
                   showStatusBar="false"
                   filterable="false"
                   sortable="false">
-          <ec:row highlightRow="true">
+          <ec:row>
             <ec:column property="name" title="projectView.developer.name"/>
             <ec:column property="email" title="projectView.developer.email"/>
           </ec:row>

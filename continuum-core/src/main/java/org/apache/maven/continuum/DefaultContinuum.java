@@ -965,6 +965,38 @@ public class DefaultContinuum
         return buildDefinition;
     }
 
+    public void updateBuildDefinition( BuildDefinition buildDefinition, int projectId )
+        throws ContinuumException
+    {
+        BuildDefinition bd = getBuildDefinition( projectId, buildDefinition.getId() );
+
+        bd.setBuildFile( buildDefinition.getBuildFile() );
+
+        bd.setGoals( buildDefinition.getGoals() );
+
+        bd.setArguments( buildDefinition.getArguments() );
+
+        Schedule schedule = getSchedule( buildDefinition.getSchedule().getId() );
+
+        bd.setSchedule( schedule );
+
+        if ( buildDefinition.isDefaultForProject() && !bd.isDefaultForProject() )
+        {
+            bd.setDefaultForProject( true );
+            
+            BuildDefinition defaultBd = getDefaultBuildDefinition( projectId );
+
+            if ( defaultBd != null )
+            {
+                defaultBd.setDefaultForProject( false );
+
+                storeBuildDefinition( defaultBd );
+            }
+        }
+
+        storeBuildDefinition( bd );
+    }
+
     public void updateBuildDefinition( int projectId, int buildDefinitionId, Map configuration )
         throws ContinuumException
     {
@@ -980,21 +1012,9 @@ public class DefaultContinuum
 
         buildDefinition.setSchedule( schedule );
 
-        if ( convertBoolean( (String) configuration.get( "defaultForProject" ) ) && !buildDefinition.isDefaultForProject() )
-        {
-            buildDefinition.setDefaultForProject( true );
-            
-            BuildDefinition bd = getDefaultBuildDefinition( projectId );
+        buildDefinition.setDefaultForProject( true );
 
-            if ( bd != null )
-            {
-                bd.setDefaultForProject( false );
-
-                storeBuildDefinition( bd );
-            }
-        }
-
-        storeBuildDefinition( buildDefinition );
+        updateBuildDefinition( buildDefinition, projectId );
     }
 
     public BuildDefinition storeBuildDefinition( BuildDefinition buildDefinition )
@@ -1010,6 +1030,28 @@ public class DefaultContinuum
         }
     }
 
+    public void addBuildDefinition( int projectId, BuildDefinition buildDefinition )
+        throws ContinuumException
+    {
+        if ( buildDefinition.isDefaultForProject() )
+        {
+            BuildDefinition bd = getDefaultBuildDefinition( projectId );
+
+            if ( bd != null )
+            {
+                bd.setDefaultForProject( false );
+
+                storeBuildDefinition( bd );
+            }
+        }
+
+        Project project = getProjectWithAllDetails( projectId );
+
+        project.addBuildDefinition( buildDefinition );
+
+        updateProject( project );
+    }
+
     public void addBuildDefinition( int projectId, Map configuration )
         throws ContinuumException
     {
@@ -1023,27 +1065,14 @@ public class DefaultContinuum
 
         Schedule schedule = getSchedule( new Integer( (String) configuration.get( "schedule" ) ).intValue() );
 
+        buildDefinition.setSchedule( schedule );
+
         if ( convertBoolean( (String) configuration.get( "defaultForProject" ) ) )
         {
             buildDefinition.setDefaultForProject( true );
-            
-            BuildDefinition bd = getDefaultBuildDefinition( projectId );
-
-            if ( bd != null )
-            {
-                bd.setDefaultForProject( false );
-
-                storeBuildDefinition( bd );
-            }
         }
 
-        buildDefinition.setSchedule( schedule );
-
-        Project project = getProjectWithAllDetails( projectId );
-
-        project.addBuildDefinition( buildDefinition );
-
-        updateProject( project );
+        addBuildDefinition( projectId, buildDefinition );
     }
 
     public void removeBuildDefinition( int projectId, int buildDefinitionId )

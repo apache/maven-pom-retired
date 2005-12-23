@@ -21,7 +21,6 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
 
 import com.opensymphony.xwork.ActionSupport;
-import com.opensymphony.webwork.ServletActionContext;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>

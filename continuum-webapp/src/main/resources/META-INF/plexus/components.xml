@@ -122,6 +122,39 @@
         </requirement>
       </requirements>
     </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>buildDefinitionEdit</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.BuildDefinitionEditAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>deleteBuildDefinition</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.DeleteBuildDefinitionAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>addBuildDefinition</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.AddBuildDefinitionAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
 
     <!--
      | Components

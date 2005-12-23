@@ -88,5 +88,23 @@
             <result name="input">projectEdit.jsp</result>
             <result name="success" type="chain">projectView</result>
         </action>
+
+        <action name="buildDefinitionEdit"
+                class="buildDefinitionEdit">
+            <result name="input">buildDefinitionEdit.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
+
+        <action name="deleteBuildDefinition"
+                class="deleteBuildDefinition">
+            <result name="delete">deleteBuildDefinition.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
+
+        <action name="addBuildDefinition"
+                class="addBuildDefinition">
+            <result name="input">buildDefinitionEdit.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
     </package>
 </xwork>

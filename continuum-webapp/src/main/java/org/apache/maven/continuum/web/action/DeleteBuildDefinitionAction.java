@@ -18,7 +18,6 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.model.project.Project;
 
 import com.opensymphony.xwork.ActionSupport;
 
@@ -26,24 +25,24 @@ import com.opensymphony.xwork.ActionSupport;
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class ProjectViewAction
+public class DeleteBuildDefinitionAction
     extends ActionSupport
 {
     private Continuum continuum;
 
-    private Project project;
-
     private int projectId;
+
+    private int buildDefinitionId;
 
     public String execute()
     {
         try
         {
-            project = continuum.getProjectWithAllDetails( projectId );
+            continuum.removeBuildDefinition( projectId, buildDefinitionId );
         }
         catch ( ContinuumException e )
         {
-            addActionMessage( "Can't get project informations (id=" + projectId + ") : " + e.getMessage() );
+            addActionMessage( "Can't delete build definition (id=" + projectId + ") for project " + projectId + " : " + e.getMessage() );
 
             e.printStackTrace();
 
@@ -53,13 +52,28 @@ public class ProjectViewAction
         return SUCCESS;
     }
 
+    public String doDefault()
+    {
+        return "delete";
+    }
+
     public void setProjectId( int projectId )
     {
         this.projectId = projectId;
     }
 
-    public Project getProject()
+    public int getProjectId()
     {
-        return project;
+        return projectId;
+    }
+
+    public void setBuildDefinitionId( int buildDefinitionId )
+    {
+        this.buildDefinitionId = buildDefinitionId;
+    }
+
+    public int getBuildDefinitionId()
+    {
+        return buildDefinitionId;
     }
 }

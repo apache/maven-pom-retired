@@ -10,7 +10,7 @@
 
         <div class="axial">
           <ww:form action="projectEdit.action" method="post">
-            <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+            <input type="hidden" name="projectId" value="<ww:property value="projectId"/>"/>
             <ww:textfield label="%{getText('projectEdit.project.name.label')}" name="name"/>
             <ww:textfield label="%{getText('projectEdit.project.version.label')}" name="version"/>
             <ww:textfield label="%{getText('projectEdit.project.scmUrl.label')}" name="scmUrl"/>

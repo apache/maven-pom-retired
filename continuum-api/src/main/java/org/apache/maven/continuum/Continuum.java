@@ -176,7 +176,13 @@ public interface Continuum
     BuildDefinition getBuildDefinition( int projectId, int buildDefinitionId )
         throws ContinuumException;
 
+    void updateBuildDefinition( BuildDefinition buildDefinition, int projectId )
+        throws ContinuumException;
+
     void updateBuildDefinition( int projectId, int buildDefinitionId, Map configuration )
+        throws ContinuumException;
+
+    void addBuildDefinition( int projectId, BuildDefinition buildDefinition )
         throws ContinuumException;
 
     void addBuildDefinition( int projectId, Map configuration )
