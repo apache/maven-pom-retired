@@ -50,25 +50,34 @@ public class ProjectEditAction
 
     public String execute()
     {
-        Project p = new Project();
+        try
+        {
+            project = getProject( projectId );
+        }
+        catch ( ContinuumException e )
+        {
+            addActionMessage( "Can't get project informations (id=" + projectId + ") : " + e.getMessage() );
 
-        p.setId( projectId );
+            e.printStackTrace();
 
-        p.setName( name );
+            return ERROR;
+        }
 
-        p.setVersion( version );
+        project.setName( name );
 
-        p.setScmUrl( scmUrl );
+        project.setVersion( version );
 
-        p.setScmUsername( scmUsername );
+        project.setScmUrl( scmUrl );
 
-        p.setScmPassword( scmPassword );
+        project.setScmUsername( scmUsername );
 
-        p.setScmTag( scmTag );
+        project.setScmPassword( scmPassword );
+
+        project.setScmTag( scmTag );
 
         try
         {
-            continuum.updateProject( p );
+            continuum.updateProject( project );
         }
         catch ( ContinuumException e )
         {
@@ -97,6 +106,18 @@ public class ProjectEditAction
             return ERROR;
         }
 
+        name = project.getName();
+
+        version = project.getVersion();
+
+        scmUrl = project.getScmUrl();
+
+        scmUsername = project.getScmUsername();
+
+        scmPassword = project.getScmPassword();
+
+        scmTag = project.getScmTag();
+
         return INPUT;
     }
 
@@ -116,9 +137,19 @@ public class ProjectEditAction
         this.projectId = projectId;
     }
 
-    public void setProjectName( String name )
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName( String name )
     {
         this.name = name;
+    }
+
+    public String getVersion()
+    {
+        return version;
     }
 
     public void setVersion( String version )
@@ -126,9 +157,19 @@ public class ProjectEditAction
         this.version = version;
     }
 
+    public String getScmUrl()
+    {
+        return scmUrl;
+    }
+
     public void setScmUrl( String scmUrl )
     {
         this.scmUrl = scmUrl;
+    }
+
+    public String getScmUsername()
+    {
+        return scmUsername;
     }
 
     public void setScmUsername( String scmUsername )
@@ -136,9 +177,19 @@ public class ProjectEditAction
         this.scmUsername = scmUsername;
     }
 
-    public void setPassword( String scmPassword )
+    public String getScmPassword()
+    {
+        return scmPassword;
+    }
+
+    public void setScmPassword( String scmPassword )
     {
         this.scmPassword = scmPassword;
+    }
+
+    public String getScmTag()
+    {
+        return scmTag;
     }
 
     public void setScmTag( String scmTag )

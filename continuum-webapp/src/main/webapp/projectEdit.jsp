@@ -11,12 +11,12 @@
         <div class="axial">
           <ww:form action="projectEdit.action" method="post">
             <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
-            <ww:textfield label="%{getText('projectEdit.project.name.label')}" name="project.name"/>
-            <ww:textfield label="%{getText('projectEdit.project.version.label')}" name="project.version"/>
-            <ww:textfield label="%{getText('projectEdit.project.scmUrl.label')}" name="project.scmUrl"/>
-            <ww:textfield label="%{getText('projectEdit.project.scmUsername.label')}" name="project.scmUsername"/>
-            <ww:password label="%{getText('projectEdit.project.scmPassword.label')}" name="project.scmPassword"/>
-            <ww:textfield label="%{getText('projectEdit.project.scmTag.label')}" name="project.scmTag"/>
+            <ww:textfield label="%{getText('projectEdit.project.name.label')}" name="name"/>
+            <ww:textfield label="%{getText('projectEdit.project.version.label')}" name="version"/>
+            <ww:textfield label="%{getText('projectEdit.project.scmUrl.label')}" name="scmUrl"/>
+            <ww:textfield label="%{getText('projectEdit.project.scmUsername.label')}" name="scmUsername"/>
+            <ww:password label="%{getText('projectEdit.project.scmPassword.label')}" name="scmPassword"/>
+            <ww:textfield label="%{getText('projectEdit.project.scmTag.label')}" name="scmTag"/>
             <ww:submit value="%{getText('save')}"/>
           </ww:form>
         </div>
