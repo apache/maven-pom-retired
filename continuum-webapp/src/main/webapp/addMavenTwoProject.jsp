@@ -33,7 +33,7 @@
                         </tr>
                         </table>
                         <div class="functnbar3">
-                            <input type="submit" value="<ww:text name="delete.submit"/>"/>
+                            <input type="submit" value="<ww:text name="add"/>"/>
                             <input type="button" name="Cancel" value="<ww:text name="cancel"/>" onClick="history.back()"/>
                         </div>
                     </ww:form>
