@@ -1,5 +1,6 @@
 <%@ taglib uri="webwork" prefix="ww" %>
 <%@ taglib uri="/tld/extremecomponents" prefix="ec" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
@@ -65,6 +66,7 @@
         <h3><ww:text name="projectView.notifiers"/></h3>
         <ww:set name="notifiers" value="project.notifiers" scope="request"/>
         <ec:table items="notifiers"
+                  var="notifier"
                   showExports="false"
                   showPagination="false"
                   showStatusBar="false"
@@ -76,7 +78,9 @@
             <ec:column property="events" title="projectView.notifier.events" cell="org.apache.maven.continuum.web.view.projectview.NotifierEventCell"/>
             <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
             <ec:column property="actions" title="&nbsp;">
-                <ww:text name="edit"/>&nbsp;<ww:text name="delete"/>
+                <c:if test="${!pageScope.notifier.fromProject}">
+                    <ww:text name="edit"/>&nbsp;<ww:text name="delete"/>
+                </c:if>
             </ec:column>
           </ec:row>
         </ec:table>
