@@ -82,5 +82,11 @@
                 class="projectView">
             <result name="success">projectView.jsp</result>
         </action>
+
+        <action name="projectEdit"
+                class="projectEdit">
+            <result name="input">projectEdit.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
     </package>
 </xwork>

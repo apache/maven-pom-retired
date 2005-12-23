@@ -28,6 +28,12 @@
               <td><ww:property value="project.projectGroup.name"/></td>
             </tr>
           </table>
+          <div class="functnbar3">
+            <ww:form action="projectEdit!edit.action">
+                <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+                <ww:submit value="%{getText('edit')}"/>
+            </ww:form>
+          </div>
         </div>
 
         <h3><ww:text name="projectView.buildDefinitions"/></h3>
