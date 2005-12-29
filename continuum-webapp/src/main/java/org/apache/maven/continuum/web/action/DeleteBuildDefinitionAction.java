@@ -42,7 +42,7 @@ public class DeleteBuildDefinitionAction
         }
         catch ( ContinuumException e )
         {
-            addActionMessage( "Can't delete build definition (id=" + projectId + ") for project " + projectId + " : " + e.getMessage() );
+            addActionMessage( "Can't delete build definition (id=" + buildDefinitionId + ") for project " + projectId + " : " + e.getMessage() );
 
             e.printStackTrace();
 

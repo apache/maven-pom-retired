@@ -65,38 +65,6 @@ public class AddBuildDefinitionAction
     {
         try
         {
-            BuildDefinition bd = new BuildDefinition();
-
-            bd.setGoals( goals );
-
-            bd.setBuildFile( buildFile );
-
-            bd.setArguments( arguments );
-
-            bd.setDefaultForProject( defaultForProject );
-
-            Schedule schedule = continuum.getSchedule( scheduleId );
-
-            bd.setSchedule( schedule );
-
-            continuum.addBuildDefinition( projectId, bd );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't update build definition (id=" + buildDefinitionId + ") for project " + projectId + " : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
-
-        return SUCCESS;
-    }
-
-    public String doDefault()
-    {
-        try
-        {
             project = continuum.getProject( projectId );
         }
         catch ( ContinuumException e )
