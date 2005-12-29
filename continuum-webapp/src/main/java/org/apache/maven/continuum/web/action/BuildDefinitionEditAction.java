@@ -67,7 +67,16 @@ public class BuildDefinitionEditAction
     {
         try
         {
+            boolean isNew = false;
+
             bd = getBuildDefinition();
+
+            if ( bd == null || buildDefinitionId == 0 )
+            {
+                bd = new BuildDefinition();
+
+                isNew = true;
+            }
 
             bd.setGoals( goals );
 
@@ -81,7 +90,14 @@ public class BuildDefinitionEditAction
 
             bd.setSchedule( schedule );
 
-            continuum.updateBuildDefinition( bd, projectId );
+            if ( !isNew )
+            {
+                continuum.updateBuildDefinition( bd, projectId );
+            }
+            else
+            {
+                continuum.addBuildDefinition( projectId, bd );
+            }
         }
         catch ( ContinuumException e )
         {
