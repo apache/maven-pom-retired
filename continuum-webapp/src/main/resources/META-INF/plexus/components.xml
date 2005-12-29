@@ -155,6 +155,23 @@
         </requirement>
       </requirements>
     </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>deleteNotifier</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.DeleteNotifierAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>addNotifier</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.AddNotifierAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+    </component>
 
     <!--
      | Components

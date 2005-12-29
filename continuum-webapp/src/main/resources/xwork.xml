@@ -104,7 +104,21 @@
         <action name="addBuildDefinition"
                 class="addBuildDefinition">
             <result name="input">buildDefinitionEdit.jsp</result>
+        </action>
+
+        <action name="deleteNotifier"
+                class="deleteNotifier">
+            <result name="delete">deleteNotifier.jsp</result>
             <result name="success" type="chain">projectView</result>
+        </action>
+
+        <action name="addNotifier"
+                class="addNotifier">
+            <result name="input">notifierSelectType.jsp</result>
+            <result name="mail_input">notifierMail.jsp</result>
+            <result name="irc_input">notifierIrc.jsp</result>
+            <result name="msn_input">notifierMsn.jsp</result>
+            <result name="jabber_input">notifierJabber.jsp</result>
         </action>
     </package>
 </xwork>

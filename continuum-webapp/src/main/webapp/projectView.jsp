@@ -65,7 +65,7 @@
           </ec:row>
         </ec:table>
         <div class="functnbar3">
-          <form method="post" action="addBuildDefinition!default.action">
+          <form method="post" action="addBuildDefinition.action">
               <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
               <input type="submit" name="addBuildDef" value="<ww:text name="add"/>"/>
           </form>
@@ -87,11 +87,19 @@
             <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
             <ec:column property="actions" title="&nbsp;">
                 <c:if test="${!pageScope.notifier.fromProject}">
-                    <ww:text name="edit"/>&nbsp;<ww:text name="delete"/>
+                    <a href="${pageContext.request.contextPath}/NotifierEdit!default.action?projectId=<ww:property value="project.id"/>&notifierId=${pageScope.notifier.id}"><ww:text name="edit"/></a>
+                    &nbsp;
+                    <a href="${pageContext.request.contextPath}/deleteNotifier!default.action?projectId=<ww:property value="project.id"/>&notifierId=${pageScope.notifier.id}&notifierType=${pageScope.notifier.type}"><ww:text name="delete"/></a>
                 </c:if>
             </ec:column>
           </ec:row>
         </ec:table>
+        <div class="functnbar3">
+          <form method="post" action="addNotifier!default.action">
+              <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+              <input type="submit" name="addNotifier" value="<ww:text name="add"/>"/>
+          </form>
+        </div>
 
         <h3><ww:text name="projectView.dependencies"/></h3>
         <ww:set name="dependencies" value="project.dependencies" scope="request"/>
