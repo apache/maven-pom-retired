@@ -148,6 +148,12 @@ public interface Continuum
     void updateNotifier( int projectId, int notifierId, Map configuration )
         throws ContinuumException;
 
+    void updateNotifier( int projectId, ProjectNotifier notifier )
+        throws ContinuumException;
+
+    void addNotifier( int projectId, ProjectNotifier notifier )
+        throws ContinuumException;
+
     void addNotifier( int projectId, String notifierType, Map configuration )
         throws ContinuumException;
 

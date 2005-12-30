@@ -16,41 +16,41 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import com.opensymphony.xwork.ActionSupport;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class AddNotifierAction
-    extends ActionSupport
+public class MailNotifierEditAction
+    extends AbstractNotifierEditAction
 {
-    private int projectId;
+    private String address;
 
-    private String notifierType;
-
-    public String execute()
+    protected void initConfiguration( Map configuration )
     {
-        return notifierType + "_" + INPUT;
+        address = (String) configuration.get( "address" );
     }
 
-    public String doDefault()
+    protected void setNotifierConfiguration( ProjectNotifier notifier )
     {
-        return INPUT;
+        HashMap configuration = new HashMap();
+
+        configuration.put( "address", address );
+
+        notifier.setConfiguration( configuration );
     }
 
-    public void setNotifierType( String notifierType )
+    public String getAddress()
     {
-        this.notifierType = notifierType;
+        return address;
     }
 
-    public int getProjectId()
+    public void setAddress( String address )
     {
-        return projectId;
-    }
-
-    public void setProjectId( int projectId )
-    {
-        this.projectId = projectId;
+        this.address = address;
     }
 }

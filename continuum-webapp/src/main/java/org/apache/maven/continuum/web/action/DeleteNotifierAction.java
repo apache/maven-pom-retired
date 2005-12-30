@@ -40,9 +40,7 @@ public class DeleteNotifierAction
     {
         try
         {
-            System.out.println( "DeleteNotifier" + projectId + " - " + notifierId);
             continuum.removeNotifier( projectId, notifierId );
-            System.out.println( "DeleteNotifier2");
         }
         catch ( ContinuumException e )
         {

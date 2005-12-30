@@ -19,26 +19,34 @@ package org.apache.maven.continuum.web.action;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.model.project.Project;
 
 import com.opensymphony.xwork.ActionSupport;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class NotifierEditAction
+public abstract class AbstractNotifierEditAction
     extends ActionSupport
 {
     private Continuum continuum;
 
     private ProjectNotifier notifier;
 
-    private Project project;
-
     private int projectId;
 
     private int notifierId;
+
+    private boolean sendOnSuccess;
+
+    private boolean sendOnFailure;
+    
+    private boolean sendOnError;
+
+    private boolean sendOnWarning;
 
     public String execute()
     {
@@ -55,13 +63,23 @@ public class NotifierEditAction
                 isNew = true;
             }
 
+            notifier.setSendOnSuccess( sendOnSuccess );
+
+            notifier.setSendOnFailure( sendOnFailure );
+
+            notifier.setSendOnError( sendOnError );
+
+            notifier.setSendOnWarning( sendOnWarning );
+
+            setNotifierConfiguration( notifier );
+
             if ( !isNew )
             {
-                //continuum.updateNotifier( projectId, notifier );
+                continuum.updateNotifier( projectId, notifier );
             }
             else
             {
-                //continuum.addNotifier( projectId, notifier );
+                continuum.addNotifier( projectId, notifier );
             }
         }
         catch ( ContinuumException e )
@@ -80,9 +98,12 @@ public class NotifierEditAction
     {
         try
         {
-            project = continuum.getProject( projectId );
-
             notifier = getNotifier();
+
+            if ( notifier == null )
+            {
+                notifier = new ProjectNotifier();
+            }
         }
         catch ( ContinuumException e )
         {
@@ -93,18 +114,27 @@ public class NotifierEditAction
             return ERROR;
         }
 
+        sendOnSuccess = notifier.isSendOnSuccess();
+
+        sendOnFailure = notifier.isSendOnFailure();
+
+        sendOnError =notifier.isSendOnError();
+
+        sendOnWarning = notifier.isSendOnWarning();
+
+        initConfiguration( notifier.getConfiguration() );
+
         return INPUT;
     }
+
+    protected abstract void initConfiguration( Map configuration );
+
+    protected abstract void setNotifierConfiguration( ProjectNotifier notifier );
 
     private ProjectNotifier getNotifier()
         throws ContinuumException
     {
         return continuum.getNotifier( projectId, notifierId );
-    }
-
-    public Project getProject()
-    {
-        return project;
     }
 
     public int getProjectId()
@@ -125,5 +155,45 @@ public class NotifierEditAction
     public void setNotifierId( int notifierId )
     {
         this.notifierId = notifierId;
+    }
+
+    public boolean isSendOnSuccess()
+    {
+        return sendOnSuccess;
+    }
+
+    public void setSendOnSuccess( boolean sendOnSuccess )
+    {
+        this.sendOnSuccess = sendOnSuccess;
+    }
+
+    public boolean isSendOnFailure()
+    {
+        return sendOnFailure;
+    }
+
+    public void setSendOnFailure( boolean sendOnFailure )
+    {
+        this.sendOnFailure = sendOnFailure;
+    }
+
+    public boolean isSendOnError()
+    {
+        return sendOnError;
+    }
+
+    public void setSendOnError( boolean sendOnError )
+    {
+        this.sendOnError = sendOnError;
+    }
+
+    public boolean isSendOnWarning()
+    {
+        return sendOnWarning;
+    }
+
+    public void setSendOnWarning( boolean sendOnWarning )
+    {
+        this.sendOnWarning = sendOnWarning;
     }
 }

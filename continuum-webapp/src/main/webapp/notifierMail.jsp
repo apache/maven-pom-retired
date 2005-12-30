@@ -17,7 +17,16 @@
         </h3>
 
         <div class="axial">
-            Mail
+            <ww:form action="mailNotifierEdit.action" method="post">
+                <ww:hidden name="notifierId"/>
+                <ww:hidden name="projectId"/>
+                <ww:textfield label="%{getText('notifier.mail.recipient.label')}" name="address"/>
+                <ww:checkbox label="%{getText('notifier.event.sendOnSuccess')}" name="sendOnSuccess" fieldValue="true"/>
+                <ww:checkbox label="%{getText('notifier.event.sendOnFailure')}" name="sendOnFailure" fieldValue="true"/>
+                <ww:checkbox label="%{getText('notifier.event.sendOnError')}" name="sendOnError" fieldValue="true"/>
+                <ww:checkbox label="%{getText('notifier.event.sendOnWarning')}" name="sendOnWarning" fieldValue="true"/>
+                <ww:submit value="%{getText('save')}"/>
+            </ww:form>
         </div>
       </div>
     </body>

@@ -172,6 +172,17 @@
       <implementation>org.apache.maven.continuum.web.action.AddNotifierAction</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>mailNotifierEdit</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.MailNotifierEditAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
 
     <!--
      | Components

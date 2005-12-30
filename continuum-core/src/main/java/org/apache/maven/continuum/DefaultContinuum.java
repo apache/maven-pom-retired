@@ -817,6 +817,21 @@ public class DefaultContinuum
         return notifier;
     }
 
+    public void updateNotifier( int projectId, ProjectNotifier notifier )
+        throws ContinuumException
+    {
+        Project project = getProjectWithAllDetails( projectId );
+
+        ProjectNotifier notif = getNotifier( projectId, notifier.getId() );
+
+        // I remove notifier then add it instead of update it due to a ClassCastException in jpox
+        project.removeNotifier( notif );
+
+        updateProject( project );
+
+        addNotifier( projectId, notifier );
+    }
+
     public void updateNotifier( int projectId, int notifierId, Map configuration )
         throws ContinuumException
     {
@@ -863,6 +878,32 @@ public class DefaultContinuum
         return notifierProperties;
     }
 
+    public void addNotifier( int projectId, ProjectNotifier notifier )
+        throws ContinuumException
+    {
+        ProjectNotifier notif = new ProjectNotifier();
+
+        notif.setSendOnSuccess( notifier.isSendOnSuccess() );
+
+        notif.setSendOnFailure( notifier.isSendOnFailure() );
+
+        notif.setSendOnError( notifier.isSendOnError() );
+
+        notif.setSendOnWarning( notifier.isSendOnWarning() );
+
+        notif.setConfiguration( notifier.getConfiguration() );
+
+        notif.setType( notifier.getType() );
+
+        notifier.setFrom( ProjectNotifier.FROM_USER );
+
+        Project project = getProjectWithAllDetails( projectId );
+
+        project.addNotifier( notif );
+
+        updateProject( project );
+    }
+
     public void addNotifier( int projectId, String notifierType, Map configuration )
         throws ContinuumException
     {
@@ -894,13 +935,7 @@ public class DefaultContinuum
 
         notifier.setConfiguration( notifierProperties );
 
-        notifier.setFrom( ProjectNotifier.FROM_USER );
-
-        Project project = getProjectWithAllDetails( projectId );
-
-        project.addNotifier( notifier );
-
-        updateProject( project );
+        addNotifier( projectId, notifier );
     }
 
     public void removeNotifier( int projectId, int notifierId )
