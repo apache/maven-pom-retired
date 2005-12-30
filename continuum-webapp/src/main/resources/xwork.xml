@@ -138,5 +138,11 @@
             <result name="input">notifierJabber.jsp</result>
             <result name="success" type="chain">projectView</result>
         </action>
+
+        <action name="msnNotifierEdit"
+                class="msnNotifierEdit">
+            <result name="input">notifierMsn.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
     </package>
 </xwork>
