@@ -22,7 +22,6 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.web.model.SummaryProjectModel;
 
 import com.opensymphony.xwork.ActionSupport;
-import com.opensymphony.webwork.ServletActionContext;
 
 import java.util.ArrayList;
 import java.util.Collection;

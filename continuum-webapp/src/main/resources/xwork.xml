@@ -144,5 +144,10 @@
             <result name="input">notifierMsn.jsp</result>
             <result name="success" type="chain">projectView</result>
         </action>
+
+        <action name="buildResults"
+                class="buildResults">
+            <result name="success">buildResults.jsp</result>
+        </action>
     </package>
 </xwork>
