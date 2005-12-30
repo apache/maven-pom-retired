@@ -40,6 +40,8 @@ public abstract class AbstractNotifierEditAction
 
     private int notifierId;
 
+    private String notifierType;
+
     private boolean sendOnSuccess;
 
     private boolean sendOnFailure;
@@ -62,6 +64,8 @@ public abstract class AbstractNotifierEditAction
 
                 isNew = true;
             }
+
+            notifier.setType( notifierType );
 
             notifier.setSendOnSuccess( sendOnSuccess );
 
@@ -114,11 +118,13 @@ public abstract class AbstractNotifierEditAction
             return ERROR;
         }
 
+        notifierType = notifier.getType();
+
         sendOnSuccess = notifier.isSendOnSuccess();
 
         sendOnFailure = notifier.isSendOnFailure();
 
-        sendOnError =notifier.isSendOnError();
+        sendOnError = notifier.isSendOnError();
 
         sendOnWarning = notifier.isSendOnWarning();
 
@@ -155,6 +161,16 @@ public abstract class AbstractNotifierEditAction
     public void setNotifierId( int notifierId )
     {
         this.notifierId = notifierId;
+    }
+
+    public String getNotifierType()
+    {
+        return notifierType;
+    }
+
+    public void setNotifierType( String notifierType )
+    {
+        this.notifierType = notifierType;
     }
 
     public boolean isSendOnSuccess()

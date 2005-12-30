@@ -126,5 +126,11 @@
             <result name="input">notifierMail.jsp</result>
             <result name="success" type="chain">projectView</result>
         </action>
+
+        <action name="ircNotifierEdit"
+                class="ircNotifierEdit">
+            <result name="input">notifierIrc.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
     </package>
 </xwork>

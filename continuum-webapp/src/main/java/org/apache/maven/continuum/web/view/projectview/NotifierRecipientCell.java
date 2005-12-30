@@ -50,6 +50,7 @@ public class NotifierRecipientCell
 
             if ( notifier.getConfiguration().get( "port" ) != null )
             {
+                address += notifier.getConfiguration().get( "port" ) + ":";
             }
 
             if ( notifier.getConfiguration().get( "channel" ) != null )

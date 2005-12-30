@@ -39,6 +39,11 @@ public class AddNotifierAction
         return INPUT;
     }
 
+    public String getNotifierType()
+    {
+        return notifierType;
+    }
+
     public void setNotifierType( String notifierType )
     {
         this.notifierType = notifierType;
