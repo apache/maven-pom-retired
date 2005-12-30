@@ -17,7 +17,24 @@
         </h3>
 
         <div class="axial">
-            Jabber
+            <ww:form action="jabberNotifierEdit.action" method="post">
+                <ww:hidden name="notifierId"/>
+                <ww:hidden name="projectId"/>
+                <ww:hidden name="notifierType"/>
+                <ww:textfield label="%{getText('notifier.jabber.host.label')}" name="host"/>
+                <ww:textfield label="%{getText('notifier.jabber.port.label')}" name="port"/>
+                <ww:textfield label="%{getText('notifier.jabber.login.label')}" name="login"/>
+                <ww:password label="%{getText('notifier.jabber.password.label')}" name="password"/>
+                <ww:textfield label="%{getText('notifier.jabber.domainName.label')}" name="domainName"/>
+                <ww:textfield label="%{getText('notifier.jabber.address.label')}" name="address"/>
+                <ww:checkbox label="%{getText('notifier.jabber.isSslConnection.label')}" name="sslConnection" value="sslConnection" fieldValue="true"/>
+                <ww:checkbox label="%{getText('notifier.jabber.isGroup.label')}" name="group" value="group" fieldValue="true"/>
+                <ww:checkbox label="%{getText('notifier.event.sendOnSuccess')}" name="sendOnSuccess" value="sendOnSuccess" fieldValue="true"/>
+                <ww:checkbox label="%{getText('notifier.event.sendOnFailure')}" name="sendOnFailure" value="sendOnFailure" fieldValue="true"/>
+                <ww:checkbox label="%{getText('notifier.event.sendOnError')}" name="sendOnError" value="sendOnError" fieldValue="true"/>
+                <ww:checkbox label="%{getText('notifier.event.sendOnWarning')}" name="sendOnWarning" value="sendOnWarning" fieldValue="true"/>
+                <ww:submit value="%{getText('save')}"/>
+            </ww:form>
         </div>
       </div>
     </body>

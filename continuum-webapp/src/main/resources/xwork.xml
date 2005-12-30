@@ -132,5 +132,11 @@
             <result name="input">notifierIrc.jsp</result>
             <result name="success" type="chain">projectView</result>
         </action>
+
+        <action name="jabberNotifierEdit"
+                class="jabberNotifierEdit">
+            <result name="input">notifierJabber.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
     </package>
 </xwork>
