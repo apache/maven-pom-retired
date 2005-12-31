@@ -19,7 +19,7 @@
 <html xml:lang="en" lang="en">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=$outputEncoding" />
-		<title>$windowTitle Package $name</title>
+		<title>$windowTitle Package $pkgInfo.name</title>
 		<link rel="stylesheet" type="text/css" href="${pkgInfo.rootRef}stylesheet.css" title="style" />
 	</head>
 	<body>
