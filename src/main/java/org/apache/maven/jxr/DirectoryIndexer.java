@@ -25,15 +25,11 @@ import org.apache.maven.jxr.log.Log;
 import org.apache.oro.text.perl.Perl5Util;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.app.VelocityEngine;
 import org.codehaus.plexus.util.IOUtil;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -273,6 +269,8 @@ public class DirectoryIndexer
             engine.setProperty( "classpath.resource.loader.class",
                                 "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader" );
         }
+        // avoid "unable to find resource 'VM_global_library.vm' in any resource loader."
+        engine.setProperty( "velocimacro.library", "" );
         engine.setProperty( Log.class.getName(), log );
         engine.setProperty( "runtime.log.logsystem.class", VelocityLogger.class.getName() );
     }
