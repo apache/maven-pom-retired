@@ -93,7 +93,7 @@ public class PackageManager
     {
         // Go through each directory and get the java source 
         // files for this dir.
-        log.info( "Scanning " + directory );
+        log.debug( "Scanning " + directory );
         DirectoryScanner directoryScanner = new DirectoryScanner();
         File baseDir = new File( directory );
         directoryScanner.setBasedir( baseDir );
