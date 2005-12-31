@@ -39,9 +39,10 @@ public class VelocityLogger
     {
         switch ( level )
         {
-            case INFO_ID:
-                log.info( msg );
-                break;
+            // velocity info messages are too verbose, just consider them as debug messages...
+            // case INFO_ID:
+            //    log.info( msg );
+            //    break;
 
             case WARN_ID:
                 log.warn( msg );
@@ -52,7 +53,6 @@ public class VelocityLogger
                 break;
 
             default:
-            case DEBUG_ID:
                 log.debug( msg );
                 break;
         }
