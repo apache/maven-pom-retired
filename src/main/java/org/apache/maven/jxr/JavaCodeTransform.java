@@ -327,8 +327,8 @@ public class JavaCodeTransform
             //on the same line.
             buf.append( inlineCommentFilter( line.substring( 0, index ) ) );
             buf.append( JAVADOC_COMMENT_START ).append( "/**" );
-            buf.append( multiLineCommentFilter( line.substring( index + 2 ) ) );
             buf.append( JAVADOC_COMMENT_END );
+            buf.append( multiLineCommentFilter( line.substring( index + 3 ) ) );
             return uriFilter( buf.toString() );
         }
 
