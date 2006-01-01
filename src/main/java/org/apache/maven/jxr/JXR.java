@@ -191,8 +191,8 @@ public class JXR
         log.debug( source + " -> " + dest );
 
         // get a relative link to the javadocs
-        String javadocLinkDir = this.javadocLinkDir != null ? getRelativeLink( dest, this.javadocLinkDir ) : null;
-        transformer.transform( source, dest, locale, inputEncoding, outputEncoding, javadocLinkDir, this.revision );
+        String javadoc = javadocLinkDir != null ? getRelativeLink( dest, javadocLinkDir ) : null;
+        transformer.transform( source, dest, locale, inputEncoding, outputEncoding, javadoc, this.revision );
     }
 
     /**
@@ -278,6 +278,10 @@ public class JXR
 
         // walk up fromDir to find the common parent
         f = new File( fromDir );
+		if ( !f.isDirectory() ) {
+			// Passed in a fromDir with a filename on the end - strip it
+			f = f.getParentFile();
+		}
         f = f.getCanonicalFile();
         f = f.getParentFile();
         boolean found = false;

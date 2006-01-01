@@ -834,7 +834,7 @@ public class CodeTransform
 
             overview.append( "<div id=\"overview\">" );
             //get the URI to get Javadoc info.
-            StringBuffer javadocURI = new StringBuffer().append( getPackageRoot() ).append( javadocLinkDir );
+            StringBuffer javadocURI = new StringBuffer().append( javadocLinkDir );
 
             try
             {
