@@ -69,7 +69,7 @@ public class JXR
      * Handles taking .java files and changing them into html. "More than meets
      * the eye!" :)
      */
-    private CodeTransform transformer;
+    private JavaCodeTransform transformer;
 
     /**
      * The revision of the module currently being processed.
@@ -82,7 +82,7 @@ public class JXR
     public void processPath( PackageManager packageManager, String source )
         throws IOException
     {
-        this.transformer = new CodeTransform( packageManager );
+        this.transformer = new JavaCodeTransform( packageManager );
 
         DirectoryScanner ds = new DirectoryScanner();
         ds.addDefaultExcludes();
@@ -231,7 +231,7 @@ public class JXR
         this.javadocLinkDir = javadocLinkDir;
     }
 
-    public void setTransformer( CodeTransform transformer )
+    public void setTransformer( JavaCodeTransform transformer )
     {
         this.transformer = transformer;
     }

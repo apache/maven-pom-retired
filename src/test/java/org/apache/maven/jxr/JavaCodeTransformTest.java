@@ -23,11 +23,11 @@ import org.apache.maven.jxr.pacman.FileManager;
 import java.io.File;
 import java.util.Locale;
 
-public class CodeTransformTest
+public class JavaCodeTransformTest
     extends TestCase
 {
 
-    private CodeTransform codeTransform;
+    private JavaCodeTransform codeTransform;
 
     private PackageManager packageManager;
 
@@ -36,19 +36,19 @@ public class CodeTransformTest
     {
         super.setUp();
         packageManager = new PackageManager( new DummyLog(), new FileManager() );
-        codeTransform = new CodeTransform( packageManager );
+        codeTransform = new JavaCodeTransform( packageManager );
     }
 
     public void testTransform()
         throws Exception
     {
         File sourceFile = new File(
-            System.getProperty( "basedir" ) + "/src/test/java/org/apache/maven/jxr/CodeTransformTest.java" );
+            System.getProperty( "basedir" ) + "/src/test/java/org/apache/maven/jxr/JavaCodeTransformTest.java" );
         assertTrue( sourceFile.exists() );
         codeTransform.transform( sourceFile.getAbsolutePath(),
-                                 System.getProperty( "basedir" ) + "/target/CodeTransformTest.html", Locale.ENGLISH,
+                                 System.getProperty( "basedir" ) + "/target/JavaCodeTransformTest.html", Locale.ENGLISH,
                                  "ISO-8859-1", "ISO-8859-1", "", "" );
-        assertTrue( new File( System.getProperty( "basedir" ), "/target/CodeTransformTest.html" ).exists() );
+        assertTrue( new File( System.getProperty( "basedir" ), "/target/JavaCodeTransformTest.html" ).exists() );
     }
 
 }

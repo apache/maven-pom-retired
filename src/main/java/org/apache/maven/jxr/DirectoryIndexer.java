@@ -61,7 +61,7 @@ import java.util.TreeMap;
 public class DirectoryIndexer
 {
     /*
-     * CodeTransform uses this to cross-reference package references
+     * JavaCodeTransform uses this to cross-reference package references
      * with that package's main summary page.
      */
     final static String INDEX = "package-summary.html";

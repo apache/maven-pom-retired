@@ -85,7 +85,7 @@ import java.util.Vector;
  *                                            importFilter
  * </pre>
  */
-public class CodeTransform
+public class JavaCodeTransform
     implements Serializable
 {
 
@@ -210,11 +210,11 @@ public class CodeTransform
     private FileManager fileManager;
 
     /**
-     * Constructor for the CodeTransform object
+     * Constructor for the JavaCodeTransform object
      *
      * @param packageManager PackageManager for this project
      */
-    public CodeTransform( PackageManager packageManager )
+    public JavaCodeTransform( PackageManager packageManager )
     {
         this.packageManager = packageManager;
         loadHash();
@@ -622,7 +622,7 @@ public class CodeTransform
     }
 
     /**
-     * Gets the header attribute of the CodeTransform object
+     * Gets the header attribute of the JavaCodeTransform object
      *
      * @return String
      */
@@ -671,7 +671,7 @@ public class CodeTransform
     }
 
     /**
-     * Gets the footer attribute of the CodeTransform object
+     * Gets the footer attribute of the JavaCodeTransform object
      *
      * @return String
      */
