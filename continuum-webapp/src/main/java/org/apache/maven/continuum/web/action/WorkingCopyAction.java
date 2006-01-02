@@ -46,6 +46,8 @@ public class WorkingCopyAction
 
     private String currentFile;
 
+    private String currentFileContent;
+
     private List files;
 
     private String output;
