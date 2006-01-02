@@ -31,15 +31,17 @@
                   sortable="false">
           <ec:row highlightRow="true">
             <ec:column property="buildNumber" title="buildResults.buildNumber">
-                <c:if test="${!pageScope.buildResult.state == 2}">
+                <c:if test="${!(pageScope.buildResult.state == 2)}">
                     ${pageScope.buildResult.buildNumber}
                 </c:if>
             </ec:column>
             <ec:column property="startTime" title="buildResults.startTime" cell="date"/>
             <ec:column property="entTime" title="buildResults.endTime" cell="date"/>
-            <ec:column property="state" title="buildResults.state" cell="org.apache.maven.continuum.web.view.StateCell"/>
+            <ec:column property="state" title="buildResults.state">
+                STATE: TODO
+            </ec:column>
             <ec:column property="actions" title="&nbsp;">
-                RESULT
+              <a href="${pageContext.request.contextPath}/buildResult.action?projectId=<ww:property value="projectId"/>&projectName=<ww:property value="projectName"/>&buildId=${pageScope.buildResult.id}">Result</a>
             </ec:column>
           </ec:row>
         </ec:table>
