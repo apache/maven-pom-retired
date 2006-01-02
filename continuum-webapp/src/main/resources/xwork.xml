@@ -149,5 +149,10 @@
                 class="buildResults">
             <result name="success">buildResults.jsp</result>
         </action>
+
+        <action name="workingCopy"
+                class="workingCopy">
+            <result name="success">workingCopy.jsp</result>
+        </action>
     </package>
 </xwork>

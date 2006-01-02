@@ -227,6 +227,20 @@
         </requirement>
       </requirements>
     </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>workingCopy</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.WorkingCopyAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</role>
+        </requirement>
+      </requirements>
+    </component>
 
     <!--
      | Components
@@ -333,6 +347,10 @@
           </property>
         </properties>
       </configuration>
+    </component>
+    <component>
+      <role>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</role>
+      <implementation>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</implementation>
     </component>
 
   </components>
