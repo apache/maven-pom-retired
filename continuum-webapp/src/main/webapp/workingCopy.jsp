@@ -21,6 +21,19 @@
         </h3>
 
         <ww:property value="output"/>
+
+        <%
+            if ( request.getParameter( "file" ) != null )
+            {
+        %>
+        <br />
+        <form>
+          <textarea rows="50" cols="100"><ww:property value="fileContent"/></textarea>
+        </form>
+        <%
+            }
+        %>
+
       </div>
     </body>
   </ww:i18n>

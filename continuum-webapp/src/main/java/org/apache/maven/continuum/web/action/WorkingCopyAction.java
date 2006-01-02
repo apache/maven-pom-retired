@@ -44,6 +44,8 @@ public class WorkingCopyAction
 
     private String userDirectory;
 
+    private String currentFile;
+
     private List files;
 
     private String output;
@@ -63,6 +65,15 @@ public class WorkingCopyAction
             String baseUrl = UrlHelper.buildUrl( "/workingCopy.action", ServletActionContext.getRequest(), ServletActionContext.getResponse(), params );
 
             output = generator.generate( files, baseUrl, continuum.getWorkingDirectory( projectId ) );
+
+            if ( currentFile != null && currentFile != "" )
+            {
+                currentFileContent = continuum.getFileContent( projectId, userDirectory, currentFile );
+            }
+            else
+            {
+                currentFileContent = "";
+            }
         }
         catch ( ContinuumException e )
         {
@@ -105,6 +116,11 @@ public class WorkingCopyAction
         this.userDirectory = userDirectory;
     }
 
+    public void setFile( String currentFile )
+    {
+        this.currentFile = currentFile;
+    }
+
     public List getFiles()
     {
         return files;
@@ -113,5 +129,10 @@ public class WorkingCopyAction
     public String getOutput()
     {
         return output;
+    }
+
+    public String getFileContent()
+    {
+        return currentFileContent;
     }
 }
