@@ -25,10 +25,10 @@
             <ec:column property="projectGroupName" title="summary.projectTable.group"/>
             <ec:column property="buildNowAction" title="&nbsp;" cell="org.apache.maven.continuum.web.view.BuildNowCell"/>
             <ec:column property="buildHistoryAction" title="&nbsp;">
-                TODO
+                <a href="<ww:url value="/buildResults.action?projectId="/>${pageScope.project.id}&projectName=${pageScope.project.name}"><ww:text name="summary.buildHistory"/></a>
             </ec:column>
             <ec:column property="workingCopyAction" title="&nbsp;">
-                TODO
+                <a href="<ww:url value="/workingCopy.action?projectId="/>${pageScope.project.id}&projectName=${pageScope.project.name}"><ww:text name="workingCopy"/></a>
             </ec:column>
             <ec:column property="deleteAction" title="&nbsp;">
                 <a href="${pageContext.request.contextPath}/deleteProject!default.action?projectId=${pageScope.project.id}&projectName=${pageScope.project.name}"><ww:text name="delete"/></a>

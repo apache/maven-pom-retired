@@ -23,6 +23,10 @@ import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
 import org.extremecomponents.table.core.BaseModel;
 
+import com.opensymphony.webwork.ServletActionContext;
+import com.opensymphony.webwork.views.util.UrlHelper;
+
+import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -50,7 +54,18 @@ public class StateCell
         {
             if ( latestBuildId != -1 && !StateGenerator.NEW.equals( state ) )
             {
-                column.setValue( "<a href=\"TO_BE_DEFINE\">" + state + "</a>" );
+                HashMap params = new HashMap();
+
+                params.put( "projectId", new Integer( project.getId() ) );
+
+                params.put( "projectName", project.getName() );
+
+                params.put( "buildId", new Integer( latestBuildId ) );
+
+                String url = UrlHelper.buildUrl( "/buildResult.action", ServletActionContext.getRequest(),
+                                                 ServletActionContext.getResponse(), params );
+
+                column.setValue( "<a href=\"" + url + "\">" + state + "</a>" );
             }
             else
             {

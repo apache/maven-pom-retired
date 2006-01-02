@@ -10,9 +10,9 @@
       <div id="h3">
         <div>
           <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
-            <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Info</a>
-            <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="<ww:url value="/buildResults.action?projectId="/><ww:property value="project.id"/>&projectName=<ww:property value="project.name"/>">Builds</a>
-            <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="<ww:url value="/workingCopy.action?projectId="/><ww:property value="project.id"/>&projectName=<ww:property value="project.name"/>">Working&nbsp;Copy</a>
+            <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em;"><ww:text name="info"/></a>
+            <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="<ww:url value="/buildResults.action?projectId="/><ww:property value="project.id"/>&projectName=<ww:property value="project.name"/>"><ww:text name="builds"/></a>
+            <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="<ww:url value="/workingCopy.action?projectId="/><ww:property value="project.id"/>&projectName=<ww:property value="project.name"/>"><ww:text name="workingCopy"/></a>
           </p>
         </div>
 
