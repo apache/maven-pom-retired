@@ -85,6 +85,22 @@
             <hierarchy>JPOX.Cache</hierarchy>
             <level>WARN</level>
           </level>
+          <level>
+            <hierarchy>org.apache.jasper</hierarchy>
+            <level>INFO</level>
+          </level>
+          <level>
+            <hierarchy>com.opensymphony.xwork</hierarchy>
+            <level>INFO</level>
+          </level>
+          <level>
+            <hierarchy>com.opensymphony.webwork</hierarchy>
+            <level>INFO</level>
+          </level>
+          <level>
+            <hierarchy>org.extremecomponents</hierarchy>
+            <level>INFO</level>
+          </level>
         </levels>
       </configuration>
     </component>
