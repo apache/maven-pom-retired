@@ -61,9 +61,9 @@ public class JabberNotifierEditAction
 
         address = (String) configuration.get( "address" );
 
-        sslConnection = Boolean.parseBoolean( (String) configuration.get( "sslConnection" ) );
+        sslConnection = Boolean.valueOf( (String) configuration.get( "sslConnection" ) ).booleanValue();
 
-        group = Boolean.parseBoolean( (String) configuration.get( "isGroup" ) );
+        group = Boolean.valueOf( (String) configuration.get( "isGroup" ) ).booleanValue();
     }
 
     protected void setNotifierConfiguration( ProjectNotifier notifier )
