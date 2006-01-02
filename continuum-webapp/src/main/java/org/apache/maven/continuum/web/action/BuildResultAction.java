@@ -45,7 +45,7 @@ public class BuildResultAction
     {
         try
         {
-            buildResult = continuum.getBuildResultByBuildNumber( projectId, buildId );
+            buildResult = continuum.getBuildResult( buildId );
         }
         catch ( ContinuumException e )
         {
