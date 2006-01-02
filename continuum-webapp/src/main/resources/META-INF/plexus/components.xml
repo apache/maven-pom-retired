@@ -229,6 +229,17 @@
     </component>
     <component>
       <role>com.opensymphony.xwork.Action</role>
+      <role-hint>buildResult</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.BuildResultAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
       <role-hint>workingCopy</role-hint>
       <implementation>org.apache.maven.continuum.web.action.WorkingCopyAction</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
