@@ -3,6 +3,14 @@
     <component>
       <role>org.apache.maven.continuum.Continuum</role>
     </component>
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+      <role-hint>build-project</role-hint>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+      <role-hint>check-out-project</role-hint>
+    </component>
   </load-on-start>
 
   <components>

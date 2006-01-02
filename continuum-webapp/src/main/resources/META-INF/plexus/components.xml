@@ -353,5 +353,17 @@
       <implementation>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</implementation>
     </component>
 
+    <component>
+      <role>org.codehaus.plexus.notification.RecipientSource</role>
+      <implementation>org.apache.maven.continuum.notification.ContinuumRecipientSource</implementation>
+      <configuration>
+        <!--
+        Setting this propery will make Continuum send all emails to
+        this address instead the address specified in the project
+        configuration
+        -->
+        <to-override>${mail.override.to.address}</to-override>
+      </configuration>
+    </component>
   </components>
 </component-set>
