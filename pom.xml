@@ -128,6 +128,7 @@
     <module>continuum-store</module>
     <module>continuum-test</module>
     <module>continuum-web</module>
+    <module>continuum-webapp</module>
     <module>continuum-xmlrpc</module>
   </modules>
   <repositories>
