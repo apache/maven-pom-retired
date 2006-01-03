@@ -1,6 +1,7 @@
 <%@ taglib uri="webwork" prefix="ww" %>
 <%@ taglib uri="/tld/extremecomponents" prefix="ec" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c1" uri="continuum" %>
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
@@ -26,11 +27,11 @@
           <table border="1" cellspacing="2" cellpadding="3" width="100%">
             <tr class="b">
               <th><ww:text name="buildResult.startTime"/></th>
-              <td>TODO<ww:property value="buildResult.startTime"/></td>
+              <td><c1:date name="buildResult.startTime"/></td>
             </tr>
             <tr class="b">
               <th><ww:text name="buildResult.endTime"/></th>
-              <td>TODO<ww:property value="buildResult.endTime"/></td>
+              <td><c1:date name="buildResult.endTime"/></td>
             </tr>
             <tr class="b">
               <th><ww:text name="buildResult.buildTrigger"/></th>
