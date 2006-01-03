@@ -36,7 +36,7 @@
                 </c:if>
             </ec:column>
             <ec:column property="startTime" title="buildResults.startTime" cell="date"/>
-            <ec:column property="entTime" title="buildResults.endTime" cell="date"/>
+            <ec:column property="endTime" title="buildResults.endTime" cell="date"/>
             <ec:column property="state" title="buildResults.state">
                 STATE: TODO
             </ec:column>
