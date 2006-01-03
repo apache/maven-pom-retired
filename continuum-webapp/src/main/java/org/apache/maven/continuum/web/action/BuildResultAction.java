@@ -23,6 +23,7 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import com.opensymphony.xwork.ActionSupport;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -41,11 +42,15 @@ public class BuildResultAction
 
     private String projectName;
 
+    private List changeSet;
+
     public String execute()
     {
         try
         {
             buildResult = continuum.getBuildResult( buildId );
+
+            changeSet = continuum.getChangesSinceLastSuccess( projectId, buildId );
         }
         catch ( ContinuumException e )
         {
@@ -92,5 +97,10 @@ public class BuildResultAction
     public BuildResult getBuildResult()
     {
         return buildResult;
+    }
+
+    public List getChangesSinceLastSuccess()
+    {
+        return changeSet;
     }
 }
