@@ -78,7 +78,7 @@ public class DateTag
         }
         else
         {
-            throw new JspException( "Could not cast the requested object " + nameAttr + " to a java.util.Date", e );
+            throw new JspException( "Could not cast the requested object " + nameAttr + " to a java.util.Date" );
         }
 
         if ( date != null )
