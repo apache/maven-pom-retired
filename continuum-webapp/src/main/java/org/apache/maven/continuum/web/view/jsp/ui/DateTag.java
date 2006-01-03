@@ -66,19 +66,22 @@ public class DateTag
         OgnlValueStack stack = getStack();
         //find the name on the valueStack, and cast it to a date
         Object dateObj = stack.findValue( actualName );
-        if ( dateObj instanceof Date )
+        if ( dateObj != null )
         {
-            date = (Date) dateObj;
-        }
-        else if ( dateObj instanceof Long )
-        {
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis( ( (Long) dateObj).longValue() );
-            date = cal.getTime();
-        }
-        else
-        {
-            throw new JspException( "Could not cast the requested object " + nameAttr + " to a java.util.Date" );
+            if ( dateObj instanceof Date )
+            {
+                date = (Date) dateObj;
+            }
+            else if ( dateObj instanceof Long )
+            {
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis( ( (Long) dateObj).longValue() );
+                date = cal.getTime();
+            }
+            else
+            {
+                throw new JspException( "Could not cast the requested object " + nameAttr + " to a java.util.Date" );
+            }
         }
 
         if ( date != null )
