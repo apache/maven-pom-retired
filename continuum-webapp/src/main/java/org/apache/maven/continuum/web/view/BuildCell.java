@@ -23,6 +23,13 @@ import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
 import org.extremecomponents.table.core.BaseModel;
 
+import com.opensymphony.webwork.views.util.UrlHelper;
+
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Used in Summary view
  *
@@ -48,7 +55,21 @@ public class BuildCell
         {
             if ( project.getBuildNumber() > 0 )
             {
-                column.setValue( "<a href=\"TO_BE_DEFINE\">" + project.getBuildNumber() + "</a>" );
+                HashMap params = new HashMap();
+
+                params.put( "projectId", new Integer( project.getId() ) );
+
+                params.put( "projectName", project.getName() );
+
+                params.put( "buildId", new Integer( buildNumber ) );
+
+                HttpServletRequest request = (HttpServletRequest) model.getPageContext().getRequest();
+
+                HttpServletResponse response = (HttpServletResponse) model.getPageContext().getResponse();
+
+                String url = UrlHelper.buildUrl( "/buildResult.action", request, response, params );
+
+                column.setValue( "<a href=\"" + url + ">" + project.getBuildNumber() + "</a>" );
             }
             else
             {
