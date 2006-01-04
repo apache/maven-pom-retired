@@ -1,4 +1,5 @@
 <%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="continuum" prefix="c1" %>
 <ww:i18n name="localization.Continuum">
 <html>
     <head>
@@ -69,10 +70,7 @@
                             </td>
                         </tr>                                                                                                                
                         </table>
-                        <div class="functnbar3">
-                            <input type="submit" value="<ww:text name="add"/>"/>
-                            <input type="button" value="<ww:text name="cancel"/>" onClick="history.back()"/>
-                        </div>
+                        <c1:submitcancel value="%{getText('add')}" cancel="%{getText('cancel')}"/>
                     </ww:form>
                 </div>
             </div>

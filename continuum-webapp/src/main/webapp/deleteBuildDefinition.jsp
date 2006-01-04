@@ -1,4 +1,5 @@
 <%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="continuum" prefix="c1" %>
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
@@ -20,10 +21,7 @@
         <ww:form action="deleteBuildDefinition.action" method="post">
             <ww:hidden name="buildDefinitionId"/>
             <ww:hidden name="projectId"/>
-            <div class="functnbar3">
-            <input type="submit" value="<ww:text name="delete"/>"/>
-            <input type="button" name="Cancel" value="<ww:text name="cancel"/>" onClick="history.back()"/>
-            </div>
+            <c1:submitcancel value="%{getText('delete')}" cancel="%{getText('cancel')}"/>
         </ww:form>
       </div>
     </body>

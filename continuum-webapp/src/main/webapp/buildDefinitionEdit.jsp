@@ -1,4 +1,5 @@
 <%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="continuum" prefix="c1" %>
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
@@ -35,7 +36,7 @@
             <ww:textfield label="%{getText('buildDefinition.arguments.label')}" name="arguments"/>
             <ww:checkbox label="%{getText('buildDefinition.defaultForProject.label')}"  name="defaultForProject" value="defaultForProject" fieldValue="true"/>
             <ww:select label="%{getText('buildDefinition.schedule.label')}" name="scheduleId" list="schedulesMap"/>
-            <ww:submit value="%{getText('save')}"/>
+            <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
           </ww:form>
         </div>
       </div>

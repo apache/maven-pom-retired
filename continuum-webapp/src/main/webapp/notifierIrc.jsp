@@ -1,4 +1,5 @@
 <%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="continuum" prefix="c1" %>
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
@@ -31,7 +32,7 @@
                 <ww:checkbox label="%{getText('notifier.event.sendOnFailure')}" name="sendOnFailure" value="sendOnFailure" fieldValue="true"/>
                 <ww:checkbox label="%{getText('notifier.event.sendOnError')}" name="sendOnError" value="sendOnError" fieldValue="true"/>
                 <ww:checkbox label="%{getText('notifier.event.sendOnWarning')}" name="sendOnWarning" value="sendOnWarning" fieldValue="true"/>
-                <ww:submit value="%{getText('save')}"/>
+                <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
             </ww:form>
         </div>
       </div>

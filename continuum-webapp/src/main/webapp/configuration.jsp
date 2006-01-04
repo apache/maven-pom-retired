@@ -47,9 +47,9 @@
             </tr>
           </table>
           <div class="functnbar3">
-            <ww:form action="configuration!edit.action">
+            <form action="configuration!edit.action" method="post">
                 <ww:submit value="%{getText('edit')}"/>
-            </ww:form>
+            </form>
           </div>
         </div>
       </div>

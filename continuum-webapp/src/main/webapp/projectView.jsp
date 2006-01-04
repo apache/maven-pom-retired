@@ -38,10 +38,10 @@
             </tr>
           </table>
           <div class="functnbar3">
-            <ww:form action="projectEdit!edit.action">
-                <ww:hidden name="project.id"/>
-                <ww:submit value="%{getText('edit')}"/>
-            </ww:form>
+            <form action="projectEdit!edit.action" method="post">
+                <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+                <ww:submit value="%{getText('edit')}" theme="simple"/>
+            </form>
           </div>
         </div>
 
@@ -74,8 +74,8 @@
         </ec:table>
         <div class="functnbar3">
           <form method="post" action="addBuildDefinition.action">
-              <ww:hidden name="project.id"/>
-              <input type="submit" name="addBuildDef" value="<ww:text name="add"/>"/>
+              <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+              <ww:submit value="%{getText('add')}" theme="simple"/>
           </form>
         </div>
 
@@ -104,8 +104,8 @@
         </ec:table>
         <div class="functnbar3">
           <form method="post" action="addNotifier!default.action">
-              <ww:hidden name="project.id"/>
-              <input type="submit" name="addNotifier" value="<ww:text name="add"/>"/>
+              <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+              <ww:submit value="%{getText('add')}" theme="simple"/>
           </form>
         </div>
 

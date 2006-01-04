@@ -1,4 +1,5 @@
 <%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="continuum" prefix="c1" %>
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
@@ -17,7 +18,7 @@
             <ww:textfield label="%{getText('configuration.companyName.label')}" name="companyName"/>
             <ww:textfield label="%{getText('configuration.companyLogo.label')}" name="companyLogo"/>
             <ww:textfield label="%{getText('configuration.companyUrl.label')}" name="companyUrl"/>
-            <ww:submit value="%{getText('save')}"/>
+            <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
           </ww:form>
         </div>
       </div>

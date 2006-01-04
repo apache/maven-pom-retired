@@ -1,4 +1,5 @@
 <%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="continuum" prefix="c1" %>
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
@@ -14,7 +15,7 @@
             <ww:select label="%{getText('notifier.type.label')}" name="notifierType"
                        list="#{ 'mail' : 'Mail', 'irc' : 'IRC', 'jabber' : 'Jabber', 'msn' : 'MSN'}"/>
             <ww:hidden name="projectId"/>
-            <ww:submit value="%{getText('submit')}"/>
+            <c1:submitcancel value="%{getText('submit')}" cancel="%{getText('cancel')}"/>
           </ww:form>
         </div>
       </div>

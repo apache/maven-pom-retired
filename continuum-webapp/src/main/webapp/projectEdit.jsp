@@ -1,4 +1,5 @@
 <%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="continuum" prefix="c1" %>
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
@@ -17,7 +18,7 @@
             <ww:textfield label="%{getText('projectEdit.project.scmUsername.label')}" name="scmUsername"/>
             <ww:password label="%{getText('projectEdit.project.scmPassword.label')}" name="scmPassword"/>
             <ww:textfield label="%{getText('projectEdit.project.scmTag.label')}" name="scmTag"/>
-            <ww:submit value="%{getText('save')}"/>
+            <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
           </ww:form>
         </div>
       </div>
