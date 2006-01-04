@@ -38,6 +38,11 @@
             <result name="success">configuration.jsp</result>
         </action>
 
+        <action name="companyInfo"
+                class="configurationAction">
+            <result name="success">/components/companyLogo.jsp</result>
+        </action>
+
         <action name="login"
                 class="loginAction">
             <result name="input">login.jsp</result>

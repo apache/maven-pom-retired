@@ -5,9 +5,7 @@
     <tbody>
       <tr>
         <td>
-            <a href="http://maven.apache.org/continuum/">
-              <b><font color="red">TODO</font></b><ww:text name="top.logo.default"/>
-            </a>
+            <ww:action name="companyInfo" executeResult="true"/>
         </td>
         <td>
           <a href="http://maven.apache.org/continuum">
