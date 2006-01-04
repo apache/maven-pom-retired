@@ -37,9 +37,7 @@
             </ec:column>
             <ec:column property="startTime" title="buildResults.startTime" cell="date"/>
             <ec:column property="endTime" title="buildResults.endTime" cell="date"/>
-            <ec:column property="state" title="buildResults.state">
-                STATE: TODO
-            </ec:column>
+            <ec:column property="state" title="buildResults.state" cell="org.apache.maven.continuum.web.view.buildresults.StateCell"/>
             <ec:column property="actions" title="&nbsp;">
               <a href="${pageContext.request.contextPath}/buildResult.action?projectId=<ww:property value="projectId"/>&projectName=<ww:property value="projectName"/>&buildId=${pageScope.buildResult.id}">Result</a>
             </ec:column>

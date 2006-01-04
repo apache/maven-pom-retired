@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.web.view.commons;
+package org.apache.maven.continuum.web.view.buildresults;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -16,49 +16,42 @@ package org.apache.maven.continuum.web.view.commons;
  * limitations under the License.
  */
 
-import java.util.Calendar;
-import java.util.Locale;
-
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.maven.continuum.web.util.StateGenerator;
 
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
 import org.extremecomponents.table.core.BaseModel;
-import org.extremecomponents.util.ExtremeUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
+ * Used in BuildResults
+ *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class DateCell
+public class StateCell
     extends DisplayCell
 {
     public void init(BaseModel model, Column column)
     {
         super.init(model, column);
 
-        String valueString = column.getPropertyValueAsString();
+        HttpServletRequest request = (HttpServletRequest) model.getPageContext().getRequest();
 
-        if ( !StringUtils.isEmpty( valueString ) )
+        Object value = column.getPropertyValue();
+
+        int state = -1;
+
+        if ( value instanceof Integer )
         {
-            Locale locale = model.getTableHandler().getTable().getLocale();
-
-            Object value = column.getPropertyValue();
-
-            if ( value instanceof Long )
-            {
-                Calendar cal = Calendar.getInstance();
-
-                cal.setTimeInMillis( ( (Long) value).longValue() );
-
-                value = cal.getTime();
-            }
-
-            value = ExtremeUtils.formatDate( column.getParse(), column.getFormat(), value, locale );
-
-            column.setValue(value);
-
-            column.setPropertyValue(value);
+            state = ( (Integer) value).intValue();
         }
+
+        value = StateGenerator.generate( state, request.getContextPath() );
+
+        column.setValue(value);
+
+        column.setPropertyValue(value);
     }
 }
