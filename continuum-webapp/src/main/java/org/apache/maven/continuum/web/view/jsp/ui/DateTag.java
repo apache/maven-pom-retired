@@ -118,7 +118,7 @@ public class DateTag
                 }
                 else
                 {
-                    msg = new SimpleDateFormat( format ).format( date );
+                    msg = new SimpleDateFormat( format, ActionContext.getContext().getLocale() ).format( date );
                 }
             }
         }
