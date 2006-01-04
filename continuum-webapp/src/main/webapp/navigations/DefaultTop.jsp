@@ -5,7 +5,7 @@
     <tbody>
       <tr>
         <td>
-            <ww:action name="companyInfo" executeResult="true"/>
+            <ww:action name="companyInfo!default" executeResult="true"/>
         </td>
         <td>
           <a href="http://maven.apache.org/continuum">
