@@ -39,7 +39,7 @@ public class DateCell
 
         String valueString = column.getPropertyValueAsString();
 
-        if ( !StringUtils.isEmpty( valueString ) )
+        if ( !StringUtils.isEmpty( valueString ) && !"0".equals( valueString ) )
         {
             Locale locale = model.getTableHandler().getTable().getLocale();
 
