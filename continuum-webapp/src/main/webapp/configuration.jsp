@@ -48,7 +48,7 @@
           </table>
           <div class="functnbar3">
             <form action="configuration!edit.action" method="post">
-                <ww:submit value="%{getText('edit')}"/>
+                <ww:submit value="%{getText('edit')}" theme="simple"/>
             </form>
           </div>
         </div>
