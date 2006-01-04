@@ -5,7 +5,7 @@
     <ww:if test="companyUrl != null && companyUrl != ''">
         <a href="<ww:property value="companyUrl"/>">
     </ww:if>
-        <img src="<ww:property value="companyLogo"/>" alt="<ww:property value="companyName"/>" title="<ww:property value="companyName"/>"/>
+        <img src="<ww:property value="companyLogo"/>" alt="<ww:property value="companyName"/>" title="<ww:property value="companyName"/>" border="0"/>
     <ww:if test="companyUrl != null && companyUrl != ''">
         </a>
     </ww:if>
