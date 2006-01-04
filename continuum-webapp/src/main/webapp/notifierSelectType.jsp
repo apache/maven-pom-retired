@@ -10,7 +10,7 @@
 
         <div class="axial">
           <ww:form action="addNotifier.action" method="post">
-            <input type="hidden" name="projectId" value="<ww:property value="projectId"/>"/>
+            <ww:hidden name="projectId"/>
             <ww:select label="%{getText('notifier.type.label')}" name="notifierType"
                        list="#{ 'mail' : 'Mail', 'irc' : 'IRC', 'jabber' : 'Jabber', 'msn' : 'MSN'}"/>
             <ww:hidden name="projectId"/>

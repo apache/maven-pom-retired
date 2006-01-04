@@ -39,7 +39,7 @@
           </table>
           <div class="functnbar3">
             <ww:form action="projectEdit!edit.action">
-                <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+                <ww:hidden name="project.id"/>
                 <ww:submit value="%{getText('edit')}"/>
             </ww:form>
           </div>
@@ -74,7 +74,7 @@
         </ec:table>
         <div class="functnbar3">
           <form method="post" action="addBuildDefinition.action">
-              <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+              <ww:hidden name="project.id"/>
               <input type="submit" name="addBuildDef" value="<ww:text name="add"/>"/>
           </form>
         </div>
@@ -104,7 +104,7 @@
         </ec:table>
         <div class="functnbar3">
           <form method="post" action="addNotifier!default.action">
-              <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+              <ww:hidden name="project.id"/>
               <input type="submit" name="addNotifier" value="<ww:text name="add"/>"/>
           </form>
         </div>

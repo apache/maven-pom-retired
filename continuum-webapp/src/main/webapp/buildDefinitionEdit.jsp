@@ -10,8 +10,8 @@
 
         <div class="axial">
           <ww:form action="buildDefinitionEdit.action" method="post">
-            <input type="hidden" name="buildDefinitionId" value="<ww:property value="buildDefinitionId"/>"/>
-            <input type="hidden" name="projectId" value="<ww:property value="projectId"/>"/>
+            <ww:hidden name="buildDefinitionId"/>
+            <ww:hidden name="projectId"/>
 
             <ww:if test="project.executorId == 'ant'">
               <ww:textfield label="%{getText('buildDefinition.buildFile.ant.label')}" name="buildFile"/>
