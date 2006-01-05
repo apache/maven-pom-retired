@@ -308,7 +308,7 @@ public class DefaultContinuum
     public void buildProjects( int trigger )
         throws ContinuumException
     {
-        Collection projectsList = null;
+        Collection projectsList;
 
         try
         {
@@ -341,7 +341,7 @@ public class DefaultContinuum
     public void buildProjects( Schedule schedule )
         throws ContinuumException
     {
-        Collection projectsList = null;
+        Collection projectsList;
         Map projectsMap = null;
 
         try
@@ -478,7 +478,7 @@ public class DefaultContinuum
     public List getChangesSinceLastSuccess( int projectId, int buildResultId )
         throws ContinuumException
     {
-        ArrayList buildResults = null;
+        ArrayList buildResults;
 
         try
         {
@@ -552,7 +552,7 @@ public class DefaultContinuum
     }
 
     private List getProjectsInBuildOrder( Collection projects )
-        throws CycleDetectedException, ContinuumException
+        throws CycleDetectedException
     {
         if ( projects == null || projects.isEmpty() )
         {
@@ -1043,7 +1043,7 @@ public class DefaultContinuum
 
         buildDefinition.setArguments( (String) configuration.get( "arguments" ) );
 
-        Schedule schedule = getSchedule( new Integer( (String) configuration.get( "schedule" ) ).intValue() );
+        Schedule schedule = getSchedule( Integer.parseInt( (String) configuration.get( "schedule" ) ) );
 
         buildDefinition.setSchedule( schedule );
 
@@ -1098,7 +1098,7 @@ public class DefaultContinuum
 
         buildDefinition.setArguments( (String) configuration.get( "arguments" ) );
 
-        Schedule schedule = getSchedule( new Integer( (String) configuration.get( "schedule" ) ).intValue() );
+        Schedule schedule = getSchedule( Integer.parseInt( (String) configuration.get( "schedule" ) ) );
 
         buildDefinition.setSchedule( schedule );
 
@@ -1164,32 +1164,31 @@ public class DefaultContinuum
     public void addSchedule( Schedule schedule )
         throws ContinuumException
     {
-        Schedule s = null;
+        Schedule s;
 
         try
         {
             s = store.getScheduleByName( schedule.getName() );
+
+            if ( s == null )
+            {
+                throw logAndCreateException( "Can't create schedule. A schedule with the same name already exists.", null );
+            }
+
+            s = store.addSchedule( schedule );
         }
         catch ( ContinuumStoreException e )
         {
+            throw logAndCreateException( "Error while accessing the store.", e );
         }
 
-        if ( s == null )
+        try
         {
-            s = store.addSchedule( schedule );
-
-            try
-            {
-                schedulesActivator.activateSchedule( s, this );
-            }
-            catch ( SchedulesActivationException e )
-            {
-                throw new ContinuumException( "Error activating schedule " + s.getName() + ".", e );
-            }
+            schedulesActivator.activateSchedule( s, this );
         }
-        else
+        catch ( SchedulesActivationException e )
         {
-            throw logAndCreateException( "Can't create schedule. A schedule with the same name already exists.", null );
+            throw new ContinuumException( "Error activating schedule " + s.getName() + ".", e );
         }
     }
 
@@ -1238,9 +1237,9 @@ public class DefaultContinuum
 
         schedule.setCronExpression( (String) configuration.get( "schedule.cronExpression" ) );
 
-        schedule.setDelay( new Integer( (String) configuration.get( "schedule.delay" ) ).intValue() );
+        schedule.setDelay( Integer.parseInt( (String) configuration.get( "schedule.delay" ) ) );
 
-        schedule.setActive( new Boolean( (String) configuration.get( "schedule.active" ) ).booleanValue() );
+        schedule.setActive( Boolean.valueOf( (String) configuration.get( "schedule.active" ) ).booleanValue() );
 
         updateSchedule( schedule, true );
     }
@@ -1323,11 +1322,11 @@ public class DefaultContinuum
     {
         List dirs = new ArrayList();
 
-        File workingDirectory = null;
+        File workingDirectory;
 
         if ( currentSubDirectory != null )
         {
-            workingDirectory = new File( baseDirectory, currentSubDirectory);
+            workingDirectory = new File( baseDirectory, currentSubDirectory );
         }
         else
         {
@@ -1340,17 +1339,17 @@ public class DefaultContinuum
         {
             for ( int i = 0; i < files.length; i++ )
             {
-                File current = new File( workingDirectory, files[i] );
+                File current = new File( workingDirectory, files[ i ] );
 
-                String currentFile = null;
+                String currentFile;
 
                 if ( currentSubDirectory == null )
                 {
-                    currentFile = files[i];
+                    currentFile = files[ i ];
                 }
                 else
                 {
-                    currentFile = currentSubDirectory + "/" + files[i];
+                    currentFile = currentSubDirectory + "/" + files[ i ];
                 }
 
                 if ( userDirectory != null && current.isDirectory() && userDirectory.startsWith( currentFile ) )
@@ -1490,7 +1489,7 @@ public class DefaultContinuum
 
         user.setEmail( (String) configuration.get( "user.email" ) );
 
-        user.setGroup( getUserGroup( new Integer( (String) configuration.get( "user.group" ) ).intValue() ) );
+        user.setGroup( getUserGroup( Integer.parseInt( (String) configuration.get( "user.group" ) ) ) );
 
         addUser( user );
     }
@@ -1521,7 +1520,7 @@ public class DefaultContinuum
 
         user.setEmail( (String) configuration.get( "user.email" ) );
 
-        user.setGroup( getUserGroup( new Integer( (String) configuration.get( "user.group" ) ).intValue() ) );
+        user.setGroup( getUserGroup( Integer.parseInt( (String) configuration.get( "user.group" ) ) ) );
 
         updateUser( user );
     }
@@ -1725,18 +1724,6 @@ public class DefaultContinuum
         UserGroup group = getUserGroup( userGroupId );
 
         store.removeUserGroup( group );
-    }
-
-    private boolean convertBoolean( String value )
-    {
-        if ( "true".equalsIgnoreCase( value ) || "on".equalsIgnoreCase( value ) || "yes".equalsIgnoreCase( value ) )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     // ----------------------------------------------------------------------
@@ -1986,61 +1973,6 @@ public class DefaultContinuum
         return workingDirectory;
     }
 
-    private void startMessage()
-    {
-        getLogger().info( "Starting Continuum." );
-
-        // ----------------------------------------------------------------------
-        //
-        // ----------------------------------------------------------------------
-
-        String banner = StringUtils.repeat( "-", getVersion().length() );
-
-        getLogger().info( "" );
-        getLogger().info( "" );
-        getLogger().info( "< Continuum " + getVersion() + " started! >" );
-        getLogger().info( "-----------------------" + banner );
-        getLogger().info( "       \\   ^__^" );
-        getLogger().info( "        \\  (oo)\\_______" );
-        getLogger().info( "           (__)\\       )\\/\\" );
-        getLogger().info( "               ||----w |" );
-        getLogger().info( "               ||     ||" );
-        getLogger().info( "" );
-        getLogger().info( "" );
-    }
-
-    private void stopMessage()
-    {
-        getLogger().info( "Stopping Continuum." );
-
-        getLogger().info( "Continuum stopped." );
-    }
-
-    private String getVersion()
-    {
-        try
-        {
-            Properties properties = new Properties();
-
-            String name = "META-INF/maven/org.apache.maven.continuum/continuum-core/pom.properties";
-
-            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream( name );
-
-            if ( resourceAsStream == null )
-            {
-                return "unknown";
-            }
-
-            properties.load( resourceAsStream );
-
-            return properties.getProperty( "version", "unknown" );
-        }
-        catch ( IOException e )
-        {
-            return "unknown";
-        }
-    }
-
     public Project getProjectWithCheckoutResult( int projectId )
         throws ContinuumException
     {
@@ -2094,6 +2026,77 @@ public class DefaultContinuum
         catch ( ContinuumStoreException e )
         {
             throw new ContinuumException( "Error retrieving the requested project", e );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Private Utilities
+    // ----------------------------------------------------------------------
+
+    private boolean convertBoolean( String value )
+    {
+        if ( "true".equalsIgnoreCase( value ) || "on".equalsIgnoreCase( value ) || "yes".equalsIgnoreCase( value ) )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void startMessage()
+    {
+        getLogger().info( "Starting Continuum." );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        String banner = StringUtils.repeat( "-", getVersion().length() );
+
+        getLogger().info( "" );
+        getLogger().info( "" );
+        getLogger().info( "< Continuum " + getVersion() + " started! >" );
+        getLogger().info( "-----------------------" + banner );
+        getLogger().info( "       \\   ^__^" );
+        getLogger().info( "        \\  (oo)\\_______" );
+        getLogger().info( "           (__)\\       )\\/\\" );
+        getLogger().info( "               ||----w |" );
+        getLogger().info( "               ||     ||" );
+        getLogger().info( "" );
+        getLogger().info( "" );
+    }
+
+    private void stopMessage()
+    {
+        getLogger().info( "Stopping Continuum." );
+
+        getLogger().info( "Continuum stopped." );
+    }
+
+    private String getVersion()
+    {
+        try
+        {
+            Properties properties = new Properties();
+
+            String name = "META-INF/maven/org.apache.maven.continuum/continuum-core/pom.properties";
+
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream( name );
+
+            if ( resourceAsStream == null )
+            {
+                return "unknown";
+            }
+
+            properties.load( resourceAsStream );
+
+            return properties.getProperty( "version", "unknown" );
+        }
+        catch ( IOException e )
+        {
+            return "unknown";
         }
     }
 }
