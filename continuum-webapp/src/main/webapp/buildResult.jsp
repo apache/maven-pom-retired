@@ -25,33 +25,28 @@
 
         <div class="axial">
           <table border="1" cellspacing="2" cellpadding="3" width="100%">
-            <tr class="b">
-              <th><ww:text name="buildResult.startTime"/></th>
-              <td><c1:date name="buildResult.startTime"/></td>
-            </tr>
-            <tr class="b">
-              <th><ww:text name="buildResult.endTime"/></th>
-              <td><c1:date name="buildResult.endTime"/></td>
-            </tr>
-            <tr class="b">
-              <th><ww:text name="buildResult.buildTrigger"/></th>
-              <td>TODO<ww:property value="buildResult.trigger"/></td>
-            </tr>
-            <tr class="b">
-              <th><ww:text name="buildResult.state"/></th>
-              <td>TODO<ww:property value="buildResult.state"/></td>
-            </tr>
-            <tr class="b">
-              <th><ww:text name="buildResult.buildNumber"/></th>
-              <td>
-                <ww:if test="buildResult.buildNumber != 0">
-                    <ww:property value="buildResult.buildNumber"/>
-                </ww:if>
-                <ww:else>
-                    &nbsp;
-                </ww:else>
-              </td>
-            </tr>
+            <c1:data label="%{getText('buildResult.startTime')}">
+                <ww:param name="after"><c1:date name="buildResult.startTime"/></ww:param>
+            </c1:data>
+            <c1:data label="%{getText('buildResult.endTime')}">
+                <ww:param name="after"><c1:date name="buildResult.endTime"/></ww:param>
+            </c1:data>
+            <c1:data label="%{getText('buildResult.buildTrigger')}">
+                <ww:param name="after">TODO<ww:property value="buildResult.trigger"/></ww:param>
+            </c1:data>
+            <c1:data label="%{getText('buildResult.state')}">
+                <ww:param name="after">TODO<ww:property value="buildResult.state"/></ww:param>
+            </c1:data>
+            <c1:data label="%{getText('buildResult.buildNumber')}">
+                <ww:param name="after">
+                    <ww:if test="buildResult.buildNumber != 0">
+                        <ww:property value="buildResult.buildNumber"/>
+                    </ww:if>
+                    <ww:else>
+                        &nbsp;
+                    </ww:else>
+                </ww:param>
+            </c1:data>
           </table>
         </div>
 

@@ -10,7 +10,7 @@
 		<name>date</name>
 		<tagclass>org.apache.maven.continuum.web.view.jsp.ui.DateTag</tagclass>
 		<bodycontent>JSP</bodycontent>
-		<info>visitor tag</info>
+		<info>date tag</info>
 		<attribute>
 			<name>name</name>
 			<required>true</required>
@@ -25,6 +25,23 @@
 			<name>nice</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>data</name>
+		<tagclass>org.apache.maven.continuum.web.view.jsp.ui.DataTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>data tag</info>
+        <attribute>
+            <name>label</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+		<attribute>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 	</tag>
 

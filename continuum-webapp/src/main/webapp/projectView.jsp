@@ -1,6 +1,7 @@
 <%@ taglib uri="webwork" prefix="ww" %>
 <%@ taglib uri="/tld/extremecomponents" prefix="ec" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib uri="continuum" prefix="c1" %>
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
@@ -20,22 +21,10 @@
             
         <div class="axial">
           <table border="1" cellspacing="2" cellpadding="3" width="100%">
-            <tr class="b">
-              <th><ww:text name="projectView.project.name"/></th>
-              <td><ww:property value="project.name"/></td>
-            </tr>
-            <tr class="b">
-              <th><ww:text name="projectView.project.version"/></th>
-              <td><ww:property value="project.version"/></td>
-            </tr>
-            <tr class="b">
-              <th><ww:text name="projectView.project.scmUrl"/></th>
-              <td><ww:property value="project.scmUrl"/></td>
-            </tr>
-            <tr class="b">
-              <th><ww:text name="projectView.project.group"/></th>
-              <td><ww:property value="project.projectGroup.name"/></td>
-            </tr>
+            <c1:data label="%{getText('projectView.project.name')}" name="project.name"/>
+            <c1:data label="%{getText('projectView.project.version')}" name="project.version"/>
+            <c1:data label="%{getText('projectView.project.scmUrl')}" name="project.scmUrl"/>
+            <c1:data label="%{getText('projectView.project.group')}" name="project.projectGroup.name"/>
           </table>
           <ww:form action="projectEdit!edit.action" method="post">
               <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>

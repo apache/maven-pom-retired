@@ -26,50 +26,24 @@
                 <div class="axial">
                     <ww:form method="post" action="addProject.action">
                         <input type="hidden" name="projectType" value="<ww:property value="projectType"/>">
-                        <table border="1" cellspacing="2" cellpadding="3" width="100%">
-                        <tr class="b">
-                            <th><ww:text name="projectName.label"/></th>
-                            <td >
-                                <input type="text" name="projectName" value="" size="100"/>
-                                <p><ww:text name="projectName.message"/></p>
-                            </td>
-                        </tr>
-                        <tr class="b">
-                            <th><ww:text name="projectVersion.label"/></th>
-                            <td >
-                                <input type="text" name="projectVersion" value="" size="100"/>
-                                <p><ww:text name="projectVersion.message"/></p>
-                             </td>
-                        </tr>
-                        <tr class="b">
-                            <th><ww:text name="projectScmUrl.label"/></th>
-                            <td >
-                                <input type="text" name="projectScmUrl" value="" size="100"/>
-                                <p><ww:text name="projectScmUrl.message"/></p>
-                             </td>
-                        </tr>
-                        <tr class="b">
-                            <th><ww:text name="projectScmUsername.label"/></th>
-                            <td >
-                                <input type="text" name="projectScmUsername" value="" size="100"/>
-                                <p><ww:text name="projectScmUsername.message"/></p>
-                            </td>
-                        </tr>
-                        <tr class="b">
-                            <th><ww:text name="projectScmPassword.label"/></th>
-                            <td >
-                                <input type="password" name="projectScmPassword" value="" size="100"/>
-                                <p><ww:text name="projectScmPassword.message"/></p>
-                            </td>
-                        </tr>
-                        <tr class="b">
-                            <th><ww:text name="projectScmTag.label"/></th>
-                            <td >
-                                <input type="text" name="projectScmTag" value="" size="100"/>
-                                <p><ww:text name="projectScmTag.message"/></p>
-                            </td>
-                        </tr>                                                                                                                
-                        </table>
+                        <ww:textfield label="%{getText('projectName.label')}" name="projectName">
+                            <ww:param name="desc"><p><ww:text name="projectName.message"/></p></ww:param>
+                        </ww:textfield>
+                        <ww:textfield label="%{getText('projectVersion.label')}" name="projectVersion">
+                            <ww:param name="desc"><p><ww:text name="projectVersion.message"/></p></ww:param>
+                        </ww:textfield>
+                        <ww:textfield label="%{getText('projectScmUrl.label')}" name="projectScmUrl">
+                            <ww:param name="desc"><p><ww:text name="projectScmUrl.message"/></p></ww:param>
+                        </ww:textfield>
+                        <ww:textfield label="%{getText('projectScmUsername.label')}" name="projectScmUsername">
+                            <ww:param name="desc"><p><ww:text name="projectScmUsername.message"/></p></ww:param>
+                        </ww:textfield>
+                        <ww:password label="%{getText('projectScmPassword.label')}" name="projectScmPassword">
+                            <ww:param name="desc"><p><ww:text name="projectScmPassword.message"/></p></ww:param>
+                        </ww:password>
+                        <ww:textfield label="%{getText('projectScmTag.label')}" name="projectScmTag">
+                            <ww:param name="desc"><p><ww:text name="projectScmTag.message"/></p></ww:param>
+                        </ww:textfield>
                         <c1:submitcancel value="%{getText('add')}" cancel="%{getText('cancel')}"/>
                     </ww:form>
                 </div>

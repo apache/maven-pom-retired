@@ -11,28 +11,15 @@
             <h3><ww:text name="add.m1.project.section.title"/></h3>
                 <div class="axial">
                     <ww:form method="post" action="addMavenOneProject.action" name="addMavenOneProject" enctype="multipart/form-data">
-                        <table border="1" cellspacing="2" cellpadding="3" width="100%">
-                        <tr class="b">
-                            <th><ww:text name="add.m1.project.m1PomUrl.label"/> </th>
-                            <td>
-                                <input type="text" name="m1PomUrl" value="" size="100"/>
-                                <p><ww:text name="add.m1.project.m1PomUrl.message"/></p>
-                            </td>
-                        </tr>
-                        <tr class="b">
-                            <th>&nbsp;</th>
-                            <td>
-                                <strong>OR</strong>
-                            </td>
-                        </tr>
-                        <tr class="b">
-                            <th><ww:text name="add.m1.project.m1PomFile.label"/></th>
-                            <td >
-                                <input type="file" name="m1PomFile" value="" size="100"/>
-                                <p><ww:text name="add.m1.project.m1PomFile.message"/></p>
-                            </td>
-                        </tr>
-                        </table>
+                        <ww:textfield label="%{getText('add.m1.project.m1PomUrl.label')}" name="m1PomUrl">
+                            <ww:param name="desc"><p><ww:text name="add.m1.project.m1PomUrl.message"/></p></ww:param>
+                        </ww:textfield>
+                        <c1:data label="">
+                            <ww:param name="after"><strong><ww:text name="or"/></strong></ww:param>
+                        </c1:data>
+                        <ww:file label="%{getText('add.m1.project.m1PomFile.label')}" name="m1PomFile">
+                            <ww:param name="desc"><p><ww:text name="add.m1.project.m1PomFile.message"/></p></ww:param>
+                        </ww:file>
                         <c1:submitcancel value="%{getText('add')}" cancel="%{getText('cancel')}"/>
                     </ww:form>
                 </div>
