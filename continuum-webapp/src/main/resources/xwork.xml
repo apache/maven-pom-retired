@@ -94,6 +94,12 @@
             <result name="success" type="chain">projectView</result>
         </action>
 
+        <action name="projectSave"
+                class="projectEdit">
+            <result name="input">projectEdit.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
+
         <action name="buildDefinitionEdit"
                 class="buildDefinitionEdit">
             <result name="input">buildDefinitionEdit.jsp</result>

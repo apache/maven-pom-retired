@@ -10,7 +10,7 @@
         <h3><ww:text name="projectEdit.section.title"/></h3>
 
         <div class="axial">
-          <ww:form action="projectEdit.action" method="post">
+          <ww:form action="projectSave.action" method="post">
             <ww:hidden name="projectId"/>
             <ww:textfield label="%{getText('projectEdit.project.name.label')}" name="name" required="true"/>
             <ww:textfield label="%{getText('projectEdit.project.version.label')}" name="version" required="true"/>
