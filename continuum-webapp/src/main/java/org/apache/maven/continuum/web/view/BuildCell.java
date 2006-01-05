@@ -49,7 +49,7 @@ public class BuildCell
 
         if ( project.isInQueue() )
         {
-            column.setValue( "In&nbsp;queue" );
+            column.setValue( "<b>In&nbsp;queue</b>" );
         }
         else if ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 || project.getState() == 4 )
         {
@@ -78,7 +78,7 @@ public class BuildCell
         }
         else
         {
-            column.setValue( "In&nbsp;progress" );
+            column.setValue( "<b>In&nbsp;progress</b>" );
         }
     }
 }

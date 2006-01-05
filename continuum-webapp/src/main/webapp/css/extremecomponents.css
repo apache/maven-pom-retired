@@ -1,6 +1,4 @@
 .eXtremeTable {
-	margin: 0;
-	padding: 0;
 }
 
 .eXtremeTable select {
@@ -11,11 +9,7 @@
 }
 
 .eXtremeTable .tableRegion {
-	border: 1px solid silver;
-	padding: 2px;
-	font-family: verdana, arial, helvetica, sans-serif;
-	font-size: 10px;
-	margin-top: 7px;
+	border: none;
 }
 
 .eXtremeTable .filter {
@@ -36,75 +30,38 @@
 }
 
 .eXtremeTable .tableHeader {
-	background-color: #308dbb;
-	color: white;
-	font-family: verdana, arial, helvetica, sans-serif;
-	font-size: 11px;
 	font-weight: bold;
 	text-align: left;
-	padding-right: 3px;
-	padding-left: 3px;
-	padding-top: 4;
-	padding-bottom: 4;
-	margin: 0;
-	border-right-style: solid;
-	border-right-width: 1px;
-	border-color: white;
+	vertical-align: top;
+	background-color: #bbb;
 }
 
 .eXtremeTable .tableHeaderSort {
-	background-color: #3a95c2;
-	color: white;
-	font-family: verdana, arial, helvetica, sans-serif;
-	font-size: 11px;
 	font-weight: bold;
 	text-align: left;
-	padding-right: 3px;
-	padding-left: 3px;
-	padding-top: 4;
-	padding-bottom: 4;
-	border-right-style: solid;
-	border-right-width: 1px;
-	border-color: white;
+	vertical-align: top;
+	background-color: #aaa;
 }
 
 .eXtremeTable .odd a, .even a {
-	color: Black;
-	font-size: 10px;
 }
 
 .eXtremeTable .odd td, .eXtremeTable .even td {
-	padding-top: 2px;
-	padding-right: 3px;
-	padding-bottom: 2px;
-	padding-left: 3px;
-	vertical-align: middle;
-	font-family: verdana, arial, helvetica, sans-serif;
-	font-size: 10px;
 }
 
 .eXtremeTable .odd {
-	background-color: #FFFFFF;
+	background: #efefef;
 }
 
 .eXtremeTable .even {
-  	background-color: #dfe4e8;
+	background: #ddd;
 }
 
 .eXtremeTable .highlight td {
-	color: black;
-	font-size: 10px;
-	padding-top: 2px;
-	padding-right: 3px;
-	padding-bottom: 2px;
-	padding-left: 3px;
-	vertical-align: middle;
-	background-color: #fdecae;
+	background-color: #bbb;
 }
 
 .eXtremeTable .highlight a, .highlight a {
-	color: black;
-	font-size: 10px;
 }
 
 .eXtremeTable .toolbar {
