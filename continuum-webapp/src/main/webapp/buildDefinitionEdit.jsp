@@ -10,7 +10,7 @@
         <h3><ww:text name="buildDefinition.section.title"/></h3>
 
         <div class="axial">
-          <ww:form action="buildDefinitionEdit.action" method="post">
+          <ww:form action="buildDefinitionSave.action" method="post">
             <ww:hidden name="buildDefinitionId"/>
             <ww:hidden name="projectId"/>
 

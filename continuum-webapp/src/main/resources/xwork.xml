@@ -106,6 +106,12 @@
             <result name="success" type="chain">projectView</result>
         </action>
 
+        <action name="buildDefinitionSave"
+                class="buildDefinitionEdit">
+            <result name="input">buildDefinitionEdit.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
+
         <action name="deleteBuildDefinition"
                 class="deleteBuildDefinition">
             <result name="delete">deleteBuildDefinition.jsp</result>
