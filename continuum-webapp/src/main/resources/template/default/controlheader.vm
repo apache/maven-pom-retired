@@ -9,5 +9,5 @@
   #end
 #end
   <tr class="b">
-    <th>$!webwork.htmlEncode($parameters.label)</th>
+    <th>$!webwork.htmlEncode($parameters.label)#if ($parameters.required)<span class="required">*</span>#end</th>
     <td>
