@@ -18,7 +18,7 @@
         </h3>
 
         <div class="axial">
-            <ww:form action="mailNotifierEdit.action" method="post">
+            <ww:form action="mailNotifierSave.action" method="post">
                 <ww:hidden name="notifierId"/>
                 <ww:hidden name="projectId"/>
                 <ww:hidden name="notifierType"/>

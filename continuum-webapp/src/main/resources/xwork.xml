@@ -144,7 +144,19 @@
             <result name="success" type="chain">projectView</result>
         </action>
 
+        <action name="mailNotifierSave"
+                class="mailNotifierEdit">
+            <result name="input">notifierMail.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
+
         <action name="ircNotifierEdit"
+                class="ircNotifierEdit">
+            <result name="input">notifierIrc.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
+
+        <action name="ircNotifierSave"
                 class="ircNotifierEdit">
             <result name="input">notifierIrc.jsp</result>
             <result name="success" type="chain">projectView</result>
@@ -156,7 +168,19 @@
             <result name="success" type="chain">projectView</result>
         </action>
 
+        <action name="jabberNotifierSave"
+                class="jabberNotifierEdit">
+            <result name="input">notifierJabber.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
+
         <action name="msnNotifierEdit"
+                class="msnNotifierEdit">
+            <result name="input">notifierMsn.jsp</result>
+            <result name="success" type="chain">projectView</result>
+        </action>
+
+        <action name="msnNotifierSave"
                 class="msnNotifierEdit">
             <result name="input">notifierMsn.jsp</result>
             <result name="success" type="chain">projectView</result>

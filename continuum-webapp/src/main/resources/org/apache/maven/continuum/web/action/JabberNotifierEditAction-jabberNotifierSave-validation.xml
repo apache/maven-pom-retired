@@ -1,0 +1,33 @@
+<!DOCTYPE validators PUBLIC 
+          "-//OpenSymphony Group//XWork Validator 1.0.2//EN" 
+          "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="host">
+        <field-validator type="required">
+            <message key="jabberNotifier.host.required"/>
+        </field-validator>
+    </field>
+    <field name="port">
+        <field-validator type="int">
+            <param name="min">0</param>
+            <param name="max">65535</param>
+            <message key="jabberNotifier.port.invalid"/>
+        </field-validator>
+    </field>
+    <field name="login">
+        <field-validator type="required">
+            <message key="jabberNotifier.login.required"/>
+        </field-validator>
+    </field>
+    <field name="password">
+        <field-validator type="required">
+            <message key="jabberNotifier.password.required"/>
+        </field-validator>
+    </field>
+    <field name="address">
+        <field-validator type="required">
+            <message key="jabberNotifier.address.required"/>
+        </field-validator>
+    </field>
+</validators>
