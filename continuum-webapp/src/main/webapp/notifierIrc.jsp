@@ -22,9 +22,9 @@
                 <ww:hidden name="notifierId"/>
                 <ww:hidden name="projectId"/>
                 <ww:hidden name="notifierType"/>
-                <ww:textfield label="%{getText('notifier.irc.host.label')}" name="host"/>
+                <ww:textfield label="%{getText('notifier.irc.host.label')}" name="host" required="true"/>
                 <ww:textfield label="%{getText('notifier.irc.port.label')}" name="port"/>
-                <ww:textfield label="%{getText('notifier.irc.channel.label')}" name="channel"/>
+                <ww:textfield label="%{getText('notifier.irc.channel.label')}" name="channel" required="true"/>
                 <ww:textfield label="%{getText('notifier.irc.nick.label')}" name="nick"/>
                 <ww:textfield label="%{getText('notifier.irc.fullName.label')}" name="fullName"/>
                 <ww:password label="%{getText('notifier.irc.password.label')}" name="password"/>

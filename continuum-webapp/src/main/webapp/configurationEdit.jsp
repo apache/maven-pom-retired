@@ -12,9 +12,9 @@
         <div class="axial">
           <ww:form action="configuration.action" method="post">
             <ww:checkbox label="%{getText('configuration.guest.label')}" name="guestAccountEnabled" value="guestAccountEnabled" fieldValue="true"/>
-            <ww:textfield label="%{getText('configuration.workingDirectory.label')}" name="workingDirectory"/>
-            <ww:textfield label="%{getText('configuration.buildOutputDirectory.label')}" name="buildOutputDirectory"/>
-            <ww:textfield label="%{getText('configuration.baseUrl.label')}" name="baseUrl"/>
+            <ww:textfield label="%{getText('configuration.workingDirectory.label')}" name="workingDirectory" required="true"/>
+            <ww:textfield label="%{getText('configuration.buildOutputDirectory.label')}" name="buildOutputDirectory" required="true"/>
+            <ww:textfield label="%{getText('configuration.baseUrl.label')}" name="baseUrl" required="true"/>
             <ww:textfield label="%{getText('configuration.companyName.label')}" name="companyName"/>
             <ww:textfield label="%{getText('configuration.companyLogo.label')}" name="companyLogo"/>
             <ww:textfield label="%{getText('configuration.companyUrl.label')}" name="companyUrl"/>

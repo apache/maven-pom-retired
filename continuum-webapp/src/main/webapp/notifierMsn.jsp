@@ -22,9 +22,9 @@
                 <ww:hidden name="notifierId"/>
                 <ww:hidden name="projectId"/>
                 <ww:hidden name="notifierType"/>
-                <ww:textfield label="%{getText('notifier.msn.login.label')}" name="login"/>
-                <ww:password label="%{getText('notifier.msn.password.label')}" name="password"/>
-                <ww:textfield label="%{getText('notifier.msn.address.label')}" name="address"/>
+                <ww:textfield label="%{getText('notifier.msn.login.label')}" name="login" required="true"/>
+                <ww:password label="%{getText('notifier.msn.password.label')}" name="password" required="true"/>
+                <ww:textfield label="%{getText('notifier.msn.address.label')}" name="address" required="true"/>
                 <ww:checkbox label="%{getText('notifier.event.sendOnSuccess')}" name="sendOnSuccess" value="sendOnSuccess" fieldValue="true"/>
                 <ww:checkbox label="%{getText('notifier.event.sendOnFailure')}" name="sendOnFailure" value="sendOnFailure" fieldValue="true"/>
                 <ww:checkbox label="%{getText('notifier.event.sendOnError')}" name="sendOnError" value="sendOnError" fieldValue="true"/>

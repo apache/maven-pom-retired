@@ -15,13 +15,13 @@
             <ww:hidden name="projectId"/>
 
             <ww:if test="project.executorId == 'ant'">
-              <ww:textfield label="%{getText('buildDefinition.buildFile.ant.label')}" name="buildFile"/>
+              <ww:textfield label="%{getText('buildDefinition.buildFile.ant.label')}" name="buildFile"  required="true"/>
             </ww:if>
             <ww:elseif test="project.executorId == 'shell'">
-              <ww:textfield label="%{getText('buildDefinition.buildFile.shell.label')}" name="buildFile"/>
+              <ww:textfield label="%{getText('buildDefinition.buildFile.shell.label')}" name="buildFile" required="true"/>
             </ww:elseif>
             <ww:else>
-              <ww:textfield label="%{getText('buildDefinition.buildFile.maven.label')}" name="buildFile"/>
+              <ww:textfield label="%{getText('buildDefinition.buildFile.maven.label')}" name="buildFile" required="true"/>
             </ww:else>
 
             <ww:if test="project.executorId == 'ant'">

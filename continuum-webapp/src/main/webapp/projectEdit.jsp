@@ -12,9 +12,9 @@
         <div class="axial">
           <ww:form action="projectEdit.action" method="post">
             <ww:hidden name="projectId"/>
-            <ww:textfield label="%{getText('projectEdit.project.name.label')}" name="name"/>
-            <ww:textfield label="%{getText('projectEdit.project.version.label')}" name="version"/>
-            <ww:textfield label="%{getText('projectEdit.project.scmUrl.label')}" name="scmUrl"/>
+            <ww:textfield label="%{getText('projectEdit.project.name.label')}" name="name" required="true"/>
+            <ww:textfield label="%{getText('projectEdit.project.version.label')}" name="version" required="true"/>
+            <ww:textfield label="%{getText('projectEdit.project.scmUrl.label')}" name="scmUrl" required="true"/>
             <ww:textfield label="%{getText('projectEdit.project.scmUsername.label')}" name="scmUsername"/>
             <ww:password label="%{getText('projectEdit.project.scmPassword.label')}" name="scmPassword"/>
             <ww:textfield label="%{getText('projectEdit.project.scmTag.label')}" name="scmTag"/>
