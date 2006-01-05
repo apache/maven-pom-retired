@@ -46,11 +46,9 @@
               <td><ww:property value="companyUrl"/></td>
             </tr>
           </table>
-          <div class="functnbar3">
-            <form action="configuration!edit.action" method="post">
-                <ww:submit value="%{getText('edit')}" theme="simple"/>
-            </form>
-          </div>
+          <ww:form action="configuration!edit.action" method="post">
+              <ww:submit value="%{getText('edit')}"/>
+          </ww:form>
         </div>
       </div>
     </body>

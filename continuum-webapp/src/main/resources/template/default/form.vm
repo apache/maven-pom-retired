@@ -1,2 +1,2 @@
 #parse("/template/simple/form.vm")
-<table class="wwFormTable">
+<table border="1" cellspacing="2" cellpadding="3" width="100%">

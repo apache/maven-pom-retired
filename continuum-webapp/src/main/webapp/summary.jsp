@@ -35,14 +35,15 @@
             </ec:column>
           </ec:row>
         </ec:table>
-        <div class="functnbar3">
-          <form method="post" action="buildProject.action">
-              <img src="<ww:url value="/images/icon_success_sml.gif"/>" alt="<ww:text name="message.success"/>" title="<ww:text name="message.success"/>"/> <ww:property value="nbSuccesses"/>
-              <img src="<ww:url value="/images/icon_warning_sml.gif"/>" alt="<ww:text name="message.failed"/>" title="<ww:text name="message.failed"/>"/> <ww:property value="nbFailures"/>
-              <img src="<ww:url value="/images/icon_error_sml.gif"/>" alt="<ww:text name="message.error"/>" title="<ww:text name="message.error"/>"/> <ww:property value="nbErrors"/>
-              <ww:submit value="%{getText('summary.buildAll')}" theme="simple"/>
-          </form>
-        </div>
+        <ww:form action="buildProject.action" method="post">
+            <ww:submit value="%{getText('summary.buildAll')}">
+                <ww:param name="before">
+                  <img src="<ww:url value="/images/icon_success_sml.gif"/>" alt="<ww:text name="message.success"/>" title="<ww:text name="message.success"/>"/> <ww:property value="nbSuccesses"/>
+                  <img src="<ww:url value="/images/icon_warning_sml.gif"/>" alt="<ww:text name="message.failed"/>" title="<ww:text name="message.failed"/>"/> <ww:property value="nbFailures"/>
+                  <img src="<ww:url value="/images/icon_error_sml.gif"/>" alt="<ww:text name="message.error"/>" title="<ww:text name="message.error"/>"/> <ww:property value="nbErrors"/>
+                </ww:param>
+            </ww:submit>
+        </ww:form>
       </div>
     </body>
   </ww:i18n>

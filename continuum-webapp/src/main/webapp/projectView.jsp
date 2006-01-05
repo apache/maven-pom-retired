@@ -37,12 +37,10 @@
               <td><ww:property value="project.projectGroup.name"/></td>
             </tr>
           </table>
-          <div class="functnbar3">
-            <form action="projectEdit!edit.action" method="post">
-                <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
-                <ww:submit value="%{getText('edit')}" theme="simple"/>
-            </form>
-          </div>
+          <ww:form action="projectEdit!edit.action" method="post">
+              <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+              <ww:submit value="%{getText('edit')}"/>
+          </ww:form>
         </div>
 
         <h3><ww:text name="projectView.buildDefinitions"/></h3>
@@ -72,12 +70,10 @@
             </ec:column>
           </ec:row>
         </ec:table>
-        <div class="functnbar3">
-          <form method="post" action="addBuildDefinition.action">
-              <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
-              <ww:submit value="%{getText('add')}" theme="simple"/>
-          </form>
-        </div>
+        <ww:form action="addBuildDefinition.action" method="post">
+            <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+            <ww:submit value="%{getText('add')}"/>
+        </ww:form>
 
         <h3><ww:text name="projectView.notifiers"/></h3>
         <ww:set name="notifiers" value="project.notifiers" scope="request"/>
@@ -102,12 +98,10 @@
             </ec:column>
           </ec:row>
         </ec:table>
-        <div class="functnbar3">
-          <form method="post" action="addNotifier!default.action">
-              <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
-              <ww:submit value="%{getText('add')}" theme="simple"/>
-          </form>
-        </div>
+        <ww:form action="addNotifier!default.action" method="post">
+            <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+            <ww:submit value="%{getText('add')}"/>
+        </ww:form>
 
         <h3><ww:text name="projectView.dependencies"/></h3>
         <ww:set name="dependencies" value="project.dependencies" scope="request"/>
