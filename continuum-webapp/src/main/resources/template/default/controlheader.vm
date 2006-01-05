@@ -3,8 +3,8 @@
 #if( $fieldErrors.get($parameters.name) )
   #set ($hasFieldErrors = $fieldErrors.get($parameters.name))
   #foreach ($error in $fieldErrors.get($parameters.name))
-    <tr errorFor="$parameters.id">
-        #if ($parameters.labelposition == 'top')<td align="left" valign="top" colspan="2">#else<td align="center" valign="top" colspan="2">#end<span class="errorMessage">$!webwork.htmlEncode($error)</span></td>
+    <tr class="b" errorFor="$parameters.id">
+        <th>&nbsp;</th><td><span class="fieldError">$!webwork.htmlEncode($error)</span></td>
     </tr>
   #end
 #end
