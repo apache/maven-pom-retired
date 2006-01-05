@@ -1170,7 +1170,7 @@ public class DefaultContinuum
         {
             s = store.getScheduleByName( schedule.getName() );
 
-            if ( s == null )
+            if ( s != null )
             {
                 throw logAndCreateException( "Can't create schedule. A schedule with the same name already exists.", null );
             }
