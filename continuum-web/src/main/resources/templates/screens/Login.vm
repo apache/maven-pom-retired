@@ -8,6 +8,11 @@ $page.setTitle( "Login" )
       <h3>Authentication</h3>
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3">
+#if ( $loginMessage )
+          <tr>
+            <td colspan="2"><font color="red">$loginMessage</font></td>
+          </tr>
+#end
           <tr>
             <td>Username :</td>
             <td><input type="text" name="login.username" size="100"></td>

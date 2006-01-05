@@ -53,11 +53,21 @@
       </configuration>
     </component>
 
+    <component>
+      <role>org.codehaus.plexus.security.Authenticator</role>
+      <role-hint>built-in-store</role-hint>
+      <implementation>org.apache.maven.continuum.security.ContinuumAuthenticator</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
     <!--
-     |
-     | Customized PullTools Service
-     |
-     -->
+    |
+    | Customized PullTools Service
+    |
+    -->
 
     <component>
       <role>org.codehaus.plexus.summit.pull.PullService</role>
@@ -477,6 +487,10 @@
       <requirements>
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.security.Authenticator</role>
+          <role-hint>built-in-store</role-hint>
         </requirement>
       </requirements>
     </component>

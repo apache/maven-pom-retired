@@ -17,7 +17,6 @@ package org.apache.maven.continuum.security;
  */
 
 import org.apache.maven.continuum.model.system.ContinuumUser;
-import org.apache.maven.continuum.model.system.Permission;
 import org.apache.maven.continuum.model.system.UserGroup;
 
 import java.util.List;

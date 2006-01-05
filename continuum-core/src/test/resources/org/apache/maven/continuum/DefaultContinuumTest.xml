@@ -11,13 +11,13 @@
      |
      | These point to the flows that we use as part of the runtime.
      |
-     | TODO: these should probably be packaged in the core package but the plexus-workflow package would
+     | TODO: these should probably be packaged in the core package but the plexus-osworkflow package would
      | need to be modified in order to find them all packaged in the JAR.
      |
      -->
     <component>
-      <role>org.codehaus.plexus.workflow.WorkflowEngine</role>
-      <implementation>org.codehaus.plexus.workflow.DefaultWorkflowEngine</implementation>
+      <role>org.codehaus.plexus.osworkflow.WorkflowEngine</role>
+      <implementation>org.codehaus.plexus.osworkflow.DefaultWorkflowEngine</implementation>
       <configuration>
         <workflowDirectory>${basedir}/../continuum-plexus-application/src/conf/workflows</workflowDirectory>
       </configuration>

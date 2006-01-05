@@ -20,9 +20,15 @@ import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.web.model.SessionUser;
 import org.codehaus.plexus.security.summit.SecureRunData;
+import org.codehaus.plexus.security.Authenticator;
+import org.codehaus.plexus.security.exception.UnknownEntityException;
+import org.codehaus.plexus.security.exception.UnauthorizedException;
+import org.codehaus.plexus.security.exception.AuthenticationException;
 import org.codehaus.plexus.action.AbstractAction;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -37,34 +43,76 @@ public class Login
      */
     private ContinuumStore store;
 
+    /**
+     * @plexus.requirement
+     */
+    private Authenticator authenticator;
+
     public void execute( Map map )
         throws Exception
     {
-        String login = (String) map.get( "login.username" );
+        SecureRunData data = (SecureRunData) map.get( "data" );
 
-        getLogger().info( "Trying to log in " + login );
+        String username = (String) map.get( "login.username" );
+
+        getLogger().info( "Trying to log in '" + username + "'." );
 
         String password = (String) map.get( "login.password" );
 
-        ContinuumUser user = store.getUserByUsername( login );
-
-        if ( user != null && user.equalsPassword( password ) )
+        if ( StringUtils.isEmpty( username ) || StringUtils.isEmpty( password ) )
         {
-            SecureRunData secData = (SecureRunData) map.get( "data" );
-
-            SessionUser usr = new SessionUser( user.getAccountId(), user.getUsername() );
-
-            usr.setFullName( user.getFullName() );
-
-            usr.setLoggedIn( true );
-
-            secData.setUser( usr );
-
-            secData.setTarget( "Summary.vm" );
+            data.getViewContext().put( "loginMessage", "Both username and password has to be supplied.");
+            data.setTarget( "Login.vm" );
+            return;
         }
-        else
+
+        // ----------------------------------------------------------------------
+        // Authenticate the user
+        // ----------------------------------------------------------------------
+
+        Map tokens = new HashMap();
+
+        tokens.put( "username", username );
+        tokens.put( "password", password );
+
+        try
         {
-            throw new Exception( "Your login/password is incorrect" );
+            authenticator.authenticate( tokens );
         }
+        catch ( UnknownEntityException e )
+        {
+            // TODO: Internationalize
+            data.getViewContext().put( "loginMessage", "Unknown user '" + username + "'.");
+            data.setTarget( "Login.vm" );
+
+            return;
+        }
+        catch ( AuthenticationException e )
+        {
+            // TODO: Internationalize
+            data.getViewContext().put( "loginMessage", "Could not authenticate: " + e.getMessage() );
+            data.setTarget( "Login.vm" );
+
+            return;
+        }
+        catch ( UnauthorizedException e )
+        {
+            data.getViewContext().put( "loginMessage", "User '" + username + "' is not authorized .");
+            data.setTarget( "Login.vm" );
+
+            return;
+        }
+
+        ContinuumUser user = store.getUserByUsername( username );
+
+        SessionUser usr = new SessionUser( user.getAccountId(), user.getUsername() );
+
+        usr.setFullName( user.getFullName() );
+
+        usr.setLoggedIn( true );
+
+        data.setUser( usr );
+
+        data.setTarget( "Summary.vm" );
     }
 }

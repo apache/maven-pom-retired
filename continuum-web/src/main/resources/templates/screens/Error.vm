@@ -9,4 +9,3 @@ $page.setTitle( $i18n.getString( "continuumError" ) )
   </div>
   <pre>$stackTrace</pre>
 </div>
-

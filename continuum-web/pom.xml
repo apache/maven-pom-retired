@@ -31,11 +31,6 @@
       <artifactId>continuum-model</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-security</artifactId>
-      <version>1.0-alpha-2</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-core</artifactId>
     </dependency>
