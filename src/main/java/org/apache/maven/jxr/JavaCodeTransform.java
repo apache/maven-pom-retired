@@ -247,7 +247,7 @@ public class JavaCodeTransform
         }
         line = replace( line, "&", "&amp;" );
         line = replace( line, "<", "&lt;" );
-        line = replace( line, "\\\\", "&#47;&#47;" );
+        line = replace( line, "\\\\", "&#92;&#92;" );
         line = replace( line, "\\\"", "\\&quot;" );
         line = replace( line, "'\"'", "'&quot;'" );
         return multiLineCommentFilter( line );
