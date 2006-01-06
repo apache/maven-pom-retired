@@ -208,7 +208,7 @@
 
         <action name="addSchedule"
                 class="addSchedule">
-            <result name="input">addSchedule.jsp</result>
+            <result name="input">editSchedule.jsp</result>
             <result name="success" type="chain">schedules</result>
         </action>
 

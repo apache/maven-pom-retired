@@ -26,15 +26,9 @@
           </ec:row>
         </ec:table>
       </div>
-      <table>
-        <tr>
-          <td>
-            <form method="post" action="addSchedule!default.action">
-              <input type="submit" name="add-build-def" value="Add"/>
-            </form>
-          </td>
-        </tr>
-      </table>
+      <ww:form action="addSchedule!default.action" method="post">
+          <ww:submit value="%{getText('add')}"/>
+      </ww:form>
     </body>
   </ww:i18n>
 </html>

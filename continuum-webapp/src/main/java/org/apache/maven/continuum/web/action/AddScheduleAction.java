@@ -32,11 +32,11 @@ public class AddScheduleAction
 
     private int scheduleId;
 
-    private boolean active;
+    private boolean active = true;
 
     private String cronExpression;
 
-    private int delay;
+    private int delay = 0;
 
     private String description;
 
@@ -68,6 +68,11 @@ public class AddScheduleAction
         return INPUT;
     }
 
+    public boolean getActive()
+    {
+        return active;
+    }
+
     public void setActive( boolean active )
     {
         this.active = active;
@@ -81,6 +86,11 @@ public class AddScheduleAction
     public void setCronExpression( String cronExpression )
     {
         this.cronExpression = cronExpression;
+    }
+
+    public int getDelay()
+    {
+        return delay;
     }
 
     public void setDelay( int delay )
