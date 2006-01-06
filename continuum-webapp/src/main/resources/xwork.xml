@@ -200,5 +200,22 @@
                 class="workingCopy">
             <result name="success">workingCopy.jsp</result>
         </action>
+
+        <action name="schedules"
+                class="schedules">
+            <result name="success">schedules.jsp</result>
+        </action>
+
+        <action name="addSchedule"
+                class="addSchedule">
+            <result name="input">addSchedule.jsp</result>
+            <result name="success" type="chain">schedules</result>
+        </action>
+
+        <action name="editSchedule"
+                class="editSchedule">
+            <result name="input">editSchedule.jsp</result>
+            <result name="success" type="chain">schedules</result>
+        </action>
     </package>
 </xwork>

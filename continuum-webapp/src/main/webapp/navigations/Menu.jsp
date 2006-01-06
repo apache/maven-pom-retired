@@ -33,6 +33,9 @@
     <div class="label"><ww:text name="menu.administration"/></div>
     <div class="body">
       <div>
+        <a href="<ww:url value="schedules.action"/>"><ww:text name="menu.administration.schedules"/></a>
+      </div>
+      <div>
         <a href="<ww:url value="configuration!default.action"/>"><ww:text name="menu.administration.configuration"/></a>
       </div>
     </div>

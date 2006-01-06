@@ -252,6 +252,39 @@
         </requirement>
       </requirements>
     </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>schedules</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.ScheduleAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>addSchedule</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.AddScheduleAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>editSchedule</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.EditScheduleAction</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+      </requirements>
+    </component>
 
     <!--
      | Components
