@@ -20,8 +20,10 @@
             <ec:column property="description" title="schedules.table.description"/>
             <ec:column property="delay" title="schedules.table.delay"/>
             <ec:column property="cronExpression" title="schedules.table.cronExpression"/>
-            <ec:column property="deleteAction" title="&nbsp;">
-                <a href="${pageContext.request.contextPath}/editSchedule!edit.action?id=${pageScope.schedule.id}">edit</a>
+            <ec:column property="actions" title="&nbsp;">
+                <a href="${pageContext.request.contextPath}/editSchedule!edit.action?id=${pageScope.schedule.id}"><ww:text name="edit"/></a>
+                &nbsp;
+                <ww:text name="delete"/>
             </ec:column>
           </ec:row>
         </ec:table>
