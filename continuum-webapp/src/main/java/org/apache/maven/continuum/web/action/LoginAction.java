@@ -60,23 +60,17 @@ public class LoginAction
 
             params.put( "password", password );
 
-            User user = authenticator.authenticate( params );
+            Authentication auth = authenticator.authenticate( params );
 
             if ( rememberMe )
             {
-                Authentication auth = new DefaultAuthentication();
-
-                auth.setUser( user );
-
-                auth.setAuthenticated( true );
-
                 rememberMeServices.loginSuccess( ServletActionContext.getRequest(),
                     ServletActionContext.getResponse(), auth );
             }
 
             HttpSession session = ServletActionContext.getRequest().getSession( true );
 
-            session.setAttribute( "authentication", user );
+            session.setAttribute( "authentication", auth );
 
             return SUCCESS;
         }
