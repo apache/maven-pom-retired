@@ -80,5 +80,10 @@
       <artifactId>plexus-formica-web</artifactId>
       <version>1.0-beta-1</version>
     </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-security-summit</artifactId>
+        <version>1.0-alpha-3-SNAPSHOT</version>
+      </dependency>
   </dependencies>
 </project>

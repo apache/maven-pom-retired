@@ -18,6 +18,7 @@ package org.apache.maven.continuum.security;
  */
 
 import org.codehaus.plexus.security.Authenticator;
+import org.codehaus.plexus.security.User;
 import org.codehaus.plexus.security.exception.UnknownEntityException;
 import org.codehaus.plexus.security.exception.AuthenticationException;
 import org.codehaus.plexus.security.exception.UnauthorizedException;
@@ -45,7 +46,7 @@ public class ContinuumAuthenticator
     // Authenticator Implementation
     // ----------------------------------------------------------------------
 
-    public Object authenticate( Map tokens )
+    public User authenticate( Map tokens )
         throws UnknownEntityException, AuthenticationException, UnauthorizedException
     {
         String username = (String) tokens.get( "username" );
@@ -70,7 +71,7 @@ public class ContinuumAuthenticator
         return null;
     }
 
-    public Object getAnonymousEntity()
+    public User getAnonymousEntity()
     {
         throw new RuntimeException( "Not implemented" );
     }

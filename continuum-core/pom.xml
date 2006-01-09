@@ -43,8 +43,7 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-security</artifactId>
-      <version>1.0-alpha-2</version>
+      <artifactId>plexus-security-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>

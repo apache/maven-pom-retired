@@ -382,6 +382,16 @@
         <version>1.0-alpha-5</version>
       </dependency>
       <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-security-api</artifactId>
+        <version>1.0-alpha-3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-security-osuser</artifactId>
+        <version>1.0-alpha-3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.derby</groupId>
         <artifactId>derby</artifactId>
         <version>10.1.1.0</version>
