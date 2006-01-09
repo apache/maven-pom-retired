@@ -46,7 +46,7 @@ public class ContinuumAuthenticator
     // Authenticator Implementation
     // ----------------------------------------------------------------------
 
-    public User authenticate( Map tokens )
+    public Authentication authenticate( Map tokens )
         throws UnknownEntityException, AuthenticationException, UnauthorizedException
     {
         String username = (String) tokens.get( "username" );
@@ -71,7 +71,7 @@ public class ContinuumAuthenticator
         return null;
     }
 
-    public User getAnonymousEntity()
+    public Authentication getAnonymousEntity()
     {
         throw new RuntimeException( "Not implemented" );
     }
