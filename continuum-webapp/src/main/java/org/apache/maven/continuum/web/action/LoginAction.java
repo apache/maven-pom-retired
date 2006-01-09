@@ -16,7 +16,18 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.rememberme.RememberMeServices;
+import org.codehaus.plexus.security.Authentication;
+import org.codehaus.plexus.security.Authenticator;
+import org.codehaus.plexus.security.DefaultAuthentication;
+import org.codehaus.plexus.security.User;
+
 import com.opensymphony.xwork.ActionSupport;
+import com.opensymphony.webwork.ServletActionContext;
+
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -25,9 +36,15 @@ import com.opensymphony.xwork.ActionSupport;
 public class LoginAction
     extends ActionSupport
 {
+    private Authenticator authenticator;
+
+    private RememberMeServices rememberMeServices;
+
     private String username = "";
 
     private String password = "";
+
+    private boolean rememberMe = false;
 
     /**
      * Execute the login action
@@ -35,7 +52,46 @@ public class LoginAction
     public String execute()
         throws Exception
     {
-        return SUCCESS;
+        try
+        {
+            Map params = new HashMap();
+
+            params.put( "username", username );
+
+            params.put( "password", password );
+
+            User user = authenticator.authenticate( params );
+
+            if ( rememberMe )
+            {
+                Authentication auth = new DefaultAuthentication();
+
+                auth.setUser( user );
+
+                auth.setAuthenticated( true );
+
+                rememberMeServices.loginSuccess( ServletActionContext.getRequest(),
+                    ServletActionContext.getResponse(), auth );
+            }
+
+            HttpSession session = ServletActionContext.getRequest().getSession( true );
+
+            session.setAttribute( "authentication", user );
+
+            return SUCCESS;
+        }
+        catch ( Exception e )
+        {
+            addActionError( "Login failed. " + e.getMessage() );
+
+            if ( rememberMe )
+            {
+                rememberMeServices.loginFail( ServletActionContext.getRequest(),
+                    ServletActionContext.getResponse() );
+            }
+
+            return INPUT;
+        }
     }
 
     /**
@@ -51,18 +107,28 @@ public class LoginAction
         return username;
     }
 
-    public String getPassword()
-    {
-        return password;
-    }
-
     public void setUsername( String username )
     {
         this.username = username;
     }
 
+    public String getPassword()
+    {
+        return password;
+    }
+
     public void setPassword( String password )
     {
         this.password = password;
+    }
+
+    public boolean isRememberMe()
+    {
+        return rememberMe;
+    }
+
+    public void setRememberMe( boolean rememberMe )
+    {
+        this.rememberMe = rememberMe;
     }
 }
