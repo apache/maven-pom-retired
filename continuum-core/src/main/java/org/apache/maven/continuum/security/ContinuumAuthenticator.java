@@ -17,8 +17,8 @@ package org.apache.maven.continuum.security;
  *
  */
 
+import org.codehaus.plexus.security.Authentication;
 import org.codehaus.plexus.security.Authenticator;
-import org.codehaus.plexus.security.User;
 import org.codehaus.plexus.security.exception.UnknownEntityException;
 import org.codehaus.plexus.security.exception.AuthenticationException;
 import org.codehaus.plexus.security.exception.UnauthorizedException;
