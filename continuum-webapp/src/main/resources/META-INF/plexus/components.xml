@@ -33,6 +33,15 @@
       <role-hint>loginAction</role-hint>
       <implementation>org.apache.maven.continuum.web.action.LoginAction</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.rememberme.RememberMeServices</role>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.security.Authenticator</role>
+          <role-hint>osuser</role-hint>
+        </requirement>
+      </requirements>
     </component>
     <component>
       <role>com.opensymphony.xwork.Action</role>
@@ -392,6 +401,7 @@
         </properties>
       </configuration>
     </component>
+
     <component>
       <role>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</role>
       <implementation>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</implementation>
@@ -408,6 +418,17 @@
         -->
         <to-override>${mail.override.to.address}</to-override>
       </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.rememberme.RememberMeServices</role>
+      <implementation>org.apache.maven.continuum.web.rememberme.DefaultRememberMeServices</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
     </component>
   </components>
 </component-set>

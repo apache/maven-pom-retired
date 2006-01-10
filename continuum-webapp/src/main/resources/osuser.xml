@@ -1,0 +1,16 @@
+<opensymphony-user>
+
+    <provider class="com.opensymphony.user.provider.memory.MemoryAccessProvider" />
+    <provider class="com.opensymphony.user.provider.memory.MemoryCredentialsProvider" />
+    <provider class="com.opensymphony.user.provider.memory.MemoryProfileProvider" />
+
+    <!--
+		Authenticators can take properties just like providers.
+
+		This smart authenticator should work for 'most' cases - it dynamically looks up
+		the most appropriate authenticator for the current server.
+	-->
+	<authenticator class="org.apache.maven.continuum.security.ContinuumAuthenticator" />
+
+  
+</opensymphony-user>

@@ -60,6 +60,8 @@ public class LoginAction
 
             params.put( "password", password );
 
+            params.put( "request", ServletActionContext.getRequest() );
+
             Authentication auth = authenticator.authenticate( params );
 
             if ( rememberMe )
@@ -77,6 +79,8 @@ public class LoginAction
         catch ( Exception e )
         {
             addActionError( "Login failed. " + e.getMessage() );
+
+            e.printStackTrace();
 
             if ( rememberMe )
             {
