@@ -17,79 +17,75 @@ package org.apache.maven.continuum.security;
  *
  */
 
-import org.codehaus.plexus.security.Authentication;
-import org.codehaus.plexus.security.Authenticator;
-import org.codehaus.plexus.security.exception.UnknownEntityException;
-import org.codehaus.plexus.security.exception.AuthenticationException;
-import org.codehaus.plexus.security.exception.UnauthorizedException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.model.system.ContinuumUser;
 
-import java.util.Map;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.PlexusConstants;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+
+import com.opensymphony.user.authenticator.AbstractAuthenticator;
+import com.opensymphony.user.authenticator.AuthenticationException;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * TODO: Move this to o.a.m.c.security once plexus-security doesn't depend on plexus-summit.
- *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
 public class ContinuumAuthenticator
-    implements Authenticator
+    extends AbstractAuthenticator
 {
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumStore store;
-
     // ----------------------------------------------------------------------
     // Authenticator Implementation
     // ----------------------------------------------------------------------
 
-    public Authentication authenticate( Map tokens )
-        throws UnknownEntityException, AuthenticationException, UnauthorizedException
+    public boolean login(String username, String password, HttpServletRequest req)
+        throws AuthenticationException
     {
-        String username = (String) tokens.get( "username" );
-        String password = (String) tokens.get( "password" );
+        PlexusContainer container = (PlexusContainer) req.getAttribute( PlexusConstants.PLEXUS_KEY );
 
-        ContinuumUser user = getUser( username );
-
-        if ( user == null )
+        if ( container == null )
         {
-            throw new UnknownEntityException();
+            throw new AuthenticationException( "Can't get plexus container in request." );
         }
+
+        ContinuumUser user = getUser( container, username );
 
         System.err.println( "username: " + username );
-        System.err.println( "password: " + password );
-        System.err.println( "user.password: " + user.getPassword() );
 
-        if ( !user.getPassword().equals( password ) )
+        if ( user != null && user.equalsPassword( password ) )
         {
-            throw new AuthenticationException( "Invalid password." );
+            return true;
         }
-
-        return null;
-    }
-
-    public Authentication getAnonymousEntity()
-    {
-        throw new RuntimeException( "Not implemented" );
+        else
+        {
+            return false;
+        }
     }
 
     // ----------------------------------------------------------------------
     // Private
     // ----------------------------------------------------------------------
 
-    private ContinuumUser getUser( String username )
+    private ContinuumUser getUser( PlexusContainer container, String username )
         throws AuthenticationException
     {
         try
         {
+            ContinuumStore store = (ContinuumStore) container.lookup( ContinuumStore.ROLE );
+
             return store.getUserByUsername( username );
         }
         catch ( ContinuumStoreException e )
         {
-            throw new AuthenticationException( "Error while retreiving user.", e );
+            throw new AuthenticationException( "Error while retreiving user." + e.getMessage() );
+        }
+        catch ( ComponentLookupException e )
+        {
+            throw new AuthenticationException( "Can't get store component." + e.getMessage() );
         }
     }
 }
