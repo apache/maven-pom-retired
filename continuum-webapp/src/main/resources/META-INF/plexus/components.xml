@@ -424,11 +424,6 @@
       <role>org.codehaus.plexus.rememberme.RememberMeServices</role>
       <implementation>org.apache.maven.continuum.web.rememberme.DefaultRememberMeServices</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
-      <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.store.ContinuumStore</role>
-        </requirement>
-      </requirements>
     </component>
   </components>
 </component-set>

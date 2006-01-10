@@ -16,62 +16,53 @@ package org.apache.maven.continuum.web.rememberme;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.model.system.ContinuumUser;
-import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
-
 import org.codehaus.plexus.rememberme.AbstractRememberMeServices;
 import org.codehaus.plexus.rememberme.UsernameNotFoundException;
 import org.codehaus.plexus.security.DefaultUser;
 import org.codehaus.plexus.security.User;
 
+import com.opensymphony.user.UserManager;
+import com.opensymphony.user.EntityNotFoundException;
+
+/**
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ * @version $Id$
+ */
 public class DefaultRememberMeServices
     extends AbstractRememberMeServices
 {
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumStore store;
-
     protected User getUserByUserName( String username )
         throws UsernameNotFoundException
     {
-        ContinuumUser user = null;
+        com.opensymphony.user.User osuser;
 
         try
         {
-            user = store.getUserByUsername( username );
+            osuser = UserManager.getInstance().getUser( username );
         }
-        catch ( ContinuumStoreException e )
+        catch ( EntityNotFoundException e )
         {
-            throw new UsernameNotFoundException( "Error while retreiving user.", e );
+            throw new UsernameNotFoundException( "User " + username + " doesn't exist." );
         }
 
-        if ( user == null )
-        {
-            throw new UsernameNotFoundException( "User doesn't exist." );
-        }
+        DefaultUser user = new DefaultUser();
 
-        DefaultUser u = new DefaultUser();
+        user.setUsername( osuser.getName() );
 
-        u.setUsername( user.getUsername() );
+        user.setFullName( osuser.getFullName() );
 
-        u.setPassword( user.getPassword() );
+        user.setEmail( osuser.getEmail() );
 
-        u.setFullName( user.getFullName() );
+        user.setDetails( osuser );
 
-        u.setEmail( user.getEmail() );
+        user.setEnabled( true );
 
-        u.setEnabled( true );
+        user.setAccountNonExpired( true );
 
-        u.setAccountNonExpired( true );
+        user.setAccountNonLocked( true );
 
-        u.setAccountNonLocked( true );
+        user.setPasswordNonExpired( true );
 
-        u.setPasswordNonExpired( true );
-
-        u.setDetails( user );
-
-        return u;
+        return user;
     }
 }
