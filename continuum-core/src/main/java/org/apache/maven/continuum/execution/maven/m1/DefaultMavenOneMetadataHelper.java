@@ -162,8 +162,7 @@ public class DefaultMavenOneMetadataHelper
 
             if ( StringUtils.isEmpty( scmConnection ) )
             {
-                throw new MavenOneMetadataHelperException(
-                    "Missing both anonymous and developer SCM connection URLs." );
+                throw new MavenOneMetadataHelperException( "Missing both anonymous and developer SCM connection URLs." );
             }
         }
 
@@ -255,8 +254,6 @@ public class DefaultMavenOneMetadataHelper
         }
         else
         {
-            String currentNagEmailAddress = null;
-
             String nagEmailAddress = getValue( build, "nagEmailAddress", null );
 
             if ( nagEmailAddress != null )

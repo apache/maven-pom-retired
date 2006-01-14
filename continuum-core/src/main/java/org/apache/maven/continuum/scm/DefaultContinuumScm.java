@@ -16,8 +16,8 @@ package org.apache.maven.continuum.scm;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.scm.ChangeFile;
 import org.apache.maven.continuum.model.scm.ChangeSet;
 import org.apache.maven.continuum.model.scm.ScmResult;
@@ -28,9 +28,8 @@ import org.apache.maven.scm.ScmFile;
 import org.apache.maven.scm.ScmFileSet;
 import org.apache.maven.scm.command.checkout.CheckOutScmResult;
 import org.apache.maven.scm.command.update.UpdateScmResult;
-import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
-import org.apache.maven.scm.provider.ScmProviderRepository;
+import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.apache.maven.scm.repository.ScmRepositoryException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -94,8 +93,6 @@ public class DefaultContinuumScm
                 "to '" + workingDirectory + "'" + tagMessage + "." );
 
             ScmRepository repository = getScmRepositorty( project );
-
-            ScmProviderRepository providerRepository = repository.getProviderRepository();
 
             ScmResult result;
 
@@ -211,8 +208,6 @@ public class DefaultContinuumScm
             }
 
             ScmRepository repository = getScmRepositorty( project );
-
-            ScmProviderRepository providerRepository = repository.getProviderRepository();
 
             ScmResult result;
 

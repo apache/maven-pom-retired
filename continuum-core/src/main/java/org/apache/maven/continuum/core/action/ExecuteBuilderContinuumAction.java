@@ -31,7 +31,6 @@ import org.apache.maven.continuum.utils.ContinuumUtils;
 
 import java.io.File;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,10 +79,8 @@ public class ExecuteBuilderContinuumAction
         // This is really a precondition for this action to execute
         // ----------------------------------------------------------------------
 
-        if ( project.getOldState() != ContinuumProjectState.NEW &&
-             scmResult.getChanges().size() == 0 &&
-             trigger != ContinuumProjectState.TRIGGER_FORCED &&
-            !isNew( project ) )
+        if ( project.getOldState() != ContinuumProjectState.NEW && scmResult.getChanges().size() == 0
+            && trigger != ContinuumProjectState.TRIGGER_FORCED && !isNew( project ) )
         {
             getLogger().info( "No files updated, not building. Project id '" + project.getId() + "'." );
 
@@ -151,7 +148,8 @@ public class ExecuteBuilderContinuumAction
 
             build.setBuildNumber( project.getBuildNumber() );
 
-            if ( build.getState() != ContinuumProjectState.OK && build.getState() != ContinuumProjectState.FAILED && build.getState() != ContinuumProjectState.ERROR )
+            if ( build.getState() != ContinuumProjectState.OK && build.getState() != ContinuumProjectState.FAILED
+                && build.getState() != ContinuumProjectState.ERROR )
             {
                 build.setState( ContinuumProjectState.ERROR );
             }

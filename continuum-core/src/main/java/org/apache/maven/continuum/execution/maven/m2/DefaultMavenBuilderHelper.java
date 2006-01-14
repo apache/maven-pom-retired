@@ -23,14 +23,13 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectDependency;
 import org.apache.maven.continuum.model.project.ProjectDeveloper;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Developer;
 import org.apache.maven.model.Notifier;
 import org.apache.maven.model.Scm;
+import org.apache.maven.project.DefaultMavenProjectBuilder;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
-import org.apache.maven.project.DefaultMavenProjectBuilder;
 import org.apache.maven.settings.MavenSettingsBuilder;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -40,7 +39,6 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -237,7 +235,7 @@ public class DefaultMavenBuilderHelper
         }
 
         continuumProject.setNotifiers( getNotifiers( mavenProject ) );
-        
+
         for ( Iterator i = userNotifiers.iterator(); i.hasNext(); )
         {
             ProjectNotifier notifier = (ProjectNotifier) i.next();
@@ -257,7 +255,7 @@ public class DefaultMavenBuilderHelper
             //   This seems like code that is shared with DefaultMaven, so it should be mobed to the project
             //   builder perhaps
             // TODO: Remove cast
-            project = ( (DefaultMavenProjectBuilder) projectBuilder).build( file, getRepository(), null, false );
+            project = ( (DefaultMavenProjectBuilder) projectBuilder ).build( file, getRepository(), null, false );
         }
         catch ( Exception e )
         {
@@ -277,14 +275,16 @@ public class DefaultMavenBuilderHelper
 
         if ( scm == null )
         {
-            throw new MavenBuilderHelperException( "Missing 'scm' element in the " + getProjectName( project ) + " POM." );
+            throw new MavenBuilderHelperException( "Missing 'scm' element in the " + getProjectName( project )
+                + " POM." );
         }
 
         String url = scm.getConnection();
 
         if ( StringUtils.isEmpty( url ) )
         {
-            throw new MavenBuilderHelperException( "Missing 'connection' element in the 'scm' element in the " + getProjectName( project ) + " POM." );
+            throw new MavenBuilderHelperException( "Missing 'connection' element in the 'scm' element in the "
+                + getProjectName( project ) + " POM." );
         }
 
         return project;

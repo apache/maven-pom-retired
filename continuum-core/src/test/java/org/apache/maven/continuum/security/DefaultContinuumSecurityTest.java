@@ -19,7 +19,6 @@ package org.apache.maven.continuum.security;
 import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.model.system.ContinuumUser;
-import org.apache.maven.continuum.model.system.UserGroup;
 
 /**
  * @author <a href="mailto:evenisse@apache">Emmanuel Venisse</a>
