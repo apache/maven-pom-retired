@@ -18,11 +18,8 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import com.opensymphony.xwork.ActionSupport;
 import com.opensymphony.xwork.Preparable;

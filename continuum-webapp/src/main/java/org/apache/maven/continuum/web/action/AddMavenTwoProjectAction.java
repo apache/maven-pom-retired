@@ -18,24 +18,20 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
-import com.opensymphony.xwork.ActionSupport;
-
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+
+import com.opensymphony.xwork.ActionSupport;
 
 /**
  * @author Nick Gonzalez
  * @version $Id$
  */
-public class AddMavenTwoProjectAction 
-    extends ActionSupport  
+public class AddMavenTwoProjectAction
+    extends ActionSupport
 {
     private Continuum continuum;
 
@@ -80,8 +76,8 @@ public class AddMavenTwoProjectAction
         {
             return INPUT;
         }
-        
-        if( result.getWarnings().size() > 0 )
+
+        if ( result.getWarnings().size() > 0 )
         {
             addActionMessage( result.getWarnings().toArray().toString() );
 
@@ -96,7 +92,8 @@ public class AddMavenTwoProjectAction
         return INPUT;
     }
 
-    public File getM2PomFile() {
+    public File getM2PomFile()
+    {
         return m2PomFile;
     }
 

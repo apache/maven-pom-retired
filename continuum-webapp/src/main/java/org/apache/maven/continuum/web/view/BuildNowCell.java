@@ -17,8 +17,6 @@ package org.apache.maven.continuum.web.view;
  */
 
 import org.apache.maven.continuum.web.model.SummaryProjectModel;
-import org.apache.maven.continuum.web.util.StateGenerator;
-
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
 import org.extremecomponents.table.core.BaseModel;
@@ -34,17 +32,19 @@ import javax.servlet.http.HttpServletRequest;
 public class BuildNowCell
     extends DisplayCell
 {
-    public void init(BaseModel model, Column column)
+    public void init( BaseModel model, Column column )
     {
-        super.init(model, column);
+        super.init( model, column );
 
         SummaryProjectModel project = (SummaryProjectModel) model.getCurrentCollectionBean();
 
         HttpServletRequest request = (HttpServletRequest) model.getPageContext().getRequest();
 
-        if ( !project.isInQueue() && ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 || project.getState() == 4 ) )
+        if ( !project.isInQueue()
+            && ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 || project.getState() == 4 ) )
         {
-            column.setValue( "<a href=\"" + request.getContextPath() + "/buildProject.action?projectId=" + project.getId() + "\">Build Now</a>" );
+            column.setValue( "<a href=\"" + request.getContextPath() + "/buildProject.action?projectId="
+                + project.getId() + "\">Build Now</a>" );
         }
     }
 }

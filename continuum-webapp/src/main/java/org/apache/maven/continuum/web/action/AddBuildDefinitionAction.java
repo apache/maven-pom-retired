@@ -18,17 +18,15 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.model.project.Profile;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.Schedule;
-
-import com.opensymphony.xwork.ActionSupport;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import com.opensymphony.xwork.ActionSupport;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -59,7 +57,7 @@ public class AddBuildDefinitionAction
 
     private Map schedulesMap;
 
-//    private Profile profile;
+    //    private Profile profile;
 
     public String execute()
     {
@@ -108,12 +106,6 @@ public class AddBuildDefinitionAction
 
             schedulesMap.put( new Integer( schedule.getId() ), schedule.getName() );
         }
-    }
-
-    private BuildDefinition getBuildDefinition()
-        throws ContinuumException
-    {
-        return continuum.getBuildDefinition( projectId, buildDefinitionId );
     }
 
     public Project getProject()
@@ -209,7 +201,7 @@ public class AddBuildDefinitionAction
             {
                 initSchedulesMap();
             }
-            catch( ContinuumException e )
+            catch ( ContinuumException e )
             {
             }
         }

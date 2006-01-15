@@ -20,10 +20,7 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
 
-import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.xwork.ActionSupport;
-
-import java.util.Map;
 
 /**
  * @author Nick Gonzalez
@@ -47,7 +44,7 @@ public class AddProjectAction
     private String projectScmTag;
 
     private String projectType;
-    
+
     public String execute()
     {
         Project project = new Project();
@@ -111,7 +108,8 @@ public class AddProjectAction
         this.projectScmTag = projectScmTag;
     }
 
-    public String getProjectScmUrl() {
+    public String getProjectScmUrl()
+    {
         return projectScmUrl;
     }
 

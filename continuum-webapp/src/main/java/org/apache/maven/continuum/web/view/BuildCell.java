@@ -17,18 +17,16 @@ package org.apache.maven.continuum.web.view;
  */
 
 import org.apache.maven.continuum.web.model.SummaryProjectModel;
-import org.apache.maven.continuum.web.util.StateGenerator;
-
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
 import org.extremecomponents.table.core.BaseModel;
-
-import com.opensymphony.webwork.views.util.UrlHelper;
 
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.opensymphony.webwork.views.util.UrlHelper;
 
 /**
  * Used in Summary view
@@ -39,9 +37,9 @@ import javax.servlet.http.HttpServletResponse;
 public class BuildCell
     extends DisplayCell
 {
-    public void init(BaseModel model, Column column)
+    public void init( BaseModel model, Column column )
     {
-        super.init(model, column);
+        super.init( model, column );
 
         SummaryProjectModel project = (SummaryProjectModel) model.getCurrentCollectionBean();
 
@@ -51,7 +49,8 @@ public class BuildCell
         {
             column.setValue( "<b>In&nbsp;queue</b>" );
         }
-        else if ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 || project.getState() == 4 )
+        else if ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3
+            || project.getState() == 4 )
         {
             if ( project.getBuildNumber() > 0 )
             {

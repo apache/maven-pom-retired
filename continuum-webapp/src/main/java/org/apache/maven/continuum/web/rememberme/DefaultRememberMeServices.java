@@ -25,7 +25,7 @@ import com.opensymphony.user.UserManager;
 import com.opensymphony.user.EntityNotFoundException;
 
 /**
- * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
+ * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
 public class DefaultRememberMeServices

@@ -30,8 +30,6 @@ public class AddScheduleAction
 {
     private Continuum continuum;
 
-    private int scheduleId;
-
     private boolean active = true;
 
     private String cronExpression;
@@ -107,10 +105,4 @@ public class AddScheduleAction
     {
         this.name = name;
     }
-
-    public void setScheduleId( int scheduleId )
-    {
-        this.scheduleId = scheduleId;
-    }
-
 }

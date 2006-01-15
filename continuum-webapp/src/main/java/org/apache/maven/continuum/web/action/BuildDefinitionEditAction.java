@@ -19,16 +19,15 @@ package org.apache.maven.continuum.web.action;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.model.project.Profile;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.Schedule;
-
-import com.opensymphony.xwork.ActionSupport;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import com.opensymphony.xwork.ActionSupport;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -61,7 +60,7 @@ public class BuildDefinitionEditAction
 
     private Map schedulesMap;
 
-//    private Profile profile;
+    //    private Profile profile;
 
     public String execute()
     {
@@ -101,7 +100,8 @@ public class BuildDefinitionEditAction
         }
         catch ( ContinuumException e )
         {
-            addActionMessage( "Can't update build definition (id=" + buildDefinitionId + ") for project " + projectId + " : " + e.getMessage() );
+            addActionMessage( "Can't update build definition (id=" + buildDefinitionId + ") for project " + projectId
+                + " : " + e.getMessage() );
 
             e.printStackTrace();
 
@@ -121,7 +121,8 @@ public class BuildDefinitionEditAction
         }
         catch ( ContinuumException e )
         {
-            addActionMessage( "Can't get build definition informations (id=" + buildDefinitionId + ") for project " + projectId + " : " + e.getMessage() );
+            addActionMessage( "Can't get build definition informations (id=" + buildDefinitionId + ") for project "
+                + projectId + " : " + e.getMessage() );
 
             e.printStackTrace();
 
@@ -153,7 +154,7 @@ public class BuildDefinitionEditAction
             return ERROR;
         }
 
-//        profile = bd.getProfile();
+        //        profile = bd.getProfile();
 
         return INPUT;
     }
@@ -275,7 +276,7 @@ public class BuildDefinitionEditAction
             {
                 initSchedulesMap();
             }
-            catch( ContinuumException e )
+            catch ( ContinuumException e )
             {
             }
         }

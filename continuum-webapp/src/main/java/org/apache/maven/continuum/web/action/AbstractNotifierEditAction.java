@@ -20,10 +20,9 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 
-import com.opensymphony.xwork.ActionSupport;
-
-import java.util.HashMap;
 import java.util.Map;
+
+import com.opensymphony.xwork.ActionSupport;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -45,7 +44,7 @@ public abstract class AbstractNotifierEditAction
     private boolean sendOnSuccess;
 
     private boolean sendOnFailure;
-    
+
     private boolean sendOnError;
 
     private boolean sendOnWarning;
@@ -88,7 +87,8 @@ public abstract class AbstractNotifierEditAction
         }
         catch ( ContinuumException e )
         {
-            addActionMessage( "Can't update notifier (id=" + notifierId + ") for project " + projectId + " : " + e.getMessage() );
+            addActionMessage( "Can't update notifier (id=" + notifierId + ") for project " + projectId + " : "
+                + e.getMessage() );
 
             e.printStackTrace();
 
@@ -111,7 +111,8 @@ public abstract class AbstractNotifierEditAction
         }
         catch ( ContinuumException e )
         {
-            addActionMessage( "Can't get notifier informations (id=" + notifierId + ") for project " + projectId + " : " + e.getMessage() );
+            addActionMessage( "Can't get notifier informations (id=" + notifierId + ") for project " + projectId
+                + " : " + e.getMessage() );
 
             e.printStackTrace();
 

@@ -20,10 +20,9 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildResult;
 
-import com.opensymphony.xwork.ActionSupport;
-
-import java.util.Collection;
 import java.util.List;
+
+import com.opensymphony.xwork.ActionSupport;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -54,7 +53,8 @@ public class BuildResultAction
         }
         catch ( ContinuumException e )
         {
-            addActionError( "Can't get build result (id=" + buildId + ") for project (id=" + projectId + ") : " + e.getMessage() );
+            addActionError( "Can't get build result (id=" + buildId + ") for project (id=" + projectId + ") : "
+                + e.getMessage() );
 
             e.printStackTrace();
 

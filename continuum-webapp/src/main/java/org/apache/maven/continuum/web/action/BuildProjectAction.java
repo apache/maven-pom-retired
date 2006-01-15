@@ -18,12 +18,8 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.model.project.Project;
 
-import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.xwork.ActionSupport;
-
-import java.util.Map;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>

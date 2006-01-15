@@ -19,15 +19,14 @@ package org.apache.maven.continuum.web.action;
 import org.codehaus.plexus.rememberme.RememberMeServices;
 import org.codehaus.plexus.security.Authentication;
 import org.codehaus.plexus.security.Authenticator;
-import org.codehaus.plexus.security.DefaultAuthentication;
-import org.codehaus.plexus.security.User;
-
-import com.opensymphony.xwork.ActionSupport;
-import com.opensymphony.webwork.ServletActionContext;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpSession;
+
+import com.opensymphony.webwork.ServletActionContext;
+import com.opensymphony.xwork.ActionSupport;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -66,8 +65,8 @@ public class LoginAction
 
             if ( rememberMe )
             {
-                rememberMeServices.loginSuccess( ServletActionContext.getRequest(),
-                    ServletActionContext.getResponse(), auth );
+                rememberMeServices.loginSuccess( ServletActionContext.getRequest(), ServletActionContext.getResponse(),
+                                                 auth );
             }
 
             HttpSession session = ServletActionContext.getRequest().getSession( true );
@@ -84,8 +83,7 @@ public class LoginAction
 
             if ( rememberMe )
             {
-                rememberMeServices.loginFail( ServletActionContext.getRequest(),
-                    ServletActionContext.getResponse() );
+                rememberMeServices.loginFail( ServletActionContext.getRequest(), ServletActionContext.getResponse() );
             }
 
             return INPUT;
