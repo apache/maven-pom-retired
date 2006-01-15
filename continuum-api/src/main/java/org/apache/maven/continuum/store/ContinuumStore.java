@@ -23,13 +23,12 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
-import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.model.system.ContinuumUser;
-import org.apache.maven.continuum.model.system.SystemConfiguration;
+import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.model.system.Permission;
+import org.apache.maven.continuum.model.system.SystemConfiguration;
 import org.apache.maven.continuum.model.system.UserGroup;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -203,7 +202,7 @@ public interface ContinuumStore
 
     Permission addPermission( Permission perm );
 
-    UserGroup addUserGroup( UserGroup group);
+    UserGroup addUserGroup( UserGroup group );
 
     void updateUserGroup( UserGroup group )
         throws ContinuumStoreException;
