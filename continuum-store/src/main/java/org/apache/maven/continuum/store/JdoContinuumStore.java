@@ -23,12 +23,11 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
-import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.model.system.ContinuumUser;
-import org.apache.maven.continuum.model.system.SystemConfiguration;
+import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.model.system.Permission;
+import org.apache.maven.continuum.model.system.SystemConfiguration;
 import org.apache.maven.continuum.model.system.UserGroup;
-import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
@@ -1030,7 +1029,7 @@ public class JdoContinuumStore
 
     private List getAllObjectsDetached( Class clazz )
     {
-        return getAllObjectsDetached( clazz, null, null );
+        return getAllObjectsDetached( clazz, null );
     }
 
     private List getAllObjectsDetached( Class clazz, String fetchGroup )

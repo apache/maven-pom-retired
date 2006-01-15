@@ -16,12 +16,7 @@ package org.apache.maven.continuum.store;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
