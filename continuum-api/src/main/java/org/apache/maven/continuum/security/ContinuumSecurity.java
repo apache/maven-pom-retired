@@ -32,7 +32,7 @@ public interface ContinuumSecurity
     static final String ADMIN_GROUP_NAME = "Continuum admin";
 
     static final String GUEST_GROUP_NAME = "Continuum guest";
-    
+
     List getPermissions( ContinuumUser user )
         throws ContinuumSecurityException;
 

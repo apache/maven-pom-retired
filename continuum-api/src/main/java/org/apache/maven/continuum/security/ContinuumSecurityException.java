@@ -20,7 +20,8 @@ package org.apache.maven.continuum.security;
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class ContinuumSecurityException extends Exception
+public class ContinuumSecurityException
+    extends Exception
 {
     public ContinuumSecurityException( String msg )
     {

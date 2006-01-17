@@ -20,7 +20,8 @@ package org.apache.maven.continuum.store;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class ContinuumStoreException extends Exception
+public class ContinuumStoreException
+    extends Exception
 {
     public ContinuumStoreException( String msg )
     {
