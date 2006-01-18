@@ -10,34 +10,59 @@ Download Continuum 1.0.2
 
  Continuum is distributed in several formats for your convenience.
 
- You will be prompted for a mirror - please be patient, as it may take 24 hours
- to reach all mirrors.
+  You will be prompted for a mirror - if the file is not found on yours, please be patient, as it may take 24
+  hours to reach all mirrors.
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.2-bin.tar.bz2}.tar.bz2}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.bz2.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.bz2.asc}PGP}})
+  Continuum 1.0.2 is distributed under the {{{http://maven.apache.org/continuum/license.html} Apache License, version 2.0}}.
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.2-bin.tar.gz}.tar.gz}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.gz.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.gz.asc}PGP}})
+*-------------------------------+---------+----------+-----------+
+|                               | Mirrors | Checksum | Signature |
+*-------------------------------+---------+----------+-----------+
+| Continuum 1.0.2 (tar.bz2)     | {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.2-bin.tar.bz2} continuum-1.0.2-bin.tar.bz2}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.bz2.md5} continuum-1.0.2-bin.tar.bz2.md5}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.bz2.asc} continuum-1.0.2-bin.tar.bz2.asc}} |
+*-------------------------------+---------+----------+-----------+
+| Continuum 1.0.2 (tar.gz)      | {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.2-bin.tar.gz} continuum-1.0.2-bin.tar.gz}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.gz.md5} continuum-1.0.2-bin.tar.gz.md5}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.tar.gz.asc} continuum-1.0.2-bin.tar.gz.asc}} |
+*-------------------------------+---------+----------+-----------+
+| Continuum 1.0.2 (zip)         | {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.2-bin.zip} continuum-1.0.2-bin.zip}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.zip.md5} continuum-1.0.2-bin.zip.md5}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.zip.asc} continuum-1.0.2-bin.zip.asc}} |
+*-------------------------------+---------+----------+-----------+
 
- * {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.2-bin.zip}.zip}} archive
-   ({{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.zip.md5}checksum}}/{{{http://www.apache.org/dist/maven/binaries/continuum-1.0.2-bin.zip.asc}PGP}})
 
- []
+*Previous Releases
 
- Continuum 1.0 is distributed under the
- {{{http://maven.apache.org/license.html}Apache License, version 2.0}}.
+**Continuum 1.0.1
 
-System Requirements
+*-------------------------------+---------+----------+-----------+
+|                               | Mirrors | Checksum | Signature |
+*-------------------------------+---------+----------+-----------+
+| Continuum 1.0.1 (tar.bz2)     | {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.1-bin.tar.bz2} continuum-1.0.1-bin.tar.bz2}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.tar.bz2.md5} continuum-1.0.1-bin.tar.bz2.md5}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.tar.bz2.asc} continuum-1.0.1-bin.tar.bz2.asc}} |
+*-------------------------------+---------+----------+-----------+
+| Continuum 1.0.1 (tar.gz)      | {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.1-bin.tar.gz} continuum-1.0.1-bin.tar.gz}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.tar.gz.md5} continuum-1.0.1-bin.tar.gz.md5}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.tar.gz.asc} continuum-1.0.1-bin.tar.gz.asc}} |
+*-------------------------------+---------+----------+-----------+
+| Continuum 1.0.1 (zip)         | {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0.1-bin.zip} continuum-1.0.1-bin.zip}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.zip.md5} continuum-1.0.1-bin.zip.md5}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0.1-bin.zip.asc} continuum-1.0.1-bin.zip.asc}} |
+*-------------------------------+---------+----------+-----------+
 
-*------------------*--------------------------------------------------------------------------------------------------------------------------------*
-| JDK              | 1.4 or above                                                                                                                   |
-*------------------*--------------------------------------------------------------------------------------------------------------------------------*
-| Memory           | No minimum requirement                                                                                                         |
-*------------------*--------------------------------------------------------------------------------------------------------------------------------*
-| Disk Space       | The Continuum application is in itself less than 30MB but will use more disk space when it's checking out and building sources |
-*------------------*--------------------------------------------------------------------------------------------------------------------------------*
-| Operating System | No minimum requirement. Tested on Windows XP, Debian, Fedora Core and Mac OS X                                                 |
-*------------------*--------------------------------------------------------------------------------------------------------------------------------*
+**Continuum 1.0
+
+*-------------------------------+---------+----------+-----------+
+|                               | Mirrors | Checksum | Signature |
+*-------------------------------+---------+----------+-----------+
+| Continuum 1.0 (tar.bz2)     | {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-bin.tar.bz2} continuum-1.0-bin.tar.bz2}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0-bin.tar.bz2.md5} continuum-1.0-bin.tar.bz2.md5}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0-bin.tar.bz2.asc} continuum-1.0-bin.tar.bz2.asc}} |
+*-------------------------------+---------+----------+-----------+
+| Continuum 1.0 (tar.gz)      | {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-bin.tar.gz} continuum-1.0-bin.tar.gz}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0-bin.tar.gz.md5} continuum-1.0-bin.tar.gz.md5}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0-bin.tar.gz.asc} continuum-1.0-bin.tar.gz.asc}} |
+*-------------------------------+---------+----------+-----------+
+| Continuum 1.0 (zip)         | {{{http://www.apache.org/dyn/closer.cgi/maven/binaries/continuum-1.0-bin.zip} continuum-1.0-bin.zip}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0-bin.zip.md5} continuum-1.0-bin.zip.md5}} | {{{http://www.apache.org/dist/maven/binaries/continuum-1.0-bin.zip.asc} continuum-1.0-bin.zip.asc}} |
+*-------------------------------+---------+----------+-----------+
+
+* System {Requirements}
+
+*----------------------+--------------------------------------------------------------------------------------------------------------------------------+
+|  <<JDK>>             | 1.4 or above                                                                                                                   |
+*----------------------+--------------------------------------------------------------------------------------------------------------------------------+
+| <<Memory>>           | No minimum requirement                                                                                                         |
+*----------------------+--------------------------------------------------------------------------------------------------------------------------------+
+| <<Disk>>             | The Continuum application is in itself less than 30MB but will use more disk space when it's checking out and building sources |
+*----------------------+--------------------------------------------------------------------------------------------------------------------------------+
+| <<Operating System>> | No minimum requirement. Tested on Windows XP, Debian, Fedora Core, Solaris and Mac OS X                                                 |
+*----------------------+--------------------------------------------------------------------------------------------------------------------------------+
 
  After downloading Continuum see the {{{guides/getting-started/index.html}Getting Started}}
  document for instructions on how to install and start Continuum.
