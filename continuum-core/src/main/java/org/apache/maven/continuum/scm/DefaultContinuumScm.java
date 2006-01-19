@@ -327,6 +327,8 @@ public class DefaultContinuumScm
 
                 // TODO: revision?
 
+                file.setStatus(scmFile.getStatus().toString());
+
                 changeSet.addFile( file );
             }
         }
