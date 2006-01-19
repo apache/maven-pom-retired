@@ -19,6 +19,8 @@ package org.apache.maven.continuum.buildcontroller;
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.scm.ChangeFile;
+import org.apache.maven.continuum.model.scm.ChangeSet;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumProjectState;
@@ -27,8 +29,6 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.continuum.utils.WorkingDirectoryService;
-import org.apache.maven.continuum.model.scm.ChangeFile;
-import org.apache.maven.continuum.model.scm.ChangeSet;
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -210,7 +210,9 @@ public class DefaultBuildController
                     }
                 }
 
-                if ( allChangesUnknown )
+                if ( allChangesUnknown && project.getOldState() != ContinuumProjectState.NEW &&
+                    trigger != ContinuumProjectState.TRIGGER_FORCED &&
+                    project.getState() != ContinuumProjectState.NEW )
                 {
 
                     getLogger().info( "The project was not built because all changes are unknown." );
