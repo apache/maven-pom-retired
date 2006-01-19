@@ -34,7 +34,6 @@ import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.context.Context;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.InterpolationFilterReader;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
@@ -42,7 +41,6 @@ import org.codehaus.plexus.util.cli.Commandline;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -55,7 +53,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -95,15 +92,25 @@ public abstract class AbstractIntegrationTest
     protected InputStream getConfiguration()
         throws Exception
     {
-        Reader reader = new FileReader( getTestFile( "../continuum-plexus-application/src/conf/application.xml" ) );
+        Reader webappPlexusReader =
+            new FileReader( getTestFile( "../continuum-webapp/src/main/webapp/WEB-INF/plexus.xml" ) );
 
-        Properties properties = new Properties();
+        Reader webappComponentsReader =
+            new FileReader( getTestFile( "../continuum-webapp/src/main/resources/META-INF/plexus/components.xml" ) );
 
-        properties.load( new FileInputStream( getTestFile( "../continuum-plexus-application/test.properties" ) ) );
+        String webappPlexus = IOUtil.toString( webappPlexusReader );
 
-        String s = IOUtil.toString( new InterpolationFilterReader( reader, properties, "@", "@" ) );
+        String webappComponent = IOUtil.toString( webappComponentsReader );
 
-        return new ByteArrayInputStream( s.getBytes() );
+        webappComponent =
+            webappComponent.substring( webappComponent.indexOf( "<components>" ) + "<components>".length() );
+
+        webappComponent = webappComponent.substring( 0, webappComponent.indexOf( "</components>" ) );
+
+        webappPlexus = webappPlexus.substring( 0, webappPlexus.indexOf( "</components>" ) ) + webappComponent +
+            webappPlexus.substring( webappPlexus.indexOf( "</components>" ) );
+
+        return new ByteArrayInputStream( webappPlexus.getBytes() );
     }
 
     protected void customizeContext( Context context )
@@ -481,6 +488,11 @@ public abstract class AbstractIntegrationTest
         {
             fail( "project.scmResult == null" );
         }
+
+        progress( "Command line=" + project.getCheckoutResult().getCommandLine() );
+        progress( "Provider message=" + project.getCheckoutResult().getProviderMessage() );
+        progress( "Command output=" + project.getCheckoutResult().getCommandOutput() );
+        progress( "exception=" + project.getCheckoutResult().getException() );
 
         assertTrue( message + "scmResult.success != true", project.getCheckoutResult().isSuccess() );
         assertEquals( message + "Checkout error exception != null", null, project.getCheckoutResult().getException() );

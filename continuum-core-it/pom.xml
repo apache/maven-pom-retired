@@ -37,7 +37,9 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
-      <artifactId>continuum-plexus-application</artifactId>
+      <artifactId>continuum-webapp</artifactId>
+      <type>pom</type>
+      <version>1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>

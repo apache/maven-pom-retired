@@ -124,10 +124,8 @@
     <module>continuum-core</module>
     <module>continuum-model</module>
     <module>continuum-notifiers</module>
-    <module>continuum-plexus-application</module>
     <module>continuum-store</module>
     <module>continuum-test</module>
-    <module>continuum-web</module>
     <module>continuum-webapp</module>
     <module>continuum-xmlrpc</module>
   </modules>
