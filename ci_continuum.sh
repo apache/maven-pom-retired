@@ -36,7 +36,7 @@ TIMESTAMP=`date +%Y%m%d.%H%M%S`
 WWW=$HOME/public_html
 DEPLOY_DIR=$WWW/builds
 DEPLOY_SITE=http://maven.zones.apache.org/~continuum/builds
-DIST=continuum-${TIMESTAMP}.tar.gz
+DIST=continuum-${TIMESTAMP}.war
 SVN=svn
 
 M2_HOME=$HOME_DIR/maven-2.0
@@ -147,12 +147,9 @@ fi
     mkdir -p $DEPLOY_DIR > /dev/null 2>&1
 
     (
-      cd $DIR/continuum/continuum-plexus-application
+      cd $DIR/continuum/continuum-webapp
 
-      $M2_HOME/bin/mvn -Denv=production --batch-mode --no-plugin-registry --update-snapshots -e clean:clean assembly:assembly
-      ret=$?; if [ $ret != 0 ]; then exit $ret; fi
-
-      mv target/continuum*.tar.gz $DEPLOY_DIR/$DIST
+      mv target/continuum*.war $DEPLOY_DIR/$DIST
     )
     ret=$?; if [ $ret != 0 ]; then exit $ret; fi
 
