@@ -47,11 +47,17 @@ import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.utils.PlexusContainerManager;
 import org.apache.maven.continuum.utils.ProjectSorter;
 import org.apache.maven.continuum.utils.WorkingDirectoryService;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.action.Action;
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.action.ActionNotFoundException;
+import org.codehaus.plexus.context.Context;
+import org.codehaus.plexus.context.ContextException;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
@@ -83,7 +89,7 @@ import java.util.Properties;
  */
 public class DefaultContinuum
     extends AbstractLogEnabled
-    implements Continuum, Initializable, Startable
+    implements Continuum, Contextualizable, Initializable, Startable
 {
     /**
      * @plexus.requirement
@@ -1781,6 +1787,14 @@ public class DefaultContinuum
             
             getLogger().info( " " + project.getId() + ":" + project.getName() + ":" + project.getExecutorId() );
         }
+    }
+
+    public void contextualize( Context context )
+        throws ContextException
+    {
+        PlexusContainer container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
+
+        PlexusContainerManager.getInstance().setContainer( container );
     }
 
     public void start()
