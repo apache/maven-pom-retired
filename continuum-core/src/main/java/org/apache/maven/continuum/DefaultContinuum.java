@@ -1,7 +1,7 @@
 package org.apache.maven.continuum;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1807,16 +1807,6 @@ public class DefaultContinuum
             initializer.initialize();
 
             configurationService.load();
-
-            // ----------------------------------------------------------------------
-            // Activate all the Build settings in the system
-            // ----------------------------------------------------------------------
-
-            schedulesActivator.activateSchedules( this );
-        }
-        catch ( SchedulesActivationException e )
-        {
-            throw new StartingException( "Error activating schedules.", e );
         }
         catch ( ConfigurationLoadingException e )
         {
@@ -1825,6 +1815,19 @@ public class DefaultContinuum
         catch ( ContinuumInitializationException e )
         {
             throw new StartingException( "Cannot initializing Continuum for the first time.", e );
+        }
+
+        try
+        {
+            // ----------------------------------------------------------------------
+            // Activate all the schedules in the system
+            // ----------------------------------------------------------------------
+            schedulesActivator.activateSchedules( this );
+        }
+        catch ( SchedulesActivationException e )
+        {
+            // We don't throw an exception here, so users will can modify schedules in interface instead of database
+            getLogger().error( "Error activating schedules.", e );
         }
     }
 
@@ -2049,14 +2052,7 @@ public class DefaultContinuum
 
     private boolean convertBoolean( String value )
     {
-        if ( "true".equalsIgnoreCase( value ) || "on".equalsIgnoreCase( value ) || "yes".equalsIgnoreCase( value ) )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return "true".equalsIgnoreCase( value ) || "on".equalsIgnoreCase( value ) || "yes".equalsIgnoreCase( value );
     }
 
     private void startMessage()

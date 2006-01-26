@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.build.settings;
 
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import org.apache.maven.continuum.scheduler.ContinuumScheduler;
 import org.apache.maven.continuum.scheduler.ContinuumSchedulerConstants;
 import org.apache.maven.continuum.scheduler.ContinuumSchedulerException;
 import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.quartz.CronTrigger;
@@ -76,7 +77,26 @@ public class DefaultSchedulesActivator
                 continue;
             }
 
-            schedule( schedule, continuum );
+            try
+            {
+                schedule( schedule, continuum );
+            }
+            catch ( SchedulesActivationException e )
+            {
+                getLogger().error( "Can't activate schedule '" + schedule.getName() + "'", e );
+
+                schedule.setActive( false );
+
+                try
+                {
+                    store.storeSchedule( schedule );
+                }
+                catch ( ContinuumStoreException e1 )
+                {
+                    throw new SchedulesActivationException( "Can't desactivate schedule '" + schedule.getName() + "'",
+                                                            e );
+                }
+            }
         }
     }
 
