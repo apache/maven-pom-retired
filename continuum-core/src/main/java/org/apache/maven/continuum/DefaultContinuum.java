@@ -354,6 +354,12 @@ public class DefaultContinuum
         {
             projectsMap = store.getProjectIdsAndBuildDefinitionIdsBySchedule( schedule.getId() );
 
+            if ( projectsMap == null )
+            {
+                // We don't have projects attached to this schedule
+                return;
+            }
+
             projectsList = getProjectsInBuildOrder();
         }
         catch ( ContinuumStoreException e )
