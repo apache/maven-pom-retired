@@ -18,7 +18,7 @@ if [ ! -z "$RUNNING" ]; then
   if [ "$CMD" = "checkout" ]; then
     echo "From: $FROM" > running_log
     echo "To: $TO" >> running_log
-    echo "Subject: [continuum build - SKIPPED - $CMD] $DATE" >>running_log
+    echo "Subject: [continuum build trunk - SKIPPED - $CMD] $DATE" >>running_log
     echo "" >> running_log
     echo "ci_continuum.sh already running... exiting" >>running_log
     echo "$RUNNING" >>running_log
@@ -34,8 +34,8 @@ REPO=$HOME_DIR/maven-repo-local
 SCM_LOG=$HOME_DIR/scm.log
 TIMESTAMP=`date +%Y%m%d.%H%M%S`
 WWW=$HOME/public_html
-DEPLOY_DIR=$WWW/builds
-DEPLOY_SITE=http://maven.zones.apache.org/~continuum/builds
+DEPLOY_DIR=$WWW/builds/trunk
+DEPLOY_SITE=http://maven.zones.apache.org/~continuum/builds/trunk
 DIST=continuum-${TIMESTAMP}.war
 SVN=svn
 
@@ -174,11 +174,11 @@ then
   echo "From: $FROM" > log
   echo "To: $TO" >> log
   if [ $ret != 0 ]; then
-    echo "Subject: [continuum build - FAILED - $CMD] $DATE" >> log
+    echo "Subject: [continuum build trunk - FAILED - $CMD] $DATE" >> log
   elif [ $fatal_error != 1 ]; then
-    echo "Subject: [continuum build - FAILED - $CMD] $DATE" >> log
+    echo "Subject: [continuum build trunk - FAILED - $CMD] $DATE" >> log
   else
-    echo "Subject: [continuum build - SUCCESS - $CMD] $DATE" >> log
+    echo "Subject: [continuum build trunk - SUCCESS - $CMD] $DATE" >> log
     echo "" >> log
     echo "Distribution:" >> log
     echo "${DEPLOY_SITE}/${DIST}" >>log
@@ -186,7 +186,7 @@ then
   fi
   echo "" >> log
   echo "Log:" >> log
-  echo "http://maven.zones.apache.org/~continuum/logs/${MESSAGE_NAME}" >> log
+  echo "http://maven.zones.apache.org/~continuum/logs/trunk/${MESSAGE_NAME}" >> log
 
   /usr/sbin/sendmail -t < log
 fi
