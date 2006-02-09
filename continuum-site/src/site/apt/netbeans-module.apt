@@ -1,0 +1,28 @@
+ ------
+ Netbeans IDE integration
+ ------
+ Milos Kleint
+ ------
+ January 05 2006
+
+Netbeans IDE Integration
+
+ Continuum integration servers can be accessed through XML-RPC directly from Netbeans IDE.
+{{{http://docs.codehaus.org/display/MEVENIDE/MevenideNetbeans2.0} The Netbeans IDE Continuum client}} is part
+of the Mevenide integration. 
+
+ In the first alpha version the features are:
+
+ * A configurable list of Continuum servers
+
+ * Shows a list of projects on the server, along with state and details about the project
+
+ * User can trigger a rebuild of the project
+ 
+ Features planned for future versions:
+
+ * Add projects to Continuum directly from the IDE
+
+ * Notifications about broken builds in Netbeans
+
+ * ..  Suggest more at Continuum or Mevenide bug tracking system.
