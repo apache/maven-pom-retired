@@ -337,7 +337,9 @@ public abstract class AbstractIntegrationTest
             FileUtils.deleteDirectory( directory );
         }
 
-        assertTrue( "Could not make directory " + directory, directory.mkdirs() );
+        assertFalse( "Could not delete directory " + directory.getAbsolutePath(), directory.exists() );
+
+        assertTrue( "Could not make directory " + directory.getAbsolutePath(), directory.mkdirs() );
     }
 
     public static void cleanDirectory( String directory )
