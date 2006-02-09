@@ -70,6 +70,10 @@
         </appenders>
         <levels>
           <level>
+            <hierarchy>org.apache.maven.continuum.execution.maven.m2.DefaultMavenBuilderHelper</hierarchy>
+            <level>INFO</level>
+          </level>
+          <level>
             <hierarchy>org.codehaus.plexus.velocity</hierarchy>
             <level>WARN</level>
           </level>

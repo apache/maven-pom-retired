@@ -16,6 +16,7 @@ package org.apache.maven.continuum.execution.maven.m2;
  * limitations under the License.
  */
 
+import org.apache.maven.artifact.manager.WagonManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
@@ -25,33 +26,52 @@ import org.apache.maven.continuum.model.project.ProjectDeveloper;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Developer;
+import org.apache.maven.model.Model;
 import org.apache.maven.model.Notifier;
+import org.apache.maven.model.Profile;
 import org.apache.maven.model.Scm;
-import org.apache.maven.project.DefaultMavenProjectBuilder;
+import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
+import org.apache.maven.profiles.DefaultProfileManager;
+import org.apache.maven.profiles.ProfileManager;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.settings.MavenSettingsBuilder;
+import org.apache.maven.settings.Mirror;
+import org.apache.maven.settings.Proxy;
+import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.SettingsUtils;
+import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
+import org.codehaus.plexus.PlexusConstants;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLifecycleException;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.context.Context;
+import org.codehaus.plexus.context.ContextException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
 public class DefaultMavenBuilderHelper
     extends AbstractLogEnabled
-    implements MavenBuilderHelper
+    implements MavenBuilderHelper, Contextualizable, Initializable
 {
-    public static final String DEFAULT_TEST_OUTPUT_DIRECTORY = "target/surefire-reports";
-
     /**
      * @plexus.requirement
      */
@@ -76,6 +96,10 @@ public class DefaultMavenBuilderHelper
      * @plexus.configuration
      */
     private String localRepository;
+
+    private PlexusContainer container;
+
+    private Settings settings;
 
     // ----------------------------------------------------------------------
     // MavenBuilderHelper Implementation
@@ -251,11 +275,26 @@ public class DefaultMavenBuilderHelper
 
         try
         {
-            // TODO: we probably need to pass in some profiles here, perhaps from settings.xml
-            //   This seems like code that is shared with DefaultMaven, so it should be mobed to the project
+            //   TODO: This seems like code that is shared with DefaultMaven, so it should be moved to the project
             //   builder perhaps
-            // TODO: Remove cast
-            project = ( (DefaultMavenProjectBuilder) projectBuilder ).build( file, getRepository(), null, false );
+
+            if ( getLogger().isDebugEnabled() )
+            {
+                writeSettings( settings );
+            }
+
+            ProfileManager profileManager = new DefaultProfileManager( container );
+
+            loadSettingsProfiles( profileManager, settings );
+
+            project = projectBuilder.build( file, getRepository( settings ), profileManager, false );
+
+            if ( getLogger().isDebugEnabled() )
+            {
+                writePom( project );
+                writeActiveProfileStatement( project );
+            }
+
         }
         catch ( Exception e )
         {
@@ -275,16 +314,16 @@ public class DefaultMavenBuilderHelper
 
         if ( scm == null )
         {
-            throw new MavenBuilderHelperException( "Missing 'scm' element in the " + getProjectName( project )
-                + " POM." );
+            throw new MavenBuilderHelperException(
+                "Missing 'scm' element in the " + getProjectName( project ) + " POM." );
         }
 
         String url = scm.getConnection();
 
         if ( StringUtils.isEmpty( url ) )
         {
-            throw new MavenBuilderHelperException( "Missing 'connection' element in the 'scm' element in the "
-                + getProjectName( project ) + " POM." );
+            throw new MavenBuilderHelperException(
+                "Missing 'connection' element in the 'scm' element in the " + getProjectName( project ) + " POM." );
         }
 
         return project;
@@ -364,31 +403,235 @@ public class DefaultMavenBuilderHelper
     //
     // ----------------------------------------------------------------------
 
-    private ArtifactRepository getRepository()
+    private Settings getSettings()
+        throws SettingsConfigurationException
+    {
+        try
+        {
+            return mavenSettingsBuilder.buildSettings();
+        }
+        catch ( IOException e )
+        {
+            throw new SettingsConfigurationException( "Error reading settings file", e );
+        }
+        catch ( XmlPullParserException e )
+        {
+            throw new SettingsConfigurationException( e.getMessage(), e.getDetail(), e.getLineNumber(),
+                                                      e.getColumnNumber() );
+        }
+    }
+
+    private ArtifactRepository getRepository( Settings settings )
     {
         // ----------------------------------------------------------------------
         // Set our configured location as the default but try to use the defaults
         // as returned by the MavenSettings component.
         // ----------------------------------------------------------------------
 
-        String localRepository = this.localRepository;
+        String localRepo = localRepository;
+
+        if ( !( StringUtils.isEmpty( settings.getLocalRepository() ) ) )
+        {
+            localRepo = settings.getLocalRepository();
+        }
+
+        return artifactRepositoryFactory.createArtifactRepository( "local", "file://" + localRepo, repositoryLayout,
+                                                                   null, null );
+    }
+
+    private void loadSettingsProfiles( ProfileManager profileManager, Settings settings )
+    {
+        List settingsProfiles = settings.getProfiles();
+
+        if ( settingsProfiles != null && !settingsProfiles.isEmpty() )
+        {
+            List settingsActiveProfileIds = settings.getActiveProfiles();
+
+            profileManager.explicitlyActivate( settingsActiveProfileIds );
+
+            for ( Iterator it = settings.getProfiles().iterator(); it.hasNext(); )
+            {
+                org.apache.maven.settings.Profile rawProfile = (org.apache.maven.settings.Profile) it.next();
+
+                Profile profile = SettingsUtils.convertFromSettingsProfile( rawProfile );
+
+                profileManager.addProfile( profile );
+            }
+        }
+    }
+
+    private void writeSettings( Settings settings )
+    {
+        StringWriter sWriter = new StringWriter();
+
+        SettingsXpp3Writer settingsWriter = new SettingsXpp3Writer();
 
         try
         {
-            Settings settings = mavenSettingsBuilder.buildSettings();
+            settingsWriter.write( sWriter, settings );
 
-            localRepository = settings.getLocalRepository();
+            StringBuffer message = new StringBuffer();
+
+            message.append( "\n************************************************************************************" );
+            message.append( "\nEffective Settings" );
+            message.append( "\n************************************************************************************" );
+            message.append( "\n" );
+            message.append( sWriter.toString() );
+            message.append( "\n************************************************************************************" );
+            message.append( "\n\n" );
+
+            getLogger().debug( message.toString() );
         }
         catch ( IOException e )
         {
-            getLogger().warn( "Error while building Maven settings.", e );
+            getLogger().warn( "Cannot serialize POM to XML.", e );
         }
-        catch ( XmlPullParserException e )
+    }
+
+    private void writePom( MavenProject project )
+    {
+        StringBuffer message = new StringBuffer();
+
+        Model pom = project.getModel();
+
+        StringWriter sWriter = new StringWriter();
+
+        MavenXpp3Writer pomWriter = new MavenXpp3Writer();
+
+        try
         {
-            getLogger().warn( "Error while building Maven settings.", e );
+            pomWriter.write( sWriter, pom );
+
+            message.append( "\n************************************************************************************" );
+            message.append( "\nEffective POM for project \'" ).append( project.getId() ).append( "\'" );
+            message.append( "\n************************************************************************************" );
+            message.append( "\n" );
+            message.append( sWriter.toString() );
+            message.append( "\n************************************************************************************" );
+            message.append( "\n\n" );
+
+            getLogger().debug( message.toString() );
+        }
+        catch ( IOException e )
+        {
+            getLogger().warn( "Cannot serialize POM to XML.", e );
+        }
+    }
+
+    private void writeActiveProfileStatement( MavenProject project )
+    {
+        List profiles = project.getActiveProfiles();
+
+        StringBuffer message = new StringBuffer();
+
+        message.append( "\n" );
+
+        message.append( "\n************************************************************************************" );
+        message.append( "\nActive Profiles for Project \'" ).append( project.getId() ).append( "\'" );
+        message.append( "\n************************************************************************************" );
+        message.append( "\n" );
+
+        if ( profiles == null || profiles.isEmpty() )
+        {
+            message.append( "There are no active profiles." );
+        }
+        else
+        {
+            message.append( "The following profiles are active:\n" );
+
+            for ( Iterator it = profiles.iterator(); it.hasNext(); )
+            {
+                Profile profile = (Profile) it.next();
+
+                message.append( "\n - " ).append( profile.getId() ).append( " (source: " )
+                    .append( profile.getSource() ).append( ")" );
+            }
+
         }
 
-        return artifactRepositoryFactory.createArtifactRepository( "local", "file://" + localRepository,
-                                                                   repositoryLayout, null, null );
+        message.append( "\n************************************************************************************" );
+        message.append( "\n\n" );
+
+        getLogger().debug( message.toString() );
+    }
+
+    /**
+     * @todo [BP] this might not be required if there is a better way to pass
+     * them in. It doesn't feel quite right.
+     * @todo [JC] we should at least provide a mapping of protocol-to-proxy for
+     * the wagons, shouldn't we?
+     */
+    private void resolveParameters( Settings settings )
+        throws ComponentLookupException, ComponentLifecycleException, SettingsConfigurationException
+    {
+        WagonManager wagonManager = (WagonManager) container.lookup( WagonManager.ROLE );
+
+        try
+        {
+            Proxy proxy = settings.getActiveProxy();
+
+            if ( proxy != null )
+            {
+                if ( proxy.getHost() == null )
+                {
+                    throw new SettingsConfigurationException( "Proxy in settings.xml has no host" );
+                }
+
+                wagonManager.addProxy( proxy.getProtocol(), proxy.getHost(), proxy.getPort(), proxy.getUsername(),
+                                       proxy.getPassword(), proxy.getNonProxyHosts() );
+            }
+
+            for ( Iterator i = settings.getServers().iterator(); i.hasNext(); )
+            {
+                Server server = (Server) i.next();
+
+                wagonManager.addAuthenticationInfo( server.getId(), server.getUsername(), server.getPassword(),
+                                                    server.getPrivateKey(), server.getPassphrase() );
+
+                wagonManager.addPermissionInfo( server.getId(), server.getFilePermissions(),
+                                                server.getDirectoryPermissions() );
+
+                if ( server.getConfiguration() != null )
+                {
+                    wagonManager.addConfiguration( server.getId(), (Xpp3Dom) server.getConfiguration() );
+                }
+            }
+
+            for ( Iterator i = settings.getMirrors().iterator(); i.hasNext(); )
+            {
+                Mirror mirror = (Mirror) i.next();
+
+                wagonManager.addMirror( mirror.getId(), mirror.getMirrorOf(), mirror.getUrl() );
+            }
+        }
+        finally
+        {
+            container.release( wagonManager );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    //
+    // ----------------------------------------------------------------------
+
+    public void contextualize( Context context )
+        throws ContextException
+    {
+        container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
+    }
+
+    public void initialize()
+        throws InitializationException
+    {
+        try
+        {
+            settings = getSettings();
+
+            resolveParameters( settings );
+        }
+        catch ( Exception e )
+        {
+            throw new InitializationException( "Can't initialize '" + getClass().getName() + "'", e );
+        }
     }
 }
