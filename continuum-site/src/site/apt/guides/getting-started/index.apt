@@ -18,6 +18,8 @@ Installing Continuum
  * <<<bin/macosx/run.sh>>> if you are using MacOS X.
  
  * <<<bin/plexus.sh>>> for others
+ 
+ <NOTE:> JAVA_HOME environment variable must be defined
 
  When Continuum is running you can access it with your browser on
  {{http://localhost:8080/continuum/}} or by using the XMLRPC interface on port 8000.
