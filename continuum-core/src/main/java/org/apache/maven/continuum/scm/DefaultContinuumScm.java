@@ -276,6 +276,8 @@ public class DefaultContinuumScm
         {
             repository.getProviderRepository().setUser( project.getScmUsername() );
 
+            repository.getProviderRepository().setPersistCheckout( true );
+
             if ( project.getScmPassword() != null )
             {
                 repository.getProviderRepository().setPassword( project.getScmPassword() );
