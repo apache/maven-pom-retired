@@ -209,12 +209,17 @@
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-bazaar</artifactId>
+        <version>1.0-beta-3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-clearcase</artifactId>
         <version>1.0-beta-3-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
-        <artifactId>maven-scm-provider-cvs</artifactId>
+        <artifactId>maven-scm-provider-cvsexe</artifactId>
         <version>1.0-beta-3-SNAPSHOT</version>
       </dependency>
       <dependency>
@@ -234,7 +239,7 @@
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
-        <artifactId>maven-scm-provider-svn</artifactId>
+        <artifactId>maven-scm-provider-svnexe</artifactId>
         <version>1.0-beta-3-SNAPSHOT</version>
       </dependency>
       <dependency>
