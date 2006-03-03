@@ -105,6 +105,11 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-bazaar</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-perforce</artifactId>
       <scope>runtime</scope>
     </dependency>
@@ -203,12 +208,12 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
-      <artifactId>maven-scm-provider-cvs</artifactId>
+      <artifactId>maven-scm-provider-cvsexe</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
-      <artifactId>maven-scm-provider-svn</artifactId>
+      <artifactId>maven-scm-provider-svnexe</artifactId>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

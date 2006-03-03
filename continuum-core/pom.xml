@@ -160,7 +160,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
-      <artifactId>maven-scm-provider-svn</artifactId>
+      <artifactId>maven-scm-provider-svnexe</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
