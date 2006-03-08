@@ -9,7 +9,7 @@ CMD=$1
 [ "$1" = "" ] && echo && echo "You must specify a checkout or update!" && echo && exit 1
 
 FROM=continuum@maven.zones.apache.org
-TO=continuum-dev@maven.apache.org
+TO=notifications@maven.apache.org
 DATE=`date`
 
 PID=$$
