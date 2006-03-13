@@ -37,8 +37,8 @@ Adding Projects to Continuum
 
  If there is a <<<<modules>>>> element inside the POM continuum will try to
  download the child projects by adding the module name to the end of the url.
- This makes it very easy to add a entire project to Continuum if you list all
- the child projects insode the POM.
+ This makes it very easy to add an entire project to Continuum if you list all
+ the child projects inside the POM.
 
  If you are using ViewCVS you can add your project with a url like this:
 
@@ -63,7 +63,7 @@ http://svn.codehaus.org/*checkout*/trunk/pom.xml?root=plexus
 
  []
 
- The notifiers is configured inside the <<<<ciManagement>>>> section of the POM
+ The notifiers are configured inside the <<<<ciManagement>>>> section of the POM
  like this:
 
 +--+
@@ -107,10 +107,10 @@ http://svn.codehaus.org/*checkout*/trunk/pom.xml?root=plexus
 
 * Adding Maven 1 Projects
 
- Adding a Maven 1 it pretty much like adding a Maven 2 project, pass it an URL
+ Adding a Maven 1 project is pretty much like adding a Maven 2 project, pass it a URL
  to a POM with SCM information and Continuum will add the projects.
 
- There are is a caveat though: The POM cannot extend a parent POM. When
+ There is a caveat though: The POM cannot extend a parent POM. When
  Continuum is downloading the POM it won't know how to find the parent POMs.
  The best way to use Continuum with Maven 1 projects is to give Continuum the
  root POM of your projects only and then have a special goal in the root

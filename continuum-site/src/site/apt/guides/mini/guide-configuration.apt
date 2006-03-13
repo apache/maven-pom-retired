@@ -22,20 +22,20 @@ Configuring Continuum
   * <<<from-mailbox>>> and <<<from-name>>>: The mailbox and name that will be
     set as the <<<From>>> header for all mails sent. It is important to ensure
     that the mailbox is a real account as most SMTP servers will verify that
-    the mailbox actually exists before accepting the mail. If the from mailbox
+    the mailbox actually exists before accepting the mail. If the <<<from-mailbox>>>
     is empty or not specified the nag email address for the project will be
     used.
 
   * <<<timestamp-format>>>: This is the timestamp format used for the dates in
     email messages.
 
- * The recipient source. This is the component that decides who should receive
-   the email. The only thing that can be configured here is a address that will
+ * The <<<RecipientSource>>> is the component that decides who should receive
+   the email. The only thing that can be configured here is an address that will
    be used as the recipient for all email sent. This configuration is mostly
    useful for people who want to make sure all email is sent to a specific
    account during testing or development.
 
- * The mail sender is the component that will send the email to the SMTP
+ * The <<<MailSender>>> is the component that will send the email to the SMTP
    server. The two properties that can be configured are:
 
   * <<<smtp-host>>>: The SMTP host. Make sure that this host will accept email.
@@ -78,7 +78,7 @@ Configuring Continuum
  This is a example configuration on how to configure Jetty with one normal HTTP
  listener and one proxy HTTP listener. With this configuration Jetty will
  listen on two ports; 8080 and 8090. Continuum can be used from either
- http://localhost:8080 or http://www.company.com/continuum. Note that the
+ <<<http://localhost:8080/continuum>>> or <<<http://www.company.com/continuum>>>. Note that the
  proxying listener will make Continuum write out URLs with the configured proxy
  host and port.
 
@@ -107,9 +107,9 @@ Configuring Continuum
 </service>
 +----+
 
-** Example Apache Configuration
+** Example Apache httpd Configuration
  
- This is a example configuration on how to configure Apache to work as a front
+ This is a example configuration on how to configure Apache httpd to work as a front
  end to Continuum. Make sure <<<mod_proxy>>> is installed and loaded and that
  Jetty is configured with a proxy HTTP listener on the proxy port.
 

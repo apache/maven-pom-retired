@@ -9,32 +9,32 @@ Configuring Continuum to start automatically on Linux 2
 
 * Introduction
 
- This document explains how to setup continuum to start automatically (when the machine boots)
- in linux. This is a procedure quite tipical for a linux system administrator, the
+ This document explains how to setup Continuum to start automatically (when the machine boots)
+ on linux. This is a procedure quite typical for a linux system administrator, the
  purpose of this document is to help you in case you don't have a linux sysadmin 
  at hand.
 
  This document is based on Debian GNU/Linux, all concepts should apply to other distributions
- and all procedures (tipically with some slight modificacion on directories paths) should apply.
+ and all procedures (typically with some slight modification on directories paths) should apply.
 
 * Prerequisites
 
- * Download continuum from {{{../../download.html}here}}.
+ * Download Continuum from {{{../../download.html}here}}.
  
- * extract the archive in <<</usr/local>>>
+ * Extract the archive in <<</usr/local>>>
 
-* Configuring continuum in init
+* Configuring Continuum in init
 
- Since the continuum linux script bin/linux/run.sh understands the same arguments as linux boot scripts, 
- there is no need to write a particular startup script to add continuum to the linux boot process.
+ Since the Continuum linux script bin/linux/run.sh understands the same arguments as linux boot scripts, 
+ there is no need to write a particular startup script to add Continuum to the linux boot process.
  All you need to do, as root, is:
 
 +--+
 ln -s /usr/local/continuum-[VERSION]/bin/linux/run.sh /etc/init.d/continuum
 +--+
 
- At this point you have continuum ready to be symlinked from different runlevels. This might 
- sound a bit esoteric, but it is not, you find very fast these words as soon as you start reading
+ At this point you have Continuum ready to be symlinked from different runlevels. This might 
+ sound a bit esoteric, but it is not, you will find these words very fast as soon as you start reading
  about the init process. Fortunately, Debian GNU/Linux comes with a very handy utility to create this 
  links, just run as root:
 
@@ -42,7 +42,7 @@ ln -s /usr/local/continuum-[VERSION]/bin/linux/run.sh /etc/init.d/continuum
 update-rc.d -n continuum defaults 80
 +--+
 
- If just copypasted this command, you will see something like this:
+ If you run this command, you will see something like this:
 
 +--+
  Adding system startup for /etc/init.d/continuum ...
@@ -55,6 +55,6 @@ update-rc.d -n continuum defaults 80
    /etc/rc5.d/S80continuum -> ../init.d/continuum
 +--+ 
 
- What you see is the symlinks that would be created. The above command didn't do anything that's 
- because the <<<-n>>> switch, remove it to get the real links creted. 
+ What you see is the symlinks that would be created. The above command didn't do anything
+ because of the <<<-n>>> switch, remove it to get the real links created. 
 

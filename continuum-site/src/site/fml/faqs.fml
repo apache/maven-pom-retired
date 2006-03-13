@@ -6,7 +6,7 @@
         <p>
           If you want to add a project that extends an other, you must add the parent project.
           When you add a project with sub-projects, Continuum will add all sub-projects, so you
-          need to provide an URL instead to uploading a POM so that Continuum can find all sub-projects.
+          need to provide a URL instead of uploading a POM so that Continuum can find all sub-projects.
         </p>
       </answer>
     </faq>
@@ -14,9 +14,9 @@
       <question>How can I add my maven 2 project with modules?</question>
       <answer>
         <p>
-          If your project has modules, you need to provide an URL instead of uploading a POM.
+          If your project has modules, you need to provide a URL instead of uploading a POM.
           When you add a project with modules, Continuum will add all sub-projects, and this
-          only works by submitting an URL.
+          only works by submitting a URL.
         </p>
       </answer>
     </faq>
@@ -27,21 +27,24 @@
           Continuum uses the command line return code for detecting a successful or failed execution.
         </p>
         <p>
-          If you use maven or ant, you need to add at the end of maven.bat and ant.bat, the following line :
+          If you use maven or ant, you need to add the following line at the end of <code>maven.bat</code> and <code>ant.bat</code> :
         </p>
         <source>
-if "%MAVEN_TERMINATE_CMD%" == "on" exit %ERROR_CODE%
+if "%MAVEN_TERMINATE_CMD%" == "on" exit %ERRORLEVEL%
         </source>
         <p>
-        If your bat file contains at the end an exit /B, this line must be copy before it.
-        You must add too, at the begin of $CONTINUUM/bin/win32/run.bat, the following lines if you run Continuum from command line :
+        If your bat file contains an <code>exit /B</code> at the end, this line must be inserted before it.
+        </p>
+        <p>
+        <b>This part is for Continuum &lt; 1.0.2</b>
+        You must also add the following lines at the begin of <code>$CONTINUUM/bin/win32/run.bat</code>, if you run Continuum from the command line :
         </p>
         <source>
 @echo off
 set MAVEN_TERMINATE_CMD=on
         </source>
         <p>
-        or this line in wrapper.conf, if you run Continuum as a service (works too with command line) :
+        or this line in <code>wrapper.conf</code>, if you run Continuum as a service (works with command line too) :
         </p>
         <source>
 set.MAVEN_TERMINATE_CMD=on
@@ -55,13 +58,13 @@ set.MAVEN_TERMINATE_CMD=on
       <question>Can i use file protocol in Add Project view?</question>
       <answer>
         <p>
-          File protocol is disabled by default for security reasons. You can allow it in $CONTINUUM_HOME/apps/continuum/conf/application.xml
+          File protocol is disabled by default for security reasons. You can allow it in <code>$CONTINUUM_HOME/apps/continuum/conf/application.xml</code>
         </p>
         <p>
           Uncomment the following line :
         </p>
         <source><![CDATA[
-          <allowedScheme implementation="java.lang.String">file</allowedScheme>
+<allowedScheme implementation="java.lang.String">file</allowedScheme>
         ]]></source>
       </answer>
     </faq>
@@ -70,14 +73,14 @@ set.MAVEN_TERMINATE_CMD=on
       <answer>
         <p>
         You're probably running the CVSNT client, or another application based on it, like TortoiseCVS. CVSNT stores passwords in the registry,
-        rather than the ~/.cvspass file. You'll need to issue the following command manually (but only once), with the appropriate information filled in:
+        rather than the <code>~/.cvspass</code> file. You'll need to issue the following command manually (but only once), with the appropriate information filled in:
         </p>
         <source>
 cvs -d :pserver:account@cvsserver:2401:/rootfolder login
         </source>
         <p>
         Also, note that the login will only be saved for the particular user who typed it. If you're running Continuum as a service, double-check the user
-        it is running as, and make sure that you run cvs login as that user.
+        it is running as, and make sure that you run <code>cvs login</code> as that user.
         </p>
       </answer>
     </faq>
@@ -94,7 +97,7 @@ cvs -d :pserver:account@cvsserver:2401:/rootfolder login
       </answer>
     </faq>
     <faq id="builds-keep-failing-because-continuum-cant-checkout-sources">
-      <question>Why Continuum builds keep failing with password is required even if I'm using anonymous or no password in CVS?</question>
+      <question>Why does Continuum builds keep failing with password is required even if I'm using anonymous or no password in CVS?</question>
       <answer>
         <p>
           If you keep getting this build error on your projects:
@@ -125,6 +128,46 @@ scm:cvs:pserver:username:@servername:path_to_repository:module_name
         </p>
       </answer>
     </faq>
-
+    <faq id="How-can-I-run-continuum-on-a-different-port">
+      <question>How can I run Continuum on a different port? I already have application X running on port 8000/8080.</question>
+      <answer>
+        <p>
+          Continuum uses two ports. Port 8000 is used for XML-RPC calls and port 8080 is used by the instance of Jetty that supplies the web interface for Continuum.
+        </p>
+        <p>
+          If you have another application already running on port 8000/8080, you will get an exception when you start Continuum.
+          If you want to change the port that Continuum uses you should edit the file <code>apps/continuum/conf/application.xml</code>.
+          Find the following section in that file:
+        </p>
+        <source><![CDATA[
+<application>
+  ...
+  <services>
+    <service>
+      <id>jetty</id>
+      <configuration>
+        <webapps>
+          <webapp>
+            <file>${plexus.home}/lib/continuum-web-1.0.2.jar</file>
+            <context>/continuum</context>
+            <extraction-path>${plexus.home}/webapp</extraction-path>
+            <listeners>
+              <http-listener>
+                <port>8080</port>	
+  ...
+    <service>
+      <id>xml-rpc</id>
+      <configuration>
+        <xmlrpc>
+          <port>8000</port>
+  ...
+        ]]></source>
+        <p>
+          Change the appropriate <code>&lt;port&gt;</code> elements to the port numbers you want for jetty and xml-rpc.
+          You need to restart Continuum for the changes to take effect.
+        </p>
+      </answer>
+    </faq>
+  
   </part>
 </faqs>

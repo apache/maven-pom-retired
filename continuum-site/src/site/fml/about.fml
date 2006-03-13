@@ -60,7 +60,7 @@
           in the <i>Channel</i> box).
         </p>
         <p>
-          Please remember that is is a preview release, so please be patient with features that are not yet implemented,
+          Please remember that it is a preview release, so please be patient with features that are not yet implemented,
           and be prepared to do some research and to help out yourself wherever possible.
         </p>
       </answer>
@@ -93,18 +93,28 @@
         </p>
         <p>
           To checkout the continuum-site project from the ASF Subversion repository, download the Subversion client for
-          your platform and run: <code>svn co http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-site</code>
+          your platform and run:
+          <source>
+svn co http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-site
+          </source>
         </p>
         <p>
           To build the continuum-site project you will need to use Maven 2.  You can download Maven 2 from the <a 
           href="http://maven.apache.org/maven2/download.html">Downloads page on the Maven 2 project site</a>.  Once you
           have installed Maven 2 and added it to your <code>PATH</code>, you can build the Continuum project site by
-          executing the <code>site:site</code> goal with the following command: <code>m2 site:site</code>.
+          executing the <code>site:site</code> goal with the following command:
+          <source>
+mvn site:site
+          </source>
           After executing the <code>site:site</code> goal, the Continuum site will be stored in the
           <code>target/site</code> directory.
         </p>
         <p>
-          Once you have updated the documentation, generate a patch by running <code>svn diff > site-patch.txt</code>.  Create a
+          Once you have updated the documentation, generate a patch by running
+          <source><![CDATA[
+svn diff > site-patch.txt
+          ]]></source>
+          Create a
           new issue in the Continuum JIRA project, and attach your patch to this issue.  Before submitting the patch, make sure
           to build the Continuum site locally and proofread for any typos.
         </p>
