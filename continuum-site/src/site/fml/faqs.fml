@@ -64,7 +64,7 @@ set.MAVEN_TERMINATE_CMD=on
           Uncomment the following line :
         </p>
         <source><![CDATA[
-<allowedScheme implementation="java.lang.String">file</allowedScheme>
+<allowedScheme>file</allowedScheme>
         ]]></source>
       </answer>
     </faq>
