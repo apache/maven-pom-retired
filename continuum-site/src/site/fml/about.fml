@@ -95,7 +95,7 @@
           To checkout the continuum-site project from the ASF Subversion repository, download the Subversion client for
           your platform and run:
           <source>
-svn co http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-site
+svn co https://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-site
           </source>
         </p>
         <p>
@@ -108,6 +108,11 @@ mvn site:site
           </source>
           After executing the <code>site:site</code> goal, the Continuum site will be stored in the
           <code>target/site</code> directory.
+        </p>
+        <p>
+          If you receive an error resolving the artifact <code>continuum-parent</code>, download the parent pom.xml from <a 
+          href="http://svn.apache.org/repos/asf/maven/continuum/trunk/pom.xml">here</a> and place it in the directory above your
+          <code>continuum-site</code> directory.  Then try the build again.
         </p>
         <p>
           Once you have updated the documentation, generate a patch by running

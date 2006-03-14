@@ -122,7 +122,7 @@ http://svn.codehaus.org/*checkout*/trunk/pom.xml?root=plexus
  When adding Ant projects you have to specify the project's name, SCM URL, 
  version and the targets to execute.
 
- <NOTE:> The SCM URL is a Maven SCM URL. Here's an example of what an
+ <NOTE:> The SCM URL is a {{{http://maven.apache.org/scm/scm-url-format.html}Maven SCM URL}}. Here's an example of what an
  SCM URL looks like:
  <<<scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk>>>
 
@@ -135,6 +135,31 @@ http://svn.codehaus.org/*checkout*/trunk/pom.xml?root=plexus
  <NOTE:> The SCM URL is a Maven SCM URL. Here's an example of what an
  SCM URL looks like:
  <<<scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk>>>
+
+ To specify the shell script to be executed, click on the shell project and
+ click "Add" under the "Build Definitions" section. This script should <<at
+ least>> be able to run Maven.
+
+ Here is a sample batch script that calls <<<mvn.bat>>> in a Windows environment:
+
++--+ 
+@echo off
+
+cmd /C mvn.bat MAVEN PARAMETERS HERE
+if ERRORLEVEL 1 goto error
+goto end
+
+:error
+exit 1
+
+:end
+exit 0
++--+
+
+ The script executes Maven and obtains the exit code from it.  You may add
+ post-build tasks to the <<<:error>>> and/or <<<:end>>> sections provided they
+ are placed before the <<<exit>>> statements.  Pre-build tasks should be added
+ before the call to <<<mvn.bat>>>.
 
 Building Projects
 

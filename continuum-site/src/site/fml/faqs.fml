@@ -168,6 +168,28 @@ scm:cvs:pserver:username:@servername:path_to_repository:module_name
         </p>
       </answer>
     </faq>
-  
+    <faq id="build-entire-project-recursively-from-parent">
+      <question>How can I build the entire project recursively from the parent?</question>
+      <answer>
+        <p>
+          If you want to build recursively from the parent, you have to remove the <code>--non-recursive</code> or <code>-N</code> argument under the
+          "Build Definitions" section of your parent project.
+        </p>
+        <p>
+          Ensure that your entire project can be checked out using the SCM URL in your parent project.
+        </p>
+        <p>
+          For CVS users who have each child project in a separate module, you have several options:
+          <p>
+          <ui>
+            <li>Refactor the CVS directory structure to a more standard one (i.e. a module with the parent POM at the base and child projects as subdirectories)</li>
+            <li>Keep the structure and create a new module that contains a parent POM and a list of symbolic links to your actual CVS modules</li>
+          </ui>
+          </p>
+          These options ensure that your child projects will not be checked out into separate numbered working directories. Instead, they will be checked out
+          correctly under a single working directory.
+        </p>
+      </answer>
+    </faq>
   </part>
 </faqs>
