@@ -24,6 +24,21 @@ Installing Continuum
  When Continuum is running you can access it with your browser on
  {{http://localhost:8080/continuum/}} or by using the XMLRPC interface on port 8000.
 
+Installing Continuum as a service
+
+ If you want to install Continuum as a service in Windows, execute:
+ <<<bin/win32/InstallService.bat>>> after running <<<bin/win32/run.bat>>>. If
+ the window closes or there is no error, then the service was installed
+ successfully.
+
+ By default, the service logs on as the <Local System> account. Be sure to
+ change this to an account where you want the service to start upon login.
+
+ You can change this by going into Computer Management (right click <My Computer>
+ and select <Manage>), selecting <Services>, and double-clicking on <<<continuum>>>.
+ In the <Log On> tab, you can specify the account along with the credentials
+ required.
+
 Fixing Maven and ant scripts for Windows
 
  {{{../../faqs.html#how-does-continuum-detect-a-successful-build}How does Continuum detect a successful build?}}
