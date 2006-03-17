@@ -1,5 +1,11 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven</groupId>
+    <artifactId>maven-parent</artifactId>
+    <version>1</version>
+    <relativePath>../pom/maven/pom.xml</relativePath>
+  </parent>
   <groupId>org.apache.maven.continuum</groupId>
   <artifactId>continuum-parent</artifactId>
   <packaging>pom</packaging>
@@ -10,17 +16,6 @@
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/CONTINUUM</url>
   </issueManagement>
-  <ciManagement>
-    <system>continuum</system>
-    <url>http://maven.zones.apache.org:8080/continuum</url>
-    <notifiers>
-      <notifier>
-        <configuration>
-          <address>continuum-dev@maven.apache.org</address>
-        </configuration>
-      </notifier>
-    </notifiers>
-  </ciManagement>
   <inceptionYear>2003</inceptionYear>
   <mailingLists>
     <mailingList>
@@ -35,76 +30,12 @@
       <unsubscribe>continuum-users-unsubscribe@maven.apache.org</unsubscribe>
       <archive>http://mail-archives.apache.org/mod_mbox/maven-continuum-users/</archive>
     </mailingList>
-    <mailingList>
-      <name>Apache Announce List</name>
-      <subscribe>announce-subscribe@apache.org</subscribe>
-      <unsubscribe>announce-unsubscribe@apache.org</unsubscribe>
-      <post>announce@apache.org</post>
-      <archive>mail-archives.apache.org/mod_mbox/www-announce/</archive>
-    </mailingList>
   </mailingLists>
-  <developers>
-    <developer>
-      <id>jvanzyl</id>
-      <name>Jason van Zyl</name>
-      <email>jason@maven.org</email>
-      <organization>Maven</organization>
-      <roles>
-        <role>Architect</role>
-        <role>Release Manager</role>
-      </roles>
-      <timezone>-5</timezone>
-    </developer>
-    <developer>
-      <id>brett</id>
-      <name>Brett Porter</name>
-      <email>brett@apache.org</email>
-      <organization>ASF</organization>
-      <roles>
-        <role>Java Developer</role>
-        <role>PMC Member</role>
-      </roles>
-      <timezone>+10</timezone>
-    </developer>
-    <developer>
-      <id>evenisse</id>
-      <name>Emmanuel Venisse</name>
-      <email>evenisse@apache.org</email>
-      <organization>ASF</organization>
-      <roles>
-        <role>Java Developer</role>
-        <role>PMC Member</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>trygvis</id>
-      <name>Trygve Laugstol</name>
-      <email>trygvis@apache.org</email>
-      <organization>Apache</organization>
-      <roles>
-        <role>Java Developer</role>
-        <role>PMC Member</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-  </developers>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/trunk/</developerConnection>
     <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/trunk/</url>
   </scm>
-  <organization>
-    <name>Apache</name>
-    <url>http://www.apache.org/</url>
-  </organization>
   <build>
     <pluginManagement>
       <plugins>
@@ -129,34 +60,6 @@
     <module>continuum-webapp</module>
     <module>continuum-xmlrpc</module>
   </modules>
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <id>snapshots</id>
-      <name>Maven Snapshot Development Repository</name>
-      <url>http://snapshots.maven.codehaus.org/maven2</url>
-    </repository>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <id>apache.snapshots</id>
-      <name>Apache Development Repository</name>
-      <url>http://cvs.apache.org/maven-snapshot-repository</url>
-    </repository>
-  </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <id>snapshots</id>
-      <name>Maven Central Plugins Development Repository</name>
-      <url>http://snapshots.maven.codehaus.org/maven2</url>
-    </pluginRepository>
-  </pluginRepositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -434,16 +337,4 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  <distributionManagement>
-    <repository>
-      <id>repo1</id>
-      <name>Maven Repository</name>
-      <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
-    </repository>
-    <snapshotRepository>
-      <id>snapshots</id>
-      <name>Maven Central Development Repository</name>
-      <url>scp://repo1.maven.org/home/projects/maven/repository-staging/snapshots/maven2</url>
-    </snapshotRepository>
-  </distributionManagement>
 </project>
