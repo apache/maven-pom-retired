@@ -2,6 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven</groupId>
+    <artifactId>maven-parent</artifactId>
+    <version>1</version>
+    <relativePath>../pom/maven/pom.xml</relativePath>
+  </parent>
   <groupId>org.apache.maven</groupId>
   <artifactId>maven-jxr</artifactId>
   <name>Maven JXR</name>
@@ -12,16 +18,6 @@
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/JXR</url>
   </issueManagement>
-  <ciManagement>
-    <system>continuum</system>
-    <notifiers>
-      <notifier>
-        <configuration>
-          <address>dev@maven.apache.org</address>
-        </configuration>
-      </notifier>
-    </notifiers>
-  </ciManagement>
   <mailingLists>
     <mailingList>
       <name>Maven User List</name>
@@ -37,56 +33,7 @@
       <post>dev@maven.apache.org</post>
       <archive>http://mail-archives.apache.org/mod_mbox/maven-dev</archive>
     </mailingList>
-    <mailingList>
-      <name>Apache Announce List</name>
-      <subscribe>announce-subscribe@apache.org</subscribe>
-      <unsubscribe>announce-unsubscribe@apache.org</unsubscribe>
-      <post>announce@apache.org</post>
-      <archive>mail-archives.apache.org/mod_mbox/www-announce/</archive>
-    </mailingList>
   </mailingLists>
-  <developers>
-    <developer>
-      <id>evenisse</id>
-      <name>Emmanuel Venisse</name>
-      <email>emmanuel@venisse.net</email>
-      <organization></organization>
-      <roles>
-        <role>Java Developer</role>
-        <role>Release Manager</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>jvanzyl</id>
-      <name>Jason van Zyl</name>
-      <email>jason@zenplex.com</email>
-      <organization>Zenplex</organization>
-      <roles>
-        <role>Architect</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>brett</id>
-      <name>Brett Porter</name>
-      <email>brett@apache.org</email>
-      <organization>ASF</organization>
-      <roles>
-        <role>Java Developer</role>
-        <role>PMC Member</role>
-      </roles>
-      <timezone>+10</timezone>
-    </developer>
-    <developer>
-      <id>fgiust</id>
-      <name>Fabrizio Giustina</name>
-      <email>fgiust@apache.org</email>
-      <organization>openmind</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-  </developers>
   <contributors>
     <contributor>
       <name>Fabrice Bellingard</name>
@@ -94,22 +41,11 @@
       <timezone>+1</timezone>
     </contributor>
   </contributors>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/jxr/trunk</connection>
     <developerConnection>scm:svn:http://svn.apache.org/repos/asf/maven/jxr/trunk</developerConnection>
     <url>http://svn.apache.org/viewcvs.cgi/maven/jxr/trunk</url>
   </scm>
-  <organization>
-    <name>Apache Software Foundation</name>
-    <url>http://www.apache.org/</url>
-  </organization>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -140,16 +76,6 @@
     </dependency>
   </dependencies>
   <distributionManagement>
-    <repository>
-      <id>repo1</id>
-      <name>Maven Central Repository</name>
-      <url>scp://repo1.maven.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
-    </repository>
-    <snapshotRepository>
-      <id>snapshots</id>
-      <name>Maven Central Development Repository</name>
-      <url>scp://repo1.maven.org/home/projects/maven/repository-staging/snapshots/maven2</url>
-    </snapshotRepository>
     <site>
       <id>website</id>
       <url>scpexe://minotaur.apache.org/www/maven.apache.org/jxr/</url>
