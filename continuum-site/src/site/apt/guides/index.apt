@@ -18,7 +18,7 @@ Documentation
 
  * {{{mini/guide-linux-boot.html}Guide to Configuring Continuum to start automatically on Linux}}
 
- * {{{mini/guide-soap-api.html}Guide to using the SOAP API}}
+ * {{{mini/guide-xmlrpc-api.html}Guide to using the XML-RPC API}}
 
 
 * Introductory Material

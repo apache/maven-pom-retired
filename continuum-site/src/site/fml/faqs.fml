@@ -240,5 +240,13 @@ dyld: lazy symbol binding failed: Symbol not found: _ftime
         </p>
       </answer>
     </faq>
+    <faq id="add-an-scm-hook-script">
+      <question>How can I build projects with a scm post-commit hook?</question>
+      <answer>
+        <p>
+          If your SCM support hook scripts, you'll need to write an <a href="guides/mini/guide-xmlrpc-api.html">xml-rpc client</a> for Continuum and call it in your post-commit script.
+        </p>
+      </answer>
+    </faq>
   </part>
 </faqs>

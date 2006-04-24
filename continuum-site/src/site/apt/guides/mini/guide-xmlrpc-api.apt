@@ -1,0 +1,109 @@
+ ------
+ Guide to using the XML-RPC API
+ ------
+ Emmanuel Venisse
+ ------
+ April 24, 2006
+
+Getting Started
+
+ Continuum has a XML-RPC API which makes it easy to add, remove, view and manipulate
+ builds from within your applications. Continuum includes a client class to access this
+ API. Alternatively, you may generate a client from favorite XML-RPC toolkit
+ (such as the toolkits for PERL or .NET). If you are using a client other than the one
+ mentioned below, you'll ned to write a code similar to the one in
+ {{{http://svn.apache.org/viewcvs.cgi/maven/continuum/tags/continuum-1.0.3/continuum-rpc-client/src/main/java/org/apache/maven/continuum/rpc/ProjectsReader.java?rev=395968&view=markup}ProjectsReader}}.
+
+ The API provides the following operations:
+
+ * addProject
+
+ * editProject
+
+ * buildProject
+
+ * refreshProject
+
+ * readProjects
+
+Using the Java Client
+
+* Creating a Client
+
+ The jar to use is {{{http://www.ibiblio.org/maven2/org/apache/maven/continuum/continuum-rpc-client/1.0.3/continuum-rpc-client-1.0.3.jar}here}}.
+ You can include it in your classpath or in your pom if you make your client with maven2.
+
++--+
+import org.apache.maven.continuum.model.project.Project
+import org.apache.maven.continuum.rpc.ProjectsReader;
+...
+
+String url = "http://localhost:8000/continuum";
+ProjectsReader pr = new ProjectsReader( new URL( address ) );
++--+
+
+* Adding a Project
+
++--+
+Project project = new Project();
+project.setExecutorId( "maven2" );
+project.setScmUrl( "scm:svn...." );
+
+pr.addProject( project );
++--+
+
+ The project type tells Continuum what type of project to expect. Valid values are
+ "ant", "shell", "maven-1", and "maven2".
+
+* Getting a Project
+
++--+
+Project project = new Project();
+project.setId( projectId );
+
+pr.refreshProject( project );
++--+
+
+* Getting the projects list
+
++--+
+projects = pr.readProjects();
+
+for ( int i = 0; i < projects.length; i++ )
+{
+    System.out.println( projects[i] + " - Name=" + projects[i].getName() + " :" + projects[i].getState() );
+}
++--+
+
+* Building a Project
+
++--+
+Project project = new Project();
+project.setId( projectId );
+
+pr.buildProject( project );
++--+
+
+* Project State
+
+ In one of the above code snippets, you see that we can check the build state.
+ The build state can be one of several values:
+
+*---------*------------------------+
+| 1 or 10 | New Build              |
+*---------*------------------------+
+| 2       | Successful Build       |
+*---------*------------------------+
+| 3       | Failed Build           |
+*---------*------------------------+
+| 4       | Error building         |
+*---------*------------------------+
+| 6       | Build in process       |
+*---------*------------------------+
+| 7       | Checking out from SCM  |
+*---------*------------------------+
+| 8       | Updating from SCM      |
+*---------*------------------------+
+| 9       | Warned Build           |
+*---------*------------------------+
+
