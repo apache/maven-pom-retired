@@ -2,8 +2,9 @@
  Continuum Feature
  ------
  Jason van Zyl
+ Emmanuel Venisse
  ------
- 25 October 2005
+ 24 April 2006
  -----
 
 Continuum Features
@@ -11,16 +12,18 @@ Continuum Features
  * Tight integration with Maven 2.x
 
  * Tight integration with {{{http://maven.apache.org/scm}Maven SCM}}
-   
+
    * Subversion
-   
+
    * CVS
-   
+
    * Starteam
 
    * Clearcase
 
    * Perforce
+
+   * bazaar
 
  * Easy to use web-based setup and interface
 
@@ -28,7 +31,7 @@ Continuum Features
 
  * An easy way to add new projects, see the adding projects section page for more information
  
- * An XML-RPC and SOAP interface for integration, automation and remoting
+ * An XML-RPC interface for integration, automation and remoting
  
  * Mail notification
  

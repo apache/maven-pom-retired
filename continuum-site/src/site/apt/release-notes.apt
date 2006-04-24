@@ -1,16 +1,16 @@
  ------
- Release Notes - Continuum 1.0.2
+ Release Notes - Continuum 1.0.3
  ------
  Emmanuel Venisse
  ------
- 09 December 2005
+ 24 April 2006
  ------
 
 Release Note
 
-  The Apache Maven team is pleased to announce Continuum 1.0.2.
+  The Apache Maven team is pleased to announce Continuum 1.0.3.
 
-  Continuum 1.0.2 is available for download from {{http://maven.apache.org/continuum/download.html}}
+  Continuum 1.0.3 is available for download from {{http://maven.apache.org/continuum/download.html}}
 
   Continuum is a continous integration server that will ensure the health of your code base.
 
@@ -18,17 +18,13 @@ Release Note
 
    * Improved performance
 
-   * Support for Clearcase
+   * New web interface
 
-   * Support for Perforce
+   * Added an internal maven repository for built projects
 
-   * Added a default build definition for ant project
+   * Improved the project build for projects with multiple build definitions
 
-   * Added specific build definition screens for Ant and shell projects
-
-   * Added support of Ant build file in a subdirectory
-
-   * Allowed modification of default schedule
+   * Improved maven2 setings/profiles loading
 
    * Bug fixes
 

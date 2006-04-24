@@ -7,7 +7,7 @@
   <body>
     <section name="Welcome to Continuum">
       <div id="downloadbox">
-        <h5>Get Continuum 1.0.2</h5>
+        <h5>Get Continuum 1.0.3</h5>
         <p>
           <a href="download.html">
             <img valign="top" src="http://maven.apache.org/images/folder-open.gif" border="0" alt="" title="download"/>
@@ -68,6 +68,7 @@
     <section name="Latest News">
       <p>
         <ul>
+          <li>Continuum 1.0.3 Final Release Available - April 25 2006</li>
           <li>Continuum 1.0.2 Final Release Available - December 09 2005</li>
           <li>Continuum 1.0.1 Final Release Available - November 16 2005</li>
           <li>Continuum 1.0 Final Release Available - October 25 2005</li>
