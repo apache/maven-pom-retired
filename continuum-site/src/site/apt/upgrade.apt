@@ -1,41 +1,58 @@
  ------
  Upgrade
  ------
- Dan T. Tran
- <dantran@apache.org>
+ Emmanuel Venisse
+ Dan T. Tran <dantran@apache.org>
  ------
- December 9, 2005
+ April 24, 2006
 
 Upgrade
 
   The following contains migration instructions between Continuum releases. 
   
 
+* 1.0.2 to 1.0.3
+
+  * Shutdown your Continuum 1.0.2
+
+  * Install your Continuum 1.0.3
+
+  * Initialize your Continuum 1.0.3 by starting it from command line, wait for it to complete the initialization,
+    and then shut it down.
+
+  * Replace Continuum 1.0.3's <<<apps/continuum/database>>> with Continuum 1.0.2's <<<apps/continuum/database>>>.
+
+  * Start your Continuum 1.0.3. 
+
+  * Login and change "Working Directory" and "Build Output Directory" in the Configuration screen, if needed. If you use default
+    values for these directories, you only need to copy them from <<<apps/continuum/>>>. A best practice is to use them out of
+    Continuum sub-directories.
+
 * 1.0.1 to 1.0.2
 
   Since there are no changes in the database schema, the migration steps are mainly to replace Continuum 1.0.2's database 
   with Continuum 1.0.1's database.  Here are detailed instructions:
-  
+
   * Shutdown your Continuum 1.0.1.  
-  
+
   * Install your Continuum 1.0.2
-  
+
   * Initialize your Continuum 1.0.2 by starting it from command line, wait for it to complete the initialization,
     and then shut it down.
-    
+
   * Replace Continuum 1.0.2's <<<apps/continuum/conf/application.xml>>> with Continuum 1.0.1's <<<apps/continuum/conf/application.xml>>>.
     Edit application.xml and replace any reference of 1.0.1 with 1.0.2.
-    
+
   * Replace Continuum 1.0.2's <<<apps/continuum/database>>> with Continuum 1.0.1's <<<apps/continuum/database>>>.
-  
+
   * Start your Continuum 1.0.2. 
-  
+
   * Login and change "Working Directory" and "Build Output Directory" if needed. If you use default values for these directories,
     you only need to copy them from <<<apps/continuum/>>>.
-  
+
   []
-  
-  If you have Continuum running as UNIX daemon or Windows NT service, make sure you modify the configuration 
-  to point to new Continuum.
+
+  [Note:] If you have Continuum running as UNIX daemon or Windows NT service, make sure you modify the configuration 
+          to point to new Continuum.
   
   
