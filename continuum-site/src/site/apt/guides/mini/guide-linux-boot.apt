@@ -29,7 +29,7 @@ Configuring Continuum to start automatically on Linux 2
  there is no need to write a particular startup script to add Continuum to the linux boot process.
  All you need to do, as root, is:
 
- * In a Debian-based system
+** In a Debian-based system
 
 +--+
 ln -s /usr/local/continuum-[VERSION]/bin/linux/run.sh /etc/init.d/continuum
@@ -60,7 +60,7 @@ update-rc.d -n continuum defaults 80
  What you see is the symlinks that would be created. The above command didn't do anything
  because of the <<<-n>>> switch, remove it to get the real links created. 
 
- * In a RedHat-based system
+** In a RedHat-based system
 
  Configuring Continuum in a RedHat-based system (like Fedora Core) is slightly different: Instead of 
  running update-rc.d, you need to add a new service using chkconfig. And in order to add Continuum to chkconfig,
