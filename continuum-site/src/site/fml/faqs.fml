@@ -63,9 +63,9 @@ set.MAVEN_TERMINATE_CMD=on
         <p>
           Uncomment the following line :
         </p>
-        <source><![CDATA[
+        <source>
 <allowedScheme>file</allowedScheme>
-        ]]></source>
+        </source>
       </answer>
     </faq>
     <faq id="i-m-running-on-windows-and-continuum-cant-log-to-my-cvs-repository-whats-going-on">
@@ -139,7 +139,7 @@ scm:cvs:pserver:username:@servername:path_to_repository:module_name
           If you want to change the port that Continuum uses you should edit the file <code>apps/continuum/conf/application.xml</code>.
           Find the following section in that file:
         </p>
-        <source><![CDATA[
+        <source>
 <application>
   ...
   <services>
@@ -154,14 +154,38 @@ scm:cvs:pserver:username:@servername:path_to_repository:module_name
             <listeners>
               <http-listener>
                 <port>8080</port>	
-  ...
+              </http-listener>
+              <!--
+              <proxy-http-listener>
+                <port>8090</port>
+                <proxy-host>localhost</proxy-host>
+                <proxy-port>80</proxy-port>
+              </proxy-http-listener>
+              -->
+            </listeners>
+          </webapp>
+        </webapps>
+      </configuration>
+    </service>
+
     <service>
       <id>xml-rpc</id>
       <configuration>
         <xmlrpc>
           <port>8000</port>
-  ...
-        ]]></source>
+        </xmlrpc>
+        <handlers>
+          <handler>
+            <role>org.apache.maven.continuum.xmlrpc.ContinuumXmlRpc</role>
+            <name>continuum</name>
+          </handler>
+        </handlers>
+      </configuration>
+    </service>
+  </services>
+    ...
+</application>
+        </source>
         <p>
           Change the appropriate <code>&lt;port&gt;</code> elements to the port numbers you want for jetty and xml-rpc.
           You need to restart Continuum for the changes to take effect.
@@ -188,6 +212,31 @@ scm:cvs:pserver:username:@servername:path_to_repository:module_name
           </p>
           These options ensure that your child projects will not be checked out into separate numbered working directories. Instead, they will be checked out
           correctly under a single working directory.
+        </p>
+      </answer>
+    </faq>
+    <faq id="cant-run-on-macosx">
+      <question>Why $CONTINUUM/bin/macosx/run.sh doesn't work for me?</question>
+      <answer>
+        <p>
+          On some MacOS X version, The <a href="http://wrapper.tanukisoftware.org/">Java Service Wrapper</a> used by Continuum doesn't work with an error like this:
+        </p>
+        <source>
+$ run.sh console
+Running continuum...
+wrapper  | --> Wrapper Started as Console
+dyld: lazy symbol binding failed: Symbol not found: _ftime
+        </source>
+        <p>
+          You can run <b>$CONTINUUM/bin/plexus.sh</b> instead.
+        </p>
+      </answer>
+    </faq>
+    <faq id="cant-run-on-solaris">
+      <question>Why $CONTINUUM/bin/solaris/run.sh doesn't work for me?</question>
+      <answer>
+        <p>
+          This script is only for sparc processor. If you have an Intel processor, you must run <b>$CONTINUUM/bin/plexus.sh</b> instead.
         </p>
       </answer>
     </faq>
