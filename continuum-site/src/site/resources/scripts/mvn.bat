@@ -38,10 +38,10 @@
 @REM Execute a user defined script before this one
 if exist "%HOME%\mavenrc_pre.bat" call "%HOME%\mavenrc_pre.bat"
 
+set ERROR_CODE=0
+
 @REM set local scope for the variables with windows NT shell
 if "%OS%"=="Windows_NT" @setlocal
-
-set ERROR_CODE=0
 
 @REM ==== START VALIDATION ====
 if not "%JAVA_HOME%" == "" goto OkJHome
@@ -67,7 +67,7 @@ goto error
 :chkMHome
 if not "%M2_HOME%"=="" goto valMHome
 
-if "%OS%"=="Windows_NT" SET M2_HOME=%~dps0\..
+if "%OS%"=="Windows_NT" SET M2_HOME=%~dp0\..
 if not "%M2_HOME%"=="" goto valMHome
 
 echo.
