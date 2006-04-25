@@ -24,7 +24,7 @@ Release Note
 
    * Improved the project build for projects with multiple build definitions
 
-   * Improved maven2 setings/profiles loading
+   * Improved maven2 settings/profiles loading
 
    * Bug fixes
 
