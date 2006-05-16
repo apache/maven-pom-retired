@@ -1,0 +1,22 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>continuum</groupId>
+  <artifactId>foo</artifactId>
+  <version>1.0</version>
+  <ciManagement>
+    <notifiers>
+      <notifier>
+        <configuration>
+          <address>foo@bar</address>
+        </configuration>
+      </notifier>
+    </notifiers>
+  </ciManagement>
+  <scm>
+    <connection>scm:cvs:ext:${user.name}@company.org:/home/company/cvs:${moduleName}/${pom.artifactId}</connection>
+    <developerConnection>scm:cvs:ext:${user.name}@company.org:/home/company/cvs:${moduleName}/${pom.artifactId}</developerConnection>
+  </scm>
+  <properties>
+    <moduleName>project</moduleName>
+  </properties>
+</project>

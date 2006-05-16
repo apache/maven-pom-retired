@@ -19,8 +19,8 @@ package org.apache.maven.continuum.initialization;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.Permission;
-import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
+import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
@@ -54,8 +54,6 @@ public class DefaultContinuumInitializer
 
     //TODO: move this to an other place
     public static final String DEFAULT_SCHEDULE_NAME = "DEFAULT_SCHEDULE";
-
-    private Schedule defaultSchedule;
 
     private SystemConfiguration systemConf;
 
@@ -94,9 +92,9 @@ public class DefaultContinuumInitializer
 
             if ( s == null )
             {
-                defaultSchedule = createDefaultSchedule();
+                Schedule defaultSchedule = createDefaultSchedule();
 
-                defaultSchedule = store.addSchedule( defaultSchedule );
+                store.addSchedule( defaultSchedule );
             }
 
             // Permission
@@ -164,7 +162,7 @@ public class DefaultContinuumInitializer
         createPermission( "manageUsers", "Manage Users/Groups" );
     }
 
-    private Permission createPermission( String name, String description)
+    private Permission createPermission( String name, String description )
         throws ContinuumStoreException
     {
         Permission perm = store.getPermission( name );
@@ -199,7 +197,7 @@ public class DefaultContinuumInitializer
 
             adminGroup.setPermissions( adminPermissions );
 
-            adminGroup = store.addUserGroup( adminGroup );
+            store.addUserGroup( adminGroup );
         }
 
         // Continuum Guest
@@ -219,7 +217,7 @@ public class DefaultContinuumInitializer
 
             guestGroup.setPermissions( guestPermissions );
 
-            guestGroup = store.addUserGroup( guestGroup );
+            store.addUserGroup( guestGroup );
         }
     }
 
@@ -238,7 +236,7 @@ public class DefaultContinuumInitializer
 
             guest.setGuest( true );
 
-            guest = store.addUser( guest );
+            store.addUser( guest );
         }
     }
 }

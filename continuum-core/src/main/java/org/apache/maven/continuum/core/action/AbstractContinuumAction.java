@@ -16,6 +16,7 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.scm.ScmResult;
@@ -38,7 +39,11 @@ public abstract class AbstractContinuumAction
 
     public static final String KEY_PROJECT_ID = "project-id";
 
+    public static final String KEY_PROJECT = "project";
+
     public static final String KEY_BUILD_DEFINITION_ID = "build-definition-id";
+
+    public static final String KEY_BUILD_DEFINITION = "build-definition";
 
     public static final String KEY_UNVALIDATED_PROJECT = "unvalidated-project";
 
@@ -57,6 +62,8 @@ public abstract class AbstractContinuumAction
     public static final String KEY_UPDATE_SCM_RESULT = "update-result";
 
     public static final String KEY_TRIGGER = "trigger";
+
+    public static final String KEY_FIRST_RUN = "first-run";
 
     // ----------------------------------------------------------------------
     // Utils
@@ -81,6 +88,11 @@ public abstract class AbstractContinuumAction
         return getInteger( context, KEY_PROJECT_ID );
     }
 
+    public static Project getProject( Map context )
+    {
+        return (Project) getObject( context, KEY_PROJECT );
+    }
+
     public static int getProjectGroupId( Map context )
     {
         return Integer.valueOf( getString( context, KEY_PROJECT_GROUP_ID ) ).intValue();
@@ -89,6 +101,11 @@ public abstract class AbstractContinuumAction
     public static int getBuildDefinitionId( Map context )
     {
         return getInteger( context, KEY_BUILD_DEFINITION_ID );
+    }
+
+    public static BuildDefinition getBuildDefinition( Map context )
+    {
+        return (BuildDefinition) getObject( context, KEY_BUILD_DEFINITION );
     }
 
     public static String getBuildId( Map context )

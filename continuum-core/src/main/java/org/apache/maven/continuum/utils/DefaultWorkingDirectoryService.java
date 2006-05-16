@@ -18,7 +18,6 @@ package org.apache.maven.continuum.utils;
 
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.Project;
-import org.apache.maven.continuum.store.ContinuumStore;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.io.File;
@@ -31,11 +30,6 @@ public class DefaultWorkingDirectoryService
     extends AbstractLogEnabled
     implements WorkingDirectoryService
 {
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumStore store;
-
     /**
      * @plexus.requirement
      */

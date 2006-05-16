@@ -24,8 +24,8 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.UserGroup;
-import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
 import java.io.File;
@@ -63,6 +63,9 @@ public interface Continuum
     Collection getProjects()
         throws ContinuumException;
 
+    Collection getProjectsWithDependencies()
+        throws ContinuumException;
+
     BuildResult getLatestBuildResultForProject( int projectId );
 
     Map getLatestBuildResults();
@@ -74,6 +77,9 @@ public interface Continuum
     // ----------------------------------------------------------------------
 
     boolean isInBuildingQueue( int projectId )
+        throws ContinuumException;
+
+    boolean isInBuildingQueue( int projectId, int buildDefinitionId )
         throws ContinuumException;
 
     boolean isInCheckoutQueue( int projectId )
@@ -191,7 +197,7 @@ public interface Continuum
     void addBuildDefinition( int projectId, BuildDefinition buildDefinition )
         throws ContinuumException;
 
-    void addBuildDefinition( int projectId, Map configuration )
+    void addBuildDefinitionFromParams( int projectId, Map configuration )
         throws ContinuumException;
 
     void removeBuildDefinition( int projectId, int buildDefinitionId )
@@ -254,7 +260,8 @@ public interface Continuum
     // User
     // ----------------------------------------------------------------------
 
-    void addUser( ContinuumUser user );
+    void addUser( ContinuumUser user )
+        throws ContinuumException;
 
     void addUser( Map configuration )
         throws ContinuumException;

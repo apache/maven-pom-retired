@@ -17,10 +17,7 @@ $page.setTitle( "Delete Build Definition" )
       #hidden ( "id" $data.getParameters().getString( "id" ) )
       #hidden ( "fid" "${executorId}Project" )
       #hidden ( "buildDefinitionId" $data.getParameters().getString( "buildDefinitionId" ) )
-      <div class="functnbar3">
-        <input type="submit" name="deleteEntry" value="Delete"/>
-        <input type="submit" name="cancel" value="Cancel"/>
-      </div>
+      #submitBar( "Delete" )
   </form>
   </div>
 </div>

@@ -20,6 +20,7 @@ import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -33,5 +34,12 @@ public interface ContinuumBuildExecutor
         throws ContinuumBuildExecutorException;
 
     void updateProjectFromCheckOut( File workingDirectory, Project project, BuildDefinition buildDefinition )
+        throws ContinuumBuildExecutorException;
+
+    boolean isBuilding( Project project );
+
+    void killProcess( Project project );
+
+    List getDeployableArtifacts( File workingDirectory, BuildDefinition buildDefinition )
         throws ContinuumBuildExecutorException;
 }

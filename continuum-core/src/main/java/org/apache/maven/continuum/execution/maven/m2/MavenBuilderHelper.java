@@ -18,6 +18,7 @@ package org.apache.maven.continuum.execution.maven.m2;
 
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 
 import java.io.File;
 
@@ -37,4 +38,6 @@ public interface MavenBuilderHelper
 
     void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject )
         throws MavenBuilderHelperException;
+
+    ArtifactRepository getLocalRepository();
 }

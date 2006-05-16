@@ -16,8 +16,8 @@ package org.apache.maven.continuum.notification;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.configuration.ConfigurationException;
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
@@ -126,7 +126,8 @@ public class DefaultContinuumNotificationDispatcher
 
                 if ( build.getEndTime() != 0 )
                 {
-                    context.put( CONTEXT_BUILD_OUTPUT, configurationService.getBuildOutput( build.getId(), project.getId() ) );
+                    context.put( CONTEXT_BUILD_OUTPUT,
+                                 configurationService.getBuildOutput( build.getId(), project.getId() ) );
                 }
 
                 context.put( CONTEXT_UPDATE_SCM_RESULT, build.getScmResult() );
@@ -162,12 +163,14 @@ public class DefaultContinuumNotificationDispatcher
 
             try
             {
+                context.put( CONTEXT_PROJECT_NOTIFIER, projectNotifier );
+
                 Notifier notifier = notifierManager.getNotifier( notifierType );
 
-                Set recipients = recipientSource.getRecipients( String.valueOf( projectNotifier.getId() ),
-                                                                messageId, configuration, context );
+                Set recipients = recipientSource.getRecipients( String.valueOf( projectNotifier.getId() ), messageId,
+                                                                configuration, context );
 
-                notifier.sendNotification( messageId, recipients, projectNotifier.getConfiguration(), context );
+                notifier.sendNotification( messageId, recipients, configuration, context );
             }
             catch ( NotificationException e )
             {

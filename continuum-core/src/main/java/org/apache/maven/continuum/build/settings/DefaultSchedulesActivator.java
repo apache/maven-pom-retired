@@ -19,17 +19,17 @@ package org.apache.maven.continuum.build.settings;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.scheduler.ContinuumBuildJob;
-import org.apache.maven.continuum.scheduler.ContinuumScheduler;
 import org.apache.maven.continuum.scheduler.ContinuumSchedulerConstants;
-import org.apache.maven.continuum.scheduler.ContinuumSchedulerException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.scheduler.AbstractJob;
+import org.codehaus.plexus.scheduler.Scheduler;
 import org.codehaus.plexus.util.StringUtils;
 import org.quartz.CronTrigger;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
-import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 
 import java.text.ParseException;
 import java.util.Collection;
@@ -52,7 +52,7 @@ public class DefaultSchedulesActivator
     /**
      * @plexus.requirement
      */
-    private ContinuumScheduler scheduler;
+    private Scheduler scheduler;
 
     //private int delay = 3600;
     private int delay = 1;
@@ -130,13 +130,14 @@ public class DefaultSchedulesActivator
 
         dataMap.put( "continuum", continuum );
 
-        dataMap.put( "logger", getLogger() );
+        dataMap.put( AbstractJob.LOGGER, getLogger() );
 
         dataMap.put( ContinuumSchedulerConstants.SCHEDULE, schedule );
 
         //the name + group makes the job unique
 
-        JobDetail jobDetail = new JobDetail( schedule.getName(), Scheduler.DEFAULT_GROUP, ContinuumBuildJob.class );
+        JobDetail jobDetail =
+            new JobDetail( schedule.getName(), org.quartz.Scheduler.DEFAULT_GROUP, ContinuumBuildJob.class );
 
         jobDetail.setJobDataMap( dataMap );
 
@@ -146,7 +147,7 @@ public class DefaultSchedulesActivator
 
         trigger.setName( schedule.getName() );
 
-        trigger.setGroup( Scheduler.DEFAULT_GROUP );
+        trigger.setGroup( org.quartz.Scheduler.DEFAULT_GROUP );
 
         Date startTime = new Date( System.currentTimeMillis() + delay * 1000 );
 
@@ -169,7 +170,7 @@ public class DefaultSchedulesActivator
 
             getLogger().info( trigger.getNextFireTime() + "" );
         }
-        catch ( ContinuumSchedulerException e )
+        catch ( SchedulerException e )
         {
             throw new SchedulesActivationException( "Cannot schedule build job.", e );
         }
@@ -184,12 +185,12 @@ public class DefaultSchedulesActivator
             {
                 getLogger().info( "Stopping active schedule \"" + schedule.getName() + "\"." );
 
-                scheduler.interruptSchedule( schedule.getName(), Scheduler.DEFAULT_GROUP );
+                scheduler.interruptSchedule( schedule.getName(), org.quartz.Scheduler.DEFAULT_GROUP );
             }
 
-            scheduler.unscheduleJob( schedule.getName(), Scheduler.DEFAULT_GROUP );
+            scheduler.unscheduleJob( schedule.getName(), org.quartz.Scheduler.DEFAULT_GROUP );
         }
-        catch ( ContinuumSchedulerException e )
+        catch ( SchedulerException e )
         {
             throw new SchedulesActivationException( "Cannot unschedule build job \"" + schedule.getName() + "\".", e );
         }

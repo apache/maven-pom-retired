@@ -17,75 +17,79 @@ package org.apache.maven.continuum.security;
  *
  */
 
+import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.model.system.ContinuumUser;
+import org.codehaus.plexus.security.Authentication;
+import org.codehaus.plexus.security.Authenticator;
+import org.codehaus.plexus.security.exception.AuthenticationException;
+import org.codehaus.plexus.security.exception.UnauthorizedException;
+import org.codehaus.plexus.security.exception.UnknownEntityException;
 
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.PlexusConstants;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-
-import com.opensymphony.user.authenticator.AbstractAuthenticator;
-import com.opensymphony.user.authenticator.AuthenticationException;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
+ * TODO: Move this to o.a.m.c.security once plexus-security doesn't depend on plexus-summit.
+ *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
 public class ContinuumAuthenticator
-    extends AbstractAuthenticator
+    implements Authenticator
 {
+    /**
+     * @plexus.requirement
+     */
+    private ContinuumStore store;
+
     // ----------------------------------------------------------------------
     // Authenticator Implementation
     // ----------------------------------------------------------------------
 
-    public boolean login(String username, String password, HttpServletRequest req)
-        throws AuthenticationException
+    public Authentication authenticate( Map tokens )
+        throws UnknownEntityException, AuthenticationException, UnauthorizedException
     {
-        PlexusContainer container = (PlexusContainer) req.getAttribute( PlexusConstants.PLEXUS_KEY );
+        String username = (String) tokens.get( "username" );
+        String password = (String) tokens.get( "password" );
 
-        if ( container == null )
+        ContinuumUser user = getUser( username );
+
+        if ( user == null )
         {
-            throw new AuthenticationException( "Can't get plexus container in request." );
+            throw new UnknownEntityException();
         }
-
-        ContinuumUser user = getUser( container, username );
 
         System.err.println( "username: " + username );
+        //System.err.println( "password: " + password );
+        //System.err.println( "user.password: " + user.getPassword() );
 
-        if ( user != null && user.equalsPassword( password ) )
+        if ( !user.equalsPassword( password ) )
         {
-            return true;
+            throw new AuthenticationException( "Invalid password." );
         }
-        else
-        {
-            return false;
-        }
+
+        return null;
+    }
+
+    public Authentication getAnonymousEntity()
+    {
+        throw new RuntimeException( "Not implemented" );
     }
 
     // ----------------------------------------------------------------------
     // Private
     // ----------------------------------------------------------------------
 
-    private ContinuumUser getUser( PlexusContainer container, String username )
+    private ContinuumUser getUser( String username )
         throws AuthenticationException
     {
         try
         {
-            ContinuumStore store = (ContinuumStore) container.lookup( ContinuumStore.ROLE );
-
             return store.getUserByUsername( username );
         }
         catch ( ContinuumStoreException e )
         {
-            throw new AuthenticationException( "Error while retreiving user." + e.getMessage() );
-        }
-        catch ( ComponentLookupException e )
-        {
-            throw new AuthenticationException( "Can't get store component." + e.getMessage() );
+            throw new AuthenticationException( "Error while retreiving user.", e );
         }
     }
 }

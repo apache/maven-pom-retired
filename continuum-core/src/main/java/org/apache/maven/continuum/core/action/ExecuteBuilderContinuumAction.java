@@ -67,11 +67,15 @@ public class ExecuteBuilderContinuumAction
         // Get parameters from the context
         // ----------------------------------------------------------------------
 
-        Project project = store.getProjectWithBuildDetails( getProjectId( context ) );
+        Project project = getProject( context );
+
+        BuildDefinition buildDefinition = getBuildDefinition( context );
 
         int trigger = getTrigger( context );
 
         ScmResult scmResult = getUpdateScmResult( context );
+
+        boolean isFirstRun = ( (Boolean) context.get( AbstractContinuumAction.KEY_FIRST_RUN ) ).booleanValue();
 
         ContinuumBuildExecutor buildExecutor = buildExecutorManager.getBuildExecutor( project.getExecutorId() );
 
@@ -79,8 +83,9 @@ public class ExecuteBuilderContinuumAction
         // This is really a precondition for this action to execute
         // ----------------------------------------------------------------------
 
-        if ( project.getOldState() != ContinuumProjectState.NEW && scmResult.getChanges().size() == 0
-            && trigger != ContinuumProjectState.TRIGGER_FORCED && !isNew( project ) )
+        if ( !isFirstRun && project.getOldState() != ContinuumProjectState.NEW &&
+            project.getOldState() != ContinuumProjectState.CHECKEDOUT && scmResult.getChanges().size() == 0 &&
+            trigger != ContinuumProjectState.TRIGGER_FORCED && !isNew( project ) )
         {
             getLogger().info( "No files updated, not building. Project id '" + project.getId() + "'." );
 
@@ -104,8 +109,6 @@ public class ExecuteBuilderContinuumAction
         build.setState( ContinuumProjectState.BUILDING );
 
         build.setTrigger( trigger );
-
-        BuildDefinition buildDefinition = store.getBuildDefinition( getBuildDefinitionId( context ) );
 
         build.setScmResult( scmResult );
 
@@ -146,13 +149,17 @@ public class ExecuteBuilderContinuumAction
 
             project.setLatestBuildId( build.getId() );
 
+            buildDefinition.setLatestBuildId( build.getId() );
+
             build.setBuildNumber( project.getBuildNumber() );
 
-            if ( build.getState() != ContinuumProjectState.OK && build.getState() != ContinuumProjectState.FAILED
-                && build.getState() != ContinuumProjectState.ERROR )
+            if ( build.getState() != ContinuumProjectState.OK && build.getState() != ContinuumProjectState.FAILED &&
+                build.getState() != ContinuumProjectState.ERROR )
             {
                 build.setState( ContinuumProjectState.ERROR );
             }
+
+            project.setState( build.getState() );
 
             // ----------------------------------------------------------------------
             // Copy over the build result
@@ -161,6 +168,8 @@ public class ExecuteBuilderContinuumAction
             store.updateBuildResult( build );
 
             build = store.getBuildResult( build.getId() );
+
+            store.storeBuildDefinition( buildDefinition );
 
             store.updateProject( project );
 
@@ -174,6 +183,7 @@ public class ExecuteBuilderContinuumAction
 
     private boolean isNew( Project project )
     {
-        return project.getState() == ContinuumProjectState.NEW;
+        return project.getState() == ContinuumProjectState.NEW ||
+            project.getState() == ContinuumProjectState.CHECKEDOUT;
     }
 }

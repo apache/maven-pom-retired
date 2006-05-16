@@ -27,8 +27,17 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.3</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-model</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-quartz</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
@@ -45,16 +54,11 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-security-summit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-formica</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>quartz</groupId>
-      <artifactId>quartz</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>servletapi</groupId>
-      <artifactId>servletapi</artifactId>
-      <version>2.3</version>
     </dependency>
     <dependency>
       <groupId>commons-fileupload</groupId>
@@ -73,17 +77,12 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-summit</artifactId>
-      <version>1.0-beta-8</version>
+      <version>1.0-beta-9</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-formica-web</artifactId>
       <version>1.0-beta-1</version>
     </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-security-summit</artifactId>
-        <version>1.0-alpha-3-SNAPSHOT</version>
-      </dependency>
   </dependencies>
 </project>

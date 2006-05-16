@@ -9,14 +9,16 @@ $page.setTitle( $item.name )
       #hidden ( "view" $form.update.view )
       #hidden ( "id" $id )
       <div class="axial">
-        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        <table border="1" cellpadding="3" cellspacing="2" width="100%">
+          <tbody>
           #foreach ( $element in $form.elements )
-          #if ( !$element.immutable )
-          <tr>
-            #field( $i18n $data $element $item $formtool )
-          </tr>
+            #if ( !$element.immutable )
+            <tr>
+              #field( $i18n $data $element $item $formtool )
+            </tr>
+            #end
           #end
-          #end
+          </tbody>
         </table>
         #submitBar( "Submit" )
       </div>

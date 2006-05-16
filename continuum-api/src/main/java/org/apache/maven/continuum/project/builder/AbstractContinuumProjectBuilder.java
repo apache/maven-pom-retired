@@ -16,16 +16,17 @@ package org.apache.maven.continuum.project.builder;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.formica.util.MungedHttpsURL;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-
-import org.codehaus.plexus.formica.util.MungedHttpsURL;
-
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.IOUtil;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -51,7 +52,47 @@ public abstract class AbstractContinuumProjectBuilder
             is = metadata.openStream();
         }
 
-        File file = File.createTempFile( "continuum-", ".tmp" );
+        String path = metadata.getPath();
+
+        String baseDirectory;
+
+        String fileName;
+
+        int lastIndex = path.lastIndexOf( "/" );
+
+        if ( lastIndex >= 0 )
+        {
+            baseDirectory = path.substring( 0, lastIndex );
+
+            // Required for windows
+            int colonIndex = baseDirectory.indexOf( ":" );
+
+            if ( colonIndex >= 0 )
+            {
+                baseDirectory = baseDirectory.substring( colonIndex + 1 );
+            }
+
+            fileName = path.substring( lastIndex + 1 );
+        }
+        else
+        {
+            baseDirectory = "";
+
+            fileName = path;
+        }
+
+        // Little hack for URLs that contains '*' like "http://svn.codehaus.org/*checkout*/trunk/pom.xml?root=plexus"
+        baseDirectory = StringUtils.replace( baseDirectory, "*", "" );
+
+        File continuumTmpDir = new File( System.getProperty( "java.io.tmpdir" ), "continuum" );
+
+        File uploadDirectory = new File( continuumTmpDir, baseDirectory );
+
+        uploadDirectory.mkdirs();
+
+        FileUtils.forceDeleteOnExit( continuumTmpDir );
+
+        File file = new File( uploadDirectory, fileName );
 
         file.deleteOnExit();
 

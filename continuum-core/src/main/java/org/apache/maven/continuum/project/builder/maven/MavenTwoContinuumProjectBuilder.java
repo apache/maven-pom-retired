@@ -19,8 +19,8 @@ package org.apache.maven.continuum.project.builder.maven;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.Schedule;
@@ -89,14 +89,13 @@ public class MavenTwoContinuumProjectBuilder
     //
     // ----------------------------------------------------------------------
 
-    private void readModules( URL url, ContinuumProjectBuildingResult result, boolean groupPom, String username, String password )
+    private void readModules( URL url, ContinuumProjectBuildingResult result, boolean groupPom, String username,
+                              String password )
     {
         MavenProject mavenProject;
 
         try
         {
-            // TODO: this isn't finding parents due to relocating to the URL
-            // TODO: the whole modules resolution is funky
             mavenProject = builderHelper.getMavenProject( createMetadataFile( url, username, password ) );
         }
         catch ( MavenBuilderHelperException e )
@@ -126,7 +125,7 @@ public class MavenTwoContinuumProjectBuilder
         {
             String defaultGoal = "clean install";
 
-            if (mavenProject.getBuild() != null && mavenProject.getBuild().getDefaultGoal() != null )
+            if ( mavenProject.getBuild() != null && mavenProject.getBuild().getDefaultGoal() != null )
             {
                 defaultGoal = mavenProject.getBuild().getDefaultGoal();
             }

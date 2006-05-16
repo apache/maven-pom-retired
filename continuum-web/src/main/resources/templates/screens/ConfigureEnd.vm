@@ -5,9 +5,9 @@ $page.setTitle( "Configure Continuum" )
     <h3>End of configuration</h3>
     <p>
     Continuum is configured.
-    <p>
+    </p>
     <p>
     You can now add users/groups after log in.
-    <p>
+    </p>
   </div>
 </div>

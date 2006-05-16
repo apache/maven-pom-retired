@@ -16,7 +16,11 @@ package org.apache.maven.continuum.scm.queue;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.core.action.CheckoutProjectContinuumAction;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.Task;
@@ -39,6 +43,11 @@ public class CheckOutTaskExecutor
      */
     private ActionManager actionManager;
 
+    /**
+     * @plexus.requirement
+     */
+    private ContinuumStore store;
+
     // ----------------------------------------------------------------------
     // TaskExecutor Implementation
     // ----------------------------------------------------------------------
@@ -50,11 +59,26 @@ public class CheckOutTaskExecutor
 
         int projectId = task.getProjectId();
 
+        Project project;
+
+        try
+        {
+            project = store.getProjectWithBuildDetails( projectId );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            getLogger().error( "Internal error while getting the project.", ex );
+
+            return;
+        }
+
         String workingDirectory = task.getWorkingDirectory().getAbsolutePath();
 
         Map context = new HashMap();
 
         context.put( CheckoutProjectContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
+
+        context.put( CheckoutProjectContinuumAction.KEY_PROJECT, project );
 
         context.put( CheckoutProjectContinuumAction.KEY_WORKING_DIRECTORY, workingDirectory );
 

@@ -10,7 +10,8 @@ $page.setTitle( "Edit Continuum Configuration" )
       #hidden ( "cid" "updateConfiguration" )
       #hidden ( "view" "ConfigureContinuum.vm" )
       <div class="axial">
-        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        <table border="1" cellpadding="3" cellspacing="2" width="100%">
+        <tbody>
         <tr class="b">
           <th>Guests</th>
           <td>
@@ -24,6 +25,14 @@ $page.setTitle( "Edit Continuum Configuration" )
         <tr class="b">
           <th>Build Output Directory</th>
           <td><input type="text" name="conf.buildOutputDirectory" value="$continuum.configuration.buildOutputDirectory" size="100"/> If you define a relative path, it will be relative to $continuum.configuration.applicationHome</td>
+        </tr>
+        <tr class="b">
+          <th>Deployment Repository Directory</th>
+          <td><input type="text" name="conf.deploymentRepositoryDirectory"
+           #if ( $continuum.configuration.deploymentRepositoryDirectory )
+            value="$continuum.configuration.deploymentRepositoryDirectory"
+           #end
+          size="100"/> <strong>Optional</strong>. If you define a relative path, it will be relative to $continuum.configuration.applicationHome</td>
         </tr>
         <tr class="b">
           <th>Base URL</th>
@@ -41,6 +50,7 @@ $page.setTitle( "Edit Continuum Configuration" )
           <th>Company URL</th>
           <td><input type="text" name="conf.companyUrl" #if ( $continuum.configuration.companyUrl ) value="$continuum.configuration.companyUrl" #end size="100"/></td>
         </tr>
+        </tbody>
         </table>
         #submitBar( "Submit" )
       </div>

@@ -47,7 +47,9 @@ public class UpdateProjectFromWorkingDirectoryContinuumAction
     public void execute( Map context )
         throws ContinuumStoreException, ContinuumException, ContinuumBuildExecutorException
     {
-        Project project = store.getProjectWithBuildDetails( getProjectId( context ) );
+        Project project = getProject( context );
+
+        project = store.getProjectWithAllDetails( project.getId() );
 
         getLogger().info( "Updating project '" + project.getName() + "' from checkout." );
 
@@ -59,7 +61,8 @@ public class UpdateProjectFromWorkingDirectoryContinuumAction
 
         ContinuumBuildExecutor builder = buildExecutorManager.getBuildExecutor( project.getExecutorId() );
 
-        builder.updateProjectFromCheckOut( workingDirectoryService.getWorkingDirectory( project ), project, buildDefinition );
+        builder.updateProjectFromCheckOut( workingDirectoryService.getWorkingDirectory( project ), project,
+                                           buildDefinition );
 
         // ----------------------------------------------------------------------
         // Store the new descriptor

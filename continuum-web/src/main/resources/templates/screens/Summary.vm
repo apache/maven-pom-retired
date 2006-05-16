@@ -22,15 +22,15 @@ $page.setTitle( "Continuum" )
 <div class="app">
   <div id="h3">
     <h3>Continuum Projects</h3>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%" id="projectSummaryTable">
+    <table border="1" cellspacing="1" cellpadding="0" width="100%" bordercolor="#666666" id="projectSummaryTable">
 
       <!-- i18n -->
       <tbody><tr>
-        <th>&nbsp;</th>
-        <th width="100%">Name</th>
-        <th>Version</th>
-        <th>Build</th>
-        <th>Group</th>
+        <th width="1%"><div align="center"></div></th>
+        <th width="48%" class="tablehead">Name</th>
+        <th width="13%" class="tablehead">Version</th>
+        <th width="5%"><div align="center" class="tablehead">Build</div></th>
+        <th width="13%"><div align="center" class="tablehead">Group</div></th>
         <th colspan="7"></th>
       </tr>
 
@@ -48,67 +48,97 @@ $page.setTitle( "Continuum" )
       #end
 
       <tr class="$css.nextClass">
-        <td>
-          #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
-            #set ( $latestBuild = $buildResults.get( $item.id ) )
+        <td bordercolor="#999999">
+          <div align="center">
+          #if ( $item.state == 1 || $item.state == 10 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+            #if ( $buildResults.get( $item.id ) )
+              #set ( $latestBuild = $buildResults.get( $item.id ) )
+            #end
             #set ( $generatedState = $state.generate( $item ) )
             #if ( $latestBuild && $generatedState != "New" )
               <a href="$link.setPage('ProjectBuild.vm').addQueryData('view','ProjectBuild').addQueryData('buildId',$latestBuild.id).addQueryData('id',$item.id)">$generatedState</a></td>
             #else
               $generatedState
             #end
+          #elseif ( $continuum.isInBuildingQueue( $item.id ) )
+            #if ( $buildResults.get( $item.id ) )
+              #set ( $latestBuild = $buildResults.get( $item.id ) )
+            #end
+            #if ( $latestBuild )
+              #set ( $generatedState = $state.generate( $latestBuild ) )
+              <a href="$link.setPage('ProjectBuild.vm').addQueryData('view','ProjectBuild').addQueryData('buildId',$latestBuild.id).addQueryData('id',$item.id)">$generatedState</a></td>
+            #else
+              &nbsp;
+            #end
           #else
             &nbsp;
           #end
+          </div>
         </td>
         <td><a href="$link.setPage('View.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">$!item.name</a></td>
         <td>$!item.version</td>
         <td>
+          <div align="center">
           #if ( $continuum.isInBuildingQueue( $item.id ) || $continuum.isInCheckoutQueue( $item.id ) )
-            <b>In&nbsp;queue</b>
-          #elseif ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+            <b><img src="$requestUtil.getContextPath()/images/inqueue.gif" alt="In Queue" title="In Queue" width="16" height="16"></b>
+          #elseif ( $item.state == 1 || $item.state == 10 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
             #if ( $item.buildNumber != 0 )
               #set ( $build = $buildResultsInSuccess.get( $item.id ) )
               <a href="$link.setPage('ProjectBuild.vm').addQueryData('view','ProjectBuild').addQueryData('buildId',$build.id).addQueryData('id',$item.id)">$item.buildNumber</a>
             #else
               $item.buildNumber
             #end
+          #elseif ( $item.state == 6 )
+            <b><img src="$requestUtil.getContextPath()/images/building.gif" alt="Building" title="Building" width="16" height="16"></b>
+          #elseif ( $item.state == 7 )
+            <b><img src="$requestUtil.getContextPath()/images/checkingout.gif" alt="Checking Out sources" title="Checking Out sources" width="16" height="16"></b>
+          #elseif ( $item.state == 8 )
+            <b><img src="$requestUtil.getContextPath()/images/checkingout.gif" alt="Updating sources" title="Updating sources" width="16" height="16"></b>
           #else
-            <b>In&nbsp;progress</b>
+            <b><img src="$requestUtil.getContextPath()/images/inqueue.gif" alt="In Queue" title="In Queue" width="16" height="16"></b>
           #end
+          </div>
         </td>
         <td>$item.projectGroup.name</td>
 
         ## Operations
 
         #if ( $continuum.security.isAuthorized( $c1user, "buildProject" ) )
+          <td width="1%">
           #if ( $continuum.isInBuildingQueue( $item.id ) || $continuum.isInCheckoutQueue( $item.id ) )
-          <td>Build</td>
-          #elseif ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
-          <td><a href="$link.addPathInfo('action', 'cam').addPathInfo('cid','buildProject').addPathInfo('id', $item.id)">Build&nbsp;Now</a></td>
+            <img src="$requestUtil.getContextPath()/images/buildnow_disabled.gif" alt="Build Now" title="Build Now" width="16" height="16" border="0">
+          #elseif ( $item.state == 1 || $item.state == 10 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+            <a href="$link.addPathInfo('action', 'cam').addPathInfo('cid','buildProject').addPathInfo('id', $item.id)"><img src="$requestUtil.getContextPath()/images/buildnow.gif" alt="Build Now" title="Build Now" width="16" height="16" border="0"></a>
           #else
-          <td>Build</td>
+            <img src="$requestUtil.getContextPath()/images/buildnow_disabled.gif" alt="Build Now" title="Build Now" width="16" height="16" border="0">
           #end
+          </td>
         #end
 
+        <td width="1%">
         #if ( $item.latestBuildId > 0 )
-        <td><a href="$link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id)">Build&nbsp;History</a></td>
+          <a href="$link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id)"><img src="$requestUtil.getContextPath()/images/buildhistory.gif" alt="Build History" title="Build History" width="16" height="16" border="0"></a>
         #else
-        <td>All&nbsp;Results</td>
+          <img src="$requestUtil.getContextPath()/images/buildhistory_disabled.gif" alt="Build History" title="Build History" width="16" height="16" border="0">
         #end
+        </td>
 
-        #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 || $item.state == 6 )
-        <td><a href="$link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $item.id)">Working&nbsp;Copy</a></td>
+        <td width="1%">
+        #if ( $item.state == 10 || $item.state == 2 || $item.state == 3 || $item.state == 4 || $item.state == 6 )
+          <a href="$link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $item.id)"><img src="$requestUtil.getContextPath()/images/workingcopy.gif" alt="Working Copy" title="Working Copy" width="16" height="16" border="0"></a>
         #else
-        <td>Working&nbsp;Copy</td>
+          <img src="$requestUtil.getContextPath()/images/workingcopy_disabled.gif" alt="Working Copy" title="Working Copy" width="16" height="16" border="0">
         #end
+        </td>
 
         #if ( $continuum.security.isAuthorized( $c1user, "deleteProject" ) )
-          #if ( $item.state == 1 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
-          <td><a href="$link.setPage('Delete.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">Delete</a></td>
+          <td width="1%">
+          #if ( $item.state == 1 || $item.state == 10 || $item.state == 2 || $item.state == 3 || $item.state == 4 )
+          <a href="$link.setPage('Delete.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)"><img src="$requestUtil.getContextPath()/images/delete.gif" alt="Delete" title="Delete" width="16" height="16" border="0"></a>
           #else
-          <td>Delete</td>
+          <img src="$requestUtil.getContextPath()/images/delete_disabled.gif" alt="Delete" title="Delete" width="16" height="16" border="0">
           #end
+          </td>
         #end
 
       </tr>
@@ -119,15 +149,22 @@ $page.setTitle( "Continuum" )
     #if ( $continuum.security.isAuthorized( $c1user, "buildProject" ) )
     <div class="functnbar3">
       <form method="post" action="$link">
-        <img src="/continuum/images/icon_success_sml.gif" alt="Success" title="Success"/> $success
-        <img src="/continuum/images/icon_warning_sml.gif" alt="Failed" title="Failed"/> $failures
-        <img src="/continuum/images/icon_error_sml.gif" alt="Error" title="Error"/> $errors
+        <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Success" title="Success"/> $success
+        <img src="$requestUtil.getContextPath()/images/icon_warning_sml.gif" alt="Failed" title="Failed"/> $failures
+        <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Error" title="Error"/> $errors
         #if ( $items && $items.size() > 0 )
         #hidden ( "action" "cam" )
         #hidden ( "cid" "buildAllProjects" )
         <!-- input type="submit" name="build-broken" value="Build All In Error" -->
         <input type="submit" name="build-all" value="Build All"/>
         #end
+      </form>
+    </div>
+    #else
+    <div class="functnbar3">
+        <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Success" title="Success"/> $success
+        <img src="$requestUtil.getContextPath()/images/icon_warning_sml.gif" alt="Failed" title="Failed"/> $failures
+        <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Error" title="Error"/> $errors
       </form>
     </div>
     #end

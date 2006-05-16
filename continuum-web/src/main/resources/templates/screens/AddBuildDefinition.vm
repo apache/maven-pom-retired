@@ -12,7 +12,8 @@ $page.setTitle( $i18n.getString( $form.add.titleKey ) )
       <input type="hidden" name="fid" value="${executorId}Project"/>
       #hidden ( "id" $id )
       <div class="axial">
-        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        <table border="1" cellpadding="3" cellspacing="2" width="100%">
+          <tbody>
           #foreach ( $element in $form.elements )
           #if($executorId == "ant" && $element.id == "buildFile")
           <tr>
@@ -67,6 +68,7 @@ $page.setTitle( $i18n.getString( $form.add.titleKey ) )
               </select>
             </td>
           </tr>
+          </tbody>
         </table>
         #submitBar( "Submit" )
       </div>

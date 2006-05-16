@@ -20,6 +20,7 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumProjectState;
@@ -88,6 +89,9 @@ public class MsnContinuumNotifier
     {
         Project project = (Project) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
+        ProjectNotifier projectNotifier =
+            (ProjectNotifier) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT_NOTIFIER );
+
         BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
         // ----------------------------------------------------------------------
@@ -116,7 +120,7 @@ public class MsnContinuumNotifier
 
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
         {
-            buildComplete( project, build, recipients, configuration );
+            buildComplete( project, projectNotifier, build, recipients, configuration );
         }
     }
 
@@ -150,15 +154,16 @@ public class MsnContinuumNotifier
         }
         else
         {
-            getLogger().warn( "Unknown build state " + build.getState() + " for project " + project.getId() );
+            getLogger().warn( "Unknown build state " + state + " for project " + project.getId() );
 
-            message = "ERROR: Unknown build state " + build.getState() + " for " + project.getName() + " project";
+            message = "ERROR: Unknown build state " + state + " for " + project.getName() + " project";
         }
 
         return message + " " + getReportUrl( project, build, configurationService );
     }
 
-    private void buildComplete( Project project, BuildResult build, Set recipients, Map configuration )
+    private void buildComplete( Project project, ProjectNotifier projectNotifier, BuildResult build, Set recipients,
+                                Map configuration )
         throws NotificationException
     {
         String message;
@@ -169,7 +174,7 @@ public class MsnContinuumNotifier
 
         BuildResult previousBuild = getPreviousBuild( project, build );
 
-        if ( !shouldNotify( build, previousBuild ) )
+        if ( !shouldNotify( build, previousBuild, projectNotifier ) )
         {
             return;
         }

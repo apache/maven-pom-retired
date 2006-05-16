@@ -48,8 +48,6 @@ public class ContinuumSchedulerConstants
     // Keys for JobDataMap
     // ----------------------------------------------------------------------
 
-    public static final String LOGGER = "logger";
-
     public static final String CONTINUUM = "continuum";
 
     public static final String SCHEDULE = "schedule";

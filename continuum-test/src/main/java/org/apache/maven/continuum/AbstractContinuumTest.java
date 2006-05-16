@@ -34,6 +34,7 @@ import org.jpox.SchemaTool;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -128,8 +129,7 @@ public abstract class AbstractContinuumTest
             System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
         }
 
-        File file = getTestFile( "../continuum-model/target/classes/META-INF/package.jdo" );
-        SchemaTool.createSchemaTables( new String[]{file.getAbsolutePath()}, false );
+        SchemaTool.createSchemaTables( new URL[]{getClass().getResource( "/META-INF/package.jdo" )}, false );
 
         // ----------------------------------------------------------------------
         // Check the configuration

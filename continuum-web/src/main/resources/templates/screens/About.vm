@@ -1,10 +1,18 @@
 $page.setTitle( "Continuum - About" )
 
 <div class="app">
-
   <div id="axial" class="h3">
     <h3>About Continuum</h3>
-    <p> Version: ${project.version}
+    <div class="axial">
+      <table border="1" cellpadding="3" cellspacing="2" width="100%">
+        <tbody>
+          <tr>
+            <th>Version</th>
+            <td>${project.version}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 

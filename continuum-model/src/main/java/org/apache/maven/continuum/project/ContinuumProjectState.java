@@ -56,12 +56,18 @@ public class ContinuumProjectState
     /**
      * This state indicates that a project is currently beeing build.
      */
-//    public final static ContinuumProjectState BUILDING = new ContinuumProjectState( "building" );
     public final static int BUILDING = 6;
 
     public final static int CHECKING_OUT = 7;
 
     public final static int UPDATING = 8;
+
+    public final static int WARNING = 9;
+
+    /**
+     * This state indicates that sources are checkouted.
+     */
+    public final static int CHECKEDOUT = 10;
 
     private String name;
 
@@ -69,7 +75,9 @@ public class ContinuumProjectState
     public static final int TRIGGER_FORCED = 1;
 
     // TODO: remove
-    public static final int TRIGGER_UNKNOWN = 0;
+    public static final int TRIGGER_SCHEDULED = 0;
+
+    public static final int TRIGGER_UNKNOWN = TRIGGER_SCHEDULED;
 
     protected ContinuumProjectState( String name )
     {

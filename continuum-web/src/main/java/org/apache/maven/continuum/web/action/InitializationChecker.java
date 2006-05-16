@@ -16,13 +16,13 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.UserGroup;
-import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.store.ContinuumStore;
-import org.codehaus.plexus.summit.rundata.RunData;
 import org.codehaus.plexus.action.AbstractAction;
+import org.codehaus.plexus.summit.rundata.RunData;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Collections;
@@ -52,7 +52,7 @@ public class InitializationChecker
 
         String username = getValue( map, "username" );
 
-        if ( !StringUtils.isEmpty( username) )
+        if ( !StringUtils.isEmpty( username ) )
         {
             adminUser.setUsername( username );
         }
@@ -63,7 +63,7 @@ public class InitializationChecker
 
         String password = getValue( map, "password" );
 
-        if ( !StringUtils.isEmpty( password) && password.equals( getValue( map, "password.two" ) ) )
+        if ( !StringUtils.isEmpty( password ) && password.equals( getValue( map, "password.two" ) ) )
         {
             adminUser.setPassword( getValue( map, "password" ) );
         }
@@ -74,7 +74,7 @@ public class InitializationChecker
 
         String fullName = getValue( map, "fullName" );
 
-        if ( !StringUtils.isEmpty( fullName) )
+        if ( !StringUtils.isEmpty( fullName ) )
         {
             adminUser.setFullName( fullName );
         }
@@ -85,7 +85,7 @@ public class InitializationChecker
 
         String email = getValue( map, "email" );
 
-        if ( !StringUtils.isEmpty( email) )
+        if ( !StringUtils.isEmpty( email ) )
         {
             adminUser.setEmail( email );
         }
@@ -100,7 +100,7 @@ public class InitializationChecker
 
         String workingDirectory = getValue( map, "workingDirectory" );
 
-        if ( !StringUtils.isEmpty( workingDirectory) )
+        if ( !StringUtils.isEmpty( workingDirectory ) )
         {
             configuration.setWorkingDirectory( configuration.getFile( workingDirectory ) );
         }
@@ -111,7 +111,7 @@ public class InitializationChecker
 
         String buildOutputDirectory = getValue( map, "buildOutputDirectory" );
 
-        if ( !StringUtils.isEmpty( buildOutputDirectory) )
+        if ( !StringUtils.isEmpty( buildOutputDirectory ) )
         {
             configuration.setBuildOutputDirectory( configuration.getFile( buildOutputDirectory ) );
         }
@@ -120,9 +120,16 @@ public class InitializationChecker
             throw new Exception( "You must set a build output directory." );
         }
 
+        String deploymentRepositoryDirectory = getValue( map, "deploymentRepositoryDirectory" );
+
+        if ( !StringUtils.isEmpty( deploymentRepositoryDirectory ) )
+        {
+            configuration.setDeploymentRepositoryDirectory( configuration.getFile( deploymentRepositoryDirectory ) );
+        }
+
         String baseUrl = getValue( map, "baseUrl" );
 
-        if ( !StringUtils.isEmpty( baseUrl) )
+        if ( !StringUtils.isEmpty( baseUrl ) )
         {
             configuration.setUrl( baseUrl );
         }
@@ -133,21 +140,21 @@ public class InitializationChecker
 
         String companyName = getValue( map, "companyName" );
 
-        if ( !StringUtils.isEmpty( companyName) )
+        if ( !StringUtils.isEmpty( companyName ) )
         {
             configuration.setCompanyName( companyName );
         }
 
         String companyLogo = getValue( map, "companyLogo" );
 
-        if ( !StringUtils.isEmpty( companyLogo) )
+        if ( !StringUtils.isEmpty( companyLogo ) )
         {
             configuration.setCompanyLogo( companyLogo );
         }
 
         String companyUrl = getValue( map, "companyUrl" );
 
-        if ( !StringUtils.isEmpty( companyUrl) )
+        if ( !StringUtils.isEmpty( companyUrl ) )
         {
             configuration.setCompanyUrl( companyUrl );
         }

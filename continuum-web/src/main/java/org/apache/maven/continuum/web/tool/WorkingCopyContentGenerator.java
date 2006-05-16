@@ -17,6 +17,8 @@ package org.apache.maven.continuum.web.tool;
  */
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.summit.pull.RequestTool;
+import org.codehaus.plexus.summit.rundata.RunData;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -29,7 +31,10 @@ import java.util.List;
  */
 public class WorkingCopyContentGenerator
     extends AbstractLogEnabled
+    implements RequestTool
 {
+    private String contextPath;
+
     private File basedir;
 
     public String generate( Object item, String baseUrl, File basedir )
@@ -40,7 +45,7 @@ public class WorkingCopyContentGenerator
 
         StringBuffer buf = new StringBuffer();
 
-        buf.append( "+&nbsp;<a href=\"" + baseUrl + "?userDirectory=/\">/</a><br />" );
+        buf.append( "+&nbsp;<a href=\"" ).append( baseUrl ).append( "?userDirectory=/\">/</a><br />" );
 
         print( directoryEntries, "&nbsp;&nbsp;", baseUrl, buf );
 
@@ -56,19 +61,21 @@ public class WorkingCopyContentGenerator
             print( obj, indent, baseUrl, buf );
         }
     }
+
     private void print( Object obj, String indent, String baseUrl, StringBuffer buf )
     {
         if ( obj instanceof File )
         {
-            File f = (File) obj;;
+            File f = (File) obj;
 
             if ( !f.isDirectory() )
             {
                 String fileName = f.getName();
 
-                if ( !".cvsignore".equals( fileName ) && !"vssver.scc".equals( fileName ) && !".DS_Store".equals( fileName ) )
+                if ( !".cvsignore".equals( fileName ) && !"vssver.scc".equals( fileName ) &&
+                    !".DS_Store".equals( fileName ) )
                 {
-                    String userDirectory = null;
+                    String userDirectory;
 
                     if ( f.getParentFile().getAbsolutePath().equals( basedir.getAbsolutePath() ) )
                     {
@@ -76,25 +83,31 @@ public class WorkingCopyContentGenerator
                     }
                     else
                     {
-                        userDirectory = f.getParentFile().getAbsolutePath().substring( basedir.getAbsolutePath().length() + 1 );
+                        userDirectory =
+                            f.getParentFile().getAbsolutePath().substring( basedir.getAbsolutePath().length() + 1 );
                     }
 
                     userDirectory = StringUtils.replace( userDirectory, "\\", "/" );
 
-                    buf.append( indent + "&nbsp;&nbsp;&nbsp;<a href=\"" + baseUrl + "?userDirectory=" + userDirectory + "&file=" + fileName + "\">" + fileName + "</a><br />" );
+                    buf.append( indent ).append( "&nbsp;&nbsp;&nbsp;<a target=\"blank\" href=\"" ).append(
+                        getFileUrl( userDirectory, fileName ) ).append( "\">" ).append( fileName ).append(
+                        "</a><br />" );
                 }
             }
             else
             {
                 String directoryName = f.getName();
 
-                if ( !"CVS".equals( directoryName ) && !".svn".equals( directoryName ) && !"SCCS".equals( directoryName ) )
+                if ( !"CVS".equals( directoryName ) && !".svn".equals( directoryName ) &&
+                    !"SCCS".equals( directoryName ) && !".bzr".equals( directoryName ) )
                 {
                     String userDirectory = f.getAbsolutePath().substring( basedir.getAbsolutePath().length() + 1 );
 
                     userDirectory = StringUtils.replace( userDirectory, "\\", "/" );
 
-                    buf.append( indent + "+&nbsp;<a href=\"" + baseUrl + "?userDirectory=" + userDirectory + "\">" + directoryName + "</a><br />" );
+                    buf.append( indent ).append( "+&nbsp;<a href=\"" ).append( baseUrl ).append(
+                        "?userDirectory=" ).append( userDirectory ).append( "\">" ).append( directoryName ).append(
+                        "</a><br />" );
                 }
             }
         }
@@ -102,5 +115,36 @@ public class WorkingCopyContentGenerator
         {
             print( (List) obj, indent + "&nbsp;&nbsp;", baseUrl, buf );
         }
+    }
+
+    private String getBrowseServletPath()
+    {
+        return contextPath + "/servlet/browse?file=";
+    }
+
+    private String getFileUrl( String directory, String fileName )
+    {
+        String filePath;
+
+        if ( StringUtils.isEmpty( directory ) || "/".equals( directory ) )
+        {
+            filePath = basedir.getName() + "/" + fileName;
+        }
+        else
+        {
+            filePath = basedir.getName() + "/" + directory + "/" + fileName;
+        }
+
+        return getBrowseServletPath() + filePath;
+    }
+
+    public void setRunData( RunData data )
+    {
+        contextPath = data.getContextPath();
+    }
+
+    public void refresh()
+    {
+        // empty
     }
 }

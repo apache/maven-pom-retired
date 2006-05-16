@@ -39,10 +39,10 @@
           <version>1.0.0+</version>
           <type>String</type>
         </field>
-        <field jpox.mappedBy="projectGroup">
+        <field jpox.mappedBy="projectGroup" jpox.fetchGroupNames="projectgroup-projects project-build-details">
           <name>projects</name>
           <version>1.0.0+</version>
-          <association stash.part="true" jpox.join="false">
+          <association jpox.join="false">
             <type>Project</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -184,17 +184,17 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field jpox.fetchGroupNames="project-all-details">
+        <field jpox.fetchGroupNames="project-all-details project-dependencies">
           <name>parent</name>
           <version>1.0.0+</version>
-          <association stash.part="true" jpox.join="false">
+          <association jpox.join="false">
             <type>ProjectDependency</type>
           </association>
         </field>
-        <field jpox.fetchGroupNames="project-all-details">
+        <field jpox.fetchGroupNames="project-all-details project-dependencies">
           <name>dependencies</name>
           <version>1.0.0+</version>
-          <association stash.part="true" jpox.join="false">
+          <association jpox.join="false">
             <type>ProjectDependency</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -516,6 +516,62 @@
           </association>
         </field>
       </fields>
+      <codeSegments>
+        <codeSegment>
+          <version>1.0.0+</version>
+          <code><![CDATA[
+            /**
+             * @return Returns string representation of the changeset
+             */
+            public String toString()
+            {
+                String result = author + "\n" + date + "\n";
+
+                if ( files != null )
+                {
+                    for ( java.util.Iterator i = files.iterator(); i.hasNext(); )
+                    {
+                        ChangeFile file = (ChangeFile) i.next();
+
+                        result += file + "\n";
+                    }
+                }
+
+                result += comment;
+
+                return result;
+            }
+
+            /**
+             * @see java.lang.Object#equals(java.lang.Object)
+             */
+            public boolean equals( Object obj )
+            {
+                if ( obj instanceof ChangeSet )
+                {
+                    ChangeSet changeSet = (ChangeSet) obj;
+
+                    if ( toString().equals( changeSet.toString() ) )
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            public java.util.Date getDateAsDate()
+            {
+                if ( date > 0 )
+                {
+                    return new java.util.Date( date );
+                }
+
+                return null;
+            }
+          ]]></code>
+        </codeSegment>
+      </codeSegments>
     </class>
 
     <class>
@@ -539,6 +595,29 @@
           <type>String</type>
         </field>
       </fields>
+      <codeSegments>
+        <codeSegment>
+          <version>1.0.0+</version>
+          <code><![CDATA[
+            /**
+             * Provide a version of the object as a string for debugging purposes
+             *
+             * @return a {@link String}made up of the properties of the object
+             */
+            public String toString()
+            {
+                StringBuffer buffer = new StringBuffer( getName() );
+
+                if ( getRevision() != null )
+                {
+                    buffer.append( ", " ).append( getRevision() );
+                }
+
+                return buffer.toString();
+            }
+          ]]></code>
+        </codeSegment>
+      </codeSegments>
     </class>
 
     <class>
@@ -586,6 +665,12 @@
           <association stash.part="true" jpox.dependent="false">
             <type>Profile</type>
           </association>
+        </field>
+        <field jpox.nullValue="default">
+          <name>latestBuildId</name>
+          <version>1.0.0</version>
+          <type>int</type>
+          <defaultValue>0</defaultValue>
         </field>
       </fields>
     </class>
@@ -743,6 +828,11 @@
           <version>1.0.0+</version>
           <type>String</type>
           <defaultValue>build-output-directory</defaultValue>
+        </field>
+        <field>
+          <name>deploymentRepositoryDirectory</name>
+          <version>1.0.0+</version>
+          <type>String</type>
         </field>
         <field>
           <name>baseUrl</name>

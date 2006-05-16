@@ -23,8 +23,13 @@ package org.apache.maven.continuum.store;
 public class ContinuumObjectNotFoundException
     extends ContinuumStoreException
 {
+    public ContinuumObjectNotFoundException( String message )
+    {
+        super( message );
+    }
+
     public ContinuumObjectNotFoundException( String type, String id )
     {
-        super( "Could not find object. Type '" + type + "'. Id: '" + id + "'." );
+        this( "Could not find object. Type '" + type + "'. Id: '" + id + "'." );
     }
 }

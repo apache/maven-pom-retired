@@ -11,134 +11,144 @@ $page.setTitle( $i18n.getString( "group.management.label" ) )
 <div class="app">
   <div id="h3">
     <h3>$i18n.getString( "group.management.label" )</h3>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <table border="1" cellpadding="3" cellspacing="2" width="100%">
+      <tbody>
       <tr>
-        <th width="10%">$i18n.getString( "group.name.label" )</th>
-        <th>$i18n.getString( "group.permission.addProject.label" )</th>
-        <th>$i18n.getString( "group.permission.editProject.label" )</th>
-        <th>$i18n.getString( "group.permission.deleteProject.label" )</th>
-        <th>$i18n.getString( "group.permission.buildProject.label" )</th>
-        <th>$i18n.getString( "group.permission.showProject.label" )</th>
-        <th>$i18n.getString( "group.permission.addBuildDefinition.label" )</th>
-        <th>$i18n.getString( "group.permission.editBuildDefinition.label" )</th>
-        <th>$i18n.getString( "group.permission.deleteBuildDefinition.label" )</th>
-        <th>$i18n.getString( "group.permission.addNotifier.label" )</th>
-        <th>$i18n.getString( "group.permission.editNotifier.label" )</th>
-        <th>$i18n.getString( "group.permission.deleteNotifier.label" )</th>
-        <th>$i18n.getString( "group.permission.manageConfiguration.label" )</th>
-        <th>$i18n.getString( "group.permission.manageSchedule.label" )</th>
-        <th>$i18n.getString( "group.permission.manageUsers.label" )</th>
-        <th width="10%">&nbsp;</th>
+        <th width="10%" class="tablehead">$i18n.getString( "group.name.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.addProject.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.editProject.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.deleteProject.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.buildProject.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.showProject.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.addBuildDefinition.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.editBuildDefinition.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.deleteBuildDefinition.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.addNotifier.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.editNotifier.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.deleteNotifier.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.manageConfiguration.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.manageSchedule.label" )</th>
+        <th class="tablehead">$i18n.getString( "group.permission.manageUsers.label" )</th>
+        <th colspan="2" class="tablehead">&nbsp;</th>
       </tr>
       #foreach ( $group in $items )
       <tr class="$css.nextClass">
         <td>$group.name</td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "addProject" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "editProject" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "deleteProject" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "buildProject" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "showProject" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "addBuildDefinition" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "editBuildDefinition" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "deleteBuildDefinition" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "addNotifier" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "editNotifier" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "deleteNotifier" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "manageConfiguration" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "manageSchedule" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
         <td>
           #if ( $continuum.security.isAuthorized( $group, "manageUsers" ) )
-            <img src="/continuum/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_success_sml.gif" alt="Authorized" title="Authorized"/>
           #else
-            <img src="/continuum/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
+            <img src="$requestUtil.getContextPath()/images/icon_error_sml.gif" alt="Unauthorized" title="Unauthorized"/>
           #end
         </td>
-        <td>
+        <td width="1%">
           #if ( $continuum.security.isAuthorized( $c1user, "manageUsers" ) )
-          <a href="$link.setPage('EditUserGroup.vm').addPathInfo( 'fid', 'userGroups').addPathInfo('id', $group.id)">Edit</a>
-          | <a href="$link.setPage('DeleteUserGroup.vm').addPathInfo('fid', "userGroups").addPathInfo('id', $group.id)">Delete</a></td>
+            <a href="$link.setPage('EditUserGroup.vm').addPathInfo( 'fid', 'userGroups').addPathInfo('id', $group.id)"><img src="$requestUtil.getContextPath()/images/edit.gif" alt="Edit" title="Edit" width="16" height="16" border="0"></a>
+          #else
+            <img src="$requestUtil.getContextPath()/images/edit_disabled.gif" alt="Edit" title="Edit" width="16" height="16" border="0">
+          #end
+        </td>
+        <td width="1%">
+          #if ( $continuum.security.isAuthorized( $c1user, "manageUsers" ) )
+            <a href="$link.setPage('DeleteUserGroup.vm').addPathInfo('fid', "userGroups").addPathInfo('id', $group.id)"><img src="$requestUtil.getContextPath()/images/delete.gif" alt="Delete" title="Delete" width="16" height="16" border="0"></a>
+          #else
+            <img src="$requestUtil.getContextPath()/images/delete_disabled.gif" alt="Delete" title="Delete" width="16" height="16" border="0">
           #end
         </td>
       </tr>
       #end
+      </tbody>
     </table>
     #if ( $continuum.security.isAuthorized( $c1user, "manageUsers" ) )
     <div class="functnbar3">

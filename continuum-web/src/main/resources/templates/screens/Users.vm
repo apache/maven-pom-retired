@@ -11,13 +11,14 @@ $page.setTitle( "Continuum - User Management" )
 <div class="app">
   <div id="h3">
     <h3>User Management</h3>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <table border="1" cellpadding="3" cellspacing="2" width="100%">
+      <tbody>
       <tr>
-        <th width="10%">$i18n.getString( "user.username.label" )</th>
-        <th width="10%">$i18n.getString( "user.fullName.label" )</th>
-        <th width="10%">$i18n.getString( "user.email.label" )</th>
-        <th width="10%">$i18n.getString( "user.groupName.label" )</th>
-        <th width="10%">&nbsp;</th>
+        <th class="tablehead">$i18n.getString( "user.username.label" )</th>
+        <th class="tablehead">$i18n.getString( "user.fullName.label" )</th>
+        <th class="tablehead">$i18n.getString( "user.email.label" )</th>
+        <th class="tablehead">$i18n.getString( "user.groupName.label" )</th>
+        <th colspan="2" class="tablehead">&nbsp;</th>
       </tr>
       #foreach ( $user in $items )
       <tr class="$css.nextClass">
@@ -25,16 +26,31 @@ $page.setTitle( "Continuum - User Management" )
         <td>$user.fullName</td>
         <td>#if ( $user.email ) $user.email #end</td>
         <td>$user.group.name</td>
-        <td>
+        <td width="1%">
           #if ( $continuum.security.isAuthorized( $c1user, "manageUsers" ) )
             #if ( "guest" != $user.username )
-            <a href="$link.setPage('EditUser.vm').addPathInfo( 'fid', 'users').addPathInfo('id', $user.accountId)">Edit</a>
-            | <a href="$link.setPage('DeleteUser.vm').addPathInfo('fid', "users").addPathInfo('id', $user.accountId)">Delete</a></td>
+              <a href="$link.setPage('EditUser.vm').addPathInfo( 'fid', 'users').addPathInfo('id', $user.accountId)"><img src="$requestUtil.getContextPath()/images/edit.gif" alt="Edit" title="Edit" width="16" height="16" border="0"></a>
+            #else
+              <img src="$requestUtil.getContextPath()/images/edit_disabled.gif" alt="Edit" title="Edit" width="16" height="16" border="0">
             #end
+          #else
+            <img src="$requestUtil.getContextPath()/images/edit_disabled.gif" alt="Edit" title="Edit" width="16" height="16" border="0">
+          #end
+        </td>
+        <td width="1%">
+          #if ( $continuum.security.isAuthorized( $c1user, "manageUsers" ) )
+            #if ( "guest" != $user.username )
+              <a href="$link.setPage('DeleteUser.vm').addPathInfo('fid', "users").addPathInfo('id', $user.accountId)"><img src="$requestUtil.getContextPath()/images/delete.gif" alt="Delete" title="Delete" width="16" height="16" border="0"></a>
+            #else
+              <img src="$requestUtil.getContextPath()/images/delete_disabled.gif" alt="Delete" title="Delete" width="16" height="16" border="0">
+            #end
+          #else
+            <img src="$requestUtil.getContextPath()/images/delete_disabled.gif" alt="Delete" title="Delete" width="16" height="16" border="0">
           #end
         </td>
       </tr>
       #end
+      </tbody>
     </table>
     #if ( $continuum.security.isAuthorized( $c1user, "manageUsers" ) )
     <div class="functnbar3">

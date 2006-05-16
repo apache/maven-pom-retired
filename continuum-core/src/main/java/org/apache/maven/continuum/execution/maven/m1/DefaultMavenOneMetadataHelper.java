@@ -162,7 +162,8 @@ public class DefaultMavenOneMetadataHelper
 
             if ( StringUtils.isEmpty( scmConnection ) )
             {
-                throw new MavenOneMetadataHelperException( "Missing both anonymous and developer SCM connection URLs." );
+                throw new MavenOneMetadataHelperException(
+                    "Missing both anonymous and developer SCM connection URLs." );
             }
         }
 
@@ -241,18 +242,10 @@ public class DefaultMavenOneMetadataHelper
 
         Xpp3Dom build = mavenProject.getChild( "build" );
 
-        List notifiers = null;
+        List notifiers = new ArrayList();
 
-        ProjectNotifier notifier = new ProjectNotifier();
-
-        if ( build == null )
-        {
-            if ( project.getNotifiers() != null && !project.getNotifiers().isEmpty() )
-            {
-                notifiers = project.getNotifiers();
-            }
-        }
-        else
+        // Add project Notifier
+        if ( build != null )
         {
             String nagEmailAddress = getValue( build, "nagEmailAddress", null );
 
@@ -262,42 +255,28 @@ public class DefaultMavenOneMetadataHelper
 
                 props.put( ContinuumRecipientSource.ADDRESS_FIELD, nagEmailAddress );
 
+                ProjectNotifier notifier = new ProjectNotifier();
+
                 notifier.setConfiguration( props );
 
                 notifier.setFrom( ProjectNotifier.FROM_PROJECT );
+
+                notifiers.add( notifier );
             }
         }
 
-        if ( notifier == null && ( notifiers == null || notifiers.isEmpty() ) )
+        // Add all user notifiers
+        if ( project.getNotifiers() != null && !project.getNotifiers().isEmpty() )
         {
-        }
-        else
-        {
-            if ( notifiers == null )
-            {
-                notifiers = new ArrayList();
-            }
-            notifiers.add( notifier );
-
-            // Add notifier defined by user
             for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
             {
                 ProjectNotifier notif = (ProjectNotifier) i.next();
 
                 if ( notif.isFromUser() )
                 {
-                    ProjectNotifier userNotifier = new ProjectNotifier();
-
-                    userNotifier.setType( notif.getType() );
-
-                    userNotifier.setConfiguration( notif.getConfiguration() );
-
-                    userNotifier.setFrom( notif.getFrom() );
-
-                    notifiers.add( userNotifier );
+                    notifiers.add( notif );
                 }
             }
-
         }
 
         // ----------------------------------------------------------------------

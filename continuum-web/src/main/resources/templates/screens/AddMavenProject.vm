@@ -9,12 +9,13 @@ $page.setTitle( "Add Project" )
       #hidden ( "view" $form.add.view )
 
       <div class="axial">
-        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        <table border="1" cellpadding="3" cellspacing="2" width="100%">
+          <tbody>
           <tr>
             #field( $i18n $data $form.elements.get(0) $item $formtool )
           </tr>
           <tr>
-            <td>&nbsp;</td>
+            <th>&nbsp;</th>
             <td>
               <strong>$i18n.getString( "message.or" )</strong>
             </td>
@@ -22,6 +23,7 @@ $page.setTitle( "Add Project" )
           <tr>
             #field( $i18n $data $form.elements.get(1) $item $formtool )
           </tr>
+          </tbody>
         </table>
 
         #submitBar( "Submit" )

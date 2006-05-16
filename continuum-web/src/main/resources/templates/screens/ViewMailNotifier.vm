@@ -4,11 +4,13 @@ $page.setTitle( "Continuum - IRC Notifier" )
   <div id="axial" class="h3">
     <h3>Mail Notifier</h3>
     <div class="axial">
-      <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <table border="1" cellpadding="3" cellspacing="2" width="100%">
+        <tbody>
         <tr class="b">
           <th>Address</th>
           <td>$notifier.configuration.address</td>
         </tr>
+        </tbody>
       </table>
     </div>
     <div class="functnbar3">

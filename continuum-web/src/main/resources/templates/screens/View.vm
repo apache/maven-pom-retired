@@ -1,4 +1,4 @@
-$page.setTitle( "Continuum - Project View: ${item.name}" )
+$page.setTitle( "Continuum - Project View: Continuum Web" )
 
 #if ( $data.user )
   #set ( $c1user = $continuum.getUser( $data.user.userId ) )
@@ -10,12 +10,14 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
 
   #if ( $continuum.security.isAuthorized( $c1user, "showProject" ) )
   <div>
-    <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
-      <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Info</b>
+    <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
+      <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">Info</b>
       #set ( $buildsLink = $link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $item.id) )
-      <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$buildsLink">Builds</a>
-      #set ( $workingCopy = $link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $item.id) )
-      <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$workingCopy">Working&nbsp;Copy</a>
+      <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="$buildsLink">Builds</a>
+        #if ( $item.state == 10 || $item.state == 2 || $item.state == 3 || $item.state == 4 || $item.state == 6 )
+        #set ( $workingCopy = $link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $item.id) )
+        <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="$workingCopy">Working&nbsp;Copy</a>
+      #end
     </p>
   </div>
   #end
@@ -24,7 +26,8 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
     <h3>$i18n.getString( $form.view.titleKey )</h3>
 
     <div class="axial">
-      <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <table border="1" cellpadding="3" cellspacing="2" width="100%">
+        <tbody>
         <tr class="b">
           <th>$i18n.getString( "project.name.label" )</th>
           <td>$item.name</td>
@@ -41,33 +44,41 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
           <th>$i18n.getString( "project.group.label" )</th>
           <td>$item.projectGroup.name</td>
         </tr>
+        </tbody>
       </table>
       #if ( $continuum.security.isAuthorized( $c1user, "editProject" ) )
       <div class="functnbar3">
         <table>
+          <tbody>
           <tr>
             <td>
               <form method="post" action="$link.setPage('Edit.vm').addPathInfo('fid', "$!{item.executorId}Project").addPathInfo('id', $item.id)">
                 <input type="submit" name="edit-project" value="Edit"/>
               </form>
             </td>
+            <td>
+              <form method="post" action="$link.addPathInfo('action', 'cam').addPathInfo('cid','buildProject').addPathInfo('id', $item.id)">
+                <input type="submit" name="build-project" value="Build Now"/>
+              </form>
+            </td>
           </tr>
+          </tbody>
         </table>
       </div>
       #end
     </div>
 
-    
     <h3>$i18n.getString( "project.buildDefinitions.label" )</h3>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <table border="1" cellpadding="3" cellspacing="2" width="100%">
+      <tbody>
       <tr>
-        <th>Goals</th>
-        <th>Arguments</th>
-        <th>POM File</th>
-        <th>Profile</th>
-        <th>Schedule</th>
-        <th>From</th>
-        <th width="10%">&nbsp;</th>
+        <th class="tablehead">Goals</th>
+        <th class="tablehead">Arguments</th>
+        <th class="tablehead">POM File</th>
+        <th class="tablehead">Profile</th>
+        <th class="tablehead">Schedule</th>
+        <th class="tablehead">From</th>
+        <th colspan="3" class="tablehead">&nbsp;</th>
       </tr>
       #foreach ( $buildDefinition in $project.buildDefinitions )
       <tr class="$css.nextClass">
@@ -89,22 +100,38 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
           #end
         </td>
         <td>Project</td>
-        <td>
-          #if ( $continuum.security.isAuthorized( $c1user, "editBuildDefinition" ) )
-          #set ( $buildDefinitionLink = $link.setPage('BuildDefinition.vm').addPathInfo('view','BuildDefinition').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id) )
-          <a href="$buildDefinitionLink">Edit</a> |
+        <td width="1%">
+          #if ( $continuum.security.isAuthorized( $c1user, "buildProject" ) )
+            #set ( $buildNowLink = $link.addPathInfo('action', 'cam').addPathInfo('cid','buildProjectWithBuildDefinition').addPathInfo('id', $item.id).addPathInfo('buildDefinitionId', $buildDefinition.id) )
+            <a href="$buildNowLink"><img src="$requestUtil.getContextPath()/images/buildnow.gif" alt="Build Now" title="Build Now" width="16" height="16" border="0"></a>
+          #else
+            <img src="$requestUtil.getContextPath()/images/buildnow_disabled.gif" alt="Build Now" title="Build Now" width="16" height="16" border="0">
           #end
+        </td>
+        <td width="1%">
+          #if ( $continuum.security.isAuthorized( $c1user, "editBuildDefinition" ) )
+            #set ( $buildDefinitionLink = $link.setPage('BuildDefinition.vm').addPathInfo('view','BuildDefinition').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id) )
+            <a href="$buildDefinitionLink"><img src="$requestUtil.getContextPath()/images/edit.gif" alt="Edit" title="Edit" width="16" height="16" border="0"></a>
+          #else
+            <img src="$requestUtil.getContextPath()/images/edit_disabled.gif" alt="Edit" title="Edit" width="16" height="16" border="0">
+          #end
+        </td>
+        <td width="1%">
           #if ( $continuum.security.isAuthorized( $c1user, "deleteBuildDefinition" ) )
-          #set ( $deleteBuildDefinitionLink = $link.setPage('DeleteBuildDefinition.vm').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
-          <a href="$deleteBuildDefinitionLink">Delete</a>
+            #set ( $deleteBuildDefinitionLink = $link.setPage('DeleteBuildDefinition.vm').addPathInfo('buildDefinitionId', $buildDefinition.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
+            <a href="$deleteBuildDefinitionLink"><img src="$requestUtil.getContextPath()/images/delete.gif" alt="Delete" title="Delete" width="16" height="16" border="0"></a>
+          #else
+            <img src="$requestUtil.getContextPath()/images/delete_disabled.gif" alt="Delete" title="Delete" width="16" height="16" border="0">
           #end
         </td>
       </tr>
       #end
+      </tbody>
     </table>
     #if ( $continuum.security.isAuthorized( $c1user, "addBuildDefinition" ) )
     <div class="functnbar3">
       <table>
+        <tbody>
         <tr>
           <td>
             <form method="post" action="$link.setPage('AddBuildDefinition.vm').addPathInfo('view','BuildDefinition').addPathInfo('fid', 'buildDefinition').addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId)">
@@ -112,19 +139,21 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
             </form>
           </td>
         </tr>
+        </tbody>
       </table>
     </div>
     #end
     
     #if ( $project.notifiers )
     <h3>$i18n.getString( "project.notifiers.label" )</h3>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <table border="1" cellpadding="3" cellspacing="2" width="100%">
+      <tbody>
       <tr>
-        <th>Type</th>
-        <th>Recipient</th>
-        <th>Events</th>
-        <th>From</th>
-        <th width="10%">&nbsp;</th>
+        <th class="tablehead">Type</th>
+        <th class="tablehead">Recipient</th>
+        <th class="tablehead">Events</th>
+        <th class="tablehead">From</th>
+        <th colspan="2" class="tablehead">&nbsp;</th>
       </tr>
       #foreach ( $notifier in $project.notifiers )
         <tr class="$css.nextClass" #if ( !$notifier.isEnabled() ) style="color: silver;" #end>
@@ -168,35 +197,45 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
               User
             #end
           </td>
-          <td>
-            #if ( $notifier.isFromUser() )
+          #if ( $notifier.isFromUser() )
+            <td width="1%">
               #if ( $continuum.security.isAuthorized( $c1user, "editNotifier" ) )
                 #if ( $notifier.type == "irc" )
                   #set ( $editNotifierLink = $link.setPage('EditIrcNotifier.vm').addPathInfo('view','EditIrcNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
-                  <a href="$editNotifierLink">Edit</a>
+                  <a href="$editNotifierLink"><img src="$requestUtil.getContextPath()/images/edit.gif" alt="Edit" title="Edit" width="16" height="16" border="0"></a>
                 #elseif ( $notifier.type == "mail" )
                   #set ( $editNotifierLink = $link.setPage('EditMailNotifier.vm').addPathInfo('view','EditMailNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
-                  <a href="$editNotifierLink">Edit</a>
+                  <a href="$editNotifierLink"><img src="$requestUtil.getContextPath()/images/edit.gif" alt="Edit" title="Edit" width="16" height="16" border="0"></a>
                 #elseif ( $notifier.type == "msn" )
                   #set ( $editNotifierLink = $link.setPage('EditMsnNotifier.vm').addPathInfo('view','EditMsnNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
-                  <a href="$editNotifierLink">Edit</a>
+                  <a href="$editNotifierLink"><img src="$requestUtil.getContextPath()/images/edit.gif" alt="Edit" title="Edit" width="16" height="16" border="0"></a>
                 #elseif ( $notifier.type == "jabber" )
                   #set ( $editNotifierLink = $link.setPage('EditJabberNotifier.vm').addPathInfo('view','EditJabberNotifier').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
-                  <a href="$editNotifierLink">Edit</a>
+                  <a href="$editNotifierLink"><img src="$requestUtil.getContextPath()/images/edit.gif" alt="Edit" title="Edit" width="16" height="16" border="0"></a>
                 #end
+              #else
+                <img src="$requestUtil.getContextPath()/images/edit_disabled.gif" alt="Edit" title="Edit" width="16" height="16" border="0">
               #end
+            </td>
+            <td width="1%">
               #if ( $continuum.security.isAuthorized( $c1user, "deleteNotifier" ) )
                 #set ( $deleteNotifierLink = $link.setPage('DeleteNotifier.vm').addPathInfo('notifierId', $notifier.id).addPathInfo('id', $item.id).addPathInfo('executorId', $item.executorId) )
-              | <a href="$deleteNotifierLink">Delete</a>
+                <a href="$deleteNotifierLink"><img src="$requestUtil.getContextPath()/images/delete.gif" alt="Delete" title="Delete" width="16" height="16" border="0"></a>
+              #else
+                <img src="$requestUtil.getContextPath()/images/delete_disabled.gif" alt="Delete" title="Delete" width="16" height="16" border="0">
               #end
-            #end
-          </td>
+            </td>
+          #else
+            <td width="2%" colspan="2">&nbsp;</td>
+          #end
         </tr>
       #end
+      </tbody>
     </table>
     #if ( $continuum.security.isAuthorized( $c1user, "addNotifier" ) )
     <div class="functnbar3">
       <table>
+        <tbody>
         <tr>
           <td>
             <form method="post" action="$link.setPage('SelectNotifier.vm').addPathInfo('id', $project.id )">
@@ -204,6 +243,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
             </form>
           </td>
         </tr>
+        </tbody>
       </table>
     </div>
     #end
@@ -211,7 +251,8 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
 
     #if ( $project.dependencies )
     <h3>$i18n.getString( "project.dependencies.label" )</h3>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <table border="1" cellpadding="3" cellspacing="2" width="100%">
+      <tbody>
       <tr>
         <th>Name</th>
       </tr>
@@ -220,24 +261,28 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         <td>$!{dependency.groupId}:$!{dependency.artifactId}:$!{dependency.version}</td>
       </tr>
       #end
+      </tbody>
     </table>
     #end
 
     <!--
     <h3>$i18n.getString( "project.usedBy.label" )</h3>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <table border="1" cellpadding="3" cellspacing="2" width="100%">
+      <tbody>
       <tr>
         <th>Name</th>
       </tr>
       <tr class="b">
         <td>&nbsp;</td>
       </tr>
+      </tbody>
     </table>
     -->
 
     #if ( $project.developers )
     <h3>$i18n.getString( "project.developers.label" )</h3>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <table border="1" cellpadding="3" cellspacing="2" width="100%">
+      <tbody>
       <tr>
         <th>Name</th>
         <th>Email</th>
@@ -250,10 +295,12 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
         <!-- td>&nbsp;</td -->
       </tr>
       #end
+      </tbody>
     </table>
     <!--
     <div class="functnbar3">
       <table>
+        <tbody>
         <tr>
           <td>
             <form method="post" action="$link">
@@ -261,6 +308,7 @@ $page.setTitle( "Continuum - Project View: ${item.name}" )
             </form>
           </td>
         </tr>
+        </tbody>
       </table>
     </div>
     -->

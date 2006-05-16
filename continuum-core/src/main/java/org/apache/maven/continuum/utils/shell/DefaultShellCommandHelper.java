@@ -38,10 +38,8 @@ public class DefaultShellCommandHelper
     // ShellCommandHelper Implementation
     // ----------------------------------------------------------------------
 
-    public ExecutionResult executeShellCommand( File workingDirectory,
-                                                String executable,
-                                                String arguments,
-                                                File output )
+    public ExecutionResult executeShellCommand( File workingDirectory, String executable, String arguments, File output,
+                                                long idCommand )
         throws Exception
     {
         Commandline cl = new Commandline();
@@ -50,16 +48,11 @@ public class DefaultShellCommandHelper
 
         argument.setLine( arguments );
 
-        return executeShellCommand( workingDirectory,
-                                    executable,
-                                    argument.getParts(),
-                                    output );
+        return executeShellCommand( workingDirectory, executable, argument.getParts(), output, idCommand );
     }
 
-    public ExecutionResult executeShellCommand( File workingDirectory,
-                                                String executable,
-                                                String[] arguments,
-                                                File output )
+    public ExecutionResult executeShellCommand( File workingDirectory, String executable, String[] arguments,
+                                                File output, long idCommand )
         throws Exception
     {
         // ----------------------------------------------------------------------
@@ -67,6 +60,8 @@ public class DefaultShellCommandHelper
         // ----------------------------------------------------------------------
 
         Commandline cl = new Commandline();
+
+        cl.setPid( idCommand );
 
         cl.addSystemEnvironment();
 
@@ -78,10 +73,13 @@ public class DefaultShellCommandHelper
 
         for ( int i = 0; i < arguments.length; i++ )
         {
-            String argument = arguments[ i ];
+            String argument = arguments[i];
 
             cl.createArgument().setValue( argument );
         }
+
+        getLogger().info( "Executing: " + cl );
+        getLogger().info( "Working directory: " + cl.getWorkingDirectory().getAbsolutePath() );
 
         // ----------------------------------------------------------------------
         //
@@ -104,5 +102,15 @@ public class DefaultShellCommandHelper
         // ----------------------------------------------------------------------
 
         return new ExecutionResult( exitCode );
+    }
+
+    public boolean isRunning( long idCommand )
+    {
+        return CommandLineUtils.isAlive( idCommand );
+    }
+
+    public void killProcess( long idCommand )
+    {
+        CommandLineUtils.killProcess( idCommand );
     }
 }

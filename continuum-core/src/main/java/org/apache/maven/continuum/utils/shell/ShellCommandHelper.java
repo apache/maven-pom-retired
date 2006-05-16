@@ -26,15 +26,15 @@ public interface ShellCommandHelper
 {
     String ROLE = ShellCommandHelper.class.getName();
 
-    ExecutionResult executeShellCommand( File workingDirectory,
-                                         String executable,
-                                         String arguments,
-                                         File output )
+    ExecutionResult executeShellCommand( File workingDirectory, String executable, String arguments, File output,
+                                         long idCommand )
         throws Exception;
 
-    ExecutionResult executeShellCommand( File workingDirectory,
-                                         String executable,
-                                         String[] arguments,
-                                         File output)
+    ExecutionResult executeShellCommand( File workingDirectory, String executable, String[] arguments, File output,
+                                         long idCommand )
         throws Exception;
+
+    boolean isRunning( long idCommand );
+
+    void killProcess( long idCommand );
 }

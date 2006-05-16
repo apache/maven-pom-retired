@@ -11,7 +11,7 @@ $page.setTitle( $i18n.getString( $form.add.titleKey ) )
       #hidden ( "id" $id )
       #end
       <div class="axial">
-        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        <table border="1" cellpadding="3" cellspacing="2" width="100%">
           #foreach ( $element in $form.elements )
           #if ( !$element.immutable )
           <tr>

@@ -1,4 +1,4 @@
-$page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$build.startTime)" )
+$page.setTitle( "Continuum - Continuum Web Build at $date.format('medium',$build.startTime)" )
 
 #if ( $data.user )
   #set ( $c1user = $continuum.getUser( $data.user.userId ) )
@@ -10,36 +10,57 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
 
   #if ( $continuum.security.isAuthorized( $c1user, "showProject" ) )
   <div>
-    <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
+    <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
       #set ( $infoLink = $link.setPage('View.vm').addPathInfo('fid', "$!{project.executorId}Project").addPathInfo('id', $project.id) )
-      <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$infoLink">Info</a>
-      <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Builds</b>
-      #set ( $workingCopy = $link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $project.id) )
-      <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$workingCopy">Working&nbsp;Copy</a>
+      <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="$infoLink">Info</a>
+      #set ( $buildsLink = $link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $project.id) )
+      <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="$buildsLink">Builds</a>
+        #if ( $project.state == 10 || $project.state == 2 || $project.state == 3 || $project.state == 4 || $project.state == 6 )
+        #set ( $workingCopy = $link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $project.id) )
+        <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="$workingCopy">Working&nbsp;Copy</a>
+      #end
     </p>
   </div>
   #end
 
+  <div id="axial" class="h3">
   <h3>Build result for $project.name</h3>
-  <p>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
-      <tr class="a">
+
+  <div class="axial">
+    <table border="1" cellpadding="3" cellspacing="2" width="100%">
+      <tbody>
+      <tr class="b">
         <th>Start Time</th>
-        <td>$date.format('medium',$build.startTime)</td>
+        <td>$!{date.format('medium',$build.startTime)}</td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <th>End Time</th>
-        <td>$date.format('medium',$build.endTime)</td>
+        <td>$!{date.format('medium',$build.endTime)}</td>
       </tr>
-      <tr class="a">
+      <tr class="b">
+        <th>Duration</th>
+        <td>
+          #if ( $build.endTime )
+            #set ( $endTime = $build.endTime )
+          #else
+            #set ( $endTime = 0 );
+          #end
+          #if ( $endTime.toString() != "0" )
+            $!{date.getTimeDifference($build.startTime, $build.endTime)}
+          #else
+            Started since : $!{date.getElapsedTime($build.startTime)}
+          #end
+        </td>
+      </tr>
+      <tr class="b">
         <th>Build Trigger</th>
         <td>$trigger.generate($build)</td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <th>State</th>
         <td>$state.generate($build)</td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <th>Build#</th>
         <td>
         #if ( $build.buildNumber != 0 )
@@ -49,21 +70,23 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
         #end
         </td>
       </tr>
+      </tbody>
     </table>
-  </p>
+  </div>
 
   #if ( $build.scmResult )
-  <h4>Changes</h4>
-  <p>
+  <h3>Changes</h3>
+  <div class="axial">
     #if ( $build.scmResult.changes.size() == 0 )
     <b>No files changed</b>
     #else
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <table border="1" cellpadding="3" cellspacing="2" width="100%">
+      <tbody>
       #foreach ( $changeSet in $build.scmResult.changes )
       <tr class="a">
-        #if ($changeSet.author) <td>$changeSet.author</td> #end
-        #if ($changeSet.date > 0) <td>$date.format('medium',$changeSet.date)</td> #end
-        #if ($changeSet.comment) <td>$changeSet.comment</td> #end
+        <td>#if ($changeSet.author) $changeSet.author #end</td>
+        <td>#if ($changeSet.dateAsDate) $date.format('medium',$changeSet.dateAsDate) #end</td>
+        <td>#if ($changeSet.comment) $changeSet.comment #end</td>
         <td>
           #foreach ( $file in $changeSet.files )
             <code>$!file.name</code><br/>
@@ -71,21 +94,23 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
         </td>
       </tr>
       #end
+      </tbody>
     </table>
     #end
-  </p>
+  </div>
   #end
 
   #set ( $changeSets = $continuum.getChangesSinceLastSuccess( $id, $build.id ) )
   #if ( $changeSets )
-  <h4>Other Changes Since Last Success</h4>
-  <p>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+  <h3>Other Changes Since Last Success</h3>
+  <div class="axial">
+    <table border="1" cellpadding="3" cellspacing="2" width="100%">
+      <tbody>
       #foreach ( $changeSet in $changeSets )
       <tr class="a">
-        #if ($changeSet.author) <td>$changeSet.author</td> #end
-        #if ($changeSet.date > 0) <td>$date.format('medium',$changeSet.date)</td> #end
-        #if ($changeSet.comment) <td>$changeSet.comment</td> #end
+        <td>#if ($changeSet.author) $changeSet.author #end</td>
+        <td>#if ($changeSet.date > 0) $date.format('medium',$changeSet.date) #end</td>
+        <td>#if ($changeSet.comment) $changeSet.comment> #end</td>
         <td>
           #foreach ( $file in $changeSet.files )
             <code>$!file.name</code><br/>
@@ -93,28 +118,32 @@ $page.setTitle( "Continuum - ${project.name} Build at $date.format('medium',$bui
         </td>
       </tr>
       #end
+      </tbody>
     </table>
-  </p>
+  </div>
   #end
 
 #if ( $build.state == 4 )
-  <h4>Build Error</h4>
-  <p>
+  <h3>Build Error</h3>
+  <div class="axial">
     <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px">
     <code><pre>$build.error</pre></code>
     </div>
-  </p>
+  </div>
 #else
-  <h4>Output</h4>
-  <p>
-#if ( $output && $output != "" )
+  <h3>Output</h3>
+  <div class="axial">
+  #if ( $output && $output != "" )
+    <a href="$requestUtil.getContextPath()/servlet/browse?file=$requestUtil.getParameter('id')/${requestUtil.getParameter('buildId')}.log.txt">Download as text</a>
+    <br><br>
     <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px">
-    <code><pre>$output</pre></code>
+      <code><pre>$output</pre></code>
     </div>
-#else
-No output.
-#end
-  </p>
+  #else
+    No output.
+  #end
+  </div>
 #end
 
+  </div>
 </div>

@@ -76,6 +76,10 @@ public interface ContinuumStore
 
     List getAllProjectsByName();
 
+    List getAllProjectsByNameWithDependencies();
+
+    List getAllProjectsByNameWithBuildDetails();
+
     List getAllSchedulesByName();
 
     Schedule addSchedule( Schedule schedule );
@@ -99,7 +103,7 @@ public interface ContinuumStore
     Project getProject( int projectId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
-    Map getProjectIdsAndBuildDefinitionIdsBySchedule( int scheduleId )
+    Map getProjectIdsAndBuildDefinitionsIdsBySchedule( int scheduleId )
         throws ContinuumStoreException;
 
     void updateProject( Project project )
@@ -131,6 +135,9 @@ public interface ContinuumStore
     ProjectGroup getProjectGroupWithBuildDetails( int projectGroupId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
+    ProjectGroup getProjectGroupWithProjects( int projectGroupId )
+        throws ContinuumObjectNotFoundException, ContinuumStoreException;
+
     List getAllProjectGroupsWithBuildDetails();
 
     List getAllProjectsWithAllDetails();
@@ -147,7 +154,12 @@ public interface ContinuumStore
     ProjectGroup getProjectGroupByGroupId( String groupId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
+    ProjectGroup getProjectGroupByGroupIdWithProjects( String groupId )
+        throws ContinuumStoreException, ContinuumObjectNotFoundException;
+
     BuildResult getLatestBuildResultForProject( int projectId );
+
+    List getBuildResultsForProject( int projectId, long fromDate );
 
     Map getLatestBuildResults();
 
@@ -216,4 +228,6 @@ public interface ContinuumStore
     UserGroup getUserGroup( String name );
 
     void removeUserGroup( UserGroup group );
+
+    void closeStore();
 }

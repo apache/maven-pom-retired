@@ -11,7 +11,7 @@
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
   <version>1.1-SNAPSHOT</version>
-  <url>http://maven.apache.org/continuum/</url>
+  <url>http://maven.apache.org/continuum</url>
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/CONTINUUM</url>
@@ -32,7 +32,7 @@
     </mailingList>
   </mailingLists>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/</connection>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/trunk/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/trunk/</developerConnection>
     <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/trunk/</url>
   </scm>
@@ -42,7 +42,7 @@
         <plugin>
           <groupId>org.codehaus.plexus</groupId>
           <artifactId>plexus-maven-plugin</artifactId>
-          <version>1.1.3</version>
+          <version>1.2</version>
           <extensions>true</extensions>
         </plugin>
       </plugins>
@@ -55,11 +55,33 @@
     <module>continuum-core</module>
     <module>continuum-model</module>
     <module>continuum-notifiers</module>
+    <module>continuum-plexus-application</module>
+    <module>continuum-rpc-client</module>
     <module>continuum-store</module>
     <module>continuum-test</module>
     <module>continuum-webapp</module>
     <module>continuum-xmlrpc</module>
   </modules>
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <id>snapshots</id>
+      <name>Maven Central Development Repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <id>snapshots</id>
+      <name>Maven Central Development Repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2</url>
+    </pluginRepository>
+  </pluginRepositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -70,7 +92,7 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
-      <version>1.0-alpha-8</version>
+      <version>1.0-alpha-9</version>
     </dependency>
   </dependencies>
   <dependencyManagement>
@@ -78,72 +100,72 @@
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-core</artifactId>
-        <version>2.0</version>
+        <version>2.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-model</artifactId>
-        <version>2.0</version>
+        <version>2.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-artifact</artifactId>
-        <version>2.0-1</version>
+        <version>2.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-project</artifactId>
-        <version>2.0-1</version>
+        <version>2.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-settings</artifactId>
-        <version>2.0</version>
+        <version>2.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-api</artifactId>
-        <version>1.0-beta-3-SNAPSHOT</version>
+        <version>1.0-beta-3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-manager-plexus</artifactId>
-        <version>1.0-beta-3-SNAPSHOT</version>
+        <version>1.0-beta-3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-bazaar</artifactId>
-        <version>1.0-beta-3-SNAPSHOT</version>
+        <version>1.0-beta-3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-clearcase</artifactId>
-        <version>1.0-beta-3-SNAPSHOT</version>
+        <version>1.0-beta-3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-cvsexe</artifactId>
-        <version>1.0-beta-3-SNAPSHOT</version>
+        <version>1.0-beta-3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-local</artifactId>
-        <version>1.0-beta-3-SNAPSHOT</version>
+        <version>1.0-beta-3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-perforce</artifactId>
-        <version>1.0-beta-3-SNAPSHOT</version>
+        <version>1.0-beta-3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-starteam</artifactId>
-        <version>1.0-beta-3-SNAPSHOT</version>
+        <version>1.0-beta-3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-svnexe</artifactId>
-        <version>1.0-beta-3-SNAPSHOT</version>
+        <version>1.0-beta-3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.wagon</groupId>
@@ -153,7 +175,7 @@
       <dependency>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-file</artifactId>
-        <version>1.0-alpha-6</version>
+        <version>1.0-alpha-7</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.wagon</groupId>
@@ -163,7 +185,7 @@
       <dependency>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-ssh</artifactId>
-        <version>1.0-alpha-6</version>
+        <version>1.0-alpha-7</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.wagon</groupId>
@@ -231,9 +253,9 @@
         <version>1.1-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>jpox</groupId>
+        <groupId>org.apache.maven.continuum.jpox</groupId>
         <artifactId>jpox</artifactId>
-        <version>1.1.0-beta-4</version>
+        <version>1.1.0-20060413</version>
         <exclusions>
           <exclusion>
             <artifactId>ant</artifactId>
@@ -247,27 +269,56 @@
             <artifactId>ojdbc</artifactId>
             <groupId>ojdbc</groupId>
           </exclusion>
+          <exclusion>
+            <artifactId>xercesImpl</artifactId>
+            <groupId>xerces</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>xmlParserAPIs</artifactId>
+            <groupId>xerces</groupId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>jpox</groupId>
+        <groupId>org.apache.maven.continuum.jpox</groupId>
         <artifactId>jpox-enhancer</artifactId>
-        <version>1.1.0-beta-4</version>
+        <version>1.1.0-20060413</version>
+      </dependency>
+      <dependency>
+        <groupId>jpox</groupId>
+        <artifactId>jpox-dbcp</artifactId>
+        <version>1.1.0-rc-1</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>jpox</artifactId>
+            <groupId>jpox</groupId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-jdo2</artifactId>
-        <version>1.0-alpha-3</version>
+        <version>1.0-alpha-4</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>xercesImpl</artifactId>
+            <groupId>xerces</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>xmlParserAPIs</artifactId>
+            <groupId>xerces</groupId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-formica</artifactId>
-        <version>1.0-beta-9</version>
+        <version>1.0-beta-10</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -312,11 +363,6 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-security-api</artifactId>
-        <version>1.0-alpha-3-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-security-osuser</artifactId>
         <version>1.0-alpha-3-SNAPSHOT</version>
       </dependency>
@@ -331,20 +377,20 @@
         <version>1.7.3.3</version>
       </dependency>
       <dependency>
-        <groupId>quartz</groupId>
-        <artifactId>quartz</artifactId>
-        <version>1.4.5</version>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-quartz</artifactId>
+        <version>1.0-alpha-2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-security-api</artifactId>
+        <version>1.0-alpha-3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-security-summit</artifactId>
+        <version>1.0-alpha-3</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <id>snapshots</id>
-      <name>Maven Central Development Repository</name>
-      <url>http://snapshots.maven.codehaus.org/maven2</url>
-    </repository>
-  </repositories>
 </project>

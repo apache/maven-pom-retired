@@ -95,6 +95,7 @@
         <from-name>@mail.override.from.name@</from-name>
         <timestamp-format>EEE, d MMM yyyy HH:mm:ss Z</timestamp-format>
         <includeBuildResult>true</includeBuildResult>
+        <alwaysSend>false</alwaysSend>
       </configuration>
     </component>
 
@@ -144,6 +145,9 @@
           <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
         </requirement>
       </requirements>
+      <configuration>
+        <alwaysSend>false</alwaysSend>
+      </configuration>
     </component>
 
     <component>
@@ -169,13 +173,14 @@
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
       </requirements>
-      <!-- configuration>
-        <from-address/>
+      <configuration>
+        <alwaysSend>false</alwaysSend>
+        <!-- from-address/>
         <from-password/>
         <host/>
         <port/>
-        <sslConnection>true</sslConnection>
-      </configuration -->
+        <sslConnection>true</sslConnection -->
+      </configuration>
     </component>
 
     <component>
@@ -201,10 +206,11 @@
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
       </requirements>
-      <!-- configuration>
-        <from-address/>
-        <from-password/>
-      </configuration -->
+      <configuration>
+        <alwaysSend>false</alwaysSend>
+        <!-- from-address/>
+        <from-password/ -->
+      </configuration>
     </component>
 
     <component>
@@ -257,12 +263,33 @@
             <value>true</value>
           </property>
           <property>
+            <name>org.jpox.autoCreateColumns</name>
+            <value>true</value>
+          </property>
+          <property>
+            <name>org.jpox.validateTables</name>
+            <value>true</value>
+          </property>
+          <property>
+            <name>org.jpox.validateColumns</name>
+            <value>true</value>
+          </property>
+          <property>
+            <name>org.jpox.validateConstraints</name>
+            <value>true</value>
+          </property>
+          <property>
             <name>org.jpox.autoStartMechanism</name>
             <value>SchemaTable</value>
           </property>
           <property>
             <name>org.jpox.autoStartMechanismMode</name>
             <value>Ignored</value>
+          </property>
+          <!-- This property is for compatibility with database created with old jpox because rc2 use 256 as default (jdo standard) -->
+          <property>
+            <name>org.jpox.rdbms.stringDefaultLength</name>
+            <value>255</value>
           </property>
           <!-- Apache Derby Configuration -->
           <property>
@@ -426,10 +453,10 @@
       <implementation>org.codehaus.plexus.formica.validation.UrlValidator</implementation>
       <configuration>
         <allowedSchemes>
-          <allowedScheme implementation="java.lang.String">http</allowedScheme>
-          <allowedScheme implementation="java.lang.String">https</allowedScheme>
-          <allowedScheme implementation="java.lang.String">ftp</allowedScheme>
-          <!-- <allowedScheme implementation="java.lang.String">file</allowedScheme> -->
+          <allowedScheme>http</allowedScheme>
+          <allowedScheme>https</allowedScheme>
+          <allowedScheme>ftp</allowedScheme>
+          <!-- <allowedScheme>file</allowedScheme> -->
         </allowedSchemes>
       </configuration>
     </component>
@@ -493,6 +520,10 @@
           </appender>
         </appenders>
         <levels>
+          <level>
+            <hierarchy>org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper</hierarchy>
+            <level>INFO</level>
+          </level>
           <level>
             <hierarchy>org.codehaus.plexus.velocity</hierarchy>
             <level>WARN</level>

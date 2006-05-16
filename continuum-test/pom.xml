@@ -19,7 +19,7 @@
       <artifactId>plexus-jdo2</artifactId>
     </dependency>
     <dependency>
-      <groupId>jpox</groupId>
+      <groupId>org.apache.maven.continuum.jpox</groupId>
       <artifactId>jpox-enhancer</artifactId>
     </dependency>
     <dependency>

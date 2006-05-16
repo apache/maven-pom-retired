@@ -21,25 +21,35 @@ import org.apache.maven.continuum.configuration.ConfigurationLoadingException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.notification.notifier.AbstractNotifier;
+
+import java.util.Map;
 
 public abstract class AbstractContinuumNotifier
     extends AbstractNotifier
 {
     /**
+     * @plexus.configuration
+     */
+    private boolean alwaysSend = false;
+
+    /**
      * Returns url of the last build
      *
      * @param project The project
-     * @param build The build
+     * @param build   The build
      */
     public String getReportUrl( Project project, BuildResult build, ConfigurationService configurationService )
         throws ContinuumException
     {
         try
         {
-            //TODO it's bad to load always the conf when we want read a value
-            configurationService.load();
+            if ( !configurationService.isLoaded() )
+            {
+                configurationService.load();
+            }
 
             StringBuffer buf = new StringBuffer( configurationService.getUrl() );
 
@@ -62,15 +72,50 @@ public abstract class AbstractContinuumNotifier
         }
     }
 
+    /**
+     * Determine if message must be sent
+     *
+     * @param build         The current build result
+     * @param previousBuild The previous build result
+     * @return True if a message must be sent
+     * @deprecated
+     */
     public boolean shouldNotify( BuildResult build, BuildResult previousBuild )
     {
+        return shouldNotify( build, previousBuild, null );
+    }
+
+    /**
+     * Determine if message must be sent
+     *
+     * @param build         The current build result
+     * @param previousBuild The previous build result
+     * @param projectNotifier The project notifier
+     * @return True if a message must be sent
+     */
+    public boolean shouldNotify( BuildResult build, BuildResult previousBuild, ProjectNotifier projectNotifier )
+    {
+        if ( projectNotifier == null )
+        {
+            projectNotifier = new ProjectNotifier();
+        }
+
         if ( build == null )
         {
             return false;
         }
 
-        // Always send if the project failed
-        if ( build.getState() == ContinuumProjectState.FAILED || build.getState() == ContinuumProjectState.ERROR )
+        if ( alwaysSend )
+        {
+            return true;
+        }
+
+        if ( build.getState() == ContinuumProjectState.FAILED && projectNotifier.isSendOnFailure() )
+        {
+            return true;
+        }
+
+        if ( build.getState() == ContinuumProjectState.ERROR && projectNotifier.isSendOnError() )
         {
             return true;
         }
@@ -82,11 +127,31 @@ public abstract class AbstractContinuumNotifier
         }
 
         // Send if the state has changed
-        getLogger().info(
+        getLogger().debug(
             "Current build state: " + build.getState() + ", previous build state: " + previousBuild.getState() );
 
         if ( build.getState() != previousBuild.getState() )
         {
+            if ( build.getState() == ContinuumProjectState.ERROR )
+            {
+                return projectNotifier.isSendOnError();
+            }
+
+            if ( build.getState() == ContinuumProjectState.FAILED )
+            {
+                return projectNotifier.isSendOnFailure();
+            }
+
+            if ( build.getState() == ContinuumProjectState.OK )
+            {
+                return projectNotifier.isSendOnSuccess();
+            }
+
+            if ( build.getState() == ContinuumProjectState.WARNING )
+            {
+                return projectNotifier.isSendOnWarning();
+            }
+
             return true;
         }
 

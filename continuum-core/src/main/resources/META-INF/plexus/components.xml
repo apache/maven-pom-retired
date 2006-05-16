@@ -36,6 +36,9 @@
         <requirement>
           <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
+        </requirement>
       </requirements>
       <configuration>
         <working-directory>${plexus.home}/temp</working-directory>
@@ -83,7 +86,7 @@
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
         <requirement>
-          <role>org.apache.maven.continuum.scheduler.ContinuumScheduler</role>
+          <role>org.codehaus.plexus.scheduler.Scheduler</role>
         </requirement>
       </requirements>
     </component>
@@ -163,15 +166,21 @@
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
       </requirements>
+      <configuration>
+        <updateProperties>
+          <property>
+            <name>maven.scm.starteam.deleteLocal</name>
+            <value>true</value>
+          </property>
+        </updateProperties>
+      </configuration>
+      
     </component>
 
     <component>
       <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
       <implementation>org.apache.maven.continuum.utils.DefaultWorkingDirectoryService</implementation>
       <requirements>
-        <requirement>
-          <role>org.apache.maven.continuum.store.ContinuumStore</role>
-        </requirement>
         <requirement>
           <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
         </requirement>
@@ -233,6 +242,9 @@
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectHelper</role>
         </requirement>
       </requirements>
     </component>
@@ -365,7 +377,7 @@
       <configuration>
         <excludedPackagingTypes>
           <!--
-          <packaging implementation="java.lang.String">pom</packaging>
+          <packaging>pom</packaging>
           -->
         </excludedPackagingTypes>
       </configuration>
@@ -411,9 +423,6 @@
         <requirement>
           <role>org.apache.maven.continuum.buildcontroller.BuildController</role>
         </requirement>
-        <requirement>
-          <role>org.apache.maven.continuum.store.ContinuumStore</role>
-        </requirement>
       </requirements>
     </component>
 
@@ -455,6 +464,9 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.action.ActionManager</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
         </requirement>
       </requirements>
     </component>
@@ -645,6 +657,31 @@
     </component>
     <component>
       <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>deploy-artifact</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.DeployArtifactContinuumAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.execution.manager.BuildExecutorManager</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.deployer.ArtifactDeployer</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.repository.ArtifactRepositoryFactory</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
       <role-hint>store-checkout-scm-result</role-hint>
       <implementation>org.apache.maven.continuum.core.action.StoreCheckOutScmResultAction</implementation>
       <requirements>
@@ -742,45 +779,5 @@
         </requirement>
       </requirements>
     </component>
-
-    <!--
-     |
-     | Scheduler
-     |
-     -->
-
-    <component>
-      <role>org.apache.maven.continuum.scheduler.ContinuumScheduler</role>
-      <implementation>org.apache.maven.continuum.scheduler.DefaultContinuumScheduler</implementation>
-      <configuration>
-        <properties>
-          <property>
-            <name>org.quartz.scheduler.instanceName</name>
-            <value>scheduler1</value>
-          </property>
-          <property>
-            <name></name>
-            <value></value>
-          </property>
-          <property>
-            <name>org.quartz.threadPool.class</name>
-            <value>org.quartz.simpl.SimpleThreadPool</value>
-          </property>
-          <property>
-            <name>org.quartz.threadPool.threadCount</name>
-            <value>15</value>
-          </property>
-          <property>
-            <name>org.quartz.threadPool.threadPriority</name>
-            <value>4</value>
-          </property>
-          <property>
-            <name>org.quartz.jobStore.class</name>
-            <value>org.quartz.simpl.RAMJobStore</value>
-          </property>
-        </properties>
-      </configuration>
-    </component>
-
   </components>
 </component-set>

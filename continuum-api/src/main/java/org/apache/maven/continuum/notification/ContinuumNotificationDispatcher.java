@@ -50,6 +50,8 @@ public interface ContinuumNotificationDispatcher
 
     String CONTEXT_PROJECT = "project";
 
+    String CONTEXT_PROJECT_NOTIFIER = "projectNotifier";
+
     String CONTEXT_BUILD_RESULT = "result";
 
     String CONTEXT_UPDATE_SCM_RESULT = "scmResult";

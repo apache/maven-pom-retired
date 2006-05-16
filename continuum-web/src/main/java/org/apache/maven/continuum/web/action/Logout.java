@@ -44,6 +44,6 @@ public class Logout
 
         secData.setUser( null );
 
-        secData.setTarget( "Index.vm" );
+        secData.setTarget( "Summary.vm" );
     }
 }

@@ -21,6 +21,8 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.formica.web.ContentGenerator;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.summit.pull.RequestTool;
+import org.codehaus.plexus.summit.rundata.RunData;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -28,8 +30,10 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
  */
 public class ContinuumStateContentGenerator
     extends AbstractLogEnabled
-    implements ContentGenerator
+    implements ContentGenerator, RequestTool
 {
+    private String contextPath;
+
     public String generate( Object item )
     {
         int state;
@@ -42,36 +46,43 @@ public class ContinuumStateContentGenerator
         else
         {
             BuildResult buildResult = (BuildResult) item;
+
             state = buildResult.getState();
         }
 
-        if ( state == ContinuumProjectState.NEW )
+        if ( state == ContinuumProjectState.NEW || state == ContinuumProjectState.CHECKEDOUT )
         {
             return "New";
         }
         else if ( state == ContinuumProjectState.OK )
         {
-            return "<img src=\"/continuum/images/icon_success_sml.gif\" alt=\"Success\" title=\"Success\" border=\"0\" />";
+            return "<img src=\"" + contextPath +
+                "/images/icon_success_sml.gif\" alt=\"Success\" title=\"Success\" border=\"0\" />";
         }
         else if ( state == ContinuumProjectState.FAILED )
         {
-            return "<img src=\"/continuum/images/icon_warning_sml.gif\" alt=\"Failed\" title=\"Failed\" border=\"0\" />";
+            return "<img src=\"" + contextPath +
+                "/images/icon_warning_sml.gif\" alt=\"Failed\" title=\"Failed\" border=\"0\" />";
         }
         else if ( state == ContinuumProjectState.ERROR )
         {
-            return "<img src=\"/continuum/images/icon_error_sml.gif\" alt=\"Error\" title=\"Error\" border=\"0\" />";
+            return "<img src=\"" + contextPath +
+                "/images/icon_error_sml.gif\" alt=\"Error\" title=\"Error\" border=\"0\" />";
         }
         else if ( state == ContinuumProjectState.BUILDING )
         {
-            return "Building";
+            return "<img src=\"" + contextPath +
+                "/images/building.gif\" alt=\"Building\" title=\"Building\" border=\"0\">";
         }
         else if ( state == ContinuumProjectState.UPDATING )
         {
-            return "Updating";
+            return "<img src=\"" + contextPath +
+                "/images/checkingout.gif\" alt=\"Checking Out sources\" title=\"Checking Out sources\" border=\"0\">";
         }
         else if ( state == ContinuumProjectState.CHECKING_OUT )
         {
-            return "Checking Out";
+            return "<img src=\"" + contextPath +
+                "/images/checkingout.gif\" alt=\"Updating sources\" title=\"Updating sources\" border=\"0\">";
         }
         else
         {
@@ -79,5 +90,15 @@ public class ContinuumStateContentGenerator
 
             return "Unknown";
         }
+    }
+
+    public void setRunData( RunData data )
+    {
+        contextPath = data.getContextPath();
+    }
+
+    public void refresh()
+    {
+        // empty
     }
 }

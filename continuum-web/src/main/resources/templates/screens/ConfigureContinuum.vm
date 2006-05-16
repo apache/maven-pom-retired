@@ -11,8 +11,8 @@ $page.setTitle( "Configure Continuum" )
     <h3>General Configuration</h3>
 
     <div class="axial">
-      <table border="1" cellspacing="2" cellpadding="3" width="100%">
-
+      <table border="1" cellpadding="3" cellspacing="2" width="100%">
+        <tbody>
         <tr class="b">
           <th>Guests</th>
           <td>
@@ -33,6 +33,16 @@ $page.setTitle( "Configure Continuum" )
           <td>$continuum.configuration.buildOutputDirectory</td>
         </tr>
         <tr class="b">
+          <th>Deployment Repository Directory</th>
+          <td>
+          #if ($continuum.configuration.deploymentRepositoryDirectory )
+           $continuum.configuration.deploymentRepositoryDirectory
+          #else
+           -
+          #end
+          </td>
+        </tr>
+        <tr class="b">
           <th>Base URL</th>
           <td>$continuum.configuration.url</td>
         </tr>
@@ -48,6 +58,7 @@ $page.setTitle( "Configure Continuum" )
           <th>Company URL</th>
           <td>#if ( $continuum.configuration.companyUrl ) $continuum.configuration.companyUrl #end</td>
         </tr>
+        </tbody>
       </table>
       #if ( $continuum.security.isAuthorized( $c1user, "manageConfiguration" ) )
       <div class="functnbar3">

@@ -11,13 +11,14 @@ $page.setTitle( "Continuum" )
 <div class="app">
   <div id="h3">
     <h3>Schedules</h3>
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+    <table border="1" cellpadding="3" cellspacing="2" width="100%">
+      <tbody>
       <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Cron</th>
-        <th>Quiet Period (seconds)</th>
-        <th width="10%">&nbsp;</th>
+        <th class="tablehead">Name</th>
+        <th class="tablehead">Description</th>
+        <th class="tablehead">Cron</th>
+        <th class="tablehead">Quiet Period (seconds)</th>
+        <th colspan="2" class="tablehead">&nbsp;</th>
       </tr>
       #foreach ( $schedule in $items )
         <tr class="$css.nextClass" #if ( !$schedule.active ) style="color: silver;" #end>
@@ -28,15 +29,27 @@ $page.setTitle( "Continuum" )
             #end</td>
           <td>$schedule.cronExpression</td>
           <td>$schedule.delay</td>
-          <td width="10%">
+          <td width="1%">
             #if ( $continuum.security.isAuthorized( $c1user, "manageSchedule" ) )
-              <a href="$link.setPage('Edit.vm').addPathInfo( 'fid', 'schedules').addPathInfo('id', $schedule.id)">Edit</a>
-              #if ( $schedule.name != "DEFAULT_SCHEDULE" )
-                | <a href="$link.setPage('DeleteSchedule.vm').addPathInfo('fid', "schedules").addPathInfo('id', $schedule.id)">Delete</a></td>
-              #end
+              <a href="$link.setPage('Edit.vm').addPathInfo( 'fid', 'schedules').addPathInfo('id', $schedule.id)"><img src="$requestUtil.getContextPath()/images/edit.gif" alt="Edit" title="Edit" width="16" height="16" border="0"></a>
+            #else
+              <img src="$requestUtil.getContextPath()/images/edit_disabled.gif" alt="Edit" title="Edit" width="16" height="16" border="0">
             #end
+          </td>
+          <td width="1%">
+            #if ( $continuum.security.isAuthorized( $c1user, "manageSchedule" ) )
+              #if ( $schedule.name != "DEFAULT_SCHEDULE" )
+                <a href="$link.setPage('DeleteSchedule.vm').addPathInfo('fid', "schedules").addPathInfo('id', $schedule.id)"><img src="$requestUtil.getContextPath()/images/delete.gif" alt="Delete" title="Delete" width="16" height="16" border="0"></a>
+              #else
+                <img src="$requestUtil.getContextPath()/images/delete_disabled.gif" alt="Delete" title="Delete" width="16" height="16" border="0">
+              #end
+            #else
+              <img src="$requestUtil.getContextPath()/images/delete_disabled.gif" alt="Delete" title="Delete" width="16" height="16" border="0">
+            #end
+          </td>
         </tr>
       #end
+      </tbody>
     </table>
     #if ( $continuum.security.isAuthorized( $c1user, "manageSchedule" ) )
     <div class="functnbar3">

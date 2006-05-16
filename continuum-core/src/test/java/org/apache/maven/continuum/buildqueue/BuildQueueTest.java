@@ -46,18 +46,18 @@ public class BuildQueueTest
 
         int projectId = project.getId();
 
-        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_SCHEDULED );
 
         assertNextBuildIs( projectId );
 
         assertNextBuildIsNull();
 
-        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_SCHEDULED );
 
-        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
-        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
-        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
-        buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_SCHEDULED );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_SCHEDULED );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_SCHEDULED );
+        buildProject( projectId, ContinuumProjectState.TRIGGER_SCHEDULED );
 
         assertNextBuildIs( projectId );
 
@@ -71,9 +71,9 @@ public class BuildQueueTest
 
         int projectId2 = addProject( getStore(), "Build Queue Project 3" ).getId();
 
-        buildProject( projectId1, ContinuumProjectState.TRIGGER_UNKNOWN );
+        buildProject( projectId1, ContinuumProjectState.TRIGGER_SCHEDULED );
 
-        buildProject( projectId2, ContinuumProjectState.TRIGGER_UNKNOWN );
+        buildProject( projectId2, ContinuumProjectState.TRIGGER_SCHEDULED );
 
         assertNextBuildIs( projectId1 );
 
@@ -83,8 +83,8 @@ public class BuildQueueTest
 
         for ( int i = 0; i < 5; i++ )
         {
-            buildProject( projectId1, ContinuumProjectState.TRIGGER_UNKNOWN );
-            buildProject( projectId2, ContinuumProjectState.TRIGGER_UNKNOWN );
+            buildProject( projectId1, ContinuumProjectState.TRIGGER_SCHEDULED );
+            buildProject( projectId2, ContinuumProjectState.TRIGGER_SCHEDULED );
         }
 
         assertNextBuildIs( projectId1 );

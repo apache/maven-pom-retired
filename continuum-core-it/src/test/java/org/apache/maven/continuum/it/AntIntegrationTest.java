@@ -76,7 +76,7 @@ public class AntIntegrationTest
 
         progress( "Building SVN Ant project" );
 
-        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
+        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_SCHEDULED ).getId();
 
         assertSuccessfulAntBuild( buildId, project.getId() );
 
@@ -120,7 +120,7 @@ public class AntIntegrationTest
 
         progress( "Building CVS Ant project" );
 
-        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
+        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_SCHEDULED ).getId();
 
         assertSuccessfulAntBuild( buildId, projectId );
 

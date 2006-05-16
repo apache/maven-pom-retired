@@ -9,18 +9,20 @@
     <script src="$data.getLink("scripts/tigris.js")" type="text/javascript"></script>
   </head>
 
-  <body onload="focus()" marginwidth="0" marginheight="0" class="composite">
+  <body onload="focus()" class="composite" marginwidth="0" marginheight="0">
 
     #parse("navigations/DefaultTop.vm")
 
-    <table id="main" border="0" cellpadding="4" cellspacing="0" width="100%">
+    <table border="0" cellpadding="4" cellspacing="0" width="100%" id="main">
       <tbody>
         <tr valign="top">
-          <td id="leftcol" width="30%">
+          <td width="180" id="leftcol">
+            <br /> <br />
             #parse("navigations/Menu.vm")
           </td>
-          <td>
+          <td width="86%">
             <div id="bodycol">
+              <br />
               $screenViewContent
             </div>
           </td>
@@ -28,6 +30,7 @@
       </tbody>
     </table>
 
+    <br />
     #parse("navigations/DefaultBottom.vm")
 
   </body>

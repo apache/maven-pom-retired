@@ -17,7 +17,6 @@ package org.apache.maven.continuum.buildcontroller;
  */
 
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
-import org.apache.maven.continuum.store.ContinuumStore;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
@@ -35,11 +34,6 @@ public class BuildProjectTaskExecutor
      * @plexus.requirement
      */
     private BuildController controller;
-
-    /**
-     * @plexus.requirement
-     */
-    private ContinuumStore store;
 
     // ----------------------------------------------------------------------
     // TaskExecutor Implementation

@@ -74,6 +74,9 @@ public class ContinuumRecipientSource
     {
         Project project = (Project) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
+        ProjectNotifier projectNotifier =
+            (ProjectNotifier) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT_NOTIFIER );
+
         if ( project == null )
         {
             throw new NotificationException( "Missing project from the notification context." );
@@ -85,6 +88,10 @@ public class ContinuumRecipientSource
         {
             recipients.add( toOverride );
         }
+        else if ( projectNotifier != null )
+        {
+            addNotifierAdresses( projectNotifier, recipients );
+        }
         else if ( project.getNotifiers() != null && !project.getNotifiers().isEmpty() )
         {
             for ( Iterator notifierIterator = project.getNotifiers().iterator(); notifierIterator.hasNext(); )
@@ -94,14 +101,7 @@ public class ContinuumRecipientSource
                 if ( notifier.getId() == new Integer( notifierId ).intValue() &&
                     notifier.getConfiguration().containsKey( ADDRESS_FIELD ) )
                 {
-                    String addressField = (String) notifier.getConfiguration().get( ADDRESS_FIELD );
-
-                    String[] addresses = StringUtils.split( addressField, "," );
-
-                    for ( int i = 0; i < addresses.length; i++ )
-                    {
-                        recipients.add( addresses[i].trim() );
-                    }
+                    addNotifierAdresses( notifier, recipients );
                 }
             }
         }
@@ -113,6 +113,24 @@ public class ContinuumRecipientSource
         else
         {
             return recipients;
+        }
+    }
+
+    private void addNotifierAdresses( ProjectNotifier notifier, Set recipients )
+    {
+        if ( notifier.getConfiguration() != null )
+        {
+            String addressField = (String) notifier.getConfiguration().get( ADDRESS_FIELD );
+
+            if ( StringUtils.isNotEmpty( addressField ) )
+            {
+                String[] addresses = StringUtils.split( addressField, "," );
+
+                for ( int i = 0; i < addresses.length; i++ )
+                {
+                    recipients.add( addresses[i].trim() );
+                }
+            }
         }
     }
 }

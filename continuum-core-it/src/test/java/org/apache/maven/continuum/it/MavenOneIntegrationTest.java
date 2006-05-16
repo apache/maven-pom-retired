@@ -68,7 +68,7 @@ public class MavenOneIntegrationTest
 
         progress( "Building Maven 1 project" );
 
-        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
+        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_SCHEDULED ).getId();
 
         assertSuccessfulMaven1Build( buildId, projectId );
 

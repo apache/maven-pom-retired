@@ -11,7 +11,8 @@ $page.setTitle( $i18n.getString( "project.title.buildDefinition.update" ) )
       #hidden ( "id" $project.id )
       #hidden ( "buildDefinitionId" $buildDefinition.id )
       <div class="axial">
-        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        <table border="1" cellpadding="3" cellspacing="2" width="100%">
+          <tbody>
           #if (${project.executorId} == "ant" )
           <tr>
             <th>$i18n.getString( "buildDefinition.antBuildXmlFile.label" )</th>
@@ -93,6 +94,7 @@ $page.setTitle( $i18n.getString( "project.title.buildDefinition.update" ) )
               </select>
             </td>
           </tr>
+          </tbody>
         </table>
         #submitBar( "Submit" )
       </div>

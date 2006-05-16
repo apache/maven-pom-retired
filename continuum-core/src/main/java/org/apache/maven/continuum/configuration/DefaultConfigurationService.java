@@ -50,13 +50,13 @@ public class DefaultConfigurationService
 
     private SystemConfiguration systemConf;
 
+    private boolean loaded = false;
+
     // ----------------------------------------------------------------------
     // Continuum specifics we'll refactor out later
     // ----------------------------------------------------------------------
 
     private Map jdks;
-
-    private static final String LS = System.getProperty( "line.separator" );
 
     // ----------------------------------------------------------------------
     //
@@ -114,6 +114,17 @@ public class DefaultConfigurationService
         systemConf.setWorkingDirectory( workingDirectory.getAbsolutePath() );
     }
 
+    public File getDeploymentRepositoryDirectory()
+    {
+        return getFile( systemConf.getDeploymentRepositoryDirectory() );
+    }
+
+    public void setDeploymentRepositoryDirectory( File deploymentRepositoryDirectory )
+    {
+        systemConf.setDeploymentRepositoryDirectory(
+            deploymentRepositoryDirectory != null ? deploymentRepositoryDirectory.getAbsolutePath() : null );
+    }
+
     public void setJdks( Map jdks )
     {
         this.jdks = jdks;
@@ -136,7 +147,7 @@ public class DefaultConfigurationService
 
     public void setCompanyName( String companyName )
     {
-        systemConf.setCompanyName(  companyName );
+        systemConf.setCompanyName( companyName );
     }
 
     public String getCompanyUrl()
@@ -207,11 +218,16 @@ public class DefaultConfigurationService
 
     public File getFile( String filename )
     {
-        File f = new File( filename );
+        File f = null;
 
-        if ( !f.isAbsolute() )
+        if ( filename != null && filename.length() != 0 )
         {
-            f = new File( applicationHome, filename );
+            f = new File( filename );
+
+            if ( !f.isAbsolute() )
+            {
+                f = new File( applicationHome, filename );
+            }
         }
 
         return f;
@@ -220,6 +236,11 @@ public class DefaultConfigurationService
     // ----------------------------------------------------------------------
     // Load and Store
     // ----------------------------------------------------------------------
+
+    public boolean isLoaded()
+    {
+        return loaded;
+    }
 
     public void load()
         throws ConfigurationLoadingException
@@ -234,6 +255,8 @@ public class DefaultConfigurationService
 
                 systemConf = store.addSystemConfiguration( systemConf );
             }
+
+            loaded = true;
         }
         catch ( ContinuumStoreException e )
         {

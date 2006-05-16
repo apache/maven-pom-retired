@@ -4,7 +4,8 @@ $page.setTitle( "Continuum - MSN Notifier" )
   <div id="axial" class="h3">
     <h3>MSN Notifier</h3>
     <div class="axial">
-      <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <table border="1" cellpadding="3" cellspacing="2" width="100%">
+        <tbody>
         <tr class="b">
           <th>MSN Login</th>
           <td>$notifier.configuration.login</td>
@@ -17,6 +18,7 @@ $page.setTitle( "Continuum - MSN Notifier" )
           <th>MSN Recipient</th>
           <td>$notifier.configuration.address</td>
         </tr>
+        </tbody>
       </table>
     </div>
     <div class="functnbar3">

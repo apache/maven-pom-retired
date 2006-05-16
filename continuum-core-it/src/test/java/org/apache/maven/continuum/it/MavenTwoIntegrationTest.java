@@ -16,17 +16,20 @@ package org.apache.maven.continuum.it;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.model.scm.ChangeSet;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,8 +42,6 @@ public class MavenTwoIntegrationTest
     public void testBasic()
         throws Exception
     {
-        Continuum continuum = getContinuum();
-
         initializeCvsRoot();
 
         progress( "Initializing Maven 2 CVS project" );
@@ -51,11 +52,12 @@ public class MavenTwoIntegrationTest
 
         progress( "Adding Maven 2 project" );
 
-        int projectId = getProjectId( continuum.addMavenTwoProject( "file:" + root.getAbsolutePath() + "/pom.xml" ) );
+        int projectId =
+            getProjectId( getContinuum().addMavenTwoProject( "file:" + root.getAbsolutePath() + "/pom.xml" ) );
 
         waitForSuccessfulCheckout( projectId );
 
-        Project project = continuum.getProjectWithAllDetails( projectId );
+        Project project = getContinuum().getProjectWithAllDetails( projectId );
 
         assertProject( projectId, "Maven 2 Project", "2.0-SNAPSHOT", "-N -B", MavenTwoBuildExecutor.ID, project );
 
@@ -74,25 +76,28 @@ public class MavenTwoIntegrationTest
 
         progress( "Building Maven 2 project" );
 
-        project = continuum.getProjectWithBuilds( projectId );
+        project = getContinuum().getProjectWithBuilds( projectId );
+
         int originalSize = project.getBuildResults().size();
 
-        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN ).getId();
+        int buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_SCHEDULED ).getId();
 
         assertSuccessfulMaven2Build( buildId, projectId );
 
         progress( "Test that a build without any files changed won't execute the executor" );
 
-        project = continuum.getProjectWithBuilds( projectId );
+        project = getContinuum().getProjectWithBuilds( projectId );
+
         int expectedSize = project.getBuildResults().size();
 
         assertEquals( "build list was not updated", originalSize + 1, expectedSize );
 
-        continuum.buildProject( projectId, ContinuumProjectState.TRIGGER_UNKNOWN );
+        getContinuum().buildProject( projectId, ContinuumProjectState.TRIGGER_SCHEDULED );
 
         Thread.sleep( 3000 );
 
-        project = continuum.getProjectWithBuilds( projectId );
+        project = getContinuum().getProjectWithBuilds( projectId );
+
         int actualSize = project.getBuildResults().size();
 
         assertEquals( "A build has unexpectedly been executed.", expectedSize, actualSize );
@@ -104,6 +109,95 @@ public class MavenTwoIntegrationTest
         BuildResult build = assertSuccessfulMaven2Build( buildId, projectId );
 
         assertEquals( "The 'build forced' flag wasn't true", ContinuumProjectState.TRIGGER_FORCED, build.getTrigger() );
+
+        progress( "Test that a forced build with a pom deleted executes the executor" );
+
+        File pom = new File( getContinuum().getWorkingDirectory( projectId ), "pom.xml" );
+
+        assertTrue( pom.delete() );
+
+        buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_FORCED ).getId();
+
+        build = assertSuccessfulMaven2Build( buildId, projectId );
+
+        assertEquals( "The 'build forced' flag wasn't true", ContinuumProjectState.TRIGGER_FORCED, build.getTrigger() );
+
+        Thread.sleep( 3000 );
+
+        progress( "Test with two build definition, the second receive scm result from the first." );
+
+        BuildDefinition buildDef = new BuildDefinition();
+
+        buildDef.setBuildFile( "pom.xml" );
+
+        buildDef.setGoals( "clean" );
+
+        getContinuum().addBuildDefinition( projectId, buildDef );
+
+        List buildDefs = getContinuum().getBuildDefinitions( projectId );
+
+        for ( Iterator i = buildDefs.iterator(); i.hasNext(); )
+        {
+            BuildDefinition bd = (BuildDefinition) i.next();
+
+            if ( bd.getGoals().equals( "clean" ) )
+            {
+                buildDef = bd;
+
+                break;
+            }
+        }
+        //FileUtils.deleteDirectory( new File( getContinuum().getWorkingDirectory( projectId ), "src" ) );
+
+        Thread.sleep( 3000 );
+
+        build = buildProject( projectId, buildDef.getId(), ContinuumProjectState.TRIGGER_FORCED );
+
+        build = getContinuum().getBuildResult( build.getId() );
+
+        line();
+        System.out.println( "CHANGESET" );
+        line();
+        for ( Iterator i = build.getScmResult().getChanges().iterator(); i.hasNext(); )
+        {
+            ChangeSet changeSet = (ChangeSet) i.next();
+            System.out.println( changeSet.toString() );
+        }
+        line();
+
+        assertEquals( "Changes list must be empty.", 1, build.getScmResult().getChanges().size() );
+
+        FileUtils.deleteDirectory( new File( getContinuum().getWorkingDirectory( projectId ), "src" ) );
+
+        Thread.sleep( 3000 );
+
+        buildId = buildProject( projectId, ContinuumProjectState.TRIGGER_FORCED ).getId();
+
+        build = assertSuccessfulMaven2Build( buildId, projectId );
+
+        build = getContinuum().getBuildResult( build.getId() );
+
+        line();
+        System.out.println( "CHANGESET" );
+        line();
+        for ( Iterator i = build.getScmResult().getChanges().iterator(); i.hasNext(); )
+        {
+            ChangeSet changeSet = (ChangeSet) i.next();
+            System.out.println( changeSet.toString() );
+        }
+        line();
+
+        assertEquals( "Changes list must be empty.", 1, build.getScmResult().getChanges().size() );
+
+        Thread.sleep( 3000 );
+
+        build = buildProject( projectId, buildDef.getId(), ContinuumProjectState.TRIGGER_FORCED );
+
+        Thread.sleep( 3000 );
+
+        build = getContinuum().getBuildResult( build.getId() );
+
+        assertTrue( build.getScmResult().getChanges().size() >= 1 );
 
         removeProject( projectId );
     }

@@ -13,7 +13,8 @@ $page.setTitle( "Continuum - Mail Notifier" )
       #hidden ( "fid" "${executorId}Project" )
       #hidden ( "notifierId" $notifier.id )
       <div class="axial">
-        <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        <table border="1" cellpadding="3" cellspacing="2" width="100%">
+          <tbody>
           <tr>
             <th>Mail Address</th>
             <td>
@@ -44,6 +45,7 @@ $page.setTitle( "Continuum - Mail Notifier" )
               <input type="checkbox" name="sendOnWarning" #if( $notifier.sendOnWarning ) checked="checked" #end/>
             </td>
           </tr>
+          </tbody>
         </table>
         #submitBar( "Submit" )
       </div>

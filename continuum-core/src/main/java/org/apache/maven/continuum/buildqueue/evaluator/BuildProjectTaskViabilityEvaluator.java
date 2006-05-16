@@ -62,6 +62,7 @@ public class BuildProjectTaskViabilityEvaluator
             BuildProjectTask task = (BuildProjectTask) it.next();
 
             Integer key = new Integer( task.getProjectId() );
+
             List projectTasks = (List) projects.get( key );
 
             if ( projectTasks == null )
@@ -90,39 +91,42 @@ public class BuildProjectTaskViabilityEvaluator
 
     private List checkTasks( List list )
     {
-        BuildProjectTask okTask = null;
-
         List toBeRemoved = new ArrayList();
 
         for ( Iterator it = list.iterator(); it.hasNext(); )
         {
             BuildProjectTask buildProjectTask = (BuildProjectTask) it.next();
 
-            if ( okTask == null )
+            for ( Iterator it2 = list.iterator(); it2.hasNext(); )
             {
-                okTask = buildProjectTask;
+                BuildProjectTask task = (BuildProjectTask) it2.next();
 
-                continue;
-            }
+                // check if it's the same task
+                if ( buildProjectTask == task ||
+                    buildProjectTask.getBuildDefinitionId() != task.getBuildDefinitionId() )
+                {
+                    continue;
+                }
 
-            // ----------------------------------------------------------------------
-            // If this build is forces, don't remove it
-            // ----------------------------------------------------------------------
+                // ----------------------------------------------------------------------
+                // If this build is forces, don't remove it
+                // ----------------------------------------------------------------------
 
-            if ( buildProjectTask.getTrigger() == ContinuumProjectState.TRIGGER_FORCED )
-            {
-                continue;
-            }
+                if ( task.getTrigger() == ContinuumProjectState.TRIGGER_FORCED )
+                {
+                    continue;
+                }
 
-            // ----------------------------------------------------------------------
-            //
-            // ----------------------------------------------------------------------
+                // ----------------------------------------------------------------------
+                //
+                // ----------------------------------------------------------------------
 
-            long interval = buildProjectTask.getTimestamp() - okTask.getTimestamp();
+                long interval = task.getTimestamp() - buildProjectTask.getTimestamp();
 
-            if ( interval < requiredBuildInterval )
-            {
-                toBeRemoved.add( buildProjectTask );
+                if ( interval < requiredBuildInterval )
+                {
+                    toBeRemoved.add( buildProjectTask );
+                }
             }
         }
 

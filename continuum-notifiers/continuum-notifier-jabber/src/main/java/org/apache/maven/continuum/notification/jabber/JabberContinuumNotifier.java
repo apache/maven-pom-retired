@@ -20,6 +20,7 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumProjectState;
@@ -104,6 +105,9 @@ public class JabberContinuumNotifier
     {
         Project project = (Project) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
+        ProjectNotifier projectNotifier =
+            (ProjectNotifier) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT_NOTIFIER );
+
         BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
         // ----------------------------------------------------------------------
@@ -132,7 +136,7 @@ public class JabberContinuumNotifier
 
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
         {
-            sendMessage( project, build, recipients, configuration );
+            sendMessage( project, projectNotifier, build, recipients, configuration );
         }
     }
 
@@ -174,7 +178,8 @@ public class JabberContinuumNotifier
         return message + " " + getReportUrl( project, build, configurationService );
     }
 
-    private void sendMessage( Project project, BuildResult build, Set recipients, Map configuration )
+    private void sendMessage( Project project, ProjectNotifier projectNotifier, BuildResult build, Set recipients,
+                              Map configuration )
         throws NotificationException
     {
         String message;
@@ -185,7 +190,7 @@ public class JabberContinuumNotifier
 
         BuildResult previousBuild = getPreviousBuild( project, build );
 
-        if ( !shouldNotify( build, previousBuild ) )
+        if ( !shouldNotify( build, previousBuild, projectNotifier ) )
         {
             return;
         }
@@ -327,7 +332,7 @@ public class JabberContinuumNotifier
         {
             return port;
         }
-        else if ( isSslConnection ( configuration ) )
+        else if ( isSslConnection( configuration ) )
         {
             return 5223;
         }
@@ -368,7 +373,7 @@ public class JabberContinuumNotifier
     {
         if ( configuration.containsKey( "sslConnection" ) )
         {
-            return convertBoolean( (String ) configuration.get( "sslConnection" ) );
+            return convertBoolean( (String) configuration.get( "sslConnection" ) );
         }
 
         return sslConnection;

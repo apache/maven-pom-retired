@@ -20,6 +20,7 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.codehaus.plexus.logging.Logger;
+import org.codehaus.plexus.scheduler.AbstractJob;
 import org.quartz.InterruptableJob;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -30,13 +31,11 @@ import org.quartz.UnableToInterruptJobException;
  * @version $Id$
  */
 public class ContinuumBuildJob
-    implements InterruptableJob
+    extends AbstractJob
 {
-    private boolean interrupted;
-
     public void execute( JobExecutionContext context )
     {
-        if ( interrupted )
+        if ( isInterrupted() )
         {
             return;
         }
@@ -51,7 +50,7 @@ public class ContinuumBuildJob
         // Get data map out of the job detail
         // ----------------------------------------------------------------------
 
-        Logger logger = (Logger) jobDetail.getJobDataMap().get( ContinuumSchedulerConstants.LOGGER );
+        Logger logger = (Logger) jobDetail.getJobDataMap().get( AbstractJob.LOGGER );
 
         String jobName = jobDetail.getName();
 
@@ -80,11 +79,5 @@ public class ContinuumBuildJob
         catch( InterruptedException e )
         {
         }
-    }
-
-    public void interrupt()
-        throws UnableToInterruptJobException
-    {
-        interrupted = true;
     }
 }

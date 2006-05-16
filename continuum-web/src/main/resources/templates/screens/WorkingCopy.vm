@@ -10,12 +10,12 @@ $page.setTitle( "Continuum - Working Copy of ${project.name}" )
 
   #if ( $continuum.security.isAuthorized( $c1user, "showProject" ) )
   <div>
-    <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
+    <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
       #set ( $infoLink = $link.setPage('View.vm').addPathInfo('fid', "$!{project.executorId}Project").addPathInfo('id', $project.id) )
-      <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$infoLink">Info</a>
+      <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="$infoLink">Info</a>
       #set ( $buildsLink = $link.setPage('ProjectBuilds.vm').addPathInfo('view', "ProjectBuilds").addPathInfo('id', $project.id) )
-      <a style="border: 1px solid black; padding-left: 1em; padding-right: 1em; text-decoration:none;" href="$buildsLink">Builds</a>
-      <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;">Working&nbsp;Copy</b>
+      <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="$buildsLink">Builds</a>
+      <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">Working&nbsp;Copy</b>
     </p>
   </div>
   #end
@@ -25,12 +25,4 @@ $page.setTitle( "Continuum - Working Copy of ${project.name}" )
   #set ( $files = $continuum.getFiles( $project.id, $data.getParameters().getString( "userDirectory" ) ) )
   #set ( $baseUrl = $link.setPage('WorkingCopy.vm').addPathInfo('view', "WorkingCopy").addPathInfo('id', $project.id) )
   $workingCopy.generate( $files, $baseUrl.toString(), $continuum.getWorkingDirectory( $project.id ) )
-
-  #if ( $data.getParameters().getString( "file" ) )
-    #set( $filename = $data.getParameters().getString( "file" ) )
-    <br />
-    <form>
-      <textarea rows="50" cols="100">$continuum.getFileContent( $project.id, $data.getParameters().getString( "userDirectory" ), $filename )</textarea>
-    </form>
-  #end
 </div>

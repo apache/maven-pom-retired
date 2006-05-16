@@ -42,9 +42,7 @@ public class CheckoutProjectContinuumAction
     public void execute( Map context )
         throws Exception
     {
-        Project project = store.getProject( getProjectId( context ) );
-
-        int state = project.getState();
+        Project project = getProject( context );
 
         project.setState( ContinuumProjectState.CHECKING_OUT );
 
@@ -57,6 +55,7 @@ public class CheckoutProjectContinuumAction
         // ----------------------------------------------------------------------
 
         ScmResult result;
+
         try
         {
             result = scm.checkOut( project, workingDirectory );
@@ -69,7 +68,9 @@ public class CheckoutProjectContinuumAction
             if ( cause instanceof NoSuchScmProviderException )
             {
                 result = new ScmResult();
+
                 result.setSuccess( false );
+
                 result.setProviderMessage( cause.getMessage() );
             }
             else if ( e.getResult() != null )
@@ -79,7 +80,9 @@ public class CheckoutProjectContinuumAction
             else
             {
                 result = new ScmResult();
+
                 result.setSuccess( false );
+
                 result.setException( ContinuumUtils.throwableMessagesToString( e ) );
             }
         }
@@ -87,15 +90,18 @@ public class CheckoutProjectContinuumAction
         {
             // TODO: do we want this here, or should it be to the logs?
             result = new ScmResult();
+
             result.setSuccess( false );
+
             result.setException( ContinuumUtils.throwableMessagesToString( t ) );
         }
         finally
         {
-            project.setState( state );
+            project.setState( ContinuumProjectState.CHECKEDOUT );
 
             store.updateProject( project );
         }
+
         context.put( KEY_CHECKOUT_SCM_RESULT, result );
     }
 }

@@ -39,8 +39,10 @@ import org.codehaus.plexus.util.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -64,6 +66,11 @@ public class DefaultContinuumScm
      * @plexus.requirement
      */
     private ContinuumStore store;
+
+    /**
+     * @plexus.configuration
+     */
+    private Properties updateProperties;
 
     // ----------------------------------------------------------------------
     // ContinuumScm implementation
@@ -144,7 +151,9 @@ public class DefaultContinuumScm
         }
         catch ( ScmRepositoryException e )
         {
-            throw new ContinuumScmException( "Cannot checkout sources.", e );
+            String message = getValidationMessages( e );
+
+            throw new ContinuumScmException( "Cannot checkout sources." + message, e );
         }
         catch ( ScmException e )
         {
@@ -207,16 +216,32 @@ public class DefaultContinuumScm
                     workingDirectory.getAbsolutePath() + ")." );
             }
 
+            //Some SCM provider requires additional system properties during update
+            if ( updateProperties != null )
+            {
+                Enumeration propertyKeys = updateProperties.propertyNames();
+
+                while ( propertyKeys.hasMoreElements() )
+                {
+                    String key = (String) propertyKeys.nextElement();
+
+                    System.setProperty( key, updateProperties.getProperty( key ) );
+                }
+            }
+
             ScmRepository repository = getScmRepositorty( project );
 
             ScmResult result;
+
+            UpdateScmResult scmResult;
 
             ScmFileSet fileSet = new ScmFileSet( workingDirectory );
 
             synchronized ( this )
             {
-                result = convertScmResult(
-                    scmManager.getProviderByRepository( repository ).update( repository, fileSet, tag, getLatestUpdateDate( project ) ) );
+                scmResult = scmManager.getProviderByRepository( repository )
+                    .update( repository, fileSet, tag, getLatestUpdateDate( project ) );
+                result = convertScmResult( scmResult );
             }
 
             if ( !result.isSuccess() )
@@ -229,23 +254,48 @@ public class DefaultContinuumScm
                 getLogger().warn( "Provider message: " + result.getProviderMessage() );
             }
 
-            // TODO: total the number of files in the changesets
-//            getLogger().info( "Updated " + result.getFiles().size() + " files." );
+            if ( scmResult.getUpdatedFiles() != null && scmResult.getUpdatedFiles().size() > 0 )
+            {
+                getLogger().info( "Updated " + scmResult.getUpdatedFiles().size() + " files." );
+            }
 
             return result;
         }
-        catch ( ScmRepositoryException ex )
+        catch ( ScmRepositoryException e )
         {
-            throw new ContinuumScmException( "Error while update sources.", ex );
+            String message = getValidationMessages( e );
+
+            throw new ContinuumScmException( "Error while update sources." + message, e );
         }
-        catch ( ScmException ex )
+        catch ( ScmException e )
         {
-            throw new ContinuumScmException( "Error while update sources.", ex );
+            throw new ContinuumScmException( "Error while update sources.", e );
         }
         catch ( Exception e )
         {
             throw new ContinuumScmException( "Cannot checkout sources.", e );
         }
+    }
+
+    private String getValidationMessages( ScmRepositoryException ex )
+    {
+        List messages = ex.getValidationMessages();
+
+        StringBuffer message = new StringBuffer();
+
+        if ( !messages.isEmpty() )
+        {
+            for ( Iterator i = messages.iterator(); i.hasNext(); )
+            {
+                message.append( (String) i.next() );
+
+                if ( i.hasNext() )
+                {
+                    message.append( System.getProperty( "line.separator" ) );
+                }
+            }
+        }
+        return message.toString();
     }
 
     // ----------------------------------------------------------------------
@@ -270,15 +320,15 @@ public class DefaultContinuumScm
     private ScmRepository getScmRepositorty( Project project )
         throws ScmRepositoryException, NoSuchScmProviderException
     {
-        ScmRepository repository = scmManager.makeScmRepository( project.getScmUrl() );
+        ScmRepository repository = scmManager.makeScmRepository( project.getScmUrl().trim() );
 
-        if ( project.getScmUsername() != null )
+        repository.getProviderRepository().setPersistCheckout( true );
+
+        if ( !StringUtils.isEmpty( project.getScmUsername() ) )
         {
             repository.getProviderRepository().setUser( project.getScmUsername() );
 
-            repository.getProviderRepository().setPersistCheckout( true );
-
-            if ( project.getScmPassword() != null )
+            if ( !StringUtils.isEmpty( project.getScmPassword() ) )
             {
                 repository.getProviderRepository().setPassword( project.getScmPassword() );
             }
@@ -329,7 +379,7 @@ public class DefaultContinuumScm
 
                 // TODO: revision?
 
-                file.setStatus(scmFile.getStatus().toString());
+                file.setStatus( scmFile.getStatus().toString() );
 
                 changeSet.addFile( file );
             }
@@ -349,14 +399,7 @@ public class DefaultContinuumScm
 
         result.setProviderMessage( scmResult.getProviderMessage() );
 
-        // TODO: is this valid?
-        ChangeSet changeSet = convertScmFileSetToChangeSet( scmResult.getUpdatedFiles() );
-        if ( changeSet != null )
-        {
-            result.addChange( changeSet );
-        }
-
-        if ( scmResult.getChanges() != null )
+        if ( scmResult.getChanges() != null && !scmResult.getChanges().isEmpty() )
         {
             for ( Iterator it = scmResult.getChanges().iterator(); it.hasNext(); )
             {
@@ -389,6 +432,18 @@ public class DefaultContinuumScm
                 result.addChange( change );
             }
         }
+        else
+        {
+            //We don't have a changes information probably because provider doesn't have a changelog command
+            //so we use the updated list that contains only the updated files list
+            ChangeSet changeSet = convertScmFileSetToChangeSet( scmResult.getUpdatedFiles() );
+
+            if ( changeSet != null )
+            {
+                result.addChange( changeSet );
+            }
+
+        }
 
         return result;
     }
@@ -399,7 +454,7 @@ public class DefaultContinuumScm
     private String writeCommandLine( String commandLine )
     {
         String cmd = commandLine;
-        
+
         if ( cmd != null && cmd.startsWith( "svn" ) )
         {
             String pwdString = "--password";

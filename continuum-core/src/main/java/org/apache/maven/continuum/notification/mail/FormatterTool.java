@@ -39,7 +39,7 @@ public class FormatterTool
     // TODO: Add i18n
     public String formatProjectState( int state )
     {
-        if ( state == ContinuumProjectState.NEW )
+        if ( state == ContinuumProjectState.NEW || state == ContinuumProjectState.CHECKEDOUT )
         {
             return "New";
         }
@@ -67,7 +67,7 @@ public class FormatterTool
 
     public String formatTrigger( int trigger )
     {
-        if ( trigger == ContinuumProjectState.TRIGGER_UNKNOWN )
+        if ( trigger == ContinuumProjectState.TRIGGER_SCHEDULED )
         {
             // TODO: fix this
             return "Schedule";

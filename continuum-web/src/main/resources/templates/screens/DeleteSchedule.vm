@@ -13,10 +13,7 @@ $page.setTitle( $i18n.getString( $form.delete.titleKey ) )
       #hidden ( "action" $form.delete.action )
       #hidden ( "view" $form.delete.view )
       #hidden ( "id" $id )
-      <div class="functnbar3">
-        <input type="submit" name="deleteEntry" value="Delete"/>
-        <input type="submit" name="cancel" value="Cancel"/>
-      </div>
+      #submitBar( "Delete" )
   </form>
   </div>
 </div>

@@ -19,6 +19,7 @@ package org.apache.maven.continuum.notification.mail;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.notification.AbstractContinuumNotifier;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
@@ -176,6 +177,9 @@ public class MailContinuumNotifier
     {
         Project project = (Project) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT );
 
+        ProjectNotifier projectNotifier =
+            (ProjectNotifier) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT_NOTIFIER );
+
         BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
 
         String buildOutput = (String) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD_OUTPUT );
@@ -195,12 +199,12 @@ public class MailContinuumNotifier
 
         if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
         {
-            buildComplete( project, build, buildOutput, source, recipients, configuration );
+            buildComplete( project, projectNotifier, build, buildOutput, source, recipients, configuration );
         }
     }
 
-    private void buildComplete( Project project, BuildResult build, String buildOutput, String source, Set recipients,
-                               Map configuration )
+    private void buildComplete( Project project, ProjectNotifier projectNotifier, BuildResult build, String buildOutput,
+                                String source, Set recipients, Map configuration )
         throws NotificationException
     {
         // ----------------------------------------------------------------------
@@ -209,7 +213,7 @@ public class MailContinuumNotifier
 
         BuildResult previousBuild = getPreviousBuild( project, build );
 
-        if ( !shouldNotify( build, previousBuild ) )
+        if ( !shouldNotify( build, previousBuild, projectNotifier ) )
         {
             return;
         }
@@ -267,8 +271,8 @@ public class MailContinuumNotifier
 
                 context.put( "osName", osName );
 
-                context.put( "javaVersion", System.getProperty( "java.version" ) + "("
-                    + System.getProperty( "java.vendor" ) + ")" );
+                context.put( "javaVersion",
+                             System.getProperty( "java.version" ) + "(" + System.getProperty( "java.vendor" ) + ")" );
 
                 // ----------------------------------------------------------------------
                 // Generate
@@ -354,9 +358,8 @@ public class MailContinuumNotifier
         if ( fromMailbox == null )
         {
             getLogger()
-                .warn(
-                       project.getName()
-                           + ": Project is missing nag email and global from mailbox is missing, not sending mail." );
+                .warn( project.getName() +
+                    ": Project is missing nag email and global from mailbox is missing, not sending mail." );
 
             return;
         }
@@ -449,8 +452,8 @@ public class MailContinuumNotifier
 
         if ( currentBuild != null && build.getId() != currentBuild.getId() )
         {
-            throw new NotificationException( "INTERNAL ERROR: The current build wasn't the first in the build list. "
-                + "Current build: '" + currentBuild.getId() + "', " + "first build: '" + build.getId() + "'." );
+            throw new NotificationException( "INTERNAL ERROR: The current build wasn't the first in the build list. " +
+                "Current build: '" + currentBuild.getId() + "', " + "first build: '" + build.getId() + "'." );
         }
 
         return (BuildResult) builds.get( builds.size() - 2 );

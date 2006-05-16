@@ -63,6 +63,13 @@
         </requirement>
       </requirements>
     </component>
+
+    <component>
+      <role>requestUtil</role>
+      <implementation>org.apache.maven.continuum.web.tool.RequestUtil</implementation>
+      <instantiation-strategy>per-lookup</instantiation-strategy>
+    </component>
+
     <!--
     |
     | Customized PullTools Service
@@ -74,6 +81,11 @@
       <implementation>org.codehaus.plexus.summit.pull.DefaultPullService</implementation>
       <configuration>
         <tools>
+          <tool>
+            <name>requestUtil</name>
+            <role>requestUtil</role>
+            <scope>request</scope>
+          </tool>
           <tool>
             <name>link</name>
             <role>linktool</role>
@@ -101,14 +113,12 @@
           </tool>
           <tool>
             <name>state</name>
-            <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
-            <role-hint>continuum-state</role-hint>
-            <scope>global</scope>
+            <role>continuum-state</role>
+            <scope>request</scope>
           </tool>
           <tool>
             <name>trigger</name>
-            <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
-            <role-hint>continuum-trigger</role-hint>
+            <role>continuum-trigger</role>
             <scope>global</scope>
           </tool>
           <tool>
@@ -535,6 +545,10 @@
             <expression>buildProject(#id)</expression>
           </call>
           <call>
+            <cid>buildProjectWithBuildDefinition</cid>
+            <expression>buildProjectWithBuildDefinition(#id, #buildDefinitionId)</expression>
+          </call>
+          <call>
             <cid>buildAllProjects</cid>
             <expression>buildProjects()</expression>
           </call>
@@ -562,7 +576,7 @@
            -->
           <call>
             <cid>addBuildDefinition</cid>
-            <expression>addBuildDefinition(#id,#parameters)</expression>
+            <expression>addBuildDefinitionFromParams(#id,#parameters)</expression>
           </call>
           <call>
             <cid>deleteBuildDefinition</cid>
@@ -655,14 +669,12 @@
      |-->
 
     <component>
-      <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
-      <role-hint>continuum-state</role-hint>
+      <role>continuum-state</role>
       <implementation>org.apache.maven.continuum.web.tool.ContinuumStateContentGenerator</implementation>
     </component>
 
     <component>
-      <role>org.codehaus.plexus.formica.web.ContentGenerator</role>
-      <role-hint>continuum-trigger</role-hint>
+      <role>continuum-trigger</role>
       <implementation>org.apache.maven.continuum.web.tool.ContinuumTriggerContentGenerator</implementation>
     </component>
 

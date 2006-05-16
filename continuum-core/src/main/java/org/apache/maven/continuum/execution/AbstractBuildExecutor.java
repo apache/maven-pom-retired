@@ -17,6 +17,7 @@ package org.apache.maven.continuum.execution;
  */
 
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.apache.maven.continuum.utils.shell.ExecutionResult;
 import org.apache.maven.continuum.utils.shell.ShellCommandHelper;
@@ -29,6 +30,7 @@ import org.codehaus.plexus.util.StringUtils;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -179,16 +181,10 @@ public abstract class AbstractBuildExecutor
         // Execute the build
         // ----------------------------------------------------------------------
 
-        getLogger().warn( "Executable '" + actualExecutable + "'." );
-
-        getLogger().info( "Arguments: " + arguments );
-
-        getLogger().info( "Working directory: " + workingDirectory.getAbsolutePath() );
-
         try
         {
             ExecutionResult result = shellCommandHelper.executeShellCommand( workingDirectory, actualExecutable,
-                                                                             arguments, output );
+                                                                             arguments, output, project.getId() );
 
             getLogger().info( "Exit code: " + result.getExitCode() );
 
@@ -199,6 +195,23 @@ public abstract class AbstractBuildExecutor
             throw new ContinuumBuildExecutorException( "Error while executing shell command. " +
                 "The most common error is that '" + executable + "' " + "is not in your path.", e );
         }
+    }
+
+    public boolean isBuilding( Project project )
+    {
+        return shellCommandHelper.isRunning( project.getId() );
+    }
+
+    public void killProcess( Project project )
+    {
+        shellCommandHelper.killProcess( project.getId() );
+    }
+
+    public List getDeployableArtifacts( File workingDirectory, BuildDefinition buildDefinition )
+        throws ContinuumBuildExecutorException
+    {
+        // Not supported by this builder
+        return Collections.EMPTY_LIST;
     }
 
     public File getWorkingDirectory( Project project )

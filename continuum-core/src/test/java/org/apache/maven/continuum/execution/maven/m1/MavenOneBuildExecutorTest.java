@@ -34,19 +34,24 @@ import java.util.Properties;
 public class MavenOneBuildExecutorTest
     extends AbstractContinuumTest
 {
-    public void testUpdatingAProjectFromScmWithAExistingProjectAndAEmptyMaven1Pom()
+    private File checkOut;
+
+    private MavenOneBuildExecutor executor;
+
+    protected void setUp()
         throws Exception
     {
+        super.setUp();
+
         BuildExecutorManager builderManager = (BuildExecutorManager) lookup( BuildExecutorManager.ROLE );
 
-        MavenOneBuildExecutor executor = (MavenOneBuildExecutor) builderManager.getBuildExecutor(
-            MavenOneBuildExecutor.ID );
+        executor = (MavenOneBuildExecutor) builderManager.getBuildExecutor( MavenOneBuildExecutor.ID );
 
         // ----------------------------------------------------------------------
         // Make a checkout
         // ----------------------------------------------------------------------
 
-        File checkOut = getTestFile( "target/test-checkout" );
+        checkOut = getTestFile( "target/test-checkout" );
 
         if ( !checkOut.exists() )
         {
@@ -55,6 +60,11 @@ public class MavenOneBuildExecutorTest
 
         FileUtils.cleanDirectory( checkOut );
 
+    }
+
+    public void testUpdatingAProjectFromScmWithAExistingProjectAndAEmptyMaven1Pom()
+        throws Exception
+    {
         FileUtils.fileWrite( new File( checkOut, "project.xml" ).getAbsolutePath(), "<project/>" );
 
         // ----------------------------------------------------------------------
@@ -78,6 +88,8 @@ public class MavenOneBuildExecutorTest
         props.put( "address", "dev@maven.apache.org" );
 
         notifier.setConfiguration( props );
+
+        notifier.setFrom( ProjectNotifier.FROM_USER );
 
         List notifiers = new ArrayList();
 
@@ -108,5 +120,221 @@ public class MavenOneBuildExecutorTest
         assertEquals( "dev@maven.apache.org", actualNotifier.getConfiguration().get( "address" ) );
 
         assertEquals( "1.1-SNAPSHOT", project.getVersion() );
+    }
+
+    public void testUpdatingAProjectWithNagEMailAddress()
+        throws Exception
+    {
+        FileUtils.fileWrite( new File( checkOut, "project.xml" ).getAbsolutePath(),
+                             "<project><build><nagEmailAddress>myuser@myhost.org</nagEmailAddress></build></project>" );
+
+        // ----------------------------------------------------------------------
+        // Make the "existing" project
+        // ----------------------------------------------------------------------
+
+        Project project = new Project();
+
+        project.setName( "Maven" );
+
+        project.setGroupId( "org.apache.maven" );
+
+        project.setArtifactId( "maven" );
+
+        project.setScmUrl( "scm:svn:http://svn.apache.org/repos/asf:maven/maven-1/core/trunk/" );
+
+        project.setVersion( "1.1-SNAPSHOT" );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        executor.updateProjectFromCheckOut( checkOut, project, null );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        assertNotNull( project );
+
+        assertEquals( "Maven", project.getName() );
+
+        assertEquals( 1, project.getNotifiers().size() );
+
+        ProjectNotifier actualNotifier = (ProjectNotifier) project.getNotifiers().get( 0 );
+
+        assertEquals( "myuser@myhost.org", actualNotifier.getConfiguration().get( "address" ) );
+
+        // ----------------------------------------------------------------------
+        // Updating a new time to prevent duplicated notifiers
+        // ----------------------------------------------------------------------
+
+        executor.updateProjectFromCheckOut( checkOut, project, null );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        assertEquals( 1, project.getNotifiers().size() );
+
+        actualNotifier = (ProjectNotifier) project.getNotifiers().get( 0 );
+
+        assertEquals( "myuser@myhost.org", actualNotifier.getConfiguration().get( "address" ) );
+    }
+
+    public void testUpdatingAProjectWithNagEMailAddressAndOneNotifier()
+        throws Exception
+    {
+        FileUtils.fileWrite( new File( checkOut, "project.xml" ).getAbsolutePath(),
+                             "<project><build><nagEmailAddress>myuser@myhost.org</nagEmailAddress></build></project>" );
+
+        // ----------------------------------------------------------------------
+        // Make the "existing" project
+        // ----------------------------------------------------------------------
+
+        Project project = new Project();
+
+        project.setName( "Maven" );
+
+        project.setGroupId( "org.apache.maven" );
+
+        project.setArtifactId( "maven" );
+
+        project.setScmUrl( "scm:svn:http://svn.apache.org/repos/asf:maven/maven-1/core/trunk/" );
+
+        ProjectNotifier notifier = new ProjectNotifier();
+
+        Properties props = new Properties();
+
+        props.put( "address", "dev@maven.apache.org" );
+
+        notifier.setConfiguration( props );
+
+        notifier.setFrom( ProjectNotifier.FROM_USER );
+
+        List notifiers = new ArrayList();
+
+        notifiers.add( notifier );
+
+        project.setNotifiers( notifiers );
+
+        project.setVersion( "1.1-SNAPSHOT" );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        executor.updateProjectFromCheckOut( checkOut, project, null );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        assertNotNull( project );
+
+        assertEquals( "Maven", project.getName() );
+
+        assertEquals( 2, project.getNotifiers().size() );
+
+        ProjectNotifier actualNotifier = (ProjectNotifier) project.getNotifiers().get( 0 );
+
+        assertEquals( "myuser@myhost.org", actualNotifier.getConfiguration().get( "address" ) );
+
+        actualNotifier = (ProjectNotifier) project.getNotifiers().get( 1 );
+
+        assertEquals( "dev@maven.apache.org", actualNotifier.getConfiguration().get( "address" ) );
+
+        // ----------------------------------------------------------------------
+        // Updating a new time to prevent duplicated notifiers
+        // ----------------------------------------------------------------------
+
+        executor.updateProjectFromCheckOut( checkOut, project, null );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        assertEquals( 2, project.getNotifiers().size() );
+
+        actualNotifier = (ProjectNotifier) project.getNotifiers().get( 0 );
+
+        assertEquals( "myuser@myhost.org", actualNotifier.getConfiguration().get( "address" ) );
+
+        actualNotifier = (ProjectNotifier) project.getNotifiers().get( 1 );
+
+        assertEquals( "dev@maven.apache.org", actualNotifier.getConfiguration().get( "address" ) );
+    }
+
+    public void testUpdatingAProjectWithOneNotifier()
+        throws Exception
+    {
+        FileUtils.fileWrite( new File( checkOut, "project.xml" ).getAbsolutePath(), "<project/>" );
+
+        // ----------------------------------------------------------------------
+        // Make the "existing" project
+        // ----------------------------------------------------------------------
+
+        Project project = new Project();
+
+        project.setName( "Maven" );
+
+        project.setGroupId( "org.apache.maven" );
+
+        project.setArtifactId( "maven" );
+
+        project.setScmUrl( "scm:svn:http://svn.apache.org/repos/asf:maven/maven-1/core/trunk/" );
+
+        ProjectNotifier notifier = new ProjectNotifier();
+
+        Properties props = new Properties();
+
+        props.put( "address", "dev@maven.apache.org" );
+
+        notifier.setConfiguration( props );
+
+        notifier.setFrom( ProjectNotifier.FROM_USER );
+
+        List notifiers = new ArrayList();
+
+        notifiers.add( notifier );
+
+        project.setNotifiers( notifiers );
+
+        project.setVersion( "1.1-SNAPSHOT" );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        executor.updateProjectFromCheckOut( checkOut, project, null );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        assertNotNull( project );
+
+        assertEquals( "Maven", project.getName() );
+
+        assertEquals( 1, project.getNotifiers().size() );
+
+        ProjectNotifier actualNotifier = (ProjectNotifier) project.getNotifiers().get( 0 );
+
+        assertEquals( "dev@maven.apache.org", actualNotifier.getConfiguration().get( "address" ) );
+
+        // ----------------------------------------------------------------------
+        // Updating a new time to prevent duplicated notifiers
+        // ----------------------------------------------------------------------
+
+        executor.updateProjectFromCheckOut( checkOut, project, null );
+
+        // ----------------------------------------------------------------------
+        //
+        // ----------------------------------------------------------------------
+
+        assertEquals( 1, project.getNotifiers().size() );
+
+        actualNotifier = (ProjectNotifier) project.getNotifiers().get( 0 );
+
+        assertEquals( "dev@maven.apache.org", actualNotifier.getConfiguration().get( "address" ) );
     }
 }

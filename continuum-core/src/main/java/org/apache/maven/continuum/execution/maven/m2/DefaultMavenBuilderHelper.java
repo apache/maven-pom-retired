@@ -33,14 +33,15 @@ import org.apache.maven.model.Scm;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.apache.maven.profiles.DefaultProfileManager;
 import org.apache.maven.profiles.ProfileManager;
+import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.project.validation.ModelValidationResult;
 import org.apache.maven.settings.MavenSettingsBuilder;
 import org.apache.maven.settings.Mirror;
 import org.apache.maven.settings.Proxy;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
-import org.apache.maven.settings.SettingsUtils;
 import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
@@ -114,7 +115,15 @@ public class DefaultMavenBuilderHelper
     public void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject )
         throws MavenBuilderHelperException
     {
+        // ----------------------------------------------------------------------
+        // Name
+        // ----------------------------------------------------------------------
+
         continuumProject.setName( getProjectName( mavenProject ) );
+
+        // ----------------------------------------------------------------------
+        // SCM Url
+        // ----------------------------------------------------------------------
 
         continuumProject.setScmUrl( getScmUrl( mavenProject ) );
 
@@ -209,30 +218,27 @@ public class DefaultMavenBuilderHelper
         // Dependencies
         // ----------------------------------------------------------------------
 
-        if ( mavenProject.getDependencies() != null )
+        List dependencies = new ArrayList();
+
+        for ( Iterator i = mavenProject.getDependencies().iterator(); i.hasNext(); )
         {
-            List dependencies = new ArrayList();
+            Dependency dependency = (Dependency) i.next();
 
-            for ( Iterator i = mavenProject.getDependencies().iterator(); i.hasNext(); )
-            {
-                Dependency dependency = (Dependency) i.next();
+            ProjectDependency cd = new ProjectDependency();
 
-                ProjectDependency cd = new ProjectDependency();
+            cd.setGroupId( dependency.getGroupId() );
 
-                cd.setGroupId( dependency.getGroupId() );
+            cd.setArtifactId( dependency.getArtifactId() );
 
-                cd.setArtifactId( dependency.getArtifactId() );
+            cd.setVersion( dependency.getVersion() );
 
-                cd.setVersion( dependency.getVersion() );
-
-                dependencies.add( cd );
-            }
-
-            continuumProject.setDependencies( dependencies );
+            dependencies.add( cd );
         }
 
+        continuumProject.setDependencies( dependencies );
+
         // ----------------------------------------------------------------------
-        //
+        // Notifiers
         // ----------------------------------------------------------------------
 
         List userNotifiers = new ArrayList();
@@ -249,9 +255,21 @@ public class DefaultMavenBuilderHelper
 
                     userNotifier.setType( notifier.getType() );
 
+                    userNotifier.setEnabled( notifier.isEnabled() );
+
                     userNotifier.setConfiguration( notifier.getConfiguration() );
 
                     userNotifier.setFrom( notifier.getFrom() );
+
+                    userNotifier.setRecipientType( notifier.getRecipientType() );
+
+                    userNotifier.setSendOnError( notifier.isSendOnError() );
+
+                    userNotifier.setSendOnFailure( notifier.isSendOnFailure() );
+
+                    userNotifier.setSendOnSuccess( notifier.isSendOnSuccess() );
+
+                    userNotifier.setSendOnWarning( notifier.isSendOnWarning() );
 
                     userNotifiers.add( userNotifier );
                 }
@@ -283,11 +301,9 @@ public class DefaultMavenBuilderHelper
                 writeSettings( settings );
             }
 
-            ProfileManager profileManager = new DefaultProfileManager( container );
+            ProfileManager profileManager = new DefaultProfileManager( container, settings );
 
-            loadSettingsProfiles( profileManager, settings );
-
-            project = projectBuilder.build( file, getRepository( settings ), profileManager, false );
+            project = projectBuilder.build( file, getLocalRepository(), profileManager, false );
 
             if ( getLogger().isDebugEnabled() )
             {
@@ -298,7 +314,25 @@ public class DefaultMavenBuilderHelper
         }
         catch ( Exception e )
         {
-            String msg = "Cannot build maven project from " + file + " (" + e.getMessage() + ").";
+            StringBuffer messages = new StringBuffer();
+
+            if ( e instanceof InvalidProjectModelException )
+            {
+                InvalidProjectModelException ex = (InvalidProjectModelException) e;
+
+                ModelValidationResult validationResult = ex.getValidationResult();
+
+                if ( validationResult != null && validationResult.getMessageCount() > 0 )
+                {
+                    for ( Iterator i = validationResult.getMessages().iterator(); i.hasNext(); )
+                    {
+                        messages.append( (String) i.next() );
+                        messages.append( "\n" );
+                    }
+                }
+            }
+
+            String msg = "Cannot build maven project from " + file + " (" + e.getMessage() + ").\n" + messages;
 
             getLogger().error( msg, e );
 
@@ -327,6 +361,11 @@ public class DefaultMavenBuilderHelper
         }
 
         return project;
+    }
+
+    public ArtifactRepository getLocalRepository()
+    {
+        return getRepository( settings );
     }
 
     // ----------------------------------------------------------------------
@@ -437,27 +476,6 @@ public class DefaultMavenBuilderHelper
 
         return artifactRepositoryFactory.createArtifactRepository( "local", "file://" + localRepo, repositoryLayout,
                                                                    null, null );
-    }
-
-    private void loadSettingsProfiles( ProfileManager profileManager, Settings settings )
-    {
-        List settingsProfiles = settings.getProfiles();
-
-        if ( settingsProfiles != null && !settingsProfiles.isEmpty() )
-        {
-            List settingsActiveProfileIds = settings.getActiveProfiles();
-
-            profileManager.explicitlyActivate( settingsActiveProfileIds );
-
-            for ( Iterator it = settings.getProfiles().iterator(); it.hasNext(); )
-            {
-                org.apache.maven.settings.Profile rawProfile = (org.apache.maven.settings.Profile) it.next();
-
-                Profile profile = SettingsUtils.convertFromSettingsProfile( rawProfile );
-
-                profileManager.addProfile( profile );
-            }
-        }
     }
 
     private void writeSettings( Settings settings )
