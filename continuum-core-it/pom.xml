@@ -14,6 +14,13 @@
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <forkMode>never</forkMode> <!-- required because if we fork plexus-utils-1.1 is used and we need 1.2 -->
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
