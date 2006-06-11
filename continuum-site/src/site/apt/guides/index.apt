@@ -17,6 +17,8 @@ Documentation
  * {{{mini/guide-configuration.html}Guide to Configuring Continuum}}
 
  * {{{mini/guide-linux-boot.html}Guide to Configuring Continuum to start automatically on Linux}}
+ 
+ * {{{mini/guide-osx-boot.html}Guide to Configuring Continuum to start automatically on OS X}}
 
  * {{{mini/guide-xmlrpc-api.html}Guide to using the XML-RPC API}}
 

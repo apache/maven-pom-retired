@@ -1,0 +1,141 @@
+ ------
+ Guide to Configuring Continuum to start automatically on OS X
+ ------
+ Evan Ernst
+ ------
+ Wed May 17 2006
+
+Configuring Continuum to start automatically on OS X 10.4
+
+* Introduction
+
+ With the release of OS X 10.4 (Tiger), launchd has become the tool of choice to manage third party
+ daemons. This document provides instructions for configuring Continuum to run with launchd at system
+ startup as a custom user with limited privileges.
+
+* Prerequisites
+
+ * Download Maven from {{{http://maven.apache.org/download.html}here}}.
+
+ * Download Continuum from {{{../../download.html}here}}.
+ 
+ * Extract the archives in <<</usr/local>>>
+
+ * Create symbolic links to the latest installed versions of Continuum and Maven so the daemon will
+ continue to spawn after  updgrading these tools.
+
++--+
+$ sudo ln -s /usr/local/maven-2.0.4 /usr/local/maven-latest
+$ sudo ln -s /usr/local/continuum-1.0.3 /usr/local/continuum-latest
++--+
+
+* Creating the continuum user account
+
+ <Note: If any part of your build process requires access to the Aqua Window Server then you should
+ add a new user account in the usual way through System Preferences, rather than with the method below.
+ This user will need to remain logged in to access the Window Server.>
+
+ * Open Netinfo Manager.
+
+ * Authenticate by clicking the lock icon.
+
+ * Select <<<users>>>-><<<nobody>>> and click the duplicate toolbar icon.
+
+ * Select the copy and change the value of the name property to continuum or whatever you wish the user
+ to be called.
+
+ * Change <<<uid>>> to something below 500 and above 100.
+
+ * Change the <<<realname>>> value to something appropriate.
+
+ * Change the home directory to the path where you want Maven to store its local repository cache. You
+ can create a home directory at <<</Users/continuum>>> if you wish (<<<$ sudo mkdir /Users/continuum
+ && sudo chown continuum /Users/continuum>>>) or just set this to the Continuum working directory. Be
+ sure to set this to a real directory where Continuum has write access!
+
+ * Make sure the <<<shell>>> property has the value <<</usr/bin/false>>> to prevent login.
+
+ * The <<<password>>> is starred-out, so no one will be able to log in as this user.
+
+ * Remove the <<<_writers_passwd>>> property.
+
+ * Delete the <<<gid>>> value, so that the continuum user will default to no group membership. If you
+ to give the continuum user access to a shared Subversion repository, you can change the gid value to the
+ svn group at any time.
+
+ * Remove any other properties
+
+ * Save the changes with Domain->Save Changes and quit Netinfo Manager.
+
+
+* Creating a plist to launch Continuum
+
+ To configure the environment and parameters for starting the daemon, launchd requires an XML file
+ called a plist. Save the following plist as
+ <<</Library/LaunchDaemons/org.apache.maven.continuum>>>
+
++--+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Debug</key>
+    <false/>
+    <key>Label</key>
+    <string>org.apache.maven.continuum</string>
+    <key>OnDemand</key>
+    <false/>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/continuum-latest/bin/plexus.sh</string>
+    </array>
+    <key>ServiceDescription</key>
+    <string>Continuum Continuous Integration Build System</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>JAVA_HOME</key>
+        <string>/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home</string>
+        <key>PATH</key>
+        <string>/usr/bin:/usr/sbin:/opt/local/bin:/usr/local/continuum-latest/bin:/usr/local/maven-latest/bin</string>
+    </dict>
+    <key>Umask</key>
+    <integer>2</integer>
+    <key>UserName</key>
+    <string>continuum</string>
+</dict>
+</plist>
++--+
+
+
+* Starting Continuum
+
+ Before launching Continuum, make sure that the user you created has write access to the installation
+ directory:
+
++--+
+$ sudo chown -R continuum:wheel /usr/local/continuum-latest/
++--+
+
+ Next, let launchd know about the plist and tell it to start Continuum:
+
++--+
+$ sudo launchctl load /Library/LaunchDaemons/org.apache.maven.continuum
+$ sudo launchctl start org.apache.maven.continuum
++--+
+
+ Now open a browser and load {{http://localhost:8080/continuum}}. You may have to wait a while for the service to start,
+ especially if this is the first time Continuum has been executed.
+
+
+* Troubleshooting
+
+ If Continuum will not load in your browser, or behaves unexpectedly, try running the startup script from the command
+ line (your <<<$JAVA_HOME>>> environment variable needs to be set).
+
++--+
+$ sudo /usr/local/continuum-latest/bin/plexus.sh
++--+
+
+ If that works fine, the next place to look is <<</usr/local/continuum-latest/apps/continuum/logs/continuum.log>>>.
+ If you don't see anything in that file, or if it does not exist, it is likely that there is a problem with your file
+ permissions or the environment variables set for Continuum in the plist.
