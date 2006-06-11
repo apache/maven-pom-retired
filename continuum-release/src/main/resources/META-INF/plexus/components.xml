@@ -1,0 +1,14 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.apache.maven.continuum.release.ContinuumReleaseManager</role>
+      <role-hint>default</role-hint>
+      <implementation>org.apache.maven.continuum.release.DefaultContinuumReleaseManager</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.plugins.release.ReleaseManager</role>          
+        </requirement>
+      </requirements>
+    </component>
+  </components>
+</component-set>
