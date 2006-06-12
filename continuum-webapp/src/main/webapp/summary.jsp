@@ -1,4 +1,4 @@
-<%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="/webwork" prefix="ww" %>
 <%@ taglib uri="/tld/extremecomponents" prefix="ec" %>
 <html>
   <ww:i18n name="localization.Continuum">
@@ -17,10 +17,10 @@
                   filterable="false">
           <ec:row highlightRow="true">
             <ec:column property="state" title="&nbsp;" cell="org.apache.maven.continuum.web.view.StateCell"/>
-            <ec:column property="name">
+            <ec:column property="name" title="summary.projectTable.name">
                 <a href="${pageContext.request.contextPath}/projectView.action?projectId=${pageScope.project.id}">${pageScope.project.name}</a>
             </ec:column>
-            <ec:column property="version"/>
+            <ec:column property="version" title="summary.projectTable.version"/>
             <ec:column property="buildNumber" title="summary.projectTable.build" cell="org.apache.maven.continuum.web.view.BuildCell"/>
             <ec:column property="projectGroupName" title="summary.projectTable.group"/>
             <ec:column property="buildNowAction" title="&nbsp;" cell="org.apache.maven.continuum.web.view.BuildNowCell" sortable="false"/>

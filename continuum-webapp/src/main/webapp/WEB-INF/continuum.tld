@@ -7,28 +7,6 @@
     <uri>continuum</uri>
 
 	<tag>
-		<name>date</name>
-		<tagclass>org.apache.maven.continuum.web.view.jsp.ui.DateTag</tagclass>
-		<bodycontent>JSP</bodycontent>
-		<info>date tag</info>
-		<attribute>
-			<name>name</name>
-			<required>true</required>
-			<rtexprvalue>false</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>format</name>
-			<required>false</required>
-			<rtexprvalue>false</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>nice</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
-
-	<tag>
 		<name>data</name>
 		<tagclass>org.apache.maven.continuum.web.view.jsp.ui.DataTag</tagclass>
 		<bodycontent>JSP</bodycontent>

@@ -1,9 +1,8 @@
 <%@ taglib uri="sitemesh-decorator" prefix="decorator" %>
-<%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="/webwork" prefix="ww" %>
 
 <html>
   <head>
-    <ww:action name="checkConfiguration" executeResult="true"/>
     <title><decorator:title/></title>
     <link rel="stylesheet" type="text/css" href="<ww:url value="/css/tigris.css"/>" media="screen" />
     <link rel="stylesheet" type="text/css" href="<ww:url value="/css/print.css"/>" media="print" />

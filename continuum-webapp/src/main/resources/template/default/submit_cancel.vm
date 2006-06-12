@@ -1,7 +1,0 @@
-</table>
-<div class="functnbar3">
-$!{parameters.before}
-#parse("/template/simple/submit.vm")
-#if ($parameters.cancel) &nbsp;<input type="button" name="Cancel" value="$parameters.cancel" onClick="history.back()"/> #end
-$!{parameters.after}
-</div>

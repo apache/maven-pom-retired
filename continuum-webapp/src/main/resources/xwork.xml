@@ -5,6 +5,7 @@
     <include file="webwork-default.xml"/>
 
     <package name="default" extends="webwork-default">
+
         <interceptors>
             <interceptor-stack name="defaultContinuumStack">
                 <interceptor-ref name="prepare"/>
@@ -217,5 +218,6 @@
             <result name="input">editSchedule.jsp</result>
             <result name="success" type="chain">schedules</result>
         </action>
+
     </package>
 </xwork>

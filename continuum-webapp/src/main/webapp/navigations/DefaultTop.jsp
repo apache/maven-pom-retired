@@ -1,16 +1,18 @@
-<%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="/webwork" prefix="ww" %>
 <ww:i18n name="localization.Continuum">
 <div id="banner">
-  <table border="1" cellspacing="0" cellpadding="8" width="100%">
+  <table border="1" cellpadding="8" cellspacing="0" width="100%">
     <tbody>
       <tr>
         <td>
-            <ww:action name="companyInfo!default" executeResult="true"/>
+          <a href="http://maven.apache.org/continuum">
+            <img src="<ww:url value="/images/continuum_logo_75.gif"/>" alt="Continuum" title="Continuum" border="0">
+          </a>
         </td>
         <td>
-          <a href="http://maven.apache.org/continuum">
-            <img src="<ww:url value="/images/continuum_logo_75.gif"/>" alt="Continuum" title="Continuum" align="right" border="0">
-          </a>
+          <div align="right">
+            <ww:action name="companyInfo!default" executeResult="true"/>
+          </div>
         </td>
       </tr>
     </tbody>
@@ -18,7 +20,7 @@
 </div>
 
 <div id="breadcrumbs">
-  <div style="float: right">
+  <div style="float: right;">
     <a href="http://maven.apache.org/continuum">Continuum</a> |
     <a href="http://maven.apache.org/">Maven</a> |
     <a href="http://www.apache.org/">Apache</a>

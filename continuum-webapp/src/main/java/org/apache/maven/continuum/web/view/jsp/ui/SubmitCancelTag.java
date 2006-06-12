@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.view.jsp.ui;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,13 @@ package org.apache.maven.continuum.web.view.jsp.ui;
  * limitations under the License.
  */
 
+import com.opensymphony.webwork.components.Component;
 import com.opensymphony.webwork.views.jsp.ui.SubmitTag;
 import com.opensymphony.xwork.util.OgnlValueStack;
+import org.apache.maven.continuum.web.components.SubmitCancel;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -26,29 +31,23 @@ import com.opensymphony.xwork.util.OgnlValueStack;
 public class SubmitCancelTag
     extends SubmitTag
 {
-    /**
-     * The name of the default template for the SubmitCancelTag
-     */
-    final public static String TEMPLATE = "submit_cancel";
-
     private String cancel;
+
+    public Component getBean( OgnlValueStack stack, HttpServletRequest req, HttpServletResponse res )
+    {
+        return new SubmitCancel( stack, req, res );
+    }
+
+    protected void populateParams()
+    {
+        super.populateParams();
+
+        SubmitCancel submitCancel = ( (SubmitCancel) component );
+        submitCancel.setCancel( cancel );
+    }
 
     public void setCancel( String cancel )
     {
         this.cancel = cancel;
-    }
-
-    protected String getDefaultTemplate()
-    {
-        return TEMPLATE;
-    }
-
-    protected void evaluateParams(OgnlValueStack stack)
-    {
-        super.evaluateParams( stack );
-        if ( cancel != null )
-        {
-            addParameter( "cancel", findString( cancel ) );
-        }
     }
 }

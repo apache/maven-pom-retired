@@ -1,4 +1,4 @@
-<%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="/webwork" prefix="ww" %>
 <html>
   <ww:i18n name="localization.Continuum">
 <head>

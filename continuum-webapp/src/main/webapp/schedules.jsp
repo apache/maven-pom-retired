@@ -1,4 +1,4 @@
-<%@ taglib uri="webwork" prefix="ww" %>
+<%@ taglib uri="/webwork" prefix="ww" %>
 <%@ taglib uri="/tld/extremecomponents" prefix="ec" %>
 <html>
   <ww:i18n name="localization.Continuum">
