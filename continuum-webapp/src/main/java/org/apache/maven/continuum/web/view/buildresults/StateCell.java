@@ -17,12 +17,12 @@ package org.apache.maven.continuum.web.view.buildresults;
  */
 
 import org.apache.maven.continuum.web.util.StateGenerator;
-
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
-import org.extremecomponents.table.core.BaseModel;
+import org.extremecomponents.table.core.TableModel;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.PageContext;
 
 /**
  * Used in BuildResults
@@ -33,11 +33,11 @@ import javax.servlet.http.HttpServletRequest;
 public class StateCell
     extends DisplayCell
 {
-    public void init(BaseModel model, Column column)
+    protected String getCellValue( TableModel tableModel, Column column )
     {
-        super.init(model, column);
+        PageContext pageContext = (PageContext) tableModel.getContext().getContextObject();
 
-        HttpServletRequest request = (HttpServletRequest) model.getPageContext().getRequest();
+        HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 
         Object value = column.getPropertyValue();
 
@@ -45,13 +45,13 @@ public class StateCell
 
         if ( value instanceof Integer )
         {
-            state = ( (Integer) value).intValue();
+            state = ( (Integer) value ).intValue();
         }
 
         value = StateGenerator.generate( state, request.getContextPath() );
 
-        column.setValue(value);
+        column.setPropertyValue( value );
 
-        column.setPropertyValue(value);
+        return value.toString();
     }
 }

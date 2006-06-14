@@ -16,15 +16,14 @@ package org.apache.maven.continuum.web.view.commons;
  * limitations under the License.
  */
 
-import java.util.Calendar;
-import java.util.Locale;
-
 import org.codehaus.plexus.util.StringUtils;
-
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
-import org.extremecomponents.table.core.BaseModel;
+import org.extremecomponents.table.core.TableModel;
 import org.extremecomponents.util.ExtremeUtils;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -33,15 +32,13 @@ import org.extremecomponents.util.ExtremeUtils;
 public class DateCell
     extends DisplayCell
 {
-    public void init(BaseModel model, Column column)
+    protected String getCellValue( TableModel tableModel, Column column )
     {
-        super.init(model, column);
-
         String valueString = column.getPropertyValueAsString();
 
         if ( !StringUtils.isEmpty( valueString ) && !"0".equals( valueString ) )
         {
-            Locale locale = model.getTableHandler().getTable().getLocale();
+            Locale locale = tableModel.getLocale();
 
             Object value = column.getPropertyValue();
 
@@ -49,16 +46,20 @@ public class DateCell
             {
                 Calendar cal = Calendar.getInstance();
 
-                cal.setTimeInMillis( ( (Long) value).longValue() );
+                cal.setTimeInMillis( ( (Long) value ).longValue() );
 
                 value = cal.getTime();
             }
 
             value = ExtremeUtils.formatDate( column.getParse(), column.getFormat(), value, locale );
 
-            column.setValue(value);
+            column.setPropertyValue( value );
 
-            column.setPropertyValue(value);
+            return value.toString();
+        }
+        else
+        {
+            return "&nbsp;";
         }
     }
 }

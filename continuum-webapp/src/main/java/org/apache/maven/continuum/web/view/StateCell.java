@@ -16,18 +16,15 @@ package org.apache.maven.continuum.web.view;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.web.model.SummaryProjectModel;
-import org.apache.maven.continuum.web.util.StateGenerator;
-
-import org.extremecomponents.table.bean.Column;
-import org.extremecomponents.table.cell.DisplayCell;
-import org.extremecomponents.table.core.BaseModel;
-
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.webwork.views.util.UrlHelper;
+import org.apache.maven.continuum.web.model.SummaryProjectModel;
+import org.apache.maven.continuum.web.util.StateGenerator;
+import org.extremecomponents.table.bean.Column;
+import org.extremecomponents.table.cell.DisplayCell;
+import org.extremecomponents.table.core.TableModel;
 
 import java.util.HashMap;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Used in Summary view
@@ -38,17 +35,13 @@ import javax.servlet.http.HttpServletRequest;
 public class StateCell
     extends DisplayCell
 {
-    public void init(BaseModel model, Column column)
+    protected String getCellValue( TableModel tableModel, Column column )
     {
-        super.init(model, column);
-
-        SummaryProjectModel project = (SummaryProjectModel) model.getCurrentCollectionBean();
+        SummaryProjectModel project = (SummaryProjectModel) tableModel.getCurrentRowBean();
 
         int latestBuildId = project.getLatestBuildId();
 
-        HttpServletRequest request = (HttpServletRequest) model.getPageContext().getRequest();
-
-        String state = StateGenerator.generate( project.getState(), request.getContextPath() );
+        String state = StateGenerator.generate( project.getState(), tableModel.getContext().getContextPath() );
 
         if ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 || project.getState() == 4 )
         {
@@ -65,16 +58,16 @@ public class StateCell
                 String url = UrlHelper.buildUrl( "/buildResult.action", ServletActionContext.getRequest(),
                                                  ServletActionContext.getResponse(), params );
 
-                column.setValue( "<a href=\"" + url + "\">" + state + "</a>" );
+                return "<a href=\"" + url + "\">" + state + "</a>";
             }
             else
             {
-                column.setValue( state );
+                return state;
             }
         }
         else
         {
-            column.setValue( "&nbsp;" );
+            return "&nbsp;";
         }
     }
 }

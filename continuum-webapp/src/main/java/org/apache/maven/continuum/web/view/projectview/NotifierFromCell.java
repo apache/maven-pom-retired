@@ -19,7 +19,7 @@ package org.apache.maven.continuum.web.view.projectview;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
-import org.extremecomponents.table.core.BaseModel;
+import org.extremecomponents.table.core.TableModel;
 
 /**
  * Used in Project view
@@ -30,19 +30,17 @@ import org.extremecomponents.table.core.BaseModel;
 public class NotifierFromCell
     extends DisplayCell
 {
-    public void init( BaseModel model, Column column )
+    protected String getCellValue( TableModel tableModel, Column column )
     {
-        super.init( model, column );
-
-        ProjectNotifier notifier = (ProjectNotifier) model.getCurrentCollectionBean();
+        ProjectNotifier notifier = (ProjectNotifier) tableModel.getCurrentRowBean();
 
         if ( notifier.isFromProject() )
         {
-            column.setValue( "Project" );
+            return "Project";
         }
         else
         {
-            column.setValue( "User" );
+            return "User";
         }
     }
 }

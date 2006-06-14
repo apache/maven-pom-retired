@@ -19,9 +19,7 @@ package org.apache.maven.continuum.web.view;
 import org.apache.maven.continuum.web.model.SummaryProjectModel;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
-import org.extremecomponents.table.core.BaseModel;
-
-import javax.servlet.http.HttpServletRequest;
+import org.extremecomponents.table.core.TableModel;
 
 /**
  * Used in Summary view
@@ -32,19 +30,23 @@ import javax.servlet.http.HttpServletRequest;
 public class BuildNowCell
     extends DisplayCell
 {
-    public void init( BaseModel model, Column column )
+    protected String getCellValue( TableModel tableModel, Column column )
     {
-        super.init( model, column );
+        SummaryProjectModel project = (SummaryProjectModel) tableModel.getCurrentRowBean();
 
-        SummaryProjectModel project = (SummaryProjectModel) model.getCurrentCollectionBean();
+        String contextPath = tableModel.getContext().getContextPath();
 
-        HttpServletRequest request = (HttpServletRequest) model.getPageContext().getRequest();
-
-        if ( !project.isInQueue()
-            && ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 || project.getState() == 4 ) )
+        if ( !project.isInQueue() && ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 ||
+            project.getState() == 4 ) )
         {
-            column.setValue( "<a href=\"" + request.getContextPath() + "/buildProject.action?projectId="
-                + project.getId() + "\">Build Now</a>" );
+            return "<a href=\"" + contextPath + "/buildProject.action?projectId=" + project.getId() + "\"><img src=\"" +
+                contextPath +
+                "/images/buildnow.gif\" alt=\"Build Now\" title=\"Build Now\" width=\"16\" height=\"16\" border=\"0\"></a>";
+        }
+        else
+        {
+            return "<img src=\"" + contextPath +
+                "/images/buildnow_disabled.gif\" alt=\"Build Now\" title=\"Build Now\" width=\"16\" height=\"16\" border=\"0\">";
         }
     }
 }

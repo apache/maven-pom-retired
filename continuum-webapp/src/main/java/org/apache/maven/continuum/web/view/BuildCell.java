@@ -16,17 +16,16 @@ package org.apache.maven.continuum.web.view;
  * limitations under the License.
  */
 
+import com.opensymphony.webwork.views.util.UrlHelper;
 import org.apache.maven.continuum.web.model.SummaryProjectModel;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
-import org.extremecomponents.table.core.BaseModel;
-
-import java.util.HashMap;
+import org.extremecomponents.table.core.TableModel;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.opensymphony.webwork.views.util.UrlHelper;
+import javax.servlet.jsp.PageContext;
+import java.util.HashMap;
 
 /**
  * Used in Summary view
@@ -37,47 +36,50 @@ import com.opensymphony.webwork.views.util.UrlHelper;
 public class BuildCell
     extends DisplayCell
 {
-    public void init( BaseModel model, Column column )
+    protected String getCellValue( TableModel tableModel, Column column )
     {
-        super.init( model, column );
-
-        SummaryProjectModel project = (SummaryProjectModel) model.getCurrentCollectionBean();
+        SummaryProjectModel project = (SummaryProjectModel) tableModel.getCurrentRowBean();
 
         int buildNumber = project.getBuildNumber();
 
         if ( project.isInQueue() )
         {
-            column.setValue( "<b>In&nbsp;queue</b>" );
-        }
-        else if ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3
-            || project.getState() == 4 )
-        {
-            if ( project.getBuildNumber() > 0 )
-            {
-                HashMap params = new HashMap();
-
-                params.put( "projectId", new Integer( project.getId() ) );
-
-                params.put( "projectName", project.getName() );
-
-                params.put( "buildId", new Integer( buildNumber ) );
-
-                HttpServletRequest request = (HttpServletRequest) model.getPageContext().getRequest();
-
-                HttpServletResponse response = (HttpServletResponse) model.getPageContext().getResponse();
-
-                String url = UrlHelper.buildUrl( "/buildResult.action", request, response, params );
-
-                column.setValue( "<a href=\"" + url + ">" + project.getBuildNumber() + "</a>" );
-            }
-            else
-            {
-                column.setValue( "&nbsp;" );
-            }
+            return "<b>In&nbsp;queue</b>";
         }
         else
         {
-            column.setValue( "<b>In&nbsp;progress</b>" );
+            if ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 ||
+                project.getState() == 4 )
+            {
+                if ( project.getBuildNumber() > 0 )
+                {
+                    HashMap params = new HashMap();
+
+                    params.put( "projectId", new Integer( project.getId() ) );
+
+                    params.put( "projectName", project.getName() );
+
+                    params.put( "buildId", new Integer( buildNumber ) );
+
+                    PageContext pageContext = (PageContext) tableModel.getContext().getContextObject();
+
+                    HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+
+                    HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
+
+                    String url = UrlHelper.buildUrl( "/buildResult.action", request, response, params );
+
+                    return "<a href=\"" + url + ">" + project.getBuildNumber() + "</a>";
+                }
+                else
+                {
+                    return "&nbsp;";
+                }
+            }
+            else
+            {
+                return "<b>In&nbsp;progress</b>";
+            }
         }
     }
 }
