@@ -9,7 +9,12 @@
   <display-name>Plexus and WebWork Test App</display-name>
 
   <context-param>
-    <param-name>extremecomponentsResourceBundleLocation</param-name>
+    <param-name>extremecomponentsPreferencesLocation</param-name>
+    <param-value>/extremecomponents.properties</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>extremecomponentsMessagesLocation</param-name>
     <param-value>localization/Continuum</param-value>
   </context-param>
 
