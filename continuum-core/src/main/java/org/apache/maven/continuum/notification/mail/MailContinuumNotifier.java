@@ -224,7 +224,7 @@ public class MailContinuumNotifier
 
         String packageName = getClass().getPackage().getName().replace( '.', '/' );
 
-        String templateName = "/" + packageName + "/templates/" + project.getExecutorId() + "/" + source + ".vm";
+        String templateName = packageName + "/templates/" + project.getExecutorId() + "/" + source + ".vm";
 
         StringWriter writer = new StringWriter();
 
