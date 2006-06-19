@@ -52,7 +52,7 @@
   <modules>
     <module>continuum-api</module>
     <module>continuum-cc</module>
-    <module>continuum-core-it</module>
+    <!-- module>continuum-core-it</module -->    <!-- TODO RE-ADD it when continuum-plexus-application will be back -->
     <module>continuum-core</module>
     <module>continuum-model</module>
     <module>continuum-notifiers</module>
