@@ -27,15 +27,6 @@
       <role>com.opensymphony.xwork.Action</role>
       <role-hint>loginAction</role-hint>
       <implementation>org.apache.maven.continuum.web.action.LoginAction</implementation>
-      <requirements>
-        <requirement>
-          <role>org.codehaus.plexus.rememberme.RememberMeServices</role>
-        </requirement>
-        <requirement>
-          <role>org.codehaus.plexus.security.Authenticator</role>
-          <role-hint>osuser</role-hint>
-        </requirement>
-      </requirements>
     </component>
     <component>
       <role>com.opensymphony.xwork.Action</role>

@@ -41,15 +41,6 @@
       <version>1.0-alpha-2-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-security-osuser</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-remember-me</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <version>2.4</version>

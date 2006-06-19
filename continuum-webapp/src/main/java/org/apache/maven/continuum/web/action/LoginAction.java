@@ -16,10 +16,6 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.rememberme.RememberMeServices;
-import org.codehaus.plexus.security.Authentication;
-import org.codehaus.plexus.security.Authenticator;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,10 +31,6 @@ import com.opensymphony.xwork.ActionSupport;
 public class LoginAction
     extends ActionSupport
 {
-    private Authenticator authenticator;
-
-    private RememberMeServices rememberMeServices;
-
     private String username = "";
 
     private String password = "";
@@ -51,43 +43,7 @@ public class LoginAction
     public String execute()
         throws Exception
     {
-        try
-        {
-            Map params = new HashMap();
-
-            params.put( "username", username );
-
-            params.put( "password", password );
-
-            params.put( "request", ServletActionContext.getRequest() );
-
-            Authentication auth = authenticator.authenticate( params );
-
-            if ( rememberMe )
-            {
-                rememberMeServices.loginSuccess( ServletActionContext.getRequest(), ServletActionContext.getResponse(),
-                                                 auth );
-            }
-
-            HttpSession session = ServletActionContext.getRequest().getSession( true );
-
-            session.setAttribute( "authentication", auth );
-
-            return SUCCESS;
-        }
-        catch ( Exception e )
-        {
-            addActionError( "Login failed. " + e.getMessage() );
-
-            e.printStackTrace();
-
-            if ( rememberMe )
-            {
-                rememberMeServices.loginFail( ServletActionContext.getRequest(), ServletActionContext.getResponse() );
-            }
-
-            return INPUT;
-        }
+        return INPUT;
     }
 
     /**
