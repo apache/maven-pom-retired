@@ -344,7 +344,7 @@ public class DirectoryIndexer
             PackageType pkg = (PackageType) packages.nextElement();
             String pkgName = pkg.getName();
             String pkgDir = perl.substitute( "s/\\./\\//g", pkgName );
-            String rootRef = perl.substitute( "s/[^\\.]*(\\.|$)/\\.\\.\\//g", pkgName );
+            String rootRef = perl.substitute( "s/[^\\.]*(\\.|$)/..\\//g", pkgName );
 
             // special case for the default package
             // javadoc doesn't deal with it, but it's easy for us
