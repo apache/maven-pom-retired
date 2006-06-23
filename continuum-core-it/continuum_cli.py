@@ -64,14 +64,14 @@ class ContinuumXmlRpcCli(cli.cli):
         """Shows Continuum project.
         Use this command to show the details of a Continuum project."""
 
-        project = c.getProject( args[0] )
+        project = c.getProject( int( args[0])  )
 
         print "Project details:"
         print "Id: " + project.id
         print "Name:               " + project.name
         print "Version:            " + project.version
         print "Working directory:  " + project.workingDirectory
-#        print "State:              " + continuum.decodeState( project.state )
+        print "State:              " + continuum.decodeState( project.state )
         print "Executor type:      " + project.executorId
         print "SCM URL:            " + project.scmUrl
 
@@ -86,7 +86,7 @@ class ContinuumXmlRpcCli(cli.cli):
             print ""
             print project.checkOutScmResult
 
-            builds = c.getBuildsForProject( project.id, 0, 0 )
+            builds = c.getBuildsForProject( int( project.id ) )
             print ""
             print "Project Builds:"
             print "|  Id  |  State |           Start time            |             End time            | Build time |"

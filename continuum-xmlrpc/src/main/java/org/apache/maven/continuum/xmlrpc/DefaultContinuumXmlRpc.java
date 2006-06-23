@@ -22,6 +22,7 @@ import org.apache.maven.continuum.execution.maven.m1.MavenOneBuildExecutor;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.execution.shell.ShellBuildExecutor;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -107,6 +108,41 @@ public class DefaultContinuumXmlRpc
         catch ( Throwable e )
         {
             return handleException( "ContinuumXmlRpc.getProjects()", null, e );
+        }
+    }
+
+    public Hashtable getBuildResult( int buildId )
+    {
+        try
+        {
+            BuildResult build = continuum.getBuildResult( buildId );
+
+            return makeHashtable( "build", convertContinuumBuild( build, false ) );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.getBuildResult()", "Build id: '" + buildId + "'.", e );
+        }
+    }
+
+    public Hashtable getBuildResultsForProject( int projectId )
+    {
+        try
+        {
+            Collection buildResults = continuum.getBuildResultsForProject( projectId );
+
+            Vector results = new Vector( buildResults.size() );
+
+            for ( Iterator it = buildResults.iterator(); it.hasNext(); )
+            {
+                results.add( convertContinuumBuild( it.next(), true ) );
+            }
+
+            return makeHashtable( "builds", results );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.getBuildResultsForProject()", "Project id: '" + projectId + "'.", e );
         }
     }
 
@@ -402,12 +438,19 @@ public class DefaultContinuumXmlRpc
         return hashtable;
     }
 
-    private Hashtable convertContinuumBuild( Object object )
+    private Hashtable convertContinuumBuild( Object object, boolean summary )
         throws IllegalAccessException, InvocationTargetException
     {
         Set excludedProperties = new HashSet();
 
         excludedProperties.add( "project" );
+
+        if ( summary )
+        {
+            excludedProperties.add( "scmResult" );
+            excludedProperties.add( "trigger" );
+            excludedProperties.add( "error" );
+        }
 
         return xmlRpcHelper.objectToHashtable( object, excludedProperties );
     }

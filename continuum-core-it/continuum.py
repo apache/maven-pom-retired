@@ -44,9 +44,18 @@ def decodeState( state ):
         return "checking out"
     elif ( state == Continuum.STATE_UPDATING ):
         return "updating"
+    elif ( state == Continuum.STATE_WARNED ):
+        return "warned"
     else:
         return "UNKNOWN STATE (" + str( state ) + ")."
 
+def decodeTrigger( trigger ):
+    if (trigger == Continuum.TRIGGER_FORCED):
+        return "forced"
+    elif (trigger == Continuum.TRIGGER_SCHEDULED):
+        return "scheduled"
+    else:
+        return "UNKNOWN TRIGGER (" + str( trigger ) + ")."
 def makeMailNotifier( address ):
     notifier = ContinuumNotifier()
 
@@ -62,6 +71,10 @@ class Continuum:
     STATE_BUILDING = 6
     STATE_CHECKING_OUT = 7
     STATE_UPDATING = 8
+    STATE_WARNED = 9
+
+    TRIGGER_SCHEDULED = 0
+    TRIGGER_FORCED = 1
 
     def __init__( self, url ):
         self.server = xmlrpclib.Server(url, allow_none=True)
@@ -95,7 +108,7 @@ class Continuum:
         return self.makeProject( result[ "project" ] )
 
     def getProjects( self ):
-        result = checkResult( self.server.continuum.getAllProjects() )
+        result = checkResult( self.server.continuum.getProjects() )
 
         projects = []
         for project in result[ "projects" ]:
@@ -111,12 +124,12 @@ class Continuum:
         checkResult( self.server.continuum.buildProject( projectId, force ) )
 
     def getBuild( self, buildId ):
-        result = checkResult( self.server.continuum.getBuild( buildId ) )
+        result = checkResult( self.server.continuum.getBuildResult( buildId ) )
 
         return Build( result[ "build" ] )
 
-    def getBuildsForProject( self, projectId, start=0, end=0 ):
-        result = checkResult( self.server.continuum.getBuildsForProject( projectId, start, end ) )
+    def getBuildsForProject( self, projectId ):
+        result = checkResult( self.server.continuum.getBuildResultsForProject( projectId ) )
 
         builds = []
         for build in result[ "builds" ]:
@@ -216,19 +229,23 @@ class Continuum:
 class Project:
     def __init__( self, map ):
         self.map = map;
+        self.dependencies = []
         self.developers = []
         self.notifiers = []
 
         if ( map == None ):
             return
 
-#        map[ "state" ] = decodeState( int( map[ "state" ] ) )
         self.id = map[ "id" ]
         self.name = map[ "name" ]
         self.scmUrl = map[ "scmUrl" ]
         self.version = map[ "version" ]
-        self.workingDirectory = map[ "workingDirectory" ]
-#        self.state = int( map[ "state" ] )
+        self.build = map[ "buildNumber" ]
+        if ( map.has_key( "workingDirectory" ) ):
+            self.workingDirectory = map[ "workingDirectory" ]
+        else:
+            self.workingDirectory = ""
+        self.state = int( map[ "state" ] )
         self.executorId = map[ "executorId" ]
 
         if ( map.has_key( "commandLineArguments" ) ):
@@ -251,6 +268,11 @@ class Project:
         else:
             self.checkOutErrorException = None
 
+        self.dependencies = list()
+        if ( map.has_key( "dependencies" ) ):
+            for f in map[ "dependencies" ]:
+                self.dependencies.append( ContinuumDependency( f ) )
+
         self.developers = list()
         if ( map.has_key( "developers" ) ):
             for f in map[ "developers" ]:
@@ -261,12 +283,12 @@ class Project:
             for f in map[ "notifiers" ]:
                 self.notifiers.append( ContinuumNotifier( f ) )
 
-# "state: " + decodeState( self.state ) + os.linesep +\
     def __str__( self ):
         s = "id: " + self.id + os.linesep +\
             "name: " + self.name + os.linesep +\
             "version: " + self.version + os.linesep +\
-            "executor id: " + self.executorId + os.linesep
+            "executor id: " + self.executorId + os.linesep +\
+            "state: " + decodeState( self.state ) + os.linesep
 
         return s
 
@@ -277,7 +299,8 @@ class MavenTwoProject( Project ):
         if ( map == None ):
             return
     
-        self.goals = map[ "goals" ]
+        self.goals = '' #map[ "goals" ]
+        self.group = map[ "groupId" ]
 
     def __str__( self ):
         return Project.__str__( self ) + os.linesep +\
@@ -290,7 +313,8 @@ class MavenOneProject( Project ):
         if ( map == None ):
             return
     
-        self.goals = map[ "goals" ]
+        self.goals = '' #map[ "goals" ]
+        self.group = map[ "groupId" ]
 
     def __str__( self ):
         return Project.__str__( self ) + os.linesep +\
@@ -302,9 +326,9 @@ class AntProject( Project ):
 
         if ( map == None ):
             return
-    
-        self.executable = map[ "executable" ]
-        self.targets = map[ "targets" ]
+        print map 
+#        self.executable = map[ "executable" ]
+#        self.targets = map[ "goals" ]
 
     def __str__( self ):
         return Project.__str__( self ) + os.linesep +\
@@ -326,15 +350,23 @@ class ShellProject( Project ):
 
 class Build:
     def __init__( self, map ):
-        #map[ "state" ] = decodeState( int( map[ "state" ] ) )
-        map[ "forced" ] = bool( map[ "forced" ] )
+        print map
         map[ "totalTime" ] = int( map[ "endTime" ] )/ 1000 - int( map[ "startTime" ] ) / 1000
         map[ "startTime" ] = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime( int( map[ "startTime" ] ) / 1000 ) )
         map[ "endTime" ] = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime( int( map[ "endTime" ] ) / 1000 ) )
 
         self.id = map[ "id" ]
+	self.buildNumber = map[ "buildNumber" ]
+        if self.buildNumber == '0':
+            self.buildNumber = ''
         self.state = int( map[ "state" ] )
-        self.forced = map[ "forced" ]
+        if ( map.has_key( "trigger" ) ):
+            self.forced = map[ "trigger" ] == Continuum.TRIGGER_FORCED
+            self.trigger = int( map[ "trigger" ] )
+        else:
+            self.forced = false
+            self.trigger = 0
+
         self.startTime = map[ "startTime" ]
         self.endTime = map[ "endTime" ]
         self.totalTime = map[ "totalTime" ]
@@ -443,9 +475,19 @@ class ScmFile:
         self.map = map
         self.path = map[ "path" ]
 
+class ContinuumDependency:
+    def __init__( self, map ):
+        self.group = map[ "groupId" ]
+        self.artifact = map[ "artifactId" ]
+        self.version = map[ "version" ]
+
+    def __str__( self ):
+        value = self.group + ":" + self.artifact + ":" + self.version
+        return value
+
 class ContinuumDeveloper:
     def __init__( self, map ):
-        self.id = map[ "id" ]
+        self.id = map[ "continuumId" ]
         self.name = map[ "name" ]
         self.email = map[ "email" ]
 
