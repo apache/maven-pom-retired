@@ -260,24 +260,28 @@
         <version>1.1.0-20060413</version>
         <exclusions>
           <exclusion>
-            <artifactId>ant</artifactId>
             <groupId>ant</groupId>
+            <artifactId>ant</artifactId>
           </exclusion>
           <exclusion>
-            <artifactId>jaas</artifactId>
+            <groupId>javax.sql</groupId>
+            <artifactId>jdbc-stdext</artifactId>
+          </exclusion>
+          <exclusion>
             <groupId>javax.security</groupId>
+            <artifactId>jaas</artifactId>
           </exclusion>
           <exclusion>
-            <artifactId>ojdbc</artifactId>
             <groupId>ojdbc</groupId>
+            <artifactId>ojdbc</artifactId>
           </exclusion>
           <exclusion>
+            <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
-            <groupId>xerces</groupId>
           </exclusion>
           <exclusion>
-            <artifactId>xmlParserAPIs</artifactId>
             <groupId>xerces</groupId>
+            <artifactId>xmlParserAPIs</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -285,6 +289,12 @@
         <groupId>org.apache.maven.continuum.jpox</groupId>
         <artifactId>jpox-enhancer</artifactId>
         <version>1.1.0-20060413</version>
+        <exclusions>
+          <exclusion>
+            <groupId>javax.sql</groupId>
+            <artifactId>jdbc-stdext</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>jpox</groupId>
@@ -292,8 +302,8 @@
         <version>1.1.0-rc-1</version>
         <exclusions>
           <exclusion>
-            <artifactId>jpox</artifactId>
             <groupId>jpox</groupId>
+            <artifactId>jpox</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -308,12 +318,12 @@
         <version>1.0-alpha-4</version>
         <exclusions>
           <exclusion>
-            <artifactId>xercesImpl</artifactId>
             <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
           </exclusion>
           <exclusion>
-            <artifactId>xmlParserAPIs</artifactId>
             <groupId>xerces</groupId>
+            <artifactId>xmlParserAPIs</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -328,8 +338,8 @@
         <version>1.1.2</version>
         <exclusions>
           <exclusion>
-            <artifactId>plexus-utils</artifactId>
             <groupId>plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
