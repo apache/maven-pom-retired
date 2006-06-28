@@ -98,31 +98,31 @@
             HSQLDB keeps all data in memory at all times.
           -->
           <!--
-                    <property>
-                      <name>javax.jdo.option.ConnectionDriverName</name>
-                      <value>org.hsqldb.jdbcDriver</value>
-                    </property>
-                    <property>
-                      <name>javax.jdo.option.ConnectionURL</name>
-                      <value>jdbc:hsqldb:${plexus.home}/database</value>
-                    </property>
-                    <property>
-                      <name>javax.jdo.option.ConnectionUserName</name>
-                      <value>sa</value>
-                    </property>
-                    <property>
-                      <name>javax.jdo.option.ConnectionPassword</name>
-                      <value></value>
-                    </property>
+          <property>
+            <name>javax.jdo.option.ConnectionDriverName</name>
+            <value>org.hsqldb.jdbcDriver</value>
+          </property>
+          <property>
+            <name>javax.jdo.option.ConnectionURL</name>
+            <value>jdbc:hsqldb:${plexus.home}/database</value>
+          </property>
+          <property>
+            <name>javax.jdo.option.ConnectionUserName</name>
+            <value>sa</value>
+          </property>
+          <property>
+            <name>javax.jdo.option.ConnectionPassword</name>
+            <value></value>
+          </property>
 
-                    <property>
-                      <name>org.jpox.transactionIsolation</name>
-                      <value>READ_UNCOMMITTED</value>
-                    </property>
-                    <property>
-                      <name>org.jpox.poid.transactionIsolation</name>
-                      <value>READ_UNCOMMITTED</value>
-                    </property>
+          <property>
+            <name>org.jpox.transactionIsolation</name>
+            <value>READ_UNCOMMITTED</value>
+          </property>
+          <property>
+            <name>org.jpox.poid.transactionIsolation</name>
+            <value>READ_UNCOMMITTED</value>
+          </property>
           -->
           <property>
             <name>org.jpox.transactionIsolation</name>
@@ -141,6 +141,7 @@
       <implementation>org.apache.maven.continuum.web.rememberme.DefaultRememberMeServices</implementation>
       <instantiation-strategy>per-lookup</instantiation-strategy>
     </component>
+
     <!--
      | Logger manager
      -->

@@ -1,223 +1,188 @@
 <!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.0//EN" "http://www.opensymphony.com/xwork/xwork-1.0.dtd">
 
 <xwork>
+  <include file="webwork-default.xml"/>
+  <package name="default" extends="webwork-default">
 
-    <include file="webwork-default.xml"/>
+    <interceptors>
+      <interceptor-stack name="defaultContinuumStack">
+        <interceptor-ref name="prepare"/>
+        <interceptor-ref name="servlet-config"/>
+        <interceptor-ref name="chain"/>
+        <interceptor-ref name="model-driven"/>
+        <interceptor-ref name="component"/>
+        <interceptor-ref name="fileUpload"/>
+        <interceptor-ref name="static-params"/>
+        <interceptor-ref name="params"/>
+        <!-- interceptor-ref name="conversionError"/ -->
+        <interceptor-ref name="validation"/>
+        <interceptor-ref name="workflow"/>
+      </interceptor-stack>
+    </interceptors>
 
-    <package name="default" extends="webwork-default">
+    <default-interceptor-ref name="defaultContinuumStack"/>
 
-        <interceptors>
-            <interceptor-stack name="defaultContinuumStack">
-                <interceptor-ref name="prepare"/>
-                <interceptor-ref name="servlet-config"/>
-                <interceptor-ref name="chain"/>
-                <interceptor-ref name="model-driven"/>
-                <interceptor-ref name="component"/>
-                <interceptor-ref name="fileUpload"/>
-                <interceptor-ref name="static-params"/>
-                <interceptor-ref name="params"/>
-                <!-- interceptor-ref name="conversionError"/ -->
-                <interceptor-ref name="validation"/>
-                <interceptor-ref name="workflow"/>
-            </interceptor-stack>
-        </interceptors>
+    <global-results>
+      <result name="error">error.jsp</result>
+    </global-results>
 
-        <default-interceptor-ref name="defaultContinuumStack"/>
+    <action name="checkConfiguration" class="checkConfigurationAction">
+      <result name="input">/redirectToContinuumInitialization.jsp</result>
+    </action>
 
-        <global-results>
-            <result name="error">error.jsp</result>
-        </global-results>
+    <action name="configuration" class="configurationAction">
+      <result name="input">configurationEdit.jsp</result>
+      <result name="success">configuration.jsp</result>
+    </action>
 
-        <action name="checkConfiguration"
-                class="checkConfigurationAction">
-            <result name="input">/redirectToContinuumInitialization.jsp</result>
-        </action>
+    <action name="companyInfo" class="configurationAction">
+      <result name="success">/components/companyLogo.jsp</result>
+    </action>
 
-        <action name="configuration"
-                class="configurationAction">
-            <result name="input">configurationEdit.jsp</result>
-            <result name="success">configuration.jsp</result>
-        </action>
+    <action name="login" class="loginAction">
+      <result name="input">login.jsp</result>
+      <result name="success" type="redirect">summary.action</result>
+    </action>
 
-        <action name="companyInfo"
-                class="configurationAction">
-            <result name="success">/components/companyLogo.jsp</result>
-        </action>
+    <action name="summary" class="summaryAction">
+      <result name="success">summary.jsp</result>
+    </action>
 
-        <action name="login"
-                class="loginAction">
-            <result name="input">login.jsp</result>
-            <result name="success" type="redirect">summary.action</result>
-        </action>
+    <action name="addMavenTwoProject" class="addMavenTwoProject">
+      <result name="input">addMavenTwoProject.jsp</result>
+      <result name="success" type="redirect">summary.action</result>
+    </action>
 
-        <action name="summary"
-                class="summaryAction">
-            <result name="success">summary.jsp</result>
-        </action>
+    <action name="addMavenOneProject" class="addMavenOneProject">
+      <result name="input">addMavenOneProject.jsp</result>
+      <result name="success" type="redirect">summary.action</result>
+    </action>
 
-        <action name="addMavenTwoProject"
-                class="addMavenTwoProject">
-            <result name="input">addMavenTwoProject.jsp</result>
-            <result name="success" type="redirect">summary.action</result>
-        </action>
+    <action name="addProject" class="addProject">
+      <result name="input">addProject.jsp</result>
+      <result name="success" type="redirect">summary.action</result>
+    </action>
 
-        <action name="addMavenOneProject"
-                class="addMavenOneProject">
-            <result name="input">addMavenOneProject.jsp</result>
-            <result name="success" type="redirect">summary.action</result>
-        </action>
+    <action name="deleteProject" class="deleteProject">
+      <result name="delete">deleteProject.jsp</result>
+      <result name="success" type="redirect">summary.action</result>
+    </action>
 
-        <action name="addProject"
-                class="addProject">
-            <result name="input">addProject.jsp</result>
-            <result name="success" type="redirect">summary.action</result>
-        </action>
+    <action name="buildProject" class="buildProject">
+      <result name="success" type="redirect">summary.action</result>
+    </action>
 
-        <action name="deleteProject"
-                class="deleteProject">
-            <result name="delete">deleteProject.jsp</result>
-            <result name="success" type="redirect">summary.action</result>
-        </action>
+    <action name="projectView" class="projectView">
+      <result name="success">projectView.jsp</result>
+    </action>
 
-        <action name="buildProject"
-                class="buildProject">
-            <result name="success" type="redirect">summary.action</result>
-        </action>
+    <action name="projectEdit" class="projectEdit">
+      <result name="input">projectEdit.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="projectView"
-                class="projectView">
-            <result name="success">projectView.jsp</result>
-        </action>
+    <action name="projectSave" class="projectEdit">
+      <result name="input">projectEdit.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="projectEdit"
-                class="projectEdit">
-            <result name="input">projectEdit.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="buildDefinitionEdit" class="buildDefinitionEdit">
+      <result name="input">buildDefinitionEdit.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="projectSave"
-                class="projectEdit">
-            <result name="input">projectEdit.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="buildDefinitionSave" class="buildDefinitionEdit">
+      <result name="input">buildDefinitionEdit.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="buildDefinitionEdit"
-                class="buildDefinitionEdit">
-            <result name="input">buildDefinitionEdit.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="deleteBuildDefinition" class="deleteBuildDefinition">
+      <result name="delete">deleteBuildDefinition.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="buildDefinitionSave"
-                class="buildDefinitionEdit">
-            <result name="input">buildDefinitionEdit.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="addBuildDefinition" class="addBuildDefinition">
+      <result name="input">buildDefinitionEdit.jsp</result>
+    </action>
 
-        <action name="deleteBuildDefinition"
-                class="deleteBuildDefinition">
-            <result name="delete">deleteBuildDefinition.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="deleteNotifier" class="deleteNotifier">
+      <result name="delete">deleteNotifier.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="addBuildDefinition"
-                class="addBuildDefinition">
-            <result name="input">buildDefinitionEdit.jsp</result>
-        </action>
+    <action name="addNotifier" class="addNotifier">
+      <result name="input">notifierSelectType.jsp</result>
+      <result name="mail_input">notifierMail.jsp</result>
+      <result name="irc_input">notifierIrc.jsp</result>
+      <result name="msn_input">notifierMsn.jsp</result>
+      <result name="jabber_input">notifierJabber.jsp</result>
+    </action>
 
-        <action name="deleteNotifier"
-                class="deleteNotifier">
-            <result name="delete">deleteNotifier.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="mailNotifierEdit" class="mailNotifierEdit">
+      <result name="input">notifierMail.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="addNotifier"
-                class="addNotifier">
-            <result name="input">notifierSelectType.jsp</result>
-            <result name="mail_input">notifierMail.jsp</result>
-            <result name="irc_input">notifierIrc.jsp</result>
-            <result name="msn_input">notifierMsn.jsp</result>
-            <result name="jabber_input">notifierJabber.jsp</result>
-        </action>
+    <action name="mailNotifierSave" class="mailNotifierEdit">
+      <result name="input">notifierMail.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="mailNotifierEdit"
-                class="mailNotifierEdit">
-            <result name="input">notifierMail.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="ircNotifierEdit" class="ircNotifierEdit">
+      <result name="input">notifierIrc.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="mailNotifierSave"
-                class="mailNotifierEdit">
-            <result name="input">notifierMail.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="ircNotifierSave" class="ircNotifierEdit">
+      <result name="input">notifierIrc.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="ircNotifierEdit"
-                class="ircNotifierEdit">
-            <result name="input">notifierIrc.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="jabberNotifierEdit" class="jabberNotifierEdit">
+      <result name="input">notifierJabber.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="ircNotifierSave"
-                class="ircNotifierEdit">
-            <result name="input">notifierIrc.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="jabberNotifierSave" class="jabberNotifierEdit">
+      <result name="input">notifierJabber.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="jabberNotifierEdit"
-                class="jabberNotifierEdit">
-            <result name="input">notifierJabber.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="msnNotifierEdit" class="msnNotifierEdit">
+      <result name="input">notifierMsn.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="jabberNotifierSave"
-                class="jabberNotifierEdit">
-            <result name="input">notifierJabber.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="msnNotifierSave" class="msnNotifierEdit">
+      <result name="input">notifierMsn.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
-        <action name="msnNotifierEdit"
-                class="msnNotifierEdit">
-            <result name="input">notifierMsn.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="buildResults" class="buildResults">
+      <result name="success">buildResults.jsp</result>
+    </action>
 
-        <action name="msnNotifierSave"
-                class="msnNotifierEdit">
-            <result name="input">notifierMsn.jsp</result>
-            <result name="success" type="chain">projectView</result>
-        </action>
+    <action name="buildResult" class="buildResult">
+      <result name="success">buildResult.jsp</result>
+    </action>
 
-        <action name="buildResults"
-                class="buildResults">
-            <result name="success">buildResults.jsp</result>
-        </action>
+    <action name="workingCopy" class="workingCopy">
+      <result name="success">workingCopy.jsp</result>
+    </action>
 
-        <action name="buildResult"
-                class="buildResult">
-            <result name="success">buildResult.jsp</result>
-        </action>
+    <action name="schedules" class="schedules">
+      <result name="success">schedules.jsp</result>
+    </action>
 
-        <action name="workingCopy"
-                class="workingCopy">
-            <result name="success">workingCopy.jsp</result>
-        </action>
+    <action name="addSchedule" class="addSchedule">
+      <result name="input">editSchedule.jsp</result>
+      <result name="success" type="chain">schedules</result>
+    </action>
 
-        <action name="schedules"
-                class="schedules">
-            <result name="success">schedules.jsp</result>
-        </action>
+    <action name="editSchedule" class="editSchedule">
+      <result name="input">editSchedule.jsp</result>
+      <result name="success" type="chain">schedules</result>
+    </action>
 
-        <action name="addSchedule"
-                class="addSchedule">
-            <result name="input">editSchedule.jsp</result>
-            <result name="success" type="chain">schedules</result>
-        </action>
-
-        <action name="editSchedule"
-                class="editSchedule">
-            <result name="input">editSchedule.jsp</result>
-            <result name="success" type="chain">schedules</result>
-        </action>
-
-    </package>
+  </package>
 </xwork>
