@@ -146,6 +146,20 @@ public class DefaultContinuumXmlRpc
         }
     }
 
+    public Hashtable getBuildOutput( int projectId, int buildId )
+    {
+        try
+        {
+            String output = continuum.getBuildOutput( projectId, buildId );
+
+            return makeHashtable( "buildOutput", output );
+        }
+        catch ( Throwable e )
+        {
+            return handleException( "ContinuumXmlRpc.getBuildOutput()", "Project id: '" + projectId + "' Build id: '" + buildId + "'.", e );
+        }
+    }
+
     // ----------------------------------------------------------------------
     // Build handling
     // ----------------------------------------------------------------------

@@ -137,24 +137,14 @@ class Continuum:
 
         return builds
 
-#    def getBuildResultForBuild( self, buildId ):
-#        result = checkResult( self.server.continuum.getBuildResultForBuild( buildId ) )
-#
-#        buildResult = result[ "buildResult" ]
-#
-#        if ( len( buildResult ) == 0 ):
-#            return None
-#
-#        return BuildResult( buildResult )
+    def getBuildOutput( self, projectId, buildId ):
+        return checkResult( self.server.continuum.getBuildOutput( projectId, buildId ) )[ "buildOutput" ]
 
     def getChangedFilesForBuild( self, buildId ):
-        result = checkResult( self.server.continuum.getBuildResultForBuild( buildId ) )
+        result = checkResult( self.server.continuum.getBuild( buildId ) )
+        scmResult = ScmResult( result[ "scmResult" ] )
 
-        changedFiles = []
-        for changedFile in result[ "changedFiles" ]:
-            changedFiles.append( ScmFile( changedFile ) )
-
-        return changedFiles
+        return scmResult.changes
 
     ####################################################################
     # Maven 2.x projects
@@ -253,21 +243,6 @@ class Project:
         else:
             self.commandLineArguments = ""
 
-#        self.configuration = map[ "configuration" ]
-
-        if ( map.has_key( "checkOutScmResult" ) ):
-            self.checkOutScmResult = CheckOutScmResult( map[ "checkOutScmResult" ] )
-        else:
-            self.checkOutScmResult = None
-        if ( map.has_key( "checkOutErrorMessage" ) ):
-            self.checkOutErrorMessage = map[ "checkOutErrorMessage" ]
-        else:
-            self.checkOutErrorMessage = None
-        if ( map.has_key( "checkOutErrorException" ) ):
-            self.checkOutErrorException = map[ "checkOutErrorException" ]
-        else:
-            self.checkOutErrorException = None
-
         self.dependencies = list()
         if ( map.has_key( "dependencies" ) ):
             for f in map[ "dependencies" ]:
@@ -326,7 +301,6 @@ class AntProject( Project ):
 
         if ( map == None ):
             return
-        print map 
 #        self.executable = map[ "executable" ]
 #        self.targets = map[ "goals" ]
 
@@ -350,13 +324,10 @@ class ShellProject( Project ):
 
 class Build:
     def __init__( self, map ):
-        print map
         map[ "totalTime" ] = int( map[ "endTime" ] )/ 1000 - int( map[ "startTime" ] ) / 1000
-        map[ "startTime" ] = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime( int( map[ "startTime" ] ) / 1000 ) )
-        map[ "endTime" ] = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime( int( map[ "endTime" ] ) / 1000 ) )
 
         self.id = map[ "id" ]
-	self.buildNumber = map[ "buildNumber" ]
+        self.buildNumber = map[ "buildNumber" ]
         if self.buildNumber == '0':
             self.buildNumber = ''
         self.state = int( map[ "state" ] )
@@ -364,18 +335,18 @@ class Build:
             self.forced = map[ "trigger" ] == Continuum.TRIGGER_FORCED
             self.trigger = int( map[ "trigger" ] )
         else:
-            self.forced = false
+            self.forced = False
             self.trigger = 0
 
-        self.startTime = map[ "startTime" ]
-        self.endTime = map[ "endTime" ]
+        self.startTime = gmtime( int( map[ "startTime" ] ) / 1000 )
+        self.endTime = gmtime( int( map[ "endTime" ] ) / 1000 )
         self.totalTime = map[ "totalTime" ]
         self.error = map.get( "error" )
         self.map = map
-        if ( map.has_key( "updateScmResult" ) ):
-            self.updateScmResult = UpdateScmResult( map[ "updateScmResult" ] )
+        if ( map.has_key( "scmResult" ) ):
+            self.scmResult = ScmResult( map[ "scmResult" ] )
         else:
-            self.updateScmResult = None
+            self.scmResult = None
 
         if ( self.error == None ):
             self.error = ""
@@ -395,7 +366,7 @@ class Build:
     def __str__( self ):
         s = "Id: " + self.id + os.linesep +\
             "State: " + decodeState( self.state ) + os.linesep +\
-            "End time: " + self.endTime + os.linesep +\
+            "End time: " + strftime( "%a, %d %b %Y %H:%M:%S +0000", self.endTime ) + os.linesep +\
             "Build time: " + self.totalTime + os.linesep
 
         if ( self.error != "" ):
@@ -424,6 +395,11 @@ class ScmResult:
         else:
             self.commandOutput = ""
 
+        self.changes = list()
+        if ( map.has_key( "changes" ) ):
+            for f in map[ "changes" ]:
+                self.changes.append( ChangeSet( f ) )
+
     def __str__( self ):
         value = "Success: " + str( self.success ) + os.linesep +\
                 "Provider Message: " + self.providerMessage + os.linesep +\
@@ -431,49 +407,33 @@ class ScmResult:
 
         return value
 
-class CheckOutScmResult( ScmResult ):
+class ChangeSet:
     def __init__( self, map ):
         self.map = map
-        ScmResult.__init__( self, map )
-        self.checkedOutFiles = list()
+        self.author = map[ "author" ]
+        self.comment = map[ "comment" ]
+        self.date = gmtime( int( map[ "date" ] ) / 1000 )
 
-        for f in map[ "checkedOutFiles" ]:
-            self.checkedOutFiles.append( ScmFile( f ) )
+        self.files = list()
+        for f in map[ "files" ]:
+            self.files.append( ChangeFile( f ) )
 
     def __str__( self ):
-        value = ScmResult.__str__( self ) + os.linesep
-
-        value += "Checked out files: " + os.linesep
-        for f in self.checkedOutFiles:
-            value += " " + f.path + os.linesep
+        value = "Author: " + self.author + os.linesep +\
+                "Comment: " + self.comment
 
         return value
 
-class UpdateScmResult( ScmResult ):
+class ChangeFile:
     def __init__( self, map ):
         self.map = map
-        ScmResult.__init__( self, map )
-        self.updatedFiles = list()
-
-        for f in map[ "updatedFiles" ]:
-            self.updatedFiles.append( ScmFile( f ) )
+        self.name = map[ "name" ]
+        self.revision = map[ "revision" ]
 
     def __str__( self ):
-        value = ScmResult.__str__( self ) + os.linesep
-
-        value += "Updated files: " + os.linesep
-        if ( len( self.updatedFiles ) > 0):
-            for f in self.updatedFiles:
-                value += " " + f.path + os.linesep
-        else:
-            value += " No files updated"
+        value = "File: " + self.name + " (" + self.revision + ")"
 
         return value
-
-class ScmFile:
-    def __init__( self, map ):
-        self.map = map
-        self.path = map[ "path" ]
 
 class ContinuumDependency:
     def __init__( self, map ):

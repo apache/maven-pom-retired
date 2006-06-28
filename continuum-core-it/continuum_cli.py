@@ -2,6 +2,7 @@
 
 import cli
 import continuum
+import time
 
 ##########################################################
 # Build your commands in this class.  Each method that
@@ -75,24 +76,13 @@ class ContinuumXmlRpcCli(cli.cli):
         print "Executor type:      " + project.executorId
         print "SCM URL:            " + project.scmUrl
 
-        if ( not isEmpty( project.checkOutErrorMessage ) or not isEmpty( project.checkOutErrorException ) ):
-            print ""
-            print "There was a error while checking out the project:"
-            if ( project.checkOutErrorMessage != None ):
-                print "Error message: " + project.checkOutErrorMessage
-            if ( project.checkOutErrorException != None ):
-                print "Exception: " + project.checkOutErrorException
-        else:
-            print ""
-            print project.checkOutScmResult
-
-            builds = c.getBuildsForProject( int( project.id ) )
-            print ""
-            print "Project Builds:"
-            print "|  Id  |  State |           Start time            |             End time            | Build time |"
-            for build in builds:
-                build.state = continuum.decodeState( build.state )
-                print "| %(id)4s | %(state)6s | %(startTime)s | %(endTime)s | %(totalTime)10s |" % build.map
+        builds = c.getBuildsForProject( int( project.id ) )
+        print ""
+        print "Project Builds:"
+        print "|  Id  |  State |           Start time            |             End time            | Build time |"
+        for build in builds:
+            build.state = continuum.decodeState( build.state )
+            print "| %(id)4s | %(state)6s | %(startTime)s | %(endTime)s | %(totalTime)10s |" % { 'id': build.id, 'state': build.state, 'startTime' : time.strftime( "%a, %d %b %Y %H:%M:%S +0000", build.startTime ), 'endTime': time.strftime( "%a, %d %b %Y %H:%M:%S +0000", build.endTime ), 'totalTime': build.totalTime }
 
         print ""
         print "Notifiers:"
@@ -130,7 +120,7 @@ class ContinuumXmlRpcCli(cli.cli):
     def do_showBuild( self, args ):
         """Shows the result of a build."""
 
-        build = c.getBuild( args[ 0 ] );
+        build = c.getBuild( int( args[ 0 ] ) )
 
         print build
 
