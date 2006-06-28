@@ -1,6 +1,6 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
 <%@ taglib uri="/tld/extremecomponents" prefix="ec" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="continuum" prefix="c1" %>
 <html>
   <ww:i18n name="localization.Continuum">
