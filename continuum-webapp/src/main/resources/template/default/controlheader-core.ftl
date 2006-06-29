@@ -20,7 +20,9 @@
 	if the label position is top,
 	then give the label it's own row in the table
 -->
-<tr>
+<#if parameters.class?exists>
+<tr class="b">
+</#if>
 <#if parameters.labelposition?default("") == 'top'>
     <th align="left" valign="top" colspan="2"><#rt/>
 <#else>
