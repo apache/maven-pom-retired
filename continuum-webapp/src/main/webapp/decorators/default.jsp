@@ -18,10 +18,12 @@
     <table id="main" border="0" cellpadding="4" cellspacing="0" width="100%">
       <tbody>
         <tr valign="top">
-          <td id="leftcol" width="30%">
+          <td id="leftcol" width="180">
+            <br /> <br />
             <ww:include value="/navigations/Menu.jsp"/>
           </td>
-          <td>
+          <td width="86%">
+            <br />
             <div id="bodycol">
                 <div class="app">
                   <decorator:body/>
