@@ -41,12 +41,12 @@ public class BuildNowCell
         {
             return "<a href=\"" + contextPath + "/buildProject.action?projectId=" + project.getId() + "\"><img src=\"" +
                 contextPath +
-                "/images/buildnow.gif\" alt=\"Build Now\" title=\"Build Now\" width=\"16\" height=\"16\" border=\"0\"></a>";
+                "/images/buildnow.gif\" alt=\"Build Now\" title=\"Build Now\" border=\"0\"></a>";
         }
         else
         {
             return "<img src=\"" + contextPath +
-                "/images/buildnow_disabled.gif\" alt=\"Build Now\" title=\"Build Now\" width=\"16\" height=\"16\" border=\"0\">";
+                "/images/buildnow_disabled.gif\" alt=\"Build Now\" title=\"Build Now\" border=\"0\">";
         }
     }
 }

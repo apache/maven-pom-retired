@@ -40,16 +40,20 @@ public class BuildCell
     {
         SummaryProjectModel project = (SummaryProjectModel) tableModel.getCurrentRowBean();
 
+        String contextPath = tableModel.getContext().getContextPath();
+
         int buildNumber = project.getBuildNumber();
+
+        String result = "<div align=\"center\">";
 
         if ( project.isInQueue() )
         {
-            return "<b>In&nbsp;queue</b>";
+            result += "<img src=\"" + contextPath + "/images/inqueue.gif\" alt=\"In Queue\" title=\"In Queue\" border=\"0\">";
         }
         else
         {
-            if ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 ||
-                project.getState() == 4 )
+            if ( project.getState() == 1 || project.getState() == 10 || project.getState() == 2 ||
+                project.getState() == 3 || project.getState() == 4 )
             {
                 if ( project.getBuildNumber() > 0 )
                 {
@@ -69,17 +73,31 @@ public class BuildCell
 
                     String url = UrlHelper.buildUrl( "/buildResult.action", request, response, params );
 
-                    return "<a href=\"" + url + ">" + project.getBuildNumber() + "</a>";
+                    result += "<a href=\"" + url + ">" + project.getBuildNumber() + "</a>";
                 }
                 else
                 {
-                    return "&nbsp;";
+                    result += "&nbsp;";
                 }
+            }
+            else if ( project.getState() == 6 )
+            {
+                result += "<img src=\"" + contextPath + "/images/building.gif\" alt=\"Building\" title=\"Building\" border=\"0\">";
+            }
+            else if ( project.getState() == 7 )
+            {
+                result += "<img src=\"" + contextPath + "/images/checkingout.gif\" alt=\"Checking Out sources\" title=\"Checking Out sources\" border=\"0\">";
+            }
+            else if ( project.getState() == 8 )
+            {
+                result += "<img src=\"" + contextPath + "/images/checkingout.gif\" alt=\"Updating sources\" title=\"Updating sources\" border=\"0\">";
             }
             else
             {
-                return "<b>In&nbsp;progress</b>";
+                result += "<img src=\"" + contextPath + "/images/inqueue.gif\" alt=\"In Queue\" title=\"In Queue\" border=\"0\">";
             }
         }
+
+        return result + "</div>";
     }
 }
