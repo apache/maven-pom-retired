@@ -26,10 +26,26 @@
             <c1:data label="%{getText('projectView.project.scmUrl')}" name="project.scmUrl"/>
             <c1:data label="%{getText('projectView.project.group')}" name="project.projectGroup.name"/>
           </table>
-          <ww:form action="projectEdit!edit.action" method="post">
-              <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
-              <ww:submit value="%{getText('edit')}"/>
-          </ww:form>
+          <div class="functnbar3">
+            <table>
+              <tbody>
+              <tr>
+                <td>
+                  <form action="projectEdit!edit.action" method="post">
+                    <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+                    <input type="submit" name="edit-project" value="<ww:text name="edit"/>"/>
+                  </form>
+                </td>
+                <td>
+                  <form method="post" action="buildProject.action">
+                    <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+                    <input type="submit" name="build-project" value="<ww:text name="summary.buildNow"/>"/>
+                  </form>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <h3><ww:text name="projectView.buildDefinitions"/></h3>
@@ -53,16 +69,19 @@
                 PROJECT
             </ec:column>
             <ec:column property="actions" title="&nbsp;">
+                <!-- TODO: REPLACE THIS WITH A NEW CELL CLASS -->
                 <a href="${pageContext.request.contextPath}/buildDefinitionEdit!default.action?projectId=<ww:property value="project.id"/>&buildDefinitionId=${pageScope.buildDefinition.id}"><ww:text name="edit"/></a>
                 &nbsp;
                 <a href="${pageContext.request.contextPath}/deleteBuildDefinition!default.action?projectId=<ww:property value="project.id"/>&buildDefinitionId=${pageScope.buildDefinition.id}"><ww:text name="delete"/></a>
             </ec:column>
           </ec:row>
         </ec:table>
-        <ww:form action="addBuildDefinition.action" method="post">
+        <div class="functnbar3">
+          <ww:form action="addBuildDefinition.action" method="post">
             <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
             <ww:submit value="%{getText('add')}"/>
-        </ww:form>
+          </ww:form>
+        </div>
 
         <h3><ww:text name="projectView.notifiers"/></h3>
         <ww:set name="notifiers" value="project.notifiers" scope="request"/>
@@ -80,17 +99,19 @@
             <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
             <ec:column property="actions" title="&nbsp;">
                 <c:if test="${!pageScope.notifier.fromProject}">
-                    <a href="${pageContext.request.contextPath}/${pageScope.notifier.type}NotifierEdit!default.action?projectId=<ww:property value="project.id"/>&notifierId=${pageScope.notifier.id}"><ww:text name="edit"/></a>
+                    <a href="${pageContext.request.contextPath}/${pageScope.notifier.type}NotifierEdit!default.action?projectId=<ww:property value="project.id"/>&notifierId=${pageScope.notifier.id}"><img src="${pageContext.request.contextPath}/images/edit.gif" alt="<ww:text name="edit"/>" title="<ww:text name="edit"/>" border="0"></a>
                     &nbsp;
-                    <a href="${pageContext.request.contextPath}/deleteNotifier!default.action?projectId=<ww:property value="project.id"/>&notifierId=${pageScope.notifier.id}&notifierType=${pageScope.notifier.type}"><ww:text name="delete"/></a>
+                    <a href="${pageContext.request.contextPath}/deleteNotifier!default.action?projectId=<ww:property value="project.id"/>&notifierId=${pageScope.notifier.id}&notifierType=${pageScope.notifier.type}"><img src="${pageContext.request.contextPath}/images/delete.gif" alt="<ww:text name="delete"/>" title="<ww:text name="delete"/>" border="0"></a>
                 </c:if>
             </ec:column>
           </ec:row>
         </ec:table>
-        <ww:form action="addNotifier!default.action" method="post">
+        <div class="functnbar3">
+          <ww:form action="addNotifier!default.action" method="post">
             <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
             <ww:submit value="%{getText('add')}"/>
-        </ww:form>
+          </ww:form>
+        </div>
 
         <h3><ww:text name="projectView.dependencies"/></h3>
         <ww:set name="dependencies" value="project.dependencies" scope="request"/>
