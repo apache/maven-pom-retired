@@ -60,8 +60,8 @@ public abstract class AbstractContinuumNotifier
                     buf.append( "/" );
                 }
 
-                buf.append( "target/ProjectBuild.vm/view/ProjectBuild/id/" ).append( project.getId() ).append(
-                    "/buildId/" ).append( build.getId() );
+                buf.append( "buildResult.action?buildId=" ).append( build.getId() ).append( "&projectId=" )
+                    .append( project.getId() ).append( "&projectName=" ).append( project.getName() );
             }
 
             return buf.toString();
