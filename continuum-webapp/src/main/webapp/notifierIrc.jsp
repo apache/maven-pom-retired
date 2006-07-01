@@ -18,10 +18,12 @@
         </h3>
 
         <div class="axial">
-            <ww:form action="ircNotifierSave.action" method="post">
-                <ww:hidden name="notifierId"/>
-                <ww:hidden name="projectId"/>
-                <ww:hidden name="notifierType"/>
+          <ww:form action="ircNotifierSave.action" method="post">
+            <ww:hidden name="notifierId"/>
+            <ww:hidden name="projectId"/>
+            <ww:hidden name="notifierType"/>
+            <table>
+              <tbody>
                 <ww:textfield label="%{getText('notifier.irc.host.label')}" name="host" required="true"/>
                 <ww:textfield label="%{getText('notifier.irc.port.label')}" name="port"/>
                 <ww:textfield label="%{getText('notifier.irc.channel.label')}" name="channel" required="true"/>
@@ -32,8 +34,12 @@
                 <ww:checkbox label="%{getText('notifier.event.sendOnFailure')}" name="sendOnFailure" value="sendOnFailure" fieldValue="true"/>
                 <ww:checkbox label="%{getText('notifier.event.sendOnError')}" name="sendOnError" value="sendOnError" fieldValue="true"/>
                 <ww:checkbox label="%{getText('notifier.event.sendOnWarning')}" name="sendOnWarning" value="sendOnWarning" fieldValue="true"/>
-                <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
-            </ww:form>
+              </tbody>
+            </table>
+            <div class="functnbar3">
+              <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
+            </div>
+          </ww:form>
         </div>
       </div>
     </body>

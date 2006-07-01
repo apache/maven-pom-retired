@@ -28,9 +28,11 @@
           </ec:row>
         </ec:table>
       </div>
-      <ww:form action="addSchedule!default.action" method="post">
+      <div class="functnbar3">
+        <ww:form action="addSchedule!default.action" method="post">
           <ww:submit value="%{getText('add')}"/>
-      </ww:form>
+        </ww:form>
+    </div>
     </body>
   </ww:i18n>
 </html>

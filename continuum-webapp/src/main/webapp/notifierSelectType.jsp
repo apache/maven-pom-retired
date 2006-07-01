@@ -12,10 +12,15 @@
         <div class="axial">
           <ww:form action="addNotifier.action" method="post">
             <ww:hidden name="projectId"/>
-            <ww:select label="%{getText('notifier.type.label')}" name="notifierType"
-                       list="#{ 'mail' : 'Mail', 'irc' : 'IRC', 'jabber' : 'Jabber', 'msn' : 'MSN'}"/>
-            <ww:hidden name="projectId"/>
-            <c1:submitcancel value="%{getText('submit')}" cancel="%{getText('cancel')}"/>
+            <table>
+              <tbody>
+                <ww:select label="%{getText('notifier.type.label')}" name="notifierType"
+                           list="#{ 'mail' : 'Mail', 'irc' : 'IRC', 'jabber' : 'Jabber', 'msn' : 'MSN'}"/>
+              </tbody>
+            </table>
+            <div class="functnbar3">
+              <c1:submitcancel value="%{getText('submit')}" cancel="%{getText('cancel')}"/>
+            </div>
           </ww:form>
         </div>
       </div>

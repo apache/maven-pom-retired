@@ -26,25 +26,31 @@
                 <div class="axial">
                     <ww:form method="post" action="addProject.action">
                         <input type="hidden" name="projectType" value="<ww:property value="projectType"/>">
-                        <ww:textfield label="%{getText('projectName.label')}" name="projectName">
-                            <ww:param name="desc"><p><ww:text name="projectName.message"/></p></ww:param>
-                        </ww:textfield>
-                        <ww:textfield label="%{getText('projectVersion.label')}" name="projectVersion">
-                            <ww:param name="desc"><p><ww:text name="projectVersion.message"/></p></ww:param>
-                        </ww:textfield>
-                        <ww:textfield label="%{getText('projectScmUrl.label')}" name="projectScmUrl">
-                            <ww:param name="desc"><p><ww:text name="projectScmUrl.message"/></p></ww:param>
-                        </ww:textfield>
-                        <ww:textfield label="%{getText('projectScmUsername.label')}" name="projectScmUsername">
-                            <ww:param name="desc"><p><ww:text name="projectScmUsername.message"/></p></ww:param>
-                        </ww:textfield>
-                        <ww:password label="%{getText('projectScmPassword.label')}" name="projectScmPassword">
-                            <ww:param name="desc"><p><ww:text name="projectScmPassword.message"/></p></ww:param>
-                        </ww:password>
-                        <ww:textfield label="%{getText('projectScmTag.label')}" name="projectScmTag">
-                            <ww:param name="desc"><p><ww:text name="projectScmTag.message"/></p></ww:param>
-                        </ww:textfield>
-                        <c1:submitcancel value="%{getText('add')}" cancel="%{getText('cancel')}"/>
+                        <table>
+                          <tbody>
+                            <ww:textfield label="%{getText('projectName.label')}" name="projectName">
+                                <ww:param name="desc"><p><ww:text name="projectName.message"/></p></ww:param>
+                            </ww:textfield>
+                            <ww:textfield label="%{getText('projectVersion.label')}" name="projectVersion">
+                                <ww:param name="desc"><p><ww:text name="projectVersion.message"/></p></ww:param>
+                            </ww:textfield>
+                            <ww:textfield label="%{getText('projectScmUrl.label')}" name="projectScmUrl">
+                                <ww:param name="desc"><p><ww:text name="projectScmUrl.message"/></p></ww:param>
+                            </ww:textfield>
+                            <ww:textfield label="%{getText('projectScmUsername.label')}" name="projectScmUsername">
+                                <ww:param name="desc"><p><ww:text name="projectScmUsername.message"/></p></ww:param>
+                            </ww:textfield>
+                            <ww:password label="%{getText('projectScmPassword.label')}" name="projectScmPassword">
+                                <ww:param name="desc"><p><ww:text name="projectScmPassword.message"/></p></ww:param>
+                            </ww:password>
+                            <ww:textfield label="%{getText('projectScmTag.label')}" name="projectScmTag">
+                                <ww:param name="desc"><p><ww:text name="projectScmTag.message"/></p></ww:param>
+                            </ww:textfield>
+                          </tbody>
+                        </table>
+                        <div class="functnbar3">
+                          <c1:submitcancel value="%{getText('add')}" cancel="%{getText('cancel')}"/>
+                        </div>
                     </ww:form>
                 </div>
             </div>

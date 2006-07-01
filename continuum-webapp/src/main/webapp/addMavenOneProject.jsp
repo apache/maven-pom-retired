@@ -11,17 +11,23 @@
             <h3><ww:text name="add.m1.project.section.title"/></h3>
                 <div class="axial">
                     <ww:form method="post" action="addMavenOneProject.action" name="addMavenOneProject" enctype="multipart/form-data">
-                        <ww:textfield label="%{getText('add.m1.project.m1PomUrl.label')}" name="m1PomUrl">
-                            <ww:param name="desc"><p><ww:text name="add.m1.project.m1PomUrl.message"/></p></ww:param>
-                        </ww:textfield>
-                        <c1:data label="">
-                            <ww:param name="after"><strong><ww:text name="or"/></strong></ww:param>
-                        </c1:data>
-                        <ww:file label="%{getText('add.m1.project.m1PomFile.label')}" name="m1PomFile">
-                            <ww:param name="desc"><p><ww:text name="add.m1.project.m1PomFile.message"/></p></ww:param>
-                        </ww:file>
-                        <c1:submitcancel value="%{getText('add')}" cancel="%{getText('cancel')}"/>
-                    </ww:form>
+                        <table>
+                          <tbody>
+                            <ww:textfield label="%{getText('add.m1.project.m1PomUrl.label')}" name="m1PomUrl">
+                                <ww:param name="desc"><p><ww:text name="add.m1.project.m1PomUrl.message"/></p></ww:param>
+                            </ww:textfield>
+                            <c1:data label="">
+                                <ww:param name="after"><strong><ww:text name="or"/></strong></ww:param>
+                            </c1:data>
+                            <ww:file label="%{getText('add.m1.project.m1PomFile.label')}" name="m1PomFile">
+                                <ww:param name="desc"><p><ww:text name="add.m1.project.m1PomFile.message"/></p></ww:param>
+                            </ww:file>
+                          </tbody>
+                        </table>
+                        <div class="functnbar3">
+                          <c1:submitcancel value="%{getText('add')}" cancel="%{getText('cancel')}"/>
+                        </div>
+                  </ww:form>
                 </div>
             </div>
         </div>

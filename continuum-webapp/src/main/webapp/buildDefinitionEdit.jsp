@@ -14,29 +14,35 @@
             <ww:hidden name="buildDefinitionId"/>
             <ww:hidden name="projectId"/>
 
-            <ww:if test="project.executorId == 'ant'">
-              <ww:textfield label="%{getText('buildDefinition.buildFile.ant.label')}" name="buildFile"  required="true"/>
-            </ww:if>
-            <ww:elseif test="project.executorId == 'shell'">
-              <ww:textfield label="%{getText('buildDefinition.buildFile.shell.label')}" name="buildFile" required="true"/>
-            </ww:elseif>
-            <ww:else>
-              <ww:textfield label="%{getText('buildDefinition.buildFile.maven.label')}" name="buildFile" required="true"/>
-            </ww:else>
+            <table>
+              <tbody>
+                <ww:if test="project.executorId == 'ant'">
+                  <ww:textfield label="%{getText('buildDefinition.buildFile.ant.label')}" name="buildFile"  required="true"/>
+                </ww:if>
+                <ww:elseif test="project.executorId == 'shell'">
+                  <ww:textfield label="%{getText('buildDefinition.buildFile.shell.label')}" name="buildFile" required="true"/>
+                </ww:elseif>
+                <ww:else>
+                  <ww:textfield label="%{getText('buildDefinition.buildFile.maven.label')}" name="buildFile" required="true"/>
+                </ww:else>
 
-            <ww:if test="project.executorId == 'ant'">
-              <ww:textfield label="%{getText('buildDefinition.goals.ant.label')}" name="goals"/>
-            </ww:if>
-            <ww:elseif test="project.executorId == 'shell'">
-            </ww:elseif>
-            <ww:else>
-              <ww:textfield label="%{getText('buildDefinition.goals.maven.label')}" name="goals"/>
-            </ww:else>
+                <ww:if test="project.executorId == 'ant'">
+                  <ww:textfield label="%{getText('buildDefinition.goals.ant.label')}" name="goals"/>
+                </ww:if>
+                <ww:elseif test="project.executorId == 'shell'">
+                </ww:elseif>
+                <ww:else>
+                  <ww:textfield label="%{getText('buildDefinition.goals.maven.label')}" name="goals"/>
+                </ww:else>
 
-            <ww:textfield label="%{getText('buildDefinition.arguments.label')}" name="arguments"/>
-            <ww:checkbox label="%{getText('buildDefinition.defaultForProject.label')}"  name="defaultForProject" value="defaultForProject" fieldValue="true"/>
-            <ww:select label="%{getText('buildDefinition.schedule.label')}" name="scheduleId" list="schedulesMap"/>
-            <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
+                <ww:textfield label="%{getText('buildDefinition.arguments.label')}" name="arguments"/>
+                <ww:checkbox label="%{getText('buildDefinition.defaultForProject.label')}"  name="defaultForProject" value="defaultForProject" fieldValue="true"/>
+                <ww:select label="%{getText('buildDefinition.schedule.label')}" name="scheduleId" list="schedulesMap"/>
+              </tbody>
+            </table>
+            <div class="functnbar3">
+              <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
+            </div>
           </ww:form>
         </div>
       </div>

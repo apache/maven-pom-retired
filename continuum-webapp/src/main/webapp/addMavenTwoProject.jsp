@@ -11,16 +11,22 @@
                 <h3><ww:text name="add.m2.project.section.title"/></h3>
                 <div class="axial">
                     <ww:form method="post" action="addMavenTwoProject.action" name="addMavenTwoProject" enctype="multipart/form-data">
-                        <ww:textfield label="%{getText('add.m2.project.m2PomUrl.label')}" name="m2PomUrl">
-                            <ww:param name="desc"><p><ww:text name="add.m2.project.m2PomUrl.message"/></p></ww:param>
-                        </ww:textfield>
-                        <c1:data label="">
-                            <ww:param name="after"><strong><ww:text name="or"/></strong></ww:param>
-                        </c1:data>
-                        <ww:file label="%{getText('add.m2.project.m2PomFile.label')}" name="m2PomFile">
-                            <ww:param name="desc"><p><ww:text name="add.m2.project.m2PomFile.message"/></p></ww:param>
-                        </ww:file>
-                        <c1:submitcancel value="%{getText('add')}" cancel="%{getText('cancel')}"/>
+                        <table>
+                          <tbody>
+                            <ww:textfield label="%{getText('add.m2.project.m2PomUrl.label')}" name="m2PomUrl">
+                                <ww:param name="desc"><p><ww:text name="add.m2.project.m2PomUrl.message"/></p></ww:param>
+                            </ww:textfield>
+                            <c1:data label="">
+                                <ww:param name="after"><strong><ww:text name="or"/></strong></ww:param>
+                            </c1:data>
+                            <ww:file label="%{getText('add.m2.project.m2PomFile.label')}" name="m2PomFile">
+                                <ww:param name="desc"><p><ww:text name="add.m2.project.m2PomFile.message"/></p></ww:param>
+                            </ww:file>
+                          </tbody>
+                        </table>
+                        <div class="functnbar3">
+                          <c1:submitcancel value="%{getText('add')}" cancel="%{getText('cancel')}"/>
+                        </div>
                     </ww:form>
                 </div>
             </div>

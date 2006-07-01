@@ -18,10 +18,12 @@
         </h3>
 
         <div class="axial">
-            <ww:form action="jabberNotifierSave.action" method="post">
-                <ww:hidden name="notifierId"/>
-                <ww:hidden name="projectId"/>
-                <ww:hidden name="notifierType"/>
+          <ww:form action="jabberNotifierSave.action" method="post">
+            <ww:hidden name="notifierId"/>
+            <ww:hidden name="projectId"/>
+            <ww:hidden name="notifierType"/>
+            <table>
+              <tbody>
                 <ww:textfield label="%{getText('notifier.jabber.host.label')}" name="host" required="true"/>
                 <ww:textfield label="%{getText('notifier.jabber.port.label')}" name="port"/>
                 <ww:textfield label="%{getText('notifier.jabber.login.label')}" name="login" required="true"/>
@@ -34,8 +36,12 @@
                 <ww:checkbox label="%{getText('notifier.event.sendOnFailure')}" name="sendOnFailure" value="sendOnFailure" fieldValue="true"/>
                 <ww:checkbox label="%{getText('notifier.event.sendOnError')}" name="sendOnError" value="sendOnError" fieldValue="true"/>
                 <ww:checkbox label="%{getText('notifier.event.sendOnWarning')}" name="sendOnWarning" value="sendOnWarning" fieldValue="true"/>
-                <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
-            </ww:form>
+              </tbody>
+            </table>
+            <div class="functnbar3">
+              <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
+            </div>
+          </ww:form>
         </div>
       </div>
     </body>

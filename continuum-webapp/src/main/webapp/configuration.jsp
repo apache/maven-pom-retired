@@ -28,9 +28,11 @@
             <c1:data label="%{getText('configuration.companyLogo.label')}" name="companyLogo"/>
             <c1:data label="%{getText('configuration.companyUrl.label')}" name="companyUrl"/>
           </table>
-          <ww:form action="configuration!edit.action" method="post">
+          <div class="functnbar3">
+            <ww:form action="configuration!edit.action" method="post">
               <ww:submit value="%{getText('edit')}"/>
-          </ww:form>
+            </ww:form>
+          </div>
         </div>
       </div>
     </body>

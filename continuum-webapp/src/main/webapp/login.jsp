@@ -10,10 +10,16 @@
         <h3><ww:text name="login.section.title"/></h3>
         <div class="axial">
         <ww:form action="login" method="post">
-            <ww:textfield label="%{getText('login.username')}" name="username" required="true"/>
-            <ww:password label="%{getText('login.password')}" name="password" required="true"/>
-            <ww:checkbox label="%{getText('login.rememberMe')}" name="rememberMe" value="rememberMe" fieldValue="true"/>
+          <table>
+            <tbody>
+              <ww:textfield label="%{getText('login.username')}" name="username" required="true"/>
+              <ww:password label="%{getText('login.password')}" name="password" required="true"/>
+              <ww:checkbox label="%{getText('login.rememberMe')}" name="rememberMe" value="rememberMe" fieldValue="true"/>
+            </tbody>
+          </table>
+          <div class="functnbar3">
             <c1:submitcancel value="%{getText('login.submit')}" cancel="%{getText('cancel')}"/>
+          </div>
         </ww:form>
         </div>
       </div>
