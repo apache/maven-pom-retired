@@ -14,9 +14,34 @@
   </load-on-start>
 
   <components>
+    <!--
+    | The mail notifier
+    |-->
     <component>
-      <role>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</role>
-      <implementation>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</implementation>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>mail</role-hint>
+      <implementation>org.apache.maven.continuum.notification.mail.MailContinuumNotifier</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.velocity.VelocityComponent</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.mailsender.MailSender</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
+      </requirements>
+      <configuration>
+        <from-mailbox></from-mailbox>
+        <from-name></from-name>
+        <timestamp-format>EEE, d MMM yyyy HH:mm:ss Z</timestamp-format>
+        <includeBuildResult>true</includeBuildResult>
+        <alwaysSend>false</alwaysSend>
+      </configuration>
     </component>
 
     <component>
@@ -28,8 +53,119 @@
         this address instead the address specified in the project
         configuration
         -->
-        <to-override>${mail.override.to.address}</to-override>
+        <to-override></to-override>
       </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.mailsender.MailSender</role>
+      <implementation>org.codehaus.plexus.mailsender.javamail.JavamailMailSender</implementation>
+      <configuration>
+        <smtp-host>localhost</smtp-host>
+        <smtp-port>25</smtp-port>
+        <sslProvider>com.sun.net.ssl.internal.ssl.Provider</sslProvider>
+        <!--
+        <username>mylogin</username>
+        <password>mypassword</password>
+        <sslMode>true</sslMode>
+        -->
+      </configuration>
+    </component>
+
+    <!--
+    | The irc notifier
+    |-->
+    <component>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>irc</role-hint>
+      <implementation>org.apache.maven.continuum.notification.irc.IrcContinuumNotifier</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.ircbot.IrcBot</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
+      </requirements>
+      <configuration>
+        <alwaysSend>false</alwaysSend>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.ircbot.IrcBot</role>
+      <implementation>org.codehaus.plexus.ircbot.DefaultIrcClient</implementation>
+    </component>
+
+    <!--
+    | The jabber notifier
+    |-->
+    <component>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>jabber</role-hint>
+      <implementation>org.apache.maven.continuum.notification.jabber.JabberContinuumNotifier</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.jabber.JabberClient</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+      <configuration>
+        <alwaysSend>false</alwaysSend>
+        <!-- from-address/>
+        <from-password/>
+        <host/>
+        <port/>
+        <sslConnection>true</sslConnection -->
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.jabber.JabberClient</role>
+      <implementation>org.codehaus.plexus.jabber.DefaultJabberClient</implementation>
+    </component>
+
+    <!--
+    | The MSN notifier
+    |-->
+    <component>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>msn</role-hint>
+      <implementation>org.apache.maven.continuum.notification.msn.MsnContinuumNotifier</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.msn.MsnClient</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+      <configuration>
+        <alwaysSend>false</alwaysSend>
+        <!-- from-address/>
+        <from-password/ -->
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.msn.MsnClient</role>
+      <implementation>org.codehaus.plexus.msn.DefaultMsnClient</implementation>
+    </component>
+
+    <component>
+      <role>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</role>
+      <implementation>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</implementation>
     </component>
 
     <component>
