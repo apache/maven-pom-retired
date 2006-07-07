@@ -100,7 +100,7 @@ http://svn.codehaus.org/*checkout*/trunk/pom.xml?root=plexus
   <configuration>
     <address>dev@maven.apache.org</address>
   </configuration>
-<notifier>
+</notifier>
 +--+
 
  Example IRC notifier configuration:
