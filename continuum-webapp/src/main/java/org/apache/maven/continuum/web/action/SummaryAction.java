@@ -21,8 +21,6 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.web.model.SummaryProjectModel;
 
-import com.opensymphony.xwork.ActionSupport;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -32,10 +30,17 @@ import java.util.Map;
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="summary"
  */
 public class SummaryAction
-    extends ActionSupport
+    extends AbstractContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
     private int nbSuccesses;

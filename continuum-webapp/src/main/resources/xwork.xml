@@ -26,25 +26,25 @@
       <result name="error">error.jsp</result>
     </global-results>
 
-    <action name="checkConfiguration" class="checkConfigurationAction">
+    <action name="checkConfiguration" class="checkConfiguration">
       <result name="input">/redirectToContinuumInitialization.jsp</result>
     </action>
 
-    <action name="configuration" class="configurationAction">
+    <action name="configuration" class="configuration">
       <result name="input">configurationEdit.jsp</result>
       <result name="success">configuration.jsp</result>
     </action>
 
-    <action name="companyInfo" class="configurationAction">
+    <action name="companyInfo" class="configuration">
       <result name="success">/components/companyLogo.jsp</result>
     </action>
 
-    <action name="login" class="loginAction">
+    <action name="login" class="login">
       <result name="input">login.jsp</result>
       <result name="success" type="redirect">summary.action</result>
     </action>
 
-    <action name="summary" class="summaryAction">
+    <action name="summary" class="summary">
       <result name="success">summary.jsp</result>
     </action>
 

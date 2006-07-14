@@ -22,14 +22,12 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 
 import java.util.Map;
 
-import com.opensymphony.xwork.ActionSupport;
-
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
 public abstract class AbstractNotifierEditAction
-    extends ActionSupport
+    extends AbstractContinuumAction
 {
     private Continuum continuum;
 

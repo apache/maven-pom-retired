@@ -26,15 +26,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.opensymphony.xwork.ActionSupport;
-
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="addBuildDefinition"
  */
 public class AddBuildDefinitionAction
-    extends ActionSupport
+    extends AbstractContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
     private Project project;

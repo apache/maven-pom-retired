@@ -18,15 +18,20 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.Continuum;
 
-import com.opensymphony.xwork.ActionSupport;
-
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="checkConfiguration"
  */
 public class CheckConfigurationAction
-    extends ActionSupport
+    extends AbstractContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
     public String execute()

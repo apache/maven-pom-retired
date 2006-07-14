@@ -24,6 +24,10 @@ import java.util.Map;
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="msnNotifierEdit"
  */
 public class MsnNotifierEditAction
     extends AbstractNotifierEditAction

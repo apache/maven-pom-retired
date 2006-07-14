@@ -16,20 +16,16 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
-import com.opensymphony.webwork.ServletActionContext;
-import com.opensymphony.xwork.ActionSupport;
-
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="login"
  */
 public class LoginAction
-    extends ActionSupport
+    extends AbstractContinuumAction
 {
     private String username = "";
 

@@ -24,10 +24,17 @@ import com.opensymphony.xwork.ActionSupport;
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="deleteProject"
  */
 public class DeleteProjectAction
     extends ActionSupport
 {
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
     private int projectId;

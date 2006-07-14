@@ -20,15 +20,20 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
 
-import com.opensymphony.xwork.ActionSupport;
-
 /**
  * @author Nick Gonzalez
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="addProject"
  */
 public class AddProjectAction
-    extends ActionSupport
+    extends AbstractContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
     private String projectName;

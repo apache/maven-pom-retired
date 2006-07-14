@@ -1,0 +1,9 @@
+<component-set>
+  <components>
+    <component>
+      <role>com.opensymphony.xwork.Action</role>
+      <role-hint>testAction</role-hint>
+      <implementation>org.apache.maven.continuum.web.action.TestAction</implementation>
+    </component>
+  </components>
+</component-set>

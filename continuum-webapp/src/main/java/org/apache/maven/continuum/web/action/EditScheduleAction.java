@@ -20,15 +20,20 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Schedule;
 
-import com.opensymphony.xwork.ActionSupport;
-
 /**
  * @author Nik Gonzalez
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="editSchedule"
  */
 public class EditScheduleAction
-    extends ActionSupport
+    extends AbstractContinuumAction
 {
 
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
     private Schedule schedule;

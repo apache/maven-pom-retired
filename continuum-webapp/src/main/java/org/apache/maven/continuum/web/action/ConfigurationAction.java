@@ -16,22 +16,27 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import com.opensymphony.xwork.Preparable;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 
 import java.io.File;
 
-import com.opensymphony.xwork.ActionSupport;
-import com.opensymphony.xwork.Preparable;
-
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="configuration"
  */
 public class ConfigurationAction
-    extends ActionSupport
+    extends AbstractContinuumAction
     implements Preparable
 {
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
     private boolean guestAccountEnabled;

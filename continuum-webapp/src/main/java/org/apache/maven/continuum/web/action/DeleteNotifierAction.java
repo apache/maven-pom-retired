@@ -19,15 +19,20 @@ package org.apache.maven.continuum.web.action;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 
-import com.opensymphony.xwork.ActionSupport;
-
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="deleteNotification"
  */
 public class DeleteNotifierAction
-    extends ActionSupport
+    extends AbstractContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
     private int projectId;

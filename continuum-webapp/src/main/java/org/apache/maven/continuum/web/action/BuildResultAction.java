@@ -16,21 +16,28 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import com.opensymphony.xwork.ActionSupport;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildResult;
 
 import java.util.List;
 
-import com.opensymphony.xwork.ActionSupport;
-
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="buildResult"
  */
 public class BuildResultAction
     extends ActionSupport
 {
+
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
     private BuildResult buildResult;

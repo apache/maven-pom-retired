@@ -24,15 +24,20 @@ import org.codehaus.plexus.util.StringUtils;
 import java.io.File;
 import java.net.MalformedURLException;
 
-import com.opensymphony.xwork.ActionSupport;
-
 /**
  * @author Nick Gonzalez
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="com.opensymphony.xwork.Action"
+ *   role-hint="addMavenTwoProject"
  */
 public class AddMavenTwoProjectAction
-    extends ActionSupport
+    extends AbstractContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
     private Continuum continuum;
 
     private String m2PomUrl;

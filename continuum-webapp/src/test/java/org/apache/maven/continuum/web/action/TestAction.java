@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,46 +16,33 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.ContinuumException;
-
-import java.util.Collection;
-
 /**
- * @author Nik Gonzalez
+ * TestAction:
  *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="schedule"
+ * @author: jesse
+ * @date: Jul 13, 2006
+ * @version: $ID:$
  */
-public class ScheduleAction
+public class TestAction
     extends AbstractContinuumAction
 {
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
-
-    private Collection schedules;
-
+    private String testString;
+   
     public String execute()
         throws Exception
     {
-        try
-        {
-            schedules = continuum.getSchedules();
-        }
-        catch ( ContinuumException e )
-        {
-            e.printStackTrace();
-        }
+        getLogger().info( testString );
 
-        return SUCCESS;
+        return INPUT;
     }
 
-    public Collection getSchedules()
+    public String getTestString()
     {
-        return schedules;
+        return testString;
     }
 
+    public void setTestString( String testString )
+    {
+        this.testString = testString;
+    }
 }

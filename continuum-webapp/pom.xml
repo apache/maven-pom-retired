@@ -9,6 +9,13 @@
   <name>Continuum Web APP</name>
   <version>1.1-SNAPSHOT</version>
   <packaging>war</packaging>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>mortbay-repo</id>
+      <name>mortbay-repo</name>
+      <url>http://www.mortbay.org/maven2/snapshot</url>
+    </pluginRepository>
+  </pluginRepositories>
   <build>
     <filters>
       <filter>src/main/filters/filter.properties</filter>
@@ -29,6 +36,31 @@
         </excludes>
       </resource>
     </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
+        <configuration>
+          <fileName>plexus-request.xml</fileName>
+          <containerDescriptor>true</containerDescriptor>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty6-plugin</artifactId>
+        <configuration>
+          <scanIntervalSeconds>10</scanIntervalSeconds>
+          <contextPath>/</contextPath>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
   <dependencies>
     <dependency>
