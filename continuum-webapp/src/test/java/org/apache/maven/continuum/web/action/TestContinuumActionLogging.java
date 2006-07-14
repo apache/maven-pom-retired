@@ -30,7 +30,7 @@ import java.io.PrintStream;
  *
  * @author: jesse
  * @date: Jul 13, 2006
- * @version: $ID:$
+ * @version: $ID$
  */
 public class TestContinuumActionLogging
     extends PlexusTestCase

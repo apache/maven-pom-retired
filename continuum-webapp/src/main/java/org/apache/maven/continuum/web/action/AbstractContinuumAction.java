@@ -25,7 +25,7 @@ import com.opensymphony.xwork.ActionSupport;
  *
  * @author: jesse
  * @date: Jul 13, 2006
- * @version: $ID:$
+ * @version: $ID$
  */
 public abstract class AbstractContinuumAction
     extends ActionSupport
