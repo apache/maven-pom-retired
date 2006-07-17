@@ -22,7 +22,7 @@ import com.opensymphony.xwork.ActionSupport;
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  *
- * @plexus.component role="com.opensymphony.xwork.Action" role-hint="addNotifierAction"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="addNotifier"
  */
 public class AddNotifierAction
     extends AbstractContinuumAction

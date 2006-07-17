@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @plexus.component
  *   role="com.opensymphony.xwork.Action"
- *   role-hint="MailNotifierEdit"
+ *   role-hint="mailNotifierEdit"
  */
 public class MailNotifierEditAction
     extends AbstractNotifierEditAction

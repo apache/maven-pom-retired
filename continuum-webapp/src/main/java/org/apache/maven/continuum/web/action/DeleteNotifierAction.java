@@ -25,7 +25,7 @@ import org.apache.maven.continuum.ContinuumException;
  *
  * @plexus.component
  *   role="com.opensymphony.xwork.Action"
- *   role-hint="deleteNotification"
+ *   role-hint="deleteNotifier"
  */
 public class DeleteNotifierAction
     extends AbstractContinuumAction
