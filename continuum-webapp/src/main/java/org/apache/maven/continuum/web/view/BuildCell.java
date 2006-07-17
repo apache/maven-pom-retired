@@ -73,7 +73,7 @@ public class BuildCell
 
                     String url = UrlHelper.buildUrl( "/buildResult.action", request, response, params );
 
-                    result += "<a href=\"" + url + ">" + project.getBuildNumber() + "</a>";
+                    result += "<a href=\"" + url + "\">" + project.getBuildNumber() + "</a>";
                 }
                 else
                 {
