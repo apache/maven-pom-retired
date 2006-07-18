@@ -27,7 +27,7 @@ import java.util.Collection;
  *
  * @plexus.component
  *   role="com.opensymphony.xwork.Action"
- *   role-hint="buildResultsList"
+ *   role-hint="buildResults"
  */
 public class BuildResultsListAction
     extends AbstractContinuumAction

@@ -26,7 +26,7 @@ import java.util.Collection;
  *
  * @plexus.component
  *   role="com.opensymphony.xwork.Action"
- *   role-hint="schedule"
+ *   role-hint="schedules"
  */
 public class ScheduleAction
     extends AbstractContinuumAction
