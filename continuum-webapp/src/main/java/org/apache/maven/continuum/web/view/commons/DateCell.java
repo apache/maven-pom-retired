@@ -16,6 +16,7 @@ package org.apache.maven.continuum.web.view.commons;
  * limitations under the License.
  */
 
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
@@ -51,7 +52,14 @@ public class DateCell
                 value = cal.getTime();
             }
 
-            value = ExtremeUtils.formatDate( column.getParse(), column.getFormat(), value, locale );
+            String format = column.getFormat();
+
+            if ( StringUtils.isEmpty( format ) )
+            {
+                format = DateFormatUtils.SMTP_DATETIME_FORMAT.getPattern();
+            }
+
+            value = ExtremeUtils.formatDate( column.getParse(), format, value, locale );
 
             column.setPropertyValue( value );
 
