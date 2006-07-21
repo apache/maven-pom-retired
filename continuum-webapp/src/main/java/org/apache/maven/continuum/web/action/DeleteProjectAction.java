@@ -18,8 +18,7 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
-
-import com.opensymphony.xwork.ActionSupport;
+import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -30,7 +29,7 @@ import com.opensymphony.xwork.ActionSupport;
  *   role-hint="deleteProject"
  */
 public class DeleteProjectAction
-    extends ActionSupport
+    extends PlexusActionSupport
 {
     /**
      * @plexus.requirement

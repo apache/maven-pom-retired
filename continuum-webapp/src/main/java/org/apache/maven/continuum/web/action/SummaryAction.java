@@ -20,6 +20,7 @@ import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.web.model.SummaryProjectModel;
+import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +37,7 @@ import java.util.Map;
  *   role-hint="summary"
  */
 public class SummaryAction
-    extends AbstractContinuumAction
+    extends PlexusActionSupport
 {
     /**
      * @plexus.requirement

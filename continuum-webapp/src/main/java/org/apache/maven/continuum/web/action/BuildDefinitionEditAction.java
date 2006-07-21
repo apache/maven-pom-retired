@@ -16,12 +16,12 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import com.opensymphony.xwork.ActionSupport;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.Schedule;
+import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ import java.util.Map;
  *   role-hint="buildDefinitionEdit"
  */
 public class BuildDefinitionEditAction
-    extends AbstractContinuumAction
+    extends PlexusActionSupport
 {
     /**
      * @plexus.requirement

@@ -19,6 +19,7 @@ package org.apache.maven.continuum.web.action;
 import com.opensymphony.xwork.Preparable;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
+import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import java.io.File;
 
@@ -31,7 +32,7 @@ import java.io.File;
  *   role-hint="configuration"
  */
 public class ConfigurationAction
-    extends AbstractContinuumAction
+    extends PlexusActionSupport
     implements Preparable
 {
     /**

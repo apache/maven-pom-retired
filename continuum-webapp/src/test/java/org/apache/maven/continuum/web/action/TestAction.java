@@ -1,5 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
+import org.codehaus.plexus.xwork.action.PlexusActionSupport;
+
 /*
  * Copyright 2001-2006 The Apache Software Foundation.
  *
@@ -24,10 +26,10 @@ package org.apache.maven.continuum.web.action;
  * @version: $ID$
  */
 public class TestAction
-    extends AbstractContinuumAction
+    extends PlexusActionSupport
 {
     private String testString;
-   
+
     public String execute()
         throws Exception
     {

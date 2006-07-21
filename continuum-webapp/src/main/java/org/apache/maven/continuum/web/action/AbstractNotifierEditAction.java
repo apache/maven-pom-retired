@@ -19,6 +19,7 @@ package org.apache.maven.continuum.web.action;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import java.util.Map;
 
@@ -27,7 +28,7 @@ import java.util.Map;
  * @version $Id$
  */
 public abstract class AbstractNotifierEditAction
-    extends AbstractContinuumAction
+    extends PlexusActionSupport
 {
     private Continuum continuum;
 

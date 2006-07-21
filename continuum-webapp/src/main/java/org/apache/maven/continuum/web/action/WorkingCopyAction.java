@@ -19,10 +19,10 @@ package org.apache.maven.continuum.web.action;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.web.util.WorkingCopyContentGenerator;
+import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.webwork.views.util.UrlHelper;
-import com.opensymphony.xwork.ActionSupport;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +36,7 @@ import java.util.List;
  *   role-hint="workingCopy"
  */
 public class WorkingCopyAction
-    extends AbstractContinuumAction
+    extends PlexusActionSupport
 {
     /**
      * @plexus.requirement

@@ -19,6 +19,7 @@ package org.apache.maven.continuum.web.action;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
+import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 /**
  * @author Nick Gonzalez
@@ -29,7 +30,7 @@ import org.apache.maven.continuum.model.project.Project;
  *   role-hint="addProject"
  */
 public class AddProjectAction
-    extends AbstractContinuumAction
+    extends PlexusActionSupport
 {
     /**
      * @plexus.requirement
