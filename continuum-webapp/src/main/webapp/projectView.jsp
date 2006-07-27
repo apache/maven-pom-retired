@@ -70,9 +70,17 @@
             </ec:column>
             <ec:column property="actions" title="&nbsp;">
                 <!-- TODO: REPLACE THIS WITH A NEW CELL CLASS -->
-                <a href="${pageContext.request.contextPath}/buildDefinitionEdit!default.action?projectId=<ww:property value="project.id"/>&buildDefinitionId=${pageScope.buildDefinition.id}"><ww:text name="edit"/></a>
+                <c:url var="buildDefinitionEditUrl" value="/buildDefinitionEdit!default.action">
+                  <c:param name="projectId" value="project.id"/>
+                  <c:param name="buildDefinitionId" value="${buildDefinition.id}"/>
+                </c:url>
+                <a href="<c:out value='${buildDefinitionEditUrl}'/>"><ww:text name="edit"/></a>
                 &nbsp;
-                <a href="${pageContext.request.contextPath}/deleteBuildDefinition!default.action?projectId=<ww:property value="project.id"/>&buildDefinitionId=${pageScope.buildDefinition.id}"><ww:text name="delete"/></a>
+                <c:url var="deleteBuildDefinitionUrl" value="/deleteBuildDefinition!default.action">
+                  <c:param name="projectId" value="project.id"/>
+                  <c:param name="buildDefinitionId" value="${buildDefinition.id}"/>
+                </c:url>
+                <a href="<c:out value='${deleteBuildDefinitionUrl}'/>"><ww:text name="delete"/></a>
             </ec:column>
           </ec:row>
         </ec:table>
@@ -99,9 +107,24 @@
             <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
             <ec:column property="actions" title="&nbsp;">
                 <c:if test="${!pageScope.notifier.fromProject}">
-                    <a href="${pageContext.request.contextPath}/${pageScope.notifier.type}NotifierEdit!default.action?projectId=<ww:property value="project.id"/>&notifierId=${pageScope.notifier.id}"><img src="${pageContext.request.contextPath}/images/edit.gif" alt="<ww:text name="edit"/>" title="<ww:text name="edit"/>" border="0"></a>
+                    <c:url var="notifierEditUrl" value="${notifier.type}NotifierEdit!default.action">
+                      <c:param name="projectId" value="project.id"/>
+                      <c:param name="notifierId" value="${notifier.id}"/>
+                    </c:url>
+                    <c:url var="imgEditUrl" value="/images/edit.gif" />
+                    <a href="<c:out value='${notifierEditUrl}'/>">
+                      <img src="<c:out value='${imgEditUrl}'/>" alt="<ww:text name="edit"/>" title="<ww:text name="edit"/>" border="0">
+                    </a>
                     &nbsp;
-                    <a href="${pageContext.request.contextPath}/deleteNotifier!default.action?projectId=<ww:property value="project.id"/>&notifierId=${pageScope.notifier.id}&notifierType=${pageScope.notifier.type}"><img src="${pageContext.request.contextPath}/images/delete.gif" alt="<ww:text name="delete"/>" title="<ww:text name="delete"/>" border="0"></a>
+                    <c:url var="notifierDeleteUrl" value="/deleteNotifier!default.action">
+                      <c:param name="projectId" value="project.id"/>
+                      <c:param name="notifierId" value="${notifier.id}"/>
+                      <c:param name="notifierType" value="${notifier.type}"/>
+                    </c:url>
+                    <c:url var="imgDeleteUrl" value="/images/delete.gif" />
+                    <a href="<c:out value='${notifierDeleteUrl}'/>">
+                      <img src="<c:out value='${imgDeleteUrl}'/>" alt="<ww:text name="delete"/>" title="<ww:text name="delete"/>" border="0">
+                    </a>
                 </c:if>
             </ec:column>
           </ec:row>

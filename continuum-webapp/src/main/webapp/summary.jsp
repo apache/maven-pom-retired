@@ -19,7 +19,10 @@
           <ec:row highlightRow="true">
             <ec:column property="state" title="&nbsp;" width="1%" cell="org.apache.maven.continuum.web.view.StateCell"/>
             <ec:column property="name" title="summary.projectTable.name" width="48%">
-                <a href="${pageContext.request.contextPath}/projectView.action?projectId=${pageScope.project.id}">${pageScope.project.name}</a>
+                <c:url var="projectViewUrl" value="/projectView.action">
+                  <c:param name="projectId" value="${project.id}"/>
+                </c:url>
+                <a href="<c:out value='${projectViewUrl}'/>">${project.name}</a>
             </ec:column>
             <ec:column property="version" title="summary.projectTable.version" width="13%"/>
             <ec:column property="buildNumber" title="summary.projectTable.build" width="5%" cell="org.apache.maven.continuum.web.view.BuildCell"/>
@@ -48,7 +51,14 @@
             <ec:column property="deleteAction" title="&nbsp;" width="1%" sortable="false">
               <c:choose>
                 <c:when test="${pageScope.project.state == 1 || pageScope.project.state == 10 || pageScope.project.state == 2 || pageScope.project.state == 3 || pageScope.project.state == 4}">
-                  <a href="${pageContext.request.contextPath}/deleteProject!default.action?projectId=${pageScope.project.id}&projectName=${pageScope.project.name}"><img src="<ww:url value="/images/delete.gif"/>" alt="Delete" title="Delete" border="0"></a>
+                  <c:url var="deleteProjectUrl" value="/deleteProject!default.action">
+                    <c:param name="projectId" value="${project.id}"/>
+                    <c:param name="projectName" value="${project.name}"/>
+                  </c:url>
+                  <c:url var="imgDeleteUrl" value="/images/delete.gif" />
+                  <a href="<c:out value='${deleteProjectUrl}'/>">
+                    <img src="<c:out value='${imgDeleteUrl}'/>" alt="Delete" title="Delete" border="0">
+                  </a>
                 </c:when>
                 <c:otherwise>
                   <img src="<ww:url value="/images/delete_disabled.gif"/>" alt="Delete" title="Delete" border="0">

@@ -21,7 +21,10 @@
             <ec:column property="delay" title="schedules.table.delay"/>
             <ec:column property="cronExpression" title="schedules.table.cronExpression"/>
             <ec:column property="actions" title="&nbsp;">
-                <a href="${pageContext.request.contextPath}/editSchedule!edit.action?id=${pageScope.schedule.id}"><ww:text name="edit"/></a>
+                <c:url var="editScheduleUrl" value="/editSchedule!edit.action">
+                  <c:param name="id" value="${schedule.id}"/>
+                </c:url>
+                <a href="<c:out value='${editScheduleUrl}'/>"><ww:text name="edit"/></a>
                 &nbsp;
                 <ww:text name="delete"/>
             </ec:column>
