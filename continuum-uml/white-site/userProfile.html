@@ -81,6 +81,7 @@
         <li>Note that only the administrator and user should be able to access this page</li>
         <li>Only the administrator should be able to edit the permissions</li>
         <li>Should permissions relate to POM roles? How can we really do that securely?</li>
+        <li>Under roles, if user has rights to edit the role, then the edit list renders</li>
       </ul>
     </div>
   </div>
@@ -194,6 +195,41 @@
           <input type="hidden" name="id" value="43"/>
           <input type="submit" name="add-notifier" value="Add"/>
         </form>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<h3>Assigned Roles</h3>
+<table border="1" cellspacing="2" cellpadding="3" width="100%">
+  <tr>
+
+    <th>Project</th>
+    <th>Role</th>
+    <th>&nbsp;</td>
+  </tr>
+  <tr class="b">
+    <td>Plexus</td>
+    <td>admin<br/>user</td>
+    <td><a href="editRoles.html">Edit</a></td>
+  </tr>
+  <tr class="b">
+    <td>Maven</td>
+    <td>admin<br/>user</td>   
+    <td><a href="editRoles.html">Edit</a></td>
+  </tr>
+  <tr class="b">
+    <td>Maven Plugins</td>
+    <td>user</td>
+    <td>&nbsp;</td>
+  </tr>
+
+</table>
+<div class="functnbar3">
+  <table>
+    <tr>
+      <td>
+       
       </td>
     </tr>
   </table>

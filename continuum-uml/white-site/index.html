@@ -105,7 +105,9 @@
 
 <div class="app">
   <div id="h3">
-    <h3>Continuum Projects</h3>
+    <center><h3>Continuum Projects</h3></center>
+    
+    <h4><a href="groupStatus.html">Plexus</a></h4>
     <table id="projectSummaryTable" border="1" cellpadding="3" cellspacing="2" width="100%">
 
       <!-- i18n -->
@@ -114,7 +116,6 @@
         <th width="100%">Name</th>
         <th>Version</th>
         <th>Build</th>
-        <th>Group</th>
         <th colspan="4"></th>
       </tr>
 
@@ -124,7 +125,6 @@
           <td><a href="viewProject.html">Default Plexus Container</a></td>
           <td>1.0-alpha-6-SNAPSHOT</td>
           <td><a href="viewBuild.html">5</a></td>
-          <td><a href="viewGroup.html">Plexus</a></td>
 
           <td><a href="#">Build&nbsp;Now</a></td>
           <td><a href="builds.html">Build&nbsp;History</a></td>
@@ -137,8 +137,7 @@
           <td><a href="viewProject.html">Plexus Utils</a></td>
           <td>1.0.2-SNAPSHOT</td>
           <td><strong>In&nbsp;progress</strong></td>
-          <td><a href="viewGroup.html">Plexus</a></td>
-
+          
           <td><a href="#">Cancel&nbsp;Build</a></td>
           <td><a href="builds.html">Build&nbsp;History</a></td>
           <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
@@ -150,8 +149,7 @@
           <td><a href="viewProject.html">Plexus Action</a></td>
           <td>1.0-alpha-6-SNAPSHOT</td>
           <td><a href="viewBuild.html">2</a></td>
-          <td><a href="viewGroup.html">Plexus</a></td>
-
+          
           <td><a href="#">Build&nbsp;Now</a></td>
           <td><a href="builds.html">Build&nbsp;History</a></td>
           <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
@@ -161,6 +159,133 @@
       </tbody></table>
 
     <div class="functnbar3">
+      <form method="post" action="#">
+        <img src="continuum_files/icon_success_sml.gif" alt="Success"> 0
+        <img src="continuum_files/icon_error_sml.gif" alt="Failed"> 0
+        <img src="continuum_files/icon_warning_sml.gif" alt="Error"> 2
+        <input name="action" value="cam" type="hidden">
+        <input name="cid" value="buildAllProjects" type="hidden">
+        <input name="build-broken" value="Build All In Error" type="submit">
+        <input name="build-all" value="Build All" type="submit">
+      </form>
+    </div>
+    
+    
+    <h4><a href="groupStatus.html">Maven</a></h4>
+    <table id="projectSummaryTable" border="1" cellpadding="3" cellspacing="2" width="100%">
+
+      <!-- i18n -->
+      <tbody><tr>
+        <th>&nbsp;</th>
+        <th width="100%">Name</th>
+        <th>Version</th>
+        <th>Build</th>
+        <th colspan="4"></th>
+      </tr>
+
+
+        <tr class="b">
+          <td><img src="continuum_files/icon_warning_sml.gif" alt="Error"></td>
+          <td><a href="viewProject.html">Maven Model</a></td>
+          <td>2.1-SNAPSHOT</td>
+          <td><a href="viewBuild.html">5</a></td>
+          <td><a href="#">Build&nbsp;Now</a></td>
+          <td><a href="builds.html">Build&nbsp;History</a></td>
+          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
+          <td><a href="deleteProject.html">Delete</a></td>
+        </tr>
+
+        <tr class="b">
+          <td>&nbsp;</td>
+          <td><a href="viewProject.html">Maven Project</a></td>
+          <td>2.1-SNAPSHOT</td>
+          <td><strong>In&nbsp;progress</strong></td>
+          
+          <td><a href="#">Cancel&nbsp;Build</a></td>
+          <td><a href="builds.html">Build&nbsp;History</a></td>
+          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
+          <td><a href="deleteProject.html">Delete</a></td>
+        </tr>
+
+        <tr class="a">
+          <td><img src="continuum_files/icon_warning_sml.gif" alt="Error"></td>
+          <td><a href="viewProject.html">Maven Plugin API</a></td>
+          <td>2.1-SNAPSHOT</td>
+          <td><a href="viewBuild.html">2</a></td>
+         
+          <td><a href="#">Build&nbsp;Now</a></td>
+          <td><a href="builds.html">Build&nbsp;History</a></td>
+          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
+          <td><a href="deleteProject.html">Delete</a></td>
+        </tr>
+
+      </tbody></table>
+      
+      <div class="functnbar3">
+      <form method="post" action="#">
+        <img src="continuum_files/icon_success_sml.gif" alt="Success"> 0
+        <img src="continuum_files/icon_error_sml.gif" alt="Failed"> 0
+        <img src="continuum_files/icon_warning_sml.gif" alt="Error"> 2
+        <input name="action" value="cam" type="hidden">
+        <input name="cid" value="buildAllProjects" type="hidden">
+        <input name="build-broken" value="Build All In Error" type="submit">
+        <input name="build-all" value="Build All" type="submit">
+      </form>
+    </div>
+      
+      <h4><a href="groupStatus.html">Maven Plugins<a/></h4>
+    <table id="projectSummaryTable" border="1" cellpadding="3" cellspacing="2" width="100%">
+
+      <!-- i18n -->
+      <tbody><tr>
+        <th>&nbsp;</th>
+        <th width="100%">Name</th>
+        <th>Version</th>
+        <th>Build</th>
+        
+        <th colspan="4"></th>
+      </tr>
+
+
+        <tr class="b">
+          <td><img src="continuum_files/icon_warning_sml.gif" alt="Error"></td>
+          <td><a href="viewProject.html">Maven Clean Plugin</a></td>
+          <td>2.1-SNAPSHOT</td>
+          <td><a href="viewBuild.html">5</a></td>
+         
+          <td><a href="#">Build&nbsp;Now</a></td>
+          <td><a href="builds.html">Build&nbsp;History</a></td>
+          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
+          <td><a href="deleteProject.html">Delete</a></td>
+        </tr>
+
+        <tr class="b">
+          <td>&nbsp;</td>
+          <td><a href="viewProject.html">Maven War Plugin</a></td>
+          <td>2.1-SNAPSHOT</td>
+          <td><strong>In&nbsp;progress</strong></td>
+          
+          <td><a href="#">Cancel&nbsp;Build</a></td>
+          <td><a href="builds.html">Build&nbsp;History</a></td>
+          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
+          <td><a href="deleteProject.html">Delete</a></td>
+        </tr>
+
+        <tr class="a">
+          <td><img src="continuum_files/icon_warning_sml.gif" alt="Error"></td>
+          <td><a href="viewProject.html">Maven Assembly Plugin</a></td>
+          <td>2.1-SNAPSHOT</td>
+          <td><a href="viewBuild.html">2</a></td>
+         
+          <td><a href="#">Build&nbsp;Now</a></td>
+          <td><a href="builds.html">Build&nbsp;History</a></td>
+          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
+          <td><a href="deleteProject.html">Delete</a></td>
+        </tr>
+
+      </tbody></table>
+      
+      <div class="functnbar3">
       <form method="post" action="#">
         <img src="continuum_files/icon_success_sml.gif" alt="Success"> 0
         <img src="continuum_files/icon_error_sml.gif" alt="Failed"> 0
