@@ -32,7 +32,7 @@ import java.io.PrintStream;
  * @date: Jul 13, 2006
  * @version: $ID$
  */
-public class TestContinuumActionLogging
+public class ContinuumActionLoggingTest
     extends PlexusTestCase
 {
 
@@ -59,7 +59,7 @@ public class TestContinuumActionLogging
     {
         try
         {
-            TestAction testAction = (TestAction) lookup( "com.opensymphony.xwork.Action", "testAction" );
+            ActionStub testAction = (ActionStub) lookup( "com.opensymphony.xwork.Action", "testAction" );
             String testString = "action test string";
             testAction.setTestString( testString );
 
