@@ -24,7 +24,7 @@ import org.codehaus.plexus.xwork.action.PlexusActionSupport;
  * @author jesse
  * @version $Id$
  */
-public class ActionStub
+public class TestAction
     extends PlexusActionSupport
 {
     private String testString;

@@ -57,7 +57,7 @@ public class ContinuumActionLoggingTest
     public void testActionLogging()
         throws Exception
     {
-        ActionStub testAction = (ActionStub) lookup( "com.opensymphony.xwork.Action", "testAction" );
+        TestAction testAction = (TestAction) lookup( "com.opensymphony.xwork.Action", "testAction" );
         String testString = "action test string";
         testAction.setTestString( testString );
 
