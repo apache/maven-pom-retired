@@ -69,7 +69,7 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-xwork-integration-single</artifactId>
+      <artifactId>plexus-xwork-integration</artifactId>
       <version>1.0-alpha-2-SNAPSHOT</version>
     </dependency>
     <dependency>
