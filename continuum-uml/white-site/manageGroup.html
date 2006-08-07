@@ -1,0 +1,276 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>Continuum</title>
+
+  <link rel="stylesheet" type="text/css" href="continuum_files/tigris.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="continuum_files/print.css" media="print">
+
+  <script src="continuum_files/tigris.js" type="text/javascript"></script></head>
+
+<body onload="focus()" class="composite">
+
+<div id="banner">
+  <table border="1" cellpadding="8" cellspacing="0" width="100%">
+    <tbody><tr>
+      <td>
+        <a href="http://www.apache.org/">
+          Your company logo here
+        </a>
+      </td>
+      <td>
+        <a href="http://maven.apache.org/continuum">
+          <img src="continuum_files/continuum_logo_75.gif" alt="Continuum" align="right" border="0">
+        </a>
+      </td>
+    </tr>
+    </tbody></table>
+</div>
+
+<div id="breadcrumbs">
+  <div style="float: right">
+    <a href="http://maven.apache.org/continuum">Continuum</a> |
+    <a href="http://maven.apache.org/">Maven</a> |
+    <a href="http://www.apache.org/">Apache</a>
+  </div>
+
+  <div>
+    Welcome, <b>Guest</b> | <a href="login.html">Login</a>
+  </div>
+</div>
+
+<table id="main" border="0" cellpadding="4" cellspacing="0" width="100%">
+<tbody><tr valign="top">
+<td id="leftcol" width="30%">
+  <div id="navcolum">
+    <div id="projectmenu" class="toolgroup">
+      <div class="label">Continuum</div>
+
+      <div class="body">
+        <div><a href="index.html">Show Projects</a></div>
+
+        <div><a href="schedule.html">View Build Schedule</a></div>
+      </div>
+    </div>
+
+    <div id="projecttools" class="toolgroup">
+      <div class="label">Add Project</div>
+
+      <div class="body">
+        <div><a href="addMaven2Project.html">Maven 2.0+ Project</a></div>
+
+        <div><a href="addMaven1Project.html">Maven 1.x Project</a></div>
+
+        <div><a href="addAntProject.html">Ant Project</a></div>
+
+        <div><a href="addShellProject.html">Shell Project</a></div>
+      </div>
+    </div>
+
+    <div id="projectimport" class="toolgroup">
+      <div class="label">Import Project</div>
+
+      <div class="body">
+        <div>
+          <a href="addCruiseControlProject.html">CruiseControl</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 5em; color: #555; border: 1px dashed black; padding: 1em;">
+      <p>Notes:</p>
+      <ul>
+       <li></li>
+      </ul>
+    </div>
+  </div>
+</td>
+<td>
+<div id="bodycol">
+<div class="app">
+
+<div>
+  <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
+    <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;"><a href="groupStatus.html">Status</a></b>
+    <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;"><a href="manageGroup.html">Manage</a></b>
+  </p>
+</div>
+
+<div id="axial" class="h3">
+<h3>Continuum Project Group</h3>
+
+<div class="axial">
+  <table border="1" cellspacing="2" cellpadding="3" width="100%">
+
+    <tr class="b">
+      <th>Project Group Name</th>
+      <td>Plexus</td>
+    </tr>
+    <tr class="b">
+      <th>Maven Group ID</th>
+      <td>org.codehaus.plexus</td>
+    </tr>
+    <tr class="b">
+      <th>Description</th>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+  <div class="functnbar3">
+    <table>
+      <tr>
+        <td>
+          <form method="post" action="editGroup.html">
+
+            <input type="hidden" name="action" value="cam"/>
+            <input type="hidden" name="cid" value="checkoutProject"/>
+            <input type="hidden" name="id" value="43"/>
+            <input type="submit" name="edit-project" value="Edit"/>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<h3>Projects</h3>
+<table border="1" cellspacing="2" cellpadding="3" width="100%">
+  <tr>
+
+    <th>Name</th>
+  </tr>
+  <tr class="b">
+    <td><a href="viewProject.html">Plexus Utils</a></td>
+  </tr>
+  <tr class="b">
+    <td><a href="viewProject.html">Default Plexus Container</a></td>
+  </tr>
+
+</table>
+
+<h3>Shared Notifiers</h3>
+<table border="1" cellspacing="2" cellpadding="3" width="100%">
+  <tr>
+
+    <th>Type</th>
+    <th>Recipient</th>
+    <th>Events</th>
+    <th width="10%">&nbsp;</th>
+  </tr>
+  <tr class="b">
+    <td>Mail</td>
+    <td>dev@plexus.codehaus.org</td>
+    <td>Failures</td>
+    <td><a href="addNotifier.html">Edit</a> | <a href="#">Delete</a></td>
+  </tr>
+  <tr class="b">
+    <td>Mail</td>
+    <td><i>All Project Developers</i></td>
+    <td>Failures</td>
+    <td><a href="addNotifier.html">Edit</a> | <a href="#">Delete</a></td>
+  </tr>
+
+</table>
+<div class="functnbar3">
+  <table>
+    <tr>
+      <td>
+        <form method="post" action="addNotifier.html">
+
+          <input type="hidden" name="action" value="cam"/>
+          <input type="hidden" name="cid" value="checkoutProject"/>
+          <input type="hidden" name="id" value="43"/>
+          <input type="submit" name="add-notifier" value="Add"/>
+        </form>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<h3>Shared Build Definitions</h3>
+<table border="1" cellspacing="2" cellpadding="3" width="100%">
+  <tr>
+
+    <th>Goals</th>
+    <th>Arguments</th>
+    <th>POM File</th>
+    <th>Profile</th>
+    <th>Schedule</th>
+    <th width="10%">&nbsp;</th>
+  </tr>
+  <tr class="b">
+    <td>clean:clean install</td>
+    <td>--batch-mode</td>
+    <td>pom.xml</td>
+    <td><a href="viewProfile.html">Maven 2.0 Default</a></td>
+    <td><a href="viewSchedule.html">Hourly</a></td>
+    <td><a href="addBuildDef.html">Edit</a> | <a href="#">Delete</a></td>
+  </tr>
+
+</table>
+<div class="functnbar3">
+  <table>
+    <tr>
+      <td>
+        <form method="post" action="addBuildDef.html">
+
+          <input type="hidden" name="action" value="cam"/>
+          <input type="hidden" name="cid" value="checkoutProject"/>
+          <input type="hidden" name="id" value="43"/>
+          <input type="submit" name="add-build-def" value="Add"/>
+        </form>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<h3>Role Definitions</h3>
+<table border="1" cellspacing="2" cellpadding="3" width="100%">
+  <tr>
+
+    <th>Role</th>
+    <th>Permissions</th>
+    <th>Members</td>
+    
+  </tr>
+  <tr class="b">
+    <td>admin</td>
+    <td>view project<br/>add projects<br/>trigger builds<br/>manage users</td>
+    <td>jason<br/>brett</td>
+  </tr>
+    <tr class="b">
+    <td>user</td>
+    <td>view project<br/>trigger builds</td>
+    <td>trygvis</td>
+  </tr>
+
+</table>
+<div class="functnbar3">
+  <table>
+    <tr>
+      <td>
+        <form method="post" action="editRoles.html">
+
+          <input type="hidden" name="action" value="cam"/>
+          <input type="submit" name="add-build-def" value="Edit Roles"/>
+        </form>
+      </td>
+    </tr>
+  </table>
+</div>
+
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody></table>
+
+<div id="footer">
+  <table border="0" cellpadding="4" cellspacing="0">
+    <tbody><tr>
+      <td>
+        Continuum &#169; 2005 Apache Software Foundation
+      </td>
+    </tr>
+    </tbody></table>
+</div>
+
+</body></html>
