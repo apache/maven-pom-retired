@@ -9,7 +9,7 @@
     <body>
       <div id="h3">
         <h3><ww:text name="summary.section.title"/></h3>
-        <ww:set name="projects" value="projects" scope="request"/>
+        <%--<ww:set name="projects" value="projects" scope="request"/>--%>
         <ec:table items="projects"
                   var="project"
                   showExports="false"

@@ -44,6 +44,8 @@ public class SummaryAction
      */
     private Continuum continuum;
 
+    private int projectGroupId = -1;
+
     private int nbSuccesses;
 
     private int nbFailures;
@@ -57,8 +59,22 @@ public class SummaryAction
     {
         try
         {
-            //TODO: Create a summary jpox request so code will be more simple and performance will be better
-            Collection projects = continuum.getProjects();
+            Collection projects;
+
+            // original logic on this page shows all projects across project groups, however if projectGroupId
+            // is set then display only those projects in the given group.
+            if ( projectGroupId == -1 )
+            {
+                getLogger().debug("SummaryAction: serving up all projects");
+                projects = continuum.getProjects();
+            }
+            else
+            {
+                getLogger().debug("SummaryAction: serving up project id -> " + projectGroupId );
+
+                //TODO: Create a summary jpox request so code will be more simple and performance will be better
+                projects = continuum.getProjectsInGroup( projectGroupId );
+            }
 
             Map buildResults = continuum.getLatestBuildResults();
 
@@ -155,5 +171,16 @@ public class SummaryAction
     public List getProjects()
     {
         return summary;
+    }
+
+
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
     }
 }

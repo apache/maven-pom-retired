@@ -2258,6 +2258,31 @@ public class DefaultContinuum
         }
     }
 
+    public Collection getAllProjectGroupsWithProjects()
+    {
+        // todo check why this interface isn't throwing exceptions on this guy
+        return store.getAllProjectGroupsWithProjects();
+
+    }
+
+    public Collection getProjectsInGroup( int projectGroupId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getProjectGroupWithProjects( projectGroupId ).getProjects();
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            throw new ContinuumException( "Unable to find the requested project", e );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error retrieving the requested project", e );
+        }
+    }
+
+
     // ----------------------------------------------------------------------
     // Private Utilities
     // ----------------------------------------------------------------------

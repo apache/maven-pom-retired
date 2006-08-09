@@ -1,5 +1,7 @@
 package org.apache.maven.continuum.web.model;
 
+import java.io.Serializable;
+
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
  *
@@ -21,6 +23,7 @@ package org.apache.maven.continuum.web.model;
  * @version $Id$
  */
 public class SummaryProjectModel
+    implements Serializable
 {
     private int id = -1;
     private String name;

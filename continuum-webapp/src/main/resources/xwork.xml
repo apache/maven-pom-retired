@@ -48,6 +48,10 @@
       <result name="success">summary.jsp</result>
     </action>
 
+    <action name="groupSummary" class="groupSummary">
+      <result name="success">groupSummary.jsp</result>
+    </action>
+
     <action name="addMavenTwoProject" class="addMavenTwoProject">
       <result name="input">addMavenTwoProject.jsp</result>
       <result name="success" type="redirect">summary.action</result>

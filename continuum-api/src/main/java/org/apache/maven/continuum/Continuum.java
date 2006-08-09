@@ -43,6 +43,15 @@ public interface Continuum
     String ROLE = Continuum.class.getName();
 
     // ----------------------------------------------------------------------
+    // Project Groups
+    // ----------------------------------------------------------------------
+
+    public Collection getAllProjectGroupsWithProjects();
+
+    public Collection getProjectsInGroup( int projectGroupId )
+        throws ContinuumException;
+    
+    // ----------------------------------------------------------------------
     // Project
     // ----------------------------------------------------------------------
 

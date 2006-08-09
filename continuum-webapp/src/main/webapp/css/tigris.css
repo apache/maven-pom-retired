@@ -100,8 +100,9 @@ a:active, a:hover, #leftcol a:active, #leftcol a:hover {
 
 
 .app h3 a:link, .app h3 a:visited, .app h4 a:link, .app h4 a:visited {
-	color: #fff !important;
-	/*text-decoration: underline;*/
+	color:black !important;
+    /* TODO was #fff causing white on white issues for me, so set it black */
+    /*text-decoration: underline;*/
 }
 
 .app h4 {
