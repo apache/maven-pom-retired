@@ -2,13 +2,16 @@
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
-        <title>ERROR</title>
+        <title><ww:text name="error.page.title"/></title>
     </head>
     <body>
       <div id="axial" class="h3">
-        <h3>ERROR</h3>
+        <h3><ww:text name="error.section.title"/></h3>
         <p>
-            TODO
+          <ww:text name="error.exception.message"/>
+          <p>
+           ${exception.message}
+          </p>
         </p>
       </div>
     </body>
