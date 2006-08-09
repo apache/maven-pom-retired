@@ -16,11 +16,9 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.Schedule;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,12 +34,8 @@ import java.util.Map;
  *   role-hint="addBuildDefinition"
  */
 public class AddBuildDefinitionAction
-    extends PlexusActionSupport
+    extends ContinuumActionSupport
 {
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
 
     private Project project;
 

@@ -16,11 +16,9 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -34,12 +32,8 @@ import java.net.MalformedURLException;
  *   role-hint="addMavenTwoProject"
  */
 public class AddMavenTwoProjectAction
-    extends PlexusActionSupport
-{
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
+    extends ContinuumActionSupport
+{    
 
     private String m2PomUrl;
 

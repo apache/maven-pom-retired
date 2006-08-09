@@ -6,6 +6,7 @@
 
     <interceptors>
       <interceptor-stack name="defaultContinuumStack">
+        <interceptor-ref name="exception"/>
         <interceptor-ref name="prepare"/>
         <interceptor-ref name="servlet-config"/>
         <interceptor-ref name="chain"/>
@@ -23,8 +24,14 @@
     <default-interceptor-ref name="defaultContinuumStack"/>
 
     <global-results>
-      <result name="error">error.jsp</result>
+      <result name="continuumException">error.jsp</result>
+      <result name="continuumInitialization" type="redirect">/configuration!input.action</result>
     </global-results>
+
+    <global-exception-mappings>
+      <exception-mapping exception="org.apache.maven.continuum.ContinuumException" result="continuumException"/>
+      <exception-mapping exception="org.apache.maven.continuum.initialization.ContinuumInitializationException" result="continuumInitialization"/>
+    </global-exception-mappings>
 
     <action name="checkConfiguration" class="checkConfiguration">
       <result name="input">/redirectToContinuumInitialization.jsp</result>

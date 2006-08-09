@@ -16,9 +16,7 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -29,13 +27,8 @@ import org.codehaus.plexus.xwork.action.PlexusActionSupport;
  *   role-hint="deleteBuildDefinition"
  */
 public class DeleteBuildDefinitionAction
-    extends PlexusActionSupport
-{
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
-
+    extends ContinuumActionSupport
+{    
     private int projectId;
 
     private int buildDefinitionId;

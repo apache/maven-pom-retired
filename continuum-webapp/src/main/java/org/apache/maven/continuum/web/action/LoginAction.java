@@ -1,7 +1,5 @@
 package org.apache.maven.continuum.web.action;
 
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
-
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
  *
@@ -27,7 +25,7 @@ import org.codehaus.plexus.xwork.action.PlexusActionSupport;
  *   role-hint="login"
  */
 public class LoginAction
-    extends PlexusActionSupport
+    extends ContinuumActionSupport
 {
     private String username = "";
 

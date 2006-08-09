@@ -90,7 +90,8 @@ public class ConfigurationAction
 
         try
         {
-            continuum.getConfiguration().store();
+            continuum.getConfiguration().setInitialized( true );
+            continuum.getConfiguration().store();            
         }
         catch ( ConfigurationStoringException e )
         {

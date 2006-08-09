@@ -16,10 +16,8 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -30,12 +28,8 @@ import org.codehaus.plexus.xwork.action.PlexusActionSupport;
  *   role-hint="projectEdit"
  */
 public class ProjectEditAction
-    extends PlexusActionSupport
+    extends ContinuumActionSupport
 {
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
 
     private Project project;
 

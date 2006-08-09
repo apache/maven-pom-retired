@@ -16,9 +16,6 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
-
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
@@ -28,12 +25,8 @@ import org.codehaus.plexus.xwork.action.PlexusActionSupport;
  *   role-hint="checkConfiguration"
  */
 public class CheckConfigurationAction
-    extends PlexusActionSupport
+    extends ContinuumActionSupport
 {
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
 
     public String execute()
     {

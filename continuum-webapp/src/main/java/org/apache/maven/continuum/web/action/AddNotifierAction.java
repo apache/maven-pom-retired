@@ -16,8 +16,6 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
-
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
@@ -25,7 +23,7 @@ import org.codehaus.plexus.xwork.action.PlexusActionSupport;
  * @plexus.component role="com.opensymphony.xwork.Action" role-hint="addNotifier"
  */
 public class AddNotifierAction
-    extends PlexusActionSupport
+    extends ContinuumActionSupport
 {
     private int projectId;
 

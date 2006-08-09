@@ -21,7 +21,6 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.Schedule;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,12 +36,8 @@ import java.util.Map;
  *   role-hint="buildDefinitionEdit"
  */
 public class BuildDefinitionEditAction
-    extends PlexusActionSupport
+    extends ContinuumActionSupport
 {
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
 
     private BuildDefinition bd;
 

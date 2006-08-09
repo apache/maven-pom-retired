@@ -18,7 +18,7 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
+import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -29,12 +29,8 @@ import org.codehaus.plexus.xwork.action.PlexusActionSupport;
  *   role-hint="deleteNotifier"
  */
 public class DeleteNotifierAction
-    extends PlexusActionSupport
-{
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
+    extends ContinuumActionSupport
+{    
 
     private int projectId;
 

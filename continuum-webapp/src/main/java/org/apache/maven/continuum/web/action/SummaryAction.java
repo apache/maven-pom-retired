@@ -16,11 +16,9 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.web.model.ProjectSummary;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,13 +35,8 @@ import java.util.Map;
  *   role-hint="summary"
  */
 public class SummaryAction
-    extends PlexusActionSupport
-{
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
-
+    extends ContinuumActionSupport
+{    
     private int projectGroupId = -1;
 
     private int nbSuccesses;
