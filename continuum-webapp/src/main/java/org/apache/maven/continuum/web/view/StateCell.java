@@ -18,7 +18,7 @@ package org.apache.maven.continuum.web.view;
 
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.webwork.views.util.UrlHelper;
-import org.apache.maven.continuum.web.model.SummaryProjectModel;
+import org.apache.maven.continuum.web.model.ProjectSummary;
 import org.apache.maven.continuum.web.util.StateGenerator;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
@@ -37,7 +37,7 @@ public class StateCell
 {
     protected String getCellValue( TableModel tableModel, Column column )
     {
-        SummaryProjectModel project = (SummaryProjectModel) tableModel.getCurrentRowBean();
+        ProjectSummary project = (ProjectSummary) tableModel.getCurrentRowBean();
 
         int latestBuildId = project.getLatestBuildId();
 

@@ -2,8 +2,8 @@ package org.apache.maven.continuum.web.action;
 
 import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.web.model.SummaryProjectModel;
-import org.apache.maven.continuum.web.model.GroupSummaryModel;
+import org.apache.maven.continuum.web.model.ProjectSummary;
+import org.apache.maven.continuum.web.model.GroupSummary;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.ProjectGroup;
@@ -64,7 +64,7 @@ public class GroupSummaryAction
 
                 getLogger().info("GroupSummaryAction: building group " + projectGroup.getName() );
 
-                GroupSummaryModel groupModel = new GroupSummaryModel();
+                GroupSummary groupModel = new GroupSummary();
                 groupModel.setId( projectGroup.getId() );
                 groupModel.setGroupId( projectGroup.getGroupId() );
                 groupModel.setName( projectGroup.getName() );
@@ -86,7 +86,7 @@ public class GroupSummaryAction
                 {
                     Project project = (Project) i.next();
 
-                    SummaryProjectModel model = new SummaryProjectModel();
+                    ProjectSummary model = new ProjectSummary();
 
                     getLogger().info("GroupSummaryAction: building project model " + project.getName() );
 

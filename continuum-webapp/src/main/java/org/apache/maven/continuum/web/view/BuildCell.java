@@ -17,7 +17,7 @@ package org.apache.maven.continuum.web.view;
  */
 
 import com.opensymphony.webwork.views.util.UrlHelper;
-import org.apache.maven.continuum.web.model.SummaryProjectModel;
+import org.apache.maven.continuum.web.model.ProjectSummary;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
 import org.extremecomponents.table.core.TableModel;
@@ -38,7 +38,7 @@ public class BuildCell
 {
     protected String getCellValue( TableModel tableModel, Column column )
     {
-        SummaryProjectModel project = (SummaryProjectModel) tableModel.getCurrentRowBean();
+        ProjectSummary project = (ProjectSummary) tableModel.getCurrentRowBean();
 
         String contextPath = tableModel.getContext().getContextPath();
 

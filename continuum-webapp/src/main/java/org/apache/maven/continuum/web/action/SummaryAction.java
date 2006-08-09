@@ -19,7 +19,7 @@ package org.apache.maven.continuum.web.action;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
-import org.apache.maven.continuum.web.model.SummaryProjectModel;
+import org.apache.maven.continuum.web.model.ProjectSummary;
 import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class SummaryAction
             {
                 Project project = (Project) i.next();
 
-                SummaryProjectModel model = new SummaryProjectModel();
+                ProjectSummary model = new ProjectSummary();
 
                 model.setId( project.getId() );
 
