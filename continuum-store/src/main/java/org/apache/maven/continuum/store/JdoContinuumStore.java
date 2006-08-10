@@ -189,11 +189,11 @@ public class JdoContinuumStore
                     else
                     {
                         buildDefinitions = new ArrayList();
+
+                        projects.put( obj[0], buildDefinitions );
                     }
 
                     buildDefinitions.add( obj[1] );
-
-                    projects.put( obj[0], buildDefinitions );
                 }
 
                 return projects;

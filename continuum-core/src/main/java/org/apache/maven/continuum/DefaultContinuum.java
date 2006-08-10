@@ -24,9 +24,7 @@ import org.apache.maven.continuum.configuration.ConfigurationLoadingException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
-import org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction;
 import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
-import org.apache.maven.continuum.core.action.StoreProjectAction;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.initialization.ContinuumInitializationException;
@@ -156,8 +154,6 @@ public class DefaultContinuum
 
     public DefaultContinuum()
     {
-        super();
-
         Runtime.getRuntime().addShutdownHook( new Thread()
         {
             public void run()
@@ -342,7 +338,7 @@ public class DefaultContinuum
     {
         Map context = new HashMap();
 
-        context.put( AddProjectToCheckOutQueueAction.KEY_PROJECT_ID, new Integer( projectId ) );
+        context.put( AbstractContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
 
         executeAction( "add-project-to-checkout-queue", context );
     }
@@ -402,8 +398,8 @@ public class DefaultContinuum
 
             if ( buildDefId == null )
             {
-                throw new ContinuumException(
-                    "Project (id=" + project.getId() + " doens't have a default build definition." );
+                throw new ContinuumException( "Project (id=" + project.getId()
+                    + " doens't have a default build definition." );
             }
 
             buildProject( project, buildDefId.intValue(), trigger );
@@ -424,6 +420,7 @@ public class DefaultContinuum
             if ( projectsMap == null )
             {
                 // We don't have projects attached to this schedule
+                getLogger().info( "No projects to build for schedule " + schedule );
                 return;
             }
 
@@ -440,24 +437,33 @@ public class DefaultContinuum
             projectsList = getProjects();
         }
 
+        getLogger().info( "Building " + projectsList.size() + " projects" );
+
         for ( Iterator projectIterator = projectsList.iterator(); projectIterator.hasNext(); )
         {
             Project project = (Project) projectIterator.next();
 
+            // FIXME: if store.getProjectIdsAndBuildDefinitionsIdsBySchedule above throws a CycleDetectedException,
+            // then projectsMap is null.
             List buildDefIds = (List) projectsMap.get( new Integer( project.getId() ) );
 
             if ( buildDefIds != null && !buildDefIds.isEmpty() )
             {
+                getLogger().info( "Processing " + buildDefIds.size() + " build definitions for project " + project );
                 for ( Iterator buildDefinitionIterator = buildDefIds.iterator(); buildDefinitionIterator.hasNext(); )
                 {
                     Integer buildDefId = (Integer) buildDefinitionIterator.next();
 
-                    if ( buildDefId != null && !isInBuildingQueue( project.getId(), buildDefId.intValue() ) &&
-                        !isInCheckoutQueue( project.getId() ) )
+                    if ( buildDefId != null && !isInBuildingQueue( project.getId(), buildDefId.intValue() )
+                        && !isInCheckoutQueue( project.getId() ) )
                     {
                         buildProject( project, buildDefId.intValue(), ContinuumProjectState.TRIGGER_SCHEDULED, false );
                     }
                 }
+            }
+            else
+            {
+                getLogger().info( "No build definitions, not building for project " + project );
             }
         }
     }
@@ -473,7 +479,6 @@ public class DefaultContinuum
     {
         buildProject( projectId, buildDefinitionId, ContinuumProjectState.TRIGGER_FORCED );
     }
-
 
     public void buildProject( int projectId, int trigger )
         throws ContinuumException
@@ -535,10 +540,10 @@ public class DefaultContinuum
 
         try
         {
-            if ( project.getState() != ContinuumProjectState.NEW &&
-                project.getState() != ContinuumProjectState.CHECKEDOUT &&
-                project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED &&
-                project.getState() != ContinuumProjectState.ERROR )
+            if ( project.getState() != ContinuumProjectState.NEW
+                && project.getState() != ContinuumProjectState.CHECKEDOUT
+                && project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED
+                && project.getState() != ContinuumProjectState.ERROR )
             {
                 ContinuumBuildExecutor executor = executorManager.getBuildExecutor( project.getExecutorId() );
 
@@ -559,8 +564,7 @@ public class DefaultContinuum
                 }
             }
 
-            getLogger().info(
-                "Enqueuing '" + project.getName() + "' (Build definition id=" + buildDefinitionId + ")." );
+            getLogger().info( "Enqueuing '" + project.getName() + "' (Build definition id=" + buildDefinitionId + ")." );
 
             buildQueue.put( new BuildProjectTask( project.getId(), buildDefinitionId, trigger ) );
         }
@@ -763,7 +767,7 @@ public class DefaultContinuum
         //
         // ----------------------------------------------------------------------
 
-        context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
+        context.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
 
         context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
 
@@ -782,7 +786,7 @@ public class DefaultContinuum
 
         executeAction( "add-project-to-checkout-queue", context );
 
-        return ( (Integer) context.get( StoreProjectAction.KEY_PROJECT_ID ) ).intValue();
+        return ( (Integer) context.get( AbstractContinuumAction.KEY_PROJECT_ID ) ).intValue();
     }
 
     private ContinuumProjectBuildingResult executeAddProjectsFromMetadataActivity( String metadataUrl,
@@ -795,7 +799,7 @@ public class DefaultContinuum
 
         context.put( CreateProjectsFromMetadata.KEY_URL, metadataUrl );
 
-        context.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
+        context.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
 
         // ----------------------------------------------------------------------
         // Create the projects from the URL
@@ -803,8 +807,8 @@ public class DefaultContinuum
 
         executeAction( "create-projects-from-metadata", context );
 
-        ContinuumProjectBuildingResult result =
-            (ContinuumProjectBuildingResult) context.get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
+        ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context
+            .get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
 
         if ( result.getProjects() != null )
         {
@@ -849,7 +853,8 @@ public class DefaultContinuum
                 projectGroup = store.getProjectGroupByGroupIdWithProjects( projectGroup.getGroupId() );
 
                 getLogger().info(
-                    "Using existing project group with the group id: '" + projectGroup.getGroupId() + "'." );
+                                  "Using existing project group with the group id: '" + projectGroup.getGroupId()
+                                      + "'." );
             }
             catch ( ContinuumObjectNotFoundException e )
             {
@@ -857,7 +862,7 @@ public class DefaultContinuum
 
                 Map pgContext = new HashMap();
 
-                pgContext.put( CreateProjectsFromMetadata.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
+                pgContext.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
 
                 pgContext.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, projectGroup );
 
@@ -900,11 +905,11 @@ public class DefaultContinuum
                 context = new HashMap();
 
                 context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
-//
-//            executeAction( "validate-project", context );
-//
-//            executeAction( "store-project", context );
-//
+                //
+                //            executeAction( "validate-project", context );
+                //
+                //            executeAction( "store-project", context );
+                //
                 context.put( AbstractContinuumAction.KEY_PROJECT_ID, new Integer( project.getId() ) );
 
                 executeAction( "add-project-to-checkout-queue", context );
@@ -992,8 +997,8 @@ public class DefaultContinuum
             if ( value instanceof String )
             {
                 String val = (String) value;
-                if ( !"sendOnSuccess".equals( val ) && !"sendOnFailure".equals( val ) && !"sendOnError".equals( val ) &&
-                    !"sendOnWarning".equals( val ) )
+                if ( !"sendOnSuccess".equals( val ) && !"sendOnFailure".equals( val ) && !"sendOnError".equals( val )
+                    && !"sendOnWarning".equals( val ) )
                 {
                     if ( !StringUtils.isEmpty( val ) )
                     {
@@ -1541,8 +1546,8 @@ public class DefaultContinuum
 
             if ( configuration.get( "conf.workingDirectory" ) != null )
             {
-                configurationService.setWorkingDirectory(
-                    configurationService.getFile( (String) configuration.get( "conf.workingDirectory" ) ) );
+                configurationService.setWorkingDirectory( configurationService.getFile( (String) configuration
+                    .get( "conf.workingDirectory" ) ) );
             }
             else
             {
@@ -1551,8 +1556,8 @@ public class DefaultContinuum
 
             if ( configuration.get( "conf.buildOutputDirectory" ) != null )
             {
-                configurationService.setBuildOutputDirectory(
-                    configurationService.getFile( (String) configuration.get( "conf.buildOutputDirectory" ) ) );
+                configurationService.setBuildOutputDirectory( configurationService.getFile( (String) configuration
+                    .get( "conf.buildOutputDirectory" ) ) );
             }
             else
             {
@@ -1561,8 +1566,8 @@ public class DefaultContinuum
 
             if ( configuration.get( "conf.deploymentRepositoryDirectory" ) != null )
             {
-                configurationService.setDeploymentRepositoryDirectory( configurationService.getFile(
-                    (String) configuration.get( "conf.deploymentRepositoryDirectory" ) ) );
+                configurationService.setDeploymentRepositoryDirectory( configurationService
+                    .getFile( (String) configuration.get( "conf.deploymentRepositoryDirectory" ) ) );
             }
 
             if ( configuration.get( "conf.url" ) != null )
@@ -1909,16 +1914,16 @@ public class DefaultContinuum
         {
             if ( !wdFile.isDirectory() )
             {
-                throw new InitializationException(
-                    "The specified working directory isn't a directory: " + "'" + wdFile.getAbsolutePath() + "'." );
+                throw new InitializationException( "The specified working directory isn't a directory: " + "'"
+                    + wdFile.getAbsolutePath() + "'." );
             }
         }
         else
         {
             if ( !wdFile.mkdirs() )
             {
-                throw new InitializationException(
-                    "Could not making the working directory: " + "'" + wdFile.getAbsolutePath() + "'." );
+                throw new InitializationException( "Could not making the working directory: " + "'"
+                    + wdFile.getAbsolutePath() + "'." );
             }
         }
 
@@ -1945,10 +1950,10 @@ public class DefaultContinuum
                 }
             }
 
-            if ( project.getState() != ContinuumProjectState.NEW &&
-                project.getState() != ContinuumProjectState.CHECKEDOUT &&
-                project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED &&
-                project.getState() != ContinuumProjectState.ERROR )
+            if ( project.getState() != ContinuumProjectState.NEW
+                && project.getState() != ContinuumProjectState.CHECKEDOUT
+                && project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED
+                && project.getState() != ContinuumProjectState.ERROR )
             {
                 int state = project.getState();
 
@@ -1958,8 +1963,9 @@ public class DefaultContinuum
 
                 try
                 {
-                    getLogger().info( "Fix project state for project " + project.getId() + ":" + project.getName() +
-                        ":" + project.getVersion() );
+                    getLogger().info(
+                                      "Fix project state for project " + project.getId() + ":" + project.getName()
+                                          + ":" + project.getVersion() );
 
                     store.updateProject( project );
 
@@ -1976,8 +1982,9 @@ public class DefaultContinuum
                 }
             }
 
-            getLogger().info( " " + project.getId() + ":" + project.getName() + ":" + project.getVersion() + ":" +
-                project.getExecutorId() );
+            getLogger().info(
+                              " " + project.getId() + ":" + project.getName() + ":" + project.getVersion() + ":"
+                                  + project.getExecutorId() );
         }
     }
 
@@ -2281,7 +2288,6 @@ public class DefaultContinuum
             throw new ContinuumException( "Error retrieving the requested project", e );
         }
     }
-
 
     // ----------------------------------------------------------------------
     // Private Utilities

@@ -21,10 +21,8 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.scheduler.AbstractJob;
-import org.quartz.InterruptableJob;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
-import org.quartz.UnableToInterruptJobException;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -73,7 +71,7 @@ public class ContinuumBuildJob
         {
             if ( schedule.getDelay() > 0 )
             {
-                Thread.currentThread().sleep( schedule.getDelay() * 1000 );
+                Thread.sleep( schedule.getDelay() * 1000 );
             }
         }
         catch( InterruptedException e )

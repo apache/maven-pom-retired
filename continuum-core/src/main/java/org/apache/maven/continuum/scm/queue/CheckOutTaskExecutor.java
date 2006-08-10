@@ -17,7 +17,6 @@ package org.apache.maven.continuum.scm.queue;
  */
 
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
-import org.apache.maven.continuum.core.action.CheckoutProjectContinuumAction;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
@@ -76,11 +75,11 @@ public class CheckOutTaskExecutor
 
         Map context = new HashMap();
 
-        context.put( CheckoutProjectContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
+        context.put( AbstractContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
 
-        context.put( CheckoutProjectContinuumAction.KEY_PROJECT, project );
+        context.put( AbstractContinuumAction.KEY_PROJECT, project );
 
-        context.put( CheckoutProjectContinuumAction.KEY_WORKING_DIRECTORY, workingDirectory );
+        context.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY, workingDirectory );
 
         try
         {

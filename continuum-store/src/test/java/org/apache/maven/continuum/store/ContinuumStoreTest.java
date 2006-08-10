@@ -538,7 +538,6 @@ public class ContinuumStoreTest
     }
 
     public void testGetAllProjects()
-        throws ContinuumStoreException
     {
         List projects = store.getAllProjectsByName();
         assertEquals( "check items", Arrays.asList( new Project[]{testProject1, testProject2} ), projects );
@@ -550,7 +549,6 @@ public class ContinuumStoreTest
     }
 
     public void testAddSchedule()
-        throws ContinuumStoreException
     {
         Schedule newSchedule = createTestSchedule( "testAddSchedule", "testAddSchedule desc", 10, "cron test", false );
         Schedule copy = createTestSchedule( newSchedule );
@@ -580,7 +578,6 @@ public class ContinuumStoreTest
     }
 
     public void testRemoveSchedule()
-        throws ContinuumStoreException
     {
         Schedule schedule = (Schedule) store.getAllSchedulesByName().get( 2 );
 
@@ -609,7 +606,6 @@ public class ContinuumStoreTest
     }
 
     public void testAddProfile()
-        throws ContinuumStoreException
     {
         Installation installationJava14 = createTestInstallation( testInstallationJava14 );
         Installation installationMaven20a3 = createTestInstallation( testInstallationMaven20a3 );
@@ -646,7 +642,6 @@ public class ContinuumStoreTest
     }
 
     public void testRemoveProfile()
-        throws ContinuumStoreException
     {
         Profile profile = (Profile) store.getAllProfilesByName().get( 2 );
 
@@ -829,7 +824,6 @@ public class ContinuumStoreTest
     }
 
     public void testGetAllProjectsGroupWithDetails()
-        throws ContinuumObjectNotFoundException
     {
         List projectGroups = store.getAllProjectGroupsWithBuildDetails();
         ProjectGroup group1 = (ProjectGroup) projectGroups.get( 0 );

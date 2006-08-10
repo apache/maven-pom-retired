@@ -1,5 +1,7 @@
 package org.apache.maven.continuum.buildcontroller;
 
+import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
+
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
  *
@@ -24,5 +26,6 @@ public interface BuildController
 {
     String ROLE = BuildController.class.getName();
 
-    void build( int projectId, int buildDefinitionId, int trigger );
+    void build( int projectId, int buildDefinitionId, int trigger )
+        throws TaskExecutionException;
 }

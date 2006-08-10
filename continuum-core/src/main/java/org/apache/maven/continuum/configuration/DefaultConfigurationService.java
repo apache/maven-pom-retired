@@ -53,12 +53,6 @@ public class DefaultConfigurationService
     private boolean loaded = false;
 
     // ----------------------------------------------------------------------
-    // Continuum specifics we'll refactor out later
-    // ----------------------------------------------------------------------
-
-    private Map jdks;
-
-    // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
@@ -127,7 +121,7 @@ public class DefaultConfigurationService
 
     public void setJdks( Map jdks )
     {
-        this.jdks = jdks;
+        // no-op
     }
 
     public String getCompanyLogo()

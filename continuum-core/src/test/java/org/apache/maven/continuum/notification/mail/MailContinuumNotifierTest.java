@@ -22,6 +22,7 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.mailsender.MailMessage;
+import org.codehaus.plexus.mailsender.MailSender;
 import org.codehaus.plexus.mailsender.test.MockMailSender;
 import org.codehaus.plexus.notification.notifier.Notifier;
 import org.codehaus.plexus.util.CollectionUtils;
@@ -119,7 +120,7 @@ public class MailContinuumNotifierTest
         //
         // ----------------------------------------------------------------------
 
-        MockMailSender mailSender = (MockMailSender) lookup( MockMailSender.ROLE );
+        MockMailSender mailSender = (MockMailSender) lookup( MailSender.ROLE );
 
         assertEquals( 1, mailSender.getReceivedEmailSize() );
 

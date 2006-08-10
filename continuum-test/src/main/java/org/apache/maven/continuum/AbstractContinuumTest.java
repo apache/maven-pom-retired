@@ -33,7 +33,7 @@ import org.jpox.SchemaTool;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
-import java.io.File;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -469,22 +469,6 @@ public class DefaultContinuumXmlRpc
         return xmlRpcHelper.objectToHashtable( object, excludedProperties );
     }
 
-    private Hashtable convertScmFile( Object object )
-        throws IllegalAccessException, InvocationTargetException
-    {
-        Set excludedProperties = new HashSet();
-
-        return xmlRpcHelper.objectToHashtable( object, excludedProperties );
-    }
-
-    private Hashtable convertScmResult( Object object )
-        throws IllegalAccessException, InvocationTargetException
-    {
-        Set excludedProperties = new HashSet();
-
-        return xmlRpcHelper.objectToHashtable( object, excludedProperties );
-    }
-
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------

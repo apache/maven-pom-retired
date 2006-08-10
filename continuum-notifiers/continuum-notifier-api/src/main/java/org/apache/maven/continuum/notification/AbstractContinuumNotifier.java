@@ -25,8 +25,6 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.notification.notifier.AbstractNotifier;
 
-import java.util.Map;
-
 public abstract class AbstractContinuumNotifier
     extends AbstractNotifier
 {

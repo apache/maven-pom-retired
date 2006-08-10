@@ -280,6 +280,9 @@ public class CruiseControlProjectBuilder
                     "Unsupported modification set found '" + modifactionset.getName() + "'." );
             }
 
+            // FIXME: this break ensures that null-checks for scmURL above
+            // are useless - scmURL is always null. Either remove the break or drop
+            // the checks.
             break;
         }
 
