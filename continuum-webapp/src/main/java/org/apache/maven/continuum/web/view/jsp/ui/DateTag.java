@@ -61,7 +61,7 @@ public class DateTag
     public int doEndTag()
         throws JspException
     {
-        actualName = (String) findString( nameAttr );
+        actualName = findString( nameAttr );
         String msg = null;
         OgnlValueStack stack = getStack();
         //find the name on the valueStack, and cast it to a date

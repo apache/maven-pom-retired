@@ -14,7 +14,7 @@
   </appender>
 
   <root>
-		<priority value="INFO"/>
+    <priority value="INFO"/>
     <appender-ref ref="default"/>
   </root>
 
