@@ -34,7 +34,6 @@
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
         <configuration>
-          <containerDescriptor>true</containerDescriptor>
           <roleDefaults>
             <roleDefault>
               <role>com.opensymphony.xwork.Action</role>
