@@ -8,10 +8,7 @@
       <div id="axial" class="h3">
         <h3><ww:text name="error.section.title"/></h3>
         <p>
-          <ww:text name="error.exception.message"/>
-          <p>
-           ${exception.message}
-          </p>
+          <ww:text name="error.message"/>
         </p>
       </div>
     </body>
