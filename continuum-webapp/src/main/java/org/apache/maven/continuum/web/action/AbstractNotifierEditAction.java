@@ -49,73 +49,51 @@ public abstract class AbstractNotifierEditAction
     private boolean sendOnWarning;
 
     public String execute()
+        throws ContinuumException
     {
-        try
+        boolean isNew = false;
+
+        notifier = getNotifier();
+
+        if ( notifier == null || notifierId == 0 )
         {
-            boolean isNew = false;
+            notifier = new ProjectNotifier();
 
-            notifier = getNotifier();
-
-            if ( notifier == null || notifierId == 0 )
-            {
-                notifier = new ProjectNotifier();
-
-                isNew = true;
-            }
-
-            notifier.setType( notifierType );
-
-            notifier.setSendOnSuccess( sendOnSuccess );
-
-            notifier.setSendOnFailure( sendOnFailure );
-
-            notifier.setSendOnError( sendOnError );
-
-            notifier.setSendOnWarning( sendOnWarning );
-
-            setNotifierConfiguration( notifier );
-
-            if ( !isNew )
-            {
-                continuum.updateNotifier( projectId, notifier );
-            }
-            else
-            {
-                continuum.addNotifier( projectId, notifier );
-            }
+            isNew = true;
         }
-        catch ( ContinuumException e )
+
+        notifier.setType( notifierType );
+
+        notifier.setSendOnSuccess( sendOnSuccess );
+
+        notifier.setSendOnFailure( sendOnFailure );
+
+        notifier.setSendOnError( sendOnError );
+
+        notifier.setSendOnWarning( sendOnWarning );
+
+        setNotifierConfiguration( notifier );
+
+        if ( !isNew )
         {
-            addActionMessage( "Can't update notifier (id=" + notifierId + ") for project " + projectId + " : "
-                + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
+            continuum.updateNotifier( projectId, notifier );
+        }
+        else
+        {
+            continuum.addNotifier( projectId, notifier );
         }
 
         return SUCCESS;
     }
 
     public String doDefault()
+        throws ContinuumException
     {
-        try
+        notifier = getNotifier();
+
+        if ( notifier == null )
         {
-            notifier = getNotifier();
-
-            if ( notifier == null )
-            {
-                notifier = new ProjectNotifier();
-            }
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't get notifier informations (id=" + notifierId + ") for project " + projectId
-                + " : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
+            notifier = new ProjectNotifier();
         }
 
         notifierType = notifier.getType();

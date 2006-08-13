@@ -34,16 +34,9 @@ public class ScheduleAction
     private Collection schedules;
 
     public String execute()
-        throws Exception
+        throws ContinuumException
     {
-        try
-        {
-            schedules = continuum.getSchedules();
-        }
-        catch ( ContinuumException e )
-        {
-            e.printStackTrace();
-        }
+        schedules = continuum.getSchedules();
 
         return SUCCESS;
     }

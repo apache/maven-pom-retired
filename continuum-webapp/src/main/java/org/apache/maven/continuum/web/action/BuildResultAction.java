@@ -45,22 +45,11 @@ public class BuildResultAction
     private List changeSet;
 
     public String execute()
+        throws ContinuumException
     {
-        try
-        {
-            buildResult = continuum.getBuildResult( buildId );
+        buildResult = continuum.getBuildResult( buildId );
 
-            changeSet = continuum.getChangesSinceLastSuccess( projectId, buildId );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionError( "Can't get build result (id=" + buildId + ") for project (id=" + projectId + ") : "
-                + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
+        changeSet = continuum.getChangesSinceLastSuccess( projectId, buildId );
 
         return SUCCESS;
     }

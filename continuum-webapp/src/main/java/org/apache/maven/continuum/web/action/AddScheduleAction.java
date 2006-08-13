@@ -43,23 +43,17 @@ public class AddScheduleAction
     private String name;
 
     public String execute()
-        throws Exception
+        throws ContinuumException
     {
-        try
-        {
-            Schedule schedule = new Schedule();
-            schedule.setActive( active );
-            schedule.setCronExpression( cronExpression );
-            schedule.setDelay( delay );
-            schedule.setDescription( description );
-            schedule.setName( name );
+        Schedule schedule = new Schedule();
+        schedule.setActive( active );
+        schedule.setCronExpression( cronExpression );
+        schedule.setDelay( delay );
+        schedule.setDescription( description );
+        schedule.setName( name );
 
-            continuum.addSchedule( schedule );
-        }
-        catch ( ContinuumException e )
-        {
-            e.printStackTrace();
-        }
+        continuum.addSchedule( schedule );
+
         return SUCCESS;
     }
 

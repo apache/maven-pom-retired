@@ -18,6 +18,7 @@ package org.apache.maven.continuum.web.action;
 
 import com.opensymphony.xwork.Preparable;
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
@@ -72,7 +73,7 @@ public class ConfigurationAction
     }
 
     public String execute()
-        throws Exception
+        throws ConfigurationStoringException
     {
         continuum.getConfiguration().setGuestAccountEnabled( guestAccountEnabled );
 
@@ -88,17 +89,8 @@ public class ConfigurationAction
 
         continuum.getConfiguration().setCompanyUrl( companyUrl );
 
-        try
-        {
-            continuum.getConfiguration().setInitialized( true );
-            continuum.getConfiguration().store();            
-        }
-        catch ( ConfigurationStoringException e )
-        {
-            addActionError( "Can't store configuration :" + e.getMessage() );
-
-            return INPUT;
-        }
+        continuum.getConfiguration().setInitialized( true );
+        continuum.getConfiguration().store();            
 
         return SUCCESS;
     }

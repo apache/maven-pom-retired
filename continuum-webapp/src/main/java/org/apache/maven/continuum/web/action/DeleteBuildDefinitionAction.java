@@ -34,19 +34,9 @@ public class DeleteBuildDefinitionAction
     private int buildDefinitionId;
 
     public String execute()
+        throws ContinuumException
     {
-        try
-        {
-            continuum.removeBuildDefinition( projectId, buildDefinitionId );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't delete build definition (id=" + buildDefinitionId + ") for project " + projectId + " : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
+        continuum.removeBuildDefinition( projectId, buildDefinitionId );
 
         return SUCCESS;
     }

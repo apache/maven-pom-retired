@@ -38,19 +38,9 @@ public class BuildResultsListAction
     private String projectName;
 
     public String execute()
+        throws ContinuumException
     {
-        try
-        {
-            buildResults = continuum.getBuildResultsForProject( projectId );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionError( "Can't get build results list for project (id=" + projectId + ") : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
+        buildResults = continuum.getBuildResultsForProject( projectId );
 
         return SUCCESS;
     }

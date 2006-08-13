@@ -33,25 +33,15 @@ public class BuildProjectAction
     private int projectId;
 
     public String execute()
+        throws ContinuumException
     {
-        try
+        if ( projectId > 0 )
         {
-            if ( projectId > 0 )
-            {
-                continuum.buildProject( projectId );
-            }
-            else
-            {
-                continuum.buildProjects();
-            }
+            continuum.buildProject( projectId );
         }
-        catch ( ContinuumException e )
+        else
         {
-            addActionMessage( "Can't build project (id=" + projectId + ") : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
+            continuum.buildProjects();
         }
 
         return SUCCESS;

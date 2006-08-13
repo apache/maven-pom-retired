@@ -46,7 +46,7 @@ public class EditScheduleAction
     private String name;
 
     public String execute()
-        throws Exception
+        throws ContinuumException
     {
         try
         {
@@ -63,29 +63,15 @@ public class EditScheduleAction
         schedule.setDescription( description );
         schedule.setName( name );
 
-        try
-        {
-            continuum.updateSchedule( schedule );
-        }
-        catch ( ContinuumException e )
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        continuum.updateSchedule( schedule );
+
         return SUCCESS;
     }
 
     public String doEdit()
-        throws Exception
+        throws ContinuumException
     {
-        try
-        {
-            schedule = continuum.getSchedule( id );
-        }
-        catch ( ContinuumException e )
-        {
-            e.printStackTrace();
-        }
+        schedule = continuum.getSchedule( id );
 
         active = schedule.isActive();
         cronExpression = schedule.getCronExpression();

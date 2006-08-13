@@ -16,6 +16,7 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.web.model.ProjectSummary;
@@ -48,99 +49,92 @@ public class SummaryAction
     private List summary;
     
     public String execute()
-        throws Exception
+        throws ContinuumException
     {
-        try
-        {
-            Collection projects;
+        Collection projects;
 
-            // original logic on this page shows all projects across project groups, however if projectGroupId
-            // is set then display only those projects in the given group.
-            if ( projectGroupId == -1 )
+        // original logic on this page shows all projects across project groups, however if projectGroupId
+        // is set then display only those projects in the given group.
+        if ( projectGroupId == -1 )
+        {
+            getLogger().debug("SummaryAction: serving up all projects");
+            projects = continuum.getProjects();
+        }
+        else
+        {
+            getLogger().debug("SummaryAction: serving up project id -> " + projectGroupId );
+
+            //TODO: Create a summary jpox request so code will be more simple and performance will be better
+            projects = continuum.getProjectsInGroup( projectGroupId );
+        }
+
+        Map buildResults = continuum.getLatestBuildResults();
+
+        Map buildResultsInSuccess = continuum.getBuildResultsInSuccess();
+
+        summary = new ArrayList();
+
+        for ( Iterator i = projects.iterator(); i.hasNext(); )
+        {
+            Project project = (Project) i.next();
+
+            ProjectSummary model = new ProjectSummary();
+
+            model.setId( project.getId() );
+
+            model.setName( project.getName() );
+
+            model.setVersion( project.getVersion() );
+
+            model.setProjectGroupName( project.getProjectGroup().getName() );
+
+            if ( continuum.isInBuildingQueue( project.getId() ) || continuum.isInCheckoutQueue( project.getId() ) )
             {
-                getLogger().debug("SummaryAction: serving up all projects");
-                projects = continuum.getProjects();
+                model.setInQueue( true );
             }
             else
             {
-                getLogger().debug("SummaryAction: serving up project id -> " + projectGroupId );
-
-                //TODO: Create a summary jpox request so code will be more simple and performance will be better
-                projects = continuum.getProjectsInGroup( projectGroupId );
+                model.setInQueue( false );
             }
 
-            Map buildResults = continuum.getLatestBuildResults();
+            model.setState( project.getState() );
 
-            Map buildResultsInSuccess = continuum.getBuildResultsInSuccess();
-
-            summary = new ArrayList();
-
-            for ( Iterator i = projects.iterator(); i.hasNext(); )
+            if ( project.getState() == 2 )
             {
-                Project project = (Project) i.next();
-
-                ProjectSummary model = new ProjectSummary();
-
-                model.setId( project.getId() );
-
-                model.setName( project.getName() );
-
-                model.setVersion( project.getVersion() );
-
-                model.setProjectGroupName( project.getProjectGroup().getName() );
-
-                if ( continuum.isInBuildingQueue( project.getId() ) || continuum.isInCheckoutQueue( project.getId() ) )
-                {
-                    model.setInQueue( true );
-                }
-                else
-                {
-                    model.setInQueue( false );
-                }
-
-                model.setState( project.getState() );
-
-                if ( project.getState() == 2 )
-                {
-                    nbSuccesses++;
-                }
-                else if ( project.getState() == 3 )
-                {
-                    nbFailures++;
-                }
-                else if ( project.getState() == 4 )
-                {
-                    nbErrors++;
-                }
-
-                model.setBuildNumber( project.getBuildNumber() );
-
-                if ( buildResultsInSuccess != null )
-                {
-                    BuildResult buildInSuccess = (BuildResult) buildResultsInSuccess.get( new Integer( project.getId() ) );
-
-                    if ( buildInSuccess != null )
-                    {
-                        model.setBuildInSuccessId( buildInSuccess.getId() );
-                    }
-                }
-
-                if ( buildResults != null )
-                {
-                    BuildResult latestBuild = (BuildResult) buildResults.get( new Integer( project.getId() ) );
-
-                    if ( latestBuild != null )
-                    {
-                        model.setLatestBuildId( latestBuild.getId() );
-                    }
-                }
-
-                summary.add( model );
+                nbSuccesses++;
             }
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
+            else if ( project.getState() == 3 )
+            {
+                nbFailures++;
+            }
+            else if ( project.getState() == 4 )
+            {
+                nbErrors++;
+            }
+
+            model.setBuildNumber( project.getBuildNumber() );
+
+            if ( buildResultsInSuccess != null )
+            {
+                BuildResult buildInSuccess = (BuildResult) buildResultsInSuccess.get( new Integer( project.getId() ) );
+
+                if ( buildInSuccess != null )
+                {
+                    model.setBuildInSuccessId( buildInSuccess.getId() );
+                }
+            }
+
+            if ( buildResults != null )
+            {
+                BuildResult latestBuild = (BuildResult) buildResults.get( new Integer( project.getId() ) );
+
+                if ( latestBuild != null )
+                {
+                    model.setLatestBuildId( latestBuild.getId() );
+                }
+            }
+
+            summary.add( model );
         }
 
         return SUCCESS;

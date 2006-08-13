@@ -43,6 +43,7 @@ public class AddMavenOneProjectAction
     private String m1Pom = null;
 
     public String execute()
+        throws ContinuumException
     {
         if ( !StringUtils.isEmpty( m1PomUrl ) )
         {
@@ -58,7 +59,8 @@ public class AddMavenOneProjectAction
                 }
                 catch ( MalformedURLException e )
                 {
-                    return INPUT;
+                    // if local file can't be converted to url it's an internal error
+                    throw new RuntimeException( e );
                 }
             }
             else
@@ -75,6 +77,7 @@ public class AddMavenOneProjectAction
         }
         catch ( ContinuumException e )
         {
+            //TODO add errors to show to the user
             return INPUT;
         }
 

@@ -64,71 +64,49 @@ public class BuildDefinitionEditAction
     //    private Profile profile;
 
     public String execute()
+        throws ContinuumException
     {
-        try
+        boolean isNew = false;
+
+        bd = getBuildDefinition();
+
+        if ( bd == null || buildDefinitionId == 0 )
         {
-            boolean isNew = false;
+            bd = new BuildDefinition();
 
-            bd = getBuildDefinition();
-
-            if ( bd == null || buildDefinitionId == 0 )
-            {
-                bd = new BuildDefinition();
-
-                isNew = true;
-            }
-
-            bd.setGoals( goals );
-
-            bd.setBuildFile( buildFile );
-
-            bd.setArguments( arguments );
-
-            bd.setDefaultForProject( defaultForProject );
-
-            Schedule schedule = continuum.getSchedule( scheduleId );
-
-            bd.setSchedule( schedule );
-
-            if ( !isNew )
-            {
-                continuum.updateBuildDefinition( bd, projectId );
-            }
-            else
-            {
-                continuum.addBuildDefinition( projectId, bd );
-            }
+            isNew = true;
         }
-        catch ( ContinuumException e )
+
+        bd.setGoals( goals );
+
+        bd.setBuildFile( buildFile );
+
+        bd.setArguments( arguments );
+
+        bd.setDefaultForProject( defaultForProject );
+
+        Schedule schedule = continuum.getSchedule( scheduleId );
+
+        bd.setSchedule( schedule );
+
+        if ( !isNew )
         {
-            addActionMessage( "Can't update build definition (id=" + buildDefinitionId + ") for project " + projectId
-                + " : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
+            continuum.updateBuildDefinition( bd, projectId );
+        }
+        else
+        {
+            continuum.addBuildDefinition( projectId, bd );
         }
 
         return SUCCESS;
     }
 
     public String doDefault()
+        throws ContinuumException
     {
-        try
-        {
-            project = continuum.getProject( projectId );
+        project = continuum.getProject( projectId );
 
-            bd = getBuildDefinition();
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't get build definition informations (id=" + buildDefinitionId + ") for project "
-                + projectId + " : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
+        bd = getBuildDefinition();
 
         defaultForProject = bd.isDefaultForProject();
 
@@ -142,20 +120,9 @@ public class BuildDefinitionEditAction
 
         scheduleName = bd.getSchedule().getName();
 
-        try
-        {
-            initSchedulesMap();
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't get schedules list : " + e.getMessage() );
+        initSchedulesMap();
 
-            e.printStackTrace();
-
-            return ERROR;
-        }
-
-        //        profile = bd.getProfile();
+        // profile = bd.getProfile();
 
         return INPUT;
     }
@@ -270,16 +237,11 @@ public class BuildDefinitionEditAction
     }
 
     public Map getSchedulesMap()
+        throws ContinuumException
     {
         if ( schedulesMap == null )
         {
-            try
-            {
-                initSchedulesMap();
-            }
-            catch ( ContinuumException e )
-            {
-            }
+            initSchedulesMap();
         }
         return schedulesMap;
     }

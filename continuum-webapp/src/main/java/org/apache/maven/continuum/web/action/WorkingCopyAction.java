@@ -58,38 +58,29 @@ public class WorkingCopyAction
     private String output;
 
     public String execute()
+        throws ContinuumException
     {
-        try
+        files = continuum.getFiles( projectId, userDirectory );
+
+        HashMap params = new HashMap();
+
+        params.put( "projectId", new Integer( projectId ) );
+
+        params.put( "projectName", projectName );
+
+        String baseUrl = UrlHelper.buildUrl( "/workingCopy.action", ServletActionContext.getRequest(), ServletActionContext.getResponse(), params );
+
+        output = generator.generate( files, baseUrl, continuum.getWorkingDirectory( projectId ) );
+
+        if ( currentFile != null && currentFile != "" )
         {
-            files = continuum.getFiles( projectId, userDirectory );
-
-            HashMap params = new HashMap();
-
-            params.put( "projectId", new Integer( projectId ) );
-
-            params.put( "projectName", projectName );
-
-            String baseUrl = UrlHelper.buildUrl( "/workingCopy.action", ServletActionContext.getRequest(), ServletActionContext.getResponse(), params );
-
-            output = generator.generate( files, baseUrl, continuum.getWorkingDirectory( projectId ) );
-
-            if ( currentFile != null && currentFile != "" )
-            {
-                currentFileContent = continuum.getFileContent( projectId, userDirectory, currentFile );
-            }
-            else
-            {
-                currentFileContent = "";
-            }
+            currentFileContent = continuum.getFileContent( projectId, userDirectory, currentFile );
         }
-        catch ( ContinuumException e )
+        else
         {
-            addActionError( "Can't get file list for project (id=" + projectId + ") : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
+            currentFileContent = "";
         }
+
         return SUCCESS;
     }
 

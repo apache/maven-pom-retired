@@ -48,19 +48,9 @@ public class ProjectEditAction
     private String scmTag;
 
     public String execute()
+        throws ContinuumException
     {
-        try
-        {
-            project = getProject( projectId );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't get project informations (id=" + projectId + ") : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
+        project = getProject( projectId );
 
         project.setName( name );
 
@@ -74,36 +64,15 @@ public class ProjectEditAction
 
         project.setScmTag( scmTag );
 
-        try
-        {
-            continuum.updateProject( project );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't update project (id=" + projectId + ") : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
+        continuum.updateProject( project );
 
         return SUCCESS;
     }
 
     public String doEdit()
+        throws ContinuumException
     {
-        try
-        {
-            project = getProject( projectId );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't get project informations (id=" + projectId + ") : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
+        project = getProject( projectId );
 
         name = project.getName();
 

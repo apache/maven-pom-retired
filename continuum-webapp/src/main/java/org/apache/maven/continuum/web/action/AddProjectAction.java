@@ -46,6 +46,7 @@ public class AddProjectAction
     private String projectType;
 
     public String execute()
+        throws ContinuumException
     {
         Project project = new Project();
 
@@ -61,14 +62,7 @@ public class AddProjectAction
 
         project.setScmTag( projectScmTag );
 
-        try
-        {
-            continuum.addProject( project, projectType );
-        }
-        catch ( ContinuumException e )
-        {
-            return INPUT;
-        }
+        continuum.addProject( project, projectType );
 
         return SUCCESS;
     }

@@ -34,19 +34,9 @@ public class DeleteProjectAction
     private String projectName;
 
     public String execute()
+        throws ContinuumException
     {
-        try
-        {
-            continuum.removeProject( projectId );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't delete project (id=" + projectId + ") : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
+        continuum.removeProject( projectId );
 
         return SUCCESS;
     }

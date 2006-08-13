@@ -36,19 +36,9 @@ public class ProjectViewAction
     private int projectId;
 
     public String execute()
+        throws ContinuumException
     {
-        try
-        {
-            project = continuum.getProjectWithAllDetails( projectId );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't get project informations (id=" + projectId + ") : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
+        project = continuum.getProjectWithAllDetails( projectId );
 
         return SUCCESS;
     }

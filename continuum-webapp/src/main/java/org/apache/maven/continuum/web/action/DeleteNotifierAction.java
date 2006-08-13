@@ -39,19 +39,9 @@ public class DeleteNotifierAction
     private String notifierType;
 
     public String execute()
+        throws ContinuumException
     {
-        try
-        {
-            continuum.removeNotifier( projectId, notifierId );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't delete notifier (id=" + notifierId + ") for project " + projectId + " : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
+        continuum.removeNotifier( projectId, notifierId );
 
         return SUCCESS;
     }

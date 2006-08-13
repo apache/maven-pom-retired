@@ -42,6 +42,7 @@ public class AddMavenTwoProjectAction
     private String m2Pom = null;
 
     public String execute()
+        throws ContinuumException
     {
         if ( !StringUtils.isEmpty( m2PomUrl ) )
         {
@@ -57,7 +58,8 @@ public class AddMavenTwoProjectAction
                 }
                 catch ( MalformedURLException e )
                 {
-                    return INPUT;
+                    // if local file can't be converted to url it's an internal error
+                    throw new RuntimeException( e );
                 }
             }
             else
@@ -74,6 +76,7 @@ public class AddMavenTwoProjectAction
         }
         catch ( ContinuumException e )
         {
+            //TODO add errors to show to the user
             return INPUT;
         }
 

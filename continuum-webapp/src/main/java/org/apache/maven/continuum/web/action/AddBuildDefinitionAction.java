@@ -60,32 +60,11 @@ public class AddBuildDefinitionAction
     //    private Profile profile;
 
     public String execute()
+        throws ContinuumException
     {
-        try
-        {
-            project = continuum.getProject( projectId );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't get project informations for project " + projectId + " : " + e.getMessage() );
+        project = continuum.getProject( projectId );
 
-            e.printStackTrace();
-
-            return ERROR;
-        }
-
-        try
-        {
-            initSchedulesMap();
-        }
-        catch ( ContinuumException e )
-        {
-            addActionMessage( "Can't get schedules list : " + e.getMessage() );
-
-            e.printStackTrace();
-
-            return ERROR;
-        }
+        initSchedulesMap();
 
         return INPUT;
     }
@@ -194,16 +173,11 @@ public class AddBuildDefinitionAction
     }
 
     public Map getSchedulesMap()
+        throws ContinuumException
     {
         if ( schedulesMap == null )
         {
-            try
-            {
-                initSchedulesMap();
-            }
-            catch ( ContinuumException e )
-            {
-            }
+            initSchedulesMap();
         }
         return schedulesMap;
     }

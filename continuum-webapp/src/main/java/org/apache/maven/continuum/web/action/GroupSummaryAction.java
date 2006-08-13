@@ -1,5 +1,6 @@
 package org.apache.maven.continuum.web.action;
 
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
@@ -40,7 +41,7 @@ public class GroupSummaryAction
     private List groups;
 
     public String execute()
-        throws Exception
+        throws ContinuumException
     {
         groups = new ArrayList();
 
