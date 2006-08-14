@@ -144,10 +144,24 @@ public interface Continuum
     int addProject( Project project, String executorId )
         throws ContinuumException;
 
+    /**
+     * Add a Maven 2 project to the list of projects. 
+     * 
+     * @param metadataUrl url of the pom.xml
+     * @return a holder with the projects, project groups and errors occurred during the project adding
+     * @throws ContinuumException
+     */
     ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl )
         throws ContinuumException;
 
-    ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
+    /**
+     * Add a Maven 1 project to the list of projects. 
+     * 
+     * @param metadataUrl url of the project.xml
+     * @return a holder with the projects, project groups and errors occurred during the project adding
+     * @throws ContinuumException
+     */
+   ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
         throws ContinuumException;
 
     void updateProject( Project project )
