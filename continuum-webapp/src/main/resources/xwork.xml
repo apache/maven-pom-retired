@@ -5,7 +5,7 @@
   <package name="default" extends="webwork-default">
 
     <interceptors>
-      <interceptor name="exception-logging" class="org.codehaus.plexus.xwork.interceptor.ExceptionLoggingInterceptor"/>
+      <interceptor name="exception-logging" class="exceptionLogging"/>
       <interceptor-stack name="defaultContinuumStack">
         <interceptor-ref name="exception-logging"/>
         <interceptor-ref name="prepare"/>
