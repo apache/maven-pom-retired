@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.execution.maven.m1;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,16 @@ import org.apache.maven.continuum.model.project.ProjectDependency;
 import org.apache.maven.continuum.model.project.ProjectDeveloper;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.notification.ContinuumRecipientSource;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -45,7 +48,16 @@ public class DefaultMavenOneMetadataHelper
     // MavenOneMetadataHelper Implementation
     // ----------------------------------------------------------------------
 
+    /**
+     * @deprecated Use {@link #mapMetadata(ContinuumProjectBuildingResult,File,Project)} instead
+     */
     public void mapMetadata( File metadata, Project project )
+        throws MavenOneMetadataHelperException
+    {
+        mapMetadata( new ContinuumProjectBuildingResult(), metadata, project );
+    }
+
+    public void mapMetadata( ContinuumProjectBuildingResult result, File metadata, Project project )
         throws MavenOneMetadataHelperException
     {
         Xpp3Dom mavenProject;
@@ -54,9 +66,22 @@ public class DefaultMavenOneMetadataHelper
         {
             mavenProject = Xpp3DomBuilder.build( new FileReader( metadata ) );
         }
-        catch ( Exception e )
+        catch ( XmlPullParserException e )
         {
-            throw new MavenOneMetadataHelperException( "Error while reading maven POM (" + e.getMessage() + ").", e );
+            result.addError( ContinuumProjectBuildingResult.ERROR_XML_PARSE );
+            
+            getLogger().info( "Error while reading maven POM (" + e.getMessage() + ").", e );
+            
+            return;
+        }
+        // TODO catch other IO exceptions and handle them more appropiately?
+        catch ( IOException e )
+        {
+            result.addError( ContinuumProjectBuildingResult.ERROR_UNKNOWN );
+            
+            getLogger().info( "Error while reading maven POM (" + e.getMessage() + ").", e );
+            
+            return;
         }
 
         // ----------------------------------------------------------------------
@@ -69,7 +94,11 @@ public class DefaultMavenOneMetadataHelper
 
         if ( extend != null )
         {
-            throw new MavenOneMetadataHelperException( "Cannot use a POM with an 'extend' element." );
+            result.addError( ContinuumProjectBuildingResult.ERROR_EXTEND );
+            
+            getLogger().info( "Cannot use a POM with an 'extend' element." );
+            
+            return;
         }
 
         // ----------------------------------------------------------------------
@@ -94,14 +123,22 @@ public class DefaultMavenOneMetadataHelper
 
             if ( StringUtils.isEmpty( groupId ) )
             {
-                throw new MavenOneMetadataHelperException( "Missing 'groupId' element in the POM." );
+                result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_GROUPID );
+
+                getLogger().info( "Missing 'groupId' element in the POM." );
+
+                return;
             }
 
             artifactId = getValue( mavenProject, "artifactId", project.getArtifactId() );
 
             if ( StringUtils.isEmpty( artifactId ) )
             {
-                throw new MavenOneMetadataHelperException( "Missing 'artifactId' element in the POM." );
+                result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_ARTIFACTID );
+
+                getLogger().info( "Missing 'artifactId' element in the POM." );
+
+                return;
             }
         }
 
@@ -113,6 +150,7 @@ public class DefaultMavenOneMetadataHelper
 
         if ( StringUtils.isEmpty( project.getVersion() ) && StringUtils.isEmpty( version ) )
         {
+            // TODO add to result and don't throw exception
             throw new MavenOneMetadataHelperException( "Missing 'version' element in the POM." );
         }
 
@@ -124,6 +162,7 @@ public class DefaultMavenOneMetadataHelper
 
         if ( StringUtils.isEmpty( project.getName() ) && StringUtils.isEmpty( name ) )
         {
+            // TODO add to result and don't throw exception
             throw new MavenOneMetadataHelperException( "Missing 'name' element in POM." );
         }
 
@@ -151,6 +190,7 @@ public class DefaultMavenOneMetadataHelper
             }
             else
             {
+                // TODO add to result and don't throw exception
                 throw new MavenOneMetadataHelperException( "Missing 'repository' element in the POM." );
             }
         }
@@ -162,6 +202,7 @@ public class DefaultMavenOneMetadataHelper
 
             if ( StringUtils.isEmpty( scmConnection ) )
             {
+                // TODO add to result and don't throw exception
                 throw new MavenOneMetadataHelperException(
                     "Missing both anonymous and developer SCM connection URLs." );
             }

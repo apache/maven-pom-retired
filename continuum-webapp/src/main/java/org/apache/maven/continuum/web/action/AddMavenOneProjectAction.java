@@ -16,13 +16,13 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.util.Iterator;
+
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.io.File;
-import java.net.MalformedURLException;
 
 /**
  * @author Nick Gonzalez
@@ -71,19 +71,16 @@ public class AddMavenOneProjectAction
 
         ContinuumProjectBuildingResult result = null;
 
-        try
-        {
-            result = continuum.addMavenOneProject( m1Pom );
-        }
-        catch ( ContinuumException e )
-        {
-            //TODO add errors to show to the user
-            return INPUT;
-        }
+        result = continuum.addMavenOneProject( m1Pom );
 
-        if( result.getWarnings().size() > 0 )
+        if ( result.getErrors().size() > 0 )
         {
-            addActionMessage( result.getWarnings().toArray().toString() );
+            Iterator it = result.getErrors().iterator();
+
+            while ( it.hasNext() )
+            {
+                addActionError( (String) it.next() );
+            }
         }
 
         return SUCCESS;

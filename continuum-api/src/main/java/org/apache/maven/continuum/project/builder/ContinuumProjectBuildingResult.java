@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.project.builder;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Holder for results of adding projects to Continuum. Contains added projects, project groups
+ * and errors that happened during the add.
+ * 
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
  */
 public class ContinuumProjectBuildingResult
 {
+    public static final String ERROR_MALFORMED_URL = "add.project.malformed.url.error";
+
+    public static final String ERROR_UNKNOWN_HOST = "add.project.unknown.host.error";
+    
+    public static final String ERROR_XML_PARSE = "add.project.xml.parse.error";
+
+    public static final String ERROR_EXTEND = "add.project.extend.error";
+
+    public static final String ERROR_MISSING_GROUPID = "add.project.missing.groupid.error";
+
+    public static final String ERROR_MISSING_ARTIFACTID = "add.project.missing.artifactid.error";
+
+    public static final String ERROR_UNKNOWN = "add.project.unknown.error";
+    
     private List projects = new ArrayList();
 
     private List projectGroups = new ArrayList();
 
-    private List warnings = new ArrayList();
+    private List errors = new ArrayList();
 
     public void addProject( Project project )
     {
@@ -61,13 +79,47 @@ public class ContinuumProjectBuildingResult
         return projectGroups;
     }
 
-    public void addWarning( String warning )
+    /**
+     * Add a warning that happened during adding the project to Continuum.
+     * 
+     * @param warningKey warning id (so it can be internationalized later)
+     * @deprecated Use {@link #addError(String)} instead
+     */
+    public void addWarning( String warningKey )
     {
-        warnings.add( warning );
+        addError( warningKey );
     }
 
+    /**
+     * Add an error that happened during adding the project to Continuum.
+     * 
+     * @param errorKey error id (so it can be internationalized later)
+     */
+    public void addError( String errorKey )
+    {
+        errors.add( errorKey );
+    }
+
+    /**
+     * Get the warnings that happened during adding the project to Continuum.
+     * There is an entry with the warning key (so it can be internationalized later) for each warning.
+     * 
+     * @return {@link List} &lt; {@link String} >
+     * @deprecated Use {@link #getErrors()} instead
+     */
     public List getWarnings()
     {
-        return warnings;
+        return getErrors();
+    }
+
+    /**
+     * Get the errors that happened during adding the project to Continuum.
+     * There is an entry with the error key (so it can be internationalized later) for each error.
+     * 
+     * @return {@link List} &lt; {@link String} >
+     */
+    public List getErrors()
+    {
+        return errors;
     }
 }

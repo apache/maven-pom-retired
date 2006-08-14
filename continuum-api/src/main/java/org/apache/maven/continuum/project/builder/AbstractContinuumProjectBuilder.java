@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.project.builder;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -105,6 +107,40 @@ public abstract class AbstractContinuumProjectBuilder
         writer.close();
 
         return file;
+    }
+
+    /**
+     * Create metadata file and handle exceptions, adding the errors to the result object.
+     * 
+     * @param result holder with result and errors.
+     * @param metadata
+     * @param username
+     * @param password
+     * @return
+     */
+    protected File createMetadataFile( ContinuumProjectBuildingResult result, URL metadata, String username,
+                                       String password )
+    {
+        try
+        {
+            return createMetadataFile( metadata, username, password );
+        }
+        catch ( MalformedURLException e )
+        {
+            getLogger().info( "Malformed URL: " + metadata, e );
+            result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL );
+        }
+        catch ( UnknownHostException e )
+        {
+            getLogger().info( "Unknown host: " + metadata, e );
+            result.addError( ContinuumProjectBuildingResult.ERROR_UNKNOWN_HOST );
+        }
+        catch ( IOException e )
+        {
+            getLogger().warn( "Could not download the URL: " + metadata, e );
+            result.addError( ContinuumProjectBuildingResult.ERROR_UNKNOWN );
+        }
+        return null;
     }
 
 }

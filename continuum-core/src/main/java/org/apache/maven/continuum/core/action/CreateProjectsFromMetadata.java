@@ -76,14 +76,18 @@ public class CreateProjectsFromMetadata
                 }
                 else
                 {
-                    throw new ContinuumException( "'" + u + "' is not a valid secureURL." );
+                    result = new ContinuumProjectBuildingResult();
+
+                    result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL );
                 }
             }
 
         }
         catch ( MalformedURLException e )
         {
-            throw new ContinuumException( "'" + u + "' is not a valid URL.", e );
+            result = new ContinuumProjectBuildingResult();
+
+            result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL );
         }
 
         context.put( KEY_PROJECT_BUILDING_RESULT, result );

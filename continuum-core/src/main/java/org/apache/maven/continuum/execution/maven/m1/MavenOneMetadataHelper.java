@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.execution.maven.m1;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package org.apache.maven.continuum.execution.maven.m1;
  */
 
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 
 import java.io.File;
 
@@ -28,6 +29,19 @@ public interface MavenOneMetadataHelper
 {
     String ROLE = MavenOneMetadataHelper.class.getName();
 
+    /**
+     * @deprecated Use {@link #mapMetadata(ContinuumProjectBuildingResult,File,Project)} instead
+     */
     void mapMetadata( File metadata, Project project )
+        throws MavenOneMetadataHelperException;
+
+    /**
+     * 
+     * @param result contains errors that happened during the process
+     * @param metadata
+     * @param project
+     * @throws MavenOneMetadataHelperException
+     */
+    void mapMetadata( ContinuumProjectBuildingResult result, File metadata, Project project )
         throws MavenOneMetadataHelperException;
 }

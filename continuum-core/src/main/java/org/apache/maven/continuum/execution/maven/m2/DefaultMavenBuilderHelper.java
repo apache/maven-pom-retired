@@ -336,6 +336,7 @@ public class DefaultMavenBuilderHelper
 
             getLogger().error( msg, e );
 
+            // TODO add to result and don't throw exception
             throw new MavenBuilderHelperException( msg, e );
         }
 
@@ -348,6 +349,7 @@ public class DefaultMavenBuilderHelper
 
         if ( scm == null )
         {
+            // TODO add to result and don't throw exception
             throw new MavenBuilderHelperException(
                 "Missing 'scm' element in the " + getProjectName( project ) + " POM." );
         }
@@ -356,6 +358,7 @@ public class DefaultMavenBuilderHelper
 
         if ( StringUtils.isEmpty( url ) )
         {
+            // TODO add to result and don't throw exception
             throw new MavenBuilderHelperException(
                 "Missing 'connection' element in the 'scm' element in the " + getProjectName( project ) + " POM." );
         }

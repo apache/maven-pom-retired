@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.project.builder.maven;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,12 +100,14 @@ public class MavenTwoContinuumProjectBuilder
         }
         catch ( MavenBuilderHelperException e )
         {
+            // TODO add to result with error key
             result.addWarning( e.getMessage() );
 
             return;
         }
         catch ( IOException e )
         {
+            // TODO add to result with error key
             result.addWarning( "Could not download " + url + ": " + e.getMessage() );
 
             return;
@@ -161,7 +163,8 @@ public class MavenTwoContinuumProjectBuilder
             }
             catch ( MavenBuilderHelperException e )
             {
-                result.addWarning( ContinuumUtils.throwableToString( e ) );
+                // TODO add to result with error key
+                result.addError( ContinuumUtils.throwableToString( e ) );
             }
 
             result.addProject( continuumProject, MavenTwoBuildExecutor.ID );
@@ -200,7 +203,8 @@ public class MavenTwoContinuumProjectBuilder
             }
             catch ( MalformedURLException e )
             {
-                result.addWarning( "Could not download project from '" + urlString + "'." );
+                // TODO add to result with error key
+                result.addError( "Could not download project from '" + urlString + "'." );
 
                 continue;
             }
@@ -219,7 +223,8 @@ public class MavenTwoContinuumProjectBuilder
 
         if ( StringUtils.isEmpty( mavenProject.getGroupId() ) )
         {
-            result.addWarning( "groupId is null." );
+            // TODO add to result with error key
+            result.addError( "groupId is null." );
 
             return null;
         }

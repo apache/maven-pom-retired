@@ -828,15 +828,15 @@ public class DefaultContinuum
         {
             getLogger().info( "Created " + result.getProjectGroups().size() + " project groups." );
         }
-        getLogger().info( result.getWarnings().size() + " warnings." );
+        getLogger().info( result.getErrors().size() + " errors." );
 
         // ----------------------------------------------------------------------
         // Look for any warnings.
         // ----------------------------------------------------------------------
 
-        if ( result.getWarnings().size() > 0 )
+        if ( result.getErrors().size() > 0 )
         {
-            for ( Iterator i = result.getWarnings().iterator(); i.hasNext(); )
+            for ( Iterator i = result.getErrors().iterator(); i.hasNext(); )
             {
                 getLogger().info( (String) i.next() );
             }

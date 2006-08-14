@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.project.builder.maven;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,16 +65,10 @@ public class MavenOneContinuumProjectBuilder
 
         File pomFile;
 
-        try
+        pomFile = createMetadataFile( result, url, username, password );
+        
+        if ( pomFile == null )
         {
-            pomFile = createMetadataFile( url, username, password );
-        }
-        catch ( IOException e )
-        {
-            getLogger().warn( "Could not download the URL", e );
-
-            result.addWarning( "Could not download the URL '" + url + "'." );
-
             return result;
         }
 
@@ -82,7 +76,12 @@ public class MavenOneContinuumProjectBuilder
 
         try
         {
-            metadataHelper.mapMetadata( pomFile, project );
+            metadataHelper.mapMetadata( result, pomFile, project );
+            
+            if ( result.getErrors().size() > 0 )
+            {
+                return result;
+            }
 
             BuildDefinition bd = new BuildDefinition();
 
@@ -102,7 +101,7 @@ public class MavenOneContinuumProjectBuilder
             }
             catch ( ContinuumStoreException e )
             {
-                getLogger().warn( "Can't get default schedule.", e );
+                getLogger().error( "Can't get default schedule.", e );
             }
 
             project.addBuildDefinition( bd );
@@ -111,7 +110,9 @@ public class MavenOneContinuumProjectBuilder
         }
         catch ( MavenOneMetadataHelperException e )
         {
-            result.addWarning( e.getMessage() );
+            getLogger().error( "Unknown error while processing metadata", e );
+            
+            result.addError( ContinuumProjectBuildingResult.ERROR_UNKNOWN );
         }
 
         ProjectGroup projectGroup = new ProjectGroup();
@@ -122,7 +123,7 @@ public class MavenOneContinuumProjectBuilder
 
         if ( StringUtils.isEmpty( project.getGroupId() ) )
         {
-            result.addWarning( "groupId is null." );
+            result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_GROUPID );
         }
 
         projectGroup.setGroupId( project.getGroupId() );

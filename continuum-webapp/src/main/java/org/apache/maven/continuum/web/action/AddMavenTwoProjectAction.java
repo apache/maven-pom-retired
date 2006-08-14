@@ -16,12 +16,16 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
+import java.util.Iterator;
+
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.io.File;
-import java.net.MalformedURLException;
 
 /**
  * @author Nick Gonzalez
@@ -64,25 +68,24 @@ public class AddMavenTwoProjectAction
             }
             else
             {
+                // no url or file was filled
+                // TODO add action error, one must be filled in
                 return INPUT;
             }
         }
 
         ContinuumProjectBuildingResult result = null;
 
-        try
-        {
-            result = continuum.addMavenTwoProject( m2Pom );
-        }
-        catch ( ContinuumException e )
-        {
-            //TODO add errors to show to the user
-            return INPUT;
-        }
+        result = continuum.addMavenTwoProject( m2Pom );
 
-        if ( result.getWarnings().size() > 0 )
+        if ( result.getErrors().size() > 0 )
         {
-            addActionMessage( result.getWarnings().toArray().toString() );
+            Iterator it = result.getErrors().iterator();
+
+            while ( it.hasNext() )
+            {
+                addActionError( (String) it.next() );
+            }
 
             return INPUT;
         }
