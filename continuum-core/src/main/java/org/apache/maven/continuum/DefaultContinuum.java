@@ -799,6 +799,15 @@ public class DefaultContinuum
         return ( (Integer) context.get( AbstractContinuumAction.KEY_PROJECT_ID ) ).intValue();
     }
 
+    /**
+     * Add a Maven 1 / Maven 2 project to Continuum
+     * 
+     * @param metadataUrl url of the pom
+     * @param projectBuilderId {@link MavenTwoContinuumProjectBuilder#ID} for Maven 2 project
+     * or {@link MavenOneContinuumProjectBuilder#ID} for Maven 1 project.
+     * @return a holder with the projects, project groups and errors occurred during the project adding
+     * @throws ContinuumException
+     */
     private ContinuumProjectBuildingResult executeAddProjectsFromMetadataActivity( String metadataUrl,
                                                                                    String projectBuilderId )
         throws ContinuumException
