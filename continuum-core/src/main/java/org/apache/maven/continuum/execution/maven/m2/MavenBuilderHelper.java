@@ -17,6 +17,7 @@ package org.apache.maven.continuum.execution.maven.m2;
  */
 
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 
@@ -32,12 +33,22 @@ public interface MavenBuilderHelper
 
     void mapMetadataToProject( File metadata, Project project )
         throws MavenBuilderHelperException;
-
+    
+    /**
+     * @deprecated use {@link #getMavenProject(ContinuumProjectBuildingResult, File)} instead.
+     */
     MavenProject getMavenProject( File file )
-        throws MavenBuilderHelperException;
+    throws MavenBuilderHelperException;
 
+    MavenProject getMavenProject( ContinuumProjectBuildingResult result, File file );
+
+    /**
+     * @deprecated use {@link #mapMavenProjectToContinuumProject(ContinuumProjectBuildingResult, MavenProject, Project)} instead.
+     */
     void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject )
         throws MavenBuilderHelperException;
+    
+    void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject, Project continuumProject );
 
     ArtifactRepository getLocalRepository();
 }

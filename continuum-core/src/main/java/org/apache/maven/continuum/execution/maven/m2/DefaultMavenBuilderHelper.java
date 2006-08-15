@@ -24,6 +24,7 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectDependency;
 import org.apache.maven.continuum.model.project.ProjectDeveloper;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Developer;
 import org.apache.maven.model.Model;
@@ -112,9 +113,18 @@ public class DefaultMavenBuilderHelper
         mapMavenProjectToContinuumProject( getMavenProject( metadata ), continuumProject );
     }
 
+    /**
+     * @deprecated use {@link #mapMavenProjectToContinuumProject(ContinuumProjectBuildingResult, MavenProject, Project)} instead.
+     */
     public void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject )
         throws MavenBuilderHelperException
     {
+        mapMavenProjectToContinuumProject( new ContinuumProjectBuildingResult(), mavenProject, continuumProject );
+    }
+    
+    public void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject, Project continuumProject )
+    {
+    
         // ----------------------------------------------------------------------
         // Name
         // ----------------------------------------------------------------------
@@ -144,7 +154,8 @@ public class DefaultMavenBuilderHelper
         }
         else
         {
-            throw new MavenBuilderHelperException( "Missing 'groupId' element in the POM." );
+            result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_GROUPID );
+            return;
         }
 
         // ----------------------------------------------------------------------
@@ -157,7 +168,8 @@ public class DefaultMavenBuilderHelper
         }
         else
         {
-            throw new MavenBuilderHelperException( "Missing 'artifactId' element in the POM." );
+            result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_ARTIFACTID );
+            return;
         }
 
         // ----------------------------------------------------------------------
@@ -276,7 +288,11 @@ public class DefaultMavenBuilderHelper
             }
         }
 
-        continuumProject.setNotifiers( getNotifiers( mavenProject ) );
+        List notifiers = getNotifiers( result, mavenProject );
+        if ( notifiers != null )
+        {
+            continuumProject.setNotifiers( notifiers );
+        }
 
         for ( Iterator i = userNotifiers.iterator(); i.hasNext(); )
         {
@@ -285,12 +301,20 @@ public class DefaultMavenBuilderHelper
             continuumProject.addNotifier( notifier );
         }
     }
-
+    
+    /**
+     * @deprecated use {@link #getMavenProject(ContinuumProjectBuildingResult, File)} instead.
+     */
     public MavenProject getMavenProject( File file )
-        throws MavenBuilderHelperException
+    throws MavenBuilderHelperException
+    {
+        return getMavenProject( new ContinuumProjectBuildingResult(), file );
+    }
+
+    public MavenProject getMavenProject( ContinuumProjectBuildingResult result, File file )
     {
         MavenProject project;
-
+        
         try
         {
             //   TODO: This seems like code that is shared with DefaultMaven, so it should be moved to the project
@@ -326,7 +350,9 @@ public class DefaultMavenBuilderHelper
                 {
                     for ( Iterator i = validationResult.getMessages().iterator(); i.hasNext(); )
                     {
-                        messages.append( (String) i.next() );
+                        String valmsg = (String) i.next();
+                        result.addError( ContinuumProjectBuildingResult.ERROR_VALIDATION, valmsg );
+                        messages.append( valmsg );
                         messages.append( "\n" );
                     }
                 }
@@ -335,9 +361,8 @@ public class DefaultMavenBuilderHelper
             String msg = "Cannot build maven project from " + file + " (" + e.getMessage() + ").\n" + messages;
 
             getLogger().error( msg, e );
-
-            // TODO add to result and don't throw exception
-            throw new MavenBuilderHelperException( msg, e );
+            
+            return null;
         }
 
         // ----------------------------------------------------------------------
@@ -349,18 +374,22 @@ public class DefaultMavenBuilderHelper
 
         if ( scm == null )
         {
-            // TODO add to result and don't throw exception
-            throw new MavenBuilderHelperException(
-                "Missing 'scm' element in the " + getProjectName( project ) + " POM." );
+            result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_SCM, getProjectName( project ) );
+            
+            getLogger().error( "Missing 'scm' element in the " + getProjectName( project ) + " POM." );
+            
+            return null;
         }
 
         String url = scm.getConnection();
 
         if ( StringUtils.isEmpty( url ) )
         {
-            // TODO add to result and don't throw exception
-            throw new MavenBuilderHelperException(
-                "Missing 'connection' element in the 'scm' element in the " + getProjectName( project ) + " POM." );
+            result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_SCM_CONNECTION, getProjectName( project ) );
+            
+            getLogger().error( "Missing 'connection' element in the 'scm' element in the " + getProjectName( project ) + " POM." );
+            
+            return null;
         }
 
         return project;
@@ -392,8 +421,7 @@ public class DefaultMavenBuilderHelper
         return project.getScm().getConnection();
     }
 
-    private List getNotifiers( MavenProject mavenProject )
-        throws MavenBuilderHelperException
+    private List getNotifiers( ContinuumProjectBuildingResult result, MavenProject mavenProject )
     {
         List notifiers = new ArrayList();
 
@@ -407,14 +435,16 @@ public class DefaultMavenBuilderHelper
 
                 if ( StringUtils.isEmpty( projectNotifier.getType() ) )
                 {
-                    throw new MavenBuilderHelperException( "Missing type from notifier." );
+                    result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_NOTIFIER_TYPE );
+                    return null;
                 }
 
                 notifier.setType( projectNotifier.getType() );
 
                 if ( projectNotifier.getConfiguration() == null )
                 {
-                    throw new MavenBuilderHelperException( "Notifier configuration cannot be null." );
+                    result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_NOTIFIER_CONFIGURATION );
+                    return null;
                 }
 
                 notifier.setConfiguration( projectNotifier.getConfiguration() );

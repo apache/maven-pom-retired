@@ -29,6 +29,7 @@ import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,7 +75,14 @@ public class DefaultMavenOneMetadataHelper
             
             return;
         }
-        // TODO catch other IO exceptions and handle them more appropiately?
+        catch ( FileNotFoundException e )
+        {
+            result.addError( ContinuumProjectBuildingResult.ERROR_POM_NOT_FOUND );
+
+            getLogger().info( "Error while reading maven POM (" + e.getMessage() + ").", e );
+
+            return;
+        }
         catch ( IOException e )
         {
             result.addError( ContinuumProjectBuildingResult.ERROR_UNKNOWN );
@@ -127,7 +135,7 @@ public class DefaultMavenOneMetadataHelper
 
                 getLogger().info( "Missing 'groupId' element in the POM." );
 
-                return;
+                // Do not throw an exception or return here, gather up as many results as possible first.
             }
 
             artifactId = getValue( mavenProject, "artifactId", project.getArtifactId() );
@@ -138,7 +146,7 @@ public class DefaultMavenOneMetadataHelper
 
                 getLogger().info( "Missing 'artifactId' element in the POM." );
 
-                return;
+                // Do not throw an exception or return here, gather up as many results as possible first.
             }
         }
 
@@ -150,8 +158,9 @@ public class DefaultMavenOneMetadataHelper
 
         if ( StringUtils.isEmpty( project.getVersion() ) && StringUtils.isEmpty( version ) )
         {
-            // TODO add to result and don't throw exception
-            throw new MavenOneMetadataHelperException( "Missing 'version' element in the POM." );
+            result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_VERSION );
+            
+            // Do not throw an exception or return here, gather up as many results as possible first.
         }
 
         // ----------------------------------------------------------------------
@@ -162,8 +171,9 @@ public class DefaultMavenOneMetadataHelper
 
         if ( StringUtils.isEmpty( project.getName() ) && StringUtils.isEmpty( name ) )
         {
-            // TODO add to result and don't throw exception
-            throw new MavenOneMetadataHelperException( "Missing 'name' element in POM." );
+            result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_NAME );
+            
+            // Do not throw an exception or return here, gather up as many results as possible first.
         }
 
         // ----------------------------------------------------------------------
@@ -180,7 +190,7 @@ public class DefaultMavenOneMetadataHelper
 
         Xpp3Dom repository = mavenProject.getChild( "repository" );
 
-        String scmConnection;
+        String scmConnection = null;
 
         if ( repository == null )
         {
@@ -190,8 +200,9 @@ public class DefaultMavenOneMetadataHelper
             }
             else
             {
-                // TODO add to result and don't throw exception
-                throw new MavenOneMetadataHelperException( "Missing 'repository' element in the POM." );
+                result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_REPOSITORY );
+
+                // Do not throw an exception or return here, gather up as many results as possible first.
             }
         }
         else
@@ -202,9 +213,9 @@ public class DefaultMavenOneMetadataHelper
 
             if ( StringUtils.isEmpty( scmConnection ) )
             {
-                // TODO add to result and don't throw exception
-                throw new MavenOneMetadataHelperException(
-                    "Missing both anonymous and developer SCM connection URLs." );
+                result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_SCM );
+                
+                // Do not throw an exception or return here, gather up as many results as possible first.
             }
         }
 
@@ -318,6 +329,16 @@ public class DefaultMavenOneMetadataHelper
                     notifiers.add( notif );
                 }
             }
+        }
+        
+        // ----------------------------------------------------------------------
+        // Handle Errors / Results
+        // ----------------------------------------------------------------------
+        
+        if ( result.hasErrors() )
+        {
+            // prevent project creation if there are errors.
+            return;
         }
 
         // ----------------------------------------------------------------------

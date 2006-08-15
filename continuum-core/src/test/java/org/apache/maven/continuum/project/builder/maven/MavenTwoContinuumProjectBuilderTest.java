@@ -49,9 +49,9 @@ public class MavenTwoContinuumProjectBuilderTest
 
         ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( pom.toURL(), null, null );
 
-        assertNotNull( result.getWarnings() );
+        assertNotNull( result.getErrors() );
 
-        assertEquals( 0, result.getWarnings().size() );
+        assertEquals( 0, result.getErrors().size() );
 
         assertNotNull( result.getProjects() );
 
@@ -80,9 +80,9 @@ public class MavenTwoContinuumProjectBuilderTest
 
         ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( pom.toURL(), null, null );
 
-        assertNotNull( result.getWarnings() );
+        assertNotNull( result.getErrors() );
 
-        assertEquals( 0, result.getWarnings().size() );
+        assertEquals( 0, result.getErrors().size() );
 
         assertNotNull( result.getProjects() );
 
@@ -111,9 +111,9 @@ public class MavenTwoContinuumProjectBuilderTest
 
         ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( pom.toURL(), null, null );
 
-        assertNotNull( result.getWarnings() );
+        assertNotNull( result.getErrors() );
 
-        assertEquals( 0, result.getWarnings().size() );
+        assertEquals( 0, result.getErrors().size() );
 
         assertNotNull( result.getProjects() );
 
@@ -163,12 +163,11 @@ public class MavenTwoContinuumProjectBuilderTest
         // Assert the warnings
         // ----------------------------------------------------------------------
 
-        assertNotNull( result.getWarnings() );
+        assertNotNull( result.getErrors() );
 
-        assertEquals( 1, result.getWarnings().size() );
+        assertEquals( 1, result.getErrors().size() );
 
-        assertTrue( "Does not end with \"I'm-not-here-project/pom.xml\"",
-                    result.getWarnings().get( 0 ).toString().indexOf( "I'm-not-here-project/pom.xml" ) != -1 );
+        assertEquals( ContinuumProjectBuildingResult.ERROR_METADATA_TRANSFER, result.getErrors().get( 0 ).toString() );
 
         // ----------------------------------------------------------------------
         // Assert the project group built

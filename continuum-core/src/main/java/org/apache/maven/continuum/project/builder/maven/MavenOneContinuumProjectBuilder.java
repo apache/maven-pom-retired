@@ -32,7 +32,6 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -78,7 +77,7 @@ public class MavenOneContinuumProjectBuilder
         {
             metadataHelper.mapMetadata( result, pomFile, project );
             
-            if ( result.getErrors().size() > 0 )
+            if ( result.hasErrors() )
             {
                 return result;
             }

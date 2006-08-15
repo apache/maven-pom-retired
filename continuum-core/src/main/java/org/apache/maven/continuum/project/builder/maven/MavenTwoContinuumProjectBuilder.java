@@ -17,7 +17,6 @@ package org.apache.maven.continuum.project.builder.maven;
  */
 
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
-import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
 import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 import org.apache.maven.continuum.model.project.BuildDefinition;
@@ -30,7 +29,6 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderExcepti
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.utils.ContinuumUtils;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -94,21 +92,23 @@ public class MavenTwoContinuumProjectBuilder
     {
         MavenProject mavenProject;
 
-        try
-        {
-            mavenProject = builderHelper.getMavenProject( createMetadataFile( url, username, password ) );
+        try {
+            mavenProject = builderHelper.getMavenProject( result, createMetadataFile( url, username, password ) );
+            
+            if( (result != null) && result.hasErrors())
+            {
+                return;
+            }
         }
-        catch ( MavenBuilderHelperException e )
+        catch (MalformedURLException e)
         {
-            // TODO add to result with error key
-            result.addWarning( e.getMessage() );
-
+            result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL );
+            
             return;
         }
         catch ( IOException e )
         {
-            // TODO add to result with error key
-            result.addWarning( "Could not download " + url + ": " + e.getMessage() );
+            result.addError( ContinuumProjectBuildingResult.ERROR_METADATA_TRANSFER );
 
             return;
         }
@@ -157,15 +157,7 @@ public class MavenTwoContinuumProjectBuilder
 
             continuumProject.addBuildDefinition( bd );
 
-            try
-            {
-                builderHelper.mapMavenProjectToContinuumProject( mavenProject, continuumProject );
-            }
-            catch ( MavenBuilderHelperException e )
-            {
-                // TODO add to result with error key
-                result.addError( ContinuumUtils.throwableToString( e ) );
-            }
+            builderHelper.mapMavenProjectToContinuumProject( result, mavenProject, continuumProject );
 
             result.addProject( continuumProject, MavenTwoBuildExecutor.ID );
         }
@@ -203,8 +195,7 @@ public class MavenTwoContinuumProjectBuilder
             }
             catch ( MalformedURLException e )
             {
-                // TODO add to result with error key
-                result.addError( "Could not download project from '" + urlString + "'." );
+                result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL, urlString );
 
                 continue;
             }
@@ -223,8 +214,7 @@ public class MavenTwoContinuumProjectBuilder
 
         if ( StringUtils.isEmpty( mavenProject.getGroupId() ) )
         {
-            // TODO add to result with error key
-            result.addError( "groupId is null." );
+            result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_GROUPID );
 
             return null;
         }

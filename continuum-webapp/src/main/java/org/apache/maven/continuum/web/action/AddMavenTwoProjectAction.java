@@ -16,16 +16,13 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-import java.net.UnknownHostException;
-import java.util.Iterator;
-
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.util.Iterator;
 
 /**
  * @author Nick Gonzalez
@@ -78,7 +75,7 @@ public class AddMavenTwoProjectAction
 
         result = continuum.addMavenTwoProject( m2Pom );
 
-        if ( result.getErrors().size() > 0 )
+        if ( result.hasErrors() )
         {
             Iterator it = result.getErrors().iterator();
 

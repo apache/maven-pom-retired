@@ -73,7 +73,7 @@ public class AddMavenOneProjectAction
 
         result = continuum.addMavenOneProject( m1Pom );
 
-        if ( result.getErrors().size() > 0 )
+        if ( result.hasErrors() )
         {
             Iterator it = result.getErrors().iterator();
 
