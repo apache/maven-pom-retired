@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,15 @@ package org.apache.maven.continuum.web.action;
  */
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.util.Iterator;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
+ * Add a Maven 1 project to continuum.
+ * 
  * @author Nick Gonzalez
+ * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
  *
  * @plexus.component
@@ -33,93 +33,60 @@ import org.codehaus.plexus.util.StringUtils;
  *   role-hint="addMavenOneProject"
  */
 public class AddMavenOneProjectAction
-    extends ContinuumActionSupport
+    extends AddMavenProjectAction
 {
 
-    private String m1PomUrl;
-
-    private File m1PomFile;
-
-    private String m1Pom = null;
-
-    public String execute()
+    protected ContinuumProjectBuildingResult doExecute( String pomUrl )
         throws ContinuumException
     {
-        if ( !StringUtils.isEmpty( m1PomUrl ) )
-        {
-            m1Pom = m1PomUrl;
-        }
-        else
-        {
-            if ( m1PomFile != null )
-            {
-                try
-                {
-                    m1Pom = m1PomFile.toURL().toString();
-                }
-                catch ( MalformedURLException e )
-                {
-                    // if local file can't be converted to url it's an internal error
-                    throw new RuntimeException( e );
-                }
-            }
-            else
-            {
-                return INPUT;
-            }
-        }
-
-        ContinuumProjectBuildingResult result = null;
-
-        result = continuum.addMavenOneProject( m1Pom );
-
-        if ( result.hasErrors() )
-        {
-            Iterator it = result.getErrors().iterator();
-
-            while ( it.hasNext() )
-            {
-                addActionError( (String) it.next() );
-            }
-
-            return INPUT;
-        }
-
-        return SUCCESS;
+        return continuum.addMavenTwoProject( pomUrl );
     }
 
-    public String doDefault()
-    {
-        return INPUT;
-    }
-
+    /**
+     * @deprecated Use {@link #getPom()} instead
+     */
     public String getM1Pom()
     {
-        return m1Pom;
+        return getPom();
     }
 
+    /**
+     * @deprecated Use {@link #setPom(String)} instead
+     */
     public void setM1Pom( String pom )
     {
-        m1Pom = pom;
+        setPom( pom );
     }
 
+    /**
+     * @deprecated Use {@link #getPomFile()} instead
+     */
     public File getM1PomFile()
     {
-        return m1PomFile;
+        return getPomFile();
     }
 
+    /**
+     * @deprecated Use {@link #setPomFile(File)} instead
+     */
     public void setM1PomFile( File pomFile )
     {
-        m1PomFile = pomFile;
+        setPomFile( pomFile );
     }
 
+    /**
+     * @deprecated Use {@link #getPomUrl()} instead
+     */
     public String getM1PomUrl()
     {
-        return m1PomUrl;
+        return getPomUrl();
     }
 
+    /**
+     * @deprecated Use {@link #setPomUrl(String)} instead
+     */
     public void setM1PomUrl( String pomUrl )
     {
-        m1PomUrl = pomUrl;
+        setPomUrl( pomUrl );
     }
 }
