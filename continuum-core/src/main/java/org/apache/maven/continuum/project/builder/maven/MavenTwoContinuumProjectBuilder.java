@@ -102,14 +102,14 @@ public class MavenTwoContinuumProjectBuilder
         }
         catch (MalformedURLException e)
         {
+            getLogger().debug( "Error adding project: Malformed URL " + url, e );
             result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL );
-            
             return;
         }
         catch ( IOException e )
         {
-            result.addError( ContinuumProjectBuildingResult.ERROR_METADATA_TRANSFER );
-
+            getLogger().debug( "Error adding project: Unknown error downloading from " + url, e );
+            result.addError( ContinuumProjectBuildingResult.ERROR_UNKNOWN );
             return;
         }
 
