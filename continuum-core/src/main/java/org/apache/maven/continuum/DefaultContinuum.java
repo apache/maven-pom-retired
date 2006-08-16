@@ -833,28 +833,33 @@ public class DefaultContinuum
         ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context
             .get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
 
-        if ( result.getProjects() != null )
+        if ( getLogger().isInfoEnabled() )
         {
-            getLogger().info( "Created " + result.getProjects().size() + " projects." );
-        }
-        if ( result.getProjectGroups() != null )
-        {
-            getLogger().info( "Created " + result.getProjectGroups().size() + " project groups." );
-        }
-        getLogger().info( result.getErrors().size() + " errors." );
-
-        // ----------------------------------------------------------------------
-        // Look for any warnings.
-        // ----------------------------------------------------------------------
-
-        if ( result.getErrors().size() > 0 )
-        {
-            for ( Iterator i = result.getErrors().iterator(); i.hasNext(); )
+            if ( result.getProjects() != null )
             {
-                getLogger().info( (String) i.next() );
+                getLogger().info( "Created " + result.getProjects().size() + " projects." );
             }
+            if ( result.getProjectGroups() != null )
+            {
+                getLogger().info( "Created " + result.getProjectGroups().size() + " project groups." );
+            }
+            getLogger().info( result.getErrors().size() + " errors." );
 
-            return result;
+            // ----------------------------------------------------------------------
+            // Look for any errors.
+            // ----------------------------------------------------------------------
+
+            if ( result.hasErrors() )
+            {
+                getLogger().info( result.getErrors().size() + " errors during project add: " );
+
+                for ( Iterator i = result.getErrors().iterator(); i.hasNext(); )
+                {
+                    getLogger().info( (String) i.next() );
+                }
+
+                return result;
+            }
         }
 
         // ----------------------------------------------------------------------
