@@ -39,7 +39,7 @@ public class AddMavenOneProjectAction
     protected ContinuumProjectBuildingResult doExecute( String pomUrl )
         throws ContinuumException
     {
-        return continuum.addMavenTwoProject( pomUrl );
+        return continuum.addMavenOneProject( pomUrl );
     }
 
     /**
