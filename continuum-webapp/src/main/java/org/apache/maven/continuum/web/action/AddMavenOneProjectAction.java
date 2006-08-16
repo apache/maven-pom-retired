@@ -81,6 +81,8 @@ public class AddMavenOneProjectAction
             {
                 addActionError( (String) it.next() );
             }
+
+            return INPUT;
         }
 
         return SUCCESS;
