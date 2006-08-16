@@ -1,3 +1,4 @@
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="/webwork" prefix="ww" %>
 <%@ taglib uri="continuum" prefix="c1" %>
 <ww:i18n name="localization.Continuum">
@@ -11,6 +12,13 @@
             <h3><ww:text name="add.m1.project.section.title"/></h3>
                 <div class="axial">
                     <ww:form method="post" action="addMavenOneProject.action" name="addMavenOneProject" enctype="multipart/form-data">
+                        <c:if test="${!empty actionErrors}">
+                          <div class="errormessage">
+                            <c:forEach items="${actionErrors}" var="actionError">
+                              <p><ww:text name="${actionError}"/></p>
+                            </c:forEach>
+                          </div>
+                        </c:if>
                         <table>
                           <tbody>
                             <ww:textfield label="%{getText('add.m1.project.m1PomUrl.label')}" name="m1PomUrl">
