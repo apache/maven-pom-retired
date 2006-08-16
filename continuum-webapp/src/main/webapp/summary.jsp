@@ -20,8 +20,8 @@
             <ec:column property="state" title="&nbsp;" width="1%" cell="org.apache.maven.continuum.web.view.StateCell"/>
             <ec:column property="name" title="summary.projectTable.name" width="48%">
                 <a href="<ww:url action="projectView">
-									<ww:param name="projectId" value="${project.id}"/>
-								</ww:url>">${project.name}</a>
+                  <ww:param name="projectId" value="${project.id}"/>
+                </ww:url>">${project.name}</a>
             </ec:column>
             <ec:column property="version" title="summary.projectTable.version" width="13%"/>
             <ec:column property="buildNumber" title="summary.projectTable.build" width="5%" cell="org.apache.maven.continuum.web.view.BuildCell"/>
@@ -31,8 +31,8 @@
               <c:choose>
                 <c:when test="${pageScope.project.latestBuildId > 0}">
                   <a href='<ww:url action="buildResults">
-											<ww:param name="projectId" value="${project.id}"/>
-										</ww:url>'><img src="<ww:url value='/images/buildhistory.gif'/>" alt="Build History" title="Build History" border="0"></a>
+                      <ww:param name="projectId" value="${project.id}"/>
+                    </ww:url>'><img src="<ww:url value='/images/buildhistory.gif'/>" alt="Build History" title="Build History" border="0"></a>
                 </c:when>
                 <c:otherwise>
                   <img src="<ww:url value='/images/buildhistory_disabled.gif'/>" alt="Build History" title="Build History" border="0">
@@ -43,8 +43,8 @@
               <c:choose>
                 <c:when test="${pageScope.project.state == 10 || pageScope.project.state == 2 || pageScope.project.state == 3 || pageScope.project.state == 4 || pageScope.project.state == 6}">
                   <a href='<ww:url action="workingCopy">
-											<ww:param name="projectId" value="${project.id}"/>
-										</ww:url>'><img src="<ww:url value='/images/workingcopy.gif'/>" alt="Working Copy" title="Working Copy" border="0"></a>
+                      <ww:param name="projectId" value="${project.id}"/>
+                    </ww:url>'><img src="<ww:url value='/images/workingcopy.gif'/>" alt="Working Copy" title="Working Copy" border="0"></a>
                 </c:when>
                 <c:otherwise>
                   <img src="<ww:url value='/images/workingcopy_disabled.gif'/>" alt="Working Copy" title="Working Copy" border="0">
