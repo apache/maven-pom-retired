@@ -167,7 +167,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getErrors().size() );
 
-        assertEquals( ContinuumProjectBuildingResult.ERROR_METADATA_TRANSFER, result.getErrors().get( 0 ).toString() );
+        assertEquals( ContinuumProjectBuildingResult.ERROR_UNKNOWN, result.getErrors().get( 0 ).toString() );
 
         // ----------------------------------------------------------------------
         // Assert the project group built
