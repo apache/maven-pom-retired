@@ -38,6 +38,9 @@ public abstract class AbstractContinuumProjectBuilder
     extends AbstractLogEnabled
     implements ContinuumProjectBuilder
 {
+    
+    private static final String TMP_DIR = System.getProperty( "java.io.tmpdir" );
+
     protected File createMetadataFile( URL metadata, String username, String password )
         throws IOException
     {
@@ -86,7 +89,7 @@ public abstract class AbstractContinuumProjectBuilder
         // Little hack for URLs that contains '*' like "http://svn.codehaus.org/*checkout*/trunk/pom.xml?root=plexus"
         baseDirectory = StringUtils.replace( baseDirectory, "*", "" );
 
-        File continuumTmpDir = new File( System.getProperty( "java.io.tmpdir" ), "continuum" );
+        File continuumTmpDir = new File( TMP_DIR, "continuum" );
 
         File uploadDirectory = new File( continuumTmpDir, baseDirectory );
 
