@@ -70,17 +70,15 @@
             </ec:column>
             <ec:column property="actions" title="&nbsp;">
                 <!-- TODO: REPLACE THIS WITH A NEW CELL CLASS -->
-                <c:url var="buildDefinitionEditUrl" value="/buildDefinitionEdit!default.action">
-                  <c:param name="projectId" value="project.id"/>
-                  <c:param name="buildDefinitionId" value="${buildDefinition.id}"/>
-                </c:url>
-                <a href="<c:out value='${buildDefinitionEditUrl}'/>"><ww:text name="edit"/></a>
+                <a href='<ww:url value="/buildDefinitionEdit!default.action">
+                  <ww:param name="projectId" value="project.id"/>
+                  <ww:param name="buildDefinitionId" value="${buildDefinition.id}"/>
+                </ww:url>'><ww:text name="edit"/></a>
                 &nbsp;
-                <c:url var="deleteBuildDefinitionUrl" value="/deleteBuildDefinition!default.action">
-                  <c:param name="projectId" value="project.id"/>
-                  <c:param name="buildDefinitionId" value="${buildDefinition.id}"/>
-                </c:url>
-                <a href="<c:out value='${deleteBuildDefinitionUrl}'/>"><ww:text name="delete"/></a>
+                <a href='<ww:url value="/deleteBuildDefinition!default.action">
+                  <ww:param name="projectId" value="project.id"/>
+                  <ww:param name="buildDefinitionId" value="${buildDefinition.id}"/>
+                </ww:url>'><ww:text name="delete"/></a>
             </ec:column>
           </ec:row>
         </ec:table>
@@ -107,23 +105,19 @@
             <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
             <ec:column property="actions" title="&nbsp;">
                 <c:if test="${!pageScope.notifier.fromProject}">
-                    <c:url var="notifierEditUrl" value="${notifier.type}NotifierEdit!default.action">
-                      <c:param name="projectId" value="project.id"/>
-                      <c:param name="notifierId" value="${notifier.id}"/>
-                    </c:url>
-                    <c:url var="imgEditUrl" value="/images/edit.gif" />
-                    <a href="<c:out value='${notifierEditUrl}'/>">
-                      <img src="<c:out value='${imgEditUrl}'/>" alt="<ww:text name="edit"/>" title="<ww:text name="edit"/>" border="0">
+                    <a href='<ww:url value="${notifier.type}NotifierEdit!default.action">
+                      <ww:param name="projectId" value="project.id"/>
+                      <ww:param name="notifierId" value="${notifier.id}"/>
+                    </ww:url>'>
+                      <img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />
                     </a>
                     &nbsp;
-                    <c:url var="notifierDeleteUrl" value="/deleteNotifier!default.action">
-                      <c:param name="projectId" value="project.id"/>
-                      <c:param name="notifierId" value="${notifier.id}"/>
-                      <c:param name="notifierType" value="${notifier.type}"/>
-                    </c:url>
-                    <c:url var="imgDeleteUrl" value="/images/delete.gif" />
-                    <a href="<c:out value='${notifierDeleteUrl}'/>">
-                      <img src="<c:out value='${imgDeleteUrl}'/>" alt="<ww:text name="delete"/>" title="<ww:text name="delete"/>" border="0">
+                    <a href='<ww:url value="/deleteNotifier!default.action">
+                      <ww:param name="projectId" value="project.id"/>
+                      <ww:param name="notifierId" value="${notifier.id}"/>
+                      <ww:param name="notifierType" value="${notifier.type}"/>
+                    </ww:url>'>
+                      <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0">
                     </a>
                 </c:if>
             </ec:column>

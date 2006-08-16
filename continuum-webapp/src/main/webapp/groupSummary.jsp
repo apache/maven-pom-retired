@@ -28,10 +28,9 @@
         <ec:row highlightRow="true">
           <ec:column property="state" title="&nbsp;" width="1%" cell="org.apache.maven.continuum.web.view.StateCell"/>
           <ec:column property="name" title="summary.projectTable.name" width="48%">
-            <c:url var="projectViewUrl" value="/projectView.action">
-              <c:param name="projectId" value="${project.id}"/>
-            </c:url>
-            <a href="<c:out value='${projectViewUrl}'/>">${project.name}</a>
+            <a href='<ww:url action="projectView">
+              <ww:param name="projectId" value="${project.id}"/>
+            </ww:url>'>${project.name}</a>
           </ec:column>
           <ec:column property="version" title="summary.projectTable.version" width="13%"/>
           <ec:column property="buildNumber" title="summary.projectTable.build" width="5%"

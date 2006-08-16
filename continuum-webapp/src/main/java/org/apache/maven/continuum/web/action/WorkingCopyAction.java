@@ -16,10 +16,8 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.web.util.WorkingCopyContentGenerator;
-import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.webwork.views.util.UrlHelper;
@@ -45,8 +43,6 @@ public class WorkingCopyAction
 
     private int projectId;
 
-    private String projectName;
-
     private String userDirectory;
 
     private String currentFile;
@@ -57,10 +53,14 @@ public class WorkingCopyAction
 
     private String output;
 
+    private String projectName;
+
     public String execute()
         throws ContinuumException
     {
         files = continuum.getFiles( projectId, userDirectory );
+
+        projectName = continuum.getProject( projectId ).getName();
 
         HashMap params = new HashMap();
 
@@ -97,11 +97,6 @@ public class WorkingCopyAction
     public String getProjectName()
     {
         return projectName;
-    }
-
-    public void setProjectName( String projectName )
-    {
-        this.projectName = projectName;
     }
 
     public String getUserDirectory()
