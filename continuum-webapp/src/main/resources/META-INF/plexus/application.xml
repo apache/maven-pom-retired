@@ -325,6 +325,10 @@
         </appenders>
         <levels>
           <level>
+            <hierarchy>org.apache.maven.continuum.project.builder.ContinuumProjectBuilder</hierarchy>
+            <level>DEBUG</level>
+          </level>
+          <level>
             <hierarchy>org.apache.maven.continuum.execution.maven.m2.DefaultMavenBuilderHelper</hierarchy>
             <level>INFO</level>
           </level>
