@@ -15,6 +15,7 @@ package org.apache.maven.continuum.core.action;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
@@ -42,6 +43,16 @@ public class CreateProjectsFromMetadata
 
     public static final String KEY_PROJECT_BUILDING_RESULT = "projectBuildingResult";
 
+    public void setProjectBuilderManager( ContinuumProjectBuilderManager projectBuilderManager )
+    {
+        this.projectBuilderManager = projectBuilderManager;
+    }
+
+    public ContinuumProjectBuilderManager getProjectBuilderManager()
+    {
+        return projectBuilderManager;
+    }
+
     public void execute( Map context )
         throws ContinuumException, ContinuumProjectBuilderManagerException, ContinuumProjectBuilderException
     {
@@ -51,7 +62,7 @@ public class CreateProjectsFromMetadata
 
         URL url;
 
-        ContinuumProjectBuilder projectBuilder = projectBuilderManager.getProjectBuilder( projectBuilderId );
+        ContinuumProjectBuilder projectBuilder = getProjectBuilderManager().getProjectBuilder( projectBuilderId );
 
         ContinuumProjectBuildingResult result;
 
@@ -77,7 +88,7 @@ public class CreateProjectsFromMetadata
                 else
                 {
                     result = new ContinuumProjectBuildingResult();
-
+                    getLogger().info( "Malformed URL (MungedHttpsURL is not valid): " + u );
                     result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL );
                 }
             }
@@ -85,8 +96,8 @@ public class CreateProjectsFromMetadata
         }
         catch ( MalformedURLException e )
         {
+            getLogger().info( "Malformed URL: " + u, e );
             result = new ContinuumProjectBuildingResult();
-
             result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL );
         }
 

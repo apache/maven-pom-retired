@@ -195,8 +195,8 @@ public class MavenTwoContinuumProjectBuilder
             }
             catch ( MalformedURLException e )
             {
+                getLogger().debug( "Error adding project module: Malformed URL " + urlString, e );
                 result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL, urlString );
-
                 continue;
             }
 
