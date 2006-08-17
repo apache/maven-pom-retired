@@ -23,6 +23,7 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -127,6 +128,11 @@ public abstract class AbstractContinuumProjectBuilder
         try
         {
             return createMetadataFile( metadata, username, password );
+        }
+        catch ( FileNotFoundException e )
+        {
+            getLogger().info( "URL not found: " + metadata, e );
+            result.addError( ContinuumProjectBuildingResult.ERROR_POM_NOT_FOUND );
         }
         catch ( MalformedURLException e )
         {
