@@ -27,6 +27,6 @@ public class StoreProjectGroupAction
 
         projectGroup = store.addProjectGroup( projectGroup );
 
-        context.put( KEY_PROJECT_GROUP_ID, Integer.toString( projectGroup.getId() ) );
+        context.put( KEY_PROJECT_GROUP_ID, new Integer( projectGroup.getId() ) );
     }
 }

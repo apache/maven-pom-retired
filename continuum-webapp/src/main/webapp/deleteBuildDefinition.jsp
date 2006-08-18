@@ -19,9 +19,10 @@
           </p>
         </div>
         <div class="functnbar3">
-          <ww:form action="deleteBuildDefinition.action" method="post">
+          <ww:form action="removeProjectBuildDefinition">
             <ww:hidden name="buildDefinitionId"/>
             <ww:hidden name="projectId"/>
+            <ww:hidden name="confirmed" value="true"/>
             <c1:submitcancel value="%{getText('delete')}" cancel="%{getText('cancel')}"/>
           </ww:form>
         </div>

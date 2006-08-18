@@ -181,6 +181,41 @@ public class DefaultContinuum
     }
 
     // ----------------------------------------------------------------------
+    // Project Groups
+    // ----------------------------------------------------------------------
+    public ProjectGroup getProjectGroup( int projectGroupId )
+        throws ContinuumException
+    {
+        List projectGroups = store.getAllProjectGroupsWithBuildDetails();
+
+        for ( Iterator i = projectGroups.iterator(); i.hasNext(); )
+        {
+            ProjectGroup pg = (ProjectGroup) i.next();
+
+            if ( pg.getId() == projectGroupId )
+            {
+                return pg;
+            }
+        }
+
+        throw new ContinuumException( "invalid group id" );
+    }
+
+
+    public ProjectGroup getProjectGroupByProjectId( int projectId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getProjectGroupByProjectId( projectId );
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            throw new ContinuumException( "could not find project group containing " + projectId );
+        }
+    }
+
+    // ----------------------------------------------------------------------
     // Projects
     // ----------------------------------------------------------------------
 
@@ -382,6 +417,13 @@ public class DefaultContinuum
         buildProjects( ContinuumProjectState.TRIGGER_FORCED );
     }
 
+
+    /**
+     * fire of the builds of all projects across all project groups using their default build definitions
+     *
+     * @param trigger
+     * @throws ContinuumException
+     */
     public void buildProjects( int trigger )
         throws ContinuumException
     {
@@ -398,47 +440,48 @@ public class DefaultContinuum
             projectsList = getProjects();
         }
 
-        Map buildDefinitionsIds = store.getDefaultBuildDefinitions();
+        //Map buildDefinitionsIds = store.getDefaultBuildDefinitions();
 
         for ( Iterator i = projectsList.iterator(); i.hasNext(); )
         {
             Project project = (Project) i.next();
 
-            Integer buildDefId = (Integer) buildDefinitionsIds.get( new Integer( project.getId() ) );
+            Integer buildDefId = null;
 
+            try
+            {
+                buildDefId = store.getDefaultBuildDefinition( project.getId() ).getId();
+            }
+            catch (ContinuumStoreException e)
+            {
+                throw new ContinuumException(
+                    "Project (id=" + project.getId() + " doens't have a default build definition, this should be impossible, parent should have default definition set." );
+            }
             if ( buildDefId == null )
             {
-                throw new ContinuumException( "Project (id=" + project.getId()
-                    + " doens't have a default build definition." );
+                throw new ContinuumException(
+                    "Project (id=" + project.getId() + " doens't have a default build definition, this should be even more impossible since store should have throw exception" );
             }
 
             buildProject( project, buildDefId.intValue(), trigger );
         }
     }
 
-    public void buildProjects( Schedule schedule )
+    /**
+     * fire off a build for all of the projects in a project group using their default builds
+     *
+     * @param projectGroupId
+     * @param trigger
+     * @throws ContinuumException
+     */
+    public void buildProjectGroup( int projectGroupId, int trigger )
         throws ContinuumException
     {
         Collection projectsList;
 
-        Map projectsMap = null;
-
         try
         {
-            projectsMap = store.getProjectIdsAndBuildDefinitionsIdsBySchedule( schedule.getId() );
-
-            if ( projectsMap == null )
-            {
-                // We don't have projects attached to this schedule
-                getLogger().info( "No projects to build for schedule " + schedule );
-                return;
-            }
-
-            projectsList = getProjectsInBuildOrder();
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new ContinuumException( "Can't get project list for schedule " + schedule.getName(), e );
+            projectsList = getProjectsInBuildOrder( store.getProjectsWithDependenciesByGroupId( projectGroupId ));
         }
         catch ( CycleDetectedException e )
         {
@@ -447,33 +490,138 @@ public class DefaultContinuum
             projectsList = getProjects();
         }
 
-        getLogger().info( "Building " + projectsList.size() + " projects" );
+        //Map buildDefinitionsIds = store.getDefaultBuildDefinitions();
 
-        for ( Iterator projectIterator = projectsList.iterator(); projectIterator.hasNext(); )
+        for ( Iterator i = projectsList.iterator(); i.hasNext(); )
         {
-            Project project = (Project) projectIterator.next();
+            Project project = (Project) i.next();
 
-            // FIXME: if store.getProjectIdsAndBuildDefinitionsIdsBySchedule above throws a CycleDetectedException,
-            // then projectsMap is null.
-            List buildDefIds = (List) projectsMap.get( new Integer( project.getId() ) );
+            Integer buildDefId = null;
 
-            if ( buildDefIds != null && !buildDefIds.isEmpty() )
+            try
             {
-                getLogger().info( "Processing " + buildDefIds.size() + " build definitions for project " + project );
-                for ( Iterator buildDefinitionIterator = buildDefIds.iterator(); buildDefinitionIterator.hasNext(); )
-                {
-                    Integer buildDefId = (Integer) buildDefinitionIterator.next();
+                buildDefId = store.getDefaultBuildDefinition( project.getId() ).getId();
+            }
+            catch (ContinuumStoreException e)
+            {
+                throw new ContinuumException(
+                    "Project (id=" + project.getId() + " doens't have a default build definition, this should be impossible, parent should have default definition set." );
+            }
+            if ( buildDefId == null )
+            {
+                throw new ContinuumException(
+                    "Project (id=" + project.getId() + " doens't have a default build definition, this should be even more impossible since store should have throw exception" );
+            }
 
-                    if ( buildDefId != null && !isInBuildingQueue( project.getId(), buildDefId.intValue() )
-                        && !isInCheckoutQueue( project.getId() ) )
+            buildProject( project, buildDefId.intValue(), trigger );
+        }
+    }
+
+    /**
+     * takes a given schedule and determines which projects need to build
+     *
+     * @param schedule
+     * @throws ContinuumException
+     */
+    public void buildProjects( Schedule schedule )
+        throws ContinuumException
+    {
+        Collection projectsList;
+
+        Map projectsMap = null;
+
+        Map projectGroupsMap = null;
+
+        try
+        {
+            // todo the store should get cleaned up some so this isn't as clunky, I think the store should be able to return all of these info
+            projectsMap = store.getProjectIdsAndBuildDefinitionsIdsBySchedule( schedule.getId() );
+
+            projectGroupsMap = store.getProjectGroupIdsAndBuildDefinitionsIdsBySchedule( schedule.getId() );
+
+            if ( projectsMap == null && projectGroupsMap == null )
+            {
+                // We don't have projects attached to this schedule
+                getLogger().info( "No projects to build for schedule " + schedule );
+                return;
+            }
+
+
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Can't get project list for schedule " + schedule.getName(), e );
+        }
+
+        Collection projectGroups = getAllProjectGroupsWithProjects();
+
+        for ( Iterator i = projectGroups.iterator(); i.hasNext(); )
+        {
+            ProjectGroup projectGroup = (ProjectGroup) i.next();
+
+            try
+            {
+                projectsList = getProjectsInBuildOrder( store.getProjectsWithDependenciesByGroupId( projectGroup.getId() ) );
+            }
+            catch ( CycleDetectedException e )
+            {
+                getLogger().warn(
+                    "Cycle detected while sorting projects for building, falling back to unsorted build." );
+
+                projectsList = getProjects();
+            }
+
+            getLogger().info( "Building " + projectsList.size() + " projects" );
+
+            List groupBuildDefinitionIds = (List) projectGroupsMap.get( new Integer( projectGroup.getId() ) );
+
+            for ( Iterator j = projectsList.iterator(); j.hasNext(); )
+            {
+                Project project = (Project) j.next();
+
+                // iterate through the project group build definitions and build
+                if ( groupBuildDefinitionIds != null && !groupBuildDefinitionIds.isEmpty() )
+                {
+                    getLogger().info(
+                        "Processing " + groupBuildDefinitionIds.size() + " build definitions for project " + project );
+                    for ( Iterator buildDefinitionIterator = groupBuildDefinitionIds.iterator();
+                          buildDefinitionIterator.hasNext(); )
                     {
-                        buildProject( project, buildDefId.intValue(), ContinuumProjectState.TRIGGER_SCHEDULED, false );
+                        Integer buildDefId = (Integer) buildDefinitionIterator.next();
+
+                        if ( buildDefId != null && !isInBuildingQueue( project.getId(), buildDefId.intValue() ) &&
+                            !isInCheckoutQueue( project.getId() ) )
+                        {
+                            buildProject( project, buildDefId.intValue(), ContinuumProjectState.TRIGGER_SCHEDULED,
+                                          false );
+                        }
                     }
                 }
-            }
-            else
-            {
-                getLogger().info( "No build definitions, not building for project " + project );
+
+                // iterate through the project build definitions and build
+                List buildDefIds = (List) projectsMap.get( new Integer( project.getId() ) );
+
+                if ( buildDefIds != null && !buildDefIds.isEmpty() )
+                {
+                    getLogger().info(
+                        "Processing " + buildDefIds.size() + " build definitions for project " + project );
+                    for ( Iterator buildDefinitionIterator = buildDefIds.iterator();
+                          buildDefinitionIterator.hasNext(); )
+                    {
+                        Integer buildDefId = (Integer) buildDefinitionIterator.next();
+
+                        if ( buildDefId != null && !isInBuildingQueue( project.getId(), buildDefId.intValue() ) &&
+                            !isInCheckoutQueue( project.getId() ) )
+                        {
+                            buildProject( project, buildDefId.intValue(), ContinuumProjectState.TRIGGER_SCHEDULED,
+                                          false );
+                        }
+                    }
+                }
+                else
+                {
+                    getLogger().info( "No build definitions, not building for project " + project );
+                }
             }
         }
     }
@@ -550,10 +698,10 @@ public class DefaultContinuum
 
         try
         {
-            if ( project.getState() != ContinuumProjectState.NEW
-                && project.getState() != ContinuumProjectState.CHECKEDOUT
-                && project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED
-                && project.getState() != ContinuumProjectState.ERROR )
+            if ( project.getState() != ContinuumProjectState.NEW &&
+                project.getState() != ContinuumProjectState.CHECKEDOUT &&
+                project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED &&
+                project.getState() != ContinuumProjectState.ERROR )
             {
                 ContinuumBuildExecutor executor = executorManager.getBuildExecutor( project.getExecutorId() );
 
@@ -574,7 +722,8 @@ public class DefaultContinuum
                 }
             }
 
-            getLogger().info( "Enqueuing '" + project.getName() + "' (Build definition id=" + buildDefinitionId + ")." );
+            getLogger().info(
+                "Enqueuing '" + project.getName() + "' (Build definition id=" + buildDefinitionId + ")." );
 
             buildQueue.put( new BuildProjectTask( project.getId(), buildDefinitionId, trigger ) );
         }
@@ -805,10 +954,10 @@ public class DefaultContinuum
 
     /**
      * Add a Maven 1 / Maven 2 project to Continuum
-     * 
-     * @param metadataUrl url of the pom
+     *
+     * @param metadataUrl      url of the pom
      * @param projectBuilderId {@link MavenTwoContinuumProjectBuilder#ID} for Maven 2 project
-     * or {@link MavenOneContinuumProjectBuilder#ID} for Maven 1 project.
+     *                         or {@link MavenOneContinuumProjectBuilder#ID} for Maven 1 project.
      * @return a holder with the projects, project groups and errors occurred during the project adding
      * @throws ContinuumException
      */
@@ -881,8 +1030,7 @@ public class DefaultContinuum
                 projectGroup = store.getProjectGroupByGroupIdWithProjects( projectGroup.getGroupId() );
 
                 getLogger().info(
-                                  "Using existing project group with the group id: '" + projectGroup.getGroupId()
-                                      + "'." );
+                    "Using existing project group with the group id: '" + projectGroup.getGroupId() + "'." );
             }
             catch ( ContinuumObjectNotFoundException e )
             {
@@ -1025,8 +1173,8 @@ public class DefaultContinuum
             if ( value instanceof String )
             {
                 String val = (String) value;
-                if ( !"sendOnSuccess".equals( val ) && !"sendOnFailure".equals( val ) && !"sendOnError".equals( val )
-                    && !"sendOnWarning".equals( val ) )
+                if ( !"sendOnSuccess".equals( val ) && !"sendOnFailure".equals( val ) && !"sendOnError".equals( val ) &&
+                    !"sendOnWarning".equals( val ) )
                 {
                     if ( !StringUtils.isEmpty( val ) )
                     {
@@ -1135,12 +1283,6 @@ public class DefaultContinuum
         return project.getBuildDefinitions();
     }
 
-    public BuildDefinition getDefaultBuildDefinition( int projectId )
-        throws ContinuumException
-    {
-        return store.getDefaultBuildDefinition( projectId );
-    }
-
     public BuildDefinition getBuildDefinition( int projectId, int buildDefinitionId )
         throws ContinuumException
     {
@@ -1161,133 +1303,124 @@ public class DefaultContinuum
         return buildDefinition;
     }
 
-    public void updateBuildDefinition( BuildDefinition buildDefinition, int projectId )
-        throws ContinuumException
-    {
-        BuildDefinition bd = getBuildDefinition( projectId, buildDefinition.getId() );
-
-        bd.setBuildFile( buildDefinition.getBuildFile() );
-
-        bd.setGoals( buildDefinition.getGoals() );
-
-        bd.setArguments( buildDefinition.getArguments() );
-
-        Schedule schedule;
-
-        if ( buildDefinition.getSchedule() == null )
-        {
-            try
-            {
-                schedule = store.getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME );
-            }
-            catch ( ContinuumStoreException e )
-            {
-                throw new ContinuumException( "Can't get default schedule.", e );
-            }
-        }
-        else
-        {
-            schedule = getSchedule( buildDefinition.getSchedule().getId() );
-        }
-
-        bd.setSchedule( schedule );
-
-        if ( buildDefinition.isDefaultForProject() && !bd.isDefaultForProject() )
-        {
-            bd.setDefaultForProject( true );
-
-            BuildDefinition defaultBd = getDefaultBuildDefinition( projectId );
-
-            if ( defaultBd != null )
-            {
-                defaultBd.setDefaultForProject( false );
-
-                storeBuildDefinition( defaultBd );
-            }
-        }
-
-        storeBuildDefinition( bd );
-    }
-
-    public void updateBuildDefinition( int projectId, int buildDefinitionId, Map configuration )
-        throws ContinuumException
-    {
-        BuildDefinition buildDefinition = getBuildDefinition( projectId, buildDefinitionId );
-
-        buildDefinition.setBuildFile( (String) configuration.get( "buildFile" ) );
-
-        buildDefinition.setGoals( (String) configuration.get( "goals" ) );
-
-        buildDefinition.setArguments( (String) configuration.get( "arguments" ) );
-
-        Schedule schedule = getSchedule( Integer.parseInt( (String) configuration.get( "schedule" ) ) );
-
-        buildDefinition.setSchedule( schedule );
-
-        if ( convertBoolean( (String) configuration.get( "defaultForProject" ) ) )
-        {
-            buildDefinition.setDefaultForProject( true );
-        }
-
-        updateBuildDefinition( buildDefinition, projectId );
-    }
-
-    public BuildDefinition storeBuildDefinition( BuildDefinition buildDefinition )
+    public BuildDefinition getDefaultBuildDefinition( int projectId )
         throws ContinuumException
     {
         try
         {
-            return store.storeBuildDefinition( buildDefinition );
+            return store.getDefaultBuildDefinition( projectId );
         }
-        catch ( ContinuumStoreException ex )
+        catch ( ContinuumObjectNotFoundException cne )
         {
-            throw logAndCreateException( "Error while storing buildDefinition.", ex );
+            throw new ContinuumException( "no default build definition for project", cne );
+        }
+        catch ( ContinuumStoreException cse )
+        {
+            throw new ContinuumException(
+                "error attempting to access default build definition for project + " + projectId, cse );
+        }
+
+    }
+
+    public BuildDefinition getBuildDefinition( int buildDefinitionId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getBuildDefinition( buildDefinitionId );
+        }
+        catch ( ContinuumObjectNotFoundException cne )
+        {
+            throw new ContinuumException( "no build definition found", cne );
+        }
+        catch ( ContinuumStoreException cse )
+        {
+            throw new ContinuumException( "error attempting to access build definition", cse );
         }
     }
 
-    public void addBuildDefinition( int projectId, BuildDefinition buildDefinition )
+
+    public List getBuildDefinitionsForProject( int projectId )
         throws ContinuumException
     {
-        if ( buildDefinition.isDefaultForProject() )
-        {
-            BuildDefinition bd = getDefaultBuildDefinition( projectId );
-
-            if ( bd != null )
-            {
-                bd.setDefaultForProject( false );
-
-                storeBuildDefinition( bd );
-            }
-        }
-
         Project project = getProjectWithAllDetails( projectId );
 
-        project.addBuildDefinition( buildDefinition );
-
-        updateProject( project );
+        return project.getBuildDefinitions();
     }
 
-    public void addBuildDefinitionFromParams( int projectId, Map configuration )
+    public List getBuildDefinitionsForProjectGroup( int projectGroupId )
         throws ContinuumException
     {
-        BuildDefinition buildDefinition = new BuildDefinition();
 
-        buildDefinition.setBuildFile( (String) configuration.get( "buildFile" ) );
+        ProjectGroup projectGroup = getProjectGroupWithBuildDetails( projectGroupId );
 
-        buildDefinition.setGoals( (String) configuration.get( "goals" ) );
+        return projectGroup.getBuildDefinitions();
+    }
 
-        buildDefinition.setArguments( (String) configuration.get( "arguments" ) );
+    public void addBuildDefinitionToProject( int projectId, BuildDefinition buildDefinition )
+        throws ContinuumException
+    {
+        HashMap context = new HashMap();
 
-        Schedule schedule = getSchedule( Integer.parseInt( (String) configuration.get( "schedule" ) ) );
+        context.put( AbstractContinuumAction.KEY_BUILD_DEFINITION, buildDefinition );
+        context.put( AbstractContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
 
-        buildDefinition.setSchedule( schedule );
+        executeAction( "add-build-definition-to-project", context );
+    }
 
-        if ( convertBoolean( (String) configuration.get( "defaultForProject" ) ) )
-        {
-            buildDefinition.setDefaultForProject( true );
-        }
+    public void removeBuildDefinitionFromProject( int projectId, int buildDefinitionId )
+        throws ContinuumException
+    {
+        HashMap context = new HashMap();
 
-        addBuildDefinition( projectId, buildDefinition );
+        context.put( AbstractContinuumAction.KEY_BUILD_DEFINITION, getBuildDefinition( buildDefinitionId ) );
+        context.put( AbstractContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
+
+        executeAction( "remove-build-definition-from-project", context );
+    }
+
+    public void updateBuildDefinitionForProject( int projectId, BuildDefinition buildDefinition )
+        throws ContinuumException
+    {
+        HashMap context = new HashMap();
+
+        context.put( AbstractContinuumAction.KEY_BUILD_DEFINITION, buildDefinition );
+        context.put( AbstractContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
+
+        executeAction( "update-build-definition-for-project", context );
+    }
+
+    public void addBuildDefinitionToProjectGroup( int projectGroupId, BuildDefinition buildDefinition )
+        throws ContinuumException
+    {
+        HashMap context = new HashMap();
+
+        context.put( AbstractContinuumAction.KEY_BUILD_DEFINITION, buildDefinition );
+        context.put( AbstractContinuumAction.KEY_PROJECT_GROUP_ID, new Integer( projectGroupId ) );
+
+        executeAction( "add-build-definition-to-project-group", context );
+    }
+
+    public void removeBuildDefinitionFromProjectGroup( int projectGroupId, int buildDefinitionId )
+        throws ContinuumException
+    {
+        HashMap context = new HashMap();
+
+        context.put( AbstractContinuumAction.KEY_BUILD_DEFINITION, getBuildDefinition( buildDefinitionId ) );
+        context.put( AbstractContinuumAction.KEY_PROJECT_GROUP_ID, new Integer( projectGroupId ) );
+
+        executeAction( "remove-build-definition-from-project-group", context );
+    }
+
+    public void updateBuildDefinitionForProjectGroup( int projectGroupId, BuildDefinition buildDefinition )
+        throws ContinuumException
+    {
+        HashMap context = new HashMap();
+
+        context.put( AbstractContinuumAction.KEY_BUILD_DEFINITION, buildDefinition );
+        context.put( AbstractContinuumAction.KEY_PROJECT_GROUP_ID, new Integer( projectGroupId ) );
+
+        executeAction( "update-build-definition-for-project-group", context );
     }
 
     public void removeBuildDefinition( int projectId, int buildDefinitionId )
@@ -1845,9 +1978,9 @@ public class DefaultContinuum
             perms.add( store.getPermission( "showProject" ) );
         }
 
-        if ( convertBoolean( (String) configuration.get( "group.permission.addBuildDefinition" ) ) )
+        if ( convertBoolean( (String) configuration.get( "group.permission.addBuildDefinitionToProject" ) ) )
         {
-            perms.add( store.getPermission( "addBuildDefinition" ) );
+            perms.add( store.getPermission( "addBuildDefinitionToProject" ) );
         }
 
         if ( convertBoolean( (String) configuration.get( "group.permission.editBuildDefinition" ) ) )
@@ -1942,16 +2075,16 @@ public class DefaultContinuum
         {
             if ( !wdFile.isDirectory() )
             {
-                throw new InitializationException( "The specified working directory isn't a directory: " + "'"
-                    + wdFile.getAbsolutePath() + "'." );
+                throw new InitializationException(
+                    "The specified working directory isn't a directory: " + "'" + wdFile.getAbsolutePath() + "'." );
             }
         }
         else
         {
             if ( !wdFile.mkdirs() )
             {
-                throw new InitializationException( "Could not making the working directory: " + "'"
-                    + wdFile.getAbsolutePath() + "'." );
+                throw new InitializationException(
+                    "Could not making the working directory: " + "'" + wdFile.getAbsolutePath() + "'." );
             }
         }
 
@@ -1978,10 +2111,10 @@ public class DefaultContinuum
                 }
             }
 
-            if ( project.getState() != ContinuumProjectState.NEW
-                && project.getState() != ContinuumProjectState.CHECKEDOUT
-                && project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED
-                && project.getState() != ContinuumProjectState.ERROR )
+            if ( project.getState() != ContinuumProjectState.NEW &&
+                project.getState() != ContinuumProjectState.CHECKEDOUT &&
+                project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED &&
+                project.getState() != ContinuumProjectState.ERROR )
             {
                 int state = project.getState();
 
@@ -1991,9 +2124,8 @@ public class DefaultContinuum
 
                 try
                 {
-                    getLogger().info(
-                                      "Fix project state for project " + project.getId() + ":" + project.getName()
-                                          + ":" + project.getVersion() );
+                    getLogger().info( "Fix project state for project " + project.getId() + ":" + project.getName() +
+                        ":" + project.getVersion() );
 
                     store.updateProject( project );
 
@@ -2010,9 +2142,8 @@ public class DefaultContinuum
                 }
             }
 
-            getLogger().info(
-                              " " + project.getId() + ":" + project.getName() + ":" + project.getVersion() + ":"
-                                  + project.getExecutorId() );
+            getLogger().info( " " + project.getId() + ":" + project.getName() + ":" + project.getVersion() + ":" +
+                project.getExecutorId() );
         }
     }
 
@@ -2133,6 +2264,7 @@ public class DefaultContinuum
         }
         catch ( Exception e )
         {
+            getLogger().info( "exception", e );
             throw new ContinuumException( "Error while executing the action '" + actionName + "'.", e );
         }
     }
@@ -2269,6 +2401,23 @@ public class DefaultContinuum
         try
         {
             return store.getProjectWithAllDetails( projectId );
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            throw new ContinuumException( "Unable to find the requested project", e );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error retrieving the requested project", e );
+        }
+    }
+
+    public ProjectGroup getProjectGroupWithBuildDetails( int projectGroupId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getProjectGroupWithBuildDetails( projectGroupId );
         }
         catch ( ContinuumObjectNotFoundException e )
         {

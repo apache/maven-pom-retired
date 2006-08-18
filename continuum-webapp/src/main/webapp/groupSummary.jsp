@@ -13,11 +13,11 @@
     <c:forEach items="${groups}" var="group">
 
       <ww:set name="group" value="${group}"/> 
-      <ww:url id="projectSummaryUrl" action="summary" namespace="/">
+      <ww:url id="projectGroupViewUrl" action="projectGroupView" namespace="/">
         <ww:param name="projectGroupId" value="%{'${group.id}'}"/>
       </ww:url>
 
-      <h3><ww:text name="groups.section.title"/>&nbsp;<ww:a href="%{projectSummaryUrl}">${group.name}</ww:a></h3>
+      <h3><ww:text name="groups.section.title"/>&nbsp;<ww:a href="%{projectGroupViewUrl}">${group.name}</ww:a></h3>
 
       <ec:table items="group.projects"
                 var="project"

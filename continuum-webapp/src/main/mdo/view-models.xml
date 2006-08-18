@@ -32,6 +32,16 @@
             <multiplicity>*</multiplicity>
           </association>
         </field>
+         <field>
+          <name>buildDefinitionSummarys</name>
+          <version>1.0.0</version>
+          <description></description>
+          <required>true</required>
+          <association>
+            <type>BuildDefinitionSummary</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
     <class>
@@ -175,6 +185,88 @@
           <description>number of errored builds in the project group</description>
           <type>int</type>
           <defaultValue>-1</defaultValue>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>BuildDefinitionSummary</name>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>id of the build definition</description>
+          <type>int</type>
+        </field>
+        <field>
+          <name>projectId</name>
+          <version>1.0.0</version>
+          <required>false</required>
+          <description>project id of the project containing the build definition</description>
+          <type>int</type>
+        </field>
+        <field>
+          <name>projectGroupId</name>
+          <version>1.0.0</version>
+          <required>false</required>
+          <description>project group id of the project group with the build definition</description>
+          <type>int</type>
+        </field>
+        <field>
+          <name>goals</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>goals for build definition</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>arguments</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>arguments for build definition</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>buildFile</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>goals for build definition</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>isDefault</name>
+          <version>1.0.0</version>
+          <description>if the build definition is used in default cases</description>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>scheduleName</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>name of the schedule for build definition</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>from</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>source of build definition, project or project group lvl</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>profileName</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>name of the profile for the build definition</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>projectName</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>if project lvl, then the name of the project using the definition</description>
+          <type>String</type>
         </field>
       </fields>
     </class>

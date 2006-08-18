@@ -22,6 +22,7 @@ import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
@@ -46,7 +47,13 @@ public interface Continuum
     // Project Groups
     // ----------------------------------------------------------------------
 
+    public ProjectGroup getProjectGroup( int projectGroupId )
+        throws ContinuumException;
+
     public Collection getAllProjectGroupsWithProjects();
+
+    public ProjectGroup getProjectGroupByProjectId( int projectId )
+        throws ContinuumException;
 
     public Collection getProjectsInGroup( int projectGroupId )
         throws ContinuumException;
@@ -202,29 +209,70 @@ public interface Continuum
     // Build Definition
     // ----------------------------------------------------------------------
 
+    /**
+     * @deprecated
+     */
     List getBuildDefinitions( int projectId )
         throws ContinuumException;
 
-    BuildDefinition getDefaultBuildDefinition( int projectId )
-        throws ContinuumException;
-
+    /**
+     * @deprecated
+     */
     BuildDefinition getBuildDefinition( int projectId, int buildDefinitionId )
         throws ContinuumException;
 
-    void updateBuildDefinition( BuildDefinition buildDefinition, int projectId )
-        throws ContinuumException;
-
-    void updateBuildDefinition( int projectId, int buildDefinitionId, Map configuration )
-        throws ContinuumException;
-
-    void addBuildDefinition( int projectId, BuildDefinition buildDefinition )
-        throws ContinuumException;
-
-    void addBuildDefinitionFromParams( int projectId, Map configuration )
-        throws ContinuumException;
-
+    /**
+     * @deprecated
+     */
     void removeBuildDefinition( int projectId, int buildDefinitionId )
         throws ContinuumException;
+
+    /**
+     * returns the build definition from either the project or the project group it is a part of
+     *
+     * @param buildDefinitionId
+     * @return
+     */
+    BuildDefinition getBuildDefinition( int buildDefinitionId )
+        throws ContinuumException;
+
+    /**
+     * returns the default build definition for the project
+     *
+     * 1) if project has default build definition, return that
+     * 2) otherwise return default build definition for parent project group
+     *
+     * @param projectId
+     * @return
+     * @throws ContinuumException
+     */
+    BuildDefinition getDefaultBuildDefinition( int projectId )
+        throws ContinuumException;
+
+    void addBuildDefinitionToProject( int projectId, BuildDefinition buildDefinition )
+        throws ContinuumException;
+
+    void addBuildDefinitionToProjectGroup( int projectGroupId, BuildDefinition buildDefinition )
+        throws ContinuumException;    
+
+    List getBuildDefinitionsForProject( int projectId )
+        throws ContinuumException;
+
+    List getBuildDefinitionsForProjectGroup( int projectGroupId )
+        throws ContinuumException;
+
+    void removeBuildDefinitionFromProject( int projectId, int buildDefinitionId )
+        throws ContinuumException;
+
+    void removeBuildDefinitionFromProjectGroup( int projectGroupId, int buildDefinitionId )
+        throws ContinuumException;
+
+    void updateBuildDefinitionForProject( int projectId, BuildDefinition buildDefinition )
+        throws ContinuumException;
+
+    void updateBuildDefinitionForProjectGroup( int projectGroupId, BuildDefinition buildDefinition )
+        throws ContinuumException;
+
 
     // ----------------------------------------------------------------------
     // Schedule

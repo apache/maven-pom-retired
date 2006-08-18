@@ -142,7 +142,7 @@ public class DefaultContinuumInitializer
 
         createPermission( "showProject", "Show Projects" );
 
-        createPermission( "addBuildDefinition", "Add Build Definitions" );
+        createPermission( "addBuildDefinitionToProject", "Add Build Definitions" );
 
         createPermission( "editBuildDefinition", "Edit Build Definitions" );
 

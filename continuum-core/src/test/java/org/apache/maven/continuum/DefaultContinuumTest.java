@@ -17,7 +17,10 @@ package org.apache.maven.continuum;
  */
 
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
 
@@ -89,12 +92,17 @@ public class DefaultContinuumTest
             Project project = (Project) i.next();
 
             projects.put( project.getName(), project );
+
+            // validate project in project group
+            assertTrue( "project not in project group", getStore().getProjectGroupByProjectId( project.getId() ) != null );
         }
 
         assertTrue( "no irc notifier", projects.containsKey( "Continuum IRC Notifier" ) );
 
         assertTrue( "no jabber notifier", projects.containsKey( "Continuum Jabber Notifier" ) );
-        // TODO: assert that the project is the in the group
+
+
+
     }
 
     public void testUpdateMavenTwoProject()
@@ -128,5 +136,68 @@ public class DefaultContinuumTest
         continuum.updateProject( project );
 
         project = continuum.getProject( project.getId() );
+    }
+
+    public void testBuildDefinitions()
+        throws Exception
+    {
+        Continuum continuum = (Continuum) lookup( Continuum.ROLE );
+
+        String url = getTestFile( "src/test-projects/project1/pom.xml" ).toURL().toExternalForm();
+
+        ContinuumProjectBuildingResult result = continuum.addMavenTwoProject( url );
+
+        assertNotNull( result );
+
+        List projects = result.getProjects();
+
+        assertEquals( 1, projects.size() );
+
+        assertEquals( Project.class, projects.get( 0 ).getClass() );
+
+        Project project = (Project) projects.get( 0 );
+
+        // reattach
+        project = continuum.getProject( project.getId() );
+
+        ProjectGroup projectGroup  = getStore().getProjectGroupByProjectId( project.getId() );
+
+        projectGroup = getStore().getProjectGroupWithBuildDetails( projectGroup.getId() );
+
+        List buildDefs = projectGroup.getBuildDefinitions();
+
+        assertTrue ("missing project group build definition", !buildDefs.isEmpty() );
+
+        assertTrue ("more then one project group build definition on add project", buildDefs.size() == 1 );
+
+        BuildDefinition pgbd = (BuildDefinition) buildDefs.get( 0 );
+
+        assertTrue ( "project group build definition is not default", pgbd.isDefaultForProject() );
+
+        assertTrue ( "project group build definition not default for project", continuum.getDefaultBuildDefinition( project.getId() ).getId() == pgbd.getId() );
+
+        BuildDefinition nbd = new BuildDefinition();
+        nbd.setGoals("clean");
+        nbd.setArguments("");
+        nbd.setDefaultForProject( true );
+        nbd.setSchedule( getStore().getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME ) );
+
+        continuum.addBuildDefinitionToProject( project.getId(), nbd );
+
+        assertTrue ( "project lvl build definition not default for project", continuum.getDefaultBuildDefinition( project.getId() ).getId() == nbd.getId() );
+
+        continuum.removeBuildDefinitionFromProject( project.getId(), nbd.getId() );
+
+        assertTrue ( "default build definition didn't toggle back to project group level", continuum.getDefaultBuildDefinition( project.getId() ).getId() == pgbd.getId() );
+
+        try
+        {
+            continuum.removeBuildDefinitionFromProjectGroup( projectGroup.getId(), pgbd.getId() );
+            fail("we were able to remove the default build definition, and that is bad");
+        }
+        catch (ContinuumException expected)
+        {
+
+        }
     }
 }

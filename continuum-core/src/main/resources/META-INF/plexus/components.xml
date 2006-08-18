@@ -584,6 +584,26 @@
      -->
     <component>
       <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>add-build-definition-to-project</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.AddBuildDefinitionToProjectAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>add-build-definition-to-project-group</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.AddBuildDefinitionToProjectGroupAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
       <role-hint>add-project-to-checkout-queue</role-hint>
       <implementation>org.apache.maven.continuum.core.action.AddProjectToCheckOutQueueAction</implementation>
       <requirements>
@@ -682,6 +702,26 @@
     </component>
     <component>
       <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>remove-build-definition-from-project</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.RemoveBuildDefinitionFromProjectAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>remove-build-definition-from-project-group</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.RemoveBuildDefinitionFromProjectGroupAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
       <role-hint>store-checkout-scm-result</role-hint>
       <implementation>org.apache.maven.continuum.core.action.StoreCheckOutScmResultAction</implementation>
       <requirements>
@@ -728,6 +768,26 @@
       <role>org.codehaus.plexus.action.Action</role>
       <role-hint>validate-project-group</role-hint>
       <implementation>org.apache.maven.continuum.core.action.ValidateProjectGroup</implementation>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>update-build-definition-from-project</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.UpdateBuildDefinitionFromProjectAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>update-build-definition-from-project-group</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.UpdateBuildDefinitionFromProjectGroupAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+      </requirements>
     </component>
     <component>
       <role>org.codehaus.plexus.action.Action</role>

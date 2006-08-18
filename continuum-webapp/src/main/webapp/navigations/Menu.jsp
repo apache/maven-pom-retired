@@ -8,9 +8,6 @@
         <a href="<ww:url value="/about.jsp"/>"><ww:text name="menu.continuum.about"/></a>
       </div>
       <div class="body">
-        <a href="<ww:url value="/summary.action"/>"><ww:text name="menu.continuum.showProjects"/></a>
-      </div>
-      <div class="body">
         <a href="<ww:url value="/groupSummary.action"/>"><ww:text name="menu.continuum.showProjectGroups"/></a>
       </div>
     </div>

@@ -35,6 +35,7 @@ import org.codehaus.plexus.util.StringUtils;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -117,8 +118,37 @@ public class MavenTwoContinuumProjectBuilder
         {
             ProjectGroup projectGroup = buildProjectGroup( mavenProject, result );
 
+            // project groups have the top lvl build definition which is the default build defintion for the sub projects
             if ( projectGroup != null )
             {
+                BuildDefinition bd = new BuildDefinition();
+
+                bd.setDefaultForProject( true );
+
+                bd.setArguments( "--batch-mode --non-recursive" );
+
+                bd.setGoals( "clean install" );
+
+                bd.setBuildFile( "pom.xml" );
+
+                try
+                {
+                    Schedule schedule = store.getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME );
+
+                    bd.setSchedule( schedule );
+                }
+                catch ( ContinuumStoreException e )
+                {
+                    getLogger().warn( "Can't get default schedule.", e );
+                }
+
+                // jdo complains that Collections.singletonList(bd) is a second class object and fails.
+                ArrayList arrayList = new ArrayList();
+
+                arrayList.add(bd);
+
+                projectGroup.setBuildDefinitions( arrayList );
+
                 result.addProjectGroup( projectGroup );
             }
         }
@@ -132,30 +162,7 @@ public class MavenTwoContinuumProjectBuilder
                 defaultGoal = mavenProject.getBuild().getDefaultGoal();
             }
 
-            Project continuumProject = new Project();
-
-            BuildDefinition bd = new BuildDefinition();
-
-            bd.setDefaultForProject( true );
-
-            bd.setArguments( "--batch-mode --non-recursive" );
-
-            bd.setGoals( defaultGoal );
-
-            bd.setBuildFile( "pom.xml" );
-
-            try
-            {
-                Schedule schedule = store.getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME );
-
-                bd.setSchedule( schedule );
-            }
-            catch ( ContinuumStoreException e )
-            {
-                getLogger().warn( "Can't get default schedule.", e );
-            }
-
-            continuumProject.addBuildDefinition( bd );
+            Project continuumProject = new Project();            
 
             builderHelper.mapMavenProjectToContinuumProject( result, mavenProject, continuumProject );
 

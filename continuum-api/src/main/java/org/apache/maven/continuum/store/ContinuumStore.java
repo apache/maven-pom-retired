@@ -53,7 +53,41 @@ public interface ContinuumStore
 
     Map getDefaultBuildDefinitions();
 
-    BuildDefinition getDefaultBuildDefinition( int projectId );
+    /**
+     * returns the default build definition of the project, if the project doesn't have on declared the default
+     * of the project group will be returned
+     *
+     * this should be the most common usage of the default build definition accessing methods
+     *
+     * @param projectId
+     * @return
+     * @throws ContinuumStoreException
+     * @throws ContinuumObjectNotFoundException
+     */
+    BuildDefinition getDefaultBuildDefinition( int projectId )
+        throws ContinuumStoreException, ContinuumObjectNotFoundException;
+
+    /**
+     * returns the default build definition for the project without consulting the project group
+     *
+     * @param projectId
+     * @return
+     * @throws ContinuumStoreException
+     * @throws ContinuumObjectNotFoundException
+     */
+    BuildDefinition getDefaultBuildDefinitionForProject( int projectId )
+        throws ContinuumStoreException, ContinuumObjectNotFoundException;
+
+    /**
+     * returns the default build definition for the project group and there should always be one declared
+     * 
+     * @param projectGroupId
+     * @return
+     * @throws ContinuumStoreException
+     * @throws ContinuumObjectNotFoundException
+     */
+    BuildDefinition getDefaultBuildDefinitionForProjectGroup( int projectGroupId )
+        throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
     BuildDefinition getBuildDefinition( int buildDefinitionId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
@@ -69,6 +103,9 @@ public interface ContinuumStore
     ProjectGroup getProjectGroup( int projectGroupId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
+    public ProjectGroup getProjectGroupByProjectId( int projectId )
+        throws ContinuumObjectNotFoundException;
+
     void updateProjectGroup( ProjectGroup group )
         throws ContinuumStoreException;
 
@@ -77,6 +114,8 @@ public interface ContinuumStore
     List getAllProjectsByName();
 
     List getAllProjectsByNameWithDependencies();
+
+    public List getProjectsWithDependenciesByGroupId( int projectGroupId );
 
     List getAllProjectsByNameWithBuildDetails();
 
@@ -104,6 +143,9 @@ public interface ContinuumStore
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
     Map getProjectIdsAndBuildDefinitionsIdsBySchedule( int scheduleId )
+        throws ContinuumStoreException;
+
+    Map getProjectGroupIdsAndBuildDefinitionsIdsBySchedule( int scheduleId )
         throws ContinuumStoreException;
 
     void updateProject( Project project )

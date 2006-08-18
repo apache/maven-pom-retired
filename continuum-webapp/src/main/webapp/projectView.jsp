@@ -49,41 +49,13 @@
         </div>
 
         <h3><ww:text name="projectView.buildDefinitions"/></h3>
-        <ww:set name="buildDefinitions" value="project.buildDefinitions" scope="request"/>
-        <ec:table items="buildDefinitions"
-                  var="buildDefinition"
-                  showExports="false"
-                  showPagination="false"
-                  showStatusBar="false"
-                  filterable="false"
-                  sortable="false">
-          <ec:row>
-            <ec:column property="goals" title="projectView.buildDefinition.goals"/>
-            <ec:column property="arguments" title="projectView.buildDefinition.arguments"/>
-            <ec:column property="buildFile" title="projectView.buildDefinition.buildFile"/>
-            <ec:column property="profile" title="projectView.buildDefinition.profile"/>
-            <ec:column property="schedule" title="schedule">
-                ${pageScope.buildDefinition.schedule.name}
-            </ec:column>
-            <ec:column property="from" title="projectView.buildDefinition.from">
-                PROJECT
-            </ec:column>
-            <ec:column property="actions" title="&nbsp;">
-                <!-- TODO: REPLACE THIS WITH A NEW CELL CLASS -->
-                <a href='<ww:url value="/buildDefinitionEdit!default.action">
-                  <ww:param name="projectId" value="project.id"/>
-                  <ww:param name="buildDefinitionId" value="${buildDefinition.id}"/>
-                </ww:url>'><ww:text name="edit"/></a>
-                &nbsp;
-                <a href='<ww:url value="/deleteBuildDefinition!default.action">
-                  <ww:param name="projectId" value="project.id"/>
-                  <ww:param name="buildDefinitionId" value="${buildDefinition.id}"/>
-                </ww:url>'><ww:text name="delete"/></a>
-            </ec:column>
-          </ec:row>
-        </ec:table>
+
+        <ww:action name="buildDefinitionSummary" id="summary" namespace="component" executeResult="true">
+          <ww:param name="projectId" value="%{project.id}" />
+        </ww:action>
+
         <div class="functnbar3">
-          <ww:form action="addBuildDefinition.action" method="post">
+          <ww:form action="buildDefinition" method="post">
             <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
             <ww:submit value="%{getText('add')}"/>
           </ww:form>

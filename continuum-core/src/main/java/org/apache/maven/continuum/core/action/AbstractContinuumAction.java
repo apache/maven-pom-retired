@@ -95,7 +95,7 @@ public abstract class AbstractContinuumAction
 
     public static int getProjectGroupId( Map context )
     {
-        return Integer.valueOf( getString( context, KEY_PROJECT_GROUP_ID ) ).intValue();
+        return getInteger( context, KEY_PROJECT_GROUP_ID );
     }
 
     public static int getBuildDefinitionId( Map context )

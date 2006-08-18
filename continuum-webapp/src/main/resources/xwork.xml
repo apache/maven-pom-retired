@@ -25,6 +25,7 @@
     <default-interceptor-ref name="defaultContinuumStack"/>
 
     <global-results>
+      <result name="error">/error.jsp</result>
       <result name="internalError" type="redirect">/error.jsp</result>
       <result name="continuumInitialization" type="redirect">/configuration!input.action</result>
     </global-results>
@@ -98,25 +99,52 @@
       <result name="success" type="chain">projectView</result>
     </action>
 
-    <action name="buildDefinitionEdit" class="buildDefinitionEdit">
-      <result name="input">buildDefinitionEdit.jsp</result>
-      <result name="success" type="chain">projectView</result>
-    </action>
-
-    <action name="buildDefinitionSave" class="buildDefinitionEdit">
-      <result name="input">buildDefinitionEdit.jsp</result>
-      <result name="success" type="chain">projectView</result>
-    </action>
-
-    <action name="deleteBuildDefinition" class="deleteBuildDefinition">
-      <result name="delete">deleteBuildDefinition.jsp</result>
-      <result name="success" type="chain">projectView</result>
-    </action>
-
-    <action name="addBuildDefinition" class="addBuildDefinition">
+    <!--
+    * build definition actions
+    -->
+    <action name="buildDefinition" class="buildDefinition">
       <result name="input">buildDefinitionEdit.jsp</result>
     </action>
 
+    <action name="saveProjectBuildDefinition" class="buildDefinition" method="saveToProject">
+      <result name="success" type="chain">projectView</result>
+    </action>
+
+    <action name="removeProjectBuildDefinition" class="buildDefinition" method="removeFromProject">
+      <result name="confirm">deleteBuildDefinition.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
+
+    <action name="saveGroupBuildDefinition" class="buildDefinition" method="saveToGroup">
+      <result name="success" type="chain">projectView</result>
+    </action>
+
+    <action name="removeGroupBuildDefinition" class="buildDefinition" method="removeFromGroup">
+      <result name="confirm">deleteBuildDefinition.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
+
+
+    <!--
+    * project group actions
+    -->
+    <action name="projectGroupView" class="projectGroup" method="view">
+      <result name="success">projectGroupView.jsp</result>
+    </action>
+
+    <action name="projectGroupBuildDefinition" class="projectGroup" method="buildDefinitions">
+      <result name="success">projectGroupBuildDefinition.jsp</result>
+    </action>
+
+    <action name="projectGroupNotifier" class="projectGroup" method="notifiers">
+      <result name="success">projectGroupNotifier.jsp</result>
+    </action>
+
+
+
+    <!--
+    * notifier actions
+    -->
     <action name="deleteNotifier" class="deleteNotifier">
       <result name="delete">deleteNotifier.jsp</result>
       <result name="success" type="chain">projectView</result>
@@ -196,5 +224,25 @@
       <result name="success" type="chain">schedules</result>
     </action>
 
+  </package>
+
+  <package name="component" extends="default">
+    <!--
+    * component actions
+    -->
+    <action name="buildDefinitionSummary" class="buildDefinitionSummary" method="summarizeForProject">
+      <result name="success">/components/buildDefinitionSummaryComponent.jsp</result>
+      <result name="error">/components/failureComponent.jsp</result>
+    </action>
+
+    <action name="groupBuildDefinitionSummary" class="buildDefinitionSummary" method="summarizeForGroup">
+      <result name="success">/components/buildDefinitionGroupSummaryComponent.jsp</result>
+      <result name="error">/components/failureComponent.jsp</result>
+    </action>
+
+    <action name="projectSummary" class="summary">
+      <result name="success">/components/projectSummaryComponent.jsp</result>
+      <result name="error">/components/failureComponent.jsp</result>
+    </action>
   </package>
 </xwork>
