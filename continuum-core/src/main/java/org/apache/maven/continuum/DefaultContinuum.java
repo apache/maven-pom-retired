@@ -450,7 +450,7 @@ public class DefaultContinuum
 
             try
             {
-                buildDefId = store.getDefaultBuildDefinition( project.getId() ).getId();
+                buildDefId = new Integer( store.getDefaultBuildDefinition( project.getId() ).getId() );
             }
             catch (ContinuumStoreException e)
             {
@@ -500,7 +500,7 @@ public class DefaultContinuum
 
             try
             {
-                buildDefId = store.getDefaultBuildDefinition( project.getId() ).getId();
+                buildDefId = new Integer( store.getDefaultBuildDefinition( project.getId() ).getId() );
             }
             catch (ContinuumStoreException e)
             {
