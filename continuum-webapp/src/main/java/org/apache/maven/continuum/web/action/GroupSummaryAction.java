@@ -51,7 +51,7 @@ public class GroupSummaryAction
         {
             ProjectGroup projectGroup = (ProjectGroup) j.next();
 
-            getLogger().info( "GroupSummaryAction: building group " + projectGroup.getName() );
+            getLogger().debug( "GroupSummaryAction: building group " + projectGroup.getName() );
 
             GroupSummary groupModel = new GroupSummary();
             groupModel.setId( projectGroup.getId() );
@@ -77,7 +77,7 @@ public class GroupSummaryAction
 
                 ProjectSummary model = new ProjectSummary();
 
-                getLogger().info( "GroupSummaryAction: building project model " + project.getName() );
+                getLogger().debug( "GroupSummaryAction: building project model " + project.getName() );
 
                 model.setId( project.getId() );
 
@@ -133,7 +133,7 @@ public class GroupSummaryAction
                         model.setLatestBuildId( latestBuild.getId() );
                     }
                 }
-                getLogger().info( "GroupSummaryAction: adding model to group " + model.getName() );
+                getLogger().debug( "GroupSummaryAction: adding model to group " + model.getName() );
                 projectModels.add( model );
             }
 
@@ -141,7 +141,7 @@ public class GroupSummaryAction
             groupModel.setNumFailures( numFailures );
             groupModel.setNumErrors( numErrors );
             groupModel.setProjects( projectModels );
-            getLogger().info( "GroupSummaryAction: adding group to groups list " + groupModel.getName() );
+            getLogger().debug( "GroupSummaryAction: adding group to groups list " + groupModel.getName() );
             groups.add( groupModel );
         }
 
