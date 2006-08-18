@@ -227,11 +227,7 @@
       <result name="success">editSchedule.jsp</result>
     </action>
 
-    <action name="addSchedule" class="schedule" method="add">
-      <result name="success" type="chain">schedules</result>
-    </action>
-
-    <action name="editSchedule" class="schedule" method="edit">
+    <action name="saveSchedule" class="schedule" method="save">
       <result name="success" type="chain">schedules</result>
     </action>
 

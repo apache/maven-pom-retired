@@ -11,8 +11,8 @@
     <h3><ww:text name="editSchedule.page.title"/></h3>
 
     <div class="axial">
-      <ww:form action="editSchedule.action" method="post">
-        <input type="hidden" name="id" value="<ww:property value="id"/>"/>
+      <ww:form action="saveSchedule" method="post">
+        <input type="hidden" name="id" value="id"/>
         <table>
           <tbody>
             <ww:textfield label="%{getText('schedule.name.label')}" name="name" required="true">

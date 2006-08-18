@@ -17,23 +17,35 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Schedule;
 
 import java.util.Collection;
 
 /**
  * @author Nik Gonzalez
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="schedules"
+ * @plexus.component role="com.opensymphony.xwork.Action"
+ * role-hint="schedule"
  */
 public class ScheduleAction
     extends ContinuumActionSupport
 {
+    private int id;
+
+    private boolean active = true;
+
+    private String cronExpression;
+
+    private int delay;
+
+    private String description;
+
+    private String name;
 
     private Collection schedules;
 
-    public String execute()
+    private Schedule schedule;
+
+    public String summary()
         throws ContinuumException
     {
         schedules = continuum.getSchedules();
@@ -41,9 +53,148 @@ public class ScheduleAction
         return SUCCESS;
     }
 
+    public String input()
+    {
+        if ( id != 0 )
+        {
+            try
+            {
+                schedule = continuum.getSchedule( id );
+                active = schedule.isActive();
+                cronExpression= schedule.getCronExpression();
+                description = schedule.getDescription();
+                name = schedule.getName();
+                delay = schedule.getDelay();
+            }
+            catch ( ContinuumException e )
+            {
+                addActionError( "unable to retrieve schedule for editting" );
+                return ERROR;
+            }
+        }
+        return SUCCESS;
+    }
+
+    public String save()
+    {
+        if ( id == 0 )
+        {
+            try
+            {
+                Schedule schedule = new Schedule();
+                schedule.setActive( active );
+                schedule.setCronExpression( cronExpression );
+                schedule.setDelay( delay );
+                schedule.setDescription( description );
+                schedule.setName( name );
+
+                continuum.addSchedule( schedule );
+            }
+            catch ( ContinuumException e )
+            {
+                addActionError( "unable to add schedule" );
+                return ERROR;
+            }
+            return SUCCESS;
+        }
+        else
+        {
+
+            try
+            {
+                schedule = continuum.getSchedule( id );
+
+                schedule.setActive( active );
+                schedule.setCronExpression( cronExpression );
+                schedule.setDelay( delay );
+                schedule.setDescription( description );
+                schedule.setName( name );
+
+                continuum.updateSchedule( schedule );
+
+            }
+            catch ( ContinuumException e )
+            {
+                addActionError( "unable to edit schedule" );
+                return ERROR;
+            }
+
+            return SUCCESS;
+        }
+    }
+
     public Collection getSchedules()
     {
         return schedules;
     }
 
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId( int id )
+    {
+        this.id = id;
+    }
+
+    public boolean isActive()
+    {
+        return active;
+    }
+
+    public void setActive( boolean active )
+    {
+        this.active = active;
+    }
+
+    public String getCronExpression()
+    {
+        return cronExpression;
+    }
+
+    public void setCronExpression( String cronExpression )
+    {
+        this.cronExpression = cronExpression;
+    }
+
+    public int getDelay()
+    {
+        return delay;
+    }
+
+    public void setDelay( int delay )
+    {
+        this.delay = delay;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription( String description )
+    {
+        this.description = description;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName( String name )
+    {
+        this.name = name;
+    }
+
+    public Schedule getSchedule()
+    {
+        return schedule;
+    }
+
+    public void setSchedule( Schedule schedule )
+    {
+        this.schedule = schedule;
+    }
 }
