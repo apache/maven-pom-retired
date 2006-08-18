@@ -51,7 +51,7 @@ public abstract class AbstractContinuumProjectBuilder
 
         if ( metadata.getProtocol().startsWith( "http" ) )
         {
-            is = new MungedHttpsURL( metadata.toExternalForm(), username, password ).getURL().openStream();
+            is = new MungedHttpsURL( metadata.toExternalForm(), username, password ).getURLConnection().getInputStream();
         }
         else
         {
