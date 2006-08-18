@@ -1395,7 +1395,7 @@ public class DefaultContinuum
         context.put( AbstractContinuumAction.KEY_BUILD_DEFINITION, buildDefinition );
         context.put( AbstractContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
 
-        executeAction( "update-build-definition-for-project", context );
+        executeAction( "update-build-definition-from-project", context );
     }
 
     public void addBuildDefinitionToProjectGroup( int projectGroupId, BuildDefinition buildDefinition )
@@ -1428,7 +1428,7 @@ public class DefaultContinuum
         context.put( AbstractContinuumAction.KEY_BUILD_DEFINITION, buildDefinition );
         context.put( AbstractContinuumAction.KEY_PROJECT_GROUP_ID, new Integer( projectGroupId ) );
 
-        executeAction( "update-build-definition-for-project-group", context );
+        executeAction( "update-build-definition-from-project-group", context );
     }
 
     public void removeBuildDefinition( int projectId, int buildDefinitionId )

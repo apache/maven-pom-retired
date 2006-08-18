@@ -116,12 +116,12 @@
     </action>
 
     <action name="saveGroupBuildDefinition" class="buildDefinition" method="saveToGroup">
-      <result name="success" type="chain">projectView</result>
+      <result name="success" type="chain">projectGroupView</result>
     </action>
 
     <action name="removeGroupBuildDefinition" class="buildDefinition" method="removeFromGroup">
       <result name="confirm">deleteBuildDefinition.jsp</result>
-      <result name="success" type="chain">projectView</result>
+      <result name="success" type="chain">projectGroupView</result>
     </action>
 
 
@@ -216,17 +216,22 @@
       <result name="success">workingCopy.jsp</result>
     </action>
 
-    <action name="schedules" class="schedules">
+    <!--
+    * schedule actions
+    -->
+    <action name="schedules" class="schedule" method="summary">
       <result name="success">schedules.jsp</result>
     </action>
 
-    <action name="addSchedule" class="addSchedule">
-      <result name="input">editSchedule.jsp</result>
+    <action name="schedule" class="schedule" method="input">
+      <result name="success">editSchedule.jsp</result>
+    </action>
+
+    <action name="addSchedule" class="schedule" method="add">
       <result name="success" type="chain">schedules</result>
     </action>
 
-    <action name="editSchedule" class="editSchedule">
-      <result name="input">editSchedule.jsp</result>
+    <action name="editSchedule" class="schedule" method="edit">
       <result name="success" type="chain">schedules</result>
     </action>
 

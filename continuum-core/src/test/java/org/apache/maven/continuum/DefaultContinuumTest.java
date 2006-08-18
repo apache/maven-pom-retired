@@ -173,6 +173,14 @@ public class DefaultContinuumTest
 
         BuildDefinition pgbd = (BuildDefinition) buildDefs.get( 0 );
 
+        pgbd.setGoals( "foo" );
+
+        continuum.updateBuildDefinitionForProjectGroup( projectGroup.getId(), pgbd );
+
+        pgbd = continuum.getBuildDefinition(  pgbd.getId() );
+
+        assertTrue ( "update failed for project group build definition", "foo".equals( pgbd.getGoals() ) );
+
         assertTrue ( "project group build definition is not default", pgbd.isDefaultForProject() );
 
         assertTrue ( "project group build definition not default for project", continuum.getDefaultBuildDefinition( project.getId() ).getId() == pgbd.getId() );

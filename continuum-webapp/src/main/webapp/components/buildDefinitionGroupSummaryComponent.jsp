@@ -21,11 +21,11 @@
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
       <ec:column property="actions" title="&nbsp;">
-          <ww:url id="editUrl" action="buildDefinition" method="input">
+          <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
             <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
           </ww:url>
-          <ww:url id="removeUrl" action="removeGroupBuildDefinition">
+          <ww:url id="removeUrl" action="removeGroupBuildDefinition" namespace="/">
             <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
             <ww:param name="confirmed" value="false"/>
@@ -62,11 +62,11 @@
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
       <ec:column property="actions" title="&nbsp;">
-          <ww:url id="editUrl" action="buildDefinition" method="input">
+          <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
             <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
           </ww:url>
-          <ww:url id="removeUrl" action="removeProjectBuildDefinition">
+          <ww:url id="removeUrl" action="removeProjectBuildDefinition" namespace="/">
             <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
             <ww:param name="confirmed" value="false"/>

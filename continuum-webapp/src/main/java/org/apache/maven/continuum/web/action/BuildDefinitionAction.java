@@ -39,7 +39,7 @@ public class BuildDefinitionAction
 {
     public static final String CONFIRM = "confirm";
 
-    private int buildDefinitionId = -1;
+    private int buildDefinitionId;
 
     private int projectId;
 
@@ -47,7 +47,7 @@ public class BuildDefinitionAction
 
     private int scheduleId;
 
-    private boolean isDefault;
+    private boolean defaultBuildDefinition;
 
     private boolean confirmed = false;
 
@@ -121,14 +121,15 @@ public class BuildDefinitionAction
             return ERROR;
         }
 
-        if ( buildDefinitionId != -1 )
+        if ( buildDefinitionId != 0 )
         {
             try
             {
                 BuildDefinition buildDefinition = continuum.getBuildDefinition( buildDefinitionId );
                 goals = buildDefinition.getGoals();
                 arguments = buildDefinition.getArguments();
-                isDefault = buildDefinition.isDefaultForProject();
+                buildFile = buildDefinition.getBuildFile();
+                defaultBuildDefinition = buildDefinition.isDefaultForProject();
 
             }
             catch ( ContinuumException ce )
@@ -146,7 +147,7 @@ public class BuildDefinitionAction
 
         try
         {
-            if ( buildDefinitionId == -1 )
+            if ( buildDefinitionId == 0 )
             {
                 continuum.addBuildDefinitionToProject( projectId, getBuildDefinitionFromInput() );
             }
@@ -162,6 +163,7 @@ public class BuildDefinitionAction
         }
         catch ( ContinuumException ce )
         {
+            getLogger().info("error saving project build definition", ce);
             addActionError( "error saving project build definition" );
             return ERROR;
         }
@@ -173,7 +175,7 @@ public class BuildDefinitionAction
     {
         try
         {
-            if ( buildDefinitionId == -1 )
+            if ( buildDefinitionId == 0 )
             {
                 continuum.addBuildDefinitionToProjectGroup( projectGroupId, getBuildDefinitionFromInput() );
             }
@@ -189,6 +191,7 @@ public class BuildDefinitionAction
         }
         catch ( ContinuumException ce )
         {
+            getLogger().info("error saving group build definition", ce);
             addActionError( "error saving group build definition" );
             return ERROR;
         }
@@ -208,6 +211,7 @@ public class BuildDefinitionAction
             }
             catch ( ContinuumException ce )
             {
+                getLogger().info("error removing build definition from project", ce);
                 addActionError( "error removing build definition from project" );
                 return ERROR;
             }
@@ -230,7 +234,8 @@ public class BuildDefinitionAction
             }
             catch ( ContinuumException ce )
             {
-                addActionError( "error removing build definition from project" );
+                getLogger().info("error removing build definition from project group", ce);
+                addActionError( "error removing build definition from project group" );
                 return ERROR;
             }
         }
@@ -258,11 +263,14 @@ public class BuildDefinitionAction
 
         BuildDefinition buildDefinition = new BuildDefinition();
 
-        buildDefinition.setId( buildDefinitionId );
+        if ( buildDefinitionId != 0 )
+        {
+            buildDefinition.setId( buildDefinitionId );
+        }
         buildDefinition.setGoals( goals );
         buildDefinition.setArguments( arguments );
         buildDefinition.setBuildFile( buildFile );
-        buildDefinition.setDefaultForProject( isDefault );
+        buildDefinition.setDefaultForProject( defaultBuildDefinition );
         buildDefinition.setSchedule( schedule );
 
         return buildDefinition;
@@ -308,14 +316,14 @@ public class BuildDefinitionAction
         this.scheduleId = scheduleId;
     }
 
-    public boolean isDefault()
+    public boolean isDefaultBuildDefinition()
     {
-        return isDefault;
+        return defaultBuildDefinition;
     }
 
-    public void setDefault( boolean aDefault )
+    public void setDefaultBuildDefinition( boolean defaultBuildDefinition )
     {
-        isDefault = aDefault;
+        this.defaultBuildDefinition = defaultBuildDefinition;
     }
 
     public boolean isConfirmed()

@@ -2,7 +2,7 @@
 <%@ taglib uri="/tld/extremecomponents" prefix="ec" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="continuum" prefix="c1" %>
-<ww:i18n name="localization.Continuum">  
+<ww:i18n name="localization.Continuum">
   <ec:table items="allBuildDefinitionSummaries"
             var="buildDefinitionSummary"
             showExports="false"
@@ -21,22 +21,22 @@
       <ec:column property="actions" title="&nbsp;">
         <!-- if the from is PROJECT then render the links differently -->
         <ww:if test="${pageScope.buildDefinitionSummary.from == 'PROJECT'}">
-          <ww:url id="editUrl" action="buildDefinition" method="input">
+          <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
             <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
           </ww:url>
-          <ww:url id="removeUrl" action="removeProjectBuildDefinition">
+          <ww:url id="removeUrl" action="removeProjectBuildDefinition" namespace="/">
             <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
             <ww:param name="confirmed" value="false"/>
           </ww:url>
         </ww:if>
         <ww:else>
-          <ww:url id="editUrl" action="buildDefinition" method="input">
+          <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
             <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
           </ww:url>
-          <ww:url id="removeUrl" action="removeGroupBuildDefinition">
+          <ww:url id="removeUrl" action="removeGroupBuildDefinition" namespace="/">
             <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
             <ww:param name="confirmed" value="false"/>

@@ -95,7 +95,7 @@ public abstract class AbstractBuildDefinitionContinuumAction
             // if buildDefinition passed in is not default then we are done
             if ( buildDefinition.isDefaultForProject() )
             {
-                if ( storedDefinition != null )
+                if ( storedDefinition != null && storedDefinition.getId() != buildDefinition.getId() )  
                 {
                     storedDefinition.setDefaultForProject( false );
 
@@ -107,12 +107,14 @@ public abstract class AbstractBuildDefinitionContinuumAction
                 //make sure we are not wacking out default build definition, that would be bad
                 if ( buildDefinition.getId() == storedDefinition.getId() )
                 {
+                    getLogger().info( "processing this build definition would result in no default build definition for project group" );
                     throw new ContinuumException( "processing this build definition would result in no default build definition for project group" );
                 }
             }
         }
         catch ( ContinuumStoreException cse )
         {
+            getLogger().info( "error updating old default build definition", cse );
             throw new ContinuumException( "error updating old default build definition", cse );
         }
     }
@@ -170,7 +172,7 @@ public abstract class AbstractBuildDefinitionContinuumAction
 
                 storedDefinition.setSchedule( schedule );
 
-                store.storeBuildDefinition( buildDefinition );
+                store.storeBuildDefinition( storedDefinition );
             }
             else
             {

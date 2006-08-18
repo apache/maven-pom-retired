@@ -1,4 +1,5 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="continuum" prefix="c1" %>
 <html>
   <ww:i18n name="localization.Continuum">
@@ -10,10 +11,23 @@
         <h3><ww:text name="buildDefinition.section.title"/></h3>
 
         <div class="axial">
-          
-          <ww:form action="addProjectBuildDefinition" method="post">
+
+
+
+          <ww:if test="${projectId != 0}">
+            <ww:url id="actionUrl" action="saveProjectBuildDefinition"/>
+          </ww:if>
+          <ww:else>
+            <ww:url id="actionUrl" action="saveGroupBuildDefinition"/>
+          </ww:else>
+
+
+
+          <ww:form action="%{actionUrl}" method="post" >
+
             <ww:hidden name="buildDefinitionId"/>
             <ww:hidden name="projectId"/>
+            <ww:hidden name="projectGroupId"/>
 
             <table>
               <tbody>
@@ -37,7 +51,7 @@
                 </ww:else>
 
                 <ww:textfield label="%{getText('buildDefinition.arguments.label')}" name="arguments"/>
-                <ww:checkbox label="%{getText('buildDefinition.defaultForProject.label')}"  name="defaultForProject" value="defaultForProject" fieldValue="true"/>
+                <ww:checkbox label="%{getText('buildDefinition.defaultForProject.label')}"  name="defaultBuildDefinition" value="defaultBuildDefinition" fieldValue="true"/>
                 <ww:select label="%{getText('buildDefinition.schedule.label')}" name="scheduleId" list="schedules"/>
               </tbody>
             </table>
