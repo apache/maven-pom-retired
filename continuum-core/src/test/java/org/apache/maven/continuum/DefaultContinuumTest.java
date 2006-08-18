@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -199,5 +200,35 @@ public class DefaultContinuumTest
         {
 
         }
+    }
+
+    /**
+     * todo add another project group to test
+     * @throws Exception
+     */
+    public void testProjectGroups()
+        throws Exception
+    {
+        Continuum continuum = (Continuum) lookup( Continuum.ROLE );
+
+        String url = getTestFile( "src/test-projects/project1/pom.xml" ).toURL().toExternalForm();
+
+        ContinuumProjectBuildingResult result = continuum.addMavenTwoProject( url );
+
+        assertNotNull( result );
+
+        Collection projectGroupList = continuum.getAllProjectGroupsWithProjects();
+
+        assertTrue ( "project group missing, should be one project group for now", projectGroupList.size() == 1 );
+
+        ProjectGroup projectGroup = (ProjectGroup) projectGroupList.iterator().next();
+
+        assertNotNull( projectGroup );
+
+        continuum.removeProjectGroup( projectGroup.getId() );
+
+        projectGroupList = continuum.getAllProjectGroupsWithProjects();
+
+        assertTrue ( "remove project group failed", projectGroupList.size() == 0 );
     }
 }

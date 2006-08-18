@@ -36,7 +36,21 @@
            </table>
         </div>
 
-        <h3>Projects</h3>
+        <h3>Project Group Actions</h3>
+
+        <div class="functnbar3">
+          <!-- switch these to action urls -->
+          <ww:form action="buildProjectGroup" method="post">
+            <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
+            <ww:submit value="Build"/>
+          </ww:form>
+          <ww:form action="removeProjectGroup" method="post">
+            <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
+            <ww:submit value="Remove"/>
+          </ww:form>
+        </div>
+
+        <h3>Member Projects</h3>
 
         <ww:action name="projectSummary" executeResult="true" namespace="component">
           <ww:param name="projectGroupId" value="%{projectGroupId}"/>

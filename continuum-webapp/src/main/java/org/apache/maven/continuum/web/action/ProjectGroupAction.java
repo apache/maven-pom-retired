@@ -63,7 +63,33 @@ public class ProjectGroupAction
     }
 
     public String remove()
-    {        
+    {
+        try
+        {
+            continuum.removeProjectGroup( projectGroupId );
+        }
+        catch ( ContinuumException e )
+        {
+            addActionError( "unable to remove project group" );
+            return ERROR;
+        }
+
+        return SUCCESS;
+    }
+
+    public String build()
+    {
+        try
+        {
+            continuum.buildProjectGroup( projectGroupId );
+        }
+        catch ( ContinuumException e )
+        {
+            addActionError( "unable to initiate build of project group" );
+            getLogger().warn( "unable to initiate build of project group " + projectGroupId );
+            return ERROR;
+        }
+
         return SUCCESS;
     }
 

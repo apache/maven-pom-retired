@@ -215,6 +215,14 @@ public class DefaultContinuum
         }
     }
 
+    public void removeProjectGroup( int projectGroupId )
+        throws ContinuumException
+    {
+        ProjectGroup projectGroup = getProjectGroup( projectGroupId );
+
+        store.removeProjectGroup( projectGroup );
+    }
+
     // ----------------------------------------------------------------------
     // Projects
     // ----------------------------------------------------------------------
@@ -474,7 +482,7 @@ public class DefaultContinuum
      * @param trigger
      * @throws ContinuumException
      */
-    public void buildProjectGroup( int projectGroupId, int trigger )
+    public void buildProjectGroup( int projectGroupId )
         throws ContinuumException
     {
         Collection projectsList;
@@ -513,7 +521,7 @@ public class DefaultContinuum
                     "Project (id=" + project.getId() + " doens't have a default build definition, this should be even more impossible since store should have throw exception" );
             }
 
-            buildProject( project, buildDefId.intValue(), trigger );
+            buildProject( project, buildDefId.intValue(), ContinuumProjectState.TRIGGER_FORCED );
         }
     }
 

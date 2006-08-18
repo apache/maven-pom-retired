@@ -57,6 +57,9 @@ public interface Continuum
 
     public Collection getProjectsInGroup( int projectGroupId )
         throws ContinuumException;
+
+    public void removeProjectGroup( int projectGroupId )
+        throws ContinuumException;
     
     // ----------------------------------------------------------------------
     // Project
@@ -123,6 +126,9 @@ public interface Continuum
         throws ContinuumException;
 
     void buildProject( int projectId, int buildDefinitionId, int trigger )
+        throws ContinuumException;
+
+    public void buildProjectGroup( int projectGroupId )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------

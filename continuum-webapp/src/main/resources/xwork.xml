@@ -140,7 +140,13 @@
       <result name="success">projectGroupNotifier.jsp</result>
     </action>
 
+    <action name="buildProjectGroup" class="projectGroup" method="build">
+      <result name="success" type="chain">projectGroupView</result>
+    </action>
 
+    <action name="removeProjectGroup" class="projectGroup" method="remove">
+      <result name="success" type="chain">groupSummary</result>
+    </action>
 
     <!--
     * notifier actions
