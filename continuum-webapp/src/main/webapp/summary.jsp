@@ -25,7 +25,6 @@
             </ec:column>
             <ec:column property="version" title="summary.projectTable.version" width="13%"/>
             <ec:column property="buildNumber" title="summary.projectTable.build" width="5%" cell="org.apache.maven.continuum.web.view.BuildCell"/>
-            <ec:column property="projectGroupName" title="summary.projectTable.group" width="13%"/>
             <ec:column property="buildNowAction" title="&nbsp;" width="1%" cell="org.apache.maven.continuum.web.view.BuildNowCell" sortable="false"/>
             <ec:column property="buildHistoryAction" title="&nbsp;" width="1%" sortable="false">
               <c:choose>
@@ -48,21 +47,6 @@
                 </c:when>
                 <c:otherwise>
                   <img src="<ww:url value='/images/workingcopy_disabled.gif'/>" alt="Working Copy" title="Working Copy" border="0">
-                </c:otherwise>
-              </c:choose>
-            </ec:column>
-            <ec:column property="deleteAction" title="&nbsp;" width="1%" sortable="false">
-              <c:choose>
-                <c:when test="${pageScope.project.state == 1 || pageScope.project.state == 10 || pageScope.project.state == 2 || pageScope.project.state == 3 || pageScope.project.state == 4}">
-                  <a href='<ww:url value="/deleteProject!default.action">
-                    <ww:param name="projectId" value="${project.id}"/>
-                    <ww:param name="projectName" value="${project.name}"/>
-                  </ww:url>'>
-                    <img src="<ww:url value='/images/delete.gif'/>" alt="Delete" title="Delete" border="0">
-                  </a>
-                </c:when>
-                <c:otherwise>
-                  <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Delete" title="Delete" border="0">
                 </c:otherwise>
               </c:choose>
             </ec:column>

@@ -30,15 +30,13 @@ import java.util.Map;
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="summary"
+ * @plexus.component role="com.opensymphony.xwork.Action"
+ * role-hint="summary"
  */
 public class SummaryAction
     extends ContinuumActionSupport
-{    
-    private int projectGroupId = -1;
+{
+    private int projectGroupId;
 
     private int nbSuccesses;
 
@@ -47,26 +45,14 @@ public class SummaryAction
     private int nbErrors;
 
     private List summary;
-    
+
     public String execute()
         throws ContinuumException
     {
         Collection projects;
 
-        // original logic on this page shows all projects across project groups, however if projectGroupId
-        // is set then display only those projects in the given group.
-        if ( projectGroupId == -1 )
-        {
-            getLogger().debug("SummaryAction: serving up all projects");
-            projects = continuum.getProjects();
-        }
-        else
-        {
-            getLogger().debug("SummaryAction: serving up project id -> " + projectGroupId );
-
-            //TODO: Create a summary jpox request so code will be more simple and performance will be better
-            projects = continuum.getProjectsInGroup( projectGroupId );
-        }
+        //TODO: Create a summary jpox request so code will be more simple and performance will be better
+        projects = continuum.getProjectsInGroup( projectGroupId );
 
         Map buildResults = continuum.getLatestBuildResults();
 

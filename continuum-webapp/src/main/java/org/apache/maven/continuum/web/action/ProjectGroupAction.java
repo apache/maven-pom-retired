@@ -37,7 +37,7 @@ public class ProjectGroupAction
 
     private boolean confirmed;
 
-    public String view()
+    public String summary()
     {
         try
         {
@@ -52,18 +52,24 @@ public class ProjectGroupAction
         return SUCCESS;
     }
 
+    public String members()
+    {
+        return summary();
+    }
+
     public String buildDefinitions()
     {
-        return view();
+        return summary();
     }
 
     public String notifiers()
     {
-        return view();
+        return summary();
     }
 
     public String remove()
     {
+        //todo add confirm page like removing build definition
         try
         {
             continuum.removeProjectGroup( projectGroupId );

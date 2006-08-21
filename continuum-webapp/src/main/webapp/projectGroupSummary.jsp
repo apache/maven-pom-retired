@@ -11,7 +11,10 @@
       <div id="h3">
         <div>
           <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
-            <ww:url id="projectGroupViewUrl" action="projectGroupView">
+            <ww:url id="projectGroupSummaryUrl" action="projectGroupSummary">
+              <ww:param name="projectGroupId" value="projectGroupId"/>
+            </ww:url>
+            <ww:url id="projectGroupMembersUrl" action="projectGroupMembers">
               <ww:param name="projectGroupId" value="projectGroupId"/>
             </ww:url>
             <ww:url id="projectGroupBuildDefinitionUrl" action="projectGroupBuildDefinition">
@@ -21,7 +24,8 @@
               <ww:param name="projectGroupId" value="projectGroupId"/>
             </ww:url>
 
-            <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">Info</b>
+            <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">Summary</b>
+            <ww:a cssStyle="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="%{projectGroupMembersUrl}">Members</ww:a>
             <ww:a cssStyle="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="%{projectGroupBuildDefinitionUrl}">Build Definitions</ww:a>
             <ww:a cssStyle="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="%{projectGroupNotifierUrl}">Notifiers</ww:a>
           </p>
@@ -39,18 +43,17 @@
         <h3>Project Group Actions</h3>
 
         <div class="functnbar3">
-          <!-- switch these to action urls -->
-          <ww:form action="buildProjectGroup" method="post">
-            <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
-            <ww:submit value="Build"/>
-          </ww:form>
-          <ww:form action="removeProjectGroup" method="post">
-            <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
-            <ww:submit value="Remove"/>
-          </ww:form>
+          <ww:url id="buildProjectGroupUrl" action="buildProjectGroup">
+            <ww:param name="projectGroupId" value="projectGroupId"/>
+          </ww:url>
+          <ww:url id="removeProjectGroupUrl" action="removeProjectGroup">
+            <ww:param name="projectGroupId" value="projectGroupId"/>
+            <ww:param name="confirmed" value="false"/>
+          </ww:url>
+          <ww:a href="%{buildProjectGroupUrl}">Build</ww:a>&nbsp;<ww:a href="%{removeProjectGroupUrl}">Remove</ww:a>
         </div>
 
-        <h3>Member Projects</h3>
+        <h3>Projects</h3>
 
         <ww:action name="projectSummary" executeResult="true" namespace="component">
           <ww:param name="projectGroupId" value="%{projectGroupId}"/>
