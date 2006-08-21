@@ -153,6 +153,34 @@
           <type>String</type>
         </field>
         <field>
+          <name>numProjects</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>the number of projects in the project group</description>
+          <type>int</type>
+        </field>
+        <field>
+          <name>projectType</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>the type of project, maven2/maven1/ant/shell</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>statusMessage</name>
+          <version>1.0.0</version>
+          <required>false</required>
+          <description>a status message like, (building project X)</description>
+          <type>String</type>
+        </field>
+        <field>
+         <name>nextScheduledBuild</name>
+          <version>1.0.0</version>
+          <required>false</required>
+          <description>timestamp for the next scheduled build</description>
+          <type>String</type>
+        </field>
+        <field>
           <name>projects</name>
           <version>1.0.0</version>
           <description></description>

@@ -62,6 +62,8 @@ public class GroupSummaryAction
             //TODO: Create a summary jpox request so code will be more simple and performance will be better
             Collection projects = projectGroup.getProjects();
 
+            groupModel.setNumProjects( projects.size() );
+
             Map buildResults = continuum.getLatestBuildResults();
 
             Map buildResultsInSuccess = continuum.getBuildResultsInSuccess();
@@ -74,6 +76,11 @@ public class GroupSummaryAction
             for ( Iterator i = projects.iterator(); i.hasNext(); )
             {
                 Project project = (Project) i.next();
+
+                if ( groupModel.getProjectType() == null )
+                {
+                    groupModel.setProjectType( project.getExecutorId() );
+                }
 
                 ProjectSummary model = new ProjectSummary();
 
@@ -136,6 +143,10 @@ public class GroupSummaryAction
                 getLogger().debug( "GroupSummaryAction: adding model to group " + model.getName() );
                 projectModels.add( model );
             }
+
+            //todo wire in the next scheduled build for the project group and a meaningful status message
+            groupModel.setNextScheduledBuild( "unknown" );
+            groupModel.setStatusMessage( "none" );
 
             groupModel.setNumSuccesses( numSuccesses );
             groupModel.setNumFailures( numFailures );

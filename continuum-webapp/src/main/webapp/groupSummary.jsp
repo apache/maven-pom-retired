@@ -36,11 +36,11 @@
         </tr>
         <tr>
           <td>Project Type:</td>
-          <td><- Maven2/Maven1/Ant/Shell -></td>
+          <td>${group.projectType}</td>
         </tr>
         <tr>
           <td>Number of Projects:</td>
-          <td><- 15 -></td>
+          <td>${group.numProjects}</td>
         </tr>
         <tr>
           <td>Build Status:</td>
@@ -66,11 +66,11 @@
         </tr>
         <tr>
           <td>Next Scheduled Build:</td>
-          <td><- timestamp -></td>
+          <td>${group.nextScheduledBuild}</td>
         </tr>
         <tr>
           <td>Status Message:</td>
-          <td><- currently building Module X -></td>
+          <td>${group.statusMessage}</td>
         </tr>
       </table>
       <hr/>
