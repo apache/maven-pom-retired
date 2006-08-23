@@ -192,7 +192,7 @@
       <email>vsiveton@apache.org</email>
       <organization>ASF</organization>
       <roles>
-        <role>Committer</role>
+        <role>PMC Member</role>
       </roles>
       <timezone>-5</timezone>
     </developer>
@@ -212,7 +212,7 @@
       <email>dennisl@apache.org</email>
       <organization>ASF</organization>
       <roles>
-        <role>Committer</role>
+        <role>PMC Member</role>
       </roles>
       <timezone>+1</timezone>
     </developer>
@@ -296,5 +296,10 @@
     </plugins>
   </reporting>
 
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/pom/maven</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/pom/maven</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/pom/maven</url>
+  </scm>
 </project>
 
