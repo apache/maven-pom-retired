@@ -48,10 +48,6 @@
     <listener-class>org.codehaus.plexus.xwork.PlexusLifecycleListener</listener-class>
   </listener>
 
-  <welcome-file-list>
-    <welcome-file>Index.action</welcome-file>
-  </welcome-file-list>
-
   <taglib>
     <taglib-uri>continuum</taglib-uri>
     <taglib-location>/WEB-INF/continuum.tld</taglib-location>
