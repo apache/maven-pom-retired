@@ -1,4 +1,7 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib uri="/tld/extremecomponents" prefix="ec" %>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
+<%@ taglib uri="continuum" prefix="c1" %>
 <ww:i18n name="localization.Continuum">
 <div id="navcolum">
   <div id="projectmenu" class="toolgroup">
@@ -29,23 +32,31 @@
       </div>
     </div>
   </div>
+
   <div id="projectmenu" class="toolgroup">
     <div class="label"><ww:text name="menu.administration"/></div>
     <div>
-      <div class="body">
-        <a href="<ww:url value="schedules.action"/>"><ww:text name="menu.administration.schedules"/></a>
-      </div>
-      <div class="body">
-        <a href="<ww:url value="configuration!default.action"/>"><ww:text name="menu.administration.configuration"/></a>
-      </div>
-      <div class="body">
-        <ww:url id="userManagementUrl" action="users"/>
-        <ww:a href="%{userManagementUrl}">Users</ww:a>
-      </div>
-      <div class="body">
-        <ww:url id="userGroupManagementUrl" action="userGroups"/>
-        <ww:a href="%{userGroupManagementUrl}">User Groups</ww:a>
-      </div>
+      <c1:ifAuthorized permission="manageSchedule">
+        <div class="body">
+          <a href="<ww:url value="schedules.action"/>"><ww:text name="menu.administration.schedules"/></a>
+        </div>
+      </c1:ifAuthorized>
+      <c1:ifAuthorized permission="manageConfiguration">
+        <div class="body">
+          <a href="<ww:url value="configuration!default.action"/>"><ww:text
+              name="menu.administration.configuration"/></a>
+        </div>
+      </c1:ifAuthorized>
+      <c1:ifAuthorized permission="manageUsers">
+        <div class="body">
+          <ww:url id="userManagementUrl" action="users"/>
+          <ww:a href="%{userManagementUrl}">Users</ww:a>
+        </div>
+        <div class="body">
+          <ww:url id="userGroupManagementUrl" action="userGroups"/>
+          <ww:a href="%{userGroupManagementUrl}">User Groups</ww:a>
+        </div>
+      </c1:ifAuthorized>
     </div>
   </div>
   <div id="projectmenu" class="toolgroup">
