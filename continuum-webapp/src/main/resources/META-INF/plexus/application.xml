@@ -358,7 +358,7 @@
           </level>
           <level>
             <hierarchy>com.opensymphony.webwork</hierarchy>
-            <level>INFO</level>
+            <level>DEBUG</level>
           </level>
           <level>
             <hierarchy>org.extremecomponents</hierarchy>

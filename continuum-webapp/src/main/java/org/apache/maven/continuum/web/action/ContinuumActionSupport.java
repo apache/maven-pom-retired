@@ -16,11 +16,10 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import com.opensymphony.xwork.Preparable;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.initialization.ContinuumInitializationException;
 import org.codehaus.plexus.xwork.action.PlexusActionSupport;
-
-import com.opensymphony.xwork.Preparable;
 
 /**
  * ContinuumActionSupport
@@ -32,17 +31,18 @@ public class ContinuumActionSupport
     extends PlexusActionSupport
     implements Preparable
 {
-
     /**
      * @plexus.requirement
      */
     protected Continuum continuum;
-    
+
     public void prepare()
         throws Exception
     {
-        getLogger().info("checking the continuum configuration");
         
+
+        getLogger().info("checking the continuum configuration");
+
         if ( !continuum.getConfiguration().isInitialized() )
         {
             throw new ContinuumInitializationException( "continuum not initialized" );

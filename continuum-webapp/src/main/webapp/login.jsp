@@ -10,6 +10,8 @@
         <h3><ww:text name="login.section.title"/></h3>
         <div class="axial">
         <ww:form action="login" method="post">
+          <ww:hidden name="login" value="true"/>
+          <ww:actionerror/>
           <table>
             <tbody>
               <ww:textfield label="%{getText('login.username')}" name="username" required="true"/>

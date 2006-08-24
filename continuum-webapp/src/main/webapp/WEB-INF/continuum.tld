@@ -107,4 +107,15 @@
     </attribute>
   </tag>
 
+  <tag>
+    <name>ifAuthorized</name>
+    <tagclass>org.apache.maven.continuum.web.view.jsp.ui.IfAuthorizedTag</tagclass>
+    <bodycontent>JSP</bodycontent>
+    <attribute>
+      <name>permission</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>
+
 </taglib>

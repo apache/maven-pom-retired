@@ -6,8 +6,15 @@
 
     <interceptors>
       <interceptor name="exception-logging" class="exceptionLogging"/>
+      <interceptor name="user" class="userInterceptor"/>
+      <interceptor name="continuum" class="continuumInterceptor"/>
       <interceptor-stack name="defaultContinuumStack">
+        <interceptor-ref name="user"/>
+        <interceptor-ref name="continuum"/>
         <interceptor-ref name="exception-logging"/>
+        <!--<interceptor-ref name="defaultStack"/>-->
+
+
         <interceptor-ref name="prepare"/>
         <interceptor-ref name="servlet-config"/>
         <interceptor-ref name="chain"/>
@@ -17,7 +24,7 @@
         <interceptor-ref name="static-params"/>
         <interceptor-ref name="params"/>
         <!-- interceptor-ref name="conversionError"/ -->
-        <interceptor-ref name="validation"/>
+       <interceptor-ref name="validation"/>
         <interceptor-ref name="workflow"/>
       </interceptor-stack>
     </interceptors>
@@ -48,10 +55,6 @@
       <result name="success">/components/companyLogo.jsp</result>
     </action>
 
-    <action name="login" class="login">
-      <result name="input">login.jsp</result>
-      <result name="success" type="redirect">summary.action</result>
-    </action>
 
     <action name="summary" class="summary">
       <result name="success">summary.jsp</result>
@@ -97,6 +100,51 @@
     <action name="projectSave" class="projectEdit">
       <result name="input">projectEdit.jsp</result>
       <result name="success" type="chain">projectView</result>
+    </action>
+
+    <!--
+    * Session Influencing actions
+    -->
+    <action name="login" class="session" method="login">
+      <result name="input">login.jsp</result>
+      <result name="error">login.jsp</result>
+      <result name="success" type="redirect">groupSummary.action</result>
+    </action>
+
+    <action name="logout" class="session" method="logout">
+      <result name="success" type="redirect">groupSummary.action</result>
+    </action>
+
+
+    <!--
+    * user management actions
+    -->
+    <action name="users" class="userManagement" method="summary">
+      <result name="success">users.jsp</result>
+    </action>
+
+    <action name="user" class="userManagement" method="input">
+      <result name="success">user.jsp</result>
+    </action>
+
+    <action name="saveUser" class="userManagement" method="save">
+      <result name="success" type="redirect">users</result>
+    </action>
+
+
+    <!--
+    * user group management actions
+    -->
+    <action name="userGroups" class="userGroupManagement" method="summary">
+      <result name="success">userGroups.jsp</result>
+    </action>
+
+    <action name="userGroup" class="userGroupManagement" method="input">
+      <result name="success">userGroup.jsp</result>
+    </action>
+
+    <action name="saveUserGroup" class="userGroupManagement" method="save">
+      <result name="success" type="redirect">userGroups</result>
     </action>
 
     <!--

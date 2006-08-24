@@ -26,6 +26,9 @@
             <c1:data label="%{getText('projectView.project.scmUrl')}" name="project.scmUrl"/>
             <c1:data label="%{getText('projectView.project.group')}" name="project.projectGroup.name"/>
           </table>
+          <!--
+            wrap this in security tag
+          -->
           <div class="functnbar3">
             <table>
               <tbody>

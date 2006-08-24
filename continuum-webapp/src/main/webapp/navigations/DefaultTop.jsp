@@ -27,7 +27,15 @@
   </div>
 
   <div>
-      <b><font color="red">TODO</font></b>Welcome, <b>Guest</b> - <a href="<ww:url value="login!default.action"/>">Login</a>
+    <ww:url id="loginUrl" action="login"/>
+    <ww:url id="logoutUrl" action="logout"/>
+    <ww:if test="${sessionScope.loggedIn != true}">
+      Welcome, <b>${sessionScope.user.username}</b> - <ww:a href="%{loginUrl}">Login</ww:a>
+    </ww:if>
+    <ww:else>
+      Welcome, <b>${sessionScope.user.username}</b> - <ww:a href="%{logoutUrl}">Logout</ww:a>
+    </ww:else>
+
   </div>
 </div>
 </ww:i18n>

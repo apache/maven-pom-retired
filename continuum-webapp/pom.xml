@@ -56,14 +56,24 @@
         <version>1.0-alpha-8</version>
         <executions>
           <execution>
-            <id>project summary model</id>
+            <id>web summary model classes</id>
             <configuration>
-              <model>src/main/mdo/view-models.xml</model>
+              <model>src/main/mdo/view-models.mdo</model>
               <version>1.0.0</version>
             </configuration>
             <goals>
               <goal>java</goal>             
             </goals>            
+          </execution>
+          <execution>
+            <id>session model classes</id>
+            <configuration>
+              <model>src/main/mdo/session-models.mdo</model>
+              <version>1.0.0</version>
+            </configuration>
+            <goals>
+              <goal>java</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>

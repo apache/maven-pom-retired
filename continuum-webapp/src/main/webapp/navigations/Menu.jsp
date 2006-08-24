@@ -38,6 +38,14 @@
       <div class="body">
         <a href="<ww:url value="configuration!default.action"/>"><ww:text name="menu.administration.configuration"/></a>
       </div>
+      <div class="body">
+        <ww:url id="userManagementUrl" action="users"/>
+        <ww:a href="%{userManagementUrl}">Users</ww:a>
+      </div>
+      <div class="body">
+        <ww:url id="userGroupManagementUrl" action="userGroups"/>
+        <ww:a href="%{userGroupManagementUrl}">User Groups</ww:a>
+      </div>
     </div>
   </div>
   <div id="projectmenu" class="toolgroup">

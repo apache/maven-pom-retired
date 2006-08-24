@@ -1,0 +1,78 @@
+<model>
+  <id>continuum-session-models</id>
+  <name>ContinuumSessionModels</name>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.apache.maven.continuum.web.model</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true">
+      <name>Session</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>sessionUsers</name>
+          <version>1.0.0</version>
+          <description></description>
+          <required>true</required>
+          <association>
+            <type>SessionUser</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>SessionUser</name>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>id</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>id of the user</description>
+          <type>int</type>
+        </field>
+        <field>
+          <name>username</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>username</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>fullName</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>full name of the user</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>email</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>email of the user</description>
+          <type>String</type>
+        </field>
+        <field>
+          <name>userGroupId</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>user group the user is a member of</description>
+          <type>int</type>
+        </field>
+        <field>
+          <name>loggedIn</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>boolean for the user is logged in or not</description>
+          <type>boolean</type>
+          <required>true</required>
+          <defaultValue>false</defaultValue>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

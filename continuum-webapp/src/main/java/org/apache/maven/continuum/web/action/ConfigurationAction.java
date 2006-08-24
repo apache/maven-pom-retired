@@ -18,11 +18,16 @@ package org.apache.maven.continuum.web.action;
 
 import com.opensymphony.xwork.Preparable;
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
+import org.apache.maven.continuum.model.system.ContinuumUser;
+import org.apache.maven.continuum.model.system.UserGroup;
+import org.apache.maven.continuum.security.ContinuumSecurity;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import java.io.File;
+import java.util.Collections;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -41,7 +46,22 @@ public class ConfigurationAction
      */
     private Continuum continuum;
 
+    /**
+     * @plexus.requirement
+     */
+    private ContinuumStore store;
+
     private boolean guestAccountEnabled;
+
+    private String username;
+
+    private String password;
+
+    private String passwordTwo;
+
+    private String fullName;
+
+    private String email;
 
     private String workingDirectory;
 
@@ -73,9 +93,34 @@ public class ConfigurationAction
     }
 
     public String execute()
-        throws ConfigurationStoringException
+        throws ConfigurationStoringException, ContinuumStoreException
     {
-        continuum.getConfiguration().setGuestAccountEnabled( guestAccountEnabled );
+        //todo switch this to validation
+
+        ContinuumUser adminUser = new ContinuumUser();
+
+        adminUser.setUsername( username );
+        adminUser.setPassword( password );
+        adminUser.setEmail( email );
+        adminUser.setFullName( fullName );
+        adminUser.setGroup( store.getUserGroup( ContinuumSecurity.ADMIN_GROUP_NAME ) );
+
+        store.addUser( adminUser );
+
+        if ( guestAccountEnabled )
+        {
+            continuum.getConfiguration().setGuestAccountEnabled( guestAccountEnabled );
+        }
+        else
+        {
+            continuum.getConfiguration().setGuestAccountEnabled( false );
+
+            UserGroup guestGroup = store.getUserGroup( ContinuumSecurity.GUEST_GROUP_NAME );
+
+            guestGroup.setPermissions( Collections.EMPTY_LIST );
+
+            store.updateUserGroup( guestGroup );
+        }
 
         continuum.getConfiguration().setWorkingDirectory( new File( workingDirectory ) );
 
@@ -90,7 +135,7 @@ public class ConfigurationAction
         continuum.getConfiguration().setCompanyUrl( companyUrl );
 
         continuum.getConfiguration().setInitialized( true );
-        continuum.getConfiguration().store();            
+        continuum.getConfiguration().store();
 
         return SUCCESS;
     }
@@ -115,6 +160,56 @@ public class ConfigurationAction
     public void setGuestAccountEnabled( boolean guestAccountEnabled )
     {
         this.guestAccountEnabled = guestAccountEnabled;
+    }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public void setUsername( String username )
+    {
+        this.username = username;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword( String password )
+    {
+        this.password = password;
+    }
+
+    public String getPasswordTwo()
+    {
+        return passwordTwo;
+    }
+
+    public void setPasswordTwo( String passwordTwo )
+    {
+        this.passwordTwo = passwordTwo;
+    }
+
+    public String getFullName()
+    {
+        return fullName;
+    }
+
+    public void setFullName( String fullName )
+    {
+        this.fullName = fullName;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail( String email )
+    {
+        this.email = email;
     }
 
     public String getWorkingDirectory()
