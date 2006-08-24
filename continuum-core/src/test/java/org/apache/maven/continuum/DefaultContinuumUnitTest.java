@@ -25,7 +25,7 @@ import org.jmock.MockObjectTestCase;
 
 /**
  * Test for {@link DefaultContinuum}.
- * 
+ *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
  */
@@ -42,7 +42,7 @@ public class DefaultContinuumUnitTest
 
         Mock actionManagerMock = new Mock( ActionManager.class );
 
-        actionManagerMock.expects( once() ).will( returnValue( (Action) actionMock.proxy() ) );
+        actionManagerMock.expects( once() ).will( returnValue( actionMock.proxy() ) );
 
         continuum.setActionManager( (ActionManager) actionManagerMock.proxy() );
 

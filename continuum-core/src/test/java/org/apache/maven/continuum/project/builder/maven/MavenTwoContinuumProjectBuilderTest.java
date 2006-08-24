@@ -18,6 +18,7 @@ package org.apache.maven.continuum.project.builder.maven;
 
 import org.apache.maven.continuum.AbstractContinuumTest;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectDependency;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
@@ -30,6 +31,7 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,8 +44,8 @@ public class MavenTwoContinuumProjectBuilderTest
     public void testGetEmailAddressWhenTypeIsSetToEmail()
         throws Exception
     {
-        ContinuumProjectBuilder projectBuilder =
-            (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE, MavenTwoContinuumProjectBuilder.ID );
+        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE,
+                                                                                   MavenTwoContinuumProjectBuilder.ID );
 
         File pom = getTestFile( "src/test/repository/maven-builder-helper-1.xml" );
 
@@ -73,8 +75,8 @@ public class MavenTwoContinuumProjectBuilderTest
     public void testGetEmailAddressWhenTypeIsntSet()
         throws Exception
     {
-        ContinuumProjectBuilder projectBuilder =
-            (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE, MavenTwoContinuumProjectBuilder.ID );
+        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE,
+                                                                                   MavenTwoContinuumProjectBuilder.ID );
 
         File pom = getTestFile( "src/test/repository/maven-builder-helper-2.xml" );
 
@@ -104,8 +106,8 @@ public class MavenTwoContinuumProjectBuilderTest
     public void testGetScmUrlWithParams()
         throws Exception
     {
-        ContinuumProjectBuilder projectBuilder =
-            (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE, MavenTwoContinuumProjectBuilder.ID );
+        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE,
+                                                                                   MavenTwoContinuumProjectBuilder.ID );
 
         File pom = getTestFile( "src/test/repository/maven-builder-helper-3.xml" );
 
@@ -143,19 +145,26 @@ public class MavenTwoContinuumProjectBuilderTest
     public void testCreateProjectsWithModules()
         throws Exception
     {
-        ContinuumProjectBuilder projectBuilder =
-            (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE, MavenTwoContinuumProjectBuilder.ID );
+        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE,
+                                                                                   MavenTwoContinuumProjectBuilder.ID );
 
-        String url = getTestFile( "src/test/resources/projects/continuum/pom.xml" ).toURL().toExternalForm();
+        URL url = getClass().getClassLoader().getResource( "projects/continuum/pom.xml" );
 
         // Eat System.out
         PrintStream ps = System.out;
 
-        System.setOut( new PrintStream( new ByteArrayOutputStream() ) );
+        ContinuumProjectBuildingResult result;
 
-        ContinuumProjectBuildingResult result = projectBuilder.buildProjectsFromMetadata( new URL( url ), null, null );
+        try
+        {
+            System.setOut( new PrintStream( new ByteArrayOutputStream() ) );
 
-        System.setOut( ps );
+            result = projectBuilder.buildProjectsFromMetadata( url, null, null );
+        }
+        finally
+        {
+            System.setOut( ps );
+        }
 
         assertNotNull( result );
 
@@ -185,7 +194,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( "projectGroup.description", "Continuum Project Description", projectGroup.getDescription() );
 
-//        assertEquals( "projectGroup.url", "http://cvs.continuum.codehaus.org/", projectGroup.getUrl() );
+        // assertEquals( "projectGroup.url", "http://cvs.continuum.codehaus.org/", projectGroup.getUrl() );
 
         // ----------------------------------------------------------------------
         // Assert the projects built
@@ -193,7 +202,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertNotNull( result.getProjects() );
 
-        assertEquals( 6, result.getProjects().size() );
+        assertEquals( 9, result.getProjects().size() );
 
         Map projects = new HashMap();
 
@@ -211,6 +220,45 @@ public class MavenTwoContinuumProjectBuilderTest
         assertMavenTwoProject( "Continuum Plexus Application", projects );
         assertMavenTwoProject( "Continuum Web", projects );
         assertMavenTwoProject( "Continuum XMLRPC Interface", projects );
+        assertMavenTwoProject( "Continuum Notifiers", projects );
+        assertMavenTwoProject( "Continuum IRC Notifier", projects );
+        assertMavenTwoProject( "Continuum Jabber Notifier", projects );
+
+        assertEquals( "continuum-parent-notifiers",
+                      ( (Project) projects.get( "Continuum IRC Notifier" ) ).getParent().getArtifactId() );
+
+        assertEquals( "continuum-parent-notifiers",
+                      ( (Project) projects.get( "Continuum Jabber Notifier" ) ).getParent().getArtifactId() );
+
+        assertDependency( "Continuum Model", "Continuum Web", projects );
+
+    }
+
+    private void assertDependency( String dep, String proj, Map projects )
+    {
+        Project p = (Project) projects.get( proj );
+
+        Project dependency = (Project) projects.get( dep );
+
+        assertNotNull( p );
+
+        assertNotNull( dependency );
+
+        assertNotNull( p.getDependencies() );
+
+        for ( Object d : p.getDependencies() )
+        {
+            ProjectDependency pd = (ProjectDependency) d;
+
+            if ( pd.getArtifactId().equals( dependency.getArtifactId() )
+                && pd.getGroupId().equals( dependency.getGroupId() )
+                && pd.getVersion().equals( dependency.getVersion() ) )
+            {
+                return;
+            }
+        }
+
+        assertFalse( true );
     }
 
     // ----------------------------------------------------------------------

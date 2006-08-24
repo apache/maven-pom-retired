@@ -1,6 +1,3 @@
-/*
- * Copyright (c) 2005 Your Corporation. All Rights Reserved.
- */
 package org.apache.maven.continuum.notification.mail;
 
 import junit.framework.TestCase;
