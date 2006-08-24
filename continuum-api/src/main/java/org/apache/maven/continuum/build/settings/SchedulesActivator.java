@@ -21,7 +21,7 @@ import org.apache.maven.continuum.model.project.Schedule;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id:$
+ * @version $Id$
  */
 public interface SchedulesActivator
 {
