@@ -1,4 +1,9 @@
 package org.apache.maven.continuum.web.action;
+
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.system.UserGroup;
+
+import java.util.List;
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -34,30 +39,88 @@ public class UserGroupManagementAction
 
     private String description;
 
+    private List userGroups;
 
-
-    private String display()
+    public String summary()
     {
-       return SUCCESS;
-    }
-
-    private String save()
-    {
-        if ( userGroupId == 0 )
+        try
         {
-            // add user group
+            userGroups = continuum.getUserGroups();
         }
-        else
+        catch ( ContinuumException e )
         {
-            // edit user group
+            addActionError( e.getMessage() );
+            return ERROR;
         }
 
         return SUCCESS;
     }
 
-    private String remove()
+    public String input()
     {
-        // remove user
+        if ( userGroupId != 0 )
+        {
+            try
+            {
+                UserGroup userGroup = continuum.getUserGroup( userGroupId );
+
+                name = userGroup.getName();
+                description = userGroup.getDescription();
+
+            }
+            catch ( ContinuumException e )
+            {
+                addActionError( e.getMessage() );
+                return ERROR;
+            }
+        }
+       return SUCCESS;
+    }
+
+    public String save()
+    {
+        if ( userGroupId == 0 )
+        {
+            UserGroup userGroup = new UserGroup();
+
+            userGroup.setName( name );
+            userGroup.setDescription( description );
+
+            continuum.addUserGroup( userGroup );
+        }
+        else
+        {
+            try
+            {
+                UserGroup userGroup = continuum.getUserGroup( userGroupId );
+
+                userGroup.setName( name );
+                userGroup.setDescription( description );
+
+                continuum.updateUserGroup( userGroup );
+            }
+            catch ( ContinuumException e )
+            {
+                addActionError( e.getMessage() );
+                return ERROR;
+            }
+        }
+
+        return SUCCESS;
+    }
+
+    public String remove()
+    {
+        try
+        {
+            continuum.removeUserGroup( userGroupId );
+        }
+        catch ( ContinuumException e )
+        {
+            addActionError( e.getMessage() );
+            return ERROR;
+        }
+
         return SUCCESS;
     }
 
@@ -92,4 +155,13 @@ public class UserGroupManagementAction
         this.name = name;
     }
 
+    public List getUserGroups()
+    {
+        return userGroups;
+    }
+
+    public void setUserGroups( List userGroups )
+    {
+        this.userGroups = userGroups;
+    }
 }

@@ -26,13 +26,15 @@
             <ec:column property="email" title="Email"/>
             <ec:column property="userGroupId" title="Group"/>
             <ec:column property="actions" title="&nbsp;">
-                <ww:url id="editUrl" action="user" method="input">
+                <ww:url id="editUrl" action="user">
+                  <ww:param name="userId" value="${pageScope.user.accountId}"/>
+                </ww:url>
+                <ww:url id="removeUrl" action="removeUser">
                   <ww:param name="userId" value="${pageScope.user.accountId}"/>
                 </ww:url>
                 <ww:a href="%{editUrl}">Edit</ww:a>
                 &nbsp;
-
-                <ww:text name="delete"/>
+                <ww:a href="%{removeUrl}">Delete</ww:a>
             </ec:column>
           </ec:row>
         </ec:table>

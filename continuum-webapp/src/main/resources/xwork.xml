@@ -108,11 +108,11 @@
     <action name="login" class="session" method="login">
       <result name="input">login.jsp</result>
       <result name="error">login.jsp</result>
-      <result name="success" type="redirect">groupSummary.action</result>
+      <result name="success" type="chain">groupSummary</result>
     </action>
 
     <action name="logout" class="session" method="logout">
-      <result name="success" type="redirect">groupSummary.action</result>
+      <result name="success" type="chain">groupSummary</result>
     </action>
 
 
@@ -128,9 +128,12 @@
     </action>
 
     <action name="saveUser" class="userManagement" method="save">
-      <result name="success" type="redirect">users</result>
+      <result name="success" type="chain">users</result>
     </action>
 
+    <action name="removeUser" class="userManagement" method="remove">
+      <result name="success" type="chain">users</result>
+    </action>
 
     <!--
     * user group management actions
@@ -144,7 +147,11 @@
     </action>
 
     <action name="saveUserGroup" class="userGroupManagement" method="save">
-      <result name="success" type="redirect">userGroups</result>
+      <result name="success" type="chain">userGroups</result>
+    </action>
+
+    <action name="removeUserGroup" class="userGroupManagement" method="remove">
+      <result name="success" type="chain">userGroups</result>
     </action>
 
     <!--
