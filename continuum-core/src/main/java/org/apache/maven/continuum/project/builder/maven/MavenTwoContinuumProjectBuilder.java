@@ -93,15 +93,16 @@ public class MavenTwoContinuumProjectBuilder
     {
         MavenProject mavenProject;
 
-        try {
+        try
+        {
             mavenProject = builderHelper.getMavenProject( result, createMetadataFile( url, username, password ) );
-            
-            if( (result != null) && result.hasErrors())
+
+            if ( result.hasErrors() )
             {
                 return;
             }
         }
-        catch (MalformedURLException e)
+        catch ( MalformedURLException e )
         {
             getLogger().debug( "Error adding project: Malformed URL " + url, e );
             result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL );
@@ -118,7 +119,8 @@ public class MavenTwoContinuumProjectBuilder
         {
             ProjectGroup projectGroup = buildProjectGroup( mavenProject, result );
 
-            // project groups have the top lvl build definition which is the default build defintion for the sub projects
+            // project groups have the top lvl build definition which is the default build defintion for the sub
+            // projects
             if ( projectGroup != null )
             {
                 BuildDefinition bd = new BuildDefinition();
@@ -145,7 +147,7 @@ public class MavenTwoContinuumProjectBuilder
                 // jdo complains that Collections.singletonList(bd) is a second class object and fails.
                 ArrayList arrayList = new ArrayList();
 
-                arrayList.add(bd);
+                arrayList.add( bd );
 
                 projectGroup.setBuildDefinitions( arrayList );
 
@@ -155,14 +157,7 @@ public class MavenTwoContinuumProjectBuilder
 
         if ( !excludedPackagingTypes.contains( mavenProject.getPackaging() ) )
         {
-            String defaultGoal = "clean install";
-
-            if ( mavenProject.getBuild() != null && mavenProject.getBuild().getDefaultGoal() != null )
-            {
-                defaultGoal = mavenProject.getBuild().getDefaultGoal();
-            }
-
-            Project continuumProject = new Project();            
+            Project continuumProject = new Project();
 
             builderHelper.mapMavenProjectToContinuumProject( result, mavenProject, continuumProject );
 
