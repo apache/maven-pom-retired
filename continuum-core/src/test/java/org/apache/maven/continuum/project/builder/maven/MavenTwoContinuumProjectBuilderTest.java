@@ -246,9 +246,9 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertNotNull( p.getDependencies() );
 
-        for ( Object d : p.getDependencies() )
+        for ( Iterator i = p.getDependencies().iterator(); i.hasNext(); )
         {
-            ProjectDependency pd = (ProjectDependency) d;
+            ProjectDependency pd = (ProjectDependency) i.next();
 
             if ( pd.getArtifactId().equals( dependency.getArtifactId() )
                 && pd.getGroupId().equals( dependency.getGroupId() )
