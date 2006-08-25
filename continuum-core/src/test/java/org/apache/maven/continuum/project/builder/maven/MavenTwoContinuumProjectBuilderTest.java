@@ -272,7 +272,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( name, project.getName() );
 
-        String scmUrl = "scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk";
+        String scmUrl = "scm:svn:http://svn.apache.org/repos/asf/maven/continuum/tags";
 
         assertTrue( project.getScmUrl().startsWith( scmUrl ) );
     }

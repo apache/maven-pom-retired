@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.continuum</groupId>
   <artifactId>continuum-parent</artifactId>
-  <version>1.0-alpha-2-SNAPSHOT</version>
+  <version>1.0.3</version>
   <packaging>pom</packaging>
   <name>Continuum Parent Project</name>
   <description>Continuum Project Description</description>
@@ -73,8 +73,8 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk</connection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/trunk</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-1.0.3</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/tags/continuum-1.0.3</url>
   </scm>
   <organization>
     <name>Apache</name>

@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.apache.maven.continuum</groupId>
     <artifactId>continuum-parent</artifactId>
-    <version>1.0-alpha-2-SNAPSHOT</version>
+    <version>1.0.3</version>
   </parent>
   <artifactId>continuum-plexus-application</artifactId>
   <name>Continuum Plexus Application</name>
@@ -11,12 +11,12 @@
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-web</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-xmlrpc</artifactId>
-      <version>1.0-alpha-2-SNAPSHOT</version>
+      <version>1.0.3</version>
     </dependency>
     <!-- Version overrides -->
     <dependency>
