@@ -66,26 +66,26 @@
 
     <action name="addMavenTwoProject" class="addMavenTwoProject">
       <result name="input">addMavenTwoProject.jsp</result>
-      <result name="success" type="redirect">summary.action</result>
+      <result name="success" type="chain">groupSummary</result>
     </action>
 
     <action name="addMavenOneProject" class="addMavenOneProject">
       <result name="input">addMavenOneProject.jsp</result>
-      <result name="success" type="redirect">summary.action</result>
+      <result name="success" type="chain">groupSummary</result>
     </action>
 
     <action name="addProject" class="addProject">
       <result name="input">addProject.jsp</result>
-      <result name="success" type="redirect">summary.action</result>
+      <result name="success" type="chain">groupSummary</result>
     </action>
 
     <action name="deleteProject" class="deleteProject">
       <result name="delete">deleteProject.jsp</result>
-      <result name="success" type="redirect">summary.action</result>
+      <result name="success" type="chain">groupSummary</result>
     </action>
 
     <action name="buildProject" class="buildProject">
-      <result name="success" type="redirect">summary.action</result>
+      <result name="success" type="chain">groupSummary</result>
     </action>
 
     <action name="projectView" class="projectView">
