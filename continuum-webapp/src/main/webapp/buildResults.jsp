@@ -39,11 +39,12 @@
             <ec:column property="endTime" title="buildResults.endTime" cell="date"/>
             <ec:column property="state" title="buildResults.state" cell="org.apache.maven.continuum.web.view.buildresults.StateCell"/>
             <ec:column property="actions" title="&nbsp;">
-              <a href='<ww:url action="buildResult">
+              <ww:url id="buildResultUrl" action="buildResult">
                 <ww:param name="projectId" value="${projectId}"/>
-                <ww:param name="projectName" value="${projectName}"/>
+                <ww:param name="projectName" value="%{projectName}"/>
                 <ww:param name="buildId" value="${buildResult.id}"/>
-              </ww:url>'>Result</a>
+              </ww:url>
+              <ww:a href="%{buildResultUrl}">Result</ww:a>
             </ec:column>
           </ec:row>
         </ec:table>

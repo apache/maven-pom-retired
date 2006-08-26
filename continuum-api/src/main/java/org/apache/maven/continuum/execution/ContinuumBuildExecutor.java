@@ -18,6 +18,7 @@ package org.apache.maven.continuum.execution;
 
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.scm.TestResult;
 
 import java.io.File;
 import java.util.List;
@@ -41,5 +42,8 @@ public interface ContinuumBuildExecutor
     void killProcess( Project project );
 
     List getDeployableArtifacts( File workingDirectory, BuildDefinition buildDefinition )
+        throws ContinuumBuildExecutorException;
+
+    TestResult getTestResults(Project project)
         throws ContinuumBuildExecutorException;
 }

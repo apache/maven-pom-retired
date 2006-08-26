@@ -32,26 +32,69 @@ Build statistics:
   Java version : $javaVersion
 
 #if ( $build.scmResult )
-Changes
-  #if ( $build.scmResult.changes.size() == 0 )
-    No files changed
-  #else
-  #foreach ( $changeSet in $build.scmResult.changes )
-    #if ($changeSet.author) $changeSet.author #end
-    #if ($changeSet.date > 0) $date.format('medium',$changeSet.date) #end
-    #if ($changeSet.comment) $changeSet.comment #end
-    #foreach ( $file in $changeSet.files )
-        $!file.name
-    #end
-  #end
-  #end
+****************************************************************************
+Changes:
+****************************************************************************
+#if ( $build.scmResult.changes.size() == 0 )
+No files changed
+
+#else
+#foreach ( $changeSet in $build.scmResult.changes )
+#if ($changeSet.author)
+#set($author = $changeSet.author)
+#else
+#set($author = "no author")
+#end
+#set($date = $formatter.formatTimestamp($changeSet.date))
+#if (!$date)
+#set($date = "no date")
+#end
+#if ($changeSet.comment)
+#set($comment = $formatter.trim($changeSet.comment))
+#else
+#set($comment = "no comment")
+#end
+Changed: $author @ $date
+Comment: $comment
+Files changed:
+#foreach ( $file in $changeSet.files )
+  $!file.name (#if ($file.revision) $file.revision #else no revision #end)
 #end
 
+#end
+#end
+#end
+#if ( $build.testResult )
+****************************************************************************
+Test Summary:
+****************************************************************************
+Tests: $build.testResult.testCount
+Failures: $build.testResult.failureCount
+Total time: $build.testResult.totalTime
+
+#end
 #if ( $build.state == 4 )
 ****************************************************************************
 Build Error:
 ****************************************************************************
 $build.error
+
+#if ( $build.testResult && $build.testResult.failureCount > 0)
+****************************************************************************
+Test Failures:
+****************************************************************************
+
+#foreach( $suite in $build.testResult.suiteResults )
+#if ( $suite.failureCount > 0)
+$suite.name
+  #foreach( $failure in $suite.failures )
+  $failure.name
+  $failure.exception
+
+  #end
+#end
+#end
+#end
 #else
 ****************************************************************************
 Output:

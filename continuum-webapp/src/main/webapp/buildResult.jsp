@@ -75,6 +75,17 @@
           <b><ww:text name="buildResult.noChanges"/></b>
         </ww:else>
 
+        <ww:if test="hasSurefireResults">
+          <h4><ww:text name="buildResult.generatedReports.title"/></h4>
+
+          <ww:url id="surefireReportUrl" action="surefireReport">
+            <ww:param name="projectId" value="projectId"/>
+            <ww:param name="buildId" value="buildId"/>
+            <ww:param name="projectName" value="projectName"/>
+          </ww:url>
+          <ww:a href="%{surefireReportUrl}"><ww:text name="buildResult.generatedReports.surefire"/></ww:a>
+        </ww:if>
+
         <ww:if test="changesSinceLastSuccess != null && changesSinceLastSuccess.size() > 0">
             <h4><ww:text name="buildResult.changesSinceLastSuccess"/></h4>
             <ww:set name="changes" value="changesSinceLastSuccess" scope="request"/>

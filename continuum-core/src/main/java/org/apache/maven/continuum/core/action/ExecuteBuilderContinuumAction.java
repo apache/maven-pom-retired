@@ -24,6 +24,7 @@ import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.scm.ScmResult;
+import org.apache.maven.continuum.model.scm.TestResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.store.ContinuumStore;
@@ -162,9 +163,20 @@ public class ExecuteBuilderContinuumAction
             project.setState( build.getState() );
 
             // ----------------------------------------------------------------------
-            // Copy over the build result
+            // Set the test result
             // ----------------------------------------------------------------------
 
+             try {
+                 TestResult testResult = buildExecutor.getTestResults( project );
+                 build.setTestResult(testResult);
+            } catch (Throwable t) {
+                getLogger().error("Error getting test results", t);
+            }
+
+            // ----------------------------------------------------------------------
+            // Copy over the build result
+            // ----------------------------------------------------------------------
+                                                          
             store.updateBuildResult( build );
 
             build = store.getBuildResult( build.getId() );

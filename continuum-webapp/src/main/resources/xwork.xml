@@ -271,6 +271,10 @@
       <result name="success">buildResult.jsp</result>
     </action>
 
+    <action name="surefireReport" class="surefireReport">
+      <result name="success">surefireReport.jsp</result>
+    </action>
+
     <action name="workingCopy" class="workingCopy">
       <result name="success">workingCopy.jsp</result>
     </action>

@@ -18,6 +18,8 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
+import org.codehaus.plexus.util.FileUtils;
 
 import java.util.List;
 
@@ -44,10 +46,19 @@ public class BuildResultAction
 
     private List changeSet;
 
+    private boolean hasSurefireResults;
+
     public String execute()
         throws ContinuumException
     {
+        //todo get this working for other types of test case rendering other then just surefire
+        // check if there are surefire results to display
+        Project project = getContinuum().getProject( projectId );
+        hasSurefireResults = FileUtils.fileExists( project.getWorkingDirectory() + "/target/surefire-reports" );
+
+
         buildResult = getContinuum().getBuildResult( buildId );
+
 
         changeSet = getContinuum().getChangesSinceLastSuccess( projectId, buildId );
 
@@ -92,5 +103,15 @@ public class BuildResultAction
     public List getChangesSinceLastSuccess()
     {
         return changeSet;
+    }
+
+    public boolean isHasSurefireResults()
+    {
+        return hasSurefireResults;
+    }
+
+    public void setHasSurefireResults( boolean hasSurefireResults )
+    {
+        this.hasSurefireResults = hasSurefireResults;
     }
 }

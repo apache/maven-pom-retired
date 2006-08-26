@@ -35,6 +35,8 @@ public class BuildResultsListAction
 
     private int projectId;
 
+    private String projectName;
+
     public String execute()
         throws ContinuumException
     {
@@ -56,5 +58,15 @@ public class BuildResultsListAction
     public Collection getBuildResults()
     {
         return buildResults;
+    }
+
+    public String getProjectName()
+    {
+        return projectName;
+    }
+
+    public void setProjectName( String projectName )
+    {
+        this.projectName = projectName;
     }
 }
