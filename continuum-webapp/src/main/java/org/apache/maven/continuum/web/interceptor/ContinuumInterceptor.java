@@ -1,13 +1,7 @@
 package org.apache.maven.continuum.web.interceptor;
 
-import com.opensymphony.xwork.ActionInvocation;
-import com.opensymphony.xwork.interceptor.Interceptor;
-import org.apache.maven.continuum.Continuum;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-
-import java.util.Map;
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2005-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +15,13 @@ import java.util.Map;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import com.opensymphony.xwork.ActionInvocation;
+import com.opensymphony.xwork.interceptor.Interceptor;
+import org.apache.maven.continuum.Continuum;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+
+import java.util.Map;
 
 /**
  * UserInterceptor:
@@ -45,7 +46,7 @@ public class ContinuumInterceptor
     /**
      *
      * @param actionInvocation
-     * @return
+     * @return action result
      * @throws Exception
      */
 
