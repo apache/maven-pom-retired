@@ -45,7 +45,7 @@ public class UserGroupManagementAction
     {
         try
         {
-            userGroups = continuum.getUserGroups();
+            userGroups = getContinuum().getUserGroups();
         }
         catch ( ContinuumException e )
         {
@@ -62,7 +62,7 @@ public class UserGroupManagementAction
         {
             try
             {
-                UserGroup userGroup = continuum.getUserGroup( userGroupId );
+                UserGroup userGroup = getContinuum().getUserGroup( userGroupId );
 
                 name = userGroup.getName();
                 description = userGroup.getDescription();
@@ -86,18 +86,18 @@ public class UserGroupManagementAction
             userGroup.setName( name );
             userGroup.setDescription( description );
 
-            continuum.addUserGroup( userGroup );
+            getContinuum().addUserGroup( userGroup );
         }
         else
         {
             try
             {
-                UserGroup userGroup = continuum.getUserGroup( userGroupId );
+                UserGroup userGroup = getContinuum().getUserGroup( userGroupId );
 
                 userGroup.setName( name );
                 userGroup.setDescription( description );
 
-                continuum.updateUserGroup( userGroup );
+                getContinuum().updateUserGroup( userGroup );
             }
             catch ( ContinuumException e )
             {
@@ -113,7 +113,7 @@ public class UserGroupManagementAction
     {
         try
         {
-            continuum.removeUserGroup( userGroupId );
+            getContinuum().removeUserGroup( userGroupId );
         }
         catch ( ContinuumException e )
         {

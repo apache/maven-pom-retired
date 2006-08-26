@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,18 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import com.opensymphony.xwork.Preparable;
-import org.apache.maven.continuum.Continuum;
+import java.io.File;
+import java.util.Collections;
+
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
-import java.io.File;
-import java.util.Collections;
+import com.opensymphony.xwork.Preparable;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -38,13 +38,9 @@ import java.util.Collections;
  *   role-hint="configuration"
  */
 public class ConfigurationAction
-    extends PlexusActionSupport
+    extends ContinuumActionSupport
     implements Preparable
 {
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
 
     /**
      * @plexus.requirement
@@ -77,19 +73,21 @@ public class ConfigurationAction
 
     public void prepare()
     {
-        guestAccountEnabled = continuum.getConfiguration().isGuestAccountEnabled();
+        ConfigurationService configuration = getContinuum().getConfiguration();
 
-        workingDirectory = continuum.getConfiguration().getWorkingDirectory().getAbsolutePath();
+        guestAccountEnabled = configuration.isGuestAccountEnabled();
 
-        buildOutputDirectory = continuum.getConfiguration().getBuildOutputDirectory().getAbsolutePath();
+        workingDirectory = configuration.getWorkingDirectory().getAbsolutePath();
 
-        baseUrl = continuum.getConfiguration().getUrl();
+        buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
 
-        companyLogo = continuum.getConfiguration().getCompanyLogo();
+        baseUrl = configuration.getUrl();
 
-        companyName = continuum.getConfiguration().getCompanyName();
+        companyLogo = configuration.getCompanyLogo();
 
-        companyUrl = continuum.getConfiguration().getCompanyUrl();
+        companyName = configuration.getCompanyName();
+
+        companyUrl = configuration.getCompanyUrl();
     }
 
     public String execute()
@@ -106,14 +104,16 @@ public class ConfigurationAction
         adminUser.setGroup( store.getUserGroup( ContinuumSecurity.ADMIN_GROUP_NAME ) );
 
         store.addUser( adminUser );
+        
+        ConfigurationService configuration = getContinuum().getConfiguration();
 
         if ( guestAccountEnabled )
         {
-            continuum.getConfiguration().setGuestAccountEnabled( guestAccountEnabled );
+            configuration.setGuestAccountEnabled( guestAccountEnabled );
         }
         else
         {
-            continuum.getConfiguration().setGuestAccountEnabled( false );
+            configuration.setGuestAccountEnabled( false );
 
             UserGroup guestGroup = store.getUserGroup( ContinuumSecurity.GUEST_GROUP_NAME );
 
@@ -122,20 +122,23 @@ public class ConfigurationAction
             store.updateUserGroup( guestGroup );
         }
 
-        continuum.getConfiguration().setWorkingDirectory( new File( workingDirectory ) );
+        configuration.setWorkingDirectory( new File( workingDirectory ) );
 
-        continuum.getConfiguration().setBuildOutputDirectory( new File( buildOutputDirectory ) );
+        configuration.setWorkingDirectory( new File( workingDirectory ) );
 
-        continuum.getConfiguration().setUrl( baseUrl );
+        configuration.setBuildOutputDirectory( new File( buildOutputDirectory ) );
 
-        continuum.getConfiguration().setCompanyLogo( companyLogo );
+        configuration.setUrl( baseUrl );
 
-        continuum.getConfiguration().setCompanyName( companyName );
+        configuration.setCompanyLogo( companyLogo );
 
-        continuum.getConfiguration().setCompanyUrl( companyUrl );
+        configuration.setCompanyName( companyName );
 
-        continuum.getConfiguration().setInitialized( true );
-        continuum.getConfiguration().store();
+        configuration.setInitialized( true );
+        configuration.store();
+
+        configuration.setInitialized( true );
+        configuration.store();            
 
         return SUCCESS;
     }

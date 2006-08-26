@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,9 +58,9 @@ public class WorkingCopyAction
     public String execute()
         throws ContinuumException
     {
-        files = continuum.getFiles( projectId, userDirectory );
+        files = getContinuum().getFiles( projectId, userDirectory );
 
-        projectName = continuum.getProject( projectId ).getName();
+        projectName = getContinuum().getProject( projectId ).getName();
 
         HashMap params = new HashMap();
 
@@ -70,11 +70,11 @@ public class WorkingCopyAction
 
         String baseUrl = UrlHelper.buildUrl( "/workingCopy.action", ServletActionContext.getRequest(), ServletActionContext.getResponse(), params );
 
-        output = generator.generate( files, baseUrl, continuum.getWorkingDirectory( projectId ) );
+        output = generator.generate( files, baseUrl, getContinuum().getWorkingDirectory( projectId ) );
 
         if ( currentFile != null && currentFile != "" )
         {
-            currentFileContent = continuum.getFileContent( projectId, userDirectory, currentFile );
+            currentFileContent = getContinuum().getFileContent( projectId, userDirectory, currentFile );
         }
         else
         {

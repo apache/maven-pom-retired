@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class ScheduleAction
     public String summary()
         throws ContinuumException
     {
-        schedules = continuum.getSchedules();
+        schedules = getContinuum().getSchedules();
 
         return SUCCESS;
     }
@@ -59,7 +59,7 @@ public class ScheduleAction
         {
             try
             {
-                schedule = continuum.getSchedule( id );
+                schedule = getContinuum().getSchedule( id );
                 active = schedule.isActive();
                 cronExpression= schedule.getCronExpression();
                 description = schedule.getDescription();
@@ -88,7 +88,7 @@ public class ScheduleAction
                 schedule.setDescription( description );
                 schedule.setName( name );
 
-                continuum.addSchedule( schedule );
+                getContinuum().addSchedule( schedule );
             }
             catch ( ContinuumException e )
             {
@@ -102,7 +102,7 @@ public class ScheduleAction
 
             try
             {
-                schedule = continuum.getSchedule( id );
+                schedule = getContinuum().getSchedule( id );
 
                 schedule.setActive( active );
                 schedule.setCronExpression( cronExpression );
@@ -110,7 +110,7 @@ public class ScheduleAction
                 schedule.setDescription( description );
                 schedule.setName( name );
 
-                continuum.updateSchedule( schedule );
+                getContinuum().updateSchedule( schedule );
 
             }
             catch ( ContinuumException e )

@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,10 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
+import java.util.Map;
+
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.web.action.ContinuumActionSupport;
-
-import java.util.Map;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -30,8 +28,6 @@ import java.util.Map;
 public abstract class AbstractNotifierEditAction
     extends ContinuumActionSupport
 {
-    private Continuum continuum;
-
     private ProjectNotifier notifier;
 
     private int projectId;
@@ -76,11 +72,11 @@ public abstract class AbstractNotifierEditAction
 
         if ( !isNew )
         {
-            continuum.updateNotifier( projectId, notifier );
+            getContinuum().updateNotifier( projectId, notifier );
         }
         else
         {
-            continuum.addNotifier( projectId, notifier );
+            getContinuum().addNotifier( projectId, notifier );
         }
 
         return SUCCESS;
@@ -118,7 +114,7 @@ public abstract class AbstractNotifierEditAction
     private ProjectNotifier getNotifier()
         throws ContinuumException
     {
-        return continuum.getNotifier( projectId, notifierId );
+        return getContinuum().getNotifier( projectId, notifierId );
     }
 
     public int getProjectId()

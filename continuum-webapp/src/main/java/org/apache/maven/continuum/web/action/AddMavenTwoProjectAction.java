@@ -22,7 +22,7 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 
 /**
- * Add a Maven 2 project to continuum.
+ * Add a Maven 2 project to Continuum.
  * 
  * @author Nick Gonzalez
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
@@ -39,7 +39,7 @@ public class AddMavenTwoProjectAction
     protected ContinuumProjectBuildingResult doExecute( String pomUrl )
         throws ContinuumException
     {
-        return continuum.addMavenTwoProject( pomUrl );
+        return getContinuum().addMavenTwoProject( pomUrl );
     }
 
     public String doDefault()

@@ -1,17 +1,20 @@
 package org.apache.maven.continuum.web.action;
 
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.model.project.BuildResult;
-import org.apache.maven.continuum.model.project.Project;
-import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.web.model.GroupSummary;
-import org.apache.maven.continuum.web.model.ProjectSummary;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+/*
+ * Copyright 2005-2006 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*
  * Copyright 2005 The Codehaus.
  *
@@ -27,6 +30,19 @@ import java.util.Map;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.web.model.GroupSummary;
+import org.apache.maven.continuum.web.model.ProjectSummary;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -45,7 +61,7 @@ public class GroupSummaryAction
     {
         groups = new ArrayList();
 
-        Collection projectGroups = continuum.getAllProjectGroupsWithProjects();
+        Collection projectGroups = getContinuum().getAllProjectGroupsWithProjects();
 
         for ( Iterator j = projectGroups.iterator(); j.hasNext(); )
         {
@@ -64,9 +80,9 @@ public class GroupSummaryAction
 
             groupModel.setNumProjects( projects.size() );
 
-            Map buildResults = continuum.getLatestBuildResults();
+            Map buildResults = getContinuum().getLatestBuildResults();
 
-            Map buildResultsInSuccess = continuum.getBuildResultsInSuccess();
+            Map buildResultsInSuccess = getContinuum().getBuildResultsInSuccess();
 
             List projectModels = new ArrayList();
             int numSuccesses = 0;
@@ -94,7 +110,7 @@ public class GroupSummaryAction
 
                 model.setProjectGroupName( project.getProjectGroup().getName() );
 
-                if ( continuum.isInBuildingQueue( project.getId() ) || continuum.isInCheckoutQueue( project.getId() ) )
+                if ( getContinuum().isInBuildingQueue( project.getId() ) || getContinuum().isInCheckoutQueue( project.getId() ) )
                 {
                     model.setInQueue( true );
                 }

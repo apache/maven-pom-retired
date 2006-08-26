@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,7 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -41,7 +39,7 @@ public class DeleteNotifierAction
     public String execute()
         throws ContinuumException
     {
-        continuum.removeNotifier( projectId, notifierId );
+        getContinuum().removeNotifier( projectId, notifierId );
 
         return SUCCESS;
     }

@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@ package org.apache.maven.continuum.web.action;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.apache.maven.continuum.configuration.ConfigurationService;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -30,7 +32,9 @@ public class CheckConfigurationAction
 
     public String execute()
     {
-        if ( !continuum.getConfiguration().isInitialized() )
+        ConfigurationService configuration = getContinuum().getConfiguration();
+
+        if ( ! configuration.isInitialized() )
         {
             return INPUT;
         }

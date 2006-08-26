@@ -34,7 +34,7 @@ public class ContinuumActionSupport
     /**
      * @plexus.requirement
      */
-    protected Continuum continuum;
+    private Continuum continuum;
 
     public void prepare()
         throws Exception

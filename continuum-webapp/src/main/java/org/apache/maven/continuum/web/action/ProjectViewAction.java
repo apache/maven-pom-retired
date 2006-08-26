@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class ProjectViewAction
     public String execute()
         throws ContinuumException
     {
-        project = continuum.getProjectWithAllDetails( projectId );
+        project = getContinuum().getProjectWithAllDetails( projectId );
 
         return SUCCESS;
     }

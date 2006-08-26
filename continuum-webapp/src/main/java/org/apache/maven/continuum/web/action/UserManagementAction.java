@@ -69,7 +69,7 @@ public class UserManagementAction
         {
             userGroups = new HashMap();
 
-            for ( Iterator i = continuum.getUserGroups().iterator(); i.hasNext();)
+            for ( Iterator i = getContinuum().getUserGroups().iterator(); i.hasNext();)
             {
                 UserGroup group = (UserGroup)i.next();
                 userGroups.put( new Integer( group.getId() ), group.getName() );
@@ -81,7 +81,7 @@ public class UserManagementAction
     {
         try
         {
-            users = continuum.getUsers();
+            users = getContinuum().getUsers();
         }
         catch ( ContinuumException e )
         {
@@ -99,7 +99,7 @@ public class UserManagementAction
         {
             try
             {
-                ContinuumUser user = continuum.getUser( userId );
+                ContinuumUser user = getContinuum().getUser( userId );
 
                 username = user.getUsername();
                 fullName = user.getFullName();
@@ -129,8 +129,8 @@ public class UserManagementAction
                 newUser.setFullName( fullName );
                 newUser.setEmail( email );
                 newUser.setPassword( password );
-                newUser.setGroup( continuum.getUserGroup( userGroupId ) );
-                continuum.addUser( newUser );
+                newUser.setGroup( getContinuum().getUserGroup( userGroupId ) );
+                getContinuum().addUser( newUser );
             }
             catch ( ContinuumException e )
             {
@@ -142,14 +142,14 @@ public class UserManagementAction
         {
             try
             {
-                ContinuumUser editUser = continuum.getUser( userId );
+                ContinuumUser editUser = getContinuum().getUser( userId );
 
                 editUser.setUsername( username );
                 editUser.setFullName( fullName );
                 editUser.setEmail( email );
                 editUser.setPassword( password );
-                editUser.setGroup( continuum.getUserGroup( userGroupId ) );
-                continuum.updateUser( editUser );
+                editUser.setGroup( getContinuum().getUserGroup( userGroupId ) );
+                getContinuum().updateUser( editUser );
 
             }
             catch ( ContinuumException e )
@@ -166,7 +166,7 @@ public class UserManagementAction
     {
         try
         {
-            continuum.removeUser( userId );
+            getContinuum().removeUser( userId );
         }
         catch ( ContinuumException e )
         {

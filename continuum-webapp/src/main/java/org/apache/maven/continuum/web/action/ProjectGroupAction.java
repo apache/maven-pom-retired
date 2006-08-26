@@ -1,9 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
-import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.ContinuumException;
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2005-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +15,9 @@ import org.apache.maven.continuum.ContinuumException;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.ContinuumException;
 
 /**
  * ProjectGroupAction:
@@ -41,7 +42,7 @@ public class ProjectGroupAction
     {
         try
         {
-            projectGroup = continuum.getProjectGroup( projectGroupId );
+            projectGroup = getContinuum().getProjectGroup( projectGroupId );
         }
         catch ( ContinuumException e)
         {
@@ -72,7 +73,7 @@ public class ProjectGroupAction
         //todo add confirm page like removing build definition
         try
         {
-            continuum.removeProjectGroup( projectGroupId );
+            getContinuum().removeProjectGroup( projectGroupId );
         }
         catch ( ContinuumException e )
         {
@@ -87,7 +88,7 @@ public class ProjectGroupAction
     {
         try
         {
-            continuum.buildProjectGroup( projectGroupId );
+            getContinuum().buildProjectGroup( projectGroupId );
         }
         catch ( ContinuumException e )
         {

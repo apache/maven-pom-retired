@@ -53,7 +53,7 @@ public class SessionAction
                 return INPUT;
             }
 
-            List userList = continuum.getUsers();
+            List userList = getContinuum().getUsers();
 
             for ( Iterator i = userList.iterator(); i.hasNext(); )
             {

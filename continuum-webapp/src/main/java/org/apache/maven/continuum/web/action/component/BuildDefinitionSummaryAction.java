@@ -1,17 +1,7 @@
 package org.apache.maven.continuum.web.action.component;
 
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.model.project.Project;
-import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.web.action.ContinuumActionSupport;
-import org.apache.maven.continuum.web.model.BuildDefinitionSummary;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2005-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +15,17 @@ import java.util.List;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.web.action.ContinuumActionSupport;
+import org.apache.maven.continuum.web.model.BuildDefinitionSummary;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * BuildDefinitionSummaryAction:
@@ -51,7 +52,7 @@ public class BuildDefinitionSummaryAction
     {
         try
         {
-            projectGroupId = continuum.getProjectGroupByProjectId( projectId ).getId();
+            projectGroupId = getContinuum().getProjectGroupByProjectId( projectId ).getId();
             groupBuildDefinitionSummaries = gatherGroupBuildDefinitionSummaries( projectGroupId );
             projectBuildDefinitionSummaries = gatherProjectBuildDefinitionSummaries( projectId );
 
@@ -73,7 +74,7 @@ public class BuildDefinitionSummaryAction
         {
             groupBuildDefinitionSummaries = gatherGroupBuildDefinitionSummaries( projectGroupId );
 
-            ProjectGroup projectGroup = continuum.getProjectGroup( projectGroupId );
+            ProjectGroup projectGroup = getContinuum().getProjectGroup( projectGroupId );
 
             for (Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
             {
@@ -99,7 +100,7 @@ public class BuildDefinitionSummaryAction
     {
         List summaryList = new ArrayList();
 
-        Project project = continuum.getProjectWithAllDetails( projectId );
+        Project project = getContinuum().getProjectWithAllDetails( projectId );
         for ( Iterator i = project.getBuildDefinitions().iterator(); i.hasNext(); )
         {
             BuildDefinitionSummary bds = generateBuildDefinitionSummary( (BuildDefinition) i.next() );
@@ -119,7 +120,7 @@ public class BuildDefinitionSummaryAction
     {
         List summaryList = new ArrayList();
 
-        ProjectGroup projectGroup = continuum.getProjectGroup( projectGroupId );
+        ProjectGroup projectGroup = getContinuum().getProjectGroup( projectGroupId );
 
         for ( Iterator i = projectGroup.getBuildDefinitions().iterator(); i.hasNext(); )
         {

@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ public class ProjectEditAction
 
         project.setScmTag( scmTag );
 
-        continuum.updateProject( project );
+        getContinuum().updateProject( project );
 
         return SUCCESS;
     }
@@ -92,7 +92,7 @@ public class ProjectEditAction
     private Project getProject( int projectId )
         throws ContinuumException
     {
-        return continuum.getProject( projectId );
+        return getContinuum().getProject( projectId );
     }
 
     public int getProjectId()

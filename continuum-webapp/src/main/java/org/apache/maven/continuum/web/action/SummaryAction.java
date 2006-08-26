@@ -1,7 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,11 +52,11 @@ public class SummaryAction
         Collection projects;
 
         //TODO: Create a summary jpox request so code will be more simple and performance will be better
-        projects = continuum.getProjectsInGroup( projectGroupId );
+        projects = getContinuum().getProjectsInGroup( projectGroupId );
 
-        Map buildResults = continuum.getLatestBuildResults();
+        Map buildResults = getContinuum().getLatestBuildResults();
 
-        Map buildResultsInSuccess = continuum.getBuildResultsInSuccess();
+        Map buildResultsInSuccess = getContinuum().getBuildResultsInSuccess();
 
         summary = new ArrayList();
 
@@ -74,7 +74,7 @@ public class SummaryAction
 
             model.setProjectGroupName( project.getProjectGroup().getName() );
 
-            if ( continuum.isInBuildingQueue( project.getId() ) || continuum.isInCheckoutQueue( project.getId() ) )
+            if ( getContinuum().isInBuildingQueue( project.getId() ) || getContinuum().isInCheckoutQueue( project.getId() ) )
             {
                 model.setInQueue( true );
             }

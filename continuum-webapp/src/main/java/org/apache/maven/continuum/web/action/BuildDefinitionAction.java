@@ -1,17 +1,7 @@
 package org.apache.maven.continuum.web.action;
 
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.model.project.Schedule;
-import org.apache.maven.continuum.model.project.Project;
-import org.apache.maven.continuum.web.exception.ContinuumActionException;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2005-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +15,17 @@ import java.util.Map;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.web.exception.ContinuumActionException;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * BuildDefinitionAction:
@@ -72,7 +73,7 @@ public class BuildDefinitionAction
         {
             schedules = new HashMap();
 
-            Collection allSchedules = continuum.getSchedules();
+            Collection allSchedules = getContinuum().getSchedules();
 
             for ( Iterator i = allSchedules.iterator(); i.hasNext(); )
             {
@@ -94,7 +95,7 @@ public class BuildDefinitionAction
     /**
      * if there is a build definition id set, then retrieve it..either way set us to up to work with build definition
      *
-     * @return
+     * @return action result
      */
     public String input()
     {
@@ -104,11 +105,11 @@ public class BuildDefinitionAction
         {
             if ( projectId != 0 )
             {
-                executor = continuum.getProject( projectId ).getExecutorId();
+                executor = getContinuum().getProject( projectId ).getExecutorId();
             }
             else
             {
-                Project project = (Project)continuum.getProjectGroup( projectGroupId ).getProjects().get( 0 );
+                Project project = (Project) getContinuum().getProjectGroup( projectGroupId ).getProjects().get( 0 );
                 executor = project.getExecutorId();
 
             }
@@ -125,7 +126,7 @@ public class BuildDefinitionAction
         {
             try
             {
-                BuildDefinition buildDefinition = continuum.getBuildDefinition( buildDefinitionId );
+                BuildDefinition buildDefinition = getContinuum().getBuildDefinition( buildDefinitionId );
                 goals = buildDefinition.getGoals();
                 arguments = buildDefinition.getArguments();
                 buildFile = buildDefinition.getBuildFile();
@@ -149,11 +150,11 @@ public class BuildDefinitionAction
         {
             if ( buildDefinitionId == 0 )
             {
-                continuum.addBuildDefinitionToProject( projectId, getBuildDefinitionFromInput() );
+                getContinuum().addBuildDefinitionToProject( projectId, getBuildDefinitionFromInput() );
             }
             else
             {
-                continuum.updateBuildDefinitionForProject( projectId, getBuildDefinitionFromInput() );
+                getContinuum().updateBuildDefinitionForProject( projectId, getBuildDefinitionFromInput() );
             }
         }
         catch ( ContinuumActionException cae )
@@ -177,11 +178,11 @@ public class BuildDefinitionAction
         {
             if ( buildDefinitionId == 0 )
             {
-                continuum.addBuildDefinitionToProjectGroup( projectGroupId, getBuildDefinitionFromInput() );
+                getContinuum().addBuildDefinitionToProjectGroup( projectGroupId, getBuildDefinitionFromInput() );
             }
             else
             {
-                continuum.updateBuildDefinitionForProjectGroup( projectGroupId, getBuildDefinitionFromInput() );
+                getContinuum().updateBuildDefinitionForProjectGroup( projectGroupId, getBuildDefinitionFromInput() );
             }
         }
         catch ( ContinuumActionException cae )
@@ -205,7 +206,7 @@ public class BuildDefinitionAction
         {
             try
             {
-                continuum.removeBuildDefinitionFromProject( projectId, buildDefinitionId );
+                getContinuum().removeBuildDefinitionFromProject( projectId, buildDefinitionId );
 
                 return SUCCESS;
             }
@@ -228,7 +229,7 @@ public class BuildDefinitionAction
         {
             try
             {
-                continuum.removeBuildDefinitionFromProject( projectGroupId, buildDefinitionId );
+                getContinuum().removeBuildDefinitionFromProject( projectGroupId, buildDefinitionId );
 
                 return SUCCESS;
             }
@@ -253,7 +254,7 @@ public class BuildDefinitionAction
 
         try
         {
-            schedule = continuum.getSchedule( scheduleId );
+            schedule = getContinuum().getSchedule( scheduleId );
         }
         catch ( ContinuumException e )
         {
