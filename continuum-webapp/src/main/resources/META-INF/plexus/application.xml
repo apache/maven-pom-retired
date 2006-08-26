@@ -287,7 +287,7 @@
       <lifecycle-handler>basic</lifecycle-handler>
 
       <configuration>
-        <threshold>DEBUG</threshold>
+        <threshold>INFO</threshold>
         <default-appender>console,rolling</default-appender>
         <appenders>
           <appender>
