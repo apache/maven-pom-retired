@@ -1,5 +1,5 @@
 import os
-from time import strftime, gmtime
+from time import strftime, localtime
 import xmlrpclib
 
 class XmlRpcException:
@@ -327,10 +327,10 @@ class Build:
         map[ "totalTime" ] = int( map[ "endTime" ] )/ 1000 - int( map[ "startTime" ] ) / 1000
 
         self.id = map[ "id" ]
-        self.buildNumber = map[ "buildNumber" ]
-        if self.buildNumber == '0':
-            self.buildNumber = ''
         self.state = int( map[ "state" ] )
+        self.buildNumber = map[ "buildNumber" ]
+        if ( self.state != Continuum.STATE_OK ):
+            self.buildNumber = ''
         if ( map.has_key( "trigger" ) ):
             self.forced = map[ "trigger" ] == Continuum.TRIGGER_FORCED
             self.trigger = int( map[ "trigger" ] )
@@ -338,8 +338,8 @@ class Build:
             self.forced = False
             self.trigger = 0
 
-        self.startTime = gmtime( int( map[ "startTime" ] ) / 1000 )
-        self.endTime = gmtime( int( map[ "endTime" ] ) / 1000 )
+        self.startTime = localtime( int( map[ "startTime" ] ) / 1000 )
+        self.endTime = localtime( int( map[ "endTime" ] ) / 1000 )
         self.totalTime = map[ "totalTime" ]
         self.error = map.get( "error" )
         self.map = map
@@ -412,7 +412,7 @@ class ChangeSet:
         self.map = map
         self.author = map[ "author" ]
         self.comment = map[ "comment" ]
-        self.date = gmtime( int( map[ "date" ] ) / 1000 )
+        self.date = localtime( int( map[ "date" ] ) / 1000 )
 
         self.files = list()
         for f in map[ "files" ]:

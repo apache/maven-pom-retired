@@ -61,9 +61,9 @@ $page.setTitle( "Continuum - Continuum Web Build at $date.format('medium',$build
         <td>$state.generate($build)</td>
       </tr>
       <tr class="b">
-        <th>Build#</th>
+        <th>Build #</th>
         <td>
-        #if ( $build.buildNumber != 0 )
+        #if ( $build.state == 2 )
           $build.buildNumber
         #else
           &nbsp;
