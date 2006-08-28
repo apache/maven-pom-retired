@@ -1,1 +1,1 @@
-<% response.sendRedirect( "/summary.action" ); %>
+<% response.sendRedirect(  request.getContextPath() + "/summary.action" ); %>
