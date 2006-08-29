@@ -294,6 +294,11 @@
       <result name="success" type="chain">schedules</result>
     </action>
 
+    <action name="removeSchedule" class="schedule" method="remove">
+      <result name="success" type="chain">schedules</result>          
+    </action>
+
+
   </package>
 
   <package name="component" extends="default">

@@ -123,6 +123,14 @@ public class ScheduleAction
         }
     }
 
+    public String remove()
+        throws ContinuumException
+    {
+       getContinuum().removeSchedule( id );
+
+       return SUCCESS; 
+    }
+
     public Collection getSchedules()
     {
         return schedules;

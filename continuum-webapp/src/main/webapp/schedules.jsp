@@ -22,12 +22,15 @@
             <ec:column property="delay" title="schedules.table.delay"/>
             <ec:column property="cronExpression" title="schedules.table.cronExpression"/>
             <ec:column property="actions" title="&nbsp;">
-                <ww:url id="editUrl" action="schedule">
+                <ww:url id="editScheduleUrl" action="schedule">
                   <ww:param name="id" value="${pageScope.schedule.id}"/>
                 </ww:url>
-                <ww:a href="%{editUrl}">Edit</ww:a>
+                <ww:url id="removeScheduleUrl" action="removeSchedule">
+                  <ww:param name="id" value="${pageScope.schedule.id}"/>
+                </ww:url>
+                <ww:a href="%{editScheduleUrl}">Edit</ww:a>
                 &nbsp;
-                <ww:text name="delete"/>
+                <ww:a href="%{removeScheduleUrl}">Delete</ww:a>
             </ec:column>
           </ec:row>
         </ec:table>

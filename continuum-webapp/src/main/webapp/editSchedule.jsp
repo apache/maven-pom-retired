@@ -12,7 +12,7 @@
 
     <div class="axial">
       <ww:form action="saveSchedule" method="post">
-        <input type="hidden" name="id" value="id"/>
+        <ww:hidden name="id"/>
         <table>
           <tbody>
             <ww:textfield label="%{getText('schedule.name.label')}" name="name" required="true">
