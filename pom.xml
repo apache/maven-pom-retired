@@ -273,40 +273,20 @@
         <type>war</type>
       </dependency>
       <dependency>
-        <groupId>org.apache.maven.continuum.jpox</groupId>
+        <groupId>jpox</groupId>
         <artifactId>jpox</artifactId>
-        <version>1.1.0-20060413</version>
+        <version>1.1.1</version>
         <exclusions>
-          <exclusion>
-            <groupId>ant</groupId>
-            <artifactId>ant</artifactId>
-          </exclusion>
           <exclusion>
             <groupId>javax.sql</groupId>
             <artifactId>jdbc-stdext</artifactId>
           </exclusion>
-          <exclusion>
-            <groupId>javax.security</groupId>
-            <artifactId>jaas</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>ojdbc</groupId>
-            <artifactId>ojdbc</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>xerces</groupId>
-            <artifactId>xmlParserAPIs</artifactId>
-          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>org.apache.maven.continuum.jpox</groupId>
+        <groupId>jpox</groupId>
         <artifactId>jpox-enhancer</artifactId>
-        <version>1.1.0-20060413</version>
+        <version>1.1.1</version>
         <exclusions>
           <exclusion>
             <groupId>javax.sql</groupId>
@@ -317,13 +297,7 @@
       <dependency>
         <groupId>jpox</groupId>
         <artifactId>jpox-dbcp</artifactId>
-        <version>1.1.0-rc-1</version>
-        <exclusions>
-          <exclusion>
-            <groupId>jpox</groupId>
-            <artifactId>jpox</artifactId>
-          </exclusion>
-        </exclusions>
+        <version>1.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>

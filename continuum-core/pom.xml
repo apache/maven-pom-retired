@@ -134,7 +134,7 @@
       <version>1.0-alpha-3</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.continuum.jpox</groupId>
+      <groupId>jpox</groupId>
       <artifactId>jpox</artifactId>
     </dependency>
     <dependency>

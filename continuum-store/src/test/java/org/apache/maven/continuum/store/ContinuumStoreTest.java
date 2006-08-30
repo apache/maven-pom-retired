@@ -1781,7 +1781,7 @@ public class ContinuumStoreTest
             System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
         }
 
-        SchemaTool.createSchemaTables( new URL[]{getClass().getResource( "/META-INF/package.jdo" )}, false );
+        SchemaTool.createSchemaTables( new URL[]{getClass().getResource( "/META-INF/package.jdo" )}, null, false );
 
         PersistenceManagerFactory pmf = jdoFactory.getPersistenceManagerFactory();
 
