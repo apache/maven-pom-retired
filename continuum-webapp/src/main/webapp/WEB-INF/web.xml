@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee" version="2.4">
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" version="2.4"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
   <display-name>Continuum Webapp</display-name>
 
@@ -48,23 +50,4 @@
     <listener-class>org.codehaus.plexus.xwork.PlexusLifecycleListener</listener-class>
   </listener>
 
-  <taglib>
-    <taglib-uri>continuum</taglib-uri>
-    <taglib-location>/WEB-INF/continuum.tld</taglib-location>
-  </taglib>
-
-  <taglib>
-    <taglib-uri>sitemesh-page</taglib-uri>
-    <taglib-location>/WEB-INF/sitemesh-page.tld</taglib-location>
-  </taglib>
-
-  <taglib>
-    <taglib-uri>sitemesh-decorator</taglib-uri>
-    <taglib-location>/WEB-INF/sitemesh-decorator.tld</taglib-location>
-  </taglib>
-
-  <taglib>
-    <taglib-uri>/tld/extremecomponents</taglib-uri>
-    <taglib-location>/WEB-INF/extremecomponents.tld</taglib-location>
-  </taglib>
 </web-app>
