@@ -64,12 +64,6 @@ public class ProjectGroupAction
         return summary();
     }
 
-    public String confirm()
-        throws ContinuumException
-    {
-        return summary();
-    }
-
     public String remove()
         throws ContinuumException
     {

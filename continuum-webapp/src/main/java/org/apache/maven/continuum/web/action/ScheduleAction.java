@@ -142,6 +142,7 @@ public class ScheduleAction
         }
         else
         {
+            schedule = getContinuum().getSchedule( id );
             return CONFIRM;
         }
 

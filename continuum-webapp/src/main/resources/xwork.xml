@@ -173,8 +173,8 @@
     </action>
 
     <action name="removeGroupBuildDefinition" class="buildDefinition" method="removeFromGroup">
-      <result name="confirm">deleteBuildDefinition.jsp</result>
-      <result name="success" type="chain">projectGroupView</result>
+      <result name="confirm">confirmBuildDefinitionRemoval.jsp</result>
+      <result name="success" type="chain">projectGroupBuildDefinition</result>
     </action>
 
 
@@ -202,12 +202,8 @@
     </action>
 
     <action name="removeProjectGroup" class="projectGroup" method="remove">
-      <result name="confirm" type="chain">confirmGroupRemoval</result>
+      <result name="confirm">confirmGroupRemoval.jsp</result>
       <result name="success" type="chain">groupSummary</result>
-    </action>
-
-    <action name="confirmGroupRemoval" class="projectGroup" method="confirm">
-      <result name="success">confirmGroupRemoval.jsp</result>
     </action>
 
     <!--
@@ -298,13 +294,10 @@
     </action>
 
     <action name="removeSchedule" class="schedule" method="remove">
-      <result name="confirm" type="chain">confirmScheduleRemoval</result>
+      <result name="confirm">confirmScheduleRemoval.jsp</result>
       <result name="success" type="chain">schedules</result>
     </action>
 
-    <action name="confirmScheduleRemoval" class="schedule" method="confirm">
-      <result name="success">confirmScheduleRemoval.jsp</result>
-    </action>
 
   </package>
 

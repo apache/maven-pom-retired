@@ -38,7 +38,6 @@ import java.util.Map;
 public class BuildDefinitionAction
     extends ContinuumActionSupport
 {
-    public static final String CONFIRM = "confirm";
 
     private int buildDefinitionId;
 
@@ -98,9 +97,8 @@ public class BuildDefinitionAction
      * @return action result
      */
     public String input()
+        throws ContinuumException
     {
-        try
-        {
         if ( executor == null )
         {
             if ( projectId != 0 )
@@ -111,39 +109,23 @@ public class BuildDefinitionAction
             {
                 Project project = (Project) getContinuum().getProjectGroup( projectGroupId ).getProjects().get( 0 );
                 executor = project.getExecutorId();
-
             }
-
-        }
-        }
-        catch ( ContinuumException e )
-        {
-            addActionError( "error determining executor type" );
-            return ERROR;
         }
 
         if ( buildDefinitionId != 0 )
         {
-            try
-            {
-                BuildDefinition buildDefinition = getContinuum().getBuildDefinition( buildDefinitionId );
-                goals = buildDefinition.getGoals();
-                arguments = buildDefinition.getArguments();
-                buildFile = buildDefinition.getBuildFile();
-                defaultBuildDefinition = buildDefinition.isDefaultForProject();
-
-            }
-            catch ( ContinuumException ce )
-            {
-                addActionError( "error getting build id" );
-                return ERROR;
-            }
+            BuildDefinition buildDefinition = getContinuum().getBuildDefinition( buildDefinitionId );
+            goals = buildDefinition.getGoals();
+            arguments = buildDefinition.getArguments();
+            buildFile = buildDefinition.getBuildFile();
+            defaultBuildDefinition = buildDefinition.isDefaultForProject();
         }
 
         return INPUT;
     }
 
     public String saveToProject()
+        throws ContinuumException
     {
 
         try
@@ -162,17 +144,12 @@ public class BuildDefinitionAction
             addActionError( cae.getMessage() );
             return INPUT;
         }
-        catch ( ContinuumException ce )
-        {
-            getLogger().info("error saving project build definition", ce);
-            addActionError( "error saving project build definition" );
-            return ERROR;
-        }
 
         return SUCCESS;
     }
 
     public String saveToGroup()
+        throws ContinuumException
     {
         try
         {
@@ -190,55 +167,33 @@ public class BuildDefinitionAction
             addActionError( cae.getMessage() );
             return INPUT;
         }
-        catch ( ContinuumException ce )
-        {
-            getLogger().info("error saving group build definition", ce);
-            addActionError( "error saving group build definition" );
-            return ERROR;
-        }
 
         return SUCCESS;
     }
 
     public String removeFromProject()
+        throws ContinuumException
     {
         if ( confirmed )
         {
-            try
-            {
-                getContinuum().removeBuildDefinitionFromProject( projectId, buildDefinitionId );
+            getContinuum().removeBuildDefinitionFromProject( projectId, buildDefinitionId );
 
-                return SUCCESS;
-            }
-            catch ( ContinuumException ce )
-            {
-                getLogger().info("error removing build definition from project", ce);
-                addActionError( "error removing build definition from project" );
-                return ERROR;
-            }
+            return SUCCESS;
         }
         else
-        {
+        {            
             return CONFIRM;
         }
     }
 
     public String removeFromProjectGroup()
+        throws ContinuumException
     {
         if ( confirmed )
         {
-            try
-            {
-                getContinuum().removeBuildDefinitionFromProject( projectGroupId, buildDefinitionId );
+            getContinuum().removeBuildDefinitionFromProject( projectGroupId, buildDefinitionId );
 
-                return SUCCESS;
-            }
-            catch ( ContinuumException ce )
-            {
-                getLogger().info("error removing build definition from project group", ce);
-                addActionError( "error removing build definition from project group" );
-                return ERROR;
-            }
+            return SUCCESS;
         }
         else
         {
