@@ -7,10 +7,8 @@
     <interceptors>
       <interceptor name="exception-logging" class="exceptionLogging"/>
       <interceptor name="user" class="userInterceptor"/>
-      <interceptor name="continuum" class="continuumInterceptor"/>
       <interceptor-stack name="defaultContinuumStack">
         <interceptor-ref name="user"/>
-        <interceptor-ref name="continuum"/>
         <interceptor-ref name="exception-logging"/>
         <!--<interceptor-ref name="defaultStack"/>-->
 
@@ -295,7 +293,7 @@
     </action>
 
     <action name="removeSchedule" class="schedule" method="remove">
-      <result name="success" type="chain">schedules</result>          
+      <result name="success" type="chain">schedules</result>
     </action>
 
 

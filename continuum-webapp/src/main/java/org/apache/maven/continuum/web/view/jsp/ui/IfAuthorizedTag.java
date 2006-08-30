@@ -1,5 +1,9 @@
 package org.apache.maven.continuum.web.view.jsp.ui;
 
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.xwork.PlexusLifecycleListener;
+
 import com.opensymphony.xwork.ActionContext;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.ContinuumException;
@@ -47,9 +51,11 @@ public class IfAuthorizedTag
     {
         ActionContext context = ActionContext.getContext();
 
+        PlexusContainer container = (PlexusContainer)context.getApplication().get( PlexusLifecycleListener.KEY ) ;
+
         try
         {
-            Continuum continuum = (Continuum) context.getSession().get( "continuum" );
+            Continuum continuum = (Continuum) container.lookup( Continuum.ROLE );
 
             if ( continuum != null )
             {
@@ -61,6 +67,10 @@ public class IfAuthorizedTag
             {
                 throw new JspTagException("continuum object is null!");
             }
+        }
+        catch ( ComponentLookupException cle)
+        {
+            throw new JspTagException( "unable to locate " + Continuum.ROLE, cle);
         }
         catch ( ContinuumException e )
         {
