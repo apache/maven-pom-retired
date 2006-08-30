@@ -39,63 +39,57 @@ public class ProjectGroupAction
     private boolean confirmed;
 
     public String summary()
+        throws ContinuumException
     {
-        try
-        {
-            projectGroup = getContinuum().getProjectGroup( projectGroupId );
-        }
-        catch ( ContinuumException e)
-        {
-            addActionError( "unable to retrieve project group" );
-            return ERROR;
-        }
+        projectGroup = getContinuum().getProjectGroup( projectGroupId );
 
         return SUCCESS;
     }
 
     public String members()
+        throws ContinuumException
     {
         return summary();
     }
 
     public String buildDefinitions()
+        throws ContinuumException
     {
         return summary();
     }
 
     public String notifiers()
+        throws ContinuumException
+    {
+        return summary();
+    }
+
+    public String confirm()
+        throws ContinuumException
     {
         return summary();
     }
 
     public String remove()
+        throws ContinuumException
     {
         //todo add confirm page like removing build definition
-        try
+        if ( confirmed )
         {
             getContinuum().removeProjectGroup( projectGroupId );
         }
-        catch ( ContinuumException e )
+        else
         {
-            addActionError( "unable to remove project group" );
-            return ERROR;
+            return CONFIRM;
         }
 
         return SUCCESS;
     }
 
     public String build()
+        throws ContinuumException
     {
-        try
-        {
-            getContinuum().buildProjectGroup( projectGroupId );
-        }
-        catch ( ContinuumException e )
-        {
-            addActionError( "unable to initiate build of project group" );
-            getLogger().warn( "unable to initiate build of project group " + projectGroupId );
-            return ERROR;
-        }
+        getContinuum().buildProjectGroup( projectGroupId );
 
         return SUCCESS;
     }

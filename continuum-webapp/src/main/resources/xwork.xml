@@ -202,7 +202,12 @@
     </action>
 
     <action name="removeProjectGroup" class="projectGroup" method="remove">
+      <result name="confirm" type="chain">confirmGroupRemoval</result>
       <result name="success" type="chain">groupSummary</result>
+    </action>
+
+    <action name="confirmGroupRemoval" class="projectGroup" method="confirm">
+      <result name="success">confirmGroupRemoval.jsp</result>
     </action>
 
     <!--
