@@ -45,6 +45,8 @@ public class ScheduleAction
 
     private Schedule schedule;
 
+    private boolean confirmed;
+
     public String summary()
         throws ContinuumException
     {
@@ -123,12 +125,27 @@ public class ScheduleAction
         }
     }
 
+    public String confirm()
+        throws ContinuumException
+    {
+        schedule = getContinuum().getSchedule( id );
+
+        return SUCCESS;
+    }
+
     public String remove()
         throws ContinuumException
     {
-       getContinuum().removeSchedule( id );
+        if ( confirmed )
+        {
+            getContinuum().removeSchedule( id );
+        }
+        else
+        {
+            return CONFIRM;
+        }
 
-       return SUCCESS; 
+        return SUCCESS;
     }
 
     public Collection getSchedules()
@@ -204,5 +221,15 @@ public class ScheduleAction
     public void setSchedule( Schedule schedule )
     {
         this.schedule = schedule;
+    }
+
+    public boolean isConfirmed()
+    {
+        return confirmed;
+    }
+
+    public void setConfirmed( boolean confirmed )
+    {
+        this.confirmed = confirmed;
     }
 }

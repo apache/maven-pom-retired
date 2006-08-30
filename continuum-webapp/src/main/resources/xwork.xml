@@ -298,9 +298,13 @@
     </action>
 
     <action name="removeSchedule" class="schedule" method="remove">
+      <result name="confirm" type="chain">confirmScheduleRemoval</result>
       <result name="success" type="chain">schedules</result>
     </action>
 
+    <action name="confirmScheduleRemoval" class="schedule" method="confirm">
+      <result name="success">confirmScheduleRemoval.jsp</result>
+    </action>
 
   </package>
 
