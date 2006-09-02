@@ -5,7 +5,7 @@
   <version>1.0-SNAPSHOT</version>
   <name>Continuum Timeout test</name>
   <scm>
-    <connection>scm:svn:http://0.0.0.0/norepo/</connection>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-core/src/test-projects/timeout</connection>
   </scm>
   <dependencies>
     <dependency>
