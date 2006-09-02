@@ -47,4 +47,9 @@ public class CheckOutTask
     {
         return workingDirectory;
     }
+
+    public long getMaxExecutionTime()
+    {
+        return 0;
+    }
 }

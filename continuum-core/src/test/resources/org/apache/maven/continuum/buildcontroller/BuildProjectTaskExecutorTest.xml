@@ -1,0 +1,11 @@
+<plexus>
+  <components>
+    <component>
+      <role>org.codehaus.plexus.notification.RecipientSource</role>
+      <implementation>org.apache.maven.continuum.notification.ContinuumRecipientSource</implementation>
+      <configuration>
+        <toOverride>nobody@localhost</toOverride>
+      </configuration>
+    </component>
+  </components>
+</plexus>

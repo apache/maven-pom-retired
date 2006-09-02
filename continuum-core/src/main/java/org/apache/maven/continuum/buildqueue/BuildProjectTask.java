@@ -33,6 +33,8 @@ public class BuildProjectTask
 
     private int trigger;
 
+    private long maxExecutionTime;
+
     public BuildProjectTask( int projectId, int buildDefinitionId, int trigger )
     {
         this.projectId = projectId;
@@ -62,5 +64,15 @@ public class BuildProjectTask
     public int getTrigger()
     {
         return trigger;
+    }
+
+    public void setMaxExecutionTime( long maxExecutionTime )
+    {
+        this.maxExecutionTime = maxExecutionTime;
+    }
+
+    public long getMaxExecutionTime()
+    {
+        return maxExecutionTime;
     }
 }

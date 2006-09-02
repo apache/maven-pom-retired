@@ -1,0 +1,18 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.maven.continuum.tests</groupId>
+  <artifactId>timeout</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>Continuum Timeout test</name>
+  <scm>
+    <connection>scm:svn:http://0.0.0.0/norepo/</connection>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
