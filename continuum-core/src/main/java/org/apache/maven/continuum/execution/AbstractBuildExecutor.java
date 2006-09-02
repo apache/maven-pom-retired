@@ -27,6 +27,7 @@ import org.codehaus.plexus.commandline.ExecutableResolver;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -190,7 +191,7 @@ public abstract class AbstractBuildExecutor
 
             getLogger().info( "Exit code: " + result.getExitCode() );
 
-            return new ContinuumBuildExecutionResult( "", result.getExitCode() );
+            return new ContinuumBuildExecutionResult( FileUtils.fileRead( output ), result.getExitCode() );
         }
         catch ( Exception e )
         {
