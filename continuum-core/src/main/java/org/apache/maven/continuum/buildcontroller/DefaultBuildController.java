@@ -74,8 +74,10 @@ public class DefaultBuildController
     // ----------------------------------------------------------------------
 
     /**
+     * @param projectId
+     * @param buildDefinitionId
+     * @param trigger
      * @throws TaskExecutionException
-     * @todo structure of this method is a bit of a mess (too much exception/finally code)
      */
     public void build( int projectId, int buildDefinitionId, int trigger )
         throws TaskExecutionException
@@ -150,8 +152,7 @@ public class DefaultBuildController
     }
 
     /**
-     * Checks if the build should be marked as ERROR and notifies
-     * the end of the build.
+     * Checks if the build should be marked as ERROR and notifies the end of the build.
      *
      * @param context
      * @throws TaskExecutionException
@@ -187,17 +188,25 @@ public class DefaultBuildController
     {
         BuildResult build = context.getBuildResult();
 
-        build.setError( error );
-
-        try
+        if ( build == null )
         {
-            store.updateBuildResult( build );
-
-            build = store.getBuildResult( build.getId() );
+            build = makeAndStoreBuildResult( context, error );
         }
-        catch ( ContinuumStoreException e )
+        else
         {
-            throw new TaskExecutionException( "Error updating build result", e );
+
+            build.setError( error );
+
+            try
+            {
+                store.updateBuildResult( build );
+
+                build = store.getBuildResult( build.getId() );
+            }
+            catch ( ContinuumStoreException e )
+            {
+                throw new TaskExecutionException( "Error updating build result", e );
+            }
         }
 
         context.getProject().setState( build.getState() );
@@ -292,8 +301,7 @@ public class DefaultBuildController
 
         actionContext.put( AbstractContinuumAction.KEY_TRIGGER, new Integer( trigger ) );
 
-        actionContext
-            .put( AbstractContinuumAction.KEY_FIRST_RUN, Boolean.valueOf( context.getOldBuildResult() == null ) );
+        actionContext.put( AbstractContinuumAction.KEY_FIRST_RUN, Boolean.valueOf( context.getOldBuildResult() == null ) );
 
         return context;
     }
@@ -305,8 +313,8 @@ public class DefaultBuildController
 
         performAction( "check-working-directory", buildContext );
 
-        boolean workingDirectoryExists = AbstractContinuumAction
-            .getBoolean( actionContext, AbstractContinuumAction.KEY_WORKING_DIRECTORY_EXISTS );
+        boolean workingDirectoryExists = AbstractContinuumAction.getBoolean( actionContext,
+                                                                             AbstractContinuumAction.KEY_WORKING_DIRECTORY_EXISTS );
 
         ScmResult scmResult;
 
@@ -320,8 +328,8 @@ public class DefaultBuildController
         {
             Project project = (Project) actionContext.get( AbstractContinuumAction.KEY_PROJECT );
 
-            actionContext.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY, workingDirectoryService
-                .getWorkingDirectory( project ).getAbsolutePath() );
+            actionContext.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY,
+                               workingDirectoryService.getWorkingDirectory( project ).getAbsolutePath() );
 
             performAction( "checkout-project", buildContext );
 
@@ -391,9 +399,9 @@ public class DefaultBuildController
     private boolean shouldBuild( BuildContext context )
         throws TaskExecutionException
     {
-        //oldBuildResult != null &&
-        //        List changes, Project project, int trigger )
-        //        scmResult.getChanges(), project, trigger ) )
+        // oldBuildResult != null &&
+        // List changes, Project project, int trigger )
+        // scmResult.getChanges(), project, trigger ) )
 
         boolean allChangesUnknown = checkAllChangesUnknown( context.getScmResult().getChanges() );
 
@@ -506,8 +514,8 @@ public class DefaultBuildController
     private BuildResult makeAndStoreBuildResult( BuildContext context, String error )
         throws TaskExecutionException
     {
-        //        Project project, ScmResult scmResult, long startTime, int trigger )
-        //        project, scmResult, startTime, trigger );
+        // Project project, ScmResult scmResult, long startTime, int trigger )
+        // project, scmResult, startTime, trigger );
 
         BuildResult build = new BuildResult();
 
@@ -585,7 +593,7 @@ public class DefaultBuildController
     }
 
     /**
-     *  Merges scm results so we'll have all changes since last execution of current build definition
+     * Merges scm results so we'll have all changes since last execution of current build definition
      */
     private void mergeScmResults( BuildContext context )
     {
