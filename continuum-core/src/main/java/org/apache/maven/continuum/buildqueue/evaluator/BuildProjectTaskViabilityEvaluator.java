@@ -19,10 +19,10 @@ package org.apache.maven.continuum.buildqueue.evaluator;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.taskqueue.TaskQueueException;
 import org.codehaus.plexus.taskqueue.TaskViabilityEvaluator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -45,8 +45,19 @@ public class BuildProjectTaskViabilityEvaluator
     // TaskViabilityEvaluator Implementation
     // ----------------------------------------------------------------------
 
-    public List evaluate( List tasks )
-        throws TaskQueueException
+    /**
+     * Removes duplicate tasks from the list. A duplicate task is one with the same
+     * build definition and that's scheduled within the required build interval.
+     *
+     * <p>
+     * &forall; <sub>t1, t2 &isin; tasks</sub> [ t1 &ne; t2 &and; t2.buildDefinition = t2.buildDefinition]:
+     *  if ( t2.timestamp - t1.timestamp < requiredBuildInterval ) remove( t2 ).
+     * </p>
+     *
+     * @param tasks A list of queued tasks to evaluate
+     * @return a list of tasks with duplicates removed
+     */
+    public Collection evaluate( Collection tasks )
     {
         // ----------------------------------------------------------------------
         // This code makes a Map with Lists with one list per project. For each
