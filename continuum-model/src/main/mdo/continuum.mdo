@@ -21,6 +21,7 @@
         <field>
           <name>id</name>
           <version>1.0.0+</version>
+          <required>true</required>
           <type>int</type>
           <identifier>true</identifier>
         </field>
@@ -1102,7 +1103,7 @@
                 for ( int i = 0; i < binaryData.length; i++ )
                 {
                     String t = Integer.toHexString( binaryData[i] & 0xff );
-        
+
                     if ( t.length() == 1 )
                     {
                         retValue += ( "0" + t );
