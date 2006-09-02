@@ -233,6 +233,56 @@ public class MavenTwoContinuumProjectBuilderTest
 
     }
 
+    public void testCreateProjectWithoutModules()
+        throws Exception
+    {
+        ContinuumProjectBuilder projectBuilder = (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE,
+                                                                                   MavenTwoContinuumProjectBuilder.ID );
+
+        URL url = getClass().getClassLoader().getResource( "projects/continuum/continuum-core/pom.xml" );
+
+        // Eat System.out
+        PrintStream ps = System.out;
+
+        ContinuumProjectBuildingResult result;
+
+        try
+        {
+            System.setOut( new PrintStream( new ByteArrayOutputStream() ) );
+
+            result = projectBuilder.buildProjectsFromMetadata( url, null, null );
+        }
+        finally
+        {
+            System.setOut( ps );
+        }
+
+        assertNotNull( result );
+
+        assertNotNull( result.getErrors() );
+
+        assertEquals( 0, result.getErrors().size() );
+
+        assertNotNull( result.getProjectGroups() );
+
+        assertEquals( 1, result.getProjectGroups().size() );
+
+        ProjectGroup projectGroup = (ProjectGroup) result.getProjectGroups().get( 0 );
+
+        assertEquals( "projectGroup.groupId", "org.apache.maven.continuum", projectGroup.getGroupId() );
+
+        assertEquals( "projectGroup.name", "Continuum Core", projectGroup.getName() );
+
+        assertNotNull( result.getProjects() );
+
+        assertEquals( 1, result.getProjects().size() );
+
+        assertNotNull( projectGroup.getProjects() );
+
+        assertEquals( 0, projectGroup.getProjects().size() );
+    }
+
+
     private void assertDependency( String dep, String proj, Map projects )
     {
         Project p = (Project) projects.get( proj );
@@ -272,7 +322,7 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( name, project.getName() );
 
-        String scmUrl = "scm:svn:http://svn.apache.org/repos/asf/maven/continuum/tags";
+        String scmUrl = "scm:svn:http://svn.apache.org/repos/asf/maven/continuum/";
 
         assertTrue( project.getScmUrl().startsWith( scmUrl ) );
     }
