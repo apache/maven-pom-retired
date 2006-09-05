@@ -108,6 +108,10 @@
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-core</artifactId>
     </dependency>
+    <dependency> <!-- added since depMgt doesn't override imported dependencies -->
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-xwork-integration</artifactId>
