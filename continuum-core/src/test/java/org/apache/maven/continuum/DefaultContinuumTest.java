@@ -239,4 +239,25 @@ public class DefaultContinuumTest
 
         assertTrue ( "remove project group failed", projectGroupList.size() == 0 );
     }
+
+    public void testExecuteAction()
+        throws Exception
+    {
+        DefaultContinuum continuum = (DefaultContinuum) lookup( Continuum.ROLE );
+
+        String exceptionName = ContinuumException.class.getName();
+        try
+        {
+            continuum.executeAction( "testAction", new HashMap() );
+        }
+        catch ( ContinuumException e )
+        {
+            //expected, check for twice wrapped exception
+            if ( e.getCause() != null )
+            {
+                assertFalse( exceptionName + " is wrapped in " + exceptionName, e.getCause().getClass()
+                    .equals( ContinuumException.class ) );
+            }
+        }
+    }
 }

@@ -7,6 +7,11 @@
         <toOverride>nobody@localhost</toOverride>
       </configuration>
     </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>testAction</role-hint>
+      <implementation>org.apache.maven.continuum.TestAction</implementation>
+    </component>
     <!--
      |
      | These point to the flows that we use as part of the runtime.

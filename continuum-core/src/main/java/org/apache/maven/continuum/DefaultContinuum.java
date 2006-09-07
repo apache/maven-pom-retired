@@ -2243,7 +2243,7 @@ public class DefaultContinuum
     // Workflow
     // ----------------------------------------------------------------------
 
-    private void executeAction( String actionName, Map context )
+    protected void executeAction( String actionName, Map context )
         throws ContinuumException
     {
         try
