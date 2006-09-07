@@ -170,16 +170,6 @@ public class DefaultContinuum
         } );
     }
 
-    public void setActionManager( ActionManager actionManager )
-    {
-        this.actionManager = actionManager;
-    }
-
-    public ActionManager getActionManager()
-    {
-        return actionManager;
-    }
-
     // ----------------------------------------------------------------------
     // Project Groups
     // ----------------------------------------------------------------------
@@ -2253,22 +2243,18 @@ public class DefaultContinuum
     // Workflow
     // ----------------------------------------------------------------------
 
-    protected void executeAction( String actionName, Map context )
+    private void executeAction( String actionName, Map context )
         throws ContinuumException
     {
         try
         {
-            Action action = getActionManager().lookup( actionName );
+            Action action = actionManager.lookup( actionName );
 
             action.execute( context );
         }
         catch ( ActionNotFoundException e )
         {
             throw new ContinuumException( "Error while executing the action '" + actionName + "'.", e );
-        }
-        catch ( ContinuumException e )
-        {
-            throw e;
         }
         catch ( Exception e )
         {
