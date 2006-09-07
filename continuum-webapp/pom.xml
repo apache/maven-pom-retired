@@ -101,6 +101,22 @@
           </excludes>
         </configuration>
       </plugin>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>src/main/webapp/WEB-INF</directory>
+              <includes>
+                <include>database</include>
+                <include>temp</include>
+                <include>logs</include>
+                <include>working-directory</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
