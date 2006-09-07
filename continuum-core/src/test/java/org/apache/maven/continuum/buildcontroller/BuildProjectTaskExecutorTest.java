@@ -31,6 +31,7 @@ import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
+import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -174,8 +175,8 @@ public class BuildProjectTaskExecutorTest
     {
         BuildProjectTask task = createTask( maxRunTime );
 
-        getTestFile( "src/test-projects/timeout/target/TEST-STARTED" ).delete();
-        getTestFile( "src/test-projects/timeout/target/TEST-COMPLETED" ).delete();
+        FileUtils.forceDelete( getTestFile( "src/test-projects/timeout/target/TEST-STARTED" ) );
+        FileUtils.forceDelete( getTestFile( "src/test-projects/timeout/target/TEST-COMPLETED" ) );
 
         System.err.println( "Queueing build" );
 
