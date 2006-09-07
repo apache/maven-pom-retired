@@ -2258,7 +2258,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumException e )
         {
-            throws e;
+            throw e;
         }
         catch ( Exception e )
         {
