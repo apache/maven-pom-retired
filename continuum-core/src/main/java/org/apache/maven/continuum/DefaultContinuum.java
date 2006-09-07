@@ -2256,6 +2256,10 @@ public class DefaultContinuum
         {
             throw new ContinuumException( "Error while executing the action '" + actionName + "'.", e );
         }
+        catch ( ContinuumException e )
+        {
+            throws e;
+        }
         catch ( Exception e )
         {
             getLogger().info( "exception", e );
