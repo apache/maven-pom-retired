@@ -7,7 +7,6 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-core</artifactId>
   <name>Continuum Core</name>
-  <version>1.1-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.derby</groupId>

@@ -8,7 +8,6 @@
   <artifactId>continuum-plexus-application</artifactId>
   <packaging>plexus-application</packaging>
   <name>Continuum Plexus Application</name>
-  <version>1.1-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
@@ -22,7 +21,7 @@
         </executions>
         <configuration>
           <descriptor>src/assembly/bin.xml</descriptor>
-          <finalName>continuum-1.1-SNAPSHOT</finalName>
+          <finalName>continuum-${pom.version}</finalName>
         </configuration>
       </plugin>
       <plugin>

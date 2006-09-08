@@ -7,7 +7,6 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-rpc-client</artifactId>
   <name>Continuum client XML-RPC</name>
-  <version>1.1-SNAPSHOT</version>
   <description>XML-RPC client code for accessing Apache Continuum servers</description>
   <build>
     <plugins>

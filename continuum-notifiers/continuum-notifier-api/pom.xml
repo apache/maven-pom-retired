@@ -7,5 +7,4 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-notifier-api</artifactId>
   <name>Continuum Notifier API</name>
-  <version>1.1-SNAPSHOT</version>
 </project>

@@ -7,7 +7,6 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-web</artifactId>
   <name>Continuum Web</name>
-  <version>1.1-SNAPSHOT</version>
   <build>
     <resources>
       <resource>

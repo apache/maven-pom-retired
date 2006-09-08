@@ -7,7 +7,6 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>continuum-notifier-irc</artifactId>
   <name>Continuum IRC Notifier</name>
-  <version>1.1-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -17,7 +16,7 @@
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-notifier-api</artifactId>
-      <version>1.1-SNAPSHOT</version>
+      <version>${pom.version}</version>
     </dependency>
   </dependencies>
 </project>
