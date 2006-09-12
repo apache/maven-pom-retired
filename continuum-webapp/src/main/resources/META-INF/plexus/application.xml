@@ -11,9 +11,35 @@
       <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
       <role-hint>check-out-project</role-hint>
     </component>
+    <component>
+      <role>org.apache.maven.continuum.web.xmlrpc.XmlRpcService</role>
+    </component>
   </load-on-start>
 
   <components>
+    <!--
+    | The XML-RPC service
+    |-->
+    <component>
+      <role>org.apache.maven.continuum.web.xmlrpc.XmlRpcService</role>
+      <implementation>org.apache.maven.continuum.web.xmlrpc.DefaultXmlRpcService</implementation>
+      <description></description>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.xmlrpc.XmlRpcServer</role>
+          <field-name>xmlRpcServer</field-name>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.xmlrpc.ContinuumXmlRpc</role>
+          <field-name>handler</field-name>
+        </requirement>
+      </requirements>
+      <configuration>
+        <port>8000</port>
+        <handler-name>continuum</handler-name>
+      </configuration>
+    </component>
+
     <!--
     | The mail notifier
     |-->
