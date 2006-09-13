@@ -12,13 +12,13 @@
         <div>
           <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
             <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="info"/></b>
-            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="<ww:url value="/buildResults.action?projectId="/><ww:property value="project.id"/>&projectName=<ww:property value="project.name"/>"><ww:text name="builds"/></a>
-            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="<ww:url value="/workingCopy.action?projectId="/><ww:property value="project.id"/>&projectName=<ww:property value="project.name"/>"><ww:text name="workingCopy"/></a>
+            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href='<ww:url action="buildResults"/>'><ww:text name="builds"/></a>
+            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href='<ww:url action="workingCopy"/>'><ww:text name="workingCopy"/></a>
           </p>
         </div>
 
         <h3><ww:text name="projectView.section.title"/></h3>
-            
+
         <div class="axial">
           <table border="1" cellspacing="2" cellpadding="3" width="100%">
             <c1:data label="%{getText('projectView.project.name')}" name="project.name"/>
