@@ -712,7 +712,7 @@ public class DefaultContinuum
             BuildProjectTask task = new BuildProjectTask( project.getId(), buildDefinitionId, trigger );
 
             task.setMaxExecutionTime( store.getBuildDefinition( buildDefinitionId ).getSchedule()
-                .getMaxJobExecutionTime() );
+                .getMaxJobExecutionTime() * 1000 );
 
             buildQueue.put( task );
         }
