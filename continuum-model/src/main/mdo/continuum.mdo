@@ -805,6 +805,16 @@
           <type>int</type>
         </field>
         <field>
+          <name>maxJobExecutionTime</name>
+          <description>
+            Maximum execution time of a job in seconds before it's
+            terminated.
+          </description>
+          <version>1.0.0+</version>
+          <type>int</type>
+          <defaultValue>3600</defaultValue>
+        </field>
+        <field>
           <name>cronExpression</name>
           <version>1.0.0+</version>
           <type>String</type>

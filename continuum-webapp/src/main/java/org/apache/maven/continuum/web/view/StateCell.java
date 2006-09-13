@@ -18,6 +18,8 @@ package org.apache.maven.continuum.web.view;
 
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.webwork.views.util.UrlHelper;
+
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.web.model.ProjectSummary;
 import org.apache.maven.continuum.web.util.StateGenerator;
 import org.extremecomponents.table.bean.Column;
@@ -39,35 +41,53 @@ public class StateCell
     {
         ProjectSummary project = (ProjectSummary) tableModel.getCurrentRowBean();
 
-        int latestBuildId = project.getLatestBuildId();
-
-        String state = StateGenerator.generate( project.getState(), tableModel.getContext().getContextPath() );
-
-        if ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 || project.getState() == 4 )
+        switch ( project.getState() )
         {
-            if ( latestBuildId != -1 && !StateGenerator.NEW.equals( state ) )
+            case ContinuumProjectState.NEW:
+            case ContinuumProjectState.OK:
+            case ContinuumProjectState.FAILED:
+            case ContinuumProjectState.ERROR:
             {
-                HashMap params = new HashMap();
+                String state = StateGenerator.generate( project.getState(), tableModel.getContext().getContextPath() );
 
-                params.put( "projectId", new Integer( project.getId() ) );
-
-                params.put( "projectName", project.getName() );
-
-                params.put( "buildId", new Integer( latestBuildId ) );
-
-                String url = UrlHelper.buildUrl( "/buildResult.action", ServletActionContext.getRequest(),
-                                                 ServletActionContext.getResponse(), params );
-
-                return "<a href=\"" + url + "\">" + state + "</a>";
+                if ( project.getLatestBuildId() != -1 && !StateGenerator.NEW.equals( state ) )
+                {
+                    return createActionLink( "buildResult", project, state );
+                }
+                else
+                {
+                    return state;
+                }
             }
-            else
+
+            case ContinuumProjectState.BUILDING:
             {
-                return state;
+                return StateGenerator.generate( project.getState(), tableModel.getContext().getContextPath() ) + " "
+                    + createActionLink( "cancelBuild", project, "(cancel)" );
+            }
+
+            default:
+            {
+                return "&nbsp;";
             }
         }
-        else
-        {
-            return "&nbsp;";
-        }
+    }
+
+    private static String createActionLink( String action, ProjectSummary project, String state )
+    {
+        HashMap params = new HashMap();
+
+        params.put( "projectId", new Integer( project.getId() ) );
+
+        params.put( "projectName", project.getName() );
+
+        params.put( "buildId", new Integer( project.getLatestBuildId() ) );
+
+        String url = UrlHelper.buildUrl( "/" + action + ".action",
+                                         ServletActionContext.getRequest(),
+                                         ServletActionContext.getResponse(),
+                                         params );
+
+        return "<a href=\"" + url + "\">" + state + "</a>";
     }
 }

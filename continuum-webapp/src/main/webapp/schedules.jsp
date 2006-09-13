@@ -21,6 +21,7 @@
             <ec:column property="description" title="schedules.table.description"/>
             <ec:column property="delay" title="schedules.table.delay"/>
             <ec:column property="cronExpression" title="schedules.table.cronExpression"/>
+            <ec:column property="maxJobExecutionTime" title="schedules.table.maxJobExecutionTime"/>
             <ec:column property="actions" title="&nbsp;">
                 <ww:url id="editScheduleUrl" action="schedule">
                   <ww:param name="id" value="${pageScope.schedule.id}"/>

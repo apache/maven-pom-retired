@@ -23,8 +23,7 @@ import java.util.Collection;
 
 /**
  * @author Nik Gonzalez
- * @plexus.component role="com.opensymphony.xwork.Action"
- * role-hint="schedule"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="schedule"
  */
 public class ScheduleAction
     extends ContinuumActionSupport
@@ -47,6 +46,8 @@ public class ScheduleAction
 
     private boolean confirmed;
 
+    private int maxJobExecutionTime;
+
     public String summary()
         throws ContinuumException
     {
@@ -63,10 +64,11 @@ public class ScheduleAction
             {
                 schedule = getContinuum().getSchedule( id );
                 active = schedule.isActive();
-                cronExpression= schedule.getCronExpression();
+                cronExpression = schedule.getCronExpression();
                 description = schedule.getDescription();
                 name = schedule.getName();
                 delay = schedule.getDelay();
+                maxJobExecutionTime = schedule.getMaxJobExecutionTime();
             }
             catch ( ContinuumException e )
             {
@@ -83,14 +85,7 @@ public class ScheduleAction
         {
             try
             {
-                Schedule schedule = new Schedule();
-                schedule.setActive( active );
-                schedule.setCronExpression( cronExpression );
-                schedule.setDelay( delay );
-                schedule.setDescription( description );
-                schedule.setName( name );
-
-                getContinuum().addSchedule( schedule );
+                getContinuum().addSchedule( setFields( new Schedule() ) );
             }
             catch ( ContinuumException e )
             {
@@ -101,19 +96,9 @@ public class ScheduleAction
         }
         else
         {
-
             try
             {
-                schedule = getContinuum().getSchedule( id );
-
-                schedule.setActive( active );
-                schedule.setCronExpression( cronExpression );
-                schedule.setDelay( delay );
-                schedule.setDescription( description );
-                schedule.setName( name );
-
-                getContinuum().updateSchedule( schedule );
-
+                getContinuum().updateSchedule( setFields( getContinuum().getSchedule( id ) ) );
             }
             catch ( ContinuumException e )
             {
@@ -123,6 +108,18 @@ public class ScheduleAction
 
             return SUCCESS;
         }
+    }
+
+    private Schedule setFields( Schedule schedule )
+    {
+        schedule.setActive( active );
+        schedule.setCronExpression( cronExpression );
+        schedule.setDelay( delay );
+        schedule.setDescription( description );
+        schedule.setName( name );
+        schedule.setMaxJobExecutionTime( maxJobExecutionTime );
+
+        return schedule;
     }
 
     public String confirm()
@@ -232,5 +229,15 @@ public class ScheduleAction
     public void setConfirmed( boolean confirmed )
     {
         this.confirmed = confirmed;
+    }
+
+    public int getMaxJobExecutionTime()
+    {
+        return maxJobExecutionTime;
+    }
+
+    public void setMaxJobExecutionTime( int maxJobExecutionTime )
+    {
+        this.maxJobExecutionTime = maxJobExecutionTime;
     }
 }
