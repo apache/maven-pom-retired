@@ -162,24 +162,27 @@ public class DefaultBuildController
     {
         Project project = context.getProject();
 
-        if ( project.getState() != ContinuumProjectState.NEW && project.getState() != ContinuumProjectState.CHECKEDOUT
-            && project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED
-            && project.getState() != ContinuumProjectState.ERROR )
+        try
         {
-            try
+            if ( project.getState() != ContinuumProjectState.NEW && project.getState() != ContinuumProjectState.CHECKEDOUT
+                && project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED
+                && project.getState() != ContinuumProjectState.ERROR )
             {
-                project.setState( ContinuumProjectState.ERROR );
+                try
+                {
+                    project.setState( ContinuumProjectState.ERROR );
 
-                store.updateProject( project );
+                    store.updateProject( project );
+                }
+                catch ( ContinuumStoreException e )
+                {
+                    throw new TaskExecutionException( "Error storing the project", e );
+                }
             }
-            catch ( ContinuumStoreException e )
-            {
-                throw new TaskExecutionException( "Error storing the project", e );
-            }
-            finally
-            {
-                notifierDispatcher.buildComplete( project, context.getBuildResult() );
-            }
+        }
+        finally
+        {
+            notifierDispatcher.buildComplete( project, context.getBuildResult() );
         }
     }
 
