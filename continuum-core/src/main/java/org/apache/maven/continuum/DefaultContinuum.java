@@ -564,47 +564,35 @@ public class DefaultContinuum
                 Project project = (Project) j.next();
 
                 // iterate through the project group build definitions and build
-                if ( groupBuildDefinitionIds != null && !groupBuildDefinitionIds.isEmpty() )
-                {
-                    getLogger().info(
-                        "Processing " + groupBuildDefinitionIds.size() + " build definitions for project " + project );
-                    for ( Iterator buildDefinitionIterator = groupBuildDefinitionIds.iterator();
-                          buildDefinitionIterator.hasNext(); )
-                    {
-                        Integer buildDefId = (Integer) buildDefinitionIterator.next();
-
-                        if ( buildDefId != null && !isInBuildingQueue( project.getId(), buildDefId.intValue() ) &&
-                            !isInCheckoutQueue( project.getId() ) )
-                        {
-                            buildProject( project, buildDefId.intValue(), ContinuumProjectState.TRIGGER_SCHEDULED,
-                                          false );
-                        }
-                    }
-                }
+                buildFromDefinitionIds( groupBuildDefinitionIds, project );
 
                 // iterate through the project build definitions and build
                 List buildDefIds = projectsMap == null ? null : (List) projectsMap.get( new Integer( project.getId() ) );
 
-                if ( buildDefIds != null && !buildDefIds.isEmpty() )
-                {
-                    getLogger().info(
-                        "Processing " + buildDefIds.size() + " build definitions for project " + project );
-                    for ( Iterator buildDefinitionIterator = buildDefIds.iterator();
-                          buildDefinitionIterator.hasNext(); )
-                    {
-                        Integer buildDefId = (Integer) buildDefinitionIterator.next();
+                buildFromDefinitionIds( buildDefIds, project );
 
-                        if ( buildDefId != null && !isInBuildingQueue( project.getId(), buildDefId.intValue() ) &&
-                            !isInCheckoutQueue( project.getId() ) )
-                        {
-                            buildProject( project, buildDefId.intValue(), ContinuumProjectState.TRIGGER_SCHEDULED,
-                                          false );
-                        }
-                    }
-                }
-                else
+                if ( buildDefIds == null || buildDefIds.isEmpty() )
                 {
                     getLogger().info( "No build definitions, not building for project " + project );
+                }
+            }
+        }
+    }
+
+    private void buildFromDefinitionIds( Collection buildDefinitionIds, Project project )
+        throws ContinuumException
+    {
+        if ( buildDefinitionIds != null && !buildDefinitionIds.isEmpty() )
+        {
+            getLogger().info( "Processing " + buildDefinitionIds.size() + " build definitions for project " + project );
+            for ( Iterator buildDefinitionIterator = buildDefinitionIds.iterator(); buildDefinitionIterator.hasNext(); )
+            {
+                Integer buildDefId = (Integer) buildDefinitionIterator.next();
+
+                if ( buildDefId != null && !isInBuildingQueue( project.getId(), buildDefId.intValue() )
+                    && !isInCheckoutQueue( project.getId() ) )
+                {
+                    buildProject( project, buildDefId.intValue(), ContinuumProjectState.TRIGGER_SCHEDULED, false );
                 }
             }
         }
