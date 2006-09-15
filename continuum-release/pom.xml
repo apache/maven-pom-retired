@@ -38,7 +38,7 @@
     <testResources>
       <testResource>
         <directory>src/test/scm</directory>
-        <targetPath>scm-src</targetPath>
+        <targetPath>../scm-src</targetPath>
       </testResource>
     </testResources>
   </build>
