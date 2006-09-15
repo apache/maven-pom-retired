@@ -1,4 +1,4 @@
-package org.apache.maven.continuum;
+package org.apache.maven.continuum.release.tasks;
 
 /*
  * Copyright 2006 The Apache Software Foundation.
@@ -16,23 +16,20 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
-import org.apache.maven.continuum.release.ContinuumReleaseManager;
-import org.apache.maven.plugins.release.model.Release;
+import org.apache.maven.plugins.release.config.ReleaseDescriptor;
+import org.apache.maven.settings.Settings;
+
+import java.util.List;
 
 /**
- * @author Jason van Zyl
+ * @author Edwin Punzalan
  */
-public class ContinuumReleaseManagerTest
-    extends PlexusTestCase
+public class PrepareReleaseProjectTask
+    extends AbstractReleaseProjectTask
 {
-    public void testContinuumReleaseManager()
-        throws Exception
+    public PrepareReleaseProjectTask( int projectId, ReleaseDescriptor descriptor,
+                                      Settings settings, List reactorProjects )
     {
-        ContinuumReleaseManager crm = (ContinuumReleaseManager) lookup( ContinuumReleaseManager.ROLE, "default" );
-
-        Release r = new Release();
-
-        crm.perform( r );
+        super( projectId, descriptor, settings, reactorProjects );
     }
 }

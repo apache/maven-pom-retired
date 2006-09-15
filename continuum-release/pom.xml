@@ -18,5 +18,10 @@
       <artifactId>maven-release-plugin</artifactId>
       <version>2.0-beta-5-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-taskqueue</artifactId>
+      <version>1.0-alpha-3</version>
+    </dependency>
   </dependencies>
 </project>

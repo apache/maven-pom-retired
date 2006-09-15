@@ -6,9 +6,121 @@
       <implementation>org.apache.maven.continuum.release.DefaultContinuumReleaseManager</implementation>
       <requirements>
         <requirement>
+          <role>org.apache.maven.project.MavenProjectBuilder</role>          
+        </requirement>
+        <requirement>
           <role>org.apache.maven.plugins.release.ReleaseManager</role>          
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper</role>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>perpare-release</role-hint>
+          <field-name>prepareReleaseQueue</field-name>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>perform-release</role-hint>
+          <field-name>performReleaseQueue</field-name>
+        </requirement>
       </requirements>
+      <configuration>
+        <local-repository>${plexus.home}/local-repository</local-repository>
+      </configuration>
     </component>
   </components>
+
+  <!--
+   |
+   | Prepare Release Project Task Queue
+   |
+   |-->
+
+  <component>
+    <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+    <role-hint>prepare-release</role-hint>
+    <implementation>org.codehaus.plexus.taskqueue.DefaultTaskQueue</implementation>
+    <lifecycle-handler>plexus-configurable</lifecycle-handler>
+    <configuration>
+      <task-entry-evaluators>
+      </task-entry-evaluators>
+      <task-exit-evaluators>
+      </task-exit-evaluators>
+      <task-viability-evaluators>
+      </task-viability-evaluators>
+    </configuration>
+  </component>
+
+  <component>
+    <role>org.codehaus.plexus.taskqueue.execution.TaskExecutor</role>
+    <role-hint>prepare-release</role-hint>
+    <implementation>org.apache.maven.continuum.release.executors.PrepareReleaseTaskExecutor</implementation>
+  </component>
+
+  <component>
+    <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+    <role-hint>prepare-release</role-hint>
+    <implementation>org.codehaus.plexus.taskqueue.execution.ThreadedTaskQueueExecutor</implementation>
+    <requirements>
+      <requirement>
+        <role>org.codehaus.plexus.taskqueue.execution.TaskExecutor</role>
+        <role-hint>prepare-release</role-hint>
+      </requirement>
+      <requirement>
+        <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+        <role-hint>prepare-release</role-hint>
+      </requirement>
+    </requirements>
+    <configuration>
+      <name>prepare-release</name>
+    </configuration>
+  </component>
+
+  <!--
+   |
+   | Perform Release Project Task Queue
+   |
+   |-->
+
+  <component>
+    <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+    <role-hint>perform-release</role-hint>
+    <implementation>org.codehaus.plexus.taskqueue.DefaultTaskQueue</implementation>
+    <lifecycle-handler>plexus-configurable</lifecycle-handler>
+    <configuration>
+      <task-entry-evaluators>
+      </task-entry-evaluators>
+      <task-exit-evaluators>
+      </task-exit-evaluators>
+      <task-viability-evaluators>
+      </task-viability-evaluators>
+    </configuration>
+  </component>
+
+  <component>
+    <role>org.codehaus.plexus.taskqueue.execution.TaskExecutor</role>
+    <role-hint>perform-release</role-hint>
+    <implementation>org.apache.maven.continuum.release.executors.PerformReleaseTaskExecutor</implementation>
+  </component>
+
+  <component>
+    <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+    <role-hint>perform-release</role-hint>
+    <implementation>org.codehaus.plexus.taskqueue.execution.ThreadedTaskQueueExecutor</implementation>
+    <requirements>
+      <requirement>
+        <role>org.codehaus.plexus.taskqueue.execution.TaskExecutor</role>
+        <role-hint>perform-release</role-hint>
+      </requirement>
+      <requirement>
+        <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+        <role-hint>perform-release</role-hint>
+      </requirement>
+    </requirements>
+    <configuration>
+      <name>perform-release</name>
+    </configuration>
+  </component>
+
 </component-set>

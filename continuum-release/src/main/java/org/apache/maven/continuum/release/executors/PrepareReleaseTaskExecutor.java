@@ -1,4 +1,4 @@
-package org.apache.maven.continuum;
+package org.apache.maven.continuum.release.executors;
 
 /*
  * Copyright 2006 The Apache Software Foundation.
@@ -16,23 +16,19 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
-import org.apache.maven.continuum.release.ContinuumReleaseManager;
-import org.apache.maven.plugins.release.model.Release;
+import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
+import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
+import org.codehaus.plexus.taskqueue.Task;
 
 /**
- * @author Jason van Zyl
+ * @author Edwin Punzalan
  */
-public class ContinuumReleaseManagerTest
-    extends PlexusTestCase
+public class PrepareReleaseTaskExecutor
+    implements TaskExecutor
 {
-    public void testContinuumReleaseManager()
-        throws Exception
+    public void executeTask( Task task )
+        throws TaskExecutionException
     {
-        ContinuumReleaseManager crm = (ContinuumReleaseManager) lookup( ContinuumReleaseManager.ROLE, "default" );
 
-        Release r = new Release();
-
-        crm.perform( r );
     }
 }

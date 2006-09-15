@@ -50,6 +50,7 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.utils.PlexusContainerManager;
 import org.apache.maven.continuum.utils.ProjectSorter;
 import org.apache.maven.continuum.utils.WorkingDirectoryService;
+import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.action.Action;
@@ -136,6 +137,11 @@ public class DefaultContinuum
     private TaskQueue checkoutQueue;
 
     /**
+     * @plexus.requirement
+     */
+    private ContinuumReleaseManager releaseManager;
+
+    /**
      * @plexus.configuration
      */
     private String workingDirectory;
@@ -168,6 +174,21 @@ public class DefaultContinuum
                 }
             }
         } );
+    }
+
+    public ContinuumReleaseManager getReleaseManager()
+    {
+        return releaseManager;
+    }
+
+    public void setActionManager( ActionManager actionManager )
+    {
+        this.actionManager = actionManager;
+    }
+
+    public ActionManager getActionManager()
+    {
+        return actionManager;
     }
 
     // ----------------------------------------------------------------------
@@ -462,7 +483,6 @@ public class DefaultContinuum
      * fire off a build for all of the projects in a project group using their default builds
      *
      * @param projectGroupId
-     * @param trigger
      * @throws ContinuumException
      */
     public void buildProjectGroup( int projectGroupId )

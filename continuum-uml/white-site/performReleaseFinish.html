@@ -87,15 +87,8 @@
 <div id="bodycol">
 <div class="app">
 
-<div>
-  <p style="border-top: 1px solid transparent; border-bottom: 1px solid black;">
-    <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;"><a href="groupStatus.html">Status</a></b>
-    <b style="border: 1px solid black; padding-left: 1em; padding-right: 1em;"><a href="manageGroup.html">Manage</a></b>
-  </p>
-</div>
-
 <div id="axial" class="h3">
-<h3>Continuum Project Group</h3>
+<h3>Continuum Release</h3>
 
     <h4><a href="viewGroup.html">Plexus</a></h4>
     <table id="projectSummaryTable" border="1" cellpadding="3" cellspacing="2" width="100%">
@@ -103,66 +96,47 @@
       <!-- i18n -->
       <tbody><tr>
         <th>&nbsp;</th>
-        <th width="100%">Name</th>
-        <th>Version</th>
-        <th>Build</th>
-        <th colspan="5"></th>
+        <th>Phase</th>
       </tr>
 
 
         <tr class="b">
-          <td><img src="continuum_files/icon_warning_sml.gif" alt="Error"></td>
-          <td><a href="viewProject.html">Default Plexus Container</a></td>
-          <td>1.0-alpha-6-SNAPSHOT</td>
-          <td><a href="viewBuild.html">5</a></td>
-
-          <td><a href="#">Build&nbsp;Now</a></td>
-          <td><a href="builds.html">Build&nbsp;History</a></td>
-          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
-          <td>Release</td>
-          <td><a href="deleteProject.html">Delete</a></td>
+          <td><img src="continuum_files/icon_success_sml.gif" alt="Success"></td>
+          <td>Verify release configuration</td>
         </tr>
 
         <tr class="b">
-          <td>&nbsp;</td>
-          <td><a href="viewProject.html">Plexus Utils</a></td>
-          <td>1.0.2-SNAPSHOT</td>
-          <td><strong>In&nbsp;progress</strong></td>
-          
-          <td><a href="#">Cancel&nbsp;Build</a></td>
-          <td><a href="builds.html">Build&nbsp;History</a></td>
-          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
-          <td>Release</td>
-          <td><a href="deleteProject.html">Delete</a></td>
+          <td><img src="continuum_files/icon_success_sml.gif" alt="Success"></td>
+          <td>Verify completed release:prepare phases</td>
         </tr>
 
-        <tr class="a">
+        <tr class="b">
           <td><img src="continuum_files/icon_success_sml.gif" alt="Success"></td>
-          <td><a href="viewProject.html">Plexus Action</a></td>
-          <td>1.0-alpha-6-SNAPSHOT</td>
-          <td><a href="viewBuild.html">2</a></td>
-          
-          <td><a href="#">Build&nbsp;Now</a></td>
-          <td><a href="builds.html">Build&nbsp;History</a></td>
-          <td><a href="workingCopy.html">Working&nbsp;Copy</a></td>
-          <td><a href="releaseProject.html">Release</a></td>
-          <td><a href="deleteProject.html">Delete</a></td>
+          <td>Configure repositories</td>
+        </tr>
+
+        <tr class="b">
+          <td><img src="continuum_files/icon_success_sml.gif" alt="Success"></td>
+          <td>Checkout project from SCM</td>
+        </tr>
+
+        <tr class="b">
+          <td><img src="continuum_files/icon_success_sml.gif" alt="Success"></td>
+          <td>Build project</td>
+        </tr>
+
+        <tr class="b">
+          <td><img src="continuum_files/icon_success_sml.gif" alt="Success"></td>
+          <td>End Release</td>
         </tr>
 
       </tbody></table>
 
-    <div class="functnbar3">
-      <form method="post" action="#">
-        <img src="continuum_files/icon_success_sml.gif" alt="Success"> 0
-        <img src="continuum_files/icon_error_sml.gif" alt="Failed"> 0
-        <img src="continuum_files/icon_warning_sml.gif" alt="Error"> 2
-        <input name="action" value="cam" type="hidden">
-        <input name="cid" value="buildAllProjects" type="hidden">
-        <input name="build-broken" value="Build All In Error" type="submit">
-        <input name="build-all" value="Build All" type="submit">
-      </form>
-    </div>
-
+      <div class="functnbar3">
+        <form action="groupStatus.html">
+          <input type="submit" value="Done"/>&nbsp;&nbsp;<a href="viewBuild.html">View Build Output</a>
+        </form>
+      </div>
 
 </div>
 </div>
