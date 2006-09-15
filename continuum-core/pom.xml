@@ -130,7 +130,6 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-taskqueue</artifactId>
-      <version>1.0-alpha-4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>jpox</groupId>
