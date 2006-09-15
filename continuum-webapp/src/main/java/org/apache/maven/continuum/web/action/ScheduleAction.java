@@ -78,21 +78,13 @@ public class ScheduleAction
                 active = schedule.isActive();
 
                 String[] cronEx = schedule.getCronExpression().split( " " );
-                int i = 0;
-                while ( i < cronEx.length )
-                {
-                    switch( i )
-                    {
-                        case 0 : second = cronEx[i]; break;
-                        case 1 : minute = cronEx[i]; break;
-                        case 2 : hour = cronEx[i]; break;
-                        case 3 : dayOfMonth = cronEx[i]; break;
-                        case 4 : month = cronEx[i]; break;
-                        case 5 : dayOfWeek = cronEx[i]; break;
-                        case 6 : year = cronEx[i]; break;
-                    }
-                    i++;
-                }
+                second = cronEx[0];
+                minute = cronEx[1];
+                hour = cronEx[2];
+                dayOfMonth = cronEx[3];
+                month = cronEx[4];
+                dayOfWeek = cronEx[5];
+                year = cronEx[6];
 
                 description = schedule.getDescription();
                 name = schedule.getName();
