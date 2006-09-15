@@ -16,19 +16,62 @@ package org.apache.maven.continuum.release.executors;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
-import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
+import org.apache.maven.continuum.release.ContinuumReleaseException;
+import org.apache.maven.continuum.release.tasks.PerformReleaseProjectTask;
+import org.apache.maven.plugins.release.ReleaseManagerListener;
+import org.apache.maven.plugins.release.ReleaseResult;
+import org.apache.maven.plugins.release.config.ReleaseDescriptor;
+import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.taskqueue.Task;
+import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
+
+import java.util.List;
 
 /**
  * @author Edwin Punzalan
  */
 public class PerformReleaseTaskExecutor
-    implements TaskExecutor
+    extends AbstractReleaseTaskExecutor
 {
     public void executeTask( Task task )
         throws TaskExecutionException
     {
+        PerformReleaseProjectTask performTask = (PerformReleaseProjectTask) task;
 
+        ReleaseDescriptor descriptor = performTask.getDescriptor();
+
+        Settings settings;
+        try
+        {
+            settings = getSettings();
+        }
+        catch ( ContinuumReleaseException e )
+        {
+            throw new TaskExecutionException( "Failed to build reactor projects.", e );
+        }
+
+        List reactorProjects;
+        try
+        {
+            reactorProjects = getReactorProjects( descriptor );
+        }
+        catch ( ContinuumReleaseException e )
+        {
+            throw new TaskExecutionException( "Failed to build reactor projects.", e );
+        }
+
+        ReleaseManagerListener listener = performTask.getListener();
+
+        ReleaseResult result =
+            releasePluginManager.performWithResult( descriptor, settings, reactorProjects,
+                                                    performTask.getBuildDirectory(), performTask.getGoals(),
+                                                    performTask.isUseReleaseProfile(), listener );
+
+        if ( result.getResultCode() == ReleaseResult.SUCCESS )
+        {
+            continuumReleaseManager.getReleaseResults().put( performTask.getReleaseId(), result );
+
+            continuumReleaseManager.getPreparedReleases().remove( performTask.getReleaseId() );
+        }
     }
 }

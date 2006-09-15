@@ -16,11 +16,9 @@ package org.apache.maven.continuum.release.tasks;
  * limitations under the License.
  */
 
+import org.apache.maven.plugins.release.ReleaseManagerListener;
 import org.apache.maven.plugins.release.config.ReleaseDescriptor;
-import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.taskqueue.Task;
-
-import java.util.List;
 
 /**
  * @author Edwin Punzalan
@@ -28,21 +26,18 @@ import java.util.List;
 public abstract class AbstractReleaseProjectTask
     implements Task
 {
-    private int projectId;
+    private String releaseId;
 
     private ReleaseDescriptor descriptor;
 
-    private Settings settings;
+    private ReleaseManagerListener listener;
 
-    private List reactorProjects;
-
-    public AbstractReleaseProjectTask( int projectId, ReleaseDescriptor descriptor,
-                                       Settings settings, List reactorProjects )
+    public AbstractReleaseProjectTask( String releaseId, ReleaseDescriptor descriptor,
+                                       ReleaseManagerListener listener )
     {
-        this.projectId = projectId;
+        this.releaseId = releaseId;
         this.descriptor = descriptor;
-        this.settings = settings;
-        this.reactorProjects = reactorProjects;
+        this.listener = listener;
     }
 
     public ReleaseDescriptor getDescriptor()
@@ -55,33 +50,23 @@ public abstract class AbstractReleaseProjectTask
         this.descriptor = descriptor;
     }
 
-    public int getProjectId()
+    public String getReleaseId()
     {
-        return projectId;
+        return releaseId;
     }
 
-    public void setProjectId( int projectId )
+    public void setReleaseId( String releaseId )
     {
-        this.projectId = projectId;
+        this.releaseId = releaseId;
     }
 
-    public Settings getSettings()
+    public ReleaseManagerListener getListener()
     {
-        return settings;
+        return listener;
     }
 
-    public void setSettings( Settings settings )
+    public void setListener( ReleaseManagerListener listener )
     {
-        this.settings = settings;
-    }
-
-    public List getReactorProjects()
-    {
-        return reactorProjects;
-    }
-
-    public void setReactorProjects( List reactorProjects )
-    {
-        this.reactorProjects = reactorProjects;
+        this.listener = listener;
     }
 }

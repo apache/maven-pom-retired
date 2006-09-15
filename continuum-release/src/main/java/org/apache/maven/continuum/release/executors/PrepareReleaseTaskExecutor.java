@@ -16,19 +16,76 @@ package org.apache.maven.continuum.release.executors;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
-import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
+import org.apache.maven.continuum.release.ContinuumReleaseException;
+import org.apache.maven.continuum.release.tasks.PrepareReleaseProjectTask;
+import org.apache.maven.plugins.release.ReleaseManagerListener;
+import org.apache.maven.plugins.release.ReleaseResult;
+import org.apache.maven.plugins.release.config.ReleaseDescriptor;
+import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.taskqueue.Task;
+import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
+
+import java.util.List;
 
 /**
  * @author Edwin Punzalan
  */
 public class PrepareReleaseTaskExecutor
-    implements TaskExecutor
+    extends AbstractReleaseTaskExecutor
 {
     public void executeTask( Task task )
         throws TaskExecutionException
     {
+        PrepareReleaseProjectTask prepareTask = (PrepareReleaseProjectTask) task;
 
+        ReleaseManagerListener listener = prepareTask.getListener();
+
+        Settings settings;
+        try
+        {
+            settings = getSettings();
+        }
+        catch ( ContinuumReleaseException e )
+        {
+            ReleaseResult result = new ReleaseResult();
+
+            result.appendError( e );
+
+            continuumReleaseManager.getReleaseResults().put( prepareTask.getReleaseId(), result );
+
+            listener.error( e.getMessage() );
+
+            throw new TaskExecutionException( "Failed to build reactor projects.", e );
+        }
+
+        ReleaseDescriptor descriptor = prepareTask.getDescriptor();
+
+        List reactorProjects;
+        try
+        {
+            reactorProjects = getReactorProjects( descriptor );
+        }
+        catch ( ContinuumReleaseException e )
+        {
+            ReleaseResult result = new ReleaseResult();
+
+            result.appendError( e );
+
+            continuumReleaseManager.getReleaseResults().put( prepareTask.getReleaseId(), result );
+
+            listener.error( e.getMessage() );
+
+            throw new TaskExecutionException( "Failed to build reactor projects.", e );
+        }
+
+        ReleaseResult result = releasePluginManager.prepareWithResult( descriptor, settings, reactorProjects,
+                                                                       false, false, listener );
+
+        if ( result.getResultCode() == ReleaseResult.SUCCESS )
+        {
+            continuumReleaseManager.getReleaseResults().put( prepareTask.getReleaseId(), result );
+
+            continuumReleaseManager.getPreparedReleases().put( prepareTask.getReleaseId(), descriptor );
+        }
     }
 }

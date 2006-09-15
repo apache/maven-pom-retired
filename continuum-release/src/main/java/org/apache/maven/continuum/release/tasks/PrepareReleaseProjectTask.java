@@ -16,10 +16,8 @@ package org.apache.maven.continuum.release.tasks;
  * limitations under the License.
  */
 
+import org.apache.maven.plugins.release.ReleaseManagerListener;
 import org.apache.maven.plugins.release.config.ReleaseDescriptor;
-import org.apache.maven.settings.Settings;
-
-import java.util.List;
 
 /**
  * @author Edwin Punzalan
@@ -27,9 +25,9 @@ import java.util.List;
 public class PrepareReleaseProjectTask
     extends AbstractReleaseProjectTask
 {
-    public PrepareReleaseProjectTask( int projectId, ReleaseDescriptor descriptor,
-                                      Settings settings, List reactorProjects )
+    public PrepareReleaseProjectTask( String releaseId, ReleaseDescriptor descriptor,
+                                      ReleaseManagerListener listener )
     {
-        super( projectId, descriptor, settings, reactorProjects );
+        super( releaseId, descriptor, listener );
     }
 }

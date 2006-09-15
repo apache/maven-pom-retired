@@ -12,6 +12,14 @@
       <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
       <role-hint>check-out-project</role-hint>
     </component>
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+      <role-hint>prepare-release</role-hint>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+      <role-hint>perform-release</role-hint>
+    </component>
     <!--
     <component>
       <role>org.codehaus.xfire.plexus.config.ConfigurationService</role>

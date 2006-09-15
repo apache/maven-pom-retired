@@ -16,10 +16,11 @@ package org.apache.maven.continuum.release;
  * limitations under the License.
  */
 
-import org.apache.maven.plugins.release.config.ReleaseDescriptor;
-import org.apache.maven.settings.Settings;
+import org.apache.maven.continuum.model.project.Project;
 
 import java.io.File;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * The Continuum Release Manager is responsible for performing releases based on a release descriptor
@@ -27,29 +28,47 @@ import java.io.File;
  *
  * @author Jason van Zyl
  */
-//TODO:JW You can probably test this in isolation and then we can add methods to the main Continuum API for
-//        releasing. The Core Continuum component would then have a dependency on this component and just delegate
-//        to this component for release management.
 public interface ContinuumReleaseManager
 {
     String ROLE = ContinuumReleaseManager.class.getName();
 
     /**
-     * Prepare a project for release which also updates the release descriptor
+     * Prepare a project for release
      *
-     * @param descriptor
+     * @param project      project / project group to be released
+     * @param releaseProperties
      * @throws ContinuumReleaseException
      */
-    void prepare( ReleaseDescriptor descriptor, Settings settings )
+    String prepare( Project project, Properties releaseProperties, Map releaseVersions,
+                    Map developmentVersions, ContinuumReleaseManagerListener listener )
+        throws ContinuumReleaseException;
+
+    /**
+     * Perform a release based on a given releaseId
+     *
+     * @param releaseId
+     * @param buildDirectory
+     * @param goals
+     * @param useReleaseProfile
+     * @throws ContinuumReleaseException
+     */
+    void perform( String releaseId, File buildDirectory,
+                  String goals, boolean useReleaseProfile, ContinuumReleaseManagerListener listener )
         throws ContinuumReleaseException;
 
     /**
      * Perform a release based on a release descriptor received by the Maven Release Plugin.
      *
-     * @param descriptor
+     * @param descriptorFile
      * @throws ContinuumReleaseException
      */
-    void perform( ReleaseDescriptor descriptor, Settings settings, File buildDirectory,
-                  String goals, boolean useReleaseProfile )
+    void perform( String releaseId, File descriptorFile, File buildDirectory,
+                  String goals, boolean useReleaseProfile, ContinuumReleaseManagerListener listener )
         throws ContinuumReleaseException;
+
+    Map getPreparedReleases();
+
+    Map getReleaseResults();
+
+    Map getListeners();
 }

@@ -21,11 +21,19 @@ import java.util.List;
 /**
  * @author Edwin Punzalan
  */
-public class ContinuumReleaseResult
+public interface ContinuumReleaseManagerListener
 {
-    private String id;
+    int INITIALIZED = 0, LISTENING = 1, FINISHED = 3;
 
-    private List finishedPhases;
+    List getCompletedPhases();
 
-    
+    String getInProgress();
+
+    String getGoalName();
+
+    List getPhases();
+
+    String getError();
+
+    int getState();
 }

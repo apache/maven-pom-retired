@@ -27,6 +27,7 @@ import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.security.ContinuumSecurity;
+import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
 import java.io.File;
@@ -381,4 +382,9 @@ public interface Continuum
 
     void removeUserGroup( int userGroupId )
         throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Continuum Release
+    // ----------------------------------------------------------------------
+    ContinuumReleaseManager getReleaseManager();
 }

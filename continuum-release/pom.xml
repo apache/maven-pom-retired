@@ -14,6 +14,16 @@
   </description>
   <dependencies>
     <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-api</artifactId>
+      <version>1.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>2.0.4</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-release-plugin</artifactId>
       <version>2.0-beta-5-SNAPSHOT</version>
@@ -24,4 +34,12 @@
       <version>1.0-alpha-3</version>
     </dependency>
   </dependencies>
+  <build>
+    <testResources>
+      <testResource>
+        <directory>src/test/scm</directory>
+        <targetPath>scm-src</targetPath>
+      </testResource>
+    </testResources>
+  </build>
 </project>
