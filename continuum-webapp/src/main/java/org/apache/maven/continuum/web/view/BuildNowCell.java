@@ -16,6 +16,7 @@ package org.apache.maven.continuum.web.view;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.web.model.ProjectSummary;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
@@ -36,17 +37,43 @@ public class BuildNowCell
 
         String contextPath = tableModel.getContext().getContextPath();
 
-        if ( !project.isInQueue() && ( project.getState() == 1 || project.getState() == 2 || project.getState() == 3 ||
-            project.getState() == 4 ) )
+        if ( project.isInQueue() )
         {
-            return "<a href=\"" + contextPath + "/buildProject.action?projectId=" + project.getId() + "\"><img src=\"" +
-                contextPath +
-                "/images/buildnow.gif\" alt=\"Build Now\" title=\"Build Now\" border=\"0\"></a>";
+            return image( contextPath, "In Queue", "buildnow_disabled.gif" );
         }
-        else
+
+        switch ( project.getState() )
         {
-            return "<img src=\"" + contextPath +
-                "/images/buildnow_disabled.gif\" alt=\"Build Now\" title=\"Build Now\" border=\"0\">";
+            case ContinuumProjectState.NEW:
+            case ContinuumProjectState.OK:
+            case ContinuumProjectState.FAILED:
+            case ContinuumProjectState.ERROR:
+            {
+                return createActionLink( contextPath, project, "buildProject", "Build Now", "buildnow.gif" );
+            }
+
+            case ContinuumProjectState.BUILDING:
+            {
+                return createActionLink( contextPath, project, "cancelBuild", "Cancel Build", "cancelbuild.gif" );
+            }
+
+            default:
+            {
+                return image( contextPath, "Build Now", "buildnow_disabled.gif" );
+            }
         }
+    }
+
+    private static String createActionLink( String contextPath, ProjectSummary project, String action, String label,
+                                            String image )
+    {
+        return "<a href='" + contextPath + "/" + action + ".action?projectId=" + project.getId() + "'>"
+            + image( contextPath, label, image ) + "</a>";
+    }
+
+    private static String image( String contextPath, String label, String image )
+    {
+        return "<img src='" + contextPath + "/images/" + image + "' alt=' " + label + "' title='" + image
+            + "' border='0' />";
     }
 }
