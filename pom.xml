@@ -286,6 +286,11 @@
       </dependency>
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-release</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-webapp</artifactId>
         <version>${pom.version}</version>
         <type>war</type>
