@@ -39,5 +39,26 @@
         <includeBuildResult>true</includeBuildResult>
       </configuration>
     </component>
+
+    <component>
+      <role>org.codehaus.plexus.velocity.VelocityComponent</role>
+      <implementation>org.codehaus.plexus.velocity.DefaultVelocityComponent</implementation>
+      <configuration>
+        <properties>
+          <property>
+            <name>resource.loader</name>
+            <value>threadContext</value>
+          </property>
+          <property>
+            <name>threadContext.resource.loader.class</name>
+            <value>org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader</value>
+          </property>
+          <property>
+            <name>velocimacro.library</name>
+            <value>org/apache/maven/continuum/notification/mail/templates/common.vm</value>
+          </property>
+        </properties>
+      </configuration>
+    </component>
   </components>
 </plexus>

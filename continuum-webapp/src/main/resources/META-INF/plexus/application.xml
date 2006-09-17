@@ -197,6 +197,30 @@
       <implementation>org.codehaus.plexus.msn.DefaultMsnClient</implementation>
     </component>
 
+    <!--
+    | Velocity component used by the mail notifier
+    |-->
+    <component>
+      <role>org.codehaus.plexus.velocity.VelocityComponent</role>
+      <implementation>org.codehaus.plexus.velocity.DefaultVelocityComponent</implementation>
+      <configuration>
+        <properties>
+          <property>
+            <name>resource.loader</name>
+            <value>threadContext</value>
+          </property>
+          <property>
+            <name>threadContext.resource.loader.class</name>
+            <value>org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader</value>
+          </property>
+          <property>
+            <name>velocimacro.library</name>
+            <value>org/apache/maven/continuum/notification/mail/templates/common.vm</value>
+          </property>
+        </properties>
+      </configuration>
+    </component>
+
     <component>
       <role>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</role>
       <implementation>org.apache.maven.continuum.web.util.WorkingCopyContentGenerator</implementation>
