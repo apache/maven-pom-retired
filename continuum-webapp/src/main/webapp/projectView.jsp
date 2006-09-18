@@ -34,7 +34,7 @@
               <tbody>
               <tr>
                 <td>
-                  <form action="projectEdit!edit.action" method="post">
+                  <form action="projectEdit.action" method="post">
                     <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
                     <input type="submit" name="edit-project" value="<ww:text name="edit"/>"/>
                   </form>

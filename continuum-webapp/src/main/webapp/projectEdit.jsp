@@ -10,7 +10,7 @@
         <h3><ww:text name="projectEdit.section.title"/></h3>
 
         <div class="axial">
-          <ww:form action="projectSave.action" method="post">
+          <ww:form action="projectSave" method="post" validate="true">
             <table>
               <tbody>
                 <ww:hidden name="projectId"/>

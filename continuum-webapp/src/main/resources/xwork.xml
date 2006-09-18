@@ -90,14 +90,13 @@
       <result name="success">projectView.jsp</result>
     </action>
 
-    <action name="projectEdit" class="projectEdit">
-      <result name="input">projectEdit.jsp</result>
-      <result name="success" type="chain">projectView</result>
+    <action name="projectEdit" class="projectEdit" method="edit">
+      <result name="success">projectEdit.jsp</result>
     </action>
 
-    <action name="projectSave" class="projectEdit">
-      <result name="input">projectEdit.jsp</result>
+    <action name="projectSave" class="projectEdit" method="save">
       <result name="success" type="chain">projectView</result>
+      <result name="input">projectEdit.jsp</result>
     </action>
 
     <!--

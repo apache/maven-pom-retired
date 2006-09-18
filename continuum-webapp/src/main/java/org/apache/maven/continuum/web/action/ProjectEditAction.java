@@ -47,7 +47,7 @@ public class ProjectEditAction
 
     private String scmTag;
 
-    public String execute()
+    public String save()
         throws ContinuumException
     {
         project = getProject( projectId );
@@ -69,7 +69,7 @@ public class ProjectEditAction
         return SUCCESS;
     }
 
-    public String doEdit()
+    public String edit()
         throws ContinuumException
     {
         project = getProject( projectId );
@@ -86,7 +86,7 @@ public class ProjectEditAction
 
         scmTag = project.getScmTag();
 
-        return INPUT;
+        return SUCCESS;
     }
 
     private Project getProject( int projectId )
