@@ -227,6 +227,20 @@
     </component>
 
     <component>
+      <role>org.codehaus.plexus.formica.validation.Validator</role>
+      <role-hint>url</role-hint>
+      <implementation>org.codehaus.plexus.formica.validation.UrlValidator</implementation>
+      <configuration>
+        <allowedSchemes>
+          <allowedScheme>http</allowedScheme>
+          <allowedScheme>https</allowedScheme>
+          <allowedScheme>ftp</allowedScheme>
+          <!-- <allowedScheme>file</allowedScheme> -->
+        </allowedSchemes>
+      </configuration>
+    </component>
+
+    <component>
       <role>org.codehaus.plexus.jdo.JdoFactory</role>
       <implementation>org.codehaus.plexus.jdo.DefaultJdoFactory</implementation>
       <configuration>
