@@ -24,7 +24,7 @@
         <configuration>
           <version>1.0.0</version>
           <packageWithVersion>false</packageWithVersion>
-          <model>src/main/mdo/continuum.mdo</model>
+          <model>src/main/mdo/continuum.xml</model>
         </configuration>
       </plugin>
       <plugin>
