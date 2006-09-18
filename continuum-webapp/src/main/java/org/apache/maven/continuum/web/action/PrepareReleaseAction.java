@@ -18,23 +18,25 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
-import org.apache.maven.continuum.release.DefaultReleaseManagerListener;
 import org.apache.maven.continuum.release.ContinuumReleaseManagerListener;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.maven.continuum.release.DefaultReleaseManagerListener;
 import org.apache.maven.model.Model;
-import org.apache.maven.plugins.release.versions.VersionInfo;
-import org.apache.maven.plugins.release.versions.DefaultVersionInfo;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugins.release.ReleaseResult;
+import org.apache.maven.plugins.release.versions.DefaultVersionInfo;
+import org.apache.maven.plugins.release.versions.VersionInfo;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.io.FileReader;
-import java.io.File;
 
 /**
  * @author Edwin Punzalan
@@ -94,9 +96,56 @@ public class PrepareReleaseAction
         }
         prepareGoals = "clean integration-test";
 
+        getReleasePluginParameters( project.getWorkingDirectory(), "pom.xml" );
+
         processProject( project.getWorkingDirectory(), "pom.xml" );
 
         return "prompt";
+    }
+
+    private void getReleasePluginParameters( String workingDirectory, String pomFilename )
+        throws Exception
+    {
+        MavenXpp3Reader pomReader = new MavenXpp3Reader();
+        Model model = pomReader.read( new FileReader( new File( workingDirectory, pomFilename ) ) );
+
+        if ( model.getBuild() != null && model.getBuild().getPlugins() != null )
+        {
+            for( Iterator plugins = model.getBuild().getPlugins().iterator(); plugins.hasNext(); )
+            {
+                Plugin plugin = (Plugin) plugins.next();
+
+                if ( plugin.getGroupId() != null && plugin.getGroupId().equals( "org.apache.maven.plugins" ) &&
+                     plugin.getArtifactId() != null && plugin.getArtifactId().equals( "maven-release-plugin" ) )
+                {
+                    Xpp3Dom dom = (Xpp3Dom) plugin.getConfiguration();
+
+                    Xpp3Dom configuration = dom.getChild( "releaseLabel" );
+                    if ( configuration != null )
+                    {
+                        scmTag = configuration.getValue();
+                    }
+
+                    configuration = dom.getChild( "tag" );
+                    if ( configuration != null )
+                    {
+                        scmTag = configuration.getValue();
+                    }
+
+                    configuration = dom.getChild( "tagBase" );
+                    if ( configuration != null )
+                    {
+                        scmTagBase = configuration.getValue();
+                    }
+
+                    configuration = dom.getChild( "preparationGoals" );
+                    if ( configuration != null )
+                    {
+                        prepareGoals = configuration.getValue();
+                    }
+                }
+            }
+        }
     }
 
     public String doPrepare()
@@ -117,7 +166,7 @@ public class PrepareReleaseAction
         releaseId = releaseManager.prepare( project, getReleaseProperties(), getRelVersionMap(),
                                             getDevVersionMap(), listener );
 
-        return checkProgress();
+        return "initialized";
     }
 
     public String viewResult()

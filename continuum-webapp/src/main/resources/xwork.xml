@@ -319,12 +319,22 @@
 
     <action name="prepareRelease" class="prepareRelease">
       <result name="prompt">prepareRelease.jsp</result>
+      <result name="initialized" type="redirect-action">
+        <param name="actionName">prepareRelease!checkProgress.action</param>
+        <param name="releaseId">${releaseId}</param>
+        <param name="projectId">${projectId}</param>
+      </result>
       <result name="inProgress">prepareReleaseProgress.jsp</result>
       <result name="finished">prepareReleaseFinished.jsp</result>
     </action>
 
     <action name="performRelease" class="performRelease">
       <result name="prompt">performRelease.jsp</result>
+      <result name="initialized" type="redirect-action">
+        <param name="actionName">performRelease!checkProgress.action</param>
+        <param name="releaseId">${releaseId}</param>
+        <param name="projectId">${projectId}</param>
+      </result>
       <result name="inProgress">performReleaseProgress.jsp</result>
       <result name="finished">performReleaseFinished.jsp</result>
     </action>

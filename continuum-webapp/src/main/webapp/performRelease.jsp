@@ -12,7 +12,7 @@
         <ww:hidden name="releaseId"/>
         <div class="axial">
           <table border="1" cellspacing="2" cellpadding="3" width="100%">
-            <ww:if test="releaseId.length == 0">
+            <ww:if test="releaseId.equals(\"\")">
               <ww:textfield label="SCM Connection URL" name="scmUrl"/>
               <ww:textfield label="SCM Username" name="scmUsername"/>
               <ww:textfield label="SCM Password" name="scmPassword"/>

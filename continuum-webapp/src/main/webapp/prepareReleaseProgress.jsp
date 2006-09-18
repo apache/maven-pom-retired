@@ -11,9 +11,12 @@
       <ww:form action="prepareRelease!checkProgress.action" method="get">
         <ww:hidden name="projectId"/>
         <ww:hidden name="releaseId"/>
-        <ww:if test="listener.phases.size == 0">
+        <ww:if test="listener.state == 0">
           <p>
-            The release goal is currently initializing... Please wait while server prepares your project for release.
+            The release goal is currently initializing...
+          </p>
+          <p>
+            Please wait while the server prepares your project for release.
           </p>
         </ww:if>
         <ww:else>
