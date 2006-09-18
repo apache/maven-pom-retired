@@ -120,7 +120,7 @@ public class PerformReleaseAction
 
         releaseManager.perform( releaseId, performDirectory, goals, useReleaseProfile, listener );
 
-        return "initialized";
+        return checkProgress();
     }
 
     public String checkProgress()
@@ -136,17 +136,9 @@ public class PerformReleaseAction
         {
             status = "initialized";
         }
-        else if ( listener.getState() == ContinuumReleaseManagerListener.LISTENING )
-        {
-            status = "inProgress";
-        }
         else
         {
-            releaseManager.getListeners().remove( releaseId );
-
-            result = (ReleaseResult) releaseManager.getReleaseResults().get( releaseId );
-
-            status = "finished";
+            status = "inProgress";
         }
 
         return status;

@@ -117,7 +117,7 @@ public class PrepareReleaseAction
         releaseId = releaseManager.prepare( project, getReleaseProperties(), getRelVersionMap(),
                                             getDevVersionMap(), listener );
 
-        return "initialized";
+        return checkProgress();
     }
 
     public String viewResult()
@@ -145,13 +145,9 @@ public class PrepareReleaseAction
 
             status = "finished";
         }
-        else if ( listener.getState() == ContinuumReleaseManagerListener.LISTENING )
-        {
-            status = "inProgress";
-        }
         else
         {
-            status = "initialized";
+            status = "inProgress";
         }
 
         return status;
