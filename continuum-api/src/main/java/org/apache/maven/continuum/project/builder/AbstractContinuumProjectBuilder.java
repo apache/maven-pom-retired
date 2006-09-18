@@ -93,6 +93,8 @@ public abstract class AbstractContinuumProjectBuilder
         File continuumTmpDir = new File( TMP_DIR, "continuum" );
 
         File uploadDirectory = new File( continuumTmpDir, baseDirectory );
+        // resolve any '..' as it will cause issues
+        uploadDirectory = uploadDirectory.getCanonicalFile();
 
         uploadDirectory.mkdirs();
 
