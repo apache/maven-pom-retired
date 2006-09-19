@@ -31,8 +31,6 @@ public class ContinuumActionSupport
     extends PlexusActionSupport
     implements Preparable
 {
-    public static final String CONFIRM = "confirm";
-
     /**
      * @plexus.requirement
      */

@@ -29,6 +29,7 @@
                 </ww:url>
                 <ww:url id="removeUrl" action="removeUserGroup">
                   <ww:param name="userGroupId" value="${pageScope.userGroup.id}"/>
+                  <ww:param name="name" value="%{'${pageScope.userGroup.name}'}"/>                  
                 </ww:url>
                 <ww:a href="%{editUrl}">Edit</ww:a>
                 &nbsp;

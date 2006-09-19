@@ -26,7 +26,7 @@ import java.util.Collection;
  * @plexus.component role="com.opensymphony.xwork.Action" role-hint="schedule"
  */
 public class ScheduleAction
-    extends ContinuumActionSupport
+    extends ContinuumConfirmAction
 {
     private int id;
 
@@ -159,8 +159,9 @@ public class ScheduleAction
             getContinuum().removeSchedule( id );
         }
         else
-        {
-            schedule = getContinuum().getSchedule( id );
+        {    
+            setConfirmationInfo( "Schedule Removal", "removeSchedule", name, "id", "" + id );
+                        
             return CONFIRM;
         }
 

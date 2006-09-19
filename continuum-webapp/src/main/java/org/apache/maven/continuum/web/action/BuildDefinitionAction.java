@@ -36,7 +36,7 @@ import java.util.Map;
  * role-hint="buildDefinition"
  */
 public class BuildDefinitionAction
-    extends ContinuumActionSupport
+    extends ContinuumConfirmAction
 {
 
     private int buildDefinitionId;

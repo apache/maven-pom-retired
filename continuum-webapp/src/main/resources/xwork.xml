@@ -130,6 +130,7 @@
 
     <action name="removeUser" class="userManagement" method="remove">
       <result name="success" type="chain">users</result>
+      <result name="confirm">confirmation.jsp</result>
     </action>
 
     <!--
@@ -149,6 +150,7 @@
 
     <action name="removeUserGroup" class="userGroupManagement" method="remove">
       <result name="success" type="chain">userGroups</result>
+      <result name="confirm">confirmation.jsp</result>
     </action>
 
     <!--
@@ -293,7 +295,7 @@
     </action>
 
     <action name="removeSchedule" class="schedule" method="remove">
-      <result name="confirm">confirmScheduleRemoval.jsp</result>
+      <result name="confirm">confirmation.jsp</result>
       <result name="success" type="chain">schedules</result>
     </action>
 

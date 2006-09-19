@@ -34,7 +34,7 @@ import java.util.Iterator;
  *   role-hint="userManagement"
  */
 public class UserManagementAction
-    extends ContinuumActionSupport
+    extends ContinuumConfirmAction
 {
     private int userId;
 
@@ -164,6 +164,13 @@ public class UserManagementAction
 
     public String remove()
     {
+        if ( !confirmed )
+        {
+            setConfirmationInfo( "User Removal", "removeUser", username, "userId", "" + userId );
+            
+            return CONFIRM;
+        }
+        
         try
         {
             getContinuum().removeUser( userId );

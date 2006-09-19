@@ -28,6 +28,7 @@
                 </ww:url>
                 <ww:url id="removeScheduleUrl" action="removeSchedule">
                   <ww:param name="id" value="${pageScope.schedule.id}"/>
+                  <ww:param name="name" value="%{'${pageScope.schedule.name}'}"/>                  
                 </ww:url>
                 <ww:a href="%{editScheduleUrl}">Edit</ww:a>
                 &nbsp;

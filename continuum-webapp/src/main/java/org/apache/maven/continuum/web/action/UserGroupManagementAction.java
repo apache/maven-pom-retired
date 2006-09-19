@@ -31,7 +31,7 @@ import java.util.List;
  *   role-hint="userGroupManagement"
  */
 public class UserGroupManagementAction
-    extends ContinuumActionSupport
+    extends ContinuumConfirmAction
 {
     private int userGroupId;
 
@@ -111,6 +111,14 @@ public class UserGroupManagementAction
 
     public String remove()
     {
+        if ( !confirmed )
+        {
+            setConfirmationInfo( "User Group Removal", "removeUserGroup", name, 
+                                 "userGroupId", "" + userGroupId );
+           
+            return CONFIRM;
+        }
+                       
         try
         {
             getContinuum().removeUserGroup( userGroupId );

@@ -30,7 +30,7 @@ import org.apache.maven.continuum.ContinuumException;
  *   role-hint="projectGroup"
  */
 public class ProjectGroupAction
-    extends ContinuumActionSupport
+    extends ContinuumConfirmAction
 {
     private int projectGroupId;
 

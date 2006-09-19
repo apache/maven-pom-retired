@@ -31,6 +31,7 @@
                 </ww:url>
                 <ww:url id="removeUrl" action="removeUser">
                   <ww:param name="userId" value="${pageScope.user.accountId}"/>
+                  <ww:param name="username" value="%{'${pageScope.user.username}'}"/>                  
                 </ww:url>
                 <ww:a href="%{editUrl}">Edit</ww:a>
                 &nbsp;
