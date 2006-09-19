@@ -80,7 +80,7 @@
             <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
             <ec:column property="actions" title="&nbsp;">
                 <c:if test="${!pageScope.notifier.fromProject}">
-                    <a href='<ww:url value="${notifier.type}NotifierEdit!default.action">
+                    <a href='<ww:url value="${notifier.type}NotifierEdit.action">
                       <ww:param name="projectId" value="project.id"/>
                       <ww:param name="notifierId" value="${notifier.id}"/>
                     </ww:url>'>

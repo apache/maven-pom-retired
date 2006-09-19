@@ -18,7 +18,7 @@
         </h3>
 
         <div class="axial">
-          <ww:form action="ircNotifierSave.action" method="post">
+          <ww:form action="ircNotifierSave" method="post" validate="true">
             <ww:hidden name="notifierId"/>
             <ww:hidden name="projectId"/>
             <ww:hidden name="notifierType"/>

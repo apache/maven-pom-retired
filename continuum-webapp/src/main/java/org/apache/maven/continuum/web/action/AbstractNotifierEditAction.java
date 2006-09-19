@@ -44,7 +44,7 @@ public abstract class AbstractNotifierEditAction
 
     private boolean sendOnWarning;
 
-    public String execute()
+    public String save()
         throws ContinuumException
     {
         boolean isNew = false;
@@ -82,7 +82,7 @@ public abstract class AbstractNotifierEditAction
         return SUCCESS;
     }
 
-    public String doDefault()
+    public String edit()
         throws ContinuumException
     {
         notifier = getNotifier();
@@ -104,7 +104,7 @@ public abstract class AbstractNotifierEditAction
 
         initConfiguration( notifier.getConfiguration() );
 
-        return INPUT;
+        return SUCCESS;
     }
 
     protected abstract void initConfiguration( Map configuration );

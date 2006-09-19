@@ -223,42 +223,38 @@
       <result name="jabber_input">notifierJabber.jsp</result>
     </action>
 
-    <action name="mailNotifierEdit" class="mailNotifierEdit">
+    <action name="mailNotifierEdit" class="mailNotifierEdit" method="edit">
+      <result name="success">notifierMail.jsp</result>
+    </action>
+
+    <action name="mailNotifierSave" class="mailNotifierEdit" method="save">
       <result name="input">notifierMail.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
-    <action name="mailNotifierSave" class="mailNotifierEdit">
-      <result name="input">notifierMail.jsp</result>
-      <result name="success" type="chain">projectView</result>
+    <action name="ircNotifierEdit" class="ircNotifierEdit" method="edit">
+      <result name="success">notifierIrc.jsp</result>
     </action>
 
-    <action name="ircNotifierEdit" class="ircNotifierEdit">
+    <action name="ircNotifierSave" class="ircNotifierEdit" method="save">
       <result name="input">notifierIrc.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
-    <action name="ircNotifierSave" class="ircNotifierEdit">
-      <result name="input">notifierIrc.jsp</result>
-      <result name="success" type="chain">projectView</result>
+    <action name="jabberNotifierEdit" class="jabberNotifierEdit" method="edit">
+      <result name="success">notifierJabber.jsp</result>
     </action>
 
-    <action name="jabberNotifierEdit" class="jabberNotifierEdit">
+    <action name="jabberNotifierSave" class="jabberNotifierEdit" method="save">
       <result name="input">notifierJabber.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
-    <action name="jabberNotifierSave" class="jabberNotifierEdit">
-      <result name="input">notifierJabber.jsp</result>
-      <result name="success" type="chain">projectView</result>
+    <action name="msnNotifierEdit" class="msnNotifierEdit" method="edit">
+      <result name="success">notifierMsn.jsp</result>
     </action>
 
-    <action name="msnNotifierEdit" class="msnNotifierEdit">
-      <result name="input">notifierMsn.jsp</result>
-      <result name="success" type="chain">projectView</result>
-    </action>
-
-    <action name="msnNotifierSave" class="msnNotifierEdit">
+    <action name="msnNotifierSave" class="msnNotifierEdit" method="save">
       <result name="input">notifierMsn.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>

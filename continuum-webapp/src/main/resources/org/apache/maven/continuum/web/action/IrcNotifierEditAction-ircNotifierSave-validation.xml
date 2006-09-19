@@ -2,22 +2,26 @@
     "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
     "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
 
+<!-- TODO: there was a problem with getting the message values from the properties file so
+    the error messages were just specified here -->
 <validators>
   <field name="host">
     <field-validator type="required">
-      <message key="ircNotifier.host.required"/>
+      <message>Host is required</message>
+      <!--message key="ircNotifier.host.required"/-->
     </field-validator>
   </field>
   <field name="port">
-    <field-validator type="int">
-      <param name="min">0</param>
-      <param name="max">65535</param>
-      <message key="ircNotifier.port.invalid"/>
+    <field-validator type="regex">
+      <param name="expression"><![CDATA[([0-9])]]></param>
+      <message>Port must be an integer</message>
+      <!--message key="ircNotifier.port.invalid"/-->
     </field-validator>
   </field>
   <field name="channel">
     <field-validator type="required">
-      <message key="ircNotifier.channel.required"/>
+      <message>Channel is required</message>
+      <!--message key="ircNotifier.channel.required"/-->
     </field-validator>
   </field>
 </validators>
