@@ -16,8 +16,8 @@
           <ww:textfield label="Username" name="username"/>
           <ww:textfield label="Full Name" name="fullName"/>
           <ww:textfield label="Email" name="email"/>
-          <ww:textfield label="Password" name="password"/>
-          <ww:textfield label="Password(again)" name="passwordTwo"/>
+          <ww:password label="Password" name="password"/>
+          <ww:password label="Password(again)" name="passwordTwo"/>
         </table>
       </div>
 
