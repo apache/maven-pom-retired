@@ -535,7 +535,7 @@ public class DefaultMavenBuilderHelper
         }
         catch ( IOException e )
         {
-            getLogger().warn( "Cannot serialize POM to XML.", e );
+            getLogger().warn( "Cannot serialize Settings to XML.", e );
         }
     }
 
