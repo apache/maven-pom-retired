@@ -411,7 +411,10 @@ public class DefaultContinuumScm
 
                 change.setComment( scmChangeSet.getComment() );
 
-                change.setDate( scmChangeSet.getDate().getTime() );
+                if ( scmChangeSet.getDate() != null )
+                {
+                    change.setDate( scmChangeSet.getDate().getTime() );
+                }
 
                 if ( scmChangeSet.getFiles() != null )
                 {
