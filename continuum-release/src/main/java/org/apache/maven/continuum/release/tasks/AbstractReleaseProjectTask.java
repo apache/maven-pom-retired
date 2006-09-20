@@ -69,4 +69,10 @@ public abstract class AbstractReleaseProjectTask
     {
         this.listener = listener;
     }
+
+    public long getMaxExecutionTime()
+    {
+        //TODO: modifify this value
+        return -1;
+    }
 }
