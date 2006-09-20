@@ -24,9 +24,9 @@
                             <ww:textfield label="%{getText('add.m1.project.m1PomUrl.label')}" name="m1PomUrl">
                                 <ww:param name="desc"><p><ww:text name="add.m1.project.m1PomUrl.message"/></p></ww:param>
                             </ww:textfield>
-                            <c1:data label="">
-                                <ww:param name="after"><strong><ww:text name="or"/></strong></ww:param>
-                            </c1:data>
+                            <ww:label>
+                              <ww:param name="after"><strong><ww:text name="or"/></strong></ww:param>
+                            </ww:label>
                             <ww:file label="%{getText('add.m1.project.m1PomFile.label')}" name="m1PomFile">
                                 <ww:param name="desc"><p><ww:text name="add.m1.project.m1PomFile.message"/></p></ww:param>
                             </ww:file>
