@@ -32,6 +32,8 @@ public abstract class AbstractReleaseProjectTask
 
     private ReleaseManagerListener listener;
 
+    private long maxExecutionTime;
+
     public AbstractReleaseProjectTask( String releaseId, ReleaseDescriptor descriptor,
                                        ReleaseManagerListener listener )
     {
@@ -72,7 +74,11 @@ public abstract class AbstractReleaseProjectTask
 
     public long getMaxExecutionTime()
     {
-        //TODO: modifify this value
-        return -1;
+         return maxExecutionTime;
+    }
+
+    public void setMaxExecutionTime( long maxTime )
+    {
+        this.maxExecutionTime = maxTime;
     }
 }

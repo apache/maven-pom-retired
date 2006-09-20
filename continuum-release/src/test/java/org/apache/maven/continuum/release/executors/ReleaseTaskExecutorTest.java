@@ -18,9 +18,7 @@ package org.apache.maven.continuum.release.executors;
 
 import org.apache.maven.continuum.release.tasks.PrepareReleaseProjectTask;
 import org.apache.maven.continuum.release.tasks.PerformReleaseProjectTask;
-import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.apache.maven.plugins.release.config.ReleaseDescriptor;
-import org.apache.maven.plugins.release.ReleaseResult;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
 import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.repository.ScmRepository;
@@ -30,7 +28,6 @@ import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
-import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 
 import java.io.File;
 
@@ -40,8 +37,6 @@ import java.io.File;
 public class ReleaseTaskExecutorTest
     extends PlexusTestCase
 {
-    private ContinuumReleaseManager releaseManager;
-
     private ScmManager scmManager;
 
     private TaskExecutor prepareExec;
@@ -67,17 +62,12 @@ public class ReleaseTaskExecutorTest
         {
             performExec = (TaskExecutor) lookup( TaskExecutor.class.getName(), "perform-release" );
         }
-
-        if ( releaseManager == null )
-        {
-            releaseManager = (ContinuumReleaseManager) lookup( ContinuumReleaseManager.ROLE );
-        }
     }
 
     public void testReleaseSimpleProject()
         throws Exception
     {
-        String scmPath = new File( getBasedir(), "target/test-classes/scm-src" ).getAbsolutePath().replace( '\\', '/' );
+        String scmPath = new File( getBasedir(), "target/scm-src" ).getAbsolutePath().replace( '\\', '/' );
         File workDir = new File( getBasedir(), "target/test-classes/work-dir" );
         FileUtils.deleteDirectory( workDir );
         File testDir = new File( getBasedir(), "target/test-classes/test-dir" );
@@ -95,7 +85,7 @@ public class ReleaseTaskExecutorTest
         String pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
         assertTrue( "Test dev version", pom.indexOf( "<version>1.0-SNAPSHOT</version>" ) > 0 );
 
-        doPrepareWithNoError( descriptor );
+        prepareExec.executeTask( getPrepareTask( "testRelease", descriptor ) );
 
         pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
         assertTrue( "Test version increment", pom.indexOf( "<version>1.1-SNAPSHOT</version>" ) > 0 );
@@ -111,7 +101,7 @@ public class ReleaseTaskExecutorTest
     public void testReleaseSimpleProjectWithNextVersion()
         throws Exception
     {
-        String scmPath = new File( getBasedir(), "target/test-classes/scm-src" ).getAbsolutePath().replace( '\\', '/' );
+        String scmPath = new File( getBasedir(), "target/scm-src" ).getAbsolutePath().replace( '\\', '/' );
         File workDir = new File( getBasedir(), "target/test-classes/work-dir" );
         FileUtils.deleteDirectory( workDir );
         File testDir = new File( getBasedir(), "target/test-classes/test-dir" );
@@ -131,7 +121,7 @@ public class ReleaseTaskExecutorTest
         String pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
         assertTrue( "Test dev version", pom.indexOf( "<version>1.1-SNAPSHOT</version>" ) > 0 );
 
-        doPrepareWithNoError( descriptor );
+        prepareExec.executeTask( getPrepareTask( "testRelease", descriptor ) );
 
         pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
         assertTrue( "Test version increment", pom.indexOf( "<version>2.1-SNAPSHOT</version>" ) > 0 );
@@ -143,26 +133,7 @@ public class ReleaseTaskExecutorTest
         pom = FileUtils.fileRead( new File( testDir, "pom.xml" ) );
         assertTrue( "Test released version", pom.indexOf( "<version>2.0</version>" ) > 0 );
 
-        performExec.executeTask( getPerformTask( "testRelease", descriptor,
-                                                 new File( getBasedir(), "target/test-classes/build-dir" ) ) );
-
-        ReleaseResult result = (ReleaseResult) releaseManager.getReleaseResults().get( "testRelease" );
-        if ( result.getResultCode() != ReleaseResult.SUCCESS )
-        {
-            fail( "Error in release:perform. Release output follows: " + result.getOutput() );
-        }
-    }
-
-    private void doPrepareWithNoError( ReleaseDescriptor descriptor )
-        throws TaskExecutionException
-    {
-        prepareExec.executeTask( getPrepareTask( "testRelease", descriptor ) );
-
-        ReleaseResult result = (ReleaseResult) releaseManager.getReleaseResults().get( "testRelease" );
-        if ( result.getResultCode() != ReleaseResult.SUCCESS )
-        {
-            fail( "Error in release:prepare. Release output follows:\n" + result.getOutput() );
-        }
+        performExec.executeTask( getPerformTask( "testRelease", descriptor, new File( getBasedir(), "target/test-classes/build-dir" ) ) );
     }
 
     private Task getPrepareTask( String releaseId, ReleaseDescriptor descriptor )
