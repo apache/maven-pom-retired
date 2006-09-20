@@ -102,7 +102,7 @@ public abstract class AbstractContinuumTest
 
         assertEquals( DefaultConfigurableJdoFactory.class.getName(), o.getClass().getName() );
 
-        ConfigurableJdoFactory jdoFactory = (ConfigurableJdoFactory) o;
+        DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) o;
 
         jdoFactory.setPersistenceManagerFactoryClass( "org.jpox.PersistenceManagerFactoryImpl" );
 
