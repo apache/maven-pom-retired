@@ -255,6 +255,20 @@
             <value>true</value>
           </property>
           <property>
+            <name>org.jpox.validateTables</name>
+            <value>false</value>
+          </property>
+          <property>
+            <name>org.jpox.validateColumns</name>
+            <value>false</value>
+          </property>
+          <property>
+            <name>org.jpox.validateConstraints</name>
+            <value>false</value>
+          </property>
+
+<!--
+          <property>
             <name>org.jpox.autoStartMechanism</name>
             <value>SchemaTable</value>
           </property>
@@ -262,6 +276,7 @@
             <name>org.jpox.autoStartMechanismMode</name>
             <value>Ignored</value>
           </property>
+-->
           <!-- Apache Derby Configuration -->
           <property>
             <name>javax.jdo.option.ConnectionDriverName</name>
