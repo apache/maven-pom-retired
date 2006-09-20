@@ -83,9 +83,9 @@ public class PrepareReleaseTaskExecutor
 
         if ( result.getResultCode() == ReleaseResult.SUCCESS )
         {
-            continuumReleaseManager.getReleaseResults().put( prepareTask.getReleaseId(), result );
-
             continuumReleaseManager.getPreparedReleases().put( prepareTask.getReleaseId(), descriptor );
         }
+
+        continuumReleaseManager.getReleaseResults().put( prepareTask.getReleaseId(), result );
     }
 }

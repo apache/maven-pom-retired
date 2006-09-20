@@ -22,6 +22,7 @@
             <ww:textfield label="Maven Arguments" name="goals"/>
             <ww:checkbox label="Use Release Profile" name="useReleaseProfile" value="true"/>
           </table>
+        </div>
         <ww:submit/>
       </ww:form>
     </body>

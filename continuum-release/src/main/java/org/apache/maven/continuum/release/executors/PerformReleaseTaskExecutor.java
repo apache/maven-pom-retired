@@ -38,6 +38,8 @@ public class PerformReleaseTaskExecutor
     {
         PerformReleaseProjectTask performTask = (PerformReleaseProjectTask) task;
 
+        ReleaseManagerListener listener = performTask.getListener();
+
         ReleaseDescriptor descriptor = performTask.getDescriptor();
 
         Settings settings;
@@ -47,6 +49,14 @@ public class PerformReleaseTaskExecutor
         }
         catch ( ContinuumReleaseException e )
         {
+            ReleaseResult result = new ReleaseResult();
+
+            result.appendError( e );
+
+            continuumReleaseManager.getReleaseResults().put( performTask.getReleaseId(), result );
+
+            listener.error( e.getMessage() );
+
             throw new TaskExecutionException( "Failed to build reactor projects.", e );
         }
 
@@ -57,10 +67,16 @@ public class PerformReleaseTaskExecutor
         }
         catch ( ContinuumReleaseException e )
         {
+            ReleaseResult result = new ReleaseResult();
+
+            result.appendError( e );
+
+            continuumReleaseManager.getReleaseResults().put( performTask.getReleaseId(), result );
+
+            listener.error( e.getMessage() );
+
             throw new TaskExecutionException( "Failed to build reactor projects.", e );
         }
-
-        ReleaseManagerListener listener = performTask.getListener();
 
         ReleaseResult result =
             releasePluginManager.performWithResult( descriptor, settings, reactorProjects,
@@ -69,9 +85,9 @@ public class PerformReleaseTaskExecutor
 
         if ( result.getResultCode() == ReleaseResult.SUCCESS )
         {
-            continuumReleaseManager.getReleaseResults().put( performTask.getReleaseId(), result );
-
             continuumReleaseManager.getPreparedReleases().remove( performTask.getReleaseId() );
         }
+
+        continuumReleaseManager.getReleaseResults().put( performTask.getReleaseId(), result );
     }
 }

@@ -37,7 +37,7 @@
         </ww:if>
         <ww:else>
           <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px">
-            <code><pre><ww:property value="result.output"/></pre></code>
+            <pre><ww:property value="result.output"/></pre>
           </div>
         </ww:else>
       </p>

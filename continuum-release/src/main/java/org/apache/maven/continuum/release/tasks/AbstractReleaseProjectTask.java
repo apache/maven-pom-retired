@@ -32,8 +32,6 @@ public abstract class AbstractReleaseProjectTask
 
     private ReleaseManagerListener listener;
 
-    private long maxExecutionTime;
-
     public AbstractReleaseProjectTask( String releaseId, ReleaseDescriptor descriptor,
                                        ReleaseManagerListener listener )
     {
@@ -70,15 +68,5 @@ public abstract class AbstractReleaseProjectTask
     public void setListener( ReleaseManagerListener listener )
     {
         this.listener = listener;
-    }
-
-    public long getMaxExecutionTime()
-    {
-         return maxExecutionTime;
-    }
-
-    public void setMaxExecutionTime( long maxTime )
-    {
-        this.maxExecutionTime = maxTime;
     }
 }

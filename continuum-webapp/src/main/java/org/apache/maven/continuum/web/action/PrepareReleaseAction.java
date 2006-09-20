@@ -84,15 +84,18 @@ public class PrepareReleaseAction
         scmPassword = project.getScmPassword();
         scmTag = project.getScmTag();
         String scmUrl = project.getScmUrl();
+
+        //skip scm:provider in scm url
+        int idx = scmUrl.indexOf( ":", 4 ) + 1;
+        scmUrl = scmUrl.substring( idx );
+
         if ( scmUrl.endsWith( "/trunk" ) )
         {
-            //skip scm:provider in scm url
-            int idx = scmUrl.indexOf( ":", 4 ) + 1;
-            scmTagBase = scmUrl.substring( idx , scmUrl.lastIndexOf( "/trunk" ) ) + "/branches";
+            scmTagBase = scmUrl.substring( 0 , scmUrl.lastIndexOf( "/trunk" ) ) + "/branches";
         }
         else
         {
-            scmTagBase = scmUrl;
+            scmTagBase = scmUrl.substring( idx );
         }
         prepareGoals = "clean integration-test";
 
@@ -186,17 +189,24 @@ public class PrepareReleaseAction
 
         listener = (ContinuumReleaseManagerListener) releaseManager.getListeners().get( releaseId );
 
-        if ( listener.getState() == ContinuumReleaseManagerListener.FINISHED )
+        if ( listener != null )
         {
-            releaseManager.getListeners().remove( releaseId );
+            if ( listener.getState() == ContinuumReleaseManagerListener.FINISHED )
+            {
+                releaseManager.getListeners().remove( releaseId );
 
-            result = (ReleaseResult) releaseManager.getReleaseResults().get( releaseId );
+                result = (ReleaseResult) releaseManager.getReleaseResults().get( releaseId );
 
-            status = "finished";
+                status = "finished";
+            }
+            else
+            {
+                status = "inProgress";
+            }
         }
         else
         {
-            status = "inProgress";
+            throw new Exception( "There is no release on-going or finished with id: " + releaseId );
         }
 
         return status;

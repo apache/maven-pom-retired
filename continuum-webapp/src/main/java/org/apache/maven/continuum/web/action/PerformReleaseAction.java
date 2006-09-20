@@ -132,13 +132,20 @@ public class PerformReleaseAction
 
         listener = (ContinuumReleaseManagerListener) releaseManager.getListeners().get( releaseId );
 
-        if ( listener.getState() == ContinuumReleaseManagerListener.FINISHED )
+        if ( listener != null )
         {
-            status = "finished";
+            if ( listener.getState() == ContinuumReleaseManagerListener.FINISHED )
+            {
+                status = "finished";
+            }
+            else
+            {
+                status = "inProgress";
+            }
         }
         else
         {
-            status = "inProgress";
+            throw new Exception( "There is no release on-going or finished with id: " + releaseId );
         }
 
         return status;
