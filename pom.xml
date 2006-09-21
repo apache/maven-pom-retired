@@ -412,6 +412,6 @@
   </dependencyManagement>
   <properties>
     <maven.version>2.0.4</maven.version>
-    <maven-scm.version>1.0-beta-3</maven-scm.version>
+    <maven-scm.version>1.0-SNAPSHOT</maven-scm.version>
   </properties>
 </project>
