@@ -18,7 +18,9 @@ package org.apache.maven.continuum.release.executors;
 
 import org.apache.maven.continuum.release.tasks.PrepareReleaseProjectTask;
 import org.apache.maven.continuum.release.tasks.PerformReleaseProjectTask;
+import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.apache.maven.plugins.release.config.ReleaseDescriptor;
+import org.apache.maven.plugins.release.ReleaseResult;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
 import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.repository.ScmRepository;
@@ -28,6 +30,7 @@ import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutor;
+import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 
 import java.io.File;
 
@@ -42,6 +45,8 @@ public class ReleaseTaskExecutorTest
     private TaskExecutor prepareExec;
 
     private TaskExecutor performExec;
+
+    private ContinuumReleaseManager releaseManager;
 
     protected void setUp()
         throws Exception
@@ -61,6 +66,11 @@ public class ReleaseTaskExecutorTest
         if ( performExec == null )
         {
             performExec = (TaskExecutor) lookup( TaskExecutor.class.getName(), "perform-release" );
+        }
+
+        if ( releaseManager == null )
+        {
+            releaseManager = (ContinuumReleaseManager) lookup( ContinuumReleaseManager.ROLE );
         }
     }
 
@@ -85,7 +95,7 @@ public class ReleaseTaskExecutorTest
         String pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
         assertTrue( "Test dev version", pom.indexOf( "<version>1.0-SNAPSHOT</version>" ) > 0 );
 
-        prepareExec.executeTask( getPrepareTask( "testRelease", descriptor ) );
+        doPrepareWithNoError( descriptor );
 
         pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
         assertTrue( "Test version increment", pom.indexOf( "<version>1.1-SNAPSHOT</version>" ) > 0 );
@@ -121,7 +131,7 @@ public class ReleaseTaskExecutorTest
         String pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
         assertTrue( "Test dev version", pom.indexOf( "<version>1.1-SNAPSHOT</version>" ) > 0 );
 
-        prepareExec.executeTask( getPrepareTask( "testRelease", descriptor ) );
+        doPrepareWithNoError( descriptor );
 
         pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
         assertTrue( "Test version increment", pom.indexOf( "<version>2.1-SNAPSHOT</version>" ) > 0 );
@@ -134,6 +144,24 @@ public class ReleaseTaskExecutorTest
         assertTrue( "Test released version", pom.indexOf( "<version>2.0</version>" ) > 0 );
 
         performExec.executeTask( getPerformTask( "testRelease", descriptor, new File( getBasedir(), "target/test-classes/build-dir" ) ) );
+
+        ReleaseResult result = (ReleaseResult) releaseManager.getReleaseResults().get( "testRelease" );
+        if ( result.getResultCode() != ReleaseResult.SUCCESS )
+        {
+            fail( "Error in release:perform. Release output follows:\n" + result.getOutput() );
+        }
+    }
+
+    private void doPrepareWithNoError( ReleaseDescriptor descriptor )
+        throws TaskExecutionException
+    {
+        prepareExec.executeTask( getPrepareTask( "testRelease", descriptor ) );
+
+        ReleaseResult result = (ReleaseResult) releaseManager.getReleaseResults().get( "testRelease" );
+        if ( result.getResultCode() != ReleaseResult.SUCCESS )
+        {
+            fail( "Error in release:prepare. Release output follows:\n" + result.getOutput() );
+        }
     }
 
     private Task getPrepareTask( String releaseId, ReleaseDescriptor descriptor )
