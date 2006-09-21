@@ -20,19 +20,24 @@
       <ec:column property="scheduleName" title="schedule"/>
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
-      <ec:column property="actions" title="&nbsp;">
+      <ec:column property="editActions" title="Edit">
           <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
             <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
           </ww:url>
+          <ww:a href="%{editUrl}">
+              <img src="<ww:url value='/images/edit.gif'/>" alt="Edit" title="Edit" border="0">
+          </ww:a>        
+      </ec:column>    
+      <ec:column property="deleteActions" title="Remove">                
           <ww:url id="removeUrl" action="removeGroupBuildDefinition" namespace="/">
             <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
             <ww:param name="confirmed" value="false"/>
           </ww:url>
-        <ww:a href="%{editUrl}"><ww:text name="edit"/></ww:a>
-        &nbsp;
-        <ww:a href="%{removeUrl}"><ww:text name="delete"/></ww:a>
+        <ww:a href="%{removeUrl}">
+            <img src="<ww:url value='/images/delete.gif'/>" alt="Delete" title="Delete" border="0">
+        </ww:a>
       </ec:column>
     </ec:row>
   </ec:table>
@@ -61,19 +66,24 @@
       <ec:column property="scheduleName" title="schedule"/>
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
-      <ec:column property="actions" title="&nbsp;">
+      <ec:column property="editAction" title="&nbsp;">
           <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
             <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
           </ww:url>
+          <ww:a href="%{editUrl}">
+              <img src="<ww:url value='/images/edit.gif'/>" alt="Edit" title="Edit" border="0">          
+          </ww:a>          
+      </ec:column>    
+      <ec:column property="removeAction" title="&nbsp;">          
           <ww:url id="removeUrl" action="removeProjectBuildDefinition" namespace="/">
             <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
             <ww:param name="confirmed" value="false"/>
           </ww:url>
-        <ww:a href="%{editUrl}"><ww:text name="edit"/></ww:a>
-        &nbsp;
-        <ww:a href="%{removeUrl}"><ww:text name="delete"/></ww:a>
+          <ww:a href="%{removeUrl}">
+              <img src="<ww:url value='/images/edit.gif'/>" alt="Edit" title="Edit" border="0">          
+          </ww:a>
       </ec:column>
     </ec:row>
   </ec:table>

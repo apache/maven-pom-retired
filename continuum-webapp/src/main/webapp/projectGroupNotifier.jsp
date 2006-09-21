@@ -10,30 +10,9 @@
 
   <body>
   <div id="h3">
-    <div>
-      <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
-        <ww:url id="projectGroupSummaryUrl" action="projectGroupSummary">
-          <ww:param name="projectGroupId" value="projectGroupId"/>
-        </ww:url>
-        <ww:url id="projectGroupMembersUrl" action="projectGroupMembers">
-          <ww:param name="projectGroupId" value="projectGroupId"/>
-        </ww:url>
-        <ww:url id="projectGroupBuildDefinitionUrl" action="projectGroupBuildDefinition">
-          <ww:param name="projectGroupId" value="projectGroupId"/>
-        </ww:url>
-        <ww:url id="projectGroupNotifierUrl" action="projectGroupNotifier">
-          <ww:param name="projectGroupId" value="projectGroupId"/>
-        </ww:url>
-        <ww:a cssStyle="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;"
-              href="%{projectGroupSummaryUrl}">Summary</ww:a>
-        <ww:a cssStyle="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;"
-              href="%{projectGroupMembersUrl}">Members</ww:a>
-        <ww:a cssStyle="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;"
-              href="%{projectGroupBuildDefinitionUrl}">Build Definitions</ww:a>
-        <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">Notifier</b>
-
-      </p>
-    </div>
+    <ww:action name="projectGroupTab" executeResult="true">
+      <ww:param name="tabName" value="'Notifier'"/>
+    </ww:action>
 
     <h3>PROJECT GROUP Notifiers<ww:text name="projectView.section.title"/></h3>
 

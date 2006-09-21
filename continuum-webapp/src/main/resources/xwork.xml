@@ -357,6 +357,11 @@
       <result name="error">/components/failureComponent.jsp</result>
     </action>
 
+    <action name="projectGroupTab" class="continuumTab">
+      <result name="success">/components/projectGroupTabComponent.jsp</result>
+      <result name="error">/components/failureComponent.jsp</result>
+    </action>
+
     <action name="projectSummary" class="summary">
       <result name="success">/components/projectSummaryComponent.jsp</result>
       <result name="error">/components/failureComponent.jsp</result>
