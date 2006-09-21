@@ -84,7 +84,15 @@ public class ScheduleAction
                 dayOfMonth = cronEx[3];
                 month = cronEx[4];
                 dayOfWeek = cronEx[5];
-                year = cronEx[6];
+
+                try
+                {
+                    year = cronEx[6];
+                }
+                catch ( Exception xe )
+                {
+
+                }
 
                 description = schedule.getDescription();
                 name = schedule.getName();

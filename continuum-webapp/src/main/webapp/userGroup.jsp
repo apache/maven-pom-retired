@@ -13,12 +13,12 @@
 
     <h3><ww:text name="User Group"/></h3>
 
-    <ww:form action="saveUserGroup" method="post">
+    <ww:form action="saveUserGroup" method="post" validate="true">
       <ww:hidden name="userGroupId"/>
 
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
-          <ww:textfield label="Name" name="name"/>
+          <ww:textfield label="Name" name="name" required="true"/>
           <ww:textfield label="Description" name="description"/>
         </table>
       </div>

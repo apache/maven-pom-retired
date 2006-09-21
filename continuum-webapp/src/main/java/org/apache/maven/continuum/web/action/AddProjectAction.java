@@ -45,7 +45,7 @@ public class AddProjectAction
 
     private String projectType;
 
-    public String execute()
+    public String add()
         throws ContinuumException
     {
         Project project = new Project();
@@ -67,9 +67,9 @@ public class AddProjectAction
         return SUCCESS;
     }
 
-    public String doDefault()
+    public String input()
     {
-        return INPUT;
+        return SUCCESS;
     }
 
     public String getProjectName()

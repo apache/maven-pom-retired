@@ -11,7 +11,7 @@
     <h3><ww:text name="editSchedule.page.title"/></h3>
 
     <div class="axial">
-      <ww:form action="saveSchedule" method="post">
+      <ww:form action="saveSchedule" method="post" validate="true">
         <ww:hidden name="id"/>
           <table>
             <ww:textfield label="%{getText('schedule.name.label')}" name="name" required="true">
@@ -22,7 +22,7 @@
             </ww:textfield>
 
             <tr>
-              <th><ww:label theme="simple" value="%{getText('schedule.cronExpression.label')}:" required="true"/></th>
+              <th><ww:label theme="simple" value="%{getText('schedule.cronExpression.label')}:"/></th>
               <td>
                 <table>
                   <ww:textfield label="%{getText('schedule.second.label')}" name="second" size="2"/>

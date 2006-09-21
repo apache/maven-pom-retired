@@ -13,16 +13,21 @@
 
     <h3><ww:text name="Users"/></h3>
 
-    <ww:form action="saveUser" method="post">
+    <ww:form action="saveUser" method="post" validate="true">
       <ww:hidden name="userId"/>
+
+      <h3>Action Error</h3>
+      <p>
+        <ww:actionerror/>
+      </p>
 
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
-          <ww:textfield label="Username" name="username"/>
-          <ww:textfield label="Full Name" name="fullName"/>
+          <ww:textfield label="Username" name="username" required="true"/>
+          <ww:textfield label="Full Name" name="fullName" required="true"/>
           <ww:textfield label="Email" name="email"/>
-          <ww:password label="Password" name="password"/>
-          <ww:password label="Password(again)" name="passwordTwo"/>
+          <ww:password label="Password" name="password" required="true"/>
+          <ww:password label="Password(again)" name="passwordTwo" required="true"/>
           <ww:select list="userGroups" label="User Group" name="userGroupId"/>
         </table>
       </div>

@@ -121,7 +121,7 @@ public class BuildDefinitionAction
             defaultBuildDefinition = buildDefinition.isDefaultForProject();
         }
 
-        return INPUT;
+        return SUCCESS;
     }
 
     public String saveToProject()

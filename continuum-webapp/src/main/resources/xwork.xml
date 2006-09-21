@@ -72,7 +72,11 @@
       <result name="success" type="chain">groupSummary</result>
     </action>
 
-    <action name="addProject" class="addProject">
+    <action name="addProjectInput" class="addProject" method="input">
+      <result name="success">addProject.jsp</result>
+    </action>
+
+    <action name="addProject" class="addProject" method="add">
       <result name="input">addProject.jsp</result>
       <result name="success" type="chain">groupSummary</result>
     </action>
@@ -125,6 +129,7 @@
     </action>
 
     <action name="saveUser" class="userManagement" method="save">
+      <result name="input">user.jsp</result>
       <result name="success" type="chain">users</result>
     </action>
 
@@ -145,6 +150,7 @@
     </action>
 
     <action name="saveUserGroup" class="userGroupManagement" method="save">
+      <result name="input">userGroup.jsp</result>
       <result name="success" type="chain">userGroups</result>
     </action>
 
@@ -156,11 +162,12 @@
     <!--
     * build definition actions
     -->
-    <action name="buildDefinition" class="buildDefinition">
-      <result name="input">buildDefinitionEdit.jsp</result>
+    <action name="buildDefinition" class="buildDefinition" method="input">
+      <result name="success">buildDefinitionEdit.jsp</result>
     </action>
 
     <action name="saveProjectBuildDefinition" class="buildDefinition" method="saveToProject">
+      <result name="input">buildDefinitionEdit.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
@@ -287,6 +294,7 @@
     </action>
 
     <action name="saveSchedule" class="schedule" method="save">
+      <result name="input">editSchedule.jsp</result>
       <result name="success" type="chain">schedules</result>
     </action>
 

@@ -24,17 +24,17 @@
                     </ww:else>
                 </h3>
                 <div class="axial">
-                    <ww:form method="post" action="addProject.action">
+                    <ww:form method="post" action="addProject" validate="true">
                         <input type="hidden" name="projectType" value="<ww:property value="projectType"/>">
                         <table>
                           <tbody>
-                            <ww:textfield label="%{getText('projectName.label')}" name="projectName">
+                            <ww:textfield label="%{getText('projectName.label')}" name="projectName" required="true">
                                 <ww:param name="desc"><p><ww:text name="projectName.message"/></p></ww:param>
                             </ww:textfield>
-                            <ww:textfield label="%{getText('projectVersion.label')}" name="projectVersion">
+                            <ww:textfield label="%{getText('projectVersion.label')}" name="projectVersion" required="true">
                                 <ww:param name="desc"><p><ww:text name="projectVersion.message"/></p></ww:param>
                             </ww:textfield>
-                            <ww:textfield label="%{getText('projectScmUrl.label')}" name="projectScmUrl">
+                            <ww:textfield label="%{getText('projectScmUrl.label')}" name="projectScmUrl" required="true">
                                 <ww:param name="desc"><p><ww:text name="projectScmUrl.message"/></p></ww:param>
                             </ww:textfield>
                             <ww:textfield label="%{getText('projectScmUsername.label')}" name="projectScmUsername">

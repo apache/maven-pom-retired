@@ -23,7 +23,7 @@
 
 
 
-          <ww:form action="%{actionUrl}" method="post" >
+          <ww:form action="%{actionUrl}" method="post" validate="true">
 
             <ww:hidden name="buildDefinitionId"/>
             <ww:hidden name="projectId"/>
