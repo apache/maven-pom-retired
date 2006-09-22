@@ -283,7 +283,7 @@ public class DefaultContinuumScm
 
         StringBuffer message = new StringBuffer();
 
-        if ( !messages.isEmpty() )
+        if ( messages != null && !messages.isEmpty() )
         {
             for ( Iterator i = messages.iterator(); i.hasNext(); )
             {
