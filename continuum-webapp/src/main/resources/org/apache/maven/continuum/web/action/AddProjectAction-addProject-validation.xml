@@ -1,0 +1,21 @@
+<!DOCTYPE validators PUBLIC
+    "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+    "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+  <field name="projectName">
+    <field-validator type="required">
+      <message key="addProject.name.required"/>
+    </field-validator>
+  </field>
+  <field name="projectVersion">
+    <field-validator type="required">
+      <message key="addProject.version.required"/>
+    </field-validator>
+  </field>
+  <field name="projectScmUrl">
+    <field-validator type="required">
+      <message key="addProject.scmUrl.required"/>
+    </field-validator>
+  </field>
+</validators>

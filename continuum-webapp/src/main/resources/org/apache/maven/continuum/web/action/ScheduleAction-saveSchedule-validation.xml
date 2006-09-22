@@ -1,0 +1,31 @@
+<!DOCTYPE validators PUBLIC
+    "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+    "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+  <field name="name">
+    <field-validator type="required">
+      <message key="schedule.name.required"/>
+    </field-validator>
+  </field>
+  <field name="description">
+    <field-validator type="required">
+      <message key="schedule.version.required"/>
+    </field-validator>
+  </field>
+  <field name="maxJobExecutionTime">
+    <field-validator type="required">
+      <message key="schedule.maxJobExecutionTime.required"/>
+    </field-validator>
+    <field-validator type="regex">
+      <param name="expression"><![CDATA[([0-9])]]></param>
+      <message key="schedule.maxJobExecutionTime.invalid"/>
+    </field-validator>
+  </field>
+  <field name="delay">
+    <field-validator type="regex">
+      <param name="expression"><![CDATA[([0-9])]]></param>
+      <message key="schedule.delay.invalid"/>  
+    </field-validator>
+  </field>
+</validators>
