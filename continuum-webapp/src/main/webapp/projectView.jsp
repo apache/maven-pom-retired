@@ -24,20 +24,10 @@
             <c1:data label="%{getText('projectView.project.name')}" name="project.name"/>
             <c1:data label="%{getText('projectView.project.version')}" name="project.version"/>
             <c1:data label="%{getText('projectView.project.scmUrl')}" name="project.scmUrl"/>
-            <tr class="b">
-                <th>
-                    <label for="project_projectGroup_name" class="label">
-                        <ww:text name="%{getText('projectView.project.group')}"/>
-                    </label>
-                </th>
-                <td>
-                    <a href='<ww:url value="/projectGroupSummary.action">
-                                 <ww:param name="projectGroupId" value="%{project.projectGroup.id}"/>
-                             </ww:url>'>
-                    <c:out value="${project.projectGroup.name}"/>
-                    </a>                    
-                </td>
-            </tr>            
+            <ww:url id="projectGroupSummaryUrl" value="/projectGroupSummary.action">
+                <ww:param name="projectGroupId" value="%{project.projectGroup.id}"/>
+            </ww:url>            
+            <c1:data label="%{getText('projectView.project.group')}" name="project.projectGroup.name" valueLink="%{'${projectGroupSummaryUrl}'}"/>
           </table>
           <!--
             wrap this in security tag

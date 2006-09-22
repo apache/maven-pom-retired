@@ -31,8 +31,25 @@ import javax.servlet.http.HttpServletResponse;
 public class DataTag
     extends AbstractUITag
 {
+    
+    protected String valueLink;
+    
     public Component getBean( OgnlValueStack stack, HttpServletRequest req, HttpServletResponse res )
     {
         return new Data( stack, req, res );
+    }
+    
+    public void setValueLink( String _link )
+    {
+        System.out.println(" link = " + _link);
+        valueLink = _link;    
+    }
+    
+    protected void populateParams()
+    {
+        super.populateParams();
+        
+        Data dataBean = ( Data ) this.component;
+        dataBean.setValueLink( valueLink );
     }
 }
