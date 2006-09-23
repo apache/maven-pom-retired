@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: CssTool.java 209843 2005-07-08 17:13:22Z evenisse $
+ * @version $Id$
  */
 public class FormDataTool
 {
