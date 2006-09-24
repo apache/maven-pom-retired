@@ -25,7 +25,7 @@
         <artifactId>continuum-distributed</artifactId>
         <version>1.1-SNAPSHOT</version>
     </parent>
-    <artifactId>extensions</artifactId>
+    <artifactId>continuum-distributed-extensions</artifactId>
     <name></name>
     <packaging>pom</packaging>
     
