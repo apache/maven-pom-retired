@@ -62,6 +62,10 @@ public class PerformReleaseAction
     public String execute()
         throws Exception
     {
+        if ( StringUtils.isNotEmpty( goals )  )
+        {
+            goals = "clean deploy";
+        }
         if ( StringUtils.isNotEmpty( releaseId )  )
         {
             ContinuumReleaseManager releaseManager = getContinuum().getReleaseManager();

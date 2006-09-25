@@ -1,11 +1,7 @@
 package org.apache.maven.continuum.core.action;
 
-import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.model.project.ProjectGroup;
-
-import java.util.Map;
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2005-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +16,16 @@ import java.util.Map;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.ProjectGroup;
+
+import java.util.Map;
+
 /**
  * AddBuildDefinitionToProjectAction:
  *
- * @author: Jesse McConnell <jmcconnell@apache.org>
- * @version: $ID:$
+ * @author Jesse McConnell <jmcconnell@apache.org>
+ * @version $Id$
  *
  * @plexus.component
  *   role="org.codehaus.plexus.action.Action"
@@ -38,12 +39,14 @@ public class UpdateBuildDefinitionFromProjectGroupAction
         throws Exception
     {
         BuildDefinition buildDefinition = getBuildDefinition( map );
-        int projectGroupId =  getProjectGroupId( map );
+        int projectGroupId = getProjectGroupId( map );
 
         ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( projectGroupId );
 
         resolveDefaultBuildDefinitionsForProjectGroup( buildDefinition, projectGroup );
 
         updateBuildDefinitionInList( projectGroup.getBuildDefinitions(), buildDefinition );
+
+        map.put( AbstractContinuumAction.KEY_BUILD_DEFINITION, buildDefinition );
     }
 }

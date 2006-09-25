@@ -69,73 +69,54 @@ public class ScheduleAction
     }
 
     public String input()
+        throws ContinuumException
     {
         if ( id != 0 )
         {
-            try
+            schedule = getContinuum().getSchedule( id );
+            active = schedule.isActive();
+
+            String[] cronEx = schedule.getCronExpression().split( " " );
+            second = cronEx[0];
+            minute = cronEx[1];
+            hour = cronEx[2];
+            dayOfMonth = cronEx[3];
+            month = cronEx[4];
+            dayOfWeek = cronEx[5];
+            if ( cronEx.length > 6 )
             {
-                schedule = getContinuum().getSchedule( id );
-                active = schedule.isActive();
-
-                String[] cronEx = schedule.getCronExpression().split( " " );
-                second = cronEx[0];
-                minute = cronEx[1];
-                hour = cronEx[2];
-                dayOfMonth = cronEx[3];
-                month = cronEx[4];
-                dayOfWeek = cronEx[5];
-
-                try
-                {
-                    year = cronEx[6];
-                }
-                catch ( Exception xe )
-                {
-
-                }
-
-                description = schedule.getDescription();
-                name = schedule.getName();
-                delay = schedule.getDelay();
-                maxJobExecutionTime = schedule.getMaxJobExecutionTime();
+                year = cronEx[6];
             }
-            catch ( ContinuumException e )
-            {
-                addActionError( "unable to retrieve schedule for editting" );
-                return ERROR;
-            }
+
+            description = schedule.getDescription();
+            name = schedule.getName();
+            delay = schedule.getDelay();
+            maxJobExecutionTime = schedule.getMaxJobExecutionTime();
         }
         return SUCCESS;
     }
 
     public String save()
+        throws ContinuumException
     {
-        if ( id == 0 )
+        if ( ( "".equals( name ) ) || ( name == null ) ) 
         {
-            try
-            {
-                getContinuum().addSchedule( setFields( new Schedule() ) );
-            }
-            catch ( ContinuumException e )
-            {
-                addActionError( "unable to add schedule" );
-                return ERROR;
-            }
-            return SUCCESS;
+            getLogger().error( "Can't create schedule. No schedule name was supplied." );
+            addActionError( "buildDefinition.noname.save.error.message");
+            return ERROR;
         }
         else
         {
-            try
+            if ( id == 0 )
+            {
+                getContinuum().addSchedule( setFields( new Schedule() ) );
+                return SUCCESS;
+            }
+            else
             {
                 getContinuum().updateSchedule( setFields( getContinuum().getSchedule( id ) ) );
-            }
-            catch ( ContinuumException e )
-            {
-                addActionError( "unable to edit schedule" );
-                return ERROR;
-            }
-
-            return SUCCESS;
+                return SUCCESS;
+            }   
         }
     }
 

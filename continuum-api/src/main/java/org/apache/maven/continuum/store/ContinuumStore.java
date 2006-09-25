@@ -218,9 +218,6 @@ public interface ContinuumStore
     Project getProjectWithBuildDetails( int projectId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
-    ProjectGroup getDefaultProjectGroup()
-        throws ContinuumStoreException;
-
     SystemConfiguration addSystemConfiguration( SystemConfiguration systemConf );
 
     void updateSystemConfiguration( SystemConfiguration systemConf )

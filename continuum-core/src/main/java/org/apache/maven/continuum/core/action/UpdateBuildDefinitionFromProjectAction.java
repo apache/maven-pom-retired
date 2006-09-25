@@ -1,9 +1,5 @@
 package org.apache.maven.continuum.core.action;
 
-import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.model.project.Project;
-
-import java.util.Map;
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -20,11 +16,16 @@ import java.util.Map;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.Project;
+
+import java.util.Map;
+
 /**
  * AddBuildDefinitionToProjectAction:
  *
- * @author: Jesse McConnell <jmcconnell@apache.org>
- * @version: $ID:$
+ * @author Jesse McConnell <jmcconnell@apache.org>
+ * @version $Id$
  * @plexus.component role="org.codehaus.plexus.action.Action"
  * role-hint="update-build-definition-from-project"
  */
@@ -41,8 +42,10 @@ public class UpdateBuildDefinitionFromProjectAction
         Project project = store.getProjectWithAllDetails( projectId );
 
         resolveDefaultBuildDefinitionsForProject( buildDefinition, project );
-        
+
         updateBuildDefinitionInList( project.getBuildDefinitions(), buildDefinition );
+
+        map.put( AbstractContinuumAction.KEY_BUILD_DEFINITION, buildDefinition );
     }
 
 }

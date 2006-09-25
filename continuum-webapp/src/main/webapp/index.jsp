@@ -1,1 +1,1 @@
-<% response.sendRedirect(  request.getContextPath() + "/summary.action" ); %>
+<% response.sendRedirect(  request.getContextPath() + "/groupSummary.action" ); %>

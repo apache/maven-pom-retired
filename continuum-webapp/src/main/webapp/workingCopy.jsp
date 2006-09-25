@@ -6,23 +6,10 @@
     </head>
     <body>
       <div id="h3">
-        <div>
-          <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
-            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;"
-              href='<ww:url action="projectView">
-                  <ww:param name="projectId" value="projectId"/>
-                </ww:url>'>
-              <ww:text name="info"/>
-            </a>
-            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;"
-              href='<ww:url action="buildResults">
-                  <ww:param name="projectId" value="projectId"/>
-                </ww:url>'>
-              <ww:text name="builds"/>
-            </a>
-            <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="workingCopy"/></b>
-          </p>
-        </div>
+
+        <jsp:include page="/navigations/ProjectMenu.jsp">
+          <jsp:param name="tab" value="workingCopy"/>
+        </jsp:include>
 
         <h3>
             <ww:text name="workingCopy.section.title">

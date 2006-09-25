@@ -14,12 +14,14 @@ package org.apache.maven.continuum.web.action;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-import com.opensymphony.xwork.Preparable;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.initialization.ContinuumInitializationException;
 import org.codehaus.plexus.xwork.action.PlexusActionSupport;
+
+import com.opensymphony.xwork.Preparable;
 
 /**
  * ContinuumActionSupport
@@ -39,13 +41,13 @@ public class ContinuumActionSupport
     public void prepare()
         throws Exception
     {
-        
-
-        getLogger().info("checking the continuum configuration");
+        getLogger().debug( "Checking if Continuum is initialized" );
 
         if ( !continuum.getConfiguration().isInitialized() )
         {
-            throw new ContinuumInitializationException( "continuum not initialized" );
+            throw new ContinuumInitializationException( "This is your first time running continuum, "
+                + "when you access it through a web browser you will need to enter some "
+                + "information before being able to use it. " + "You can ignore this exception." );
         }
 
     }

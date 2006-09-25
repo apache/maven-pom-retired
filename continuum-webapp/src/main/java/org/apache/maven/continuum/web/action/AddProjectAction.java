@@ -16,8 +16,12 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import java.util.Iterator;
+
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
+
+import com.opensymphony.xwork.Validateable;
 
 /**
  * @author Nick Gonzalez
@@ -29,6 +33,7 @@ import org.apache.maven.continuum.model.project.Project;
  */
 public class AddProjectAction
     extends ContinuumActionSupport
+    implements Validateable
 {
 
     private String projectName;
@@ -45,7 +50,38 @@ public class AddProjectAction
 
     private String projectType;
 
-    public String add()
+    public void validate()
+    {
+        boolean projectNameAlreadyExist = false;
+        Iterator iterator;
+        Project project;
+
+        clearErrorsAndMessages();
+        try
+        {
+            iterator = getContinuum().getProjects().iterator();
+            while ( iterator.hasNext() )
+            {
+                project = (Project) iterator.next();
+                if ( project.getName().equalsIgnoreCase( projectName ) )
+                {
+                    projectNameAlreadyExist = true;
+                    break;
+                }
+            }
+            if ( projectNameAlreadyExist == true )
+            {
+                addActionError( "projectName.already.exist.error" );
+            }
+        }
+        catch ( ContinuumException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public String execute()
         throws ContinuumException
     {
         Project project = new Project();

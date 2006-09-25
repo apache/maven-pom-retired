@@ -9,13 +9,8 @@
     </head>
     <body>
       <div id="h3">
-        <div>
-          <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
-            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href='<ww:url action="projectView"/>'><ww:text name="info"/></a>
-            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href='<ww:url action="buildResults"/>'><ww:text name="builds"/></a>
-            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href='<ww:url action="workingCopy"/>'><ww:text name="workingCopy"/></a>
-          </p>
-        </div>
+
+        <jsp:include page="/navigations/ProjectMenu.jsp"/>
 
         <h3>
             <ww:text name="buildResult.section.title">
@@ -31,11 +26,11 @@
             <c1:data label="%{getText('buildResult.endTime')}">
                 <ww:param name="after"><c1:date name="buildResult.endTime"/></ww:param>
             </c1:data>
-            <c1:data label="%{getText('buildResult.buildTrigger')}">
-                <ww:param name="after">TODO<ww:property value="buildResult.trigger"/></ww:param>
+            <c1:data label="%{getText('buildResult.trigger')}">
+                <ww:param name="after"><ww:text name="buildResult.trigger.%{buildResult.trigger}"/></ww:param>
             </c1:data>
             <c1:data label="%{getText('buildResult.state')}">
-                <ww:param name="after">TODO<ww:property value="buildResult.state"/></ww:param>
+                <ww:param name="after"><ww:text name="buildResult.state.%{buildResult.state}"/></ww:param>
             </c1:data>
             <c1:data label="%{getText('buildResult.buildNumber')}">
                 <ww:param name="after">
@@ -58,12 +53,13 @@
                       showExports="false"
                       showPagination="false"
                       showStatusBar="false"
+                      sortable="false"
                       filterable="false">
               <ec:row>
                 <ec:column property="author" title="buildResult.changes.author"/>
                 <ec:column property="date" title="buildResult.changes.date" cell="date"/>
-                <ec:column property="comment" title="buildResult.changes.comment" sortable="false"/>
-                <ec:column property="files" title="buildResult.changes.files" sortable="false">
+                <ec:column property="comment" title="buildResult.changes.comment" />
+                <ec:column property="files" title="buildResult.changes.files">
                     <c:forEach var="scmFile" items="${pageScope.change.files}">
                         <c:out value="${scmFile.name}"/><br />
                     </c:forEach>
@@ -94,12 +90,13 @@
                       showExports="false"
                       showPagination="false"
                       showStatusBar="false"
+                      sortable="false"
                       filterable="false">
               <ec:row>
                 <ec:column property="author" title="buildResult.changes.author"/>
                 <ec:column property="date" title="buildResult.changes.date" cell="date"/>
-                <ec:column property="comment" title="buildResult.changes.comment" sortable="false"/>
-                <ec:column property="files" title="buildResult.changes.files" sortable="false">
+                <ec:column property="comment" title="buildResult.changes.comment" />
+                <ec:column property="files" title="buildResult.changes.files">
                     <c:forEach var="scmFile" items="${pageScope.change.files}">
                         <c:out value="${scmFile.name}"/><br />
                     </c:forEach>
@@ -110,21 +107,19 @@
 
         <ww:if test="buildResult.state == 4">
           <h4><ww:text name="buildResult.buildError"/></h4>
-          <p>
-            <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px">
-            <code><pre><ww:property value="buildResult.error"/></pre></code>
-            </div>
-          </p>
+          <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px">
+            <pre><ww:property value="buildResult.error"/></pre>
+          </div>
         </ww:if>
         <ww:else>
           <h4><ww:text name="buildResult.buildOutput"/></h4>
           <p>
-            <ww:if test="buildResult.output == ''">
+            <ww:if test="buildOutput == ''">
                 <ww:text name="buildResult.noOutput"/>
             </ww:if>
             <ww:else>
               <div style="width:100%; height:500px; overflow:auto; border-style: solid; border-width: 1px">
-                <code><pre>buildResult.output</pre></code>
+                <pre><ww:property value="buildOutput"/></pre>
               </div>
             </ww:else>
           </p>

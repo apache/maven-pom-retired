@@ -52,4 +52,9 @@ public class ProjectViewAction
     {
         return project;
     }
+
+    public int getProjectId()
+    {
+        return projectId;
+    }
 }

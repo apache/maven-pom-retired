@@ -3,26 +3,24 @@
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
-        <title><ww:text name="deleteBuildDefinition.page.title"/></title>
+      <title><ww:text name="deleteBuildDefinition.page.title"/></title>
     </head>
     <body>
       <div id="axial" class="h3">
         <h3><ww:text name="deleteBuildDefinition.section.title"/></h3>
-
         <div class="warningmessage">
           <p>
             <strong>
-                <ww:text name="deleteBuildDefinition.confirmation.message">
-                    <ww:param><ww:property value="buildDefinitionId"/></ww:param>
-                </ww:text>
+              <ww:text name="deleteBuildDefinition.confirmation.message">
+          	  	<ww:param><ww:property value="buildDefinitionId"/></ww:param>
+          	  </ww:text>
             </strong>
           </p>
         </div>
         <div class="functnbar3">
-          <ww:form action="removeGroupBuildDefinition">
-            <ww:hidden name="buildDefinitionId"/>
-            <ww:hidden name="projectGroupId"/>
+          <ww:form action="removeProjectBuildDefinition.action" method="post">
             <ww:hidden name="projectId"/>
+            <ww:hidden name="buildDefinitionId"/>
             <ww:hidden name="confirmed" value="true"/>
             <c1:submitcancel value="%{getText('delete')}" cancel="%{getText('cancel')}"/>
           </ww:form>

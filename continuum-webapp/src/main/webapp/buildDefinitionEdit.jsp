@@ -15,10 +15,10 @@
 
 
           <ww:if test="${projectId != 0}">
-            <ww:url id="actionUrl" action="saveProjectBuildDefinition"/>
+            <ww:url id="actionUrl" action="saveProjectBuildDefinition" includeContext="false" />
           </ww:if>
           <ww:else>
-            <ww:url id="actionUrl" action="saveGroupBuildDefinition"/>
+            <ww:url id="actionUrl" action="saveGroupBuildDefinition" includeContext="false" />
           </ww:else>
 
 

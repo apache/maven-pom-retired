@@ -31,7 +31,7 @@ import java.util.List;
  * BuildDefinitionSummaryAction:
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
- * @version $ID:$
+ * @version $Id$
  * @plexus.component role="com.opensymphony.xwork.Action"
  * role-hint="buildDefinitionSummary"
  */
@@ -41,6 +41,8 @@ public class BuildDefinitionSummaryAction
     private int projectGroupId;
 
     private int projectId;
+    
+    private ProjectGroup projectGroup;
 
     private List projectBuildDefinitionSummaries = new ArrayList();
 
@@ -52,7 +54,8 @@ public class BuildDefinitionSummaryAction
     {
         try
         {
-            projectGroupId = getContinuum().getProjectGroupByProjectId( projectId ).getId();
+            projectGroup = getContinuum().getProjectGroupByProjectId( projectId );
+            projectGroupId = projectGroup.getId();
             groupBuildDefinitionSummaries = gatherGroupBuildDefinitionSummaries( projectGroupId );
             projectBuildDefinitionSummaries = gatherProjectBuildDefinitionSummaries( projectId );
 
@@ -74,7 +77,7 @@ public class BuildDefinitionSummaryAction
         {
             groupBuildDefinitionSummaries = gatherGroupBuildDefinitionSummaries( projectGroupId );
 
-            ProjectGroup projectGroup = getContinuum().getProjectGroup( projectGroupId );
+            projectGroup = getContinuum().getProjectGroup( projectGroupId );
 
             for (Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
             {
@@ -120,7 +123,7 @@ public class BuildDefinitionSummaryAction
     {
         List summaryList = new ArrayList();
 
-        ProjectGroup projectGroup = getContinuum().getProjectGroup( projectGroupId );
+        projectGroup = getContinuum().getProjectGroup( projectGroupId );
 
         for ( Iterator i = projectGroup.getBuildDefinitions().iterator(); i.hasNext(); )
         {
@@ -196,5 +199,15 @@ public class BuildDefinitionSummaryAction
     public void setAllBuildDefinitionSummaries( List allBuildDefinitionSummaries )
     {
         this.allBuildDefinitionSummaries = allBuildDefinitionSummaries;
+    }
+
+    public ProjectGroup getProjectGroup()
+    {
+        return projectGroup;
+    }
+
+    public void setProjectGroup( ProjectGroup projectGroup )
+    {
+        this.projectGroup = projectGroup;
     }
 }

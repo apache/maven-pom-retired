@@ -19,7 +19,7 @@ package org.apache.maven.continuum.web.exception;
  * ContinuumActionException:
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
- * @version $ID:$
+ * @version $Id$
  */
 public class ContinuumActionException
     extends Exception

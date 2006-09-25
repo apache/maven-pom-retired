@@ -2,6 +2,7 @@
 <%@ taglib uri="http://www.extremecomponents.org" prefix="ec" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="continuum" prefix="c1" %>
+
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
@@ -9,13 +10,10 @@
     </head>
     <body>
       <div id="h3">
-        <div>
-          <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
-            <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="info"/></b>
-            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href='<ww:url action="buildResults"/>'><ww:text name="builds"/></a>
-            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href='<ww:url action="workingCopy"/>'><ww:text name="workingCopy"/></a>
-          </p>
-        </div>
+
+        <jsp:include page="/navigations/ProjectMenu.jsp">
+          <jsp:param name="tab" value="view"/>
+        </jsp:include>
 
         <h3><ww:text name="projectView.section.title"/></h3>
 
@@ -30,7 +28,7 @@
             <c1:data label="%{getText('projectView.project.group')}" name="project.projectGroup.name" valueLink="%{'${projectGroupSummaryUrl}'}"/>
           </table>
           <!--
-            wrap this in security tag
+            TODO wrap this in security tag
           -->
           <div class="functnbar3">
             <table>
@@ -83,10 +81,10 @@
             <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
             <ec:column property="actions" title="&nbsp;">
                 <c:if test="${!pageScope.notifier.fromProject}">
-                    <a href='<ww:url value="${notifier.type}NotifierEdit.action">
+                    <a href='<ww:url value="${notifier.type}NotifierEdit!default.action">
                       <ww:param name="projectId" value="project.id"/>
                       <ww:param name="notifierId" value="${notifier.id}"/>
-                    </ww:url>'>
+                      </ww:url>'>
                       <img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />
                     </a>
                     &nbsp;
@@ -94,7 +92,7 @@
                       <ww:param name="projectId" value="project.id"/>
                       <ww:param name="notifierId" value="${notifier.id}"/>
                       <ww:param name="notifierType" value="${notifier.type}"/>
-                    </ww:url>'>
+                      </ww:url>'>
                       <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0">
                     </a>
                 </c:if>

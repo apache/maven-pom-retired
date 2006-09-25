@@ -1,3 +1,4 @@
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="/webwork" prefix="ww" %>
 <%@ taglib uri="continuum" prefix="c1" %>
 <html>
@@ -12,6 +13,13 @@
 
     <div class="axial">
       <ww:form action="saveSchedule" method="post" validate="true">
+        <c:if test="${!empty actionErrors}">
+          <div class="errormessage">
+            <c:forEach items="${actionErrors}" var="actionError">
+              <p><ww:text name="${actionError}"/></p>
+            </c:forEach>
+          </div>
+        </c:if>
         <ww:hidden name="id"/>
           <table>
             <ww:textfield label="%{getText('schedule.name.label')}" name="name" required="true">

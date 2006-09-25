@@ -24,7 +24,7 @@ import java.util.Map;
  * AddBuildDefinitionToProjectAction:
  *
  * @author: Jesse McConnell <jmcconnell@apache.org>
- * @version: $ID:$
+ * @version: $Id$
  *
  * @plexus.component
  *   role="org.codehaus.plexus.action.Action"

@@ -1,17 +1,5 @@
 package org.apache.maven.continuum.core.action;
 
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
-import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.model.project.Schedule;
-import org.apache.maven.continuum.model.project.Project;
-import org.apache.maven.continuum.store.ContinuumStore;
-import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
-
-import java.util.Iterator;
-import java.util.List;
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -28,11 +16,24 @@ import java.util.List;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
+import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.store.ContinuumStore;
+import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
+
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * AbstractBuildDefinitionContinuumAction:
  *
- * @author: Jesse McConnell <jmcconnell@apache.org>
- * @version: $ID:$
+ * @author Jesse McConnell <jmcconnell@apache.org>
+ * @version $Id$
  */
 public abstract class AbstractBuildDefinitionContinuumAction
     extends AbstractContinuumAction
@@ -127,7 +128,7 @@ public abstract class AbstractBuildDefinitionContinuumAction
      * @param buildDefinition
      * @throws ContinuumException
      */
-    protected void updateBuildDefinitionInList( List buildDefinitions, BuildDefinition buildDefinition )
+    protected BuildDefinition updateBuildDefinitionInList( List buildDefinitions, BuildDefinition buildDefinition )
         throws ContinuumException
     {
         try
@@ -173,6 +174,8 @@ public abstract class AbstractBuildDefinitionContinuumAction
                 storedDefinition.setSchedule( schedule );
 
                 store.storeBuildDefinition( storedDefinition );
+
+                return storedDefinition;
             }
             else
             {

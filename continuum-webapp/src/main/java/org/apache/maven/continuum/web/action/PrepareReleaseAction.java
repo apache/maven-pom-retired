@@ -83,15 +83,19 @@ public class PrepareReleaseAction
         scmUsername = project.getScmUsername();
         scmPassword = project.getScmPassword();
         scmTag = project.getScmTag();
+
+        if ( StringUtils.isEmpty( scmTag ) )
+        {
+            scmTag = "myRelease";
+        }
+
         String scmUrl = project.getScmUrl();
 
         //skip scm:provider in scm url
         int idx = scmUrl.indexOf( ":", 4 ) + 1;
-        scmUrl = scmUrl.substring( idx );
-
         if ( scmUrl.endsWith( "/trunk" ) )
         {
-            scmTagBase = scmUrl.substring( 0 , scmUrl.lastIndexOf( "/trunk" ) ) + "/branches";
+            scmTagBase = scmUrl.substring( idx , scmUrl.lastIndexOf( "/trunk" ) ) + "/branches";
         }
         else
         {
@@ -189,7 +193,7 @@ public class PrepareReleaseAction
 
         listener = (ContinuumReleaseManagerListener) releaseManager.getListeners().get( releaseId );
 
-        if ( listener != null )
+        if ( listener == null || ( listener.getState() == ContinuumReleaseManagerListener.FINISHED ) )
         {
             if ( listener.getState() == ContinuumReleaseManagerListener.FINISHED )
             {

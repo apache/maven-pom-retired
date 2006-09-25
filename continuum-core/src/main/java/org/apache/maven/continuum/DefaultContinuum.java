@@ -36,6 +36,7 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.project.ContinuumProjectState;
@@ -765,18 +766,7 @@ public class DefaultContinuum
     {
         ArrayList buildResults;
 
-        try
-        {
-            buildResults = new ArrayList( store.getProjectWithBuilds( projectId ).getBuildResults() );
-        }
-        catch ( ContinuumObjectNotFoundException e )
-        {
-            return Collections.EMPTY_LIST;
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw logAndCreateException( "Exception while getting build results for project.", e );
-        }
+        buildResults = new ArrayList( store.getBuildResultsForProject( projectId, 0 ) );
 
         Collections.reverse( buildResults );
 
@@ -817,7 +807,12 @@ public class DefaultContinuum
                 changes = new ArrayList();
             }
 
-            changes.addAll( buildResult.getScmResult().getChanges() );
+            ScmResult scmResult = buildResult.getScmResult();
+
+            if ( scmResult != null )
+            {
+                changes.addAll( scmResult.getChanges() );
+            }
 
             if ( !buildResultsIterator.hasNext() )
             {
@@ -931,14 +926,7 @@ public class DefaultContinuum
 
         context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
 
-        try
-        {
-            context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, store.getDefaultProjectGroup() );
-        }
-        catch ( ContinuumStoreException e )
-        {
-            throw new ContinuumException( "Error getting the default project group to work with" );
-        }
+        context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, getDefaultProjectGroup() );
 
         executeAction( "validate-project", context );
 
@@ -1047,6 +1035,10 @@ public class DefaultContinuum
 
                 projectGroup = store.getProjectGroupWithProjects( projectGroupId );
             }
+
+            /* add the project group loaded from database, which has more info, like id */
+            result.getProjectGroups().remove( 0 );
+            result.getProjectGroups().add( projectGroup );
         }
         catch ( ContinuumStoreException e )
         {
@@ -1125,7 +1117,7 @@ public class DefaultContinuum
         return notifier;
     }
 
-    public void updateNotifier( int projectId, ProjectNotifier notifier )
+    public ProjectNotifier updateNotifier( int projectId, ProjectNotifier notifier )
         throws ContinuumException
     {
         Project project = getProjectWithAllDetails( projectId );
@@ -1137,10 +1129,10 @@ public class DefaultContinuum
 
         updateProject( project );
 
-        addNotifier( projectId, notifier );
+        return addNotifier( projectId, notifier );
     }
 
-    public void updateNotifier( int projectId, int notifierId, Map configuration )
+    public ProjectNotifier updateNotifier( int projectId, int notifierId, Map configuration )
         throws ContinuumException
     {
         Project project = getProjectWithAllDetails( projectId );
@@ -1154,7 +1146,7 @@ public class DefaultContinuum
 
         updateProject( project );
 
-        addNotifier( projectId, notifierType, configuration );
+        return addNotifier( projectId, notifierType, configuration );
     }
 
     private Properties createNotifierProperties( Map configuration )
@@ -1184,7 +1176,7 @@ public class DefaultContinuum
         return notifierProperties;
     }
 
-    public void addNotifier( int projectId, ProjectNotifier notifier )
+    public ProjectNotifier addNotifier( int projectId, ProjectNotifier notifier )
         throws ContinuumException
     {
         ProjectNotifier notif = new ProjectNotifier();
@@ -1208,9 +1200,11 @@ public class DefaultContinuum
         project.addNotifier( notif );
 
         updateProject( project );
+
+        return notif;
     }
 
-    public void addNotifier( int projectId, String notifierType, Map configuration )
+    public ProjectNotifier addNotifier( int projectId, String notifierType, Map configuration )
         throws ContinuumException
     {
         ProjectNotifier notifier = new ProjectNotifier();
@@ -1241,7 +1235,7 @@ public class DefaultContinuum
 
         notifier.setConfiguration( notifierProperties );
 
-        addNotifier( projectId, notifier );
+        return addNotifier( projectId, notifier );
     }
 
     public void removeNotifier( int projectId, int notifierId )
@@ -1353,7 +1347,7 @@ public class DefaultContinuum
         return projectGroup.getBuildDefinitions();
     }
 
-    public void addBuildDefinitionToProject( int projectId, BuildDefinition buildDefinition )
+    public BuildDefinition addBuildDefinitionToProject( int projectId, BuildDefinition buildDefinition )
         throws ContinuumException
     {
         HashMap context = new HashMap();
@@ -1362,6 +1356,8 @@ public class DefaultContinuum
         context.put( AbstractContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
 
         executeAction( "add-build-definition-to-project", context );
+
+        return (BuildDefinition) context.get( AbstractContinuumAction.KEY_BUILD_DEFINITION );
     }
 
     public void removeBuildDefinitionFromProject( int projectId, int buildDefinitionId )
@@ -1375,7 +1371,7 @@ public class DefaultContinuum
         executeAction( "remove-build-definition-from-project", context );
     }
 
-    public void updateBuildDefinitionForProject( int projectId, BuildDefinition buildDefinition )
+    public BuildDefinition updateBuildDefinitionForProject( int projectId, BuildDefinition buildDefinition )
         throws ContinuumException
     {
         HashMap context = new HashMap();
@@ -1384,9 +1380,11 @@ public class DefaultContinuum
         context.put( AbstractContinuumAction.KEY_PROJECT_ID, new Integer( projectId ) );
 
         executeAction( "update-build-definition-from-project", context );
+
+        return (BuildDefinition) context.get( AbstractContinuumAction.KEY_BUILD_DEFINITION );
     }
 
-    public void addBuildDefinitionToProjectGroup( int projectGroupId, BuildDefinition buildDefinition )
+    public BuildDefinition addBuildDefinitionToProjectGroup( int projectGroupId, BuildDefinition buildDefinition )
         throws ContinuumException
     {
         HashMap context = new HashMap();
@@ -1395,6 +1393,8 @@ public class DefaultContinuum
         context.put( AbstractContinuumAction.KEY_PROJECT_GROUP_ID, new Integer( projectGroupId ) );
 
         executeAction( "add-build-definition-to-project-group", context );
+
+        return (BuildDefinition) context.get( AbstractContinuumAction.KEY_BUILD_DEFINITION );
     }
 
     public void removeBuildDefinitionFromProjectGroup( int projectGroupId, int buildDefinitionId )
@@ -1408,7 +1408,7 @@ public class DefaultContinuum
         executeAction( "remove-build-definition-from-project-group", context );
     }
 
-    public void updateBuildDefinitionForProjectGroup( int projectGroupId, BuildDefinition buildDefinition )
+    public BuildDefinition updateBuildDefinitionForProjectGroup( int projectGroupId, BuildDefinition buildDefinition )
         throws ContinuumException
     {
         HashMap context = new HashMap();
@@ -1417,6 +1417,8 @@ public class DefaultContinuum
         context.put( AbstractContinuumAction.KEY_PROJECT_GROUP_ID, new Integer( projectGroupId ) );
 
         executeAction( "update-build-definition-from-project-group", context );
+
+        return (BuildDefinition) context.get( AbstractContinuumAction.KEY_BUILD_DEFINITION );
     }
 
     public void removeBuildDefinition( int projectId, int buildDefinitionId )
@@ -2187,7 +2189,10 @@ public class DefaultContinuum
 
     private void closeStore()
     {
-        store.closeStore();
+        if ( store != null )
+        {
+            store.closeStore();
+        }
     }
 
     public void stop()
@@ -2206,7 +2211,10 @@ public class DefaultContinuum
 
         try
         {
-            configurationService.store();
+            if ( configurationService != null )
+            {
+                configurationService.store();
+            }
         }
         catch ( ConfigurationStoringException e )
         {
@@ -2500,9 +2508,13 @@ public class DefaultContinuum
 
     private void stopMessage()
     {
-        getLogger().info( "Stopping Continuum." );
+        // Yes dorothy, this can happen!
+        if ( getLogger() != null )
+        {
+            getLogger().info( "Stopping Continuum." );
 
-        getLogger().info( "Continuum stopped." );
+            getLogger().info( "Continuum stopped." );
+        }
     }
 
     private String getVersion()
@@ -2529,4 +2541,24 @@ public class DefaultContinuum
             return "unknown";
         }
     }
+
+    private ProjectGroup getDefaultProjectGroup()
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getProjectGroupByGroupIdWithProjects( Continuum.DEFAULT_PROJECT_GROUP_GROUP_ID );
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            throw new ContinuumException(
+                                          "Continuum is not properly initialized, default project group does not exist",
+                                          e );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Exception while getting default project group.", ex );
+        }
+    }
+
 }

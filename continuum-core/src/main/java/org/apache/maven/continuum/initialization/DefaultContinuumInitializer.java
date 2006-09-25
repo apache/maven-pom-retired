@@ -16,18 +16,22 @@ package org.apache.maven.continuum.initialization;
  * limitations under the License.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.Permission;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
 import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.security.ContinuumSecurity;
+import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.jpox.SchemaTool;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -38,16 +42,6 @@ public class DefaultContinuumInitializer
     extends AbstractLogEnabled
     implements ContinuumInitializer
 {
-    // ----------------------------------------------------------------------
-    // Default values for the default project group
-    // ----------------------------------------------------------------------
-
-    public static final String DEFAULT_PROJECT_GROUP_NAME = "DEFAULT_PROJECT_GROUP";
-
-    public static final String DEFAULT_PROJECT_GROUP_ID = "DEFAULT";
-
-    public static final String DEFAULT_PROJECT_GROUP_DESCRIPTION = "Default Project Group";
-
     // ----------------------------------------------------------------------
     // Default values for the default schedule
     // ----------------------------------------------------------------------
@@ -74,6 +68,20 @@ public class DefaultContinuumInitializer
         throws ContinuumInitializationException
     {
         getLogger().info( "Continuum initializer running ..." );
+        
+        if ( getLogger().isDebugEnabled() )
+        {
+            getLogger().debug( "Dumping JPOX/JDO Schema Details ..." );
+            try
+            {
+                SchemaTool.outputDBInfo( null, true );
+                SchemaTool.outputSchemaInfo( null, true );
+            }
+            catch ( Exception e )
+            {
+                getLogger().debug( "Error while dumping the database schema", e );
+            }
+        }
 
         try
         {

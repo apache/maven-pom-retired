@@ -355,7 +355,10 @@ public class DefaultContinuumScm
 
         // TODO: is this valid? Does it ever return a changeset itself?
         ChangeSet changeSet = convertScmFileSetToChangeSet( scmResult.getCheckedOutFiles() );
-        result.addChange( changeSet );
+        if ( changeSet != null )
+        {
+            result.addChange( changeSet );
+        }
 
         return result;
     }

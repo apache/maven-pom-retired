@@ -13,10 +13,10 @@
           <table border="1" cellspacing="2" cellpadding="3" width="100%">
             <ww:textfield label="SCM Username" name="scmUsername"/>
             <ww:textfield label="SCM Password" name="scmPassword"/>
-            <ww:textfield label="SCM Tag" name="scmTag"/>
-            <ww:textfield label="SCM Tag Base" name="scmTagBase"/>
-            <ww:textfield label="Preparation Goals" name="prepareGoals"/>
-           </table>
+            <ww:textfield label="SCM Tag" name="scmTag" required="true"/>
+            <ww:textfield label="SCM Tag Base" name="scmTagBase" required="true"/>
+            <ww:textfield label="Preparation Goals" name="prepareGoals" required="true"/>
+          </table>
         </div>
 
         <ww:iterator value="projects">

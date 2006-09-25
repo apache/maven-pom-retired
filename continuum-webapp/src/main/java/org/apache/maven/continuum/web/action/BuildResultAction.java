@@ -16,12 +16,15 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.configuration.ConfigurationException;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.codehaus.plexus.util.FileUtils;
-
-import java.util.List;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -34,8 +37,6 @@ import java.util.List;
 public class BuildResultAction
     extends ContinuumActionSupport
 {
-
-
     private BuildResult buildResult;
 
     private int buildId;
@@ -48,19 +49,26 @@ public class BuildResultAction
 
     private boolean hasSurefireResults;
 
+    private String buildOutput;
+
     public String execute()
-        throws ContinuumException
+        throws ContinuumException, ConfigurationException, IOException
     {
         //todo get this working for other types of test case rendering other then just surefire
         // check if there are surefire results to display
-        Project project = getContinuum().getProject( projectId );
+        Project project = getContinuum().getProject( getProjectId() );
         hasSurefireResults = FileUtils.fileExists( project.getWorkingDirectory() + "/target/surefire-reports" );
 
+        buildResult = getContinuum().getBuildResult( getBuildId() );
 
-        buildResult = getContinuum().getBuildResult( buildId );
+        changeSet = getContinuum().getChangesSinceLastSuccess( getProjectId(), getBuildId() );
 
+        File buildOutputFile = getContinuum().getConfiguration().getBuildOutputFile( getBuildId(), getProjectId() );
 
-        changeSet = getContinuum().getChangesSinceLastSuccess( projectId, buildId );
+        if ( buildOutputFile.exists() )
+        {
+            buildOutput = FileUtils.fileRead( buildOutputFile );
+        }
 
         return SUCCESS;
     }
@@ -113,5 +121,10 @@ public class BuildResultAction
     public void setHasSurefireResults( boolean hasSurefireResults )
     {
         this.hasSurefireResults = hasSurefireResults;
+    }
+
+    public String getBuildOutput()
+    {
+        return buildOutput;
     }
 }

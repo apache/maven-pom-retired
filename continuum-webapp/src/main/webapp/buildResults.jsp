@@ -8,13 +8,10 @@
     </head>
     <body>
       <div id="h3">
-        <div>
-          <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
-            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href='<ww:url action="projectView"/>'><ww:text name="info"/></a>
-            <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="builds"/></b>
-            <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href='<ww:url action="workingCopy"/>'><ww:text name="workingCopy"/></a>
-          </p>
-        </div>
+
+        <jsp:include page="/navigations/ProjectMenu.jsp">
+          <jsp:param name="tab" value="buildResults"/>
+        </jsp:include>
 
         <h3>
             <ww:text name="buildResults.section.title">
@@ -30,9 +27,9 @@
                   filterable="false"
                   sortable="false">
           <ec:row highlightRow="true">
-            <ec:column property="buildNumber" title="buildResults.buildNumber">
-                <c:if test="${!(pageScope.buildResult.state == 2)}">
-                    ${pageScope.buildResult.buildNumber}
+            <ec:column property="buildNumberIfNotZero" title="buildResults.buildNumber">
+                <c:if test="${pageScope.buildResult.state == 2}">
+                    <c:out value="${pageScope.buildResult.buildNumber}"/>
                 </c:if>
             </ec:column>
             <ec:column property="startTime" title="buildResults.startTime" cell="date"/>

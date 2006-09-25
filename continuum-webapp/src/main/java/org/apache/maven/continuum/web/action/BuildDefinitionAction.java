@@ -31,7 +31,7 @@ import java.util.Map;
  * BuildDefinitionAction:
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
- * @version $ID:$
+ * @version $Id$
  * @plexus.component role="com.opensymphony.xwork.Action"
  * role-hint="buildDefinition"
  */
@@ -118,6 +118,7 @@ public class BuildDefinitionAction
             goals = buildDefinition.getGoals();
             arguments = buildDefinition.getArguments();
             buildFile = buildDefinition.getBuildFile();
+            scheduleId = buildDefinition.getSchedule().getId();
             defaultBuildDefinition = buildDefinition.isDefaultForProject();
         }
 
@@ -191,7 +192,7 @@ public class BuildDefinitionAction
     {
         if ( confirmed )
         {
-            getContinuum().removeBuildDefinitionFromProject( projectGroupId, buildDefinitionId );
+            getContinuum().removeBuildDefinitionFromProjectGroup( projectGroupId, buildDefinitionId );
 
             return SUCCESS;
         }

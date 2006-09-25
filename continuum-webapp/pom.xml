@@ -21,7 +21,7 @@
         <directory>src/main/resources</directory>
         <includes>
           <include>**/*.properties</include>
-          <include>**/META-INF/plexus/components.xml</include>
+          <include>**/META-INF/plexus/application.xml</include>
         </includes>
       </resource>
       <resource>
@@ -55,7 +55,6 @@
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
-        <version>1.0-alpha-8</version>
         <executions>
           <execution>
             <id>web summary model classes</id>
@@ -64,8 +63,8 @@
               <version>1.0.0</version>
             </configuration>
             <goals>
-              <goal>java</goal>             
-            </goals>            
+              <goal>java</goal>         
+            </goals>
           </execution>
           <execution>
             <id>session model classes</id>
@@ -80,8 +79,33 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jspc-maven-plugin</artifactId>
+        <version>1.4.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <warSourceDirectory>${project.build.directory}/${project.build.finalName}/</warSourceDirectory>
+          <injectString><![CDATA[<!-- [jspc-maven-plugin:post-compiled-jsps-as-servlets] -->]]></injectString>
+          <!-- 
+            Uncomment outputWebXml if you want the generated web.xml to
+            be placed in the working directory that the war:war mojo uses.
+            -->
+          <!-- 
+          <outputWebXml>${project.build.directory}/${project.build.finalName}/WEB-INF/web.xml</outputWebXml> 
+          -->
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
+        <version>6.0.0</version>
         <configuration>
           <scanIntervalSeconds>10</scanIntervalSeconds>
           <contextPath>/</contextPath>
@@ -165,6 +189,12 @@
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
     </dependency>
+    <!--
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+    -->
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
@@ -255,4 +285,3 @@
     </dependency>
   </dependencies>
 </project>
-

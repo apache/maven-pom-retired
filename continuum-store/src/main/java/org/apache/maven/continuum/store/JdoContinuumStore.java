@@ -88,8 +88,6 @@ public class JdoContinuumStore
 
     private static final String PROJECTGROUP_PROJECTS_FETCH_GROUP = "projectgroup-projects";
 
-    private static final String DEFAULT_GROUP_ID = "default";
-
     // ----------------------------------------------------------------------
     // Component Lifecycle
     // ----------------------------------------------------------------------
@@ -1122,27 +1120,6 @@ public class JdoContinuumStore
         throw new ContinuumObjectNotFoundException( "unable to find project group containing project with id: " + projectId );
     }
 
-
-    public ProjectGroup getDefaultProjectGroup()
-        throws ContinuumStoreException
-    {
-        ProjectGroup group;
-
-        try
-        {
-            group = (ProjectGroup) getObjectFromQuery( ProjectGroup.class, "groupId", DEFAULT_GROUP_ID,
-                                                       PROJECTGROUP_PROJECTS_FETCH_GROUP );
-        }
-        catch ( ContinuumObjectNotFoundException e )
-        {
-            group = new ProjectGroup();
-            group.setName( "Default Project Group" );
-            group.setGroupId( DEFAULT_GROUP_ID );
-            group.setDescription( "Contains all projects that do not have a group of their own" );
-            group = addProjectGroup( group );
-        }
-        return group;
-    }
 
     public SystemConfiguration addSystemConfiguration( SystemConfiguration systemConf )
     {

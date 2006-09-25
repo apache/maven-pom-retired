@@ -22,22 +22,25 @@
         <interceptor-ref name="static-params"/>
         <interceptor-ref name="params"/>
         <!-- interceptor-ref name="conversionError"/ -->
-       <interceptor-ref name="validation"/>
-        <interceptor-ref name="workflow"/>
+        <interceptor-ref name="validation">
+          <param name="excludeMethods">input,back,cancel,browse,edit</param>
+        </interceptor-ref>
+        <interceptor-ref name="workflow">
+          <param name="excludeMethods">input,back,cancel,browse,edit</param>
+        </interceptor-ref>
       </interceptor-stack>
     </interceptors>
 
     <default-interceptor-ref name="defaultContinuumStack"/>
 
     <global-results>
-      <result name="error">/error.jsp</result>
-      <result name="internalError" type="redirect">/error.jsp</result>
-      <result name="continuumInitialization" type="redirect">/configuration!input.action</result>
+      <result name="error-internal">/error/error.jsp?id=500</result>
+      <result name="continuumInitialization" type="redirect">/configuration!input.action?isNew=true</result>
     </global-results>
 
     <global-exception-mappings>
       <exception-mapping exception="org.apache.maven.continuum.initialization.ContinuumInitializationException" result="continuumInitialization"/>
-      <exception-mapping exception="java.lang.Exception" result="internalError"/>
+      <exception-mapping exception="java.lang.Exception" result="error-internal"/>
     </global-exception-mappings>
 
     <action name="checkConfiguration" class="checkConfiguration">
@@ -163,7 +166,7 @@
     * build definition actions
     -->
     <action name="buildDefinition" class="buildDefinition" method="input">
-      <result name="success">buildDefinitionEdit.jsp</result>
+      <result name="input">buildDefinitionEdit.jsp</result>
     </action>
 
     <action name="saveProjectBuildDefinition" class="buildDefinition" method="saveToProject">
@@ -177,10 +180,10 @@
     </action>
 
     <action name="saveGroupBuildDefinition" class="buildDefinition" method="saveToGroup">
-      <result name="success" type="chain">projectGroupView</result>
+      <result name="success" type="chain">projectGroupBuildDefinition</result>
     </action>
 
-    <action name="removeGroupBuildDefinition" class="buildDefinition" method="removeFromGroup">
+    <action name="removeGroupBuildDefinition" class="buildDefinition" method="removeFromProjectGroup">
       <result name="confirm">confirmBuildDefinitionRemoval.jsp</result>
       <result name="success" type="chain">projectGroupBuildDefinition</result>
     </action>
@@ -189,12 +192,12 @@
     <!--
     * project group actions
     -->
-    <action name="projectGroupMembers" class="projectGroup" method="members">
-      <result name="success">projectGroupMembers.jsp</result>
-    </action>
-
     <action name="projectGroupSummary" class="projectGroup" method="summary">
       <result name="success">projectGroupSummary.jsp</result>
+    </action>
+
+    <action name="projectGroupMembers" class="projectGroup" method="members">
+      <result name="success">projectGroupMembers.jsp</result>
     </action>
 
     <action name="projectGroupBuildDefinition" class="projectGroup" method="buildDefinitions">
@@ -296,8 +299,8 @@
     <action name="saveSchedule" class="schedule" method="save">
       <result name="input">editSchedule.jsp</result>
       <result name="success" type="chain">schedules</result>
+      <result name="error" type="chain">schedule</result>
     </action>
-
     <action name="removeSchedule" class="schedule" method="remove">
       <result name="confirm">confirmation.jsp</result>
       <result name="success" type="chain">schedules</result>

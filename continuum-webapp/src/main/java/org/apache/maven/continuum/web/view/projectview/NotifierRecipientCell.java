@@ -24,6 +24,9 @@ import org.extremecomponents.table.core.TableModel;
 /**
  * Used in Project view
  *
+ * @deprecated use of cells is discouraged due to lack of i18n and design in java code.
+ *             Use jsp:include instead.
+ *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
@@ -57,7 +60,14 @@ public class NotifierRecipientCell
         }
         else
         {
-            return notifier.getConfiguration().get( "address" ).toString();
+            if ( notifier.getConfiguration().get( "address" ) == null )
+            {
+                return "";
+            }
+            else
+            {
+                return notifier.getConfiguration().get( "address" ).toString();
+            }
         }
     }
 }

@@ -71,6 +71,11 @@
           <version>1.3-SNAPSHOT</version>
           <extensions>true</extensions>
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.modello</groupId>
+          <artifactId>modello-maven-plugin</artifactId>
+          <version>1.0-alpha-11-SNAPSHOT</version>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>

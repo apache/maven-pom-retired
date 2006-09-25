@@ -13,11 +13,11 @@
         <div class="axial">
           <table border="1" cellspacing="2" cellpadding="3" width="100%">
             <ww:if test="releaseId.equals(\"\")">
-              <ww:textfield label="SCM Connection URL" name="scmUrl"/>
+              <ww:textfield label="SCM Connection URL" name="scmUrl" required="true"/>
               <ww:textfield label="SCM Username" name="scmUsername"/>
               <ww:textfield label="SCM Password" name="scmPassword"/>
-              <ww:textfield label="SCM Tag" name="scmTag"/>
-              <ww:textfield label="SCM Tag Base" name="scmTagBase"/>
+              <ww:textfield label="SCM Tag" name="scmTag" required="true"/>
+              <ww:textfield label="SCM Tag Base" name="scmTagBase" required="true"/>
             </ww:if>
             <ww:textfield label="Maven Arguments" name="goals"/>
             <ww:checkbox label="Use Release Profile" name="useReleaseProfile" value="true"/>

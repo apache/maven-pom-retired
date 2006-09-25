@@ -23,6 +23,7 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.scm.ScmResult;
+import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.PlexusTestCase;
@@ -36,6 +37,7 @@ import javax.jdo.PersistenceManagerFactory;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +64,38 @@ public abstract class AbstractContinuumTest
         getStore();
 
         setUpConfigurationService( (ConfigurationService) lookup( ConfigurationService.ROLE ) );
+        
+        Collection projectGroups = store.getAllProjectGroupsWithProjects();
+
+        assertEquals( 0, projectGroups.size() );
+
+        createDefaultProjectGroup();
+        
+        projectGroups = store.getAllProjectGroupsWithProjects();
+        
+        assertEquals( 1, projectGroups.size() );
+    }
+
+    protected void createDefaultProjectGroup()
+        throws Exception
+    {
+        ProjectGroup group;
+        try
+        {
+            group = getDefaultProjectGroup();
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            group = new ProjectGroup();
+
+            group.setName( "Default Project Group" );
+
+            group.setGroupId( Continuum.DEFAULT_PROJECT_GROUP_GROUP_ID );
+
+            group.setDescription( "Contains all projects that do not have a group of their own" );
+
+            group = store.addProjectGroup( group );
+        }
     }
 
     public static void setUpConfigurationService( ConfigurationService configurationService )
@@ -79,7 +113,7 @@ public abstract class AbstractContinuumTest
     protected ProjectGroup getDefaultProjectGroup()
         throws ContinuumStoreException
     {
-        return store.getDefaultProjectGroup();
+        return store.getProjectGroupByGroupIdWithProjects( Continuum.DEFAULT_PROJECT_GROUP_GROUP_ID );
     }
 
     // ----------------------------------------------------------------------

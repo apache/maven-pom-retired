@@ -33,12 +33,12 @@ public interface MavenBuilderHelper
 
     void mapMetadataToProject( File metadata, Project project )
         throws MavenBuilderHelperException;
-    
+
     /**
      * @deprecated use {@link #getMavenProject(ContinuumProjectBuildingResult, File)} instead.
      */
     MavenProject getMavenProject( File file )
-    throws MavenBuilderHelperException;
+        throws MavenBuilderHelperException;
 
     MavenProject getMavenProject( ContinuumProjectBuildingResult result, File file );
 
@@ -47,8 +47,9 @@ public interface MavenBuilderHelper
      */
     void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject )
         throws MavenBuilderHelperException;
-    
-    void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject, Project continuumProject );
+
+    void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject,
+                                            Project continuumProject );
 
     ArtifactRepository getLocalRepository();
 }

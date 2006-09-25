@@ -1,5 +1,6 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
 <%@ taglib uri="continuum" prefix="c1" %>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <ww:i18n name="localization.Continuum">
 <html>
     <head>
@@ -25,6 +26,13 @@
                 </h3>
                 <div class="axial">
                     <ww:form method="post" action="addProject" validate="true">
+                        <c:if test="${!empty actionErrors}">
+                          <div class="errormessage">
+                            <c:forEach items="${actionErrors}" var="actionError">
+                              <p><ww:text name="${actionError}"/></p>
+                            </c:forEach>
+                          </div>
+                        </c:if>
                         <input type="hidden" name="projectType" value="<ww:property value="projectType"/>">
                         <table>
                           <tbody>

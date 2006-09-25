@@ -23,7 +23,7 @@ import org.apache.maven.continuum.ContinuumException;
  * ProjectGroupAction:
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
- * @version $ID:$
+ * @version $Id$
  *
  * @plexus.component
  *   role="com.opensymphony.xwork.Action"

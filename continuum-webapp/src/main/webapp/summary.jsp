@@ -1,7 +1,6 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
 <%@ taglib uri="http://www.extremecomponents.org" prefix="ec" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
-<%@ taglib uri="continuum" prefix="c1" %>
 <html>
 <ww:i18n name="localization.Continuum">
   <head>
@@ -17,6 +16,7 @@
               showExports="false"
               showPagination="false"
               showStatusBar="false"
+              sortable="false"
               filterable="false">
       <ec:row highlightRow="true">
         <ec:column property="state" title="&nbsp;" width="1%" cell="org.apache.maven.continuum.web.view.StateCell"/>
@@ -28,9 +28,10 @@
         <ec:column property="version" title="summary.projectTable.version" width="13%"/>
         <ec:column property="buildNumber" title="summary.projectTable.build" width="5%"
                    cell="org.apache.maven.continuum.web.view.BuildCell"/>
-        <ec:column property="buildNowAction" title="&nbsp;" width="1%"
-                   cell="org.apache.maven.continuum.web.view.BuildNowCell" sortable="false"/>
-        <ec:column property="buildHistoryAction" title="&nbsp;" width="1%" sortable="false">
+        <ec:column property="buildNowAction" title="&nbsp;" width="1%">
+          <jsp:include page="/components/buildNowCell.jsp"/>
+        </ec:column>
+        <ec:column property="buildHistoryAction" title="&nbsp;" width="1%">
           <c:choose>
             <c:when test="${pageScope.project.latestBuildId > 0}">
               <a href='<ww:url action="buildResults">
@@ -44,7 +45,7 @@
             </c:otherwise>
           </c:choose>
         </ec:column>
-        <ec:column property="workingCopyAction" title="&nbsp;" width="1%" sortable="false">
+        <ec:column property="workingCopyAction" title="&nbsp;" width="1%">
           <c:choose>
             <c:when
                 test="${pageScope.project.state == 10 || pageScope.project.state == 2 || pageScope.project.state == 3 || pageScope.project.state == 4 || pageScope.project.state == 6}">

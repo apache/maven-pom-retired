@@ -15,7 +15,7 @@
             <table>
               <tbody>
                 <ww:select label="%{getText('notifier.type.label')}" name="notifierType"
-                           list="#@java.util.LinkedHashMap@{ 'mail' : 'Mail', 'irc' : 'IRC', 'jabber' : 'Jabber', 'msn' : 'MSN'}"/>
+                           list="#@java.util.LinkedHashMap@{'mail':'Mail', 'irc':'IRC', 'jabber':'Jabber', 'msn':'MSN'}"/>
               </tbody>
             </table>
             <div class="functnbar3">

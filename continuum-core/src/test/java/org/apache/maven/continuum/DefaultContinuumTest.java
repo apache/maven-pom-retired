@@ -219,17 +219,30 @@ public class DefaultContinuumTest
     {
         Continuum continuum = (Continuum) lookup( Continuum.ROLE );
 
+        Collection projectGroupList = continuum.getAllProjectGroupsWithProjects();
+
+        int projectGroupsBefore = projectGroupList.size();
+
+        assertEquals( 1, projectGroupsBefore );
+
         String url = getTestFile( "src/test-projects/project1/pom.xml" ).toURL().toExternalForm();
 
         ContinuumProjectBuildingResult result = continuum.addMavenTwoProject( url );
 
         assertNotNull( result );
 
-        Collection projectGroupList = continuum.getAllProjectGroupsWithProjects();
+        assertEquals( 1, result.getProjectGroups().size() );
 
-        assertTrue ( "project group missing, should be one project group for now", projectGroupList.size() == 1 );
+        ProjectGroup projectGroup = (ProjectGroup) result.getProjectGroups().get( 0 );
 
-        ProjectGroup projectGroup = (ProjectGroup) projectGroupList.iterator().next();
+        assertEquals( "plexus", projectGroup.getGroupId() );
+
+        projectGroupList = continuum.getAllProjectGroupsWithProjects();
+
+        assertEquals( "Project group missing, should have " + ( projectGroupsBefore + 1 ) + " project groups",
+                      projectGroupsBefore + 1, projectGroupList.size() );
+
+        projectGroup = (ProjectGroup) projectGroupList.iterator().next();
 
         assertNotNull( projectGroup );
 
@@ -237,7 +250,7 @@ public class DefaultContinuumTest
 
         projectGroupList = continuum.getAllProjectGroupsWithProjects();
 
-        assertTrue ( "remove project group failed", projectGroupList.size() == 0 );
+        assertEquals( "Remove project group failed", projectGroupsBefore, projectGroupList.size() );
     }
 
     public void testExecuteAction()

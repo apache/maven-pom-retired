@@ -19,6 +19,8 @@ package org.apache.maven.continuum.web.action;
 import java.io.File;
 import java.util.Collections;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 import org.apache.maven.continuum.model.system.ContinuumUser;
@@ -26,7 +28,9 @@ import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.codehaus.plexus.util.StringUtils;
 
+import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.xwork.Preparable;
 
 /**
@@ -83,6 +87,14 @@ public class ConfigurationAction
 
         baseUrl = configuration.getUrl();
 
+        if ( StringUtils.isEmpty( baseUrl ) )
+        {
+            HttpServletRequest request = ServletActionContext.getRequest();
+            baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+                + request.getContextPath();
+            getLogger().info( "baseUrl='" + baseUrl + "'" );
+        }
+
         companyLogo = configuration.getCompanyLogo();
 
         companyName = configuration.getCompanyName();
@@ -124,8 +136,6 @@ public class ConfigurationAction
 
         configuration.setWorkingDirectory( new File( workingDirectory ) );
 
-        configuration.setWorkingDirectory( new File( workingDirectory ) );
-
         configuration.setBuildOutputDirectory( new File( buildOutputDirectory ) );
 
         configuration.setUrl( baseUrl );
@@ -134,11 +144,10 @@ public class ConfigurationAction
 
         configuration.setCompanyName( companyName );
 
-        configuration.setInitialized( true );
-        configuration.store();
+        configuration.setCompanyUrl( companyUrl );
 
         configuration.setInitialized( true );
-        configuration.store();            
+        configuration.store();
 
         return SUCCESS;
     }

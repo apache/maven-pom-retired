@@ -32,7 +32,9 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -108,9 +110,30 @@ public class MavenTwoContinuumProjectBuilder
             result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL );
             return;
         }
+        catch ( FileNotFoundException e )
+        {
+            getLogger().debug( "Error adding project: File not found " + url, e );
+            result.addError( ContinuumProjectBuildingResult.ERROR_POM_NOT_FOUND );
+            return;
+        }
+        catch ( ConnectException e )
+        {
+            getLogger().debug( "Error adding project: Unable to connect " + url, e );
+            result.addError( ContinuumProjectBuildingResult.ERROR_CONNECT );
+            return;
+        }
         catch ( IOException e )
         {
-            getLogger().debug( "Error adding project: Unknown error downloading from " + url, e );
+            if ( e.getMessage() != null )
+            {
+                if ( e.getMessage().indexOf( "Server returned HTTP response code: 401" ) >= 0 )
+                {
+                    getLogger().debug( "Error adding project: Unauthorized " + url, e );
+                    result.addError( ContinuumProjectBuildingResult.ERROR_UNAUTHORIZED );
+                    return;
+                }
+            }
+            getLogger().info( "Error adding project: Unknown error downloading from " + url, e );
             result.addError( ContinuumProjectBuildingResult.ERROR_UNKNOWN );
             return;
         }

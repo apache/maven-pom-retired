@@ -3,29 +3,24 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 <%@ taglib uri="continuum" prefix="c1" %>
 <html>
-<ww:i18n name="localization.Continuum">
-  <head>
-    <title><ww:text name="projectView.page.title"/></title>
-  </head>
+  <ww:i18n name="localization.Continuum">
+    <head>
+      <title><ww:text name="projectView.page.title"/></title>
+    </head>
 
-  <body>
-  <div id="h3">
-    <ww:action name="projectGroupTab" executeResult="true">
-      <ww:param name="tabName" value="'Notifier'"/>
-    </ww:action>
+    <body>
+      <div id="h3">
 
-    <h3>PROJECT GROUP Notifiers<ww:text name="projectView.section.title"/></h3>
-
-    <div class="axial">
-      <table border="1" cellspacing="2" cellpadding="3" width="100%">
-        <c1:data label="%{getText('projectView.project.name')}" name="projectGroup.name"/>
-      </table>
-    </div>
-
-    <div class="axial">
-      UNDER CONSTRUCTION
-    </div>
-  </div>
-  </body>
-</ww:i18n>
+        <jsp:include page="/navigations/ProjectGroupMenu.jsp">
+          <jsp:param name="tab" value="notifier"/>
+        </jsp:include>
+    
+        <h3>PROJECT GROUP Notifiers<ww:text name="projectView.section.title"/></h3>
+    
+        <div class="axial">
+          UNDER CONSTRUCTION
+        </div>
+      </div>
+    </body>
+  </ww:i18n>
 </html>

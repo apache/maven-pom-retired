@@ -30,13 +30,14 @@
                   showExports="false"
                   showPagination="false"
                   showStatusBar="false"
+                  sortable="false"
                   filterable="false">
           <ec:row>
-            <ec:column property="tests" title="surefireReport.tests" sortable="false"/>
-            <ec:column property="errors" title="surefireReport.errors" sortable="false"/>
-            <ec:column property="failures" title="surefireReport.failures" sortable="false"/>
-            <ec:column property="successRate" title="surefireReport.successRate" sortable="false"/>
-            <ec:column property="elapsedTime" title="surefireReport.time" sortable="false"/>
+            <ec:column property="tests" title="surefireReport.tests"/>
+            <ec:column property="errors" title="surefireReport.errors"/>
+            <ec:column property="failures" title="surefireReport.failures"/>
+            <ec:column property="successRate" title="surefireReport.successRate"/>
+            <ec:column property="elapsedTime" title="surefireReport.time"/>
           </ec:row>
         </ec:table>
 
@@ -46,16 +47,17 @@
                   showExports="false"
                   showPagination="false"
                   showStatusBar="false"
+                  sortable="false"
                   filterable="false">
           <ec:row>
-            <ec:column property="name" title="surefireReport.package" sortable="false">
+            <ec:column property="name" title="surefireReport.package">
               <a href="#<c:out value="${pageScope.report.name}"/>"><c:out value="${pageScope.report.name}"/></a>
             </ec:column>
-            <ec:column property="tests" title="surefireReport.tests" sortable="false"/>
-            <ec:column property="errors" title="surefireReport.errors" sortable="false"/>
-            <ec:column property="failures" title="surefireReport.failures" sortable="false"/>
-            <ec:column property="successRate" title="surefireReport.successRate" sortable="false"/>
-            <ec:column property="elapsedTime" title="surefireReport.time" sortable="false"/>
+            <ec:column property="tests" title="surefireReport.tests"/>
+            <ec:column property="errors" title="surefireReport.errors"/>
+            <ec:column property="failures" title="surefireReport.failures"/>
+            <ec:column property="successRate" title="surefireReport.successRate"/>
+            <ec:column property="elapsedTime" title="surefireReport.time"/>
           </ec:row>
         </ec:table>
 
@@ -66,6 +68,7 @@
                     showExports="false"
                     showPagination="false"
                     showStatusBar="false"
+                    sortable="false"
                     filterable="false">
             <ec:row>
               <!-- @todo there must be a better option than to use #attr -->
@@ -79,14 +82,14 @@
                   <img src="<ww:url value="/images/icon_success_sml.gif"/>" alt="<ww:text name="message.success"/>" title="<ww:text name="message.success"/>"/>
                 </ec:column>
               </ww:else>
-              <ec:column property="name" title="surefireReport.class" sortable="false">
+              <ec:column property="name" title="surefireReport.class">
                 <a href="#<c:out value="${pageScope.report.id}"/>"><c:out value="${pageScope.report.name}"/></a>
               </ec:column>
-              <ec:column property="tests" title="surefireReport.tests" sortable="false"/>
-              <ec:column property="errors" title="surefireReport.errors" sortable="false"/>
-              <ec:column property="failures" title="surefireReport.failures" sortable="false"/>
-              <ec:column property="successRate" title="surefireReport.successRate" sortable="false"/>
-              <ec:column property="elapsedTime" title="surefireReport.time" sortable="false"/>
+              <ec:column property="tests" title="surefireReport.tests"/>
+              <ec:column property="errors" title="surefireReport.errors"/>
+              <ec:column property="failures" title="surefireReport.failures"/>
+              <ec:column property="successRate" title="surefireReport.successRate"/>
+              <ec:column property="elapsedTime" title="surefireReport.time"/>
             </ec:row>
           </ec:table>
         </ww:iterator>
@@ -100,6 +103,7 @@
                       showExports="false"
                       showPagination="false"
                       showStatusBar="false"
+                      sortable="false"
                       filterable="false">
               <ec:row>
                 <!-- @todo there must be a better option than to use #attr -->
@@ -116,9 +120,9 @@
                   <ec:column property="icon" title="&nbsp;">
                     <img src="<ww:url value="/images/icon_success_sml.gif"/>" alt="<ww:text name="message.success"/>" title="<ww:text name="message.success"/>"/>
                   </ec:column>
-                  <ec:column property="name" title="surefireReport.testCase" sortable="false"/>
+                  <ec:column property="name" title="surefireReport.testCase"/>
                 </ww:else>
-                <ec:column property="time" title="surefireReport.time" sortable="false"/>
+                <ec:column property="time" title="surefireReport.time"/>
               </ec:row>
             </ec:table>
           </ww:iterator>
