@@ -26,6 +26,7 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugins.release.ReleaseResult;
 import org.apache.maven.plugins.release.versions.DefaultVersionInfo;
 import org.apache.maven.plugins.release.versions.VersionInfo;
+import org.apache.maven.scm.provider.svn.repository.SvnScmProviderRepository;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
@@ -43,9 +44,9 @@ import java.util.Properties;
  *
  * @plexus.component
  *   role="com.opensymphony.xwork.Action"
- *   role-hint="prepareRelease"
+ *   role-hint="releasePrepare"
  */
-public class PrepareReleaseAction
+public class ReleasePrepareAction
     extends ContinuumActionSupport
 {
     private int projectId;
@@ -76,7 +77,7 @@ public class PrepareReleaseAction
 
     private ContinuumReleaseManagerListener listener;
 
-    public String execute()
+    public String input()
         throws Exception
     {
         Project project = getContinuum().getProject( projectId );
@@ -84,30 +85,23 @@ public class PrepareReleaseAction
         scmPassword = project.getScmPassword();
         scmTag = project.getScmTag();
 
-        if ( StringUtils.isEmpty( scmTag ) )
-        {
-            scmTag = "myRelease";
-        }
-
         String scmUrl = project.getScmUrl();
-
-        //skip scm:provider in scm url
-        int idx = scmUrl.indexOf( ":", 4 ) + 1;
-        if ( scmUrl.endsWith( "/trunk" ) )
+        if ( scmUrl.startsWith( "scm:svn:" ) )
         {
-            scmTagBase = scmUrl.substring( idx , scmUrl.lastIndexOf( "/trunk" ) ) + "/branches";
+            scmTagBase = new SvnScmProviderRepository( scmUrl, scmUsername, scmPassword ).getTagBase();
         }
         else
         {
-            scmTagBase = scmUrl.substring( idx );
+            scmTagBase = "";
         }
+
         prepareGoals = "clean integration-test";
 
         getReleasePluginParameters( project.getWorkingDirectory(), "pom.xml" );
 
         processProject( project.getWorkingDirectory(), "pom.xml" );
 
-        return "prompt";
+        return SUCCESS;
     }
 
     private void getReleasePluginParameters( String workingDirectory, String pomFilename )
@@ -155,7 +149,7 @@ public class PrepareReleaseAction
         }
     }
 
-    public String doPrepare()
+    public String execute()
         throws Exception
     {
         listener = new DefaultReleaseManagerListener();
@@ -173,7 +167,7 @@ public class PrepareReleaseAction
         releaseId = releaseManager.prepare( project, getReleaseProperties(), getRelVersionMap(),
                                             getDevVersionMap(), listener );
 
-        return "initialized";
+        return SUCCESS;
     }
 
     public String viewResult()
@@ -193,7 +187,7 @@ public class PrepareReleaseAction
 
         listener = (ContinuumReleaseManagerListener) releaseManager.getListeners().get( releaseId );
 
-        if ( listener == null || ( listener.getState() == ContinuumReleaseManagerListener.FINISHED ) )
+        if ( listener != null )
         {
             if ( listener.getState() == ContinuumReleaseManagerListener.FINISHED )
             {

@@ -21,7 +21,6 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.apache.maven.plugins.release.config.ReleaseDescriptor;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,12 +28,14 @@ import java.util.Map;
  *
  * @plexus.component
  *   role="com.opensymphony.xwork.Action"
- *   role-hint="releaseProject"
+ *   role-hint="releaseProjectGoal"
  */
-public class ReleaseProjectAction
+public class ReleaseProjectGoalAction
     extends ContinuumActionSupport
 {
     private int projectId;
+
+    private int projectGroupId;
 
     private String projectName;
 
@@ -42,18 +43,10 @@ public class ReleaseProjectAction
 
     private String preparedReleaseId;
 
-    private String goal;
-
-    private String scmUrl;
-
-    private Project project;
-
-    private List releaseList;
-
-    public String promptReleaseGoal()
+    public String execute()
         throws Exception
     {
-        project = getContinuum().getProjectWithAllDetails( projectId );
+        Project project = getContinuum().getProjectWithAllDetails( projectId );
 
         String releaseId = ArtifactUtils.versionlessKey( project.getGroupId(), project.getArtifactId() );
 
@@ -74,30 +67,6 @@ public class ReleaseProjectAction
         return SUCCESS;
     }
 
-    public String execute()
-        throws Exception
-    {
-        if ( "prepare".equals( goal ) )
-        {
-            return "prepareRelease";
-        }
-        else if ( "perform".equals( goal ) )
-        {
-            if ( "".equals( preparedReleaseId ) )
-            {
-                return "performReleaseFromScm";
-            }
-            else
-            {
-                return "performRelease";
-            }
-        }
-        else
-        {
-            return "prompt";
-        }
-    }
-
     public int getProjectId()
     {
         return projectId;
@@ -106,6 +75,26 @@ public class ReleaseProjectAction
     public void setProjectId( int projectId )
     {
         this.projectId = projectId;
+    }
+
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
+    }
+
+    public String getProjectName()
+    {
+        return projectName;
+    }
+
+    public void setProjectName( String projectName )
+    {
+        this.projectName = projectName;
     }
 
     public String getPreparedReleaseName()
@@ -118,46 +107,6 @@ public class ReleaseProjectAction
         this.preparedReleaseName = preparedReleaseName;
     }
 
-    public String getGoal()
-    {
-        return goal;
-    }
-
-    public void setGoal( String goal )
-    {
-        this.goal = goal;
-    }
-
-    public Project getProject()
-    {
-        return project;
-    }
-
-    public void setProject( Project project )
-    {
-        this.project = project;
-    }
-
-    public String getScmUrl()
-    {
-        return scmUrl;
-    }
-
-    public void setScmUrl( String scmUrl )
-    {
-        this.scmUrl = scmUrl;
-    }
-
-    public List getReleaseList()
-    {
-        return releaseList;
-    }
-
-    public void setReleaseList( List releaseList )
-    {
-        this.releaseList = releaseList;
-    }
-
     public String getPreparedReleaseId()
     {
         return preparedReleaseId;
@@ -166,15 +115,5 @@ public class ReleaseProjectAction
     public void setPreparedReleaseId( String preparedReleaseId )
     {
         this.preparedReleaseId = preparedReleaseId;
-    }
-
-    public String getProjectName()
-    {
-        return projectName;
-    }
-
-    public void setProjectName( String projectName )
-    {
-        this.projectName = projectName;
     }
 }

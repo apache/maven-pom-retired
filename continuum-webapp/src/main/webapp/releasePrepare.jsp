@@ -1,22 +1,26 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
-        <title><ww:text name="releaseProject.page.title"/></title>
+      <title><ww:text name="release.page.title"/></title>
+      <ww:head />
     </head>
     <body>
-      <h2><ww:text name="prepareRelease.section.title"/></h2>
-      <ww:form action="prepareRelease!doPrepare.action" method="post">
-        <h3><ww:text name="prepareRelease.releaseParameters"/></h3>
+      <h2><ww:text name="releasePrepare.section.title"/></h2>
+      <ww:form action="releasePrepare" method="post" validate="true">
+        <h3><ww:text name="releasePrepare.parameters"/></h3>
         <input type="hidden" name="projectId" value="<ww:property value="projectId"/>"/>
         <div class="axial">
           <table border="1" cellspacing="2" cellpadding="3" width="100%">
             <ww:textfield label="SCM Username" name="scmUsername"/>
             <ww:textfield label="SCM Password" name="scmPassword"/>
-            <ww:textfield label="SCM Tag" name="scmTag" required="true"/>
-            <ww:textfield label="SCM Tag Base" name="scmTagBase" required="true"/>
-            <ww:textfield label="Preparation Goals" name="prepareGoals" required="true"/>
-          </table>
+            <ww:textfield label="SCM Tag" name="scmTag"/>
+            <c:if test="${!empty(scmTagBase)}">
+              <ww:textfield label="SCM Tag Base" name="scmTagBase"/>
+            </c:if>
+            <ww:textfield label="Preparation Goals" name="prepareGoals"/>
+           </table>
         </div>
 
         <ww:iterator value="projects">
@@ -25,14 +29,14 @@
           <div class="axial">
             <table border="1" cellspacing="2" cellpadding="3" width="100%">
               <tr>
-                <th><ww:text name="prepareRelease.releaseVersion"/></th>
+                <th><ww:text name="releasePrepare.releaseVersion"/></th>
                 <td>
                   <input type=text name="relVersions"
                          value="<ww:property value="release"/>" size="100">
                 </td>
               </tr>
               <tr>
-                <th><ww:text name="prepareRelease.nextDevelopmentVersion"/></th>
+                <th><ww:text name="releasePrepare.nextDevelopmentVersion"/></th>
                 <td>
                   <input type=text name="devVersions"
                          value="<ww:property value="dev"/>" size="100">

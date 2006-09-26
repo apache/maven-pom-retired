@@ -313,43 +313,77 @@
     <!--
     - continuum release
     -->
+    <action name="releasePromptGoal" class="releaseProject" method="promptReleaseGoal">
+      <result name="success">releaseProject.jsp</result>
+    </action>
+
     <action name="releaseProject" class="releaseProject">
-      <result name="prompt">releaseProject.jsp</result>
       <result name="prepareRelease" type="redirect-action">
-        <param name="actionName">prepareRelease</param>
+        <param name="actionName">releasePrepareInput</param>
         <param name="projectId">${projectId}</param>
       </result>
       <result name="performRelease" type="redirect-action">
-        <param name="actionName">performRelease</param>
+        <param name="actionName">releasePerformInput</param>
         <param name="projectId">${projectId}</param>
         <param name="releaseId">${preparedReleaseId}</param>
       </result>
+      <result name="performReleaseFromScm" type="redirect-action">
+        <param name="actionName">releasePerformFromScmInput</param>
+        <param name="projectId">${projectId}</param>
+      </result>
     </action>
 
-    <action name="prepareRelease" class="prepareRelease">
-      <result name="prompt">prepareRelease.jsp</result>
-      <result name="initialized" type="redirect-action">
-        <param name="actionName">prepareRelease!checkProgress.action</param>
+    <action name="releasePrepareInput" class="releasePrepare" method="input">
+      <result name="success">releasePrepare.jsp</result>
+    </action>
+
+    <action name="releasePrepare" class="releasePrepare">
+      <result name="input" type="chain">releasePrepareInput</result>
+      <result name="success" type="redirect-action">
+        <param name="actionName">releaseInProgress</param>
         <param name="releaseId">${releaseId}</param>
         <param name="projectId">${projectId}</param>
       </result>
-      <result name="inProgress">prepareReleaseProgress.jsp</result>
-      <result name="finished">prepareReleaseFinished.jsp</result>
     </action>
 
-    <action name="performRelease" class="performRelease">
-      <result name="prompt">performRelease.jsp</result>
-      <result name="initialized" type="redirect-action">
-        <param name="actionName">performRelease!checkProgress.action</param>
+    <action name="releasePerformInput" class="releasePerform" method="input">
+      <result name="success">releasePerform.jsp</result>
+    </action>
+
+    <action name="releasePerform" class="releasePerform">
+      <result name="input" type="chain">releasePerformInput</result>
+      <result name="success" type="redirect-action">
+        <param name="actionName">releaseInProgress</param>
         <param name="releaseId">${releaseId}</param>
         <param name="projectId">${projectId}</param>
       </result>
-      <result name="inProgress">performReleaseProgress.jsp</result>
-      <result name="finished">performReleaseFinished.jsp</result>
     </action>
 
-    <action name="viewReleaseResult" class="viewReleaseResult">
-      <result name="success">viewReleaseResult.jsp</result>
+    <action name="releasePerformFromScmInput" class="releasePerform" method="inputFromScm">
+      <result name="success">releasePerformFromScm.jsp</result>
+    </action>
+
+    <action name="releasePerformFromScm" class="releasePerform" method="executeFromScm">
+      <result name="input" type="chain">releasePerformFromScmInput</result>
+      <result name="success" type="redirect-action">
+        <param name="actionName">releaseInProgress</param>
+        <param name="projectId">${projectId}</param>
+      </result>
+    </action>
+
+    <action name="releaseInProgress" class="releaseInProgress">
+      <result name="initialized">releaseInitialized.jsp</result>
+      <result name="inProgress">releaseInProgress.jsp</result>
+      <result name="success">releaseFinished.jsp</result>
+    </action>
+
+    <action name="releaseCleanup" class="releaseCleanup">
+      <result name="prepareFinished" type="chain">releasePromptGoal</result>
+      <result name="performFinished" type="chain">groupSummary</result>
+    </action>
+
+    <action name="releaseViewResult" class="releaseInProgress" method="viewResult">
+      <result name="success">releaseViewResult.jsp</result>
     </action>
 
   </package>
