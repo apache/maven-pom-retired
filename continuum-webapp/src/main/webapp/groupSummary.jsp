@@ -14,8 +14,8 @@
 
     <p/>
 
-    <ww:if test="${groups == null }">
-      No Project Groups Known.
+    <ww:if test="%{groups.isEmpty()}">
+      <b>No Project Groups Known.</b>
     </ww:if>
 
     <div class="eXtremeTable" >
