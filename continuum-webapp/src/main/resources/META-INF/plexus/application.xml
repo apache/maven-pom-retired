@@ -270,15 +270,6 @@
             <name>org.jpox.validateConstraints</name>
             <value>false</value>
           </property>
-
-          <property>
-            <name>org.jpox.autoStartMechanism</name>
-            <value>SchemaTable</value>
-          </property>
-          <property>
-            <name>org.jpox.autoStartMechanismMode</name>
-            <value>Ignored</value>
-          </property>
           <property>
             <name>org.jpox.transactionIsolation</name>
             <value>READ_UNCOMMITTED</value>
@@ -286,11 +277,6 @@
           <property>
             <name>org.jpox.poid.transactionIsolation</name>
             <value>READ_UNCOMMITTED</value>
-          </property>
-          <!-- this is required for MySQL -->
-          <property>
-            <name>org.jpox.rdbms.stringDefaultLength</name>
-            <value>255</value>
           </property>
         </otherProperties>
       </configuration>
