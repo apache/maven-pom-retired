@@ -1,10 +1,10 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
-<%@ taglib uri="http://www.extremecomponents.org" prefix="ec" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
+<%@ taglib uri="continuum" prefix="c1" %>
 
 <ww:i18n name="localization.Continuum">
 
-  <c:if test="${projectGroup.permissions.execute}">
+  <c1:ifAuthorized permission="buildProject">
     <c:choose>
       <c:when test="${!project.inQueue and ( project.state gt 0 ) and ( project.state lt 5 )}">
         <ww:url id="buildProjectUrl" action="buildProject" namespace="/">
@@ -18,6 +18,6 @@
         <img src="<c:url value='/images/buildnow_disabled.gif'/>" alt="Build Now" title="Build Now" border="0">
       </c:otherwise>
     </c:choose>
-  </c:if>
+  </c1:ifAuthorized>
 
 </ww:i18n>
