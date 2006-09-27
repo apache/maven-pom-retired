@@ -318,6 +318,11 @@ public class ContinuumStoreTest
         testProjectGroup2.setId( group.getId() );
     }
 
+    protected void tearDown()
+    {
+        store.closeStore();
+    }
+
     // ----------------------------------------------------------------------
     //  TEST METHODS
     // ----------------------------------------------------------------------
