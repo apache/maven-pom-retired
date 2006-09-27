@@ -23,12 +23,29 @@
 
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
-          <ww:textfield label="Username" name="username" required="true"/>
-          <ww:textfield label="Full Name" name="fullName" required="true"/>
-          <ww:textfield label="Email" name="email"/>
-          <ww:password label="Password" name="password" required="true"/>
-          <ww:password label="Password(again)" name="passwordTwo" required="true"/>
-          <ww:select list="userGroups" label="User Group" name="userGroupId"/>
+
+          <ww:textfield label="%{getText('user.username.label')}" name="username" required="true">
+            <ww:param name="desc"><p><ww:text name="user.username.message"/></p></ww:param>
+          </ww:textfield>
+
+          <ww:textfield label="%{getText('user.fullName.label')}" name="fullName" required="true">
+            <ww:param name="desc"><p><ww:text name="user.fullName.message"/></p></ww:param>
+          </ww:textfield>
+
+          <ww:textfield label="%{getText('user.email.label')}" name="email">
+            <ww:param name="desc"><p><ww:text name="user.email.message"/></p></ww:param>
+          </ww:textfield>
+
+          <ww:password label="%{getText('user.password.label')}" name="password" required="true"/>
+
+          <ww:password label="%{getText('user.passwordTwo.label')}" name="passwordTwo" required="true">
+            <ww:param name="desc"><p><ww:text name="user.passwordTwo.message"/></p></ww:param>
+          </ww:password>
+
+          <ww:select list="userGroups" label="%{getText('user.userGroup.label')}" name="userGroupId">
+            <ww:param name="desc"><p><ww:text name="user.userGroup.message"/></p></ww:param>
+          </ww:select>
+
         </table>
       </div>
 

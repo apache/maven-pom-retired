@@ -25,10 +25,10 @@
           <a href="<ww:url value="/addMavenOneProject!default.action" includeParams="none"/>"><ww:text name="menu.add.m1Project"/></a>
         </div>
         <div class="body">
-          <a href="<ww:url value="/addProject!default.action" includeParams="none"><ww:param name="projectType">ant</ww:param></ww:url>"><ww:text name="menu.add.antProject"/></a>
+          <a href="<ww:url value="/addProjectInput.action" includeParams="none"><ww:param name="projectType">ant</ww:param></ww:url>"><ww:text name="menu.add.antProject"/></a>
         </div>
         <div class="body">
-          <a href="<ww:url value="/addProject!default.action" includeParams="none"><ww:param name="projectType">shell</ww:param></ww:url>"><ww:text name="menu.add.shellProject"/></a>
+          <a href="<ww:url value="/addProjectInput.action" includeParams="none"><ww:param name="projectType">shell</ww:param></ww:url>"><ww:text name="menu.add.shellProject"/></a>
         </div>
       </div>
     </div>

@@ -18,8 +18,12 @@
 
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
-          <ww:textfield label="Name" name="name" required="true"/>
-          <ww:textfield label="Description" name="description"/>
+          <ww:textfield label="%{getText('userGroup.name.label')}" name="name" required="true">
+            <ww:param name="desc"><p><ww:text name="userGroup.name.message"/></p></ww:param>
+          </ww:textfield>
+          <ww:textfield label="%{getText('userGroup.description.label')}" name="description">
+            <ww:param name="desc"><p><ww:text name="userGroup.description.message"/></p></ww:param>
+          </ww:textfield>
         </table>
       </div>
 

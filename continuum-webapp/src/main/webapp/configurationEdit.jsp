@@ -13,11 +13,25 @@
 
       <div class="axial">
         <table border="1" cellspacing="2" cellpadding="3" width="100%">
-          <ww:textfield label="Username" name="username"/>
-          <ww:textfield label="Full Name" name="fullName"/>
-          <ww:textfield label="Email" name="email"/>
-          <ww:password label="Password" name="password"/>
-          <ww:password label="Password(again)" name="passwordTwo"/>
+
+          <ww:textfield label="%{getText('user.username.label')}" name="username">
+            <ww:param name="desc"><p><ww:text name="user.username.message"/></p></ww:param>
+          </ww:textfield>
+
+          <ww:textfield label="%{getText('user.fullName.label')}" name="fullName">
+            <ww:param name="desc"><p><ww:text name="user.fullName.message"/></p></ww:param>
+          </ww:textfield>
+
+          <ww:textfield label="%{getText('user.email.label')}" name="email">
+            <ww:param name="desc"><p><ww:text name="user.email.message"/></p></ww:param>
+          </ww:textfield>
+
+          <ww:password label="%{getText('user.password.label')}" name="password"/>
+
+          <ww:password label="%{getText('user.passwordTwo.label')}" name="passwordTwo">
+            <ww:param name="desc"><p><ww:text name="user.passwordTwo.message"/></p></ww:param>
+          </ww:password>
+
         </table>
       </div>
 
@@ -25,16 +39,38 @@
 
         <table>
           <tbody>
+
             <ww:checkbox label="%{getText('configuration.guest.label')}" name="guestAccountEnabled"
-                         value="guestAccountEnabled" fieldValue="true"/>
+                         value="guestAccountEnabled" fieldValue="true">
+              <ww:param name="desc"><p><ww:text name="configuration.guest.message"/></p></ww:param>
+            </ww:checkbox>
+
             <ww:textfield label="%{getText('configuration.workingDirectory.label')}" name="workingDirectory"
-                          required="true"/>
+                          required="true">
+              <ww:param name="desc"><p><ww:text name="configuration.workingDirectory.message"/></p></ww:param>
+            </ww:textfield>
+
             <ww:textfield label="%{getText('configuration.buildOutputDirectory.label')}" name="buildOutputDirectory"
-                          required="true"/>
-            <ww:textfield label="%{getText('configuration.baseUrl.label')}" name="baseUrl" required="true"/>
-            <ww:textfield label="%{getText('configuration.companyName.label')}" name="companyName"/>
-            <ww:textfield label="%{getText('configuration.companyLogo.label')}" name="companyLogo"/>
-            <ww:textfield label="%{getText('configuration.companyUrl.label')}" name="companyUrl"/>
+                          required="true">
+              <ww:param name="desc"><p><ww:text name="configuration.buildOutputDirectory.message"/></p></ww:param>
+            </ww:textfield>
+
+            <ww:textfield label="%{getText('configuration.baseUrl.label')}" name="baseUrl" required="true">
+              <ww:param name="desc"><p><ww:text name="configuration.baseUrl.message"/></p></ww:param>
+            </ww:textfield>
+
+            <ww:textfield label="%{getText('configuration.companyName.label')}" name="companyName">
+              <ww:param name="desc"><p><ww:text name="configuration.companyName.message"/></p></ww:param>
+            </ww:textfield>
+
+            <ww:textfield label="%{getText('configuration.companyLogo.label')}" name="companyLogo">
+              <ww:param name="desc"><p><ww:text name="configuration.companyLogo.message"/></p></ww:param>
+            </ww:textfield>
+
+            <ww:textfield label="%{getText('configuration.companyUrl.label')}" name="companyUrl">
+              <ww:param name="desc"><p><ww:text name="configuration.companyUrl.message"/></p></ww:param>
+            </ww:textfield>
+            
           </tbody>
         </table>
         <div class="functnbar3">
