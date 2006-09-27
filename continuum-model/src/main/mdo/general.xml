@@ -1,0 +1,36 @@
+<model>
+  <id>general</id>
+  <name>General</name>
+  <description>General's object model.</description>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.apache.maven.continuum.model.general</value>
+    </default>
+  </defaults>
+
+  <classes>
+    <class>
+      <name>CompanyInformation</name>
+      <packageName>org.apache.maven.continuum.model.general</packageName>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>companyName</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>companyLogoUrl</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+        <field>
+          <name>companyUrl</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

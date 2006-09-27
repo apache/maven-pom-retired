@@ -16,6 +16,7 @@ package org.apache.maven.continuum.configuration;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.general.CompanyInformation;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
@@ -49,6 +50,8 @@ public class DefaultConfigurationService
     // ----------------------------------------------------------------------
 
     private SystemConfiguration systemConf;
+
+    private CompanyInformation companyInformation;
 
     private boolean loaded = false;
 
@@ -126,32 +129,32 @@ public class DefaultConfigurationService
 
     public String getCompanyLogo()
     {
-        return systemConf.getCompanyLogoUrl();
+        return companyInformation.getCompanyLogoUrl();
     }
 
     public void setCompanyLogo( String companyLogoUrl )
     {
-        systemConf.setCompanyLogoUrl( companyLogoUrl );
+        companyInformation.setCompanyLogoUrl( companyLogoUrl );
     }
 
     public String getCompanyName()
     {
-        return systemConf.getCompanyName();
+        return companyInformation.getCompanyName();
     }
 
     public void setCompanyName( String companyName )
     {
-        systemConf.setCompanyName( companyName );
+        companyInformation.setCompanyName( companyName );
     }
 
     public String getCompanyUrl()
     {
-        return systemConf.getCompanyUrl();
+        return companyInformation.getCompanyUrl();
     }
 
     public void setCompanyUrl( String companyUrl )
     {
-        systemConf.setCompanyUrl( companyUrl );
+        companyInformation.setCompanyUrl( companyUrl );
     }
 
     public boolean isGuestAccountEnabled()
@@ -250,6 +253,15 @@ public class DefaultConfigurationService
                 systemConf = store.addSystemConfiguration( systemConf );
             }
 
+            companyInformation = store.getCompanyInformation();
+
+            if ( companyInformation == null )
+            {
+                companyInformation = new CompanyInformation();
+
+                companyInformation = store.addCompanyInformation( companyInformation );
+            }
+
             loaded = true;
         }
         catch ( ContinuumStoreException e )
@@ -264,6 +276,7 @@ public class DefaultConfigurationService
         try
         {
             store.updateSystemConfiguration( systemConf );
+            store.updateCompanyInformation( companyInformation );
         }
         catch ( ContinuumStoreException e )
         {

@@ -16,6 +16,7 @@ package org.apache.maven.continuum.store;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.general.CompanyInformation;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Profile;
@@ -62,13 +63,20 @@ public class JdoContinuumStore
     /**
      * @plexus.requirement
      */
-    private JdoFactory jdoFactory;
+    private JdoFactory continuumJdoFactory;
+
+    /**
+     * @plexus.requirement
+     */
+    private JdoFactory usersJdoFactory;
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
-    private PersistenceManagerFactory pmf;
+    private PersistenceManagerFactory continuumPmf;
+
+    private PersistenceManagerFactory usersPmf;
 
     // ----------------------------------------------------------------------
     // Fetch Groups
@@ -95,7 +103,8 @@ public class JdoContinuumStore
     public void initialize()
         throws InitializationException
     {
-        pmf = jdoFactory.getPersistenceManagerFactory();
+        continuumPmf = continuumJdoFactory.getPersistenceManagerFactory();
+        usersPmf = usersJdoFactory.getPersistenceManagerFactory();
     }
 
     // ----------------------------------------------------------------------
@@ -656,9 +665,15 @@ public class JdoContinuumStore
     private void updateObject( Object object )
         throws ContinuumStoreException
     {
+        updateObject( getPersistenceManager(), object );
+    }
+
+    private void updateObject( PersistenceManager pmf, Object object )
+        throws ContinuumStoreException
+    {
         try
         {
-            PlexusJdoUtils.updateObject( getPersistenceManager(), object );
+            PlexusJdoUtils.updateObject( pmf, object );
         }
         catch ( PlexusStoreException e )
         {
@@ -1064,7 +1079,22 @@ public class JdoContinuumStore
 
     private List getAllObjectsDetached( Class clazz, String ordering, String fetchGroup )
     {
-        return PlexusJdoUtils.getAllObjectsDetached( getPersistenceManager(), clazz, ordering, fetchGroup );
+        return getAllObjectsDetached( getPersistenceManager(), clazz, ordering, fetchGroup );
+    }
+
+    private List getAllObjectsDetached( PersistenceManager pmf, Class clazz )
+    {
+        return getAllObjectsDetached( pmf, clazz, null );
+    }
+
+    private List getAllObjectsDetached( PersistenceManager pmf, Class clazz, String fetchGroup )
+    {
+        return getAllObjectsDetached( pmf, clazz, null, fetchGroup );
+    }
+
+    private List getAllObjectsDetached( PersistenceManager pmf, Class clazz, String ordering, String fetchGroup )
+    {
+        return PlexusJdoUtils.getAllObjectsDetached( pmf, clazz, ordering, fetchGroup );
     }
 
     public ProjectGroup addProjectGroup( ProjectGroup group )
@@ -1074,7 +1104,12 @@ public class JdoContinuumStore
 
     private Object addObject( Object object )
     {
-        return PlexusJdoUtils.addObject( getPersistenceManager(), object );
+        return addObject( getPersistenceManager(), object );
+    }
+
+    private Object addObject( PersistenceManager pmf, Object object )
+    {
+        return PlexusJdoUtils.addObject( pmf, object );
     }
 
     public ProjectGroup getProjectGroupByGroupId( String groupId )
@@ -1120,7 +1155,6 @@ public class JdoContinuumStore
         throw new ContinuumObjectNotFoundException( "unable to find project group containing project with id: " + projectId );
     }
 
-
     public SystemConfiguration addSystemConfiguration( SystemConfiguration systemConf )
     {
         return (SystemConfiguration) addObject( systemConf );
@@ -1149,6 +1183,37 @@ public class JdoContinuumStore
         else
         {
             return (SystemConfiguration) systemConfs.get( 0 );
+        }
+    }
+
+    public CompanyInformation addCompanyInformation( CompanyInformation companyInfo )
+    {
+        return (CompanyInformation) addObject( getPersistenceManager( usersPmf ), companyInfo );
+    }
+
+    public void updateCompanyInformation( CompanyInformation companyInfo )
+        throws ContinuumStoreException
+    {
+        updateObject( getPersistenceManager( usersPmf ), companyInfo );
+    }
+
+    public CompanyInformation getCompanyInformation()
+        throws ContinuumStoreException
+    {
+        List companyInfos = getAllObjectsDetached( getPersistenceManager( usersPmf ), CompanyInformation.class );
+
+        if ( companyInfos == null || companyInfos.isEmpty() )
+        {
+            return null;
+        }
+        else if ( companyInfos.size() > 1 )
+        {
+            throw new ContinuumStoreException(
+                "Database is corrupted. There are more than one companyInformation object." );
+        }
+        else
+        {
+            return (CompanyInformation) companyInfos.get( 0 );
         }
     }
 
@@ -1379,6 +1444,11 @@ public class JdoContinuumStore
 
     private PersistenceManager getPersistenceManager()
     {
+        return getPersistenceManager( continuumPmf );
+    }
+
+    private PersistenceManager getPersistenceManager( PersistenceManagerFactory pmf )
+    {
         PersistenceManager pm = pmf.getPersistenceManager();
 
         pm.getFetchPlan().setMaxFetchDepth( -1 );
@@ -1394,7 +1464,8 @@ public class JdoContinuumStore
 
     public void closeStore()
     {
-        closePersistenceManagerFactory( 1 );
+        closePersistenceManagerFactory( continuumPmf, 1 );
+        closePersistenceManagerFactory( usersPmf, 1 );
     }
 
     /**
@@ -1402,7 +1473,7 @@ public class JdoContinuumStore
      *
      * @param numTry The number of try. The maximum try is 5.
      */
-    private void closePersistenceManagerFactory( int numTry )
+    private void closePersistenceManagerFactory( PersistenceManagerFactory pmf, int numTry )
     {
         if ( pmf != null )
         {
@@ -1429,7 +1500,7 @@ public class JdoContinuumStore
                             //nothing to do
                         }
 
-                        closePersistenceManagerFactory( numTry + 1 );
+                        closePersistenceManagerFactory( pmf, numTry + 1 );
                     }
                     else
                     {

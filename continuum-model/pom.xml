@@ -15,19 +15,41 @@
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
-        <version>1.0-alpha-9</version>
+        <version>1.0-alpha-11-SNAPSHOT</version>
         <executions>
           <execution>
+            <id>modello-continuum</id>
             <goals>
               <goal>java</goal>
               <goal>jpox-jdo-mapping</goal>
             </goals>
+            <configuration>
+              <model>src/main/mdo/continuum.xml</model>
+            </configuration>
+          </execution>
+          <execution>
+            <id>modello-java-users</id>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <model>src/main/mdo/general.xml</model>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jpox-jdo-mapping-users</id>
+            <goals>
+              <goal>jpox-jdo-mapping</goal>
+            </goals>
+            <configuration>
+              <model>src/main/mdo/general.xml</model>
+              <outputDirectory>${basedir}/target/classes/org/apache/maven/continuum/model/general</outputDirectory>
+            </configuration>
           </execution>
         </executions>
         <configuration>
           <version>1.0.0</version>
           <packageWithVersion>false</packageWithVersion>
-          <model>src/main/mdo/continuum.xml</model>
         </configuration>
       </plugin>
       <plugin>

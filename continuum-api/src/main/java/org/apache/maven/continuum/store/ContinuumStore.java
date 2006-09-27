@@ -16,6 +16,7 @@ package org.apache.maven.continuum.store;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.general.CompanyInformation;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Profile;
@@ -224,6 +225,14 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     SystemConfiguration getSystemConfiguration()
+        throws ContinuumStoreException;
+
+    CompanyInformation addCompanyInformation( CompanyInformation companyInfo );
+
+    void updateCompanyInformation( CompanyInformation companyInfo )
+        throws ContinuumStoreException;
+
+    CompanyInformation getCompanyInformation()
         throws ContinuumStoreException;
 
     ContinuumUser addUser( ContinuumUser user );
