@@ -1,5 +1,0 @@
-$page.setTitle( "Welcome to Continuum" )
-
-<div class="app">
-  <h3>Welcome to Continuum!</h3>
-</div>
