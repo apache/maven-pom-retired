@@ -287,7 +287,7 @@
 
     <component>
       <role>org.codehaus.plexus.jdo.JdoFactory</role>
-      <role-hint>projectserver</role-hint>
+      <role-hint>users</role-hint>
       <implementation>org.codehaus.plexus.jdo.DataSourceConfigurableJdoFactory</implementation>
       <configuration>
 
