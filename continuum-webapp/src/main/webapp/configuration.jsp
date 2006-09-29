@@ -15,7 +15,7 @@
                 <ww:param name="after">
                     <ww:text name="configuration.guest.value">
                         <ww:param>
-                            <ww:if test="guestAccountEnabled"><ww:text name="enabled"/></ww:if>
+                            <ww:if test="%{guestAccountEnabled == true}"><ww:text name="enabled"/></ww:if>
                             <ww:else><ww:text name="disabled"/></ww:else>
                         </ww:param>
                     </ww:text>
@@ -29,7 +29,7 @@
             <c1:data label="%{getText('configuration.companyUrl.label')}" name="companyUrl"/>
           </table>
           <div class="functnbar3">
-            <ww:form action="configuration!edit.action" method="post">
+            <ww:form action="editConfiguration.action" method="post">
               <ww:submit value="%{getText('edit')}"/>
             </ww:form>
           </div>

@@ -43,7 +43,6 @@ import com.opensymphony.xwork.Preparable;
  */
 public class ConfigurationAction
     extends ContinuumActionSupport
-    implements Preparable
 {
 
     /**
@@ -77,32 +76,10 @@ public class ConfigurationAction
 
     public void prepare()
     {
-        ConfigurationService configuration = getContinuum().getConfiguration();
 
-        guestAccountEnabled = configuration.isGuestAccountEnabled();
-
-        workingDirectory = configuration.getWorkingDirectory().getAbsolutePath();
-
-        buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
-
-        baseUrl = configuration.getUrl();
-
-        if ( StringUtils.isEmpty( baseUrl ) )
-        {
-            HttpServletRequest request = ServletActionContext.getRequest();
-            baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                + request.getContextPath();
-            getLogger().info( "baseUrl='" + baseUrl + "'" );
-        }
-
-        companyLogo = configuration.getCompanyLogo();
-
-        companyName = configuration.getCompanyName();
-
-        companyUrl = configuration.getCompanyUrl();
     }
-
-    public String execute()
+    
+    public String save()
         throws ConfigurationStoringException, ContinuumStoreException
     {
         //todo switch this to validation
@@ -116,7 +93,7 @@ public class ConfigurationAction
         adminUser.setGroup( store.getUserGroup( ContinuumSecurity.ADMIN_GROUP_NAME ) );
 
         store.addUser( adminUser );
-        
+
         ConfigurationService configuration = getContinuum().getConfiguration();
 
         if ( guestAccountEnabled )
@@ -152,16 +129,39 @@ public class ConfigurationAction
         return SUCCESS;
     }
 
-    public String doDefault()
+    public String edit()
         throws Exception
     {
+        setConfiguration();
         return SUCCESS;
     }
 
-    public String doEdit()
-        throws Exception
+    private void setConfiguration()
     {
-        return INPUT;
+        ConfigurationService configuration = getContinuum().getConfiguration();
+
+        guestAccountEnabled = configuration.isGuestAccountEnabled();
+
+        workingDirectory = configuration.getWorkingDirectory().getAbsolutePath();
+
+        buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
+
+        baseUrl = configuration.getUrl();
+
+        if ( StringUtils.isEmpty( baseUrl ) )
+        {
+            HttpServletRequest request = ServletActionContext.getRequest();
+            baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+                + request.getContextPath();
+            getLogger().info( "baseUrl='" + baseUrl + "'" );
+        }
+
+        companyLogo = configuration.getCompanyLogo();
+
+        companyName = configuration.getCompanyName();
+
+        companyUrl = configuration.getCompanyUrl();
+
     }
 
     public boolean isGuestAccountEnabled()

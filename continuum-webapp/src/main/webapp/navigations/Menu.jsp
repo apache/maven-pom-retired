@@ -43,7 +43,7 @@
       </c1:ifAuthorized>
       <c1:ifAuthorized permission="manageConfiguration">
           <div class="body">
-            <a href="<ww:url value="/configuration!default.action" includeParams="none"/>"><ww:text name="menu.administration.configuration"/></a>
+            <a href="<ww:url value="/editConfiguration.action" includeParams="none"/>"><ww:text name="menu.administration.configuration"/></a>
           </div>
       </c1:ifAuthorized>
       <c1:ifAuthorized permission="manageUsers">

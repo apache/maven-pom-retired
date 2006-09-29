@@ -35,7 +35,7 @@
 
     <global-results>
       <result name="error-internal">/error/error.jsp?id=500</result>
-      <result name="continuumInitialization" type="redirect">/configuration!input.action?isNew=true</result>
+      <result name="continuumInitialization" type="redirect">/editConfiguration.action?isNew=true</result>
     </global-results>
 
     <global-exception-mappings>
@@ -47,7 +47,11 @@
       <result name="input">/redirectToContinuumInitialization.jsp</result>
     </action>
 
-    <action name="configuration" class="configuration">
+    <action name="editConfiguration" class="configuration" method="edit">
+      <result name="success">configurationEdit.jsp</result>
+    </action>
+
+    <action name="configuration" class="configuration" method="save">
       <result name="input">configurationEdit.jsp</result>
       <result name="success">configuration.jsp</result>
     </action>
@@ -55,7 +59,6 @@
     <action name="companyInfo" class="configuration">
       <result name="success">/components/companyLogo.jsp</result>
     </action>
-
 
     <action name="summary" class="summary">
       <result name="success">summary.jsp</result>

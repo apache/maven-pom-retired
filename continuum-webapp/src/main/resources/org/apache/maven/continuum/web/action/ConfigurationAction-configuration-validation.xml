@@ -1,0 +1,49 @@
+<!DOCTYPE validators PUBLIC
+    "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+    "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+  <field name="workingDirectory">
+    <field-validator type="requiredstring">
+      <message key="configuration.workingDirectory.required"/>
+    </field-validator>
+  </field>
+  <field name="buildOutputDirectory">
+    <field-validator type="requiredstring">
+      <message key="configuration.buildOutputDirectory.required"/>
+    </field-validator>
+  </field>
+  <field name="baseUrl">
+    <field-validator type="requiredstring" short-circuit="true">
+      <message key="configuration.baseUrl.required"/>
+    </field-validator>
+    <field-validator type="url">
+      <message key="configuration.baseUrl.invalid"/>
+    </field-validator>
+  </field>
+  <field name="username">
+    <field-validator type="requiredstring">
+      <message key="configuration.username.required"/>
+    </field-validator>
+  </field>
+  <field name="fullName">
+    <field-validator type="requiredstring">
+      <message key="configuration.fullName.required"/>
+    </field-validator>
+  </field>
+  <field name="password">
+    <field-validator type="requiredstring">
+      <message key="configuration.password.required"/>
+    </field-validator>
+  </field>
+  <field name="passwordTwo">
+    <field-validator type="requiredstring">
+      <message key="configuration.passwordTwo.required"/>
+    </field-validator>
+  </field>
+  <validator type="expression">
+    <param name="expression">
+      password.equals(passwordTwo)</param>
+    <message key="configuration.passwordTwo.nomatch"/>
+  </validator>
+</validators>
