@@ -66,6 +66,14 @@
       <ec:column property="scheduleName" title="schedule"/>
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
+      <ec:column property="buildNowAction" title="&nbsp;" width="1%">
+        <ww:url id="buildProjectUrl" action="buildProject" namespace="/">
+          <ww:param name="projectId" value="${project.id}"/>
+        </ww:url>
+        <ww:a href="%{buildProjectUrl}">
+          <img src="<c:url value='/images/buildnow.gif'/>" alt="Build Now" title="Build Now" border="0">
+        </ww:a>
+      </ec:column>
       <ec:column property="editAction" title="&nbsp;">
           <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
             <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
@@ -82,7 +90,7 @@
             <ww:param name="confirmed" value="false"/>
           </ww:url>
           <ww:a href="%{removeUrl}">
-              <img src="<ww:url value='/images/edit.gif'/>" alt="Edit" title="Edit" border="0">          
+              <img src="<ww:url value='/images/delete.gif'/>" alt="Edit" title="Edit" border="0">
           </ww:a>
       </ec:column>
     </ec:row>

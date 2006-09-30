@@ -81,7 +81,7 @@ public class AddProjectAction
         }
     }
 
-    public String execute()
+    public String add()
         throws ContinuumException
     {
         Project project = new Project();
