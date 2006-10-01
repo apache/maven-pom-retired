@@ -62,6 +62,10 @@
               <ww:param name="desc"><p><ww:text name="configuration.buildOutputDirectory.message"/></p></ww:param>
             </ww:textfield>
 
+            <ww:textfield label="%{getText('configuration.deploymentRepositoryDirectory.label')}" name="deploymentRepositoryDirectory">
+              <ww:param name="desc"><p><ww:text name="configuration.deploymentRepositoryDirectory.message"/></p></ww:param>
+            </ww:textfield>
+
             <ww:textfield label="%{getText('configuration.baseUrl.label')}" name="baseUrl" required="true">
               <ww:param name="desc"><p><ww:text name="configuration.baseUrl.message"/></p></ww:param>
             </ww:textfield>

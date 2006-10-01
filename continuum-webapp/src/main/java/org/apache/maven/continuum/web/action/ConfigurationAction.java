@@ -21,6 +21,7 @@ import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 import org.apache.maven.continuum.model.system.ContinuumUser;
@@ -29,9 +30,9 @@ import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import com.opensymphony.webwork.ServletActionContext;
-import com.opensymphony.xwork.Preparable;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -42,8 +43,12 @@ import com.opensymphony.xwork.Preparable;
  *   role-hint="configuration"
  */
 public class ConfigurationAction
-    extends ContinuumActionSupport
+    extends PlexusActionSupport
 {
+    /**
+     * @plexus.requirement
+     */
+    private Continuum continuum;
 
     /**
      * @plexus.requirement
@@ -66,6 +71,8 @@ public class ConfigurationAction
 
     private String buildOutputDirectory;
 
+    private String deploymentRepositoryDirectory;
+
     private String baseUrl;
 
     private String companyLogo;
@@ -74,11 +81,6 @@ public class ConfigurationAction
 
     private String companyUrl;
 
-    public void prepare()
-    {
-
-    }
-    
     public String save()
         throws ConfigurationStoringException, ContinuumStoreException
     {
@@ -94,7 +96,7 @@ public class ConfigurationAction
 
         store.addUser( adminUser );
 
-        ConfigurationService configuration = getContinuum().getConfiguration();
+        ConfigurationService configuration = continuum.getConfiguration();
 
         if ( guestAccountEnabled )
         {
@@ -114,6 +116,8 @@ public class ConfigurationAction
         configuration.setWorkingDirectory( new File( workingDirectory ) );
 
         configuration.setBuildOutputDirectory( new File( buildOutputDirectory ) );
+
+        configuration.setDeploymentRepositoryDirectory( new File( deploymentRepositoryDirectory ) );
 
         configuration.setUrl( baseUrl );
 
@@ -138,7 +142,7 @@ public class ConfigurationAction
 
     private void setConfiguration()
     {
-        ConfigurationService configuration = getContinuum().getConfiguration();
+        ConfigurationService configuration = continuum.getConfiguration();
 
         guestAccountEnabled = configuration.isGuestAccountEnabled();
 
@@ -232,6 +236,16 @@ public class ConfigurationAction
     public void setWorkingDirectory( String workingDirectory )
     {
         this.workingDirectory = workingDirectory;
+    }
+
+    public String getDeploymentRepositoryDirectory()
+    {
+        return deploymentRepositoryDirectory;
+    }
+
+    public void setDeploymentRepositoryDirectory( String deploymentRepositoryDirectory )
+    {
+        this.deploymentRepositoryDirectory = deploymentRepositoryDirectory;
     }
 
     public String getBuildOutputDirectory()

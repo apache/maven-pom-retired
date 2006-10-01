@@ -23,6 +23,7 @@
             </c1:data>
             <c1:data label="%{getText('configuration.workingDirectory.label')}" name="workingDirectory"/>
             <c1:data label="%{getText('configuration.buildOutputDirectory.label')}" name="buildOutputDirectory"/>
+            <c1:data label="%{getText('configuration.deploymentRepositoryDirectory.label')}" name="deploymentRepositoryDirectory"/>
             <c1:data label="%{getText('configuration.baseUrl.label')}" name="baseUrl"/>
             <c1:data label="%{getText('configuration.companyName.label')}" name="companyName"/>
             <c1:data label="%{getText('configuration.companyLogo.label')}" name="companyLogo"/>
