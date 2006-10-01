@@ -18,7 +18,6 @@ package org.apache.maven.continuum.execution;
 
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.BuildDefinition;
-import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.scm.TestResult;
 import org.apache.maven.continuum.utils.WorkingDirectoryService;
 import org.apache.maven.continuum.utils.shell.ExecutionResult;
