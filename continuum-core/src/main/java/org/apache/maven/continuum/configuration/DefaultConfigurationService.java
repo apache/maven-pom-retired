@@ -98,7 +98,15 @@ public class DefaultConfigurationService
 
     public void setBuildOutputDirectory( File buildOutputDirectory )
     {
-        systemConf.setBuildOutputDirectory( buildOutputDirectory.getAbsolutePath() );
+        File f = buildOutputDirectory;
+        try
+        {
+            f = f.getCanonicalFile();
+        }
+        catch ( IOException e )
+        {
+        }
+        systemConf.setBuildOutputDirectory( f.getAbsolutePath() );
     }
 
     public File getWorkingDirectory()
@@ -108,7 +116,16 @@ public class DefaultConfigurationService
 
     public void setWorkingDirectory( File workingDirectory )
     {
-        systemConf.setWorkingDirectory( workingDirectory.getAbsolutePath() );
+        File f = workingDirectory;
+        try
+        {
+            f = f.getCanonicalFile();
+        }
+        catch ( IOException e )
+        {
+        }
+
+        systemConf.setWorkingDirectory( f.getAbsolutePath() );
     }
 
     public File getDeploymentRepositoryDirectory()
@@ -200,6 +217,14 @@ public class DefaultConfigurationService
     {
         File dir = new File( getBuildOutputDirectory(), Integer.toString( projectId ) );
 
+        try
+        {
+            dir = dir.getCanonicalFile();
+        }
+        catch ( IOException e )
+        {
+        }
+
         if ( !dir.exists() && !dir.mkdirs() )
         {
             throw new ConfigurationException(
@@ -227,7 +252,14 @@ public class DefaultConfigurationService
             }
         }
 
-        return f;
+        try
+        {
+            return f.getCanonicalFile();
+        }
+        catch ( IOException e )
+        {
+            return f;
+        }
     }
 
     // ----------------------------------------------------------------------
