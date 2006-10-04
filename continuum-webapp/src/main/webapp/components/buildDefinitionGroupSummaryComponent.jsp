@@ -21,7 +21,7 @@
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
       <ec:column property="editActions" title="Edit">
-          <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
+          <ww:url id="editUrl" action="buildDefinition" namespace="/">
             <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
           </ww:url>
@@ -42,7 +42,7 @@
     </ec:row>
   </ec:table>
   <div class="functnbar3">
-    <ww:form action="buildDefinition" method="post">
+    <ww:form action="buildDefinition" method="post" namespace="/">
       <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
       <ww:submit value="%{getText('add')}"/>
     </ww:form>
