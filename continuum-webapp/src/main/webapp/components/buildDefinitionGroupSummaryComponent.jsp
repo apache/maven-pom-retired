@@ -4,7 +4,7 @@
 <%@ taglib uri="continuum" prefix="c1" %>
 <ww:i18n name="localization.Continuum">
 
-  <h3>Group Build Definitions</h3>
+  <h3>Project Group Build Definitions</h3>
   <ec:table items="groupBuildDefinitionSummaries"
             var="buildDefinitionSummary"
             showExports="false"

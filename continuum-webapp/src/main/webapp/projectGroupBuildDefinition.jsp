@@ -15,8 +15,6 @@
           <jsp:param name="tab" value="buildDefinition"/>
         </jsp:include>
 
-        <h3>Project Group Build Definitions</h3>
-
         <ww:action name="groupBuildDefinitionSummary" executeResult="true" namespace="component">
           <ww:param name="projectGroupId" value="%{projectGroupId}"/>
         </ww:action>

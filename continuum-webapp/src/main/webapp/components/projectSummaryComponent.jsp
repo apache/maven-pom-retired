@@ -4,6 +4,8 @@
 <%@ taglib uri="continuum" prefix="c1" %>
 <ww:i18n name="localization.Continuum">
 
+  <h3>Projects</h3>
+
   <ec:table items="projects"
             var="project"
             showExports="false"
