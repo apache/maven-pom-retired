@@ -43,7 +43,7 @@
   </ec:table>
   <div class="functnbar3">
     <ww:form action="buildDefinition" method="post">
-      <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupid"/>"/>
+      <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
       <ww:submit value="%{getText('add')}"/>
     </ww:form>
   </div>
