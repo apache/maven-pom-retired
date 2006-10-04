@@ -170,7 +170,17 @@ public class DefaultBuildController
             {
                 try
                 {
-                    project.setState( ContinuumProjectState.ERROR );
+                    String s = (String) context.getActionContext().get( AbstractContinuumAction.KEY_BUILD_ID );
+
+                    if ( s != null )
+                    {
+                        BuildResult buildResult = store.getBuildResult( Integer.valueOf( s ).intValue() );
+                        project.setState( buildResult.getState() );
+                    }
+                    else
+                    {
+                        project.setState( ContinuumProjectState.ERROR );
+                    }
 
                     store.updateProject( project );
                 }
