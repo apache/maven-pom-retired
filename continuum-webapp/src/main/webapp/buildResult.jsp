@@ -30,7 +30,7 @@
                 <ww:param name="after"><ww:text name="buildResult.trigger.%{buildResult.trigger}"/></ww:param>
             </c1:data>
             <c1:data label="%{getText('buildResult.state')}">
-                <ww:param name="after"><ww:text name="buildResult.state.%{buildResult.state}"/></ww:param>
+                <ww:param name="after" value="state"/>
             </c1:data>
             <c1:data label="%{getText('buildResult.buildNumber')}">
                 <ww:param name="after">

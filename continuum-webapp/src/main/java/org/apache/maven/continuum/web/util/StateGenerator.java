@@ -50,7 +50,7 @@ public class StateGenerator
         }
         else if ( state == ContinuumProjectState.BUILDING )
         {
-            return BUILDING;
+            return "<img src=\"" + contextPath + "/images/building.gif\" alt=\"Building\" title=\"Building\" border=\"0\" />";
         }
         else if ( state == ContinuumProjectState.UPDATING )
         {

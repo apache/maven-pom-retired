@@ -21,10 +21,15 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.web.util.StateGenerator;
 import org.apache.maven.continuum.configuration.ConfigurationException;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.codehaus.plexus.util.FileUtils;
+
+import javax.servlet.jsp.PageContext;
+
+import com.opensymphony.webwork.ServletActionContext;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -51,6 +56,8 @@ public class BuildResultAction
 
     private String buildOutput;
 
+    private String state;
+
     public String execute()
         throws ContinuumException, ConfigurationException, IOException
     {
@@ -70,8 +77,11 @@ public class BuildResultAction
             buildOutput = FileUtils.fileRead( buildOutputFile );
         }
 
+        state = StateGenerator.generate( buildResult.getState(), ServletActionContext.getRequest().getContextPath() );
+
         return SUCCESS;
     }
+
 
     public int getBuildId()
     {
@@ -127,4 +137,10 @@ public class BuildResultAction
     {
         return buildOutput;
     }
+
+    public String getState()
+    {
+        return state;
+    }
+
 }
