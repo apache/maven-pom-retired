@@ -22,8 +22,13 @@ import org.apache.maven.continuum.web.util.WorkingCopyContentGenerator;
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.webwork.views.util.UrlHelper;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.util.HashMap;
 import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -55,6 +60,12 @@ public class WorkingCopyAction
 
     private String projectName;
 
+    private File downloadFile;
+
+    private String mimeType = "application/octet-stream";
+
+    private static String FILE_SEPARATOR = System.getProperty( "file.separator" );
+
     public String execute()
         throws ContinuumException
     {
@@ -74,6 +85,34 @@ public class WorkingCopyAction
 
         if ( currentFile != null && currentFile != "" )
         {
+            String dir;
+
+            //TODO: maybe create a plexus component for this so that additional mimetypes can be easily added
+            MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+            mimeTypesMap.addMimeTypes( "application/java-archive jar war ear");
+            mimeTypesMap.addMimeTypes( "application/java-class class" );
+            mimeTypesMap.addMimeTypes( "image/png png" );
+
+            if ( FILE_SEPARATOR.equals( userDirectory ) )
+            {
+                dir = userDirectory;
+            }
+            else
+            {
+                dir = FILE_SEPARATOR + userDirectory + FILE_SEPARATOR;
+            }
+
+            downloadFile = new File( getContinuum().getWorkingDirectory( projectId ) + dir + currentFile );
+            mimeType = mimeTypesMap.getContentType( downloadFile );
+            
+            if ( ( mimeType.contains( "image" ) ) ||
+                 ( mimeType.contains( "java-archive" ) ) ||
+                 ( mimeType.contains( "java-class" ) ) ||
+                 ( downloadFile.length() > 100000 ) )
+            {
+                return "stream";
+            }
+
             currentFileContent = getContinuum().getFileContent( projectId, userDirectory, currentFile );
         }
         else
@@ -127,5 +166,37 @@ public class WorkingCopyAction
     public String getFileContent()
     {
         return currentFileContent;
+    }
+
+
+    public InputStream getInputStream()
+        throws ContinuumException
+    {
+        FileInputStream fis = null;
+        try
+        {
+            fis = new FileInputStream( downloadFile );
+        }
+        catch ( FileNotFoundException fne )
+        {
+            throw new ContinuumException( "Error accessing file.", fne );
+        }
+
+        return fis;
+    }
+
+    public String getFileLength()
+    {
+        return Long.toString( downloadFile.length() );
+    }
+
+    public String getDownloadFilename()
+    {
+        return downloadFile.getName();
+    }
+
+    public String getMimeType()
+    {
+        return this.mimeType;
     }
 }

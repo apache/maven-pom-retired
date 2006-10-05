@@ -286,6 +286,11 @@
 
     <action name="workingCopy" class="workingCopy">
       <result name="success">/workingCopy.jsp</result>
+      <result name="stream" type="stream">
+        <param name="contentType">application/octet-stream</param>
+        <param name="contentDisposition">filename="${downloadFilename}"</param>
+        <param name="contentLength">${fileLength}</param>
+      </result>
     </action>
 
     <!--
