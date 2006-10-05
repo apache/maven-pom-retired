@@ -105,9 +105,9 @@ public class WorkingCopyAction
             downloadFile = new File( getContinuum().getWorkingDirectory( projectId ) + dir + currentFile );
             mimeType = mimeTypesMap.getContentType( downloadFile );
             
-            if ( ( mimeType.contains( "image" ) ) ||
-                 ( mimeType.contains( "java-archive" ) ) ||
-                 ( mimeType.contains( "java-class" ) ) ||
+            if ( ( mimeType.indexOf( "image" ) >= 0 ) ||
+                 ( mimeType.indexOf( "java-archive" ) >= 0 ) ||
+                 ( mimeType.indexOf( "java-class" ) >= 0 ) ||
                  ( downloadFile.length() > 100000 ) )
             {
                 return "stream";
