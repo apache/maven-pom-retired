@@ -93,7 +93,7 @@
     </action>
 
     <action name="buildProject" class="buildProject">
-      <result name="success" type="chain">groupSummary</result>
+      <result name="success" type="chain">projectGroupSummary</result>
     </action>
 
     <action name="projectView" class="projectView">
@@ -212,7 +212,7 @@
     </action>
 
     <action name="buildProjectGroup" class="projectGroup" method="build">
-      <result name="success" type="chain">groupSummary</result>
+      <result name="success" type="chain">projectGroupSummary</result>
     </action>
 
     <action name="removeProjectGroup" class="projectGroup" method="remove">
