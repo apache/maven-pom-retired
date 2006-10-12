@@ -30,7 +30,7 @@
             <c1:data label="%{getText('configuration.companyUrl.label')}" name="companyUrl"/>
           </table>
           <div class="functnbar3">
-            <ww:form action="editConfiguration.action" method="post">
+            <ww:form action="configuration!input.action" method="post">
               <ww:submit value="%{getText('edit')}"/>
             </ww:form>
           </div>

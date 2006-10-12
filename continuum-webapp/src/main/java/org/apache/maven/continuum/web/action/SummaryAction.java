@@ -40,6 +40,8 @@ public class SummaryAction
 {
     private int projectGroupId;
 
+    private String projectGroupName;
+
     private int nbSuccesses;
 
     private int nbFailures;
@@ -157,5 +159,16 @@ public class SummaryAction
     public void setProjectGroupId( int projectGroupId )
     {
         this.projectGroupId = projectGroupId;
+    }
+
+
+    public String getProjectGroupName()
+    {
+        return projectGroupName;
+    }
+
+    public void setProjectGroupName( String projectGroupName )
+    {
+        this.projectGroupName = projectGroupName;
     }
 }

@@ -10,12 +10,15 @@
   <body>
   <div id="h3">
 
-    <h3>Project Groups</h3>
-
-    <p/>
-
-    <ww:if test="%{groups.isEmpty()}">
-      <b>No Project Groups Known.</b>
+    <ww:if test="${infoMessage != null}">
+       <p>${infoMessage}</p>
+    </ww:if>
+    <ww:else>
+       <h3>Project Groups</h3>
+    </ww:else>
+  
+    <ww:if test="${groups == null }">
+      No Project Groups Known.
     </ww:if>
 
     <div class="eXtremeTable" >

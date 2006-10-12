@@ -81,6 +81,7 @@
   </build>
   <modules>
     <module>continuum-api</module>
+    <module>continuum-security</module>
     <module>continuum-cc</module>
     <!-- module>continuum-core-it</module -->    <!-- TODO RE-ADD it when continuum-plexus-application will be back -->
     <module>continuum-core</module>
@@ -294,6 +295,11 @@
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-release</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-security</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>

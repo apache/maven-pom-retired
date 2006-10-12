@@ -53,6 +53,7 @@ import java.util.Map;
 public class GroupSummaryAction
     extends ContinuumActionSupport
 {
+    private String infoMessage;
 
     private List groups;
 
@@ -180,4 +181,14 @@ public class GroupSummaryAction
         return groups;
     }
 
+
+    public String getInfoMessage()
+    {
+        return infoMessage;
+    }
+
+    public void setInfoMessage( String infoMessage )
+    {
+        this.infoMessage = infoMessage;
+    }
 }

@@ -18,7 +18,6 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.Continuum;
-import org.apache.maven.continuum.initialization.ContinuumInitializationException;
 import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 import com.opensymphony.xwork.Preparable;
@@ -41,15 +40,7 @@ public class ContinuumActionSupport
     public void prepare()
         throws Exception
     {
-        getLogger().debug( "Checking if Continuum is initialized" );
-
-        if ( !continuum.getConfiguration().isInitialized() )
-        {
-            throw new ContinuumInitializationException( "This is your first time running continuum, "
-                + "when you access it through a web browser you will need to enter some "
-                + "information before being able to use it. " + "You can ignore this exception." );
-        }
-
+ 
     }
 
     public Continuum getContinuum()

@@ -2,6 +2,7 @@
 <%@ taglib uri="http://www.extremecomponents.org" prefix="ec" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="continuum" prefix="c1" %>
+<%@ taglib uri="/plexusSecuritySystem" prefix="pss" %>
 
 <html>
   <ww:i18n name="localization.Continuum">
@@ -27,9 +28,8 @@
             </ww:url>            
             <c1:data label="%{getText('projectView.project.group')}" name="project.projectGroup.name" valueLink="%{'${projectGroupSummaryUrl}'}"/>
           </table>
-          <!--
-            TODO wrap this in security tag
-          -->
+
+          <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
           <div class="functnbar3">
             <table>
               <tbody>
@@ -50,6 +50,7 @@
               </tbody>
             </table>
           </div>
+          </pss:ifAuthorized>
         </div>
 
         <h3><ww:text name="projectView.buildDefinitions"/></h3>
@@ -59,10 +60,12 @@
         </ww:action>
 
         <div class="functnbar3">
+           <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
           <ww:form action="buildDefinition" method="post">
             <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
             <ww:submit value="%{getText('add')}"/>
           </ww:form>
+          </pss:ifAuthorized>
         </div>
 
         <h3><ww:text name="projectView.notifiers"/></h3>
@@ -80,6 +83,7 @@
             <ec:column property="events" title="projectView.notifier.events" cell="org.apache.maven.continuum.web.view.projectview.NotifierEventCell"/>
             <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
             <ec:column property="actions" title="&nbsp;">
+               <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
                 <c:if test="${!pageScope.notifier.fromProject}">
                     <a href='<ww:url value="${notifier.type}NotifierEdit!default.action">
                       <ww:param name="projectId" value="project.id"/>
@@ -96,14 +100,17 @@
                       <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0">
                     </a>
                 </c:if>
+              </pss:ifAuthorized>
             </ec:column>
           </ec:row>
         </ec:table>
         <div class="functnbar3">
+           <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
           <ww:form action="addNotifier!default.action" method="post">
             <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
             <ww:submit value="%{getText('add')}"/>
           </ww:form>
+          </pss:ifAuthorized>
         </div>
 
         <h3><ww:text name="projectView.dependencies"/></h3>

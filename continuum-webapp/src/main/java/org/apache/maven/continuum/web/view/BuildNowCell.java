@@ -21,6 +21,14 @@ import org.apache.maven.continuum.web.model.ProjectSummary;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
 import org.extremecomponents.table.core.TableModel;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.security.system.SecuritySession;
+import org.codehaus.plexus.security.system.SecuritySystemConstants;
+import org.codehaus.plexus.security.system.SecuritySystem;
+import org.codehaus.plexus.security.authorization.AuthorizationException;
+import org.codehaus.plexus.xwork.PlexusLifecycleListener;
+import com.opensymphony.xwork.ActionContext;
 
 /**
  * Used in Summary view
@@ -39,6 +47,33 @@ public class BuildNowCell
         ProjectSummary project = (ProjectSummary) tableModel.getCurrentRowBean();
 
         String contextPath = tableModel.getContext().getContextPath();
+
+        // do the authz bit
+        ActionContext context = ActionContext.getContext();
+
+        PlexusContainer container = (PlexusContainer) context.getApplication().get( PlexusLifecycleListener.KEY );
+        SecuritySession securitySession =
+            (SecuritySession) context.getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
+
+        try
+        {
+            SecuritySystem securitySystem = (SecuritySystem) container.lookup( SecuritySystem.ROLE );
+
+            if ( !securitySystem.isAuthorized( securitySession, "continuum-build-group",
+                                               project.getProjectGroupName() ) )
+            {
+                return image( contextPath, "Not Authorized", "buildnow_disabled.gif" );
+            }
+        }
+        catch ( ComponentLookupException cle )
+        {
+            return image( contextPath, "Not Authorized[cle]", "buildnow_disabled.gif" );
+        }
+        catch ( AuthorizationException ae )
+        {
+            return image( contextPath, "Not Authorized[ae]", "buildnow_disabled.gif" );
+        }
+
 
         if ( project.isInQueue() )
         {

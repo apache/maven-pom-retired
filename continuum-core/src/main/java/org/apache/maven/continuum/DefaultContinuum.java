@@ -1033,6 +1033,8 @@ public class DefaultContinuum
 
                 int projectGroupId = AbstractContinuumAction.getProjectGroupId( pgContext );
 
+
+
                 projectGroup = store.getProjectGroupWithProjects( projectGroupId );
             }
 
@@ -1084,6 +1086,9 @@ public class DefaultContinuum
         {
             throw new ContinuumException( "Error adding projects from modules", e );
         }
+        context.put( AbstractContinuumAction.KEY_PROJECT_GROUP_ID, new Integer( projectGroup.getId() ) );
+        // add the relevent security administration roles for this project
+        executeAction( "add-assignable-roles", context );
 
         return result;
     }
@@ -2260,6 +2265,7 @@ public class DefaultContinuum
         }
         catch ( ActionNotFoundException e )
         {
+            e.printStackTrace( );
             throw new ContinuumException( "Error while executing the action '" + actionName + "'.", e );
         }
         catch ( ContinuumException e )

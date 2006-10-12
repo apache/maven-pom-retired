@@ -40,6 +40,8 @@ public class BuildDefinitionSummaryAction
 {
     private int projectGroupId;
 
+    private String projectGroupName;
+
     private int projectId;
     
     private ProjectGroup projectGroup;
@@ -169,6 +171,16 @@ public class BuildDefinitionSummaryAction
     public void setProjectGroupId( int projectGroupId )
     {
         this.projectGroupId = projectGroupId;
+    }
+
+    public String getProjectGroupName()
+    {
+        return projectGroupName;
+    }
+
+    public void setProjectGroupName( String projectGroupName )
+    {
+        this.projectGroupName = projectGroupName;
     }
 
     public List getProjectBuildDefinitionSummaries()

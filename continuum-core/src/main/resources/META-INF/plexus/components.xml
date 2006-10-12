@@ -564,6 +564,20 @@
      -->
     <component>
       <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>add-assignable-roles</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.AddAssignableRolesAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.rbac.profile.RoleProfileManager</role>
+          <role-hint>continuum</role-hint>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
       <role-hint>add-build-definition-to-project</role-hint>
       <implementation>org.apache.maven.continuum.core.action.AddBuildDefinitionToProjectAction</implementation>
       <requirements>

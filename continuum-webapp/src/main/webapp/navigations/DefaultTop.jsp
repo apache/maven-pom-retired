@@ -1,4 +1,7 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="/plexusSecuritySystem" prefix="pss" %>
+
 <ww:i18n name="localization.Continuum">
 <div id="banner">
   <table border="1" cellpadding="8" cellspacing="0" width="100%">
@@ -20,22 +23,12 @@
 </div>
 
 <div id="breadcrumbs">
+
   <div style="float: right;">
     <a href="http://maven.apache.org/continuum">Continuum</a> |
     <a href="http://maven.apache.org/">Maven</a> |
     <a href="http://www.apache.org/">Apache</a>
   </div>
-
-  <div>
-    <ww:url id="loginUrl" action="login"/>
-    <ww:url id="logoutUrl" action="logout"/>
-    <ww:if test="${sessionScope.loggedIn != true}">
-      Welcome, <b>${sessionScope.user.username}</b> - <ww:a href="%{loginUrl}">Login</ww:a>
-    </ww:if>
-    <ww:else>
-      Welcome, <b>${sessionScope.user.username}</b> - <ww:a href="%{logoutUrl}">Logout</ww:a>
-    </ww:else>
-
-  </div>
+  <c:import url="/WEB-INF/jsp/pss/include/securityLinks.jsp"/>
 </div>
 </ww:i18n>

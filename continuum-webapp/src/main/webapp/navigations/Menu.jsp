@@ -1,6 +1,7 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
-<%@ taglib uri="continuum" prefix="c1" %>
+<%@ taglib uri="/plexusSecuritySystem" prefix="pss" %>
+
 <ww:i18n name="localization.Continuum">
 <div id="navcolum">
   <div id="projectmenu" class="toolgroup">
@@ -15,7 +16,8 @@
     </div>
   </div>
 
-    <div id="projectmenu" class="toolgroup">
+  <pss:ifAuthorized permission="continuum-add-group">
+  <div id="projectmenu" class="toolgroup">
       <div class="label"><ww:text name="menu.addProject"/></div>
       <div>
         <div class="body">
@@ -30,35 +32,36 @@
         <div class="body">
           <a href="<ww:url value="/addProjectInput.action" includeParams="none"><ww:param name="projectType">shell</ww:param></ww:url>"><ww:text name="menu.add.shellProject"/></a>
         </div>
+    </div>
+  </pss:ifAuthorized>
+
+
+  <pss:ifAnyAuthorized permissions="continuum-manage-schedules,continuum-manage-configuration,continuum-manage-users">
+  <div id="projectmenu" class="toolgroup">
+    <div class="label"><ww:text name="menu.administration"/></div>
+    <div>
+      <pss:ifAuthorized permission="continuum-manage-schedules">
+        <ww:url id="scheduleUrl" action="schedules"/>
+        <div class="body">
+          <ww:a href="%{scheduleUrl}"><ww:text name="menu.administration.schedules"/></ww:a>
+        </div>
+      </pss:ifAuthorized>
+      <pss:ifAuthorized permission="continuum-manage-configuration">
+        <ww:url id="configurationUrl" action="configuration" method="default"/>
+        <div class="body">
+          <ww:a href="%{configurationUrl}"><ww:text name="menu.administration.configuration"/></ww:a>
+        </div>
+      </pss:ifAuthorized>
+      <pss:ifAuthorized permission="continuum-manage-users">
+        <ww:url id="userListUrl" action="userlist" namespace="/security" includeParams="none"/>
+        <div class="body">
+          <ww:a href="%{userListUrl}">Users</ww:a>
+        </div>
+      </pss:ifAuthorized>
       </div>
     </div>
 
-    <div id="projectmenu" class="toolgroup">
-      <div class="label"><ww:text name="menu.administration"/></div>
-      <div>
-      <c1:ifAuthorized permission="manageSchedule">
-          <div class="body">
-            <a href="<ww:url value="/schedules.action" includeParams="none"/>"><ww:text name="menu.administration.schedules"/></a>
-          </div>
-      </c1:ifAuthorized>
-      <c1:ifAuthorized permission="manageConfiguration">
-          <div class="body">
-            <a href="<ww:url value="/editConfiguration.action" includeParams="none"/>"><ww:text name="menu.administration.configuration"/></a>
-          </div>
-      </c1:ifAuthorized>
-      <c1:ifAuthorized permission="manageUsers">
-        <div class="body">
-          <ww:url id="userManagementUrl" action="users"/>
-          <ww:a href="%{userManagementUrl}">Users</ww:a>
-        </div>
-        <div class="body">
-          <ww:url id="userGroupManagementUrl" action="userGroups"/>
-          <ww:a href="%{userGroupManagementUrl}">User Groups</ww:a>
-        </div>
-      </c1:ifAuthorized>
-      </div>
-    </div>
-
+  </pss:ifAnyAuthorized>
   <div id="projectmenu" class="toolgroup">
     <div class="label">Legend</div>
     <div id="legend">

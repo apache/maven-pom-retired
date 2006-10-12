@@ -17,6 +17,7 @@
 
         <ww:action name="groupBuildDefinitionSummary" executeResult="true" namespace="component">
           <ww:param name="projectGroupId" value="%{projectGroupId}"/>
+          <ww:param name="projectGroupName" value="%{projectGroup.name}"/>
         </ww:action>
       </div>
     </body>

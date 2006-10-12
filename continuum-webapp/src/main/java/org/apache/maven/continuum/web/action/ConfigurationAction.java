@@ -16,23 +16,23 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.util.Collections;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.maven.continuum.Continuum;
+import com.opensymphony.xwork.Preparable;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
-import org.apache.maven.continuum.model.system.ContinuumUser;
-import org.apache.maven.continuum.model.system.UserGroup;
-import org.apache.maven.continuum.security.ContinuumSecurity;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
+import org.codehaus.plexus.security.policy.UserSecurityPolicy;
+import org.codehaus.plexus.security.rbac.Resource;
+import org.codehaus.plexus.security.system.SecuritySystem;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.codehaus.plexus.security.user.User;
+import org.codehaus.plexus.security.user.UserManager;
+import org.codehaus.plexus.security.user.UserNotFoundException;
 
-import com.opensymphony.webwork.ServletActionContext;
+import java.io.File;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -43,29 +43,21 @@ import com.opensymphony.webwork.ServletActionContext;
  *   role-hint="configuration"
  */
 public class ConfigurationAction
-    extends PlexusActionSupport
+    extends ContinuumActionSupport
+    implements Preparable, SecureAction
 {
-    /**
-     * @plexus.requirement
-     */
-    private Continuum continuum;
-
+    
     /**
      * @plexus.requirement
      */
     private ContinuumStore store;
 
+    /**
+     * @plexus.requirement
+     */
+    private SecuritySystem securitySystem;
+
     private boolean guestAccountEnabled;
-
-    private String username;
-
-    private String password;
-
-    private String passwordTwo;
-
-    private String fullName;
-
-    private String email;
 
     private String workingDirectory;
 
@@ -81,37 +73,44 @@ public class ConfigurationAction
 
     private String companyUrl;
 
+
+    public void prepare()
+    {
+        try{
+
+
+        ConfigurationService configuration = getContinuum().getConfiguration();
+
+        guestAccountEnabled = getGuestAccountLockingStatus();
+
+        workingDirectory = configuration.getWorkingDirectory().getAbsolutePath();
+
+        buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
+
+        baseUrl = configuration.getUrl();
+
+        companyLogo = configuration.getCompanyLogo();
+
+        companyName = configuration.getCompanyName();
+
+        companyUrl = configuration.getCompanyUrl();
+        } catch ( Exception e)
+        {
+            e.printStackTrace( );
+        }
+    }
+
     public String save()
         throws ConfigurationStoringException, ContinuumStoreException
     {
-        //todo switch this to validation
 
-        ContinuumUser adminUser = new ContinuumUser();
-
-        adminUser.setUsername( username );
-        adminUser.setPassword( password );
-        adminUser.setEmail( email );
-        adminUser.setFullName( fullName );
-        adminUser.setGroup( store.getUserGroup( ContinuumSecurity.ADMIN_GROUP_NAME ) );
-
-        store.addUser( adminUser );
-
-        ConfigurationService configuration = continuum.getConfiguration();
-
-        if ( guestAccountEnabled )
+        try
         {
-            configuration.setGuestAccountEnabled( guestAccountEnabled );
-        }
-        else
-        {
-            configuration.setGuestAccountEnabled( false );
+        ConfigurationService configuration = getContinuum().getConfiguration();
 
-            UserGroup guestGroup = store.getUserGroup( ContinuumSecurity.GUEST_GROUP_NAME );
+        configuration.setGuestAccountEnabled( guestAccountEnabled );
 
-            guestGroup.setPermissions( Collections.EMPTY_LIST );
-
-            store.updateUserGroup( guestGroup );
-        }
+        resolveGuestAccountLockingStatus();
 
         configuration.setWorkingDirectory( new File( workingDirectory ) );
 
@@ -129,44 +128,73 @@ public class ConfigurationAction
 
         configuration.setInitialized( true );
         configuration.store();
-
-        return SUCCESS;
-    }
-
-    public String edit()
-        throws Exception
-    {
-        setConfiguration();
-        return SUCCESS;
-    }
-
-    private void setConfiguration()
-    {
-        ConfigurationService configuration = continuum.getConfiguration();
-
-        guestAccountEnabled = configuration.isGuestAccountEnabled();
-
-        workingDirectory = configuration.getWorkingDirectory().getAbsolutePath();
-
-        buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
-
-        baseUrl = configuration.getUrl();
-
-        if ( StringUtils.isEmpty( baseUrl ) )
-        {
-            HttpServletRequest request = ServletActionContext.getRequest();
-            baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                + request.getContextPath();
-            getLogger().info( "baseUrl='" + baseUrl + "'" );
         }
-
-        companyLogo = configuration.getCompanyLogo();
-
-        companyName = configuration.getCompanyName();
-
-        companyUrl = configuration.getCompanyUrl();
+        catch (Exception e)
+        {
+            e.printStackTrace( );
+        }
+        return SUCCESS;
 
     }
+
+
+    private void resolveGuestAccountLockingStatus()
+    {
+
+        UserManager userManager = securitySystem.getUserManager();
+        UserSecurityPolicy policy = securitySystem.getPolicy();
+
+        User guest;
+
+        try
+        {
+            guest = userManager.findUser( "guest" );
+            guest.setLocked( guestAccountEnabled );
+            userManager.updateUser( guest );
+        }
+        catch ( UserNotFoundException ne )
+        {
+            policy.setEnabled( false );
+
+            guest = userManager.createUser( "guest", "Guest", "" );
+            guest.setLocked( guestAccountEnabled );
+            guest = userManager.addUser( guest );
+
+        }
+        finally
+        {
+            policy.setEnabled( true );
+        }       
+    }
+
+    private boolean getGuestAccountLockingStatus()
+    {
+        UserManager userManager = securitySystem.getUserManager();
+        UserSecurityPolicy policy = securitySystem.getPolicy();
+
+        User guest;
+
+        try
+        {
+            guest = userManager.findUser( "guest" );
+
+            return guest.isLocked();
+        }
+        catch ( UserNotFoundException ne )
+        {
+            policy.setEnabled( false );
+
+            guest = userManager.createUser( "guest", "Guest", "" );
+            guest = userManager.addUser( guest );
+
+            return guest.isLocked();
+        }
+        finally
+        {
+            policy.setEnabled( true );
+        }
+    }
+
 
     public boolean isGuestAccountEnabled()
     {
@@ -176,56 +204,6 @@ public class ConfigurationAction
     public void setGuestAccountEnabled( boolean guestAccountEnabled )
     {
         this.guestAccountEnabled = guestAccountEnabled;
-    }
-
-    public String getUsername()
-    {
-        return username;
-    }
-
-    public void setUsername( String username )
-    {
-        this.username = username;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword( String password )
-    {
-        this.password = password;
-    }
-
-    public String getPasswordTwo()
-    {
-        return passwordTwo;
-    }
-
-    public void setPasswordTwo( String passwordTwo )
-    {
-        this.passwordTwo = passwordTwo;
-    }
-
-    public String getFullName()
-    {
-        return fullName;
-    }
-
-    public void setFullName( String fullName )
-    {
-        this.fullName = fullName;
-    }
-
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public void setEmail( String email )
-    {
-        this.email = email;
     }
 
     public String getWorkingDirectory()
@@ -296,5 +274,16 @@ public class ConfigurationAction
     public void setCompanyUrl( String companyUrl )
     {
         this.companyUrl = companyUrl;
+    }
+
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+    {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_MANAGE_CONFIGURATION, Resource.GLOBAL );
+
+        return bundle;
     }
 }

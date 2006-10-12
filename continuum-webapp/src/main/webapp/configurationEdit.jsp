@@ -9,7 +9,8 @@
   <body>
   <div id="axial" class="h3">
     <h3><ww:text name="configuration.section.title"/></h3>
-    <ww:form action="configuration.action" method="post" validate="true">
+
+    <ww:form action="configuration!save" method="post">
 
       <ww:if test="hasActionErrors()">
         <h3>Action Error</h3>
@@ -17,30 +18,6 @@
       <p>
         <ww:actionerror/>
       </p>
-
-      <div class="axial">
-        <table border="1" cellspacing="2" cellpadding="3" width="100%">
-
-          <ww:textfield label="%{getText('user.username.label')}" name="username" required="true">
-            <ww:param name="desc"><p><ww:text name="user.username.message"/></p></ww:param>
-          </ww:textfield>
-
-          <ww:textfield label="%{getText('user.fullName.label')}" name="fullName" required="true">
-            <ww:param name="desc"><p><ww:text name="user.fullName.message"/></p></ww:param>
-          </ww:textfield>
-
-          <ww:textfield label="%{getText('user.email.label')}" name="email">
-            <ww:param name="desc"><p><ww:text name="user.email.message"/></p></ww:param>
-          </ww:textfield>
-
-          <ww:password label="%{getText('user.password.label')}" name="password" required="true"/>
-
-          <ww:password label="%{getText('user.passwordTwo.label')}" name="passwordTwo" required="true">
-            <ww:param name="desc"><p><ww:text name="user.passwordTwo.message"/></p></ww:param>
-          </ww:password>
-
-        </table>
-      </div>
 
       <div class="axial">
 

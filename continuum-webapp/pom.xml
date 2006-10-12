@@ -32,6 +32,57 @@
       </resource>
     </resources>
     <plugins>
+           <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.1.1-20060724.192148-1</version>
+        <!-- This configuration is added to cleanup from war:inplace -->
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${basedir}/</directory>
+              <includes>
+                <include>derby.log</include>
+              </includes>
+            </fileset>
+            <fileset>
+              <directory>${basedir}/src/main/webapp</directory>
+              <includes>
+                <!-- TODO: META-INF shouldn't be required, seems to be an issue with the current war plugin -->
+                <include>META-INF</include>
+                <include>WEB-INF/classes</include>      <!-- Classes and Resources from other wars -->
+                <include>WEB-INF/lib</include>          <!-- Dependencies from other wars -->
+                <include>WEB-INF/database</include>     <!-- Database location configured in application.xml -->
+                <include>WEB-INF/logs</include>         <!-- Log file location specified in application.xml -->
+                <include>pss</include>                  <!-- plexus-security css and javascript -->
+                <include>WEB-INF/jsp/pss</include>      <!-- plexus-security jsps -->
+                <include>WEB-INF/template/pss</include> <!-- plexus-security xwork templates -->
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+            <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.0.1</version>
+        <configuration>
+          <!-- Some versions of maven-war-plugin (snapshots) have this incorrectly defaulted to true.
+               Specifically setting this to false to avoid accidental jar file creation. -->
+          <archiveClasses>false</archiveClasses>
+          <dependentWarExcludes>META-INF/**,WEB-INF/web.xml,WEB-INF/classes/xwork.xml</dependentWarExcludes>
+        </configuration>
+        <!-- TODO: would be good to make the jetty plugin aware of these and remove the below -->
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <!-- Needed to get the plexus-security war overlay to do its thing before jetty:run -->
+              <goal>inplace</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
@@ -128,28 +179,16 @@
           </excludes>
         </configuration>
       </plugin>
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>src/main/webapp/WEB-INF</directory>
-              <includes>
-                <include>database</include>
-                <include>temp</include>
-                <include>logs</include>
-                <include>working-directory</include>
-              </includes>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-security</artifactId>
     </dependency>
     <dependency> <!-- added since depMgt doesn't override imported dependencies -->
       <groupId>org.codehaus.plexus</groupId>
@@ -283,6 +322,112 @@
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-ssh</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <!--
+      Plexus Security Dependencies
+      -->
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-system</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-ui-web</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-ui-web-integration</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-ui-web-taglib</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-ui-web-rbac</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-authentication-provider-user-manager</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-user-management-api</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-user-management-provider-jdo</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-authorization-rbac-store-jdo</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-keys-jdo</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+     <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-authentication-provider-keystore</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-authorization-api</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-authorization-rbac-authorizer</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+        <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-jdo2</artifactId>
+      <version>1.0-alpha-7-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xmlParserAPIs</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>10.1.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>jpox</groupId>
+      <artifactId>jpox</artifactId>
+      <version>1.1.1</version>
+      <exclusions>
+        <!-- targeting JDK 1.4 we don't need this -->
+        <exclusion>
+          <groupId>javax.sql</groupId>
+          <artifactId>jdbc-stdext</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 </project>
