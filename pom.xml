@@ -105,15 +105,7 @@
         <enabled>false</enabled>
       </releases>
     </repository>
-    <repository>
-      <id>people.apache.org</id>
-      <name>Apache Snapshot Development Repository</name>
-      <url>http://people.apache.org/repo/m2-snapshot-repository</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
-  </repositories>
+    </repositories>
   <pluginRepositories>
     <pluginRepository>
       <id>codehaus.org</id>
@@ -123,7 +115,12 @@
         <enabled>false</enabled>
       </releases>
     </pluginRepository>
-  </pluginRepositories>
+    <pluginRepository>
+      <id>people.apache.org</id>
+      <name>Apache Snapshot Development Repository</name>
+      <url>http://people.apache.org/repo/m2-snapshot-repository</url>
+    </pluginRepository>
+   </pluginRepositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
