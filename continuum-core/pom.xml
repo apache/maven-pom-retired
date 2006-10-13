@@ -35,10 +35,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-security-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-local</artifactId>
       <scope>test</scope>
@@ -167,23 +163,23 @@
     <dependency>
       <groupId>org.codehaus.plexus.security</groupId>
       <artifactId>plexus-security-rbac-profile</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0-alpha-6-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus.security</groupId>
       <artifactId>plexus-security-ui-web-integration</artifactId>
       <scope>test</scope>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0-alpha-6-SNAPSHOT</version>
     </dependency>
      <dependency>
       <groupId>org.codehaus.plexus.security</groupId>
       <artifactId>plexus-security-authorization-rbac-model</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0-alpha-6-SNAPSHOT</version>
     </dependency>
      <dependency>
       <artifactId>plexus-security-authorization-rbac-store-memory</artifactId>
       <groupId>org.codehaus.plexus.security</groupId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0-alpha-6-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
