@@ -119,6 +119,9 @@
       <id>people.apache.org</id>
       <name>Apache Snapshot Development Repository</name>
       <url>http://people.apache.org/repo/m2-snapshot-repository</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
     </pluginRepository>
    </pluginRepositories>
   <dependencies>
