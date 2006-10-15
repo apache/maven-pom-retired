@@ -622,7 +622,6 @@
          <configuration>
            <enabled>true</enabled>
            <cookie-timeout>30</cookie-timeout>
-           <cookie-domain>localhost</cookie-domain>
          </configuration>
        </component>
 
