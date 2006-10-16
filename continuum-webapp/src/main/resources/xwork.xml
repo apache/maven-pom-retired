@@ -223,7 +223,9 @@
 
     <action name="removeProjectGroup" class="projectGroup" method="remove">
       <result name="confirm">/confirmGroupRemoval.jsp</result>
-      <result name="success" type="chain">groupSummary</result>
+      <result name="success" type="redirect-action">
+        <param name="actionName">groupSummary</param>
+      </result>
     </action>
 
     <!--
