@@ -57,7 +57,7 @@
   <div class="functnbar3">
     <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
     <ww:form action="buildDefinition" method="post">
-      <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupid"/>"/>
+      <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
       <ww:submit value="%{getText('add')}"/>
     </ww:form>
     </pss:ifAuthorized>
