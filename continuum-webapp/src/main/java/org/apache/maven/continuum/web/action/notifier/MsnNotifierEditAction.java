@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.web.action;
+package org.apache.maven.continuum.web.action.notifier;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -17,6 +17,7 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.web.action.notifier.AbstractNotifierEditAction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,15 +28,23 @@ import java.util.Map;
  *
  * @plexus.component
  *   role="com.opensymphony.xwork.Action"
- *   role-hint="mailNotifierEdit"
+ *   role-hint="msnNotifierEdit"
  */
-public class MailNotifierEditAction
+public class MsnNotifierEditAction
     extends AbstractNotifierEditAction
 {
+    private String login;
+
+    private String password;
+
     private String address;
 
     protected void initConfiguration( Map configuration )
     {
+        login = (String) configuration.get( "login" );
+
+        password = (String) configuration.get( "password" );
+
         address = (String) configuration.get( "address" );
     }
 
@@ -43,9 +52,33 @@ public class MailNotifierEditAction
     {
         HashMap configuration = new HashMap();
 
+        configuration.put( "login", login );
+
+        configuration.put( "password", password );
+
         configuration.put( "address", address );
 
         notifier.setConfiguration( configuration );
+    }
+
+    public String getLogin()
+    {
+        return login;
+    }
+
+    public void setLogin( String login )
+    {
+        this.login = login;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword( String password )
+    {
+        this.password = password;
     }
 
     public String getAddress()

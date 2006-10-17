@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.web.action;
+package org.apache.maven.continuum.web.action.notifier;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.
@@ -17,6 +17,7 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.web.action.notifier.AbstractNotifierEditAction;
 
 import java.util.HashMap;
 import java.util.Map;

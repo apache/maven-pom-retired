@@ -1,4 +1,6 @@
-package org.apache.maven.continuum.web.action;
+package org.apache.maven.continuum.web.action.notifier;
+
+import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
 /*
  * Copyright 2004-2005 The Apache Software Foundation.

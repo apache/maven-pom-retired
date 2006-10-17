@@ -280,6 +280,10 @@
       <result name="success" type="chain">projectView</result>
     </action>
 
+
+    <!--
+    *  build results, test reporting, working copy actions
+    -->
     <action name="buildResults" class="buildResults">
       <result name="success">/WEB-INF/jsp/buildResults.jsp</result>
     </action>

@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.web.action;
+package org.apache.maven.continuum.web.action.notifier;
 
 /*
  * Copyright 2004-2006 The Apache Software Foundation.
@@ -16,10 +16,11 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import java.util.Map;
-
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.web.action.ContinuumActionSupport;
+
+import java.util.Map;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
