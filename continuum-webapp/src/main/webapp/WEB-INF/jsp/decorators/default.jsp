@@ -13,14 +13,14 @@
   </head>
 
   <body onload="focus()" marginwidth="0" marginheight="0" class="composite">
-    <ww:include value="/navigations/DefaultTop.jsp"/>
+    <ww:include value="/WEB-INF/jsp/navigations/DefaultTop.jsp"/>
 
     <table id="main" border="0" cellpadding="4" cellspacing="0" width="100%">
       <tbody>
         <tr valign="top">
           <td id="leftcol" width="180">
             <br /> <br />
-            <ww:include value="/navigations/Menu.jsp"/>
+            <ww:include value="/WEB-INF/jsp/navigations/Menu.jsp"/>
           </td>
           <td width="86%">
             <br />
@@ -34,6 +34,6 @@
       </tbody>
     </table>
 
-    <ww:include value="/navigations/DefaultBottom.jsp"/>
+    <ww:include value="/WEB-INF/jsp/navigations/DefaultBottom.jsp"/>
   </body>
 </html>

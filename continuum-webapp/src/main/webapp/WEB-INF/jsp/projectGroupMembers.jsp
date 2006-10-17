@@ -13,10 +13,9 @@
     <body>
       <div id="h3">
 
-        <jsp:include page="/navigations/ProjectGroupMenu.jsp">
-          <jsp:param name="tab" value="members"/>
-        </jsp:include>
-        
+       <ww:action name="projectGroupTab" executeResult="true">
+      <ww:param name="tabName" value="'Members'"/>
+    </ww:action>
     <div class="axial">
       <!--
       Scan for new Projects?

@@ -1,4 +1,4 @@
-<decorators defaultdir="/decorators">
+<decorators defaultdir="/WEB-INF/jsp/decorators">
   <decorator name="none" page="none.jsp">
     <pattern>/initializeConfiguration*</pattern>
   </decorator>

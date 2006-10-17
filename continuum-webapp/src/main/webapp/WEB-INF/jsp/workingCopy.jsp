@@ -7,7 +7,7 @@
     <body>
       <div id="h3">
 
-        <jsp:include page="/navigations/ProjectMenu.jsp">
+        <jsp:include page="/WEB-INF/jsp/navigations/ProjectMenu.jsp">
           <jsp:param name="tab" value="workingCopy"/>
         </jsp:include>
 

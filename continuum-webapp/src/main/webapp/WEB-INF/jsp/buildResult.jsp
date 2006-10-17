@@ -10,7 +10,7 @@
     <body>
       <div id="h3">
 
-        <jsp:include page="/navigations/ProjectMenu.jsp"/>
+        <jsp:include page="/WEB-INF/jsp/navigations/ProjectMenu.jsp"/>
 
         <h3>
             <ww:text name="buildResult.section.title">

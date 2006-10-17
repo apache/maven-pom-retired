@@ -32,7 +32,7 @@
                  cell="org.apache.maven.continuum.web.view.BuildCell"/>
       <ec:column property="projectGroupName" title="summary.projectTable.group" width="13%"/> 
       <ec:column property="buildNowAction" title="&nbsp;" width="1%">
-        <jsp:include page="/components/buildNowCell.jsp"/>
+        <jsp:include page="/WEB-INF/jsp/components/buildNowCell.jsp"/>
       </ec:column>
       <ec:column property="buildHistoryAction" title="&nbsp;" width="1%">
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">

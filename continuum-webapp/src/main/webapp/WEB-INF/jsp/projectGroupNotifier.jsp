@@ -11,9 +11,9 @@
     <body>
       <div id="h3">
 
-        <jsp:include page="/navigations/ProjectGroupMenu.jsp">
-          <jsp:param name="tab" value="notifier"/>
-        </jsp:include>
+        <ww:action name="projectGroupTab" executeResult="true">
+      <ww:param name="tabName" value="'Notifier'"/>
+    </ww:action>
     
         <h3>PROJECT GROUP Notifiers<ww:text name="projectView.section.title"/></h3>
     

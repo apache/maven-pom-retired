@@ -53,9 +53,9 @@
 
     <global-results>
 
-      <result name="error">/error.jsp</result>
-      <result name="internal-error">/error.jsp</result>
-      <result name="internalError" type="redirect">/error.jsp</result>
+      <result name="error">/WEB-INF/jsp/error.jsp</result>
+      <result name="internal-error">/WEB-INF/jsp/error.jsp</result>
+      <result name="internalError" type="redirect">/WEB-INF/jsp/error.jsp</result>
       
       <result name="continuum-configuration-required" type="redirect-action">
         <param name="actionName">configuration</param>
@@ -111,46 +111,49 @@
       <result type="redirect-action">groupSummary</result>
     </action>
 
+    <action name="about" class="about">
+      <result name="success">/WEB-INF/jsp/about.jsp</result>
+    </action>
 
     <action name="configuration" class="configuration">
       <interceptor-ref name="unconfiguredContinuumStack"/>
-      <result name="input">/configurationEdit.jsp</result>
-      <result name="success">/configuration.jsp</result>
+      <result name="input">/WEB-INF/jsp/configurationEdit.jsp</result>
+      <result name="success">/WEB-INF/jsp/configuration.jsp</result>
     </action>
    
     <action name="companyInfo" class="configuration">
-      <result name="success">/components/companyLogo.jsp</result>
+      <result name="success">/WEB-INF/jsp/components/companyLogo.jsp</result>
     </action>
 
     <action name="summary" class="summary">
-      <result name="success">/summary.jsp</result>
+      <result name="success">/WEB-INF/jsp/summary.jsp</result>
     </action>
 
     <action name="groupSummary" class="groupSummary">
-      <result name="success">/groupSummary.jsp</result>
+      <result name="success">/WEB-INF/jsp/groupSummary.jsp</result>
     </action>
 
     <action name="addMavenTwoProject" class="addMavenTwoProject">
-      <result name="input">/addMavenTwoProject.jsp</result>
+      <result name="input">/WEB-INF/jsp/addMavenTwoProject.jsp</result>
       <result name="success" type="chain">groupSummary</result>
     </action>
 
     <action name="addMavenOneProject" class="addMavenOneProject">
-      <result name="input">/addMavenOneProject.jsp</result>
+      <result name="input">/WEB-INF/jsp/addMavenOneProject.jsp</result>
       <result name="success" type="chain">groupSummary</result>
     </action>
 
     <action name="addProjectInput" class="addProject" method="input">
-      <result name="success">/addProject.jsp</result>
+      <result name="success">/WEB-INF/jsp/addProject.jsp</result>
     </action>
 
     <action name="addProject" class="addProject" method="add">
-      <result name="input">/addProject.jsp</result>
+      <result name="input">/WEB-INF/jsp/addProject.jsp</result>
       <result name="success" type="chain">groupSummary</result>
     </action>
 
     <action name="deleteProject" class="deleteProject">
-      <result name="delete">/deleteProject.jsp</result>
+      <result name="delete">/WEB-INF/jsp/deleteProject.jsp</result>
       <result name="success" type="chain">groupSummary</result>
     </action>
 
@@ -159,15 +162,15 @@
     </action>
 
     <action name="projectView" class="projectView">
-      <result name="success">/projectView.jsp</result>
+      <result name="success">/WEB-INF/jsp/projectView.jsp</result>
     </action>
 
     <action name="projectEdit" class="projectEdit" method="edit">
-      <result name="success">/projectEdit.jsp</result>
+      <result name="success">/WEB-INF/jsp/projectEdit.jsp</result>
     </action>
 
     <action name="projectSave" class="projectEdit" method="save">
-      <result name="input">/projectEdit.jsp</result>
+      <result name="input">/WEB-INF/jsp/projectEdit.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
@@ -175,16 +178,16 @@
     * build definition actions
     -->
     <action name="buildDefinition" class="buildDefinition" method="input">
-      <result name="success">/buildDefinitionEdit.jsp</result>
+      <result name="success">/WEB-INF/jsp/buildDefinitionEdit.jsp</result>
     </action>
 
     <action name="saveProjectBuildDefinition" class="buildDefinition" method="saveToProject">
-      <result name="input">/buildDefinitionEdit.jsp</result>
+      <result name="input">/WEB-INF/jsp/buildDefinitionEdit.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
     <action name="removeProjectBuildDefinition" class="buildDefinition" method="removeFromProject">
-      <result name="confirm">/deleteBuildDefinition.jsp</result>
+      <result name="confirm">/WEB-INF/jsp/deleteBuildDefinition.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
@@ -193,7 +196,7 @@
     </action>
 
     <action name="removeGroupBuildDefinition" class="buildDefinition" method="removeFromProjectGroup">
-      <result name="confirm">/confirmBuildDefinitionRemoval.jsp</result>
+      <result name="confirm">/WEB-INF/jsp/confirmBuildDefinitionRemoval.jsp</result>
       <result name="success" type="chain">projectGroupBuildDefinition</result>
     </action>
 
@@ -202,19 +205,19 @@
     * project group actions
     -->
     <action name="projectGroupSummary" class="projectGroup" method="summary">
-      <result name="success">/projectGroupSummary.jsp</result>
+      <result name="success">/WEB-INF/jsp/projectGroupSummary.jsp</result>
     </action>
 
     <action name="projectGroupMembers" class="projectGroup" method="members">
-      <result name="success">/projectGroupMembers.jsp</result>
+      <result name="success">/WEB-INF/jsp/projectGroupMembers.jsp</result>
     </action>
 
     <action name="projectGroupBuildDefinition" class="projectGroup" method="buildDefinitions">
-      <result name="success">/projectGroupBuildDefinition.jsp</result>
+      <result name="success">/WEB-INF/jsp/projectGroupBuildDefinition.jsp</result>
     </action>
 
     <action name="projectGroupNotifier" class="projectGroup" method="notifiers">
-      <result name="success">/projectGroupNotifier.jsp</result>
+      <result name="success">/WEB-INF/jsp/projectGroupNotifier.jsp</result>
     </action>
 
     <action name="buildProjectGroup" class="projectGroup" method="build">
@@ -222,7 +225,7 @@
     </action>
 
     <action name="removeProjectGroup" class="projectGroup" method="remove">
-      <result name="confirm">/confirmGroupRemoval.jsp</result>
+      <result name="confirm">/WEB-INF/jsp/confirmGroupRemoval.jsp</result>
       <result name="success" type="redirect-action">
         <param name="actionName">groupSummary</param>
       </result>
@@ -232,68 +235,68 @@
     * notifier actions
     -->
     <action name="deleteNotifier" class="deleteNotifier">
-      <result name="delete">/deleteNotifier.jsp</result>
+      <result name="delete">/WEB-INF/jsp/deleteNotifier.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
     <action name="addNotifier" class="addNotifier">
-      <result name="input">/notifierSelectType.jsp</result>
-      <result name="mail_input">/notifierMail.jsp</result>
-      <result name="irc_input">/notifierIrc.jsp</result>
-      <result name="msn_input">/notifierMsn.jsp</result>
-      <result name="jabber_input">/notifierJabber.jsp</result>
+      <result name="input">/WEB-INF/jsp/notifierSelectType.jsp</result>
+      <result name="mail_input">/WEB-INF/jsp/notifierMail.jsp</result>
+      <result name="irc_input">/WEB-INF/jsp/notifierIrc.jsp</result>
+      <result name="msn_input">/WEB-INF/jsp/notifierMsn.jsp</result>
+      <result name="jabber_input">/WEB-INF/jsp/notifierJabber.jsp</result>
     </action>
 
     <action name="mailNotifierEdit" class="mailNotifierEdit" method="edit">
-      <result name="success">/notifierMail.jsp</result>
+      <result name="success">/WEB-INF/jsp/notifierMail.jsp</result>
     </action>
 
     <action name="mailNotifierSave" class="mailNotifierEdit" method="save">
-      <result name="input">/notifierMail.jsp</result>
+      <result name="input">/WEB-INF/jsp/notifierMail.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
     <action name="ircNotifierEdit" class="ircNotifierEdit" method="edit">
-      <result name="success">/notifierIrc.jsp</result>
+      <result name="success">/WEB-INF/jsp/notifierIrc.jsp</result>
     </action>
 
     <action name="ircNotifierSave" class="ircNotifierEdit" method="save">
-      <result name="input">/notifierIrc.jsp</result>
+      <result name="input">/WEB-INF/jsp/notifierIrc.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
     <action name="jabberNotifierEdit" class="jabberNotifierEdit" method="edit">
-      <result name="success">/notifierJabber.jsp</result>
+      <result name="success">/WEB-INF/jsp/notifierJabber.jsp</result>
     </action>
 
     <action name="jabberNotifierSave" class="jabberNotifierEdit" method="save">
-      <result name="input">/notifierJabber.jsp</result>
+      <result name="input">/WEB-INF/jsp/notifierJabber.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
     <action name="msnNotifierEdit" class="msnNotifierEdit" method="edit">
-      <result name="success">/notifierMsn.jsp</result>
+      <result name="success">/WEB-INF/jsp/notifierMsn.jsp</result>
     </action>
 
     <action name="msnNotifierSave" class="msnNotifierEdit" method="save">
-      <result name="input">/notifierMsn.jsp</result>
+      <result name="input">/WEB-INF/jsp/notifierMsn.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
 
     <action name="buildResults" class="buildResults">
-      <result name="success">/buildResults.jsp</result>
+      <result name="success">/WEB-INF/jsp/buildResults.jsp</result>
     </action>
 
     <action name="buildResult" class="buildResult">
-      <result name="success">/buildResult.jsp</result>
+      <result name="success">/WEB-INF/jsp/buildResult.jsp</result>
     </action>
 
     <action name="surefireReport" class="surefireReport">
-      <result name="success">/surefireReport.jsp</result>
+      <result name="success">/WEB-INF/jsp/surefireReport.jsp</result>
     </action>
 
     <action name="workingCopy" class="workingCopy">
-      <result name="success">/workingCopy.jsp</result>
+      <result name="success">/WEB-INF/jsp/workingCopy.jsp</result>
       <result name="stream" type="stream">
         <param name="contentType">application/octet-stream</param>
         <param name="contentDisposition">filename="${downloadFilename}"</param>
@@ -305,20 +308,20 @@
     * schedule actions
     -->
     <action name="schedules" class="schedule" method="summary">
-      <result name="success">/schedules.jsp</result>
+      <result name="success">/WEB-INF/jsp/schedules.jsp</result>
     </action>
 
     <action name="schedule" class="schedule" method="input">
-      <result name="success">/editSchedule.jsp</result>
+      <result name="success">/WEB-INF/jsp/editSchedule.jsp</result>
     </action>
 
     <action name="saveSchedule" class="schedule" method="save">
-      <result name="input">/editSchedule.jsp</result>
+      <result name="input">/WEB-INF/jsp/editSchedule.jsp</result>
       <result name="success" type="chain">schedules</result>
       <result name="error" type="chain">schedule</result>
     </action>
     <action name="removeSchedule" class="schedule" method="remove">
-      <result name="confirm">/confirmation.jsp</result>
+      <result name="confirm">/WEB-INF/jsp/confirmation.jsp</result>
       <result name="success" type="chain">schedules</result>
     </action>
 
@@ -330,7 +333,7 @@
     - continuum release
     -->
     <action name="releasePromptGoal" class="releaseProject" method="promptReleaseGoal">
-      <result name="success">/releaseProject.jsp</result>
+      <result name="success">/WEB-INF/jsp/releaseProject.jsp</result>
     </action>
 
     <action name="releaseProject" class="releaseProject">
@@ -350,7 +353,7 @@
     </action>
 
     <action name="releasePrepareInput" class="releasePrepare" method="input">
-      <result name="success">/releasePrepare.jsp</result>
+      <result name="success">/WEB-INF/jsp/releasePrepare.jsp</result>
     </action>
 
     <action name="releasePrepare" class="releasePrepare">
@@ -363,7 +366,7 @@
     </action>
 
     <action name="releasePerformInput" class="releasePerform" method="input">
-      <result name="success">/releasePerform.jsp</result>
+      <result name="success">/WEB-INF/jsp/releasePerform.jsp</result>
     </action>
 
     <action name="releasePerform" class="releasePerform">
@@ -376,7 +379,7 @@
     </action>
 
     <action name="releasePerformFromScmInput" class="releasePerform" method="inputFromScm">
-      <result name="success">/releasePerformFromScm.jsp</result>
+      <result name="success">/WEB-INF/jsp/releasePerformFromScm.jsp</result>
     </action>
 
     <action name="releasePerformFromScm" class="releasePerform" method="executeFromScm">
@@ -388,9 +391,9 @@
     </action>
 
     <action name="releaseInProgress" class="releaseInProgress">
-      <result name="initialized">/releaseInitialized.jsp</result>
-      <result name="inProgress">/releaseInProgress.jsp</result>
-      <result name="success">/releaseFinished.jsp</result>
+      <result name="initialized">/WEB-INF/jsp/releaseInitialized.jsp</result>
+      <result name="inProgress">/WEB-INF/jsp/releaseInProgress.jsp</result>
+      <result name="success">/WEB-INF/jsp/releaseFinished.jsp</result>
     </action>
 
     <action name="releaseCleanup" class="releaseCleanup">
@@ -399,7 +402,7 @@
     </action>
 
     <action name="releaseViewResult" class="releaseInProgress" method="viewResult">
-      <result name="success">/releaseViewResult.jsp</result>
+      <result name="success">/WEB-INF/jsp/releaseViewResult.jsp</result>
     </action>
 
   </package>
@@ -409,23 +412,23 @@
     * component actions
     -->
     <action name="buildDefinitionSummary" class="buildDefinitionSummary" method="summarizeForProject">
-      <result name="success">/components/buildDefinitionSummaryComponent.jsp</result>
-      <result name="error">/components/failureComponent.jsp</result>
+      <result name="success">/WEB-INF/jsp/components/buildDefinitionSummaryComponent.jsp</result>
+      <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
     </action>
 
     <action name="groupBuildDefinitionSummary" class="buildDefinitionSummary" method="summarizeForGroup">
-      <result name="success">/components/buildDefinitionGroupSummaryComponent.jsp</result>
-      <result name="error">/components/failureComponent.jsp</result>
+      <result name="success">/WEB-INF/jsp/components/buildDefinitionGroupSummaryComponent.jsp</result>
+      <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
     </action>
 
     <action name="projectGroupTab" class="continuumTab">
-      <result name="success">/components/projectGroupTabComponent.jsp</result>
-      <result name="error">/components/failureComponent.jsp</result>
+      <result name="success">/WEB-INF/jsp/components/projectGroupTabComponent.jsp</result>
+      <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
     </action>
 
     <action name="projectSummary" class="summary">
-      <result name="success">/components/projectSummaryComponent.jsp</result>
-      <result name="error">/components/failureComponent.jsp</result>
+      <result name="success">/WEB-INF/jsp/components/projectSummaryComponent.jsp</result>
+      <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
     </action>
   </package>
 </xwork>

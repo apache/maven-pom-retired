@@ -18,11 +18,11 @@
       <ww:param name="tabName" value="'Summary'"/>
     </ww:action>
 
-
-        <jsp:include page="/navigations/ProjectGroupMenu.jsp">
+  <%--
+        <jsp:include page="/WEB-INF/jsp/navigations/ProjectGroupMenu.jsp">
           <jsp:param name="tab" value="summary"/>
         </jsp:include>
-
+      --%>
         <h3>Project Group Actions</h3>
 
     <div class="axial">

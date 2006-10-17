@@ -8,10 +8,12 @@
     <div class="label">Continuum</div>
     <div>
       <div class="body">
-        <a href="<ww:url value="/about.jsp" includeParams="none"/>"><ww:text name="menu.continuum.about"/></a>
+        <ww:url id="aboutUrl" action="about" includeParams="none"/>
+        <ww:a href="%{aboutUrl}"><ww:text name="menu.continuum.about"/></ww:a>
       </div>
       <div class="body">
-        <a href="<ww:url value="/groupSummary.action" includeParams="none"/>"><ww:text name="menu.continuum.showProjectGroups"/></a>
+        <ww:url id="groupSummaryUrl" action="groupSummary" includeParams="none"/>
+        <ww:a href="%{groupSummaryUrl}"><ww:text name="menu.continuum.showProjectGroups"/></ww:a>
       </div>
     </div>
   </div>
@@ -21,16 +23,24 @@
       <div class="label"><ww:text name="menu.addProject"/></div>
       <div>
         <div class="body">
-          <a href="<ww:url value="/addMavenTwoProject!default.action" includeParams="none"/>"><ww:text name="menu.add.m2Project"/></a>
+          <ww:url id="addMavenTwoProjectUrl" action="addMavenTwoProject" includeParams="none"/>
+          <ww:a href="%{addMavenTwoProjectUrl}"><ww:text name="menu.add.m2Project"/></ww:a>
         </div>
         <div class="body">
-          <a href="<ww:url value="/addMavenOneProject!default.action" includeParams="none"/>"><ww:text name="menu.add.m1Project"/></a>
+          <ww:url id="addMavenOneProjectUrl" action="addMavenOneProject" includeParams="none"/>
+          <ww:a href="%{addMavenOneProjectUrl}"><ww:text name="menu.add.m1Project"/></ww:a>
         </div>
         <div class="body">
-          <a href="<ww:url value="/addProjectInput.action" includeParams="none"><ww:param name="projectType">ant</ww:param></ww:url>"><ww:text name="menu.add.antProject"/></a>
+          <ww:url id="addAntProjectUrl" action="addProjectInput" includeParams="none">
+            <ww:param name="projectType">ant</ww:param>
+          </ww:url>
+          <ww:a href="%{addAntProjectUrl}"><ww:text name="menu.add.antProject"/></ww:a>
         </div>
         <div class="body">
-          <a href="<ww:url value="/addProjectInput.action" includeParams="none"><ww:param name="projectType">shell</ww:param></ww:url>"><ww:text name="menu.add.shellProject"/></a>
+          <ww:url id="addShellProjectUrl" action="addProjectInput" includeParams="none">
+            <ww:param name="projectType">shell</ww:param>
+          </ww:url>
+          <ww:a href="%{addShellProjectUrl}"><ww:text name="menu.add.shellProject"/></ww:a>
         </div>
     </div>
   </pss:ifAuthorized>

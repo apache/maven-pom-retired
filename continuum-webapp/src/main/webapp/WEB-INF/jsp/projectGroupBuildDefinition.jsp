@@ -11,9 +11,9 @@
     <body>
       <div id="h3">
 
-        <jsp:include page="/navigations/ProjectGroupMenu.jsp">
-          <jsp:param name="tab" value="buildDefinition"/>
-        </jsp:include>
+      <ww:action name="projectGroupTab" executeResult="true">
+      <ww:param name="tabName" value="'BuildDefinitions'"/>
+    </ww:action>
 
         <ww:action name="groupBuildDefinitionSummary" executeResult="true" namespace="component">
           <ww:param name="projectGroupId" value="%{projectGroupId}"/>
