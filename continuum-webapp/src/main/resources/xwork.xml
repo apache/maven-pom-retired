@@ -59,6 +59,7 @@
       
       <result name="continuum-configuration-required" type="redirect-action">
         <param name="actionName">configuration</param>
+        <param name="namespace">/admin</param>
         <param name="method">input</param>
       </result>
 
@@ -115,11 +116,7 @@
       <result name="success">/WEB-INF/jsp/about.jsp</result>
     </action>
 
-    <action name="configuration" class="configuration">
-      <interceptor-ref name="unconfiguredContinuumStack"/>
-      <result name="input">/WEB-INF/jsp/configurationEdit.jsp</result>
-      <result name="success">/WEB-INF/jsp/configuration.jsp</result>
-    </action>
+
    
     <action name="companyInfo" class="configuration">
       <result name="success">/WEB-INF/jsp/components/companyLogo.jsp</result>
@@ -403,6 +400,24 @@
 
     <action name="releaseViewResult" class="releaseInProgress" method="viewResult">
       <result name="success">/WEB-INF/jsp/releaseViewResult.jsp</result>
+    </action>
+
+  </package>
+
+  <!--
+  |
+  | admin actions
+  |
+  | administrative secured actions ought to be placed in here so there is a clear seperation between secured
+  | actions and others
+  |
+  -->
+  <package name="admin" extends="default">
+
+    <action name="configuration" class="configuration">
+      <interceptor-ref name="unconfiguredContinuumStack"/>
+      <result name="input">/WEB-INF/jsp/admin/configurationEdit.jsp</result>
+      <result name="success">/WEB-INF/jsp/admin/configuration.jsp</result>
     </action>
 
   </package>

@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.web.action;
+package org.apache.maven.continuum.web.action.admin;
 
 /*
  * Copyright 2004-2006 The Apache Software Foundation.
@@ -22,6 +22,7 @@ import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
+import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 import org.codehaus.plexus.security.policy.UserSecurityPolicy;
 import org.codehaus.plexus.security.rbac.Resource;
 import org.codehaus.plexus.security.system.SecuritySystem;
