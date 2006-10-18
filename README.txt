@@ -31,14 +31,16 @@ Building on Unix
 
 Run :
 
- $ sh build.sh
+ $ mvn clean install
 
 The output of the build will be in build.log.
 
 To start continuum:
 
- $ cd continuum-plexus-application/target/plexus-test-runtime
- $ ./bin/plexus.sh
+ $ cd continuum-webapp
+ $ mvn jetty:run
+
+Or just deploy the webapp found in continuum-webapp/target.
 
 Building on Windows
 -------------------
@@ -48,15 +50,16 @@ and Windows doesn't support path length greater than 250 characters.
 
 Run :
 
- $ build.bat
+ $ mvn clean install
 
 The output of the build will be in build.log.
 
 To start continuum:
 
- $ cd continuum-plexus-application\target\plexus-test-runtime
- $ .\bin\plexus.bat
+ $ cd continuum-webapp
+ $ mvn jetty:run
 
+Or just deploy the webapp found in continuum-webapp/target.
 
 Access continuum's web site
 ---------------------------
