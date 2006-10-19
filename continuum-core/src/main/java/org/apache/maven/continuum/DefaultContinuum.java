@@ -1099,13 +1099,34 @@ public class DefaultContinuum
 
     // This whole section needs a scrub but will need to be dealt with generally
     // when we add schedules and profiles to the mix.
-
     public ProjectNotifier getNotifier( int projectId, int notifierId )
         throws ContinuumException
     {
         Project project = getProjectWithAllDetails( projectId );
 
         List notifiers = project.getNotifiers();
+
+        ProjectNotifier notifier = null;
+
+        for ( Iterator i = notifiers.iterator(); i.hasNext(); )
+        {
+            notifier = (ProjectNotifier) i.next();
+
+            if ( notifier.getId() == notifierId )
+            {
+                break;
+            }
+        }
+
+        return notifier;
+    }
+
+    public ProjectNotifier getGroupNotifier( int projectGroupId, int notifierId )
+        throws ContinuumException
+    {
+        ProjectGroup projectGroup = getProjectGroup( projectGroupId );
+
+        List notifiers = projectGroup.getNotifiers();
 
         ProjectNotifier notifier = null;
 
@@ -1137,6 +1158,29 @@ public class DefaultContinuum
         return addNotifier( projectId, notifier );
     }
 
+     public ProjectNotifier updateGroupNotifier( int projectGroupId, ProjectNotifier notifier )
+        throws ContinuumException
+    {
+        ProjectGroup projectGroup = getProjectGroup( projectGroupId );
+
+        ProjectNotifier notif = getGroupNotifier( projectGroupId, notifier.getId() );
+
+        // I remove notifier then add it instead of update it due to a ClassCastException in jpox
+        projectGroup.removeNotifier( notif );
+
+        try
+        {
+            store.updateProjectGroup( projectGroup );
+        }
+        catch ( ContinuumStoreException cse )
+        {
+            throw new ContinuumException( "Unable to update project group.", cse );
+        }
+
+        return addGroupNotifier( projectGroupId, notifier );
+    }
+
+    /*
     public ProjectNotifier updateNotifier( int projectId, int notifierId, Map configuration )
         throws ContinuumException
     {
@@ -1180,7 +1224,7 @@ public class DefaultContinuum
 
         return notifierProperties;
     }
-
+    */
     public ProjectNotifier addNotifier( int projectId, ProjectNotifier notifier )
         throws ContinuumException
     {
@@ -1209,6 +1253,41 @@ public class DefaultContinuum
         return notif;
     }
 
+    public ProjectNotifier addGroupNotifier( int projectGroupId, ProjectNotifier notifier )
+        throws ContinuumException
+    {
+        ProjectNotifier notif = new ProjectNotifier();
+
+        notif.setSendOnSuccess( notifier.isSendOnSuccess() );
+
+        notif.setSendOnFailure( notifier.isSendOnFailure() );
+
+        notif.setSendOnError( notifier.isSendOnError() );
+
+        notif.setSendOnWarning( notifier.isSendOnWarning() );
+
+        notif.setConfiguration( notifier.getConfiguration() );
+
+        notif.setType( notifier.getType() );
+
+        notif.setFrom( ProjectNotifier.FROM_USER );
+
+        ProjectGroup projectGroup = getProjectGroup( projectGroupId );
+
+        projectGroup.addNotifier( notif );
+        try
+        {
+            store.updateProjectGroup( projectGroup );
+        }
+        catch ( ContinuumStoreException cse )
+        {
+            throw new ContinuumException( "unable to add notifier to project group", cse );
+        }
+
+        return notif;
+    }
+
+    /*
     public ProjectNotifier addNotifier( int projectId, String notifierType, Map configuration )
         throws ContinuumException
     {
@@ -1242,7 +1321,7 @@ public class DefaultContinuum
 
         return addNotifier( projectId, notifier );
     }
-
+    */
     public void removeNotifier( int projectId, int notifierId )
         throws ContinuumException
     {
@@ -1263,6 +1342,37 @@ public class DefaultContinuum
                 project.removeNotifier( n );
 
                 updateProject( project );
+            }
+        }
+    }
+
+    public void removeGroupNotifier( int projectGroupId, int notifierId )
+        throws ContinuumException
+    {
+        ProjectGroup projectGroup = getProjectGroup( projectGroupId );
+
+        ProjectNotifier n = getGroupNotifier( projectGroupId, notifierId );
+
+        if ( n != null )
+        {
+            if ( n.isFromProject() )
+            {
+                n.setEnabled( false );
+
+                storeNotifier( n );
+            }
+            else
+            {
+                projectGroup.removeNotifier( n );
+
+                try
+                {
+                    store.updateProjectGroup( projectGroup );
+                }
+                catch ( ContinuumStoreException cse )
+                {
+                    throw new ContinuumException( "Unable to remove notifer from project group.", cse );
+                }                            
             }
         }
     }

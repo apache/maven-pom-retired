@@ -16,20 +16,21 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -251,6 +252,57 @@ public class DefaultContinuumTest
         projectGroupList = continuum.getAllProjectGroupsWithProjects();
 
         assertEquals( "Remove project group failed", projectGroupsBefore, projectGroupList.size() );
+    }
+
+
+    /**
+     * test the logic for notifiers
+     * 
+     * @throws Exception
+     */
+    public void testProjectAndGroupNotifiers()
+        throws Exception
+    {
+        Continuum continuum = (Continuum) lookup( Continuum.ROLE );
+
+        Collection projectGroupList = continuum.getAllProjectGroupsWithProjects();
+
+        int projectGroupsBefore = projectGroupList.size();
+
+        assertEquals( 1, projectGroupsBefore );
+
+        String url = getTestFile( "src/test-projects/project1/pom.xml" ).toURL().toExternalForm();
+
+        ContinuumProjectBuildingResult result = continuum.addMavenTwoProject( url );
+
+        assertNotNull( result );
+
+        assertEquals( 1, result.getProjectGroups().size() );
+
+        ProjectGroup projectGroup = (ProjectGroup) result.getProjectGroups().get( 0 );
+
+        continuum.addGroupNotifier( projectGroup.getId(), new ProjectNotifier() );
+        continuum.addGroupNotifier( projectGroup.getId(), new ProjectNotifier() );
+
+        for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
+        {
+            Project p = (Project)i.next();
+            continuum.addNotifier( p.getId(), new ProjectNotifier() );           
+        }
+
+        projectGroup = continuum.getProjectGroup( projectGroup.getId() );
+
+
+        assertEquals( 2, projectGroup.getNotifiers().size() );
+
+
+        for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
+        {
+            Project p = (Project)i.next();
+            // this is 2 right now, the notifier in the pom is placed in each notifier right now
+            assertEquals( 2, p.getNotifiers().size() );
+
+        }        
     }
 
     public void testExecuteAction()

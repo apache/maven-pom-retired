@@ -16,11 +16,6 @@ package org.apache.maven.continuum;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.model.project.BuildDefinition;
@@ -32,9 +27,14 @@ import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
+import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -197,28 +197,6 @@ public interface Continuum
     void updateProject( Project project )
         throws ContinuumException;
 
-    // ----------------------------------------------------------------------
-    // Notification
-    // ----------------------------------------------------------------------
-
-    ProjectNotifier getNotifier( int projectId, int notifierId )
-        throws ContinuumException;
-
-    ProjectNotifier updateNotifier( int projectId, int notifierId, Map configuration )
-        throws ContinuumException;
-
-    ProjectNotifier updateNotifier( int projectId, ProjectNotifier notifier )
-        throws ContinuumException;
-
-    ProjectNotifier addNotifier( int projectId, ProjectNotifier notifier )
-        throws ContinuumException;
-
-    ProjectNotifier addNotifier( int projectId, String notifierType, Map configuration )
-        throws ContinuumException;
-
-    void removeNotifier( int projectId, int notifierId )
-        throws ContinuumException;
-
     Project getProjectWithCheckoutResult( int projectId )
         throws ContinuumException;
 
@@ -226,6 +204,34 @@ public interface Continuum
         throws ContinuumException;
 
     Project getProjectWithBuilds( int projectId )
+        throws ContinuumException;
+
+    // ----------------------------------------------------------------------
+    // Notification
+    // ----------------------------------------------------------------------
+
+    ProjectNotifier getNotifier( int projectId, int notifierId )
+        throws ContinuumException;
+
+    ProjectNotifier getGroupNotifier( int projectGroupId, int notifierId )
+        throws ContinuumException;
+
+    ProjectNotifier updateNotifier( int projectId, ProjectNotifier notifier )
+        throws ContinuumException;
+
+    ProjectNotifier updateGroupNotifier( int projectGroupId, ProjectNotifier notifier )
+        throws ContinuumException;
+
+    ProjectNotifier addNotifier( int projectId, ProjectNotifier notifier )
+        throws ContinuumException;
+
+    ProjectNotifier addGroupNotifier( int projectGroupId, ProjectNotifier notifier )
+        throws ContinuumException;
+
+    void removeNotifier( int projectId, int notifierId )
+        throws ContinuumException;
+
+    void removeGroupNotifier( int projectGroupId, int notifierId )
         throws ContinuumException;
 
     // ----------------------------------------------------------------------

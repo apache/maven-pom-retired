@@ -79,7 +79,7 @@ public abstract class AbstractBuildDefinitionContinuumAction
      * 1) project groups have default build definitions
      * 2) if project has default build definition, that overrides project group definition
      * 3) changing parent default build definition does not effect project if it has a default declared
-     * 4) project groups much have a default build definition
+     * 4) project groups must have a default build definition
      *
      * @param buildDefinition
      * @param projectGroup
