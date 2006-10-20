@@ -1,7 +1,0 @@
-<workflow xmlns="http://werkflow.codehaus.org/simple" id="continuum-add-ant-project">
-  <sequence>
-    <action id="update-scm"/>
-    <action id="update-metadata"/>
-    <action id="build"/>
-  </sequence>
-</workflow>

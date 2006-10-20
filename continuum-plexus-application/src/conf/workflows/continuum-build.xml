@@ -1,7 +1,0 @@
-<workflow xmlns="http://werkflow.codehaus.org/simple" id="continuum-build-flow">
-  <sequence>
-    <action id="update-project"/>
-    <action id="update-metadata"/>
-    <action id="build"/>
-  </sequence>
-</workflow>
