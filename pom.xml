@@ -87,7 +87,8 @@
     <module>continuum-core</module>
     <module>continuum-model</module>
     <module>continuum-notifiers</module>
-    <!-- module>continuum-plexus-application</module -->
+    <module>continuum-plexus-application</module>
+    <module>continuum-plexus-runtime</module>
     <module>continuum-rpc-client</module>
     <module>continuum-store</module>
     <module>continuum-test</module>
@@ -140,7 +141,7 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
-      <version>1.0-alpha-10-SNAPSHOT</version>
+      <version>1.0-alpha-10</version>
     </dependency>
   </dependencies>
   <dependencyManagement>
@@ -346,17 +347,17 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>1.3-SNAPSHOT</version>
+        <version>1.3</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-jdo2</artifactId>
-        <version>1.0-alpha-7-SNAPSHOT</version>
+        <version>1.0-alpha-7</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-formica</artifactId>
-        <version>1.0-beta-11-SNAPSHOT</version>
+        <version>1.0-beta-11</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -402,7 +403,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-taskqueue</artifactId>
-        <version>1.0-alpha-4-SNAPSHOT</version>
+        <version>1.0-alpha-4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.derby</groupId>
@@ -417,11 +418,12 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-quartz</artifactId>
-        <version>1.0-alpha-3-SNAPSHOT</version>
+        <version>1.0-alpha-3</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
   <properties>
+    <continuumWebappVersion>${pom.version}</continuumWebappVersion>
     <maven.version>2.0.4</maven.version>
     <maven-scm.version>1.0-SNAPSHOT</maven-scm.version>
   </properties>
