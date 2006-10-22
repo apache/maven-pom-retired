@@ -18,6 +18,7 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -35,10 +36,25 @@ public class ProjectViewAction
 
     private int projectId;
 
+    /**
+     * Target {@link ProjectGroup} to view.
+     */
+    private ProjectGroup projectGroup;
+
+    /**
+     * Identifier for the target {@link ProjectGroup} to obtain for 
+     * viewing.
+     */
+    private int projectGroupId;
+
     public String execute()
         throws ContinuumException
     {
-        project = getContinuum().getProjectWithAllDetails( projectId );
+        // determine if we should obtain ProjectGroup details
+        if ( projectGroupId > 0 )
+            projectGroup = getContinuum().getProjectGroup( projectGroupId );
+        else
+            project = getContinuum().getProjectWithAllDetails( projectId );
 
         return SUCCESS;
     }
@@ -57,4 +73,34 @@ public class ProjectViewAction
     {
         return projectId;
     }
+
+    /**
+     * Return the identifier for the {@link ProjectGroup} to view.
+     * @return the projectGroupId
+     */
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    /**
+     * Sets the {@link ProjectGroup} identifier to obtain for viewing.
+     * @param projectGroupId the projectGroupId to set
+     */
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
+    }
+
+    /**
+     * Returns the {@link ProjectGroup} instance obtained for 
+     * the specified project group Id, or null if it were not set.
+     * 
+     * @return the projectGroup
+     */
+    public ProjectGroup getProjectGroup()
+    {
+        return projectGroup;
+    }
+
 }

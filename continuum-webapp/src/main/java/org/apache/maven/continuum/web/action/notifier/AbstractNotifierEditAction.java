@@ -17,6 +17,7 @@ package org.apache.maven.continuum.web.action.notifier;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
@@ -29,9 +30,20 @@ import java.util.Map;
 public abstract class AbstractNotifierEditAction
     extends ContinuumActionSupport
 {
+    /**
+     * WebWork result returned when an edit action completes successfully 
+     * for a Project Group.
+     */
+    private static final String SUCCESS_GROUP = SUCCESS + "_group";
+
     private ProjectNotifier notifier;
 
     private int projectId;
+
+    /**
+     * Target {@link ProjectGroup} instance to edit the notifier for.
+     */
+    private int projectGroupId;
 
     private int notifierId;
 
@@ -73,11 +85,22 @@ public abstract class AbstractNotifierEditAction
 
         if ( !isNew )
         {
-            getContinuum().updateNotifier( projectId, notifier );
+            // determine if we should update ProjectGroup notifier
+            if ( projectGroupId > 0 )
+                getContinuum().updateGroupNotifier( projectGroupId, notifier );
+            else
+                getContinuum().updateNotifier( projectId, notifier );
         }
         else
         {
-            getContinuum().addNotifier( projectId, notifier );
+            // determine if we should update ProjectGroup notifier
+            if ( projectGroupId > 0 )
+            {
+                getContinuum().addGroupNotifier( projectGroupId, notifier );
+                return SUCCESS_GROUP;
+            }
+            else
+                getContinuum().addNotifier( projectId, notifier );
         }
 
         return SUCCESS;
@@ -114,7 +137,25 @@ public abstract class AbstractNotifierEditAction
 
     private ProjectNotifier getNotifier()
         throws ContinuumException
-    {
+    {       
+        // we obtain projectGroup Notifier if we had a valid 
+        // project Group Id 
+        if ( projectGroupId > 0 )
+        {
+            getLogger().info( "Attempting to obtain Notifier for Project Group" );
+            try
+            {
+                return getContinuum().getGroupNotifier( projectGroupId, notifierId );
+            }
+            catch ( Exception e )
+            {
+                e.printStackTrace();
+                throw new ContinuumException( "Exception while attempting to lookup Notifier for Project GroupId:"
+                    + projectGroupId, e );
+            }
+
+        }
+        // else return the project notifier
         return getContinuum().getNotifier( projectId, notifierId );
     }
 
@@ -187,4 +228,21 @@ public abstract class AbstractNotifierEditAction
     {
         this.sendOnWarning = sendOnWarning;
     }
+
+    /**
+     * @return the projectGroupId
+     */
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    /**
+     * @param projectGroupId the projectGroupId to set
+     */
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
+    }
+
 }

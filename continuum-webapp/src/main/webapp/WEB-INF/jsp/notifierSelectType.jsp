@@ -10,8 +10,9 @@
         <h3><ww:text name="notifier.section.add.title"/></h3>
 
         <div class="axial">
-          <ww:form action="addNotifier.action" method="post">
+          <ww:form action="addNotifier!execute" method="post">
             <ww:hidden name="projectId"/>
+            <ww:hidden name="projectGroupId" />
             <table>
               <tbody>
                 <ww:select label="%{getText('notifier.type.label')}" name="notifierType"

@@ -12,14 +12,13 @@
       <div id="h3">
 
         <ww:action name="projectGroupTab" executeResult="true">
-      <ww:param name="tabName" value="'Notifier'"/>
-    </ww:action>
+          <ww:param name="tabName" value="'Notifier'"/>
+        </ww:action>
     
-        <h3>PROJECT GROUP Notifiers<ww:text name="projectView.section.title"/></h3>
-    
-        <div class="axial">
-          UNDER CONSTRUCTION
-        </div>
+        <ww:action name="projectGroupNotifierSummary" executeResult="true" namespace="component">
+          <ww:param name="projectGroupId" value="%{projectGroupId}"/>
+          <ww:param name="projectGroupName" value="%{projectGroup.name}"/>
+        </ww:action>
       </div>
     </body>
   </ww:i18n>

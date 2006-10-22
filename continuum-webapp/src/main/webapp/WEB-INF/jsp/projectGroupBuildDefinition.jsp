@@ -11,9 +11,9 @@
     <body>
       <div id="h3">
 
-      <ww:action name="projectGroupTab" executeResult="true">
-      <ww:param name="tabName" value="'BuildDefinitions'"/>
-    </ww:action>
+        <ww:action name="projectGroupTab" executeResult="true">
+          <ww:param name="tabName" value="'BuildDefinitions'"/>
+        </ww:action>
 
         <ww:action name="groupBuildDefinitionSummary" executeResult="true" namespace="component">
           <ww:param name="projectGroupId" value="%{projectGroupId}"/>

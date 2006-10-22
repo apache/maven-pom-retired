@@ -21,6 +21,7 @@
           <ww:form action="mailNotifierSave" method="post" validate="true">
             <ww:hidden name="notifierId"/>
             <ww:hidden name="projectId"/>
+            <ww:hidden name="projectGroupId"/>
             <ww:hidden name="notifierType"/>
             <table>
               <tbody>

@@ -236,7 +236,7 @@
       <result name="success" type="chain">projectView</result>
     </action>
 
-    <action name="addNotifier" class="addNotifier">
+    <action name="addNotifier" class="addNotifier" method="doDefault">
       <result name="input">/WEB-INF/jsp/notifierSelectType.jsp</result>
       <result name="mail_input">/WEB-INF/jsp/notifierMail.jsp</result>
       <result name="irc_input">/WEB-INF/jsp/notifierIrc.jsp</result>
@@ -250,7 +250,8 @@
 
     <action name="mailNotifierSave" class="mailNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifierMail.jsp</result>
-      <result name="success" type="chain">projectView</result>
+      <result name="success" type="chain">projectView</result>      
+      <result name="success_group" type="chain">projectGroupNotifier</result>
     </action>
 
     <action name="ircNotifierEdit" class="ircNotifierEdit" method="edit">
@@ -260,6 +261,7 @@
     <action name="ircNotifierSave" class="ircNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifierIrc.jsp</result>
       <result name="success" type="chain">projectView</result>
+      <result name="success_group" type="chain">projectGroupNotifier</result>
     </action>
 
     <action name="jabberNotifierEdit" class="jabberNotifierEdit" method="edit">
@@ -269,6 +271,7 @@
     <action name="jabberNotifierSave" class="jabberNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifierJabber.jsp</result>
       <result name="success" type="chain">projectView</result>
+      <result name="success_group" type="chain">projectGroupNotifier</result>
     </action>
 
     <action name="msnNotifierEdit" class="msnNotifierEdit" method="edit">
@@ -278,6 +281,7 @@
     <action name="msnNotifierSave" class="msnNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifierMsn.jsp</result>
       <result name="success" type="chain">projectView</result>
+      <result name="success_group" type="chain">projectGroupNotifier</result>
     </action>
 
 
@@ -449,5 +453,16 @@
       <result name="success">/WEB-INF/jsp/components/projectSummaryComponent.jsp</result>
       <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
     </action>
+    
+    <action name="projectNotifierSummary" class="notifierSummary" method="summarizeForProject">
+       <result name="success">/WEB-INF/jsp/components/projectNotifierSummaryComponent.jsp</result>
+       <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
+    </action>
+    
+    <action name="projectGroupNotifierSummary" class="notifierSummary" method="summarizeForProjectGroup">
+       <result name="success">/WEB-INF/jsp/components/projectGroupNotifierSummaryComponent.jsp</result>
+       <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>    
+    </action>
+    
   </package>
 </xwork>

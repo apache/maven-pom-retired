@@ -1,5 +1,6 @@
 package org.apache.maven.continuum.web.action.notifier;
 
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
 /*
@@ -28,6 +29,11 @@ public class AddNotifierAction
     extends ContinuumActionSupport
 {
     private int projectId;
+
+    /**
+     * Target {@link ProjectGroup} instance to add the Notifier for.
+     */
+    private int projectGroupId;
 
     private String notifierType;
 
@@ -60,4 +66,23 @@ public class AddNotifierAction
     {
         this.projectId = projectId;
     }
+
+    /**
+     * Returns the current {@link ProjectGroup} Identifier.
+     * @return the projectGroupId
+     */
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    /**
+     * Sets the Id for the target {@link ProjectGroup}.
+     * @param projectGroupId the projectGroupId to set
+     */
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
+    }
+
 }
