@@ -87,13 +87,18 @@ public abstract class AbstractNotifierEditAction
         {
             // determine if we should update ProjectGroup notifier
             if ( projectGroupId > 0 )
+            {
                 getContinuum().updateGroupNotifier( projectGroupId, notifier );
+                return SUCCESS_GROUP;
+            }
             else
+            {
                 getContinuum().updateNotifier( projectId, notifier );
+            }
         }
         else
         {
-            // determine if we should update ProjectGroup notifier
+            // determine if we should add ProjectGroup notifier
             if ( projectGroupId > 0 )
             {
                 getContinuum().addGroupNotifier( projectGroupId, notifier );
@@ -137,12 +142,11 @@ public abstract class AbstractNotifierEditAction
 
     private ProjectNotifier getNotifier()
         throws ContinuumException
-    {       
+    {
         // we obtain projectGroup Notifier if we had a valid 
         // project Group Id 
         if ( projectGroupId > 0 )
-        {
-            getLogger().info( "Attempting to obtain Notifier for Project Group" );
+        {            
             try
             {
                 return getContinuum().getGroupNotifier( projectGroupId, notifierId );

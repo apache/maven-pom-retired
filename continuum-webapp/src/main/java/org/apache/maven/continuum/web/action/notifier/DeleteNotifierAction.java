@@ -29,9 +29,16 @@ import org.apache.maven.continuum.web.action.ContinuumActionSupport;
  */
 public class DeleteNotifierAction
     extends ContinuumActionSupport
-{    
+{
+    /**
+     * WebWork result returned when an edit action completes successfully 
+     * for a Project Group.
+     */
+    private static final String SUCCESS_GROUP = SUCCESS + "_group";
 
     private int projectId;
+
+    private int projectGroupId;
 
     private int notifierId;
 
@@ -40,7 +47,16 @@ public class DeleteNotifierAction
     public String execute()
         throws ContinuumException
     {
-        getContinuum().removeNotifier( projectId, notifierId );
+        // determine if we need to remove the notifier off the projectGroup.
+        if ( projectGroupId > 0 )
+        {
+            getContinuum().removeGroupNotifier( projectGroupId, notifierId );
+            return SUCCESS_GROUP;
+        }
+        else
+        {
+            getContinuum().removeNotifier( projectId, notifierId );
+        }
 
         return SUCCESS;
     }
@@ -79,4 +95,21 @@ public class DeleteNotifierAction
     {
         return notifierType;
     }
+
+    /**
+     * @return the projectGroupId
+     */
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    /**
+     * @param projectGroupId the projectGroupId to set
+     */
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
+    }
+
 }

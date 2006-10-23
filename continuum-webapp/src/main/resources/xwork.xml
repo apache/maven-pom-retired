@@ -234,6 +234,7 @@
     <action name="deleteNotifier" class="deleteNotifier">
       <result name="delete">/WEB-INF/jsp/deleteNotifier.jsp</result>
       <result name="success" type="chain">projectView</result>
+      <result name="success_group" type="chain">projectGroupNotifier</result>
     </action>
 
     <action name="addNotifier" class="addNotifier" method="doDefault">
@@ -243,7 +244,14 @@
       <result name="msn_input">/WEB-INF/jsp/notifierMsn.jsp</result>
       <result name="jabber_input">/WEB-INF/jsp/notifierJabber.jsp</result>
     </action>
-
+        
+    <action name="editNotifier" class="addNotifier"> 
+      <result name="mail_input" type="chain">mailNotifierEdit</result>
+      <result name="irc_input" type="chain">ircNotifierEdit</result>
+      <result name="msn_input" type="chain">msnNotifierEdit</result>
+      <result name="jabber_input" type="chain">jabberNotifierEdit</result>
+    </action>
+    
     <action name="mailNotifierEdit" class="mailNotifierEdit" method="edit">
       <result name="success">/WEB-INF/jsp/notifierMail.jsp</result>
     </action>

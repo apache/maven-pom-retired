@@ -59,9 +59,7 @@
             </table>
         </div>
     </pss:ifAnyAuthorized>
-
-
-    <h3>Projects</h3>
+   
     <ww:action name="projectSummary" executeResult="true" namespace="component">
       <ww:param name="projectGroupId" value="%{projectGroupId}"/>
       <ww:param name="projectGroupName" value="%{projectGroup.name}"/>
