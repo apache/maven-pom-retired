@@ -72,12 +72,15 @@ public class ReleaseTaskExecutorTest
         {
             releaseManager = (ContinuumReleaseManager) lookup( ContinuumReleaseManager.ROLE );
         }
+        File scmPath = new File( getBasedir(), "target/scm-src" ).getAbsoluteFile();
+        File scmTargetPath = new File( getBasedir(), "target/scm-test" ).getAbsoluteFile();
+        FileUtils.copyDirectoryStructure(scmPath, scmTargetPath);
     }
 
-    public void testReleaseSimpleProject()
+    public void releaseSimpleProject()
         throws Exception
     {
-        String scmPath = new File( getBasedir(), "target/scm-src" ).getAbsolutePath().replace( '\\', '/' );
+    	String scmPath = new File( getBasedir(), "target/scm-test" ).getAbsolutePath().replace( '\\', '/' );
         File workDir = new File( getBasedir(), "target/test-classes/work-dir" );
         FileUtils.deleteDirectory( workDir );
         File testDir = new File( getBasedir(), "target/test-classes/test-dir" );
@@ -107,11 +110,16 @@ public class ReleaseTaskExecutorTest
         pom = FileUtils.fileRead( new File( testDir, "pom.xml" ) );
         assertTrue( "Test released version", pom.indexOf( "<version>1.0</version>" ) > 0 );
     }
-
-    public void testReleaseSimpleProjectWithNextVersion()
+    
+    public void testReleases() throws Exception{
+    	releaseSimpleProject();
+    	releaseSimpleProjectWithNextVersion();
+    }
+    
+    public void releaseSimpleProjectWithNextVersion()
         throws Exception
     {
-        String scmPath = new File( getBasedir(), "target/scm-src" ).getAbsolutePath().replace( '\\', '/' );
+        String scmPath = new File( getBasedir(), "target/scm-test" ).getAbsolutePath().replace( '\\', '/' );
         File workDir = new File( getBasedir(), "target/test-classes/work-dir" );
         FileUtils.deleteDirectory( workDir );
         File testDir = new File( getBasedir(), "target/test-classes/test-dir" );
