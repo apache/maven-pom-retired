@@ -21,6 +21,7 @@ import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -132,6 +133,24 @@ public class DefaultContinuumNotificationDispatcher
 
                 context.put( CONTEXT_UPDATE_SCM_RESULT, build.getScmResult() );
             }
+
+
+            ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( project.getProjectGroup().getId() );
+
+            // perform the project lvl notifications
+            for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
+            {
+                sendNotification( messageId, (ProjectNotifier) i.next(), context );
+            }
+
+            // perform the project group lvl notifications
+            if ( projectGroup.getNotifiers() != null )
+            {
+                for ( Iterator i = projectGroup.getNotifiers().iterator(); i.hasNext(); )
+                {
+                    sendNotification( messageId, (ProjectNotifier) i.next(), context );
+                }
+            }            
         }
         catch ( ContinuumStoreException e )
         {
@@ -145,37 +164,35 @@ public class DefaultContinuumNotificationDispatcher
 
             return;
         }
+    }
 
-        for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )
+    private void sendNotification( String messageId, ProjectNotifier projectNotifier, Map context )
+    {
+        String notifierType = projectNotifier.getType();
+
+        if ( !projectNotifier.isEnabled() )
         {
-            ProjectNotifier projectNotifier = (ProjectNotifier) i.next();
+            getLogger().info( notifierType + " notifier (id=" + projectNotifier.getId() + ") is disabled." );
 
-            String notifierType = projectNotifier.getType();
+            return;
+        }
 
-            if ( !projectNotifier.isEnabled() )
-            {
-                getLogger().info( notifierType + " notifier (id=" + projectNotifier.getId() + ") is disabled." );
+        Map configuration = projectNotifier.getConfiguration();
 
-                continue;
-            }
+        try
+        {
+            context.put( CONTEXT_PROJECT_NOTIFIER, projectNotifier );
 
-            Map configuration = projectNotifier.getConfiguration();
+            Notifier notifier = notifierManager.getNotifier( notifierType );
 
-            try
-            {
-                context.put( CONTEXT_PROJECT_NOTIFIER, projectNotifier );
+            Set recipients = recipientSource.getRecipients( String.valueOf( projectNotifier.getId() ), messageId,
+                                                            configuration, context );
 
-                Notifier notifier = notifierManager.getNotifier( notifierType );
-
-                Set recipients = recipientSource.getRecipients( String.valueOf( projectNotifier.getId() ), messageId,
-                                                                configuration, context );
-
-                notifier.sendNotification( messageId, recipients, configuration, context );
-            }
-            catch ( NotificationException e )
-            {
-                getLogger().error( "Error while trying to use the " + notifierType + "notifier.", e );
-            }
+            notifier.sendNotification( messageId, recipients, configuration, context );
+        }
+        catch ( NotificationException e )
+        {
+            getLogger().error( "Error while trying to use the " + notifierType + "notifier.", e );
         }
     }
 }
