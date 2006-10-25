@@ -16,8 +16,8 @@ package org.apache.maven.continuum.release.tasks;
  * limitations under the License.
  */
 
-import org.apache.maven.plugins.release.ReleaseManagerListener;
-import org.apache.maven.plugins.release.config.ReleaseDescriptor;
+import org.apache.maven.shared.release.ReleaseManagerListener;
+import org.apache.maven.shared.release.config.ReleaseDescriptor;
 import org.codehaus.plexus.taskqueue.Task;
 
 /**

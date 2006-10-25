@@ -16,7 +16,7 @@ package org.apache.maven.continuum.release;
  * limitations under the License.
  */
 
-import org.apache.maven.plugins.release.ReleaseManagerListener;
+import org.apache.maven.shared.release.ReleaseManagerListener;
 
 import java.util.List;
 import java.util.ArrayList;

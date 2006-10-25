@@ -18,9 +18,9 @@ package org.apache.maven.continuum.release.executors;
 
 import org.apache.maven.continuum.release.ContinuumReleaseException;
 import org.apache.maven.continuum.release.tasks.PrepareReleaseProjectTask;
-import org.apache.maven.plugins.release.ReleaseManagerListener;
-import org.apache.maven.plugins.release.ReleaseResult;
-import org.apache.maven.plugins.release.config.ReleaseDescriptor;
+import org.apache.maven.shared.release.ReleaseManagerListener;
+import org.apache.maven.shared.release.ReleaseResult;
+import org.apache.maven.shared.release.config.ReleaseDescriptor;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;

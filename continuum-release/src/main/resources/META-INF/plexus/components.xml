@@ -48,7 +48,7 @@
           <role>org.apache.maven.continuum.release.ContinuumReleaseManager</role>
         </requirement>
         <requirement>
-          <role>org.apache.maven.plugins.release.ReleaseManager</role>
+          <role>org.apache.maven.shared.release.ReleaseManager</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.project.MavenProjectBuilder</role>
@@ -111,7 +111,7 @@
           <role>org.apache.maven.continuum.release.ContinuumReleaseManager</role>
         </requirement>
         <requirement>
-          <role>org.apache.maven.plugins.release.ReleaseManager</role>
+          <role>org.apache.maven.shared.release.ReleaseManager</role>
         </requirement>
         <requirement>
           <role>org.apache.maven.project.MavenProjectBuilder</role>
