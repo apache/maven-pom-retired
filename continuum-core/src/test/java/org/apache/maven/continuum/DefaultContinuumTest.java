@@ -282,8 +282,7 @@ public class DefaultContinuumTest
         ProjectGroup projectGroup = (ProjectGroup) result.getProjectGroups().get( 0 );
 
         continuum.addGroupNotifier( projectGroup.getId(), new ProjectNotifier() );
-        continuum.addGroupNotifier( projectGroup.getId(), new ProjectNotifier() );
-
+       
         for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
         {
             Project p = (Project)i.next();
@@ -299,9 +298,7 @@ public class DefaultContinuumTest
         for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
         {
             Project p = (Project)i.next();
-            // this is 2 right now, the notifier in the pom is placed in each notifier right now
-            assertEquals( 2, p.getNotifiers().size() );
-
+            assertEquals( 1, p.getNotifiers().size() );
         }        
     }
 

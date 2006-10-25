@@ -108,23 +108,26 @@ public class DefaultMavenBuilderHelper
     // ----------------------------------------------------------------------
     // MavenBuilderHelper Implementation
     // ----------------------------------------------------------------------
-
+    /**
+     * @deprecated use {@link #mapMavenProjectToContinuumProject(ContinuumProjectBuildingResult, MavenProject, Project, boolean)} instead.
+     */
     public void mapMetadataToProject( File metadata, Project continuumProject )
         throws MavenBuilderHelperException
     {
-        mapMavenProjectToContinuumProject( getMavenProject( metadata ), continuumProject );
+        // todo this is deprecated so it shouldn't be used anyway so just set false for groupPom boolean and clean up later
+        mapMavenProjectToContinuumProject( getMavenProject( metadata ), continuumProject, false );
     }
 
     /**
-     * @deprecated use {@link #mapMavenProjectToContinuumProject(ContinuumProjectBuildingResult, MavenProject, Project)} instead.
+     * @deprecated use {@link #mapMavenProjectToContinuumProject(ContinuumProjectBuildingResult, MavenProject, Project, boolean)} instead.
      */
-    public void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject )
+    public void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject, boolean groupPom )
         throws MavenBuilderHelperException
     {
-        mapMavenProjectToContinuumProject( new ContinuumProjectBuildingResult(), mavenProject, continuumProject );
+        mapMavenProjectToContinuumProject( new ContinuumProjectBuildingResult(), mavenProject, continuumProject, groupPom );
     }
     
-    public void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject, Project continuumProject )
+    public void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject, Project continuumProject, boolean groupPom )
     {
     
         // ----------------------------------------------------------------------
@@ -253,54 +256,59 @@ public class DefaultMavenBuilderHelper
 
         // ----------------------------------------------------------------------
         // Notifiers
+        //
+        // if its a groupPom, then notifiers have been taken care of
         // ----------------------------------------------------------------------
 
-        List userNotifiers = new ArrayList();
-
-        if ( continuumProject.getNotifiers() != null )
+        if ( !groupPom )
         {
-            for ( int i = 0; i < continuumProject.getNotifiers().size(); i++ )
+            List userNotifiers = new ArrayList();
+
+            if ( continuumProject.getNotifiers() != null )
             {
-                ProjectNotifier notifier = (ProjectNotifier) continuumProject.getNotifiers().get( i );
-
-                if ( notifier.isFromUser() )
+                for ( int i = 0; i < continuumProject.getNotifiers().size(); i++ )
                 {
-                    ProjectNotifier userNotifier = new ProjectNotifier();
+                    ProjectNotifier notifier = (ProjectNotifier) continuumProject.getNotifiers().get( i );
 
-                    userNotifier.setType( notifier.getType() );
+                    if ( notifier.isFromUser() )
+                    {
+                        ProjectNotifier userNotifier = new ProjectNotifier();
 
-                    userNotifier.setEnabled( notifier.isEnabled() );
+                        userNotifier.setType( notifier.getType() );
 
-                    userNotifier.setConfiguration( notifier.getConfiguration() );
+                        userNotifier.setEnabled( notifier.isEnabled() );
 
-                    userNotifier.setFrom( notifier.getFrom() );
+                        userNotifier.setConfiguration( notifier.getConfiguration() );
 
-                    userNotifier.setRecipientType( notifier.getRecipientType() );
+                        userNotifier.setFrom( notifier.getFrom() );
 
-                    userNotifier.setSendOnError( notifier.isSendOnError() );
+                        userNotifier.setRecipientType( notifier.getRecipientType() );
 
-                    userNotifier.setSendOnFailure( notifier.isSendOnFailure() );
+                        userNotifier.setSendOnError( notifier.isSendOnError() );
 
-                    userNotifier.setSendOnSuccess( notifier.isSendOnSuccess() );
+                        userNotifier.setSendOnFailure( notifier.isSendOnFailure() );
 
-                    userNotifier.setSendOnWarning( notifier.isSendOnWarning() );
+                        userNotifier.setSendOnSuccess( notifier.isSendOnSuccess() );
 
-                    userNotifiers.add( userNotifier );
+                        userNotifier.setSendOnWarning( notifier.isSendOnWarning() );
+
+                        userNotifiers.add( userNotifier );
+                    }
                 }
             }
-        }
 
-        List notifiers = getNotifiers( result, mavenProject );
-        if ( notifiers != null )
-        {
-            continuumProject.setNotifiers( notifiers );
-        }
+            List notifiers = getNotifiers( result, mavenProject, continuumProject );
+            if ( notifiers != null )
+            {
+                continuumProject.setNotifiers( notifiers );
+            }
 
-        for ( Iterator i = userNotifiers.iterator(); i.hasNext(); )
-        {
-            ProjectNotifier notifier = (ProjectNotifier) i.next();
+            for ( Iterator i = userNotifiers.iterator(); i.hasNext(); )
+            {
+                ProjectNotifier notifier = (ProjectNotifier) i.next();
 
-            continuumProject.addNotifier( notifier );
+                continuumProject.addNotifier( notifier );
+            }
         }
     }
     
@@ -455,7 +463,7 @@ public class DefaultMavenBuilderHelper
         return project.getScm().getConnection();
     }
 
-    private List getNotifiers( ContinuumProjectBuildingResult result, MavenProject mavenProject )
+    private List getNotifiers( ContinuumProjectBuildingResult result, MavenProject mavenProject, Project continuumProject )
     {
         List notifiers = new ArrayList();
 

@@ -43,13 +43,20 @@ public interface MavenBuilderHelper
     MavenProject getMavenProject( ContinuumProjectBuildingResult result, File file );
 
     /**
-     * @deprecated use {@link #mapMavenProjectToContinuumProject(ContinuumProjectBuildingResult, MavenProject, Project)} instead.
+     * @deprecated use {@link #mapMavenProjectToContinuumProject(ContinuumProjectBuildingResult, MavenProject, Project, boolean)} instead.
      */
-    void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject )
+    void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject, boolean groupPom )
         throws MavenBuilderHelperException;
 
+    /**
+     *
+     * @param result
+     * @param mavenProject
+     * @param continuumProject
+     * @param groupPom map this project as if it is being used to initialize a project group
+     */
     void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject,
-                                            Project continuumProject );
+                                            Project continuumProject, boolean groupPom );
 
     ArtifactRepository getLocalRepository();
 }

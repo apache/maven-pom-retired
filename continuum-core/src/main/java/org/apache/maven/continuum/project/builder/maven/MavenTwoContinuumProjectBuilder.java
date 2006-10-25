@@ -23,6 +23,7 @@ import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
@@ -30,6 +31,7 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.model.Notifier;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.FileNotFoundException;
@@ -182,7 +184,7 @@ public class MavenTwoContinuumProjectBuilder
         {
             Project continuumProject = new Project();
 
-            builderHelper.mapMavenProjectToContinuumProject( result, mavenProject, continuumProject );
+            builderHelper.mapMavenProjectToContinuumProject( result, mavenProject, continuumProject, groupPom );
 
             result.addProject( continuumProject, MavenTwoBuildExecutor.ID );
         }
@@ -264,6 +266,53 @@ public class MavenTwoContinuumProjectBuilder
         // ----------------------------------------------------------------------
 
         projectGroup.setDescription( mavenProject.getDescription() );
+
+
+        //
+        // group lvl notifiers
+        //
+        if ( mavenProject.getCiManagement() != null && mavenProject.getCiManagement().getNotifiers() != null )
+        {
+            List notifiers = new ArrayList();
+
+            for ( Iterator i = mavenProject.getCiManagement().getNotifiers().iterator(); i.hasNext(); )
+            {
+                Notifier projectNotifier = (Notifier) i.next();
+
+                ProjectNotifier notifier = new ProjectNotifier();
+
+                if ( StringUtils.isEmpty( projectNotifier.getType() ) )
+                {
+                    result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_NOTIFIER_TYPE );
+                    return null;
+                }
+
+                notifier.setType( projectNotifier.getType() );
+
+                if ( projectNotifier.getConfiguration() == null )
+                {
+                    result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_NOTIFIER_CONFIGURATION );
+                    return null;
+                }
+
+                notifier.setConfiguration( projectNotifier.getConfiguration() );
+
+                notifier.setFrom( ProjectNotifier.FROM_PROJECT );
+
+                notifier.setSendOnSuccess( projectNotifier.isSendOnSuccess() );
+
+                notifier.setSendOnFailure( projectNotifier.isSendOnFailure() );
+
+                notifier.setSendOnError( projectNotifier.isSendOnError() );
+
+                notifier.setSendOnWarning( projectNotifier.isSendOnWarning() );
+
+                notifiers.add( notifier );
+            }
+
+            projectGroup.setNotifiers( notifiers );
+        }
+
 
         return projectGroup;
     }

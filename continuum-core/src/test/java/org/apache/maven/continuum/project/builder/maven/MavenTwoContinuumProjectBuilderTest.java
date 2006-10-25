@@ -25,13 +25,13 @@ import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-import java.net.URL;
-import java.util.HashMap;
+import java.io.ByteArrayOutputStream;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.HashMap;
+import java.net.URL;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -58,13 +58,15 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getProjects().size() );
 
-        Project project = (Project) result.getProjects().get( 0 );
+        ProjectGroup pg = (ProjectGroup)result.getProjectGroups().get(0);
 
-        assertNotNull( project.getNotifiers() );
+        assertNotNull( pg );
 
-        assertEquals( 1, project.getNotifiers().size() );
+        assertNotNull( pg.getNotifiers() );
 
-        ProjectNotifier notifier = (ProjectNotifier) project.getNotifiers().get( 0 );
+        assertEquals( 1, pg.getNotifiers().size() );
+
+        ProjectNotifier notifier = (ProjectNotifier) pg.getNotifiers().get( 0 );
 
         assertEquals( "mail", notifier.getType() );
 
@@ -89,13 +91,15 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getProjects().size() );
 
-        Project project = (Project) result.getProjects().get( 0 );
+        ProjectGroup pg = (ProjectGroup)result.getProjectGroups().get(0);
 
-        assertNotNull( project.getNotifiers() );
+        assertNotNull( pg );
 
-        assertEquals( 1, project.getNotifiers().size() );
+        assertNotNull( pg.getNotifiers() );
 
-        ProjectNotifier notifier = (ProjectNotifier) project.getNotifiers().get( 0 );
+        assertEquals( 1, pg.getNotifiers().size() );
+
+        ProjectNotifier notifier = (ProjectNotifier) pg.getNotifiers().get( 0 );
 
         assertEquals( "mail", notifier.getType() );
 
@@ -120,13 +124,15 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getProjects().size() );
 
-        Project project = (Project) result.getProjects().get( 0 );
+        ProjectGroup pg = (ProjectGroup)result.getProjectGroups().get(0);
 
-        assertNotNull( project.getNotifiers() );
+        assertNotNull( pg );
 
-        assertEquals( 1, project.getNotifiers().size() );
+        assertNotNull( pg.getNotifiers() );
 
-        ProjectNotifier notifier = (ProjectNotifier) project.getNotifiers().get( 0 );
+        assertEquals( 1, pg.getNotifiers().size() );
+
+        ProjectNotifier notifier = (ProjectNotifier) pg.getNotifiers().get( 0 );
 
         assertEquals( "mail", notifier.getType() );
 
@@ -134,7 +140,9 @@ public class MavenTwoContinuumProjectBuilderTest
 
         String username = System.getProperty( "user.name" );
 
-        String scmUrl = "scm:cvs:ext:${user.name}@company.org:/home/company/cvs:project/foo";
+        String scmUrl = "scm:cvs:ext:${user.name}@company.org:/home/company/cvs:project/foo" ;
+
+        Project project = (Project)result.getProjects().get(0);
 
         scmUrl = StringUtils.replace( scmUrl, "${user.name}", username );
 
@@ -281,7 +289,6 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 0, projectGroup.getProjects().size() );
     }
-
 
     private void assertDependency( String dep, String proj, Map projects )
     {
