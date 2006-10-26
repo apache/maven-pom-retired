@@ -1,7 +1,7 @@
-package org.apache.maven.continuum.web.it;
+package org.apache.continuum.web.test;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2005-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +20,12 @@ package org.apache.maven.continuum.web.it;
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class HomepageTest
-    extends AbstractIntegrationWebTest
+public abstract class AbstractGuestAccessTestCase
+    extends AbstractSeleniumTestCase
 {
-    public void testHomepage()
+    public void setUp()
     {
-        beginAt( "/" );
-
-        assertTablePresent( "projectSummaryTable" );
-
-        assertTextPresent( "Continuum Projects" );
-
-        assertTextPresent( "Status" );
-
-        assertTextPresent( "Name" );
-
-        assertTextPresent( "Version" );
+        super.setUp();
+        assertFalse( "User was authenticated.", isAuthenticated() );
     }
 }

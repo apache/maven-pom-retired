@@ -1,7 +1,7 @@
-package org.apache.maven.continuum.web.it;
+package org.apache.continuum.web.test;
 
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2005-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,18 @@ package org.apache.maven.continuum.web.it;
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  */
-public class MavenTwoPomWithNoConnectionElementTest
-    extends AbstractIntegrationWebTest
+public abstract class AbstractAuthenticatedAccessTestCase
+    extends AbstractGuestAccessTestCase
 {
-    public void testAddBadPom()
+    public void setUp()
     {
-        addMavenTwoProject( "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/m2-test-poms/pom-with-no-connection-element.xml" );
-
-        assertTextPresent( "Missing 'connection' element in the 'scm' element in the POM." );
+        super.setUp();
+        clickLinkWithText( "Login" );
+        assertLoginPage();
+        submitLoginPage( getUsername(), getPassword() );
     }
+
+    public abstract String getUsername();
+
+    public abstract String getPassword();
 }
