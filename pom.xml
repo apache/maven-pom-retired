@@ -427,6 +427,18 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <repositories>
+    <repository>
+      <id>codehaus-snapshots</id>
+      <name>Codehaus Snapshot Development Repository</name>
+      <url>http://snapshots.repository.codehaus.org</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
+
   <properties>
     <continuumWebappVersion>${pom.version}</continuumWebappVersion>
     <maven.version>2.0.4</maven.version>
