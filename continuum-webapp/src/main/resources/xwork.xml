@@ -155,7 +155,7 @@
     </action>
 
     <action name="buildProject" class="buildProject">
-      <result name="success" type="chain">projectGroupSummary</result>
+      <result name="success" type="chain">groupSummary</result>
     </action>
 
     <action name="projectView" class="projectView">
