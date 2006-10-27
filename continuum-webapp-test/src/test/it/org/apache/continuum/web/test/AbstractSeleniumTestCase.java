@@ -19,6 +19,7 @@ package org.apache.continuum.web.test;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
 import junit.framework.TestCase;
+import org.codehaus.plexus.util.StringUtils;
 import org.openqa.selenium.server.SeleniumServer;
 
 import java.util.Calendar;
@@ -44,7 +45,13 @@ public abstract class AbstractSeleniumTestCase
 
     public void setUp()
     {
-        sel = new DefaultSelenium( "localhost", SeleniumServer.DEFAULT_PORT, "*firefox", baseUrl );
+        String browser = System.getProperty( "browser" );
+        if ( StringUtils.isEmpty( browser ) )
+        {
+            browser = "*firefox";
+        }
+
+        sel = new DefaultSelenium( "localhost", SeleniumServer.DEFAULT_PORT, browser, baseUrl );
         sel.start();
         initialize();
     }

@@ -194,6 +194,14 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <systemProperties>
+            <property>
+              <name>browser</name>
+              <value>${browser}</value>
+            </property>
+          </systemProperties>
+        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -207,6 +215,28 @@
       <properties>
         <container.name>tomcat5x</container.name>
         <container.url>http://apache.multidist.com/tomcat/tomcat-5/v5.5.20/bin/apache-tomcat-5.5.20.zip</container.url>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>firefox</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <browser>*firefox</browser>
+      </properties>
+    </profile>
+    <profile>
+      <id>iexplore</id>
+      <properties>
+        <browser>*iexplore</browser>
+      </properties>
+    </profile>
+    <profile>
+      <id>otherbrowser</id>
+      <properties>
+        <browser>${browserPath}</browser>
       </properties>
     </profile>
   </profiles>
