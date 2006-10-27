@@ -236,7 +236,7 @@
     <profile>
       <id>otherbrowser</id>
       <properties>
-        <browser>${browserPath}</browser>
+        <browser>*custom ${browserPath}</browser>
       </properties>
     </profile>
   </profiles>
