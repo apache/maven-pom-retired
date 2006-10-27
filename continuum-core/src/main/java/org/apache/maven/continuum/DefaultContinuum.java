@@ -2333,7 +2333,7 @@ public class DefaultContinuum
         }
         catch ( ConfigurationStoringException e )
         {
-            throw new StoppingException( "Error storing the Continuum configuration.", e );
+            getLogger().info( "Error storing the Continuum configuration.", e );
         }
 
         closeStore();
