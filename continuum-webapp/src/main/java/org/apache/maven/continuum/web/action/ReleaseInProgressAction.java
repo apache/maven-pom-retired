@@ -18,7 +18,7 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.apache.maven.continuum.release.ContinuumReleaseManagerListener;
-import org.apache.maven.plugins.release.ReleaseResult;
+import org.apache.maven.shared.release.ReleaseResult;
 
 /**
  * @author Edwin Punzalan

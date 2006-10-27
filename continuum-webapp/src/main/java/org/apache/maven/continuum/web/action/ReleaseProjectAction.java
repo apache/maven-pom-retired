@@ -19,7 +19,7 @@ package org.apache.maven.continuum.web.action;
 import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
-import org.apache.maven.plugins.release.config.ReleaseDescriptor;
+import org.apache.maven.shared.release.config.ReleaseDescriptor;
 
 import java.util.List;
 import java.util.Map;

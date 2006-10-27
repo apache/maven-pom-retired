@@ -23,10 +23,10 @@ import org.apache.maven.continuum.release.DefaultReleaseManagerListener;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.apache.maven.plugins.release.ReleaseResult;
-import org.apache.maven.plugins.release.versions.DefaultVersionInfo;
-import org.apache.maven.plugins.release.versions.VersionInfo;
 import org.apache.maven.scm.provider.svn.repository.SvnScmProviderRepository;
+import org.apache.maven.shared.release.ReleaseResult;
+import org.apache.maven.shared.release.versions.VersionInfo;
+import org.apache.maven.shared.release.versions.DefaultVersionInfo;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
