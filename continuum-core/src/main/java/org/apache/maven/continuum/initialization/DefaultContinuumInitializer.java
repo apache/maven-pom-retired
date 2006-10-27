@@ -111,6 +111,8 @@ public class DefaultContinuumInitializer
             createGroups();
 
             createGuestUser();
+
+            createDefaultProjectGroup();
         }
         catch ( ContinuumStoreException e )
         {
@@ -244,6 +246,28 @@ public class DefaultContinuumInitializer
             guest.setGuest( true );
 
             store.addUser( guest );
+        }
+    }
+
+    private void createDefaultProjectGroup()
+        throws ContinuumStoreException
+    {
+        ProjectGroup group;
+        try
+        {
+            group = store.getProjectGroupByGroupId( Continuum.DEFAULT_PROJECT_GROUP_GROUP_ID );
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            group = new ProjectGroup();
+
+            group.setName( "Default Project Group" );
+
+            group.setGroupId( Continuum.DEFAULT_PROJECT_GROUP_GROUP_ID );
+
+            group.setDescription( "Contains all projects that do not have a group of their own" );
+
+            group = store.addProjectGroup( group );
         }
     }
 }
