@@ -17,26 +17,24 @@ package org.apache.maven.continuum.web.action.notifier;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
 /**
+ * Action to delete a {@link ProjectNotifier} instance from a 
+ * specified {@link ProjectGroup}.
+ * 
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
- * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="deleteNotifier"
+ * @version $Id: DeleteNotifierAction.java 467122 2006-10-23 20:50:19Z jmcconnell $
+ * @since 1.1
+ * @plexus.component 
+ *   role="com.opensymphony.xwork.Action"  
+ *   role-hint="deleteGroupNotifier"
  */
-public class DeleteNotifierAction
+public class DeleteGroupNotifierAction
     extends ContinuumActionSupport
 {
-    /**
-     * WebWork result returned when an edit action completes successfully 
-     * for a Project Group.
-     */
-    private static final String SUCCESS_GROUP = SUCCESS + "_group";
-
-    private int projectId;
 
     private int projectGroupId;
 
@@ -47,33 +45,13 @@ public class DeleteNotifierAction
     public String execute()
         throws ContinuumException
     {
-        // determine if we need to remove the notifier off the projectGroup.
-        if ( projectGroupId > 0 )
-        {
-            getContinuum().removeGroupNotifier( projectGroupId, notifierId );
-            return SUCCESS_GROUP;
-        }
-        else
-        {
-            getContinuum().removeNotifier( projectId, notifierId );
-        }
-
+        getContinuum().removeGroupNotifier( projectGroupId, notifierId );
         return SUCCESS;
     }
 
     public String doDefault()
     {
         return "delete";
-    }
-
-    public void setProjectId( int projectId )
-    {
-        this.projectId = projectId;
-    }
-
-    public int getProjectId()
-    {
-        return projectId;
     }
 
     public void setNotifierId( int notifierId )

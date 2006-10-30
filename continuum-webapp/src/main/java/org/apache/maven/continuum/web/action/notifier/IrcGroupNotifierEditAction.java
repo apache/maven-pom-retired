@@ -16,22 +16,26 @@ package org.apache.maven.continuum.web.action.notifier;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
-import org.apache.maven.continuum.web.action.notifier.AbstractNotifierEditAction;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Action that deletes a {@link ProjectNotifier} of type 'IRC' from the 
+ * specified {@link ProjectGroup}.
+ * 
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
- * @version $Id$
+ * @version $Id: IrcNotifierEditAction.java 465060 2006-10-17 21:24:38Z jmcconnell $
+ * @since 1.1
  *
  * @plexus.component
  *   role="com.opensymphony.xwork.Action"
- *   role-hint="ircNotifierEdit"
+ *   role-hint="ircGroupNotifierEdit"
  */
-public class IrcNotifierEditAction
-    extends AbstractNotifierEditAction
+public class IrcGroupNotifierEditAction
+    extends AbstractGroupNotifierEditAction
 {
     private String host;
 

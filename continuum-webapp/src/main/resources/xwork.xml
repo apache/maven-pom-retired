@@ -229,15 +229,14 @@
     </action>
 
     <!--
-    * notifier actions
+    * notifier actions :: Project
     -->
-    <action name="deleteNotifier" class="deleteNotifier">
+    <action name="deleteProjectNotifier" class="deleteProjectNotifier">
       <result name="delete">/WEB-INF/jsp/deleteNotifier.jsp</result>
       <result name="success" type="chain">projectView</result>
-      <result name="success_group" type="chain">projectGroupNotifier</result>
     </action>
 
-    <action name="addNotifier" class="addNotifier" method="doDefault">
+    <action name="addProjectNotifier" class="addProjectNotifier" method="doDefault">
       <result name="input">/WEB-INF/jsp/notifierSelectType.jsp</result>
       <result name="mail_input">/WEB-INF/jsp/notifierMail.jsp</result>
       <result name="irc_input">/WEB-INF/jsp/notifierIrc.jsp</result>
@@ -245,53 +244,108 @@
       <result name="jabber_input">/WEB-INF/jsp/notifierJabber.jsp</result>
     </action>
         
-    <action name="editNotifier" class="addNotifier"> 
-      <result name="mail_input" type="chain">mailNotifierEdit</result>
-      <result name="irc_input" type="chain">ircNotifierEdit</result>
-      <result name="msn_input" type="chain">msnNotifierEdit</result>
-      <result name="jabber_input" type="chain">jabberNotifierEdit</result>
+    <action name="editProjectNotifier" class="addProjectNotifier"> 
+      <result name="mail_input" type="chain">mailProjectNotifierEdit</result>
+      <result name="irc_input" type="chain">ircProjectNotifierEdit</result>
+      <result name="msn_input" type="chain">msnProjectNotifierEdit</result>
+      <result name="jabber_input" type="chain">jabberProjectNotifierEdit</result>
     </action>
     
-    <action name="mailNotifierEdit" class="mailNotifierEdit" method="edit">
+    <action name="mailProjectNotifierEdit" class="mailProjectNotifierEdit" method="edit">
       <result name="success">/WEB-INF/jsp/notifierMail.jsp</result>
     </action>
 
-    <action name="mailNotifierSave" class="mailNotifierEdit" method="save">
+    <action name="mailProjectNotifierSave" class="mailProjectNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifierMail.jsp</result>
-      <result name="success" type="chain">projectView</result>      
-      <result name="success_group" type="chain">projectGroupNotifier</result>
+      <result name="success" type="chain">projectView</result>
     </action>
 
-    <action name="ircNotifierEdit" class="ircNotifierEdit" method="edit">
+    <action name="ircProjectNotifierEdit" class="ircProjectNotifierEdit" method="edit">
       <result name="success">/WEB-INF/jsp/notifierIrc.jsp</result>
     </action>
 
-    <action name="ircNotifierSave" class="ircNotifierEdit" method="save">
+    <action name="ircProjectNotifierSave" class="ircProjectNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifierIrc.jsp</result>
       <result name="success" type="chain">projectView</result>
-      <result name="success_group" type="chain">projectGroupNotifier</result>
     </action>
 
-    <action name="jabberNotifierEdit" class="jabberNotifierEdit" method="edit">
+    <action name="jabberProjectNotifierEdit" class="jabberProjectNotifierEdit" method="edit">
       <result name="success">/WEB-INF/jsp/notifierJabber.jsp</result>
     </action>
 
-    <action name="jabberNotifierSave" class="jabberNotifierEdit" method="save">
+    <action name="jabberProjectNotifierSave" class="jabberProjectNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifierJabber.jsp</result>
       <result name="success" type="chain">projectView</result>
-      <result name="success_group" type="chain">projectGroupNotifier</result>
     </action>
 
-    <action name="msnNotifierEdit" class="msnNotifierEdit" method="edit">
+    <action name="msnProjectNotifierEdit" class="msnProjectNotifierEdit" method="edit">
       <result name="success">/WEB-INF/jsp/notifierMsn.jsp</result>
     </action>
 
-    <action name="msnNotifierSave" class="msnNotifierEdit" method="save">
+    <action name="msnProjectNotifierSave" class="msnProjectNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifierMsn.jsp</result>
       <result name="success" type="chain">projectView</result>
-      <result name="success_group" type="chain">projectGroupNotifier</result>
     </action>
 
+    <!--
+    * notifier actions :: Project Group
+    -->
+    
+    <action name="deleteProjectGroupNotifier" class="deleteGroupNotifier">
+      <result name="delete">/WEB-INF/jsp/deleteNotifier.jsp</result>
+      <result name="success" type="chain">projectGroupNotifier</result>
+    </action>
+
+    <action name="addProjectGroupNotifier" class="addGroupNotifier" method="doDefault">
+      <result name="input">/WEB-INF/jsp/notifierSelectType.jsp</result>
+      <result name="mail_input">/WEB-INF/jsp/notifierMail.jsp</result>
+      <result name="irc_input">/WEB-INF/jsp/notifierIrc.jsp</result>
+      <result name="msn_input">/WEB-INF/jsp/notifierMsn.jsp</result>
+      <result name="jabber_input">/WEB-INF/jsp/notifierJabber.jsp</result>
+    </action>
+        
+    <action name="editProjectGroupNotifier" class="addGroupNotifier">
+      <result name="mail_input" type="chain">mailProjectGroupNotifierEdit</result>
+      <result name="irc_input" type="chain">ircProjectGroupNotifierEdit</result>
+      <result name="msn_input" type="chain">msnProjectGroupNotifierEdit</result>
+      <result name="jabber_input" type="chain">jabberProjectGroupNotifierEdit</result>
+    </action>
+    
+    <action name="mailProjectGroupNotifierEdit" class="mailGroupNotifierEdit" method="edit">
+      <result name="success">/WEB-INF/jsp/notifierMail.jsp</result>
+    </action>
+
+    <action name="mailProjectGroupNotifierSave" class="mailGroupNotifierEdit" method="save">
+      <result name="input">/WEB-INF/jsp/notifierMail.jsp</result>
+      <result name="success" type="chain">projectGroupNotifier</result>   
+    </action>
+
+    <action name="ircProjectGroupNotifierEdit" class="ircGroupNotifierEdit" method="edit">
+      <result name="success">/WEB-INF/jsp/notifierIrc.jsp</result>
+    </action>
+
+    <action name="ircProjectGroupNotifierSave" class="ircGroupNotifierEdit" method="save">
+      <result name="input">/WEB-INF/jsp/notifierIrc.jsp</result>
+      <result name="success" type="chain">projectGroupNotifier</result>
+    </action>
+
+    <action name="jabberProjectGroupNotifierEdit" class="jabberGroupNotifierEdit" method="edit">
+      <result name="success">/WEB-INF/jsp/notifierJabber.jsp</result>
+    </action>
+
+    <action name="jabberProjectGroupNotifierSave" class="jabberGroupNotifierEdit" method="save">
+      <result name="input">/WEB-INF/jsp/notifierJabber.jsp</result>
+      <result name="success" type="chain">projectGroupNotifier</result>
+    </action>
+
+    <action name="msnProjectGroupNotifierEdit" class="msnGroupNotifierEdit" method="edit">
+      <result name="success">/WEB-INF/jsp/notifierMsn.jsp</result>
+    </action>
+
+    <action name="msnProjectGroupNotifierSave" class="msnGroupNotifierEdit" method="save">
+      <result name="input">/WEB-INF/jsp/notifierMsn.jsp</result>
+      <result name="success" type="chain">projectGroupNotifier</result>
+    </action>
 
     <!--
     *  build results, test reporting, working copy actions
