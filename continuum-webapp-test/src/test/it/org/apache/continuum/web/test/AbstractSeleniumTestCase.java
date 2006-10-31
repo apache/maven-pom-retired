@@ -142,18 +142,36 @@ public abstract class AbstractSeleniumTestCase
 
     public void clickLinkWithText( String text )
     {
-        clickLinkWithLocator( "link=" + text );
+        clickLinkWithText( text, true );
+    }
+
+    public void clickLinkWithText( String text, boolean wait )
+    {
+        clickLinkWithLocator( "link=" + text, wait );
     }
 
     public void clickLinkWithXPath( String xpath )
     {
-        clickLinkWithLocator( "xpath=" + xpath );
+        clickLinkWithXPath( xpath, true );
+    }
+
+    public void clickLinkWithXPath( String xpath, boolean wait )
+    {
+        clickLinkWithLocator( "xpath=" + xpath, wait );
     }
 
     public void clickLinkWithLocator( String locator )
     {
+        clickLinkWithLocator( locator, true );
+    }
+
+    public void clickLinkWithLocator( String locator, boolean wait )
+    {
         sel.click( locator );
-        waitPage();
+        if ( wait )
+        {
+            waitPage();
+        }
     }
 
     //////////////////////////////////////
@@ -286,5 +304,61 @@ public abstract class AbstractSeleniumTestCase
         }
         sel.click( "//input[@type='submit']" );
         waitPage();
+    }
+
+    //////////////////////////////////////
+    // ANT/SHELL Projects
+    //////////////////////////////////////
+    public void assertAddProjectPage( String type )
+    {
+        String title = type.substring( 0, 1 ).toUpperCase() + type.substring( 1 ).toLowerCase();
+        assertPage( "Continuum - Add " + title + " Project" );
+        assertTextPresent( "Add " + title + " Project" );
+        assertTextPresent( "Project Name" );
+        assertElementPresent( "projectName" );
+        assertTextPresent( "Version" );
+        assertElementPresent( "projectVersion" );
+        assertTextPresent( "Scm Url" );
+        assertElementPresent( "projectScmUrl" );
+        assertTextPresent( "Scm Username" );
+        assertElementPresent( "projectScmUsername" );
+        assertTextPresent( "Scm Password" );
+        assertElementPresent( "projectScmPassword" );
+        assertTextPresent( "Scm Branch/Tag" );
+        assertElementPresent( "projectScmTag" );
+        assertLinkPresent( "Maven SCM URL" );
+    }
+
+    public void assertAddAntProjectPage()
+    {
+        assertAddProjectPage( "ant" );
+    }
+
+    public void assertAddShellProjectPage()
+    {
+        assertAddProjectPage( "shell" );
+    }
+
+    //////////////////////////////////////
+    // Group Summary
+    //////////////////////////////////////
+    public void assertGroupSummaryPage()
+    {
+        assertPage( "Continuum - Group Summary" );
+        assertTextPresent( "Project Groups" );
+        if ( sel.isTextPresent( "No Project Groups Known." ) )
+        {
+            assertTextNotPresent( "Name" );
+            assertTextNotPresent( "Group Id" );
+            assertTextNotPresent( "Projects" );
+            assertTextNotPresent( "Build Status" );
+        }
+        else
+        {
+            assertTextPresent( "Name" );
+            assertTextPresent( "Group Id" );
+            assertTextPresent( "Projects" );
+            assertTextPresent( "Build Status" );
+        }
     }
 }
