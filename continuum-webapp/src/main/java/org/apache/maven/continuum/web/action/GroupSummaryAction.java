@@ -162,8 +162,8 @@ public class GroupSummaryAction
             }
 
             //todo wire in the next scheduled build for the project group and a meaningful status message
-            groupModel.setNextScheduledBuild( "unknown" );
-            groupModel.setStatusMessage( "none" );
+            //groupModel.setNextScheduledBuild( "unknown" );
+            //groupModel.setStatusMessage( "none" );
 
             groupModel.setNumSuccesses( numSuccesses );
             groupModel.setNumFailures( numFailures );

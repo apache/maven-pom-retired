@@ -27,6 +27,7 @@ import org.codehaus.plexus.security.system.SecuritySession;
 import org.codehaus.plexus.security.system.SecuritySystemConstants;
 import org.codehaus.plexus.security.system.SecuritySystem;
 import org.codehaus.plexus.security.authorization.AuthorizationException;
+import org.codehaus.plexus.util.Os;
 import org.codehaus.plexus.xwork.PlexusLifecycleListener;
 import com.opensymphony.xwork.ActionContext;
 
@@ -92,7 +93,14 @@ public class BuildNowCell
 
             case ContinuumProjectState.BUILDING:
             {
-                return createActionLink( contextPath, project, "cancelBuild", "Cancel Build", "cancelbuild.gif" );
+                if ( !Os.isFamily( "windows" ) )
+                {
+                    return createActionLink( contextPath, project, "cancelBuild", "Cancel Build", "cancelbuild.gif" );
+                }
+                else
+                {
+                    return image( contextPath, "Build Now", "buildnow_disabled.gif" );
+                }
             }
 
             default:
