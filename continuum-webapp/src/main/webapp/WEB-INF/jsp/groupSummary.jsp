@@ -36,8 +36,6 @@
         <ec:column property="groupId" title="Group&nbsp;Id" width="20%"/>
         <ec:column property="numProjects" title="Projects" width="1%" style="text-align: center"/>
         <ec:column property="numSuccesses" title="Build&nbsp;Status" width="1%" style="white-space: nowrap" cell="org.apache.maven.continuum.web.view.BuildStatusCell"/>
-        <!-- ec:column property="nextScheduledBuild" title="Next&nbsp;Build" width="1%" style="white-space: nowrap"/>
-        <ec:column property="statusMessage" title="Status&nbsp;Message"/ -->
       </ec:row>
     </ec:table>
     </div>        
