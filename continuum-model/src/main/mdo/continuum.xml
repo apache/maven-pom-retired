@@ -746,6 +746,15 @@
           <type>String</type>
         </field>
         <field>
+          <name>buildFresh</name>
+          <version>1.0.0.+</version>
+          <type>boolean</type>
+          <defaultValue>false</defaultValue>
+          <description>
+            true if the build is to be smoked and checked back out from the scm each build
+          </description>
+        </field>
+        <field>
           <name>schedule</name>
           <version>1.0.0+</version>
           <association stash.part="true" jpox.dependent="false">

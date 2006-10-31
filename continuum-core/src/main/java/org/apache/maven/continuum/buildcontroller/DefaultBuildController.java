@@ -90,6 +90,13 @@ public class DefaultBuildController
 
         try
         {
+            // check if build definition requires smoking the existing checkout and rechecking out project
+            if ( context.getBuildDefinition().isBuildFresh())
+            {
+                getLogger().info( "Purging exiting working copy" );
+                cleanWorkingDirectory( context );
+            }
+
             // ----------------------------------------------------------------------
             // TODO: Centralize the error handling from the SCM related actions.
             // ContinuumScmResult should return a ContinuumScmResult from all
@@ -317,6 +324,12 @@ public class DefaultBuildController
         actionContext.put( AbstractContinuumAction.KEY_FIRST_RUN, Boolean.valueOf( context.getOldBuildResult() == null ) );
 
         return context;
+    }
+
+    private void cleanWorkingDirectory( BuildContext buildContext )
+        throws TaskExecutionException
+    {
+        performAction( "clean-working-directory", buildContext );
     }
 
     private void updateWorkingDirectory( BuildContext buildContext )

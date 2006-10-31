@@ -59,6 +59,8 @@ public class BuildDefinitionAction
 
     private String buildFile;
 
+    private boolean buildFresh;
+
     private Map schedules;
 
     private Map profiles;
@@ -118,6 +120,7 @@ public class BuildDefinitionAction
             goals = buildDefinition.getGoals();
             arguments = buildDefinition.getArguments();
             buildFile = buildDefinition.getBuildFile();
+            buildFresh = buildDefinition.isBuildFresh();
             scheduleId = buildDefinition.getSchedule().getId();
             defaultBuildDefinition = buildDefinition.isDefaultForProject();
         }
@@ -227,6 +230,7 @@ public class BuildDefinitionAction
         buildDefinition.setGoals( goals );
         buildDefinition.setArguments( arguments );
         buildDefinition.setBuildFile( buildFile );
+        buildDefinition.setBuildFresh( buildFresh );
         buildDefinition.setDefaultForProject( defaultBuildDefinition );
         buildDefinition.setSchedule( schedule );
 
@@ -331,6 +335,16 @@ public class BuildDefinitionAction
     public void setBuildFile( String buildFile )
     {
         this.buildFile = buildFile;
+    }
+
+    public boolean isBuildFresh()
+    {
+        return buildFresh;
+    }
+
+    public void setBuildFresh( boolean buildFresh )
+    {
+        this.buildFresh = buildFresh;
     }
 
     public Map getSchedules()

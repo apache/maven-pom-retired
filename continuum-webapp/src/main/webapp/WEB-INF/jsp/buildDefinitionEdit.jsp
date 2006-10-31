@@ -51,6 +51,7 @@
                 </ww:else>
 
                 <ww:textfield label="%{getText('buildDefinition.arguments.label')}" name="arguments"/>
+                <ww:checkbox label="Build Fresh" name="buildFresh" value="buildFresh" fieldValue="true"/>
                 <ww:checkbox label="%{getText('buildDefinition.defaultForProject.label')}"  name="defaultBuildDefinition" value="defaultBuildDefinition" fieldValue="true"/>
                 <ww:select label="%{getText('buildDefinition.schedule.label')}" name="scheduleId" list="schedules"/>
               </tbody>

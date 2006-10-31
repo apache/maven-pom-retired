@@ -642,6 +642,19 @@
     </component>
     <component>
       <role>org.codehaus.plexus.action.Action</role>
+      <role-hint>clean-working-directory</role-hint>
+      <implementation>org.apache.maven.continuum.core.action.CleanWorkingDirectoryAction</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.store.ContinuumStore</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.utils.WorkingDirectoryService</role>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.action.Action</role>
       <role-hint>create-projects-from-metadata</role-hint>
       <implementation>org.apache.maven.continuum.core.action.CreateProjectsFromMetadata</implementation>
       <requirements>
