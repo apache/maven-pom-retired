@@ -747,7 +747,7 @@
         </field>
         <field>
           <name>buildFresh</name>
-          <version>1.0.0.+</version>
+          <version>1.0.0+</version>
           <type>boolean</type>
           <defaultValue>false</defaultValue>
           <description>
