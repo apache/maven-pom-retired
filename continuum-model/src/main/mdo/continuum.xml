@@ -1181,5 +1181,69 @@
         </field>
       </fields>
     </class>
+
+    <class>
+      <name>ContinuumProjectState</name>
+      <packageName>org.apache.maven.continuum.project</packageName>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>name</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+           <version>1.0.0+</version>
+           <code><![CDATA[
+    public final static int NEW = 1;
+    public final static int OK = 2;
+    public final static int FAILED = 3;
+    public final static int ERROR = 4;
+    public final static int BUILDING = 6;
+    public final static int CHECKING_OUT = 7;
+    public final static int UPDATING = 8;
+    public final static int WARNING = 9;
+    public final static int CHECKEDOUT = 10;
+
+    // TODO: maybe move these to another class
+    public static final int TRIGGER_FORCED = 1;
+
+    // TODO: remove
+    public static final int TRIGGER_SCHEDULED = 0;
+
+    public static final int TRIGGER_UNKNOWN = TRIGGER_SCHEDULED;
+
+    public String getI18nKey()
+    {
+        return "org.apache.maven.continuum.project.state." + name;
+    }
+
+    public boolean equals( Object object )
+    {
+        if ( !( object instanceof ContinuumProjectState ) )
+        {
+            return false;
+        }
+
+        ContinuumProjectState other = (ContinuumProjectState) object;
+
+        return name.equals( other.name );
+    }
+
+    public int hashCode()
+    {
+        return name.hashCode();
+    }
+
+    public String toString()
+    {
+        return name;
+    }
+           ]]></code>
+        </codeSegment>
+      </codeSegments>
+    </class>
   </classes>
 </model>
