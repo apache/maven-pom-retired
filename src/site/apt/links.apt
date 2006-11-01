@@ -1,7 +1,6 @@
  ------
- Maven JXR
+ Maven JXR - Further Links
  ------
- Jason van Zyl
  Vincent Siveton
  ------
  October 2006
@@ -25,19 +24,18 @@
  ~~ http://maven.apache.org/guides/mini/guide-apt-format.html
 
 
-Maven JXR
+Further Links
 
- JXR is a source cross reference generator. It analyzes a set of Java source files and produce HTML files
- that shows annotated source code.
+* Articles
 
- Take a look at the {{{xref/index.html}JXR report}} to see a result.
+  * {{{http://java.sun.com/developer/technicalArticles/J2SE/xref/}Cross-Referencing HTML the Tiger Way}}
 
- The orignal JXR code was merged in 2004 with the Javasrc project from
- {{{http://jakarta.apache.org/alexandria}Jakarta Alexandria}} project.
+* Related Softwares
 
-* Examples
+  * {{{http://java.sun.com/j2se/1.4.2/docs/tooldocs/windows/javadoc.html#linksource}Javadoc linksource option}}:
+    Creates an HTML version of each source file (with line numbers) and adds links to them from the standard HTML
+    documentation.
 
-   The following example show how to use Maven JXR in more advanced usecases:
+  * {{{https://sorcerer.dev.java.net/}Sorcerer}}: Sorcerer is a source code cross reference generator for JDK 6.
 
-   * {{{examples/java.html}Using Maven JXR in Java}}
-
+  * {{{http://www.java2html.de/}Java2html}}: Java2Html converts Java source code to HTML, RTF, TeX and XHTML.
