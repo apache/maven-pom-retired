@@ -1182,7 +1182,7 @@
       </fields>
     </class>
 
-    <class>
+    <class jpox.enabled="false">
       <name>ContinuumProjectState</name>
       <packageName>org.apache.maven.continuum.project</packageName>
       <version>1.0.0+</version>
