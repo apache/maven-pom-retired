@@ -56,47 +56,6 @@ public class BuildCell
 
         String result = "<div align=\"center\">";
 
-
-        // do the authz bit
-        ActionContext context = ActionContext.getContext();
-
-        PlexusContainer container = (PlexusContainer) context.getApplication().get( PlexusLifecycleListener.KEY );
-        SecuritySession securitySession =
-            (SecuritySession) context.getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
-
-        try
-        {
-            SecuritySystem securitySystem = (SecuritySystem) container.lookup( SecuritySystem.ROLE );
-
-            if ( !securitySystem.isAuthorized( securitySession, "continuum-build-group",
-                                               project.getProjectGroupName() ) )
-            {
-                result += "<img src=\"" + contextPath +
-                    "/images/buildnow_disabled.gif\" alt=\"not authorized\" title=\"not authorized\" border=\"0\">";
-                result += "</div>";
-
-                return result;
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            result +=
-                "<img src=\"" + contextPath + "/images/buildnow_disabled.gif\" alt=\"cle\" title=\"cle\" border=\"0\">";
-            result += "</div>";
-
-            return result;
-        }
-        catch ( AuthorizationException ae )
-        {
-            result += "<img src=\"" + contextPath +
-                "/images/buildnow_disabled.gif\" alt=\"authz exception\" title=\"authz exception\" border=\"0\">";
-            result += "</div>";
-
-            return result;
-        }
-
-
-        // we are authzd so act normally
         if ( project.isInQueue() )
         {
             result += "<img src=\"" + contextPath + "/images/inqueue.gif\" alt=\"In Queue\" title=\"In Queue\" border=\"0\">";
@@ -124,7 +83,15 @@ public class BuildCell
 
                     String url = UrlHelper.buildUrl( "/buildResult.action", request, response, params );
 
-                    result += "<a href=\"" + url + "\">" + project.getBuildNumber() + "</a>";
+                    if ( isAuthorized( project ) )
+                    {
+                        // we are authzd so act normally
+                        result += "<a href=\"" + url + "\">" + project.getBuildNumber() + "</a>";
+                    }
+                    else
+                    {
+                        result += project.getBuildNumber();
+                    }
                 }
                 else
                 {
@@ -150,5 +117,36 @@ public class BuildCell
         }
 
         return result + "</div>";
+    }
+
+    private boolean isAuthorized( ProjectSummary project )
+    {
+        // do the authz bit
+        ActionContext context = ActionContext.getContext();
+
+        PlexusContainer container = (PlexusContainer) context.getApplication().get( PlexusLifecycleListener.KEY );
+        SecuritySession securitySession =
+            (SecuritySession) context.getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
+
+        try
+        {
+            SecuritySystem securitySystem = (SecuritySystem) container.lookup( SecuritySystem.ROLE );
+
+            if ( !securitySystem.isAuthorized( securitySession, "continuum-build-group",
+                                               project.getProjectGroupName() ) )
+            {
+                return false;
+            }
+        }
+        catch ( ComponentLookupException cle )
+        {
+            return false;
+        }
+        catch ( AuthorizationException ae )
+        {
+            return false;
+        }
+
+        return true;
     }
 }
