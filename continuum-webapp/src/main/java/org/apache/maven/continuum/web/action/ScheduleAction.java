@@ -30,7 +30,7 @@ public class ScheduleAction
 {
     private int id;
 
-    private boolean active = true;
+    private boolean active = false;
 
     private int delay;
 
@@ -93,6 +93,12 @@ public class ScheduleAction
             delay = schedule.getDelay();
             maxJobExecutionTime = schedule.getMaxJobExecutionTime();
         }
+        else
+        {
+            // all new schedules should be active
+            active = true;
+        }
+
         return SUCCESS;
     }
 
