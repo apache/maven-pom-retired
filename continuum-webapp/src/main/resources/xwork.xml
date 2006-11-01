@@ -218,7 +218,10 @@
     </action>
 
     <action name="buildProjectGroup" class="projectGroup" method="build">
-      <result name="success" type="chain">projectGroupSummary</result>
+      <result name="success" type="redirect-action">
+        <param name="actionName">projectGroupSummary</param>
+        <param name="projectGroupId">${projectGroupId}</param>
+      </result>
     </action>
 
     <action name="removeProjectGroup" class="projectGroup" method="remove">
