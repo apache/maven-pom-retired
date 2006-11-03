@@ -46,6 +46,11 @@ import org.apache.maven.settings.Proxy;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
+import org.apache.maven.scm.repository.ScmRepository;
+import org.apache.maven.scm.repository.ScmRepositoryException;
+import org.apache.maven.scm.provider.ScmProviderRepositoryWithHost;
+import org.apache.maven.scm.manager.NoSuchScmProviderException;
+import org.apache.maven.scm.manager.ScmManager;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLifecycleException;
@@ -101,6 +106,11 @@ public class DefaultMavenBuilderHelper
      */
     private String localRepository;
 
+    /**
+     * @plexus.requirement
+     */
+    private ScmManager scmManager;
+
     private PlexusContainer container;
 
     private Settings settings;
@@ -128,6 +138,7 @@ public class DefaultMavenBuilderHelper
     }
     
     public void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject, Project continuumProject, boolean groupPom )
+        throws MavenBuilderHelperException
     {
     
         // ----------------------------------------------------------------------
@@ -140,11 +151,53 @@ public class DefaultMavenBuilderHelper
         // SCM Url
         // ----------------------------------------------------------------------
 
-        continuumProject.setScmUrl( getScmUrl( mavenProject ) );
+        String scmUrl = getScmUrl( mavenProject );
+
+        continuumProject.setScmUrl( scmUrl );
 
         if ( !"HEAD".equals( mavenProject.getScm().getTag() ) )
         {
             continuumProject.setScmTag( mavenProject.getScm().getTag() );
+        }
+
+        try
+        {
+            // this has the bonus of validating the scm url
+            ScmRepository repos = getScmRepository( scmUrl );
+
+            if ( repos.getProviderRepository() instanceof ScmProviderRepositoryWithHost )
+            {
+                String host = ( (ScmProviderRepositoryWithHost) repos.getProviderRepository() ).getHost();
+
+                if ( settings != null && settings.getServer( host ) != null )
+                {
+                    Server server = settings.getServer( host );
+
+                    if ( StringUtils.isEmpty( continuumProject.getScmUsername() ) &&
+                        !StringUtils.isEmpty( server.getUsername() ) )
+                    {
+
+                        continuumProject.setScmUsername( server.getUsername() );
+
+                        if ( !StringUtils.isEmpty( server.getPassword() ) )
+                        {
+                            continuumProject.setScmPassword( server.getPassword() );
+                        }
+                        else
+                        {
+                            continuumProject.setScmPassword( "" );
+                        }
+                    }
+                }
+            }
+        }
+        catch ( ScmRepositoryException e )
+        {
+            throw new MavenBuilderHelperException( "Malformed SCM URL " + scmUrl );
+        }
+        catch ( NoSuchScmProviderException e )
+        {
+            throw new MavenBuilderHelperException( "Malformed SCM URL " + scmUrl );
         }
 
         continuumProject.setVersion( getVersion( mavenProject ) );
@@ -456,6 +509,18 @@ public class DefaultMavenBuilderHelper
         }
 
         return name;
+    }
+
+
+    private ScmRepository getScmRepository( String scmUrl )
+        throws ScmRepositoryException, NoSuchScmProviderException
+    {
+        ScmRepository repos = scmManager.makeScmRepository( scmUrl );
+        if ( repos == null )
+        {
+            throw new ScmRepositoryException( "Unable to make repository for url " + scmUrl );
+        }
+        return repos;
     }
 
     private String getScmUrl( MavenProject project )

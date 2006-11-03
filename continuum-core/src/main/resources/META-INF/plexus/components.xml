@@ -269,6 +269,9 @@
         <requirement>
           <role>org.apache.maven.settings.MavenSettingsBuilder</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.scm.manager.ScmManager</role>
+        </requirement>
       </requirements>
       <configuration>
         <local-repository>${plexus.home}/local-repository</local-repository>

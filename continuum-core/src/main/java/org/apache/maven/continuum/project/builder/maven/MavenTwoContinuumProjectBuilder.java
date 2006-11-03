@@ -18,6 +18,7 @@ package org.apache.maven.continuum.project.builder.maven;
 
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
+import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException;
 import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
@@ -184,7 +185,16 @@ public class MavenTwoContinuumProjectBuilder
         {
             Project continuumProject = new Project();
 
-            builderHelper.mapMavenProjectToContinuumProject( result, mavenProject, continuumProject, groupPom );
+            try
+            {
+                builderHelper.mapMavenProjectToContinuumProject( result, mavenProject, continuumProject, groupPom );
+            }
+            catch ( MavenBuilderHelperException e )
+            {
+                getLogger().info( "Error adding project: Unknown error mapping project " + url, e );
+                result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_SCM_CONNECTION );
+                return;
+            }
 
             result.addProject( continuumProject, MavenTwoBuildExecutor.ID );
         }
