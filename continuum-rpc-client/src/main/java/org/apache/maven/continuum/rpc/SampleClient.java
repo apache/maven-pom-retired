@@ -27,10 +27,12 @@ public class SampleClient
     {
         String address = "http://localhost:8000/continuum";
 
-        if ( args.length > 0 )
+        if ( args.length > 0 && args[0] != null && args[0].length() > 0 )
         {
             address = args[0];
         }
+
+        System.out.println( "Connecting to: " + address );
 
         ProjectsReader pr = new ProjectsReader( new URL( address ) );
 
