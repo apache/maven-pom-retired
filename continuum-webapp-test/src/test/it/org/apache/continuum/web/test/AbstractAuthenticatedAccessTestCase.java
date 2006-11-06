@@ -24,11 +24,10 @@ public abstract class AbstractAuthenticatedAccessTestCase
     extends AbstractGuestAccessTestCase
 {
     public void setUp()
+        throws Exception
     {
         super.setUp();
-        clickLinkWithText( "Login" );
-        assertLoginPage();
-        submitLoginPage( getUsername(), getPassword() );
+        login( getUsername(), getPassword() );
     }
 
     public abstract String getUsername();

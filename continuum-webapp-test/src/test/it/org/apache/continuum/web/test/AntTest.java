@@ -36,11 +36,11 @@ public class AntTest
     public void testAddAntProject()
     {
         goToAddAntPage();
-        getSelenium().type( "projectName", "Foo" );
-        getSelenium().type( "projectVersion", "1.0-SNAPSHOT" );
-        getSelenium().type( "projectScmUrl",
+        setFieldValue( "projectName", "Foo" );
+        setFieldValue( "projectVersion", "1.0-SNAPSHOT" );
+        setFieldValue( "projectScmUrl",
                             "https://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/ant/" );
-        clickLinkWithXPath( "//input[@type='submit']" );
+        clickButtonWithValue( "Add" );
         assertGroupSummaryPage();
         assertTextPresent( "Default Project Group" );
         clickLinkWithText( "Default Project Group");
@@ -52,7 +52,7 @@ public class AntTest
     public void testSubmitEmptyForm()
     {
         goToAddAntPage();
-        clickLinkWithXPath( "//input[@type='submit']", false );
+        clickButtonWithValue( "Add", false );
         assertAddAntProjectPage();
         assertTextPresent( "Name is required" );
         assertTextPresent( "Version is required" );
@@ -62,7 +62,7 @@ public class AntTest
     public void testSubmitEmptyProjectName()
     {
         goToAddAntPage();
-        clickLinkWithXPath( "//input[@type='submit']", false );
+        clickButtonWithValue( "Add", false );
         assertAddAntProjectPage();
         assertTextPresent( "Name is required" );
     }
@@ -70,7 +70,7 @@ public class AntTest
     public void testSubmitEmptyVersion()
     {
         goToAddAntPage();
-        clickLinkWithXPath( "//input[@type='submit']", false );
+        clickButtonWithValue( "Add", false );
         assertAddAntProjectPage();
         assertTextPresent( "Version is required" );
     }
@@ -78,7 +78,7 @@ public class AntTest
     public void testSubmitEmptyScmUrl()
     {
         goToAddAntPage();
-        clickLinkWithXPath( "//input[@type='submit']", false );
+        clickButtonWithValue( "Add", false );
         assertAddAntProjectPage();
         assertTextPresent( "SCM Url is required" );
     }

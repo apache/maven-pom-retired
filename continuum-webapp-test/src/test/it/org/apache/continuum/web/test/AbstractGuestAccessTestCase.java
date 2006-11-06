@@ -21,9 +21,10 @@ package org.apache.continuum.web.test;
  * @version $Id$
  */
 public abstract class AbstractGuestAccessTestCase
-    extends AbstractSeleniumTestCase
+    extends AbstractContinuumTestCase
 {
     public void setUp()
+        throws Exception
     {
         super.setUp();
         assertFalse( "User was authenticated.", isAuthenticated() );

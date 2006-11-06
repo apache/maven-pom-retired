@@ -24,6 +24,7 @@ public class LoginTest
     extends AbstractGuestAccessTestCase
 {
     public void setUp()
+        throws Exception
     {
         super.setUp();
         clickLinkWithText( "Login" );
