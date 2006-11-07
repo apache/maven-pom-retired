@@ -17,6 +17,7 @@ package org.apache.maven.continuum.rpc;
  */
 
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 
 import java.net.URL;
 
@@ -70,42 +71,43 @@ public class SampleClient
 
                 System.out.println( "Name for project " + project.getId() + " : " + project.getName() );
 
-                if ( project.getState() == 1 || project.getState() == 10 )
+                if ( project.getState() == ContinuumProjectState.NEW
+                    || project.getState() == ContinuumProjectState.CHECKEDOUT )
                 {
                     System.out.println( "State: New" );
                 }
 
-                if ( project.getState() == 2 )
+                if ( project.getState() == ContinuumProjectState.OK )
                 {
                     System.out.println( "State: OK" );
                 }
 
-                if ( project.getState() == 3 )
+                if ( project.getState() == ContinuumProjectState.FAILED )
                 {
                     System.out.println( "State: Failed" );
                 }
 
-                if ( project.getState() == 4 )
+                if ( project.getState() == ContinuumProjectState.ERROR )
                 {
                     System.out.println( "State: Error" );
                 }
 
-                if ( project.getState() == 6 )
+                if ( project.getState() == ContinuumProjectState.BUILDING )
                 {
                     System.out.println( "State: Building" );
                 }
 
-                if ( project.getState() == 7 )
+                if ( project.getState() == ContinuumProjectState.CHECKING_OUT )
                 {
                     System.out.println( "State: Checking out" );
                 }
 
-                if ( project.getState() == 8 )
+                if ( project.getState() == ContinuumProjectState.UPDATING )
                 {
                     System.out.println( "State: Updating" );
                 }
 
-                if ( project.getState() == 9 )
+                if ( project.getState() == ContinuumProjectState.WARNING )
                 {
                     System.out.println( "State: Warning" );
                 }
