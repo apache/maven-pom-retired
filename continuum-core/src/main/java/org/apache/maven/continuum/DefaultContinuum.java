@@ -539,9 +539,12 @@ public class DefaultContinuum
 
         Map projectGroupsMap = null;
 
+        // get the Maps of id's that are effected by this schedule
         try
         {
-            // todo the store should get cleaned up some so this isn't as clunky, I think the store should be able to return all of these info
+            // todo the store should get cleaned up some so this isn't as clunky,
+            // todo I think the store should be able to return all of these info
+
             projectsMap = store.getProjectIdsAndBuildDefinitionsIdsBySchedule( schedule.getId() );
 
             projectGroupsMap = store.getProjectGroupIdsAndBuildDefinitionsIdsBySchedule( schedule.getId() );
@@ -560,10 +563,13 @@ public class DefaultContinuum
 
         Collection projectGroups = getAllProjectGroupsWithProjects();
 
+        // walk through all of the project groups
         for ( Iterator i = projectGroups.iterator(); i.hasNext(); )
         {
+            // get the project group
             ProjectGroup projectGroup = (ProjectGroup) i.next();
 
+            // get all the sorted projects in a project group
             try
             {
                 projectsList = getProjectsInBuildOrder( store.getProjectsWithDependenciesByGroupId( projectGroup.getId() ) );
@@ -573,13 +579,15 @@ public class DefaultContinuum
                 getLogger().warn(
                     "Cycle detected while sorting projects for building, falling back to unsorted build." );
 
-                projectsList = getProjects();
+                projectsList = getProjectsInGroup( projectGroup.getId() );
             }
 
             getLogger().info( "Building " + projectsList.size() + " projects" );
 
+            // get the group build definitions associated with this project group
             List groupBuildDefinitionIds = (List) projectGroupsMap.get( new Integer( projectGroup.getId() ) );
 
+            // iterate through the sorted (or potentially unsorted) projects in this project group
             for ( Iterator j = projectsList.iterator(); j.hasNext(); )
             {
                 Project project = (Project) j.next();
