@@ -378,22 +378,22 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-mail-sender-api</artifactId>
-        <version>1.0-alpha-3</version>
+        <version>${mail-sender.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-mail-sender-simple</artifactId>
-        <version>1.0-alpha-3</version>
+        <version>${mail-sender.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-mail-sender-test</artifactId>
-        <version>1.0-alpha-3</version>
+        <version>${mail-sender.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-mail-sender-javamail</artifactId>
-        <version>1.0-alpha-3</version>
+        <version>${mail-sender.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -511,5 +511,6 @@
     <maven.version>2.0.4</maven.version>
     <maven-scm.version>1.0-SNAPSHOT</maven-scm.version>
     <plexus-security.version>1.0-alpha-6-SNAPSHOT</plexus-security.version>
+    <mail-sender.version>1.0-alpha-5-SNAPSHOT</mail-sender.version>
   </properties>
 </project>

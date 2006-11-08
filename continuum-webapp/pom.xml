@@ -70,7 +70,7 @@
           <!-- Some versions of maven-war-plugin (snapshots) have this incorrectly defaulted to true.
                Specifically setting this to false to avoid accidental jar file creation. -->
           <archiveClasses>false</archiveClasses>
-          <dependentWarExcludes>META-INF/**,WEB-INF/web.xml,WEB-INF/classes/xwork.xml</dependentWarExcludes>
+          <dependentWarExcludes>META-INF/**,WEB-INF/web.xml,WEB-INF/classes/xwork.xml,WEB-INF/lib/**</dependentWarExcludes>
         </configuration>
         <!-- TODO: would be good to make the jetty plugin aware of these and remove the below -->
         <executions>
@@ -298,10 +298,6 @@
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-xmlrpc</artifactId>
       <version>1.0-beta-4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-mail-sender-javamail</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
