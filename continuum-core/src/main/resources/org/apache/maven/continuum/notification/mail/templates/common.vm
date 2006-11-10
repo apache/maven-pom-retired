@@ -26,6 +26,7 @@ Build statistics:
   Finished at: $formatter.formatTimestamp( $build.endTime )
   Total time: $formatter.formatInterval( $build.startTime, $build.endTime )
   Build Trigger: $formatter.formatTrigger( $build.trigger )
+  Build Number: $build.buildNumber
   Exit code: $build.exitCode
   Building machine hostname: $buildHost
   Operating system : $osName
