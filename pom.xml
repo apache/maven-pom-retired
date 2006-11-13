@@ -506,6 +506,16 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <profiles>
+    <profile>
+      <id>integration</id>
+      <modules>
+        <module>continuum-webapp-test</module>
+      </modules>
+    </profile>
+  </profiles>
+
   <properties>
     <continuumWebappVersion>${pom.version}</continuumWebappVersion>
     <maven.version>2.0.4</maven.version>
