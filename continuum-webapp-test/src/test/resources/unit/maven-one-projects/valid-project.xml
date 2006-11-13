@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/3.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/3.0.0 http://maven.apache.org/maven-v3_0_0.xsd">
+  <pomVersion>3</pomVersion>
+  <id>maven-one-project</id>
+  <name>Maven One Project</name>
+  <currentVersion>1.0</currentVersion>
+  <description>This is a sample Maven One Project used for testing.</description>
+  <shortDescription>This is a sample Maven One Project.</shortDescription>
+  <developers>
+    <developer>
+      <name>John Doe</name>
+      <id>john</id>
+      <email>john.doe@apache.org</email>
+      <organization/>
+      <roles>
+        <role>Documentation</role>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+  </developers>
+  <repository>
+    <connection>scm:svn:http://svn.dummy.org/repos/trunk/maven-two-project/</connection>
+    <developerConnection>scm:svn:https://svn.dummy.org/repos/trunk/maven-two-project/</developerConnection>
+    <url>http://svn.dummy.org/viewcvs.cgi/trunk/maven-two-project/</url>
+  </repository>
+  <dependencies/>
+</project>

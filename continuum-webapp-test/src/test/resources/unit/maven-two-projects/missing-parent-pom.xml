@@ -1,0 +1,16 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>maven.two.project</groupId>
+    <artifactId>maven-two-project</artifactId>
+    <version>1.0</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>sample-maven-two-project</artifactId>
+  <packaging>jar</packaging>
+  <name>Maven Two Project</name>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/trunk/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/continuum/trunk/</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/trunk/</url>
+  </scm>
+</project>
