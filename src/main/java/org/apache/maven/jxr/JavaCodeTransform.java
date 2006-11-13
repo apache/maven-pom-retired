@@ -88,6 +88,9 @@ import java.util.Vector;
 public class JavaCodeTransform
     implements Serializable
 {
+    // ----------------------------------------------------------------------
+    // public fields
+    // ----------------------------------------------------------------------
 
     /**
      * show line numbers
@@ -151,6 +154,10 @@ public class JavaCodeTransform
     public static final char[] VALID_URI_CHARS = {'?', '+', '%', '&', ':', '/', '.', '@', '_', ';', '=', '$', ',', '-',
         '!', '~', '*', '\'', '(', ')'};
 
+    // ----------------------------------------------------------------------
+    // private fields
+    // ----------------------------------------------------------------------
+
     /**
      * HashTable containing java reserved words
      */
@@ -191,10 +198,19 @@ public class JavaCodeTransform
      */
     private String sourcedir = null;
 
+    /**
+     * The input encoding
+     */
     private String inputEncoding = null;
 
+    /**
+     * The output encoding
+     */
     private String outputEncoding = null;
 
+    /**
+     * The wanted locale
+     */
     private Locale locale = null;
 
     /**
@@ -207,7 +223,14 @@ public class JavaCodeTransform
      */
     private PackageManager packageManager;
 
+    /**
+     * current file manager
+     */
     private FileManager fileManager;
+
+    // ----------------------------------------------------------------------
+    // constructor
+    // ----------------------------------------------------------------------
 
     /**
      * Constructor for the JavaCodeTransform object
@@ -221,6 +244,10 @@ public class JavaCodeTransform
         this.fileManager = packageManager.getFileManager();
     }
 
+    // ----------------------------------------------------------------------
+    // public methods
+    // ----------------------------------------------------------------------
+
     /**
      * Now different method of seeing if at end of input stream, closes inputs
      * stream at end.
@@ -232,6 +259,424 @@ public class JavaCodeTransform
     {
         return htmlFilter( line );
     }
+
+    /**
+     * Gets the header attribute of the JavaCodeTransform object
+     *
+     * @return String
+     */
+    public String getHeader()
+    {
+        StringBuffer buffer = new StringBuffer();
+
+        String outputEncoding = this.outputEncoding;
+        if ( outputEncoding == null )
+        {
+            outputEncoding = "ISO-8859-1";
+        }
+
+        // header
+        buffer
+            .append(
+                "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n" )
+            .append( "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"" ).append( locale )
+            .append( "\" lang=\"" ).append( locale ).append( "\">\n" ).append( "<head>\n" )
+            .append( "<meta http-equiv=\"content-type\" content=\"text/html; charset=" ).append( outputEncoding )
+            .append( "\" />" );
+
+        // title ("classname xref")
+        try
+        {
+            buffer.append( "<title>" ).append( fileManager.getFile( this.getCurrentFilename() )
+                .getClassType().getName() ).append( " xref</title>\n" );
+
+        }
+        catch ( IOException e )
+        {
+            buffer.append( "<title>xref</title>\n" );
+            e.printStackTrace();
+        }
+
+        // stylesheet link
+        buffer.append( "<link type=\"text/css\" rel=\"stylesheet\" href=\"" ).append( this.getPackageRoot() )
+            .append( STYLESHEET_FILENAME ).append( "\" />\n" );
+
+        buffer.append( "</head>\n" ).append( "<body>\n" ).append( this.getFileOverview() );
+
+        // start code section
+        buffer.append( "<pre>\n" );
+
+        return buffer.toString();
+    }
+
+    /**
+     * Gets the footer attribute of the JavaCodeTransform object
+     *
+     * @return String
+     */
+    public final String getFooter()
+    {
+        return "</pre>\n" + "<hr/>" + "<div id=\"footer\">" + JXR.NOTICE + "</div>" + "</body>\n" + "</html>\n";
+    }
+
+    /**
+     * This is the public method for doing all transforms of code.
+     *
+     * @param sourceReader Reader
+     * @param destWriter Writer
+     * @param locale String
+     * @param inputEncoding String
+     * @param outputEncoding String
+     * @param javadocLinkDir String
+     * @param revision String
+     * @param showHeader boolean
+     * @param showFooter boolean
+     * @throws IOException
+     */
+    public final void transform( Reader sourceReader, Writer destWriter, Locale locale, String inputEncoding,
+                                 String outputEncoding, String javadocLinkDir, String revision, boolean showHeader,
+                                 boolean showFooter )
+        throws IOException
+    {
+        this.locale = locale;
+        this.inputEncoding = inputEncoding;
+        this.outputEncoding = outputEncoding;
+        this.javadocLinkDir = javadocLinkDir;
+        this.revision = revision;
+
+        BufferedReader in = new BufferedReader( sourceReader );
+
+        PrintWriter out = new PrintWriter( destWriter );
+
+        String line = "";
+
+        if ( showHeader )
+        {
+            out.println( getHeader() );
+        }
+
+        int linenumber = 1;
+        while ( ( line = in.readLine() ) != null )
+        {
+            if ( LINE_NUMBERS )
+            {
+                out.print( "<a name=\"" + linenumber + "\" " + "href=\"#" + linenumber + "\">" + linenumber +
+                    "</a>" + getLineWidth( linenumber ) );
+            }
+
+            out.println( this.syntaxHighlight( line ) );
+
+            ++linenumber;
+        }
+
+        if ( showFooter )
+        {
+            out.println( getFooter() );
+        }
+
+        out.flush();
+    }
+
+    /**
+     * This is the public method for doing all transforms of code.
+     *
+     * @param sourcefile String
+     * @param destfile String
+     * @param locale String
+     * @param inputEncoding String
+     * @param outputEncoding String
+     * @param javadocLinkDir String
+     * @param revision String
+     * @throws IOException
+     */
+    public final void transform( String sourcefile, String destfile, Locale locale, String inputEncoding,
+                                 String outputEncoding, String javadocLinkDir, String revision )
+        throws IOException
+    {
+        this.setCurrentFilename( sourcefile );
+
+        this.sourcefile = sourcefile;
+        this.destfile = destfile;
+
+        //make sure that the parent directories exist...
+        new File( new File( destfile ).getParent() ).mkdirs();
+
+        Reader fr = null;
+        Writer fw = null;
+        try
+        {
+            if ( inputEncoding != null )
+            {
+                fr = new InputStreamReader( new FileInputStream( sourcefile ), inputEncoding );
+            }
+            else
+            {
+                fr = new FileReader( sourcefile );
+            }
+            if ( outputEncoding != null )
+            {
+                fw = new OutputStreamWriter( new FileOutputStream( destfile ), outputEncoding );
+            }
+            else
+            {
+                fw = new FileWriter( destfile );
+            }
+
+            transform( fr, fw, locale, inputEncoding, outputEncoding, javadocLinkDir, revision, true, true );
+        }
+        catch ( RuntimeException e )
+        {
+            System.out.println( "Unable to processPath " + sourcefile + " => " + destfile );
+            throw e;
+        }
+        finally
+        {
+            if ( fr != null )
+            {
+                try
+                {
+                    fr.close();
+                }
+                catch ( Exception ex )
+                {
+                    ex.printStackTrace();
+                }
+            }
+            if ( fw != null )
+            {
+                try
+                {
+                    fw.close();
+                }
+                catch ( Exception ex )
+                {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Get the current filename
+     *
+     * @return String
+     */
+    public final String getCurrentFilename()
+    {
+        return this.currentFilename;
+    }
+
+    /**
+     * Set the current filename
+     *
+     * @param filename String
+     */
+    public final void setCurrentFilename( String filename )
+    {
+        this.currentFilename = filename;
+    }
+
+    /**
+     * From the current file, determine the package root based on the current
+     * path.
+     *
+     * @return String
+     */
+    public final String getPackageRoot()
+    {
+        StringBuffer buff = new StringBuffer();
+
+        JavaFile jf = null;
+
+        try
+        {
+            jf = fileManager.getFile( this.getCurrentFilename() );
+        }
+        catch ( IOException e )
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        String current = jf.getPackageType().getName();
+
+        int count = this.getPackageCount( current );
+
+        for ( int i = 0; i < count; ++i )
+        {
+            buff.append( "../" );
+        }
+
+        return buff.toString();
+    }
+
+    /**
+     * Given a line of text, search for URIs and make href's out of them
+     *
+     * @param line String
+     * @return String
+     */
+    public final String uriFilter( String line )
+    {
+        for ( int i = 0; i < VALID_URI_SCHEMES.length; ++i )
+        {
+            String scheme = VALID_URI_SCHEMES[i];
+
+            int index = line.indexOf( scheme );
+
+            if ( index != -1 )
+            {
+                int start = index;
+                int end = -1;
+
+                for ( int j = start; j < line.length(); ++j )
+                {
+                    char current = line.charAt( j );
+
+                    if ( !Character.isLetterOrDigit( current ) && isInvalidURICharacter( current ) )
+                    {
+                        end = j;
+                        break;
+                    }
+
+                    end = j;
+                }
+
+                //now you should have the full URI so you can replace this
+                //in the current buffer
+
+                if ( end != -1 )
+                {
+                    String uri = line.substring( start, end );
+
+                    line = StringUtils.replace( line, uri,
+                                                "<a href=\"" + uri + "\" target=\"alexandria_uri\">" + uri + "</a>" );
+                }
+            }
+        }
+
+        //if we are in a multiline comment we should not call JXR here.
+        if ( !inMultiLineComment && !inJavadocComment )
+        {
+            return jxrFilter( line );
+        }
+
+        return line;
+    }
+
+    /**
+     * The current revision of the CVS module
+     *
+     * @return String
+     */
+    public final String getRevision()
+    {
+        return this.revision;
+    }
+
+    /**
+     * The current source file being read
+     *
+     * @return source file name
+     */
+    public final String getSourcefile()
+    {
+        return this.sourcefile;
+    }
+
+    /**
+     * The current dest file being written
+     *
+     * @return destination file name
+     */
+    public final String getDestfile()
+    {
+        return this.destfile;
+    }
+
+    /**
+     * The current source directory being read from.
+     *
+     * @return source directory
+     */
+    public final String getSourceDirectory()
+    {
+        return this.sourcedir;
+    }
+
+    /**
+     * Cross Reference the given line with JXR returning the new content.
+     *
+     * @param line String
+     * @param packageName String
+     * @param classType ClassType
+     * @return String
+     */
+    public final String xrLine( String line, String packageName, ClassType classType )
+    {
+        StringBuffer buff = new StringBuffer( line );
+
+        String link = null;
+        String find = null;
+        String href = null;
+
+        if ( classType != null )
+        {
+            href = this.getHREF( packageName, classType );
+            find = classType.getName();
+        }
+        else
+        {
+            href = this.getHREF( packageName );
+            find = packageName;
+        }
+
+        //build out what the link would be.
+        link = "<a href=\"" + href + "\">" + find + "</a>";
+
+        //use the SimpleWordTokenizer to find all entries
+        //that match word.  Then replace these with the link
+
+        //now replace the word in the buffer with the link
+
+        String replace = link;
+        StringEntry[] tokens = SimpleWordTokenizer.tokenize( buff.toString(), find );
+
+        for ( int l = 0; l < tokens.length; ++l )
+        {
+
+            int start = tokens[l].getIndex();
+            int end = tokens[l].getIndex() + find.length();
+
+            buff.replace( start, end, replace );
+
+        }
+
+        return buff.toString();
+    }
+
+    /**
+     * Highlight the package in this line.
+     *
+     * @param line input line
+     * @param packageName package name
+     * @return input line with linked package
+     */
+    public final String xrLine( String line, String packageName )
+    {
+        String href = this.getHREF( packageName );
+
+        String find = packageName;
+
+        //build out what the link would be.
+        String link = "<a href=\"" + href + "\">" + find + "</a>";
+
+        return StringUtils.replace( line, find, link );
+    }
+
+    // ----------------------------------------------------------------------
+    // private methods
+    // ----------------------------------------------------------------------
 
     /**
      * Filter html tags into more benign text.
@@ -386,6 +831,7 @@ public class JavaCodeTransform
         {
             buf.append( stringFilter( line ) );
         }
+
         return buf.toString();
     }
 
@@ -397,7 +843,6 @@ public class JavaCodeTransform
      */
     private final String stringFilter( String line )
     {
-
         if ( line == null || line.equals( "" ) )
         {
             return "";
@@ -481,6 +926,7 @@ public class JavaCodeTransform
             }
         }
         buf.append( line );
+
         return uriFilter( buf.toString() );
     }
 
@@ -622,204 +1068,6 @@ public class JavaCodeTransform
     }
 
     /**
-     * Gets the header attribute of the JavaCodeTransform object
-     *
-     * @return String
-     */
-    public String getHeader()
-    {
-        StringBuffer buffer = new StringBuffer();
-
-        String outputEncoding = this.outputEncoding;
-        if ( outputEncoding == null )
-        {
-            outputEncoding = "ISO-8859-1";
-        }
-
-        // header
-        buffer
-            .append(
-                "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n" )
-            .append( "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"" ).append( locale )
-            .append( "\" lang=\"" ).append( locale ).append( "\">\n" ).append( "<head>\n" )
-            .append( "<meta http-equiv=\"content-type\" content=\"text/html; charset=" ).append( outputEncoding )
-            .append( "\" />" );
-
-        // title ("classname xref")
-        try
-        {
-            buffer.append( "<title>" ).append( fileManager.getFile( this.getCurrentFilename() )
-                .getClassType().getName() ).append( " xref</title>\n" );
-
-        }
-        catch ( IOException e )
-        {
-            buffer.append( "<title>xref</title>\n" );
-            e.printStackTrace();
-        }
-
-        // stylesheet link
-        buffer.append( "<link type=\"text/css\" rel=\"stylesheet\" href=\"" ).append( this.getPackageRoot() )
-            .append( STYLESHEET_FILENAME ).append( "\" />\n" );
-
-        buffer.append( "</head>\n" ).append( "<body>\n" ).append( this.getFileOverview() );
-
-        // start code section
-        buffer.append( "<pre>\n" );
-
-        return buffer.toString();
-    }
-
-    /**
-     * Gets the footer attribute of the JavaCodeTransform object
-     *
-     * @return String
-     */
-    public final String getFooter()
-    {
-        return "</pre>\n" + "<hr/>" + "<div id=\"footer\">" + JXR.NOTICE + "</div>" + "</body>\n" + "</html>\n";
-    }
-
-    /**
-     * This is the public method for doing all transforms of code.
-     *
-     * @param sourceReader Reader
-     * @param destWriter Writer
-     * @param locale String
-     * @param inputEncoding String
-     * @param outputEncoding String
-     * @param javadocLinkDir String
-     * @param revision String
-     * @param showHeader boolean
-     * @param showFooter boolean
-     * @throws IOException
-     */
-    public final void transform( Reader sourceReader, Writer destWriter, Locale locale, String inputEncoding,
-                                 String outputEncoding, String javadocLinkDir, String revision, boolean showHeader,
-                                 boolean showFooter )
-        throws IOException
-    {
-        this.locale = locale;
-        this.inputEncoding = inputEncoding;
-        this.outputEncoding = outputEncoding;
-        this.javadocLinkDir = javadocLinkDir;
-        this.revision = revision;
-
-        BufferedReader in = new BufferedReader( sourceReader );
-
-        PrintWriter out = new PrintWriter( destWriter );
-
-        String line = "";
-
-        if ( showHeader )
-        {
-            out.println( getHeader() );
-        }
-
-        int linenumber = 1;
-        while ( ( line = in.readLine() ) != null )
-        {
-            if ( LINE_NUMBERS )
-            {
-                out.print( "<a name=\"" + linenumber + "\" " + "href=\"#" + linenumber + "\">" + linenumber +
-                    "</a>" + getLineWidth( linenumber ) );
-            }
-
-            out.println( this.syntaxHighlight( line ) );
-
-            ++linenumber;
-        }
-
-        if ( showFooter )
-        {
-            out.println( getFooter() );
-        }
-
-        out.flush();
-    }
-
-    /**
-     * This is the public method for doing all transforms of code.
-     *
-     * @param sourcefile String
-     * @param destfile String
-     * @param locale String
-     * @param inputEncoding String
-     * @param outputEncoding String
-     * @param javadocLinkDir String
-     * @param revision String
-     * @throws IOException
-     */
-    public final void transform( String sourcefile, String destfile, Locale locale, String inputEncoding,
-                                 String outputEncoding, String javadocLinkDir, String revision )
-        throws IOException
-    {
-
-        this.setCurrentFilename( sourcefile );
-
-        this.sourcefile = sourcefile;
-        this.destfile = destfile;
-
-        //make sure that the parent directories exist...
-        new File( new File( destfile ).getParent() ).mkdirs();
-
-        Reader fr = null;
-        Writer fw = null;
-        try
-        {
-            if ( inputEncoding != null )
-            {
-                fr = new InputStreamReader( new FileInputStream( sourcefile ), inputEncoding );
-            }
-            else
-            {
-                fr = new FileReader( sourcefile );
-            }
-            if ( outputEncoding != null )
-            {
-                fw = new OutputStreamWriter( new FileOutputStream( destfile ), outputEncoding );
-            }
-            else
-            {
-                fw = new FileWriter( destfile );
-            }
-
-            transform( fr, fw, locale, inputEncoding, outputEncoding, javadocLinkDir, revision, true, true );
-        }
-        catch ( RuntimeException e )
-        {
-            System.out.println( "Unable to processPath " + sourcefile + " => " + destfile );
-            throw e;
-        }
-        finally
-        {
-            if ( fr != null )
-            {
-                try
-                {
-                    fr.close();
-                }
-                catch ( Exception ex )
-                {
-                    ex.printStackTrace();
-                }
-            }
-            if ( fw != null )
-            {
-                try
-                {
-                    fw.close();
-                }
-                catch ( Exception ex )
-                {
-                    ex.printStackTrace();
-                }
-            }
-        }
-
-    }
-
-    /**
      * Get an overview header for this file.
      *
      * @return String
@@ -831,7 +1079,6 @@ public class JavaCodeTransform
         // only add the header if javadocs are present
         if ( javadocLinkDir != null )
         {
-
             overview.append( "<div id=\"overview\">" );
             //get the URI to get Javadoc info.
             StringBuffer javadocURI = new StringBuffer().append( javadocLinkDir );
@@ -865,6 +1112,7 @@ public class JavaCodeTransform
 
             overview.append( "</div>" );
         }
+
         return overview.toString();
     }
 
@@ -900,12 +1148,10 @@ public class JavaCodeTransform
      */
     private final String jxrFilter( String line )
     {
-
         JavaFile jf = null;
 
         try
         {
-
             //if the current file isn't set then just return
             if ( this.getCurrentFilename() == null )
             {
@@ -940,13 +1186,11 @@ public class JavaCodeTransform
         //go through each word and then match them to the correct class if necessary.
         for ( int i = 0; i < words.length; ++i )
         {
-
             //each word
             StringEntry word = words[i];
 
             for ( int j = 0; j < packages.length; ++j )
             {
-
                 //get the package from teh PackageManager because this will hold
                 //the version with the classes also.
 
@@ -970,7 +1214,6 @@ public class JavaCodeTransform
 
                 if ( wordName.indexOf( "." ) != -1 )
                 {
-
                     //if there is a "." in the string then we have to assume
                     //it is a package.
 
@@ -988,7 +1231,6 @@ public class JavaCodeTransform
 
                     if ( pt != null )
                     {
-
                         ClassType ct = pt.getClassType( fqpn_class );
 
                         if ( ct != null )
@@ -998,54 +1240,25 @@ public class JavaCodeTransform
                             //link to it.
 
                             line = xrLine( line, pt.getName(), ct );
-
                         }
-
                     }
 
                     if ( fqpn_package.equals( currentImport.getName() ) &&
                         currentImport.getClassType( fqpn_class ) != null )
                     {
-
                         //then the package we are currently in is the one specified in the string
                         //and the import class is correct.
                         line = xrLine( line, packages[j], currentImport.getClassType( fqpn_class ) );
-
                     }
-
                 }
                 else if ( currentImport.getClassType( wordName ) != null )
                 {
-
                     line = xrLine( line, packages[j], currentImport.getClassType( wordName ) );
-
                 }
-
             }
-
         }
 
         return importFilter( line );
-    }
-
-    /**
-     * Get the current filename
-     *
-     * @return String
-     */
-    public final String getCurrentFilename()
-    {
-        return this.currentFilename;
-    }
-
-    /**
-     * Set the current filename
-     *
-     * @param filename String
-     */
-    public final void setCurrentFilename( String filename )
-    {
-        this.currentFilename = filename;
     }
 
     /**
@@ -1057,7 +1270,6 @@ public class JavaCodeTransform
      */
     private final String getHREF( String dest, ClassType jc )
     {
-
         StringBuffer href = new StringBuffer();
 
         //find out how to go back to the root
@@ -1101,19 +1313,16 @@ public class JavaCodeTransform
      */
     private final int getPackageCount( String packageName )
     {
-
         if ( packageName == null )
         {
             return 0;
         }
 
         int count = 0;
-
         int index = 0;
 
         while ( true )
         {
-
             index = packageName.indexOf( ".", index );
 
             if ( index == -1 )
@@ -1139,7 +1348,6 @@ public class JavaCodeTransform
      */
     private final String importFilter( String line )
     {
-
         int start = -1;
 
         /*
@@ -1154,15 +1362,12 @@ public class JavaCodeTransform
 
         if ( isImport || isPackage )
         {
-
             start = line.trim().indexOf( " " );
         }
 
         if ( start != -1 )
         {
-
             //filter out this packagename...
-
             String pkg = line.substring( start, line.length() ).trim();
 
             //specify the classname of this import if any.
@@ -1170,13 +1375,10 @@ public class JavaCodeTransform
 
             if ( pkg.indexOf( ".*" ) != -1 )
             {
-
                 pkg = StringUtils.replace( pkg, ".*", "" );
-
             }
             else if ( !isPackage )
             {
-
                 //this is an explicit Class import
 
                 String packageLine = pkg.toString();
@@ -1197,7 +1399,6 @@ public class JavaCodeTransform
                     classname = packageLine.substring( packageLine.lastIndexOf( "." ) + 1, packageLine.length() - 1 );
 
                     int end = pkg.lastIndexOf( "." );
-
                     if ( end == -1 )
                     {
                         end = pkg.length() - 1;
@@ -1205,7 +1406,6 @@ public class JavaCodeTransform
 
                     pkg = pkg.substring( 0, end );
                 }
-
             }
 
             pkg = StringUtils.replace( pkg, ";", "" );
@@ -1214,14 +1414,11 @@ public class JavaCodeTransform
 
             if ( packageManager.getPackageType( pkg ) != null || isPackage )
             {
-
                 //Create an HREF for explicit classname imports
                 if ( classname != null )
                 {
-
                     line = StringUtils.replace( line, classname, "<a href=\"" + pkgHREF + "/" + classname + ".html" +
                         "\">" + classname + "</a>" );
-
                 }
 
                 //now replace the given package with a href
@@ -1234,104 +1431,6 @@ public class JavaCodeTransform
         return line;
     }
 
-    /**
-     * From the current file, determine the package root based on the current
-     * path.
-     *
-     * @return String
-     */
-    public final String getPackageRoot()
-    {
-
-        StringBuffer buff = new StringBuffer();
-
-        JavaFile jf = null;
-
-        try
-        {
-            jf = fileManager.getFile( this.getCurrentFilename() );
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-            return null;
-        }
-
-        String current = jf.getPackageType().getName();
-
-        int count = this.getPackageCount( current );
-
-        for ( int i = 0; i < count; ++i )
-        {
-            buff.append( "../" );
-        }
-
-        return buff.toString();
-    }
-
-    /**
-     * Given a line of text, search for URIs and make href's out of them
-     *
-     * @param line String
-     * @return String
-     */
-    public final String uriFilter( String line )
-    {
-
-        for ( int i = 0; i < VALID_URI_SCHEMES.length; ++i )
-        {
-
-            String scheme = VALID_URI_SCHEMES[i];
-
-            int index = line.indexOf( scheme );
-
-            if ( index != -1 )
-            {
-
-                int start = index;
-
-                int end = -1;
-
-                for ( int j = start; j < line.length(); ++j )
-                {
-
-                    char current = line.charAt( j );
-
-                    if ( !Character.isLetterOrDigit( current ) && isInvalidURICharacter( current ) )
-                    {
-                        end = j;
-                        break;
-                    }
-
-                    end = j;
-
-                }
-
-                //now you should have the full URI so you can replace this
-                //in the current buffer
-
-                if ( end != -1 )
-                {
-
-                    String uri = line.substring( start, end );
-
-                    line = StringUtils.replace( line, uri,
-                                                "<a href=\"" + uri + "\" target=\"alexandria_uri\">" + uri + "</a>" );
-                }
-            }
-        }
-
-        //if we are in a multiline comment we should not call JXR here.
-        if ( !inMultiLineComment && !inJavadocComment )
-        {
-            return jxrFilter( line );
-        }
-        else
-        {
-            return line;
-        }
-
-    }
 
     /**
      * if the given char is not one of the following in VALID_URI_CHARS then
@@ -1342,7 +1441,6 @@ public class JavaCodeTransform
      */
     private final boolean isInvalidURICharacter( char c )
     {
-
         for ( int i = 0; i < VALID_URI_CHARS.length; ++i )
         {
             if ( VALID_URI_CHARS[i] == c )
@@ -1353,117 +1451,4 @@ public class JavaCodeTransform
 
         return true;
     }
-
-    /**
-     * The current revision of the CVS module
-     *
-     * @return String
-     */
-    public final String getRevision()
-    {
-        return this.revision;
-    }
-
-    /**
-     * The current source file being read
-     *
-     * @return source file name
-     */
-    public final String getSourcefile()
-    {
-        return this.sourcefile;
-    }
-
-    /**
-     * The current dest file being written
-     *
-     * @return destination file name
-     */
-    public final String getDestfile()
-    {
-        return this.destfile;
-    }
-
-    /**
-     * The current source directory being read from.
-     *
-     * @return source directory
-     */
-    public final String getSourceDirectory()
-    {
-        return this.sourcedir;
-    }
-
-    /**
-     * Cross Reference the given line with JXR returning the new content.
-     *
-     * @param line String
-     * @param packageName String
-     * @param classType ClassType
-     * @return String
-     */
-    public final String xrLine( String line, String packageName, ClassType classType )
-    {
-
-        StringBuffer buff = new StringBuffer( line );
-
-        String link = null;
-        String find = null;
-        String href = null;
-
-        if ( classType != null )
-        {
-            href = this.getHREF( packageName, classType );
-            find = classType.getName();
-        }
-        else
-        {
-            href = this.getHREF( packageName );
-            find = packageName;
-        }
-
-        //build out what the link would be.
-        link = "<a href=\"" + href + "\">" + find + "</a>";
-
-        //use the SimpleWordTokenizer to find all entries
-        //that match word.  Then replace these with the link
-
-        //now replace the word in the buffer with the link
-
-        String replace = link;
-        StringEntry[] tokens = SimpleWordTokenizer.tokenize( buff.toString(), find );
-
-        for ( int l = 0; l < tokens.length; ++l )
-        {
-
-            int start = tokens[l].getIndex();
-            int end = tokens[l].getIndex() + find.length();
-
-            buff.replace( start, end, replace );
-
-        }
-
-        return buff.toString();
-    }
-
-    /**
-     * Highlight the package in this line.
-     *
-     * @param line input line
-     * @param packageName package name
-     * @return input line with linked package
-     */
-    public final String xrLine( String line, String packageName )
-    {
-
-        String href = this.getHREF( packageName );
-
-        String find = packageName;
-
-        //build out what the link would be.
-        String link = "<a href=\"" + href + "\">" + find + "</a>";
-
-        return StringUtils.replace( line, find, link );
-    }
-
 }
