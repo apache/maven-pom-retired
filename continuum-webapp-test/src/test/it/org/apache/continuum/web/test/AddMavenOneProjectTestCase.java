@@ -16,11 +16,6 @@ package org.apache.continuum.web.test;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.util.cli.Commandline;
-import org.codehaus.plexus.util.cli.CommandLineUtils;
-import org.codehaus.plexus.util.cli.CommandLineException;
-import org.codehaus.plexus.util.cli.DefaultConsumer;
-
 import java.io.File;
 
 /**
@@ -61,7 +56,7 @@ public class AddMavenOneProjectTestCase
         getSelenium().click( "//input[@type='submit']" );
         waitPage();
 
-        if( validPom )
+        if ( validPom )
         {
             assertPage( "Continuum - Group Summary" );
             assertTextPresent( "Project Groups" );
@@ -74,7 +69,7 @@ public class AddMavenOneProjectTestCase
     /**
      * test with valid pom file
      */
-   /* public void testValidPomFile()
+    /* public void testValidPomFile()
     {
         File pomFile = new File( getBasedir(), "src/test/resources/unit/valid-maven-project/project.xml");
         submitAddMavenOneProjectPage( "", pomFile.getAbsolutePath(), false );
@@ -86,7 +81,7 @@ public class AddMavenOneProjectTestCase
      */
     public void testValidPomUrl()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/valid-project.xml");
+        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/valid-project.xml" );
         submitAddMavenOneProjectPage( "file:/" + pomFile.getAbsolutePath(), "", true );
         assertTextPresent( "Maven One Project" );
     }
@@ -107,18 +102,20 @@ public class AddMavenOneProjectTestCase
      */
     public void testMissingElementInPom()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/missing-repository-element-project.xml");
+        File pomFile = new File( getBasedir(),
+                                 "src/test/resources/unit/maven-one-projects/missing-repository-element-project.xml" );
         submitAddMavenOneProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
         assertTextPresent( "Missing repository element in the POM." );
     }
 
-    
+
     /**
      * test with <extend> element present in pom file
      */
     public void testWithExtendElementPom()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/extend-element-project.xml");
+        File pomFile =
+            new File( getBasedir(), "src/test/resources/unit/maven-one-projects/extend-element-project.xml" );
         submitAddMavenOneProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
         assertTextPresent( "Cannot use a POM with an extend element." );
     }
@@ -128,7 +125,8 @@ public class AddMavenOneProjectTestCase
      */
     public void testUnparseableXmlContent()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/unparseable-content-project.xml");
+        File pomFile =
+            new File( getBasedir(), "src/test/resources/unit/maven-one-projects/unparseable-content-project.xml" );
         submitAddMavenOneProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
         assertTextPresent( "The XML content of the POM can not be parsed." );
     }
@@ -138,7 +136,7 @@ public class AddMavenOneProjectTestCase
      */
     public void testMalformedPomUrl()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/valid-project.xml");
+        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/valid-project.xml" );
         submitAddMavenOneProjectPage( pomFile.getAbsolutePath(), "", false );
         assertTextPresent( "The URL provided is malformed." );
     }
@@ -148,7 +146,7 @@ public class AddMavenOneProjectTestCase
      */
     public void testInaccessiblePomUrl()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/valid-project.xml");
+        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/valid-project.xml" );
         submitAddMavenOneProjectPage( "file://" + pomFile.getAbsolutePath(), "", false );
         assertTextPresent( "The specified host is either unknown or inaccessible." );
     }

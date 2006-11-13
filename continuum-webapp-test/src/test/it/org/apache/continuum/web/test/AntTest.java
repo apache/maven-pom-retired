@@ -39,12 +39,12 @@ public class AntTest
         setFieldValue( "projectName", "Foo" );
         setFieldValue( "projectVersion", "1.0-SNAPSHOT" );
         setFieldValue( "projectScmUrl",
-                            "https://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/ant/" );
+                       "https://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/ant/" );
         clickButtonWithValue( "Add" );
         assertGroupSummaryPage();
         assertTextPresent( "Default Project Group" );
-        clickLinkWithText( "Default Project Group");
-        assertTextPresent( "Foo");
+        clickLinkWithText( "Default Project Group" );
+        assertTextPresent( "Foo" );
 
         //TODO Add more tests (values in Default Project Group, values in project view, notifiers, build defintions, delete, build,...)
     }

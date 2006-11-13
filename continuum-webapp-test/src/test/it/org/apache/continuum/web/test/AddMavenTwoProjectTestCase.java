@@ -44,7 +44,7 @@ public class AddMavenTwoProjectTestCase
         getSelenium().click( "//input[@type='submit']" );
         waitPage();
 
-        if( validPom )
+        if ( validPom )
         {
             assertPage( "Continuum - Group Summary" );
             assertTextPresent( "Project Groups" );
@@ -57,17 +57,18 @@ public class AddMavenTwoProjectTestCase
      */
     public void testMultiModuleProject()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-two-projects/multi-module-maven-project/pom.xml");
-        submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", true);
+        File pomFile =
+            new File( getBasedir(), "src/test/resources/unit/maven-two-projects/multi-module-maven-project/pom.xml" );
+        submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", true );
         assertTextPresent( "Maven Two Multi-Module Project" );
         assertTextPresent( "maven.two.multi.module.project" );
 
         clickLinkWithText( "Maven Two Multi-Module Project" );
-        assertTextPresent( "Summary");
-        assertTextPresent( "Summary");
-        assertTextPresent( "Maven Two Multi-Module Project");
-        assertTextPresent( "Maven Two Multi-Module Project Module 1");
-        assertTextPresent( "Maven Two Multi-Module Project Module 2");
+        assertTextPresent( "Summary" );
+        assertTextPresent( "Summary" );
+        assertTextPresent( "Maven Two Multi-Module Project" );
+        assertTextPresent( "Maven Two Multi-Module Project Module 1" );
+        assertTextPresent( "Maven Two Multi-Module Project Module 2" );
     }
 
     /**
@@ -86,7 +87,8 @@ public class AddMavenTwoProjectTestCase
      */
     public void testMissingScmElementPom()
     {
-        File pomFile= new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-scm-element-pom.xml");
+        File pomFile =
+            new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-scm-element-pom.xml" );
         submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
         assertTextPresent( "Missing scm element in the POM." );
         assertElementPresent( "m2PomUrl" );
@@ -98,9 +100,10 @@ public class AddMavenTwoProjectTestCase
      */
     public void testCannotAccessResource()
     {
-        File pomFile= new File( getBasedir(), "src/test/resources/unit/maven-two-projects/valid-pom.xml");
+        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-two-projects/valid-pom.xml" );
         submitAddMavenTwoProjectPage( "file://" + pomFile.getAbsolutePath(), "", false );
-        assertTextPresent( "The specified resource cannot be accessed. Please try again later or contact your administrator." );
+        assertTextPresent(
+            "The specified resource cannot be accessed. Please try again later or contact your administrator." );
         assertElementPresent( "m2PomUrl" );
         assertElementPresent( "m2PomFile" );
     }
@@ -110,21 +113,23 @@ public class AddMavenTwoProjectTestCase
      */
     public void testMissingConnectionElement()
     {
-        File pomFile= new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-connection-element-pom.xml");
+        File pomFile =
+            new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-connection-element-pom.xml" );
         submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
         assertTextPresent( "Missing connection sub-element in the scm element in the POM." );
         assertElementPresent( "m2PomUrl" );
         assertElementPresent( "m2PomFile" );
     }
 
-        /**
+    /**
      * Test when the parent pom is missing or not yet added in continuum
      */
     public void testMissingParentPom()
     {
-        File pomFile= new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-parent-pom.xml");
+        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-parent-pom.xml" );
         submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
-        assertTextPresent( "Missing artifact trying to build the POM. Check that its parent POM is available or add it first in Continuum." );
+        assertTextPresent(
+            "Missing artifact trying to build the POM. Check that its parent POM is available or add it first in Continuum." );
         assertElementPresent( "m2PomUrl" );
         assertElementPresent( "m2PomFile" );
     }
@@ -134,7 +139,8 @@ public class AddMavenTwoProjectTestCase
      */
     public void testNotifiers()
     {
-        File pomFile= new File( getBasedir(), "src/test/resources/unit/maven-two-projects/specified-notifiers-pom.xml");
+        File pomFile =
+            new File( getBasedir(), "src/test/resources/unit/maven-two-projects/specified-notifiers-pom.xml" );
         submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", true );
         assertTextPresent( "Maven Two Notifiers Project" );
 
@@ -154,20 +160,20 @@ public class AddMavenTwoProjectTestCase
      */
     public void testMissingModules()
     {
-        File pomFile= new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-modules-pom.xml");
+        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-modules-pom.xml" );
         submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
         assertTextPresent( "Unknown error trying to build POM." );
         assertElementPresent( "m2PomUrl" );
         assertElementPresent( "m2PomFile" );
     }
-    
+
     /**
      * Test valid pom
      */
     public void testValidPom()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-two-projects/valid-pom.xml");
-        submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", true);
+        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-two-projects/valid-pom.xml" );
+        submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", true );
         assertTextPresent( "Maven Two Project" );
         assertTextPresent( "maven.two.project" );
     }
