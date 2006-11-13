@@ -141,8 +141,6 @@ public class SchedulesPageTest
         // delete schedule after adding
         deleteSchedule( SCHEDULE_NAME );
 
-        assertDefaultSchedule();
-
         assertFalse( "Can not delete schedule",
                      getSelenium().isElementPresent( XPathExpressionUtil.matchTableRowOrderedValues( columnValues ) ) );
     }
@@ -173,9 +171,7 @@ public class SchedulesPageTest
                        "2021", "8", "9", false );
 
         // after we save the schedule we should be brought back to the schedules page
-        assertPage( SCHEDULES_PAGE_TITLE );
-
-        assertDefaultSchedule();
+        assertInitialSchedulesPage();
 
         cronSchedule = "2 3 4 ? 6 7 2021";
 
@@ -229,6 +225,7 @@ public class SchedulesPageTest
 
         inputSchedule( fields, wait, valid );
 
+        //TODO: Fix text validation, we need real text and not a property in the screen
         assertFalse( "Name field improperly validated",
                      getSelenium().isElementPresent( "//tr/td[span='schedule.name.required']" ) );
         assertFalse( "Description field improperly validated",
@@ -260,11 +257,15 @@ public class SchedulesPageTest
     {
         assertPage( EDIT_SCHEDULE_PAGE_TITLE );
 
+        //TODO: assert error messages
+
         assertEditSchedulePageInputFields();
     }
 
     public void assertEditSchedulePageInputFields()
     {
+        //TODO: assert content
+
         assertElementPresent( "saveSchedule_id" );
         assertElementPresent( "id" );
         assertElementPresent( "saveSchedule_name" );
@@ -296,7 +297,7 @@ public class SchedulesPageTest
     public void deleteSchedule( String scheduleName )
     {
         // after we save the schedule we should be brought back to the schedules page
-        assertPage( SCHEDULES_PAGE_TITLE );
+        assertInitialSchedulesPage();
 
         String[] columnValues = {scheduleName};
 
@@ -305,11 +306,13 @@ public class SchedulesPageTest
 
         // deletion confirmation page
         assertPage( "Schedule Removal" );
+        //TODO: assert content
+        //TODO: assert schedule name is in deletion confirmation
 
         clickButtonWithValue( "Delete" );
 
         // after we confirm the deletion we should be brought back to the schedules page
-        assertPage( SCHEDULES_PAGE_TITLE );
+        assertInitialSchedulesPage();
     }
 
 
@@ -364,7 +367,7 @@ public class SchedulesPageTest
         if ( valid )
         {
             // after we save the schedule we should be brought back to the schedules page        
-            assertPage( SCHEDULES_PAGE_TITLE );
+            assertInitialSchedulesPage();
         }
         else
         {
