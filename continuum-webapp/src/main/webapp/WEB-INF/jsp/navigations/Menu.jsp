@@ -23,11 +23,11 @@
       <div class="label"><ww:text name="menu.addProject"/></div>
       <div>
         <div class="body">
-          <ww:url id="addMavenTwoProjectUrl" action="addMavenTwoProject" namespace="/" includeParams="none"/>
+          <ww:url id="addMavenTwoProjectUrl" action="addMavenTwoProject" method="default" namespace="/" includeParams="none"/>
           <ww:a href="%{addMavenTwoProjectUrl}"><ww:text name="menu.add.m2Project"/></ww:a>
         </div>
         <div class="body">
-          <ww:url id="addMavenOneProjectUrl" action="addMavenOneProject" namespace="/" includeParams="none"/>
+          <ww:url id="addMavenOneProjectUrl" action="addMavenOneProject" method="default" namespace="/" includeParams="none"/>
           <ww:a href="%{addMavenOneProjectUrl}"><ww:text name="menu.add.m1Project"/></ww:a>
         </div>
         <div class="body">
