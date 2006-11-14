@@ -31,10 +31,17 @@ import java.util.Map;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.codehaus.plexus.action.Action"
+ *   role-hint="create-projects-from-metadata"
  */
-public class CreateProjectsFromMetadata
+public class CreateProjectsFromMetadataAction
     extends AbstractContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
     private ContinuumProjectBuilderManager projectBuilderManager;
 
     public static final String KEY_URL = "url";

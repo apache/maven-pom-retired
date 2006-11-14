@@ -24,12 +24,18 @@ import java.util.Map;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager"
+ *   role-hint="default"
  */
 public class DefaultContinuumProjectBuilderManager
     extends AbstractLogEnabled
     implements ContinuumProjectBuilderManager
 {
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement role="org.apache.maven.continuum.project.builder.ContinuumProjectBuilder"
+     */
     private Map projectBuilders;
 
     // ----------------------------------------------------------------------

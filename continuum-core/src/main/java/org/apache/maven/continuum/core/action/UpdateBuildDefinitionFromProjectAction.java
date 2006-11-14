@@ -26,8 +26,10 @@ import java.util.Map;
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.action.Action"
- * role-hint="update-build-definition-from-project"
+ *
+ * @plexus.component
+ *   role="org.codehaus.plexus.action.Action"
+ *   role-hint="update-build-definition-from-project"
  */
 public class UpdateBuildDefinitionFromProjectAction
     extends AbstractBuildDefinitionContinuumAction

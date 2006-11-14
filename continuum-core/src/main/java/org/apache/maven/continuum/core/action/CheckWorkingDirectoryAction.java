@@ -26,17 +26,21 @@ import java.util.Map;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.codehaus.plexus.action.Action"
+ *   role-hint="check-working-directory"
  */
 public class CheckWorkingDirectoryAction
     extends AbstractContinuumAction
 {
     /**
-     * @plexus.requirement *
+     * @plexus.requirement
      */
     private WorkingDirectoryService workingDirectoryService;
 
     /**
-     * @plexus.requirement *
+     * @plexus.requirement
      */
     private ContinuumStore store;
 

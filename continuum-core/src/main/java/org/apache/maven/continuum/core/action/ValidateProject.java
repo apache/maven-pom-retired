@@ -26,12 +26,22 @@ import java.util.Map;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.codehaus.plexus.action.Action"
+ *   role-hint="validate-project"
  */
 public class ValidateProject
     extends AbstractValidationContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
     private BuildExecutorManager buildExecutorManager;
 
+    /**
+     * @plexus.requirement
+     */
     private ContinuumStore store;
 
     public void execute( Map context )

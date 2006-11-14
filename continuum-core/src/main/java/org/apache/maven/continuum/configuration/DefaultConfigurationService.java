@@ -30,13 +30,16 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.apache.maven.continuum.configuration.ConfigurationService"
  */
 public class DefaultConfigurationService
     extends AbstractLogEnabled
     implements ConfigurationService
 {
     /**
-     * @plexus.configuration
+     * @plexus.configuration default-value="${plexus.home}"
      */
     private File applicationHome;
 

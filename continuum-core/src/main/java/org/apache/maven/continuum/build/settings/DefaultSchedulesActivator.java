@@ -39,6 +39,10 @@ import java.util.Iterator;
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.apache.maven.continuum.build.settings.SchedulesActivator"
+ *   role-hint="default"
  */
 public class DefaultSchedulesActivator
     extends AbstractLogEnabled

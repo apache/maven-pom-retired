@@ -38,6 +38,10 @@ import java.util.Set;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.apache.maven.continuum.notification.ContinuumNotificationDispatcher"
+ *   role-hint="default"
  */
 public class DefaultContinuumNotificationDispatcher
     extends AbstractLogEnabled

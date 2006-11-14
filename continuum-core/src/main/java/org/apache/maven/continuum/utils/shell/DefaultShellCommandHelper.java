@@ -29,6 +29,10 @@ import java.io.Writer;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.apache.maven.continuum.utils.shell.ShellCommandHelper"
+ *   role-hint="default"
  */
 public class DefaultShellCommandHelper
     extends AbstractLogEnabled

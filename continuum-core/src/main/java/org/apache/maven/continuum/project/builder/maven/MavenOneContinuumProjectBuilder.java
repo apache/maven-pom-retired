@@ -37,6 +37,10 @@ import java.net.URL;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.apache.maven.continuum.project.builder.ContinuumProjectBuilder"
+ *   role-hint="maven-one-builder"
  */
 public class MavenOneContinuumProjectBuilder
     extends AbstractContinuumProjectBuilder

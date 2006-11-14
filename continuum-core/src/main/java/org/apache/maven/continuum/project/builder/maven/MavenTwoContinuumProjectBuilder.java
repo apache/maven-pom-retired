@@ -47,6 +47,10 @@ import java.util.List;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.apache.maven.continuum.project.builder.ContinuumProjectBuilder"
+ *   role-hint="maven-two-builder"
  */
 public class MavenTwoContinuumProjectBuilder
     extends AbstractContinuumProjectBuilder
@@ -69,7 +73,7 @@ public class MavenTwoContinuumProjectBuilder
     /**
      * @plexus.configuration
      */
-    private List excludedPackagingTypes;
+    private List excludedPackagingTypes = new ArrayList();
 
     // ----------------------------------------------------------------------
     // AbstractContinuumProjectBuilder Implementation

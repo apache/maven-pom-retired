@@ -24,7 +24,7 @@ import org.apache.maven.continuum.configuration.ConfigurationLoadingException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
 import org.apache.maven.continuum.core.action.AbstractContinuumAction;
-import org.apache.maven.continuum.core.action.CreateProjectsFromMetadata;
+import org.apache.maven.continuum.core.action.CreateProjectsFromMetadataAction;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.manager.BuildExecutorManager;
 import org.apache.maven.continuum.initialization.ContinuumInitializationException;
@@ -88,6 +88,10 @@ import java.util.Properties;
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.apache.maven.continuum.Continuum"
+ *   role-hint="default"
  */
 public class DefaultContinuum
     extends AbstractLogEnabled
@@ -119,7 +123,7 @@ public class DefaultContinuum
     private SchedulesActivator schedulesActivator;
 
     /**
-     * @plexus.requirement
+     * @deprecated should removeorg.apache.maven.continuum.security.ContinuumSecurity.
      */
     private ContinuumSecurity security;
 
@@ -128,12 +132,12 @@ public class DefaultContinuum
     // ----------------------------------------------------------------------
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="build-project"
      */
     private TaskQueue buildQueue;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="check-out-project"
      */
     private TaskQueue checkoutQueue;
 
@@ -143,7 +147,7 @@ public class DefaultContinuum
     private ContinuumReleaseManager releaseManager;
 
     /**
-     * @plexus.configuration
+     * @plexus.configuration default-value="${plexus.home}/temp"
      */
     private String workingDirectory;
 
@@ -960,9 +964,9 @@ public class DefaultContinuum
     {
         Map context = new HashMap();
 
-        context.put( CreateProjectsFromMetadata.KEY_PROJECT_BUILDER_ID, projectBuilderId );
+        context.put( CreateProjectsFromMetadataAction.KEY_PROJECT_BUILDER_ID, projectBuilderId );
 
-        context.put( CreateProjectsFromMetadata.KEY_URL, metadataUrl );
+        context.put( CreateProjectsFromMetadataAction.KEY_URL, metadataUrl );
 
         context.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
 
@@ -973,7 +977,7 @@ public class DefaultContinuum
         executeAction( "create-projects-from-metadata", context );
 
         ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context
-            .get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
+            .get( CreateProjectsFromMetadataAction.KEY_PROJECT_BUILDING_RESULT );
 
         if ( getLogger().isInfoEnabled() )
         {

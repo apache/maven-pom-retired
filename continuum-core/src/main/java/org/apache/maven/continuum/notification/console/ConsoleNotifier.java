@@ -30,6 +30,10 @@ import java.util.Set;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.codehaus.plexus.notification.notifier.Notifier"
+ *   role-hint="console"
  */
 public class ConsoleNotifier
     extends AbstractNotifier

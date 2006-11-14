@@ -40,6 +40,10 @@ import java.util.Properties;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.apache.maven.continuum.execution.maven.m1.MavenOneMetadataHelper"
+ *   role-hint="default"
  */
 public class DefaultMavenOneMetadataHelper
     extends AbstractLogEnabled

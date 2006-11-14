@@ -31,14 +31,14 @@ public class CreateProjectsFromMetadataTest
     extends MockObjectTestCase
 {
 
-    private CreateProjectsFromMetadata action;
+    private CreateProjectsFromMetadataAction action;
 
     private Mock projectBuilderManagerMock, projectBuilder;
 
     protected void setUp()
         throws Exception
     {
-        action = new CreateProjectsFromMetadata();
+        action = new CreateProjectsFromMetadataAction();
         action.enableLogging( new ConsoleLogger( Logger.LEVEL_DEBUG, "" ) );
         projectBuilderManagerMock = mock( ContinuumProjectBuilderManager.class );
         action.setProjectBuilderManager( (ContinuumProjectBuilderManager) projectBuilderManagerMock.proxy() );
@@ -55,13 +55,13 @@ public class CreateProjectsFromMetadataTest
         throws Exception
     {
         Map context = new HashMap();
-        context.put( CreateProjectsFromMetadata.KEY_URL, "http://svn.apache.org/repos/asf/maven/continuum/trunk/pom.xml" );
-        context.put( CreateProjectsFromMetadata.KEY_PROJECT_BUILDER_ID, "id" );
+        context.put( CreateProjectsFromMetadataAction.KEY_URL, "http://svn.apache.org/repos/asf/maven/continuum/trunk/pom.xml" );
+        context.put( CreateProjectsFromMetadataAction.KEY_PROJECT_BUILDER_ID, "id" );
 
         action.execute( context );
 
         ContinuumProjectBuildingResult result = (ContinuumProjectBuildingResult) context
-            .get( CreateProjectsFromMetadata.KEY_PROJECT_BUILDING_RESULT );
+            .get( CreateProjectsFromMetadataAction.KEY_PROJECT_BUILDING_RESULT );
 
         assertFalse( "Should not have errors", result.hasErrors() );
     }

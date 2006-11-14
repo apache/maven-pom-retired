@@ -38,8 +38,14 @@ import java.util.Map;
 public class AddAssignableRolesAction
     extends AbstractContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
     private ContinuumStore store;
 
+    /**
+     * @plexus.requirement
+     */
     private RoleProfileManager roleManager;
 
     public void execute( Map context )

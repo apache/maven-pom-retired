@@ -16,9 +16,6 @@ package org.apache.maven.continuum.initialization;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.Schedule;
@@ -33,10 +30,17 @@ import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.jpox.SchemaTool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  * @todo use this, reintroduce default project group
+ *
+ * @plexus.component
+ *   role="org.apache.maven.continuum.initialization.ContinuumInitializer"
+ *   role-hint="default"
  */
 public class DefaultContinuumInitializer
     extends AbstractLogEnabled

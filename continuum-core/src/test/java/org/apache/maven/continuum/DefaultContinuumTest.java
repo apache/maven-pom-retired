@@ -24,6 +24,7 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 import java.io.File;
 import java.util.Collection;
@@ -42,7 +43,16 @@ public class DefaultContinuumTest
     public void testContinuumConfiguration()
         throws Exception
     {
-        lookup( Continuum.ROLE );
+        try
+        {
+           lookup( Continuum.ROLE );
+        }
+        catch ( ComponentLookupException e )
+        {
+           e.printStackTrace();
+           throw e;
+        }
+
     }
 
     public void testLookups()

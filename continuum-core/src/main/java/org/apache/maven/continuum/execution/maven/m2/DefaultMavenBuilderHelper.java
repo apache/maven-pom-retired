@@ -76,6 +76,10 @@ import java.util.List;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper"
+ *   role-hint="default"
  */
 public class DefaultMavenBuilderHelper
     extends AbstractLogEnabled
@@ -102,7 +106,7 @@ public class DefaultMavenBuilderHelper
     private MavenSettingsBuilder mavenSettingsBuilder;
 
     /**
-     * @plexus.configuration
+     * @plexus.configuration default-value="${plexus.home}/local-repository"
      */
     private String localRepository;
 

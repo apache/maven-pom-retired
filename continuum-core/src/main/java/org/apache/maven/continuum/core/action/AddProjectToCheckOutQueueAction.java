@@ -27,6 +27,10 @@ import java.util.Map;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *   role="org.codehaus.plexus.action.Action"
+ *   role-hint="add-project-to-checkout-queue"
  */
 public class AddProjectToCheckOutQueueAction
     extends AbstractContinuumAction
@@ -36,8 +40,14 @@ public class AddProjectToCheckOutQueueAction
      */
     private WorkingDirectoryService workingDirectoryService;
 
+    /**
+     * @plexus.requirement role-hint="check-out-project"
+     */
     private TaskQueue checkOutQueue;
 
+    /**
+     * @plexus.requirement
+     */
     private ContinuumStore store;
 
     public void execute( Map context )
