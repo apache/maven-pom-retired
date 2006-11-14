@@ -153,6 +153,53 @@ public class JdoContinuumStore
         }
     }
 
+    public Project getProject( String groupId, String artifactId, String version )
+        throws ContinuumStoreException
+    {
+        PersistenceManager pm = getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( Project.class, true );
+
+            Query query = pm.newQuery( extent );
+
+            query.declareImports( "import java.lang.String" );
+
+            query.declareParameters( "String groupId, String artifactId, String version" );
+
+            query.setFilter( "this.groupId == groupId && this.artifactId == artifactId && this.version == version" );
+
+            Object[] params = new Object[3];
+            params[0] = groupId;
+            params[1]=artifactId;
+            params[2]=version;
+
+            Collection result = (Collection) query.executeWithArray( params );
+
+            if ( result.size() == 0 )
+            {
+                tx.commit();
+
+                return null;
+            }
+
+            Object object = pm.detachCopy( result.iterator().next() );
+
+            tx.commit();
+
+            return (Project) object;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
     public Map getProjectIdsAndBuildDefinitionsIdsBySchedule( int scheduleId )
         throws ContinuumStoreException
     {
@@ -510,7 +557,7 @@ public class JdoContinuumStore
 
         for ( Iterator i = projectGroup.getBuildDefinitions().iterator(); i.hasNext(); )
         {
-            BuildDefinition bd = (BuildDefinition)i.next();
+            BuildDefinition bd = (BuildDefinition) i.next();
 
             // also applies to project group membership
             if ( bd.isDefaultForProject() )
@@ -698,11 +745,11 @@ public class JdoContinuumStore
 
         List groupProjects = new ArrayList();
 
-        for (Iterator i = allProjects.iterator(); i.hasNext(); )
+        for ( Iterator i = allProjects.iterator(); i.hasNext(); )
         {
-            Project project = (Project)i.next();
+            Project project = (Project) i.next();
 
-            if (project.getProjectGroup().getId() == projectGroupId )
+            if ( project.getProjectGroup().getId() == projectGroupId )
             {
                 groupProjects.add( project );
             }
@@ -950,6 +997,27 @@ public class JdoContinuumStore
         }
     }
 
+    public List getBuildResultsInSuccessForProject( int projectId, long fromDate )
+    {
+        List buildResults = getBuildResultsForProject( projectId, fromDate );
+
+        List results = new ArrayList();
+
+        if ( buildResults != null )
+        {
+            for ( Iterator i = buildResults.iterator(); i.hasNext(); )
+            {
+                BuildResult res = (BuildResult) i.next();
+                if ( res.isSuccess() )
+                {
+                    results.add( res );
+                }
+            }
+        }
+
+        return results;
+    }
+
     public Map getBuildResultsInSuccess()
     {
         PersistenceManager pm = getPersistenceManager();
@@ -1152,7 +1220,8 @@ public class JdoContinuumStore
             }
         }
 
-        throw new ContinuumObjectNotFoundException( "unable to find project group containing project with id: " + projectId );
+        throw new ContinuumObjectNotFoundException(
+            "unable to find project group containing project with id: " + projectId );
     }
 
     public SystemConfiguration addSystemConfiguration( SystemConfiguration systemConf )

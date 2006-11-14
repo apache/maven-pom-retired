@@ -20,6 +20,7 @@ import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectDependency;
 import org.apache.maven.continuum.model.scm.ChangeFile;
 import org.apache.maven.continuum.model.scm.ChangeSet;
 import org.apache.maven.continuum.model.scm.ScmResult;
@@ -37,6 +38,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -85,13 +87,13 @@ public class DefaultBuildController
         getLogger().info( "Initializing build" );
         BuildContext context = initializeBuildContext( projectId, buildDefinitionId, trigger );
 
-        getLogger().info( "Starting build" );
+        getLogger().info( "Starting build of " + context.getProject().getName() );
         startBuild( context );
 
         try
         {
             // check if build definition requires smoking the existing checkout and rechecking out project
-            if ( context.getBuildDefinition().isBuildFresh())
+            if ( context.getBuildDefinition().isBuildFresh() )
             {
                 getLogger().info( "Purging exiting working copy" );
                 cleanWorkingDirectory( context );
@@ -113,6 +115,8 @@ public class DefaultBuildController
                 getLogger().info( "Error updating from SCM, not building" );
                 return;
             }
+
+            checkProjectDependencies( context );
 
             if ( !shouldBuild( context ) )
             {
@@ -171,9 +175,10 @@ public class DefaultBuildController
 
         try
         {
-            if ( project.getState() != ContinuumProjectState.NEW && project.getState() != ContinuumProjectState.CHECKEDOUT
-                && project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED
-                && project.getState() != ContinuumProjectState.ERROR )
+            if ( project.getState() != ContinuumProjectState.NEW &&
+                project.getState() != ContinuumProjectState.CHECKEDOUT &&
+                project.getState() != ContinuumProjectState.OK && project.getState() != ContinuumProjectState.FAILED &&
+                project.getState() != ContinuumProjectState.ERROR )
             {
                 try
                 {
@@ -273,7 +278,7 @@ public class DefaultBuildController
      * @return
      * @throws TaskExecutionException
      */
-    private BuildContext initializeBuildContext( int projectId, int buildDefinitionId, int trigger )
+    protected BuildContext initializeBuildContext( int projectId, int buildDefinitionId, int trigger )
         throws TaskExecutionException
     {
         BuildContext context = new BuildContext();
@@ -321,32 +326,33 @@ public class DefaultBuildController
 
         actionContext.put( AbstractContinuumAction.KEY_TRIGGER, new Integer( trigger ) );
 
-        actionContext.put( AbstractContinuumAction.KEY_FIRST_RUN, Boolean.valueOf( context.getOldBuildResult() == null ) );
+        actionContext.put( AbstractContinuumAction.KEY_FIRST_RUN,
+                           Boolean.valueOf( context.getOldBuildResult() == null ) );
 
         return context;
     }
 
-    private void cleanWorkingDirectory( BuildContext buildContext )
+    private void cleanWorkingDirectory( BuildContext context )
         throws TaskExecutionException
     {
-        performAction( "clean-working-directory", buildContext );
+        performAction( "clean-working-directory", context );
     }
 
-    private void updateWorkingDirectory( BuildContext buildContext )
+    private void updateWorkingDirectory( BuildContext context )
         throws TaskExecutionException
     {
-        Map actionContext = buildContext.getActionContext();
+        Map actionContext = context.getActionContext();
 
-        performAction( "check-working-directory", buildContext );
+        performAction( "check-working-directory", context );
 
-        boolean workingDirectoryExists = AbstractContinuumAction.getBoolean( actionContext,
-                                                                             AbstractContinuumAction.KEY_WORKING_DIRECTORY_EXISTS );
+        boolean workingDirectoryExists =
+            AbstractContinuumAction.getBoolean( actionContext, AbstractContinuumAction.KEY_WORKING_DIRECTORY_EXISTS );
 
         ScmResult scmResult;
 
         if ( workingDirectoryExists )
         {
-            performAction( "update-working-directory-from-scm", buildContext );
+            performAction( "update-working-directory-from-scm", context );
 
             scmResult = AbstractContinuumAction.getUpdateScmResult( actionContext, null );
         }
@@ -357,12 +363,12 @@ public class DefaultBuildController
             actionContext.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY,
                                workingDirectoryService.getWorkingDirectory( project ).getAbsolutePath() );
 
-            performAction( "checkout-project", buildContext );
+            performAction( "checkout-project", context );
 
             scmResult = AbstractContinuumAction.getCheckoutResult( actionContext, null );
         }
 
-        buildContext.setScmResult( scmResult );
+        context.setScmResult( scmResult );
     }
 
     private void performAction( String actionName, BuildContext context )
@@ -422,24 +428,22 @@ public class DefaultBuildController
         throw exception;
     }
 
-    private boolean shouldBuild( BuildContext context )
+    protected boolean shouldBuild( BuildContext context )
         throws TaskExecutionException
     {
-        // oldBuildResult != null &&
-        // List changes, Project project, int trigger )
-        // scmResult.getChanges(), project, trigger ) )
-
-        boolean allChangesUnknown = checkAllChangesUnknown( context.getScmResult().getChanges() );
+        boolean shouldBuild = true;
 
         Project project = context.getProject();
 
-        if ( allChangesUnknown && project.getOldState() != ContinuumProjectState.NEW
-            && project.getOldState() != ContinuumProjectState.CHECKEDOUT
-            && context.getTrigger() != ContinuumProjectState.TRIGGER_FORCED
-            && project.getState() != ContinuumProjectState.NEW
-            && project.getState() != ContinuumProjectState.CHECKEDOUT )
+        // Check SCM changes
+        boolean allChangesUnknown = checkAllChangesUnknown( context.getScmResult().getChanges() );
+
+        if ( allChangesUnknown && project.getOldState() != ContinuumProjectState.NEW &&
+            project.getOldState() != ContinuumProjectState.CHECKEDOUT &&
+            context.getTrigger() != ContinuumProjectState.TRIGGER_FORCED &&
+            project.getState() != ContinuumProjectState.NEW && project.getState() != ContinuumProjectState.CHECKEDOUT )
         {
-            if ( context.getScmResult().getChanges().size() > 0 )
+            if ( !context.getScmResult().getChanges().isEmpty() )
             {
                 getLogger().info( "The project was not built because all changes are unknown." );
             }
@@ -461,10 +465,28 @@ public class DefaultBuildController
                 throw new TaskExecutionException( "Error storing project", e );
             }
 
-            return false;
+            shouldBuild = false;
+
+            // Check dependencies changes
+            if ( context.getModifiedDependencies() != null && !context.getModifiedDependencies().isEmpty() )
+            {
+                shouldBuild = true;
+            }
+        }
+        else
+        {
+            // Check dependencies changes
+            if ( context.getModifiedDependencies() != null && !context.getModifiedDependencies().isEmpty() )
+            {
+                shouldBuild = true;
+            }
+            else
+            {
+                shouldBuild = false;
+            }
         }
 
-        return true;
+        return shouldBuild;
     }
 
     private boolean checkAllChangesUnknown( List changes )
@@ -491,6 +513,55 @@ public class DefaultBuildController
         return true;
     }
 
+    protected void checkProjectDependencies( BuildContext context )
+    {
+        if ( context.getOldBuildResult() == null )
+        {
+            return;
+        }
+
+        try
+        {
+            Project project = store.getProjectWithAllDetails( context.getProject().getId() );
+            List dependencies = project.getDependencies();
+
+            if ( dependencies == null )
+            {
+                return;
+            }
+            List modifiedDependencies = new ArrayList();
+
+            for ( Iterator i = dependencies.iterator(); i.hasNext(); )
+            {
+                ProjectDependency dep = (ProjectDependency) i.next();
+                Project dependencyProject = store.getProject( dep.getGroupId(), dep.getArtifactId(), dep.getVersion() );
+
+                if ( dependencyProject != null )
+                {
+                    List buildResults = store.getBuildResultsInSuccessForProject( dependencyProject.getId(),
+                                                                                  context.getOldBuildResult().getEndTime() );
+                    if ( buildResults != null && !buildResults.isEmpty() )
+                    {
+                        getLogger().debug( "Dependency changed: " + dep.getGroupId() + ":" + dep.getArtifactId() + ":" +
+                            dep.getVersion() );
+                        modifiedDependencies.add( dep );
+                    }
+                }
+                else
+                {
+                    getLogger().debug( "Skip non Continuum project: " + dep.getGroupId() + ":" + dep.getArtifactId() +
+                        ":" + dep.getVersion() );
+                }
+            }
+
+            context.setModifiedDependencies( modifiedDependencies );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            getLogger().warn( "Can't get the project dependencies", e );
+        }
+    }
+
     private String convertScmResultToError( ScmResult result )
     {
         String error = "";
@@ -503,24 +574,24 @@ public class DefaultBuildController
         {
             if ( result.getCommandLine() != null )
             {
-                error = "Command line: " + StringUtils.clean( result.getCommandLine() )
-                    + System.getProperty( "line.separator" );
+                error = "Command line: " + StringUtils.clean( result.getCommandLine() ) +
+                    System.getProperty( "line.separator" );
             }
 
             if ( result.getProviderMessage() != null )
             {
-                error = "Provider message: " + StringUtils.clean( result.getProviderMessage() )
-                    + System.getProperty( "line.separator" );
+                error = "Provider message: " + StringUtils.clean( result.getProviderMessage() ) +
+                    System.getProperty( "line.separator" );
             }
 
             if ( result.getCommandOutput() != null )
             {
                 error += "Command output: " + System.getProperty( "line.separator" );
-                error += "-------------------------------------------------------------------------------"
-                    + System.getProperty( "line.separator" );
+                error += "-------------------------------------------------------------------------------" +
+                    System.getProperty( "line.separator" );
                 error += StringUtils.clean( result.getCommandOutput() ) + System.getProperty( "line.separator" );
-                error += "-------------------------------------------------------------------------------"
-                    + System.getProperty( "line.separator" );
+                error += "-------------------------------------------------------------------------------" +
+                    System.getProperty( "line.separator" );
             }
 
             if ( result.getException() != null )
@@ -554,6 +625,18 @@ public class DefaultBuildController
         build.setEndTime( System.currentTimeMillis() );
 
         build.setScmResult( context.getScmResult() );
+
+        List dependencies = context.getModifiedDependencies();
+        if ( dependencies != null && !dependencies.isEmpty() )
+        {
+            List modifiedDependencies = new ArrayList();
+            for ( Iterator i = dependencies.iterator(); i.hasNext(); )
+            {
+                ProjectDependency dep = (ProjectDependency) i.next();
+                modifiedDependencies.add( dep.getGroupId() + ":" + dep.getArtifactId() + ":" + dep.getVersion() );
+            }
+            build.setModifiedDependencies( modifiedDependencies );
+        }
 
         if ( error != null )
         {
@@ -649,7 +732,6 @@ public class DefaultBuildController
                 }
 
                 newScmResult.setChanges( oldChanges );
-
             }
         }
     }

@@ -16,21 +16,20 @@ package org.apache.maven.continuum.buildcontroller;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.core.action.AbstractContinuumAction;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.scm.ScmResult;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- *
  * This class holds build context information.
  *
  * @author <a href="mailto:kenney@apache.org">Kenney Westerhof</a>
- *
  */
 public class BuildContext
 {
@@ -51,6 +50,8 @@ public class BuildContext
     private int trigger;
 
     private BuildResult buildResult;
+
+    private List modifiedDependencies;
 
     public void setStartTime( long startTime )
     {
@@ -139,5 +140,19 @@ public class BuildContext
     public void setTrigger( int trigger )
     {
         this.trigger = trigger;
+    }
+
+    public List getModifiedDependencies()
+    {
+        if ( modifiedDependencies == null )
+        {
+            modifiedDependencies = new ArrayList();
+        }
+        return modifiedDependencies;
+    }
+
+    public void setModifiedDependencies( List modifiedDependencies )
+    {
+        this.modifiedDependencies = modifiedDependencies;
     }
 }

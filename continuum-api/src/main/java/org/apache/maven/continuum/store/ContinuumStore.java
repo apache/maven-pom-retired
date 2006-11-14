@@ -43,9 +43,6 @@ public interface ContinuumStore
 {
     String ROLE = ContinuumStore.class.getName();
 
-    Project getProjectByName( String name )
-        throws ContinuumStoreException;
-
     void removeNotifier( ProjectNotifier notifier )
         throws ContinuumStoreException;
 
@@ -57,13 +54,14 @@ public interface ContinuumStore
     /**
      * returns the default build definition of the project, if the project doesn't have on declared the default
      * of the project group will be returned
-     *
+     * <p/>
      * this should be the most common usage of the default build definition accessing methods
      *
      * @param projectId
      * @return
      * @throws ContinuumStoreException
      * @throws ContinuumObjectNotFoundException
+     *
      */
     BuildDefinition getDefaultBuildDefinition( int projectId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
@@ -75,17 +73,19 @@ public interface ContinuumStore
      * @return
      * @throws ContinuumStoreException
      * @throws ContinuumObjectNotFoundException
+     *
      */
     BuildDefinition getDefaultBuildDefinitionForProject( int projectId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
     /**
      * returns the default build definition for the project group and there should always be one declared
-     * 
+     *
      * @param projectGroupId
      * @return
      * @throws ContinuumStoreException
      * @throws ContinuumObjectNotFoundException
+     *
      */
     BuildDefinition getDefaultBuildDefinitionForProjectGroup( int projectGroupId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
@@ -142,6 +142,12 @@ public interface ContinuumStore
 
     Project getProject( int projectId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
+
+    Project getProject( String groupId, String artifactId, String version )
+        throws ContinuumStoreException;
+
+    Project getProjectByName( String name )
+        throws ContinuumStoreException;
 
     Map getProjectIdsAndBuildDefinitionsIdsBySchedule( int scheduleId )
         throws ContinuumStoreException;
@@ -201,6 +207,8 @@ public interface ContinuumStore
         throws ContinuumStoreException, ContinuumObjectNotFoundException;
 
     BuildResult getLatestBuildResultForProject( int projectId );
+
+    List getBuildResultsInSuccessForProject( int projectId, long fromDate );
 
     List getBuildResultsForProject( int projectId, long fromDate );
 

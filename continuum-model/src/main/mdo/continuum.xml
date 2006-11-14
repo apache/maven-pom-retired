@@ -449,6 +449,14 @@
             <type>TestResult</type>
           </association>
         </field>
+        <field jpox.fetchGroupNames="build-result-with-details">
+          <name>modifiedDependencies</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
 

@@ -98,6 +98,8 @@ public class SchedulesPageTest
         super.setUp();
 
         clickLinkWithText( "Schedules" );
+
+        assertSchedulesPage();
     }
 
     public String getUsername()
@@ -110,17 +112,13 @@ public class SchedulesPageTest
         return this.adminPassword;
     }
 
-    public void testInitialSchedulesPage()
-        throws Exception
-    {
-        assertInitialSchedulesPage();
-    }
-
     public void testBasicScheduleAddAndDelete()
         throws Exception
     {
         // add schedule
         clickButtonWithValue( "Add" );
+
+        assertEditSchedulePage();
 
         inputSchedule( SCHEDULE_NAME, SCHEDULE_DESCRIPTION, SECOND, MINUTE, HOUR, DAYOFMONTH, MONTH, DAYOFWEEK, YEAR,
                        MAXJOBEXECUTIONTIME, DELAY, true );
@@ -150,6 +148,8 @@ public class SchedulesPageTest
     {
         clickButtonWithValue( "Add" );
 
+        assertEditSchedulePage();
+
         inputSchedule( SCHEDULE_NAME_EDIT, SCHEDULE_DESCRIPTION, SECOND, MINUTE, HOUR, DAYOFMONTH, MONTH, DAYOFWEEK,
                        YEAR, MAXJOBEXECUTIONTIME, DELAY, true );
 
@@ -169,9 +169,6 @@ public class SchedulesPageTest
 
         inputSchedule( SCHEDULE_NAME_EDIT + "modified", SCHEDULE_DESCRIPTION + "updated", "2", "3", "4", "?", "6", "7",
                        "2021", "8", "9", false );
-
-        // after we save the schedule we should be brought back to the schedules page
-        assertInitialSchedulesPage();
 
         cronSchedule = "2 3 4 ? 6 7 2021";
 
@@ -196,14 +193,14 @@ public class SchedulesPageTest
     {
         clickButtonWithValue( "Add" );
 
+        assertEditSchedulePage();
+
         HashMap fields = new HashMap();
         boolean valid = false;
         boolean wait = false;
 
         // test saving without editing anything from the initial edit page
         inputSchedule( fields, wait, valid );
-
-        assertEditSchedulePage();
 
         assertTrue( "Name field not validated",
                     getSelenium().isElementPresent( "//tr/td[span='schedule.name.required']" ) );
@@ -237,7 +234,7 @@ public class SchedulesPageTest
     }
 
 
-    public void assertInitialSchedulesPage()
+    public void assertSchedulesPage()
     {
         assertPage( SCHEDULES_PAGE_TITLE );
 
@@ -297,7 +294,7 @@ public class SchedulesPageTest
     public void deleteSchedule( String scheduleName )
     {
         // after we save the schedule we should be brought back to the schedules page
-        assertInitialSchedulesPage();
+        assertSchedulesPage();
 
         String[] columnValues = {scheduleName};
 
@@ -312,7 +309,7 @@ public class SchedulesPageTest
         clickButtonWithValue( "Delete" );
 
         // after we confirm the deletion we should be brought back to the schedules page
-        assertInitialSchedulesPage();
+        assertSchedulesPage();
     }
 
 
@@ -367,7 +364,7 @@ public class SchedulesPageTest
         if ( valid )
         {
             // after we save the schedule we should be brought back to the schedules page        
-            assertInitialSchedulesPage();
+            assertSchedulesPage();
         }
         else
         {
