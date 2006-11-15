@@ -29,6 +29,7 @@ import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.model.system.Permission;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
 import org.apache.maven.continuum.model.system.UserGroup;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.jdo.PlexusJdoUtils;
 import org.codehaus.plexus.jdo.PlexusObjectNotFoundException;
@@ -1008,7 +1009,7 @@ public class JdoContinuumStore
             for ( Iterator i = buildResults.iterator(); i.hasNext(); )
             {
                 BuildResult res = (BuildResult) i.next();
-                if ( res.isSuccess() )
+                if ( res.getState() == ContinuumProjectState.OK )
                 {
                     results.add( res );
                 }

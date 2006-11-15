@@ -223,6 +223,7 @@ public class DefaultBuildController
         }
         else
         {
+            updateBuildResult( build, context );
 
             build.setError( error );
 
@@ -247,6 +248,29 @@ public class DefaultBuildController
         catch ( ContinuumStoreException e )
         {
             throw new TaskExecutionException( "Error updating project", e );
+        }
+    }
+
+    private void updateBuildResult( BuildResult build, BuildContext context )
+    {
+        if ( build.getScmResult() == null && context.getScmResult() != null )
+        {
+            build.setScmResult( context.getScmResult() );
+        }
+
+        if ( build.getModifiedDependencies() == null && context.getModifiedDependencies() != null )
+        {
+            List dependencies = context.getModifiedDependencies();
+            if ( dependencies != null && !dependencies.isEmpty() )
+            {
+                List modifiedDependencies = new ArrayList();
+                for ( Iterator i = dependencies.iterator(); i.hasNext(); )
+                {
+                    ProjectDependency dep = (ProjectDependency) i.next();
+                    modifiedDependencies.add( dep.getGroupId() + ":" + dep.getArtifactId() + ":" + dep.getVersion() );
+                }
+                build.setModifiedDependencies( modifiedDependencies );
+            }
         }
     }
 
@@ -299,18 +323,13 @@ public class DefaultBuildController
 
             context.setBuildDefinition( buildDefinition );
 
-            try
+            BuildResult oldBuildResult = store.getLatestBuildResultForProject( projectId );
+
+            context.setOldBuildResult( oldBuildResult );
+
+            if ( oldBuildResult != null )
             {
-                BuildResult oldBuildResult = store.getBuildResult( buildDefinition.getLatestBuildId() );
-
-                context.setOldBuildResult( oldBuildResult );
-
                 context.setOldScmResult( getOldScmResult( projectId, oldBuildResult.getEndTime() ) );
-
-            }
-            catch ( ContinuumObjectNotFoundException ex )
-            {
-                // Nothing to do
             }
         }
         catch ( ContinuumStoreException e )
@@ -439,54 +458,53 @@ public class DefaultBuildController
 
         Project project = context.getProject();
 
-        // Check SCM changes
-        boolean allChangesUnknown = checkAllChangesUnknown( context.getScmResult().getChanges() );
-
-        if ( allChangesUnknown && project.getOldState() != ContinuumProjectState.NEW &&
+        if ( project.getOldState() != ContinuumProjectState.NEW &&
             project.getOldState() != ContinuumProjectState.CHECKEDOUT &&
             context.getTrigger() != ContinuumProjectState.TRIGGER_FORCED &&
             project.getState() != ContinuumProjectState.NEW && project.getState() != ContinuumProjectState.CHECKEDOUT )
         {
-            if ( !context.getScmResult().getChanges().isEmpty() )
-            {
-                getLogger().info( "The project was not built because all changes are unknown." );
-            }
-            else
-            {
-                getLogger().info( "The project was not built because there are no changes." );
-            }
+            // Check SCM changes
+            boolean allChangesUnknown = checkAllChangesUnknown( context.getScmResult().getChanges() );
 
-            project.setState( project.getOldState() );
+            if ( allChangesUnknown )
+            {
+                if ( !context.getScmResult().getChanges().isEmpty() )
+                {
+                    getLogger().info( "The project was not built because all changes are unknown." );
+                }
+                else
+                {
+                    getLogger().info( "The project was not built because there are no changes." );
+                }
 
-            project.setOldState( 0 );
+                project.setState( project.getOldState() );
 
-            try
-            {
-                store.updateProject( project );
-            }
-            catch ( ContinuumStoreException e )
-            {
-                throw new TaskExecutionException( "Error storing project", e );
-            }
+                project.setOldState( 0 );
 
-            shouldBuild = false;
+                try
+                {
+                    store.updateProject( project );
+                }
+                catch ( ContinuumStoreException e )
+                {
+                    throw new TaskExecutionException( "Error storing project", e );
+                }
 
-            // Check dependencies changes
-            if ( context.getModifiedDependencies() != null && !context.getModifiedDependencies().isEmpty() )
-            {
-                shouldBuild = true;
-            }
-        }
-        else
-        {
-            // Check dependencies changes
-            if ( context.getModifiedDependencies() != null && !context.getModifiedDependencies().isEmpty() )
-            {
-                shouldBuild = true;
-            }
-            else
-            {
                 shouldBuild = false;
+
+                // Check dependencies changes
+                if ( context.getModifiedDependencies() != null && !context.getModifiedDependencies().isEmpty() )
+                {
+                    shouldBuild = true;
+                }
+            }
+            else
+            {
+                // Check dependencies changes
+                if ( context.getModifiedDependencies() != null && !context.getModifiedDependencies().isEmpty() )
+                {
+                    shouldBuild = true;
+                }
             }
         }
 
@@ -531,8 +549,19 @@ public class DefaultBuildController
 
             if ( dependencies == null )
             {
+                dependencies = new ArrayList();
+            }
+
+            if ( project.getParent() != null )
+            {
+                dependencies.add( project.getParent() );
+            }
+
+            if ( dependencies.isEmpty() )
+            {
                 return;
             }
+
             List modifiedDependencies = new ArrayList();
 
             for ( Iterator i = dependencies.iterator(); i.hasNext(); )
@@ -550,6 +579,11 @@ public class DefaultBuildController
                             dep.getVersion() );
                         modifiedDependencies.add( dep );
                     }
+                    else
+                    {
+                        getLogger().debug( "Dependency not changed: " + dep.getGroupId() + ":" + dep.getArtifactId() +
+                            ":" + dep.getVersion() );
+                    }
                 }
                 else
                 {
@@ -559,6 +593,7 @@ public class DefaultBuildController
             }
 
             context.setModifiedDependencies( modifiedDependencies );
+            context.getActionContext().put( AbstractContinuumAction.KEY_UPDATE_DEPENDENCIES, modifiedDependencies );
         }
         catch ( ContinuumStoreException e )
         {
@@ -628,19 +663,9 @@ public class DefaultBuildController
 
         build.setEndTime( System.currentTimeMillis() );
 
-        build.setScmResult( context.getScmResult() );
+        updateBuildResult( build, context );
 
-        List dependencies = context.getModifiedDependencies();
-        if ( dependencies != null && !dependencies.isEmpty() )
-        {
-            List modifiedDependencies = new ArrayList();
-            for ( Iterator i = dependencies.iterator(); i.hasNext(); )
-            {
-                ProjectDependency dep = (ProjectDependency) i.next();
-                modifiedDependencies.add( dep.getGroupId() + ":" + dep.getArtifactId() + ":" + dep.getVersion() );
-            }
-            build.setModifiedDependencies( modifiedDependencies );
-        }
+        build.setScmResult( context.getScmResult() );
 
         if ( error != null )
         {

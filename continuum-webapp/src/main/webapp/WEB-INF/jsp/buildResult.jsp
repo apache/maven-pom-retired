@@ -45,7 +45,7 @@
           </table>
         </div>
 
-        <h4><ww:text name="buildResult.changes"/></h4>
+        <h4><ww:text name="buildResult.scmResult.changes"/></h4>
         <ww:if test="buildResult.scmResult.changes != null && buildResult.scmResult.changes.size() > 0">
             <ww:set name="changes" value="buildResult.scmResult.changes" scope="request"/>
             <ec:table items="changes"
@@ -56,10 +56,10 @@
                       sortable="false"
                       filterable="false">
               <ec:row>
-                <ec:column property="author" title="buildResult.changes.author"/>
-                <ec:column property="date" title="buildResult.changes.date" cell="date"/>
-                <ec:column property="comment" title="buildResult.changes.comment" />
-                <ec:column property="files" title="buildResult.changes.files">
+                <ec:column property="author" title="buildResult.scmResult.changes.author"/>
+                <ec:column property="date" title="buildResult.scmResult.changes.date" cell="date"/>
+                <ec:column property="comment" title="buildResult.scmResult.changes.comment" />
+                <ec:column property="files" title="buildResult.scmResult.changes.files">
                     <c:forEach var="scmFile" items="${pageScope.change.files}">
                         <c:out value="${scmFile.name}"/><br />
                     </c:forEach>
@@ -68,7 +68,29 @@
             </ec:table>
         </ww:if>
         <ww:else>
-          <b><ww:text name="buildResult.noChanges"/></b>
+          <b><ww:text name="buildResult.scmResult.noChanges"/></b>
+        </ww:else>
+
+        <h4><ww:text name="buildResult.dependencies.changes"/></h4>
+        <ww:if test="buildResult.modifiedDependencies != null && buildResult.modifiedDependencies.size() > 0">
+            aaa
+            <ww:set name="changes" value="buildResult.modifiedDependencies" scope="request"/>
+            <ec:table items="changes"
+                      var="change"
+                      showExports="false"
+                      showPagination="false"
+                      showStatusBar="false"
+                      sortable="false"
+                      filterable="false">
+              <ec:row>
+                <ec:column property="dependency" title="buildResult.dependencies.title">
+                  <c:out value="${pageScope.change}"/><br />
+                </ec:column>
+              </ec:row>
+            </ec:table>
+        </ww:if>
+        <ww:else>
+          <b><ww:text name="buildResult.dependencies.noChanges"/>${buildResult.modifiedDependencies}</b>
         </ww:else>
 
         <ww:if test="hasSurefireResults">

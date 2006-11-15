@@ -24,6 +24,7 @@ import org.codehaus.plexus.action.AbstractAction;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,6 +61,8 @@ public abstract class AbstractContinuumAction
     public static final String KEY_CHECKOUT_SCM_RESULT = "checkout-result";
 
     public static final String KEY_UPDATE_SCM_RESULT = "update-result";
+
+    public static final String KEY_UPDATE_DEPENDENCIES = "update-dependencies";
 
     public static final String KEY_TRIGGER = "trigger";
 
@@ -146,6 +149,16 @@ public abstract class AbstractContinuumAction
     public static ScmResult getUpdateScmResult( Map context, ScmResult defaultValue )
     {
         return (ScmResult) getObject( context, KEY_UPDATE_SCM_RESULT, defaultValue );
+    }
+
+    public static List getUpdatedDependencies( Map context )
+    {
+        return (List) getObject( context, KEY_UPDATE_DEPENDENCIES );
+    }
+
+    public static List getUpdatedDependencies( Map context, List defaultValue )
+    {
+        return (List) getObject( context, KEY_UPDATE_DEPENDENCIES, defaultValue );
     }
 
     // ----------------------------------------------------------------------

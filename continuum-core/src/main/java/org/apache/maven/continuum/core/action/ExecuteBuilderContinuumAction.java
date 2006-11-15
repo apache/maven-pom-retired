@@ -32,6 +32,7 @@ import org.apache.maven.continuum.utils.ContinuumUtils;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,6 +81,10 @@ public class ExecuteBuilderContinuumAction
 
         ScmResult scmResult = getUpdateScmResult( context );
 
+        List updatedDependencies = getUpdatedDependencies( context );
+
+        boolean hasUpdatedDependencies = updatedDependencies != null && !updatedDependencies.isEmpty();
+
         boolean isFirstRun = ( (Boolean) context.get( AbstractContinuumAction.KEY_FIRST_RUN ) ).booleanValue();
 
         ContinuumBuildExecutor buildExecutor = buildExecutorManager.getBuildExecutor( project.getExecutorId() );
@@ -89,7 +94,8 @@ public class ExecuteBuilderContinuumAction
         // ----------------------------------------------------------------------
 
         if ( !isFirstRun && project.getOldState() != ContinuumProjectState.NEW &&
-            project.getOldState() != ContinuumProjectState.CHECKEDOUT && scmResult.getChanges().size() == 0 &&
+            project.getOldState() != ContinuumProjectState.CHECKEDOUT &&
+            scmResult.getChanges().size() == 0 && !hasUpdatedDependencies &&
             trigger != ContinuumProjectState.TRIGGER_FORCED && !isNew( project ) )
         {
             getLogger().info( "No files updated, not building. Project id '" + project.getId() + "'." );
@@ -170,17 +176,20 @@ public class ExecuteBuilderContinuumAction
             // Set the test result
             // ----------------------------------------------------------------------
 
-             try {
-                 TestResult testResult = buildExecutor.getTestResults( project );
-                 build.setTestResult(testResult);
-            } catch (Throwable t) {
-                getLogger().error("Error getting test results", t);
+            try
+            {
+                TestResult testResult = buildExecutor.getTestResults( project );
+                build.setTestResult( testResult );
+            }
+            catch ( Throwable t )
+            {
+                getLogger().error( "Error getting test results", t );
             }
 
             // ----------------------------------------------------------------------
             // Copy over the build result
             // ----------------------------------------------------------------------
-                                                          
+
             store.updateBuildResult( build );
 
             build = store.getBuildResult( build.getId() );

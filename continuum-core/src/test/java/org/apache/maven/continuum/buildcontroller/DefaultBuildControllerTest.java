@@ -47,18 +47,21 @@ public class DefaultBuildControllerTest
         Project project1 = createProject( "project1" );
         BuildDefinition bd1 = createBuildDefinition();
         project1.addBuildDefinition( bd1 );
+        project1.setState( ContinuumProjectState.OK );
         projectId1 = addProject( getStore(), project1 ).getId();
         buildDefinitionId1 = getStore().getDefaultBuildDefinition( projectId1 ).getId();
         project1 = getStore().getProject( projectId1 );
         BuildResult buildResult1 = new BuildResult();
         buildResult1.setStartTime( Calendar.getInstance().getTimeInMillis() );
         buildResult1.setEndTime( Calendar.getInstance().getTimeInMillis() );
+        buildResult1.setState( ContinuumProjectState.OK);
         buildResult1.setSuccess( true );
         getStore().addBuildResult( project1, buildResult1 );
         BuildResult buildResult2 = new BuildResult();
         buildResult2.setStartTime( Calendar.getInstance().getTimeInMillis() - 7200000 );
         buildResult2.setEndTime( Calendar.getInstance().getTimeInMillis() - 7200000 );
         buildResult2.setSuccess( true );
+        buildResult2.setState( ContinuumProjectState.OK);
         getStore().addBuildResult( project1, buildResult2 );
 
         Project project2 = createProject( "project2" );
@@ -74,6 +77,7 @@ public class DefaultBuildControllerTest
         project2.addDependency( dep2 );
         BuildDefinition bd2 = createBuildDefinition();
         project2.addBuildDefinition( bd2 );
+        project2.setState( ContinuumProjectState.OK );
         projectId2 = addProject( getStore(), project2 ).getId();
         buildDefinitionId2 = getStore().getDefaultBuildDefinition( projectId2 ).getId();
 
@@ -119,6 +123,23 @@ public class DefaultBuildControllerTest
         controller.checkProjectDependencies( context );
         assertEquals( 0, context.getModifiedDependencies().size() );
         assertFalse( controller.shouldBuild( context ) );
+    }
+
+    public void testWithNewProjects()
+        throws Exception
+    {
+        Project p1 = getStore().getProject( projectId1 );
+        p1.setState( ContinuumProjectState.NEW );
+        getStore().updateProject( p1 );
+
+        Project p2 = getStore().getProject( projectId2 );
+        p2.setState( ContinuumProjectState.NEW );
+        getStore().updateProject( p2 );
+
+        BuildContext context = getContext( +1 );
+        controller.checkProjectDependencies( context );
+        assertEquals( 0, context.getModifiedDependencies().size() );
+        assertTrue( controller.shouldBuild( context ) );
     }
 
     public void testWithDependencyChanges()
