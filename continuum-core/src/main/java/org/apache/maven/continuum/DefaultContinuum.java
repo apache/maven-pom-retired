@@ -91,7 +91,6 @@ import java.util.Properties;
  *
  * @plexus.component
  *   role="org.apache.maven.continuum.Continuum"
- *   role-hint="default"
  */
 public class DefaultContinuum
     extends AbstractLogEnabled

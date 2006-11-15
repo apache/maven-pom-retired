@@ -42,7 +42,6 @@ import java.util.Iterator;
  *
  * @plexus.component
  *   role="org.apache.maven.continuum.build.settings.SchedulesActivator"
- *   role-hint="default"
  */
 public class DefaultSchedulesActivator
     extends AbstractLogEnabled
@@ -172,7 +171,7 @@ public class DefaultSchedulesActivator
         {
             scheduler.scheduleJob( jobDetail, trigger );
 
-            getLogger().info( trigger.getNextFireTime() + "" );
+            getLogger().info( trigger.getName() + ": next fire time ->" + trigger.getNextFireTime() );
         }
         catch ( SchedulerException e )
         {

@@ -28,14 +28,28 @@ import java.util.Map;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
+ *
+ * @plexus.component
+ *  role="org.codehaus.plexus.action.Action"
+ *  role-hint="update-working-directory-from-scm"
+
  */
 public class UpdateWorkingDirectoryFromScmContinuumAction
     extends AbstractContinuumAction
 {
+    /**
+     * @plexus.requirement
+     */
     private ContinuumNotificationDispatcher notifier;
 
+    /**
+     * @plexus.requirement
+     */
     private ContinuumScm scm;
 
+    /**
+     * @plexus.requirement
+     */
     private ContinuumStore store;
 
     public void execute( Map context )

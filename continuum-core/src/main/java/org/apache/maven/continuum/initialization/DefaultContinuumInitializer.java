@@ -19,19 +19,12 @@ package org.apache.maven.continuum.initialization;
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.Schedule;
-import org.apache.maven.continuum.model.system.ContinuumUser;
-import org.apache.maven.continuum.model.system.Permission;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
-import org.apache.maven.continuum.model.system.UserGroup;
-import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.jpox.SchemaTool;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -109,13 +102,6 @@ public class DefaultContinuumInitializer
                 store.addSchedule( defaultSchedule );
             }
 
-            // Permission
-            createPermissions();
-
-            createGroups();
-
-            createGuestUser();
-
             createDefaultProjectGroup();
         }
         catch ( ContinuumStoreException e )
@@ -143,115 +129,6 @@ public class DefaultContinuumInitializer
         return schedule;
     }
 
-    private void createPermissions()
-        throws ContinuumStoreException
-    {
-        createPermission( "addProject", "Add Projects" );
-
-        createPermission( "editProject", "Edit Projects" );
-
-        createPermission( "deleteProject", "Delete Projects" );
-
-        createPermission( "buildProject", "Build Projects" );
-
-        createPermission( "showProject", "Show Projects" );
-
-        createPermission( "addBuildDefinitionToProject", "Add Build Definitions" );
-
-        createPermission( "editBuildDefinition", "Edit Build Definitions" );
-
-        createPermission( "deleteBuildDefinition", "Delete Build Definitions" );
-
-        createPermission( "addNotifier", "Add Notifiers" );
-
-        createPermission( "editNotifier", "Edit Notifiers" );
-
-        createPermission( "deleteNotifier", "Delete Notifiers" );
-
-        createPermission( "manageConfiguration", "Manage Continuum Configuration" );
-
-        createPermission( "manageSchedule", "Manage Schedules" );
-
-        createPermission( "manageUsers", "Manage Users/Groups" );
-    }
-
-    private Permission createPermission( String name, String description )
-        throws ContinuumStoreException
-    {
-        Permission perm = store.getPermission( name );
-
-        if ( perm == null )
-        {
-            perm = new Permission();
-
-            perm.setName( name );
-
-            perm.setDescription( description );
-
-            perm = store.addPermission( perm );
-        }
-
-        return perm;
-    }
-
-    private void createGroups()
-        throws ContinuumStoreException
-    {
-        // Continuum Administrator
-        if ( store.getUserGroup( ContinuumSecurity.ADMIN_GROUP_NAME ) == null )
-        {
-            List adminPermissions = store.getPermissions();
-
-            UserGroup adminGroup = new UserGroup();
-
-            adminGroup.setName( ContinuumSecurity.ADMIN_GROUP_NAME );
-
-            adminGroup.setDescription( "Continuum Admin Group" );
-
-            adminGroup.setPermissions( adminPermissions );
-
-            store.addUserGroup( adminGroup );
-        }
-
-        // Continuum Guest
-        if ( store.getUserGroup( ContinuumSecurity.GUEST_GROUP_NAME ) == null )
-        {
-            UserGroup guestGroup = new UserGroup();
-
-            guestGroup.setName( ContinuumSecurity.GUEST_GROUP_NAME );
-
-            guestGroup.setDescription( "Continuum Guest Group" );
-
-            List guestPermissions = new ArrayList();
-
-            guestPermissions.add( store.getPermission( "buildProject" ) );
-
-            guestPermissions.add( store.getPermission( "showProject" ) );
-
-            guestGroup.setPermissions( guestPermissions );
-
-            store.addUserGroup( guestGroup );
-        }
-    }
-
-    private void createGuestUser()
-        throws ContinuumStoreException
-    {
-        if ( store.getGuestUser() == null )
-        {
-            ContinuumUser guest = new ContinuumUser();
-
-            guest.setUsername( "guest" );
-
-            guest.setFullName( "Anonymous User" );
-
-            guest.setGroup( store.getUserGroup( ContinuumSecurity.GUEST_GROUP_NAME ) );
-
-            guest.setGuest( true );
-
-            store.addUser( guest );
-        }
-    }
 
     private void createDefaultProjectGroup()
         throws ContinuumStoreException
