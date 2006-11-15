@@ -16,16 +16,18 @@ package org.apache.maven.continuum.core.action;
  * limitations under the License.
  */
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.project.builder.manager.ContinuumProjectBuilderManager;
+import org.apache.maven.settings.MavenSettingsBuilder;
+import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateProjectsFromMetadataTest
     extends MockObjectTestCase
@@ -33,7 +35,7 @@ public class CreateProjectsFromMetadataTest
 
     private CreateProjectsFromMetadataAction action;
 
-    private Mock projectBuilderManagerMock, projectBuilder;
+    private Mock projectBuilderManagerMock, projectBuilder, mavenSettingsBuilderMock;
 
     protected void setUp()
         throws Exception
@@ -41,14 +43,20 @@ public class CreateProjectsFromMetadataTest
         action = new CreateProjectsFromMetadataAction();
         action.enableLogging( new ConsoleLogger( Logger.LEVEL_DEBUG, "" ) );
         projectBuilderManagerMock = mock( ContinuumProjectBuilderManager.class );
+        mavenSettingsBuilderMock = mock ( MavenSettingsBuilder.class );
         action.setProjectBuilderManager( (ContinuumProjectBuilderManager) projectBuilderManagerMock.proxy() );
+        action.setMavenSettingsBuilder( (MavenSettingsBuilder) mavenSettingsBuilderMock.proxy() );
 
         projectBuilder = mock( ContinuumProjectBuilder.class );
+
 
         projectBuilderManagerMock.expects( once() ).method( "getProjectBuilder" )
             .will(returnValue( projectBuilder.proxy() ) );
         projectBuilder.expects( once() ).method( "buildProjectsFromMetadata" )
             .will( returnValue( new ContinuumProjectBuildingResult() ) );
+
+        mavenSettingsBuilderMock.expects( once() ).method( "buildSettings" )
+            .will(returnValue( new Settings() ) );
     }
 
     public void testExecute()
