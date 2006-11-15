@@ -103,8 +103,10 @@ public class CreateProjectsFromMetadataAction
                 {
                     settings = getSettings();
 
+                    getLogger().info( "checking for settings auth setup" );
                     if ( settings != null && settings.getServer( url.getHost() ) != null )
                     {
+                        getLogger().info( "found setting based auth setup, using" );
                         Server server = settings.getServer( url.getHost() );
 
                         username = server.getUsername();
