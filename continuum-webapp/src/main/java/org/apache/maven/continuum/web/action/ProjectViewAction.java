@@ -50,11 +50,7 @@ public class ProjectViewAction
     public String execute()
         throws ContinuumException
     {
-        // determine if we should obtain ProjectGroup details
-        if ( projectGroupId > 0 )
-            projectGroup = getContinuum().getProjectGroup( projectGroupId );
-        else
-            project = getContinuum().getProjectWithAllDetails( projectId );
+        project = getContinuum().getProjectWithAllDetails( projectId );
 
         return SUCCESS;
     }
