@@ -123,9 +123,9 @@
                   filterable="false"
                   sortable="false">
           <ec:row>
-            <ec:column property="groupId" title="projectView.dependency.groupId">
-            <ec:column property="artifactId" title="projectView.dependency.artifactId">
-            <ec:column property="version" title="projectView.dependency.version">
+            <ec:column property="groupId" title="projectView.dependency.groupId"/>
+            <ec:column property="artifactId" title="projectView.dependency.artifactId"/>
+            <ec:column property="version" title="projectView.dependency.version"/>
           </ec:row>
         </ec:table>
 
