@@ -46,10 +46,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="org.apache.maven.continuum.buildcontroller.BuildController"
- *   role-hint="default"
+ * @plexus.component role="org.apache.maven.continuum.buildcontroller.BuildController" role-hint="default"
  */
 public class DefaultBuildController
     extends AbstractLogEnabled
@@ -232,6 +229,8 @@ public class DefaultBuildController
                 store.updateBuildResult( build );
 
                 build = store.getBuildResult( build.getId() );
+
+                context.setBuildResult( build );
             }
             catch ( ContinuumStoreException e )
             {
@@ -260,17 +259,7 @@ public class DefaultBuildController
 
         if ( build.getModifiedDependencies() == null && context.getModifiedDependencies() != null )
         {
-            List dependencies = context.getModifiedDependencies();
-            if ( dependencies != null && !dependencies.isEmpty() )
-            {
-                List modifiedDependencies = new ArrayList();
-                for ( Iterator i = dependencies.iterator(); i.hasNext(); )
-                {
-                    ProjectDependency dep = (ProjectDependency) i.next();
-                    modifiedDependencies.add( dep.getGroupId() + ":" + dep.getArtifactId() + ":" + dep.getVersion() );
-                }
-                build.setModifiedDependencies( modifiedDependencies );
-            }
+            build.setModifiedDependencies( context.getModifiedDependencies() );
         }
     }
 

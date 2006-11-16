@@ -453,7 +453,7 @@
           <name>modifiedDependencies</name>
           <version>1.0.0+</version>
           <association>
-            <type>String</type>
+            <type>ProjectDependency</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>

@@ -34,7 +34,7 @@ Build statistics:
 
 #if ( $build.scmResult )
 ****************************************************************************
-Changes:
+SCM Changes:
 ****************************************************************************
 #if ( $build.scmResult.changes.size() == 0 )
 No files changed
@@ -63,6 +63,20 @@ Files changed:
 #end
 
 #end
+#end
+#end
+
+#if ( $build.modifiedDependencies )
+****************************************************************************
+Dependencies Changes:
+****************************************************************************
+#if ( $build.modifiedDependencies.size() == 0 )
+No dependencies changed
+
+#else
+#foreach ( $dep in $build.modifiedDependencies )
+$dep.groupId:$dep.artifactId:$dep.version
+
 #end
 #end
 #if ( $build.testResult )

@@ -73,24 +73,23 @@
 
         <h4><ww:text name="buildResult.dependencies.changes"/></h4>
         <ww:if test="buildResult.modifiedDependencies != null && buildResult.modifiedDependencies.size() > 0">
-            aaa
-            <ww:set name="changes" value="buildResult.modifiedDependencies" scope="request"/>
-            <ec:table items="changes"
-                      var="change"
+            <ww:set name="dependencies" value="buildResult.modifiedDependencies" scope="request"/>
+            <ec:table items="dependencies"
+                      var="dep"
                       showExports="false"
                       showPagination="false"
                       showStatusBar="false"
                       sortable="false"
                       filterable="false">
               <ec:row>
-                <ec:column property="dependency" title="buildResult.dependencies.title">
-                  <c:out value="${pageScope.change}"/><br />
-                </ec:column>
+                <ec:column property="groupId" title="buildResult.dependencies.title"/>
+                <ec:column property="artifactId" title="buildResult.dependencies.title"/>
+                <ec:column property="version" title="buildResult.dependencies.title"/>
               </ec:row>
             </ec:table>
         </ww:if>
         <ww:else>
-          <b><ww:text name="buildResult.dependencies.noChanges"/>${buildResult.modifiedDependencies}</b>
+          <b><ww:text name="buildResult.dependencies.noChanges"/></b>
         </ww:else>
 
         <ww:if test="hasSurefireResults">

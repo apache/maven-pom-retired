@@ -122,6 +122,8 @@ public class ExecuteBuilderContinuumAction
         build.setTrigger( trigger );
 
         build.setScmResult( scmResult );
+        
+        build.setModifiedDependencies( updatedDependencies );
 
         store.addBuildResult( project, build );
 

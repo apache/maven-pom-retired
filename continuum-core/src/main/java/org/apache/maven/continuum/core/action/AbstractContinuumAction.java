@@ -153,7 +153,7 @@ public abstract class AbstractContinuumAction
 
     public static List getUpdatedDependencies( Map context )
     {
-        return (List) getObject( context, KEY_UPDATE_DEPENDENCIES );
+        return getUpdatedDependencies( context, null );
     }
 
     public static List getUpdatedDependencies( Map context, List defaultValue )
