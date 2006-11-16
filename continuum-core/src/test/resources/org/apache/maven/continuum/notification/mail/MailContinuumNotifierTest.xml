@@ -29,6 +29,9 @@
           <role>org.codehaus.plexus.mailsender.MailSender</role>
         </requirement>
         <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
+        <requirement>
           <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
         </requirement>
       </requirements>

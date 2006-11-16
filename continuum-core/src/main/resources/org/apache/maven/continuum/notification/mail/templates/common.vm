@@ -111,6 +111,7 @@ $dep.groupId:$dep.artifactId:$dep.version
 
 #end
 #end
+#end
 #if ( $build.testResult )
 ****************************************************************************
 Test Summary:
