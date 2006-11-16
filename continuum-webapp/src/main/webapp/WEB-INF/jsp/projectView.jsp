@@ -116,16 +116,16 @@
         <h3><ww:text name="projectView.dependencies"/></h3>
         <ww:set name="dependencies" value="project.dependencies" scope="request"/>
         <ec:table items="dependencies"
-                  var="dependency"
+                  var="dep"
                   showExports="false"
                   showPagination="false"
                   showStatusBar="false"
                   filterable="false"
                   sortable="false">
           <ec:row>
-            <ec:column property="name" title="projectView.dependency.name">
-                ${pageScope.dependency.groupId}:${pageScope.dependency.artifactId}:${pageScope.dependency.version}
-            </ec:column>
+            <ec:column property="groupId" title="projectView.dependency.groupId">
+            <ec:column property="artifactId" title="projectView.dependency.artifactId">
+            <ec:column property="version" title="projectView.dependency.version">
           </ec:row>
         </ec:table>
 
