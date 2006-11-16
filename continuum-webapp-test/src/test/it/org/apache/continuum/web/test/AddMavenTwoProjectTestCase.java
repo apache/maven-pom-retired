@@ -145,7 +145,7 @@ public class AddMavenTwoProjectTestCase
         assertTextPresent( "Maven Two Notifiers Project" );
 
         clickLinkWithText( "Maven Two Notifiers Project" );
-        clickLinkWithText( "Notifier" );
+        clickLinkWithText( "Notifiers" );
 
         assertTextPresent( "Project Group Notifiers" );
         assertTextPresent( "mail" );
