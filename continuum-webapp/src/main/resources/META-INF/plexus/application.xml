@@ -68,6 +68,9 @@
         <requirement>
           <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
         </requirement>
+        <requirement>
+          <role>org.apache.maven.continuum.Continuum</role>
+        </requirement>
       </requirements>
       <configuration>
         <from-mailbox></from-mailbox>
