@@ -22,7 +22,7 @@
       <ec:column property="scheduleName" title="schedule"/>
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
-      <ec:column property="editActions" title="Edit">
+      <ec:column property="editActions" title="&nbsp;">
 
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
           <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
@@ -37,7 +37,7 @@
           <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="Edit" title="Edit" border="0">
         </pss:elseAuthorized>
       </ec:column>    
-      <ec:column property="deleteActions" title="Remove">
+      <ec:column property="deleteActions" title="&nbsp;">
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
           <ww:url id="removeUrl" action="removeGroupBuildDefinition" namespace="/">
             <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
