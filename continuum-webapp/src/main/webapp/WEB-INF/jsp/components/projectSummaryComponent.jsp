@@ -96,7 +96,7 @@
         </c:choose>
         </pss:ifAuthorized>
         <pss:elseAuthorized>
-          <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Delete" title="Delete" border="0">
+          <img src="<ww:url value='/images/releaseproject_disabled.gif'/>" alt="Delete" title="Delete" border="0">
         </pss:elseAuthorized>
       </ec:column>
       <ec:column property="deleteAction" title="&nbsp;" width="1%" sortable="false">
