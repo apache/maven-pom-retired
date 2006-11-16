@@ -57,6 +57,10 @@
                 <include>pss</include>                  <!-- plexus-security css and javascript -->
                 <include>WEB-INF/jsp/pss</include>      <!-- plexus-security jsps -->
                 <include>WEB-INF/template/pss</include> <!-- plexus-security xwork templates -->
+                <include>WEB-INF/build-output-directory</include> <!-- Directory created by jetty:run -->
+                <include>WEB-INF/working-directory</include>      <!-- Directory created by jetty:run -->
+                <include>WEB-INF/logs</include>         <!-- Directory created by jetty:run -->
+                <include>WEB-INF/temp</include>         <!-- Directory created by jetty:run -->
               </includes>
             </fileset>
           </filesets>
