@@ -65,7 +65,39 @@ Files changed:
 #end
 #end
 #end
+#if ( $changesSinceLastSuccess )
+****************************************************************************
+SCM Changes since last success:
+****************************************************************************
+#if ( $changesSinceLastSuccess.changes.size() == 0 )
+No files changed
 
+#else
+#foreach ( $changeSet in $changesSinceLastSuccess )
+#if ($changeSet.author)
+#set($author = $changeSet.author)
+#else
+#set($author = "no author")
+#end
+#set($date = $formatter.formatTimestamp($changeSet.date))
+#if (!$date)
+#set($date = "no date")
+#end
+#if ($changeSet.comment)
+#set($comment = $formatter.trim($changeSet.comment))
+#else
+#set($comment = "no comment")
+#end
+Changed: $author @ $date
+Comment: $comment
+Files changed:
+#foreach ( $file in $changeSet.files )
+  $!file.name (#if ($file.revision) $file.revision #else no revision #end)
+#end
+
+#end
+#end
+#end
 #if ( $build.modifiedDependencies )
 ****************************************************************************
 Dependencies Changes:

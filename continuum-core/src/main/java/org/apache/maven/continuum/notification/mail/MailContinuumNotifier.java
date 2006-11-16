@@ -16,6 +16,7 @@ package org.apache.maven.continuum.notification.mail;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
@@ -71,6 +72,11 @@ public class MailContinuumNotifier
      * @plexus.requirement
      */
     private ContinuumStore store;
+
+    /**
+     * @plexus.requirement
+     */
+    private Continuum continuum;
 
     /**
      * @plexus.configuration
@@ -245,6 +251,9 @@ public class MailContinuumNotifier
                 context.put( "project", project );
 
                 context.put( "build", build );
+
+                context.put( "changesSinceLastSuccess",
+                             continuum.getChangesSinceLastSuccess( project.getId(), build.getId() ) );
 
                 context.put( "buildOutput", buildOutput );
 
@@ -460,7 +469,7 @@ public class MailContinuumNotifier
     }
 
     /**
-     * @see org.codehaus.plexus.notification.notifier.Notifier#sendNotification(java.lang.String, java.util.Set, java.util.Properties)
+     * @see org.codehaus.plexus.notification.notifier.Notifier#sendNotification(java.lang.String,java.util.Set,java.util.Properties)
      */
     public void sendNotification( String arg0, Set arg1, Properties arg2 )
         throws NotificationException
