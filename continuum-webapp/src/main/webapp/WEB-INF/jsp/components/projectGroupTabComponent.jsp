@@ -20,74 +20,74 @@
         </ww:url>
 
         <ww:set name="tabName" value="tabName"/>
-        <c:choose>        
+        <c:choose>
             <c:when test="${tabName != 'Summary'}">
                 <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupSummaryUrl}">
-            </c:when>    
+            </c:when>
             <c:otherwise>
                 <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">            
             </c:otherwise>
-        </c:choose>            
-        Summary                    
+        </c:choose>
+        Project Group Summary
         <c:choose>
-            <c:when test="${tabName != 'Summary'}">        
+            <c:when test="${tabName != 'Summary'}">
                 </a>
-            </c:when>    
+            </c:when>
             <c:otherwise>
                 </b>
             </c:otherwise>
-        </c:choose>                                       
-        <c:choose>        
+        </c:choose>
+        <c:choose>
             <c:when test="${tabName != 'Members'}">
                 <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupMembersUrl}">
-            </c:when>    
+            </c:when>
             <c:otherwise>
-                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">            
+                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">
             </c:otherwise>
-        </c:choose>                    
+        </c:choose>
         Members
         <c:choose>
-            <c:when test="${tabName != 'Members'}">        
+            <c:when test="${tabName != 'Members'}">
                 </a>
-            </c:when>    
+            </c:when>
             <c:otherwise>
                 </b>
             </c:otherwise>
-        </c:choose>                                               
-        <c:choose>        
+        </c:choose>
+        <c:choose>
             <c:when test="${tabName != 'Build Definitions'}">
                 <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupBuildDefinitionUrl}">
-            </c:when>    
+            </c:when>
             <c:otherwise>
-                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">            
+                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">
             </c:otherwise>
-        </c:choose>                            
-        Build Definition
+        </c:choose>
+        Build Definitions
         <c:choose>
-            <c:when test="${tabName != 'Build Definitions'}">        
+            <c:when test="${tabName != 'Build Definitions'}">
                 </a>
-            </c:when>    
+            </c:when>
             <c:otherwise>
                 </b>
             </c:otherwise>
-        </c:choose>                                                       
-        <c:choose>        
+        </c:choose>
+        <c:choose>
             <c:when test="${tabName != 'Notifier'}">
                 <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupNotifierUrl}">
-            </c:when>    
+            </c:when>
             <c:otherwise>
-                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">            
+                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">
             </c:otherwise>
-        </c:choose>                                    
-        Notifier
+        </c:choose>
+        Notifiers
         <c:choose>
-            <c:when test="${tabName != 'Notifier'}">        
+            <c:when test="${tabName != 'Notifier'}">
                 </a>
-            </c:when>    
+            </c:when>
             <c:otherwise>
                 </b>
             </c:otherwise>
-        </c:choose>                                                               
+        </c:choose>
       </p>
     </div>
-  </div>  
+  </div>
