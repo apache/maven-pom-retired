@@ -33,7 +33,7 @@
       <ec:row highlightRow="true">
         <ec:column property="name" title="summary.projectTable.name" width="48%">
           <ww:url id="projectViewUrl" action="projectView">
-            <ww:param name="projectId" value="projectId"/>
+            <ww:param name="projectId" value="${pageScope.project.id}"/>
           </ww:url>
           <ww:a href="%{projectViewUrl}">${pageScope.project.name}</ww:a>
         </ec:column>
@@ -71,7 +71,7 @@
                   <ww:param name="projectId" value="${pageScope.project.id}"/>
                   <ww:param name="projectName" value="${pageScope.project.name}"/>
                 </ww:url>
-                <ww:a href="%{removeProjectUrl">
+                <ww:a href="%{removeProjectUrl}">
                   <img src="<ww:url value='/images/delete.gif'/>" alt="Delete" title="Delete" border="0">
                 </ww:a>
               </c:when>
