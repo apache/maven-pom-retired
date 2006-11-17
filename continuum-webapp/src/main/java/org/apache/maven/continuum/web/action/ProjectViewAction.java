@@ -18,7 +18,6 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
-import org.apache.maven.continuum.model.project.ProjectGroup;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -35,11 +34,6 @@ public class ProjectViewAction
     private Project project;
 
     private int projectId;
-
-    /**
-     * Target {@link ProjectGroup} to view.
-     */
-    private ProjectGroup projectGroup;
 
     /**
      * Identifier for the target {@link ProjectGroup} to obtain for 
@@ -87,16 +81,4 @@ public class ProjectViewAction
     {
         this.projectGroupId = projectGroupId;
     }
-
-    /**
-     * Returns the {@link ProjectGroup} instance obtained for 
-     * the specified project group Id, or null if it were not set.
-     * 
-     * @return the projectGroup
-     */
-    public ProjectGroup getProjectGroup()
-    {
-        return projectGroup;
-    }
-
 }
