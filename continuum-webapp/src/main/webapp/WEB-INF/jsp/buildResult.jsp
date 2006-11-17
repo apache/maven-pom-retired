@@ -105,9 +105,9 @@
                       sortable="false"
                       filterable="false">
               <ec:row>
-                <ec:column property="groupId" title="buildResult.dependencies.title"/>
-                <ec:column property="artifactId" title="buildResult.dependencies.title"/>
-                <ec:column property="version" title="buildResult.dependencies.title"/>
+                <ec:column property="groupId" title="buildResult.dependencies.groupId"/>
+                <ec:column property="artifactId" title="buildResult.dependencies.artifactId"/>
+                <ec:column property="version" title="buildResult.dependencies.version"/>
               </ec:row>
             </ec:table>
         </ww:if>
