@@ -530,6 +530,8 @@ public class DefaultContinuum
     /**
      * takes a given schedule and determines which projects need to build
      *
+     * The build order is determined by the 
+     *
      * @param schedule
      * @throws ContinuumException
      */
@@ -540,76 +542,51 @@ public class DefaultContinuum
 
         Map projectsMap = null;
 
-        Map projectGroupsMap = null;
-
-        // get the Maps of id's that are effected by this schedule
         try
         {
-            // todo the store should get cleaned up some so this isn't as clunky,
-            // todo I think the store should be able to return all of these info
-
             projectsMap = store.getProjectIdsAndBuildDefinitionsIdsBySchedule( schedule.getId() );
 
-            projectGroupsMap = store.getProjectGroupIdsAndBuildDefinitionsIdsBySchedule( schedule.getId() );
-
-            if ( projectsMap == null && projectGroupsMap == null )
+            if ( projectsMap == null )
             {
                 // We don't have projects attached to this schedule
-                getLogger().info( "No projects to build for schedule " + schedule );
                 return;
             }
+
+            projectsList = getProjectsInBuildOrder();
         }
         catch ( ContinuumStoreException e )
         {
             throw new ContinuumException( "Can't get project list for schedule " + schedule.getName(), e );
         }
-
-        Collection projectGroups = getAllProjectGroupsWithProjects();
-
-        // walk through all of the project groups
-        for ( Iterator i = projectGroups.iterator(); i.hasNext(); )
+        catch ( CycleDetectedException e )
         {
-            // get the project group
-            ProjectGroup projectGroup = (ProjectGroup) i.next();
+            getLogger().warn( "Cycle detected while sorting projects for building, falling back to unsorted build." );
 
-            // get all the sorted projects in a project group
-            try
+            projectsList = getProjects();
+        }
+
+        for ( Iterator projectIterator = projectsList.iterator(); projectIterator.hasNext(); )
+        {
+            Project project = (Project) projectIterator.next();
+
+            List buildDefIds = (List) projectsMap.get( new Integer( project.getId() ) );
+
+            if ( buildDefIds != null && !buildDefIds.isEmpty() )
             {
-                projectsList = getProjectsInBuildOrder( store.getProjectsWithDependenciesByGroupId( projectGroup.getId() ) );
-            }
-            catch ( CycleDetectedException e )
-            {
-                getLogger().warn(
-                    "Cycle detected while sorting projects for building, falling back to unsorted build." );
-
-                projectsList = getProjectsInGroup( projectGroup.getId() );
-            }
-
-            getLogger().info( "Building " + projectsList.size() + " projects" );
-
-            // get the group build definitions associated with this project group
-            List groupBuildDefinitionIds = (List) projectGroupsMap.get( new Integer( projectGroup.getId() ) );
-
-            // iterate through the sorted (or potentially unsorted) projects in this project group
-            for ( Iterator j = projectsList.iterator(); j.hasNext(); )
-            {
-                Project project = (Project) j.next();
-
-                // iterate through the project group build definitions and build
-                buildFromDefinitionIds( groupBuildDefinitionIds, project );
-
-                // iterate through the project build definitions and build
-                List buildDefIds = projectsMap == null ? null : (List) projectsMap.get( new Integer( project.getId() ) );
-
-                buildFromDefinitionIds( buildDefIds, project );
-
-                if ( buildDefIds == null || buildDefIds.isEmpty() )
+                for ( Iterator buildDefinitionIterator = buildDefIds.iterator(); buildDefinitionIterator.hasNext(); )
                 {
-                    getLogger().info( "No build definitions, not building for project " + project );
+                    Integer buildDefId = (Integer) buildDefinitionIterator.next();
+
+                    if ( buildDefId != null && !isInBuildingQueue( project.getId(), buildDefId.intValue() ) &&
+                        !isInCheckoutQueue( project.getId() ) )
+                    {
+                        buildProject( project, buildDefId.intValue(), ContinuumProjectState.TRIGGER_SCHEDULED, false );
+                    }
                 }
             }
         }
     }
+
 
     private void buildFromDefinitionIds( Collection buildDefinitionIds, Project project )
         throws ContinuumException
@@ -851,6 +828,13 @@ public class DefaultContinuum
         return getProjectsInBuildOrder( getProjectsWithDependencies() );
     }
 
+    /**
+     * take a collection of projects and sort for order
+     *
+     * @param projects
+     * @return
+     * @throws CycleDetectedException
+     */
     private List getProjectsInBuildOrder( Collection projects )
         throws CycleDetectedException
     {
