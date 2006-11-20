@@ -347,6 +347,7 @@
       <configuration>
         <threshold>INFO</threshold>
         <default-appender>console,rolling</default-appender>
+
         <appenders>
           <appender>
             <id>console</id>
@@ -358,7 +359,7 @@
           <appender>
             <id>rolling</id>
             <threshold>DEBUG</threshold>
-            <type>org.apache.log4j.RollingFileAppender</type>
+            <type>org.apache.log4j.DailyRollingFileAppender</type>
             <conversion-pattern>%-4r [%t] %-5p %c %x - %m%n</conversion-pattern>
 
             <properties>
@@ -371,40 +372,58 @@
                 <value>true</value>
               </property>
               <property>
-                <name>maxBackupIndex</name>
-                <value>10</value>
+                <name>datePattern</name>
+                <value>'.'yyyy-MM-dd</value>
+              </property>
+            </properties>
+          </appender>
+
+          <appender>
+            <id>audit</id>
+            <threshold>DEBUG</threshold>
+            <type>org.apache.log4j.DailyRollingFileAppender</type>
+            <conversion-pattern>%-4r [%t] %-5p %c %x - %m%n</conversion-pattern>
+
+            <properties>
+              <property>
+                <name>file</name>
+                <value>${plexus.home}/logs/audit.log</value>
               </property>
               <property>
-                <name>maxFileSize</name>
-                <value>10MB</value>
+                <name>append</name>
+                <value>true</value>
+              </property>
+              <property>
+                <name>datePattern</name>
+                <value>'.'yyyy-MM-dd</value>
               </property>
             </properties>
           </appender>
         </appenders>
+
         <levels>
           <level>
-            <hierarchy>org.apache.maven.continuum.project.builder.ContinuumProjectBuilder</hierarchy>
+            <hierarchy>org.apache.maven.archiva.web.servlet.repository.RepositoryMapping</hierarchy>
+            <level>DEBUG, audit</level>
+          </level>
+
+          <!-- Help identify bugs during testing -->
+          <level>
+            <hierarchy>org.apache.maven</hierarchy>
             <level>DEBUG</level>
           </level>
           <level>
-            <hierarchy>org.apache.maven.continuum.execution.maven.m2.DefaultMavenBuilderHelper</hierarchy>
-            <level>INFO</level>
+            <hierarchy>org.codehaus.plexus.security</hierarchy>
+            <level>DEBUG</level>
           </level>
-          <level>
-            <hierarchy>org.codehaus.plexus.velocity</hierarchy>
-            <level>WARN</level>
-          </level>
+          <!-- squelch noisy objects (for now) -->
           <level>
             <hierarchy>org.codehaus.plexus.mailsender.MailSender</hierarchy>
             <level>INFO</level>
           </level>
           <level>
-            <hierarchy>JPOX</hierarchy>
+            <hierarchy>org.quartz</hierarchy>
             <level>INFO</level>
-          </level>
-          <level>
-            <hierarchy>JPOX.Cache</hierarchy>
-            <level>WARN</level>
           </level>
           <level>
             <hierarchy>org.apache.jasper</hierarchy>
@@ -419,8 +438,22 @@
             <level>INFO</level>
           </level>
           <level>
-            <hierarchy>org.extremecomponents</hierarchy>
+            <hierarchy>org.codehaus.plexus.PlexusContainer</hierarchy>
             <level>INFO</level>
+          </level>
+          <level>
+            <hierarchy>JPOX</hierarchy>
+            <level>WARN</level>
+          </level>
+          <!--
+                    <level>
+                      <hierarchy>JPOX.RDBMS.SQL</hierarchy>
+                      <level>DEBUG</level>
+                    </level>
+          -->
+          <level>
+            <hierarchy>freemarker</hierarchy>
+            <level>WARN</level>
           </level>
         </levels>
       </configuration>
