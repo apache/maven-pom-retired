@@ -151,14 +151,22 @@ public class DefaultMavenBuilderHelper
         // SCM Url
         // ----------------------------------------------------------------------
 
-        String scmUrl = getScmUrl( mavenProject );
-
-        continuumProject.setScmUrl( scmUrl );
-
-        if ( !"HEAD".equals( mavenProject.getScm().getTag() ) )
+        // TODO: Remove this: scm url shouldn't be null there
+        if ( StringUtils.isEmpty( continuumProject.getScmUrl() ) )
         {
-            continuumProject.setScmTag( mavenProject.getScm().getTag() );
+            String scmUrl = getScmUrl( mavenProject );
+
+            continuumProject.setScmUrl( scmUrl );
+
+            if ( !"HEAD".equals( mavenProject.getScm().getTag() ) )
+            {
+                continuumProject.setScmTag( mavenProject.getScm().getTag() );
+            }
         }
+
+        // ----------------------------------------------------------------------
+        // Version
+        // ----------------------------------------------------------------------
 
         continuumProject.setVersion( getVersion( mavenProject ) );
 

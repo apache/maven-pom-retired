@@ -88,7 +88,7 @@ public class MavenTwoContinuumProjectBuilder
 
         ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
 
-        readModules( url, result, true, username, password );
+        readModules( url, result, true, username, password, null );
 
         return result;
     }
@@ -98,7 +98,7 @@ public class MavenTwoContinuumProjectBuilder
     // ----------------------------------------------------------------------
 
     private void readModules( URL url, ContinuumProjectBuildingResult result, boolean groupPom, String username,
-                              String password )
+                              String password, String scmUrl )
     {
         MavenProject mavenProject;
 
@@ -214,6 +214,22 @@ public class MavenTwoContinuumProjectBuilder
                 return;
             }
 
+            // Rewrite scmurl from the one found in added project due to a bug in scm url resolution
+            // for projects that doesn't have module name != artifactId
+            if ( StringUtils.isNotEmpty( scmUrl))
+            {
+                continuumProject.setScmUrl( scmUrl);
+            }
+            else
+            {
+                scmUrl = continuumProject.getScmUrl();
+            }
+
+            if ( !"HEAD".equals( mavenProject.getScm().getTag() ) )
+            {
+                continuumProject.setScmTag( mavenProject.getScm().getTag() );
+            }
+
             result.addProject( continuumProject, MavenTwoBuildExecutor.ID );
         }
 
@@ -255,7 +271,7 @@ public class MavenTwoContinuumProjectBuilder
                 continue;
             }
 
-            readModules( moduleUrl, result, false, username, password );
+            readModules( moduleUrl, result, false, username, password, scmUrl+"/"+module );
         }
     }
 

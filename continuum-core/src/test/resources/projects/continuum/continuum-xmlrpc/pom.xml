@@ -5,7 +5,7 @@
     <artifactId>continuum-parent</artifactId>
     <version>1.0.3</version>
   </parent>
-  <artifactId>continuum-xmlrpc</artifactId>
+  <artifactId>continuum-xmlrpc-server</artifactId>
   <name>Continuum XMLRPC Interface</name>
   <dependencies>
     <dependency>
