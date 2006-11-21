@@ -6,16 +6,16 @@
   <div id="h3">
     <div>
       <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
-       <ww:url id="projectGroupSummaryUrl" action="projectGroupSummary">
+       <ww:url id="projectGroupSummaryUrl" action="projectGroupSummary" includeParams="none">
           <ww:param name="projectGroupId" value="projectGroupId"/>
         </ww:url>
-        <ww:url id="projectGroupMembersUrl" action="projectGroupMembers">
+        <ww:url id="projectGroupMembersUrl" action="projectGroupMembers" includeParams="none">
           <ww:param name="projectGroupId" value="projectGroupId"/>
         </ww:url>
-        <ww:url id="projectGroupBuildDefinitionUrl" action="projectGroupBuildDefinition">
+        <ww:url id="projectGroupBuildDefinitionUrl" action="projectGroupBuildDefinition" includeParams="none">
           <ww:param name="projectGroupId" value="projectGroupId"/>
         </ww:url>
-        <ww:url id="projectGroupNotifierUrl" action="projectGroupNotifier">
+        <ww:url id="projectGroupNotifierUrl" action="projectGroupNotifier" includeParams="none">
           <ww:param name="projectGroupId" value="projectGroupId"/>
         </ww:url>
 
@@ -55,7 +55,7 @@
             </c:otherwise>
         </c:choose>
         <c:choose>
-            <c:when test="${tabName != 'Build Definitions'}">
+            <c:when test="${tabName != 'BuildDefinitions'}">
                 <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupBuildDefinitionUrl}">
             </c:when>
             <c:otherwise>
@@ -64,7 +64,7 @@
         </c:choose>
         Build Definitions
         <c:choose>
-            <c:when test="${tabName != 'Build Definitions'}">
+            <c:when test="${tabName != 'BuildDefinitions'}">
                 </a>
             </c:when>
             <c:otherwise>

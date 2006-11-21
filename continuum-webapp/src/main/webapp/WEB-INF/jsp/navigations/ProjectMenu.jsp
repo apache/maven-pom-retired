@@ -5,14 +5,17 @@
 <div>
   <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
 
-    <ww:url id="viewUrl" action="projectView">
-    	<ww:param name="projectId" value="projectId"/>
+    <ww:url id="viewUrl" action="projectView" includeParams="none">
+        <ww:param name="projectId" value="projectId"/>
+        <ww:param name="tab" value="view"/>
     </ww:url>
-    <ww:url id="buildResultsUrl" action="buildResults">
-    	<ww:param name="projectId" value="projectId"/>
+    <ww:url id="buildResultsUrl" action="buildResults" includeParams="none">
+        <ww:param name="projectId" value="projectId"/>
+        <ww:param name="tab" value="buildResults"/>
     </ww:url>
-    <ww:url id="workingCopyUrl" action="workingCopy">
-    	<ww:param name="projectId" value="projectId"/>
+    <ww:url id="workingCopyUrl" action="workingCopy" includeParams="none">
+        <ww:param name="projectId" value="projectId"/>
+        <ww:param name="tab" value="workingCopy"/>
     </ww:url>
 
     <c:choose>
