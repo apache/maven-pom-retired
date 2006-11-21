@@ -17,28 +17,28 @@
 
     <c:choose>
       <c:when test="${param.tab == 'view'}">
-        <b class="tabMenuDisabled"><ww:text name="info"/></b>
+        <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="info"/></b>
       </c:when>
       <c:otherwise>
-        <ww:a cssClass="tabMenuEnabled" href="%{viewUrl}"><ww:text name="info"/></ww:a>
+        <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${viewUrl}"><ww:text name="info"/></a>
       </c:otherwise>
     </c:choose>
 
     <c:choose>
       <c:when test="${param.tab == 'buildResults'}">
-        <b class="tabMenuDisabled"><ww:text name="builds"/></b>
+        <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="builds"/></b>
       </c:when>
       <c:otherwise>
-        <ww:a cssClass="tabMenuEnabled" href="%{buildResultsUrl}"><ww:text name="builds"/></ww:a>
+        <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${buildResultsUrl}"><ww:text name="builds"/></a>
       </c:otherwise>
     </c:choose>
 
     <c:choose>
       <c:when test="${param.tab == 'workingCopy'}">
-        <b class="tabMenuDisabled"><ww:text name="workingCopy"/></b>
+        <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="workingCopy"/></b>
       </c:when>
       <c:otherwise>
-        <ww:a cssClass="tabMenuEnabled" href="%{workingCopyUrl}"><ww:text name="workingCopy"/></ww:a>
+        <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${workingCopyUrl}"><ww:text name="workingCopy"/></a>
       </c:otherwise>
     </c:choose>
 
