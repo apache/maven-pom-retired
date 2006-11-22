@@ -120,7 +120,7 @@
         </executions>
         <configuration>
           <descriptor>src/main/assembly/bin.xml</descriptor>
-          <finalName>project-server</finalName>
+          <finalName>continuum</finalName>
         </configuration>
       </plugin>
     </plugins>
