@@ -46,8 +46,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
- * @plexus.component role="org.apache.maven.continuum.project.builder.ContinuumProjectBuilder"
- * role-hint="maven-two-builder"
+ * @plexus.component role="org.apache.maven.continuum.project.builder.ContinuumProjectBuilder" role-hint="maven-two-builder"
  */
 public class MavenTwoContinuumProjectBuilder
     extends AbstractContinuumProjectBuilder

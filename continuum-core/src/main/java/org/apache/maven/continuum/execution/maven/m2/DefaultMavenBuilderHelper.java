@@ -72,8 +72,7 @@ import java.util.List;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- * @plexus.component role="org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper"
- * role-hint="default"
+ * @plexus.component role="org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper" role-hint="default"
  */
 public class DefaultMavenBuilderHelper
     extends AbstractLogEnabled
@@ -123,7 +122,8 @@ public class DefaultMavenBuilderHelper
 
         if ( mavenProject == null )
         {
-            //result is already populated
+            result.addError( ContinuumProjectBuildingResult.ERROR_UNKNOWN,
+                             "Can't load the maven project. Verify that your scm url is correct and remove/readd the project." );
             return;
         }
 
@@ -135,7 +135,7 @@ public class DefaultMavenBuilderHelper
     {
         if ( mavenProject == null )
         {
-            result.addError( ContinuumProjectBuildingResult.ERROR_UNKNOWN, "The maven project is null" );
+            result.addError( ContinuumProjectBuildingResult.ERROR_UNKNOWN, "The maven project is null." );
             return;
         }
 
