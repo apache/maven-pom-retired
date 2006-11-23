@@ -20,12 +20,13 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Holder for results of adding projects to Continuum. Contains added projects, project groups
  * and errors that happened during the add.
- * 
+ *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
@@ -60,7 +61,8 @@ public class ContinuumProjectBuildingResult
 
     public static final String ERROR_MISSING_NOTIFIER_TYPE = "add.project.missing.notifier.type.error";
 
-    public static final String ERROR_MISSING_NOTIFIER_CONFIGURATION = "add.project.missing.notifier.configuration.error";
+    public static final String ERROR_MISSING_NOTIFIER_CONFIGURATION =
+        "add.project.missing.notifier.configuration.error";
 
     public static final String ERROR_METADATA_TRANSFER = "add.project.metadata.transfer.error";
 
@@ -109,7 +111,7 @@ public class ContinuumProjectBuildingResult
 
     /**
      * Add a warning that happened during adding the project to Continuum.
-     * 
+     *
      * @param warningKey warning id (so it can be internationalized later)
      * @deprecated Use {@link #addError(String)} instead
      */
@@ -120,7 +122,7 @@ public class ContinuumProjectBuildingResult
 
     /**
      * Add an error that happened during adding the project to Continuum.
-     * 
+     *
      * @param errorKey error id (so it can be internationalized later)
      */
     public void addError( String errorKey )
@@ -130,7 +132,7 @@ public class ContinuumProjectBuildingResult
 
     /**
      * Add an error that happened during adding the project to Continuum.
-     * 
+     *
      * @param errorKey error id (so it can be internationalized later)
      */
     public void addError( String errorKey, Object param )
@@ -141,7 +143,7 @@ public class ContinuumProjectBuildingResult
 
     /**
      * Add an error that happened during adding the project to Continuum.
-     * 
+     *
      * @param errorKey error id (so it can be internationalized later)
      */
     public void addError( String errorKey, Object params[] )
@@ -153,7 +155,7 @@ public class ContinuumProjectBuildingResult
     /**
      * Get the warnings that happened during adding the project to Continuum.
      * There is an entry with the warning key (so it can be internationalized later) for each warning.
-     * 
+     *
      * @return {@link List} &lt; {@link String} >
      * @deprecated Use {@link #getErrors()} instead
      */
@@ -165,7 +167,7 @@ public class ContinuumProjectBuildingResult
     /**
      * Get the errors that happened during adding the project to Continuum.
      * There is an entry with the error key (so it can be internationalized later) for each error.
-     * 
+     *
      * @return {@link List} &lt; {@link String} >
      */
     public List getErrors()
@@ -175,11 +177,33 @@ public class ContinuumProjectBuildingResult
 
     /**
      * Quick check to see if there are any errors.
-     * 
+     *
      * @return boolean indicating if there are any errors.
      */
     public boolean hasErrors()
     {
         return ( errors != null ) && ( !errors.isEmpty() );
+    }
+
+    /**
+     * Returns a string representation of the errors.
+     *
+     * @return a string representation of the errors.
+     */
+    public String getErrorsAsString()
+    {
+        if ( !hasErrors() )
+        {
+            return null;
+        }
+
+        StringBuffer message = new StringBuffer();
+        for ( Iterator i = errors.iterator(); i.hasNext(); )
+        {
+            String error = (String) i.next();
+            message.append( error );
+            message.append( "\n" );
+        }
+        return message.toString();
     }
 }

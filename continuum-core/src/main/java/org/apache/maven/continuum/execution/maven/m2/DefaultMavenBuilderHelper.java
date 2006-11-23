@@ -72,10 +72,8 @@ import java.util.List;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper"
- *   role-hint="default"
+ * @plexus.component role="org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper"
+ * role-hint="default"
  */
 public class DefaultMavenBuilderHelper
     extends AbstractLogEnabled
@@ -118,29 +116,29 @@ public class DefaultMavenBuilderHelper
     // ----------------------------------------------------------------------
     // MavenBuilderHelper Implementation
     // ----------------------------------------------------------------------
-    /**
-     * @deprecated use {@link #mapMavenProjectToContinuumProject(ContinuumProjectBuildingResult, MavenProject, Project, boolean)} instead.
-     */
-    public void mapMetadataToProject( File metadata, Project continuumProject )
-        throws MavenBuilderHelperException
+
+    public void mapMetadataToProject( ContinuumProjectBuildingResult result, File metadata, Project continuumProject )
     {
-        // todo this is deprecated so it shouldn't be used anyway so just set false for groupPom boolean and clean up later
-        mapMavenProjectToContinuumProject( getMavenProject( metadata ), continuumProject, false );
+        MavenProject mavenProject = getMavenProject( result, metadata );
+
+        if ( mavenProject == null )
+        {
+            //result is already populated
+            return;
+        }
+
+        mapMavenProjectToContinuumProject( result, mavenProject, continuumProject, false );
     }
 
-    /**
-     * @deprecated use {@link #mapMavenProjectToContinuumProject(ContinuumProjectBuildingResult, MavenProject, Project, boolean)} instead.
-     */
-    public void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject, boolean groupPom )
-        throws MavenBuilderHelperException
+    public void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject,
+                                                   Project continuumProject, boolean groupPom )
     {
-        mapMavenProjectToContinuumProject( new ContinuumProjectBuildingResult(), mavenProject, continuumProject, groupPom );
-    }
-    
-    public void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject, Project continuumProject, boolean groupPom )
-        throws MavenBuilderHelperException
-    {
-    
+        if ( mavenProject == null )
+        {
+            result.addError( ContinuumProjectBuildingResult.ERROR_UNKNOWN, "The maven project is null" );
+            return;
+        }
+
         // ----------------------------------------------------------------------
         // Name
         // ----------------------------------------------------------------------
@@ -332,20 +330,11 @@ public class DefaultMavenBuilderHelper
             }
         }
     }
-    
-    /**
-     * @deprecated use {@link #getMavenProject(ContinuumProjectBuildingResult, File)} instead.
-     */
-    public MavenProject getMavenProject( File file )
-    throws MavenBuilderHelperException
-    {
-        return getMavenProject( new ContinuumProjectBuildingResult(), file );
-    }
 
     public MavenProject getMavenProject( ContinuumProjectBuildingResult result, File file )
     {
         MavenProject project;
-        
+
         try
         {
             //   TODO: This seems like code that is shared with DefaultMaven, so it should be moved to the project
@@ -372,8 +361,8 @@ public class DefaultMavenBuilderHelper
             StringBuffer messages = new StringBuffer();
 
             Throwable cause = e.getCause();
-            
-            if( cause != null )
+
+            if ( cause != null )
             {
                 while ( ( cause.getCause() != null ) && ( cause instanceof ProjectBuildingException ) )
                 {
@@ -409,7 +398,7 @@ public class DefaultMavenBuilderHelper
             result.addError( ContinuumProjectBuildingResult.ERROR_PROJECT_BUILDING, e.getMessage() );
 
             String msg = "Cannot build maven project from " + file + " (" + e.getMessage() + ").\n" + messages;
-            
+
             file.delete();
 
             getLogger().error( msg );
@@ -419,12 +408,14 @@ public class DefaultMavenBuilderHelper
         // TODO catch all exceptions is bad
         catch ( Exception e )
         {
+            result.addError( ContinuumProjectBuildingResult.ERROR_PROJECT_BUILDING, e.getMessage() );
+
             String msg = "Cannot build maven project from " + file + " (" + e.getMessage() + ").";
 
             file.delete();
-            
+
             getLogger().error( msg );
-            
+
             return null;
         }
 
@@ -438,9 +429,9 @@ public class DefaultMavenBuilderHelper
         if ( scm == null )
         {
             result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_SCM, getProjectName( project ) );
-            
+
             getLogger().error( "Missing 'scm' element in the " + getProjectName( project ) + " POM." );
-            
+
             return null;
         }
 
@@ -449,9 +440,10 @@ public class DefaultMavenBuilderHelper
         if ( StringUtils.isEmpty( url ) )
         {
             result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_SCM_CONNECTION, getProjectName( project ) );
-            
-            getLogger().error( "Missing 'connection' element in the 'scm' element in the " + getProjectName( project ) + " POM." );
-            
+
+            getLogger().error(
+                "Missing 'connection' element in the 'scm' element in the " + getProjectName( project ) + " POM." );
+
             return null;
         }
 
@@ -484,7 +476,8 @@ public class DefaultMavenBuilderHelper
         return project.getScm().getConnection();
     }
 
-    private List getNotifiers( ContinuumProjectBuildingResult result, MavenProject mavenProject, Project continuumProject )
+    private List getNotifiers( ContinuumProjectBuildingResult result, MavenProject mavenProject,
+                               Project continuumProject )
     {
         List notifiers = new ArrayList();
 

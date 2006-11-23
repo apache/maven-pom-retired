@@ -18,21 +18,20 @@ package org.apache.maven.continuum.project.builder.maven;
 
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor;
-import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelperException;
 import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.project.builder.AbstractContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilder;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuilderException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.model.Notifier;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.FileNotFoundException;
@@ -47,10 +46,8 @@ import java.util.List;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="org.apache.maven.continuum.project.builder.ContinuumProjectBuilder"
- *   role-hint="maven-two-builder"
+ * @plexus.component role="org.apache.maven.continuum.project.builder.ContinuumProjectBuilder"
+ * role-hint="maven-two-builder"
  */
 public class MavenTwoContinuumProjectBuilder
     extends AbstractContinuumProjectBuilder
@@ -196,29 +193,27 @@ public class MavenTwoContinuumProjectBuilder
             if ( username != null && StringUtils.isNotEmpty( username ) )
             {
                 continuumProject.setScmUsername( username );
-                
+
                 if ( password != null && StringUtils.isNotEmpty( password ) )
                 {
                     continuumProject.setScmPassword( password );
                 }
             }
 
-            try
+            builderHelper.mapMavenProjectToContinuumProject( result, mavenProject, continuumProject, groupPom );
+
+            if ( result.hasErrors() )
             {
-                builderHelper.mapMavenProjectToContinuumProject( result, mavenProject, continuumProject, groupPom );
-            }
-            catch ( MavenBuilderHelperException e )
-            {
-                getLogger().info( "Error adding project: Unknown error mapping project " + url, e );
-                result.addError( ContinuumProjectBuildingResult.ERROR_MISSING_SCM_CONNECTION );
+                getLogger().info(
+                    "Error adding project: Unknown error mapping project " + url + ": " + result.getErrorsAsString() );
                 return;
             }
 
             // Rewrite scmurl from the one found in added project due to a bug in scm url resolution
             // for projects that doesn't have module name != artifactId
-            if ( StringUtils.isNotEmpty( scmUrl))
+            if ( StringUtils.isNotEmpty( scmUrl ) )
             {
-                continuumProject.setScmUrl( scmUrl);
+                continuumProject.setScmUrl( scmUrl );
             }
             else
             {
@@ -271,7 +266,7 @@ public class MavenTwoContinuumProjectBuilder
                 continue;
             }
 
-            readModules( moduleUrl, result, false, username, password, scmUrl+"/"+module );
+            readModules( moduleUrl, result, false, username, password, scmUrl + "/" + module );
         }
     }
 
@@ -310,7 +305,6 @@ public class MavenTwoContinuumProjectBuilder
         // ----------------------------------------------------------------------
 
         projectGroup.setDescription( mavenProject.getDescription() );
-
 
         //
         // group lvl notifiers
@@ -356,7 +350,6 @@ public class MavenTwoContinuumProjectBuilder
 
             projectGroup.setNotifiers( notifiers );
         }
-
 
         return projectGroup;
     }

@@ -24,24 +24,25 @@ import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.execution.ContinuumBuildExecutorException;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.scm.SuiteResult;
+import org.apache.maven.continuum.model.scm.TestCaseFailure;
+import org.apache.maven.continuum.model.scm.TestResult;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.apache.maven.project.artifact.ProjectArtifactMetadata;
-import org.apache.maven.continuum.model.scm.TestResult;
-import org.apache.maven.continuum.model.scm.SuiteResult;
-import org.apache.maven.continuum.model.scm.TestCaseFailure;
-import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.plexus.util.xml.pull.XmlPullParser;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.MXParser;
+import org.codehaus.plexus.util.xml.pull.XmlPullParser;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-  
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.IOException;
-import java.io.FileNotFoundException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -118,13 +119,13 @@ public class MavenTwoBuildExecutor
             throw new ContinuumBuildExecutorException( "Could not find Maven project descriptor." );
         }
 
-        try
+        ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
+
+        builderHelper.mapMetadataToProject( result, f, project );
+
+        if ( result.hasErrors() )
         {
-            builderHelper.mapMetadataToProject( f, project );
-        }
-        catch ( MavenBuilderHelperException e )
-        {
-            throw new ContinuumBuildExecutorException( "Error while mapping metadata.", e );
+            throw new ContinuumBuildExecutorException( "Error while mapping metadata:" + result.getErrorsAsString() );
         }
     }
 
@@ -162,14 +163,14 @@ public class MavenTwoBuildExecutor
 
         MavenProject project;
 
-        try
-        {
-            project = builderHelper.getMavenProject( f );
-        }
-        catch ( MavenBuilderHelperException e )
+        ContinuumProjectBuildingResult result = new ContinuumProjectBuildingResult();
+
+        project = builderHelper.getMavenProject( result, f );
+
+        if ( result.hasErrors() )
         {
             throw new ContinuumBuildExecutorException(
-                "Unable to read the Maven project descriptor '" + f + "': " + e.getMessage(), e );
+                "Unable to read the Maven project descriptor '" + f + "': " + result.getErrorsAsString() );
         }
 
         List artifacts = new ArrayList( 1 );
@@ -253,19 +254,19 @@ public class MavenTwoBuildExecutor
         return artifacts;
     }
 
-    public TestResult getTestResults(Project project)
-            throws ContinuumBuildExecutorException {
-        return getTestResults(getWorkingDirectory(project));
+    public TestResult getTestResults( Project project )
+        throws ContinuumBuildExecutorException
+    {
+        return getTestResults( getWorkingDirectory( project ) );
     }
 
-    private TestResult getTestResults(File workingDir)
-            throws ContinuumBuildExecutorException {
+    private TestResult getTestResults( File workingDir )
+        throws ContinuumBuildExecutorException
+    {
         DirectoryScanner scanner = new DirectoryScanner();
-        scanner.setBasedir(workingDir);
-        scanner.setIncludes(new String[] {
-                "**/target/surefire-reports/TEST-*.xml",
-                "**/target/surefire-it-reports/TEST-*.xml"
-        });
+        scanner.setBasedir( workingDir );
+        scanner.setIncludes(
+            new String[]{"**/target/surefire-reports/TEST-*.xml", "**/target/surefire-it-reports/TEST-*.xml"} );
         scanner.scan();
 
         TestResult testResult = new TestResult();
@@ -273,44 +274,51 @@ public class MavenTwoBuildExecutor
         int failureCount = 0;
         int totalTime = 0;
         String[] testResultFiles = scanner.getIncludedFiles();
-        for (int i = 0; i < testResultFiles.length; i++) {
-            File xmlFile = new File(workingDir, testResultFiles[i]);
+        for ( int i = 0; i < testResultFiles.length; i++ )
+        {
+            File xmlFile = new File( workingDir, testResultFiles[i] );
             SuiteResult suite = new SuiteResult();
-            try {
+            try
+            {
                 XmlPullParser parser = new MXParser();
-                parser.setInput(new FileReader(xmlFile));
-                if (parser.next() != XmlPullParser.START_TAG || !"testsuite".equals(parser.getName())) {
+                parser.setInput( new FileReader( xmlFile ) );
+                if ( parser.next() != XmlPullParser.START_TAG || !"testsuite".equals( parser.getName() ) )
+                {
                     continue;
                 }
 
-                suite.setName(parser.getAttributeValue(null, "name"));
+                suite.setName( parser.getAttributeValue( null, "name" ) );
 
-                int suiteFailureCount =
-                        Integer.parseInt(parser.getAttributeValue(null, "errors")) +
-                        Integer.parseInt(parser.getAttributeValue(null, "failures"));
+                int suiteFailureCount = Integer.parseInt( parser.getAttributeValue( null, "errors" ) ) +
+                    Integer.parseInt( parser.getAttributeValue( null, "failures" ) );
 
-                long suiteTotalTime =
-                        (long) (1000 * Double.parseDouble(parser.getAttributeValue(null, "time")));
+                long suiteTotalTime = (long) ( 1000 * Double.parseDouble( parser.getAttributeValue( null, "time" ) ) );
 
                 // TODO: add tests attribute to testsuite element so we only
                 // have to parse the rest of the file if there are failures
                 int suiteTestCount = 0;
-                while (!(parser.next() == XmlPullParser.END_TAG && "testsuite".equals(parser.getName()))) {
-                    if (parser.getEventType() == XmlPullParser.START_TAG && "testcase".equals(parser.getName())) {
+                while ( !( parser.next() == XmlPullParser.END_TAG && "testsuite".equals( parser.getName() ) ) )
+                {
+                    if ( parser.getEventType() == XmlPullParser.START_TAG && "testcase".equals( parser.getName() ) )
+                    {
                         suiteTestCount++;
-                        String name = parser.getAttributeValue(null, "name");
-                        do {
+                        String name = parser.getAttributeValue( null, "name" );
+                        do
+                        {
                             parser.next();
-                        } while (parser.getEventType() != XmlPullParser.START_TAG &&
-                                 parser.getEventType() != XmlPullParser.END_TAG);
-                        if (parser.getEventType() == XmlPullParser.START_TAG &&
-                                ("error".equals(parser.getName()) || "failure".equals(parser.getName()))) {
+                        }
+                        while ( parser.getEventType() != XmlPullParser.START_TAG &&
+                            parser.getEventType() != XmlPullParser.END_TAG );
+                        if ( parser.getEventType() == XmlPullParser.START_TAG &&
+                            ( "error".equals( parser.getName() ) || "failure".equals( parser.getName() ) ) )
+                        {
                             TestCaseFailure failure = new TestCaseFailure();
-                            failure.setName(name);
-                            if (parser.next() == XmlPullParser.TEXT) {
-                                failure.setException(parser.getText());
+                            failure.setName( name );
+                            if ( parser.next() == XmlPullParser.TEXT )
+                            {
+                                failure.setException( parser.getText() );
                             }
-                            suite.addFailure(failure);
+                            suite.addFailure( failure );
                         }
                     }
                 }
@@ -319,25 +327,28 @@ public class MavenTwoBuildExecutor
                 failureCount += suiteFailureCount;
                 totalTime += suiteTotalTime;
 
-                suite.setTestCount(suiteTestCount);
-                suite.setFailureCount(suiteFailureCount);
-                suite.setTotalTime(suiteTotalTime);
-            } catch (XmlPullParserException xppex) {
-                throw new ContinuumBuildExecutorException(
-                        "Error parsing file: " + xmlFile, xppex);
-            } catch (FileNotFoundException fnfex) {
-                throw new ContinuumBuildExecutorException(
-                        "Test file not found", fnfex);
-            } catch (IOException ioex) {
-                throw new ContinuumBuildExecutorException(
-                        "Parsing error for file: " + xmlFile, ioex);
+                suite.setTestCount( suiteTestCount );
+                suite.setFailureCount( suiteFailureCount );
+                suite.setTotalTime( suiteTotalTime );
             }
-            testResult.addSuiteResult(suite);
+            catch ( XmlPullParserException xppex )
+            {
+                throw new ContinuumBuildExecutorException( "Error parsing file: " + xmlFile, xppex );
+            }
+            catch ( FileNotFoundException fnfex )
+            {
+                throw new ContinuumBuildExecutorException( "Test file not found", fnfex );
+            }
+            catch ( IOException ioex )
+            {
+                throw new ContinuumBuildExecutorException( "Parsing error for file: " + xmlFile, ioex );
+            }
+            testResult.addSuiteResult( suite );
         }
 
-        testResult.setTestCount(testCount);
-        testResult.setFailureCount(failureCount);
-        testResult.setTotalTime(totalTime);
+        testResult.setTestCount( testCount );
+        testResult.setFailureCount( failureCount );
+        testResult.setTotalTime( totalTime );
 
         return testResult;
     }

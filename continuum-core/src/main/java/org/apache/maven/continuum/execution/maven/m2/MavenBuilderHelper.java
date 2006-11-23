@@ -31,22 +31,9 @@ public interface MavenBuilderHelper
 {
     String ROLE = MavenBuilderHelper.class.getName();
 
-    void mapMetadataToProject( File metadata, Project project )
-        throws MavenBuilderHelperException;
-
-    /**
-     * @deprecated use {@link #getMavenProject(ContinuumProjectBuildingResult, File)} instead.
-     */
-    MavenProject getMavenProject( File file )
-        throws MavenBuilderHelperException;
+    void mapMetadataToProject( ContinuumProjectBuildingResult result, File metadata, Project project );
 
     MavenProject getMavenProject( ContinuumProjectBuildingResult result, File file );
-
-    /**
-     * @deprecated use {@link #mapMavenProjectToContinuumProject(ContinuumProjectBuildingResult, MavenProject, Project, boolean)} instead.
-     */
-    void mapMavenProjectToContinuumProject( MavenProject mavenProject, Project continuumProject, boolean groupPom )
-        throws MavenBuilderHelperException;
 
     /**
      *
@@ -56,8 +43,7 @@ public interface MavenBuilderHelper
      * @param groupPom map this project as if it is being used to initialize a project group
      */
     void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject,
-                                            Project continuumProject, boolean groupPom )
-        throws MavenBuilderHelperException;
+                                            Project continuumProject, boolean groupPom );
 
     ArtifactRepository getLocalRepository();
 }
