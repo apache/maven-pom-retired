@@ -87,6 +87,90 @@
         </ec:column>
       </ec:row>
     </ec:table>
+    
+  <pss:ifAuthorized permission="continuum-manage-users">
+  <h3>Users</h3>
+    
+  <ww:form action="projectGroupMembers" theme="xhtml" method="post">
+    <ww:hidden name="ascending" />
+    <ww:hidden name="projectGroupId" />
+    <tr>
+      <td nowrap="true">
+        <table cellpadding="0" cellspacing="0">               
+          <ww:select label="User search"
+               list="criteria"
+               name="filterProperty"
+               value="filterProperty" />
+        </table>
+      </td>               
+      <td>
+        <table cellpadding="0" cellspacing="0">
+          <ww:textfield name="filterKey" />
+        </table>
+      </td>  
+      <td colspan="2" align="right">
+        <table cellpadding="0" cellspacing="0">
+          <ww:submit value="Search"/>
+        </table>
+      </td>
+    </tr>             
+  </ww:form>
+
+  <hr/>
+  
+  <table class="securityTable" border="1" cellspacing="0" cellpadding="2" width="80%">
+    <thead>
+      <tr>
+        <th nowrap="true">
+          <ww:form id="sortlist" name="sortlist" action="projectGroupMembers" theme="xhtml" method="post">
+            <ww:if test="${ascending}">
+              <ww:a href="javascript: sortlist.submit()"><img src="<ww:url value='/images/icon_sortdown.gif'/>" title="<ww:text name='Sort descending'/>" border="0"></ww:a> Username
+            </ww:if>
+            <ww:else>
+              <ww:a href="javascript: sortlist.submit()"><img src="<ww:url value='/images/icon_sortup.gif'/>" title="<ww:text name='Sort ascending'/>" border="0"></ww:a> Username
+            </ww:else>
+            <ww:hidden name="ascending" value="${!ascending}"/>
+            <ww:hidden name="projectGroupId" />
+            <ww:hidden name="filterProperty" />
+            <ww:hidden name="filterKey" />
+          </ww:form>
+        </th>   
+        <th>Full Name</th>
+        <th>Administrator</th>
+        <th>Developer</th>
+        <th>User</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ww:iterator value="projectGroupUsers">
+        <tr>
+          <td>
+            <ww:property value="username"/>
+          </td>
+          <td>
+            <ww:property value="userFullName"/>
+          </td>
+          <td>
+            <ww:if test="${administrator}">
+              <img src="<ww:url value='/images/icon_success_sml.gif'/>" border="0">
+            </ww:if>
+          </td>
+          <td>
+            <ww:if test="${developer}">
+              <img src="<ww:url value='/images/icon_success_sml.gif'/>" border="0">
+            </ww:if>
+          </td>
+          <td>
+            <ww:if test="${user}">
+              <img src="<ww:url value='/images/icon_success_sml.gif'/>" border="0">
+            </ww:if>
+          </td>
+        </tr>
+      </ww:iterator>
+    </tbody>
+  </table>
+  </pss:ifAuthorized>
+  
   </div>
   </body>
 </ww:i18n>

@@ -16,8 +16,24 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.web.bean.ProjectGroupUserBean;
 import org.apache.maven.continuum.ContinuumException;
+import org.codehaus.plexus.security.rbac.RBACManager;
+import org.codehaus.plexus.security.rbac.RbacManagerException;
+import org.codehaus.plexus.security.rbac.RbacObjectNotFoundException;
+import org.codehaus.plexus.security.rbac.Role;
+import org.codehaus.plexus.security.user.User;
+import org.codehaus.plexus.security.user.UserManager;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * ProjectGroupAction:
@@ -32,11 +48,37 @@ import org.apache.maven.continuum.ContinuumException;
 public class ProjectGroupAction
     extends ContinuumConfirmAction
 {
+    private final static Map FILTER_CRITERIA = new HashMap();
+    static
+    {
+        FILTER_CRITERIA.put( "username", "Username contains" );
+        FILTER_CRITERIA.put( "fullName", "Name contains" );
+        FILTER_CRITERIA.put( "email", "Email contains" );
+    }
+    
+    /**
+     * @plexus.requirement
+     */
+    private UserManager manager;
+
+    /**
+     * @plexus.requirement
+     */
+    private RBACManager rbac;
+
     private int projectGroupId;
 
     private ProjectGroup projectGroup;
 
     private boolean confirmed;
+    
+    private List projectGroupUsers;
+    
+    private String filterProperty;
+    
+    private String filterKey;
+    
+    private boolean ascending = true;
 
     public String summary()
         throws ContinuumException
@@ -49,7 +91,11 @@ public class ProjectGroupAction
     public String members()
         throws ContinuumException
     {
-        return summary();
+        projectGroup = getContinuum().getProjectGroup( projectGroupId );
+
+        populateProjectGroupUsers( projectGroup );
+        
+        return SUCCESS;
     }
 
     public String buildDefinitions()
@@ -88,7 +134,81 @@ public class ProjectGroupAction
         return SUCCESS;
     }
 
-
+    private void populateProjectGroupUsers( ProjectGroup group ) 
+    {
+        List users;
+        
+        if ( StringUtils.isEmpty( filterKey ) )
+        {
+            users = manager.getUsers( ascending );
+        }
+        else
+        {
+            users = findUsers( filterProperty, filterKey, ascending );
+        }
+        
+        projectGroupUsers = new ArrayList();
+        
+        for ( Iterator i = users.iterator(); i.hasNext(); )
+        {
+            ProjectGroupUserBean pgUser = new ProjectGroupUserBean();
+            
+            User user = (User) i.next();
+            
+            pgUser.setUser( user );
+            
+            pgUser.setProjectGroup( group );
+            
+            try
+            {
+                Collection effectiveRoles = rbac.getEffectivelyAssignedRoles( user.getUsername() );
+                for ( Iterator j = effectiveRoles.iterator(); j.hasNext(); )
+                {
+                    Role role = (Role) j.next();
+                    if( role.getName().indexOf( projectGroup.getName() ) > -1 )
+                    {
+                        pgUser.setRoles( effectiveRoles );
+                        projectGroupUsers.add( pgUser );
+                        break;
+                    }
+                }
+                
+            }
+            catch ( RbacObjectNotFoundException e )
+            {
+                pgUser.setRoles( Collections.EMPTY_LIST );
+            }
+            catch ( RbacManagerException e )
+            {
+                pgUser.setRoles( Collections.EMPTY_LIST );
+            }
+        }
+    }
+    
+    private List findUsers( String searchProperty, String searchKey, boolean orderAscending )
+    {
+        List users = null;
+            
+        if ( "username".equals( searchProperty ) )
+        {
+            users = manager.findUsersByUsernameKey( searchKey, orderAscending );
+        }
+        else if ( "fullName".equals( getFilterProperty() ) )
+        {
+            users = manager.findUsersByFullNameKey( searchKey, orderAscending );
+        }
+        else if ( "email".equals( getFilterProperty() ) )
+        {
+            users = manager.findUsersByEmailKey( searchKey, orderAscending );
+        }
+        else
+        {
+            users = Collections.EMPTY_LIST;
+        }
+        
+        return users;
+    }
+    
     public int getProjectGroupId()
     {
         return projectGroupId;
@@ -118,4 +238,45 @@ public class ProjectGroupAction
     {
         this.confirmed = confirmed;
     }
+
+    public List getProjectGroupUsers()
+    {
+        return projectGroupUsers;
+    }
+
+    public boolean isAscending()
+    {
+        return ascending;
+    }
+
+    public void setAscending( boolean ascending )
+    {
+        this.ascending = ascending;
+    }
+
+    public String getFilterKey()
+    {
+        return filterKey;
+    }
+
+    public void setFilterKey( String filterKey )
+    {
+        this.filterKey = filterKey;
+    }
+
+    public String getFilterProperty()
+    {
+        return filterProperty;
+    }
+
+    public void setFilterProperty( String filterProperty )
+    {
+        this.filterProperty = filterProperty;
+    }
+
+    public Map getCriteria()
+    {
+        return FILTER_CRITERIA;
+    }
+    
 }
