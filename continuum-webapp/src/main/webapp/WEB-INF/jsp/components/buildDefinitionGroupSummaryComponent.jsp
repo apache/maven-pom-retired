@@ -66,6 +66,7 @@
     </pss:ifAuthorized>
   </div>
 
+  <ww:if test="${not empty projectBuildDefinitionSummaries}">
   <h3>Project Build Definitions</h3>
 
   <ec:table items="projectBuildDefinitionSummaries"
@@ -123,4 +124,7 @@
       </ec:column>
     </ec:row>
   </ec:table>
+
+  </ww:if>
+
 </ww:i18n>
