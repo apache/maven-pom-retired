@@ -157,6 +157,9 @@ public interface ContinuumStore
     Map getProjectGroupIdsAndBuildDefinitionsIdsBySchedule( int scheduleId )
         throws ContinuumStoreException;
 
+    public Map getAggregatedProjectIdsAndBuildDefinitionIdsBySchedule( int scheduleId )
+        throws ContinuumStoreException;
+
     void updateProject( Project project )
         throws ContinuumStoreException;
 

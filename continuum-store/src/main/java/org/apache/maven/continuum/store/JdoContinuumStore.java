@@ -201,6 +201,47 @@ public class JdoContinuumStore
         }
     }
 
+    /**
+     * get the combined list of projectId and build definitions, including the ones
+     * inherited by their project group
+     *
+     * @param scheduleId
+     * @return
+     * @throws ContinuumStoreException
+     */
+    public Map getAggregatedProjectIdsAndBuildDefinitionIdsBySchedule( int scheduleId )
+        throws ContinuumStoreException
+    {
+        Map projectSource = getProjectIdsAndBuildDefinitionsIdsBySchedule( scheduleId );
+        Map projectGroupSource = getProjectGroupIdsAndBuildDefinitionsIdsBySchedule( scheduleId );
+
+        Map aggregate = new HashMap();
+
+        // start out by checking if we have projects with this scheduleId
+        if ( projectSource != null )
+        {
+            aggregate.putAll( projectSource );
+        }
+
+        // iterate through the project groups and make sure we are not walking over projects that
+        // might define their own build definitions
+        for ( Iterator i = projectGroupSource.keySet().iterator(); i.hasNext(); )
+        {
+            Integer projectGroupId = (Integer) i.next();
+            List projectsInGroup = getProjectsInGroup( projectGroupId.intValue() );
+
+            for ( Iterator j = projectsInGroup.iterator(); j.hasNext(); )
+            {   
+                Integer projectId = new Integer( ( (Project) j.next() ).getId() );
+                if ( !aggregate.keySet().contains( projectId ) )
+                {
+                    aggregate.put( projectId, projectGroupSource.get( projectGroupId ) );
+                }
+            }
+        }
+        return aggregate;
+    }
+
     public Map getProjectIdsAndBuildDefinitionsIdsBySchedule( int scheduleId )
         throws ContinuumStoreException
     {
@@ -252,6 +293,10 @@ public class JdoContinuumStore
                     buildDefinitions.add( obj[1] );
                 }
 
+                return projects;
+            }
+            if ( !projects.isEmpty() )
+            {
                 return projects;
             }
         }

@@ -704,10 +704,11 @@ public class DefaultContinuum
 
         try
         {
-            projectsMap = store.getProjectIdsAndBuildDefinitionsIdsBySchedule( schedule.getId() );
+            projectsMap = store.getAggregatedProjectIdsAndBuildDefinitionIdsBySchedule( schedule.getId() );
 
-            if ( projectsMap == null )
+            if ( projectsMap == null || projectsMap.size() == 0 )
             {
+                getLogger().debug( "no builds attached to schedule" );
                 // We don't have projects attached to this schedule
                 return;
             }
@@ -728,7 +729,6 @@ public class DefaultContinuum
         for ( Iterator projectIterator = projectsList.iterator(); projectIterator.hasNext(); )
         {
             Project project = (Project) projectIterator.next();
-
             List buildDefIds = (List) projectsMap.get( new Integer( project.getId() ) );
 
             if ( buildDefIds != null && !buildDefIds.isEmpty() )
