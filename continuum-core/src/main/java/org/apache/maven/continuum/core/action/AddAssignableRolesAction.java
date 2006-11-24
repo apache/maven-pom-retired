@@ -65,7 +65,7 @@ public class AddAssignableRolesAction
         }
         catch ( RoleProfileException rpe )
         {
-            throw new ContinuumException( "error generating dynamic role for project " + projectGroup.getName() );
+            throw new ContinuumException( "error generating dynamic role for project " + projectGroup.getName(), rpe );
         }
     }
 }
