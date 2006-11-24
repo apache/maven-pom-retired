@@ -6,6 +6,7 @@
 <ww:i18n name="localization.Continuum">
 
   <h3>Project Group Notifiers</h3>
+  <ww:if test="${not empty projectGroupNotifierSummaries}">
   <ec:table items="projectGroupNotifierSummaries"
             var="projectGroupNotifierSummary"
             showExports="false"
@@ -52,6 +53,7 @@
      
     </ec:row>
   </ec:table>
+  </ww:if>
   <div class="functnbar3">
     <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
     <ww:url id="addUrl" action="addProjectGroupNotifier" namespace="/"  includeContext="false" includeParams="none" />

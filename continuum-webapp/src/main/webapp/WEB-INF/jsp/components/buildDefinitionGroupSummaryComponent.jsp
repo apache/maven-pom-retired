@@ -7,6 +7,7 @@
 <ww:i18n name="localization.Continuum">
 
   <h3>Project Group Build Definitions</h3>
+  <ww:if test="${not empty groupBuildDefinitionSummaries}">
   <ec:table items="groupBuildDefinitionSummaries"
             var="buildDefinitionSummary"
             showExports="false"
@@ -57,6 +58,7 @@
       </ec:column>
     </ec:row>
   </ec:table>
+  </ww:if>
   <div class="functnbar3">
     <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
     <ww:form action="buildDefinition" method="post">
