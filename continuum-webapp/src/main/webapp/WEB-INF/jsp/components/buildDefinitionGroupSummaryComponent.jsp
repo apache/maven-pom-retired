@@ -23,7 +23,7 @@
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
       <ec:column property="editActions" title="&nbsp;">
-
+        <center>
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
           <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
             <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
@@ -36,8 +36,10 @@
         <pss:elseAuthorized>
           <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="Edit" title="Edit" border="0">
         </pss:elseAuthorized>
+        </center>
       </ec:column>    
       <ec:column property="deleteActions" title="&nbsp;">
+        <center>
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
           <ww:url id="removeUrl" action="removeGroupBuildDefinition" namespace="/">
             <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
@@ -51,6 +53,7 @@
         <pss:elseAuthorized>
           <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Delete" title="Delete" border="0">
         </pss:elseAuthorized>
+        </center>
       </ec:column>
     </ec:row>
   </ec:table>

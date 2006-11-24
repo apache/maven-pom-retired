@@ -13,7 +13,7 @@
     <body>
       <div id="h3">
 
-       <ww:action name="projectGroupTab" executeResult="true">
+    <ww:action name="projectGroupTab" executeResult="true">
       <ww:param name="tabName" value="'Members'"/>
     </ww:action>
     <div class="axial">
@@ -37,7 +37,7 @@
           </ww:url>
           <ww:a href="%{projectViewUrl}">${pageScope.project.name}</ww:a>
         </ec:column>
-        <ec:column property="editAction" title="Edit" width="1%" sortable="false">
+        <ec:column property="editAction" title="&nbsp;" width="1%" sortable="false">
           <center>
             <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroup.name}">
             <c:choose>
@@ -61,7 +61,7 @@
             </pss:elseAuthorized>
           </center>
         </ec:column>
-        <ec:column property="deleteAction" title="Remove" width="1%" sortable="false">
+        <ec:column property="deleteAction" title="&nbsp;" width="1%" sortable="false">
           <center>
             <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroup.name}">
             <c:choose>
