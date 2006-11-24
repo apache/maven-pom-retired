@@ -134,13 +134,13 @@ public class SchedulesPageTest
         String[] columnValues = {SCHEDULE_NAME, SCHEDULE_DESCRIPTION, DELAY, cronSchedule, MAXJOBEXECUTIONTIME};
 
         assertTrue( "Can not add schedule",
-                    getSelenium().isElementPresent( XPathExpressionUtil.matchTableRowOrderedValues( columnValues ) ) );
+                    getSelenium().isElementPresent( XPathExpressionUtil.getTableRow( columnValues ) ) );
 
         // delete schedule after adding
         deleteSchedule( SCHEDULE_NAME );
 
         assertFalse( "Can not delete schedule",
-                     getSelenium().isElementPresent( XPathExpressionUtil.matchTableRowOrderedValues( columnValues ) ) );
+                     getSelenium().isElementPresent( XPathExpressionUtil.getTableRow( columnValues ) ) );
     }
 
     public void testEditSchedule()
@@ -164,7 +164,7 @@ public class SchedulesPageTest
         String[] columnValues = {SCHEDULE_NAME, SCHEDULE_DESCRIPTION, DELAY, cronSchedule, MAXJOBEXECUTIONTIME};
 
         // edit the schedule        
-        clickLinkWithXPath( XPathExpressionUtil.columnElementWithSiblingColumnValues( XPathExpressionUtil.ANCHOR, 5,
+        clickLinkWithXPath( XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5,
                                                                                       "Edit", columnValues ) );
 
         inputSchedule( SCHEDULE_NAME_EDIT + "modified", SCHEDULE_DESCRIPTION + "updated", "2", "3", "4", "?", "6", "7",
@@ -176,10 +176,10 @@ public class SchedulesPageTest
             {SCHEDULE_NAME_EDIT + "modified", SCHEDULE_DESCRIPTION + "updated", "9", cronSchedule, "8"};
 
         assertTrue( "Can not edit schedule", getSelenium().isElementPresent(
-            XPathExpressionUtil.matchTableRowOrderedValues( editedColumnValues ) ) );
+            XPathExpressionUtil.getTableRow( editedColumnValues ) ) );
 
         // check if the active state has been saved
-        clickLinkWithXPath( XPathExpressionUtil.columnElementWithSiblingColumnValues( XPathExpressionUtil.ANCHOR, 5,
+        clickLinkWithXPath( XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5,
                                                                                       "Edit", editedColumnValues ) );
 
         assertEquals( "Can disable the schedule", CHECKBOX_UNCHECK, getFieldValue( "active" ) );
@@ -247,7 +247,7 @@ public class SchedulesPageTest
             DEFAULT_MAXJOBEXECUTIONTIME};
 
         assertTrue( "Default schedule not found",
-                    getSelenium().isElementPresent( XPathExpressionUtil.matchTableRowOrderedValues( columnValues ) ) );
+                    getSelenium().isElementPresent( XPathExpressionUtil.getTableRow( columnValues ) ) );
     }
 
     public void assertEditSchedulePage()
@@ -298,7 +298,7 @@ public class SchedulesPageTest
 
         String[] columnValues = {scheduleName};
 
-        clickLinkWithXPath( XPathExpressionUtil.columnElementWithSiblingColumnValues( XPathExpressionUtil.ANCHOR, 5,
+        clickLinkWithXPath( XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5,
                                                                                       "Delete", columnValues ) );
 
         // deletion confirmation page
