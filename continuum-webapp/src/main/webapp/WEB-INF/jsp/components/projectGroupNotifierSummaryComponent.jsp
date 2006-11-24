@@ -62,21 +62,22 @@
     </pss:ifAuthorized>
   </div>
 
-  <h3>Project Notifiers</h3>
-  <ec:table items="projectNotifierSummaries"
-            var="projectNotifierSummary"
-            showExports="false"
-            showPagination="false"
-            showStatusBar="false"
-            filterable="false"
-            sortable="false">
-    <ec:row>
-      <ec:column property="type" title="projectView.notifier.type"/>
-      <ec:column property="recipient" title="projectView.notifier.recipient"/>
-      <ec:column property="events" title="projectView.notifier.events"/>
-      <ec:column property="sender" title="projectView.notifier.from"/>
-      <ec:column property="state" value="Enabled/Disabled" />
-     
-    </ec:row>
-  </ec:table>  
+  <ww:if test="${not empty projectNotifierSummaries}">
+    <h3>Project Notifiers</h3>
+    <ec:table items="projectNotifierSummaries"
+              var="projectNotifierSummary"
+              showExports="false"
+              showPagination="false"
+              showStatusBar="false"
+              filterable="false"
+              sortable="false">
+      <ec:row>
+        <ec:column property="type" title="projectView.notifier.type"/>
+        <ec:column property="recipient" title="projectView.notifier.recipient"/>
+        <ec:column property="events" title="projectView.notifier.events"/>
+        <ec:column property="sender" title="projectView.notifier.from"/>
+        <ec:column property="state" value="Enabled/Disabled" />
+      </ec:row>
+    </ec:table>
+  </ww:if>
 </ww:i18n>
