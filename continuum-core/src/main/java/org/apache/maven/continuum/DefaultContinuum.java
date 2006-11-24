@@ -216,6 +216,19 @@ public class DefaultContinuum
         throw new ContinuumException( "invalid group id" );
     }
 
+    public ProjectGroup getProjectGroupWithProjects( int projectGroupId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getProjectGroupWithProjects( projectGroupId );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "could not find project group containing " + projectGroupId );
+        }
+    }
+    
     public ProjectGroup getProjectGroupByProjectId( int projectId )
         throws ContinuumException
     {
@@ -236,6 +249,105 @@ public class DefaultContinuum
 
         store.removeProjectGroup( projectGroup );
     }
+    
+    public void addProjectGroup( ProjectGroup projectGroup )
+        throws ContinuumException
+    {
+        ProjectGroup pg = null;
+        
+        try
+        {
+            pg = store.getProjectGroupByGroupId( projectGroup.getGroupId() );
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            //since we want to add a new project group, we should be getting 
+            //this exception
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Unable to add the requested project group", e );
+        }
+        
+        if ( pg == null )
+        {
+
+            ProjectGroup new_pg = store.addProjectGroup( projectGroup );
+            
+            try
+            {
+                addBuildDefinitionToProjectGroup( new_pg.getId(), getDefaultBuildDefinition() );
+            }
+            catch ( ContinuumStoreException e )
+            {
+                throw new ContinuumException( "Error adding default build definition to the requested project group", e );
+            }
+            
+            getLogger().info( "Added new project group: " + new_pg.getName() );
+        }
+        else
+        {
+            throw new ContinuumException( "Unable to add the requested project group: groupId already exists." );
+        }
+    }
+    
+    private BuildDefinition getDefaultBuildDefinition()
+        throws ContinuumStoreException
+    {
+        BuildDefinition bd = new BuildDefinition();
+
+        bd.setDefaultForProject( true );
+
+        bd.setGoals( "clean install" );
+
+        bd.setArguments( "--batch-mode --non-recursive" );
+
+        bd.setBuildFile( "pom.xml" );
+
+        bd.setSchedule( store.getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME ) );
+
+        return bd;
+    }
+    
+    public Collection getAllProjectGroups()
+    {
+        return store.getAllProjectGroups();
+    }
+    
+    public ProjectGroup getProjectGroupByGroupId( String groupId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getProjectGroupByGroupId( groupId );
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            throw new ContinuumException( "Unable to find project group", e);
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error retrieving", e);
+        }
+    }
+    
+    public ProjectGroup getProjectGroupByGroupIdWithBuildDetails( String groupId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getProjectGroupByGroupIdWithBuildDetails( groupId );
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            throw new ContinuumException( "Unable to find project group", e);
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error retrieving", e);
+        }
+    }
+
 
     // ----------------------------------------------------------------------
     // Projects
@@ -423,6 +535,19 @@ public class DefaultContinuum
         }
     }
 
+    public Project getProjectWithBuildDetails( int projectId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getProjectWithBuildDetails( projectId );
+        }
+        catch ( ContinuumStoreException ex )
+        {
+            throw logAndCreateException( "Exception while getting project '" + projectId + "'.", ex );
+        }
+    }
+
     public Collection getAllProjects( int start, int end )
         throws ContinuumException
     {
@@ -506,24 +631,59 @@ public class DefaultContinuum
         }
 
         //Map buildDefinitionsIds = store.getDefaultBuildDefinitions();
+        
+        BuildDefinition groupDefaultBD = null;
+        try
+        {
+            groupDefaultBD = store.getDefaultBuildDefinitionForProjectGroup( projectGroupId );
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            throw new ContinuumException(
+                                         "Project Group (id="
+                                             + projectGroupId
+                                             + " doens't have a default build definition, this should be impossible, it should always have a default definition set." );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException(
+                                         "Project Group (id="
+                                             + projectGroupId
+                                             + " doens't have a default build definition, this should be impossible, it should always have a default definition set." );
+        }
 
         for ( Iterator i = projectsList.iterator(); i.hasNext(); )
         {
             Project project = (Project) i.next();
 
-            Integer buildDefId = null;
+            int buildDefId = groupDefaultBD.getId();
 
+            BuildDefinition projectDefaultBD = null;
             try
             {
-                buildDefId = new Integer( store.getDefaultBuildDefinition( project.getId() ).getId() );
+                projectDefaultBD = store.getDefaultBuildDefinitionForProject( project.getId() );
+            }
+            catch ( ContinuumObjectNotFoundException e )
+            {
+                getLogger().debug( e.getMessage() );
             }
             catch ( ContinuumStoreException e )
             {
-                throw new ContinuumException(
-                    "Project (id=" + project.getId() + " doens't have a default build definition, this should be impossible, parent should have default definition set." );
+                getLogger().debug( e.getMessage() );
             }
 
-            buildProject( project, buildDefId.intValue(), ContinuumProjectState.TRIGGER_FORCED );
+            if( projectDefaultBD != null )
+            {
+                buildDefId = projectDefaultBD.getId();
+                getLogger().debug( "Project " + project.getId() + " has own default build definition, will use it instead of group's.");
+            }
+            else if( !"maven2".equals( project.getExecutorId() ) )
+            {
+                getLogger().debug( "Project " + project.getId() + " is not a maven2 project, will not be included in group build.");
+                continue;
+            }
+
+            buildProject( project, buildDefId, ContinuumProjectState.TRIGGER_FORCED );
         }
     }
 
@@ -866,6 +1026,12 @@ public class DefaultContinuum
         return executeAddProjectsFromMetadataActivity( metadataUrl, MavenTwoContinuumProjectBuilder.ID );
     }
 
+    public ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl, int projectGroupId )
+        throws ContinuumException
+    {
+        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenTwoContinuumProjectBuilder.ID, projectGroupId );
+    }
+
     // ----------------------------------------------------------------------
     // Shell projects
     // ----------------------------------------------------------------------
@@ -942,7 +1108,15 @@ public class DefaultContinuum
      * @throws ContinuumException
      */
     private ContinuumProjectBuildingResult executeAddProjectsFromMetadataActivity( String metadataUrl,
-                                                                                   String projectBuilderId )
+                                                                                  String projectBuilderId )
+        throws ContinuumException
+    {
+        return executeAddProjectsFromMetadataActivity( metadataUrl, projectBuilderId, -1 );
+    }
+
+    private ContinuumProjectBuildingResult executeAddProjectsFromMetadataActivity( String metadataUrl,
+                                                                                  String projectBuilderId,
+                                                                                  int projectGroupId )
         throws ContinuumException
     {
         Map context = new HashMap();
@@ -1005,33 +1179,36 @@ public class DefaultContinuum
 
         try
         {
-            try
-            {
-                projectGroup = store.getProjectGroupByGroupIdWithProjects( projectGroup.getGroupId() );
-
-                getLogger().info(
-                    "Using existing project group with the group id: '" + projectGroup.getGroupId() + "'." );
+            if (projectGroupId == -1) {
+                try
+                {
+                    projectGroup = store.getProjectGroupByGroupId( projectGroup.getGroupId() );
+    
+                    projectGroupId = projectGroup.getId();
+    
+                    getLogger().info(
+                                      "Using existing project group with the group id: '" + projectGroup.getGroupId()
+                                          + "'." );
+                }
+                catch ( ContinuumObjectNotFoundException e )
+                {
+                    getLogger().info( "Creating project group with the group id: '" + projectGroup.getGroupId() + "'." );
+    
+                    Map pgContext = new HashMap();
+    
+                    pgContext.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
+    
+                    pgContext.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, projectGroup );
+    
+                    executeAction( "validate-project-group", pgContext );
+    
+                    executeAction( "store-project-group", pgContext );
+    
+                    projectGroupId = AbstractContinuumAction.getProjectGroupId( pgContext );
+                }
             }
-            catch ( ContinuumObjectNotFoundException e )
-            {
-                getLogger().info( "Creating project group with the group id: '" + projectGroup.getGroupId() + "'." );
-
-                Map pgContext = new HashMap();
-
-                pgContext.put( AbstractContinuumAction.KEY_WORKING_DIRECTORY, getWorkingDirectory() );
-
-                pgContext.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, projectGroup );
-
-                executeAction( "validate-project-group", pgContext );
-
-                executeAction( "store-project-group", pgContext );
-
-                int projectGroupId = AbstractContinuumAction.getProjectGroupId( pgContext );
-
-
-
-                projectGroup = store.getProjectGroupWithProjects( projectGroupId );
-            }
+    
+            projectGroup = store.getProjectGroupWithBuildDetails( projectGroupId );
 
             /* add the project group loaded from database, which has more info, like id */
             result.getProjectGroups().remove( 0 );
@@ -1220,6 +1397,7 @@ public class DefaultContinuum
         return notifierProperties;
     }
     */
+    
     public ProjectNotifier addNotifier( int projectId, ProjectNotifier notifier )
         throws ContinuumException
     {
@@ -1317,6 +1495,7 @@ public class DefaultContinuum
         return addNotifier( projectId, notifier );
     }
     */
+
     public void removeNotifier( int projectId, int notifierId )
         throws ContinuumException
     {
@@ -2457,6 +2636,19 @@ public class DefaultContinuum
         }
     }
 
+    public void updateProjectGroup( ProjectGroup projectGroup )
+        throws ContinuumException
+    {
+        try
+        {
+            store.updateProjectGroup( projectGroup );
+        }
+        catch ( ContinuumStoreException cse )
+        {
+            throw logAndCreateException( "Error while updating project group.", cse );
+        }
+    }
+
     public void removeNotifier( ProjectNotifier notifier )
         throws ContinuumException
     {
@@ -2573,7 +2765,7 @@ public class DefaultContinuum
     {
         try
         {
-            return store.getProjectGroupWithProjects( projectGroupId ).getProjects();
+            return store.getProjectsInGroup( projectGroupId );
         }
         catch ( ContinuumObjectNotFoundException e )
         {

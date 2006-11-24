@@ -178,6 +178,11 @@
       <result name="success">/WEB-INF/jsp/buildDefinitionEdit.jsp</result>
     </action>
 
+    <action name="saveBuildDefinition" class="buildDefinition" method="saveBuildDefinition">
+      <result name="success" type="chain">projectView</result>
+      <result name="success_group" type="chain">projectGroupBuildDefinition</result>
+    </action>
+
     <action name="saveProjectBuildDefinition" class="buildDefinition" method="saveToProject">
       <result name="input">/WEB-INF/jsp/buildDefinitionEdit.jsp</result>
       <result name="success" type="chain">projectView</result>
@@ -229,6 +234,20 @@
       <result name="success" type="redirect-action">
         <param name="actionName">groupSummary</param>
       </result>
+    </action>
+    
+    <action name="addProjectGroup" class="addProjectGroup">
+      <result name="input">/WEB-INF/jsp/projectGroupAdd.jsp</result>
+      <result name="success" type="chain">groupSummary</result>
+    </action>
+    
+    <action name="editProjectGroup" class="projectGroup" method="edit">
+        <result name="success">/WEB-INF/jsp/projectGroupEdit.jsp</result>
+    </action>
+    
+    <action name="saveProjectGroup" class="projectGroup" method="save">
+      <result name="success" type="chain">projectGroupSummary</result>
+      <result name="input">/WEB-INF/jsp/projectGroupEdit.jsp</result>
     </action>
 
     <!--

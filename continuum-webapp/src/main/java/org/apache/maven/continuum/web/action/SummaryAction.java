@@ -49,14 +49,16 @@ public class SummaryAction
     private int nbErrors;
 
     private List summary;
+    
+    private List projects;
 
     public String execute()
         throws ContinuumException
     {
-        Collection projects;
+        Collection projectsInGroup;
 
         //TODO: Create a summary jpox request so code will be more simple and performance will be better
-        projects = getContinuum().getProjectsInGroup( projectGroupId );
+        projectsInGroup = getContinuum().getProjectsInGroup( projectGroupId );
 
         Map buildResults = getContinuum().getLatestBuildResults();
 
@@ -64,7 +66,7 @@ public class SummaryAction
 
         summary = new ArrayList();
 
-        for ( Iterator i = projects.iterator(); i.hasNext(); )
+        for ( Iterator i = projectsInGroup.iterator(); i.hasNext(); )
         {
             Project project = (Project) i.next();
 
@@ -150,6 +152,10 @@ public class SummaryAction
         return summary;
     }
 
+    public void setProjects( List projects )
+    {
+        this.projects = projects;
+    }
 
     public int getProjectGroupId()
     {

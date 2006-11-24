@@ -898,6 +898,18 @@ td.filebrowse h3 {
   padding: 10px 0px 8px 0px;
 }
 
+.composite #main #bodycol .app h2 {
+	font-size: small;
+}
+
+.securityTable th {
+    font-size: x-small;
+}
+
+.securityTable td {
+    font-size: 13px;
+}
+
 /*
 * Some extensions
 */

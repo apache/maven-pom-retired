@@ -733,6 +733,11 @@ public class JdoContinuumStore
     {
         return getAllObjectsDetached( ProjectGroup.class, "name ascending", PROJECTGROUP_PROJECTS_FETCH_GROUP );
     }
+    
+    public Collection getAllProjectGroups()
+    {
+        return getAllObjectsDetached( ProjectGroup.class, "name ascending", null );
+    }
 
     public List getAllProjectsByName()
     {
@@ -1091,6 +1096,39 @@ public class JdoContinuumStore
         }
     }
 
+    public List getProjectsInGroup( int projectGroupId )
+        throws ContinuumObjectNotFoundException, ContinuumStoreException
+    {
+        PersistenceManager pm = getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( Project.class, true );
+
+            Query query = pm.newQuery( extent, "projectGroup.id == " + projectGroupId );
+
+            query.setOrdering( "name ascending" );
+
+            pm.getFetchPlan().addGroup( PROJECTGROUP_PROJECTS_FETCH_GROUP );
+
+            List result = (List) query.execute();
+
+            result = (List) pm.detachCopyAll( result );
+
+            tx.commit();
+
+            return result;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
     public ProjectGroup getProjectGroupWithProjects( int projectGroupId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
@@ -1185,6 +1223,12 @@ public class JdoContinuumStore
         throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
         return (ProjectGroup) getObjectFromQuery( ProjectGroup.class, "groupId", groupId, null );
+    }
+
+    public ProjectGroup getProjectGroupByGroupIdWithBuildDetails( String groupId )
+        throws ContinuumStoreException, ContinuumObjectNotFoundException
+    {
+        return (ProjectGroup) getObjectFromQuery( ProjectGroup.class, "groupId", groupId, PROJECT_BUILD_DETAILS_FETCH_GROUP );
     }
 
     public ProjectGroup getProjectGroupByGroupIdWithProjects( String groupId )

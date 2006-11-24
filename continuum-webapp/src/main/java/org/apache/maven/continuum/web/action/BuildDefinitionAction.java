@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.List;
 
 /**
  * BuildDefinitionAction:
@@ -109,8 +110,13 @@ public class BuildDefinitionAction
             }
             else
             {
-                Project project = (Project) getContinuum().getProjectGroup( projectGroupId ).getProjects().get( 0 );
-                executor = project.getExecutorId();
+                List projects = getContinuum().getProjectGroup( projectGroupId ).getProjects();
+                
+                if( projects.size() > 0 )
+                {
+                    Project project = (Project) projects.get( 0 );
+                    executor = project.getExecutorId();
+                }
             }
         }
 
@@ -125,7 +131,20 @@ public class BuildDefinitionAction
             defaultBuildDefinition = buildDefinition.isDefaultForProject();
         }
 
-        return SUCCESS;
+        return INPUT;
+    }
+
+    public String saveBuildDefinition()
+        throws ContinuumException
+    {
+        if (projectId != 0)
+        {
+            return saveToProject();
+        }
+        else
+        {
+            return saveToGroup();
+        }
     }
 
     public String saveToProject()
@@ -157,13 +176,20 @@ public class BuildDefinitionAction
     {
         try
         {
+            BuildDefinition newBuildDef = getBuildDefinitionFromInput();
+            
+            if ( getContinuum().getBuildDefinitionsForProjectGroup( projectGroupId ).size() == 0 )
+            {
+                newBuildDef.setDefaultForProject( true );
+            }
+            
             if ( buildDefinitionId == 0 )
             {
-                getContinuum().addBuildDefinitionToProjectGroup( projectGroupId, getBuildDefinitionFromInput() );
+                getContinuum().addBuildDefinitionToProjectGroup( projectGroupId, newBuildDef );
             }
             else
             {
-                getContinuum().updateBuildDefinitionForProjectGroup( projectGroupId, getBuildDefinitionFromInput() );
+                getContinuum().updateBuildDefinitionForProjectGroup( projectGroupId, newBuildDef );
             }
         }
         catch ( ContinuumActionException cae )
@@ -172,7 +198,7 @@ public class BuildDefinitionAction
             return INPUT;
         }
 
-        return SUCCESS;
+        return "success_group";
     }
 
     public String removeFromProject()

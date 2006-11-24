@@ -18,9 +18,13 @@ package org.apache.maven.continuum.web.action;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -41,13 +45,56 @@ public abstract class AddMavenProjectAction
     private File pomFile;
 
     private String pom = null;
+    
+    private String username;
+    
+    private String password;
+
+    private Collection projectGroups;
+
+    private String projectGroupName;
+
+    private int selectedProjectGroup = -1;
+
+    private boolean disableGroupSelection;
 
     public String execute()
         throws ContinuumException
     {
+        if ( selectedProjectGroup == -1 )
+        {
+            addActionError( "add.project.nogroup.error" );
+            return doDefault();
+        }
+        
         if ( !StringUtils.isEmpty( pomUrl ) )
         {
-            pom = pomUrl;
+            try
+            {
+                URL url = new URL( pomUrl );
+                if ( pomUrl.startsWith( "http" ) && !StringUtils.isEmpty( username ) )
+                {
+                    StringBuffer urlBuffer = new StringBuffer();
+                    urlBuffer.append( url.getProtocol() ).append( "://" );
+                    urlBuffer.append( username ).append( ':' ).append( password ).append( '@' ).append( url.getHost() );
+                    if ( url.getPort() != -1 )
+                    {
+                        urlBuffer.append( url.getPort() );
+                    }
+                    urlBuffer.append( url.getPath() );
+                    
+                    pom = urlBuffer.toString();
+                }
+                else
+                {
+                    pom = pomUrl;
+                }
+            }
+            catch ( MalformedURLException e )
+            {
+                addActionError( "add.project.unknown.error" );
+                return doDefault();
+            }
         }
         else
         {
@@ -67,11 +114,11 @@ public abstract class AddMavenProjectAction
             {
                 // no url or file was filled
                 addActionError( "add.project.field.required.error" );
-                return INPUT;
+                return doDefault();
             }
         }
 
-        ContinuumProjectBuildingResult result = doExecute( pom );
+        ContinuumProjectBuildingResult result = doExecute( pom, selectedProjectGroup );
 
         if ( result.hasErrors() )
         {
@@ -82,7 +129,7 @@ public abstract class AddMavenProjectAction
                 addActionError( (String) it.next() );
             }
 
-            return INPUT;
+            return doDefault();
         }
 
         return SUCCESS;
@@ -92,13 +139,46 @@ public abstract class AddMavenProjectAction
      * Subclasses must implement this method calling the appropiate operation on the continuum service.
      * 
      * @param pomUrl url of the pom specified by the user
+     * @param selectedProjectGroup project group id selected by the user
      * @return result of adding the pom to continuum
      */
-    protected abstract ContinuumProjectBuildingResult doExecute( String pomUrl )
+    protected abstract ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup )
         throws ContinuumException;
 
     public String doDefault()
     {
+        Collection allProjectGroups = getContinuum().getAllProjectGroups();
+        projectGroups = new ArrayList();
+        for ( Iterator i = allProjectGroups.iterator(); i.hasNext(); )
+        {
+            ProjectGroup pg = (ProjectGroup) i.next();
+            //TODO: must implement same functionality using plexus-security
+            //if ( pg.getPermissions().isWrite() )
+            //{
+                projectGroups.add( pg );
+            //}
+        }
+        
+        if ( session.get( "lastViewedProjectGroup" ) != null )
+        {
+            selectedProjectGroup = ( (Integer) session.get( "lastViewedProjectGroup" ) ).intValue();
+        }
+        else
+        {
+            selectedProjectGroup = -1;
+        }
+        if ( disableGroupSelection == true && selectedProjectGroup != -1 )
+        {
+            try
+            {
+                projectGroupName = getContinuum().getProjectGroup( selectedProjectGroup ).getName();
+            }
+            catch ( ContinuumException e )
+            {
+                e.printStackTrace();
+            }
+        }
+
         return INPUT;
     }
 
@@ -130,5 +210,55 @@ public abstract class AddMavenProjectAction
     public void setPomUrl( String pomUrl )
     {
         this.pomUrl = pomUrl;
+    }
+
+    public void setPassword( String password )
+    {
+        this.password = password;
+    }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public void setUsername( String username )
+    {
+        this.username = username;
+    }
+
+    public Collection getProjectGroups()
+    {
+        return projectGroups;
+    }
+
+    public String getProjectGroupName()
+    {
+        return projectGroupName;
+    }
+
+    public void setProjectGroupName( String projectGroupName )
+    {
+        this.projectGroupName = projectGroupName;
+    }
+
+    public int getSelectedProjectGroup()
+    {
+        return selectedProjectGroup;
+    }
+
+    public void setSelectedProjectGroup( int selectedProjectGroup )
+    {
+        this.selectedProjectGroup = selectedProjectGroup;
+    }
+
+    public boolean isDisableGroupSelection()
+    {
+        return this.disableGroupSelection;
+    }
+
+    public void setDisableGroupSelection( boolean disableGroupSelection )
+    {
+        this.disableGroupSelection = disableGroupSelection;
     }
 }

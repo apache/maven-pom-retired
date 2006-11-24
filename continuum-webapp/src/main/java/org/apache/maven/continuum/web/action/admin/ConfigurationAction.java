@@ -16,6 +16,7 @@ package org.apache.maven.continuum.web.action.admin;
  * limitations under the License.
  */
 
+import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.xwork.Preparable;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
@@ -32,8 +33,10 @@ import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 import org.codehaus.plexus.security.user.User;
 import org.codehaus.plexus.security.user.UserManager;
 import org.codehaus.plexus.security.user.UserNotFoundException;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -89,6 +92,14 @@ public class ConfigurationAction
         buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
 
         baseUrl = configuration.getUrl();
+
+        if ( StringUtils.isEmpty( baseUrl ) )
+        {
+            HttpServletRequest request = ServletActionContext.getRequest();
+            baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+                + request.getContextPath();
+            getLogger().info( "baseUrl='" + baseUrl + "'" );
+        }
 
         companyLogo = configuration.getCompanyLogo();
 

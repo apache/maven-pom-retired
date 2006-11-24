@@ -60,6 +60,8 @@ public interface Continuum
      * @return {@link Collection} &lt;{@link ProjectGroup}>
      */
     public Collection getAllProjectGroupsWithProjects();
+    
+    public Collection getAllProjectGroups();
 
     public ProjectGroup getProjectGroupByProjectId( int projectId )
         throws ContinuumException;
@@ -68,6 +70,18 @@ public interface Continuum
         throws ContinuumException;
 
     public void removeProjectGroup( int projectGroupId )
+        throws ContinuumException;
+
+    public void addProjectGroup( ProjectGroup projectGroup )
+        throws ContinuumException;
+    
+    public ProjectGroup getProjectGroupWithProjects( int projectGroupId )
+        throws ContinuumException;
+
+    public ProjectGroup getProjectGroupByGroupId( String groupId )
+        throws ContinuumException;
+    
+    public ProjectGroup getProjectGroupByGroupIdWithBuildDetails( String groupId )
         throws ContinuumException;
     
     // ----------------------------------------------------------------------
@@ -81,6 +95,9 @@ public interface Continuum
         throws ContinuumException;
 
     Project getProject( int projectId )
+        throws ContinuumException;
+
+    Project getProjectWithBuildDetails( int projectId )
         throws ContinuumException;
 
     List getAllProjectsWithAllDetails( int start, int end );
@@ -112,6 +129,7 @@ public interface Continuum
 
     boolean isInCheckoutQueue( int projectId )
         throws ContinuumException;
+
     // ----------------------------------------------------------------------
     // Building
     // ----------------------------------------------------------------------
@@ -184,6 +202,9 @@ public interface Continuum
     ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl )
         throws ContinuumException;
 
+    ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl, int projectGroupId )
+        throws ContinuumException;
+
     /**
      * Add a Maven 1 project to the list of projects. 
      * 
@@ -195,6 +216,9 @@ public interface Continuum
         throws ContinuumException;
 
     void updateProject( Project project )
+        throws ContinuumException;
+
+    void updateProjectGroup( ProjectGroup projectGroup )
         throws ContinuumException;
 
     Project getProjectWithCheckoutResult( int projectId )
@@ -213,22 +237,22 @@ public interface Continuum
     ProjectNotifier getNotifier( int projectId, int notifierId )
         throws ContinuumException;
 
-    ProjectNotifier getGroupNotifier( int projectGroupId, int notifierId )
-        throws ContinuumException;
-
     ProjectNotifier updateNotifier( int projectId, ProjectNotifier notifier )
-        throws ContinuumException;
-
-    ProjectNotifier updateGroupNotifier( int projectGroupId, ProjectNotifier notifier )
         throws ContinuumException;
 
     ProjectNotifier addNotifier( int projectId, ProjectNotifier notifier )
         throws ContinuumException;
 
-    ProjectNotifier addGroupNotifier( int projectGroupId, ProjectNotifier notifier )
+    void removeNotifier( int projectId, int notifierId )
         throws ContinuumException;
 
-    void removeNotifier( int projectId, int notifierId )
+    ProjectNotifier getGroupNotifier( int projectGroupId, int notifierId )
+        throws ContinuumException;
+
+    ProjectNotifier updateGroupNotifier( int projectGroupId, ProjectNotifier notifier )
+        throws ContinuumException;
+
+    ProjectNotifier addGroupNotifier( int projectGroupId, ProjectNotifier notifier )
         throws ContinuumException;
 
     void removeGroupNotifier( int projectGroupId, int notifierId )

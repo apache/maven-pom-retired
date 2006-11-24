@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.web.bean.ProjectGroupUserBean;
 import org.apache.maven.continuum.ContinuumException;
@@ -70,8 +71,20 @@ public class ProjectGroupAction
 
     private ProjectGroup projectGroup;
 
+    private String name;
+
+    private String description;
+
+    private Map projects = new HashMap();
+
+    private Map projectGroups = new HashMap();
+
     private boolean confirmed;
     
+    private boolean projectInCOQueue = false;
+
+    private Collection projectList;
+
     private List projectGroupUsers;
     
     private String filterProperty;
@@ -84,6 +97,7 @@ public class ProjectGroupAction
         throws ContinuumException
     {
         projectGroup = getContinuum().getProjectGroup( projectGroupId );
+        session.put( "lastViewedProjectGroup", new Integer( projectGroupId ) );
 
         return SUCCESS;
     }
@@ -121,6 +135,87 @@ public class ProjectGroupAction
         else
         {
             return CONFIRM;
+        }
+
+        return SUCCESS;
+    }
+
+    public String edit()
+        throws ContinuumException
+    {
+        projectGroup = getProjectGroup( projectGroupId );
+
+        name = projectGroup.getName();
+
+        description = projectGroup.getDescription();
+
+        projectList = getContinuum().getProjectsInGroup( projectGroupId );
+        
+        if( projectList != null )
+        {
+            Iterator proj = projectList.iterator();
+            
+            while ( proj.hasNext() )
+            {
+                Project p = (Project) proj.next();
+                if ( getContinuum().isInCheckoutQueue( p.getId() ) )
+                {
+                    projectInCOQueue = true;
+                }
+                projects.put( p, new Integer( p.getProjectGroup().getId() ) );
+            }
+        }
+
+        Iterator proj_group = getContinuum().getAllProjectGroupsWithProjects().iterator();
+        while ( proj_group.hasNext() )
+        {
+            ProjectGroup pg = (ProjectGroup) proj_group.next();
+            projectGroups.put( new Integer( pg.getId() ), pg.getName() );
+        }
+
+        return SUCCESS;
+    }
+
+    public String save()
+        throws ContinuumException
+    {
+        projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
+
+        projectGroup.setName( name );
+
+        projectGroup.setDescription( description );
+
+        getContinuum().updateProjectGroup( projectGroup );
+
+        Iterator keys = projects.keySet().iterator();
+        while ( keys.hasNext() )
+        {
+            String key = (String) keys.next();
+
+            String [] id = (String []) projects.get( key );
+            
+            int projectId = Integer.parseInt( key );
+
+            Project project = null;
+            Iterator i = projectGroup.getProjects().iterator();
+            while( i.hasNext() )
+            {
+                project = (Project) i.next();
+                if( projectId == project.getId() )
+                {
+                    break;
+                }
+            }
+            
+            ProjectGroup newProjectGroup = getProjectGroup( new Integer (id[0]).intValue() );
+            
+            if ( newProjectGroup.getId() != projectGroup.getId() )
+            {
+                getLogger().info( "Moving project " + project.getName() + " to project group "
+                                      + newProjectGroup.getName() );
+                project.setProjectGroup( newProjectGroup );
+                getContinuum().updateProject( project );
+            }
         }
 
         return SUCCESS;
@@ -224,6 +319,12 @@ public class ProjectGroupAction
         return projectGroup;
     }
 
+    public ProjectGroup getProjectGroup( int projectGroupId )
+        throws ContinuumException
+    {
+        return getContinuum().getProjectGroup( projectGroupId );
+    }
+
     public void setProjectGroup( ProjectGroup projectGroup )
     {
         this.projectGroup = projectGroup;
@@ -239,6 +340,60 @@ public class ProjectGroupAction
         this.confirmed = confirmed;
     }
 
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription( String description )
+    {
+        this.description = description;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName( String name )
+    {
+        this.name = name;
+    }
+
+    public Map getProjects()
+    {
+        return projects;
+    }
+
+    public void setProjects( Map projects )
+    {
+        this.projects = projects;
+    }
+
+    public Map getProjectGroups()
+    {
+        return projectGroups;
+    }
+
+    public void setProjectGroups( Map projectGroups )
+    {
+        this.projectGroups = projectGroups;
+    }
+
+    public boolean isProjectInCOQueue()
+    {
+        return projectInCOQueue;
+    }
+
+    public void setProjectInCOQueue( boolean projectInQueue )
+    {
+        this.projectInCOQueue = projectInQueue;
+    }
+
+    public Collection getProjectList()
+    {
+        return projectList;
+    }
     public List getProjectGroupUsers()
     {
         return projectGroupUsers;

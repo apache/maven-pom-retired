@@ -11,54 +11,62 @@
         <h3><ww:text name="buildDefinition.section.title"/></h3>
 
         <div class="axial">
-
-
-
-          <ww:if test="${projectId != 0}">
-            <ww:url id="actionUrl" action="saveProjectBuildDefinition" includeContext="false" />
-          </ww:if>
-          <ww:else>
-            <ww:url id="actionUrl" action="saveGroupBuildDefinition" includeContext="false" />
-          </ww:else>
-
-
-
-          <ww:form action="%{actionUrl}" method="post" validate="true">
-
-            <ww:hidden name="buildDefinitionId"/>
-            <ww:hidden name="projectId"/>
-            <ww:hidden name="projectGroupId"/>
-
-            <table>
-              <tbody>
-                <ww:if test="executor == 'ant'">
-                  <ww:textfield label="%{getText('buildDefinition.buildFile.ant.label')}" name="buildFile"  required="true"/>
-                </ww:if>
-                <ww:elseif test="executor == 'shell'">
-                  <ww:textfield label="%{getText('buildDefinition.buildFile.shell.label')}" name="buildFile" required="true"/>
-                </ww:elseif>
-                <ww:else>
-                  <ww:textfield label="%{getText('buildDefinition.buildFile.maven.label')}" name="buildFile" required="true"/>
-                </ww:else>
-
-                <ww:if test="executor == 'ant'">
-                  <ww:textfield label="%{getText('buildDefinition.goals.ant.label')}" name="goals"/>
-                </ww:if>
-                <ww:elseif test="executor == 'shell'">
-                </ww:elseif>
-                <ww:else>
-                  <ww:textfield label="%{getText('buildDefinition.goals.maven.label')}" name="goals"/>
-                </ww:else>
-
-                <ww:textfield label="%{getText('buildDefinition.arguments.label')}" name="arguments"/>
-                <ww:checkbox label="Build Fresh" name="buildFresh" value="buildFresh" fieldValue="true"/>
-                <ww:checkbox label="%{getText('buildDefinition.defaultForProject.label')}"  name="defaultBuildDefinition" value="defaultBuildDefinition" fieldValue="true"/>
-                <ww:select label="%{getText('buildDefinition.schedule.label')}" name="scheduleId" list="schedules"/>
-              </tbody>
-            </table>
-            <div class="functnbar3">
-              <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
-            </div>
+          <ww:form action="saveBuildDefinition" method="post" validate="true">
+            <c:choose>
+            
+              <c:when test="${!empty actionErrors}">
+                <div class="errormessage">
+                  <c:forEach items="${actionErrors}" var="actionError">
+                    <p><ww:text name="${actionError}"/></p>
+                  </c:forEach>
+                </div>
+                <input type="button" value="Back" onClick="history.go(-1)">
+              </c:when>
+  
+              <c:when test="${empty actionErrors}">
+                <ww:hidden name="buildDefinitionId"/>
+                <ww:hidden name="projectId"/>
+                <ww:hidden name="projectGroupId"/>
+    
+                <table>
+                  <tbody>
+                    <ww:if test="executor == 'ant'">
+                      <ww:textfield label="%{getText('buildDefinition.buildFile.ant.label')}" name="buildFile"  required="true"/>
+                    </ww:if>
+                    <ww:elseif test="executor == 'shell'">
+                      <ww:textfield label="%{getText('buildDefinition.buildFile.shell.label')}" name="buildFile" required="true"/>
+                    </ww:elseif>
+                    <ww:else>
+                      <ww:textfield label="%{getText('buildDefinition.buildFile.maven.label')}" name="buildFile" required="true"/>
+                    </ww:else>
+    
+                    <ww:if test="executor == 'ant'">
+                      <ww:textfield label="%{getText('buildDefinition.goals.ant.label')}" name="goals"/>
+                    </ww:if>
+                    <ww:elseif test="executor == 'shell'">
+                    </ww:elseif>
+                    <ww:else>
+                      <ww:textfield label="%{getText('buildDefinition.goals.maven.label')}" name="goals"/>
+                    </ww:else>
+    
+                    <ww:textfield label="%{getText('buildDefinition.arguments.label')}" name="arguments"/>
+                    <ww:if test="defaultBuildDefinition == true">
+                      <ww:label label="%{getText('buildDefinition.defaultForProject.label')}" value="true"/>
+                      <ww:hidden name="defaultBuildDefinition" value="true"/>
+                    </ww:if>
+                    <ww:checkbox label="Build Fresh" name="buildFresh" value="buildFresh" fieldValue="true"/>
+                    <ww:else>
+                      <ww:checkbox label="%{getText('buildDefinition.defaultForProject.label')}"  name="defaultBuildDefinition" value="defaultBuildDefinition" fieldValue="true"/>
+                    </ww:else>
+                    <ww:select label="%{getText('buildDefinition.schedule.label')}" name="scheduleId" list="schedules"/>
+                  </tbody>
+                </table>
+                <div class="functnbar3">
+                  <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
+                </div>
+              </c:when>
+            
+            </c:choose>
           </ww:form>
         </div>
       </div>

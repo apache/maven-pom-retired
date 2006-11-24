@@ -17,6 +17,7 @@ package org.apache.maven.continuum.initialization;
  */
 
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
@@ -129,6 +130,23 @@ public class DefaultContinuumInitializer
         return schedule;
     }
 
+    private BuildDefinition getDefaultBuildDefinition() 
+        throws ContinuumStoreException
+    {
+        BuildDefinition bd = new BuildDefinition();
+        
+        bd.setDefaultForProject( true );
+    
+        bd.setGoals( "clean install" );
+    
+        bd.setArguments( "--batch-mode --non-recursive" );
+    
+        bd.setBuildFile( "pom.xml" );
+    
+        bd.setSchedule( store.getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME ) );
+        
+        return bd;
+    }
 
     private void createDefaultProjectGroup()
         throws ContinuumStoreException
@@ -147,6 +165,8 @@ public class DefaultContinuumInitializer
             group.setGroupId( Continuum.DEFAULT_PROJECT_GROUP_GROUP_ID );
 
             group.setDescription( "Contains all projects that do not have a group of their own" );
+            
+            group.getBuildDefinitions().add( getDefaultBuildDefinition() );
 
             group = store.addProjectGroup( group );
         }
