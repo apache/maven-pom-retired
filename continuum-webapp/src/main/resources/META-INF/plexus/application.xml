@@ -96,16 +96,9 @@
 
     <component>
       <role>org.codehaus.plexus.mailsender.MailSender</role>
-      <implementation>org.codehaus.plexus.mailsender.javamail.JavamailMailSender</implementation>
+      <implementation>org.codehaus.plexus.mailsender.javamail.JndiJavamailMailSender</implementation>
       <configuration>
-        <smtp-host>localhost</smtp-host>
-        <smtp-port>25</smtp-port>
-        <sslProvider>com.sun.net.ssl.internal.ssl.Provider</sslProvider>
-        <!--
-        <username>mylogin</username>
-        <password>mypassword</password>
-        <sslMode>true</sslMode>
-        -->
+        <jndiSessionName>java:comp/env/mail/Session</jndiSessionName>
       </configuration>
     </component>
 
