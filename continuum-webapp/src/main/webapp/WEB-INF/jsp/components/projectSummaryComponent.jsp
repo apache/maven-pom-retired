@@ -5,6 +5,7 @@
 <%@ taglib uri="/plexusSecuritySystem" prefix="pss" %>
 
 <ww:i18n name="localization.Continuum">
+<ww:if test="${not empty projects}">
 
   <h3>Projects</h3>
 
@@ -123,4 +124,5 @@
       </ec:column>
     </ec:row>
   </ec:table>
+</ww:if>
 </ww:i18n>
