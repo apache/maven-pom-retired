@@ -82,7 +82,6 @@
   <modules>
     <module>continuum-api</module>
     <module>continuum-security</module>
-    <module>continuum-cc</module>
     <!-- module>continuum-core-it</module -->    <!-- TODO RE-ADD it when continuum-plexus-application will be back -->
     <module>continuum-core</module>
     <module>continuum-model</module>
@@ -92,7 +91,6 @@
     <module>continuum-rpc-client</module>
     <module>continuum-store</module>
     <module>continuum-test</module>
-    <!-- module>continuum-web</module --> <!--Remove this when webapp will be ready and packaged as a plexus-application -->
     <module>continuum-webapp</module>
     <module>continuum-xmlrpc</module>
     <module>continuum-release</module>
