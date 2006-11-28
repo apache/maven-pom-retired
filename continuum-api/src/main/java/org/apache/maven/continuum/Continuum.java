@@ -24,11 +24,8 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
-import org.apache.maven.continuum.model.system.ContinuumUser;
-import org.apache.maven.continuum.model.system.UserGroup;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
-import org.apache.maven.continuum.security.ContinuumSecurity;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
 import java.io.File;
@@ -374,60 +371,6 @@ public interface Continuum
     void reloadConfiguration()
         throws ContinuumException;
 
-    // ----------------------------------------------------------------------
-    // Security
-    // ----------------------------------------------------------------------
-
-    ContinuumSecurity getSecurity();
-
-    // ----------------------------------------------------------------------
-    // User
-    // ----------------------------------------------------------------------
-
-    void addUser( ContinuumUser user )
-        throws ContinuumException;
-
-    void addUser( Map configuration )
-        throws ContinuumException;
-
-    void updateUser( ContinuumUser user )
-        throws ContinuumException;
-
-    void updateUser( int userId, Map configuration )
-        throws ContinuumException;
-
-    List getUsers()
-        throws ContinuumException;
-
-    ContinuumUser getUser( int userId )
-        throws ContinuumException;
-
-    void removeUser( int userId )
-        throws ContinuumException;
-
-    // ----------------------------------------------------------------------
-    // User Group
-    // ----------------------------------------------------------------------
-
-    void addUserGroup( UserGroup userGroup );
-
-    void addUserGroup( Map configuration )
-        throws ContinuumException;
-
-    void updateUserGroup( UserGroup userGroup )
-        throws ContinuumException;
-
-    void updateUserGroup( int userGroupId, Map configuration )
-        throws ContinuumException;
-
-    List getUserGroups()
-        throws ContinuumException;
-
-    UserGroup getUserGroup( int userGroupId )
-        throws ContinuumException;
-
-    void removeUserGroup( int userGroupId )
-        throws ContinuumException;
 
     // ----------------------------------------------------------------------
     // Continuum Release

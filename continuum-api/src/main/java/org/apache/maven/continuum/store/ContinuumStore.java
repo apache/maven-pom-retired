@@ -24,11 +24,8 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
-import org.apache.maven.continuum.model.system.ContinuumUser;
 import org.apache.maven.continuum.model.system.Installation;
-import org.apache.maven.continuum.model.system.Permission;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
-import org.apache.maven.continuum.model.system.UserGroup;
 
 import java.util.Collection;
 import java.util.List;
@@ -253,48 +250,6 @@ public interface ContinuumStore
 
     CompanyInformation getCompanyInformation()
         throws ContinuumStoreException;
-
-    ContinuumUser addUser( ContinuumUser user );
-
-    void updateUser( ContinuumUser user )
-        throws ContinuumStoreException;
-
-    ContinuumUser getUser( int userId )
-        throws ContinuumObjectNotFoundException, ContinuumStoreException;
-
-    ContinuumUser getGuestUser()
-        throws ContinuumStoreException;
-
-    List getUsers()
-        throws ContinuumStoreException;
-
-    ContinuumUser getUserByUsername( String username )
-        throws ContinuumStoreException;
-
-    void removeUser( ContinuumUser user );
-
-    List getPermissions()
-        throws ContinuumStoreException;
-
-    Permission getPermission( String name )
-        throws ContinuumStoreException;
-
-    Permission addPermission( Permission perm );
-
-    UserGroup addUserGroup( UserGroup group );
-
-    void updateUserGroup( UserGroup group )
-        throws ContinuumStoreException;
-
-    List getUserGroups()
-        throws ContinuumStoreException;
-
-    UserGroup getUserGroup( int userGroupId )
-        throws ContinuumObjectNotFoundException, ContinuumStoreException;
-
-    UserGroup getUserGroup( String name );
-
-    void removeUserGroup( UserGroup group );
 
     void closeStore();
 }
