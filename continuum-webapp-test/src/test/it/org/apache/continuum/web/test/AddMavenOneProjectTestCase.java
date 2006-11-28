@@ -83,6 +83,8 @@ public class AddMavenOneProjectTestCase
     {
         File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/valid-project.xml" );
         submitAddMavenOneProjectPage( "file:/" + pomFile.getAbsolutePath(), "", true );
+        assertPage( "Continuum - Group Summary" );
+        clickLinkWithText( "Default Project Group" );
         assertTextPresent( "Maven One Project" );
     }
 
@@ -138,7 +140,8 @@ public class AddMavenOneProjectTestCase
     {
         File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/valid-project.xml" );
         submitAddMavenOneProjectPage( pomFile.getAbsolutePath(), "", false );
-        assertTextPresent( "The URL provided is malformed." );
+        assertTextPresent(
+            "The specified resource cannot be accessed. Please try again later or contact your administrator." );
     }
 
     /**
