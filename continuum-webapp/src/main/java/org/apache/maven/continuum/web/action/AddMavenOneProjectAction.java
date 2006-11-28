@@ -39,7 +39,7 @@ public class AddMavenOneProjectAction
     protected ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup )
         throws ContinuumException
     {
-        return getContinuum().addMavenOneProject( pomUrl );
+        return getContinuum().addMavenOneProject( pomUrl, selectedProjectGroup );
     }
 
     /**

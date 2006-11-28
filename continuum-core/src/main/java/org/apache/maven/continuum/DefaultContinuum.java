@@ -1008,6 +1008,12 @@ public class DefaultContinuum
         return executeAddProjectsFromMetadataActivity( metadataUrl, MavenOneContinuumProjectBuilder.ID );
     }
 
+    public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl, int projectGroupId )
+        throws ContinuumException
+    {
+        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenOneContinuumProjectBuilder.ID, projectGroupId );
+    }
+
     // ----------------------------------------------------------------------
     // Maven 2.x projects
     // ----------------------------------------------------------------------

@@ -22,7 +22,21 @@
                         <table>
                           <tbody>
                             <ww:textfield label="%{getText('add.m1.project.m1PomUrl.label')}" name="m1PomUrl">
-                                <ww:param name="desc"><p><ww:text name="add.m1.project.m1PomUrl.message"/></p></ww:param>
+                                <ww:param name="desc">
+                                <table cellspacing="0" cellpadding="0">
+                                  <tbody>
+                                    <tr>
+                                      <td><ww:text name="add.m1.project.m1PomUrl.username.label"/>: </td>
+                                      <td><input type="text" name="username" size="20" id="addMavenOneProject_username"/><td>
+                                    </tr>  
+                                    <tr>
+                                      <td><ww:text name="add.m1.project.m1PomUrl.password.label"/>: </td>
+                                      <td><input type="password" name="password" size="20" id="addMavenOneProject_password"/><td>
+                                    </tr>  
+                                  </tbody>
+                                </table>  
+                                  <p><ww:text name="add.m1.project.m1PomUrl.message"/></p>
+                                </ww:param>
                             </ww:textfield>
                             <ww:label>
                               <ww:param name="after"><strong><ww:text name="or"/></strong></ww:param>
@@ -30,6 +44,14 @@
                             <ww:file label="%{getText('add.m1.project.m1PomFile.label')}" name="m1PomFile">
                                 <ww:param name="desc"><p><ww:text name="add.m1.project.m1PomFile.message"/></p></ww:param>
                             </ww:file>
+                            <ww:if test="disableGroupSelection == true">
+                              <ww:hidden name="selectedProjectGroup"/>
+                              <ww:hidden name="disableGroupSelection"/>
+                              <ww:textfield label="%{getText('add.m1.project.projectGroup')}" name="projectGroupName" disabled="true"/>
+                            </ww:if>
+                            <ww:else>
+                              <ww:select label="%{getText('add.m1.project.projectGroup')}" name="selectedProjectGroup" list="projectGroups" listKey="id" listValue="name"/>
+                            </ww:else>
                           </tbody>
                         </table>
                         <div class="functnbar3">
