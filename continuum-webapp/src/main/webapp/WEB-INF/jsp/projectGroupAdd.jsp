@@ -22,9 +22,9 @@
             </c:if>
             <table>
               <tbody>
-                <ww:textfield label="%{getText('projectGroup.add.name.label')}" name="name"  required="true"/>
-                <ww:textfield label="%{getText('projectGroup.add.groupId.label')}" name="groupId" required="true"/>
-                <ww:textfield label="%{getText('projectGroup.add.description.label')}" name="description"/>
+                <ww:textfield label="%{getText('projectGroup.name.label')}" name="name"  required="true"/>
+                <ww:textfield label="%{getText('projectGroup.groupId.label')}" name="groupId" required="true"/>
+                <ww:textfield label="%{getText('projectGroup.description.label')}" name="description"/>
               </tbody>
             </table>
             <div class="functnbar3">

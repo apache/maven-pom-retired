@@ -21,9 +21,9 @@
             <table>
               <tbody>
                 <ww:hidden name="projectGroupId"/>
-                <ww:textfield label="%{getText('projectGroup.edit.name.label')}" name="name" required="true" disabled="%{projectInCOQueue}"/>
-                <c1:data label="%{getText('projectGroup.edit.groupId.label')}" name="projectGroup.groupId"/>
-                <ww:textfield label="%{getText('projectGroup.edit.description.label')}" name="description" disabled="%{projectInCOQueue}"/>
+                <ww:textfield label="%{getText('projectGroup.name.label')}" name="name" required="true" disabled="%{projectInCOQueue}"/>
+                <c1:data label="%{getText('projectGroup.groupId.label')}" name="projectGroup.groupId"/>
+                <ww:textfield label="%{getText('projectGroup.description.label')}" name="description" disabled="%{projectInCOQueue}"/>
               </tbody>
             </table>
             

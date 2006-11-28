@@ -7,7 +7,7 @@
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
-      <title><ww:text name="projectView.page.title"/></title>
+      <title><ww:text name="projectGroup.page.title"/></title>
     </head>
 
     <body>
