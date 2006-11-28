@@ -1,14 +1,23 @@
 package org.apache.continuum.web.test;
 
+/*
+ * Copyright 2005-2006 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import java.io.File;
 
-/**
- * Created by IntelliJ IDEA.
- * User: deng
- * Date: Nov 7, 2006
- * Time: 10:03:06 AM
- * To change this template use File | Settings | File Templates.
- */
 public class AddMavenTwoProjectTestCase
     extends AbstractAuthenticatedAccessTestCase
 {
@@ -50,25 +59,6 @@ public class AddMavenTwoProjectTestCase
             assertTextPresent( "Project Groups" );
             assertTextPresent( "Default Project Group" );
         }
-    }
-
-    /**
-     * Test multi module projects
-     */
-    public void testMultiModuleProject()
-    {
-        File pomFile =
-            new File( getBasedir(), "src/test/resources/unit/maven-two-projects/multi-module-maven-project/pom.xml" );
-        submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", true );
-        assertTextPresent( "Maven Two Multi-Module Project" );
-        assertTextPresent( "maven.two.multi.module.project" );
-
-        clickLinkWithText( "Maven Two Multi-Module Project" );
-        assertTextPresent( "Summary" );
-        assertTextPresent( "Summary" );
-        assertTextPresent( "Maven Two Multi-Module Project" );
-        assertTextPresent( "Maven Two Multi-Module Project Module 1" );
-        assertTextPresent( "Maven Two Multi-Module Project Module 2" );
     }
 
     /**
@@ -135,27 +125,6 @@ public class AddMavenTwoProjectTestCase
     }
 
     /**
-     * Test when notifier(s) are specified in the pom
-     */
-    public void testNotifiers()
-    {
-        File pomFile =
-            new File( getBasedir(), "src/test/resources/unit/maven-two-projects/specified-notifiers-pom.xml" );
-        submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", true );
-        assertTextPresent( "Maven Two Notifiers Project" );
-
-        clickLinkWithText( "Maven Two Notifiers Project" );
-        clickLinkWithText( "Notifiers" );
-
-        assertTextPresent( "Project Group Notifiers" );
-        assertTextPresent( "mail" );
-        assertTextPresent( "Error" );
-        assertTextPresent( "Fail" );
-        assertTextPresent( "Success" );
-        assertTextNotPresent( "Warning" );
-    }
-
-    /**
      * Test when the modules/subprojects specified in the pom are not found
      */
     public void testMissingModules()
@@ -166,16 +135,4 @@ public class AddMavenTwoProjectTestCase
         assertElementPresent( "m2PomUrl" );
         assertElementPresent( "m2PomFile" );
     }
-
-    /**
-     * Test valid pom
-     */
-    public void testValidPom()
-    {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-two-projects/valid-pom.xml" );
-        submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", true );
-        assertTextPresent( "Maven Two Project" );
-        assertTextPresent( "maven.two.project" );
-    }
-
 }

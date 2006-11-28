@@ -35,14 +35,14 @@ public class LoginTest
     {
         submitLoginPage( "badUsername", "badPassword", false );
         assertLoginPage();
-        assertTextPresent( "Authentication failed" );
+        assertTextPresent( "You have entered an incorrect username and/or password" );
     }
 
     public void testWithBadPassword()
     {
         submitLoginPage( adminUsername, "badPassword", false );
         assertLoginPage();
-        assertTextPresent( "Authentication failed" );
+        assertTextPresent( "You have entered an incorrect username and/or password" );
     }
 
     public void testWithEmptyUsername()
@@ -56,7 +56,7 @@ public class LoginTest
     {
         submitLoginPage( adminUsername, "", false );
         assertLoginPage();
-        assertTextPresent( "Authentication failed" );
+        assertTextPresent( "You have entered an incorrect username and/or password" );
     }
 
     public void testWithCorrectUsernamePassword()
@@ -64,4 +64,5 @@ public class LoginTest
         submitLoginPage( adminUsername, adminPassword );
         logout();
     }
+
 }

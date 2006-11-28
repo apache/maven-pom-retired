@@ -21,19 +21,10 @@ package org.apache.continuum.web.test;
  * @version $Id$
  */
 public class AntTest
-    extends AbstractAuthenticatedAccessTestCase
+    extends AbstractAuthenticatedAdminAccessTestCase
 {
-    public String getUsername()
-    {
-        return adminUsername;
-    }
-
-    public String getPassword()
-    {
-        return adminPassword;
-    }
-
     public void testAddAntProject()
+        throws Exception
     {
         goToAddAntPage();
         setFieldValue( "projectName", "Foo" );
@@ -41,7 +32,8 @@ public class AntTest
         setFieldValue( "projectScmUrl",
                        "https://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-test-projects/ant/" );
         clickButtonWithValue( "Add" );
-        assertGroupSummaryPage();
+
+        assertProjectGroupsSummaryPage();
         assertTextPresent( "Default Project Group" );
         clickLinkWithText( "Default Project Group" );
         assertTextPresent( "Foo" );
@@ -88,4 +80,5 @@ public class AntTest
         clickLinkWithText( "Ant Project" );
         assertAddAntProjectPage();
     }
+
 }

@@ -164,8 +164,8 @@ public class SchedulesPageTest
         String[] columnValues = {SCHEDULE_NAME, SCHEDULE_DESCRIPTION, DELAY, cronSchedule, MAXJOBEXECUTIONTIME};
 
         // edit the schedule        
-        clickLinkWithXPath( XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5,
-                                                                                      "Edit", columnValues ) );
+        clickLinkWithXPath(
+            XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5, "Edit", columnValues ) );
 
         inputSchedule( SCHEDULE_NAME_EDIT + "modified", SCHEDULE_DESCRIPTION + "updated", "2", "3", "4", "?", "6", "7",
                        "2021", "8", "9", false );
@@ -175,12 +175,12 @@ public class SchedulesPageTest
         String[] editedColumnValues =
             {SCHEDULE_NAME_EDIT + "modified", SCHEDULE_DESCRIPTION + "updated", "9", cronSchedule, "8"};
 
-        assertTrue( "Can not edit schedule", getSelenium().isElementPresent(
-            XPathExpressionUtil.getTableRow( editedColumnValues ) ) );
+        assertTrue( "Can not edit schedule",
+                    getSelenium().isElementPresent( XPathExpressionUtil.getTableRow( editedColumnValues ) ) );
 
         // check if the active state has been saved
-        clickLinkWithXPath( XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5,
-                                                                                      "Edit", editedColumnValues ) );
+        clickLinkWithXPath(
+            XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5, "Edit", editedColumnValues ) );
 
         assertEquals( "Can disable the schedule", CHECKBOX_UNCHECK, getFieldValue( "active" ) );
 
@@ -298,8 +298,8 @@ public class SchedulesPageTest
 
         String[] columnValues = {scheduleName};
 
-        clickLinkWithXPath( XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5,
-                                                                                      "Delete", columnValues ) );
+        clickLinkWithXPath(
+            XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5, "Delete", columnValues ) );
 
         // deletion confirmation page
         assertPage( "Schedule Removal" );
