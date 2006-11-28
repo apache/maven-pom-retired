@@ -18,6 +18,8 @@ package org.apache.continuum.web.test;
 
 import java.io.File;
 
+//TODO: Remove this class and move all tests in AddMavenTwoProjectTest
+//tests need probably to be refactored
 public class AddMavenTwoProjectTestCase
     extends AbstractAuthenticatedAccessTestCase
 {
