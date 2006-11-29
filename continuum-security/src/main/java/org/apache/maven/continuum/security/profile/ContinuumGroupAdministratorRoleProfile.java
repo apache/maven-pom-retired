@@ -52,6 +52,6 @@ public class ContinuumGroupAdministratorRoleProfile
 
     public boolean isAssignable()
     {
-        return false;
+        return true;
     }
 }
