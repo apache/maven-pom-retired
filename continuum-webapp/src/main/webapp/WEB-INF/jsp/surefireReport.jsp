@@ -113,7 +113,9 @@
                   </ec:column>
                   <ec:column property="name" title="surefireReport.testCase" sortable="false">
                     <c:out value="${pageScope.testCase.name}"/><br/><br/>
-                    <c:out value="${pageScope.testCase.failureDetails}"/>
+                    <pre>
+                      <c:out value="${pageScope.testCase.failureDetails}"/>
+                    </pre>
                   </ec:column>
                 </ww:if>
                 <ww:else>
