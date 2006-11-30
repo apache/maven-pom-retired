@@ -309,6 +309,10 @@
               <schedule id="1" />
               <profile id="1" />
             </buildDefinition>
+            <buildDefinition>
+              <id>8</id>
+              <goals>deploy</goals>
+            </buildDefinition>
           </buildDefinitions>
         </project>
       </projects>
@@ -380,6 +384,10 @@
           <buildFile>buildFile3</buildFile>
           <schedule id="2" />
           <profile id="2" />
+        </buildDefinition>
+        <buildDefinition>
+          <id>7</id>
+          <goals>deploy</goals>
         </buildDefinition>
       </buildDefinitions>
     </projectGroup>

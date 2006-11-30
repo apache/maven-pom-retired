@@ -274,6 +274,7 @@ public abstract class AbstractContinuumStoreTestCase
             createTestBuildDefinition( "arguments2", "buildFile2", "goals2", profile1, schedule1 );
         BuildDefinition testGroupBuildDefinition3 =
             createTestBuildDefinition( "arguments3", "buildFile3", "goals3", profile2, schedule1 );
+        BuildDefinition testGroupBuildDefinition4 = createTestBuildDefinition( null, null, "deploy", null, null );
 
         BuildDefinition testBuildDefinition1 =
             createTestBuildDefinition( "arguments11", "buildFile11", "goals11", profile2, schedule1 );
@@ -281,6 +282,7 @@ public abstract class AbstractContinuumStoreTestCase
             createTestBuildDefinition( "arguments12", "buildFile12", "goals12", profile2, schedule2 );
         BuildDefinition testBuildDefinition3 =
             createTestBuildDefinition( "arguments13", "buildFile13", "goals13", profile1, schedule2 );
+        BuildDefinition testBuildDefinition4 = createTestBuildDefinition( null, null, "deploy", null, null );
 
         ProjectGroup group = createTestProjectGroup( defaultProjectGroup );
 
@@ -325,6 +327,10 @@ public abstract class AbstractContinuumStoreTestCase
         BuildDefinition buildDefinition3 = createTestBuildDefinition( testBuildDefinition3 );
         project2.addBuildDefinition( buildDefinition3 );
         testProject2.addBuildDefinition( testBuildDefinition3 );
+
+        BuildDefinition buildDefinition4 = createTestBuildDefinition( testBuildDefinition4 );
+        project2.addBuildDefinition( buildDefinition4 );
+        testProject2.addBuildDefinition( testBuildDefinition4 );
 
         ProjectDeveloper projectDeveloper2 = createTestDeveloper( testDeveloper2 );
         project2.addDeveloper( projectDeveloper2 );
@@ -383,6 +389,10 @@ public abstract class AbstractContinuumStoreTestCase
         BuildDefinition groupBuildDefinition3 = createTestBuildDefinition( testGroupBuildDefinition3 );
         group.addBuildDefinition( groupBuildDefinition3 );
         testProjectGroup2.addBuildDefinition( testGroupBuildDefinition3 );
+
+        BuildDefinition groupBuildDefinition4 = createTestBuildDefinition( testGroupBuildDefinition4 );
+        group.addBuildDefinition( groupBuildDefinition4 );
+        testProjectGroup2.addBuildDefinition( testGroupBuildDefinition4 );
 
         if ( addToStore )
         {
