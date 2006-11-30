@@ -64,15 +64,23 @@
       </result>
 
        <!-- The following security-* result names arrive from the plexus-security package -->
-      <result name="security-login-success" type="redirect-action">groupSummary</result>
-      <result name="security-login-cancel" type="redirect-action">groupSummary</result>
+      <result name="security-login-success" type="redirect-action">
+        <param name="actionName">groupSummary</param>
+        <param name="namespace">/</param>
+      </result>
+      <result name="security-login-cancel" type="redirect-action">
+        <param name="actionName">groupSummary</param>
+        <param name="namespace">/</param>
+      </result>
       <result name="security-login-locked" type="redirect-action">
         <param name="actionName">groupSummary</param>
         <param name="namespace">/</param>
         <param name="infoMessage">Account Locked</param> 
       </result>
-      
-      <result name="security-logout" type="redirect-action">groupSummary</result>
+      <result name="security-logout" type="redirect-action">
+        <param name="actionName">groupSummary</param>
+        <param name="namespace">/</param>
+      </result>
       <result name="requires-authentication" type="redirect-action">
         <param name="actionName">login</param>
         <param name="namespace">/security</param>
@@ -82,10 +90,13 @@
         <param name="namespace">/security</param>
       </result>
       <result name="security-register-cancel" type="redirect-action">
-        <param name="actionName">login</param>
-        <param name="namespace">/security</param>
+        <param name="actionName">groupSummary</param>
+        <param name="namespace">/</param>
       </result>
-      <result name="security-account-success" type="redirect-action">groupSummary</result>
+      <result name="security-account-success" type="redirect-action">
+        <param name="actionName">groupSummary</param>
+        <param name="namespace">/</param>
+      </result>
       <result name="security-account-cancel" type="redirect-action">
         <param name="actionName">login</param>
         <param name="namespace">/security</param>
