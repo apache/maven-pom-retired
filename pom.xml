@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 <!--
   ~ Copyright 2006 The Apache Software Foundation.
@@ -19,6 +16,9 @@
   ~ limitations under the License.
   -->
 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.apache.maven</groupId>
@@ -94,6 +94,7 @@
     <module>continuum-webapp</module>
     <module>continuum-xmlrpc</module>
     <module>continuum-release</module>
+    <module>continuum-data-management</module>
   </modules>
   <repositories>
     <repository>
@@ -257,6 +258,12 @@
       <dependency>
         <groupId>org.apache.maven.continuum</groupId>
         <artifactId>continuum-store</artifactId>
+        <classifier>tests</classifier>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.continuum</groupId>
+        <artifactId>continuum-store</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
@@ -355,7 +362,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-jdo2</artifactId>
-        <version>1.0-alpha-7</version>
+        <version>1.0-alpha-8-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>

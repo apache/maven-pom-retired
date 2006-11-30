@@ -252,4 +252,8 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     void closeStore();
+
+    Collection getAllProjectGroupsWithTheLot();
+
+    void eraseDatabase();
 }

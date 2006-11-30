@@ -21,11 +21,19 @@ import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Profile;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectDependency;
+import org.apache.maven.continuum.model.project.ProjectDeveloper;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
+import org.apache.maven.continuum.model.scm.TestCaseFailure;
+import org.apache.maven.continuum.model.scm.ChangeSet;
+import org.apache.maven.continuum.model.scm.ChangeFile;
+import org.apache.maven.continuum.model.scm.SuiteResult;
+import org.apache.maven.continuum.model.scm.ScmResult;
+import org.apache.maven.continuum.model.scm.TestResult;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.jdo.PlexusJdoUtils;
@@ -43,6 +51,7 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -174,8 +183,8 @@ public class JdoContinuumStore
 
             Object[] params = new Object[3];
             params[0] = groupId;
-            params[1]=artifactId;
-            params[2]=version;
+            params[1] = artifactId;
+            params[2] = version;
 
             Collection result = (Collection) query.executeWithArray( params );
 
@@ -228,7 +237,7 @@ public class JdoContinuumStore
             List projectsInGroup = getProjectsInGroup( projectGroupId.intValue() );
 
             for ( Iterator j = projectsInGroup.iterator(); j.hasNext(); )
-            {   
+            {
                 Integer projectId = new Integer( ( (Project) j.next() ).getId() );
                 if ( !aggregate.keySet().contains( projectId ) )
                 {
@@ -775,7 +784,7 @@ public class JdoContinuumStore
     {
         return getAllObjectsDetached( ProjectGroup.class, "name ascending", PROJECTGROUP_PROJECTS_FETCH_GROUP );
     }
-    
+
     public Collection getAllProjectGroups()
     {
         return getAllObjectsDetached( ProjectGroup.class, "name ascending", null );
@@ -1270,7 +1279,8 @@ public class JdoContinuumStore
     public ProjectGroup getProjectGroupByGroupIdWithBuildDetails( String groupId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
-        return (ProjectGroup) getObjectFromQuery( ProjectGroup.class, "groupId", groupId, PROJECT_BUILD_DETAILS_FETCH_GROUP );
+        return (ProjectGroup) getObjectFromQuery( ProjectGroup.class, "groupId", groupId,
+                                                  PROJECT_BUILD_DETAILS_FETCH_GROUP );
     }
 
     public ProjectGroup getProjectGroupByGroupIdWithProjects( String groupId )
@@ -1392,6 +1402,37 @@ public class JdoContinuumStore
     {
         closePersistenceManagerFactory( continuumPmf, 1 );
         closePersistenceManagerFactory( usersPmf, 1 );
+    }
+
+    public Collection getAllProjectGroupsWithTheLot()
+    {
+        List fetchGroups = Arrays.asList( new String[]{PROJECT_WITH_BUILDS_FETCH_GROUP,
+            PROJECTGROUP_PROJECTS_FETCH_GROUP, BUILD_RESULT_WITH_DETAILS_FETCH_GROUP,
+            PROJECT_WITH_CHECKOUT_RESULT_FETCH_GROUP, PROJECT_ALL_DETAILS_FETCH_GROUP,
+            PROJECT_BUILD_DETAILS_FETCH_GROUP} );
+        return PlexusJdoUtils.getAllObjectsDetached( getPersistenceManager(), ProjectGroup.class, "name ascending",
+                                                     fetchGroups );
+    }
+
+    public void eraseDatabase()
+    {
+        PlexusJdoUtils.removeAll( getPersistenceManager(), ProjectGroup.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), Project.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), Schedule.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), Profile.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), Installation.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), ScmResult.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), BuildResult.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), TestResult.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), SuiteResult.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), TestCaseFailure.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), SystemConfiguration.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), ProjectNotifier.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), ProjectDeveloper.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), ProjectDependency.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), ChangeSet.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), ChangeFile.class );
+        PlexusJdoUtils.removeAll( getPersistenceManager(), BuildDefinition.class );
     }
 
     /**

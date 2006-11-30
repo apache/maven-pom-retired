@@ -13,21 +13,21 @@
     <class>
       <name>CompanyInformation</name>
       <packageName>org.apache.maven.continuum.model.general</packageName>
-      <version>1.0.0+</version>
+      <version>1.1.0+</version>
       <fields>
         <field>
           <name>companyName</name>
-          <version>1.0.0+</version>
+          <version>1.1.0+</version>
           <type>String</type>
         </field>
         <field>
           <name>companyLogoUrl</name>
-          <version>1.0.0+</version>
+          <version>1.1.0+</version>
           <type>String</type>
         </field>
         <field>
           <name>companyUrl</name>
-          <version>1.0.0+</version>
+          <version>1.1.0+</version>
           <type>String</type>
         </field>
       </fields>
