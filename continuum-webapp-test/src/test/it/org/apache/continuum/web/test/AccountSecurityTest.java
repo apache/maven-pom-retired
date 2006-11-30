@@ -21,35 +21,37 @@ import org.apache.maven.shared.web.test.XPathExpressionUtil;
 public class AccountSecurityTest
     extends AbstractAuthenticatedAccessTestCase
 {
+    public final String SIMPLE_POM = getBasedir() + "/target/test-classes/unit/simple-project/pom.xml";
+    
     // create user fields
-    final static public String CREATE_FORM_USERNAME_FIELD = "userCreateForm_user_username";
+    public static final String CREATE_FORM_USERNAME_FIELD = "userCreateForm_user_username";    
+    
+    public static final String CREATE_FORM_FULLNAME_FIELD = "userCreateForm_user_fullName";
 
-    final static public String CREATE_FORM_FULLNAME_FIELD = "userCreateForm_user_fullName";
+    public static final String CREATE_FORM_EMAILADD_FIELD = "userCreateForm_user_email";
 
-    final static public String CREATE_FORM_EMAILADD_FIELD = "userCreateForm_user_email";
+    public static final String CREATE_FORM_PASSWORD_FIELD = "userCreateForm_user_password";
 
-    final static public String CREATE_FORM_PASSWORD_FIELD = "userCreateForm_user_password";
+    public static final String CREATE_FORM_CONFIRM_PASSWORD_FIELD = "userCreateForm_user_confirmPassword";
 
-    final static public String CREATE_FORM_CONFIRM_PASSWORD_FIELD = "userCreateForm_user_confirmPassword";
+    public static final String PASSWORD_FIELD = "user.password";
 
-    final static public String PASSWORD_FIELD = "user.password";
-
-    final static public String CONFIRM_PASSWORD_FIELD = "user.confirmPassword";
+    public static final String CONFIRM_PASSWORD_FIELD = "user.confirmPassword";
 
     // user account 1
-    final static public String CUSTOM_USERNAME = "custom";
+    public static final String CUSTOM_USERNAME = "custom";
 
-    final static public String CUSTOM_USERNAME2 = "custom2";
+    public static final String CUSTOM_USERNAME2 = "custom2";
 
-    final static public String CUSTOM_USERNAME3 = "custom3";
+    public static final String CUSTOM_USERNAME3 = "custom3";
 
-    final static public String CUSTOM_USERNAME4 = "custom4";
+    public static final String CUSTOM_USERNAME4 = "custom4";
 
-    final static public String CUSTOM_FULLNAME = "custom fullname";
+    public static final String CUSTOM_FULLNAME = "custom fullname";
 
-    final static public String CUSTOM_EMAILADD = "custom@custom.com";
+    public static final String CUSTOM_EMAILADD = "custom@custom.com";
 
-    final static public String CUSTOM_PASSWORD = "custompassword";
+    public static final String CUSTOM_PASSWORD = "custompassword";
 
     public void setUp()
         throws Exception
@@ -207,7 +209,29 @@ public class AccountSecurityTest
         deleteUser( CUSTOM_USERNAME4, CUSTOM_FULLNAME, CUSTOM_EMAILADD, false, true );
         super.logout();
     }
+       
+    public void testDefaultRolesOfNewSystemAdministrator()
+    {
+        // initialize
+        createUser( CUSTOM_USERNAME, CUSTOM_FULLNAME, CUSTOM_EMAILADD, CUSTOM_PASSWORD, true);
+                      
+        // upgrade the role of the user to system administrator
+        String[] columnValues = { CUSTOM_USERNAME, CUSTOM_FULLNAME, CUSTOM_EMAILADD, "false", "false" };
+        clickLinkWithXPath( XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 6, "Edit", columnValues ) );
+                        
+        checkField( "addRolesToUser_addSelectedRolesSystem Administrator" );
+        clickButtonWithValue( "Add Selected Roles" );
 
+        // verify roles        
+        String[] roleList = { "Project Developer - Test Project Group Name", 
+                              "System Administrator", "User Administrator", 
+                              "Project User - Test Project Group Name",
+                              "Project Developer - Default Project Group", 
+                              "Project User - Default Project Group" };
+        
+        assertElementPresent( XPathExpressionUtil.getList( roleList ) );                
+    }
+    
     private void createUser( String userName, String fullName, String emailAdd, String password, boolean valid )
     {
         createUser( userName, fullName, emailAdd, password, password, valid );
