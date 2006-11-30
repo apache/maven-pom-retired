@@ -24,44 +24,30 @@ import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
-import org.codehaus.plexus.security.policy.UserSecurityPolicy;
 import org.codehaus.plexus.security.rbac.Resource;
-import org.codehaus.plexus.security.system.SecuritySystem;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
-import org.codehaus.plexus.security.user.User;
-import org.codehaus.plexus.security.user.UserManager;
-import org.codehaus.plexus.security.user.UserNotFoundException;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.File;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="configuration"
+ * @plexus.component role="com.opensymphony.xwork.Action"
+ * role-hint="configuration"
  */
 public class ConfigurationAction
     extends ContinuumActionSupport
     implements Preparable, SecureAction
 {
-    
+
     /**
      * @plexus.requirement
      */
     private ContinuumStore store;
-
-    /**
-     * @plexus.requirement
-     */
-    private SecuritySystem securitySystem;
-
-    private boolean guestAccountEnabled;
 
     private String workingDirectory;
 
@@ -80,35 +66,34 @@ public class ConfigurationAction
 
     public void prepare()
     {
-        try{
-
-
-        ConfigurationService configuration = getContinuum().getConfiguration();
-
-        guestAccountEnabled = getGuestAccountLockingStatus();
-
-        workingDirectory = configuration.getWorkingDirectory().getAbsolutePath();
-
-        buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
-
-        baseUrl = configuration.getUrl();
-
-        if ( StringUtils.isEmpty( baseUrl ) )
+        try
         {
-            HttpServletRequest request = ServletActionContext.getRequest();
-            baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                + request.getContextPath();
-            getLogger().info( "baseUrl='" + baseUrl + "'" );
+
+            ConfigurationService configuration = getContinuum().getConfiguration();
+
+            workingDirectory = configuration.getWorkingDirectory().getAbsolutePath();
+
+            buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
+
+            baseUrl = configuration.getUrl();
+
+            if ( StringUtils.isEmpty( baseUrl ) )
+            {
+                HttpServletRequest request = ServletActionContext.getRequest();
+                baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() +
+                    request.getContextPath();
+                getLogger().info( "baseUrl='" + baseUrl + "'" );
+            }
+
+            companyLogo = configuration.getCompanyLogo();
+
+            companyName = configuration.getCompanyName();
+
+            companyUrl = configuration.getCompanyUrl();
         }
-
-        companyLogo = configuration.getCompanyLogo();
-
-        companyName = configuration.getCompanyName();
-
-        companyUrl = configuration.getCompanyUrl();
-        } catch ( Exception e)
+        catch ( Exception e )
         {
-            e.printStackTrace( );
+            e.printStackTrace();
         }
     }
 
@@ -118,104 +103,31 @@ public class ConfigurationAction
 
         try
         {
-        ConfigurationService configuration = getContinuum().getConfiguration();
+            ConfigurationService configuration = getContinuum().getConfiguration();
 
-        configuration.setGuestAccountEnabled( guestAccountEnabled );
+            configuration.setWorkingDirectory( new File( workingDirectory ) );
 
-        resolveGuestAccountLockingStatus();
+            configuration.setBuildOutputDirectory( new File( buildOutputDirectory ) );
 
-        configuration.setWorkingDirectory( new File( workingDirectory ) );
+            configuration.setDeploymentRepositoryDirectory( new File( deploymentRepositoryDirectory ) );
 
-        configuration.setBuildOutputDirectory( new File( buildOutputDirectory ) );
+            configuration.setUrl( baseUrl );
 
-        configuration.setDeploymentRepositoryDirectory( new File( deploymentRepositoryDirectory ) );
+            configuration.setCompanyLogo( companyLogo );
 
-        configuration.setUrl( baseUrl );
+            configuration.setCompanyName( companyName );
 
-        configuration.setCompanyLogo( companyLogo );
+            configuration.setCompanyUrl( companyUrl );
 
-        configuration.setCompanyName( companyName );
-
-        configuration.setCompanyUrl( companyUrl );
-
-        configuration.setInitialized( true );
-        configuration.store();
+            configuration.setInitialized( true );
+            configuration.store();
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
-            e.printStackTrace( );
+            e.printStackTrace();
         }
         return SUCCESS;
 
-    }
-
-
-    private void resolveGuestAccountLockingStatus()
-    {
-
-        UserManager userManager = securitySystem.getUserManager();
-        UserSecurityPolicy policy = securitySystem.getPolicy();
-
-        User guest;
-
-        try
-        {
-            guest = userManager.findUser( "guest" );
-            guest.setLocked( guestAccountEnabled );
-            userManager.updateUser( guest );
-        }
-        catch ( UserNotFoundException ne )
-        {
-            policy.setEnabled( false );
-
-            guest = userManager.createUser( "guest", "Guest", "" );
-            guest.setLocked( guestAccountEnabled );
-            guest = userManager.addUser( guest );
-
-        }
-        finally
-        {
-            policy.setEnabled( true );
-        }       
-    }
-
-    private boolean getGuestAccountLockingStatus()
-    {
-        UserManager userManager = securitySystem.getUserManager();
-        UserSecurityPolicy policy = securitySystem.getPolicy();
-
-        User guest;
-
-        try
-        {
-            guest = userManager.findUser( "guest" );
-
-            return guest.isLocked();
-        }
-        catch ( UserNotFoundException ne )
-        {
-            policy.setEnabled( false );
-
-            guest = userManager.createUser( "guest", "Guest", "" );
-            guest = userManager.addUser( guest );
-
-            return guest.isLocked();
-        }
-        finally
-        {
-            policy.setEnabled( true );
-        }
-    }
-
-
-    public boolean isGuestAccountEnabled()
-    {
-        return guestAccountEnabled;
-    }
-
-    public void setGuestAccountEnabled( boolean guestAccountEnabled )
-    {
-        this.guestAccountEnabled = guestAccountEnabled;
     }
 
     public String getWorkingDirectory()

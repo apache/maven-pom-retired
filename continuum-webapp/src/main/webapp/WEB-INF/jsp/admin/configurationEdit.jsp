@@ -24,11 +24,6 @@
         <table>
           <tbody>
 
-            <ww:checkbox label="%{getText('configuration.guest.label')}" name="guestAccountEnabled"
-                         value="guestAccountEnabled">
-              <ww:param name="desc"><p><ww:text name="configuration.guest.message"/></p></ww:param>
-            </ww:checkbox>
-
             <ww:textfield label="%{getText('configuration.workingDirectory.label')}" name="workingDirectory"
                           required="true">
               <ww:param name="desc"><p><ww:text name="configuration.workingDirectory.message"/></p></ww:param>

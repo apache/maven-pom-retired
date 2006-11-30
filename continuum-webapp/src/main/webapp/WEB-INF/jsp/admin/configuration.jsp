@@ -11,16 +11,6 @@
 
         <div class="axial">
           <table border="1" cellspacing="2" cellpadding="3" width="100%">
-            <c1:data label="%{getText('configuration.guest.label')}">
-                <ww:param name="after">
-                    <ww:text name="configuration.guest.value">
-                        <ww:param>
-                            <ww:if test="%{guestAccountEnabled == true}"><ww:text name="enabled"/></ww:if>
-                            <ww:else><ww:text name="disabled"/></ww:else>
-                        </ww:param>
-                    </ww:text>
-                </ww:param>
-            </c1:data>
             <c1:data label="%{getText('configuration.workingDirectory.label')}" name="workingDirectory"/>
             <c1:data label="%{getText('configuration.buildOutputDirectory.label')}" name="buildOutputDirectory"/>
             <c1:data label="%{getText('configuration.deploymentRepositoryDirectory.label')}" name="deploymentRepositoryDirectory"/>
