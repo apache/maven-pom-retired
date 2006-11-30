@@ -250,22 +250,25 @@ public class MavenTwoContinuumProjectBuilder
         {
             String module = (String) it.next();
 
-            String urlString = prefix + "/" + module + POM_PART + suffix;
-
-            URL moduleUrl;
-
-            try
+            if ( StringUtils.isNotEmpty( module ) )
             {
-                moduleUrl = new URL( urlString );
-            }
-            catch ( MalformedURLException e )
-            {
-                getLogger().debug( "Error adding project module: Malformed URL " + urlString, e );
-                result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL, urlString );
-                continue;
-            }
+                String urlString = prefix + "/" + module + POM_PART + suffix;
 
-            readModules( moduleUrl, result, false, username, password, scmUrl + "/" + module );
+                URL moduleUrl;
+
+                try
+                {
+                    moduleUrl = new URL( urlString );
+                }
+                catch ( MalformedURLException e )
+                {
+                    getLogger().debug( "Error adding project module: Malformed URL " + urlString, e );
+                    result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL, urlString );
+                    continue;
+                }
+
+                readModules( moduleUrl, result, false, username, password, scmUrl + "/" + module );
+            }
         }
     }
 
