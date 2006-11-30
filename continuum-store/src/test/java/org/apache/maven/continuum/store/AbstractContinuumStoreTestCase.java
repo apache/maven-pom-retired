@@ -859,25 +859,33 @@ public abstract class AbstractContinuumStoreTestCase
 
     protected static void assertScheduleEquals( Schedule expectedSchedule, Schedule actualSchedule )
     {
-        assertNotSame( expectedSchedule, actualSchedule );
-        assertEquals( "compare schedule - id", expectedSchedule.getId(), actualSchedule.getId() );
-        assertEquals( "compare schedule - name", expectedSchedule.getName(), actualSchedule.getName() );
-        assertEquals( "compare schedule - desc", expectedSchedule.getDescription(), actualSchedule.getDescription() );
-        assertEquals( "compare schedule - delay", expectedSchedule.getDelay(), actualSchedule.getDelay() );
-        assertEquals( "compare schedule - cron", expectedSchedule.getCronExpression(),
-                      actualSchedule.getCronExpression() );
-        assertEquals( "compare schedule - active", expectedSchedule.isActive(), actualSchedule.isActive() );
+        assertEquals( expectedSchedule, actualSchedule );
+        if ( expectedSchedule != null )
+        {
+            assertNotSame( expectedSchedule, actualSchedule );
+            assertEquals( "compare schedule - id", expectedSchedule.getId(), actualSchedule.getId() );
+            assertEquals( "compare schedule - name", expectedSchedule.getName(), actualSchedule.getName() );
+            assertEquals( "compare schedule - desc", expectedSchedule.getDescription(), actualSchedule.getDescription() );
+            assertEquals( "compare schedule - delay", expectedSchedule.getDelay(), actualSchedule.getDelay() );
+            assertEquals( "compare schedule - cron", expectedSchedule.getCronExpression(),
+                          actualSchedule.getCronExpression() );
+            assertEquals( "compare schedule - active", expectedSchedule.isActive(), actualSchedule.isActive() );
+        }
     }
 
     protected static void assertProfileEquals( Profile expectedProfile, Profile actualProfile )
     {
-        assertNotSame( expectedProfile, actualProfile );
-        assertEquals( "compare profile - name", expectedProfile.getName(), actualProfile.getName() );
-        assertEquals( "compare profile - desc", expectedProfile.getDescription(), actualProfile.getDescription() );
-        assertEquals( "compare profile - scmMode", expectedProfile.getScmMode(), actualProfile.getScmMode() );
-        assertEquals( "compare profile - build w/o changes", expectedProfile.isBuildWithoutChanges(),
-                      actualProfile.isBuildWithoutChanges() );
-        assertEquals( "compare profile - active", expectedProfile.isActive(), actualProfile.isActive() );
+        assertEquals( expectedProfile, actualProfile );
+        if ( expectedProfile != null )
+        {
+            assertNotSame( expectedProfile, actualProfile );
+            assertEquals( "compare profile - name", expectedProfile.getName(), actualProfile.getName() );
+            assertEquals( "compare profile - desc", expectedProfile.getDescription(), actualProfile.getDescription() );
+            assertEquals( "compare profile - scmMode", expectedProfile.getScmMode(), actualProfile.getScmMode() );
+            assertEquals( "compare profile - build w/o changes", expectedProfile.isBuildWithoutChanges(),
+                          actualProfile.isBuildWithoutChanges() );
+            assertEquals( "compare profile - active", expectedProfile.isActive(), actualProfile.isActive() );
+        }
     }
 
     protected static void assertInstallationEquals( Installation expected, Installation actual )
