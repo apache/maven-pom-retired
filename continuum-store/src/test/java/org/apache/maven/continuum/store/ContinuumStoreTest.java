@@ -353,6 +353,7 @@ public class ContinuumStoreTest
         newProfile.setDescription( "testEditProfile updated description" );
 
         Profile copy = createTestProfile( newProfile );
+        copy.setId( newProfile.getId() );
         store.updateProfile( newProfile );
 
         Profile retrievedProfile = (Profile) store.getAllProfilesByName().get( 0 );
