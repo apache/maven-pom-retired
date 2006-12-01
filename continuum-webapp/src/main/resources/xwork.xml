@@ -131,8 +131,7 @@
     </action>
 
 
-    <!-- TODO! -->
-    <action name="companyInfo" class="configuration">
+    <action name="companyInfo" class="companyInfo">
       <result name="success">/WEB-INF/jsp/components/companyLogo.jsp</result>
     </action>
 
@@ -536,6 +535,18 @@
 
     <action name="saveAppearance" class="configureAppearance">
       <result name="input">/WEB-INF/jsp/admin/editAppearance.jsp</result>
+      <result type="redirect-action">
+        <param name="actionName">configureAppearance</param>
+        <param name="namespace">/admin</param>
+      </result>
+    </action>
+
+    <action name="editCompanyPom" class="editPom" method="input">
+      <result name="input">/WEB-INF/jsp/admin/editPom.jsp</result>
+    </action>
+
+    <action name="saveCompanyPom" class="editPom">
+      <result name="input">/WEB-INF/jsp/admin/editPom.jsp</result>
       <result type="redirect-action">
         <param name="actionName">configureAppearance</param>
         <param name="namespace">/admin</param>

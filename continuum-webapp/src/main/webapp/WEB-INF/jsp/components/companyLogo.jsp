@@ -1,16 +1,16 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
-<ww:i18n name="localization.Continuum">
-  <ww:if test="companyLogo != null && companyLogo != ''">
-    <ww:if test="companyUrl != null && companyUrl != ''">
-      <a href="<ww:property value='companyUrl'/>">
-        <img src="<ww:property value='companyLogo'/>" alt="<ww:property value='companyName'/>" title="<ww:property value='companyName'/>" border="0"/>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<ww:set name="companyLogo" value="companyLogo"/>
+<c:if test="${!empty(companyLogo)}">
+  <ww:set name="companyUrl" value="companyUrl"/>
+  <c:choose>
+    <c:when test="${!empty(companyUrl)}">
+      <a href="${companyUrl}">
+        <img src="${companyLogo}" title="${companyName}" border="0" alt=""/>
       </a>
-    </ww:if>
-    <ww:else>
-        <img src="<ww:property value='companyLogo'/>" alt="<ww:property value='companyName'/>" title="<ww:property value='companyName'/>" border="0"/>
-    </ww:else>
-  </ww:if>
-  <ww:else>
-    <a href="http://maven.apache.org/continuum/"><img src="<ww:url value="/images/asf_logo_wide.gif"/>" alt="Apache Software Foundation" title="Apache Software Foundation" border="0"></a>
-  </ww:else>
-</ww:i18n>
+    </c:when>
+    <c:otherwise>
+      <img src="${companyLogo}" title="${companyName}" border="0" alt=""/>
+    </c:otherwise>
+  </c:choose>
+</c:if>

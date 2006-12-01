@@ -33,38 +33,64 @@
 </div>
 <h2>Company Details</h2>
 
-<table>
-  <ww:label name="companyPom.groupId" label="Group ID"/>
-  <ww:label name="companyPom.artifactId" label="Artifact ID"/>
-</table>
+<p>
+  The logo in the top right of the screen is controlled by your selected 'company POM'.
+</p>
 
-<div style="float: right">
-  <a href="<ww:url action='editCompanyPom' />">Edit Company POM</a>
-</div>
-<h3>POM Information</h3>
+<ww:set name="companyPom" value="companyPom"/>
 
-<ww:actionmessage/>
-<ww:set name="companyModel" value="companyModel"/>
+<c:if test="${empty(companyPom)}">
+  <p>
+    You have not yet specified a company POM. <a href="<ww:url action='editAppearance' />">Select a Company POM</a>
+  </p>
+</c:if>
 
-<c:if test="${companyModel}">
+<c:if test="${!empty(companyPom)}">
+  <p>
+    Your selected company POM is below. If you would like to change the organization name, url or logo, you can
+    <a href="<ww:url action='editCompanyPom'/>">edit the POM</a>.
+  </p>
+
+  <ww:set name="companyModel" value="companyModel"/>
   <table>
-    <tr>
-      <th>Name</th>
-      <td>${companyModel.organization.name}</td>
-    </tr>
-    <tr>
-      <th>URL</th>
-      <td><a href="${companyModel.organization.url}">
-        <code>${companyModel.organization.name}</code>
-      </a></td>
-    </tr>
-    <tr>
-      <th>Logo URL</th>
-      <td>
-        <code>${companyModel.properties['organization.logo']}</code>
-      </td>
-    </tr>
+    <ww:label name="companyPom.groupId" label="Group ID"/>
+    <ww:label name="companyPom.artifactId" label="Artifact ID"/>
+    <c:if test="${companyModel != null}">
+      <ww:label name="companyModel.version" label="Version"/>
+    </c:if>
   </table>
+
+  <div style="float: right">
+    <a href="<ww:url action='editCompanyPom' />">Edit Company POM</a>
+  </div>
+  <h3>POM Information</h3>
+
+  <c:choose>
+    <c:when test="${companyModel != null}">
+      <table>
+        <tr>
+          <th>Name</th>
+          <td>${companyModel.organization.name}</td>
+        </tr>
+        <tr>
+          <th>URL</th>
+          <td><a href="${companyModel.organization.url}">
+            <code>${companyModel.organization.url}</code>
+          </a></td>
+        </tr>
+        <tr>
+          <th>Logo URL</th>
+          <td>
+            <code>${companyModel.properties['organization.logo']}</code>
+          </td>
+        </tr>
+      </table>
+    </c:when>
+    <c:otherwise>
+      Company POM '${companyPom.groupId}:${companyPom.artifactId}' doesn't exist.
+      <a href="<ww:url action='editCompanyPom' />">Create company POM</a>
+    </c:otherwise>
+  </c:choose>
 </c:if>
 </body>
 

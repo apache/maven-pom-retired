@@ -20,7 +20,9 @@ package org.apache.maven.continuum.web.action.admin;
  */
 
 import com.opensymphony.xwork.ModelDriven;
+import org.apache.maven.artifact.installer.ArtifactInstallationException;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
+import org.apache.maven.continuum.configuration.CompanyPom;
 import org.apache.maven.continuum.configuration.Configuration;
 import org.apache.maven.continuum.configuration.ConfigurationChangeException;
 import org.apache.maven.continuum.configuration.ConfigurationStore;
@@ -41,9 +43,9 @@ import java.io.IOException;
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id: ConfigurationAction.java 480950 2006-11-30 14:58:35Z evenisse $
  * @plexus.component role="com.opensymphony.xwork.Action"
- * role-hint="configureAppearance"
+ * role-hint="editPom"
  */
-public class ConfigureAppearanceAction
+public class EditPomAction
     extends ContinuumActionSupport
     implements ModelDriven, SecureAction
 {
@@ -57,24 +59,32 @@ public class ConfigureAppearanceAction
      */
     private Configuration configuration;
 
-    private Model companyModel;
-
     /**
      * @plexus.requirement
      */
     private CompanyPomHandler companyPomHandler;
 
+    private Model companyModel;
+
     public String execute()
-        throws IOException, ConfigurationStoreException, InvalidConfigurationException, ConfigurationChangeException
+        throws IOException, ConfigurationStoreException, InvalidConfigurationException, ConfigurationChangeException,
+        ArtifactInstallationException
     {
-        configurationStore.storeConfiguration( configuration );
+        // TODO: hack for passed in String[]
+        String[] logo = (String[]) companyModel.getProperties().get( "organization.logo" );
+        if ( logo != null )
+        {
+            companyModel.getProperties().put( "organization.logo", logo[0] );
+        }
+
+        companyPomHandler.save( companyModel );
 
         return SUCCESS;
     }
 
     public Object getModel()
     {
-        return configuration;
+        return companyModel;
     }
 
     public void prepare()
@@ -82,7 +92,20 @@ public class ConfigureAppearanceAction
     {
         configuration = configurationStore.getConfigurationFromStore();
 
-        companyModel = companyPomHandler.getCompanyPomModel( configuration.getCompanyPom() );
+        CompanyPom companyPom = configuration.getCompanyPom();
+        companyModel = companyPomHandler.getCompanyPomModel( companyPom );
+
+        if ( companyModel == null )
+        {
+            companyModel = new Model();
+            companyModel.setModelVersion( "4.0.0" );
+
+            if ( companyPom != null )
+            {
+                companyModel.setGroupId( companyPom.getGroupId() );
+                companyModel.setArtifactId( companyPom.getArtifactId() );
+            }
+        }
     }
 
     public SecureActionBundle getSecureActionBundle()
