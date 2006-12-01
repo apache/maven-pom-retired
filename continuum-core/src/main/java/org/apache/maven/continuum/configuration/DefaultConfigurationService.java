@@ -16,7 +16,6 @@ package org.apache.maven.continuum.configuration;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.model.general.CompanyInformation;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
@@ -25,14 +24,11 @@ import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="org.apache.maven.continuum.configuration.ConfigurationService"
+ * @plexus.component role="org.apache.maven.continuum.configuration.ConfigurationService"
  */
 public class DefaultConfigurationService
     extends AbstractLogEnabled
@@ -53,8 +49,6 @@ public class DefaultConfigurationService
     // ----------------------------------------------------------------------
 
     private SystemConfiguration systemConf;
-
-    private CompanyInformation companyInformation;
 
     private boolean loaded = false;
 
@@ -140,51 +134,6 @@ public class DefaultConfigurationService
     {
         systemConf.setDeploymentRepositoryDirectory(
             deploymentRepositoryDirectory != null ? deploymentRepositoryDirectory.getAbsolutePath() : null );
-    }
-
-    public void setJdks( Map jdks )
-    {
-        // no-op
-    }
-
-    public String getCompanyLogo()
-    {
-        return companyInformation.getCompanyLogoUrl();
-    }
-
-    public void setCompanyLogo( String companyLogoUrl )
-    {
-        companyInformation.setCompanyLogoUrl( companyLogoUrl );
-    }
-
-    public String getCompanyName()
-    {
-        return companyInformation.getCompanyName();
-    }
-
-    public void setCompanyName( String companyName )
-    {
-        companyInformation.setCompanyName( companyName );
-    }
-
-    public String getCompanyUrl()
-    {
-        return companyInformation.getCompanyUrl();
-    }
-
-    public void setCompanyUrl( String companyUrl )
-    {
-        companyInformation.setCompanyUrl( companyUrl );
-    }
-
-    public boolean isGuestAccountEnabled()
-    {
-        return systemConf.isGuestAccountEnabled();
-    }
-
-    public void setGuestAccountEnabled( boolean enabled )
-    {
-        systemConf.setGuestAccountEnabled( enabled );
     }
 
     public String getBuildOutput( int buildId, int projectId )
@@ -288,15 +237,6 @@ public class DefaultConfigurationService
                 systemConf = store.addSystemConfiguration( systemConf );
             }
 
-            companyInformation = store.getCompanyInformation();
-
-            if ( companyInformation == null )
-            {
-                companyInformation = new CompanyInformation();
-
-                companyInformation = store.addCompanyInformation( companyInformation );
-            }
-
             loaded = true;
         }
         catch ( ContinuumStoreException e )
@@ -311,7 +251,6 @@ public class DefaultConfigurationService
         try
         {
             store.updateSystemConfiguration( systemConf );
-            store.updateCompanyInformation( companyInformation );
         }
         catch ( ContinuumStoreException e )
         {

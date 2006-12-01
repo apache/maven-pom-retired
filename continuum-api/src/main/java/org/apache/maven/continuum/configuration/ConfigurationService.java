@@ -17,7 +17,6 @@ package org.apache.maven.continuum.configuration;
  */
 
 import java.io.File;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -52,24 +51,6 @@ public interface ConfigurationService
     File getDeploymentRepositoryDirectory();
 
     void setDeploymentRepositoryDirectory( File deploymentRepositoryDirectory );
-
-    void setJdks( Map jdks );
-
-    String getCompanyLogo();
-
-    void setCompanyLogo( String companyLogoUrl );
-
-    String getCompanyName();
-
-    void setCompanyName( String companyName );
-
-    String getCompanyUrl();
-
-    void setCompanyUrl( String companyUrl );
-
-    boolean isGuestAccountEnabled();
-
-    void setGuestAccountEnabled( boolean enabled );
 
     String getBuildOutput( int buildId, int projectId )
         throws ConfigurationException;

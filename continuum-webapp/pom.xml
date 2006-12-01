@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
@@ -50,17 +50,28 @@
               <includes>
                 <!-- TODO: META-INF shouldn't be required, seems to be an issue with the current war plugin -->
                 <include>META-INF</include>
-                <include>WEB-INF/classes</include>      <!-- Classes and Resources from other wars -->
-                <include>WEB-INF/lib</include>          <!-- Dependencies from other wars -->
-                <include>WEB-INF/database</include>     <!-- Database location configured in application.xml -->
-                <include>WEB-INF/logs</include>         <!-- Log file location specified in application.xml -->
-                <include>pss</include>                  <!-- plexus-security css and javascript -->
-                <include>WEB-INF/jsp/pss</include>      <!-- plexus-security jsps -->
-                <include>WEB-INF/template/pss</include> <!-- plexus-security xwork templates -->
-                <include>WEB-INF/build-output-directory</include> <!-- Directory created by jetty:run -->
-                <include>WEB-INF/working-directory</include>      <!-- Directory created by jetty:run -->
-                <include>WEB-INF/logs</include>         <!-- Directory created by jetty:run -->
-                <include>WEB-INF/temp</include>         <!-- Directory created by jetty:run -->
+                <include>WEB-INF/classes</include>
+                <!-- Classes and Resources from other wars -->
+                <include>WEB-INF/lib</include>
+                <!-- Dependencies from other wars -->
+                <include>WEB-INF/database</include>
+                <!-- Database location configured in application.xml -->
+                <include>WEB-INF/logs</include>
+                <!-- Log file location specified in application.xml -->
+                <include>pss</include>
+                <!-- plexus-security css and javascript -->
+                <include>WEB-INF/jsp/pss</include>
+                <!-- plexus-security jsps -->
+                <include>WEB-INF/template/pss</include>
+                <!-- plexus-security xwork templates -->
+                <include>WEB-INF/build-output-directory</include>
+                <!-- Directory created by jetty:run -->
+                <include>WEB-INF/working-directory</include>
+                <!-- Directory created by jetty:run -->
+                <include>WEB-INF/logs</include>
+                <!-- Directory created by jetty:run -->
+                <include>WEB-INF/temp</include>
+                <!-- Directory created by jetty:run -->
               </includes>
             </fileset>
           </filesets>
@@ -74,7 +85,8 @@
           <!-- Some versions of maven-war-plugin (snapshots) have this incorrectly defaulted to true.
                Specifically setting this to false to avoid accidental jar file creation. -->
           <archiveClasses>false</archiveClasses>
-          <dependentWarExcludes>META-INF/**,WEB-INF/web.xml,WEB-INF/classes/xwork.xml,WEB-INF/lib/**</dependentWarExcludes>
+          <dependentWarExcludes>META-INF/**,WEB-INF/web.xml,WEB-INF/classes/xwork.xml,WEB-INF/lib/**
+          </dependentWarExcludes>
         </configuration>
         <!-- TODO: would be good to make the jetty plugin aware of these and remove the below -->
         <executions>
@@ -186,6 +198,10 @@
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-configuration</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-core</artifactId>
@@ -367,7 +383,7 @@
       <groupId>org.codehaus.plexus.security</groupId>
       <artifactId>plexus-security-keys-jdo</artifactId>
     </dependency>
-     <dependency>
+    <dependency>
       <groupId>org.codehaus.plexus.security</groupId>
       <artifactId>plexus-security-authentication-provider-keystore</artifactId>
     </dependency>

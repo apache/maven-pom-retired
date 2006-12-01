@@ -3,8 +3,8 @@
 <xwork>
   <include file="webwork-default.xml"/>
 
-  <!-- Include plexus-security xwork configurations. -->  
-  <include file="xwork-security.xml" />
+  <!-- Include plexus-security xwork configurations. -->
+  <include file="xwork-security.xml"/>
 
 
   <package name="default" extends="webwork-default">
@@ -16,7 +16,7 @@
       <interceptor name="pssSecureActions" class="pssSecureActionInterceptor"/>
       <interceptor name="pssAutoLogin" class="pssAutoLoginInterceptor"/>
       <interceptor name="pssEnvironmentChecker" class="pssEnvironmentCheckInterceptor"/>
-      
+
       <interceptor-stack name="configuredContinuumStack">
         <interceptor-ref name="defaultStack"/>
         <interceptor-ref name="exception-logging"/>
@@ -56,14 +56,14 @@
       <result name="error">/WEB-INF/jsp/error.jsp</result>
       <result name="internal-error">/WEB-INF/jsp/error.jsp</result>
       <result name="internalError" type="redirect">/WEB-INF/jsp/error.jsp</result>
-      
+
       <result name="continuum-configuration-required" type="redirect-action">
         <param name="actionName">configuration</param>
         <param name="namespace">/admin</param>
         <param name="method">input</param>
       </result>
 
-       <!-- The following security-* result names arrive from the plexus-security package -->
+      <!-- The following security-* result names arrive from the plexus-security package -->
       <result name="security-login-success" type="redirect-action">
         <param name="actionName">groupSummary</param>
         <param name="namespace">/</param>
@@ -75,7 +75,7 @@
       <result name="security-login-locked" type="redirect-action">
         <param name="actionName">groupSummary</param>
         <param name="namespace">/</param>
-        <param name="infoMessage">Account Locked</param> 
+        <param name="infoMessage">Account Locked</param>
       </result>
       <result name="security-logout" type="redirect-action">
         <param name="actionName">groupSummary</param>
@@ -112,8 +112,11 @@
     </global-results>
 
     <global-exception-mappings>
-      <exception-mapping exception="org.apache.maven.continuum.initialization.ContinuumInitializationException" result="continuumInitialization"/>
-      <exception-mapping exception="java.lang.Exception" result="error-internal"/>
+      <exception-mapping exception="org.apache.maven.continuum.initialization.ContinuumInitializationException"
+                         result="continuumInitialization"/>
+      <!-- TODO: this is missing
+            <exception-mapping exception="java.lang.Exception" result="error-internal"/>
+      -->
     </global-exception-mappings>
 
     <!-- This is the redirection facility for plexus-security,
@@ -128,7 +131,7 @@
     </action>
 
 
-   
+    <!-- TODO! -->
     <action name="companyInfo" class="configuration">
       <result name="success">/WEB-INF/jsp/components/companyLogo.jsp</result>
     </action>
@@ -246,16 +249,16 @@
         <param name="actionName">groupSummary</param>
       </result>
     </action>
-    
+
     <action name="addProjectGroup" class="addProjectGroup">
       <result name="input">/WEB-INF/jsp/projectGroupAdd.jsp</result>
       <result name="success" type="chain">groupSummary</result>
     </action>
-    
+
     <action name="editProjectGroup" class="projectGroup" method="edit">
-        <result name="success">/WEB-INF/jsp/projectGroupEdit.jsp</result>
+      <result name="success">/WEB-INF/jsp/projectGroupEdit.jsp</result>
     </action>
-    
+
     <action name="saveProjectGroup" class="projectGroup" method="save">
       <result name="success" type="chain">projectGroupSummary</result>
       <result name="input">/WEB-INF/jsp/projectGroupEdit.jsp</result>
@@ -276,14 +279,14 @@
       <result name="msn_input">/WEB-INF/jsp/notifierMsn.jsp</result>
       <result name="jabber_input">/WEB-INF/jsp/notifierJabber.jsp</result>
     </action>
-        
-    <action name="editProjectNotifier" class="addProjectNotifier"> 
+
+    <action name="editProjectNotifier" class="addProjectNotifier">
       <result name="mail_input" type="chain">mailProjectNotifierEdit</result>
       <result name="irc_input" type="chain">ircProjectNotifierEdit</result>
       <result name="msn_input" type="chain">msnProjectNotifierEdit</result>
       <result name="jabber_input" type="chain">jabberProjectNotifierEdit</result>
     </action>
-    
+
     <action name="mailProjectNotifierEdit" class="mailProjectNotifierEdit" method="edit">
       <result name="success">/WEB-INF/jsp/notifierMail.jsp</result>
     </action>
@@ -323,7 +326,7 @@
     <!--
     * notifier actions :: Project Group
     -->
-    
+
     <action name="deleteProjectGroupNotifier" class="deleteGroupNotifier">
       <result name="delete">/WEB-INF/jsp/deleteNotifier.jsp</result>
       <result name="success" type="chain">projectGroupNotifier</result>
@@ -336,21 +339,21 @@
       <result name="msn_input">/WEB-INF/jsp/notifierMsn.jsp</result>
       <result name="jabber_input">/WEB-INF/jsp/notifierJabber.jsp</result>
     </action>
-        
+
     <action name="editProjectGroupNotifier" class="addGroupNotifier">
       <result name="mail_input" type="chain">mailProjectGroupNotifierEdit</result>
       <result name="irc_input" type="chain">ircProjectGroupNotifierEdit</result>
       <result name="msn_input" type="chain">msnProjectGroupNotifierEdit</result>
       <result name="jabber_input" type="chain">jabberProjectGroupNotifierEdit</result>
     </action>
-    
+
     <action name="mailProjectGroupNotifierEdit" class="mailGroupNotifierEdit" method="edit">
       <result name="success">/WEB-INF/jsp/notifierMail.jsp</result>
     </action>
 
     <action name="mailProjectGroupNotifierSave" class="mailGroupNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifierMail.jsp</result>
-      <result name="success" type="chain">projectGroupNotifier</result>   
+      <result name="success" type="chain">projectGroupNotifier</result>
     </action>
 
     <action name="ircProjectGroupNotifierEdit" class="ircGroupNotifierEdit" method="edit">
@@ -523,6 +526,21 @@
       <result name="success">/WEB-INF/jsp/admin/configuration.jsp</result>
     </action>
 
+    <action name="configureAppearance" class="configureAppearance" method="input">
+      <result name="input">/WEB-INF/jsp/admin/appearance.jsp</result>
+    </action>
+
+    <action name="editAppearance" class="configureAppearance" method="input">
+      <result name="input">/WEB-INF/jsp/admin/editAppearance.jsp</result>
+    </action>
+
+    <action name="saveAppearance" class="configureAppearance">
+      <result name="input">/WEB-INF/jsp/admin/editAppearance.jsp</result>
+      <result type="redirect-action">
+        <param name="actionName">configureAppearance</param>
+        <param name="namespace">/admin</param>
+      </result>
+    </action>
   </package>
 
   <package name="component" extends="default">
@@ -548,16 +566,16 @@
       <result name="success">/WEB-INF/jsp/components/projectSummaryComponent.jsp</result>
       <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
     </action>
-    
+
     <action name="projectNotifierSummary" class="notifierSummary" method="summarizeForProject">
-       <result name="success">/WEB-INF/jsp/components/projectNotifierSummaryComponent.jsp</result>
-       <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
+      <result name="success">/WEB-INF/jsp/components/projectNotifierSummaryComponent.jsp</result>
+      <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
     </action>
-    
+
     <action name="projectGroupNotifierSummary" class="notifierSummary" method="summarizeForProjectGroup">
-       <result name="success">/WEB-INF/jsp/components/projectGroupNotifierSummaryComponent.jsp</result>
-       <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>    
+      <result name="success">/WEB-INF/jsp/components/projectGroupNotifierSummaryComponent.jsp</result>
+      <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
     </action>
-    
+
   </package>
 </xwork>

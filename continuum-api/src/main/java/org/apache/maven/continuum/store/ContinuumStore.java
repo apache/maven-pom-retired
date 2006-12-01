@@ -16,7 +16,6 @@ package org.apache.maven.continuum.store;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.model.general.CompanyInformation;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Profile;
@@ -108,7 +107,7 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     Collection getAllProjectGroupsWithProjects();
-    
+
     Collection getAllProjectGroups();
 
     List getAllProjectsByName();
@@ -188,7 +187,7 @@ public interface ContinuumStore
 
     List getProjectsInGroup( int projectGroupId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException;
-    
+
     ProjectGroup getProjectGroupWithProjects( int projectGroupId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
@@ -241,14 +240,6 @@ public interface ContinuumStore
         throws ContinuumStoreException;
 
     SystemConfiguration getSystemConfiguration()
-        throws ContinuumStoreException;
-
-    CompanyInformation addCompanyInformation( CompanyInformation companyInfo );
-
-    void updateCompanyInformation( CompanyInformation companyInfo )
-        throws ContinuumStoreException;
-
-    CompanyInformation getCompanyInformation()
         throws ContinuumStoreException;
 
     void closeStore();

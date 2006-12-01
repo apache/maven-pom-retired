@@ -16,7 +16,6 @@ package org.apache.maven.continuum.store;
  * limitations under the License.
  */
 
-import org.apache.maven.continuum.model.general.CompanyInformation;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Profile;
@@ -26,14 +25,14 @@ import org.apache.maven.continuum.model.project.ProjectDeveloper;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.Schedule;
+import org.apache.maven.continuum.model.scm.ChangeFile;
+import org.apache.maven.continuum.model.scm.ChangeSet;
+import org.apache.maven.continuum.model.scm.ScmResult;
+import org.apache.maven.continuum.model.scm.SuiteResult;
+import org.apache.maven.continuum.model.scm.TestCaseFailure;
+import org.apache.maven.continuum.model.scm.TestResult;
 import org.apache.maven.continuum.model.system.Installation;
 import org.apache.maven.continuum.model.system.SystemConfiguration;
-import org.apache.maven.continuum.model.scm.TestCaseFailure;
-import org.apache.maven.continuum.model.scm.ChangeSet;
-import org.apache.maven.continuum.model.scm.ChangeFile;
-import org.apache.maven.continuum.model.scm.SuiteResult;
-import org.apache.maven.continuum.model.scm.ScmResult;
-import org.apache.maven.continuum.model.scm.TestResult;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.jdo.PlexusJdoUtils;
@@ -1351,37 +1350,6 @@ public class JdoContinuumStore
             return (SystemConfiguration) systemConfs.get( 0 );
         }
     }
-
-    public CompanyInformation addCompanyInformation( CompanyInformation companyInfo )
-    {
-        return (CompanyInformation) addObject( getPersistenceManager( usersPmf ), companyInfo );
-    }
-
-    public void updateCompanyInformation( CompanyInformation companyInfo )
-        throws ContinuumStoreException
-    {
-        updateObject( getPersistenceManager( usersPmf ), companyInfo );
-    }
-
-    public CompanyInformation getCompanyInformation()
-        throws ContinuumStoreException
-    {
-        List companyInfos = getAllObjectsDetached( getPersistenceManager( usersPmf ), CompanyInformation.class );
-
-        if ( companyInfos == null || companyInfos.isEmpty() )
-        {
-            return null;
-        }
-        else if ( companyInfos.size() > 1 )
-        {
-            throw new ContinuumStoreException(
-                "Database is corrupted. There are more than one companyInformation object." );
-        }
-        else
-        {
-            return (CompanyInformation) companyInfos.get( 0 );
-        }
-    }  
 
     private PersistenceManager getPersistenceManager()
     {

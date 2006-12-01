@@ -57,43 +57,22 @@ public class ConfigurationAction
 
     private String baseUrl;
 
-    private String companyLogo;
-
-    private String companyName;
-
-    private String companyUrl;
-
-
     public void prepare()
     {
-        try
+        ConfigurationService configuration = getContinuum().getConfiguration();
+
+        workingDirectory = configuration.getWorkingDirectory().getAbsolutePath();
+
+        buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
+
+        baseUrl = configuration.getUrl();
+
+        if ( StringUtils.isEmpty( baseUrl ) )
         {
-
-            ConfigurationService configuration = getContinuum().getConfiguration();
-
-            workingDirectory = configuration.getWorkingDirectory().getAbsolutePath();
-
-            buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
-
-            baseUrl = configuration.getUrl();
-
-            if ( StringUtils.isEmpty( baseUrl ) )
-            {
-                HttpServletRequest request = ServletActionContext.getRequest();
-                baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() +
-                    request.getContextPath();
-                getLogger().info( "baseUrl='" + baseUrl + "'" );
-            }
-
-            companyLogo = configuration.getCompanyLogo();
-
-            companyName = configuration.getCompanyName();
-
-            companyUrl = configuration.getCompanyUrl();
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
+            HttpServletRequest request = ServletActionContext.getRequest();
+            baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() +
+                request.getContextPath();
+            getLogger().info( "baseUrl='" + baseUrl + "'" );
         }
     }
 
@@ -112,12 +91,6 @@ public class ConfigurationAction
             configuration.setDeploymentRepositoryDirectory( new File( deploymentRepositoryDirectory ) );
 
             configuration.setUrl( baseUrl );
-
-            configuration.setCompanyLogo( companyLogo );
-
-            configuration.setCompanyName( companyName );
-
-            configuration.setCompanyUrl( companyUrl );
 
             configuration.setInitialized( true );
             configuration.store();
@@ -169,37 +142,6 @@ public class ConfigurationAction
     {
         this.baseUrl = baseUrl;
     }
-
-    public String getCompanyLogo()
-    {
-        return companyLogo;
-    }
-
-    public void setCompanyLogo( String companyLogo )
-    {
-        this.companyLogo = companyLogo;
-    }
-
-    public String getCompanyName()
-    {
-        return companyName;
-    }
-
-    public void setCompanyName( String companyName )
-    {
-        this.companyName = companyName;
-    }
-
-    public String getCompanyUrl()
-    {
-        return companyUrl;
-    }
-
-    public void setCompanyUrl( String companyUrl )
-    {
-        this.companyUrl = companyUrl;
-    }
-
 
     public SecureActionBundle getSecureActionBundle()
         throws SecureActionException
