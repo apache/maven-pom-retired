@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+  ~ Copyright 2005-2006 The Apache Software Foundation.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<project name="Continuum">
+  <bannerLeft>
+    <src>images/continuum_logo_75.gif</src>
+  </bannerLeft>
+  <bannerRight>
+    <src>http://www.apache.org/images/asf_logo_wide.gif</src>
+  </bannerRight>
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-application-skin</artifactId>
+  </skin>
+  <publishDate position="none"/>
+  <body>
+    <breadcrumbs>
+      <item name="Login/Register" href="/admin/login.html"/>
+    </breadcrumbs>
+    <links>
+      <item name="Continuum" href="http://maven.apache.org/continuum/"/>
+      <item name="Maven" href="http://maven.apache.org/"/>
+      <item name="Apache" href="http://www.apache.org/"/>
+    </links>
+    <menu name="Projects">
+      <item name="Project Group Summary" href="/index.html"/>
+      <!-- TODO: this should just be 'add project', and have a simple first page that can figure out what to do -->
+      <item name="Add Maven 2.x Project" href="/add-maven-2.html" />
+      <item name="Add Maven 1.x Project" href="/add-maven-1.html" />
+      <item name="Add Ant Project" href="/add-ant.html" />
+      <item name="Add Other Project" href="/add-other.html" />
+    </menu>
+    <menu name="Administration">
+      <item name="Settings" href="/admin/settings.html" />
+      <item name="Appearance" href="/admin/appearance.html" />
+      <item name="Schedules" href="/admin/schedules.html"/>
+      <item name="Users" href="" /> <!-- TODO: link in to p-sec white site -->
+    </menu>
+    <menu name="Legend">
+      <!-- Legend goes here -->
+    </menu>
+  </body>
+</project>
