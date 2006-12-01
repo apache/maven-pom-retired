@@ -22,7 +22,13 @@
   <body>
     <h1>Appearance</h1>
 
-    <h2>Company Details</h2>
+    <div>
+      <div style="float: right">
+        <a href="edit-appearance.html">Edit</a>
+      </div>
+      <h2>Company Details</h2>
+    </div>
+
 
     <p>
       Enter the details of the company super POM below. If it exists, the organization name, URL and logo will be read
@@ -32,15 +38,11 @@
     <table>
       <tr>
         <th>Group ID</th>
-        <td><input type="text" /></td>
+        <td>org.apache</td>
       </tr>
       <tr>
         <th>Artifact ID</th>
-        <td><input type="text" /></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td><input type="submit" value="Save" /></td>
+        <td>apache</td>
       </tr>
     </table>
     <div style="float: right"><p><a href="edit-company-pom.html">Edit Company POM</a></p></div>
