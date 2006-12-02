@@ -22,16 +22,18 @@ package org.apache.maven.continuum.web.action.admin;
 import com.opensymphony.xwork.ModelDriven;
 import org.apache.maven.artifact.installer.ArtifactInstallationException;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
-import org.apache.maven.continuum.configuration.CompanyPom;
-import org.apache.maven.continuum.configuration.Configuration;
-import org.apache.maven.continuum.configuration.ConfigurationChangeException;
-import org.apache.maven.continuum.configuration.ConfigurationStore;
-import org.apache.maven.continuum.configuration.ConfigurationStoreException;
-import org.apache.maven.continuum.configuration.InvalidConfigurationException;
 import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
+import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.ProjectBuildingException;
+import org.apache.maven.shared.app.configuration.InvalidConfigurationException;
+import org.apache.maven.shared.app.configuration.Configuration;
+import org.apache.maven.shared.app.configuration.ConfigurationStoreException;
+import org.apache.maven.shared.app.configuration.ConfigurationChangeException;
+import org.apache.maven.shared.app.configuration.ConfigurationStore;
+import org.apache.maven.shared.app.configuration.CompanyPom;
+import org.apache.maven.shared.app.company.CompanyPomHandler;
 import org.codehaus.plexus.security.rbac.Resource;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
@@ -66,6 +68,9 @@ public class EditPomAction
 
     private Model companyModel;
 
+    /** @plexus.requirement */
+    private MavenBuilderHelper helper;
+
     public String execute()
         throws IOException, ConfigurationStoreException, InvalidConfigurationException, ConfigurationChangeException,
         ArtifactInstallationException
@@ -77,7 +82,7 @@ public class EditPomAction
             companyModel.getProperties().put( "organization.logo", logo[0] );
         }
 
-        companyPomHandler.save( companyModel );
+        companyPomHandler.save( companyModel, helper.getLocalRepository() );
 
         return SUCCESS;
     }
@@ -93,7 +98,7 @@ public class EditPomAction
         configuration = configurationStore.getConfigurationFromStore();
 
         CompanyPom companyPom = configuration.getCompanyPom();
-        companyModel = companyPomHandler.getCompanyPomModel( companyPom );
+        companyModel = companyPomHandler.getCompanyPomModel( companyPom, helper.getLocalRepository() );
 
         if ( companyModel == null )
         {

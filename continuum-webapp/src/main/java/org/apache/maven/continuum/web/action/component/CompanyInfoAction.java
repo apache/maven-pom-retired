@@ -1,10 +1,5 @@
 package org.apache.maven.continuum.web.action.component;
 
-import com.opensymphony.xwork.ActionSupport;
-import org.apache.maven.continuum.configuration.ConfigurationStore;
-import org.apache.maven.continuum.web.action.admin.CompanyPomHandler;
-import org.apache.maven.model.Model;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,6 +18,12 @@ import org.apache.maven.model.Model;
  * specific language governing permissions and limitations
  * under the License.
  */
+
+import com.opensymphony.xwork.ActionSupport;
+import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
+import org.apache.maven.model.Model;
+import org.apache.maven.shared.app.company.CompanyPomHandler;
+import org.apache.maven.shared.app.configuration.ConfigurationStore;
 
 /**
  * Stores the company information for displaying on the page.
@@ -48,10 +49,16 @@ public class CompanyInfoAction
      */
     private ConfigurationStore configurationStore;
 
+    /**
+     * @plexus.requirement
+     */
+    private MavenBuilderHelper helper;
+
     public String execute()
         throws Exception
     {
-        Model model = handler.getCompanyPomModel( configurationStore.getConfigurationFromStore().getCompanyPom() );
+        Model model = handler.getCompanyPomModel( configurationStore.getConfigurationFromStore().getCompanyPom(),
+                                                  helper.getLocalRepository() );
 
         if ( model != null )
         {

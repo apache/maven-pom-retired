@@ -34,30 +34,7 @@
       <name>Configuration</name>
       <version>1.1.0+</version>
       <fields>
-        <field>
-          <name>companyPom</name>
-          <version>1.1.0+</version>
-          <description>The identifier of the company super POM.</description>
-          <association>
-            <type>CompanyPom</type>
-          </association>
-        </field>
-      </fields>
-    </class>
-    <class>
-      <name>CompanyPom</name>
-      <version>1.1.0+</version>
-      <fields>
-        <field>
-          <name>groupId</name>
-          <type>String</type>
-          <version>1.1.0+</version>
-        </field>
-        <field>
-          <name>artifactId</name>
-          <type>String</type>
-          <version>1.1.0+</version>
-        </field>
+        <!-- Reserved for future configuration -->
       </fields>
     </class>
   </classes>
