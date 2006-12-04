@@ -50,7 +50,6 @@
           </tr>
         </table>
       </div>
-      <a href="<ww:url  action='addProjectGroup' method='input' namespace='/' />">Add a Project Group</a>
     </pss:ifAuthorized>
     </div>        
   </body>
