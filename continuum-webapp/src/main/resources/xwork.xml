@@ -135,10 +135,6 @@
       <result name="success">/WEB-INF/jsp/components/companyLogo.jsp</result>
     </action>
 
-    <action name="summary" class="summary">
-      <result name="success">/WEB-INF/jsp/summary.jsp</result>
-    </action>
-
     <action name="groupSummary" class="groupSummary">
       <result name="success">/WEB-INF/jsp/groupSummary.jsp</result>
     </action>
