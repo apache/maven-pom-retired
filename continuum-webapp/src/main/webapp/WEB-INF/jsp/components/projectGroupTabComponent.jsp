@@ -3,6 +3,8 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
 <%@ taglib uri="continuum" prefix="c1" %>
 
+<ww:i18n name="localization.Continuum">
+
   <div id="h3">
     <div>
       <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
@@ -22,72 +24,40 @@
         <ww:set name="tabName" value="tabName"/>
         <c:choose>
             <c:when test="${tabName != 'Summary'}">
-                <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupSummaryUrl}">
+                <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupSummaryUrl}"><ww:text name="projectGroup.tab.summary"/></a>
             </c:when>
             <c:otherwise>
-                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">            
+                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="projectGroup.tab.summary"/></b>
             </c:otherwise>
         </c:choose>
-        Project Group Summary
-        <c:choose>
-            <c:when test="${tabName != 'Summary'}">
-                </a>
-            </c:when>
-            <c:otherwise>
-                </b>
-            </c:otherwise>
-        </c:choose>
+
         <c:choose>
             <c:when test="${tabName != 'Members'}">
-                <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupMembersUrl}">
+                <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupMembersUrl}"><ww:text name="projectGroup.tab.members"/></a>
             </c:when>
             <c:otherwise>
-                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">
+                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="projectGroup.tab.members"/></b>
             </c:otherwise>
         </c:choose>
-        Members
-        <c:choose>
-            <c:when test="${tabName != 'Members'}">
-                </a>
-            </c:when>
-            <c:otherwise>
-                </b>
-            </c:otherwise>
-        </c:choose>
+
         <c:choose>
             <c:when test="${tabName != 'BuildDefinitions'}">
-                <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupBuildDefinitionUrl}">
+                <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupBuildDefinitionUrl}"><ww:text name="projectGroup.tab.buildDefinitions"/></a>
             </c:when>
             <c:otherwise>
-                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">
+                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="projectGroup.tab.buildDefinitions"/></b>
             </c:otherwise>
         </c:choose>
-        Build Definitions
-        <c:choose>
-            <c:when test="${tabName != 'BuildDefinitions'}">
-                </a>
-            </c:when>
-            <c:otherwise>
-                </b>
-            </c:otherwise>
-        </c:choose>
+
         <c:choose>
             <c:when test="${tabName != 'Notifier'}">
-                <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupNotifierUrl}">
+                <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupNotifierUrl}"><ww:text name="projectGroup.tab.notifiers"/></a>
             </c:when>
             <c:otherwise>
-                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;">
-            </c:otherwise>
-        </c:choose>
-        Notifiers
-        <c:choose>
-            <c:when test="${tabName != 'Notifier'}">
-                </a>
-            </c:when>
-            <c:otherwise>
-                </b>
+                <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="projectGroup.tab.notifiers"/></b>
             </c:otherwise>
         </c:choose>
       </p>
     </div>
   </div>
+</ww:i18n>

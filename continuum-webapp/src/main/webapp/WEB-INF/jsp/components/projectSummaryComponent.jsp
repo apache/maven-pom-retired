@@ -7,7 +7,7 @@
 <ww:i18n name="localization.Continuum">
 <ww:if test="${not empty projects}">
 
-  <h3>Projects</h3>
+  <h3><ww:text name="projectGroup.projects.title"/></h3>
 
   <ec:table items="projects"
             var="project"

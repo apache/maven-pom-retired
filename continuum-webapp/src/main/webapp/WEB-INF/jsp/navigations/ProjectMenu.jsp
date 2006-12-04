@@ -24,7 +24,7 @@
         <ww:param name="projectGroupId" value="projectGroupId"/>
     </ww:url>
 
-    <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupSummaryUrl}">Project Group Summary</a>
+    <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupSummaryUrl}"><ww:text name="projectGroup.tab.summary"/></a>
     <c:choose>
       <c:when test="${param.tab == 'view'}">
         <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="info"/></b>
