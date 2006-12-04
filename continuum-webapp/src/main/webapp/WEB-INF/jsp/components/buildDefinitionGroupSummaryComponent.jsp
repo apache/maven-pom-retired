@@ -19,7 +19,7 @@
       <ec:column property="goals" title="projectView.buildDefinition.goals"/>
       <ec:column property="arguments" title="projectView.buildDefinition.arguments"/>
       <ec:column property="buildFile" title="projectView.buildDefinition.buildFile"/>
-      <ec:column property="profile" title="projectView.buildDefinition.profile"/>
+      <!-- ec:column property="profile" title="projectView.buildDefinition.profile"/ -->
       <ec:column property="scheduleName" title="schedule"/>
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
@@ -59,14 +59,14 @@
     </ec:row>
   </ec:table>
   </ww:if>
-  <div class="functnbar3">
-    <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
-    <ww:form action="buildDefinition" method="post">
-      <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
-      <ww:submit value="%{getText('add')}"/>
-    </ww:form>
-    </pss:ifAuthorized>
-  </div>
+  <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
+    <div class="functnbar3">
+      <ww:form action="buildDefinition" method="post">
+        <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
+        <ww:submit value="%{getText('add')}"/>
+      </ww:form>
+    </div>
+  </pss:ifAuthorized>
 
   <ww:if test="${not empty projectBuildDefinitionSummaries}">
   <h3>Project Build Definitions</h3>
@@ -83,7 +83,7 @@
       <ec:column property="goals" title="projectView.buildDefinition.goals"/>
       <ec:column property="arguments" title="projectView.buildDefinition.arguments"/>
       <ec:column property="buildFile" title="projectView.buildDefinition.buildFile"/>
-      <ec:column property="profile" title="projectView.buildDefinition.profile"/>
+      <!-- ec:column property="profile" title="projectView.buildDefinition.profile"/ -->
       <ec:column property="scheduleName" title="schedule"/>
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
