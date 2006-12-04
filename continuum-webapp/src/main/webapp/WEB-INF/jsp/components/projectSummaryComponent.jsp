@@ -33,7 +33,24 @@
                  cell="org.apache.maven.continuum.web.view.BuildCell"/>
       <ec:column property="projectGroupName" title="summary.projectTable.group" width="13%"/> 
       <ec:column property="buildNowAction" title="&nbsp;" width="1%">
-        <jsp:include page="/WEB-INF/jsp/components/buildNowCell.jsp"/>
+        <pss:ifAuthorized permission="continuum-build-group" resource="${projectGroupName}">
+          <c:choose>
+            <c:when test="${!project.inQueue and ( project.state gt 0 ) and ( project.state lt 5 )}">
+              <ww:url id="buildProjectUrl" action="buildProject" namespace="/">
+                <ww:param name="projectId" value="${project.id}"/>
+              </ww:url>
+              <ww:a href="%{buildProjectUrl}">
+                <img src="<ww:url value='/images/buildnow.gif'/>" alt="Build Now" title="Build Now" border="0">
+              </ww:a>
+            </c:when>
+            <c:otherwise>
+              <img src="<ww:url value='/images/buildnow_disabled.gif'/>" alt="Build Now" title="Build Now" border="0">
+            </c:otherwise>
+          </c:choose>
+        </pss:ifAuthorized>
+        <pss:elseAuthorized>
+          <img src="<ww:url value='/images/buildnow_disabled.gif'/>" alt="Build Now" title="Build Now" border="0">
+        </pss:elseAuthorized>
       </ec:column>
       <ec:column property="buildHistoryAction" title="&nbsp;" width="1%">
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
