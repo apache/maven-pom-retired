@@ -38,9 +38,9 @@
         <ec:column property="numSuccesses" title="Build&nbsp;Status" width="1%" style="white-space: nowrap" cell="org.apache.maven.continuum.web.view.BuildStatusCell"/>
       </ec:row>
     </ec:table>
-    <pss:ifAnyAuthorized permissions="continuum-add-group">
+    <pss:ifAuthorized permission="continuum-add-group">
       <a href="<ww:url  action='addProjectGroup' method='input' namespace='/' />">Add a Project Group</a>
-    </pss:ifAnyAuthorized>
+    </pss:ifAuthorized>
     </div>        
   </body>
 </ww:i18n>
