@@ -335,9 +335,9 @@ public abstract class AbstractContinuumTestCase
 
     public void assertAddProjectGroupPage()
     {
-        assertPage( "Continuum - Add Continuum Project Group" );
+        assertPage( "Continuum - Add Project Group" );
 
-        assertTextPresent( "Add Continuum Project Group" );
+        assertTextPresent( "Add Project Group" );
         assertTextPresent( "Project Group Name" );
         assertElementPresent( "name" );
         assertTextPresent( "Project Group Id" );

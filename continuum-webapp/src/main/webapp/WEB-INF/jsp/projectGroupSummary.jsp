@@ -66,14 +66,30 @@
       <ww:param name="projectGroupName" value="%{projectGroup.name}"/>
     </ww:action>
     
-    <div class="functnbar3">
-      <pss:ifAnyAuthorized permissions="continuum-add-project-to-group" resource="${projectGroup.name}">
-          <c:url var="addM2ProjectUrl" value="/addMavenTwoProject!default.action">
-            <c:param name="disableGroupSelection" value="true"/>
-          </c:url>
-          <a href="<c:out value='${addM2ProjectUrl}'/>"><ww:text name="add.m2.project.section.title"/></a>
-      </pss:ifAnyAuthorized>
-    </div>
+    <pss:ifAnyAuthorized permissions="continuum-add-project-to-group" resource="${projectGroup.name}">
+      <div class="functnbar3">
+        <c:url var="addM2ProjectUrl" value="/addMavenTwoProject!default.action">
+          <c:param name="disableGroupSelection" value="true"/>
+        </c:url>
+        <c:url var="addM1ProjectUrl" value="/addMavenOneProject!default.action">
+          <c:param name="disableGroupSelection" value="true"/>
+        </c:url>
+        <table>
+          <tr>
+            <td>
+              <form action="${addM2ProjectUrl}" method="post">
+                <input type="submit" name="addM2Project" value="<ww:text name="add.m2.project.section.title"/>"/>
+              </form>
+            </td>
+            <td>
+              <form action="${addM1ProjectUrl}" method="post">
+                <input type="submit" name="addM1Project" value="<ww:text name="add.m1.project.section.title"/>"/>
+              </form>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </pss:ifAnyAuthorized>
 
   </div>
   </body>

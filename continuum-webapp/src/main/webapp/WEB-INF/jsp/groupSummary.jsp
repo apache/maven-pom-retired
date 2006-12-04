@@ -39,6 +39,17 @@
       </ec:row>
     </ec:table>
     <pss:ifAuthorized permission="continuum-add-group">
+      <div class="functnbar3">
+        <table>
+          <tr>
+            <td>
+              <form action="<ww:url  action='addProjectGroup' method='input' namespace='/' />" method="post">
+                <input type="submit" name="addProjectGroup" value="<ww:text name="projectGroup.add.section.title"/>"/>
+              </form>
+            </td>
+          </tr>
+        </table>
+      </div>
       <a href="<ww:url  action='addProjectGroup' method='input' namespace='/' />">Add a Project Group</a>
     </pss:ifAuthorized>
     </div>        
