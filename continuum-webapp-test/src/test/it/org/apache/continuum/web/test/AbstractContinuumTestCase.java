@@ -77,21 +77,6 @@ public abstract class AbstractContinuumTestCase
             assertEditConfigurationPage();
             submitConfigurationPage( baseUrl, null, null, null );
 
-            try
-            {
-                addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, DEFAULT_PROJ_GRP_NAME );
-                removeProjectGroup( DEFAULT_PROJ_GRP_NAME, DEFAULT_PROJ_GRP_ID, DEFAULT_PROJ_GRP_DESCRIPTION );
-                addProjectGroup( DEFAULT_PROJ_GRP_NAME, DEFAULT_PROJ_GRP_ID, DEFAULT_PROJ_GRP_DESCRIPTION );
-
-                addProjectGroup( TEST_PROJ_GRP_NAME, TEST_PROJ_GRP_ID, TEST_PROJ_GRP_DESCRIPTION );
-                addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, TEST_PROJ_GRP_NAME );
-                removeProjectGroup( TEST_PROJ_GRP_NAME, TEST_PROJ_GRP_ID, TEST_PROJ_GRP_DESCRIPTION );
-            }
-            catch ( Exception e )
-            {
-                e.printStackTrace();
-            }
-
             // logout with a longer delay
             assertTrue( "User wasn't authenticated.", isAuthenticated() );
             clickLinkWithText( "Logout", false );
