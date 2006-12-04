@@ -6,7 +6,7 @@
   <div id="h3">
     <div>
       <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
-       <ww:url id="projectGroupSummaryUrl" action="projectGroupSummary" includeParams="none">
+        <ww:url id="projectGroupSummaryUrl" action="projectGroupSummary" includeParams="none">
           <ww:param name="projectGroupId" value="projectGroupId"/>
         </ww:url>
         <ww:url id="projectGroupMembersUrl" action="projectGroupMembers" includeParams="none">

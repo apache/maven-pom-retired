@@ -35,6 +35,8 @@ public class BuildResultsListAction
 
     private int projectId;
 
+    private int projectGroupId;
+
     private String projectName;
 
     public String execute()
@@ -53,6 +55,16 @@ public class BuildResultsListAction
     public void setProjectId( int projectId )
     {
         this.projectId = projectId;
+    }
+
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
     }
 
     public Collection getBuildResults()

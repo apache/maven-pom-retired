@@ -40,6 +40,7 @@
                 <ww:param name="projectId" value="${projectId}"/>
                 <ww:param name="projectName" value="%{projectName}"/>
                 <ww:param name="buildId" value="${buildResult.id}"/>
+                <ww:param name="projectGroupId" value="${projectGroupId}"/>
               </ww:url>
               <ww:a href="%{buildResultUrl}">Result</ww:a>
             </ec:column>

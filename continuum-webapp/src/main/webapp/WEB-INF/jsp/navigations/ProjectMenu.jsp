@@ -5,19 +5,26 @@
 <div>
   <p style="border-top: 1px solid transparent; border-bottom: 1px solid #DFDEDE;">
 
+    <ww:url id="projectGroupSummaryUrl" action="projectGroupSummary" includeParams="none">
+        <ww:param name="projectGroupId" value="projectGroupId"/>
+    </ww:url>
     <ww:url id="viewUrl" action="projectView" includeParams="none">
         <ww:param name="projectId" value="projectId"/>
         <ww:param name="tab" value="view"/>
+        <ww:param name="projectGroupId" value="projectGroupId"/>
     </ww:url>
     <ww:url id="buildResultsUrl" action="buildResults" includeParams="none">
         <ww:param name="projectId" value="projectId"/>
         <ww:param name="tab" value="buildResults"/>
+        <ww:param name="projectGroupId" value="projectGroupId"/>
     </ww:url>
     <ww:url id="workingCopyUrl" action="workingCopy" includeParams="none">
         <ww:param name="projectId" value="projectId"/>
         <ww:param name="tab" value="workingCopy"/>
+        <ww:param name="projectGroupId" value="projectGroupId"/>
     </ww:url>
 
+    <a style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em; text-decoration: none;" href="${projectGroupSummaryUrl}">Project Group Summary</a>
     <c:choose>
       <c:when test="${param.tab == 'view'}">
         <b style="border: 1px solid #DFDEDE; padding-left: 1em; padding-right: 1em;"><ww:text name="info"/></b>

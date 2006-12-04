@@ -48,6 +48,8 @@ public class BuildResultAction
 
     private int projectId;
 
+    private int projectGroupId;
+
     private String projectName;
 
     private List changeSet;
@@ -111,6 +113,16 @@ public class BuildResultAction
     public void setProjectName( String projectName )
     {
         this.projectName = projectName;
+    }
+
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
     }
 
     public BuildResult getBuildResult()

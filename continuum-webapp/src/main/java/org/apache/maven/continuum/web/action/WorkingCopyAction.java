@@ -48,6 +48,8 @@ public class WorkingCopyAction
 
     private int projectId;
 
+    private int projectGroupId;
+
     private String userDirectory;
 
     private String currentFile;
@@ -136,6 +138,16 @@ public class WorkingCopyAction
     public String getProjectName()
     {
         return projectName;
+    }
+
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
     }
 
     public String getUserDirectory()
