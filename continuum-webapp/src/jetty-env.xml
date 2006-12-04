@@ -3,6 +3,24 @@
 
 <Configure class="org.mortbay.jetty.webapp.WebAppContext">
 
+<New id="validation_mail" class="org.mortbay.jetty.plus.naming.Resource">
+  <Arg>mail/Session</Arg>
+  <Arg>
+    <New class="org.mortbay.naming.factories.MailSessionReference">
+      <Set name="user">username</Set>
+      <Set name="password">password</Set>
+      <Set name="properties">
+        <New class="java.util.Properties">
+          <Put name="mail.smtp.host">smtp.host.org</Put>
+          <Put name="mail.from">continuum@host.org</Put>
+          <Put name="mail.senderName">Continuum</Put>
+          <Put name="mail.debug">true</Put>
+        </New>
+      </Set>
+    </New>
+  </Arg>
+</New>
+
 <New id="continuum" class="org.mortbay.jetty.plus.naming.Resource">
   <Arg>jdbc/continuum</Arg>
   <Arg>
