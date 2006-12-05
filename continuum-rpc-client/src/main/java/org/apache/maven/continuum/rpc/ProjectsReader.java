@@ -56,7 +56,7 @@ public class ProjectsReader
         executorMap.put( "shell", "Shell" );
         executorMap.put( "ant", "Ant" );
         executorMap.put( "maven-1", "MavenOne" );
-        executorMap.put( "maven-2", "MavenTwo" );
+        executorMap.put( "maven2", "MavenTwo" );
     }
 
     public Project[] readProjects()
