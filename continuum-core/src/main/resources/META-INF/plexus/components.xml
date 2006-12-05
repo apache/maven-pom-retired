@@ -59,7 +59,7 @@
      |-->
     <component>
       <role>org.apache.maven.continuum.execution.ContinuumBuildExecutor</role>
-      <role-hint>maven-2</role-hint>
+      <role-hint>maven2</role-hint>
       <implementation>org.apache.maven.continuum.execution.maven.m2.MavenTwoBuildExecutor</implementation>
       <configuration>
         <default-executable>mvn</default-executable>

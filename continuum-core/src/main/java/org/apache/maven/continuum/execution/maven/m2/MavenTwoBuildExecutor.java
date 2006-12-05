@@ -58,7 +58,7 @@ public class MavenTwoBuildExecutor
 
     public static final String CONFIGURATION_GOALS = "goals";
 
-    public static final String ID = "maven-2";
+    public static final String ID = "maven2";
 
     // ----------------------------------------------------------------------
     //
