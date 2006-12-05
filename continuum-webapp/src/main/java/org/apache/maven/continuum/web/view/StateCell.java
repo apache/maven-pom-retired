@@ -81,6 +81,8 @@ public class StateCell
 
         params.put( "buildId", new Integer( project.getLatestBuildId() ) );
 
+        params.put( "projectGroupId", new Integer( project.getProjectGroupId()));
+
         String url = UrlHelper.buildUrl( "/" + action + ".action",
                                          ServletActionContext.getRequest(),
                                          ServletActionContext.getResponse(),

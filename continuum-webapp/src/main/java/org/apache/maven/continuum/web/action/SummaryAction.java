@@ -29,7 +29,7 @@ import java.util.Map;
 
 /**
  * Used to render the list of projects in the project group page.
- * 
+ *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
  * @plexus.component role="com.opensymphony.xwork.Action"
@@ -49,7 +49,7 @@ public class SummaryAction
     private int nbErrors;
 
     private List summary;
-    
+
     private List projects;
 
     public String execute()
@@ -78,9 +78,12 @@ public class SummaryAction
 
             model.setVersion( project.getVersion() );
 
+            model.setProjectGroupId( project.getProjectGroup().getId() );
+
             model.setProjectGroupName( project.getProjectGroup().getName() );
 
-            if ( getContinuum().isInBuildingQueue( project.getId() ) || getContinuum().isInCheckoutQueue( project.getId() ) )
+            if ( getContinuum().isInBuildingQueue( project.getId() ) ||
+                getContinuum().isInCheckoutQueue( project.getId() ) )
             {
                 model.setInQueue( true );
             }

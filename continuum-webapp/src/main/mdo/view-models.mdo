@@ -81,6 +81,14 @@
           <type>String</type>
         </field>
         <field>
+          <name>projectGroupId</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>id of the project group this project is a member of</description>
+          <type>int</type>
+          <defaultValue>-1</defaultValue>
+        </field>
+        <field>
           <name>projectGroupName</name>
           <version>1.0.0</version>
           <required>true</required>

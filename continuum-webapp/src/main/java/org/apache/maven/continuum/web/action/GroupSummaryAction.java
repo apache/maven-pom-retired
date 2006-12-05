@@ -109,6 +109,8 @@ public class GroupSummaryAction
 
                 model.setVersion( project.getVersion() );
 
+                model.setProjectGroupId( project.getProjectGroup().getId() );
+
                 model.setProjectGroupName( project.getProjectGroup().getName() );
 
                 if ( getContinuum().isInBuildingQueue( project.getId() ) || getContinuum().isInCheckoutQueue( project.getId() ) )

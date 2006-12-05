@@ -38,11 +38,10 @@ import java.util.HashMap;
 /**
  * Used in Summary view
  *
- * @deprecated use of cells is discouraged due to lack of i18n and design in java code.
- *             Use jsp:include instead.
- *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ * @deprecated use of cells is discouraged due to lack of i18n and design in java code.
+ *             Use jsp:include instead.
  */
 public class BuildCell
     extends DisplayCell
@@ -58,7 +57,8 @@ public class BuildCell
 
         if ( project.isInQueue() )
         {
-            result += "<img src=\"" + contextPath + "/images/inqueue.gif\" alt=\"In Queue\" title=\"In Queue\" border=\"0\">";
+            result +=
+                "<img src=\"" + contextPath + "/images/inqueue.gif\" alt=\"In Queue\" title=\"In Queue\" border=\"0\">";
         }
         else
         {
@@ -74,6 +74,8 @@ public class BuildCell
                     params.put( "projectName", project.getName() );
 
                     params.put( "buildId", new Integer( buildNumber ) );
+
+                    params.put( "projectGroupId", new Integer( project.getProjectGroupId() ) );
 
                     PageContext pageContext = (PageContext) tableModel.getContext().getContextObject();
 
@@ -100,19 +102,23 @@ public class BuildCell
             }
             else if ( project.getState() == 6 )
             {
-                result += "<img src=\"" + contextPath + "/images/building.gif\" alt=\"Building\" title=\"Building\" border=\"0\">";
+                result += "<img src=\"" + contextPath +
+                    "/images/building.gif\" alt=\"Building\" title=\"Building\" border=\"0\">";
             }
             else if ( project.getState() == 7 )
             {
-                result += "<img src=\"" + contextPath + "/images/checkingout.gif\" alt=\"Checking Out sources\" title=\"Checking Out sources\" border=\"0\">";
+                result += "<img src=\"" + contextPath +
+                    "/images/checkingout.gif\" alt=\"Checking Out sources\" title=\"Checking Out sources\" border=\"0\">";
             }
             else if ( project.getState() == 8 )
             {
-                result += "<img src=\"" + contextPath + "/images/checkingout.gif\" alt=\"Updating sources\" title=\"Updating sources\" border=\"0\">";
+                result += "<img src=\"" + contextPath +
+                    "/images/checkingout.gif\" alt=\"Updating sources\" title=\"Updating sources\" border=\"0\">";
             }
             else
             {
-                result += "<img src=\"" + contextPath + "/images/inqueue.gif\" alt=\"In Queue\" title=\"In Queue\" border=\"0\">";
+                result += "<img src=\"" + contextPath +
+                    "/images/inqueue.gif\" alt=\"In Queue\" title=\"In Queue\" border=\"0\">";
             }
         }
 
