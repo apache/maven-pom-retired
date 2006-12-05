@@ -219,6 +219,16 @@
         <version>${maven-scm.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-synergy</artifactId>
+        <version>${maven-scm.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-vss</artifactId>
+        <version>${maven-scm.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-provider-api</artifactId>
         <version>${wagon.version}</version>
