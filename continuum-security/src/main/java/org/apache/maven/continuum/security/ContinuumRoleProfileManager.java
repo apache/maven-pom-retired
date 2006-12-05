@@ -1,10 +1,10 @@
 package org.apache.maven.continuum.security;
 
-import org.codehaus.plexus.rbac.profile.DefaultRoleProfileManager;
-import org.codehaus.plexus.rbac.profile.RoleProfileException;
-import org.codehaus.plexus.rbac.profile.DynamicRoleProfile;
-import org.codehaus.plexus.security.rbac.Role;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.rbac.profile.DefaultRoleProfileManager;
+import org.codehaus.plexus.rbac.profile.DynamicRoleProfile;
+import org.codehaus.plexus.rbac.profile.RoleProfileException;
+import org.codehaus.plexus.security.rbac.Role;
 /*
  * Copyright 2006 The Apache Software Foundation.
  *
@@ -42,27 +42,25 @@ public class ContinuumRoleProfileManager
         getRole( "continuum-group-administrator" );
         getRole( "registered-user" );
 
-
+        // this should not be additive in the database, and will make sure they are in synced on updates
         mergeRoleProfiles( "system-administrator", "continuum-system-administrator" );
         mergeRoleProfiles( "user-administrator", "continuum-user-administrator" );
         mergeRoleProfiles( "guest", "continuum-guest" );
 
-
-
-        setInitialized( true ); //todo remove the initialization idea from profile managers
+        setInitialized( true );
     }
 
 
     public Role getDynamicRole( String roleHint, String resource )
         throws RoleProfileException
     {
-        if ( !initialized )
+        if ( !isInitialized() )
         {
             initialize();
         }
 
         try
-        {
+        {            
             DynamicRoleProfile roleProfile =  (DynamicRoleProfile)container.lookup( DynamicRoleProfile.ROLE, roleHint );
 
             return roleProfile.getRole( resource ); 
@@ -73,3 +71,4 @@ public class ContinuumRoleProfileManager
         }
     }
 }
+

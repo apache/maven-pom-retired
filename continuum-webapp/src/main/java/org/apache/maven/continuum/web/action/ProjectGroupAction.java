@@ -16,18 +16,10 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.web.bean.ProjectGroupUserBean;
-import org.apache.maven.continuum.ContinuumException;
 import org.codehaus.plexus.security.rbac.RBACManager;
 import org.codehaus.plexus.security.rbac.RbacManagerException;
 import org.codehaus.plexus.security.rbac.RbacObjectNotFoundException;
@@ -35,6 +27,16 @@ import org.codehaus.plexus.security.rbac.Role;
 import org.codehaus.plexus.security.user.User;
 import org.codehaus.plexus.security.user.UserManager;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.rbac.profile.RoleProfileManager;
+import org.codehaus.plexus.rbac.profile.RoleProfileException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ProjectGroupAction:
@@ -66,6 +68,11 @@ public class ProjectGroupAction
      * @plexus.requirement
      */
     private RBACManager rbac;
+
+    /**
+     * @plexus.requirement role-hint="continuum"
+     */
+    private RoleProfileManager roleManager;
 
     private int projectGroupId;
 
@@ -181,7 +188,23 @@ public class ProjectGroupAction
     {
         projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
 
-        projectGroup.setName( name );
+        // need to administer roles since they are based off of this
+        // todo convert everything like to work off of string keys
+        if ( !name.equals( projectGroup.getName() ) )
+        {
+            try
+            {
+                roleManager.renameDynamicRole( "continuum-group-developer", projectGroup.getName(), name );
+                roleManager.renameDynamicRole( "continuum-group-user", projectGroup.getName(), name );
+
+                projectGroup.setName( name );
+            }
+            catch ( RoleProfileException e )
+            {
+                throw new ContinuumException( "unable to rename the project group", e );
+            }
+
+        }
 
         projectGroup.setDescription( description );
 

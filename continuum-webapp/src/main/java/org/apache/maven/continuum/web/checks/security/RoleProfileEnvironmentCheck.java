@@ -20,8 +20,12 @@ import org.codehaus.plexus.security.system.check.EnvironmentCheck;
 import org.codehaus.plexus.rbac.profile.RoleProfileManager;
 import org.codehaus.plexus.rbac.profile.RoleProfileException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.Continuum;
 
 import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * RoleProfileEnvironmentCheck:
@@ -42,6 +46,11 @@ public class RoleProfileEnvironmentCheck
      */
     private RoleProfileManager continuumRoleManager;
 
+    /**
+     * @plexus.requirement
+     */
+    private Continuum continuum;
+
     public void validateEnvironment( List list )
     {
         try
@@ -50,6 +59,19 @@ public class RoleProfileEnvironmentCheck
             {
                 continuumRoleManager.initialize();
             }
+
+            Collection projectGroups = continuum.getAllProjectGroups();
+
+            for ( Iterator i = projectGroups.iterator(); i.hasNext(); )
+            {
+                ProjectGroup group = (ProjectGroup) i.next();
+
+                // gets the role, making it if it doesn't exist
+                continuumRoleManager.getDynamicRole( "continuum-group-user", group.getName() );
+                continuumRoleManager.getDynamicRole( "continuum-group-developer", group.getName() );
+
+            }
+
         }
         catch ( RoleProfileException rpe )
         {
