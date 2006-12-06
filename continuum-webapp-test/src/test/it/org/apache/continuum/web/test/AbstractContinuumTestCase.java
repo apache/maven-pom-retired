@@ -143,8 +143,6 @@ public abstract class AbstractContinuumTestCase
     public void assertEditConfigurationPage()
     {
         assertPage( "Continuum - Configuration" );
-        assertTextPresent( "Guest" );
-        assertElementPresent( "guestAccountEnabled" );
         assertTextPresent( "Working Directory" );
         assertElementPresent( "workingDirectory" );
         assertTextPresent( "Build Output Directory" );
@@ -453,14 +451,6 @@ public abstract class AbstractContinuumTestCase
         setFieldValue( "user.email", newEmailAddress );
         setFieldValue( "user.password", newPassword );
         setFieldValue( "user.confirmPassword", confirmNewPassword );
-    }
-
-    //////////////////////////////////////
-    // Login
-    //////////////////////////////////////
-    public void goToLoginPage()
-    {
-        clickLinkWithText( "Login" );
     }
 
     public void tearDown()
