@@ -1,4 +1,7 @@
-<project>
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>continuum-parent</artifactId>
     <groupId>org.apache.maven.continuum</groupId>
@@ -16,7 +19,16 @@
   </dependencies>
   <build>
     <!--
-    need to fix pulling requirements from other artifacts
+    TODO: fix cdc pulling requirements from other artifacts.
+      This is disabled and done manually, due to the inability of
+      plexus-cdc to generate a proper component descriptor when
+      the component is extended off of another component.
+
+      We have RoleProfile's based off of p-sec AbstractDynamicRoleProfile and
+      a RoleProfileManager based off of p-sec DefaultRoleProfileManager.
+
+      This arrangement will not work with the current version of plexus-cdc.
+      
     <plugins>
       <plugin>
         <groupId>org.codehaus.plexus</groupId>

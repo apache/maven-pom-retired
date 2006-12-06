@@ -41,6 +41,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>memory</role-hint>
         </requirement>
       </requirements>
     </component>
@@ -51,16 +52,18 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>memory</role-hint>
         </requirement>
       </requirements>
     </component>
-    <component>
+     <component>
       <role>org.codehaus.plexus.rbac.profile.RoleProfile</role>
       <role-hint>continuum-group-administrator</role-hint>
       <implementation>org.apache.maven.continuum.security.profile.ContinuumGroupAdministratorRoleProfile</implementation>
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>memory</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -68,13 +71,14 @@
         </requirement>
       </requirements>
     </component>
-    <component>
+     <component>
       <role>org.codehaus.plexus.rbac.profile.RoleProfile</role>
       <role-hint>continuum-guest</role-hint>
       <implementation>org.apache.maven.continuum.security.profile.ContinuumGuestRoleProfile</implementation>
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>memory</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -84,11 +88,44 @@
     </component>
     <component>
       <role>org.codehaus.plexus.rbac.profile.RoleProfile</role>
+      <role-hint>continuum-system-administrator</role-hint>
+      <implementation>org.apache.maven.continuum.security.profile.ContinuumSystemAdministratorRoleProfile</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>memory</role-hint>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.PlexusContainer</role>
+          <field-name>container</field-name>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.rbac.profile.RoleProfile</role>
+      <role-hint>continuum-user-administrator</role-hint>
+      <implementation>org.apache.maven.continuum.security.profile.ContinuumUserAdministratorRoleProfile</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>memory</role-hint>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.PlexusContainer</role>
+          <field-name>container</field-name>
+        </requirement>
+      </requirements>
+    </component>
+    
+    <!-- 
+     <component>
+      <role>org.codehaus.plexus.rbac.profile.RoleProfile</role>
       <role-hint>user-administrator</role-hint>
       <implementation>org.codehaus.plexus.security.ui.web.role.profile.UserAdministratorRoleProfile</implementation>
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>memory</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -104,6 +141,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>memory</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -119,6 +157,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>memory</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -134,6 +173,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>memory</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -141,5 +181,6 @@
         </requirement>
       </requirements>
     </component>
+     -->
   </components>
 </plexus>

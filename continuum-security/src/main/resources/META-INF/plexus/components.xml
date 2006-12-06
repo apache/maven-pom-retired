@@ -27,6 +27,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>cached</role-hint>
         </requirement>
       </requirements>
     </component>
@@ -37,6 +38,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>cached</role-hint>
         </requirement>
       </requirements>
     </component>
@@ -47,6 +49,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>cached</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -61,6 +64,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>cached</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -75,6 +79,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>cached</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -89,6 +94,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>cached</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -103,7 +109,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
-          <role-hint>jdo</role-hint>
+          <role-hint>cached</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>

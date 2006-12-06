@@ -55,7 +55,7 @@ public class AddAssignableRolesAction
 
         ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( projectGroupId );
 
-        //todo make the resource the name of the project group and hide the id from the user
+        // TODO: make the resource the name of the project group and hide the id from the user
 
         try
         {
