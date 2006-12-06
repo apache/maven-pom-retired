@@ -76,9 +76,6 @@ public abstract class AbstractContinuumTestCase
             submitLoginPage( adminUsername, adminPassword );
             assertEditConfigurationPage();
             submitConfigurationPage( baseUrl, null, null, null );
-
-            // logout with a longer delay
-            assertTrue( "User wasn't authenticated.", isAuthenticated() );
             logout();
         }
     }
