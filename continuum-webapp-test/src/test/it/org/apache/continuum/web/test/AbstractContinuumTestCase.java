@@ -79,9 +79,7 @@ public abstract class AbstractContinuumTestCase
 
             // logout with a longer delay
             assertTrue( "User wasn't authenticated.", isAuthenticated() );
-            clickLinkWithText( "Logout", false );
-            waitPage( LONG_WAIT );
-            assertFalse( "The user is always authenticated after a logout.", isAuthenticated() );
+            logout();
         }
     }
 
