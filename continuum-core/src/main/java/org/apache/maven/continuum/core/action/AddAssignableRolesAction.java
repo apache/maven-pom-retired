@@ -44,7 +44,7 @@ public class AddAssignableRolesAction
     private ContinuumStore store;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="continuum"
      */
     private RoleProfileManager roleManager;
 
@@ -65,6 +65,7 @@ public class AddAssignableRolesAction
         }
         catch ( RoleProfileException rpe )
         {
+            rpe.printStackTrace();
             throw new ContinuumException( "error generating dynamic role for project " + projectGroup.getName(), rpe );
         }
     }

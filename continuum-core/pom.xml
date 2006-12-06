@@ -160,24 +160,29 @@
       <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-security</artifactId>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.codehaus.plexus.security</groupId>
       <artifactId>plexus-security-rbac-profile</artifactId>
     </dependency>
+    -->
+    <!--
     <dependency>
       <groupId>org.codehaus.plexus.security</groupId>
       <artifactId>plexus-security-ui-web-integration</artifactId>
       <scope>test</scope>
     </dependency>
-     <dependency>
+    -->
+<!--    <dependency>
       <groupId>org.codehaus.plexus.security</groupId>
       <artifactId>plexus-security-authorization-rbac-model</artifactId>
     </dependency>
-     <dependency>
+    <dependency>
       <artifactId>plexus-security-authorization-rbac-store-memory</artifactId>
       <groupId>org.codehaus.plexus.security</groupId>
       <scope>test</scope>
     </dependency>
+    -->
   </dependencies>
   <build>
     <plugins>

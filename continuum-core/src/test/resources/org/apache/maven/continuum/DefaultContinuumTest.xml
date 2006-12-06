@@ -41,7 +41,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
-          <role-hint>memory</role-hint>
+     >
         </requirement>
       </requirements>
     </component>
@@ -52,7 +52,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
-          <role-hint>memory</role-hint>
+
         </requirement>
       </requirements>
     </component>
@@ -63,7 +63,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
-          <role-hint>memory</role-hint>
+
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -78,7 +78,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
-          <role-hint>memory</role-hint>
+
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -93,7 +93,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
-          <role-hint>memory</role-hint>
+
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -109,7 +109,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
-          <role-hint>memory</role-hint>
+
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -125,7 +125,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
-          <role-hint>memory</role-hint>
+
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
@@ -141,7 +141,7 @@
       <requirements>
         <requirement>
           <role>org.codehaus.plexus.security.rbac.RBACManager</role>
-          <role-hint>memory</role-hint>
+
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.PlexusContainer</role>
