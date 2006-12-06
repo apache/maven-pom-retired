@@ -61,13 +61,14 @@ import java.util.Map;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
+ * @plexus.component role="org.apache.maven.continuum.store.ContinuumStore" role-hint="jdo"
  */
 public class JdoContinuumStore
     extends AbstractContinuumStore
     implements ContinuumStore, Initializable
 {
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="continuum"
      */
     private JdoFactory continuumJdoFactory;
 
