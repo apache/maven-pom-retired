@@ -132,7 +132,7 @@ public abstract class AbstractContinuumTest
         // Set up the JDO factory
         // ----------------------------------------------------------------------
 
-        Object o = lookup( JdoFactory.ROLE );
+        Object o = lookup( JdoFactory.ROLE, "continuum" );
 
         assertEquals( DefaultConfigurableJdoFactory.class.getName(), o.getClass().getName() );
 
