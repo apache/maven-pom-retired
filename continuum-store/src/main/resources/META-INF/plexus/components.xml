@@ -10,11 +10,6 @@
           <role-hint>continuum</role-hint>
           <field-name>continuumJdoFactory</field-name>
         </requirement>
-        <requirement>
-          <role>org.codehaus.plexus.jdo.JdoFactory</role>
-          <role-hint>users</role-hint>
-          <field-name>usersJdoFactory</field-name>
-        </requirement>
       </requirements>
     </component>
   </components>

@@ -71,18 +71,11 @@ public class JdoContinuumStore
      */
     private JdoFactory continuumJdoFactory;
 
-    /**
-     * @plexus.requirement
-     */
-    private JdoFactory usersJdoFactory;
-
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
     private PersistenceManagerFactory continuumPmf;
-
-    private PersistenceManagerFactory usersPmf;
 
     // ----------------------------------------------------------------------
     // Fetch Groups
@@ -110,7 +103,6 @@ public class JdoContinuumStore
         throws InitializationException
     {
         continuumPmf = continuumJdoFactory.getPersistenceManagerFactory();
-        usersPmf = usersJdoFactory.getPersistenceManagerFactory();
     }
 
     // ----------------------------------------------------------------------
@@ -1369,7 +1361,6 @@ public class JdoContinuumStore
     public void closeStore()
     {
         closePersistenceManagerFactory( continuumPmf, 1 );
-        closePersistenceManagerFactory( usersPmf, 1 );
     }
 
     public Collection getAllProjectGroupsWithTheLot()
