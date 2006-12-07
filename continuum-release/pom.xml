@@ -25,19 +25,20 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-model</artifactId>
     </dependency>
+    <!--
+      adding maven-artifact as a dependency since maven-2.0.5-SNAPSHOT 
+      appears to have a slightly different way of resolving dependencies
+      and 2.0 artifact is getting chosen as opposed to 2.0.4 like earlier
+      versions of maven peg it to...the 2.0 artifact was coming from the
+      maven-release-manager
+    -->
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact-manager</artifactId>
-      <exclusions>
-        <!--
-          maven release manager uses maven-artifact 2.0 so exclude
-	  because we use an Exception that didn't exist that version
-	-->
-        <exclusion>
-          <groupId>org.apache.maven</groupId>
-	  <artifactId>maven-artifact</artifactId>
-	</exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
