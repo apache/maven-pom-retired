@@ -151,7 +151,42 @@ public class ProjectsReader
             Hashtable table = (Hashtable) obj;
             if ( !table.get( "result" ).equals( "ok" ) )
             {
-                throw new RuntimeException( "Edit failed" );
+                throw new RuntimeException( "Add failed" );
+            }
+        }
+        else if ( obj instanceof XmlRpcException )
+        {
+            throw (XmlRpcException) obj;
+        }
+    }
+
+    public void addMavenOneProject( String url )
+        throws XmlRpcException, IOException
+    {
+        addProjectByUrl( url, "maven-1" );
+    }
+
+    public void addMavenTwoProject( String url )
+        throws XmlRpcException, IOException
+    {
+        addProjectByUrl( url, "maven2" );
+    }
+
+    private void addProjectByUrl( String url, String execId )
+        throws XmlRpcException, IOException
+    {
+        XmlRpcClient client = new XmlRpcClient( server );
+
+        Vector vect = new Vector();
+        vect.add( url );
+
+        Object obj = client.execute( "continuum.add" + executorMap.get( execId ) + "Project", vect );
+        if ( obj instanceof Hashtable )
+        {
+            Hashtable table = (Hashtable) obj;
+            if ( !table.get( "result" ).equals( "ok" ) )
+            {
+                throw new RuntimeException( "Add failed" );
             }
         }
         else if ( obj instanceof XmlRpcException )
