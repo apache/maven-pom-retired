@@ -553,7 +553,7 @@
     <continuumWebappVersion>${pom.version}</continuumWebappVersion>
     <maven.version>2.0.4</maven.version>
     <wagon.version>1.0-beta-1</wagon.version>
-    <maven-scm.version>1.0-SNAPSHOT</maven-scm.version>
+    <maven-scm.version>1.0-beta-4</maven-scm.version>
     <plexus-security.version>1.0-alpha-6-SNAPSHOT</plexus-security.version>
     <mail-sender.version>1.0-alpha-5-SNAPSHOT</mail-sender.version>
   </properties>
