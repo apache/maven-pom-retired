@@ -17,10 +17,11 @@
        <h3>Project Groups</h3>
     </ww:else>
   
-    <ww:if test="${groups == null }">
+    <ww:if test="${empty groups}">
       No Project Groups Known.
     </ww:if>
 
+    <ww:if test="${not empty groups}">
     <div class="eXtremeTable" >
     <ec:table items="groups"
               var="group"
@@ -38,6 +39,7 @@
         <ec:column property="numSuccesses" title="Build&nbsp;Status" width="1%" style="white-space: nowrap" cell="org.apache.maven.continuum.web.view.BuildStatusCell"/>
       </ec:row>
     </ec:table>
+    </ww:if>
     <pss:ifAuthorized permission="continuum-add-group">
       <div class="functnbar3">
         <table>
