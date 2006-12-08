@@ -70,6 +70,8 @@ public class ContinuumProjectBuildingResult
 
     public static final String ERROR_UNAUTHORIZED = "add.project.unauthorized.error";
 
+    public static final String ERROR_PROTOCOL_NOT_ALLOWED = "add.project.validation.protocol.not_allowed";
+
     public static final String ERROR_ARTIFACT_NOT_FOUND = "add.project.artifact.not.found.error";
 
     public static final String ERROR_PROJECT_BUILDING = "add.project.project.building.error";

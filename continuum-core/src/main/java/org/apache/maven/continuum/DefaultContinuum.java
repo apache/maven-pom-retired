@@ -56,6 +56,8 @@ import org.codehaus.plexus.action.ActionManager;
 import org.codehaus.plexus.action.ActionNotFoundException;
 import org.codehaus.plexus.context.Context;
 import org.codehaus.plexus.context.ContextException;
+import org.codehaus.plexus.formica.FormicaException;
+import org.codehaus.plexus.formica.validation.Validator;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -149,6 +151,11 @@ public class DefaultContinuum
      * @plexus.requirement
      */
     private BuildExecutorManager executorManager;
+
+    /**
+     * @plexus.requirement role-hint="url"
+     */
+    private Validator urlValidator;
 
     private boolean stopped = false;
 
@@ -1115,6 +1122,20 @@ public class DefaultContinuum
                                                                                    int projectGroupId )
         throws ContinuumException
     {
+        try
+        {
+            if ( !urlValidator.validate( metadataUrl ) )
+            {
+                ContinuumProjectBuildingResult res = new ContinuumProjectBuildingResult();
+                res.addError( ContinuumProjectBuildingResult.ERROR_PROTOCOL_NOT_ALLOWED );
+                return res;
+            }
+        }
+        catch( FormicaException e )
+        {
+            //can't be thrown
+        }
+
         Map context = new HashMap();
 
         context.put( CreateProjectsFromMetadataAction.KEY_PROJECT_BUILDER_ID, projectBuilderId );
