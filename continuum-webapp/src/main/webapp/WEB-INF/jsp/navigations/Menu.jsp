@@ -100,20 +100,6 @@
     </div>
   </pss:ifAnyAuthorized>
 
-  <c:if test="${sessionScope.securitySession.authenticated}">
-    <div id="projectmenu" class="toolgroup">
-      <div class="label">
-        <ww:text name="menu.account.options"/>
-      </div>
-      <ww:url id="accountUrl" action="account" namespace="/security" includeParams="none"/>
-      <div class="body">
-        <ww:a href="%{accountUrl}">
-          <ww:text name="user.edit.account"/>
-        </ww:a>
-      </div>
-    </div>
-  </c:if>
-
   <div id="projectmenu" class="toolgroup">
     <div class="label">Legend</div>
     <div id="legend">
