@@ -2,7 +2,7 @@
 <html>
   <ww:i18n name="localization.Continuum">
     <head>
-        <title><ww:text name="release.page.title"/></title>
+        <title><ww:text name="releaseProject.page.title"/></title>
     </head>
     <body>
       <h3>
