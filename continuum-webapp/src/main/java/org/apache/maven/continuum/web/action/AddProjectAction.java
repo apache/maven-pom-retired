@@ -16,12 +16,15 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
-import java.util.Iterator;
-
+import com.opensymphony.xwork.Validateable;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 
-import com.opensymphony.xwork.Validateable;
+import java.util.Iterator;
 
 /**
  * @author Nick Gonzalez
@@ -33,7 +36,7 @@ import com.opensymphony.xwork.Validateable;
  */
 public class AddProjectAction
     extends ContinuumActionSupport
-    implements Validateable
+    implements Validateable, SecureAction
 {
 
     private String projectName;
@@ -176,5 +179,16 @@ public class AddProjectAction
     public void setProjectVersion( String projectVersion )
     {
         this.projectVersion = projectVersion;
+    }
+
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+    {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_OPERATION );
+
+        return bundle;
     }
 }

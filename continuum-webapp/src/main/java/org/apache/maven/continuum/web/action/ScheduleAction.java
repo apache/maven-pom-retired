@@ -17,7 +17,11 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.Schedule;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 
 import java.util.Collection;
 
@@ -27,6 +31,7 @@ import java.util.Collection;
  */
 public class ScheduleAction
     extends ContinuumConfirmAction
+    implements SecureAction
 {
     private int id;
 
@@ -322,5 +327,15 @@ public class ScheduleAction
     {
         return ( second + " " + minute + " " + hour + " " + dayOfMonth + " " +
                     month + " " + dayOfWeek + " " + year ).trim();
+    }
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+    {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_MANAGE_SCHEDULES );
+
+        return bundle;
     }
 }

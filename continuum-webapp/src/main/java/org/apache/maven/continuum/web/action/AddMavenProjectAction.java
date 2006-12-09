@@ -16,17 +16,21 @@ package org.apache.maven.continuum.web.action;
  * limitations under the License.
  */
 
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.codehaus.plexus.util.StringUtils;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Action to add a Maven project to Continuum, either Maven 1 or Maven 2.
@@ -36,6 +40,7 @@ import org.codehaus.plexus.util.StringUtils;
  */
 public abstract class AddMavenProjectAction
     extends ContinuumActionSupport
+    implements SecureAction
 {
 
     private static final long serialVersionUID = -3965565189557706469L;
@@ -261,4 +266,16 @@ public abstract class AddMavenProjectAction
     {
         this.disableGroupSelection = disableGroupSelection;
     }
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+        {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_OPERATION );
+        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_PROJECT_TO_GROUP_OPERATION, projectGroupName );
+
+        return bundle;
+    }
+
 }
