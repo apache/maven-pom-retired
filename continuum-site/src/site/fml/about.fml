@@ -116,9 +116,9 @@ mvn site:site
         </p>
         <p>
           Once you have updated the documentation, generate a patch by running
-          <source><![CDATA[
+          <source>
 svn diff > site-patch.txt
-          ]]></source>
+          </source>
           Create a
           new issue in the Continuum JIRA project, and attach your patch to this issue.  Before submitting the patch, make sure
           to build the Continuum site locally and proofread for any typos.
