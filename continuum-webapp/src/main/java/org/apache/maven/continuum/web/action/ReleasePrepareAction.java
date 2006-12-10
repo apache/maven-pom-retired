@@ -49,6 +49,8 @@ import java.util.Properties;
 public class ReleasePrepareAction
     extends ContinuumActionSupport
 {
+    private static final String SCM_SVN_PROTOCOL_PREFIX = "scm:svn:";
+
     private int projectId;
 
     private String releaseId;
@@ -86,9 +88,11 @@ public class ReleasePrepareAction
         scmTag = project.getScmTag();
 
         String scmUrl = project.getScmUrl();
-        if ( scmUrl.startsWith( "scm:svn:" ) )
+        if ( scmUrl.startsWith( SCM_SVN_PROTOCOL_PREFIX ) )
         {
             scmTagBase = new SvnScmProviderRepository( scmUrl, scmUsername, scmPassword ).getTagBase();
+            // strip the Maven scm protocol prefix
+            scmTagBase = scmTagBase.substring( SCM_SVN_PROTOCOL_PREFIX.length() );
         }
         else
         {
