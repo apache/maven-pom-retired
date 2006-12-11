@@ -237,7 +237,7 @@ public abstract class AbstractContinuumTestCase
             assertTextPresent( "Build Status" );
         }
 
-        assertLinkPresent( "Add a Project Group" );
+        assertElementPresent( "//input[@value='Add Project Group']" );
     }
 
     //////////////////////////////////////
