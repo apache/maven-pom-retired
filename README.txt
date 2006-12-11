@@ -1,5 +1,6 @@
 Getting Sun Jars
 ----------------
+
 Some jar files can not distributed via http://www.ibiblio.org/maven2 
 (see http://maven.apache.org/guides/mini/guide-coping-with-sun-jars.html for further information).
  
