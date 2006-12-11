@@ -146,12 +146,6 @@ public abstract class AbstractContinuumTestCase
         assertElementPresent( "deploymentRepositoryDirectory" );
         assertTextPresent( "Base URL" );
         assertElementPresent( "baseUrl" );
-        assertTextPresent( "Company Name" );
-        assertElementPresent( "companyName" );
-        assertTextPresent( "Company Logo" );
-        assertElementPresent( "companyLogo" );
-        assertTextPresent( "Company URL" );
-        assertElementPresent( "companyUrl" );
     }
 
     public void submitConfigurationPage( String baseUrl, String companyName, String companyLogo, String companyUrl )
