@@ -22,7 +22,7 @@
       <ec:column property="editActions" title="Edit">
         
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
-          <ww:url id="editUrl" action="editProjectGroupNotifier" namespace="/"  includeContext="false" includeParams="none">
+          <ww:url id="editUrl" action="editProjectGroupNotifier" namespace="/">
             <ww:param name="projectGroupId">${pageScope.projectGroupNotifierSummary.projectGroupId}</ww:param>
             <ww:param name="notifierId">${pageScope.projectGroupNotifierSummary.id}</ww:param>
             <ww:param name="notifierType">${pageScope.projectGroupNotifierSummary.type}</ww:param>
