@@ -53,9 +53,9 @@
 
     <global-results>
 
-      <result name="error">/WEB-INF/jsp/error.jsp</result>
-      <result name="internal-error">/WEB-INF/jsp/error.jsp</result>
-      <result name="internalError" type="redirect">/WEB-INF/jsp/error.jsp</result>
+      <result name="error">/WEB-INF/jsp/error/error.jsp</result>
+      <result name="internal-error">/WEB-INF/jsp/error/error.jsp</result>
+      <result name="internalError" type="redirect">/WEB-INF/jsp/error/error.jsp</result>
 
       <result name="continuum-configuration-required" type="redirect-action">
         <param name="actionName">configuration</param>
