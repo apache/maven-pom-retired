@@ -45,6 +45,8 @@ public abstract class AddMavenProjectAction
 
     private static final long serialVersionUID = -3965565189557706469L;
 
+    private static final int DEFINED_BY_POM_GROUP_ID = -1;
+
     private String pomUrl;
 
     private File pomFile;
@@ -59,19 +61,13 @@ public abstract class AddMavenProjectAction
 
     private String projectGroupName;
 
-    private int selectedProjectGroup = -1;
+    private int selectedProjectGroup = DEFINED_BY_POM_GROUP_ID;
 
     private boolean disableGroupSelection;
 
     public String execute()
         throws ContinuumException
     {
-        if ( selectedProjectGroup == -1 )
-        {
-            addActionError( "add.project.nogroup.error" );
-            return doDefault();
-        }
-        
         if ( !StringUtils.isEmpty( pomUrl ) )
         {
             try
@@ -154,6 +150,12 @@ public abstract class AddMavenProjectAction
     {
         Collection allProjectGroups = getContinuum().getAllProjectGroups();
         projectGroups = new ArrayList();
+
+        ProjectGroup defaultGroup = new ProjectGroup();
+        defaultGroup.setId( DEFINED_BY_POM_GROUP_ID );
+        defaultGroup.setName( "Defined by POM" );
+        projectGroups.add( defaultGroup );
+
         for ( Iterator i = allProjectGroups.iterator(); i.hasNext(); )
         {
             ProjectGroup pg = (ProjectGroup) i.next();
@@ -163,16 +165,16 @@ public abstract class AddMavenProjectAction
                 projectGroups.add( pg );
             //}
         }
-        
+
         if ( session.get( "lastViewedProjectGroup" ) != null )
         {
             selectedProjectGroup = ( (Integer) session.get( "lastViewedProjectGroup" ) ).intValue();
         }
         else
         {
-            selectedProjectGroup = -1;
+            selectedProjectGroup = DEFINED_BY_POM_GROUP_ID;
         }
-        if ( disableGroupSelection == true && selectedProjectGroup != -1 )
+        if ( disableGroupSelection == true && selectedProjectGroup != DEFINED_BY_POM_GROUP_ID )
         {
             try
             {
@@ -269,7 +271,7 @@ public abstract class AddMavenProjectAction
 
     public SecureActionBundle getSecureActionBundle()
         throws SecureActionException
-        {
+    {
         SecureActionBundle bundle = new SecureActionBundle();
         bundle.setRequiresAuthentication( true );
         bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_OPERATION );
@@ -277,5 +279,4 @@ public abstract class AddMavenProjectAction
 
         return bundle;
     }
-
 }
