@@ -131,6 +131,8 @@ public class CreateProjectsFromMetadataAction
                    mungedURL = new MungedHttpsURL( curl, username, password );
                 }
 
+                mungedURL.setLogger( getLogger() );
+
                 if ( mungedURL.isValid() )
                 {
                     url = mungedURL.getURL();
@@ -140,7 +142,7 @@ public class CreateProjectsFromMetadataAction
                 else
                 {
                     result = new ContinuumProjectBuildingResult();
-                    getLogger().info( "Malformed URL (MungedHttpsURL is not valid): " + curl );
+                    getLogger().info( "Malformed URL (MungedHttpsURL is not valid): " + hidePasswordInUrl( curl ) );
                     result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL );
                 }
             }
@@ -148,13 +150,29 @@ public class CreateProjectsFromMetadataAction
         }
         catch ( MalformedURLException e )
         {
-            getLogger().info( "Malformed URL: " + curl, e );
+            getLogger().info( "Malformed URL: " + hidePasswordInUrl( curl ), e );
             result = new ContinuumProjectBuildingResult();
             result.addError( ContinuumProjectBuildingResult.ERROR_MALFORMED_URL );
         }
 
 
         context.put( KEY_PROJECT_BUILDING_RESULT, result );
+    }
+
+    private String hidePasswordInUrl( String url )
+    {
+        int indexAt = url.indexOf( "@" );
+
+        if ( indexAt < 0 )
+        {
+            return url;
+        }
+
+        String s = url.substring( 0, indexAt );
+
+        int pos = s.lastIndexOf( ":" );
+
+        return s.substring( 0, pos + 1 ) + "*****" + url.substring( indexAt );
     }
 
     private Settings getSettings()
