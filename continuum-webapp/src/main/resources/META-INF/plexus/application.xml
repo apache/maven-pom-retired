@@ -410,11 +410,6 @@
         </appenders>
 
         <levels>
-          <level>
-            <hierarchy>org.apache.maven.archiva.web.servlet.repository.RepositoryMapping</hierarchy>
-            <level>DEBUG, audit</level>
-          </level>
-
           <!-- Help identify bugs during testing -->
           <level>
             <hierarchy>org.apache.maven</hierarchy>
@@ -474,7 +469,7 @@
         <configs>
           <config>${user.home}/.m2/security.properties</config>
           <config>${user.home}/.m2/continuum.properties</config>
-          <config>/org/apache/maven/archiva/security.properties</config>
+          <config>/org/apache/maven/continuum/security.properties</config>
         </configs>
       </configuration>
     </component>
