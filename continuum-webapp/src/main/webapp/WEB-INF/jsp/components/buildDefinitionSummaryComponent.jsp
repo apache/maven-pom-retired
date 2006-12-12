@@ -28,9 +28,7 @@
               <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
               <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
             </ww:url>
-            <ww:a href="%{editUrl}">
-              <ww:text name="edit"/>
-            </ww:a>
+            <ww:a href="%{editUrl}"><img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0"></ww:a>
           </pss:ifAuthorized>
           <pss:ifAuthorized permission="continuum-remove-project-build-definition" resource="${projectGroupName}">
             <ww:url id="removeUrl" action="removeProjectBuildDefinition" namespace="/">
@@ -38,9 +36,7 @@
               <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
               <ww:param name="confirmed" value="false"/>
             </ww:url>
-            <ww:a href="%{removeUrl}">
-              <ww:text name="delete"/>
-            </ww:a>
+            <ww:a href="%{removeUrl}"><img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></ww:a>
           </pss:ifAuthorized>
         </ww:if>
         <ww:else>
@@ -49,9 +45,7 @@
               <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
               <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
             </ww:url>
-            <ww:a href="%{editUrl}">
-              <ww:text name="edit"/>
-            </ww:a>
+            <ww:a href="%{editUrl}"><img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0"></ww:a>
           </pss:ifAuthorized>
           <pss:ifAuthorized permission="continuum-remove-group-build-definition">
             <ww:url id="removeUrl" action="removeGroupBuildDefinition" namespace="/">
@@ -59,9 +53,7 @@
               <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
               <ww:param name="confirmed" value="false"/>
             </ww:url>
-            <ww:a href="%{removeUrl}">
-              <ww:text name="delete"/>
-            </ww:a>
+            <ww:a href="%{removeUrl}"><img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></ww:a>
           </pss:ifAuthorized>
         </ww:else>
       </ec:column>

@@ -58,6 +58,7 @@ public class BuildDefinitionSummaryAction
         {
             projectGroup = getContinuum().getProjectGroupByProjectId( projectId );
             projectGroupId = projectGroup.getId();
+            projectGroupName = projectGroup.getName();
             groupBuildDefinitionSummaries = gatherGroupBuildDefinitionSummaries( projectGroupId );
             projectBuildDefinitionSummaries = gatherProjectBuildDefinitionSummaries( projectId );
 
