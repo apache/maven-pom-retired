@@ -58,12 +58,14 @@
 
         <ww:action name="buildDefinitionSummary" id="summary" namespace="component" executeResult="true">
           <ww:param name="projectId" value="%{project.id}" />
+          <ww:param name="projectGroupId" value="%{project.projectGroup.id}"/>
         </ww:action>
 
         <div class="functnbar3">
            <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
           <ww:form action="buildDefinition" method="post">
             <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+            <input type="hidden" name="projectGroupId" value="<ww:property value="project.projectGroup.id"/>"/>
             <ww:submit value="%{getText('add')}"/>
           </ww:form>
           </pss:ifAuthorized>
