@@ -79,6 +79,8 @@ public class WorkingCopyAction
 
         params.put( "projectId", new Integer( projectId ) );
 
+        params.put( "projectGroupId", new Integer( projectGroupId ) );
+
         params.put( "projectName", projectName );
 
         String baseUrl = UrlHelper.buildUrl( "/workingCopy.action", ServletActionContext.getRequest(), ServletActionContext.getResponse(), params );
