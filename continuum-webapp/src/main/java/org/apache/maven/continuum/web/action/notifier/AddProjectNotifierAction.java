@@ -1,6 +1,7 @@
 package org.apache.maven.continuum.web.action.notifier;
 
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
@@ -38,6 +39,11 @@ public class AddProjectNotifierAction
      * Identifier for the {@link Project} instance.
      */
     private int projectId;
+    
+    /**
+     * Identifier for the {@link ProjectGroup} instance that the current {@link Project} is a member of.
+     */
+    private int projectGroupId;
 
     /**
      * Type for a {@link ProjectNotifier}.
@@ -102,4 +108,24 @@ public class AddProjectNotifierAction
         this.projectId = projectId;
     }
 
+    /**
+     * Returns the identifier for the {@link ProjectGroup} that the 
+     * {@link Project} is a member of.
+     * @return the projectGroupId
+     */
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    /**
+     * Sets the identifier for the {@link ProjectGroup} that the 
+     * {@link Project} is a member of.
+     * @param projectGroupId the identifier to set
+     */
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
+    }
+    
 }

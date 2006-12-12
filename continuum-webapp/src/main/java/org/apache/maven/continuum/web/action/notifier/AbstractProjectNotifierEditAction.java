@@ -18,6 +18,7 @@ package org.apache.maven.continuum.web.action.notifier;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 
 /**
@@ -32,6 +33,11 @@ public abstract class AbstractProjectNotifierEditAction
      * Identifier for the {@link Project} who's {@link ProjectNotifier} is being edited.
      */
     private int projectId;
+    
+    /**
+     * Identifier for the {@link ProjectGroup} instance that the current {@link Project} is a member of.
+     */
+    private int projectGroupId;
 
     /**
      * Save the notifier for the {@link Project} here.<p>
@@ -81,6 +87,26 @@ public abstract class AbstractProjectNotifierEditAction
     public void setProjectId( int projectId )
     {
         this.projectId = projectId;
+    }
+    
+    /**
+     * Returns the identifier for the {@link ProjectGroup} that the 
+     * {@link Project} is a member of.
+     * @return the projectGroupId
+     */
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    /**
+     * Sets the identifier for the {@link ProjectGroup} that the 
+     * {@link Project} is a member of.
+     * @param projectGroupId the identifier to set
+     */
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
     }
 
 }

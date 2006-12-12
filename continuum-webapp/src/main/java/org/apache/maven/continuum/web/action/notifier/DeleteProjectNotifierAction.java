@@ -17,33 +17,34 @@ package org.apache.maven.continuum.web.action.notifier;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
 /**
- * Action that deletes a {@link ProjectNotifier} of type 'IRC' from the 
- * specified {@link ProjectGroup}.
+ * Action that deletes a {@link ProjectNotifier} of type 'IRC' from the specified {@link ProjectGroup}.
  * 
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id: DeleteNotifierAction.java 467122 2006-10-23 20:50:19Z jmcconnell $
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="deleteProjectNotifier"
+ * 
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="deleteProjectNotifier"
  */
-public class DeleteProjectNotifierAction
-    extends ContinuumActionSupport
+public class DeleteProjectNotifierAction extends ContinuumActionSupport
 {
 
     private int projectId;
+
+    /**
+     * Identifier for the {@link ProjectGroup} that the current {@link Project} is a member of.
+     */
+    private int projectGroupId;
 
     private int notifierId;
 
     private String notifierType;
 
-    public String execute()
-        throws ContinuumException
+    public String execute() throws ContinuumException
     {
         getContinuum().removeNotifier( projectId, notifierId );
         return SUCCESS;
@@ -82,6 +83,16 @@ public class DeleteProjectNotifierAction
     public String getNotifierType()
     {
         return notifierType;
+    }
+
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
     }
 
 }
