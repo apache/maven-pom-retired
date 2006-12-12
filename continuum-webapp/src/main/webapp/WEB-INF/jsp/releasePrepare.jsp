@@ -8,18 +8,18 @@
     </head>
     <body>
       <h2><ww:text name="releasePrepare.section.title"/></h2>
-      <ww:form action="releasePrepare" method="post" validate="true">
+      <ww:form action="releasePrepare" method="post">
         <h3><ww:text name="releasePrepare.parameters"/></h3>
         <input type="hidden" name="projectId" value="<ww:property value="projectId"/>"/>
         <div class="axial">
           <table border="1" cellspacing="2" cellpadding="3" width="100%">
-            <ww:textfield label="SCM Username" name="scmUsername"/>
-            <ww:password label="SCM Password" name="scmPassword"/>
-            <ww:textfield label="SCM Tag" name="scmTag"/>
+            <ww:textfield label="SCM Username" name="scmUsername" required="true"/>
+            <ww:password label="SCM Password" name="scmPassword" required="true"/>
+            <ww:textfield label="SCM Tag" name="scmTag" required="true"/>
             <c:if test="${!empty(scmTagBase)}">
               <ww:textfield label="SCM Tag Base" name="scmTagBase"/>
             </c:if>
-            <ww:textfield label="Preparation Goals" name="prepareGoals"/>
+            <ww:textfield label="Preparation Goals" name="prepareGoals" required="true"/>
            </table>
         </div>
 

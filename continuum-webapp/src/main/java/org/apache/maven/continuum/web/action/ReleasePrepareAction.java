@@ -444,4 +444,9 @@ public class ReleasePrepareAction
     {
         this.prepareGoals = prepareGoals;
     }
+
+    public void validate()
+    {
+        
+    }
 }
