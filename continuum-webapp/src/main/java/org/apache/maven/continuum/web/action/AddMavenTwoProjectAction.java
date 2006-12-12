@@ -39,10 +39,10 @@ public class AddMavenTwoProjectAction
     extends AddMavenProjectAction
 {
 
-    protected ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup )
+    protected ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup, boolean checkProtocol )
         throws ContinuumException
     {
-        return getContinuum().addMavenTwoProject( pomUrl, selectedProjectGroup );
+        return getContinuum().addMavenTwoProject( pomUrl, selectedProjectGroup, checkProtocol );
     }
 
     public String doDefault()

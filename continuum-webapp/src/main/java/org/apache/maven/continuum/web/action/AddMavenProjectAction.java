@@ -68,6 +68,8 @@ public abstract class AddMavenProjectAction
     public String execute()
         throws ContinuumException
     {
+        boolean checkProtocol = true;
+
         if ( !StringUtils.isEmpty( pomUrl ) )
         {
             try
@@ -104,6 +106,7 @@ public abstract class AddMavenProjectAction
                 try
                 {
                     pom = pomFile.toURL().toString();
+                    checkProtocol = false;
                 }
                 catch ( MalformedURLException e )
                 {
@@ -119,7 +122,7 @@ public abstract class AddMavenProjectAction
             }
         }
 
-        ContinuumProjectBuildingResult result = doExecute( pom, selectedProjectGroup );
+        ContinuumProjectBuildingResult result = doExecute( pom, selectedProjectGroup, checkProtocol );
 
         if ( result.hasErrors() )
         {
@@ -141,9 +144,10 @@ public abstract class AddMavenProjectAction
      * 
      * @param pomUrl url of the pom specified by the user
      * @param selectedProjectGroup project group id selected by the user
+     * @param checkProtocol check if the protocol is allowed, use false if the pom is uploaded
      * @return result of adding the pom to continuum
      */
-    protected abstract ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup )
+    protected abstract ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup, boolean checkProtocol )
         throws ContinuumException;
 
     public String doDefault()

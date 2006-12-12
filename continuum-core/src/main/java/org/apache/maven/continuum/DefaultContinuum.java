@@ -1008,14 +1008,26 @@ public class DefaultContinuum
     public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
         throws ContinuumException
     {
-        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenOneContinuumProjectBuilder.ID );
+        return addMavenOneProject( metadataUrl, true );
+    }
+
+    public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl, boolean checkProtocol )
+        throws ContinuumException
+    {
+        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenOneContinuumProjectBuilder.ID, checkProtocol );
     }
 
     public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl, int projectGroupId )
         throws ContinuumException
     {
+        return addMavenOneProject( metadataUrl, projectGroupId, true );
+    }
+
+    public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl, int projectGroupId, boolean checkProtocol )
+        throws ContinuumException
+    {
         return executeAddProjectsFromMetadataActivity( metadataUrl, MavenOneContinuumProjectBuilder.ID,
-                                                       projectGroupId );
+                                                       projectGroupId, checkProtocol );
     }
 
     // ----------------------------------------------------------------------
@@ -1025,14 +1037,27 @@ public class DefaultContinuum
     public ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl )
         throws ContinuumException
     {
-        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenTwoContinuumProjectBuilder.ID );
+        return addMavenTwoProject( metadataUrl, true );
+    }
+
+    public ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl, boolean checkProtocol )
+        throws ContinuumException
+    {
+        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenTwoContinuumProjectBuilder.ID, checkProtocol );
     }
 
     public ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl, int projectGroupId )
         throws ContinuumException
     {
+        return addMavenTwoProject( metadataUrl, projectGroupId, true );
+    }
+
+    public ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl, int projectGroupId,
+                                                              boolean checkProtocol )
+        throws ContinuumException
+    {
         return executeAddProjectsFromMetadataActivity( metadataUrl, MavenTwoContinuumProjectBuilder.ID,
-                                                       projectGroupId );
+                                                       projectGroupId, checkProtocol );
     }
 
     // ----------------------------------------------------------------------
@@ -1111,29 +1136,34 @@ public class DefaultContinuum
      * @throws ContinuumException
      */
     private ContinuumProjectBuildingResult executeAddProjectsFromMetadataActivity( String metadataUrl,
-                                                                                   String projectBuilderId )
+                                                                                   String projectBuilderId,
+                                                                                   boolean checkProtocol )
         throws ContinuumException
     {
-        return executeAddProjectsFromMetadataActivity( metadataUrl, projectBuilderId, -1 );
+        return executeAddProjectsFromMetadataActivity( metadataUrl, projectBuilderId, -1, checkProtocol );
     }
 
     private ContinuumProjectBuildingResult executeAddProjectsFromMetadataActivity( String metadataUrl,
                                                                                    String projectBuilderId,
-                                                                                   int projectGroupId )
+                                                                                   int projectGroupId,
+                                                                                   boolean checkProtocol )
         throws ContinuumException
     {
-        try
+        if ( checkProtocol )
         {
-            if ( !urlValidator.validate( metadataUrl ) )
+            try
             {
-                ContinuumProjectBuildingResult res = new ContinuumProjectBuildingResult();
-                res.addError( ContinuumProjectBuildingResult.ERROR_PROTOCOL_NOT_ALLOWED );
-                return res;
+                if ( !urlValidator.validate( metadataUrl ) )
+                {
+                    ContinuumProjectBuildingResult res = new ContinuumProjectBuildingResult();
+                    res.addError( ContinuumProjectBuildingResult.ERROR_PROTOCOL_NOT_ALLOWED );
+                    return res;
+                }
             }
-        }
-        catch( FormicaException e )
-        {
-            //can't be thrown
+            catch( FormicaException e )
+            {
+                //can't be thrown
+            }
         }
 
         Map context = new HashMap();
