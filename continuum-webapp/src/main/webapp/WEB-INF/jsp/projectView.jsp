@@ -86,17 +86,20 @@
             <ec:column property="actions" title="&nbsp;">
                <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
                 <c:if test="${!pageScope.notifier.fromProject}">
-                    <a href='<ww:url value="${notifier.type}NotifierEdit!default.action">
-                      <ww:param name="projectId" value="project.id"/>
+                    <a href='<ww:url value="${notifier.type}ProjectNotifierEdit!default.action">
                       <ww:param name="notifierId" value="${notifier.id}"/>
+                      <ww:param name="projectId" value="project.id"/>
+                      <ww:param name="projectGroupId" value="${project.projectGroup.id}"/>
+                      <ww:param name="notifierType" value="${notifier.type}"/>
                       </ww:url>'>
                       <img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />
                     </a>
                     &nbsp;
-                    <a href='<ww:url value="/deleteNotifier!default.action">
+                    <a href='<ww:url value="/deleteProjectNotifier!default.action">
                       <ww:param name="projectId" value="project.id"/>
-                      <ww:param name="notifierId" value="${notifier.id}"/>
+                      <ww:param name="projectGroupId" value="${project.projectGroup.id}"/>
                       <ww:param name="notifierType" value="${notifier.type}"/>
+                      <ww:param name="notifierId" value="${notifier.id}"/>
                       </ww:url>'>
                       <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0">
                     </a>
@@ -107,8 +110,9 @@
         </ec:table>
         <div class="functnbar3">
            <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
-          <ww:form action="addNotifier!default.action" method="post">
+          <ww:form action="addProjectNotifier!default.action" method="post">
             <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+            <input type="hidden" name="projectGroupId" value="<ww:property value="project.projectGroup.id"/>"/>
             <ww:submit value="%{getText('add')}"/>
           </ww:form>
           </pss:ifAuthorized>

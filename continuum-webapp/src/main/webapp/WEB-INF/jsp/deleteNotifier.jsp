@@ -20,9 +20,10 @@
           </p>
         </div>
         <div class="functnbar3">
-          <ww:form action="deleteNotifier.action" method="post">
+          <ww:form action="deleteProjectNotifier.action" method="post">
             <ww:hidden name="notifierId"/>
             <ww:hidden name="projectId"/>
+            <ww:hidden name="projectGroupId" />
             <c1:submitcancel value="%{getText('delete')}" cancel="%{getText('cancel')}"/>
           </ww:form>
         </div>
