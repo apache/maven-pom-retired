@@ -94,8 +94,7 @@
                       <ww:param name="projectGroupId" value="${project.projectGroup.id}"/>
                       <ww:param name="notifierType" value="${notifier.type}"/>
                       </ww:url>'>
-                      <img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />
-                    </a>
+                      <img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" /></a>
                     &nbsp;
                     <a href='<ww:url value="/deleteProjectNotifier!default.action">
                       <ww:param name="projectId" value="project.id"/>
@@ -103,8 +102,7 @@
                       <ww:param name="notifierType" value="${notifier.type}"/>
                       <ww:param name="notifierId" value="${notifier.id}"/>
                       </ww:url>'>
-                      <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0">
-                    </a>
+                      <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></a>
                 </c:if>
               </pss:ifAuthorized>
             </ec:column>
