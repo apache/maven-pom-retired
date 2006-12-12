@@ -140,8 +140,22 @@ public class DataManagementToolTest
 
     private static String removeTimestampVariance( String content )
     {
-        return removeTagContent(
-            removeTagContent( removeTagContent( removeTagContent( content, "startTime" ), "endTime" ), "date" ), "id" );
+        return fixXmlQuotes( removeTagContent(
+            removeTagContent( removeTagContent( removeTagContent( content, "startTime" ), "endTime" ), "date" ), "id" ) );
+    }
+
+    private static String fixXmlQuotes( String s )
+    {
+        if ( s.startsWith( "<?xml version='1.0' encoding='UTF-8'?>"))
+        {
+            return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + s.substring( "<?xml version='1.0' encoding='UTF-8'?>".length() );
+        }
+        return cleanLineEndings( s );
+    }
+
+    private static String cleanLineEndings( String s )
+    {
+        return s.replaceAll( "\r\n", "\n" );
     }
 
     private static String removeTagContent( String content, String field )

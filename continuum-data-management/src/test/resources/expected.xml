@@ -20,7 +20,7 @@
           <workingDirectory>workingDirectory1</workingDirectory>
           <buildResults>
             <buildResult>
-              <project id="1" />
+              <project id="1"></project>
               <id>1</id>
               <buildNumber>1</buildNumber>
               <state>1</state>
@@ -77,7 +77,7 @@
               </scmResult>
             </buildResult>
             <buildResult>
-              <project id="1" />
+              <project id="1"></project>
               <id>2</id>
               <buildNumber>2</buildNumber>
               <state>2</state>
@@ -152,7 +152,7 @@
               <version>version2</version>
             </dependency>
           </dependencies>
-          <projectGroup id="1" />
+          <projectGroup id="1"></projectGroup>
           <notifiers>
             <notifier>
               <id>3</id>
@@ -171,16 +171,16 @@
               <goals>goals11</goals>
               <arguments>arguments11</arguments>
               <buildFile>buildFile11</buildFile>
-              <schedule id="2" />
-              <profile id="2" />
+              <schedule id="2"></schedule>
+              <profile id="2"></profile>
             </buildDefinition>
             <buildDefinition>
               <id>2</id>
               <goals>goals12</goals>
               <arguments>arguments12</arguments>
               <buildFile>buildFile12</buildFile>
-              <schedule id="1" />
-              <profile id="2" />
+              <schedule id="1"></schedule>
+              <profile id="2"></profile>
             </buildDefinition>
           </buildDefinitions>
         </project>
@@ -197,7 +197,7 @@
           <workingDirectory>workingDirectory2</workingDirectory>
           <buildResults>
             <buildResult>
-              <project id="2" />
+              <project id="2"></project>
               <id>3</id>
               <buildNumber>3</buildNumber>
               <state>3</state>
@@ -275,7 +275,7 @@
               <version>version3</version>
             </dependency>
           </dependencies>
-          <projectGroup id="1" />
+          <projectGroup id="1"></projectGroup>
           <notifiers>
             <notifier>
               <id>4</id>
@@ -306,8 +306,8 @@
               <goals>goals13</goals>
               <arguments>arguments13</arguments>
               <buildFile>buildFile13</buildFile>
-              <schedule id="1" />
-              <profile id="1" />
+              <schedule id="1"></schedule>
+              <profile id="1"></profile>
             </buildDefinition>
             <buildDefinition>
               <id>8</id>
@@ -345,8 +345,8 @@
           <goals>goals1</goals>
           <arguments>arguments1</arguments>
           <buildFile>buildFile1</buildFile>
-          <schedule id="1" />
-          <profile id="1" />
+          <schedule id="1"></schedule>
+          <profile id="1"></profile>
         </buildDefinition>
       </buildDefinitions>
     </projectGroup>
@@ -374,16 +374,16 @@
           <goals>goals2</goals>
           <arguments>arguments2</arguments>
           <buildFile>buildFile2</buildFile>
-          <schedule id="2" />
-          <profile id="1" />
+          <schedule id="2"></schedule>
+          <profile id="1"></profile>
         </buildDefinition>
         <buildDefinition>
           <id>6</id>
           <goals>goals3</goals>
           <arguments>arguments3</arguments>
           <buildFile>buildFile3</buildFile>
-          <schedule id="2" />
-          <profile id="2" />
+          <schedule id="2"></schedule>
+          <profile id="2"></profile>
         </buildDefinition>
         <buildDefinition>
           <id>7</id>
@@ -453,8 +453,8 @@
       <description>description1</description>
       <scmMode>1</scmMode>
       <buildWithoutChanges>true</buildWithoutChanges>
-      <jdk name="JDK 1.3" />
-      <builder name="Maven 2.0 alpha 3" />
+      <jdk name="JDK 1.3"></jdk>
+      <builder name="Maven 2.0 alpha 3"></builder>
     </profile>
     <profile>
       <id>2</id>
@@ -462,8 +462,8 @@
       <name>name2</name>
       <description>description2</description>
       <scmMode>2</scmMode>
-      <jdk name="JDK 1.4" />
-      <builder name="Maven 2.0 alpha 3" />
+      <jdk name="JDK 1.4"></jdk>
+      <builder name="Maven 2.0 alpha 3"></builder>
     </profile>
     <profile>
       <id>3</id>
@@ -471,8 +471,8 @@
       <description>description3</description>
       <scmMode>3</scmMode>
       <buildWithoutChanges>true</buildWithoutChanges>
-      <jdk name="JDK 1.4" />
-      <builder name="Maven 2.0 alpha 3" />
+      <jdk name="JDK 1.4"></jdk>
+      <builder name="Maven 2.0 alpha 3"></builder>
     </profile>
   </profiles>
 </continuumDatabase>
