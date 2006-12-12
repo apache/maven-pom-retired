@@ -114,11 +114,7 @@
     <global-exception-mappings>
       <exception-mapping exception="org.apache.maven.continuum.initialization.ContinuumInitializationException"
                          result="continuumInitialization"/>
-      <!-- TODO: this is missing
-            <exception-mapping exception="java.lang.Exception" result="error-internal"/>
-      -->
-      <exception-mapping exception="java.lang.Exception"
-                         result="error"/>
+      <exception-mapping exception="java.lang.Exception" result="error"/>
     </global-exception-mappings>
 
     <!-- This is the redirection facility for plexus-security,
