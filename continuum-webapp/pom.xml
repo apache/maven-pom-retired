@@ -360,6 +360,11 @@
       <artifactId>wagon-ssh</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-webdav</artifactId>
+      <scope>runtime</scope>
+    </dependency>
     <!--
       Plexus Security Dependencies
       -->
