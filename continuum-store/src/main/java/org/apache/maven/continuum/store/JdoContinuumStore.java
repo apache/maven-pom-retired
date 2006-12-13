@@ -223,20 +223,24 @@ public class JdoContinuumStore
 
         // iterate through the project groups and make sure we are not walking over projects that
         // might define their own build definitions
-        for ( Iterator i = projectGroupSource.keySet().iterator(); i.hasNext(); )
+        if ( projectGroupSource != null )
         {
-            Integer projectGroupId = (Integer) i.next();
-            List projectsInGroup = getProjectsInGroup( projectGroupId.intValue() );
-
-            for ( Iterator j = projectsInGroup.iterator(); j.hasNext(); )
+        	for ( Iterator i = projectGroupSource.keySet().iterator(); i.hasNext(); )
             {
-                Integer projectId = new Integer( ( (Project) j.next() ).getId() );
-                if ( !aggregate.keySet().contains( projectId ) )
+                Integer projectGroupId = (Integer) i.next();
+                List projectsInGroup = getProjectsInGroup( projectGroupId.intValue() );
+
+                for ( Iterator j = projectsInGroup.iterator(); j.hasNext(); )
                 {
-                    aggregate.put( projectId, projectGroupSource.get( projectGroupId ) );
+                    Integer projectId = new Integer( ( (Project) j.next() ).getId() );
+                    if ( !aggregate.keySet().contains( projectId ) )
+                    {
+                        aggregate.put( projectId, projectGroupSource.get( projectGroupId ) );
+                    }
                 }
             }
         }
+        
         return aggregate;
     }
 
