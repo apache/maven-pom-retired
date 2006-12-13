@@ -302,14 +302,9 @@
 
     <component>
       <role>org.codehaus.plexus.jdo.JdoFactory</role>
-
       <implementation>org.codehaus.plexus.jdo.DataSourceConfigurableJdoFactory</implementation>
-
       <role-hint>continuum</role-hint>
-
       <configuration>
-
-
         <connectionFactoryName>java:comp/env/jdbc/continuum</connectionFactoryName>
         <shutdownConnectionFactoryName>java:comp/env/jdbc/continuum_shutdown</shutdownConnectionFactoryName>
 
