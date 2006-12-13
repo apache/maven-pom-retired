@@ -1,0 +1,2 @@
+This is a WagonContinuumNotifier test file expected to be deployed at the url specified in the distributionManagement.site 
+section of the pom.

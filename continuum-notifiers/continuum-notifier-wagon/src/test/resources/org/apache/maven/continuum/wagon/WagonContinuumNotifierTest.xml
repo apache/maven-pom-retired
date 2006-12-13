@@ -1,0 +1,67 @@
+<plexus>
+  <components>
+    <component>
+      <role>org.apache.maven.continuum.wagon.ServletServer</role>
+      <implementation>org.apache.maven.continuum.wagon.ServletServer</implementation>
+      <configuration>
+        <port>10007</port>
+        <contexts>
+          <context>
+            <id>/dav</id>
+            <servlets>
+              <servlet>
+                <id>LOCALREPO</id>
+                <path>/*</path>
+                <servlet>it.could.webdav.DAVServlet</servlet>
+                <parameters>
+                  <property>
+                    <name>rootPath</name>
+                      <value>${basedir}/target</value>
+                  </property>
+                  <property>
+                    <name>xmlOnly</name>
+                    <value>false</value>
+                  </property>
+                </parameters>
+              </servlet>
+            </servlets>
+          </context>
+        </contexts>
+      </configuration>
+    </component>
+    
+    <component>
+      <role>org.codehaus.plexus.notification.notifier.Notifier</role>
+      <role-hint>wagon</role-hint>
+      <implementation>org.apache.maven.continuum.notification.wagon.WagonContinuumNotifier</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.artifact.manager.WagonManager</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectBuilder</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.settings.MavenSettingsBuilder</role>
+        </requirement>
+      </requirements>
+      <configuration>
+        <localRepository>~/.m2/repository</localRepository>
+      </configuration>
+    </component>
+    
+    <component>
+      <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
+      <implementation>org.apache.maven.continuum.wagon.MockConfigurationService</implementation>
+    </component>
+    
+    <component>
+      <role>org.apache.maven.artifact.manager.WagonManager</role>
+      <implementation>org.apache.maven.artifact.manager.DefaultWagonManager</implementation>
+    </component>
+    
+  </components>
+</plexus>

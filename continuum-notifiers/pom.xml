@@ -13,6 +13,7 @@
     <module>continuum-notifier-irc</module>
     <module>continuum-notifier-jabber</module>
     <module>continuum-notifier-msn</module>
+    <module>continuum-notifier-wagon</module>
   </modules>
   <dependencies>
     <dependency>
