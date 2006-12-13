@@ -329,6 +329,10 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-wagon</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
       <artifactId>continuum-xmlrpc</artifactId>
     </dependency>
     <dependency>

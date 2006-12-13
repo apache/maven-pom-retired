@@ -68,6 +68,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 /**
  * @author <a href="mailto:hisidro@exist.com">Henry Isidro</a>
  * @author <a href="mailto:nramirez@exist.com">Napoleon Esmundo C. Ramirez</a>
+ * @plexus.component role="org.codehaus.plexus.notification.notifier.Notifier" role-hint="wagon"
  */
 public class WagonContinuumNotifier
     extends AbstractContinuumNotifier
