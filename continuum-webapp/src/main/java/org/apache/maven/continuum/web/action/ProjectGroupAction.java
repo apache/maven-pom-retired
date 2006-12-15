@@ -99,6 +99,8 @@ public class ProjectGroupAction
     private String filterKey;
     
     private boolean ascending = true;
+    
+    private Collection groupProjects;
 
     public String summary()
         throws ContinuumException
@@ -113,12 +115,20 @@ public class ProjectGroupAction
         throws ContinuumException
     {
         projectGroup = getContinuum().getProjectGroup( projectGroupId );
+        
+        groupProjects = getContinuum().getProjectsInGroup( projectGroupId );
 
         populateProjectGroupUsers( projectGroup );
         
         return SUCCESS;
     }
 
+    public Collection getGroupProjects()
+        throws ContinuumException
+    {
+    	return groupProjects;
+    }
+    
     public String buildDefinitions()
         throws ContinuumException
     {

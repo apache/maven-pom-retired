@@ -24,12 +24,13 @@
 
     <h3>Member Projects</h3>
 
-    <ec:table items="projectGroup.projects"
+    <ec:table items="groupProjects"
               var="project"
               showExports="false"
               showPagination="false"
               showStatusBar="false"
-              filterable="false">
+              filterable="false"
+              sortable="false">
       <ec:row highlightRow="true">
         <ec:column property="name" title="summary.projectTable.name" width="48%">
           <ww:url id="projectViewUrl" action="projectView">
