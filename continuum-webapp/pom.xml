@@ -50,6 +50,8 @@
               <includes>
                 <!-- TODO: META-INF shouldn't be required, seems to be an issue with the current war plugin -->
                 <include>META-INF</include>
+                <include>template/pss</include>
+                <!-- Templates from other wars -->
                 <include>WEB-INF/classes</include>
                 <!-- Classes and Resources from other wars -->
                 <include>WEB-INF/lib</include>
