@@ -373,7 +373,7 @@
             <properties>
               <property>
                 <name>file</name>
-                <value>${plexus.home}/logs/continuum.log</value>
+                <value>${appserver.base}/logs/continuum.log</value>
               </property>
               <property>
                 <name>append</name>
@@ -395,7 +395,7 @@
             <properties>
               <property>
                 <name>file</name>
-                <value>${plexus.home}/logs/audit.log</value>
+                <value>${appserver.base}/logs/audit.log</value>
               </property>
               <property>
                 <name>append</name>
