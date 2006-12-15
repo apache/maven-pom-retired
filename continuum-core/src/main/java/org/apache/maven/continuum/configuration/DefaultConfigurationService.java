@@ -192,6 +192,11 @@ public class DefaultConfigurationService
 
     public File getFile( String filename )
     {
+        if ( filename == null )
+        {
+            return null;
+        }
+
         File f = null;
 
         if ( filename != null && filename.length() != 0 )

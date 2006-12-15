@@ -61,11 +61,23 @@ public class ConfigurationAction
     {
         ConfigurationService configuration = getContinuum().getConfiguration();
 
-        workingDirectory = configuration.getWorkingDirectory().getAbsolutePath();
+        File workingDirectoryFile = configuration.getWorkingDirectory();
+        if ( workingDirectoryFile != null )
+        {
+            workingDirectory = workingDirectoryFile.getAbsolutePath();
+        }
 
-        buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
+        File buildOutputDirectoryFile = configuration.getBuildOutputDirectory();
+        if ( buildOutputDirectoryFile != null )
+        {
+            buildOutputDirectory = buildOutputDirectoryFile.getAbsolutePath();
+        }
 
-        deploymentRepositoryDirectory = configuration.getDeploymentRepositoryDirectory().getAbsolutePath();
+        File deploymentRepositoryDirectoryFile = configuration.getDeploymentRepositoryDirectory();
+        if ( deploymentRepositoryDirectoryFile != null )
+        {
+            deploymentRepositoryDirectory = deploymentRepositoryDirectoryFile.getAbsolutePath();
+        }
 
         baseUrl = configuration.getUrl();
 
