@@ -44,13 +44,15 @@
             <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
               <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
               <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
+              <ww:param name="groupBuildDefinition">true</ww:param>
             </ww:url>
             <ww:a href="%{editUrl}"><img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0"></ww:a>
           </pss:ifAuthorized>
-          <pss:ifAuthorized permission="continuum-remove-group-build-definition">
+          <pss:ifAuthorized permission="continuum-remove-group-build-definition" resource="${projectGroupName}">
             <ww:url id="removeUrl" action="removeGroupBuildDefinition" namespace="/">
               <ww:param name="projectGroupId">${pageScope.buildDefinitionSummary.projectGroupId}</ww:param>
               <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
+              <ww:param name="groupBuildDefinition">true</ww:param>
               <ww:param name="confirmed" value="false"/>
             </ww:url>
             <ww:a href="%{removeUrl}"><img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></ww:a>

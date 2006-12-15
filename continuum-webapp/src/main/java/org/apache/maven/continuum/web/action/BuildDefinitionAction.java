@@ -66,6 +66,8 @@ public class BuildDefinitionAction
 
     private Map profiles;
 
+    private boolean groupBuildDefinition = false;
+
     public void prepare()
         throws Exception
     {
@@ -137,7 +139,7 @@ public class BuildDefinitionAction
     public String saveBuildDefinition()
         throws ContinuumException
     {
-        if (projectId != 0)
+        if ( projectId != 0  && !groupBuildDefinition )
         {
             return saveToProject();
         }
@@ -198,7 +200,14 @@ public class BuildDefinitionAction
             return INPUT;
         }
 
-        return "success_group";
+        if ( projectId != 0 )
+        {
+            return SUCCESS;
+        }
+        else
+        {
+            return "success_group";
+        }
     }
 
     public String removeFromProject()
@@ -391,5 +400,15 @@ public class BuildDefinitionAction
     public void setProfiles( Map profiles )
     {
         this.profiles = profiles;
+    }
+
+    public boolean isGroupBuildDefinition()
+    {
+        return groupBuildDefinition;
+    }
+
+    public void setGroupBuildDefinition( boolean groupBuildDefinition )
+    {
+        this.groupBuildDefinition = groupBuildDefinition;
     }
 }

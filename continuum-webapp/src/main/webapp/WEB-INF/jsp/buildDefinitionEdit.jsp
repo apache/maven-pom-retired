@@ -27,6 +27,7 @@
                 <ww:hidden name="buildDefinitionId"/>
                 <ww:hidden name="projectId"/>
                 <ww:hidden name="projectGroupId"/>
+                <ww:hidden name="groupBuildDefinition"/>
     
                 <table>
                   <tbody>
