@@ -65,6 +65,8 @@ public class ConfigurationAction
 
         buildOutputDirectory = configuration.getBuildOutputDirectory().getAbsolutePath();
 
+        deploymentRepositoryDirectory = configuration.getDeploymentRepositoryDirectory().getAbsolutePath();
+
         baseUrl = configuration.getUrl();
 
         if ( StringUtils.isEmpty( baseUrl ) )
