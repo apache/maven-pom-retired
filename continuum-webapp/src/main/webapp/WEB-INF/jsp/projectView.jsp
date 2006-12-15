@@ -14,7 +14,6 @@
 
         <jsp:include page="/WEB-INF/jsp/navigations/ProjectMenu.jsp">
           <jsp:param name="tab" value="view"/>
-          <jsp:param name="projectGroupId" value="%{project.projectGroup.id}"/>
         </jsp:include>
 
         <h3><ww:text name="projectView.section.title"/></h3>

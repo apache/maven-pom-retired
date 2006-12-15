@@ -41,17 +41,10 @@ public class ProjectViewAction
      */
     private ProjectGroup projectGroup;
 
-    /**
-     * Identifier for the target {@link ProjectGroup} to obtain for 
-     * viewing.
-     */
-    private int projectGroupId;
-
     public String execute()
         throws ContinuumException
     {
-        projectGroup = getContinuum().getProjectGroup( projectGroupId );
-
+        projectGroup = getContinuum().getProjectGroupByProjectId( projectId );
         project = getContinuum().getProjectWithAllDetails( projectId );
 
         return SUCCESS;
@@ -73,24 +66,6 @@ public class ProjectViewAction
     }
 
     /**
-     * Return the identifier for the {@link ProjectGroup} to view.
-     * @return the projectGroupId
-     */
-    public int getProjectGroupId()
-    {
-        return projectGroupId;
-    }
-
-    /**
-     * Sets the {@link ProjectGroup} identifier to obtain for viewing.
-     * @param projectGroupId the projectGroupId to set
-     */
-    public void setProjectGroupId( int projectGroupId )
-    {
-        this.projectGroupId = projectGroupId;
-    }
-
-    /**
      * Returns the {@link ProjectGroup} instance obtained for 
      * the specified project group Id, or null if it were not set.
      * 
@@ -100,5 +75,4 @@ public class ProjectViewAction
     {
         return projectGroup;
     }
-
 }
