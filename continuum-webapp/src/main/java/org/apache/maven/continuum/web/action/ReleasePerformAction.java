@@ -103,7 +103,6 @@ public class ReleasePerformAction
         descriptor.setScmReleaseLabel( scmTag );
         descriptor.setScmTagBase( scmTagBase );
 
-        String releaseId;
         do
         {
             releaseId = String.valueOf( System.currentTimeMillis() );
