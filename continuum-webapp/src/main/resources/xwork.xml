@@ -158,7 +158,10 @@
 
     <action name="deleteProject" class="deleteProject">
       <result name="delete">/WEB-INF/jsp/deleteProject.jsp</result>
-      <result name="success" type="chain">groupSummary</result>
+      <result name="success" type="redirect-action">
+        <param name="actionName">projectGroupSummary</param>
+        <param name="projectGroupId">${projectGroupId}</param>
+      </result>
     </action>
 
     <action name="buildProject" class="buildProject">

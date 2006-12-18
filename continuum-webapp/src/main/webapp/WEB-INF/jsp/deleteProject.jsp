@@ -21,6 +21,7 @@
         <div class="functnbar3">
           <ww:form action="deleteProject.action" method="post">
             <ww:hidden name="projectId"/>
+            <ww:hidden name="projectGroupId"/>
             <c1:submitcancel value="%{getText('delete')}" cancel="%{getText('cancel')}"/>
           </ww:form>
         </div>

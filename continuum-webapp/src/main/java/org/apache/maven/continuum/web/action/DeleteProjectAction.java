@@ -34,6 +34,8 @@ public class DeleteProjectAction
 
     private String projectName;
 
+    private int projectGroupId;
+
     public String execute()
         throws ContinuumException
     {
@@ -45,7 +47,7 @@ public class DeleteProjectAction
     public String doDefault()
         throws ContinuumException
     {
-        Project project = getContinuum().getProject( projectId ); 
+        Project project = getContinuum().getProject( projectId );
         projectName = project.getName();
         
         return "delete";
@@ -69,5 +71,15 @@ public class DeleteProjectAction
     public String getProjectName()
     {
         return projectName;
+    }
+
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
+    }
+
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
     }
 }
