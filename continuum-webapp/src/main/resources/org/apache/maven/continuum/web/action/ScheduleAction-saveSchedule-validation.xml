@@ -28,4 +28,7 @@
       <message key="schedule.delay.invalid"/>  
     </field-validator>
   </field>
+  <validator type="cronexpression">
+    <message/>
+  </validator>
 </validators>
