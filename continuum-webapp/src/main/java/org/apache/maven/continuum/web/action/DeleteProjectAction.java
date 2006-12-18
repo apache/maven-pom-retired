@@ -17,6 +17,7 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Project;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -42,7 +43,11 @@ public class DeleteProjectAction
     }
 
     public String doDefault()
+        throws ContinuumException
     {
+        Project project = getContinuum().getProject( projectId ); 
+        projectName = project.getName();
+        
         return "delete";
     }
 

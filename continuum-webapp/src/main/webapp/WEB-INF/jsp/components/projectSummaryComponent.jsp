@@ -124,7 +124,6 @@
               test="${pageScope.project.state == 1 || pageScope.project.state == 10 || pageScope.project.state == 2 || pageScope.project.state == 3 || pageScope.project.state == 4}">
             <ww:url id="deleteProjectUrl" value="deleteProject!default.action" namespace="/">
               <ww:param name="projectId" value="${project.id}"/>
-              <ww:param name="projectName" value="${project.name}"/>
             </ww:url>
             <ww:a href="%{deleteProjectUrl}">
               <img src="<ww:url value='/images/delete.gif'/>" alt="Delete" title="Delete" border="0">
