@@ -349,6 +349,13 @@
           <type>String</type>
         </field>
         <field>
+          <name>from</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>The origin of the notifier (pom or user).</description>
+          <type>String</type>
+        </field>
+        <field>
           <name>events</name>
           <version>1.0.0</version>
           <required>false</required>

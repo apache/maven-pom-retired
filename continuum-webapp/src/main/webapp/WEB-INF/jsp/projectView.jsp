@@ -71,22 +71,23 @@
         </div>
 
         <h3><ww:text name="projectView.notifiers"/></h3>
-        <ww:set name="notifiers" value="project.notifiers" scope="request"/>
-        <ec:table items="notifiers"
-                  var="notifier"
-                  showExports="false"
-                  showPagination="false"
-                  showStatusBar="false"
-                  filterable="false"
-                  sortable="false">
-          <ec:row>
-            <ec:column property="type" title="projectView.notifier.type"/>
-            <ec:column property="recipient" title="projectView.notifier.recipient" cell="org.apache.maven.continuum.web.view.projectview.NotifierRecipientCell"/>
-            <ec:column property="events" title="projectView.notifier.events" cell="org.apache.maven.continuum.web.view.projectview.NotifierEventCell"/>
-            <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
-            <ec:column property="actions" title="&nbsp;">
-               <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
-                <c:if test="${!pageScope.notifier.fromProject}">
+        <ww:if test="${not empty project.notifiers}">
+          <ww:set name="notifiers" value="project.notifiers" scope="request"/>
+          <ec:table items="notifiers"
+                    var="notifier"
+                    showExports="false"
+                    showPagination="false"
+                    showStatusBar="false"
+                    filterable="false"
+                    sortable="false">
+            <ec:row>
+              <ec:column property="type" title="projectView.notifier.type"/>
+              <ec:column property="recipient" title="projectView.notifier.recipient" cell="org.apache.maven.continuum.web.view.projectview.NotifierRecipientCell"/>
+              <ec:column property="events" title="projectView.notifier.events" cell="org.apache.maven.continuum.web.view.projectview.NotifierEventCell"/>
+              <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
+              <ec:column property="actions" title="&nbsp;">
+                <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
+                  <c:if test="${!pageScope.notifier.fromProject}">
                     <a href='<ww:url value="${notifier.type}ProjectNotifierEdit!default.action">
                       <ww:param name="notifierId" value="${notifier.id}"/>
                       <ww:param name="projectId" value="project.id"/>
@@ -102,11 +103,12 @@
                       <ww:param name="notifierId" value="${notifier.id}"/>
                       </ww:url>'>
                       <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></a>
-                </c:if>
-              </pss:ifAuthorized>
-            </ec:column>
-          </ec:row>
-        </ec:table>
+                  </c:if>
+                </pss:ifAuthorized>
+              </ec:column>
+            </ec:row>
+          </ec:table>
+        </ww:if>
         <div class="functnbar3">
            <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
           <ww:form action="addProjectNotifier!default.action" method="post">

@@ -18,39 +18,47 @@
       <ec:column property="type" title="projectView.notifier.type"/>
       <ec:column property="recipient" title="projectView.notifier.recipient"/>
       <ec:column property="events" title="projectView.notifier.events"/>
-      <ec:column property="sender" title="projectView.notifier.from"/>      
+      <ec:column property="sender" title="projectView.notifier.from"/>
       <ec:column property="editActions" title="Edit">
-        
-        <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
-          <ww:url id="editUrl" action="editProjectGroupNotifier" namespace="/">
-            <ww:param name="projectGroupId">${pageScope.projectGroupNotifierSummary.projectGroupId}</ww:param>
-            <ww:param name="notifierId">${pageScope.projectGroupNotifierSummary.id}</ww:param>
-            <ww:param name="notifierType">${pageScope.projectGroupNotifierSummary.type}</ww:param>
-          </ww:url>
-          <ww:a href="%{editUrl}">
-              <img src="<ww:url value='/images/edit.gif'/>" alt="Edit" title="Edit" border="0">
-          </ww:a>
-        </pss:ifAuthorized>
-        <pss:elseAuthorized>
+        <ww:if test="${pageScope.projectGroupNotifierSummary.from == 'PROJECT'}">
           <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="Edit" title="Edit" border="0">
-        </pss:elseAuthorized>
+        </ww:if>
+        <ww:else>
+          <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
+            <ww:url id="editUrl" action="editProjectGroupNotifier" namespace="/">
+              <ww:param name="projectGroupId">${pageScope.projectGroupNotifierSummary.projectGroupId}</ww:param>
+              <ww:param name="notifierId">${pageScope.projectGroupNotifierSummary.id}</ww:param>
+              <ww:param name="notifierType">${pageScope.projectGroupNotifierSummary.type}</ww:param>
+            </ww:url>
+            <ww:a href="%{editUrl}">
+              <img src="<ww:url value='/images/edit.gif'/>" alt="Edit" title="Edit" border="0">
+            </ww:a>
+          </pss:ifAuthorized>
+          <pss:elseAuthorized>
+            <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="Edit" title="Edit" border="0">
+          </pss:elseAuthorized>
+        </ww:else>
       </ec:column>    
       <ec:column property="deleteActions" title="Remove">
-        <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
-          <ww:url id="removeUrl" action="deleteProjectGroupNotifier!default.action" namespace="/">
-            <ww:param name="projectGroupId">${pageScope.projectGroupNotifierSummary.projectGroupId}</ww:param>
-            <ww:param name="notifierId">${pageScope.projectGroupNotifierSummary.id}</ww:param>
-            <ww:param name="confirmed" value="false"/>
-          </ww:url>
-        <ww:a href="%{removeUrl}">
+        <ww:if test="${pageScope.projectGroupNotifierSummary.from == 'PROJECT'}">
+          <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Edit" title="Edit" border="0">
+        </ww:if>
+        <ww:else>
+          <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
+            <ww:url id="removeUrl" action="deleteProjectGroupNotifier!default.action" namespace="/">
+              <ww:param name="projectGroupId">${pageScope.projectGroupNotifierSummary.projectGroupId}</ww:param>
+              <ww:param name="notifierId">${pageScope.projectGroupNotifierSummary.id}</ww:param>
+              <ww:param name="confirmed" value="false"/>
+            </ww:url>
+          <ww:a href="%{removeUrl}">
             <img src="<ww:url value='/images/delete.gif'/>" alt="Delete" title="Delete" border="0">
-        </ww:a>
-        </pss:ifAuthorized>
-        <pss:elseAuthorized>
-          <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Delete" title="Delete" border="0">
-        </pss:elseAuthorized>
+          </ww:a>
+          </pss:ifAuthorized>
+          <pss:elseAuthorized>
+            <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Delete" title="Delete" border="0">
+          </pss:elseAuthorized>
+        </ww:else>
       </ec:column>      
-     
     </ec:row>
   </ec:table>
   </ww:if>

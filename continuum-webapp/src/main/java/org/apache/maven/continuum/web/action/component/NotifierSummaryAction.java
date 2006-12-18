@@ -112,6 +112,16 @@ public class NotifierSummaryAction
         ns.setId( notifier.getId() );
         ns.setType( notifier.getType() );
         ns.setProjectGroupId( getProjectGroupId() );
+
+        if ( notifier.isFromProject() )
+        {
+            ns.setFrom( "PROJECT" );
+        }
+        else
+        {
+            ns.setFrom( "USER" );
+        }
+
         // FIXME: Source the recipient 
         ns.setRecipient( "unknown" );
         // XXX: Hack - just for testing :)
