@@ -89,5 +89,11 @@ public class DeleteGroupNotifierAction
     {
         this.projectGroupId = projectGroupId;
     }
+    
+    public int getProjectId()
+    {
+        //flags that this is a group notifier
+        return -1;
+    }
 
 }

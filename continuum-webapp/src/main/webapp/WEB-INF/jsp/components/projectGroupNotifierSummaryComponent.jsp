@@ -37,7 +37,7 @@
       </ec:column>    
       <ec:column property="deleteActions" title="Remove">
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
-          <ww:url id="removeUrl" action="deleteProjectGroupNotifier" namespace="/">
+          <ww:url id="removeUrl" action="deleteProjectGroupNotifier!default.action" namespace="/">
             <ww:param name="projectGroupId">${pageScope.projectGroupNotifierSummary.projectGroupId}</ww:param>
             <ww:param name="notifierId">${pageScope.projectGroupNotifierSummary.id}</ww:param>
             <ww:param name="confirmed" value="false"/>
