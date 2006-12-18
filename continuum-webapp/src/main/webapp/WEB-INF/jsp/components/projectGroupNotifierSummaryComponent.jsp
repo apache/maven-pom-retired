@@ -19,7 +19,7 @@
       <ec:column property="recipient" title="projectView.notifier.recipient"/>
       <ec:column property="events" title="projectView.notifier.events"/>
       <ec:column property="sender" title="projectView.notifier.from"/>
-      <ec:column property="editActions" title="Edit">
+      <ec:column property="editActions" title="&nbsp;">
         <ww:if test="${pageScope.projectGroupNotifierSummary.from == 'PROJECT'}">
           <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="Edit" title="Edit" border="0">
         </ww:if>
@@ -39,7 +39,7 @@
           </pss:elseAuthorized>
         </ww:else>
       </ec:column>    
-      <ec:column property="deleteActions" title="Remove">
+      <ec:column property="deleteActions" title="&nbsp;">
         <ww:if test="${pageScope.projectGroupNotifierSummary.from == 'PROJECT'}">
           <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Edit" title="Edit" border="0">
         </ww:if>
