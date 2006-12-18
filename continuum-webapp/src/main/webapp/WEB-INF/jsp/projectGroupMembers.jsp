@@ -68,7 +68,7 @@
             <c:choose>
               <c:when
                   test="${pageScope.project.state == 1 || pageScope.project.state == 10 || pageScope.project.state == 2 || pageScope.project.state == 3 || pageScope.project.state == 4}">
-                <ww:url id="removeProjectUrl" action="deleteProject">
+                <ww:url id="removeProjectUrl" action="deleteProject!default.action">
                   <ww:param name="projectId" value="${pageScope.project.id}"/>
                   <ww:param name="projectName" value="${pageScope.project.name}"/>
                 </ww:url>
