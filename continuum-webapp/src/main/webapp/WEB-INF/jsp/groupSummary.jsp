@@ -1,6 +1,8 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
 <%@ taglib uri="http://www.extremecomponents.org" prefix="ec" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
+<%@ taglib uri="/plexusSecuritySystem" prefix="pss" %>
+
 <html>
 <ww:i18n name="localization.Continuum">
   <head>
@@ -22,7 +24,7 @@
     </ww:if>
 
     <ww:if test="${not empty groups}">
-    <div class="eXtremeTable" >
+
     <ec:table items="groups"
               var="group"
               showExports="false"
@@ -53,7 +55,7 @@
         </table>
       </div>
     </pss:ifAuthorized>
-    </div>        
+  </div>
   </body>
 </ww:i18n>
 </html>

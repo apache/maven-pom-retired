@@ -3,7 +3,7 @@
 <%@ taglib uri="/plexusSecuritySystem" prefix="pss" %>
 
 <ww:i18n name="localization.Continuum">
-  <div id="navcolum">
+<div id="navcolumn">
   <div id="projectmenu" class="toolgroup">
     <div class="label">Continuum</div>
     <div>
@@ -24,39 +24,40 @@
 
   <pss:ifAuthorized permission="continuum-add-group">
     <div id="projectmenu" class="toolgroup">
-    <div class="label">
-      <ww:text name="menu.addProject"/>
-    </div>
-    <div>
-      <div class="body">
-        <ww:url id="addMavenTwoProjectUrl" action="addMavenTwoProject" method="default" namespace="/"
-                includeParams="none"/>
-        <ww:a href="%{addMavenTwoProjectUrl}">
-          <ww:text name="menu.add.m2Project"/>
-        </ww:a>
+      <div class="label">
+        <ww:text name="menu.addProject"/>
       </div>
-      <div class="body">
-        <ww:url id="addMavenOneProjectUrl" action="addMavenOneProject" method="default" namespace="/"
-                includeParams="none"/>
-        <ww:a href="%{addMavenOneProjectUrl}">
-          <ww:text name="menu.add.m1Project"/>
-        </ww:a>
-      </div>
-      <div class="body">
-        <ww:url id="addAntProjectUrl" action="addProjectInput" namespace="/" includeParams="none">
-          <ww:param name="projectType">ant</ww:param>
-        </ww:url>
-        <ww:a href="%{addAntProjectUrl}">
-          <ww:text name="menu.add.antProject"/>
-        </ww:a>
-      </div>
-      <div class="body">
-        <ww:url id="addShellProjectUrl" action="addProjectInput" namespace="/" includeParams="none">
-          <ww:param name="projectType">shell</ww:param>
-        </ww:url>
-        <ww:a href="%{addShellProjectUrl}">
-          <ww:text name="menu.add.shellProject"/>
-        </ww:a>
+      <div>
+        <div class="body">
+          <ww:url id="addMavenTwoProjectUrl" action="addMavenTwoProject" method="default" namespace="/"
+                  includeParams="none"/>
+          <ww:a href="%{addMavenTwoProjectUrl}">
+            <ww:text name="menu.add.m2Project"/>
+          </ww:a>
+        </div>
+        <div class="body">
+          <ww:url id="addMavenOneProjectUrl" action="addMavenOneProject" method="default" namespace="/"
+                  includeParams="none"/>
+          <ww:a href="%{addMavenOneProjectUrl}">
+            <ww:text name="menu.add.m1Project"/>
+          </ww:a>
+        </div>
+        <div class="body">
+          <ww:url id="addAntProjectUrl" action="addProjectInput" namespace="/" includeParams="none">
+            <ww:param name="projectType">ant</ww:param>
+          </ww:url>
+          <ww:a href="%{addAntProjectUrl}">
+            <ww:text name="menu.add.antProject"/>
+          </ww:a>
+        </div>
+        <div class="body">
+          <ww:url id="addShellProjectUrl" action="addProjectInput" namespace="/" includeParams="none">
+            <ww:param name="projectType">shell</ww:param>
+          </ww:url>
+          <ww:a href="%{addShellProjectUrl}">
+            <ww:text name="menu.add.shellProject"/>
+          </ww:a>
+        </div>
       </div>
     </div>
   </pss:ifAuthorized>
@@ -115,5 +116,5 @@
       <div id="litem10" class="body">Build in Error</div>
     </div>
   </div>
-  </div>
+</div>
 </ww:i18n>
