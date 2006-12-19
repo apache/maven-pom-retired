@@ -31,9 +31,9 @@
                   <ww:param name="id" value="${pageScope.schedule.id}"/>
                   <ww:param name="name" value="%{'${pageScope.schedule.name}'}"/>                  
                 </ww:url>
-                <ww:a href="%{editScheduleUrl}">Edit</ww:a>
+                <ww:a href="%{editScheduleUrl}"><img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" /></ww:a>
                 &nbsp;
-                <ww:a href="%{removeScheduleUrl}">Delete</ww:a>
+                <ww:a href="%{removeScheduleUrl}"><img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></ww:a>
             </ec:column>
           </ec:row>
         </ec:table>
