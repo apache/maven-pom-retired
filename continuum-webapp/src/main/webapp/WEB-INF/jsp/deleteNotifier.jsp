@@ -14,7 +14,7 @@
             <strong>
                 <ww:text name="deleteNotifier.confirmation.message">
                     <ww:param><ww:property value="notifierType"/></ww:param>
-                    <ww:param><ww:property value="notifierId"/></ww:param>
+                    <ww:param><ww:property value="recipient"/></ww:param>
                 </ww:text>
             </strong>
           </p>

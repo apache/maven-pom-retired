@@ -22,6 +22,8 @@ import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
+import java.util.Map;
+
 /**
  * Action that deletes a {@link ProjectNotifier} of type 'IRC' from the specified {@link ProjectGroup}.
  * 
@@ -43,15 +45,43 @@ public class DeleteProjectNotifierAction extends ContinuumActionSupport
     private int notifierId;
 
     private String notifierType;
+    
+    private String recipient;    
 
-    public String execute() throws ContinuumException
+	public String execute() throws ContinuumException
     {
         getContinuum().removeNotifier( projectId, notifierId );
         return SUCCESS;
     }
 
     public String doDefault()
+    	throws ContinuumException
     {
+    	ProjectNotifier notifier = getContinuum().getNotifier( projectId, notifierId );
+    	
+    	Map configuration = notifier.getConfiguration();
+    	
+    	notifierType = notifier.getType();
+    	
+    	if ( ( "mail".equals( notifierType ) ) || 
+    		 ( "msn".equals( notifierType ) ) ||
+    		 ( "jabber".equals( notifierType ) ) )
+    	{
+    		recipient = (String) configuration.get( "address" );
+    	}
+    	
+    	if ( "irc".equals( notifierType ) )
+    	{
+    		recipient = (String) configuration.get( "host" );
+    		
+    		if ( configuration.get( "port" ) != null )
+    		{
+    			recipient = recipient + ":" + (String) configuration.get( "port" );
+    		}
+        		
+    		recipient = recipient + ":" + (String) configuration.get( "channel" );
+		}
+    	
         return "delete";
     }
 
@@ -94,5 +124,15 @@ public class DeleteProjectNotifierAction extends ContinuumActionSupport
     {
         this.projectGroupId = projectGroupId;
     }
+    
+    public String getRecipient()
+    {
+		return recipient;
+	}
+
+	public void setRecipient(String recipient)
+	{
+		this.recipient = recipient;
+	}
 
 }
