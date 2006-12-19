@@ -6,6 +6,7 @@ package org.apache.maven.continuum.web.action.component;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
@@ -122,8 +123,32 @@ public class NotifierSummaryAction
             ns.setFrom( "USER" );
         }
 
-        // FIXME: Source the recipient 
-        ns.setRecipient( "unknown" );
+        // Source the recipient 
+        Map configuration = notifier.getConfiguration();
+        
+        String recipient = "unknowm";
+
+        if ( ( "mail".equals( notifier.getType() ) ) || 
+             ( "msn".equals( notifier.getType() ) ) ||
+             ( "jabber".equals( notifier.getType() ) ) )
+        {
+            recipient = (String) configuration.get( "address" );
+        }
+        
+        if ( "irc".equals( notifier.getType() ) )
+        {
+            recipient = (String) configuration.get( "host" );
+            
+            if ( configuration.get( "port" ) != null )
+            {
+                recipient = recipient + ":" + (String) configuration.get( "port" );
+            }
+                
+            recipient = recipient + ":" + (String) configuration.get( "channel" );
+        }
+        
+        ns.setRecipient( recipient );
+        
         // XXX: Hack - just for testing :)
         StringBuffer sb = new StringBuffer();
         if ( notifier.isSendOnError() )
