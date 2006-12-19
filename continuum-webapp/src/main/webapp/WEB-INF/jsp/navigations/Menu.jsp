@@ -111,9 +111,10 @@
       <div id="litem5" class="body">Queued Build</div>
       <div id="litem6" class="body">Delete</div>
       <div id="litem7" class="body">Edit</div>
-      <div id="litem8" class="body">Build in Success</div>
-      <div id="litem9" class="body">Build in Failure</div>
-      <div id="litem10" class="body">Build in Error</div>
+      <div id="litem8" class="body">Release</div>
+      <div id="litem9" class="body">Build in Success</div>
+      <div id="litem10" class="body">Build in Failure</div>
+      <div id="litem11" class="body">Build in Error</div>
     </div>
   </div>
 </div>

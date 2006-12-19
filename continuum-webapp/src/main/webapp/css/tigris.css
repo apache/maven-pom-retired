@@ -682,23 +682,27 @@ dd {
 }
 
 #litem6 {
-  background: url(../images/delete.gif) 134px 5px no-repeat
+  background: url(../images/delete.gif) 134px 5px no-repeat;
 }
 
 #litem7 {
   background: url(../images/edit.gif) 134px 5px no-repeat;
-  padding-bottom: 8px;
 }
 
 #litem8 {
-  background: url(../images/icon_success_sml.gif) 134px 5px no-repeat;
+  background: url(../images/releaseproject.gif) 134px 5px no-repeat;
+  padding-bottom: 8px;
 }
 
 #litem9 {
-  background: url(../images/icon_warning_sml.gif) 134px 5px no-repeat;
+  background: url(../images/icon_success_sml.gif) 134px 5px no-repeat;
 }
 
 #litem10 {
+  background: url(../images/icon_warning_sml.gif) 134px 5px no-repeat;
+}
+
+#litem11 {
   background: url(../images/icon_error_sml.gif) 134px 5px no-repeat;
 }
 
