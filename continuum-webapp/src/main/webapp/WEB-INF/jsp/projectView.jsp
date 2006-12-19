@@ -85,7 +85,7 @@
               <ec:column property="recipient" title="projectView.notifier.recipient" cell="org.apache.maven.continuum.web.view.projectview.NotifierRecipientCell"/>
               <ec:column property="events" title="projectView.notifier.events" cell="org.apache.maven.continuum.web.view.projectview.NotifierEventCell"/>
               <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
-              <ec:column property="actions" title="&nbsp;">
+              <ec:column property="editAction" title="&nbsp;" width="1%">
                 <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
                   <c:if test="${!pageScope.notifier.fromProject}">
                     <a href='<ww:url value="${notifier.type}ProjectNotifierEdit!default.action">
@@ -95,7 +95,15 @@
                       <ww:param name="notifierType">${notifier.type}</ww:param>
                       </ww:url>'>
                       <img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" /></a>
-                    &nbsp;
+                  </c:if>
+                </pss:ifAuthorized>
+                <pss:elseAuthorized>
+                  <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />
+                </pss:elseAuthorized>
+              </ec:column>
+              <ec:column property="deleteAction" title="&nbsp;" width="1%">
+                <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
+                  <c:if test="${!pageScope.notifier.fromProject}">
                     <a href='<ww:url value="/deleteProjectNotifier!default.action">
                       <ww:param name="projectId" value="project.id"/>
                       <ww:param name="projectGroupId" value="${project.projectGroup.id}"/>
@@ -105,6 +113,9 @@
                       <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></a>
                   </c:if>
                 </pss:ifAuthorized>
+                <pss:elseAuthorized>
+                  <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />
+                </pss:elseAuthorized>
               </ec:column>
             </ec:row>
           </ec:table>

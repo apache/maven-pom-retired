@@ -23,7 +23,7 @@
       <ec:column property="scheduleName" title="schedule"/>
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
-      <ec:column property="editActions" title="&nbsp;">
+      <ec:column property="editActions" title="&nbsp;" width="1%">
         <center>
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
           <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
@@ -39,7 +39,7 @@
         </pss:elseAuthorized>
         </center>
       </ec:column>    
-      <ec:column property="deleteActions" title="&nbsp;">
+      <ec:column property="deleteActions" title="&nbsp;" width="1%">
         <center>
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
           <ww:url id="removeUrl" action="removeGroupBuildDefinition" namespace="/">
@@ -47,9 +47,9 @@
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
             <ww:param name="confirmed" value="false"/>
           </ww:url>
-        <ww:a href="%{removeUrl}">
+          <ww:a href="%{removeUrl}">
             <img src="<ww:url value='/images/delete.gif'/>" alt="Delete" title="Delete" border="0">
-        </ww:a>
+          </ww:a>
         </pss:ifAuthorized>
         <pss:elseAuthorized>
           <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Delete" title="Delete" border="0">
@@ -95,7 +95,7 @@
           <img src="<c:url value='/images/buildnow.gif'/>" alt="Build Now" title="Build Now" border="0">
         </ww:a>
       </ec:column>
-      <ec:column property="editAction" title="&nbsp;">
+      <ec:column property="editAction" title="&nbsp;" width="1%">
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
           <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
             <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
@@ -109,7 +109,7 @@
           <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="Edit" title="Edit" border="0">
         </pss:elseAuthorized>
       </ec:column>
-      <ec:column property="removeAction" title="&nbsp;">
+      <ec:column property="removeAction" title="&nbsp;" width="1%">
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
           <ww:url id="removeUrl" action="removeProjectBuildDefinition" namespace="/">
             <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
