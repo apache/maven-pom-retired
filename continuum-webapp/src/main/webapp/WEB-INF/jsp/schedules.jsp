@@ -23,16 +23,17 @@
             <ec:column property="delay" title="schedules.table.delay"/>
             <ec:column property="cronExpression" title="schedules.table.cronExpression"/>
             <ec:column property="maxJobExecutionTime" title="schedules.table.maxJobExecutionTime"/>
-            <ec:column property="actions" title="&nbsp;">
+            <ec:column property="editActions" title="&nbsp;" width="1%">
                 <ww:url id="editScheduleUrl" action="schedule">
                   <ww:param name="id" value="${pageScope.schedule.id}"/>
                 </ww:url>
+                <ww:a href="%{editScheduleUrl}"><img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" /></ww:a>
+            </ec:column>
+            <ec:column property="editActions" title="&nbsp;" width="1%">
                 <ww:url id="removeScheduleUrl" action="removeSchedule">
                   <ww:param name="id" value="${pageScope.schedule.id}"/>
                   <ww:param name="name" value="%{'${pageScope.schedule.name}'}"/>                  
                 </ww:url>
-                <ww:a href="%{editScheduleUrl}"><img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" /></ww:a>
-                &nbsp;
                 <ww:a href="%{removeScheduleUrl}"><img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></ww:a>
             </ec:column>
           </ec:row>
