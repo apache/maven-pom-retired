@@ -16,10 +16,10 @@ package org.apache.maven.continuum.execution.maven.m2;
  * limitations under the License.
  */
 
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 
 import java.io.File;
 
@@ -36,14 +36,14 @@ public interface MavenBuilderHelper
     MavenProject getMavenProject( ContinuumProjectBuildingResult result, File file );
 
     /**
-     *
      * @param result
      * @param mavenProject
      * @param continuumProject
-     * @param groupPom map this project as if it is being used to initialize a project group
+     * @param groupPom         map this project as if it is being used to initialize a project group
      */
     void mapMavenProjectToContinuumProject( ContinuumProjectBuildingResult result, MavenProject mavenProject,
                                             Project continuumProject, boolean groupPom );
 
-    ArtifactRepository getLocalRepository();
+    ArtifactRepository getLocalRepository()
+        throws SettingsConfigurationException;
 }

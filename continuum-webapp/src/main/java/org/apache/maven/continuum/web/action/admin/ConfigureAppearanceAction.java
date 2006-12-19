@@ -22,6 +22,7 @@ package org.apache.maven.continuum.web.action.admin;
 import com.opensymphony.xwork.ModelDriven;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
+import org.apache.maven.continuum.execution.maven.m2.SettingsConfigurationException;
 import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 import org.apache.maven.model.Model;
@@ -85,7 +86,8 @@ public class ConfigureAppearanceAction
     }
 
     public void prepare()
-        throws ConfigurationStoreException, ProjectBuildingException, ArtifactMetadataRetrievalException
+        throws ConfigurationStoreException, ProjectBuildingException, ArtifactMetadataRetrievalException,
+        SettingsConfigurationException
     {
         configuration = configurationStore.getConfigurationFromStore();
 

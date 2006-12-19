@@ -22,18 +22,19 @@ package org.apache.maven.continuum.web.action.admin;
 import com.opensymphony.xwork.ModelDriven;
 import org.apache.maven.artifact.installer.ArtifactInstallationException;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
+import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
+import org.apache.maven.continuum.execution.maven.m2.SettingsConfigurationException;
 import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
-import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.ProjectBuildingException;
-import org.apache.maven.shared.app.configuration.InvalidConfigurationException;
+import org.apache.maven.shared.app.company.CompanyPomHandler;
+import org.apache.maven.shared.app.configuration.CompanyPom;
 import org.apache.maven.shared.app.configuration.Configuration;
-import org.apache.maven.shared.app.configuration.ConfigurationStoreException;
 import org.apache.maven.shared.app.configuration.ConfigurationChangeException;
 import org.apache.maven.shared.app.configuration.ConfigurationStore;
-import org.apache.maven.shared.app.configuration.CompanyPom;
-import org.apache.maven.shared.app.company.CompanyPomHandler;
+import org.apache.maven.shared.app.configuration.ConfigurationStoreException;
+import org.apache.maven.shared.app.configuration.InvalidConfigurationException;
 import org.codehaus.plexus.security.rbac.Resource;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
@@ -68,12 +69,14 @@ public class EditPomAction
 
     private Model companyModel;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private MavenBuilderHelper helper;
 
     public String execute()
         throws IOException, ConfigurationStoreException, InvalidConfigurationException, ConfigurationChangeException,
-        ArtifactInstallationException
+        ArtifactInstallationException, SettingsConfigurationException
     {
         // TODO: hack for passed in String[]
         String[] logo = (String[]) companyModel.getProperties().get( "organization.logo" );
@@ -93,7 +96,8 @@ public class EditPomAction
     }
 
     public void prepare()
-        throws ConfigurationStoreException, ProjectBuildingException, ArtifactMetadataRetrievalException
+        throws ConfigurationStoreException, ProjectBuildingException, ArtifactMetadataRetrievalException,
+        SettingsConfigurationException
     {
         configuration = configurationStore.getConfigurationFromStore();
 

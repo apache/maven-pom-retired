@@ -110,8 +110,6 @@ public class DefaultMavenBuilderHelper
 
     private PlexusContainer container;
 
-    private Settings settings;
-
     // ----------------------------------------------------------------------
     // MavenBuilderHelper Implementation
     // ----------------------------------------------------------------------
@@ -340,6 +338,8 @@ public class DefaultMavenBuilderHelper
             //   TODO: This seems like code that is shared with DefaultMaven, so it should be moved to the project
             //   builder perhaps
 
+            Settings settings = getSettings();
+
             if ( getLogger().isDebugEnabled() )
             {
                 writeSettings( settings );
@@ -451,8 +451,9 @@ public class DefaultMavenBuilderHelper
     }
 
     public ArtifactRepository getLocalRepository()
+        throws SettingsConfigurationException
     {
-        return getRepository( settings );
+        return getRepository( getSettings() );
     }
 
     // ----------------------------------------------------------------------
@@ -536,6 +537,7 @@ public class DefaultMavenBuilderHelper
     {
         try
         {
+            //TODO: buildSettings cache settings so if user modify it, we need to restart Continuum, we need to use a non-cached settings there
             return mavenSettingsBuilder.buildSettings();
         }
         catch ( IOException e )
@@ -732,7 +734,7 @@ public class DefaultMavenBuilderHelper
     {
         try
         {
-            settings = getSettings();
+            Settings settings = getSettings();
 
             resolveParameters( settings );
         }
