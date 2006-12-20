@@ -48,6 +48,7 @@
             <ww:url id="removeUrl" action="deleteProjectGroupNotifier!default.action" namespace="/">
               <ww:param name="projectGroupId">${pageScope.projectGroupNotifierSummary.projectGroupId}</ww:param>
               <ww:param name="notifierId">${pageScope.projectGroupNotifierSummary.id}</ww:param>
+              <ww:param name="notifierType">${pageScope.projectGroupNotifierSummary.type}</ww:param>
               <ww:param name="confirmed" value="false"/>
             </ww:url>
           <ww:a href="%{removeUrl}">

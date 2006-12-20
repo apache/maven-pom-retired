@@ -16,6 +16,8 @@ package org.apache.maven.continuum.web.action.notifier;
  * limitations under the License.
  */
 
+import java.util.Map;
+
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
@@ -37,10 +39,12 @@ public class DeleteGroupNotifierAction
 {
 
     private int projectGroupId;
-
+    
     private int notifierId;
 
     private String notifierType;
+    
+    private String recipient;
 
     public String execute()
         throws ContinuumException
@@ -50,7 +54,33 @@ public class DeleteGroupNotifierAction
     }
 
     public String doDefault()
+        throws ContinuumException
     {
+        ProjectNotifier notifier = getContinuum().getGroupNotifier( projectGroupId, notifierId );
+        
+        Map configuration = notifier.getConfiguration();
+        
+        notifierType = notifier.getType();
+        
+        if ( ( "mail".equals( notifierType ) ) || 
+             ( "msn".equals( notifierType ) ) ||
+             ( "jabber".equals( notifierType ) ) )
+        {
+            recipient = (String) configuration.get( "address" );
+        }
+        
+        if ( "irc".equals( notifierType ) )
+        {
+            recipient = (String) configuration.get( "host" );
+            
+            if ( configuration.get( "port" ) != null )
+            {
+                recipient = recipient + ":" + (String) configuration.get( "port" );
+            }
+                
+            recipient = recipient + ":" + (String) configuration.get( "channel" );
+        }
+        
         return "delete";
     }
 
@@ -96,4 +126,13 @@ public class DeleteGroupNotifierAction
         return -1;
     }
 
+    public String getRecipient()
+    {
+        return recipient;
+    }
+
+    public void setRecipient( String recipient )
+    {
+        this.recipient = recipient;
+    }
 }
