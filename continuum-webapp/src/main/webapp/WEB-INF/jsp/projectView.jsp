@@ -88,7 +88,7 @@
               <ec:column property="editAction" title="&nbsp;" width="1%">
                 <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
                   <c:if test="${!pageScope.notifier.fromProject}">
-                    <a href='<ww:url value="${notifier.type}ProjectNotifierEdit!default.action">
+                    <a href='<ww:url value="${notifier.type}ProjectNotifierEdit.action">
                       <ww:param name="notifierId" value="${notifier.id}"/>
                       <ww:param name="projectId" value="project.id"/>
                       <ww:param name="projectGroupId" value="${project.projectGroup.id}"/>
