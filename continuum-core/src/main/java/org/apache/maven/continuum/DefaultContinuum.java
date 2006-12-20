@@ -281,6 +281,10 @@ public class DefaultContinuum
                                               e );
             }
 
+            Map context = new HashMap();
+            context.put( AbstractContinuumAction.KEY_PROJECT_GROUP_ID, new Integer( new_pg.getId() ) );
+            executeAction( "add-assignable-roles", context );
+
             getLogger().info( "Added new project group: " + new_pg.getName() );
         }
         else
