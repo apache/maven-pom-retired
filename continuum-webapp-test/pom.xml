@@ -36,6 +36,253 @@
       <version>1.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
+    
+    <!--
+       All dependencies defined below are the dependencies list of continuum-webapp
+       We need them because we need to add in WEB-INF-lib all jars that aren't in
+       the webapp because they are provided by appserver
+    -->
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-configuration</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-app-configuration-model</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-app-configuration-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-security</artifactId>
+    </dependency>
+    <dependency> <!-- added since depMgt doesn't override imported dependencies -->
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-xwork-integration</artifactId>
+      <version>1.0-alpha-3</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>opensymphony</groupId>
+      <artifactId>sitemesh</artifactId>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.extremecomponents</groupId>
+      <artifactId>extremecomponents</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-log4j-logging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+    </dependency>
+    <!--
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>taglibs</groupId>
+      <artifactId>standard</artifactId>
+      <version>1.1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-bazaar</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-clearcase</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-cvsexe</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-local</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-perforce</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-starteam</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-svnexe</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-synergy</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-vss</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-irc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-jabber</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-msn</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-notifier-wagon</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.continuum</groupId>
+      <artifactId>continuum-xmlrpc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-xmlrpc</artifactId>
+      <version>1.0-beta-4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-provider-api</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-file</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-http-lightweight</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-ssh</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-ssh-external</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-webdav</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+      Plexus Security Dependencies
+      -->
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-ui-web</artifactId>
+      <type>war</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.security</groupId>
+      <artifactId>plexus-security-ui-web-taglib</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-jdo2</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xmlParserAPIs</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+    </dependency>
+    <!--
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>8.0-312.jdbc3</version>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>jpox</groupId>
+      <artifactId>jpox</artifactId>
+      <exclusions>
+        <!-- targeting JDK 1.4 we don't need this -->
+        <exclusion>
+          <groupId>javax.sql</groupId>
+          <artifactId>jdbc-stdext</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.activation</groupId>
+      <artifactId>activation</artifactId>
+      <version>1.1</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -63,6 +310,19 @@
               <outputDirectory>${project.build.directory}/${container.name}conf/webapps/continuum</outputDirectory>
             </configuration>
           </execution>
+          <execution>
+            <id>prepare-provided-dependencies</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+              <excludeTransitive>false</excludeTransitive>
+              <outputDirectory>${project.build.directory}/providedDependencies</outputDirectory>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -79,6 +339,39 @@
                 <copy todir="${project.build.directory}/installs/${container.name}/apache-tomcat-5.5.20/apache-tomcat-5.5.20/common/lib">
                   <fileset dir="${project.build.directory}/${container.name}conf/webapps/continuum/WEB-INF/lib">
                     <include name="**/derby-*.jar"/>
+                  </fileset>
+                </copy>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>copy-provided-dependencies</id>
+            <phase>package</phase>
+            <configuration>
+              <tasks>
+                <copy todir="${project.build.directory}/${container.name}conf">
+                  <fileset dir="src/test/${container.name}"/>
+                </copy>
+                <copy todir="${project.build.directory}/${container.name}conf/webapps/continuum/WEB-INF/lib">
+                  <fileset dir="${project.build.directory}/providedDependencies">
+                    <include name="activation-*.jar"/>
+                    <include name="classworlds-*.jar"/>
+                    <include name="icu4j-*.jar"/>
+                    <include name="jpox-*.jar"/>
+                    <include name="velocity-dep-*.jar"/>
+                    <include name="xalan-*.jar"/>
+                    <include name="xercesImpl-*.jar"/>
+                    <include name="xml-apis-*.jar"/>
+                    <include name="xmlParserAPIs-*.jar"/>
+                    <include name="mail-*.jar"/>
+                    <include name="plexus-container-default-*.jar"/>
+                    <include name="jdo2-api-*.jar"/>
+                    <include name="connector-*.jar"/>
+                    <include name="nlog4j-*.jar"/>
+                    <include name="log4j-*.jar"/>
                   </fileset>
                 </copy>
               </tasks>

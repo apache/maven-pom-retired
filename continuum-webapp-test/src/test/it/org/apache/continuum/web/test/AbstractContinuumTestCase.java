@@ -236,8 +236,6 @@ public abstract class AbstractContinuumTestCase
             assertTextPresent( "Projects" );
             assertTextPresent( "Build Status" );
         }
-
-        assertElementPresent( "//input[@value='Add Project Group']" );
     }
 
     //////////////////////////////////////
@@ -276,13 +274,10 @@ public abstract class AbstractContinuumTestCase
             assertTextPresent( "Version" );
             assertTextPresent( "Build" );
         }
-
-        assertLinkPresent( "Add Maven 2.0+ Project" );
-
-        //TODO: Add these links in the page
-        //assertLinkPresent( "Add Maven 1.x Project");
-        //assertLinkPresent( "Add Ant Project");
-        //assertLinkPresent( "Add Shell Project");
+        else
+        {
+            assertTextNotPresent( "Project Name" );
+        }
     }
 
     public void addProjectGroup( String name, String groupId, String description )
@@ -291,8 +286,7 @@ public abstract class AbstractContinuumTestCase
         goToProjectGroupsSummaryPage();
 
         // Go to Add Project Group Page
-        assertLinkPresent( "Add a Project Group" );
-        clickLinkWithText( "Add a Project Group" );
+        clickButtonWithValue( "Add Project Group" );
         assertAddProjectGroupPage();
 
         // Enter values into Add Project Group fields, and submit  
