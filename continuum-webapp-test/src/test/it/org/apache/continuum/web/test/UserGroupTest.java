@@ -48,7 +48,7 @@ public class UserGroupTest
         throws Exception
     {
         clickLinkWithText( "Users" );
-        assertAddAdminUserListPage();
+        assertUsersListPage();
     }
 
 }

@@ -200,12 +200,6 @@ public abstract class AbstractContinuumTestCase
         assertAddProjectPage( "shell" );
     }
 
-    public void assertAddAdminUserListPage()
-        throws Exception
-    {
-        assertPage( "[Admin] User List" );
-    }
-
     //////////////////////////////////////
     // Project Groups
     //////////////////////////////////////
@@ -434,6 +428,32 @@ public abstract class AbstractContinuumTestCase
         setFieldValue( "user.email", newEmailAddress );
         setFieldValue( "user.password", newPassword );
         setFieldValue( "user.confirmPassword", confirmNewPassword );
+    }
+
+    //////////////////////////////////////
+    // Users
+    //////////////////////////////////////
+    public void assertUsersListPage()
+    {
+        assertPage( "[Admin] User List" );
+    }
+
+    public void assertCreateUserPage()
+    {
+        assertPage( "[Admin] User Create" );
+        assertTextPresent( "Username" );
+        assertTextPresent( "Full Name" );
+        assertTextPresent( "Email Address" );
+        assertTextPresent( "Password" );
+        assertTextPresent( "Confirm Password" );
+    }
+
+    public void assertDeleteUserPage( String username )
+    {
+        assertPage( "[Admin] User Delete" );
+        assertTextPresent( "[Admin] User Delete" );
+        assertTextPresent( "The following user will be deleted: " + username );
+        assertButtonWithValuePresent( "Delete User" );
     }
 
     public void tearDown()

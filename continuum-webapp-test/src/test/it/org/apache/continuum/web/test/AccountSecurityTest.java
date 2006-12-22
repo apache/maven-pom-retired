@@ -47,17 +47,13 @@ public class AccountSecurityTest
 
     public static final String CUSTOM_USERNAME4 = "custom4";
 
+    public static final String CUSTOM_USERNAME5 = "custom5";
+
     public static final String CUSTOM_FULLNAME = "custom fullname";
 
     public static final String CUSTOM_EMAILADD = "custom@custom.com";
 
     public static final String CUSTOM_PASSWORD = "custompassword";
-
-    public void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
 
     public String getUsername()
     {
@@ -75,7 +71,7 @@ public class AccountSecurityTest
 
         // delete custom user
         deleteUser( CUSTOM_USERNAME, CUSTOM_FULLNAME, CUSTOM_EMAILADD );
-        super.logout();
+        logout();
     }
 
     public void testPasswordConfirmation()
@@ -83,13 +79,13 @@ public class AccountSecurityTest
     {
         // initial user account creation ignores the password creation checks
         createUser( CUSTOM_USERNAME2, CUSTOM_FULLNAME, CUSTOM_EMAILADD, CUSTOM_PASSWORD, true );
-        super.logout();
+        logout();
 
         // start password creation validation test
-        super.login( CUSTOM_USERNAME2, CUSTOM_PASSWORD );
+        login( CUSTOM_USERNAME2, CUSTOM_PASSWORD );
 
         // select profile
-        clickLinkWithText( CUSTOM_USERNAME2 );
+        clickLinkWithText( "Edit Details" );
 
         //TODO: verify account details page
         assertPage( "Account Details" );
@@ -103,12 +99,12 @@ public class AccountSecurityTest
         assertPage( "Account Details" );
         isTextPresent( "Password confirmation failed.  Passwords do not match" );
 
-        super.logout();
+        logout();
 
         // house keeping
-        super.login( super.adminUsername, super.adminPassword );
+        login( getUsername(), getPassword() );
         deleteUser( CUSTOM_USERNAME2, CUSTOM_FULLNAME, CUSTOM_EMAILADD );
-        super.logout();
+        logout();
     }
 
     public void testPasswordCreationValidation()
@@ -116,10 +112,10 @@ public class AccountSecurityTest
     {
         // initial user account creation ignores the password creation checks
         createUser( CUSTOM_USERNAME3, CUSTOM_FULLNAME, CUSTOM_EMAILADD, CUSTOM_PASSWORD, true );
-        super.logout();
+        logout();
 
         // start password creation validation test
-        super.login( CUSTOM_USERNAME3, CUSTOM_PASSWORD );
+        login( CUSTOM_USERNAME3, CUSTOM_PASSWORD );
 
         // password test
         String alphaTest = "abcdef";
@@ -128,7 +124,7 @@ public class AccountSecurityTest
         String validPassword = "abc123";
 
         // select profile
-        clickLinkWithText( CUSTOM_USERNAME3 );
+        clickLinkWithText( "Edit Details" );
 
         //TODO: verify account details page
         assertPage( "Account Details" );
@@ -169,12 +165,12 @@ public class AccountSecurityTest
         // we should still be in Account Details
         assertPage( "Continuum - Group Summary" );
 
-        super.logout();
+        logout();
 
         // house keeping
-        super.login( super.adminUsername, super.adminPassword );
+        login( getUsername(), getPassword() );
         deleteUser( CUSTOM_USERNAME3, CUSTOM_FULLNAME, CUSTOM_EMAILADD );
-        super.logout();
+        logout();
     }
 
 
@@ -182,7 +178,7 @@ public class AccountSecurityTest
         throws Exception
     {
         createUser( CUSTOM_USERNAME4, CUSTOM_FULLNAME, CUSTOM_EMAILADD, CUSTOM_PASSWORD, true );
-        super.logout();
+        logout();
 
         int numberOfTries = 3;
 
@@ -190,7 +186,7 @@ public class AccountSecurityTest
         {
             if ( nIndex < 2 )
             {
-                super.login( this.CUSTOM_USERNAME4, this.CUSTOM_PASSWORD + "error", false, "Login Page" );
+                login( this.CUSTOM_USERNAME4, this.CUSTOM_PASSWORD + "error", false, "Login Page" );
                 // login should fail
                 assertTextPresent( "You have entered an incorrect username and/or password" );
                 assertFalse( "user is authenticated using wrong password", isAuthenticated() );
@@ -198,38 +194,40 @@ public class AccountSecurityTest
             else
             {
                 // on the 3rd try, account is locked and we are returned to the Group Summary Page
-                super.login( this.CUSTOM_USERNAME4, this.CUSTOM_PASSWORD + "error", false,
+                login( this.CUSTOM_USERNAME4, this.CUSTOM_PASSWORD + "error", false,
                              "Continuum - Group Summary" );
                 assertTextPresent( "Account Locked" );
             }
         }
 
         // house keeping
-        super.login( super.adminUsername, super.adminPassword );
+        login( getUsername(), getPassword() );
         deleteUser( CUSTOM_USERNAME4, CUSTOM_FULLNAME, CUSTOM_EMAILADD, false, true );
-        super.logout();
+        logout();
     }
        
     public void testDefaultRolesOfNewSystemAdministrator()
     {
         // initialize
-        createUser( CUSTOM_USERNAME, CUSTOM_FULLNAME, CUSTOM_EMAILADD, CUSTOM_PASSWORD, true);
+        createUser( CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD, CUSTOM_PASSWORD, true);
                       
         // upgrade the role of the user to system administrator
-        String[] columnValues = { CUSTOM_USERNAME, CUSTOM_FULLNAME, CUSTOM_EMAILADD, "false", "false" };
-        clickLinkWithXPath( XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 6, "Edit", columnValues ) );
+        //TODO: check Permanent/validated/locked columns
+        String[] columnValues = { CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD };
+        clickLinkWithText( CUSTOM_USERNAME5 );
                         
         checkField( "addRolesToUser_addSelectedRolesSystem Administrator" );
         clickButtonWithValue( "Add Selected Roles" );
 
         // verify roles        
-        String[] roleList = { "Project Developer - Test Project Group Name", 
-                              "System Administrator", "User Administrator", 
-                              "Project User - Test Project Group Name",
-                              "Project Developer - Default Project Group", 
+        String[] roleList = { "System Administrator",
+                              "User Administrator",
+                              "Continuum Group Project Administrator",
+                              "Project Developer - Default Project Group",
                               "Project User - Default Project Group" };
         
-        assertElementPresent( XPathExpressionUtil.getList( roleList ) );                
+        assertElementPresent( XPathExpressionUtil.getList( roleList ) );
+        deleteUser( CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD );
     }
     
     private void createUser( String userName, String fullName, String emailAdd, String password, boolean valid )
@@ -241,26 +239,31 @@ public class AccountSecurityTest
                              boolean valid )
     {
         clickLinkWithText( "Users" );
-        assertPage( "[Admin] User List" );
+        assertUsersListPage();
 
         // create user
-        // submit button : Create Users
-        clickLinkWithText( "Create User" );
-        getSelenium().type( CREATE_FORM_USERNAME_FIELD, userName );
-        getSelenium().type( CREATE_FORM_FULLNAME_FIELD, fullName );
-        getSelenium().type( CREATE_FORM_EMAILADD_FIELD, emailAdd );
-        getSelenium().type( CREATE_FORM_PASSWORD_FIELD, password );
-        getSelenium().type( CREATE_FORM_CONFIRM_PASSWORD_FIELD, confirmPassword );
+        clickButtonWithValue( "Create New User" );
+        assertCreateUserPage();
+        setFieldValue( CREATE_FORM_USERNAME_FIELD, userName );
+        setFieldValue( CREATE_FORM_FULLNAME_FIELD, fullName );
+        setFieldValue( CREATE_FORM_EMAILADD_FIELD, emailAdd );
+        setFieldValue( CREATE_FORM_PASSWORD_FIELD, password );
+        setFieldValue( CREATE_FORM_CONFIRM_PASSWORD_FIELD, confirmPassword );
         submit();
 
         if ( valid )
         {
-            assertPage( "[Admin] User List" );
+            assertUsersListPage();
 
-            String[] columnValues = {userName, fullName, emailAdd, "false", "false"};
+            String[] columnValues = {userName, fullName, emailAdd};
 
             // check if custom user is created
             assertElementPresent( XPathExpressionUtil.getTableRow( columnValues ) );
+            //TODO: check Permanent/validated/locked columns
+        }
+        else
+        {
+            assertCreateUserPage();
         }
     }
 
@@ -271,25 +274,23 @@ public class AccountSecurityTest
 
     private void deleteUser( String userName, String fullName, String emailAdd, boolean validated, boolean locked )
     {
+        //TODO: Add permanent/validated/locked values
         String[] columnValues =
-            {userName, fullName, emailAdd, Boolean.toString( validated ), Boolean.toString( locked )};
+            {userName, fullName, emailAdd};
 
         clickLinkWithText( "Users" );
 
         // delete user
+        //clickLinkWithXPath(
+        //    XPathExpressionUtil.getImgColumnElement( XPathExpressionUtil.ANCHOR, 7, "delete.gif", columnValues ) );
         clickLinkWithXPath(
-            XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 7, "Delete", columnValues ) );
+            XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 7, columnValues ) + "/img[contains(@src, 'delete.gif')]" );
 
         // confirm
-        assertPage( "[Admin] User Delete" );
-        super.submit();
+        assertDeleteUserPage( userName );
+        submit();
 
         // check if account is successfuly deleted
-        super.assertElementNotPresent( XPathExpressionUtil.getTableRow( columnValues ) );
-    }
-
-    public void tearDown()
-    {
-        super.tearDown();
+        assertElementNotPresent( XPathExpressionUtil.getTableRow( columnValues ) );
     }
 }
