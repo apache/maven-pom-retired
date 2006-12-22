@@ -387,7 +387,7 @@ public abstract class AbstractContinuumTestCase
     //////////////////////////////////////
     public void goToMyAccount()
     {
-        clickLinkWithText( "Edit user info" );
+        clickLinkWithText( "Edit Details" );
     }
 
     public void assertMyAccountDetails( String username, String newFullName, String newEmailAddress )

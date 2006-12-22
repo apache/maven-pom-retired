@@ -84,8 +84,8 @@ public class AccountSecurityTest
         // start password creation validation test
         login( CUSTOM_USERNAME2, CUSTOM_PASSWORD );
 
-        // select profile
-        clickLinkWithText( "Edit Details" );
+        // Edit user informations
+        goToMyAccount()
 
         //TODO: verify account details page
         assertPage( "Account Details" );
