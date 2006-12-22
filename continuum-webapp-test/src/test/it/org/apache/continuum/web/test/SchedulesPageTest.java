@@ -165,7 +165,7 @@ public class SchedulesPageTest
 
         // edit the schedule        
         clickLinkWithXPath(
-            XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5, "Edit", columnValues ) );
+            XPathExpressionUtil.getImgColumnElement( XPathExpressionUtil.ANCHOR, 5, "edit.gif", columnValues ) );
 
         inputSchedule( SCHEDULE_NAME_EDIT + "modified", SCHEDULE_DESCRIPTION + "updated", "2", "3", "4", "?", "6", "7",
                        "2021", "8", "9", false );
@@ -180,7 +180,7 @@ public class SchedulesPageTest
 
         // check if the active state has been saved
         clickLinkWithXPath(
-            XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5, "Edit", editedColumnValues ) );
+            XPathExpressionUtil.getImgColumnElement( XPathExpressionUtil.ANCHOR, 5, "edit.gif", editedColumnValues ) );
 
         assertEquals( "Can disable the schedule", CHECKBOX_UNCHECK, getFieldValue( "active" ) );
 
@@ -299,7 +299,7 @@ public class SchedulesPageTest
         String[] columnValues = {scheduleName};
 
         clickLinkWithXPath(
-            XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 5, "Delete", columnValues ) );
+            XPathExpressionUtil.getImgColumnElement( XPathExpressionUtil.ANCHOR, 5, "delete.gif", columnValues ) );
 
         // deletion confirmation page
         assertPage( "Schedule Removal" );

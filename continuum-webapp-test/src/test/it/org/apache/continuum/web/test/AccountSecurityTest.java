@@ -281,10 +281,8 @@ public class AccountSecurityTest
         clickLinkWithText( "Users" );
 
         // delete user
-        //clickLinkWithXPath(
-        //    XPathExpressionUtil.getImgColumnElement( XPathExpressionUtil.ANCHOR, 7, "delete.gif", columnValues ) );
         clickLinkWithXPath(
-            XPathExpressionUtil.getColumnElement( XPathExpressionUtil.ANCHOR, 7, columnValues ) + "/img[contains(@src, 'delete.gif')]" );
+            XPathExpressionUtil.getImgColumnElement( XPathExpressionUtil.ANCHOR, 7, "delete.gif", columnValues ) );
 
         // confirm
         assertDeleteUserPage( userName );
