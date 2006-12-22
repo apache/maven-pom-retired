@@ -85,7 +85,7 @@ public class AccountSecurityTest
         login( CUSTOM_USERNAME2, CUSTOM_PASSWORD );
 
         // Edit user informations
-        goToMyAccount()
+        goToMyAccount();
 
         //TODO: verify account details page
         assertPage( "Account Details" );
