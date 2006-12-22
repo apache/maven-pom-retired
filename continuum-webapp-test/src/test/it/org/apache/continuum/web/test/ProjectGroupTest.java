@@ -69,7 +69,7 @@ public class ProjectGroupTest
     {
         // Add a project group and a project to it
         addProjectGroup( TEST_PROJ_GRP_NAME, TEST_PROJ_GRP_ID, TEST_PROJ_GRP_DESCRIPTION );
-        addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, TEST_PROJ_GRP_NAME );
+        addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, TEST_PROJ_GRP_NAME, true );
 
         // assert that the default project group has 0 projects while the test project group has 1
         assertCellValueFromTable( "0", "ec_table", 1, 2 );

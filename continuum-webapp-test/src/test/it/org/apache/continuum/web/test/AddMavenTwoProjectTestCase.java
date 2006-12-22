@@ -37,7 +37,7 @@ public class AddMavenTwoProjectTestCase
         throws Exception
     {
         super.setUp();
-        clickLinkWithText( "Maven 2.0.x Project" );
+        goToAddMavenProjectPage();
     }
 
     /**
@@ -47,19 +47,14 @@ public class AddMavenTwoProjectTestCase
      * @param m2PomFile
      * @param validPom
      */
-    public void submitAddMavenTwoProjectPage( String m2PomUrl, String m2PomFile, boolean validPom )
+    public void submitAddMavenTwoProjectPage( String m2PomUrl, boolean validPom )
     {
-        getSelenium().type( "m2PomUrl", m2PomUrl );
-        getSelenium().type( "m2PomFile", m2PomFile );
-
-        getSelenium().click( "//input[@type='submit']" );
-        waitPage();
+        addMavenTwoProject( m2PomUrl, "", "", null, false );
 
         if ( validPom )
         {
-            assertPage( "Continuum - Group Summary" );
-            assertTextPresent( "Project Groups" );
             assertTextPresent( "Default Project Group" );
+            //TODO: Add more tests
         }
     }
 
@@ -68,10 +63,8 @@ public class AddMavenTwoProjectTestCase
      */
     public void testNoPomSpecified()
     {
-        submitAddMavenTwoProjectPage( "", "", false );
+        submitAddMavenTwoProjectPage( "", false );
         assertTextPresent( "Either POM URL or Upload POM is required." );
-        assertElementPresent( "m2PomUrl" );
-        assertElementPresent( "m2PomFile" );
     }
 
     /**
@@ -79,12 +72,9 @@ public class AddMavenTwoProjectTestCase
      */
     public void testMissingScmElementPom()
     {
-        File pomFile =
-            new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-scm-element-pom.xml" );
-        submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
+        String pomUrl = "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-two-projects/missing-scm-element-pom.xml";
+        submitAddMavenTwoProjectPage( pomUrl, false );
         assertTextPresent( "Missing scm element in the POM." );
-        assertElementPresent( "m2PomUrl" );
-        assertElementPresent( "m2PomFile" );
     }
 
     /**
@@ -92,12 +82,10 @@ public class AddMavenTwoProjectTestCase
      */
     public void testCannotAccessResource()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-two-projects/valid-pom.xml" );
-        submitAddMavenTwoProjectPage( "file://" + pomFile.getAbsolutePath(), "", false );
+        String pomUrl = "http://svn.apache.org/asf/maven/continuum/trunk/bad_url/pom.xml";
+        submitAddMavenTwoProjectPage( pomUrl, false );
         assertTextPresent(
             "The specified resource cannot be accessed. Please try again later or contact your administrator." );
-        assertElementPresent( "m2PomUrl" );
-        assertElementPresent( "m2PomFile" );
     }
 
     /**
@@ -105,12 +93,9 @@ public class AddMavenTwoProjectTestCase
      */
     public void testMissingConnectionElement()
     {
-        File pomFile =
-            new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-connection-element-pom.xml" );
-        submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
+        String pomUrl = "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-two-projects/missing-connection-element-pom.xml";
+        submitAddMavenTwoProjectPage( pomUrl, false );
         assertTextPresent( "Missing connection sub-element in the scm element in the POM." );
-        assertElementPresent( "m2PomUrl" );
-        assertElementPresent( "m2PomFile" );
     }
 
     /**
@@ -118,12 +103,10 @@ public class AddMavenTwoProjectTestCase
      */
     public void testMissingParentPom()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-parent-pom.xml" );
-        submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
+        String pomUrl = "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-two-projects/missing-parent-pom.xml";
+        submitAddMavenTwoProjectPage( pomUrl, false );
         assertTextPresent(
             "Missing artifact trying to build the POM. Check that its parent POM is available or add it first in Continuum." );
-        assertElementPresent( "m2PomUrl" );
-        assertElementPresent( "m2PomFile" );
     }
 
     /**
@@ -131,10 +114,8 @@ public class AddMavenTwoProjectTestCase
      */
     public void testMissingModules()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-two-projects/missing-modules-pom.xml" );
-        submitAddMavenTwoProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
+        String pomUrl= "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-two-projects/missing-modules-pom.xml";
+        submitAddMavenTwoProjectPage( pomUrl, false );
         assertTextPresent( "Unknown error trying to build POM." );
-        assertElementPresent( "m2PomUrl" );
-        assertElementPresent( "m2PomFile" );
     }
 }

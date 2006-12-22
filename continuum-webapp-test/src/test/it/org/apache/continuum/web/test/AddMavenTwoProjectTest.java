@@ -23,9 +23,7 @@ public class AddMavenTwoProjectTest
         throws Exception
     {
         // Enter values into Add Maven Two Project fields, and submit
-        addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, null );
-
-        assertProjectGroupsSummaryPage();
+        addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, null, true );
 
         clickLinkWithText( DEFAULT_PROJ_GRP_NAME );
     }
@@ -35,7 +33,7 @@ public class AddMavenTwoProjectTest
     {
         addProjectGroup( TEST_PROJ_GRP_NAME, TEST_PROJ_GRP_ID, TEST_PROJ_GRP_DESCRIPTION );
 
-        addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, TEST_PROJ_GRP_NAME );
+        addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, TEST_PROJ_GRP_NAME, true );
 
         assertCellValueFromTable( "1", "ec_table", 2, 2 );
     }

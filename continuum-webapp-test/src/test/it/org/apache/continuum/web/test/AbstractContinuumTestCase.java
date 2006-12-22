@@ -327,7 +327,6 @@ public abstract class AbstractContinuumTestCase
     // Maven 2.0.x Project
     //////////////////////////////////////
     public void goToAddMavenProjectPage()
-        throws Exception
     {
         clickLinkWithText( "Maven 2.0.x Project" );
 
@@ -335,7 +334,6 @@ public abstract class AbstractContinuumTestCase
     }
 
     public void assertAddMavenTwoProjectPage()
-        throws Exception
     {
         assertTextPresent( "POM Url" );
         assertElementPresent( "m2PomUrl" );
@@ -349,8 +347,7 @@ public abstract class AbstractContinuumTestCase
         assertElementPresent( "selectedProjectGroup" );
     }
 
-    public void addMavenTwoProject( String pomUrl, String username, String password, String projectGroup )
-        throws Exception
+    public void addMavenTwoProject( String pomUrl, String username, String password, String projectGroup, boolean validProject )
     {
         goToAddMavenProjectPage();
 
@@ -365,6 +362,40 @@ public abstract class AbstractContinuumTestCase
         }
 
         submit();
+
+        if ( validProject )
+        {
+            assertProjectGroupsSummaryPage();
+        }
+        else
+        {
+            assertAddMavenTwoProjectPage();
+        }
+    }
+
+    public void addMavenTwoProject( String pomFile, String projectGroup, boolean validProject )
+        throws Exception
+    {
+        goToAddMavenProjectPage();
+
+        // Enter values into Add Maven Two Project fields, and submit  
+        setFieldValue( "m2PomFile", pomFile );
+
+        if ( projectGroup != null )
+        {
+            selectValue( "addMavenTwoProject_selectedProjectGroup", projectGroup );
+        }
+
+        submit();
+
+        if ( validProject )
+        {
+            assertProjectGroupsSummaryPage();
+        }
+        else
+        {
+            assertAddMavenTwoProjectPage();
+        }
     }
 
     public void moveProjectToProjectGroup( String name, String groupId, String description, String newProjectGroup )
