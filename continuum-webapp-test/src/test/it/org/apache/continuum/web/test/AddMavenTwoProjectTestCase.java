@@ -85,7 +85,7 @@ public class AddMavenTwoProjectTestCase
         String pomUrl = "http://svn.apache.org/asf/maven/continuum/trunk/bad_url/pom.xml";
         submitAddMavenTwoProjectPage( pomUrl, false );
         assertTextPresent(
-            "The specified resource cannot be accessed. Please try again later or contact your administrator." );
+            "POM file does not exist. Either the POM you specified or one of its modules does not exist." );
     }
 
     /**
