@@ -25,7 +25,7 @@
   <Arg>jdbc/continuum</Arg>
   <Arg>
     <New class="org.apache.derby.jdbc.EmbeddedDataSource">
-      <Set name="DatabaseName">target/continuum_database</Set>
+      <Set name="DatabaseName">../continuum_database</Set>
       <Set name="user">sa</Set>
       <Set name="createDatabase">create</Set>
     </New>
@@ -35,7 +35,7 @@
   <Arg>jdbc/continuum_shutdown</Arg>
   <Arg>
     <New class="org.apache.derby.jdbc.EmbeddedDataSource">
-      <Set name="DatabaseName">target/continuum_database</Set>
+      <Set name="DatabaseName">../continuum_database</Set>
       <Set name="user">sa</Set>
       <Set name="shutdownDatabase">shutdown</Set>
     </New>
@@ -45,7 +45,7 @@
   <Arg>jdbc/users</Arg>
   <Arg>
     <New class="org.apache.derby.jdbc.EmbeddedDataSource">
-      <Set name="DatabaseName">target/users_database</Set>
+      <Set name="DatabaseName">../users_database</Set>
       <Set name="user">sa</Set>
       <Set name="createDatabase">create</Set>
     </New>
@@ -55,7 +55,7 @@
   <Arg>jdbc/users_shutdown</Arg>
   <Arg>
     <New class="org.apache.derby.jdbc.EmbeddedDataSource">
-      <Set name="DatabaseName">target/users_database</Set>
+      <Set name="DatabaseName">../users_database</Set>
       <Set name="user">sa</Set>
       <Set name="shutdownDatabase">shutdown</Set>
     </New>
