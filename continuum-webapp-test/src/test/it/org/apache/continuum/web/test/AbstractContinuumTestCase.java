@@ -25,14 +25,6 @@ import org.apache.maven.shared.web.test.AbstractSeleniumTestCase;
 public abstract class AbstractContinuumTestCase
     extends AbstractSeleniumTestCase
 {
-    protected String adminUsername = "admin";
-
-    protected String adminPassword = "admin1";
-
-    protected String adminFullName = "Continuum Admin";
-
-    protected String adminEmail = "admin@localhost.localdomain.com";
-
     private String baseUrl = "http://localhost:9595";
 
     public final static String DEFAULT_PROJ_GRP_NAME = "Default Project Group";
@@ -54,30 +46,10 @@ public abstract class AbstractContinuumTestCase
 
     public final static String TEST_POM_PASSWORD = "dummy";
 
-    private final static int ONE_SECOND = 1000;
-
-    private final static int ONE_MINUTE = 60 * ONE_SECOND;
-
-    private final static int LONG_WAIT = 5 * ONE_MINUTE;
-
-    /**
-     * We create an admin user if it doesn't exist
-     */
-    protected void initialize()
+    protected void postAdminUserCreation()
     {
-        getSelenium().setTimeout( String.valueOf( 5 * ONE_MINUTE ) );
-        open( "/continuum" );
-
-        if ( "Create Admin User".equals( getTitle() ) )
-        {
-            assertCreateAdminUserPage();
-            submitCreateAdminUserPage( adminFullName, adminEmail, adminPassword, adminPassword );
-            assertLoginPage();
-            submitLoginPage( adminUsername, adminPassword );
-            assertEditConfigurationPage();
-            submitConfigurationPage( baseUrl, null, null, null );
-            logout();
-        }
+        assertEditConfigurationPage();
+        submitConfigurationPage( baseUrl, null, null, null );
     }
 
     //////////////////////////////////////
@@ -101,35 +73,6 @@ public abstract class AbstractContinuumTestCase
     public String getBaseUrl()
     {
         return "http://localhost:9595/continuum";
-    }
-
-    //////////////////////////////////////
-    // Create Admin User
-    //////////////////////////////////////
-    public void assertCreateAdminUserPage()
-    {
-        assertPage( "Create Admin User" );
-        assertTextPresent( "Create Admin User" );
-        assertTextPresent( "Username" );
-        assertElementPresent( "user.username" );
-        assertTextPresent( "Full Name" );
-        assertElementPresent( "user.fullName" );
-        assertTextPresent( "Email Address" );
-        assertElementPresent( "user.email" );
-        assertTextPresent( "Password" );
-        assertElementPresent( "user.password" );
-        assertTextPresent( "Confirm Password" );
-        assertElementPresent( "user.confirmPassword" );
-    }
-
-    public void submitCreateAdminUserPage( String fullName, String email, String password, String confirmPassword )
-    {
-        setFieldValue( "user.fullName", fullName );
-        setFieldValue( "user.email", email );
-        setFieldValue( "user.password", password );
-        setFieldValue( "user.confirmPassword", confirmPassword );
-        submit();
-        waitPage();
     }
 
     //////////////////////////////////////
