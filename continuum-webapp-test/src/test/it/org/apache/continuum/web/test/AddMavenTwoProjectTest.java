@@ -35,6 +35,6 @@ public class AddMavenTwoProjectTest
 
         addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, TEST_PROJ_GRP_NAME, true );
 
-        assertCellValueFromTable( "1", "ec_table", 2, 2 );
+        assertCellValueFromTable( "1", "ec_table", 1, 2 );
     }
 }

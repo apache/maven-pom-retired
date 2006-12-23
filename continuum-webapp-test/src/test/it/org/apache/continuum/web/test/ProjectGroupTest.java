@@ -39,27 +39,24 @@ public class ProjectGroupTest
 
         showProjectGroup( DEFAULT_PROJ_GRP_NAME, DEFAULT_PROJ_GRP_ID, DEFAULT_PROJ_GRP_DESCRIPTION );
 
-        assertLinkPresent( "Build Definitions" );
         clickLinkWithText( "Build Definitions" );
 
         String tableElement = "ec_table";
         assertCellValueFromTable( "Goals", tableElement, 0, 0 );
         assertCellValueFromTable( "Arguments", tableElement, 0, 1 );
         assertCellValueFromTable( "Build File", tableElement, 0, 2 );
-        assertCellValueFromTable( "Profile", tableElement, 0, 3 );
-        assertCellValueFromTable( "schedule", tableElement, 0, 4 );
-        assertCellValueFromTable( "From", tableElement, 0, 5 );
-        assertCellValueFromTable( "Default", tableElement, 0, 6 );
+        assertCellValueFromTable( "schedule", tableElement, 0, 3 );
+        assertCellValueFromTable( "From", tableElement, 0, 4 );
+        assertCellValueFromTable( "Default", tableElement, 0, 5 );
+        assertCellValueFromTable( "", tableElement, 0, 6 );
         assertCellValueFromTable( "", tableElement, 0, 7 );
-        assertCellValueFromTable( "", tableElement, 0, 8 );
 
         assertCellValueFromTable( "clean install", tableElement, 1, 0 );
         assertCellValueFromTable( "--batch-mode --non-recursive", tableElement, 1, 1 );
         assertCellValueFromTable( "pom.xml", tableElement, 1, 2 );
-        assertCellValueFromTable( "", tableElement, 1, 3 );
-        assertCellValueFromTable( "DEFAULT_SCHEDULE", tableElement, 1, 4 );
-        assertCellValueFromTable( "GROUP", tableElement, 1, 5 );
-        assertCellValueFromTable( "true", tableElement, 1, 6 );
+        assertCellValueFromTable( "DEFAULT_SCHEDULE", tableElement, 1, 3 );
+        assertCellValueFromTable( "GROUP", tableElement, 1, 4 );
+        assertCellValueFromTable( "true", tableElement, 1, 5 );
         assertImgWithAlt( "Edit" );
         assertImgWithAlt( "Delete" );
     }

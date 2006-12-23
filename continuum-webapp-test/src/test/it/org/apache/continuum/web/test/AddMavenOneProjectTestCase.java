@@ -38,54 +38,35 @@ public class AddMavenOneProjectTestCase
         throws Exception
     {
         super.setUp();
-        clickLinkWithText( "Maven 1.x Project" );
     }
 
     /**
      * submit the page
      *
      * @param m1PomUrl
-     * @param m1PomFile
      * @param validPom
      */
-    public void submitAddMavenOneProjectPage( String m1PomUrl, String m1PomFile, boolean validPom )
+    public void submitAddMavenOneProjectPage( String m1PomUrl, boolean validPom )
     {
-        getSelenium().type( "m1PomUrl", m1PomUrl );
-        getSelenium().type( "m1PomFile", m1PomFile );
-
-        getSelenium().click( "//input[@type='submit']" );
-        waitPage();
+        addMavenOneProject( m1PomUrl, "", "", null, validPom );
 
         if ( validPom )
         {
-            assertPage( "Continuum - Group Summary" );
-            assertTextPresent( "Project Groups" );
-            //assertTextPresent( "Default Project Group" );
+            assertTextPresent( "Default Project Group" );
+            //TODO: Add more tests
         }
     }
-
-    //TODO: problem with input type="file", selenium.type(..) does not work,
-    // TODO: refer to http://forums.openqa.org/thread.jspa?messageID=1365&#1365 for workaround
-    /**
-     * test with valid pom file
-     */
-    /* public void testValidPomFile()
-    {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/valid-maven-project/project.xml");
-        submitAddMavenOneProjectPage( "", pomFile.getAbsolutePath(), false );
-        assertTextPresent( "Maven One Project" );
-    }*/
 
     /**
      * test with valid pom url
      */
     public void testValidPomUrl()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/valid-project.xml" );
-        submitAddMavenOneProjectPage( "file:/" + pomFile.getAbsolutePath(), "", true );
-        assertPage( "Continuum - Group Summary" );
-        clickLinkWithText( "Default Project Group" );
+        String pomUrl = "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-one-projects/valid-project.xml";
+        submitAddMavenOneProjectPage( pomUrl, true );
+        //Test the group is created
         assertTextPresent( "Maven One Project" );
+        //TODO: add more tests
     }
 
     /**
@@ -93,10 +74,8 @@ public class AddMavenOneProjectTestCase
      */
     public void testNoPomSpecified()
     {
-        submitAddMavenOneProjectPage( "", "", false );
+        submitAddMavenOneProjectPage( "", false );
         assertTextPresent( "Either POM URL or Upload POM is required." );
-        assertElementPresent( "m1PomUrl" );
-        assertElementPresent( "m1PomFile" );
     }
 
     /**
@@ -104,9 +83,8 @@ public class AddMavenOneProjectTestCase
      */
     public void testMissingElementInPom()
     {
-        File pomFile = new File( getBasedir(),
-                                 "src/test/resources/unit/maven-one-projects/missing-repository-element-project.xml" );
-        submitAddMavenOneProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
+        String pomUrl = "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-one-projects/missing-repository-element-project.xml";
+        submitAddMavenOneProjectPage( pomUrl, false );
         assertTextPresent( "Missing repository element in the POM." );
     }
 
@@ -116,9 +94,8 @@ public class AddMavenOneProjectTestCase
      */
     public void testWithExtendElementPom()
     {
-        File pomFile =
-            new File( getBasedir(), "src/test/resources/unit/maven-one-projects/extend-element-project.xml" );
-        submitAddMavenOneProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
+        String pomUrl = "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-one-projects/extend-element-project.xml";
+        submitAddMavenOneProjectPage( pomUrl, false );
         assertTextPresent( "Cannot use a POM with an extend element." );
     }
 
@@ -127,9 +104,8 @@ public class AddMavenOneProjectTestCase
      */
     public void testUnparseableXmlContent()
     {
-        File pomFile =
-            new File( getBasedir(), "src/test/resources/unit/maven-one-projects/unparseable-content-project.xml" );
-        submitAddMavenOneProjectPage( "file:/" + pomFile.getAbsolutePath(), "", false );
+        String pomUrl = "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-one-projects/unparseable-content-project.xml";
+        submitAddMavenOneProjectPage( pomUrl, false );
         assertTextPresent( "The XML content of the POM can not be parsed." );
     }
 
@@ -138,8 +114,8 @@ public class AddMavenOneProjectTestCase
      */
     public void testMalformedPomUrl()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/valid-project.xml" );
-        submitAddMavenOneProjectPage( pomFile.getAbsolutePath(), "", false );
+        String pomUrl = "aaa";
+        submitAddMavenOneProjectPage( pomUrl, false );
         assertTextPresent(
             "The specified resource cannot be accessed. Please try again later or contact your administrator." );
     }
@@ -149,9 +125,8 @@ public class AddMavenOneProjectTestCase
      */
     public void testInaccessiblePomUrl()
     {
-        File pomFile = new File( getBasedir(), "src/test/resources/unit/maven-one-projects/valid-project.xml" );
-        submitAddMavenOneProjectPage( "file://" + pomFile.getAbsolutePath(), "", false );
-        assertTextPresent( "The specified host is either unknown or inaccessible." );
+        String pomUrl = "http://www.google.com";
+        submitAddMavenOneProjectPage( pomUrl, false );
+        assertTextPresent( "The specified resource isn't a file or the protocol used isn't allowed." );
     }
-
 }

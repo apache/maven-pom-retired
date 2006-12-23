@@ -37,7 +37,7 @@ public class AddMavenTwoProjectTestCase
         throws Exception
     {
         super.setUp();
-        goToAddMavenProjectPage();
+        goToAddMavenTwoProjectPage();
     }
 
     /**
@@ -49,7 +49,7 @@ public class AddMavenTwoProjectTestCase
      */
     public void submitAddMavenTwoProjectPage( String m2PomUrl, boolean validPom )
     {
-        addMavenTwoProject( m2PomUrl, "", "", null, false );
+        addMavenTwoProject( m2PomUrl, "", "", null, validPom );
 
         if ( validPom )
         {
@@ -89,6 +89,17 @@ public class AddMavenTwoProjectTestCase
     }
 
     /**
+     * test with a malformed pom url
+     */
+    public void testMalformedPomUrl()
+    {
+        String pomUrl = "aaa";
+        submitAddMavenTwoProjectPage( pomUrl, false );
+        assertTextPresent(
+            "The specified resource cannot be accessed. Please try again later or contact your administrator." );
+    }
+
+    /**
      * Test when the connection element is missing from the scm tag
      */
     public void testMissingConnectionElement()
@@ -117,5 +128,15 @@ public class AddMavenTwoProjectTestCase
         String pomUrl= "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-two-projects/missing-modules-pom.xml";
         submitAddMavenTwoProjectPage( pomUrl, false );
         assertTextPresent( "Unknown error trying to build POM." );
+    }
+
+    /**
+     * test wiht an inaccessible pom url
+     */
+    public void testInaccessiblePomUrl()
+    {
+        String pomUrl = "http://www.google.com";
+        submitAddMavenTwoProjectPage( pomUrl, false );
+        assertTextPresent( "The specified resource isn't a file or the protocol used isn't allowed." );
     }
 }

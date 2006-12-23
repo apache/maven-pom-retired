@@ -326,7 +326,7 @@ public abstract class AbstractContinuumTestCase
     //////////////////////////////////////
     // Maven 2.0.x Project
     //////////////////////////////////////
-    public void goToAddMavenProjectPage()
+    public void goToAddMavenTwoProjectPage()
     {
         clickLinkWithText( "Maven 2.0.x Project" );
 
@@ -349,7 +349,7 @@ public abstract class AbstractContinuumTestCase
 
     public void addMavenTwoProject( String pomUrl, String username, String password, String projectGroup, boolean validProject )
     {
-        goToAddMavenProjectPage();
+        goToAddMavenTwoProjectPage();
 
         // Enter values into Add Maven Two Project fields, and submit  
         setFieldValue( "m2PomUrl", pomUrl );
@@ -373,10 +373,13 @@ public abstract class AbstractContinuumTestCase
         }
     }
 
+    //TODO: problem with input type="file", selenium.type(..) does not work,
+    // TODO: refer to http://forums.openqa.org/thread.jspa?messageID=1365&#1365 for workaround
+    /*
     public void addMavenTwoProject( String pomFile, String projectGroup, boolean validProject )
         throws Exception
     {
-        goToAddMavenProjectPage();
+        goToAddMavenTwoProjectPage();
 
         // Enter values into Add Maven Two Project fields, and submit  
         setFieldValue( "m2PomFile", pomFile );
@@ -397,6 +400,86 @@ public abstract class AbstractContinuumTestCase
             assertAddMavenTwoProjectPage();
         }
     }
+    */
+
+    //////////////////////////////////////
+    // Maven 1.x Project
+    //////////////////////////////////////
+    public void goToAddMavenOneProjectPage()
+    {
+        clickLinkWithText( "Maven 1.x Project" );
+
+        assertAddMavenOneProjectPage();
+    }
+
+    public void assertAddMavenOneProjectPage()
+    {
+        assertTextPresent( "POM Url" );
+        assertElementPresent( "m1PomUrl" );
+        assertTextPresent( "Username" );
+        assertElementPresent( "username" );
+        assertTextPresent( "Password" );
+        assertElementPresent( "password" );
+        assertTextPresent( "Upload POM" );
+        assertElementPresent( "m1PomFile" );
+        assertTextPresent( "Project Group" );
+        assertElementPresent( "selectedProjectGroup" );
+    }
+
+    public void addMavenOneProject( String pomUrl, String username, String password, String projectGroup, boolean validProject )
+    {
+        goToAddMavenOneProjectPage();
+
+        // Enter values into Add Maven One Project fields, and submit  
+        setFieldValue( "m1PomUrl", pomUrl );
+        setFieldValue( "username", username );
+        setFieldValue( "password", password );
+
+        if ( projectGroup != null )
+        {
+            selectValue( "addMavenOneProject_selectedProjectGroup", projectGroup );
+        }
+
+        submit();
+
+        if ( validProject )
+        {
+            assertProjectGroupsSummaryPage();
+        }
+        else
+        {
+            assertAddMavenOneProjectPage();
+        }
+    }
+
+    //TODO: problem with input type="file", selenium.type(..) does not work,
+    // TODO: refer to http://forums.openqa.org/thread.jspa?messageID=1365&#1365 for workaround
+    /*
+    public void addMavenOneProject( String pomFile, String projectGroup, boolean validProject )
+        throws Exception
+    {
+        goToAddMavenOneProjectPage();
+
+        // Enter values into Add Maven One Project fields, and submit  
+        setFieldValue( "m1PomFile", pomFile );
+
+        if ( projectGroup != null )
+        {
+            selectValue( "addMavenOneProject_selectedProjectGroup", projectGroup );
+        }
+
+        submit();
+
+        if ( validProject )
+        {
+            assertProjectGroupsSummaryPage();
+        }
+        else
+        {
+            assertAddMavenOneProjectPage();
+        }
+    }
+    */
 
     public void moveProjectToProjectGroup( String name, String groupId, String description, String newProjectGroup )
         throws Exception
