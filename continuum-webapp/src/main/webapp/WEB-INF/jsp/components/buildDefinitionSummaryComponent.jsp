@@ -60,7 +60,7 @@
             <ww:a href="%{removeUrl}"><img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></ww:a>
           </pss:ifAuthorized>
           <pss:elseAuthorized>
-            <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />
+            <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0" />
           </pss:elseAuthorized>
         </ww:if>
         <ww:else>
@@ -74,7 +74,7 @@
             <ww:a href="%{removeUrl}"><img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></ww:a>
           </pss:ifAuthorized>
           <pss:elseAuthorized>
-            <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />
+            <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0" />
           </pss:elseAuthorized>
         </ww:else>
       </ec:column>

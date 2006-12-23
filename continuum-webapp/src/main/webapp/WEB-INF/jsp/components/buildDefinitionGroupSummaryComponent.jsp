@@ -31,11 +31,11 @@
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
           </ww:url>
           <ww:a href="%{editUrl}">
-              <img src="<ww:url value='/images/edit.gif'/>" alt="Edit" title="Edit" border="0">
+              <img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0">
           </ww:a>
         </pss:ifAuthorized>
         <pss:elseAuthorized>
-          <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="Edit" title="Edit" border="0">
+          <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0">
         </pss:elseAuthorized>
         </center>
       </ec:column>    
@@ -48,11 +48,11 @@
             <ww:param name="confirmed" value="false"/>
           </ww:url>
           <ww:a href="%{removeUrl}">
-            <img src="<ww:url value='/images/delete.gif'/>" alt="Delete" title="Delete" border="0">
+            <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0">
           </ww:a>
         </pss:ifAuthorized>
         <pss:elseAuthorized>
-          <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Delete" title="Delete" border="0">
+          <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0">
         </pss:elseAuthorized>
         </center>
       </ec:column>
@@ -102,11 +102,11 @@
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
           </ww:url>
           <ww:a href="%{editUrl}">
-              <img src="<ww:url value='/images/edit.gif'/>" alt="Edit" title="Edit" border="0">          
+              <img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0">          
           </ww:a>
         </pss:ifAuthorized>
         <pss:elseAuthorized>
-          <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="Edit" title="Edit" border="0">
+          <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0">
         </pss:elseAuthorized>
       </ec:column>
       <ec:column property="removeAction" title="&nbsp;" width="1%">
@@ -117,11 +117,11 @@
             <ww:param name="confirmed" value="false"/>
           </ww:url>
           <ww:a href="%{removeUrl}">
-              <img src="<ww:url value='/images/delete.gif'/>" alt="Edit" title="Edit" border="0">
+              <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0">
           </ww:a>
         </pss:ifAuthorized>
         <pss:elseAuthorized>
-           <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Edit" title="Edit" border="0"> 
+           <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"> 
         </pss:elseAuthorized>
       </ec:column>
     </ec:row>
