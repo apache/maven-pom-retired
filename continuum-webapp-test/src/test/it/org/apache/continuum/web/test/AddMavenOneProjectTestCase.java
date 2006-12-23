@@ -85,7 +85,7 @@ public class AddMavenOneProjectTestCase
     {
         String pomUrl = "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-one-projects/missing-repository-element-project.xml";
         submitAddMavenOneProjectPage( pomUrl, false );
-        assertTextPresent( "Missing repository element in the POM." );
+        assertTextPresent( "Missing 'repository' element in the POM." );
     }
 
 
@@ -96,7 +96,7 @@ public class AddMavenOneProjectTestCase
     {
         String pomUrl = "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-one-projects/extend-element-project.xml";
         submitAddMavenOneProjectPage( pomUrl, false );
-        assertTextPresent( "Cannot use a POM with an extend element." );
+        assertTextPresent( "Cannot use a POM with an 'extend' element." );
     }
 
     /**
