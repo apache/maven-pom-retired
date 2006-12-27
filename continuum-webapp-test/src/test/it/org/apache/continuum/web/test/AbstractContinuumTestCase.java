@@ -25,7 +25,7 @@ import org.apache.maven.shared.web.test.AbstractSeleniumTestCase;
 public abstract class AbstractContinuumTestCase
     extends AbstractSeleniumTestCase
 {
-    private String baseUrl = "http://localhost:9595";
+    private String baseUrl = "http://localhost:9595/continuum";
 
     public final static String DEFAULT_PROJ_GRP_NAME = "Default Project Group";
 
@@ -72,7 +72,7 @@ public abstract class AbstractContinuumTestCase
 
     public String getBaseUrl()
     {
-        return "http://localhost:9595/continuum";
+        return baseUrl;
     }
 
     //////////////////////////////////////
@@ -463,5 +463,10 @@ public abstract class AbstractContinuumTestCase
         }
 
         super.tearDown();
+    }
+
+    protected String getWebContext()
+    {
+        return "/continuum";
     }
 }
