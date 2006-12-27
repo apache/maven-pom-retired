@@ -42,6 +42,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -173,8 +174,6 @@ public class MavenTwoBuildExecutor
                 "Unable to read the Maven project descriptor '" + f + "': " + result.getErrorsAsString() );
         }
 
-        List artifacts = new ArrayList( 1 );
-
         // Maven could help us out a lot more here by knowing how to get the deployment artifacts from a project.
         // TODO: this is currently quite lame
 
@@ -246,9 +245,19 @@ public class MavenTwoBuildExecutor
             }
         }
 
+        List attachedArtifacts = project.getAttachedArtifacts();
+
+        List artifacts = new ArrayList( attachedArtifacts.size() + 1 );
+
         if ( artifact.getFile().exists() )
         {
             artifacts.add( artifact );
+        }
+
+        for ( Iterator iterator = attachedArtifacts.iterator(); iterator.hasNext(); )
+        {
+            Artifact attachedArtifact = (Artifact) iterator.next();
+            artifacts.add( attachedArtifact );
         }
 
         return artifacts;
