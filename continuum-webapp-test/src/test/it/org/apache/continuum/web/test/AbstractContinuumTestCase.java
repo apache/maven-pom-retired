@@ -444,6 +444,10 @@ public abstract class AbstractContinuumTestCase
     {
         try
         {
+            goToLoginPage();
+
+            submitLoginPage( adminUsername, adminPassword );
+
             goToProjectGroupsSummaryPage();
 
             if ( isLinkPresent( TEST_PROJ_GRP_NAME ) )
@@ -459,6 +463,7 @@ public abstract class AbstractContinuumTestCase
         }
         catch ( Exception e )
         {
+            // TODO! should be rethrowing this, but the tearDown in the parent doesn't allow it
             e.printStackTrace();
         }
 
