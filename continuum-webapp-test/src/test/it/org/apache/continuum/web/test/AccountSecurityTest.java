@@ -81,7 +81,7 @@ public class AccountSecurityTest
             {
                 if ( i == 4 )
                 {
-                    // TODO! this is due to a bug where roles are not removed with the user, so remove them by hand
+                    // TODO! this is due to a bug where roles are not removed with the user, so remove them by hand [CONTINUUM-1095]
                     clickLinkWithText( CUSTOM_USERNAME5 );
                     checkField( "removeRolesFromUser_removeSelectedRolesSystem Administrator" );
                     clickButtonWithValue( "Remove Selected Roles" );
