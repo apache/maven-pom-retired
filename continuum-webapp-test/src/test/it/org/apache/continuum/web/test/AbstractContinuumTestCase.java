@@ -441,30 +441,30 @@ public abstract class AbstractContinuumTestCase
     }
 
     public void tearDown()
+        throws Exception
     {
-        try
+        login( adminUsername, adminPassword );
+
+        goToProjectGroupsSummaryPage();
+
+        if ( isLinkPresent( TEST_PROJ_GRP_NAME ) )
         {
-            goToLoginPage();
-
-            submitLoginPage( adminUsername, adminPassword );
-
-            goToProjectGroupsSummaryPage();
-
-            if ( isLinkPresent( TEST_PROJ_GRP_NAME ) )
-            {
-                removeProjectGroup( TEST_PROJ_GRP_NAME, TEST_PROJ_GRP_ID, TEST_PROJ_GRP_DESCRIPTION );
-            }
-            if ( isLinkPresent( DEFAULT_PROJ_GRP_NAME ) &&
-                "0".equals( getCellValueFromTable( "ec_table", 1, 2 ) ) == false )
-            {
-                removeProjectGroup( DEFAULT_PROJ_GRP_NAME, DEFAULT_PROJ_GRP_ID, DEFAULT_PROJ_GRP_DESCRIPTION );
-                addProjectGroup( DEFAULT_PROJ_GRP_NAME, DEFAULT_PROJ_GRP_ID, DEFAULT_PROJ_GRP_DESCRIPTION );
-            }
+            removeProjectGroup( TEST_PROJ_GRP_NAME, TEST_PROJ_GRP_ID, TEST_PROJ_GRP_DESCRIPTION );
         }
-        catch ( Exception e )
+        // TODO: clean this up
+        if ( isLinkPresent( "Apache Maven" ) )
         {
-            // TODO! should be rethrowing this, but the tearDown in the parent doesn't allow it
-            e.printStackTrace();
+            removeProjectGroup( "Apache Maven", "org.apache.maven", "Maven is a software project management and comprehension tool. Based on the concept of a project object model (POM), Maven can manage a project's build, reporting and documentation from a central piece of information." );
+        }
+        if ( isLinkPresent( "Maven One Project" ) )
+        {
+            removeProjectGroup( "Maven One Project", "maven-one-project", "This is a sample Maven One Project." );
+        }
+        if ( isLinkPresent( DEFAULT_PROJ_GRP_NAME ) &&
+            "0".equals( getCellValueFromTable( "ec_table", 1, 2 ) ) == false )
+        {
+            removeProjectGroup( DEFAULT_PROJ_GRP_NAME, DEFAULT_PROJ_GRP_ID, DEFAULT_PROJ_GRP_DESCRIPTION );
+            addProjectGroup( DEFAULT_PROJ_GRP_NAME, DEFAULT_PROJ_GRP_ID, DEFAULT_PROJ_GRP_DESCRIPTION );
         }
 
         super.tearDown();

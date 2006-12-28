@@ -22,10 +22,10 @@ public class AccountSecurityTest
     extends AbstractAuthenticatedAccessTestCase
 {
     public final String SIMPLE_POM = getBasedir() + "/target/test-classes/unit/simple-project/pom.xml";
-    
+
     // create user fields
-    public static final String CREATE_FORM_USERNAME_FIELD = "userCreateForm_user_username";    
-    
+    public static final String CREATE_FORM_USERNAME_FIELD = "userCreateForm_user_username";
+
     public static final String CREATE_FORM_FULLNAME_FIELD = "userCreateForm_user_fullName";
 
     public static final String CREATE_FORM_EMAILADD_FIELD = "userCreateForm_user_email";
@@ -39,7 +39,7 @@ public class AccountSecurityTest
     public static final String CONFIRM_PASSWORD_FIELD = "user.confirmPassword";
 
     // user account 1
-    public static final String CUSTOM_USERNAME = "custom";
+    public static final String CUSTOM_USERNAME = "custom1";
 
     public static final String CUSTOM_USERNAME2 = "custom2";
 
@@ -65,13 +65,43 @@ public class AccountSecurityTest
         return super.adminPassword;
     }
 
+    public void tearDown()
+        throws Exception
+    {
+        login( adminUsername, adminPassword );
+
+        clickLinkWithText( "Users" );
+
+        String[] users = {CUSTOM_USERNAME, CUSTOM_USERNAME2, CUSTOM_USERNAME3, CUSTOM_USERNAME4, CUSTOM_USERNAME5};
+
+        for ( int i = 0; i < users.length; i++ )
+        {
+            String[] columns = new String[]{users[i], CUSTOM_FULLNAME, CUSTOM_EMAILADD};
+            if ( isElementPresent( XPathExpressionUtil.getTableRow( columns ) ) )
+            {
+                if ( i == 4 )
+                {
+                    // TODO! this is due to a bug where roles are not removed with the user, so remove them by hand
+                    clickLinkWithText( CUSTOM_USERNAME5 );
+                    checkField( "removeRolesFromUser_removeSelectedRolesSystem Administrator" );
+                    clickButtonWithValue( "Remove Selected Roles" );
+                }
+
+                deleteUser( users[i], CUSTOM_FULLNAME, CUSTOM_EMAILADD );
+            }
+        }
+
+        logout();
+
+        super.tearDown();
+    }
+
     public void testBasicUserAddDelete()
     {
         createUser( CUSTOM_USERNAME, CUSTOM_FULLNAME, CUSTOM_EMAILADD, CUSTOM_PASSWORD, true );
 
         // delete custom user
         deleteUser( CUSTOM_USERNAME, CUSTOM_FULLNAME, CUSTOM_EMAILADD );
-        logout();
     }
 
     public void testPasswordConfirmation()
@@ -194,8 +224,7 @@ public class AccountSecurityTest
             else
             {
                 // on the 3rd try, account is locked and we are returned to the Group Summary Page
-                login( this.CUSTOM_USERNAME4, this.CUSTOM_PASSWORD + "error", false,
-                             "Continuum - Group Summary" );
+                login( this.CUSTOM_USERNAME4, this.CUSTOM_PASSWORD + "error", false, "Continuum - Group Summary" );
                 assertTextPresent( "Account Locked" );
             }
         }
@@ -205,31 +234,31 @@ public class AccountSecurityTest
         deleteUser( CUSTOM_USERNAME4, CUSTOM_FULLNAME, CUSTOM_EMAILADD, false, true );
         logout();
     }
-       
+
     public void testDefaultRolesOfNewSystemAdministrator()
     {
         // initialize
-        createUser( CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD, CUSTOM_PASSWORD, true);
-                      
+        createUser( CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD, CUSTOM_PASSWORD, true );
+
         // upgrade the role of the user to system administrator
         //TODO: check Permanent/validated/locked columns
-        String[] columnValues = { CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD };
+        String[] columnValues = {CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD};
         clickLinkWithText( CUSTOM_USERNAME5 );
-                        
+
         checkField( "addRolesToUser_addSelectedRolesSystem Administrator" );
         clickButtonWithValue( "Add Selected Roles" );
 
         // verify roles        
-        String[] roleList = { "System Administrator",
-                              "User Administrator",
-                              "Continuum Group Project Administrator",
-                              "Project Developer - Default Project Group",
-                              "Project User - Default Project Group" };
-        
+        String[] roleList = {"Project User - Maven One Project", "Project Developer - Test Project Group Name",
+            "User Administrator", "System Administrator", "Project Developer - Maven One Project",
+            "Project Developer - Default Project Group", "Project Developer - Apache Maven",
+            "Project User - Apache Maven", "Project User - Default Project Group",
+            "Continuum Group Project Administrator", "Project User - Test Project Group Name"};
+
         assertElementPresent( XPathExpressionUtil.getList( roleList ) );
         deleteUser( CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD );
     }
-    
+
     private void createUser( String userName, String fullName, String emailAdd, String password, boolean valid )
     {
         createUser( userName, fullName, emailAdd, password, password, valid );
@@ -275,8 +304,7 @@ public class AccountSecurityTest
     private void deleteUser( String userName, String fullName, String emailAdd, boolean validated, boolean locked )
     {
         //TODO: Add permanent/validated/locked values
-        String[] columnValues =
-            {userName, fullName, emailAdd};
+        String[] columnValues = {userName, fullName, emailAdd};
 
         clickLinkWithText( "Users" );
 

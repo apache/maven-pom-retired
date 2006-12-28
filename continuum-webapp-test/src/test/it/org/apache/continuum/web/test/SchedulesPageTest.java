@@ -373,6 +373,7 @@ public class SchedulesPageTest
     }
 
     public void tearDown()
+        throws Exception
     {
         logout();
 
