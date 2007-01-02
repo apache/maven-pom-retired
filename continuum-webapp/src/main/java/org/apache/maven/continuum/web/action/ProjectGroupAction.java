@@ -151,6 +151,7 @@ public class ProjectGroupAction
         }
         else
         {
+            name = getContinuum().getProjectGroup( projectGroupId ).getName();
             return CONFIRM;
         }
 

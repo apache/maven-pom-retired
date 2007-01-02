@@ -161,6 +161,8 @@ public class ScheduleAction
         else
         {    
             setConfirmationInfo( "Schedule Removal", "removeSchedule", name, "id", "" + id );
+            
+            name = getContinuum().getSchedule( id ).getName();
                         
             return CONFIRM;
         }

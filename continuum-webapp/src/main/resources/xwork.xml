@@ -301,7 +301,7 @@
       <result name="error" type="chain">schedule</result>
     </action>
     <action name="removeSchedule" class="schedule" method="remove">
-      <result name="confirm">/WEB-INF/jsp/confirmation.jsp</result>
+      <result name="confirm">/WEB-INF/jsp/confirmScheduleRemoval.jsp</result>
       <result name="success" type="chain">schedules</result>
     </action>
 

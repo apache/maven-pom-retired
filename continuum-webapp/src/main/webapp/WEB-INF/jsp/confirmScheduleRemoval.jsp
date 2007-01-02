@@ -14,9 +14,15 @@
           <ww:hidden name="confirmed" value="true"/>
           <ww:actionerror/>
 
-          <p>
-            Are you sure you wish to remove <ww:property value="schedule.name"/>?
-          </p>
+          <div class="warningmessage">
+            <p>
+              <strong>
+                <ww:text name="schedules.confirmation.message">
+                  <ww:param><ww:property value="%{name}"/></ww:param>
+                </ww:text>
+              </strong>
+            </p>
+          </div>
 
           <div class="functnbar3">
             <c1:submitcancel value="%{getText('delete')}" cancel="%{getText('cancel')}"/>
