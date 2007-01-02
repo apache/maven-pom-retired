@@ -17,6 +17,7 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Project;
 
 import java.util.Collection;
 
@@ -31,17 +32,19 @@ import java.util.Collection;
 public class BuildResultsListAction
     extends ContinuumActionSupport
 {
+    private Project project;
+
     private Collection buildResults;
 
     private int projectId;
-
-    private int projectGroupId;
 
     private String projectName;
 
     public String execute()
         throws ContinuumException
     {
+        project = getContinuum().getProject( projectId );
+
         buildResults = getContinuum().getBuildResultsForProject( projectId );
 
         return SUCCESS;
@@ -57,16 +60,6 @@ public class BuildResultsListAction
         this.projectId = projectId;
     }
 
-    public int getProjectGroupId()
-    {
-        return projectGroupId;
-    }
-
-    public void setProjectGroupId( int projectGroupId )
-    {
-        this.projectGroupId = projectGroupId;
-    }
-
     public Collection getBuildResults()
     {
         return buildResults;
@@ -80,5 +73,10 @@ public class BuildResultsListAction
     public void setProjectName( String projectName )
     {
         this.projectName = projectName;
+    }
+
+    public Project getProject()
+    {
+        return project;
     }
 }

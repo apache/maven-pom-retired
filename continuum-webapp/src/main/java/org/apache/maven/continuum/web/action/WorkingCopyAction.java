@@ -17,6 +17,7 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.web.util.WorkingCopyContentGenerator;
 
 import com.opensymphony.webwork.ServletActionContext;
@@ -46,9 +47,9 @@ public class WorkingCopyAction
      */
     private WorkingCopyContentGenerator generator;
 
-    private int projectId;
+    private Project project;
 
-    private int projectGroupId;
+    private int projectId;
 
     private String userDirectory;
 
@@ -73,13 +74,13 @@ public class WorkingCopyAction
     {
         files = getContinuum().getFiles( projectId, userDirectory );
 
-        projectName = getContinuum().getProject( projectId ).getName();
+        project = getContinuum().getProject( projectId );
+
+        projectName = project.getName();
 
         HashMap params = new HashMap();
 
         params.put( "projectId", new Integer( projectId ) );
-
-        params.put( "projectGroupId", new Integer( projectGroupId ) );
 
         params.put( "projectName", projectName );
 
@@ -142,16 +143,6 @@ public class WorkingCopyAction
         return projectName;
     }
 
-    public int getProjectGroupId()
-    {
-        return projectGroupId;
-    }
-
-    public void setProjectGroupId( int projectGroupId )
-    {
-        this.projectGroupId = projectGroupId;
-    }
-
     public String getUserDirectory()
     {
         return userDirectory;
@@ -212,5 +203,10 @@ public class WorkingCopyAction
     public String getMimeType()
     {
         return this.mimeType;
+    }
+
+    public Project getProject()
+    {
+        return project;
     }
 }
