@@ -63,10 +63,12 @@ public class SurefireReportAction
 
     private String projectName;
 
+    private Project project;
+
     public String execute()
         throws ContinuumException
     {
-        Project project = getContinuum().getProject( projectId );
+        project = getContinuum().getProject( projectId );
 
         //@todo maven-surefire-report reportsDirectory should be detected ?
         File reportsDirectory = new File( project.getWorkingDirectory() + "/target/surefire-reports" );
@@ -195,6 +197,11 @@ public class SurefireReportAction
     public void setBuildId( int buildId )
     {
         this.buildId = buildId;
+    }
+
+    public Project getProject()
+    {
+        return project;
     }
 
     public int getProjectId()
