@@ -82,14 +82,18 @@ public class SummaryAction
 
             model.setProjectGroupName( project.getProjectGroup().getName() );
 
-            if ( getContinuum().isInBuildingQueue( project.getId() ) ||
-                getContinuum().isInCheckoutQueue( project.getId() ) )
+            if ( getContinuum().isInBuildingQueue( project.getId() ) )
             {
-                model.setInQueue( true );
+                model.setInBuildingQueue( true );
+            }
+            else if ( getContinuum().isInCheckoutQueue( project.getId() ) )
+            {
+                model.setInCheckoutQueue( true );
             }
             else
             {
-                model.setInQueue( false );
+                model.setInBuildingQueue( false );
+                model.setInCheckoutQueue( false );
             }
 
             model.setState( project.getState() );

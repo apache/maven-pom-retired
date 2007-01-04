@@ -128,10 +128,18 @@
           <defaultValue>-1</defaultValue>
         </field>
         <field>
-          <name>inQueue</name>
+          <name>inBuildingQueue</name>
           <version>1.0.0</version>
           <required>true</required>
           <description>true/false depending on if the project is in the build queue or not</description>
+          <type>boolean</type>
+          <defaultValue>false</defaultValue>
+        </field>
+        <field>
+          <name>inCheckoutQueue</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>true/false depending on if the project is in the checkout queue or not</description>
           <type>boolean</type>
           <defaultValue>false</defaultValue>
         </field>

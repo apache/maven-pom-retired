@@ -55,10 +55,15 @@ public class BuildCell
 
         String result = "<div align=\"center\">";
 
-        if ( project.isInQueue() )
+        if ( project.isInBuildingQueue() )
         {
             result +=
                 "<img src=\"" + contextPath + "/images/inqueue.gif\" alt=\"In Queue\" title=\"In Queue\" border=\"0\">";
+        }
+        else if ( project.isInCheckoutQueue() )
+        {
+            result += "<img src=\"" + contextPath +
+                "/images/checkingout.gif\" alt=\"Checking Out sources\" title=\"Checking Out sources\" border=\"0\">";
         }
         else
         {
