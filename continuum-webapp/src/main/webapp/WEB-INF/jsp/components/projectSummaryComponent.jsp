@@ -54,7 +54,7 @@
       <ec:column property="buildNowAction" title="&nbsp;" width="1%">
         <pss:ifAuthorized permission="continuum-build-group" resource="${projectGroupName}">
           <c:choose>
-            <c:when test="${!project.inQueue and ( project.state gt 0 ) and ( project.state lt 5 )}">
+            <c:when test="${!project.inBuildingQueue and !project.inCheckoutQueue and ( project.state gt 0 ) and ( project.state lt 5 )}">
               <ww:url id="buildProjectUrl" action="buildProject" namespace="/">
                 <ww:param name="projectId" value="${project.id}"/>
               </ww:url>
