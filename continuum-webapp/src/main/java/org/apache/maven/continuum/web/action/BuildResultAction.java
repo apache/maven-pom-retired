@@ -45,13 +45,13 @@ import com.opensymphony.webwork.ServletActionContext;
 public class BuildResultAction
     extends ContinuumActionSupport
 {
+    private Project project;
+
     private BuildResult buildResult;
 
     private int buildId;
 
     private int projectId;
-
-    private int projectGroupId;
 
     private String projectName;
 
@@ -68,7 +68,7 @@ public class BuildResultAction
     {
         //todo get this working for other types of test case rendering other then just surefire
         // check if there are surefire results to display
-        Project project = getContinuum().getProject( getProjectId() );
+        project = getContinuum().getProject( getProjectId() );
         hasSurefireResults = FileUtils.fileExists( project.getWorkingDirectory() + "/target/surefire-reports" );
 
         buildResult = getContinuum().getBuildResult( getBuildId() );
@@ -98,6 +98,11 @@ public class BuildResultAction
         this.buildId = buildId;
     }
 
+    public Project getProject()
+    {
+        return project;
+    }
+
     public int getProjectId()
     {
         return projectId;
@@ -116,16 +121,6 @@ public class BuildResultAction
     public void setProjectName( String projectName )
     {
         this.projectName = projectName;
-    }
-
-    public int getProjectGroupId()
-    {
-        return projectGroupId;
-    }
-
-    public void setProjectGroupId( int projectGroupId )
-    {
-        this.projectGroupId = projectGroupId;
     }
 
     public BuildResult getBuildResult()
