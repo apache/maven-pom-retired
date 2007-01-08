@@ -32,19 +32,34 @@ import org.apache.maven.continuum.ContinuumException;
 public class BuildProjectAction
     extends ContinuumActionSupport
 {
-
     private int projectId;
+
+    private int buildDefinitionId;
 
     public String execute()
         throws ContinuumException
     {
         if ( projectId > 0 )
         {
-            getContinuum().buildProject( projectId );
+            if ( buildDefinitionId > 0 )
+            {
+                getContinuum().buildProjectWithBuildDefinition( projectId, buildDefinitionId );
+            }
+            else
+            {
+                getContinuum().buildProject( projectId );
+            }
         }
         else
         {
-            getContinuum().buildProjects();
+            if ( buildDefinitionId > 0 )
+            {
+                getContinuum().buildProjectsWithBuildDefinition( buildDefinitionId );
+            }
+            else
+            {
+                getContinuum().buildProjects();
+            }
         }
 
         return SUCCESS;
@@ -58,5 +73,15 @@ public class BuildProjectAction
     public int getProjectId()
     {
         return projectId;
+    }
+
+    public void setBuildDefinitionId( int buildDefinitionId )
+    {
+        this.buildDefinitionId = buildDefinitionId;
+    }
+
+    public int getBuildDefinition()
+    {
+        return buildDefinitionId;
     }
 }

@@ -140,7 +140,13 @@ public interface Continuum
     void buildProjects()
         throws ContinuumException;
 
+    void buildProjectsWithBuildDefinition( int buildDefinitionId )
+        throws ContinuumException;
+
     void buildProjects( int trigger )
+        throws ContinuumException;
+
+    void buildProjects( int trigger, int buildDefinitionId )
         throws ContinuumException;
 
     void buildProjects( Schedule schedule )
@@ -150,6 +156,9 @@ public interface Continuum
         throws ContinuumException;
 
     void buildProject( int projectId, int trigger )
+        throws ContinuumException;
+
+    void buildProjectWithBuildDefinition( int projectId, int buildDefinitionId )
         throws ContinuumException;
 
     void buildProject( int projectId, int buildDefinitionId, int trigger )

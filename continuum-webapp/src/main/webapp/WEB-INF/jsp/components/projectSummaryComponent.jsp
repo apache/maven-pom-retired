@@ -55,7 +55,7 @@
         <pss:ifAuthorized permission="continuum-build-group" resource="${projectGroupName}">
           <c:choose>
             <c:when test="${!project.inBuildingQueue and !project.inCheckoutQueue and ( project.state gt 0 ) and ( project.state lt 5 )}">
-              <ww:url id="buildProjectUrl" action="buildProject" namespace="/">
+              <ww:url id="buildProjectUrl" action="buildProject" namespace="/" includeParams="none">
                 <ww:param name="projectId" value="${project.id}"/>
               </ww:url>
               <ww:a href="%{buildProjectUrl}">

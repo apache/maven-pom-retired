@@ -39,6 +39,18 @@
       <ec:column property="scheduleName" title="schedule"/>
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
+      <ec:column property="buildAction" title="&nbsp;" width="1%">
+        <pss:ifAuthorized permission="continuum-build-group" resource="${projectGroupName}">
+          <ww:url id="buildProjectUrl" action="buildProject" namespace="/">
+            <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
+            <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
+          </ww:url>
+          <ww:a href="%{buildProjectUrl}"><img src="<ww:url value='/images/buildnow.gif'/>" alt="<ww:text name='build'/>" title="<ww:text name='build'/>" border="0"></ww:a>
+        </pss:ifAuthorized>
+        <pss:elseAuthorized>
+          <img src="<ww:url value='/images/buildnow_disabled.gif'/>" alt="<ww:text name='build'/>" title="<ww:text name='build'/>" border="0" />
+        </pss:elseAuthorized>
+      </ec:column>
       <ec:column property="editAction" title="&nbsp;" width="1%">
         <%-- if the from is PROJECT then render the links differently --%>
         <ww:if test="${pageScope.buildDefinitionSummary.from == 'PROJECT'}">

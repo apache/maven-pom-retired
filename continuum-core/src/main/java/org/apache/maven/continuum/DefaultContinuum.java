@@ -568,6 +568,12 @@ public class DefaultContinuum
         buildProjects( ContinuumProjectState.TRIGGER_FORCED );
     }
 
+    public void buildProjectsWithBuildDefinition( int buildDefinitionId )
+        throws ContinuumException
+    {
+        buildProjects( ContinuumProjectState.TRIGGER_FORCED, buildDefinitionId );
+    }
+
     /**
      * fire of the builds of all projects across all project groups using their default build definitions
      *
@@ -590,8 +596,6 @@ public class DefaultContinuum
             projectsList = getProjects();
         }
 
-        //Map buildDefinitionsIds = store.getDefaultBuildDefinitions();
-
         for ( Iterator i = projectsList.iterator(); i.hasNext(); )
         {
             Project project = (Project) i.next();
@@ -609,6 +613,37 @@ public class DefaultContinuum
             }
 
             buildProject( project, buildDefId.intValue(), trigger );
+        }
+    }
+
+    /**
+     * fire of the builds of all projects across all project groups using the group build definition
+     *
+     * @param trigger
+     * @param buildDefinitionId
+     * @throws ContinuumException
+     */
+    public void buildProjects( int trigger, int buildDefinitionId )
+        throws ContinuumException
+    {
+        Collection projectsList;
+
+        try
+        {
+            projectsList = getProjectsInBuildOrder();
+        }
+        catch ( CycleDetectedException e )
+        {
+            getLogger().warn( "Cycle detected while sorting projects for building, falling back to unsorted build." );
+
+            projectsList = getProjects();
+        }
+
+        for ( Iterator i = projectsList.iterator(); i.hasNext(); )
+        {
+            Project project = (Project) i.next();
+
+            buildProject( project, buildDefinitionId, trigger );
         }
     }
 
