@@ -44,7 +44,6 @@ public class DataTag
     
     public void setValueLink( String _link )
     {
-        System.out.println(" link = " + _link);
         valueLink = _link;    
     }
     
