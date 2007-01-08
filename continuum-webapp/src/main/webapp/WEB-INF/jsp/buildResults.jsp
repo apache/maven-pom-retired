@@ -34,7 +34,7 @@
 
         <h3>
             <ww:text name="buildResults.section.title">
-                <ww:param><ww:property value="projectName"/></ww:param>
+                <ww:param><ww:property value="project.name"/></ww:param>
             </ww:text>
         </h3>
         <ww:set name="buildResults" value="buildResults" scope="request"/>
