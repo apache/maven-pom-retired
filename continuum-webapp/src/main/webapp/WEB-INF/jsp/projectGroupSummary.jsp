@@ -56,14 +56,14 @@
               <pss:ifAuthorized permission="continuum-build-group" resource="${projectGroup.name}">
                 <form action="buildProjectGroup.action" method="post">
                     <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
-                    <input type="submit" name="build" value="<ww:text name="Build"/>"/>
+                    <input type="submit" name="build" value="<ww:text name="build"/>"/>
                 </form>
                 </pss:ifAuthorized>
             <td>
                 <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroup.name}">
                 <form action="editProjectGroup.action" method="post">
                     <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
-                    <input type="submit" name="edit" value="<ww:text name="Edit"/>"/>
+                    <input type="submit" name="edit" value="<ww:text name="edit"/>"/>
                 </form>
                 </pss:ifAuthorized>
             </td>
@@ -71,7 +71,7 @@
               <pss:ifAuthorized permission="continuum-remove-group" resource="${projectGroup.name}">
                 <form action="removeProjectGroup.action" method="post">
                     <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
-                    <input type="submit" name="remove" value="<ww:text name="Remove"/>"/>
+                    <input type="submit" name="remove" value="<ww:text name="delete"/>"/>
                 </form>
               </pss:ifAuthorized>
             </td>
