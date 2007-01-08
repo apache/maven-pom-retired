@@ -85,6 +85,7 @@ public class DateTag
         OgnlValueStack stack = getStack();
         //find the name on the valueStack, and cast it to a date
         Object dateObj = stack.findValue( actualName );
+
         if ( dateObj != null )
         {
             if ( dateObj instanceof Date )
@@ -103,7 +104,7 @@ public class DateTag
             }
         }
 
-        if ( date != null )
+        if ( date != null && date.getTime() > 0 )
         {
             tp = findProviderInStack();
 
