@@ -25,7 +25,7 @@
 
 <ww:i18n name="localization.Continuum">
 
-  <h3>Project Group Build Definitions</h3>
+  <h3>Project Group Build Definitions of ${projectGroup.name} group</h3>
   <ww:if test="${not empty groupBuildDefinitionSummaries}">
   <ec:table items="groupBuildDefinitionSummaries"
             var="buildDefinitionSummary"

@@ -24,7 +24,7 @@
 <%@ taglib uri="/plexusSecuritySystem" prefix="pss" %>
 <ww:i18n name="localization.Continuum">
 
-  <h3>Project Group Notifiers</h3>
+  <h3>Project Group Notifiers of ${projectGroup.name} group</h3>
   <ww:if test="${not empty projectGroupNotifierSummaries}">
   <ec:table items="projectGroupNotifierSummaries"
             var="projectGroupNotifierSummary"

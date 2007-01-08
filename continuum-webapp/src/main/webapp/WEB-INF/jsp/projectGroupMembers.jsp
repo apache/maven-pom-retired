@@ -41,7 +41,7 @@
       -->
     </div>
 
-    <h3>Member Projects</h3>
+    <h3>Member Projects of ${projectGroup.name} group</h3>
 
     <ec:table items="groupProjects"
               var="project"
