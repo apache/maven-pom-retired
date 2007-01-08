@@ -32,7 +32,6 @@
           <ww:form action="projectSave" method="post" validate="true">
             <table>
               <tbody>
-                <ww:hidden name="projectId"/>
                 <ww:textfield label="%{getText('projectEdit.project.name.label')}" name="name" required="true"/>
                 <ww:textfield label="%{getText('projectEdit.project.version.label')}" name="version" required="true"/>
                 <ww:textfield label="%{getText('projectEdit.project.scmUrl.label')}" name="scmUrl" required="true"/>
@@ -44,6 +43,7 @@
             <div class="functnbar3">
               <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
             </div>
+            <ww:hidden name="projectId"/>
           </ww:form>
         </div>
       </div>
