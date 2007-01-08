@@ -33,7 +33,7 @@
 
         <h3>
             <ww:text name="buildResult.section.title">
-                <ww:param><ww:property value="projectName"/></ww:param>
+                <ww:param><ww:property value="project.name"/></ww:param>
             </ww:text>
         </h3>
 
