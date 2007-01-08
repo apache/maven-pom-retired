@@ -105,7 +105,10 @@ public class ConfigurationAction
 
             configuration.setBuildOutputDirectory( new File( buildOutputDirectory ) );
 
-            configuration.setDeploymentRepositoryDirectory( new File( deploymentRepositoryDirectory ) );
+            if ( StringUtils.isNotEmpty( deploymentRepositoryDirectory ) )
+            {
+                configuration.setDeploymentRepositoryDirectory( new File( deploymentRepositoryDirectory ) );
+            }
 
             configuration.setUrl( baseUrl );
 
