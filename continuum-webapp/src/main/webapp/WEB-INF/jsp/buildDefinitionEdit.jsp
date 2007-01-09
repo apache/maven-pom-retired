@@ -43,11 +43,6 @@
               </c:when>
   
               <c:when test="${empty actionErrors}">
-                <ww:hidden name="buildDefinitionId"/>
-                <ww:hidden name="projectId"/>
-                <ww:hidden name="projectGroupId"/>
-                <ww:hidden name="groupBuildDefinition"/>
-    
                 <table>
                   <tbody>
                     <ww:if test="executor == 'ant'">
@@ -70,11 +65,10 @@
                     </ww:else>
     
                     <ww:textfield label="%{getText('buildDefinition.arguments.label')}" name="arguments"/>
+                    <ww:checkbox label="Build Fresh" name="buildFresh" value="buildFresh" fieldValue="true"/>
                     <ww:if test="defaultBuildDefinition == true">
                       <ww:label label="%{getText('buildDefinition.defaultForProject.label')}" value="true"/>
-                      <ww:hidden name="defaultBuildDefinition" value="true"/>
                     </ww:if>
-                    <ww:checkbox label="Build Fresh" name="buildFresh" value="buildFresh" fieldValue="true"/>
                     <ww:else>
                       <ww:checkbox label="%{getText('buildDefinition.defaultForProject.label')}"  name="defaultBuildDefinition" value="defaultBuildDefinition" fieldValue="true"/>
                     </ww:else>
@@ -84,6 +78,14 @@
                 <div class="functnbar3">
                   <c1:submitcancel value="%{getText('save')}" cancel="%{getText('cancel')}"/>
                 </div>
+
+                <ww:hidden name="buildDefinitionId"/>
+                <ww:hidden name="projectId"/>
+                <ww:hidden name="projectGroupId"/>
+                <ww:hidden name="groupBuildDefinition"/>
+                <ww:if test="defaultBuildDefinition == true">
+                  <ww:hidden name="defaultBuildDefinition" value="true"/>
+                </ww:if>
               </c:when>
             
             </c:choose>
