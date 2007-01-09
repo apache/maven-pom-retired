@@ -245,7 +245,15 @@ public class DefaultContinuum
     public void removeProjectGroup( int projectGroupId )
         throws ContinuumException
     {
-        ProjectGroup projectGroup = getProjectGroup( projectGroupId );
+        ProjectGroup projectGroup = getProjectGroupWithProjects( projectGroupId );
+
+        if ( projectGroup != null )
+        {
+            for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
+            {
+                removeProject( ( (Project) i.next() ).getId() );
+            }
+        }
 
         store.removeProjectGroup( projectGroup );
     }
