@@ -39,7 +39,7 @@
     </ww:else>
   
     <ww:if test="${empty groups}">
-      No Project Groups Known.
+      Project Groups list is empty.
     </ww:if>
 
     <ww:if test="${not empty groups}">
