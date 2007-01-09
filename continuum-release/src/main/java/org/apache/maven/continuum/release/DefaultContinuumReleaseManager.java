@@ -22,16 +22,16 @@ package org.apache.maven.continuum.release;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.release.tasks.PerformReleaseProjectTask;
 import org.apache.maven.continuum.release.tasks.PrepareReleaseProjectTask;
+import org.apache.maven.continuum.release.tasks.RollbackReleaseProjectTask;
 import org.apache.maven.shared.release.ReleaseManagerListener;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
-import org.apache.maven.shared.release.config.io.xpp3.ReleaseDescriptorXpp3Reader;
+import org.apache.maven.shared.release.config.ReleaseDescriptorStore;
+import org.apache.maven.shared.release.config.ReleaseDescriptorStoreException;
+import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.TaskQueueException;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
@@ -46,12 +46,22 @@ public class DefaultContinuumReleaseManager
     /**
      * @plexus.requirement
      */
+    private ReleaseDescriptorStore releaseStore;
+
+    /**
+     * @plexus.requirement
+     */
     private TaskQueue prepareReleaseQueue;
 
     /**
      * @plexus.requirement
      */
     private TaskQueue performReleaseQueue;
+
+    /**
+     * @plexus.requirement
+     */
+    private TaskQueue rollbackReleaseQueue;
 
     private Map listeners;
 
@@ -102,23 +112,11 @@ public class DefaultContinuumReleaseManager
         }
     }
 
-    public void perform( String releaseId, File descriptorFile, File buildDirectory,
+    public void perform( String releaseId, String workingDirectory, File buildDirectory,
                          String goals, boolean useReleaseProfile, ContinuumReleaseManagerListener listener )
         throws ContinuumReleaseException
     {
-        ReleaseDescriptor descriptor;
-        try
-        {
-            descriptor = new ReleaseDescriptorXpp3Reader().read( new FileReader( descriptorFile ) );
-        }
-        catch ( IOException e )
-        {
-            throw new ContinuumReleaseException( "Failed to parse descriptor file.", e );
-        }
-        catch ( XmlPullParserException e )
-        {
-            throw new ContinuumReleaseException( "Failed to parse descriptor file.", e );
-        }
+        ReleaseDescriptor descriptor = readReleaseDescriptor( workingDirectory );
 
         perform( releaseId, descriptor, buildDirectory, goals, useReleaseProfile, listener );
     }
@@ -138,6 +136,30 @@ public class DefaultContinuumReleaseManager
         catch ( TaskQueueException e )
         {
             throw new ContinuumReleaseException( "Failed to add perform release task in queue.", e );
+        }
+    }
+
+    public void rollback( String releaseId, String workingDirectory, ContinuumReleaseManagerListener listener )
+        throws ContinuumReleaseException
+    {
+        ReleaseDescriptor descriptor = readReleaseDescriptor( workingDirectory );
+
+        rollback( releaseId, descriptor, listener );
+    }
+
+    private void rollback( String releaseId, ReleaseDescriptor descriptor, ContinuumReleaseManagerListener listener )
+        throws ContinuumReleaseException
+    {
+        Task releaseTask =
+            new RollbackReleaseProjectTask( releaseId, descriptor, (ReleaseManagerListener) listener );
+
+        try
+        {
+            rollbackReleaseQueue.put( releaseTask );
+        }
+        catch ( TaskQueueException e )
+        {
+            throw new ContinuumReleaseException( "Failed to rollback release.", e );
         }
     }
 
@@ -189,6 +211,24 @@ public class DefaultContinuumReleaseManager
 
         //forced properties
         descriptor.setInteractive( false );
+
+        return descriptor;
+    }
+
+    private ReleaseDescriptor readReleaseDescriptor( String workingDirectory )
+        throws ContinuumReleaseException
+    {
+        ReleaseDescriptor descriptor = new ReleaseDescriptor();
+        descriptor.setWorkingDirectory( workingDirectory );
+
+        try
+        {
+            descriptor = releaseStore.read( descriptor );
+        }
+        catch ( ReleaseDescriptorStoreException e )
+        {
+            throw new ContinuumReleaseException( "Failed to parse descriptor file.", e );
+        }
 
         return descriptor;
     }

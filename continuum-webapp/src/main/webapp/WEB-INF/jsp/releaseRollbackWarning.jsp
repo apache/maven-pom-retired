@@ -22,22 +22,32 @@
   <ww:i18n name="localization.Continuum">
     <head>
         <title><ww:text name="releaseProject.page.title"/></title>
-        <meta http-equiv="refresh" content="10;url=<ww:url includeParams="all" />"/>
     </head>
     <body>
-      <h2><ww:text name="releaseInProgress.section.title"/></h2>
-      <h3><ww:property value="name"/></h3>
-      <p>
-        The release goal is currently initializing...
-      </p>
-      <p>
-        Please wait while the server prepares your project for release.
-      </p>
-      <ww:form action="releaseInProgress" method="get">
-        <ww:hidden name="projectId"/>
-        <ww:hidden name="releaseId"/>
-        <ww:submit value="Refresh"/>
-      </ww:form>
+      <h3>
+        <ww:text name="releaseProject.section.title">
+          <ww:param><ww:property value="projectName"/></ww:param>
+        </ww:text>
+      </h3>
+      <p>This will revert all changes made by the previous release?</p>
+      <table>
+        <tr>
+          <td>
+            <ww:form action="releaseRollback" method="post">
+              <ww:hidden name="projectId"/>
+              <ww:hidden name="releaseId"/>
+              <ww:submit value="Rollback Changes"/>
+            </ww:form>
+          </td>
+          <td>
+            <ww:form action="releaseInProgress" method="post">
+              <ww:hidden name="projectId"/>
+              <ww:hidden name="releaseId"/>
+              <ww:submit value="Cancel"/>
+            </ww:form>
+          </td>
+        </tr>
+      </table>
     </body>
   </ww:i18n>
 </html>

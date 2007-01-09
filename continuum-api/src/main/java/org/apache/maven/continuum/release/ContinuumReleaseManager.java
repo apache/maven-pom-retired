@@ -38,8 +38,12 @@ public interface ContinuumReleaseManager
     /**
      * Prepare a project for release
      *
-     * @param project      project / project group to be released
+     * @param project
      * @param releaseProperties
+     * @param releaseVersions
+     * @param developmentVersions
+     * @param listener
+     * @return
      * @throws ContinuumReleaseException
      */
     String prepare( Project project, Properties releaseProperties, Map releaseVersions,
@@ -62,11 +66,27 @@ public interface ContinuumReleaseManager
     /**
      * Perform a release based on a release descriptor received by the Maven Release Plugin.
      *
-     * @param descriptorFile
+     * @param releaseId
+     * @param workingDirectory
+     * @param buildDirectory
+     * @param goals
+     * @param useReleaseProfile
+     * @param listener
      * @throws ContinuumReleaseException
      */
-    void perform( String releaseId, File descriptorFile, File buildDirectory,
+    void perform( String releaseId, String workingDirectory, File buildDirectory,
                   String goals, boolean useReleaseProfile, ContinuumReleaseManagerListener listener )
+        throws ContinuumReleaseException;
+
+    /**
+     * Rollback changes made by a previous release.
+     *
+     * @param releaseId
+     * @param workingDirectory
+     * @param listener
+     * @throws ContinuumReleaseException
+     */
+    public void rollback( String releaseId, String workingDirectory, ContinuumReleaseManagerListener listener )
         throws ContinuumReleaseException;
 
     Map getPreparedReleases();

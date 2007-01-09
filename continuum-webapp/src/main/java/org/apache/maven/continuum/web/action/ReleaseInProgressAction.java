@@ -37,6 +37,8 @@ public class ReleaseInProgressAction
 
     private String releaseId;
 
+    private String releaseGoal;
+
     private ContinuumReleaseManagerListener listener;
 
     private ReleaseResult result;
@@ -137,5 +139,15 @@ public class ReleaseInProgressAction
     public void setProjectId( int projectId )
     {
         this.projectId = projectId;
+    }
+
+    public String getReleaseGoal()
+    {
+        return releaseGoal;
+    }
+
+    public void setReleaseGoal( String releaseGoal )
+    {
+        this.releaseGoal = releaseGoal;
     }
 }

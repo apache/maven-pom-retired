@@ -51,7 +51,7 @@
           <param name="excludeMethods">input,back,cancel,browse,edit</param>
         </interceptor-ref>
       </interceptor-stack>
-      
+
       <interceptor-stack name="unconfiguredContinuumStack">
         <interceptor-ref name="defaultStack"/>
         <interceptor-ref name="exception-logging"/>
@@ -395,6 +395,18 @@
       <result name="success">/WEB-INF/jsp/releaseFinished.jsp</result>
     </action>
 
+    <action name="releaseRollbackWarning" class="releaseRollback" method="warn">
+      <result>/WEB-INF/jsp/releaseRollbackWarning.jsp</result>
+    </action>
+
+    <action name="releaseRollback" class="releaseRollback">
+      <result name="success" type="redirect-action">
+        <param name="actionName">releaseCleanup</param>
+        <param name="projectId">${projectId}</param>
+        <param name="releaseId">${releaseId}</param>
+      </result>
+    </action>
+
     <action name="releaseCleanup" class="releaseCleanup">
       <result name="prepareFinished" type="chain">releasePromptGoal</result>
       <result name="performFinished" type="chain">groupSummary</result>
@@ -486,7 +498,7 @@
     </action>
 
   </package>
-  
+
   <package name="notifier" extends="default">
     <!--
     * notifier actions :: Project

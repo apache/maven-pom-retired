@@ -19,13 +19,11 @@ package org.apache.maven.continuum.release.executors;
  * under the License.
  */
 
-import org.apache.maven.continuum.release.ContinuumReleaseException;
 import org.apache.maven.continuum.release.tasks.PerformReleaseProjectTask;
+import org.apache.maven.continuum.release.tasks.ReleaseProjectTask;
 import org.apache.maven.shared.release.ReleaseManagerListener;
 import org.apache.maven.shared.release.ReleaseResult;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
-import org.apache.maven.settings.Settings;
-import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 
 import java.util.List;
@@ -36,7 +34,7 @@ import java.util.List;
 public class PerformReleaseTaskExecutor
     extends AbstractReleaseTaskExecutor
 {
-    public void executeTask( Task task )
+    public void execute( ReleaseProjectTask task )
         throws TaskExecutionException
     {
         PerformReleaseProjectTask performTask = (PerformReleaseProjectTask) task;
@@ -45,41 +43,7 @@ public class PerformReleaseTaskExecutor
 
         ReleaseDescriptor descriptor = performTask.getDescriptor();
 
-        Settings settings;
-        try
-        {
-            settings = getSettings();
-        }
-        catch ( ContinuumReleaseException e )
-        {
-            ReleaseResult result = new ReleaseResult();
-
-            result.appendError( e );
-
-            continuumReleaseManager.getReleaseResults().put( performTask.getReleaseId(), result );
-
-            listener.error( e.getMessage() );
-
-            throw new TaskExecutionException( "Failed to build reactor projects.", e );
-        }
-
-        List reactorProjects;
-        try
-        {
-            reactorProjects = getReactorProjects( descriptor );
-        }
-        catch ( ContinuumReleaseException e )
-        {
-            ReleaseResult result = new ReleaseResult();
-
-            result.appendError( e );
-
-            continuumReleaseManager.getReleaseResults().put( performTask.getReleaseId(), result );
-
-            listener.error( e.getMessage() );
-
-            throw new TaskExecutionException( "Failed to build reactor projects.", e );
-        }
+        List reactorProjects = getReactorProjects( performTask );
 
         ReleaseResult result =
             releasePluginManager.performWithResult( descriptor, settings, reactorProjects,

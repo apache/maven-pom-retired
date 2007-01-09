@@ -19,10 +19,9 @@ package org.apache.maven.continuum.release.executors;
  * under the License.
  */
 
-import org.apache.maven.continuum.release.tasks.PrepareReleaseProjectTask;
 import org.apache.maven.continuum.release.tasks.ReleaseProjectTask;
-import org.apache.maven.shared.release.ReleaseResult;
-import org.apache.maven.shared.release.config.ReleaseDescriptor;
+import org.apache.maven.shared.release.ReleaseExecutionException;
+import org.apache.maven.shared.release.ReleaseFailureException;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 
 import java.util.List;
@@ -30,26 +29,26 @@ import java.util.List;
 /**
  * @author Edwin Punzalan
  */
-public class PrepareReleaseTaskExecutor
+public class RollbackReleaseTaskExecutor
     extends AbstractReleaseTaskExecutor
 {
-    protected void execute( ReleaseProjectTask task )
+    protected void execute( ReleaseProjectTask releaseTask )
         throws TaskExecutionException
     {
-        PrepareReleaseProjectTask prepareTask = (PrepareReleaseProjectTask) task;
+        List reactorProjects = getReactorProjects( releaseTask );
 
-        ReleaseDescriptor descriptor = prepareTask.getDescriptor();
-
-        List reactorProjects = getReactorProjects( prepareTask );
-
-        ReleaseResult result = releasePluginManager.prepareWithResult( descriptor, settings, reactorProjects,
-                                                                       false, false, prepareTask.getListener() );
-
-        if ( result.getResultCode() == ReleaseResult.SUCCESS )
+        try
         {
-            continuumReleaseManager.getPreparedReleases().put( prepareTask.getReleaseId(), descriptor );
+            releasePluginManager.rollback( releaseTask.getDescriptor(), settings, reactorProjects,
+                                           releaseTask.getListener() );
         }
-
-        continuumReleaseManager.getReleaseResults().put( prepareTask.getReleaseId(), result );
+        catch ( ReleaseExecutionException e )
+        {
+            throw new TaskExecutionException( "Failed to rollback release", e );
+        }
+        catch ( ReleaseFailureException e )
+        {
+            throw new TaskExecutionException( "Failed to rollback release", e );
+        }
     }
 }

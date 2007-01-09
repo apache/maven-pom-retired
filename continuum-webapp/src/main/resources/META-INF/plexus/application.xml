@@ -41,6 +41,10 @@
       <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
       <role-hint>perform-release</role-hint>
     </component>
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+      <role-hint>rollback-release</role-hint>
+    </component>
   </load-on-start>
 
   <components>

@@ -26,8 +26,7 @@ import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.continuum.release.ContinuumReleaseException;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
-import org.apache.maven.shared.release.ReleaseManager;
-import org.apache.maven.shared.release.config.ReleaseDescriptor;
+import org.apache.maven.continuum.release.tasks.ReleaseProjectTask;
 import org.apache.maven.profiles.DefaultProfileManager;
 import org.apache.maven.profiles.ProfileManager;
 import org.apache.maven.project.DuplicateProjectException;
@@ -37,8 +36,13 @@ import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.ProjectSorter;
 import org.apache.maven.settings.MavenSettingsBuilder;
 import org.apache.maven.settings.Settings;
+import org.apache.maven.shared.release.ReleaseManager;
+import org.apache.maven.shared.release.ReleaseResult;
+import org.apache.maven.shared.release.config.ReleaseDescriptor;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.taskqueue.Task;
+import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 import org.codehaus.plexus.context.Context;
 import org.codehaus.plexus.context.ContextException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
@@ -86,13 +90,70 @@ public abstract class AbstractReleaseTaskExecutor
 
     private PlexusContainer container;
 
-    private Settings settings;
+    protected Settings settings;
+
+    public void executeTask( Task task )
+        throws TaskExecutionException
+    {
+        ReleaseProjectTask releaseTask = (ReleaseProjectTask) task;
+
+        setUp( releaseTask );
+
+        execute( releaseTask );
+    }
+
+    protected void setUp( ReleaseProjectTask releaseTask )
+        throws TaskExecutionException
+    {
+        try
+        {
+            //make sure settings is re-read each time
+            settings = getSettings();
+        }
+        catch ( ContinuumReleaseException e )
+        {
+            ReleaseResult result = new ReleaseResult();
+
+            result.appendError( e );
+
+            continuumReleaseManager.getReleaseResults().put( releaseTask.getReleaseId(), result );
+
+            releaseTask.getListener().error( e.getMessage() );
+
+            throw new TaskExecutionException( "Failed to build reactor projects.", e );
+        }
+    }
+
+    protected abstract void execute( ReleaseProjectTask releaseTask )
+        throws TaskExecutionException;
+
+    protected List getReactorProjects( ReleaseProjectTask releaseTask )
+        throws TaskExecutionException
+    {
+        List reactorProjects;
+        try
+        {
+            reactorProjects = getReactorProjects( releaseTask.getDescriptor() );
+        }
+        catch ( ContinuumReleaseException e )
+        {
+            ReleaseResult result = new ReleaseResult();
+
+            result.appendError( e );
+
+            continuumReleaseManager.getReleaseResults().put( releaseTask.getReleaseId(), result );
+
+            releaseTask.getListener().error( e.getMessage() );
+
+            throw new TaskExecutionException( "Failed to build reactor projects.", e );
+        }
+
+        return reactorProjects;
+    }
 
     protected List getReactorProjects( ReleaseDescriptor descriptor )
         throws ContinuumReleaseException
     {
-        Settings settings = getSettings();
-
         List reactorProjects = new ArrayList();
 
         MavenProject project;
@@ -151,23 +212,20 @@ public abstract class AbstractReleaseTaskExecutor
         return reactorProjects;
     }
 
-    protected Settings getSettings()
+    private Settings getSettings()
         throws ContinuumReleaseException
     {
-        if ( settings == null )
+        try
         {
-            try
-            {
-                settings = settingsBuilder.buildSettings();
-            }
-            catch ( IOException e )
-            {
-                throw new ContinuumReleaseException( "Failed to get Maven Settings.", e );
-            }
-            catch ( XmlPullParserException e )
-            {
-                throw new ContinuumReleaseException( "Failed to get Maven Settings.", e );
-            }
+            settings = settingsBuilder.buildSettings();
+        }
+        catch ( IOException e )
+        {
+            throw new ContinuumReleaseException( "Failed to get Maven Settings.", e );
+        }
+        catch ( XmlPullParserException e )
+        {
+            throw new ContinuumReleaseException( "Failed to get Maven Settings.", e );
         }
 
         return settings;

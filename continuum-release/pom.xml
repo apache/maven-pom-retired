@@ -45,7 +45,7 @@
       <artifactId>maven-model</artifactId>
     </dependency>
     <!--
-      adding maven-artifact as a dependency since maven-2.0.5-SNAPSHOT 
+      adding maven-artifact as a dependency since maven-2.0.5-SNAPSHOT
       appears to have a slightly different way of resolving dependencies
       and 2.0 artifact is getting chosen as opposed to 2.0.4 like earlier
       versions of maven peg it to...the 2.0 artifact was coming from the
@@ -60,7 +60,7 @@
       <artifactId>maven-artifact-manager</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.shared</groupId>
+      <groupId>org.apache.maven.release</groupId>
       <artifactId>maven-release-manager</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>

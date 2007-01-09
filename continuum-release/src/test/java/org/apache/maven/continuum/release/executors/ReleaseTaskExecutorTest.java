@@ -21,6 +21,7 @@ package org.apache.maven.continuum.release.executors;
 
 import org.apache.maven.continuum.release.tasks.PrepareReleaseProjectTask;
 import org.apache.maven.continuum.release.tasks.PerformReleaseProjectTask;
+import org.apache.maven.continuum.release.tasks.RollbackReleaseProjectTask;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
 import org.apache.maven.shared.release.ReleaseResult;
@@ -49,6 +50,8 @@ public class ReleaseTaskExecutorTest
 
     private TaskExecutor performExec;
 
+    private TaskExecutor rollbackExec;
+
     private ContinuumReleaseManager releaseManager;
 
     protected void setUp()
@@ -71,6 +74,11 @@ public class ReleaseTaskExecutorTest
             performExec = (TaskExecutor) lookup( TaskExecutor.class.getName(), "perform-release" );
         }
 
+        if ( rollbackExec == null )
+        {
+            rollbackExec = (TaskExecutor) lookup( TaskExecutor.class.getName(), "rollback-release" );
+        }
+
         if ( releaseManager == null )
         {
             releaseManager = (ContinuumReleaseManager) lookup( ContinuumReleaseManager.ROLE );
@@ -83,7 +91,7 @@ public class ReleaseTaskExecutorTest
     public void releaseSimpleProject()
         throws Exception
     {
-    	String scmPath = new File( getBasedir(), "target/scm-test" ).getAbsolutePath().replace( '\\', '/' );
+        String scmPath = new File( getBasedir(), "target/scm-test" ).getAbsolutePath().replace( '\\', '/' );
         File workDir = new File( getBasedir(), "target/test-classes/work-dir" );
         FileUtils.deleteDirectory( workDir );
         File testDir = new File( getBasedir(), "target/test-classes/test-dir" );
@@ -113,12 +121,15 @@ public class ReleaseTaskExecutorTest
         pom = FileUtils.fileRead( new File( testDir, "pom.xml" ) );
         assertTrue( "Test released version", pom.indexOf( "<version>1.0</version>" ) > 0 );
     }
-    
-    public void testReleases() throws Exception{
-    	releaseSimpleProject();
-    	releaseSimpleProjectWithNextVersion();
+
+    public void testReleases()
+        throws Exception
+    {
+        releaseSimpleProject();
+        releaseAndRollbackProject();
+        releaseSimpleProjectWithNextVersion();
     }
-    
+
     public void releaseSimpleProjectWithNextVersion()
         throws Exception
     {
@@ -161,6 +172,50 @@ public class ReleaseTaskExecutorTest
         {
             fail( "Error in release:perform. Release output follows:\n" + result.getOutput() );
         }
+    }
+
+    public void releaseAndRollbackProject()
+        throws Exception
+    {
+        String scmPath = new File( getBasedir(), "target/scm-test" ).getAbsolutePath().replace( '\\', '/' );
+        File workDir = new File( getBasedir(), "target/test-classes/work-dir" );
+        FileUtils.deleteDirectory( workDir );
+        File testDir = new File( getBasedir(), "target/test-classes/test-dir" );
+        FileUtils.deleteDirectory( testDir );
+
+        ReleaseDescriptor descriptor = new ReleaseDescriptor();
+        descriptor.setInteractive( false );
+        descriptor.setScmSourceUrl( "scm:svn:file://localhost/" + scmPath + "/trunk" );
+        descriptor.setWorkingDirectory( workDir.getAbsolutePath() );
+
+        ScmRepository repository = getScmRepositorty( descriptor.getScmSourceUrl() );
+        ScmFileSet fileSet = new ScmFileSet( workDir );
+        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, null );
+
+        String pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
+        assertTrue( "Test dev version", pom.indexOf( "<version>1.1-SNAPSHOT</version>" ) > 0 );
+
+        doPrepareWithNoError( descriptor );
+
+        pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
+        assertTrue( "Test version increment", pom.indexOf( "<version>1.2-SNAPSHOT</version>" ) > 0 );
+
+        repository = getScmRepositorty( "scm:svn:file://localhost/" + scmPath + "/tags/test-artifact-1.1" );
+        fileSet = new ScmFileSet( testDir );
+        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, null );
+
+        pom = FileUtils.fileRead( new File( testDir, "pom.xml" ) );
+        assertTrue( "Test released version", pom.indexOf( "<version>1.1</version>" ) > 0 );
+
+        rollbackExec.executeTask( new RollbackReleaseProjectTask( "testRelease", descriptor, null ) );
+
+        pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
+        assertTrue( "Test rollback version", pom.indexOf( "<version>1.1-SNAPSHOT</version>" ) > 0 );
+
+        assertFalse( "Test that release.properties has been cleaned", new File( workDir, "release.properties" ).exists() );
+        assertFalse( "Test that backup file has been cleaned", new File( workDir, "pom.xml.releaseBackup" ).exists() );
+
+        //@todo when implemented already, check if tag was also removed
     }
 
     private void doPrepareWithNoError( ReleaseDescriptor descriptor )

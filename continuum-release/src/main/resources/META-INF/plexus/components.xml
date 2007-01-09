@@ -25,6 +25,10 @@
       <implementation>org.apache.maven.continuum.release.DefaultContinuumReleaseManager</implementation>
       <requirements>
         <requirement>
+          <role>org.apache.maven.shared.release.config.ReleaseDescriptorStore</role>
+          <role-hint>properties</role-hint>
+        </requirement>
+        <requirement>
           <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
           <role-hint>prepare-release</role-hint>
           <field-name>prepareReleaseQueue</field-name>
@@ -33,6 +37,11 @@
           <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
           <role-hint>perform-release</role-hint>
           <field-name>performReleaseQueue</field-name>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>rollback-release</role-hint>
+          <field-name>rollbackReleaseQueue</field-name>
         </requirement>
       </requirements>
     </component>
@@ -160,6 +169,69 @@
       </requirements>
       <configuration>
         <name>perform-release</name>
+      </configuration>
+    </component>
+
+    <!--
+     |
+     | Rollback Release Project Task Queue
+     |
+     |-->
+
+    <component>
+      <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+      <role-hint>rollback-release</role-hint>
+      <implementation>org.codehaus.plexus.taskqueue.DefaultTaskQueue</implementation>
+      <lifecycle-handler>plexus-configurable</lifecycle-handler>
+      <configuration>
+        <task-entry-evaluators>
+        </task-entry-evaluators>
+        <task-exit-evaluators>
+        </task-exit-evaluators>
+        <task-viability-evaluators>
+        </task-viability-evaluators>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskExecutor</role>
+      <role-hint>rollback-release</role-hint>
+      <implementation>org.apache.maven.continuum.release.executors.RollbackReleaseTaskExecutor</implementation>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.continuum.release.ContinuumReleaseManager</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.shared.release.ReleaseManager</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.project.MavenProjectBuilder</role>
+        </requirement>
+        <requirement>
+          <role>org.apache.maven.settings.MavenSettingsBuilder</role>
+        </requirement>
+      </requirements>
+      <configuration>
+        <local-repository>${plexus.home}/local-repository</local-repository>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor</role>
+      <role-hint>rollback-release</role-hint>
+      <implementation>org.codehaus.plexus.taskqueue.execution.ThreadedTaskQueueExecutor</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.execution.TaskExecutor</role>
+          <role-hint>rollback-release</role-hint>
+        </requirement>
+        <requirement>
+          <role>org.codehaus.plexus.taskqueue.TaskQueue</role>
+          <role-hint>rollback-release</role-hint>
+        </requirement>
+      </requirements>
+      <configuration>
+        <name>rollback-release</name>
       </configuration>
     </component>
 
