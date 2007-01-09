@@ -62,7 +62,7 @@ public abstract class AbstractContinuumNotifier
                 }
 
                 buf.append( "buildResult.action?buildId=" ).append( build.getId() ).append( "&projectId=" )
-                    .append( project.getId() ).append( "&projectName=" ).append( project.getName() );
+                    .append( project.getId() );
             }
 
             return buf.toString();
