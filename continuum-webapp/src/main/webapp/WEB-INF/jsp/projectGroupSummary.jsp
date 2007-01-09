@@ -89,9 +89,13 @@
       <div class="functnbar3">
         <c:url var="addM2ProjectUrl" value="/addMavenTwoProject!default.action">
           <c:param name="disableGroupSelection" value="true"/>
+          <c:param name="selectedProjectGroup" value="${projectGroup.id}"/>
+          <c:param name="projectGroupName" value="${projectGroup.name}"/>
         </c:url>
         <c:url var="addM1ProjectUrl" value="/addMavenOneProject!default.action">
           <c:param name="disableGroupSelection" value="true"/>
+          <c:param name="selectedProjectGroup" value="${projectGroup.id}"/>
+          <c:param name="projectGroupName" value="${projectGroup.name}"/>
         </c:url>
         <table>
           <tr>

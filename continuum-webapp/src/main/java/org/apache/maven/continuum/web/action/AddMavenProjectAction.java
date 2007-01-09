@@ -173,14 +173,6 @@ public abstract class AddMavenProjectAction
             //}
         }
 
-        if ( session.get( "lastViewedProjectGroup" ) != null )
-        {
-            selectedProjectGroup = ( (Integer) session.get( "lastViewedProjectGroup" ) ).intValue();
-        }
-        else
-        {
-            selectedProjectGroup = DEFINED_BY_POM_GROUP_ID;
-        }
         if ( disableGroupSelection == true && selectedProjectGroup != DEFINED_BY_POM_GROUP_ID )
         {
             try
@@ -281,6 +273,7 @@ public abstract class AddMavenProjectAction
     {
         SecureActionBundle bundle = new SecureActionBundle();
         bundle.setRequiresAuthentication( true );
+
         if ( StringUtils.isEmpty( projectGroupName ) )
         {
             bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_OPERATION );

@@ -109,7 +109,6 @@ public class ProjectGroupAction
         throws ContinuumException
     {
         projectGroup = getContinuum().getProjectGroup( projectGroupId );
-        session.put( "lastViewedProjectGroup", new Integer( projectGroupId ) );
 
         return SUCCESS;
     }
