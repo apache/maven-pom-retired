@@ -344,9 +344,9 @@
     </profile>
   </profiles>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/pom/trunk/maven</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/pom/trunk/maven</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/pom/trunk/maven</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/pom/trunk/maven-plugin-surrogate-parent</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/pom/trunk/maven-plugin-surrogate-parent</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/pom/trunk/maven-plugin-surrogate-parent</url>
   </scm>
 </project>
 
