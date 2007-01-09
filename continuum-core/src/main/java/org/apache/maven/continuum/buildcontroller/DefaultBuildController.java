@@ -132,8 +132,16 @@ public class DefaultBuildController
 
             Map actionContext = context.getActionContext();
 
-            performAction( "update-project-from-working-directory", context );
-
+            try
+            {
+                performAction( "update-project-from-working-directory", context );
+            }
+            catch ( TaskExecutionException e )
+            {
+                //just log the error but don't stop the build from progressing in order not to suppress any build result messages there 
+                getLogger().error( "Error executing action update-project-from-working-directory '", e );
+            }
+            
             performAction( "execute-builder", context );
 
             performAction( "deploy-artifact", context );
@@ -422,6 +430,7 @@ public class DefaultBuildController
         catch ( Exception e )
         {
             exception = new TaskExecutionException( "Error executing action '" + actionName + "'", e );
+            error = ContinuumUtils.throwableToString( exception );
         }
 
         // TODO: clean this up. We catch the original exception from the action, and then update the buildresult
