@@ -42,7 +42,7 @@
       <ec:column property="buildAction" title="&nbsp;" width="1%">
         <pss:ifAuthorized permission="continuum-build-group" resource="${projectGroupName}">
           <ww:url id="buildProjectUrl" action="buildProject" namespace="/">
-            <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
+            <ww:param name="projectId">${projectId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
           </ww:url>
           <ww:a href="%{buildProjectUrl}"><img src="<ww:url value='/images/buildnow.gif'/>" alt="<ww:text name='build'/>" title="<ww:text name='build'/>" border="0"></ww:a>
@@ -56,7 +56,7 @@
         <ww:if test="${pageScope.buildDefinitionSummary.from == 'PROJECT'}">
           <pss:ifAuthorized permission="continuum-modify-project-build-definition" resource="${projectGroupName}">
             <ww:url id="editUrl" action="buildDefinition" method="input" namespace="/">
-              <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
+              <ww:param name="projectId">${projectId}</ww:param>
               <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
             </ww:url>
             <ww:a href="%{editUrl}"><img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0"></ww:a>
@@ -84,7 +84,7 @@
         <ww:if test="${pageScope.buildDefinitionSummary.from == 'PROJECT'}">
           <pss:ifAuthorized permission="continuum-remove-project-build-definition" resource="${projectGroupName}">
             <ww:url id="removeUrl" action="removeProjectBuildDefinition" namespace="/">
-              <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
+              <ww:param name="projectId">${projectId}</ww:param>
               <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
               <ww:param name="confirmed" value="false"/>
             </ww:url>
