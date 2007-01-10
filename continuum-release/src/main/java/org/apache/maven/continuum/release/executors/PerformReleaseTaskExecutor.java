@@ -50,6 +50,9 @@ public class PerformReleaseTaskExecutor
                                                     performTask.getBuildDirectory(), performTask.getGoals(),
                                                     performTask.isUseReleaseProfile(), listener );
 
+        //override to show the actual start time
+        result.setStartTime( getStartTime() );
+
         if ( result.getResultCode() == ReleaseResult.SUCCESS )
         {
             continuumReleaseManager.getPreparedReleases().remove( performTask.getReleaseId() );

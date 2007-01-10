@@ -41,11 +41,11 @@ import org.apache.maven.shared.release.ReleaseResult;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.taskqueue.Task;
-import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 import org.codehaus.plexus.context.Context;
 import org.codehaus.plexus.context.ContextException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
+import org.codehaus.plexus.taskqueue.Task;
+import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
@@ -92,6 +92,8 @@ public abstract class AbstractReleaseTaskExecutor
 
     protected Settings settings;
 
+    private long startTime;
+
     public void executeTask( Task task )
         throws TaskExecutionException
     {
@@ -105,6 +107,9 @@ public abstract class AbstractReleaseTaskExecutor
     protected void setUp( ReleaseProjectTask releaseTask )
         throws TaskExecutionException
     {
+        //actual release execution start time
+        setStartTime( System.currentTimeMillis() );
+
         try
         {
             //make sure settings is re-read each time
@@ -112,7 +117,7 @@ public abstract class AbstractReleaseTaskExecutor
         }
         catch ( ContinuumReleaseException e )
         {
-            ReleaseResult result = new ReleaseResult();
+            ReleaseResult result = createReleaseResult();
 
             result.appendError( e );
 
@@ -137,7 +142,7 @@ public abstract class AbstractReleaseTaskExecutor
         }
         catch ( ContinuumReleaseException e )
         {
-            ReleaseResult result = new ReleaseResult();
+            ReleaseResult result = createReleaseResult();
 
             result.appendError( e );
 
@@ -264,5 +269,26 @@ public abstract class AbstractReleaseTaskExecutor
         throws ContextException
     {
         container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
+    }
+
+    protected ReleaseResult createReleaseResult()
+    {
+        ReleaseResult result = new ReleaseResult();
+
+        result.setStartTime( getStartTime() );
+
+        result.setEndTime( System.currentTimeMillis() );
+
+        return result;
+    }
+
+    protected long getStartTime()
+    {
+        return startTime;
+    }
+
+    protected void setStartTime( long startTime )
+    {
+        this.startTime = startTime;
     }
 }

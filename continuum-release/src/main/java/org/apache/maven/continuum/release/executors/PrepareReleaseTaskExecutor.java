@@ -45,6 +45,9 @@ public class PrepareReleaseTaskExecutor
         ReleaseResult result = releasePluginManager.prepareWithResult( descriptor, settings, reactorProjects,
                                                                        false, false, prepareTask.getListener() );
 
+        //override to show the actual start time
+        result.setStartTime( getStartTime() );
+
         if ( result.getResultCode() == ReleaseResult.SUCCESS )
         {
             continuumReleaseManager.getPreparedReleases().put( prepareTask.getReleaseId(), descriptor );
