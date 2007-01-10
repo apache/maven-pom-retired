@@ -19,6 +19,7 @@ package org.apache.maven.continuum.core.action;
  * under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.scm.ScmResult;
 import org.apache.maven.continuum.notification.ContinuumNotificationDispatcher;
@@ -31,11 +32,8 @@ import java.util.Map;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
- *
- * @plexus.component
- *  role="org.codehaus.plexus.action.Action"
- *  role-hint="update-working-directory-from-scm"
-
+ * @plexus.component role="org.codehaus.plexus.action.Action"
+ * role-hint="update-working-directory-from-scm"
  */
 public class UpdateWorkingDirectoryFromScmContinuumAction
     extends AbstractContinuumAction
@@ -60,6 +58,8 @@ public class UpdateWorkingDirectoryFromScmContinuumAction
     {
         Project project = getProject( context );
 
+        BuildDefinition buildDefinition = getBuildDefinition( context );
+
         int state = project.getState();
 
         project.setState( ContinuumProjectState.UPDATING );
@@ -70,7 +70,7 @@ public class UpdateWorkingDirectoryFromScmContinuumAction
 
         try
         {
-            notifier.checkoutStarted( project );
+            notifier.checkoutStarted( project, buildDefinition );
 
             scmResult = scm.updateProject( project );
 
@@ -82,7 +82,7 @@ public class UpdateWorkingDirectoryFromScmContinuumAction
 
             store.updateProject( project );
 
-            notifier.checkoutComplete( project );
+            notifier.checkoutComplete( project, buildDefinition );
         }
     }
 }

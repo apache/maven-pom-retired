@@ -141,7 +141,7 @@ public class DefaultBuildController
                 //just log the error but don't stop the build from progressing in order not to suppress any build result messages there 
                 getLogger().error( "Error executing action update-project-from-working-directory '", e );
             }
-            
+
             performAction( "execute-builder", context );
 
             performAction( "deploy-artifact", context );
@@ -216,7 +216,7 @@ public class DefaultBuildController
         }
         finally
         {
-            notifierDispatcher.buildComplete( project, context.getBuildResult() );
+            notifierDispatcher.buildComplete( project, context.getBuildDefinition(), context.getBuildResult() );
         }
     }
 
@@ -293,7 +293,7 @@ public class DefaultBuildController
             throw new TaskExecutionException( "Error persisting project", e );
         }
 
-        notifierDispatcher.buildStarted( project );
+        notifierDispatcher.buildStarted( project, context.getBuildDefinition() );
 
     }
 

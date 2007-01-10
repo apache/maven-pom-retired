@@ -56,6 +56,6 @@ public class ContinuumNotificationDispatcherTest
 
         build = store.getBuildResult( build.getId() );
 
-        notificationDispatcher.buildComplete( project, build );
+        notificationDispatcher.buildComplete( project, null, build );
     }
 }

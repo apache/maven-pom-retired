@@ -41,10 +41,8 @@ import java.util.Map;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="org.codehaus.plexus.action.Action"
- *   role-hint="execute-builder"
+ * @plexus.component role="org.codehaus.plexus.action.Action"
+ * role-hint="execute-builder"
  */
 public class ExecuteBuilderContinuumAction
     extends AbstractContinuumAction
@@ -97,9 +95,8 @@ public class ExecuteBuilderContinuumAction
         // ----------------------------------------------------------------------
 
         if ( !isFirstRun && project.getOldState() != ContinuumProjectState.NEW &&
-            project.getOldState() != ContinuumProjectState.CHECKEDOUT &&
-            scmResult.getChanges().size() == 0 && !hasUpdatedDependencies &&
-            trigger != ContinuumProjectState.TRIGGER_FORCED && !isNew( project ) )
+            project.getOldState() != ContinuumProjectState.CHECKEDOUT && scmResult.getChanges().size() == 0 &&
+            !hasUpdatedDependencies && trigger != ContinuumProjectState.TRIGGER_FORCED && !isNew( project ) )
         {
             getLogger().info( "No files updated, not building. Project id '" + project.getId() + "'." );
 
@@ -113,69 +110,70 @@ public class ExecuteBuilderContinuumAction
         }
 
         // ----------------------------------------------------------------------
-        // Make the build
+        // Make the buildResult
         // ----------------------------------------------------------------------
 
-        BuildResult build = new BuildResult();
+        BuildResult buildResult = new BuildResult();
 
-        build.setStartTime( new Date().getTime() );
+        buildResult.setStartTime( new Date().getTime() );
 
-        build.setState( ContinuumProjectState.BUILDING );
+        buildResult.setState( ContinuumProjectState.BUILDING );
 
-        build.setTrigger( trigger );
+        buildResult.setTrigger( trigger );
 
-        build.setScmResult( scmResult );
-        
-        build.setModifiedDependencies( updatedDependencies );
+        buildResult.setScmResult( scmResult );
 
-        store.addBuildResult( project, build );
+        buildResult.setModifiedDependencies( updatedDependencies );
 
-        context.put( KEY_BUILD_ID, Integer.toString( build.getId() ) );
+        store.addBuildResult( project, buildResult );
 
-        build = store.getBuildResult( build.getId() );
+        context.put( KEY_BUILD_ID, Integer.toString( buildResult.getId() ) );
+
+        buildResult = store.getBuildResult( buildResult.getId() );
 
         try
         {
-            notifier.runningGoals( project, build );
+            notifier.runningGoals( project, buildDefinition, buildResult );
 
-            File buildOutputFile = configurationService.getBuildOutputFile( build.getId(), project.getId() );
+            File buildOutputFile = configurationService.getBuildOutputFile( buildResult.getId(), project.getId() );
 
             ContinuumBuildExecutionResult result = buildExecutor.build( project, buildDefinition, buildOutputFile );
 
-            build.setState( result.getExitCode() == 0 ? ContinuumProjectState.OK : ContinuumProjectState.FAILED );
+            buildResult.setState( result.getExitCode() == 0 ? ContinuumProjectState.OK : ContinuumProjectState.FAILED );
 
-            build.setExitCode( result.getExitCode() );
+            buildResult.setExitCode( result.getExitCode() );
         }
         catch ( Throwable e )
         {
-            getLogger().error( "Error running build", e );
+            getLogger().error( "Error running buildResult", e );
 
-            build.setState( ContinuumProjectState.ERROR );
+            buildResult.setState( ContinuumProjectState.ERROR );
 
-            build.setError( ContinuumUtils.throwableToString( e ) );
+            buildResult.setError( ContinuumUtils.throwableToString( e ) );
         }
         finally
         {
-            build.setEndTime( new Date().getTime() );
+            buildResult.setEndTime( new Date().getTime() );
 
-            if ( build.getState() == ContinuumProjectState.OK )
+            if ( buildResult.getState() == ContinuumProjectState.OK )
             {
                 project.setBuildNumber( project.getBuildNumber() + 1 );
             }
 
-            project.setLatestBuildId( build.getId() );
+            project.setLatestBuildId( buildResult.getId() );
 
-            buildDefinition.setLatestBuildId( build.getId() );
+            buildDefinition.setLatestBuildId( buildResult.getId() );
 
-            build.setBuildNumber( project.getBuildNumber() );
+            buildResult.setBuildNumber( project.getBuildNumber() );
 
-            if ( build.getState() != ContinuumProjectState.OK && build.getState() != ContinuumProjectState.FAILED &&
-                build.getState() != ContinuumProjectState.ERROR )
+            if ( buildResult.getState() != ContinuumProjectState.OK &&
+                buildResult.getState() != ContinuumProjectState.FAILED &&
+                buildResult.getState() != ContinuumProjectState.ERROR )
             {
-                build.setState( ContinuumProjectState.ERROR );
+                buildResult.setState( ContinuumProjectState.ERROR );
             }
 
-            project.setState( build.getState() );
+            project.setState( buildResult.getState() );
 
             // ----------------------------------------------------------------------
             // Set the test result
@@ -184,7 +182,7 @@ public class ExecuteBuilderContinuumAction
             try
             {
                 TestResult testResult = buildExecutor.getTestResults( project );
-                build.setTestResult( testResult );
+                buildResult.setTestResult( testResult );
             }
             catch ( Throwable t )
             {
@@ -192,18 +190,18 @@ public class ExecuteBuilderContinuumAction
             }
 
             // ----------------------------------------------------------------------
-            // Copy over the build result
+            // Copy over the buildResult result
             // ----------------------------------------------------------------------
 
-            store.updateBuildResult( build );
+            store.updateBuildResult( buildResult );
 
-            build = store.getBuildResult( build.getId() );
+            buildResult = store.getBuildResult( buildResult.getId() );
 
             store.storeBuildDefinition( buildDefinition );
 
             store.updateProject( project );
 
-            notifier.goalsCompleted( project, build );
+            notifier.goalsCompleted( project, buildDefinition, buildResult );
         }
     }
 

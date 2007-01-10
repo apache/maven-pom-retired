@@ -21,10 +21,11 @@ package org.apache.maven.continuum.notification;
 
 import org.apache.maven.continuum.configuration.ConfigurationException;
 import org.apache.maven.continuum.configuration.ConfigurationService;
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
-import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -41,10 +42,8 @@ import java.util.Set;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="org.apache.maven.continuum.notification.ContinuumNotificationDispatcher"
- *   role-hint="default"
+ * @plexus.component role="org.apache.maven.continuum.notification.ContinuumNotificationDispatcher"
+ * role-hint="default"
  */
 public class DefaultContinuumNotificationDispatcher
     extends AbstractLogEnabled
@@ -74,41 +73,42 @@ public class DefaultContinuumNotificationDispatcher
     // ContinuumNotificationDispatcher Implementation
     // ----------------------------------------------------------------------
 
-    public void buildStarted( Project project )
+    public void buildStarted( Project project, BuildDefinition buildDefinition )
     {
-        sendNotification( MESSAGE_ID_BUILD_STARTED, project, null );
+        sendNotification( MESSAGE_ID_BUILD_STARTED, project, buildDefinition, null );
     }
 
-    public void checkoutStarted( Project project )
+    public void checkoutStarted( Project project, BuildDefinition buildDefinition )
     {
-        sendNotification( MESSAGE_ID_CHECKOUT_STARTED, project, null );
+        sendNotification( MESSAGE_ID_CHECKOUT_STARTED, project, buildDefinition, null );
     }
 
-    public void checkoutComplete( Project project )
+    public void checkoutComplete( Project project, BuildDefinition buildDefinition )
     {
-        sendNotification( MESSAGE_ID_CHECKOUT_COMPLETE, project, null );
+        sendNotification( MESSAGE_ID_CHECKOUT_COMPLETE, project, buildDefinition, null );
     }
 
-    public void runningGoals( Project project, BuildResult build )
+    public void runningGoals( Project project, BuildDefinition buildDefinition, BuildResult buildResult )
     {
-        sendNotification( MESSAGE_ID_RUNNING_GOALS, project, build );
+        sendNotification( MESSAGE_ID_RUNNING_GOALS, project, buildDefinition, buildResult );
     }
 
-    public void goalsCompleted( Project project, BuildResult build )
+    public void goalsCompleted( Project project, BuildDefinition buildDefinition, BuildResult buildResult )
     {
-        sendNotification( MESSAGE_ID_GOALS_COMPLETED, project, build );
+        sendNotification( MESSAGE_ID_GOALS_COMPLETED, project, buildDefinition, buildResult );
     }
 
-    public void buildComplete( Project project, BuildResult build )
+    public void buildComplete( Project project, BuildDefinition buildDefinition, BuildResult buildResult )
     {
-        sendNotification( MESSAGE_ID_BUILD_COMPLETE, project, build );
+        sendNotification( MESSAGE_ID_BUILD_COMPLETE, project, buildDefinition, buildResult );
     }
 
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
-    private void sendNotification( String messageId, Project project, BuildResult build )
+    private void sendNotification( String messageId, Project project, BuildDefinition buildDefinition,
+                                   BuildResult buildResult )
     {
         Map context = new HashMap();
 
@@ -127,20 +127,20 @@ public class DefaultContinuumNotificationDispatcher
             project = store.getProjectWithAllDetails( project.getId() );
 
             context.put( CONTEXT_PROJECT, project );
+            context.put( CONTEXT_BUILD_DEFINITION, buildDefinition );
 
-            if ( build != null )
+            if ( buildResult != null )
             {
-                context.put( CONTEXT_BUILD, build );
+                context.put( CONTEXT_BUILD, buildResult );
 
-                if ( build.getEndTime() != 0 )
+                if ( buildResult.getEndTime() != 0 )
                 {
                     context.put( CONTEXT_BUILD_OUTPUT,
-                                 configurationService.getBuildOutput( build.getId(), project.getId() ) );
+                                 configurationService.getBuildOutput( buildResult.getId(), project.getId() ) );
                 }
 
-                context.put( CONTEXT_UPDATE_SCM_RESULT, build.getScmResult() );
+                context.put( CONTEXT_UPDATE_SCM_RESULT, buildResult.getScmResult() );
             }
-
 
             ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( project.getProjectGroup().getId() );
 
@@ -157,7 +157,7 @@ public class DefaultContinuumNotificationDispatcher
                 {
                     sendNotification( messageId, (ProjectNotifier) i.next(), context );
                 }
-            }            
+            }
         }
         catch ( ContinuumStoreException e )
         {

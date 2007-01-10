@@ -19,6 +19,7 @@ package org.apache.maven.continuum.notification;
  * under the License.
  */
 
+import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 
@@ -53,6 +54,8 @@ public interface ContinuumNotificationDispatcher
 
     String CONTEXT_PROJECT = "project";
 
+    String CONTEXT_BUILD_DEFINITION = "buildDefinition";
+
     String CONTEXT_PROJECT_NOTIFIER = "projectNotifier";
 
     String CONTEXT_BUILD_RESULT = "result";
@@ -63,15 +66,15 @@ public interface ContinuumNotificationDispatcher
     //
     // ----------------------------------------------------------------------
 
-    void buildStarted( Project project );
+    void buildStarted( Project project, BuildDefinition buildDefinition );
 
-    void checkoutStarted( Project project );
+    void checkoutStarted( Project project, BuildDefinition buildDefinition );
 
-    void checkoutComplete( Project project );
+    void checkoutComplete( Project project, BuildDefinition buildDefinition );
 
-    void runningGoals( Project project, BuildResult build );
+    void runningGoals( Project project, BuildDefinition buildDefinition, BuildResult buildResult );
 
-    void goalsCompleted( Project project, BuildResult build );
+    void goalsCompleted( Project project, BuildDefinition buildDefinition, BuildResult buildResult );
 
-    void buildComplete( Project project, BuildResult build );
+    void buildComplete( Project project, BuildDefinition buildDefinition, BuildResult buildResult );
 }
