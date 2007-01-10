@@ -303,11 +303,6 @@
             <name>org.jpox.rdbms.dateTimezone</name>
             <value>JDK_DEFAULT_TIMEZONE</value>
           </property>
-          <!-- this is required for MySQL -->
-          <property>
-            <name>org.jpox.rdbms.stringDefaultLength</name>
-            <value>255</value>
-          </property>
         </otherProperties>
       </configuration>
     </component>
