@@ -63,6 +63,11 @@ public class NotifierRecipientCell
         }
         else
         {
+            if ( "wagon".equals( notifier.getType() ) )
+            {
+                return notifier.getConfiguration().get( "url" ).toString(); 
+            }
+            
             if ( notifier.getConfiguration().get( "address" ) == null )
             {
                 return "";

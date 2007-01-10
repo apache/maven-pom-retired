@@ -145,7 +145,7 @@ public class NotifierSummaryAction
         // Source the recipient 
         Map configuration = notifier.getConfiguration();
         
-        String recipient = "unknowm";
+        String recipient = "unknown";
 
         if ( ( "mail".equals( notifier.getType() ) ) || 
              ( "msn".equals( notifier.getType() ) ) ||
@@ -164,6 +164,11 @@ public class NotifierSummaryAction
             }
                 
             recipient = recipient + ":" + (String) configuration.get( "channel" );
+        }
+        
+        if ( "wagon".equals( notifier.getType() ) )
+        {
+            recipient = (String) configuration.get( "url" );
         }
         
         ns.setRecipient( recipient );

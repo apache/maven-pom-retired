@@ -514,6 +514,7 @@
       <result name="irc_input">/WEB-INF/jsp/notifier/notifierIrc.jsp</result>
       <result name="msn_input">/WEB-INF/jsp/notifier/notifierMsn.jsp</result>
       <result name="jabber_input">/WEB-INF/jsp/notifier/notifierJabber.jsp</result>
+      <result name="wagon_input">/WEB-INF/jsp/notifier/notifierWagon.jsp</result>
     </action>
 
     <action name="editProjectNotifier" class="addProjectNotifier">
@@ -521,6 +522,7 @@
       <result name="irc_input" type="chain">ircProjectNotifierEdit</result>
       <result name="msn_input" type="chain">msnProjectNotifierEdit</result>
       <result name="jabber_input" type="chain">jabberProjectNotifierEdit</result>
+      <result name="wagon_input" type="chain">WagonProjectNotifierEdit</result>
     </action>
 
     <action name="mailProjectNotifierEdit" class="mailProjectNotifierEdit" method="edit">
@@ -558,6 +560,15 @@
       <result name="input">/WEB-INF/jsp/notifier/notifierMsn.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
+    
+    <action name="wagonProjectNotifierEdit" class="wagonProjectNotifierEdit" method="edit">
+      <result name="success">/WEB-INF/jsp/notifier/notifierWagon.jsp</result>
+    </action>
+    
+    <action name="wagonProjectNotifierSave" class="wagonProjectNotifierEdit" method="save">
+      <result name="input">/WEB-INF/jsp/notifier/notifierWagon.jsp</result>
+      <result name="success" type="chain">projectView</result>
+    </action>
 
     <!--
     * notifier actions :: Project Group
@@ -574,6 +585,7 @@
       <result name="irc_input">/WEB-INF/jsp/notifier/notifierIrc.jsp</result>
       <result name="msn_input">/WEB-INF/jsp/notifier/notifierMsn.jsp</result>
       <result name="jabber_input">/WEB-INF/jsp/notifier/notifierJabber.jsp</result>
+      <result name="wagon_input">/WEB-INF/jsp/notifier/notifierWagon.jsp</result>
     </action>
 
     <action name="editProjectGroupNotifier" class="addGroupNotifier">
@@ -581,6 +593,7 @@
       <result name="irc_input" type="chain">ircProjectGroupNotifierEdit</result>
       <result name="msn_input" type="chain">msnProjectGroupNotifierEdit</result>
       <result name="jabber_input" type="chain">jabberProjectGroupNotifierEdit</result>
+      <result name="wagon_input" type="chain">wagonProjectGroupNotifierEdit</result>
     </action>
 
     <action name="mailProjectGroupNotifierEdit" class="mailGroupNotifierEdit" method="edit">
@@ -616,6 +629,15 @@
 
     <action name="msnProjectGroupNotifierSave" class="msnGroupNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifier/notifierMsn.jsp</result>
+      <result name="success" type="chain">projectGroupNotifier</result>
+    </action>
+    
+    <action name="wagonProjectGroupNotifierEdit" class="wagonGroupNotifierEdit" method="edit">
+      <result name="success">/WEB-INF/jsp/notifier/notifierWagon.jsp</result>
+    </action>
+
+    <action name="wagonProjectGroupNotifierSave" class="wagonGroupNotifierEdit" method="save">
+      <result name="input">/WEB-INF/jsp/notifier/notifierWagon.jsp</result>
       <result name="success" type="chain">projectGroupNotifier</result>
     </action>
 

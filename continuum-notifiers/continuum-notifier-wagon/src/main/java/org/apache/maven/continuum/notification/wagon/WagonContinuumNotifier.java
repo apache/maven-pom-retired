@@ -19,12 +19,6 @@ package org.apache.maven.continuum.notification.wagon;
  * under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
 import org.apache.maven.artifact.manager.WagonManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
@@ -68,6 +62,12 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
 /**
  * @author <a href="mailto:hisidro@exist.com">Henry Isidro</a>
  * @author <a href="mailto:nramirez@exist.com">Napoleon Esmundo C. Ramirez</a>
@@ -77,45 +77,41 @@ public class WagonContinuumNotifier
     extends AbstractContinuumNotifier
     implements Contextualizable
 {
-    public static final String KEY_BUILD_DEFINITION = "build-definition";
-
     public static final String BUILD_OUTPUT_FILE_NAME = "buildresult.txt";
-    
+
     private static final String CONTEXT_MAVEN_PROJECT = "CONTEXT_MAVEN_PROJECT";
-    
+
     /**
      * @plexus.requirement
      */
     private ConfigurationService configurationService;
-    
+
     /**
      * @plexus.requirement
      */
     private WagonManager wagonManager;
-    
+
     /**
      * @plexus.requirement
      */
     private MavenProjectBuilder projectBuilder;
-    
+
     /**
      * @plexus.requirement
      */
     private MavenSettingsBuilder settingsBuilder;
-    
+
     /**
      * @plexus.configuration
      */
     private String localRepository;
-    
-    
+
     private Settings settings;
-    
+
     private ProfileManager profileManager;
-    
+
     private PlexusContainer container;
-    
-    
+
     public void sendNotification( String source, Set recipients, Map configuration, Map context )
         throws NotificationException
     {
@@ -125,9 +121,10 @@ public class WagonContinuumNotifier
             (ProjectNotifier) context.get( ContinuumNotificationDispatcher.CONTEXT_PROJECT_NOTIFIER );
 
         BuildResult build = (BuildResult) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD );
-        
-        BuildDefinition buildDefinition = (BuildDefinition) context.get( KEY_BUILD_DEFINITION );
-        
+
+        BuildDefinition buildDefinition =
+            (BuildDefinition) context.get( ContinuumNotificationDispatcher.CONTEXT_BUILD_DEFINITION );
+
         // ----------------------------------------------------------------------
         // If there wasn't any building done, don't notify
         // ----------------------------------------------------------------------
@@ -135,7 +132,7 @@ public class WagonContinuumNotifier
         {
             return;
         }
-        
+
         // ----------------------------------------------------------------------
         // Deloy build result to given url 
         // ----------------------------------------------------------------------
@@ -146,7 +143,7 @@ public class WagonContinuumNotifier
              */
             MavenProject mavenProject = getMavenProject( project, buildDefinition );
             configuration.put( CONTEXT_MAVEN_PROJECT, mavenProject );
-            
+
             if ( source.equals( ContinuumNotificationDispatcher.MESSAGE_ID_BUILD_COMPLETE ) )
             {
                 buildComplete( project, projectNotifier, build, configuration );
@@ -157,29 +154,41 @@ public class WagonContinuumNotifier
             throw new NotificationException( "Error while notifiying.", e );
         }
     }
-    
+
     private void buildComplete( Project project, ProjectNotifier projectNotifier, BuildResult build, Map configuration )
         throws ContinuumException
     {
-        MavenProject mavenProject = (MavenProject) configuration.get( CONTEXT_MAVEN_PROJECT );
-        
-        DistributionManagement distributionManagement = mavenProject.getDistributionManagement();
-        if ( distributionManagement == null )
+        String id = null;
+        String url = null;
+
+        if ( configuration.containsKey( "url" ) )
         {
-            throw new ContinuumException( "Missing distribution management information in the project" );
+            url = (String) configuration.get( "url" );
+        }
+        else
+        {
+            MavenProject mavenProject = (MavenProject) configuration.get( CONTEXT_MAVEN_PROJECT );
+            DistributionManagement distributionManagement = mavenProject.getDistributionManagement();
+
+            if ( distributionManagement == null )
+            {
+                throw new ContinuumException( "Missing distribution management information in the project." );
+            }
+
+            Site site = distributionManagement.getSite();
+            if ( site == null )
+            {
+                throw new ContinuumException(
+                    "Missing site information in the distribution management element in the project." );
+            }
+
+            url = site.getUrl();
+            id = site.getId();
         }
 
-        Site site = distributionManagement.getSite();
-        if ( site == null )
-        {
-            throw new ContinuumException( "Missing site information in the distribution management element in the project.." );
-        }
-
-        String url = site.getUrl();
-        String id = site.getId();
         if ( url == null )
         {
-            throw new ContinuumException( "The URL to the site is missing in the project descriptor." );
+            throw new ContinuumException( "The URL to the site is not defined." );
         }
 
         Repository repository = new Repository( id, url );
@@ -196,7 +205,8 @@ public class WagonContinuumNotifier
 
         if ( !wagon.supportsDirectoryCopy() )
         {
-            throw new ContinuumException( "Wagon protocol '" + repository.getProtocol() + "' doesn't support directory copying" );
+            throw new ContinuumException(
+                "Wagon protocol '" + repository.getProtocol() + "' doesn't support directory copying" );
         }
 
         try
@@ -210,7 +220,7 @@ public class WagonContinuumNotifier
             }
 
             ProxyInfo proxyInfo = wagonManager.getProxy( repository.getProtocol() );
-            
+
             if ( proxyInfo != null )
             {
                 wagon.connect( repository, wagonManager.getAuthenticationInfo( id ), proxyInfo );
@@ -219,7 +229,7 @@ public class WagonContinuumNotifier
             {
                 wagon.connect( repository, wagonManager.getAuthenticationInfo( id ) );
             }
-            
+
             File buildOutputFile = configurationService.getBuildOutputFile( build.getId(), build.getProject().getId() );
 
             wagon.put( buildOutputFile, BUILD_OUTPUT_FILE_NAME );
@@ -272,33 +282,34 @@ public class WagonContinuumNotifier
             }
         }
     }
-    
+
     public void sendNotification( String arg0, Set arg1, Properties arg2 )
         throws NotificationException
     {
         throw new NotificationException( "Not implemented." );
     }
-    
+
     private MavenProject getMavenProject( Project project, BuildDefinition buildDefinition )
         throws ContinuumException
     {
-        File projectWorkingDir = new File( configurationService.getWorkingDirectory(), Integer.toString( project.getId() ) );
+        File projectWorkingDir =
+            new File( configurationService.getWorkingDirectory(), Integer.toString( project.getId() ) );
         File pomFile = new File( projectWorkingDir, buildDefinition.getBuildFile() );
-        
+
         MavenProject mavenProject = null;
-        
+
         try
         {
             mavenProject = projectBuilder.build( pomFile, getLocalRepository(), getProfileManager( settings ) );
         }
         catch ( ProjectBuildingException e )
         {
-            throw new ContinuumException( "Unable to acquire the MavenProject in " + pomFile.getAbsolutePath(), e);
+            throw new ContinuumException( "Unable to acquire the MavenProject in " + pomFile.getAbsolutePath(), e );
         }
-        
+
         return mavenProject;
     }
-    
+
     private Settings getSettings()
     {
         if ( settings == null )
@@ -309,26 +320,26 @@ public class WagonContinuumNotifier
             }
             catch ( IOException e )
             {
-                getLogger().error( "Failed to get Settings" , e);
+                getLogger().error( "Failed to get Settings", e );
             }
             catch ( XmlPullParserException e )
             {
-                getLogger().error( "Failed to get Settings" , e);
+                getLogger().error( "Failed to get Settings", e );
             }
         }
-    
+
         return settings;
     }
-    
+
     private ArtifactRepository getLocalRepository()
     {
         String repo = localRepository;
-        
+
         if ( getSettings() != null && !StringUtils.isEmpty( getSettings().getLocalRepository() ) )
         {
             repo = getSettings().getLocalRepository();
         }
-        
+
         return new DefaultArtifactRepository( "local-repository", "file://" + repo, new DefaultRepositoryLayout() );
     }
 
@@ -341,7 +352,7 @@ public class WagonContinuumNotifier
 
         return profileManager;
     }
-    
+
     public void contextualize( Context context )
         throws ContextException
     {
