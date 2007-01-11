@@ -22,6 +22,7 @@ package org.apache.maven.continuum.web.view;
 import com.opensymphony.webwork.views.util.UrlHelper;
 import com.opensymphony.xwork.ActionContext;
 import org.apache.maven.continuum.web.model.ProjectSummary;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.security.authorization.AuthorizationException;
@@ -146,7 +147,7 @@ public class BuildCell
         {
             SecuritySystem securitySystem = (SecuritySystem) container.lookup( SecuritySystem.ROLE );
 
-            if ( !securitySystem.isAuthorized( securitySession, "continuum-build-group",
+            if ( !securitySystem.isAuthorized( securitySession, ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
                                                project.getProjectGroupName() ) )
             {
                 return false;

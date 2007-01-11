@@ -82,15 +82,16 @@
     </ec:row>
   </ec:table>
   </ww:if>
-  <div class="functnbar3">
-    <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
-    <ww:url id="addUrl" action="addProjectGroupNotifier" namespace="/"  includeContext="false" includeParams="none" />
-    <ww:form action="%{addUrl}" method="post">
-      <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
-      <ww:submit value="%{getText('add')}"/>
-    </ww:form>
-    </pss:ifAuthorized>
-  </div>
+
+  <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
+    <div class="functnbar3">
+      <ww:url id="addUrl" action="addProjectGroupNotifier" namespace="/"  includeContext="false" includeParams="none" />
+      <ww:form action="%{addUrl}" method="post">
+        <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
+        <ww:submit value="%{getText('add')}"/>
+        </ww:form>
+    </div>
+  </pss:ifAuthorized>
 
   <ww:if test="${not empty projectNotifierSummaries}">
     <h3>Project Notifiers</h3>

@@ -72,7 +72,7 @@
         </pss:elseAuthorized>
       </ec:column>
       <ec:column property="buildHistoryAction" title="&nbsp;" width="1%">
-        <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
+        <pss:ifAuthorized permission="continuum-view-group" resource="${projectGroupName}">
         <c:choose>
           <c:when test="${pageScope.project.latestBuildId > 0}">
             <ww:url id="buildResultsUrl" action="buildResults" namespace="/">
@@ -94,7 +94,7 @@
         </pss:elseAuthorized>
       </ec:column>
       <ec:column property="workingCopyAction" title="&nbsp;" width="1%">
-        <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
+        <pss:ifAuthorized permission="continuum-view-group" resource="${projectGroupName}">
         <c:choose>
           <c:when test="${pageScope.project.state == 10 || pageScope.project.state == 2 || pageScope.project.state == 3 || pageScope.project.state == 4 || pageScope.project.state == 6}">
             <ww:url id="workingCopyUrl" action="workingCopy" namespace="/">
@@ -115,7 +115,7 @@
         </pss:elseAuthorized>
       </ec:column>
       <ec:column property="releaseAction" title="&nbsp;" width="1%" sortable="false">
-        <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
+        <pss:ifAuthorized permission="continuum-build-group" resource="${projectGroupName}">
         <c:choose>
           <c:when test="${pageScope.project.state == 2}">
             <ww:url id="releaseProjectUrl" action="releasePromptGoal" namespace="/">

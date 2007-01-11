@@ -21,10 +21,18 @@ package org.apache.maven.continuum.web.view;
 
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.webwork.views.util.UrlHelper;
-
+import com.opensymphony.xwork.ActionContext;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.web.model.ProjectSummary;
 import org.apache.maven.continuum.web.util.StateGenerator;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.security.authorization.AuthorizationException;
+import org.codehaus.plexus.security.system.SecuritySession;
+import org.codehaus.plexus.security.system.SecuritySystem;
+import org.codehaus.plexus.security.system.SecuritySystemConstants;
+import org.codehaus.plexus.xwork.PlexusLifecycleListener;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
 import org.extremecomponents.table.core.TableModel;
@@ -34,11 +42,10 @@ import java.util.HashMap;
 /**
  * Used in Summary view
  *
- * @deprecated use of cells is discouraged due to lack of i18n and design in java code.
- *             Use jsp:include instead.
- *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
+ * @deprecated use of cells is discouraged due to lack of i18n and design in java code.
+ *             Use jsp:include instead.
  */
 public class StateCell
     extends DisplayCell
@@ -59,7 +66,14 @@ public class StateCell
 
                 if ( project.getLatestBuildId() != -1 && !StateGenerator.NEW.equals( state ) )
                 {
-                    return createActionLink( "buildResult", project, state );
+                    if ( isAuthorized( project ) )
+                    {
+                        return createActionLink( "buildResult", project, state );
+                    }
+                    else
+                    {
+                        return state;
+                    }
                 }
                 else
                 {
@@ -84,13 +98,42 @@ public class StateCell
 
         params.put( "buildId", new Integer( project.getLatestBuildId() ) );
 
-        params.put( "projectGroupId", new Integer( project.getProjectGroupId()));
+        params.put( "projectGroupId", new Integer( project.getProjectGroupId() ) );
 
-        String url = UrlHelper.buildUrl( "/" + action + ".action",
-                                         ServletActionContext.getRequest(),
-                                         ServletActionContext.getResponse(),
-                                         params );
+        String url = UrlHelper.buildUrl( "/" + action + ".action", ServletActionContext.getRequest(),
+                                         ServletActionContext.getResponse(), params );
 
         return "<a href=\"" + url + "\">" + state + "</a>";
+    }
+
+    private boolean isAuthorized( ProjectSummary project )
+    {
+        // do the authz bit
+        ActionContext context = ActionContext.getContext();
+
+        PlexusContainer container = (PlexusContainer) context.getApplication().get( PlexusLifecycleListener.KEY );
+        SecuritySession securitySession =
+            (SecuritySession) context.getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
+
+        try
+        {
+            SecuritySystem securitySystem = (SecuritySystem) container.lookup( SecuritySystem.ROLE );
+
+            if ( !securitySystem.isAuthorized( securitySession, ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
+                                               project.getProjectGroupName() ) )
+            {
+                return false;
+            }
+        }
+        catch ( ComponentLookupException cle )
+        {
+            return false;
+        }
+        catch ( AuthorizationException ae )
+        {
+            return false;
+        }
+
+        return true;
     }
 }

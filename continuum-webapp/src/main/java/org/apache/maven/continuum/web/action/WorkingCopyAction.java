@@ -19,28 +19,33 @@ package org.apache.maven.continuum.web.action;
  * under the License.
  */
 
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.model.project.Project;
-import org.apache.maven.continuum.web.util.WorkingCopyContentGenerator;
-
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.webwork.views.util.UrlHelper;
+import com.opensymphony.xwork.ActionContext;
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
+import org.apache.maven.continuum.web.util.WorkingCopyContentGenerator;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.security.authorization.AuthorizationException;
+import org.codehaus.plexus.security.system.SecuritySession;
+import org.codehaus.plexus.security.system.SecuritySystem;
+import org.codehaus.plexus.security.system.SecuritySystemConstants;
+import org.codehaus.plexus.xwork.PlexusLifecycleListener;
 
 import javax.activation.MimetypesFileTypeMap;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileInputStream;
-import java.io.InputStream;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="workingCopy"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="workingCopy"
  */
 public class WorkingCopyAction
     extends ContinuumActionSupport
@@ -81,51 +86,53 @@ public class WorkingCopyAction
 
         projectName = project.getName();
 
-        HashMap params = new HashMap();
-
-        params.put( "projectId", new Integer( projectId ) );
-
-        params.put( "projectName", projectName );
-
-        String baseUrl = UrlHelper.buildUrl( "/workingCopy.action", ServletActionContext.getRequest(), ServletActionContext.getResponse(), params );
-
-        output = generator.generate( files, baseUrl, getContinuum().getWorkingDirectory( projectId ) );
-
-        if ( currentFile != null && currentFile != "" )
+        if ( isAuthorized( project ) )
         {
-            String dir;
+            HashMap params = new HashMap();
 
-            //TODO: maybe create a plexus component for this so that additional mimetypes can be easily added
-            MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-            mimeTypesMap.addMimeTypes( "application/java-archive jar war ear");
-            mimeTypesMap.addMimeTypes( "application/java-class class" );
-            mimeTypesMap.addMimeTypes( "image/png png" );
+            params.put( "projectId", new Integer( projectId ) );
 
-            if ( FILE_SEPARATOR.equals( userDirectory ) )
+            params.put( "projectName", projectName );
+
+            String baseUrl = UrlHelper.buildUrl( "/workingCopy.action", ServletActionContext.getRequest(),
+                                                 ServletActionContext.getResponse(), params );
+
+            output = generator.generate( files, baseUrl, getContinuum().getWorkingDirectory( projectId ) );
+
+            if ( currentFile != null && currentFile != "" )
             {
-                dir = userDirectory;
+                String dir;
+
+                //TODO: maybe create a plexus component for this so that additional mimetypes can be easily added
+                MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+                mimeTypesMap.addMimeTypes( "application/java-archive jar war ear" );
+                mimeTypesMap.addMimeTypes( "application/java-class class" );
+                mimeTypesMap.addMimeTypes( "image/png png" );
+
+                if ( FILE_SEPARATOR.equals( userDirectory ) )
+                {
+                    dir = userDirectory;
+                }
+                else
+                {
+                    dir = FILE_SEPARATOR + userDirectory + FILE_SEPARATOR;
+                }
+
+                downloadFile = new File( getContinuum().getWorkingDirectory( projectId ) + dir + currentFile );
+                mimeType = mimeTypesMap.getContentType( downloadFile );
+
+                if ( ( mimeType.indexOf( "image" ) >= 0 ) || ( mimeType.indexOf( "java-archive" ) >= 0 ) ||
+                    ( mimeType.indexOf( "java-class" ) >= 0 ) || ( downloadFile.length() > 100000 ) )
+                {
+                    return "stream";
+                }
+
+                currentFileContent = getContinuum().getFileContent( projectId, userDirectory, currentFile );
             }
             else
             {
-                dir = FILE_SEPARATOR + userDirectory + FILE_SEPARATOR;
+                currentFileContent = "";
             }
-
-            downloadFile = new File( getContinuum().getWorkingDirectory( projectId ) + dir + currentFile );
-            mimeType = mimeTypesMap.getContentType( downloadFile );
-            
-            if ( ( mimeType.indexOf( "image" ) >= 0 ) ||
-                 ( mimeType.indexOf( "java-archive" ) >= 0 ) ||
-                 ( mimeType.indexOf( "java-class" ) >= 0 ) ||
-                 ( downloadFile.length() > 100000 ) )
-            {
-                return "stream";
-            }
-
-            currentFileContent = getContinuum().getFileContent( projectId, userDirectory, currentFile );
-        }
-        else
-        {
-            currentFileContent = "";
         }
 
         return SUCCESS;
@@ -211,5 +218,36 @@ public class WorkingCopyAction
     public Project getProject()
     {
         return project;
+    }
+
+    private boolean isAuthorized( Project project )
+    {
+        // do the authz bit
+        ActionContext context = ActionContext.getContext();
+
+        PlexusContainer container = (PlexusContainer) context.getApplication().get( PlexusLifecycleListener.KEY );
+        SecuritySession securitySession =
+            (SecuritySession) context.getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
+
+        try
+        {
+            SecuritySystem securitySystem = (SecuritySystem) container.lookup( SecuritySystem.ROLE );
+
+            if ( !securitySystem.isAuthorized( securitySession, ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
+                                               project.getProjectGroup().getName() ) )
+            {
+                return false;
+            }
+        }
+        catch ( ComponentLookupException cle )
+        {
+            return false;
+        }
+        catch ( AuthorizationException ae )
+        {
+            return false;
+        }
+
+        return true;
     }
 }
