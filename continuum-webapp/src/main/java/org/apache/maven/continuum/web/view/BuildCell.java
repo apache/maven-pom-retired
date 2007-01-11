@@ -73,7 +73,7 @@ public class BuildCell
             if ( project.getState() == 1 || project.getState() == 10 || project.getState() == 2 ||
                 project.getState() == 3 || project.getState() == 4 )
             {
-                if ( project.getBuildNumber() > 0 )
+                if ( buildNumber > 0 )
                 {
                     HashMap params = new HashMap();
 
@@ -81,7 +81,7 @@ public class BuildCell
 
                     params.put( "projectName", project.getName() );
 
-                    params.put( "buildId", new Integer( buildNumber ) );
+                    params.put( "buildId", new Integer( project.getBuildInSuccessId() ) );
 
                     params.put( "projectGroupId", new Integer( project.getProjectGroupId() ) );
 
@@ -96,11 +96,11 @@ public class BuildCell
                     if ( isAuthorized( project ) )
                     {
                         // we are authzd so act normally
-                        result += "<a href=\"" + url + "\">" + project.getBuildNumber() + "</a>";
+                        result += "<a href=\"" + url + "\">" + buildNumber + "</a>";
                     }
                     else
                     {
-                        result += project.getBuildNumber();
+                        result += buildNumber;
                     }
                 }
                 else
