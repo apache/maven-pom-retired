@@ -39,9 +39,13 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -82,7 +86,10 @@ public class JdoDataManagementTool
         database.setProfiles( store.getAllProfilesByName() );
 
         ContinuumStaxWriter writer = new ContinuumStaxWriter();
-        FileWriter fileWriter = new FileWriter( new File( backupDirectory, BUILDS_XML ) );
+
+        OutputStream out = new FileOutputStream( new File( backupDirectory, BUILDS_XML ) );
+        Writer fileWriter = new OutputStreamWriter( out, Charset.forName( database.getModelEncoding() ) );
+
         try
         {
             writer.write( fileWriter, database );
