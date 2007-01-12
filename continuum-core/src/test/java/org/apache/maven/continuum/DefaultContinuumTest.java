@@ -25,9 +25,9 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.taskqueue.TaskQueue;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 import java.io.File;
 import java.util.Collection;
@@ -48,12 +48,12 @@ public class DefaultContinuumTest
     {
         try
         {
-           lookup( Continuum.ROLE );
+            lookup( Continuum.ROLE );
         }
         catch ( ComponentLookupException e )
         {
-           e.printStackTrace();
-           throw e;
+            e.printStackTrace();
+            throw e;
         }
 
     }
@@ -109,13 +109,13 @@ public class DefaultContinuumTest
             projects.put( project.getName(), project );
 
             // validate project in project group
-            assertTrue( "project not in project group", getStore().getProjectGroupByProjectId( project.getId() ) != null );
+            assertTrue( "project not in project group",
+                        getStore().getProjectGroupByProjectId( project.getId() ) != null );
         }
 
         assertTrue( "no irc notifier", projects.containsKey( "Continuum IRC Notifier" ) );
 
         assertTrue( "no jabber notifier", projects.containsKey( "Continuum Jabber Notifier" ) );
-
 
 
     }
@@ -175,15 +175,15 @@ public class DefaultContinuumTest
         // reattach
         project = continuum.getProject( project.getId() );
 
-        ProjectGroup projectGroup  = getStore().getProjectGroupByProjectId( project.getId() );
+        ProjectGroup projectGroup = getStore().getProjectGroupByProjectId( project.getId() );
 
         projectGroup = getStore().getProjectGroupWithBuildDetails( projectGroup.getId() );
 
         List buildDefs = projectGroup.getBuildDefinitions();
 
-        assertTrue ("missing project group build definition", !buildDefs.isEmpty() );
+        assertTrue( "missing project group build definition", !buildDefs.isEmpty() );
 
-        assertTrue ("more then one project group build definition on add project", buildDefs.size() == 1 );
+        assertTrue( "more then one project group build definition on add project", buildDefs.size() == 1 );
 
         BuildDefinition pgbd = (BuildDefinition) buildDefs.get( 0 );
 
@@ -191,34 +191,37 @@ public class DefaultContinuumTest
 
         continuum.updateBuildDefinitionForProjectGroup( projectGroup.getId(), pgbd );
 
-        pgbd = continuum.getBuildDefinition(  pgbd.getId() );
+        pgbd = continuum.getBuildDefinition( pgbd.getId() );
 
-        assertTrue ( "update failed for project group build definition", "foo".equals( pgbd.getGoals() ) );
+        assertTrue( "update failed for project group build definition", "foo".equals( pgbd.getGoals() ) );
 
-        assertTrue ( "project group build definition is not default", pgbd.isDefaultForProject() );
+        assertTrue( "project group build definition is not default", pgbd.isDefaultForProject() );
 
-        assertTrue ( "project group build definition not default for project", continuum.getDefaultBuildDefinition( project.getId() ).getId() == pgbd.getId() );
+        assertTrue( "project group build definition not default for project",
+                    continuum.getDefaultBuildDefinition( project.getId() ).getId() == pgbd.getId() );
 
         BuildDefinition nbd = new BuildDefinition();
-        nbd.setGoals("clean");
-        nbd.setArguments("");
+        nbd.setGoals( "clean" );
+        nbd.setArguments( "" );
         nbd.setDefaultForProject( true );
         nbd.setSchedule( getStore().getScheduleByName( DefaultContinuumInitializer.DEFAULT_SCHEDULE_NAME ) );
 
         continuum.addBuildDefinitionToProject( project.getId(), nbd );
 
-        assertTrue ( "project lvl build definition not default for project", continuum.getDefaultBuildDefinition( project.getId() ).getId() == nbd.getId() );
+        assertTrue( "project lvl build definition not default for project",
+                    continuum.getDefaultBuildDefinition( project.getId() ).getId() == nbd.getId() );
 
         continuum.removeBuildDefinitionFromProject( project.getId(), nbd.getId() );
 
-        assertTrue ( "default build definition didn't toggle back to project group level", continuum.getDefaultBuildDefinition( project.getId() ).getId() == pgbd.getId() );
+        assertTrue( "default build definition didn't toggle back to project group level",
+                    continuum.getDefaultBuildDefinition( project.getId() ).getId() == pgbd.getId() );
 
         try
         {
             continuum.removeBuildDefinitionFromProjectGroup( projectGroup.getId(), pgbd.getId() );
-            fail("we were able to remove the default build definition, and that is bad");
+            fail( "we were able to remove the default build definition, and that is bad" );
         }
-        catch (ContinuumException expected)
+        catch ( ContinuumException expected )
         {
 
         }
@@ -226,6 +229,7 @@ public class DefaultContinuumTest
 
     /**
      * todo add another project group to test
+     *
      * @throws Exception
      */
     public void testProjectGroups()
@@ -267,10 +271,9 @@ public class DefaultContinuumTest
         assertEquals( "Remove project group failed", projectGroupsBefore, projectGroupList.size() );
     }
 
-
     /**
      * test the logic for notifiers
-     * 
+     *
      * @throws Exception
      */
     public void testProjectAndGroupNotifiers()
@@ -295,24 +298,22 @@ public class DefaultContinuumTest
         ProjectGroup projectGroup = (ProjectGroup) result.getProjectGroups().get( 0 );
 
         continuum.addGroupNotifier( projectGroup.getId(), new ProjectNotifier() );
-       
+
         for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
         {
-            Project p = (Project)i.next();
-            continuum.addNotifier( p.getId(), new ProjectNotifier() );           
+            Project p = (Project) i.next();
+            continuum.addNotifier( p.getId(), new ProjectNotifier() );
         }
 
         projectGroup = continuum.getProjectGroup( projectGroup.getId() );
 
-
-        assertEquals( 2, projectGroup.getNotifiers().size() );
-
+        assertEquals( 1, projectGroup.getNotifiers().size() );
 
         for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
         {
-            Project p = (Project)i.next();
-            assertEquals( 1, p.getNotifiers().size() );
-        }        
+            Project p = (Project) i.next();
+            assertEquals( 2, p.getNotifiers().size() );
+        }
     }
 
     public void testExecuteAction()

@@ -276,59 +276,54 @@ public class DefaultMavenBuilderHelper
 
         // ----------------------------------------------------------------------
         // Notifiers
-        //
-        // if its a groupPom, then notifiers have been taken care of
         // ----------------------------------------------------------------------
 
-        if ( !groupPom )
+        List userNotifiers = new ArrayList();
+
+        if ( continuumProject.getNotifiers() != null )
         {
-            List userNotifiers = new ArrayList();
-
-            if ( continuumProject.getNotifiers() != null )
+            for ( int i = 0; i < continuumProject.getNotifiers().size(); i++ )
             {
-                for ( int i = 0; i < continuumProject.getNotifiers().size(); i++ )
+                ProjectNotifier notifier = (ProjectNotifier) continuumProject.getNotifiers().get( i );
+
+                if ( notifier.isFromUser() )
                 {
-                    ProjectNotifier notifier = (ProjectNotifier) continuumProject.getNotifiers().get( i );
+                    ProjectNotifier userNotifier = new ProjectNotifier();
 
-                    if ( notifier.isFromUser() )
-                    {
-                        ProjectNotifier userNotifier = new ProjectNotifier();
+                    userNotifier.setType( notifier.getType() );
 
-                        userNotifier.setType( notifier.getType() );
+                    userNotifier.setEnabled( notifier.isEnabled() );
 
-                        userNotifier.setEnabled( notifier.isEnabled() );
+                    userNotifier.setConfiguration( notifier.getConfiguration() );
 
-                        userNotifier.setConfiguration( notifier.getConfiguration() );
+                    userNotifier.setFrom( notifier.getFrom() );
 
-                        userNotifier.setFrom( notifier.getFrom() );
+                    userNotifier.setRecipientType( notifier.getRecipientType() );
 
-                        userNotifier.setRecipientType( notifier.getRecipientType() );
+                    userNotifier.setSendOnError( notifier.isSendOnError() );
 
-                        userNotifier.setSendOnError( notifier.isSendOnError() );
+                    userNotifier.setSendOnFailure( notifier.isSendOnFailure() );
 
-                        userNotifier.setSendOnFailure( notifier.isSendOnFailure() );
+                    userNotifier.setSendOnSuccess( notifier.isSendOnSuccess() );
 
-                        userNotifier.setSendOnSuccess( notifier.isSendOnSuccess() );
+                    userNotifier.setSendOnWarning( notifier.isSendOnWarning() );
 
-                        userNotifier.setSendOnWarning( notifier.isSendOnWarning() );
-
-                        userNotifiers.add( userNotifier );
-                    }
+                    userNotifiers.add( userNotifier );
                 }
             }
+        }
 
-            List notifiers = getNotifiers( result, mavenProject, continuumProject );
-            if ( notifiers != null )
-            {
-                continuumProject.setNotifiers( notifiers );
-            }
+        List notifiers = getNotifiers( result, mavenProject, continuumProject );
+        if ( notifiers != null )
+        {
+            continuumProject.setNotifiers( notifiers );
+        }
 
-            for ( Iterator i = userNotifiers.iterator(); i.hasNext(); )
-            {
-                ProjectNotifier notifier = (ProjectNotifier) i.next();
+        for ( Iterator i = userNotifiers.iterator(); i.hasNext(); )
+        {
+            ProjectNotifier notifier = (ProjectNotifier) i.next();
 
-                continuumProject.addNotifier( notifier );
-            }
+            continuumProject.addNotifier( notifier );
         }
     }
 

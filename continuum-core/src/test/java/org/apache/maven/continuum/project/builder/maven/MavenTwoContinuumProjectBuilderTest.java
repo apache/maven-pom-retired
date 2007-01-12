@@ -61,19 +61,27 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getProjects().size() );
 
+        Project project = (Project) result.getProjects().get( 0 );
+
+        assertNotNull( project );
+
+        assertNotNull( project.getNotifiers() );
+
+        assertEquals( 1, project.getNotifiers().size() );
+
+        ProjectNotifier notifier = (ProjectNotifier) project.getNotifiers().get( 0 );
+
+        assertEquals( "mail", notifier.getType() );
+
+        assertEquals( "foo@bar", notifier.getConfiguration().get( "address" ) );
+
         ProjectGroup pg = (ProjectGroup) result.getProjectGroups().get( 0 );
 
         assertNotNull( pg );
 
         assertNotNull( pg.getNotifiers() );
 
-        assertEquals( 1, pg.getNotifiers().size() );
-
-        ProjectNotifier notifier = (ProjectNotifier) pg.getNotifiers().get( 0 );
-
-        assertEquals( "mail", notifier.getType() );
-
-        assertEquals( "foo@bar", notifier.getConfiguration().get( "address" ) );
+        assertEquals( 0, pg.getNotifiers().size() );
     }
 
     public void testGetEmailAddressWhenTypeIsntSet()
@@ -94,19 +102,27 @@ public class MavenTwoContinuumProjectBuilderTest
 
         assertEquals( 1, result.getProjects().size() );
 
+        Project project = (Project) result.getProjects().get( 0 );
+
+        assertNotNull( project );
+
+        assertNotNull( project.getNotifiers() );
+
+        assertEquals( 1, project.getNotifiers().size() );
+
+        ProjectNotifier notifier = (ProjectNotifier) project.getNotifiers().get( 0 );
+
+        assertEquals( "mail", notifier.getType() );
+
+        assertEquals( "foo@bar", notifier.getConfiguration().get( "address" ) );
+
         ProjectGroup pg = (ProjectGroup) result.getProjectGroups().get( 0 );
 
         assertNotNull( pg );
 
         assertNotNull( pg.getNotifiers() );
 
-        assertEquals( 1, pg.getNotifiers().size() );
-
-        ProjectNotifier notifier = (ProjectNotifier) pg.getNotifiers().get( 0 );
-
-        assertEquals( "mail", notifier.getType() );
-
-        assertEquals( "foo@bar", notifier.getConfiguration().get( "address" ) );
+        assertEquals( 0, pg.getNotifiers().size() );
     }
 
     public void testGetScmUrlWithParams()
@@ -130,16 +146,6 @@ public class MavenTwoContinuumProjectBuilderTest
         ProjectGroup pg = (ProjectGroup) result.getProjectGroups().get( 0 );
 
         assertNotNull( pg );
-
-        assertNotNull( pg.getNotifiers() );
-
-        assertEquals( 1, pg.getNotifiers().size() );
-
-        ProjectNotifier notifier = (ProjectNotifier) pg.getNotifiers().get( 0 );
-
-        assertEquals( "mail", notifier.getType() );
-
-        assertEquals( "foo@bar", notifier.getConfiguration().get( "address" ) );
 
         String username = System.getProperty( "user.name" );
 
