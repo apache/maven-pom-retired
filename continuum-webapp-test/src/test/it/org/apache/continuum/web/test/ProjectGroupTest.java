@@ -47,16 +47,18 @@ public class ProjectGroupTest
         assertCellValueFromTable( "Build File", tableElement, 0, 2 );
         assertCellValueFromTable( "schedule", tableElement, 0, 3 );
         assertCellValueFromTable( "From", tableElement, 0, 4 );
-        assertCellValueFromTable( "Default", tableElement, 0, 5 );
-        assertCellValueFromTable( "", tableElement, 0, 6 );
+        assertCellValueFromTable( "Build Fresh", tableElement, 0, 5 );
+        assertCellValueFromTable( "Default", tableElement, 0, 6 );
         assertCellValueFromTable( "", tableElement, 0, 7 );
+        assertCellValueFromTable( "", tableElement, 0, 8 );
 
         assertCellValueFromTable( "clean install", tableElement, 1, 0 );
         assertCellValueFromTable( "--batch-mode --non-recursive", tableElement, 1, 1 );
         assertCellValueFromTable( "pom.xml", tableElement, 1, 2 );
         assertCellValueFromTable( "DEFAULT_SCHEDULE", tableElement, 1, 3 );
         assertCellValueFromTable( "GROUP", tableElement, 1, 4 );
-        assertCellValueFromTable( "true", tableElement, 1, 5 );
+        assertCellValueFromTable( "false", tableElement, 1, 5 );
+        assertCellValueFromTable( "true", tableElement, 1, 6 );
         assertImgWithAlt( "Edit" );
         assertImgWithAlt( "Delete" );
     }

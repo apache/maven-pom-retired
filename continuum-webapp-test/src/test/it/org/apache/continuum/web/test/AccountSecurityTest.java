@@ -236,6 +236,7 @@ public class AccountSecurityTest
     }
 
     public void testDefaultRolesOfNewSystemAdministrator()
+        throws Exception
     {
         // initialize
         createUser( CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD, CUSTOM_PASSWORD, true );
@@ -249,12 +250,10 @@ public class AccountSecurityTest
         clickButtonWithValue( "Add Selected Roles" );
 
         // verify roles        
-        String[] roleList = {"Project User - Maven One Project", "Project Developer - Test Project Group Name",
-            "User Administrator", "System Administrator", "Project Developer - Maven One Project",
-            "Project Developer - Default Project Group", "Project Developer - Apache Maven",
-            "Project User - Apache Maven", "Project User - Default Project Group",
-            "Continuum Group Project Administrator", "Project User - Test Project Group Name"};
-
+        String[] roleList = {"System Administrator", "User Administrator", 
+            "Continuum Group Project Administrator", "Project Developer - Default Project Group",
+            "Project User - Default Project Group"};
+Thread.sleep( 20000 );
         assertElementPresent( XPathExpressionUtil.getList( roleList ) );
         deleteUser( CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD );
     }

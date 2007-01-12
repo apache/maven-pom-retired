@@ -159,7 +159,7 @@ public abstract class AbstractContinuumTestCase
         assertPage( "Continuum - Group Summary" );
         assertTextPresent( "Project Groups" );
 
-        if ( isTextPresent( "No Project Groups Known." ) )
+        if ( isTextPresent( "Project Groups list is empty." ) )
         {
             assertTextNotPresent( "Name" );
             assertTextNotPresent( "Group Id" );
