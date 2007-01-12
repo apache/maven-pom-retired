@@ -35,8 +35,7 @@ import java.util.List;
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.Action"
- * role-hint="buildDefinitionSummary"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="buildDefinitionSummary"
  */
 public class BuildDefinitionSummaryAction
     extends ContinuumActionSupport
@@ -46,7 +45,7 @@ public class BuildDefinitionSummaryAction
     private String projectGroupName;
 
     private int projectId;
-    
+
     private ProjectGroup projectGroup;
 
     private List projectBuildDefinitionSummaries = new ArrayList();
@@ -85,9 +84,9 @@ public class BuildDefinitionSummaryAction
 
             projectGroup = getContinuum().getProjectGroup( projectGroupId );
 
-            for (Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
+            for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
             {
-                Project project = (Project)i.next();
+                Project project = (Project) i.next();
                 projectBuildDefinitionSummaries.addAll( gatherProjectBuildDefinitionSummaries( project.getId() ) );
 
             }
@@ -95,16 +94,16 @@ public class BuildDefinitionSummaryAction
             allBuildDefinitionSummaries.addAll( groupBuildDefinitionSummaries );
             allBuildDefinitionSummaries.addAll( projectBuildDefinitionSummaries );
         }
-        catch (ContinuumException e)
+        catch ( ContinuumException e )
         {
-           getLogger().info( "unable to build summary" );
-           return ERROR;
+            getLogger().info( "unable to build summary" );
+            return ERROR;
         }
 
         return SUCCESS;
     }
 
-    private List gatherProjectBuildDefinitionSummaries( int projectId)
+    private List gatherProjectBuildDefinitionSummaries( int projectId )
         throws ContinuumException
     {
         List summaryList = new ArrayList();
@@ -153,6 +152,7 @@ public class BuildDefinitionSummaryAction
         bds.setBuildFile( bd.getBuildFile() );
         bds.setScheduleName( bd.getSchedule().getName() );
         bds.setIsDefault( bd.isDefaultForProject() );
+        bds.setIsBuildFresh( bd.isBuildFresh() );
 
         return bds;
     }

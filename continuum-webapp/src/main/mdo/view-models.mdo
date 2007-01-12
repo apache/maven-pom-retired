@@ -289,6 +289,12 @@
           <type>String</type>
         </field>
         <field>
+          <name>isBuildFresh</name>
+          <version>1.0.0</version>
+          <description>if the build is to be smoked and checked back out from the scm each build</description>
+          <type>boolean</type>
+        </field>
+        <field>
           <name>isDefault</name>
           <version>1.0.0</version>
           <description>if the build definition is used in default cases</description>

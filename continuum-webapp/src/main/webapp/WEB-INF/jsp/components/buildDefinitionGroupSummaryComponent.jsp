@@ -41,6 +41,7 @@
       <!-- ec:column property="profile" title="projectView.buildDefinition.profile"/ -->
       <ec:column property="scheduleName" title="schedule"/>
       <ec:column property="from" title="projectView.buildDefinition.from"/>
+      <ec:column property="isBuildFresh" title="projectView.buildDefinition.buildFresh"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
       <ec:column property="buildAction" title="&nbsp;" width="1%">
         <pss:ifAuthorized permission="continuum-build-group" resource="${projectGroupName}">

@@ -65,7 +65,7 @@
                     </ww:else>
     
                     <ww:textfield label="%{getText('buildDefinition.arguments.label')}" name="arguments"/>
-                    <ww:checkbox label="Build Fresh" name="buildFresh" value="buildFresh" fieldValue="true"/>
+                    <ww:checkbox label="%{getText('buildDefinition.buildFresh.label')}" name="buildFresh" value="buildFresh" fieldValue="true"/>
                     <ww:if test="defaultBuildDefinition == true">
                       <ww:label label="%{getText('buildDefinition.defaultForProject.label')}" value="true"/>
                     </ww:if>
