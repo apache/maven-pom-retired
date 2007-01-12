@@ -22,12 +22,12 @@ package org.apache.maven.continuum.core.action;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.initialization.DefaultContinuumInitializer;
 import org.apache.maven.continuum.model.project.BuildDefinition;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.Schedule;
-import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
-import org.apache.maven.continuum.store.ContinuumObjectNotFoundException;
 
 import java.util.Iterator;
 import java.util.List;
@@ -55,8 +55,7 @@ public abstract class AbstractBuildDefinitionContinuumAction
             // if buildDefinition passed in is not default then we are done
             if ( buildDefinition.isDefaultForProject() )
             {
-                BuildDefinition storedDefinition =
-                    store.getDefaultBuildDefinitionForProject( project.getId() );
+                BuildDefinition storedDefinition = store.getDefaultBuildDefinitionForProject( project.getId() );
 
                 if ( storedDefinition != null )
                 {
@@ -68,7 +67,8 @@ public abstract class AbstractBuildDefinitionContinuumAction
         }
         catch ( ContinuumObjectNotFoundException nfe )
         {
-            getLogger().debug( getClass().getName() + ": safely ignoring the resetting of old build definition becuase it didn't exist" );
+            getLogger().debug( getClass().getName() +
+                ": safely ignoring the resetting of old build definition becuase it didn't exist" );
         }
         catch ( ContinuumStoreException cse )
         {
@@ -78,7 +78,7 @@ public abstract class AbstractBuildDefinitionContinuumAction
 
     /**
      * resolves build definition defaults between project groups and projects
-     *
+     * <p/>
      * 1) project groups have default build definitions
      * 2) if project has default build definition, that overrides project group definition
      * 3) changing parent default build definition does not effect project if it has a default declared
@@ -93,13 +93,12 @@ public abstract class AbstractBuildDefinitionContinuumAction
     {
         try
         {
-            BuildDefinition storedDefinition =
-                                store.getDefaultBuildDefinitionForProjectGroup( projectGroup.getId() );
+            BuildDefinition storedDefinition = store.getDefaultBuildDefinitionForProjectGroup( projectGroup.getId() );
 
             // if buildDefinition passed in is not default then we are done
             if ( buildDefinition.isDefaultForProject() )
             {
-                if ( storedDefinition != null && storedDefinition.getId() != buildDefinition.getId() )  
+                if ( storedDefinition != null && storedDefinition.getId() != buildDefinition.getId() )
                 {
                     storedDefinition.setDefaultForProject( false );
 
@@ -111,8 +110,10 @@ public abstract class AbstractBuildDefinitionContinuumAction
                 //make sure we are not wacking out default build definition, that would be bad
                 if ( buildDefinition.getId() == storedDefinition.getId() )
                 {
-                    getLogger().info( "processing this build definition would result in no default build definition for project group" );
-                    throw new ContinuumException( "processing this build definition would result in no default build definition for project group" );
+                    getLogger().info(
+                        "processing this build definition would result in no default build definition for project group" );
+                    throw new ContinuumException(
+                        "processing this build definition would result in no default build definition for project group" );
                 }
             }
         }
@@ -153,6 +154,7 @@ public abstract class AbstractBuildDefinitionContinuumAction
                 storedDefinition.setGoals( buildDefinition.getGoals() );
                 storedDefinition.setArguments( buildDefinition.getArguments() );
                 storedDefinition.setBuildFile( buildDefinition.getBuildFile() );
+                storedDefinition.setBuildFresh( buildDefinition.isBuildFresh() );
 
                 // special case of this is resolved in the resolveDefaultBuildDefinitionsForProjectGroup method
                 storedDefinition.setDefaultForProject( buildDefinition.isDefaultForProject() );
