@@ -39,7 +39,9 @@ import java.util.List;
 /**
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
- * @todo I think this should have all the JDO stuff from the abstract test, and the abstract test should use a mock continuum store with the exception of the integration tests which should be running against a fully deployed plexus application instead
+ * @todo I think this should have all the JDO stuff from the abstract test, and the abstract test
+ * should use a mock continuum store with the exception of the integration tests which should be
+ * running against a fully deployed plexus application instead
  * @todo review for ambiguities and ensure it is all encapsulated in the store, otherwise the code may make the same mistake about not deleting things, etc
  */
 public class ContinuumStoreTest
@@ -209,7 +211,7 @@ public class ContinuumStoreTest
     {
         Project retrievedProject = store.getProjectWithCheckoutResult( testProject1.getId() );
         assertProjectEquals( testProject1, retrievedProject );
-        assertScmResultEquals( testCheckoutResult1, retrievedProject.getCheckoutResult()  );
+        assertScmResultEquals( testCheckoutResult1, retrievedProject.getCheckoutResult() );
         checkProjectFetchGroup( retrievedProject, true, false, false, false );
     }
 
@@ -729,8 +731,8 @@ public class ContinuumStoreTest
 
         Profile profile = store.getProfile( testProfile1.getId() );
         Schedule schedule = store.getSchedule( testSchedule1.getId() );
-        BuildDefinition buildDefinition =
-            createTestBuildDefinition( "TABDTP arguments", "TABDTP buildFile", "TABDTP goals", profile, schedule );
+        BuildDefinition buildDefinition = createTestBuildDefinition( "TABDTP arguments", "TABDTP buildFile",
+                                                                     "TABDTP goals", profile, schedule, false, false );
         BuildDefinition copy = createTestBuildDefinition( buildDefinition );
         project.addBuildDefinition( buildDefinition );
         store.updateProject( project );
@@ -749,12 +751,13 @@ public class ContinuumStoreTest
         Project project = store.getProjectWithAllDetails( testProject1.getId() );
 
         BuildDefinition newBuildDefinition = (BuildDefinition) project.getBuildDefinitions().get( 0 );
-        // If we use "arguments1.1", jpox-rc2 store "arguments11", weird
-        String arguments = "arguments11";
+        newBuildDefinition.setBuildFresh( true );
+        new BuildDefinition().setDefaultForProject( true );
+        String arguments = "arguments1.1";
         newBuildDefinition.setArguments( arguments );
 
         BuildDefinition copy = createTestBuildDefinition( newBuildDefinition );
-        store.updateProject( project );
+        store.storeBuildDefinition( newBuildDefinition );
 
         project = store.getProjectWithAllDetails( testProject1.getId() );
         assertEquals( "check # build defs", 2, project.getBuildDefinitions().size() );
@@ -840,8 +843,8 @@ public class ContinuumStoreTest
 
         Profile profile = store.getProfile( testProfile1.getId() );
         Schedule schedule = store.getSchedule( testSchedule1.getId() );
-        BuildDefinition buildDefinition =
-            createTestBuildDefinition( "TABDTPG arguments", "TABDTPG buildFile", "TABDTPG goals", profile, schedule );
+        BuildDefinition buildDefinition = createTestBuildDefinition( "TABDTPG arguments", "TABDTPG buildFile",
+                                                                     "TABDTPG goals", profile, schedule, false, false );
         BuildDefinition copy = createTestBuildDefinition( buildDefinition );
         projectGroup.addBuildDefinition( buildDefinition );
         store.updateProjectGroup( projectGroup );

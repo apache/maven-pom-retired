@@ -272,20 +272,22 @@ public abstract class AbstractContinuumStoreTestCase
         testProfile3.setId( profile3.getId() );
 
         BuildDefinition testGroupBuildDefinition1 =
-            createTestBuildDefinition( "arguments1", "buildFile1", "goals1", profile1, schedule2 );
+            createTestBuildDefinition( "arguments1", "buildFile1", "goals1", profile1, schedule2, false, false );
         BuildDefinition testGroupBuildDefinition2 =
-            createTestBuildDefinition( "arguments2", "buildFile2", "goals2", profile1, schedule1 );
+            createTestBuildDefinition( "arguments2", "buildFile2", "goals2", profile1, schedule1, false, false );
         BuildDefinition testGroupBuildDefinition3 =
-            createTestBuildDefinition( "arguments3", "buildFile3", "goals3", profile2, schedule1 );
-        BuildDefinition testGroupBuildDefinition4 = createTestBuildDefinition( null, null, "deploy", null, null );
+            createTestBuildDefinition( "arguments3", "buildFile3", "goals3", profile2, schedule1, false, false );
+        BuildDefinition testGroupBuildDefinition4 =
+            createTestBuildDefinition( null, null, "deploy", null, null, false, false );
 
         BuildDefinition testBuildDefinition1 =
-            createTestBuildDefinition( "arguments11", "buildFile11", "goals11", profile2, schedule1 );
+            createTestBuildDefinition( "arguments11", "buildFile11", "goals11", profile2, schedule1, false, false );
         BuildDefinition testBuildDefinition2 =
-            createTestBuildDefinition( "arguments12", "buildFile12", "goals12", profile2, schedule2 );
+            createTestBuildDefinition( "arguments12", "buildFile12", "goals12", profile2, schedule2, false, false );
         BuildDefinition testBuildDefinition3 =
-            createTestBuildDefinition( "arguments13", "buildFile13", "goals13", profile1, schedule2 );
-        BuildDefinition testBuildDefinition4 = createTestBuildDefinition( null, null, "deploy", null, null );
+            createTestBuildDefinition( "arguments13", "buildFile13", "goals13", profile1, schedule2, false, false );
+        BuildDefinition testBuildDefinition4 =
+            createTestBuildDefinition( null, null, "deploy", null, null, false, false );
 
         ProjectGroup group = createTestProjectGroup( defaultProjectGroup );
 
@@ -631,11 +633,13 @@ public abstract class AbstractContinuumStoreTestCase
     {
         return createTestBuildDefinition( buildDefinition.getArguments(), buildDefinition.getBuildFile(),
                                           buildDefinition.getGoals(), buildDefinition.getProfile(),
-                                          buildDefinition.getSchedule() );
+                                          buildDefinition.getSchedule(), buildDefinition.isDefaultForProject(),
+                                          buildDefinition.isBuildFresh() );
     }
 
     protected static BuildDefinition createTestBuildDefinition( String arguments, String buildFile, String goals,
-                                                                Profile profile, Schedule schedule )
+                                                                Profile profile, Schedule schedule,
+                                                                boolean defaultForProject, boolean buildFresh )
     {
         BuildDefinition definition = new BuildDefinition();
         definition.setArguments( arguments );
@@ -643,6 +647,8 @@ public abstract class AbstractContinuumStoreTestCase
         definition.setGoals( goals );
         definition.setProfile( profile );
         definition.setSchedule( schedule );
+        definition.setDefaultForProject( defaultForProject );
+        definition.setBuildFresh( buildFresh );
         return definition;
     }
 
@@ -868,7 +874,8 @@ public abstract class AbstractContinuumStoreTestCase
             assertNotSame( expectedSchedule, actualSchedule );
             assertEquals( "compare schedule - id", expectedSchedule.getId(), actualSchedule.getId() );
             assertEquals( "compare schedule - name", expectedSchedule.getName(), actualSchedule.getName() );
-            assertEquals( "compare schedule - desc", expectedSchedule.getDescription(), actualSchedule.getDescription() );
+            assertEquals( "compare schedule - desc", expectedSchedule.getDescription(),
+                          actualSchedule.getDescription() );
             assertEquals( "compare schedule - delay", expectedSchedule.getDelay(), actualSchedule.getDelay() );
             assertEquals( "compare schedule - cron", expectedSchedule.getCronExpression(),
                           actualSchedule.getCronExpression() );
@@ -981,6 +988,10 @@ public abstract class AbstractContinuumStoreTestCase
                       actualBuildDefinition.getBuildFile() );
         assertEquals( "compare build definition - goals", expectedBuildDefinition.getGoals(),
                       actualBuildDefinition.getGoals() );
+        assertEquals( "compare build definition - build fresh", expectedBuildDefinition.isBuildFresh(),
+                      actualBuildDefinition.isBuildFresh() );
+        assertEquals( "compare build definition - defaultForProject", expectedBuildDefinition.isDefaultForProject(),
+                      actualBuildDefinition.isDefaultForProject() );
     }
 
     protected static void assertDevelopersEqual( List expectedDevelopers, List actualDevelopers )
