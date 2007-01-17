@@ -20,7 +20,6 @@ package org.apache.maven.continuum;
  */
 
 import org.apache.maven.continuum.configuration.ConfigurationService;
-import org.apache.maven.continuum.execution.ContinuumBuildExecutor;
 import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
@@ -56,11 +55,11 @@ public interface Continuum
 
     /**
      * Get all {@link ProjectGroup}s and their {@link Project}s
-     * 
+     *
      * @return {@link Collection} &lt;{@link ProjectGroup}>
      */
     public Collection getAllProjectGroupsWithProjects();
-    
+
     public Collection getAllProjectGroups();
 
     public ProjectGroup getProjectGroupByProjectId( int projectId )
@@ -74,16 +73,16 @@ public interface Continuum
 
     public void addProjectGroup( ProjectGroup projectGroup )
         throws ContinuumException;
-    
+
     public ProjectGroup getProjectGroupWithProjects( int projectGroupId )
         throws ContinuumException;
 
     public ProjectGroup getProjectGroupByGroupId( String groupId )
         throws ContinuumException;
-    
+
     public ProjectGroup getProjectGroupByGroupIdWithBuildDetails( String groupId )
         throws ContinuumException;
-    
+
     // ----------------------------------------------------------------------
     // Project
     // ----------------------------------------------------------------------
@@ -192,9 +191,9 @@ public interface Continuum
 
     /**
      * Add a project to the list of building projects (ant, shell,...)
-     * 
+     *
      * @param project the project to add
-     * @param executorId the id of an {@link ContinuumBuildExecutor}, eg. <code>ant</code> or <code>shell</code> 
+     * @param executorId the id of an {@link org.apache.maven.continuum.execution.ContinuumBuildExecutor}, eg. <code>ant</code> or <code>shell</code>
      * @return id of the project
      * @throws ContinuumException
      */
@@ -202,8 +201,20 @@ public interface Continuum
         throws ContinuumException;
 
     /**
-     * Add a Maven 2 project to the list of projects. 
-     * 
+     * Add a project to the list of building projects (ant, shell,...)
+     *
+     * @param project the project to add
+     * @param executorId the id of an {@link org.apache.maven.continuum.execution.ContinuumBuildExecutor}, eg. <code>ant</code> or <code>shell</code>
+     * @param projectGroupId
+     * @return id of the project
+     * @throws ContinuumException
+     */
+    int addProject( Project project, String executorId, int projectGroupId )
+        throws ContinuumException;
+
+    /**
+     * Add a Maven 2 project to the list of projects.
+     *
      * @param metadataUrl url of the pom.xml
      * @return a holder with the projects, project groups and errors occurred during the project adding
      * @throws ContinuumException
@@ -212,8 +223,8 @@ public interface Continuum
         throws ContinuumException;
 
     /**
-     * Add a Maven 2 project to the list of projects. 
-     * 
+     * Add a Maven 2 project to the list of projects.
+     *
      * @param metadataUrl url of the pom.xml
      * @param checkProtocol check if the protocol is allowed, use false if the pom is uploaded
      * @return a holder with the projects, project groups and errors occurred during the project adding
@@ -246,8 +257,8 @@ public interface Continuum
         throws ContinuumException;
 
     /**
-     * Add a Maven 1 project to the list of projects. 
-     * 
+     * Add a Maven 1 project to the list of projects.
+     *
      * @param metadataUrl url of the project.xml
      * @return a holder with the projects, project groups and errors occurred during the project adding
      * @throws ContinuumException
@@ -256,8 +267,8 @@ public interface Continuum
         throws ContinuumException;
 
     /**
-     * Add a Maven 1 project to the list of projects. 
-     * 
+     * Add a Maven 1 project to the list of projects.
+     *
      * @param metadataUrl url of the project.xml
      * @param checkProtocol check if the protocol is allowed, use false if the pom is uploaded
      * @return a holder with the projects, project groups and errors occurred during the project adding
@@ -380,7 +391,7 @@ public interface Continuum
         throws ContinuumException;
 
     BuildDefinition addBuildDefinitionToProjectGroup( int projectGroupId, BuildDefinition buildDefinition )
-        throws ContinuumException;    
+        throws ContinuumException;
 
     List getBuildDefinitionsForProject( int projectId )
         throws ContinuumException;

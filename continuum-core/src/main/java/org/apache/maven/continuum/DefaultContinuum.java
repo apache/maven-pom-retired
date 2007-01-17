@@ -269,7 +269,7 @@ public class DefaultContinuum
         }
         catch ( ContinuumObjectNotFoundException e )
         {
-            //since we want to add a new project group, we should be getting 
+            //since we want to add a new project group, we should be getting
             //this exception
         }
         catch ( ContinuumStoreException e )
@@ -1117,6 +1117,12 @@ public class DefaultContinuum
     public int addProject( Project project, String executorId )
         throws ContinuumException
     {
+        return addProject( project, executorId, getDefaultProjectGroup().getId() );
+    }
+
+    public int addProject( Project project, String executorId, int groupId )
+        throws ContinuumException
+    {
         project.setExecutorId( executorId );
 
         if ( executorId.equalsIgnoreCase( "ant" ) )
@@ -1145,16 +1151,18 @@ public class DefaultContinuum
             }
         }
 
-        return executeAddProjectFromScmActivity( project );
+        return executeAddProjectFromScmActivity( project, groupId );
     }
 
     // ----------------------------------------------------------------------
     // Activities. These should end up as workflows in werkflow
     // ----------------------------------------------------------------------
 
-    private int executeAddProjectFromScmActivity( Project project )
+    private int executeAddProjectFromScmActivity( Project project, int groupId )
         throws ContinuumException
     {
+        ProjectGroup projectGroup = getProjectGroupWithBuildDetails( groupId );
+
         Map context = new HashMap();
 
         // ----------------------------------------------------------------------
@@ -1165,7 +1173,7 @@ public class DefaultContinuum
 
         context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT, project );
 
-        context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, getDefaultProjectGroup() );
+        context.put( AbstractContinuumAction.KEY_UNVALIDATED_PROJECT_GROUP, projectGroup );
 
         executeAction( "validate-project", context );
 

@@ -32,7 +32,7 @@
         </ww:else>
         </title>
     </head>
-    <body>              
+    <body>
         <div class="app">
             <div id="axial" class="h3">
                 <h3>
@@ -73,6 +73,7 @@
                             <ww:textfield label="%{getText('projectScmTag.label')}" name="projectScmTag">
                                 <ww:param name="desc"><p><ww:text name="projectScmTag.message"/></p></ww:param>
                             </ww:textfield>
+                            <ww:select label="%{getText('projectGroup.name.label')}" name="selectedProjectGroup" list="projectGroups" listKey="id" listValue="name"/>
                           </tbody>
                         </table>
                         <div class="functnbar3">

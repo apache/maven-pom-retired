@@ -21,13 +21,17 @@ package org.apache.maven.continuum.web.action;
 
 import com.opensymphony.xwork.Validateable;
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 
 import java.util.Iterator;
+import java.util.Collection;
+import java.util.ArrayList;
 
 /**
  * @author Nick Gonzalez
@@ -56,6 +60,10 @@ public class AddProjectAction
 
     private String projectType;
 
+    private Collection projectGroups;
+
+    private int selectedProjectGroup;
+
     public void validate()
     {
         boolean projectNameAlreadyExist = false;
@@ -75,7 +83,7 @@ public class AddProjectAction
                     break;
                 }
             }
-            if ( projectNameAlreadyExist == true )
+            if ( projectNameAlreadyExist )
             {
                 addActionError( "projectName.already.exist.error" );
             }
@@ -104,13 +112,29 @@ public class AddProjectAction
 
         project.setScmTag( projectScmTag );
 
-        getContinuum().addProject( project, projectType );
+        getContinuum().addProject( project, projectType, selectedProjectGroup );
 
         return SUCCESS;
     }
 
     public String input()
+        throws ContinuumException
     {
+        projectGroups = new ArrayList();
+
+        Collection allProjectGroups = getContinuum().getAllProjectGroups();
+
+        for ( Iterator i = allProjectGroups.iterator(); i.hasNext(); )
+        {
+            ProjectGroup pg = (ProjectGroup) i.next();
+
+            //TODO: must implement same functionality using plexus-security
+            projectGroups.add( pg );
+        }
+
+        selectedProjectGroup = getContinuum().getProjectGroupByGroupId(
+            Continuum.DEFAULT_PROJECT_GROUP_GROUP_ID ).getId();
+
         return SUCCESS;
     }
 
@@ -193,5 +217,25 @@ public class AddProjectAction
         bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_OPERATION );
 
         return bundle;
+    }
+
+    public Collection getProjectGroups()
+    {
+        return projectGroups;
+    }
+
+    public void setProjectGroups( Collection projectGroups )
+    {
+        this.projectGroups = projectGroups;
+    }
+
+    public int getSelectedProjectGroup()
+    {
+        return selectedProjectGroup;
+    }
+
+    public void setSelectedProjectGroup( int selectedProjectGroup )
+    {
+        this.selectedProjectGroup = selectedProjectGroup;
     }
 }
