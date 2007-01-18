@@ -39,7 +39,17 @@
       <ec:column property="arguments" title="projectView.buildDefinition.arguments"/>
       <ec:column property="buildFile" title="projectView.buildDefinition.buildFile"/>
       <!-- ec:column property="profile" title="projectView.buildDefinition.profile"/ -->
-      <ec:column property="scheduleName" title="schedule"/>
+      <ec:column property="scheduleName" title="projectView.buildDefinition.schedule">
+        <pss:ifAuthorized permission="continuum-manage-schedules">
+          <ww:url id="scheduleUrl" action="schedule" namespace="/" includeParams="none">
+            <ww:param name="id">${pageScope.buildDefinitionSummary.scheduleId}</ww:param>
+          </ww:url>
+          <ww:a href="%{scheduleUrl}">${pageScope.buildDefinitionSummary.scheduleName}</ww:a> 
+        </pss:ifAuthorized>
+        <pss:elseAuthorized>
+          ${pageScope.buildDefinitionSummary.scheduleName}
+        </pss:elseAuthorized>
+      </ec:column>
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isBuildFresh" title="projectView.buildDefinition.buildFresh"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
@@ -115,7 +125,17 @@
       <ec:column property="arguments" title="projectView.buildDefinition.arguments"/>
       <ec:column property="buildFile" title="projectView.buildDefinition.buildFile"/>
       <!-- ec:column property="profile" title="projectView.buildDefinition.profile"/ -->
-      <ec:column property="scheduleName" title="schedule"/>
+      <ec:column property="scheduleName" title="projectView.buildDefinition.schedule">
+        <pss:ifAuthorized permission="continuum-manage-schedules">
+          <ww:url id="scheduleUrl" action="schedule" namespace="/" includeParams="none">
+            <ww:param name="id">${pageScope.buildDefinitionSummary.scheduleId}</ww:param>
+          </ww:url>
+          <ww:a href="%{scheduleUrl}">${pageScope.buildDefinitionSummary.scheduleName}</ww:a> 
+        </pss:ifAuthorized>
+        <pss:elseAuthorized>
+          ${pageScope.buildDefinitionSummary.scheduleName}
+        </pss:elseAuthorized>
+      </ec:column>
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
       <ec:column property="buildNowAction" title="&nbsp;" width="1%">

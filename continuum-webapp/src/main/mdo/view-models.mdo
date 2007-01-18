@@ -301,6 +301,13 @@
           <type>boolean</type>
         </field>
         <field>
+          <name>scheduleId</name>
+          <version>1.0.0</version>
+          <required>true</required>
+          <description>id of the schedule for build definition</description>
+          <type>int</type>
+        </field>
+        <field>
           <name>scheduleName</name>
           <version>1.0.0</version>
           <required>true</required>

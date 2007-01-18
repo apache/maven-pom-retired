@@ -150,6 +150,7 @@ public class BuildDefinitionSummaryAction
         bds.setId( bd.getId() );
         bds.setArguments( bd.getArguments() );
         bds.setBuildFile( bd.getBuildFile() );
+        bds.setScheduleId( bd.getSchedule().getId() );
         bds.setScheduleName( bd.getSchedule().getName() );
         bds.setIsDefault( bd.isDefaultForProject() );
         bds.setIsBuildFresh( bd.isBuildFresh() );
