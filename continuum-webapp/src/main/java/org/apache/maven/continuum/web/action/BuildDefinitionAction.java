@@ -135,6 +135,21 @@ public class BuildDefinitionAction
             scheduleId = buildDefinition.getSchedule().getId();
             defaultBuildDefinition = buildDefinition.isDefaultForProject();
         }
+        else
+        {
+            if ( "maven2".equals(executor) )
+            {
+                buildFile = "pom.xml";
+            }
+            else if ( "maven-1".equals(executor) )
+            {
+                buildFile = "project.xml";
+            }
+            else if ( "ant".equals(executor) )
+            {
+                buildFile = "build.xml";
+            }
+        }
 
         return SUCCESS;
     }
