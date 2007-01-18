@@ -89,7 +89,7 @@
       </div>
       <div>
         <pss:ifAuthorized permission="continuum-manage-schedules">
-          <ww:url id="scheduleUrl" namespace="/" action="schedules"/>
+          <ww:url id="scheduleUrl" namespace="/" action="schedules" includeParams="none"/>
           <div class="body">
             <ww:a href="%{scheduleUrl}">
               <ww:text name="menu.administration.schedules"/>
@@ -97,13 +97,13 @@
           </div>
         </pss:ifAuthorized>
         <pss:ifAuthorized permission="continuum-manage-configuration">
-          <ww:url id="configurationUrl" action="configuration" namespace="/admin" method="default"/>
+          <ww:url id="configurationUrl" action="configuration" namespace="/admin" method="default" includeParams="none"/>
           <div class="body">
             <ww:a href="%{configurationUrl}">
               <ww:text name="menu.administration.configuration"/>
             </ww:a>
           </div>
-          <ww:url id="configurationUrl" action="configureAppearance" namespace="/admin"/>
+          <ww:url id="configurationUrl" action="configureAppearance" namespace="/admin" includeParams="none"/>
           <div class="body">
             <ww:a href="%{configurationUrl}">
               <ww:text name="menu.administration.appearance"/>
