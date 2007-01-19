@@ -25,18 +25,17 @@ import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.codehaus.plexus.rbac.profile.RoleProfileException;
 import org.codehaus.plexus.rbac.profile.RoleProfileManager;
-import org.codehaus.plexus.security.rbac.Role;
 
 import java.util.Map;
 
 /**
  * AddAssignableRolesAction:
  *
- * @author: Jesse McConnell <jmcconnell@apache.org>
+ * @author: Emmanuel Venisse <evenisse@apache.org>
  * @version: $Id$
- * @plexus.component role="org.codehaus.plexus.action.Action" role-hint="add-assignable-roles"
+ * @plexus.component role="org.codehaus.plexus.action.Action" role-hint="remove-assignable-roles"
  */
-public class AddAssignableRolesAction
+public class RemoveAssignableRolesAction
     extends AbstractContinuumAction
 {
     /**
@@ -54,20 +53,18 @@ public class AddAssignableRolesAction
     {
         int projectGroupId = getProjectGroupId( context );
 
-        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( projectGroupId );
-
-        // TODO: make the resource the name of the project group and hide the id from the user
+        ProjectGroup projectGroup = store.getProjectGroup( projectGroupId );
 
         try
         {
-            Role developer = roleManager.getDynamicRole( "continuum-group-developer", projectGroup.getName() );
+            roleManager.deleteDynamicRole( "continuum-group-developer", projectGroup.getName() );
 
-            Role user = roleManager.getDynamicRole( "continuum-group-user", projectGroup.getName() );
+            roleManager.deleteDynamicRole( "continuum-group-user", projectGroup.getName() );
         }
         catch ( RoleProfileException rpe )
         {
             rpe.printStackTrace();
-            throw new ContinuumException( "error generating dynamic role for project " + projectGroup.getName(), rpe );
+            throw new ContinuumException( "error removing dynamic role for project " + projectGroup.getName(), rpe );
         }
     }
 }

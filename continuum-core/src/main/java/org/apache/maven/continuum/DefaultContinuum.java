@@ -255,6 +255,12 @@ public class DefaultContinuum
             }
         }
 
+        getLogger().info( "Remove project group" + projectGroup.getName() + "(" + projectGroup.getId() + ")" );
+
+        Map context = new HashMap();
+        context.put( AbstractContinuumAction.KEY_PROJECT_GROUP_ID, new Integer( projectGroup.getId() ) );
+        executeAction( "remove-assignable-roles", context );
+
         store.removeProjectGroup( projectGroup );
     }
 
@@ -1073,11 +1079,12 @@ public class DefaultContinuum
         return addMavenOneProject( metadataUrl, projectGroupId, true );
     }
 
-    public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl, int projectGroupId, boolean checkProtocol )
+    public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl, int projectGroupId,
+                                                              boolean checkProtocol )
         throws ContinuumException
     {
-        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenOneContinuumProjectBuilder.ID,
-                                                       projectGroupId, checkProtocol );
+        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenOneContinuumProjectBuilder.ID, projectGroupId,
+                                                       checkProtocol );
     }
 
     // ----------------------------------------------------------------------
@@ -1106,8 +1113,8 @@ public class DefaultContinuum
                                                               boolean checkProtocol )
         throws ContinuumException
     {
-        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenTwoContinuumProjectBuilder.ID,
-                                                       projectGroupId, checkProtocol );
+        return executeAddProjectsFromMetadataActivity( metadataUrl, MavenTwoContinuumProjectBuilder.ID, projectGroupId,
+                                                       checkProtocol );
     }
 
     // ----------------------------------------------------------------------
@@ -1218,7 +1225,7 @@ public class DefaultContinuum
                     return res;
                 }
             }
-            catch( FormicaException e )
+            catch ( FormicaException e )
             {
                 //can't be thrown
             }
