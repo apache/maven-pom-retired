@@ -692,6 +692,7 @@ public class JavaCodeTransform
         }
         line = replace( line, "&", "&amp;" );
         line = replace( line, "<", "&lt;" );
+        line = replace( line, ">", "&gt;" );
         line = replace( line, "\\\\", "&#92;&#92;" );
         line = replace( line, "\\\"", "\\&quot;" );
         line = replace( line, "'\"'", "'&quot;'" );
