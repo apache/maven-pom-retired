@@ -57,6 +57,7 @@ public class ReleasePrepareActionTest
         String scmUrl = "scm:svn:" + svnUrl + "/trunk/";
         Project project = new Project();
         project.setScmUrl( scmUrl );
+        project.setWorkingDirectory(".");
         continuumMock.expects( once() ).method( "getProject" ).will( returnValue( project ) );
         action.input();
         assertEquals( svnUrl + "/tags", action.getScmTagBase() );
@@ -73,6 +74,7 @@ public class ReleasePrepareActionTest
     {
         Project project = new Project();
         project.setScmUrl( "scm:cvs:xxx" );
+        project.setWorkingDirectory(".");
         continuumMock.expects( once() ).method( "getProject" ).will( returnValue( project ) );
         action.input();
         assertEquals( "", action.getScmTagBase() );
