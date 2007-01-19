@@ -56,9 +56,9 @@ public abstract class AddMavenProjectAction
 
     private String pom = null;
     
-    private String username;
+    private String scmUsername;
     
-    private String password;
+    private String scmPassword;
 
     private Collection projectGroups;
 
@@ -78,11 +78,11 @@ public abstract class AddMavenProjectAction
             try
             {
                 URL url = new URL( pomUrl );
-                if ( pomUrl.startsWith( "http" ) && !StringUtils.isEmpty( username ) )
+                if ( pomUrl.startsWith( "http" ) && !StringUtils.isEmpty(scmUsername) )
                 {
                     StringBuffer urlBuffer = new StringBuffer();
                     urlBuffer.append( url.getProtocol() ).append( "://" );
-                    urlBuffer.append( username ).append( ':' ).append( password ).append( '@' ).append( url.getHost() );
+                    urlBuffer.append(scmUsername).append( ':' ).append(scmPassword).append( '@' ).append( url.getHost() );
                     if ( url.getPort() != -1 )
                     {
                         urlBuffer.append( url.getPort() );
@@ -218,19 +218,19 @@ public abstract class AddMavenProjectAction
         this.pomUrl = pomUrl;
     }
 
-    public void setPassword( String password )
+    public void setScmPassword( String scmPassword)
     {
-        this.password = password;
+        this.scmPassword = scmPassword;
     }
 
-    public String getUsername()
+    public String getScmUsername()
     {
-        return username;
+        return scmUsername;
     }
 
-    public void setUsername( String username )
+    public void setScmUsername( String scmUsername)
     {
-        this.username = username;
+        this.scmUsername = scmUsername;
     }
 
     public Collection getProjectGroups()

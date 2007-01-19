@@ -46,11 +46,11 @@
                                   <tbody>
                                     <tr>
                                       <td><ww:text name="add.m1.project.m1PomUrl.username.label"/>: </td>
-                                      <td><input type="text" name="username" size="20" id="addMavenOneProject_username"/><td>
+                                      <td><input type="text" name="scmUsername" size="20" id="addMavenOneProject_scmUsername"/><td>
                                     </tr>  
                                     <tr>
                                       <td><ww:text name="add.m1.project.m1PomUrl.password.label"/>: </td>
-                                      <td><input type="password" name="password" size="20" id="addMavenOneProject_password"/><td>
+                                      <td><input type="password" name="scmPassword" size="20" id="addMavenOneProject_scmPassword"/><td>
                                     </tr>  
                                   </tbody>
                                 </table>  
