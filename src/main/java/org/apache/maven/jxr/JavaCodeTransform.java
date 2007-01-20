@@ -100,7 +100,7 @@ public class JavaCodeTransform
     /**
      * start comment delimeter
      */
-    public static final String COMMENT_START = "<em class=\"comment\">";
+    public static final String COMMENT_START = "<em id=\"jxr_comment\">";
 
     /**
      * end comment delimeter
@@ -110,7 +110,7 @@ public class JavaCodeTransform
     /**
      * start javadoc comment delimeter
      */
-    public static final String JAVADOC_COMMENT_START = "<em>";
+    public static final String JAVADOC_COMMENT_START = "<em id=\"jxr_javadoccomment\">";
 
     /**
      * end javadoc comment delimeter
@@ -120,7 +120,7 @@ public class JavaCodeTransform
     /**
      * start String delimeter
      */
-    public static final String STRING_START = "<span class=\"string\">";
+    public static final String STRING_START = "<span id=\"jxr_string\">";
 
     /**
      * end String delimeter
@@ -130,7 +130,7 @@ public class JavaCodeTransform
     /**
      * start reserved word delimeter
      */
-    public static final String RESERVED_WORD_START = "<strong>";
+    public static final String RESERVED_WORD_START = "<strong id=\"jxr_keyword\">";
 
     /**
      * end reserved word delimeter
