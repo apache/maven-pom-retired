@@ -282,19 +282,30 @@ public class JavaCodeTransform
             .append( "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"" ).append( locale )
             .append( "\" lang=\"" ).append( locale ).append( "\">\n" ).append( "<head>\n" )
             .append( "<meta http-equiv=\"content-type\" content=\"text/html; charset=" ).append( outputEncoding )
-            .append( "\" />" );
+            .append( "\" />\n" );
 
         // title ("classname xref")
+        buffer.append( "<title>" );
         try
         {
-            buffer.append( "<title>" ).append( fileManager.getFile( this.getCurrentFilename() )
-                .getClassType().getName() ).append( " xref</title>\n" );
-
+            JavaFile javaFile = fileManager.getFile( this.getCurrentFilename() );
+            if ( javaFile.getClassType() != null )
+            {
+                buffer.append( javaFile.getClassType().getName() );
+            }
+            else
+            {
+                buffer.append( this.getCurrentFilename() );
+            }
+            buffer.append( " " );
         }
         catch ( IOException e )
         {
-            buffer.append( "<title>xref</title>\n" );
             e.printStackTrace();
+        }
+        finally
+        {
+            buffer.append( "xref</title>\n" );
         }
 
         // stylesheet link
@@ -1096,7 +1107,7 @@ public class JavaCodeTransform
                 }
                 else
                 {
-                    System.out.println( this.getCurrentFilename() );
+                    return "";
                 }
                 javadocURI.append( ".html" );
 

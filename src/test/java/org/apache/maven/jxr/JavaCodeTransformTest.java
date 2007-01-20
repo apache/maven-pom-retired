@@ -45,13 +45,23 @@ public class JavaCodeTransformTest
     public void testTransform()
         throws Exception
     {
-        File sourceFile = new File(
-            System.getProperty( "basedir" ) + "/src/test/java/org/apache/maven/jxr/JavaCodeTransformTest.java" );
+        File sourceFile = new File( System.getProperty( "user.dir" )
+            + "/src/test/java/org/apache/maven/jxr/JavaCodeTransformTest.java" );
         assertTrue( sourceFile.exists() );
-        codeTransform.transform( sourceFile.getAbsolutePath(),
-                                 System.getProperty( "basedir" ) + "/target/JavaCodeTransformTest.html", Locale.ENGLISH,
-                                 "ISO-8859-1", "ISO-8859-1", "", "" );
-        assertTrue( new File( System.getProperty( "basedir" ), "/target/JavaCodeTransformTest.html" ).exists() );
+
+        codeTransform.transform( sourceFile.getAbsolutePath(), System.getProperty( "user.dir" )
+            + "/target/JavaCodeTransformTest.html", Locale.ENGLISH, "ISO-8859-1", "ISO-8859-1", "", "" );
+        assertTrue( new File( System.getProperty( "user.dir" ), "/target/JavaCodeTransformTest.html" ).exists() );
     }
 
+    public void testTransformWithEmptyClassFile()
+        throws Exception
+    {
+        File sourceFile = new File( System.getProperty( "user.dir" ) + "/src/test/resources/EmptyClass.java" );
+        assertTrue( sourceFile.exists() );
+
+        codeTransform.transform( sourceFile.getAbsolutePath(), System.getProperty( "user.dir" )
+            + "/target/EmptyClass.html", Locale.ENGLISH, "ISO-8859-1", "ISO-8859-1", "", "" );
+        assertTrue( new File( System.getProperty( "user.dir" ), "/target/EmptyClass.html" ).exists() );
+    }
 }
