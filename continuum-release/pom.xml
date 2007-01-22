@@ -63,6 +63,12 @@
       <groupId>org.apache.maven.release</groupId>
       <artifactId>maven-release-manager</artifactId>
       <version>1.0-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>classworlds</groupId>
+          <artifactId>classworlds</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>

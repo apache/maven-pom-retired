@@ -430,6 +430,8 @@ public abstract class AbstractContinuumStoreTestCase
     {
         super.tearDown();
 
+        store.eraseDatabase();
+
         store.closeStore();
     }
 
