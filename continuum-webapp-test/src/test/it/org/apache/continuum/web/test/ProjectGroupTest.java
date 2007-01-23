@@ -45,7 +45,7 @@ public class ProjectGroupTest
         assertCellValueFromTable( "Goals", tableElement, 0, 0 );
         assertCellValueFromTable( "Arguments", tableElement, 0, 1 );
         assertCellValueFromTable( "Build File", tableElement, 0, 2 );
-        assertCellValueFromTable( "schedule", tableElement, 0, 3 );
+        assertCellValueFromTable( "Schedule", tableElement, 0, 3 );
         assertCellValueFromTable( "From", tableElement, 0, 4 );
         assertCellValueFromTable( "Build Fresh", tableElement, 0, 5 );
         assertCellValueFromTable( "Default", tableElement, 0, 6 );
