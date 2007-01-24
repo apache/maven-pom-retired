@@ -282,9 +282,9 @@ public abstract class AbstractContinuumTestCase
         assertTextPresent( "POM Url" );
         assertElementPresent( "m2PomUrl" );
         assertTextPresent( "Username" );
-        assertElementPresent( "username" );
+        assertElementPresent( "scmUsername" );
         assertTextPresent( "Password" );
-        assertElementPresent( "password" );
+        assertElementPresent( "scmPassword" );
         assertTextPresent( "Upload POM" );
         assertElementPresent( "m2PomFile" );
         assertTextPresent( "Project Group" );
@@ -361,9 +361,9 @@ public abstract class AbstractContinuumTestCase
         assertTextPresent( "POM Url" );
         assertElementPresent( "m1PomUrl" );
         assertTextPresent( "Username" );
-        assertElementPresent( "username" );
+        assertElementPresent( "scmUsername" );
         assertTextPresent( "Password" );
-        assertElementPresent( "password" );
+        assertElementPresent( "scmPassword" );
         assertTextPresent( "Upload POM" );
         assertElementPresent( "m1PomFile" );
         assertTextPresent( "Project Group" );
