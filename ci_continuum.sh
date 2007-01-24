@@ -161,7 +161,7 @@ fi
     (
       cd $DIR/continuum/continuum-plexus-runtime
 
-      mv target/continuum*.war $DEPLOY_DIR/$DIST_APP
+      mv target/continuum*.tar.gz $DEPLOY_DIR/$DIST_APP
     )
     ret=$?; if [ $ret != 0 ]; then exit $ret; fi
 
