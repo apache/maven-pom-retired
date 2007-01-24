@@ -49,10 +49,6 @@
                        alt="Error" title="Error" border="0">
                 </ww:else>
               </ww:elseif>
-              <ww:else>
-                <img src="<ww:url value='/images/inqueue.gif'/>"
-                     alt="Queued" title="Queued" border="0">
-              </ww:else>
               </td>
               <td><ww:property/></td>
             </tr>
