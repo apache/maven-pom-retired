@@ -26,6 +26,8 @@ public class AddMavenTwoProjectTest
         addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, null, true );
 
         clickLinkWithText( DEFAULT_PROJ_GRP_NAME );
+
+        removeProjectGroup( "Apache Maven", "org.apache.maven", "Maven is a software project management and comprehension tool. Based on the concept of a project object model (POM), Maven can manage a project's build, reporting and documentation from a central piece of information." );
     }
 
     public void testAddMavenTwoProjectFromRemoteSourceToNonDefaultProjectGroup()
@@ -34,10 +36,12 @@ public class AddMavenTwoProjectTest
         addProjectGroup( TEST_PROJ_GRP_NAME, TEST_PROJ_GRP_ID, TEST_PROJ_GRP_DESCRIPTION );
 
         addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, TEST_PROJ_GRP_NAME, true );
-Thread.sleep( 30000 );
+
         assertCellValueFromTable( TEST_PROJ_GRP_NAME, "ec_table", 2, 0 );
         assertCellValueFromTable( TEST_PROJ_GRP_ID, "ec_table", 2, 1 );
         assertCellValueFromTable( "1", "ec_table", 2, 2 );
+
+        removeProjectGroup( TEST_PROJ_GRP_NAME, TEST_PROJ_GRP_ID, TEST_PROJ_GRP_DESCRIPTION );
     }
 
     /**

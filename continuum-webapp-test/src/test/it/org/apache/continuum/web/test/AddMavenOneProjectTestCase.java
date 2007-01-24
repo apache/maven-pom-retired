@@ -61,12 +61,14 @@ public class AddMavenOneProjectTestCase
      * test with valid pom url
      */
     public void testValidPomUrl()
+        throws Exception
     {
         String pomUrl = "http://svn.apache.org/repos/asf/maven/continuum/trunk/continuum-webapp-test/src/test/resources/unit/maven-one-projects/valid-project.xml";
         submitAddMavenOneProjectPage( pomUrl, true );
         //Test the group is created
         assertTextPresent( "Maven One Project" );
         //TODO: add more tests
+        removeProjectGroup( "Maven One Project", "maven-one-project", "This is a sample Maven One Project." );
     }
 
     /**

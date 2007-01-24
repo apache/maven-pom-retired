@@ -82,6 +82,8 @@ public class ProjectGroupTest
         goToProjectGroupsSummaryPage();
         assertCellValueFromTable( "1", "ec_table", 1, 2 );
         assertCellValueFromTable( "0", "ec_table", 2, 2 );
+
+        removeProjectGroup( TEST_PROJ_GRP_NAME, TEST_PROJ_GRP_ID, TEST_PROJ_GRP_DESCRIPTION );
     }
 
 }
