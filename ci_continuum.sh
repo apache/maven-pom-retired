@@ -36,7 +36,8 @@ TIMESTAMP=`date +%Y%m%d.%H%M%S`
 WWW=$HOME/public_html
 DEPLOY_DIR=$WWW/builds/trunk
 DEPLOY_SITE=http://maven.zones.apache.org/~continuum/builds/trunk
-DIST=continuum-${TIMESTAMP}.war
+DIST_WAR=continuum-${TIMESTAMP}.war
+DIST_APP=continuum-${TIMESTAMP}.tar.gz
 SVN=svn
 
 M2_HOME=$HOME_DIR/maven-2.0
@@ -141,7 +142,7 @@ fi
     # Only created on success
 
     echo
-    echo "Creating continuum distribution for public consumption: ${DEPLOY_SITE}/${DIST}"
+    echo "Creating continuum distribution for public consumption: ${DEPLOY_SITE}/${DIST_WAR}"
     echo
 
     mkdir -p $DEPLOY_DIR > /dev/null 2>&1
@@ -149,7 +150,18 @@ fi
     (
       cd $DIR/continuum/continuum-webapp
 
-      mv target/continuum*.war $DEPLOY_DIR/$DIST
+      mv target/continuum*.war $DEPLOY_DIR/$DIST_WAR
+    )
+    ret=$?; if [ $ret != 0 ]; then exit $ret; fi
+
+    echo
+    echo "Creating continuum distribution for public consumption: ${DEPLOY_SITE}/${DIST_APP}"
+    echo
+
+    (
+      cd $DIR/continuum/continuum-plexus-runtime
+
+      mv target/continuum*.war $DEPLOY_DIR/$DIST_APP
     )
     ret=$?; if [ $ret != 0 ]; then exit $ret; fi
 
@@ -181,7 +193,8 @@ then
     echo "Subject: [continuum build trunk - SUCCESS - $CMD] $DATE" >> log
     echo "" >> log
     echo "Distribution:" >> log
-    echo "${DEPLOY_SITE}/${DIST}" >>log
+    echo "War: ${DEPLOY_SITE}/${DIST_WAR}" >>log
+    echo "Standalone app: ${DEPLOY_SITE}/${DIST_APP}" >>log
     rm $HOME_DIR/build_required
   fi
   echo "" >> log
