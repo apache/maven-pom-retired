@@ -34,7 +34,7 @@ public class AddMavenTwoProjectTest
         addProjectGroup( TEST_PROJ_GRP_NAME, TEST_PROJ_GRP_ID, TEST_PROJ_GRP_DESCRIPTION );
 
         addMavenTwoProject( TEST_POM_URL, TEST_POM_USERNAME, TEST_POM_PASSWORD, TEST_PROJ_GRP_NAME, true );
-
+Thread.sleep( 30000 );
         assertCellValueFromTable( TEST_PROJ_GRP_NAME, "ec_table", 2, 0 );
         assertCellValueFromTable( TEST_PROJ_GRP_ID, "ec_table", 2, 1 );
         assertCellValueFromTable( "1", "ec_table", 2, 2 );
@@ -130,11 +130,21 @@ public class AddMavenTwoProjectTest
     }
 
     /**
-     * test wiht an inaccessible pom url
+     * test with an inaccessible pom url
      */
     public void testInaccessiblePomUrl()
     {
         String pomUrl = "http://www.google.com";
+        submitAddMavenTwoProjectPage( pomUrl, false );
+        assertTextPresent( "POM file does not exist. Either the POM you specified or one of its modules does not exist." );
+    }
+
+    /**
+     * test unallowed file protocol
+     */
+    public void testNotAllowedProtocol()
+    {
+        String pomUrl = "file:///pom.xml";
         submitAddMavenTwoProjectPage( pomUrl, false );
         assertTextPresent( "The specified resource isn't a file or the protocol used isn't allowed." );
     }

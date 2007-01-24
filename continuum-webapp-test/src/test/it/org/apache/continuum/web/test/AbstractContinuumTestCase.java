@@ -297,8 +297,8 @@ public abstract class AbstractContinuumTestCase
 
         // Enter values into Add Maven Two Project fields, and submit  
         setFieldValue( "m2PomUrl", pomUrl );
-        setFieldValue( "username", username );
-        setFieldValue( "password", password );
+        setFieldValue( "scmUsername", username );
+        setFieldValue( "scmPassword", password );
 
         if ( projectGroup != null )
         {
@@ -376,8 +376,8 @@ public abstract class AbstractContinuumTestCase
 
         // Enter values into Add Maven One Project fields, and submit  
         setFieldValue( "m1PomUrl", pomUrl );
-        setFieldValue( "username", username );
-        setFieldValue( "password", password );
+        setFieldValue( "scmUsername", username );
+        setFieldValue( "scmPassword", password );
 
         if ( projectGroup != null )
         {

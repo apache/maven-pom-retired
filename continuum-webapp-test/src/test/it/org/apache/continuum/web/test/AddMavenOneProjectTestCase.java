@@ -121,11 +121,21 @@ public class AddMavenOneProjectTestCase
     }
 
     /**
-     * test wiht an inaccessible pom url
+     * test with an inaccessible pom url
      */
     public void testInaccessiblePomUrl()
     {
         String pomUrl = "http://www.google.com";
+        submitAddMavenOneProjectPage( pomUrl, false );
+        assertTextPresent( "POM file does not exist. Either the POM you specified or one of its modules does not exist." );
+    }
+
+    /**
+     * test unallowed file protocol
+     */
+    public void testNotAllowedProtocol()
+    {
+        String pomUrl = "file:///project.xml";
         submitAddMavenOneProjectPage( pomUrl, false );
         assertTextPresent( "The specified resource isn't a file or the protocol used isn't allowed." );
     }
