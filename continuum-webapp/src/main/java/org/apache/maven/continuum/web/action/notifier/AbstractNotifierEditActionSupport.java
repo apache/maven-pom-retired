@@ -74,12 +74,6 @@ public abstract class AbstractNotifierEditActionSupport
     private boolean sendOnWarning;
 
     /**
-     * Action name to redirect on SUCCESS.<p>
-     * This is set on the originating page and passed down the edit page.
-     */
-    private String targetRedirectAction;
-
-    /**
      * Obtain and return the {@link ProjectNotifier} instance for editing.
      *
      * @return {@link ProjectNotifier} instance.
@@ -256,22 +250,6 @@ public abstract class AbstractNotifierEditActionSupport
     public void setNotifierId( int notifierId )
     {
         this.notifierId = notifierId;
-    }
-
-    /**
-     * @return the targetAction
-     */
-    public String getTargetRedirectAction()
-    {
-        return targetRedirectAction;
-    }
-
-    /**
-     * @param targetAction the targetAction to set
-     */
-    public void setTargetRedirectAction( String targetAction )
-    {
-        this.targetRedirectAction = targetAction;
     }
 
     /**
