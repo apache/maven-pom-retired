@@ -120,7 +120,12 @@
             filterable="false"
             sortable="false">
     <ec:row>
-      <ec:column property="projectName" title="Project"/>
+      <ec:column property="projectName" title="Project">
+        <ww:url id="projectUrl" action="projectView" namespace="/" includeParams="none">
+          <ww:param name="projectId" value="${pageScope.buildDefinitionSummary.projectId}"/>
+        </ww:url>
+        <ww:a href="%{projectUrl}">${pageScope.buildDefinitionSummary.projectName}</ww:a>
+      </ec:column>
       <ec:column property="goals" title="projectView.buildDefinition.goals"/>
       <ec:column property="arguments" title="projectView.buildDefinition.arguments"/>
       <ec:column property="buildFile" title="projectView.buildDefinition.buildFile"/>
