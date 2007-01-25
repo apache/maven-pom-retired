@@ -692,36 +692,40 @@ dd {
 }
 
 #litem4 {
-  background: url(../images/checkingout.gif) 134px 5px no-repeat;
+  background: url(../images/workingcopy.gif) 134px 5px no-repeat;
 }
 
 #litem5 {
+  background: url(../images/checkingout.gif) 134px 5px no-repeat;
+}
+
+#litem6 {
   background: url(../images/inqueue.gif) 134px 5px no-repeat;
   padding-bottom: 8px;
 }
 
-#litem6 {
+#litem7 {
   background: url(../images/delete.gif) 134px 5px no-repeat;
 }
 
-#litem7 {
+#litem8 {
   background: url(../images/edit.gif) 134px 5px no-repeat;
 }
 
-#litem8 {
+#litem9 {
   background: url(../images/releaseproject.gif) 134px 5px no-repeat;
   padding-bottom: 8px;
 }
 
-#litem9 {
+#litem10 {
   background: url(../images/icon_success_sml.gif) 134px 5px no-repeat;
 }
 
-#litem10 {
+#litem11 {
   background: url(../images/icon_warning_sml.gif) 134px 5px no-repeat;
 }
 
-#litem11 {
+#litem12 {
   background: url(../images/icon_error_sml.gif) 134px 5px no-repeat;
 }
 

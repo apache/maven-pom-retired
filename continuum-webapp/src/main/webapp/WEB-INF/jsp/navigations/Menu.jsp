@@ -126,14 +126,15 @@
       <div id="litem1" class="body">Build Now</div>
       <div id="litem2" class="body">Build History</div>
       <div id="litem3" class="body">Build In Progress</div>
-      <div id="litem4" class="body">Checking Out Build</div>
-      <div id="litem5" class="body">Queued Build</div>
-      <div id="litem6" class="body">Delete</div>
-      <div id="litem7" class="body">Edit</div>
-      <div id="litem8" class="body">Release</div>
-      <div id="litem9" class="body">Build in Success</div>
-      <div id="litem10" class="body">Build in Failure</div>
-      <div id="litem11" class="body">Build in Error</div>
+      <div id="litem4" class="body">Working Copy</div>
+      <div id="litem5" class="body">Checking Out Build</div>
+      <div id="litem6" class="body">Queued Build</div>
+      <div id="litem7" class="body">Delete</div>
+      <div id="litem8" class="body">Edit</div>
+      <div id="litem9" class="body">Release</div>
+      <div id="litem10" class="body">Build in Success</div>
+      <div id="litem11" class="body">Build in Failure</div>
+      <div id="litem12" class="body">Build in Error</div>
     </div>
   </div>
 </div>
