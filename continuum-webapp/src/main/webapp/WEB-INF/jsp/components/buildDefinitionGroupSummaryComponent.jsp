@@ -139,13 +139,18 @@
       <ec:column property="from" title="projectView.buildDefinition.from"/>
       <ec:column property="isDefault" title="projectView.buildDefinition.default"/>
       <ec:column property="buildNowAction" title="&nbsp;" width="1%">
-        <ww:url id="buildProjectUrl" action="buildProject" namespace="/" includeParams="none">
-          <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
-          <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
-        </ww:url>
-        <ww:a href="%{buildProjectUrl}">
-          <img src="<c:url value='/images/buildnow.gif'/>" alt="Build Now" title="Build Now" border="0">
-        </ww:a>
+        <pss:ifAuthorized permission="continuum-build-group" resource="${projectGroupName}">
+          <ww:url id="buildProjectUrl" action="buildProject" namespace="/" includeParams="none">
+            <ww:param name="projectId">${pageScope.buildDefinitionSummary.projectId}</ww:param>
+            <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
+          </ww:url>
+          <ww:a href="%{buildProjectUrl}">
+            <img src="<c:url value='/images/buildnow.gif'/>" alt="<ww:text name='build'/>" title="<ww:text name='build'/>" border="0">
+          </ww:a>
+        </pss:ifAuthorized>
+        <pss:elseAuthorized>
+          <img src="<ww:url value='/images/buildnow_disabled.gif'/>" alt="<ww:text name='build'/>" title="<ww:text name='build'/>" border="0" />
+        </pss:elseAuthorized>
       </ec:column>
       <ec:column property="editAction" title="&nbsp;" width="1%">
         <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroupName}">
