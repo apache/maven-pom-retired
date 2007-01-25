@@ -345,21 +345,28 @@
           <name>id</name>
           <version>1.0.0</version>
           <required>true</required>
-          <description>id of the build definition</description>
+          <description>id of the notifier</description>
           <type>int</type>
         </field>
         <field>
           <name>projectId</name>
           <version>1.0.0</version>
           <required>false</required>
-          <description>project id of the project containing the build definition</description>
+          <description>project id of the project containing the notifier</description>
           <type>int</type>
+        </field>
+        <field>
+          <name>projectName</name>
+          <version>1.0.0</version>
+          <required>false</required>
+          <description>project name of the project containing the notifier</description>
+          <type>String</type>
         </field>
         <field>
           <name>projectGroupId</name>
           <version>1.0.0</version>
           <required>false</required>
-          <description>project group id of the project group with the build definition</description>
+          <description>project group id of the project group with the notifier</description>
           <type>int</type>
         </field>
         <field>
@@ -370,11 +377,11 @@
           <type>String</type>
         </field>
         <field>
-          <name>from</name>
+          <name>fromProject</name>
           <version>1.0.0</version>
           <required>true</required>
           <description>The origin of the notifier (pom or user).</description>
-          <type>String</type>
+          <type>boolean</type>
         </field>
         <field>
           <name>events</name>
