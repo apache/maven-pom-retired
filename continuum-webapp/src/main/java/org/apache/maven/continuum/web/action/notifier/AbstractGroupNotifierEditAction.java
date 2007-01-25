@@ -25,7 +25,7 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 
 /**
  * Common base class for all Project Group notifier edit actions.
- * 
+ *
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
  * @version $Id$
  */
@@ -38,12 +38,12 @@ public abstract class AbstractGroupNotifierEditAction
      */
     private int projectGroupId;
 
-    /** 
-     * Creates or updates the {@link ProjectNotifier} instance for the 
+    /**
+     * Creates or updates the {@link ProjectNotifier} instance for the
      * {@link ProjectGroup} here.<p>
-     * This is used by the subclasses that create/obtain an instance of 
+     * This is used by the subclasses that create/obtain an instance of
      * {@link ProjectNotifier} to be saved.
-     * 
+     *
      * @see org.apache.maven.continuum.web.action.notifier.AbstractNotifierEditActionSupport#saveNotifier(ProjectNotifier)
      */
     protected void saveNotifier( ProjectNotifier notifier )
@@ -51,18 +51,18 @@ public abstract class AbstractGroupNotifierEditAction
     {
         boolean isNew = notifier.getId() <= 0;
         if ( !isNew )
-        {            
+        {
             getContinuum().updateGroupNotifier( projectGroupId, notifier );
         }
         else
-        {         
+        {
             getContinuum().addGroupNotifier( projectGroupId, notifier );
         }
     }
 
     /**
      * @return the notifier
-     * @throws ContinuumException 
+     * @throws ContinuumException
      */
     protected ProjectNotifier getNotifier()
         throws ContinuumException

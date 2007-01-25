@@ -19,23 +19,20 @@ package org.apache.maven.continuum.web.action.notifier;
  * under the License.
  */
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * Action that deletes a {@link ProjectNotifier} of type 'Mail' from the 
+ * Action that edits a {@link ProjectNotifier} of type 'Mail' from the
  * specified {@link Project}.
- * 
+ *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id: MailNotifierEditAction.java 465060 2006-10-17 21:24:38Z jmcconnell $
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="mailProjectNotifierEdit"
  * @since 1.1
- * 
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="mailProjectNotifierEdit"
  */
 public class MailProjectNotifierEditAction
     extends AbstractProjectNotifierEditAction

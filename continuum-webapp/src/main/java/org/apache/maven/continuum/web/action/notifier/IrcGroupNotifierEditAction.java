@@ -26,16 +26,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Action that deletes a {@link ProjectNotifier} of type 'IRC' from the 
+ * Action that edits a {@link ProjectNotifier} of type 'IRC' from the
  * specified {@link ProjectGroup}.
- * 
+ *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id: IrcNotifierEditAction.java 465060 2006-10-17 21:24:38Z jmcconnell $
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="ircGroupNotifierEdit"
  * @since 1.1
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="ircGroupNotifierEdit"
  */
 public class IrcGroupNotifierEditAction
     extends AbstractGroupNotifierEditAction

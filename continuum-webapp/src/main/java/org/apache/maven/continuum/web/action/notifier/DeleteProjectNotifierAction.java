@@ -28,14 +28,14 @@ import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 import java.util.Map;
 
 /**
- * Action that deletes a {@link ProjectNotifier} of type 'IRC' from the specified {@link ProjectGroup}.
- * 
+ * Action that deletes a {@link ProjectNotifier} from a specified {@link Project}.
+ *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id: DeleteNotifierAction.java 467122 2006-10-23 20:50:19Z jmcconnell $
- * 
  * @plexus.component role="com.opensymphony.xwork.Action" role-hint="deleteProjectNotifier"
  */
-public class DeleteProjectNotifierAction extends ContinuumActionSupport
+public class DeleteProjectNotifierAction
+    extends ContinuumActionSupport
 {
 
     private int projectId;
@@ -48,43 +48,43 @@ public class DeleteProjectNotifierAction extends ContinuumActionSupport
     private int notifierId;
 
     private String notifierType;
-    
-    private String recipient;    
 
-	public String execute() throws ContinuumException
+    private String recipient;
+
+    public String execute()
+        throws ContinuumException
     {
         getContinuum().removeNotifier( projectId, notifierId );
         return SUCCESS;
     }
 
     public String doDefault()
-    	throws ContinuumException
+        throws ContinuumException
     {
-    	ProjectNotifier notifier = getContinuum().getNotifier( projectId, notifierId );
-    	
-    	Map configuration = notifier.getConfiguration();
-    	
-    	notifierType = notifier.getType();
-    	
-    	if ( ( "mail".equals( notifierType ) ) || 
-    		 ( "msn".equals( notifierType ) ) ||
-    		 ( "jabber".equals( notifierType ) ) )
-    	{
-    		recipient = (String) configuration.get( "address" );
-    	}
-    	
-    	if ( "irc".equals( notifierType ) )
-    	{
-    		recipient = (String) configuration.get( "host" );
-    		
-    		if ( configuration.get( "port" ) != null )
-    		{
-    			recipient = recipient + ":" + (String) configuration.get( "port" );
-    		}
-        		
-    		recipient = recipient + ":" + (String) configuration.get( "channel" );
-		}
-    	
+        ProjectNotifier notifier = getContinuum().getNotifier( projectId, notifierId );
+
+        Map configuration = notifier.getConfiguration();
+
+        notifierType = notifier.getType();
+
+        if ( ( "mail".equals( notifierType ) ) || ( "msn".equals( notifierType ) ) ||
+            ( "jabber".equals( notifierType ) ) )
+        {
+            recipient = (String) configuration.get( "address" );
+        }
+
+        if ( "irc".equals( notifierType ) )
+        {
+            recipient = (String) configuration.get( "host" );
+
+            if ( configuration.get( "port" ) != null )
+            {
+                recipient = recipient + ":" + (String) configuration.get( "port" );
+            }
+
+            recipient = recipient + ":" + (String) configuration.get( "channel" );
+        }
+
         return "delete";
     }
 
@@ -127,15 +127,15 @@ public class DeleteProjectNotifierAction extends ContinuumActionSupport
     {
         this.projectGroupId = projectGroupId;
     }
-    
+
     public String getRecipient()
     {
-		return recipient;
-	}
+        return recipient;
+    }
 
-	public void setRecipient(String recipient)
-	{
-		this.recipient = recipient;
-	}
+    public void setRecipient( String recipient )
+    {
+        this.recipient = recipient;
+    }
 
 }

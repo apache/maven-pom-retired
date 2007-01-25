@@ -26,14 +26,11 @@ import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
 /**
  * Action to add a {@link ProjectNotifier} for a specified {@link Project}.
- * 
+ *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id: AddNotifierAction.java 466640 2006-10-22 13:11:30Z jmcconnell $
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="addProjectNotifier"
  * @since 1.1
- *
- * @plexus.component 
- *   role="com.opensymphony.xwork.Action" 
- *   role-hint="addProjectNotifier"
  */
 public class AddProjectNotifierAction
     extends ContinuumActionSupport
@@ -42,7 +39,7 @@ public class AddProjectNotifierAction
      * Identifier for the {@link Project} instance.
      */
     private int projectId;
-    
+
     /**
      * Identifier for the {@link ProjectGroup} instance that the current {@link Project} is a member of.
      */
@@ -56,6 +53,7 @@ public class AddProjectNotifierAction
     /**
      * Default method executed when no specific method is specified
      * for invocation.
+     *
      * @return result as a String value to determines the control flow.
      */
     public String execute()
@@ -73,6 +71,7 @@ public class AddProjectNotifierAction
 
     /**
      * Returns the type for the {@link ProjectNotifier}.
+     *
      * @return Notifier type as String.
      */
     public String getNotifierType()
@@ -82,7 +81,7 @@ public class AddProjectNotifierAction
 
     /**
      * Sets the type for the {@link ProjectNotifier}.
-     * 
+     *
      * @param notifierType Notifier type to set.
      */
     public void setNotifierType( String notifierType )
@@ -92,7 +91,7 @@ public class AddProjectNotifierAction
 
     /**
      * Identifier for the Project being edited.
-     * 
+     *
      * @return project id.
      */
     public int getProjectId()
@@ -101,9 +100,9 @@ public class AddProjectNotifierAction
     }
 
     /**
-     * Sets the identifier for the Project to be edited for 
+     * Sets the identifier for the Project to be edited for
      * project notifiers.
-     * 
+     *
      * @param projectId
      */
     public void setProjectId( int projectId )
@@ -112,8 +111,9 @@ public class AddProjectNotifierAction
     }
 
     /**
-     * Returns the identifier for the {@link ProjectGroup} that the 
+     * Returns the identifier for the {@link ProjectGroup} that the
      * {@link Project} is a member of.
+     *
      * @return the projectGroupId
      */
     public int getProjectGroupId()
@@ -122,13 +122,14 @@ public class AddProjectNotifierAction
     }
 
     /**
-     * Sets the identifier for the {@link ProjectGroup} that the 
+     * Sets the identifier for the {@link ProjectGroup} that the
      * {@link Project} is a member of.
+     *
      * @param projectGroupId the identifier to set
      */
     public void setProjectGroupId( int projectGroupId )
     {
         this.projectGroupId = projectGroupId;
     }
-    
+
 }

@@ -26,15 +26,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Action that deletes a {@link ProjectNotifier} of type 'MSN' from the 
+ * Action that edits a {@link ProjectNotifier} of type 'MSN' from the
  * specified {@link ProjectGroup}.
- * 
+ *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id: MsnNotifierEditAction.java 465060 2006-10-17 21:24:38Z jmcconnell $
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="msnGroupNotifierEdit"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="msnGroupNotifierEdit"
  */
 public class MsnGroupNotifierEditAction
     extends AbstractGroupNotifierEditAction

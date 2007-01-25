@@ -19,34 +19,32 @@ package org.apache.maven.continuum.web.action.notifier;
  * under the License.
  */
 
-import java.util.Map;
-
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 
+import java.util.Map;
+
 /**
- * Action to delete a {@link ProjectNotifier} instance from a 
+ * Action to delete a {@link ProjectNotifier} instance from a
  * specified {@link ProjectGroup}.
- * 
+ *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id: DeleteNotifierAction.java 467122 2006-10-23 20:50:19Z jmcconnell $
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="deleteGroupNotifier"
  * @since 1.1
- * @plexus.component 
- *   role="com.opensymphony.xwork.Action"  
- *   role-hint="deleteGroupNotifier"
  */
 public class DeleteGroupNotifierAction
     extends ContinuumActionSupport
 {
 
     private int projectGroupId;
-    
+
     private int notifierId;
 
     private String notifierType;
-    
+
     private String recipient;
 
     public String execute()
@@ -60,30 +58,29 @@ public class DeleteGroupNotifierAction
         throws ContinuumException
     {
         ProjectNotifier notifier = getContinuum().getGroupNotifier( projectGroupId, notifierId );
-        
+
         Map configuration = notifier.getConfiguration();
-        
+
         notifierType = notifier.getType();
-        
-        if ( ( "mail".equals( notifierType ) ) || 
-             ( "msn".equals( notifierType ) ) ||
-             ( "jabber".equals( notifierType ) ) )
+
+        if ( ( "mail".equals( notifierType ) ) || ( "msn".equals( notifierType ) ) ||
+            ( "jabber".equals( notifierType ) ) )
         {
             recipient = (String) configuration.get( "address" );
         }
-        
+
         if ( "irc".equals( notifierType ) )
         {
             recipient = (String) configuration.get( "host" );
-            
+
             if ( configuration.get( "port" ) != null )
             {
                 recipient = recipient + ":" + (String) configuration.get( "port" );
             }
-                
+
             recipient = recipient + ":" + (String) configuration.get( "channel" );
         }
-        
+
         return "delete";
     }
 
@@ -122,7 +119,7 @@ public class DeleteGroupNotifierAction
     {
         this.projectGroupId = projectGroupId;
     }
-    
+
     public int getProjectId()
     {
         //flags that this is a group notifier

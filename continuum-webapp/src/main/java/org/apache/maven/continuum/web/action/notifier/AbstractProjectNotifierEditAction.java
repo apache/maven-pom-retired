@@ -36,7 +36,7 @@ public abstract class AbstractProjectNotifierEditAction
      * Identifier for the {@link Project} who's {@link ProjectNotifier} is being edited.
      */
     private int projectId;
-    
+
     /**
      * Identifier for the {@link ProjectGroup} instance that the current {@link Project} is a member of.
      */
@@ -44,9 +44,9 @@ public abstract class AbstractProjectNotifierEditAction
 
     /**
      * Save the notifier for the {@link Project} here.<p>
-     * This is used by the subclasses that create/obtain an instance of 
+     * This is used by the subclasses that create/obtain an instance of
      * {@link ProjectNotifier} to be saved.
-     * 
+     *
      * @see org.apache.maven.continuum.web.action.notifier.AbstractNotifierEditActionSupport#saveNotifier(ProjectNotifier)
      */
     protected void saveNotifier( ProjectNotifier notifier )
@@ -74,7 +74,7 @@ public abstract class AbstractProjectNotifierEditAction
 
     /**
      * Returns the identifier for the current project.
-     * 
+     *
      * @return current project's id.
      */
     public int getProjectId()
@@ -84,17 +84,18 @@ public abstract class AbstractProjectNotifierEditAction
 
     /**
      * Sets the id of the current project for this action.
-     * 
+     *
      * @param projectId current project's id.
      */
     public void setProjectId( int projectId )
     {
         this.projectId = projectId;
     }
-    
+
     /**
-     * Returns the identifier for the {@link ProjectGroup} that the 
+     * Returns the identifier for the {@link ProjectGroup} that the
      * {@link Project} is a member of.
+     *
      * @return the projectGroupId
      */
     public int getProjectGroupId()
@@ -103,8 +104,9 @@ public abstract class AbstractProjectNotifierEditAction
     }
 
     /**
-     * Sets the identifier for the {@link ProjectGroup} that the 
+     * Sets the identifier for the {@link ProjectGroup} that the
      * {@link Project} is a member of.
+     *
      * @param projectGroupId the identifier to set
      */
     public void setProjectGroupId( int projectGroupId )

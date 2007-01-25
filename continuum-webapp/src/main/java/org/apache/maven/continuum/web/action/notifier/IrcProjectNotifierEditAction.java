@@ -27,10 +27,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="ircProjectNotifierEdit"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="ircProjectNotifierEdit"
  */
 public class IrcProjectNotifierEditAction
     extends AbstractProjectNotifierEditAction

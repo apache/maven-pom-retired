@@ -19,33 +19,30 @@ package org.apache.maven.continuum.web.action.notifier;
  * under the License.
  */
 
-import java.util.Map;
-import java.util.HashMap;
-
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * Action that deletes a {@link ProjectNotifier} of type 'Wagon' from the 
+ * Action that edits a {@link ProjectNotifier} of type 'Wagon' from the
  * specified {@link ProjectGroup}.
- * 
+ *
  * @author <a href="mailto:hisidro@exist.com">Henry Isidro</a>
- * 
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="wagonGroupNotifierEdit"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="wagonGroupNotifierEdit"
  */
 
 public class WagonGroupNotifierEditAction
     extends AbstractGroupNotifierEditAction
 {
     private String url;
-    
+
     protected void initConfiguration( Map configuration )
-    {     
+    {
         url = (String) configuration.get( "url" );
     }
-    
+
     protected void setNotifierConfiguration( ProjectNotifier notifier )
     {
         HashMap configuration = new HashMap();
@@ -55,12 +52,12 @@ public class WagonGroupNotifierEditAction
         notifier.setConfiguration( configuration );
     }
 
-    public String getUrl() 
+    public String getUrl()
     {
         return url;
     }
 
-    public void setUrl( String url ) 
+    public void setUrl( String url )
     {
         this.url = url;
     }
