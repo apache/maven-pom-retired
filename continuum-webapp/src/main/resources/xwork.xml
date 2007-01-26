@@ -34,6 +34,7 @@
       <interceptor name="pssForceAdminUser" class="pssForceAdminUserInterceptor"/>
       <interceptor name="pssSecureActions" class="pssSecureActionInterceptor"/>
       <interceptor name="pssAutoLogin" class="pssAutoLoginInterceptor"/>
+      <interceptor name="pssPolicyEnforcement" class="pssPolicyEnforcementInterceptor"/>
       <interceptor name="pssEnvironmentChecker" class="pssEnvironmentCheckInterceptor"/>
 
       <interceptor-stack name="configuredContinuumStack">
@@ -43,6 +44,7 @@
         <interceptor-ref name="pssForceAdminUser"/>
         <interceptor-ref name="pssAutoLogin"/>
         <interceptor-ref name="pssSecureActions"/>
+        <interceptor-ref name="pssPolicyEnforcement"/>
         <interceptor-ref name="continuumConfigurationCheck"/>
         <interceptor-ref name="validation">
           <param name="excludeMethods">input,back,cancel,browse,edit</param>
@@ -58,6 +60,7 @@
         <interceptor-ref name="pssEnvironmentChecker"/>
         <interceptor-ref name="pssForceAdminUser"/>
         <interceptor-ref name="pssAutoLogin"/>
+        <interceptor-ref name="pssPolicyEnforcement"/>
         <interceptor-ref name="pssSecureActions"/>
         <interceptor-ref name="validation">
           <param name="excludeMethods">input,back,cancel,browse,edit</param>
