@@ -73,7 +73,14 @@
                             <ww:textfield label="%{getText('projectScmTag.label')}" name="projectScmTag">
                                 <ww:param name="desc"><p><ww:text name="projectScmTag.message"/></p></ww:param>
                             </ww:textfield>
-                            <ww:select label="%{getText('projectGroup.name.label')}" name="selectedProjectGroup" list="projectGroups" listKey="id" listValue="name"/>
+                            <ww:if test="disableGroupSelection == true">
+                              <ww:hidden name="selectedProjectGroup"/>
+                              <ww:hidden name="disableGroupSelection"/>
+                              <ww:textfield label="%{getText('projectGroup.name.label')}" name="projectGroupName" disabled="true"/>
+                            </ww:if>
+                            <ww:else>
+                              <ww:select label="%{getText('projectGroup.name.label')}" name="selectedProjectGroup" list="projectGroups" listKey="id" listValue="name"/>
+                            </ww:else>
                           </tbody>
                         </table>
                         <div class="functnbar3">

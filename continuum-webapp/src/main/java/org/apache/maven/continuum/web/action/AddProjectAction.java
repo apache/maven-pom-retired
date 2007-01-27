@@ -64,6 +64,10 @@ public class AddProjectAction
 
     private int selectedProjectGroup;
 
+    private String projectGroupName;
+
+    private boolean disableGroupSelection;
+
     public void validate()
     {
         boolean projectNameAlreadyExist = false;
@@ -132,8 +136,11 @@ public class AddProjectAction
             projectGroups.add( pg );
         }
 
-        selectedProjectGroup = getContinuum().getProjectGroupByGroupId(
-            Continuum.DEFAULT_PROJECT_GROUP_GROUP_ID ).getId();
+        if ( !disableGroupSelection )
+        {
+            selectedProjectGroup = getContinuum().getProjectGroupByGroupId(
+                Continuum.DEFAULT_PROJECT_GROUP_GROUP_ID ).getId();
+        }
 
         return SUCCESS;
     }
@@ -237,5 +244,25 @@ public class AddProjectAction
     public void setSelectedProjectGroup( int selectedProjectGroup )
     {
         this.selectedProjectGroup = selectedProjectGroup;
+    }
+
+    public boolean isDisableGroupSelection()
+    {
+        return disableGroupSelection;
+    }
+
+    public void setDisableGroupSelection( boolean disableGroupSelection )
+    {
+        this.disableGroupSelection = disableGroupSelection;
+    }
+
+    public String getProjectGroupName()
+    {
+        return projectGroupName;
+    }
+
+    public void setProjectGroupName( String projectGroupName )
+    {
+        this.projectGroupName = projectGroupName;
     }
 }

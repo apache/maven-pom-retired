@@ -30,6 +30,38 @@
     <title>
       <ww:text name="projectGroup.page.title"/>
     </title>
+    <script type="text/javascript">
+      function goToAddProject()
+      {
+        var urls = document.getElementById( "projectTypes" );
+        var index = urls.selectedIndex;
+
+        if ( index > 0 )
+        {
+          var form = document.forms[ "addNewProject" ];
+          form.action = urls[ index ].value;
+
+          if ( index == 3 )
+          {
+            form.projectType.value = "ant";
+          }
+          else if ( index == 4 )
+          {
+            form.projectType.value = "shell";
+          }
+          else
+          {
+            form.projectType.value = "";
+          }
+
+          form.submit();
+        }
+        else
+        {
+          alert( "Please choose a project type to add from the dropdown list." );
+        }
+      }
+    </script>
   </head>
   <body>
   <div id="h3">
@@ -75,44 +107,39 @@
                 </form>
               </pss:ifAuthorized>
             </td>
+            <td>
+              <pss:ifAnyAuthorized permissions="continuum-add-project-to-group" resource="${projectGroup.name}">
+                <ww:form name="addNewProject">
+                  <ww:hidden name="disableGroupSelection" value="true"/>
+                  <ww:hidden name="selectedProjectGroup" value="${projectGroup.id}"/>
+                  <ww:hidden name="projectGroupName" value="${projectGroup.name}"/>
+                  <ww:hidden name="projectType" value=""/>
+                </ww:form>
+
+                <c:url var="addM2ProjectUrl" value="/addMavenTwoProject!input.action" />
+                <c:url var="addM1ProjectUrl" value="/addMavenOneProject!input.action" />
+                <c:url var="addProjectUrl" value="/addProjectInput.action" />
+
+                <select id="projectTypes">
+                  <option value="">Add New Project</option>
+                  <option value="${addM2ProjectUrl}">Add M2 Project</option>
+                  <option value="${addM1ProjectUrl}">Add M1 Project</option>
+                  <option value="${addProjectUrl}">Add Ant Project</option>
+                  <option value="${addProjectUrl}">Add Shell Project</option>
+                </select>
+
+                <input type="button" value="Add" onclick="goToAddProject()"/>
+              </pss:ifAnyAuthorized>
+            </td>
           </tr>
         </table>
       </div>
     </pss:ifAnyAuthorized>
-   
+
     <ww:action name="projectSummary" executeResult="true" namespace="component">
       <ww:param name="projectGroupId" value="%{projectGroupId}"/>
       <ww:param name="projectGroupName" value="%{projectGroup.name}"/>
     </ww:action>
-    
-    <pss:ifAnyAuthorized permissions="continuum-add-project-to-group" resource="${projectGroup.name}">
-      <div class="functnbar3">
-        <c:url var="addM2ProjectUrl" value="/addMavenTwoProject!default.action">
-          <c:param name="disableGroupSelection" value="true"/>
-          <c:param name="selectedProjectGroup" value="${projectGroup.id}"/>
-          <c:param name="projectGroupName" value="${projectGroup.name}"/>
-        </c:url>
-        <c:url var="addM1ProjectUrl" value="/addMavenOneProject!default.action">
-          <c:param name="disableGroupSelection" value="true"/>
-          <c:param name="selectedProjectGroup" value="${projectGroup.id}"/>
-          <c:param name="projectGroupName" value="${projectGroup.name}"/>
-        </c:url>
-        <table>
-          <tr>
-            <td>
-              <form action="${addM2ProjectUrl}" method="post">
-                <input type="submit" name="addM2Project" value="<ww:text name="add.m2.project.section.title"/>"/>
-              </form>
-            </td>
-            <td>
-              <form action="${addM1ProjectUrl}" method="post">
-                <input type="submit" name="addM1Project" value="<ww:text name="add.m1.project.section.title"/>"/>
-              </form>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </pss:ifAnyAuthorized>
 
   </div>
   </body>
