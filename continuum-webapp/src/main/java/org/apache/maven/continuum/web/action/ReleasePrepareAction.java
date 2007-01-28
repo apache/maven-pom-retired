@@ -301,8 +301,12 @@ public class ReleasePrepareAction
             p.setProperty( "password", scmPassword );
         }
 
+        if ( StringUtils.isNotEmpty( scmTagBase ) )
+        {
+            p.setProperty( "tagBase", scmTagBase );
+        }
+
         p.setProperty( "tag", scmTag );
-        p.setProperty( "tagBase", scmTagBase );
         p.setProperty( "prepareGoals", prepareGoals );
 
         return p;
@@ -450,6 +454,6 @@ public class ReleasePrepareAction
 
     public void validate()
     {
-        
+
     }
 }
