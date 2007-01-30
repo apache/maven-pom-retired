@@ -24,7 +24,7 @@ import org.apache.maven.shared.release.ReleaseExecutionException;
 import org.apache.maven.shared.release.ReleaseFailureException;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Edwin Punzalan
@@ -35,12 +35,10 @@ public class RollbackReleaseTaskExecutor
     protected void execute( ReleaseProjectTask releaseTask )
         throws TaskExecutionException
     {
-        List reactorProjects = getReactorProjects( releaseTask );
-
         try
         {
-            releasePluginManager.rollback( releaseTask.getDescriptor(), settings, reactorProjects,
-                                           releaseTask.getListener() );
+            releaseManager.rollback( releaseTask.getDescriptor(), settings,
+                                     new ArrayList(), releaseTask.getListener() );
         }
         catch ( ReleaseExecutionException e )
         {

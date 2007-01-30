@@ -1,4 +1,4 @@
-package org.apache.maven.continuum.release.executors;
+package org.apache.maven.continuum.release.phase;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,116 +19,83 @@ package org.apache.maven.continuum.release.executors;
  * under the License.
  */
 
-import org.apache.maven.continuum.release.tasks.PerformReleaseProjectTask;
-import org.apache.maven.continuum.release.tasks.ReleaseProjectTask;
-import org.apache.maven.continuum.release.ContinuumReleaseException;
-import org.apache.maven.shared.release.ReleaseManagerListener;
+import org.apache.maven.shared.release.phase.AbstractReleasePhase;
 import org.apache.maven.shared.release.ReleaseResult;
+import org.apache.maven.shared.release.ReleaseExecutionException;
+import org.apache.maven.shared.release.ReleaseFailureException;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
+import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.MavenSettingsBuilder;
+import org.apache.maven.continuum.release.ContinuumReleaseException;
+import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.ProjectSorter;
 import org.apache.maven.project.DuplicateProjectException;
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.repository.DefaultArtifactRepository;
+import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
-import org.apache.maven.settings.Settings;
-import org.apache.maven.profiles.DefaultProfileManager;
 import org.apache.maven.profiles.ProfileManager;
-import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
+import org.apache.maven.profiles.DefaultProfileManager;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
-import org.codehaus.plexus.context.Context;
-import org.codehaus.plexus.context.ContextException;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.PlexusConstants;
+import org.codehaus.plexus.context.Context;
+import org.codehaus.plexus.context.ContextException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.io.File;
+import java.io.IOException;
 
 /**
- *
+ * Generate the reactor projects
  *
  * @author Edwin Punzalan
  */
-public class PerformReleaseTaskExecutor
-    extends AbstractReleaseTaskExecutor
+public class GenerateReactorProjectsPhase
+    extends AbstractReleasePhase
     implements Contextualizable
 {
-    /**
-     * @plexus.requirement
-     */
     private MavenProjectBuilder projectBuilder;
 
-    /**
-     * @plexus.configuration
-     */
-    private String localRepository;
-
-    private ProfileManager profileManager;
+    private MavenSettingsBuilder settingsBuilder;
 
     private PlexusContainer container;
 
-    public void execute( ReleaseProjectTask task )
-        throws TaskExecutionException
+    private String localRepository;
+
+    public ReleaseResult execute( ReleaseDescriptor releaseDescriptor, Settings settings, List reactorProjects )
+        throws ReleaseExecutionException, ReleaseFailureException
     {
-        PerformReleaseProjectTask performTask = (PerformReleaseProjectTask) task;
+        ReleaseResult result = new ReleaseResult();
 
-        ReleaseManagerListener listener = performTask.getListener();
-
-        ReleaseDescriptor descriptor = performTask.getDescriptor();
-
-        List reactorProjects = getReactorProjects( performTask );
-
-        ReleaseResult result =
-            releaseManager.performWithResult( descriptor, settings, reactorProjects,
-                                                    performTask.getBuildDirectory(), performTask.getGoals(),
-                                                    performTask.isUseReleaseProfile(), listener );
-
-        //override to show the actual start time
-        result.setStartTime( getStartTime() );
-
-        if ( result.getResultCode() == ReleaseResult.SUCCESS )
-        {
-            continuumReleaseManager.getPreparedReleases().remove( performTask.getReleaseId() );
-        }
-
-        continuumReleaseManager.getReleaseResults().put( performTask.getReleaseId(), result );
-    }
-
-    protected List getReactorProjects( ReleaseProjectTask releaseTask )
-        throws TaskExecutionException
-    {
-        List reactorProjects;
         try
         {
-            reactorProjects = getReactorProjects( releaseTask.getDescriptor() );
+            reactorProjects.addAll( getReactorProjects( releaseDescriptor ) );
         }
         catch ( ContinuumReleaseException e )
         {
-            ReleaseResult result = createReleaseResult();
-
-            result.appendError( e );
-
-            continuumReleaseManager.getReleaseResults().put( releaseTask.getReleaseId(), result );
-
-            releaseTask.getListener().error( e.getMessage() );
-
-            throw new TaskExecutionException( "Failed to build reactor projects.", e );
+            throw new ReleaseExecutionException( "Unable to get reactor projects: " + e.getMessage(), e );
         }
 
-        return reactorProjects;
+        result.setResultCode( ReleaseResult.SUCCESS );
+
+        return result;
     }
 
-    /**
-     * @todo remove and use generate-reactor-projects phase
-     */
-    protected List getReactorProjects( ReleaseDescriptor descriptor )
+    public ReleaseResult simulate( ReleaseDescriptor releaseDescriptor, Settings settings, List reactorProjects )
+        throws ReleaseExecutionException, ReleaseFailureException
+    {
+        return execute( releaseDescriptor, settings, reactorProjects );
+    }
+
+    private List getReactorProjects( ReleaseDescriptor descriptor )
         throws ContinuumReleaseException
     {
         List reactorProjects = new ArrayList();
@@ -137,7 +104,7 @@ public class PerformReleaseTaskExecutor
         try
         {
             project = projectBuilder.buildWithDependencies( getProjectDescriptorFile( descriptor ),
-                                            getLocalRepository(), getProfileManager( settings ) );
+                                            getLocalRepository(), getProfileManager( getSettings() ) );
 
             reactorProjects.add( project );
         }
@@ -163,7 +130,7 @@ public class PerformReleaseTaskExecutor
             try
             {
                 MavenProject reactorProject = projectBuilder.build( pomFile, getLocalRepository(),
-                                                                    getProfileManager( settings ) );
+                                                                    getProfileManager( getSettings() ) );
 
                 reactorProjects.add( reactorProject );
             }
@@ -189,7 +156,6 @@ public class PerformReleaseTaskExecutor
         return reactorProjects;
     }
 
-
     private File getProjectDescriptorFile( ReleaseDescriptor descriptor )
     {
         String parentPath = descriptor.getWorkingDirectory();
@@ -211,12 +177,24 @@ public class PerformReleaseTaskExecutor
 
     private ProfileManager getProfileManager( Settings settings )
     {
-        if ( profileManager == null )
-        {
-            profileManager = new DefaultProfileManager( container, settings );
-        }
+        return new DefaultProfileManager( container, settings );
+    }
 
-        return profileManager;
+    private Settings getSettings()
+        throws ContinuumReleaseException
+    {
+        try
+        {
+            return settingsBuilder.buildSettings();
+        }
+        catch ( IOException e )
+        {
+            throw new ContinuumReleaseException( "Failed to get Maven Settings.", e );
+        }
+        catch ( XmlPullParserException e )
+        {
+            throw new ContinuumReleaseException( "Failed to get Maven Settings.", e );
+        }
     }
 
     public void contextualize( Context context )

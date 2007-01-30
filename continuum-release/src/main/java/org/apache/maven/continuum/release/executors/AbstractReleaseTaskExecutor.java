@@ -19,47 +19,24 @@ package org.apache.maven.continuum.release.executors;
  * under the License.
  */
 
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.DefaultArtifactRepository;
-import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.continuum.release.ContinuumReleaseException;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.apache.maven.continuum.release.tasks.ReleaseProjectTask;
-import org.apache.maven.profiles.DefaultProfileManager;
-import org.apache.maven.profiles.ProfileManager;
-import org.apache.maven.project.DuplicateProjectException;
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.MavenProjectBuilder;
-import org.apache.maven.project.ProjectBuildingException;
-import org.apache.maven.project.ProjectSorter;
 import org.apache.maven.settings.MavenSettingsBuilder;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.shared.release.ReleaseManager;
 import org.apache.maven.shared.release.ReleaseResult;
-import org.apache.maven.shared.release.config.ReleaseDescriptor;
-import org.codehaus.plexus.PlexusConstants;
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.context.Context;
-import org.codehaus.plexus.context.ContextException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
-import org.codehaus.plexus.util.dag.CycleDetectedException;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author Edwin Punzalan
  */
 public abstract class AbstractReleaseTaskExecutor
-    implements ReleaseTaskExecutor, Contextualizable
+    implements ReleaseTaskExecutor
 {
     /**
      * @plexus.requirement
@@ -69,26 +46,12 @@ public abstract class AbstractReleaseTaskExecutor
     /**
      * @plexus.requirement
      */
-    protected ReleaseManager releasePluginManager;
-
-    /**
-     * @plexus.requirement
-     */
-    private MavenProjectBuilder projectBuilder;
+    protected ReleaseManager releaseManager;
 
     /**
      * @plexus.requirement
      */
     private MavenSettingsBuilder settingsBuilder;
-
-    /**
-     * @plexus.configuration
-     */
-    private String localRepository;
-
-    private ProfileManager profileManager;
-
-    private PlexusContainer container;
 
     protected Settings settings;
 
@@ -132,91 +95,6 @@ public abstract class AbstractReleaseTaskExecutor
     protected abstract void execute( ReleaseProjectTask releaseTask )
         throws TaskExecutionException;
 
-    protected List getReactorProjects( ReleaseProjectTask releaseTask )
-        throws TaskExecutionException
-    {
-        List reactorProjects;
-        try
-        {
-            reactorProjects = getReactorProjects( releaseTask.getDescriptor() );
-        }
-        catch ( ContinuumReleaseException e )
-        {
-            ReleaseResult result = createReleaseResult();
-
-            result.appendError( e );
-
-            continuumReleaseManager.getReleaseResults().put( releaseTask.getReleaseId(), result );
-
-            releaseTask.getListener().error( e.getMessage() );
-
-            throw new TaskExecutionException( "Failed to build reactor projects.", e );
-        }
-
-        return reactorProjects;
-    }
-
-    protected List getReactorProjects( ReleaseDescriptor descriptor )
-        throws ContinuumReleaseException
-    {
-        List reactorProjects = new ArrayList();
-
-        MavenProject project;
-        try
-        {
-            project = projectBuilder.buildWithDependencies( getProjectDescriptorFile( descriptor ),
-                                            getLocalRepository(), getProfileManager( settings ) );
-
-            reactorProjects.add( project );
-        }
-        catch ( ProjectBuildingException e )
-        {
-            throw new ContinuumReleaseException( "Failed to build project.", e );
-        }
-        catch ( ArtifactNotFoundException e )
-        {
-            throw new ContinuumReleaseException( "Failed to build project.", e );
-        }
-        catch ( ArtifactResolutionException e )
-        {
-            throw new ContinuumReleaseException( "Failed to build project.", e );
-        }
-
-        for( Iterator modules = project.getModules().iterator(); modules.hasNext(); )
-        {
-            String moduleDir = modules.next().toString();
-
-            File pomFile = new File( project.getBasedir(), moduleDir + "/pom.xml" );
-
-            try
-            {
-                MavenProject reactorProject = projectBuilder.build( pomFile, getLocalRepository(),
-                                                                    getProfileManager( settings ) );
-
-                reactorProjects.add( reactorProject );
-            }
-            catch ( ProjectBuildingException e )
-            {
-                throw new ContinuumReleaseException( "Failed to build project.", e );
-            }
-        }
-
-        try
-        {
-            reactorProjects = new ProjectSorter( reactorProjects ).getSortedProjects();
-        }
-        catch ( CycleDetectedException e )
-        {
-            throw new ContinuumReleaseException( "Failed to sort projects.", e );
-        }
-        catch ( DuplicateProjectException e )
-        {
-            throw new ContinuumReleaseException( "Failed to sort projects.", e );
-        }
-
-        return reactorProjects;
-    }
-
     private Settings getSettings()
         throws ContinuumReleaseException
     {
@@ -234,41 +112,6 @@ public abstract class AbstractReleaseTaskExecutor
         }
 
         return settings;
-    }
-
-    private File getProjectDescriptorFile( ReleaseDescriptor descriptor )
-    {
-        String parentPath = descriptor.getWorkingDirectory();
-
-        String pomFilename = descriptor.getPomFileName();
-        if ( pomFilename == null )
-        {
-            pomFilename = "pom.xml";
-        }
-
-        return new File( parentPath, pomFilename );
-    }
-
-    private ArtifactRepository getLocalRepository()
-    {
-        return new DefaultArtifactRepository( "local-repository", "file://" + localRepository,
-                                                                                   new DefaultRepositoryLayout() );
-    }
-
-    private ProfileManager getProfileManager( Settings settings )
-    {
-        if ( profileManager == null )
-        {
-            profileManager = new DefaultProfileManager( container, settings );
-        }
-
-        return profileManager;
-    }
-
-    public void contextualize( Context context )
-        throws ContextException
-    {
-        container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
     }
 
     protected ReleaseResult createReleaseResult()

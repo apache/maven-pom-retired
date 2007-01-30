@@ -25,7 +25,7 @@ import org.apache.maven.shared.release.ReleaseResult;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
 import org.codehaus.plexus.taskqueue.execution.TaskExecutionException;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Edwin Punzalan
@@ -40,10 +40,8 @@ public class PrepareReleaseTaskExecutor
 
         ReleaseDescriptor descriptor = prepareTask.getDescriptor();
 
-        List reactorProjects = getReactorProjects( prepareTask );
-
-        ReleaseResult result = releasePluginManager.prepareWithResult( descriptor, settings, reactorProjects,
-                                                                       false, false, prepareTask.getListener() );
+        ReleaseResult result = releaseManager.prepareWithResult( descriptor, settings, new ArrayList(),
+                                                                 false, false, prepareTask.getListener() );
 
         //override to show the actual start time
         result.setStartTime( getStartTime() );
