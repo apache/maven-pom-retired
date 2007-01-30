@@ -131,6 +131,10 @@
         <param name="actionName">addadmin</param>
         <param name="namespace">/security</param>
       </result>
+      <result name="must-change-password" type="redirect-action">
+        <param name="actionName">password</param>
+        <param name="namespace">/security</param>
+      </result>
     </global-results>
 
     <global-exception-mappings>
@@ -563,11 +567,11 @@
       <result name="input">/WEB-INF/jsp/notifier/notifierMsn.jsp</result>
       <result name="success" type="chain">projectView</result>
     </action>
-    
+
     <action name="wagonProjectNotifierEdit" class="wagonProjectNotifierEdit" method="edit">
       <result name="success">/WEB-INF/jsp/notifier/notifierWagon.jsp</result>
     </action>
-    
+
     <action name="wagonProjectNotifierSave" class="wagonProjectNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifier/notifierWagon.jsp</result>
       <result name="success" type="chain">projectView</result>
@@ -634,7 +638,7 @@
       <result name="input">/WEB-INF/jsp/notifier/notifierMsn.jsp</result>
       <result name="success" type="chain">projectGroupNotifier</result>
     </action>
-    
+
     <action name="wagonProjectGroupNotifierEdit" class="wagonGroupNotifierEdit" method="edit">
       <result name="success">/WEB-INF/jsp/notifier/notifierWagon.jsp</result>
     </action>
