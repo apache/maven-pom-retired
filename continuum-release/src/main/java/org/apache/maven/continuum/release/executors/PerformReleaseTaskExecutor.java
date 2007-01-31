@@ -162,12 +162,20 @@ public class PerformReleaseTaskExecutor
 
             try
             {
-                MavenProject reactorProject = projectBuilder.build( pomFile, getLocalRepository(),
+                MavenProject reactorProject = projectBuilder.buildWithDependencies( pomFile, getLocalRepository(),
                                                                     getProfileManager( settings ) );
 
                 reactorProjects.add( reactorProject );
             }
             catch ( ProjectBuildingException e )
+            {
+                throw new ContinuumReleaseException( "Failed to build project.", e );
+            }
+            catch ( ArtifactNotFoundException e )
+            {
+                throw new ContinuumReleaseException( "Failed to build project.", e );
+            }
+            catch ( ArtifactResolutionException e )
             {
                 throw new ContinuumReleaseException( "Failed to build project.", e );
             }

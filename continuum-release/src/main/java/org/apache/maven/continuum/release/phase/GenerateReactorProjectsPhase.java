@@ -129,12 +129,20 @@ public class GenerateReactorProjectsPhase
 
             try
             {
-                MavenProject reactorProject = projectBuilder.build( pomFile, getLocalRepository(),
+                MavenProject reactorProject = projectBuilder.buildWithDependencies( pomFile, getLocalRepository(),
                                                                     getProfileManager( getSettings() ) );
 
                 reactorProjects.add( reactorProject );
             }
             catch ( ProjectBuildingException e )
+            {
+                throw new ContinuumReleaseException( "Failed to build project.", e );
+            }
+            catch ( ArtifactNotFoundException e )
+            {
+                throw new ContinuumReleaseException( "Failed to build project.", e );
+            }
+            catch ( ArtifactResolutionException e )
             {
                 throw new ContinuumReleaseException( "Failed to build project.", e );
             }
