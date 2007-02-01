@@ -252,6 +252,100 @@ public class MavenTwoContinuumProjectBuilderTest
         assertDependency( "Continuum Model", "Continuum Web", projects );
     }
 
+    public void testCreateProjectsWithModuleswithParentPomIsntPomXml()
+        throws Exception
+    {
+        ContinuumProjectBuilder projectBuilder =
+            (ContinuumProjectBuilder) lookup( ContinuumProjectBuilder.ROLE, MavenTwoContinuumProjectBuilder.ID );
+
+        URL url = getClass().getClassLoader().getResource( "projects/continuum/pom_ci.xml" );
+
+        // Eat System.out
+        PrintStream ps = System.out;
+
+        ContinuumProjectBuildingResult result;
+
+        try
+        {
+            System.setOut( new PrintStream( new ByteArrayOutputStream() ) );
+
+            result = projectBuilder.buildProjectsFromMetadata( url, null, null );
+        }
+        finally
+        {
+            System.setOut( ps );
+        }
+
+        assertNotNull( result );
+
+        // ----------------------------------------------------------------------
+        // Assert the warnings
+        // ----------------------------------------------------------------------
+
+        assertNotNull( result.getErrors() );
+
+        assertEquals( 1, result.getErrors().size() );
+
+        assertEquals( ContinuumProjectBuildingResult.ERROR_POM_NOT_FOUND, result.getErrors().get( 0 ).toString() );
+
+        // ----------------------------------------------------------------------
+        // Assert the project group built
+        // ----------------------------------------------------------------------
+
+        assertNotNull( result.getProjectGroups() );
+
+        assertEquals( 1, result.getProjectGroups().size() );
+
+        ProjectGroup projectGroup = (ProjectGroup) result.getProjectGroups().iterator().next();
+
+        assertEquals( "projectGroup.groupId", "org.apache.maven.continuum", projectGroup.getGroupId() );
+
+        assertEquals( "projectGroup.name", "Continuum Parent Project", projectGroup.getName() );
+
+        assertEquals( "projectGroup.description", "Continuum Project Description", projectGroup.getDescription() );
+
+        // assertEquals( "projectGroup.url", "http://cvs.continuum.codehaus.org/", projectGroup.getUrl() );
+
+        // ----------------------------------------------------------------------
+        // Assert the projects built
+        // ----------------------------------------------------------------------
+
+        assertNotNull( result.getProjects() );
+
+        assertEquals( 9, result.getProjects().size() );
+
+        Map projects = new HashMap();
+
+        for ( Iterator it = result.getProjects().iterator(); it.hasNext(); )
+        {
+            Project project = (Project) it.next();
+
+            assertNotNull( project.getName() );
+
+            projects.put( project.getName(), project );
+        }
+
+        assertMavenTwoProject( "Continuum Core", projects );
+        assertMavenTwoProject( "Continuum Model", projects );
+        assertMavenTwoProject( "Continuum Plexus Application", projects );
+        assertScmUrl( "Continuum Web", projects,
+                      "scm:svn:http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-1.0.3/continuum-web" );
+        //directoryName != artifactId for this project
+        assertScmUrl( "Continuum XMLRPC Interface", projects,
+                      "scm:svn:http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-1.0.3/continuum-xmlrpc" );
+        assertMavenTwoProject( "Continuum Notifiers", projects );
+        assertMavenTwoProject( "Continuum IRC Notifier", projects );
+        assertMavenTwoProject( "Continuum Jabber Notifier", projects );
+
+        assertEquals( "continuum-parent-notifiers",
+                      ( (Project) projects.get( "Continuum IRC Notifier" ) ).getParent().getArtifactId() );
+
+        assertEquals( "continuum-parent-notifiers",
+                      ( (Project) projects.get( "Continuum Jabber Notifier" ) ).getParent().getArtifactId() );
+
+        assertDependency( "Continuum Model", "Continuum Web", projects );
+    }
+
     public void testCreateProjectWithoutModules()
         throws Exception
     {

@@ -236,16 +236,20 @@ public class MavenTwoContinuumProjectBuilder
 
         int i = prefix.indexOf( '?' );
 
+        int lastSlash;
+
         if ( i != -1 )
         {
             suffix = prefix.substring( i );
 
-            prefix = prefix.substring( 0, i - POM_PART.length() );
+            lastSlash = prefix.lastIndexOf( "/", i );
         }
         else
         {
-            prefix = prefix.substring( 0, prefix.length() - POM_PART.length() );
+            lastSlash = prefix.lastIndexOf( "/" );
         }
+
+        prefix = prefix.substring( 0, lastSlash );
 
         for ( Iterator it = modules.iterator(); it.hasNext(); )
         {

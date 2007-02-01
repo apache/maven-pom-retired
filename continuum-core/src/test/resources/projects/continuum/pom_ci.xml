@@ -1,0 +1,118 @@
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.maven.continuum</groupId>
+  <artifactId>continuum-parent</artifactId>
+  <version>1.0.3</version>
+  <packaging>pom</packaging>
+  <name>Continuum Parent Project</name>
+  <description>Continuum Project Description</description>
+  <url>http://cvs.continuum.codehaus.org/</url>
+  <ciManagement>
+    <system>continuum</system>
+    <url>http://continuum.codehaus.org/continuumweb/servlet/continuum</url>
+    <notifiers>
+      <notifier>
+        <type>mail</type>
+        <address>dev@continuum.codehaus.org</address>
+      </notifier>
+    </notifiers>
+  </ciManagement>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/CONTINUUM</url>
+  </issueManagement>
+  <inceptionYear>2003</inceptionYear>
+  <mailingLists>
+    <mailingList>
+      <name>Continuum Announce List</name>
+      <subscribe>announce-subscribe@continuum.codehaus.org</subscribe>
+      <unsubscribe>announce-unsubscribe@continuum.codehaus.org</unsubscribe>
+      <archive>http://archive.continuum.codehaus.org/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Continuum Despots List</name>
+      <subscribe>despots-subscribe@continuum.codehaus.org</subscribe>
+      <unsubscribe>despots-unsubscribe@continuum.codehaus.org</unsubscribe>
+      <archive>http://archive.continuum.codehaus.org/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Continuum Dev List</name>
+      <subscribe>dev-subscribe@continuum.codehaus.org</subscribe>
+      <unsubscribe>dev-unsubscribe@continuum.codehaus.org</unsubscribe>
+      <archive>http://archive.continuum.codehaus.org/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Continuum User List</name>
+      <subscribe>user-subscribe@continuum.codehaus.org</subscribe>
+      <unsubscribe>user-unsubscribe@continuum.codehaus.org</unsubscribe>
+      <archive>http://archive.continuum.codehaus.org/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Continuum SCM List</name>
+      <subscribe>scm-subscribe@continuum.codehaus.org</subscribe>
+      <unsubscribe>scm-unsubscribe@continuum.codehaus.org</unsubscribe>
+      <archive>http://archive.continuum.codehaus.org/</archive>
+    </mailingList>
+  </mailingLists>
+  <dependencies>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <version>1.0-alpha-2</version>
+    </dependency>
+    <dependency>
+      <groupId>plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>1.0-alpha-3-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/continuum/tags/continuum-1.0.3</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/continuum/tags/continuum-1.0.3</url>
+  </scm>
+  <organization>
+    <name>Apache</name>
+    <url>http://www.apache.org/</url>
+  </organization>
+  <distributionManagement>
+    <repository>
+      <id>repo1</id>
+      <name>Maven Repository</name>
+      <url>scp://beaver.codehaus.org/home/projects/maven/repository-staging/to-ibiblio/maven2</url>
+    </repository>
+  </distributionManagement>
+  <modules>
+    <module>continuum-core</module>
+    <module>continuum-model</module>
+    <module>continuum-plexus-application</module>
+    <module>continuum-web</module>
+    <module>continuum-xmlrpc</module>
+    <module>continuum-notifiers</module>
+    <module>I'm-not-here-project</module>
+  </modules>
+</project>
