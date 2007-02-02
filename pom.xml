@@ -287,6 +287,19 @@ under the License.
     </site>
   </distributionManagement>
 
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.apache.org/repos/asf/maven/pom/tags</tagBase>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
   <profiles>
     <profile>
       <id>ci</id>
@@ -440,6 +453,7 @@ under the License.
             <configuration>
               <useReleaseProfile>false</useReleaseProfile>
               <goals>site site-deploy</goals>
+              <arguments>-Prelease</arguments>
             </configuration>
           </plugin>          
         </plugins>
@@ -448,9 +462,9 @@ under the License.
   </profiles>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/pom/tags/maven-parent-5</connection>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/pom/tags/maven-parent-5</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/pom/tags/maven-parent-5</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/pom/tags/maven-parent-5</url>
+    <url>https://svn.apache.org/repos/asf/maven/pom/tags/maven-parent-5</url>
   </scm>
 </project>
 
