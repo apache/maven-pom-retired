@@ -298,7 +298,7 @@ under the License.
             <!-- This element will be overriden by children -->
             <tagBase>https://svn.apache.org/repos/asf/maven/pom/tags</tagBase>
             <useReleaseProfile>false</useReleaseProfile>
-            <goals>deploy site-deploy</goals>
+            <goals>deploy</goals>
             <arguments>-Prelease</arguments>
           </configuration>
         </plugin>
