@@ -36,6 +36,7 @@ public class ContinuumRoleConstants
     public static final String GUEST_ROLE = "Guest";
 
     // roles
+    public static final String CONTINUUM_PROJECT_ADMINISTRATOR_ROLE_PREFIX = "Project Administrator";
     public static final String CONTINUUM_PROJECT_DEVELOPER_ROLE_PREFIX = "Project Developer";
     public static final String CONTINUUM_PROJECT_USER_ROLE_PREFIX = "Project User";
 
@@ -67,5 +68,9 @@ public class ContinuumRoleConstants
     public static final String CONTINUUM_ADD_PROJECT_NOTIFIER_OPERATION = "continuum-add-project-notifier";
     public static final String CONTINUUM_REMOVE_PROJECT_NOTIFIER_OPERATION = "continuum-remove-project-notifier";
     public static final String CONTINUUM_MODIFY_PROJECT_NOTIFIER_OPERATION = "continuum-modify-project-notifier";
+
+    // operations against user assignment.
+    public static final String USER_MANAGEMENT_ROLE_GRANT_OPERATION = "user-management-role-grant";
+    public static final String USER_MANAGEMENT_USER_ROLE_OPERATION = "user-management-user-role";
 
 }

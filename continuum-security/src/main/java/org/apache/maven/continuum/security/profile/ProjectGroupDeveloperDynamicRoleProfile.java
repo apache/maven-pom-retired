@@ -21,10 +21,6 @@ package org.apache.maven.continuum.security.profile;
 
 import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.codehaus.plexus.rbac.profile.AbstractDynamicRoleProfile;
-import org.codehaus.plexus.rbac.profile.RoleProfileException;
-import org.codehaus.plexus.security.rbac.RbacManagerException;
-import org.codehaus.plexus.security.rbac.RbacObjectNotFoundException;
-import org.codehaus.plexus.security.rbac.Role;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -87,35 +83,4 @@ public class ProjectGroupDeveloperDynamicRoleProfile
         return true;
     }
 
-
-    public Role getRole( String resource )
-         throws RoleProfileException
-     {
-         try
-         {
-             if ( rbacManager.roleExists( getRoleName( resource ) ) )
-             {
-                 return rbacManager.getRole( getRoleName( resource ) );
-             }
-             else
-             {
-                 // first time assign the role to the system administrator since they need the access
-                 Role newRole = generateRole( resource );
-
-                 Role groupAdmin = rbacManager.getRole( ContinuumRoleConstants.GROUP_ADMINISTRATOR_ROLE );
-                 groupAdmin.addChildRoleName( newRole.getName() );
-                 rbacManager.saveRole( groupAdmin );
-
-                 return newRole;
-             }
-         }
-         catch ( RbacObjectNotFoundException ne )
-         {
-             throw new RoleProfileException( "unable to get role", ne );
-         }
-         catch ( RbacManagerException e )
-         {
-             throw new RoleProfileException( "system error with rbac manager", e );
-         }
-      }
 }

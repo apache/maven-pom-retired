@@ -55,6 +55,17 @@
     -->
     <component>
       <role>org.codehaus.plexus.rbac.profile.DynamicRoleProfile</role>
+      <role-hint>continuum-group-project-administrator</role-hint>
+      <implementation>org.apache.maven.continuum.security.profile.ProjectGroupAdministratorDynamicRoleProfile</implementation>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.security.rbac.RBACManager</role>
+          <role-hint>memory</role-hint>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.rbac.profile.DynamicRoleProfile</role>
       <role-hint>continuum-group-developer</role-hint>
       <implementation>org.apache.maven.continuum.security.profile.ProjectGroupDeveloperDynamicRoleProfile</implementation>
       <requirements>

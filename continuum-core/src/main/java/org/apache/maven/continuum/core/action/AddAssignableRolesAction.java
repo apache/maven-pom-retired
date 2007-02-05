@@ -60,6 +60,8 @@ public class AddAssignableRolesAction
 
         try
         {
+            Role administrator = roleManager.getDynamicRole( "continuum-group-project-administrator", projectGroup.getName() );
+
             Role developer = roleManager.getDynamicRole( "continuum-group-developer", projectGroup.getName() );
 
             Role user = roleManager.getDynamicRole( "continuum-group-user", projectGroup.getName() );
