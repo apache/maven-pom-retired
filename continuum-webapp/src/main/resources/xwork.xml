@@ -192,6 +192,8 @@
 
     <action name="buildProject" class="buildProject">
       <result name="success" type="chain">groupSummary</result>
+      <result name="to_group_page" type="chain">projectGroupSummary</result>
+      <result name="to_project_page" type="chain">projectView</result>
     </action>
 
     <action name="projectView" class="projectView">

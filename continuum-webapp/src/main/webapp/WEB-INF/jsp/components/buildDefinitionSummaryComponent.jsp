@@ -55,6 +55,7 @@
           <ww:url id="buildProjectUrl" action="buildProject" namespace="/">
             <ww:param name="projectId">${projectId}</ww:param>
             <ww:param name="buildDefinitionId">${pageScope.buildDefinitionSummary.id}</ww:param>
+            <ww:param name="fromProjectPage" value="true"/>
           </ww:url>
           <ww:a href="%{buildProjectUrl}"><img src="<ww:url value='/images/buildnow.gif'/>" alt="<ww:text name='build'/>" title="<ww:text name='build'/>" border="0"></ww:a>
         </pss:ifAuthorized>

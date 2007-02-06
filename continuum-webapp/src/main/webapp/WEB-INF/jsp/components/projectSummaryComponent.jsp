@@ -57,6 +57,8 @@
             <c:when test="${!project.inBuildingQueue and !project.inCheckoutQueue and ( project.state gt 0 ) and ( project.state lt 5 )}">
               <ww:url id="buildProjectUrl" action="buildProject" namespace="/" includeParams="none">
                 <ww:param name="projectId" value="${project.id}"/>
+                <ww:param name="projectGroupId" value="${project.projectGroupId}"/>
+                <ww:param name="fromGroupPage" value="true"/>
               </ww:url>
               <ww:a href="%{buildProjectUrl}">
                 <img src="<ww:url value='/images/buildnow.gif'/>" alt="Build Now" title="Build Now" border="0">

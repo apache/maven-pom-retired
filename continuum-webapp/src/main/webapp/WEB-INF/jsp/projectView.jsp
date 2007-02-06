@@ -62,6 +62,7 @@
                 <td>
                   <form method="post" action="buildProject.action">
                     <input type="hidden" name="projectId" value="<ww:property value="project.id"/>"/>
+                    <input type="hidden" name="fromProjectPage" value="true"/>
                     <input type="submit" name="build-project" value="<ww:text name="summary.buildNow"/>"/>
                   </form>
                 </td>

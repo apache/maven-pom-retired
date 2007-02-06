@@ -36,6 +36,12 @@ public class BuildProjectAction
 
     private int buildDefinitionId;
 
+    private int projectGroupId;
+
+    private boolean fromGroupPage = false;
+
+    private boolean fromProjectPage = false;
+
     public String execute()
         throws ContinuumException
     {
@@ -62,6 +68,18 @@ public class BuildProjectAction
             }
         }
 
+        if ( projectId > 0 )
+        {
+            if ( fromGroupPage == true )
+            {
+                return "to_group_page";
+            }
+            if ( fromProjectPage == true )
+            {
+                return "to_project_page";
+            }
+        }
+
         return SUCCESS;
     }
 
@@ -83,5 +101,35 @@ public class BuildProjectAction
     public int getBuildDefinition()
     {
         return buildDefinitionId;
+    }
+
+    public int getProjectGroupId()
+    {
+        return projectGroupId;
+    }
+
+    public void setProjectGroupId( int projectGroupId )
+    {
+        this.projectGroupId = projectGroupId;
+    }
+
+    public boolean isFromGroupPage()
+    {
+        return fromGroupPage;
+    }
+
+    public void setFromGroupPage( boolean fromGroupPage )
+    {
+        this.fromGroupPage = fromGroupPage;
+    }
+
+    public boolean isFromProjectPage()
+    {
+        return fromProjectPage;
+    }
+
+    public void setFromProjectPage( boolean fromProjectPage )
+    {
+        this.fromProjectPage = fromProjectPage;
     }
 }
