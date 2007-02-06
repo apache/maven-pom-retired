@@ -52,12 +52,12 @@
               <th><ww:label theme="simple" value="%{getText('schedule.cronExpression.label')}:"/></th>
               <td>
                 <table>
-                  <ww:textfield label="%{getText('schedule.second.label')}" name="second" size="2"/>
-                  <ww:textfield label="%{getText('schedule.minute.label')}" name="minute" size="2"/>
-                  <ww:textfield label="%{getText('schedule.hour.label')}" name="hour"  size="2"/>
-                  <ww:textfield label="%{getText('schedule.dayOfMonth.label')}" name="dayOfMonth"  size="2"/>
-                  <ww:textfield label="%{getText('schedule.month.label')}" name="month"  size="2"/>
-                  <ww:textfield label="%{getText('schedule.dayOfWeek.label')}" name="dayOfWeek"  size="2"/>
+                  <ww:textfield label="%{getText('schedule.second.label')}" name="second" size="10"/>
+                  <ww:textfield label="%{getText('schedule.minute.label')}" name="minute" size="10"/>
+                  <ww:textfield label="%{getText('schedule.hour.label')}" name="hour" size="10"/>
+                  <ww:textfield label="%{getText('schedule.dayOfMonth.label')}" name="dayOfMonth" size="10"/>
+                  <ww:textfield label="%{getText('schedule.month.label')}" name="month" size="10"/>
+                  <ww:textfield label="%{getText('schedule.dayOfWeek.label')}" name="dayOfWeek" size="10"/>
                   <ww:textfield label="%{getText('schedule.year.label')}" name="year"  size="4">
                     <ww:param name="desc"><p><ww:text name="schedule.cronExpression.message"/></p></ww:param>
                   </ww:textfield>
