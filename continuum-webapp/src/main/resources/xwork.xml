@@ -513,6 +513,7 @@
     <action name="deleteProjectNotifier" class="deleteProjectNotifier">
       <result name="delete">/WEB-INF/jsp/notifier/deleteNotifier.jsp</result>
       <result name="success" type="chain">projectView</result>
+      <result name="to_group_page" type="chain">projectGroupNotifier</result>
     </action>
 
     <action name="addProjectNotifier" class="addProjectNotifier" method="doDefault">
@@ -529,7 +530,7 @@
       <result name="irc_input" type="chain">ircProjectNotifierEdit</result>
       <result name="msn_input" type="chain">msnProjectNotifierEdit</result>
       <result name="jabber_input" type="chain">jabberProjectNotifierEdit</result>
-      <result name="wagon_input" type="chain">WagonProjectNotifierEdit</result>
+      <result name="wagon_input" type="chain">wagonProjectNotifierEdit</result>
     </action>
 
     <action name="mailProjectNotifierEdit" class="mailProjectNotifierEdit" method="edit">
@@ -539,6 +540,7 @@
     <action name="mailProjectNotifierSave" class="mailProjectNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifier/notifierMail.jsp</result>
       <result name="success" type="chain">projectView</result>
+      <result name="to_group_page" type="chain">projectGroupNotifier</result>
     </action>
 
     <action name="ircProjectNotifierEdit" class="ircProjectNotifierEdit" method="edit">
@@ -548,6 +550,7 @@
     <action name="ircProjectNotifierSave" class="ircProjectNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifier/notifierIrc.jsp</result>
       <result name="success" type="chain">projectView</result>
+      <result name="to_group_page" type="chain">projectGroupNotifier</result>
     </action>
 
     <action name="jabberProjectNotifierEdit" class="jabberProjectNotifierEdit" method="edit">
@@ -557,6 +560,7 @@
     <action name="jabberProjectNotifierSave" class="jabberProjectNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifier/notifierJabber.jsp</result>
       <result name="success" type="chain">projectView</result>
+      <result name="to_group_page" type="chain">projectGroupNotifier</result>
     </action>
 
     <action name="msnProjectNotifierEdit" class="msnProjectNotifierEdit" method="edit">
@@ -566,6 +570,7 @@
     <action name="msnProjectNotifierSave" class="msnProjectNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifier/notifierMsn.jsp</result>
       <result name="success" type="chain">projectView</result>
+      <result name="to_group_page" type="chain">projectGroupNotifier</result>
     </action>
 
     <action name="wagonProjectNotifierEdit" class="wagonProjectNotifierEdit" method="edit">
@@ -575,6 +580,7 @@
     <action name="wagonProjectNotifierSave" class="wagonProjectNotifierEdit" method="save">
       <result name="input">/WEB-INF/jsp/notifier/notifierWagon.jsp</result>
       <result name="success" type="chain">projectView</result>
+      <result name="to_group_page" type="chain">projectGroupNotifier</result>
     </action>
 
     <!--

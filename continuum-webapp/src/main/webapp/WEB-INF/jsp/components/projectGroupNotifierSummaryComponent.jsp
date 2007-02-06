@@ -111,6 +111,7 @@
                 <ww:param name="projectId">${pageScope.projectNotifierSummary.projectId}</ww:param>
                 <ww:param name="notifierId">${pageScope.projectNotifierSummary.id}</ww:param>
                 <ww:param name="notifierType">${pageScope.projectNotifierSummary.type}</ww:param>
+                <ww:param name="fromGroupPage" value="true"/>
               </ww:url>
               <ww:a href="%{editUrl}">
                 <img src="<ww:url value='/images/edit.gif'/>" alt="Edit" title="Edit" border="0">
@@ -129,6 +130,7 @@
                 <ww:param name="projectId">${pageScope.projectNotifierSummary.projectId}</ww:param>
                 <ww:param name="notifierId">${pageScope.projectNotifierSummary.id}</ww:param>
                 <ww:param name="confirmed" value="false"/>
+                <ww:param name="fromGroupPage" value="true"/>
               </ww:url>
               <ww:a href="%{removeUrl}">
                 <img src="<ww:url value='/images/delete.gif'/>" alt="Delete" title="Delete" border="0">

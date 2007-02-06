@@ -72,6 +72,12 @@ public abstract class AbstractNotifierEditActionSupport
      * for the build.
      */
     private boolean sendOnWarning;
+    
+    /**
+     * Detemines if the save operation returns to the project group notifier page or not.<p>
+     * <code>true</code> implies return to the project group notifier page.
+     */
+    private boolean fromGroupPage = false;
 
     /**
      * Obtain and return the {@link ProjectNotifier} instance for editing.
@@ -123,6 +129,11 @@ public abstract class AbstractNotifierEditActionSupport
         setNotifierConfiguration( notifier );
 
         saveNotifier( notifier );
+
+        if ( fromGroupPage )
+        {
+            return "to_group_page";
+        }
 
         return SUCCESS;
     }
@@ -250,6 +261,22 @@ public abstract class AbstractNotifierEditActionSupport
     public void setNotifierId( int notifierId )
     {
         this.notifierId = notifierId;
+    }
+
+    /**
+     * @return the fromGroupPage
+     */
+    public boolean isFromGroupPage()
+    {
+        return fromGroupPage;
+    }
+
+    /**
+     * @param fromGroupPage the fromGroupPage to set
+     */
+    public void setFromGroupPage( boolean fromGroupPage )
+    {
+        this.fromGroupPage = fromGroupPage;
     }
 
     /**

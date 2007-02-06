@@ -49,6 +49,7 @@
             <ww:hidden name="projectId"/>
             <ww:hidden name="projectGroupId"/>
             <ww:hidden name="notifierType"/>
+            <ww:hidden name="fromGroupPage"/>
             <table>
               <tbody>
                 <ww:textfield label="%{getText('notifier.mail.recipient.label')}" name="address" required="true" />

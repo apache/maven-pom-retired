@@ -49,6 +49,12 @@ public class AddProjectNotifierAction
      * Type for a {@link ProjectNotifier}.
      */
     private String notifierType;
+    
+    /**
+     * Detemines if the save operation returns to the project group notifier page or not.<p>
+     * <code>true</code> implies return to the project group notifier page.
+     */
+    private boolean fromGroupPage = false;
 
     /**
      * Default method executed when no specific method is specified
@@ -132,4 +138,19 @@ public class AddProjectNotifierAction
         this.projectGroupId = projectGroupId;
     }
 
+    /**
+     * @return the fromGroupPage
+     */
+    public boolean isFromGroupPage()
+    {
+        return fromGroupPage;
+    }
+
+    /**
+     * @param fromGroupPage the fromGroupPage to set
+     */
+    public void setFromGroupPage( boolean fromGroupPage )
+    {
+        this.fromGroupPage = fromGroupPage;
+    }
 }

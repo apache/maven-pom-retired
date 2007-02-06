@@ -48,6 +48,7 @@
             <ww:hidden name="projectId"/>
             <ww:hidden name="projectGroupId"/>
             <ww:hidden name="notifierType"/>
+            <ww:hidden name="fromGroupPage"/>
             <table>
               <tbody>
                 <ww:textfield label="%{getText('notifier.jabber.host.label')}" name="host" required="true"/>

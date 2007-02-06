@@ -51,10 +51,18 @@ public class DeleteProjectNotifierAction
 
     private String recipient;
 
+    private boolean fromGroupPage = false;
+
     public String execute()
         throws ContinuumException
     {
         getContinuum().removeNotifier( projectId, notifierId );
+
+        if ( fromGroupPage )
+        {
+            return "to_group_page";
+        }
+
         return SUCCESS;
     }
 
@@ -136,6 +144,16 @@ public class DeleteProjectNotifierAction
     public void setRecipient( String recipient )
     {
         this.recipient = recipient;
+    }
+
+    public boolean isFromGroupPage()
+    {
+        return fromGroupPage;
+    }
+
+    public void setFromGroupPage( boolean fromGroupPage )
+    {
+        this.fromGroupPage = fromGroupPage;
     }
 
 }
