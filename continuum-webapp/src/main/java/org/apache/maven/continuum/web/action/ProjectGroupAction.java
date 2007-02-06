@@ -21,8 +21,12 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectDependency;
 import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.web.bean.ProjectGroupUserBean;
+import org.codehaus.plexus.rbac.profile.RoleProfileException;
+import org.codehaus.plexus.rbac.profile.RoleProfileManager;
 import org.codehaus.plexus.security.rbac.RBACManager;
 import org.codehaus.plexus.security.rbac.RbacManagerException;
 import org.codehaus.plexus.security.rbac.RbacObjectNotFoundException;
@@ -30,8 +34,6 @@ import org.codehaus.plexus.security.rbac.Role;
 import org.codehaus.plexus.security.user.User;
 import org.codehaus.plexus.security.user.UserManager;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.rbac.profile.RoleProfileManager;
-import org.codehaus.plexus.rbac.profile.RoleProfileException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,22 +48,21 @@ import java.util.Map;
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="projectGroup"
+ * @plexus.component role="com.opensymphony.xwork.Action"
+ * role-hint="projectGroup"
  */
 public class ProjectGroupAction
     extends ContinuumConfirmAction
 {
     private final static Map FILTER_CRITERIA = new HashMap();
+
     static
     {
         FILTER_CRITERIA.put( "username", "Username contains" );
         FILTER_CRITERIA.put( "fullName", "Name contains" );
         FILTER_CRITERIA.put( "email", "Email contains" );
     }
-    
+
     /**
      * @plexus.requirement
      */
@@ -90,20 +91,22 @@ public class ProjectGroupAction
     private Map projectGroups = new HashMap();
 
     private boolean confirmed;
-    
+
     private boolean projectInCOQueue = false;
 
     private Collection projectList;
 
     private List projectGroupUsers;
-    
+
     private String filterProperty;
-    
+
     private String filterKey;
-    
+
     private boolean ascending = true;
-    
+
     private Collection groupProjects;
+
+    private int releaseProjectId;
 
     public String summary()
         throws ContinuumException
@@ -117,20 +120,20 @@ public class ProjectGroupAction
         throws ContinuumException
     {
         projectGroup = getContinuum().getProjectGroup( projectGroupId );
-        
+
         groupProjects = getContinuum().getProjectsInGroup( projectGroupId );
 
         populateProjectGroupUsers( projectGroup );
-        
+
         return SUCCESS;
     }
 
     public Collection getGroupProjects()
         throws ContinuumException
     {
-    	return groupProjects;
+        return groupProjects;
     }
-    
+
     public String buildDefinitions()
         throws ContinuumException
     {
@@ -170,11 +173,11 @@ public class ProjectGroupAction
         description = projectGroup.getDescription();
 
         projectList = getContinuum().getProjectsInGroup( projectGroupId );
-        
-        if( projectList != null )
+
+        if ( projectList != null )
         {
             Iterator proj = projectList.iterator();
-            
+
             while ( proj.hasNext() )
             {
                 Project p = (Project) proj.next();
@@ -228,27 +231,27 @@ public class ProjectGroupAction
         {
             String key = (String) keys.next();
 
-            String [] id = (String []) projects.get( key );
-            
+            String[] id = (String[]) projects.get( key );
+
             int projectId = Integer.parseInt( key );
 
             Project project = null;
             Iterator i = projectGroup.getProjects().iterator();
-            while( i.hasNext() )
+            while ( i.hasNext() )
             {
                 project = (Project) i.next();
-                if( projectId == project.getId() )
+                if ( projectId == project.getId() )
                 {
                     break;
                 }
             }
-            
-            ProjectGroup newProjectGroup = getProjectGroup( new Integer (id[0]).intValue() );
-            
+
+            ProjectGroup newProjectGroup = getProjectGroup( new Integer( id[0] ).intValue() );
+
             if ( newProjectGroup.getId() != projectGroup.getId() )
             {
-                getLogger().info( "Moving project " + project.getName() + " to project group "
-                                      + newProjectGroup.getName() );
+                getLogger().info(
+                    "Moving project " + project.getName() + " to project group " + newProjectGroup.getName() );
                 project.setProjectGroup( newProjectGroup );
                 getContinuum().updateProject( project );
             }
@@ -265,10 +268,90 @@ public class ProjectGroupAction
         return SUCCESS;
     }
 
-    private void populateProjectGroupUsers( ProjectGroup group ) 
+    public String release()
+        throws ContinuumException
+    {
+        //get the parent of the group by finding the parent project
+        //i.e., the project that doesn't have a parent, or it's parent is not in the group.
+
+        Project parent = null;
+
+        boolean allBuildsOk = true;
+
+        projectList = getContinuum().getProjectsInGroupWithDependencies( projectGroupId );
+
+        if ( projectList != null )
+        {
+            Iterator proj = projectList.iterator();
+
+            while ( proj.hasNext() )
+            {
+                Project p = (Project) proj.next();
+
+                if ( p.getState() != ContinuumProjectState.OK )
+                {
+                    allBuildsOk = false;
+                }
+
+                if ( ( p.getParent() == null ) || ( !isParentInProjectGroup( p.getParent(), projectList ) ) )
+                {
+                    if ( parent == null )
+                    {
+                        parent = p;
+                    }
+                    else
+                    {
+                        //currently, we have no provisions for releasing 2 or more parents
+                        //at the same time, this will be implemented in the future
+                        throw new ContinuumException(
+                            "Cannot release two or more parent projects in the same project group at the same time." );
+                    }
+                }
+            }
+        }
+
+        releaseProjectId = parent.getId();
+
+        if ( allBuildsOk )
+        {
+            return SUCCESS;
+        }
+        else
+        {
+            throw new ContinuumException(
+                "Cannot release project group: one or more projects in the group were not built successfully." );
+        }
+    }
+
+    private boolean isParentInProjectGroup( ProjectDependency parent, Collection projectsInGroup )
+        throws ContinuumException
+    {
+        boolean result = false;
+
+        Iterator projectsIterator = projectsInGroup.iterator();
+
+        while ( projectsIterator.hasNext() )
+        {
+            Project project = (Project) projectsIterator.next();
+
+            if ( parent != null )
+            {
+                if ( ( project.getArtifactId().equals( parent.getArtifactId() ) ) &&
+                    ( project.getGroupId().equals( parent.getGroupId() ) ) &&
+                    ( project.getVersion().equals( parent.getVersion() ) ) )
+                {
+                    result = true;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private void populateProjectGroupUsers( ProjectGroup group )
     {
         List users;
-        
+
         if ( StringUtils.isEmpty( filterKey ) )
         {
             users = manager.getUsers( ascending );
@@ -277,33 +360,33 @@ public class ProjectGroupAction
         {
             users = findUsers( filterProperty, filterKey, ascending );
         }
-        
+
         projectGroupUsers = new ArrayList();
-        
+
         for ( Iterator i = users.iterator(); i.hasNext(); )
         {
             ProjectGroupUserBean pgUser = new ProjectGroupUserBean();
-            
+
             User user = (User) i.next();
-            
+
             pgUser.setUser( user );
-            
+
             pgUser.setProjectGroup( group );
-            
+
             try
             {
                 Collection effectiveRoles = rbac.getEffectivelyAssignedRoles( user.getUsername() );
                 for ( Iterator j = effectiveRoles.iterator(); j.hasNext(); )
                 {
                     Role role = (Role) j.next();
-                    if( role.getName().indexOf( projectGroup.getName() ) > -1 )
+                    if ( role.getName().indexOf( projectGroup.getName() ) > -1 )
                     {
                         pgUser.setRoles( effectiveRoles );
                         projectGroupUsers.add( pgUser );
                         break;
                     }
                 }
-                
+
             }
             catch ( RbacObjectNotFoundException e )
             {
@@ -315,11 +398,11 @@ public class ProjectGroupAction
             }
         }
     }
-    
+
     private List findUsers( String searchProperty, String searchKey, boolean orderAscending )
     {
         List users = null;
-            
+
         if ( "username".equals( searchProperty ) )
         {
             users = manager.findUsersByUsernameKey( searchKey, orderAscending );
@@ -336,10 +419,10 @@ public class ProjectGroupAction
         {
             users = Collections.EMPTY_LIST;
         }
-        
+
         return users;
     }
-    
+
     public int getProjectGroupId()
     {
         return projectGroupId;
@@ -430,6 +513,7 @@ public class ProjectGroupAction
     {
         return projectList;
     }
+
     public List getProjectGroupUsers()
     {
         return projectGroupUsers;
@@ -469,5 +553,15 @@ public class ProjectGroupAction
     {
         return FILTER_CRITERIA;
     }
-    
+
+    public void setReleaseProjectId( int releaseProjectId )
+    {
+        this.releaseProjectId = releaseProjectId;
+    }
+
+    public int getReleaseProjectId()
+    {
+        return this.releaseProjectId;
+    }
+
 }

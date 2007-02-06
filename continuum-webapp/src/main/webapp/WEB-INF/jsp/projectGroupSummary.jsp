@@ -108,6 +108,14 @@
               </pss:ifAuthorized>
             </td>
             <td>
+              <pss:ifAuthorized permission="continuum-build-group" resource="${projectGroup.name}">
+                <form action="releaseProjectGroup.action" method="post">
+                    <input type="hidden" name="projectGroupId" value="<ww:property value="projectGroupId"/>"/>
+                    <input type="submit" name="release" value="<ww:text name="release"/>"/>
+                </form>
+              </pss:ifAuthorized>
+            </td>
+            <td>
               <pss:ifAnyAuthorized permissions="continuum-add-project-to-group" resource="${projectGroup.name}">
                 <ww:form name="addNewProject">
                   <ww:hidden name="disableGroupSelection" value="true"/>

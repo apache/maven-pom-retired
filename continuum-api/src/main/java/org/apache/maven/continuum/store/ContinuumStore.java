@@ -191,6 +191,9 @@ public interface ContinuumStore
     List getProjectsInGroup( int projectGroupId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
+    List getProjectsInGroupWithDependencies( int projectGroupId )
+        throws ContinuumObjectNotFoundException, ContinuumStoreException;
+
     ProjectGroup getProjectGroupWithProjects( int projectGroupId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException;
 

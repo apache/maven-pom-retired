@@ -271,6 +271,13 @@
         <param name="actionName">groupSummary</param>
       </result>
     </action>
+    
+    <action name="releaseProjectGroup" class="projectGroup" method="release">
+      <result name="success" type="redirect-action">
+        <param name="actionName">releasePromptGoal</param>
+        <param name="projectId">${releaseProjectId}</param>
+      </result>
+    </action>
 
     <action name="addProjectGroup" class="addProjectGroup">
       <result name="input">/WEB-INF/jsp/projectGroupAdd.jsp</result>

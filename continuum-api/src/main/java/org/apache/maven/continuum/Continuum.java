@@ -68,6 +68,9 @@ public interface Continuum
     public Collection getProjectsInGroup( int projectGroupId )
         throws ContinuumException;
 
+    public Collection getProjectsInGroupWithDependencies( int projectGroupId )
+        throws ContinuumException;
+
     public void removeProjectGroup( int projectGroupId )
         throws ContinuumException;
 
@@ -192,7 +195,7 @@ public interface Continuum
     /**
      * Add a project to the list of building projects (ant, shell,...)
      *
-     * @param project the project to add
+     * @param project    the project to add
      * @param executorId the id of an {@link org.apache.maven.continuum.execution.ContinuumBuildExecutor}, eg. <code>ant</code> or <code>shell</code>
      * @return id of the project
      * @throws ContinuumException
@@ -203,8 +206,8 @@ public interface Continuum
     /**
      * Add a project to the list of building projects (ant, shell,...)
      *
-     * @param project the project to add
-     * @param executorId the id of an {@link org.apache.maven.continuum.execution.ContinuumBuildExecutor}, eg. <code>ant</code> or <code>shell</code>
+     * @param project        the project to add
+     * @param executorId     the id of an {@link org.apache.maven.continuum.execution.ContinuumBuildExecutor}, eg. <code>ant</code> or <code>shell</code>
      * @param projectGroupId
      * @return id of the project
      * @throws ContinuumException
@@ -225,7 +228,7 @@ public interface Continuum
     /**
      * Add a Maven 2 project to the list of projects.
      *
-     * @param metadataUrl url of the pom.xml
+     * @param metadataUrl   url of the pom.xml
      * @param checkProtocol check if the protocol is allowed, use false if the pom is uploaded
      * @return a holder with the projects, project groups and errors occurred during the project adding
      * @throws ContinuumException
@@ -236,7 +239,7 @@ public interface Continuum
     /**
      * Add a Maven 2 project to the list of projects.
      *
-     * @param metadataUrl url of the pom.xml
+     * @param metadataUrl    url of the pom.xml
      * @param projectGroupId id of the project group to use
      * @return a holder with the projects, project groups and errors occurred during the project adding
      * @throws ContinuumException
@@ -247,9 +250,9 @@ public interface Continuum
     /**
      * Add a Maven 2 project to the list of projects.
      *
-     * @param metadataUrl url of the pom.xml
+     * @param metadataUrl    url of the pom.xml
      * @param projectGroupId id of the project group to use
-     * @param checkProtocol check if the protocol is allowed, use false if the pom is uploaded
+     * @param checkProtocol  check if the protocol is allowed, use false if the pom is uploaded
      * @return a holder with the projects, project groups and errors occurred during the project adding
      * @throws ContinuumException
      */
@@ -263,42 +266,42 @@ public interface Continuum
      * @return a holder with the projects, project groups and errors occurred during the project adding
      * @throws ContinuumException
      */
-   ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
+    ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl )
         throws ContinuumException;
 
     /**
      * Add a Maven 1 project to the list of projects.
      *
-     * @param metadataUrl url of the project.xml
+     * @param metadataUrl   url of the project.xml
      * @param checkProtocol check if the protocol is allowed, use false if the pom is uploaded
      * @return a holder with the projects, project groups and errors occurred during the project adding
      * @throws ContinuumException
      */
-   ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl, boolean checkProtocol )
+    ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl, boolean checkProtocol )
         throws ContinuumException;
 
     /**
      * Add a Maven 1 project to the list of projects.
      *
-     * @param metadataUrl url of the project.xml
+     * @param metadataUrl    url of the project.xml
      * @param projectGroupId id of the project group to use
      * @return a holder with the projects, project groups and errors occurred during the project adding
      * @throws ContinuumException
      */
     ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl, int projectGroupId )
-         throws ContinuumException;
+        throws ContinuumException;
 
     /**
      * Add a Maven 1 project to the list of projects.
      *
-     * @param metadataUrl url of the project.xml
+     * @param metadataUrl    url of the project.xml
      * @param projectGroupId id of the project group to use
-     * @param checkProtocol check if the protocol is allowed, use false if the pom is uploaded
+     * @param checkProtocol  check if the protocol is allowed, use false if the pom is uploaded
      * @return a holder with the projects, project groups and errors occurred during the project adding
      * @throws ContinuumException
      */
     ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl, int projectGroupId, boolean checkProtocol )
-         throws ContinuumException;
+        throws ContinuumException;
 
     void updateProject( Project project )
         throws ContinuumException;
@@ -376,7 +379,7 @@ public interface Continuum
 
     /**
      * returns the default build definition for the project
-     *
+     * <p/>
      * 1) if project has default build definition, return that
      * 2) otherwise return default build definition for parent project group
      *
@@ -410,7 +413,6 @@ public interface Continuum
 
     BuildDefinition updateBuildDefinitionForProjectGroup( int projectGroupId, BuildDefinition buildDefinition )
         throws ContinuumException;
-
 
     // ----------------------------------------------------------------------
     // Schedule

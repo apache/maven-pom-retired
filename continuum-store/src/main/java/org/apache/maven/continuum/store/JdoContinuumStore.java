@@ -1162,6 +1162,41 @@ public class JdoContinuumStore
             Query query = pm.newQuery( extent, "projectGroup.id == " + projectGroupId );
 
             query.setOrdering( "name ascending" );
+            
+            pm.getFetchPlan().addGroup( PROJECTGROUP_PROJECTS_FETCH_GROUP );
+
+            List result = (List) query.execute();
+
+            result = (List) pm.detachCopyAll( result );
+
+            tx.commit();
+
+            return result;
+        }
+        finally
+        {
+            rollback( tx );
+        }
+    }
+
+    public List getProjectsInGroupWithDependencies( int projectGroupId )
+        throws ContinuumObjectNotFoundException, ContinuumStoreException
+    {
+        PersistenceManager pm = getPersistenceManager();
+
+        Transaction tx = pm.currentTransaction();
+
+        try
+        {
+            tx.begin();
+
+            Extent extent = pm.getExtent( Project.class, true );
+
+            Query query = pm.newQuery( extent, "projectGroup.id == " + projectGroupId );
+
+            query.setOrdering( "name ascending" );
+
+            pm.getFetchPlan().addGroup( PROJECT_DEPENDENCIES_FETCH_GROUP );
 
             pm.getFetchPlan().addGroup( PROJECTGROUP_PROJECTS_FETCH_GROUP );
 

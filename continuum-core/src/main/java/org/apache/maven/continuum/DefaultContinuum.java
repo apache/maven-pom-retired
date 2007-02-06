@@ -2583,6 +2583,23 @@ public class DefaultContinuum
         }
     }
 
+    public Collection getProjectsInGroupWithDependencies( int projectGroupId )
+        throws ContinuumException
+    {
+        try
+        {
+            return store.getProjectsInGroupWithDependencies( projectGroupId );
+        }
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            throw new ContinuumException( "Unable to find the requested project", e );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error retrieving the requested project", e );
+        }
+    }
+
     // ----------------------------------------------------------------------
     // Private Utilities
     // ----------------------------------------------------------------------
