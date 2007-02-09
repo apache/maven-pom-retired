@@ -22,6 +22,7 @@ package org.apache.maven.continuum.web.interceptor;
 import com.opensymphony.xwork.ActionInvocation;
 import com.opensymphony.xwork.interceptor.Interceptor;
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
@@ -54,6 +55,16 @@ public class ForceContinuumConfigurationInterceptor
 
     }
 
+    /**
+     * 1) check to see if this interceptor has been successfully executed
+     * 2) check if the configuration service is initialized
+     * 3) load the configuration and see if that is initialized (addresses restore on empty db)
+     * 4) force the configuration screen
+     *
+     * @param invocation
+     * @return
+     * @throws Exception
+     */
     public String intercept( ActionInvocation invocation )
         throws Exception
     {
@@ -62,13 +73,25 @@ public class ForceContinuumConfigurationInterceptor
             return invocation.invoke();
         }
 
-        if ( !continuum.getConfiguration().isInitialized() )
+        ConfigurationService configuration = continuum.getConfiguration();
+
+        if ( configuration.isInitialized() )
+        {
+            checked = true;
+            return invocation.invoke();
+        }
+
+        configuration.load();
+
+        if ( configuration.isInitialized() )
+        {
+            checked = true;
+            return invocation.invoke();
+        }
+        else
         {
             return "continuum-configuration-required";
         }
 
-        checked = true;
-
-        return invocation.invoke();
     }
 }
