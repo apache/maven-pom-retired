@@ -432,6 +432,12 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <dependency>
+      <groupId>geronimo-spec</groupId>
+      <artifactId>geronimo-spec-jta</artifactId>
+      <version>1.0.1B-rc2</version>
+      <scope>provided</scope>
+    </dependency>
     <!--
     <dependency>
       <groupId>postgresql</groupId>
