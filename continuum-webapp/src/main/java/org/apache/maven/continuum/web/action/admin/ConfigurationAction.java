@@ -96,31 +96,24 @@ public class ConfigurationAction
     public String save()
         throws ConfigurationStoringException, ContinuumStoreException
     {
+        ConfigurationService configuration = getContinuum().getConfiguration();
 
-        try
+        configuration.setWorkingDirectory( new File( workingDirectory ) );
+
+        configuration.setBuildOutputDirectory( new File( buildOutputDirectory ) );
+
+        if ( StringUtils.isNotEmpty( deploymentRepositoryDirectory ) )
         {
-            ConfigurationService configuration = getContinuum().getConfiguration();
-
-            configuration.setWorkingDirectory( new File( workingDirectory ) );
-
-            configuration.setBuildOutputDirectory( new File( buildOutputDirectory ) );
-
-            if ( StringUtils.isNotEmpty( deploymentRepositoryDirectory ) )
-            {
-                configuration.setDeploymentRepositoryDirectory( new File( deploymentRepositoryDirectory ) );
-            }
-
-            configuration.setUrl( baseUrl );
-
-            configuration.setInitialized( true );
-            configuration.store();
+            configuration.setDeploymentRepositoryDirectory( new File( deploymentRepositoryDirectory ) );
         }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-        }
+
+        configuration.setUrl( baseUrl );
+
+        configuration.setInitialized( true );
+
+        configuration.store();
+
         return SUCCESS;
-
     }
 
     public String getWorkingDirectory()
