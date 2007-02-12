@@ -45,15 +45,7 @@ public class SummaryAction
 
     private String projectGroupName;
 
-    private int nbSuccesses;
-
-    private int nbFailures;
-
-    private int nbErrors;
-
     private List summary;
-
-    private List projects;
 
     public String execute()
         throws ContinuumException
@@ -63,9 +55,9 @@ public class SummaryAction
         //TODO: Create a summary jpox request so code will be more simple and performance will be better
         projectsInGroup = getContinuum().getProjectsInGroup( projectGroupId );
 
-        Map buildResults = getContinuum().getLatestBuildResults();
+        Map buildResults = getContinuum().getLatestBuildResults( projectGroupId );
 
-        Map buildResultsInSuccess = getContinuum().getBuildResultsInSuccess();
+        Map buildResultsInSuccess = getContinuum().getBuildResultsInSuccess( projectGroupId );
 
         summary = new ArrayList();
 
@@ -101,19 +93,6 @@ public class SummaryAction
 
             model.setState( project.getState() );
 
-            if ( project.getState() == 2 )
-            {
-                nbSuccesses++;
-            }
-            else if ( project.getState() == 3 )
-            {
-                nbFailures++;
-            }
-            else if ( project.getState() == 4 )
-            {
-                nbErrors++;
-            }
-
             model.setBuildNumber( project.getBuildNumber() );
 
             if ( buildResultsInSuccess != null )
@@ -142,29 +121,9 @@ public class SummaryAction
         return SUCCESS;
     }
 
-    public int getNbSuccesses()
-    {
-        return nbSuccesses;
-    }
-
-    public int getNbFailures()
-    {
-        return nbFailures;
-    }
-
-    public int getNbErrors()
-    {
-        return nbErrors;
-    }
-
     public List getProjects()
     {
         return summary;
-    }
-
-    public void setProjects( List projects )
-    {
-        this.projects = projects;
     }
 
     public int getProjectGroupId()

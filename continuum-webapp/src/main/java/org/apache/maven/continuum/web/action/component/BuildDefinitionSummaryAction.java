@@ -82,7 +82,7 @@ public class BuildDefinitionSummaryAction
         {
             groupBuildDefinitionSummaries = gatherGroupBuildDefinitionSummaries( projectGroupId );
 
-            projectGroup = getContinuum().getProjectGroup( projectGroupId );
+            projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
 
             for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
             {
@@ -128,7 +128,7 @@ public class BuildDefinitionSummaryAction
     {
         List summaryList = new ArrayList();
 
-        projectGroup = getContinuum().getProjectGroup( projectGroupId );
+        projectGroup = getContinuum().getProjectGroupWithBuildDetails( projectGroupId );
 
         for ( Iterator i = projectGroup.getBuildDefinitions().iterator(); i.hasNext(); )
         {

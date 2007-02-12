@@ -80,6 +80,9 @@ public interface Continuum
     public ProjectGroup getProjectGroupWithProjects( int projectGroupId )
         throws ContinuumException;
 
+    public ProjectGroup getProjectGroupWithBuildDetails( int projectGroupId )
+        throws ContinuumException;
+
     public ProjectGroup getProjectGroupByGroupId( String groupId )
         throws ContinuumException;
 
@@ -115,7 +118,11 @@ public interface Continuum
 
     BuildResult getLatestBuildResultForProject( int projectId );
 
+    Map getLatestBuildResults( int projectGroupId );
+
     Map getLatestBuildResults();
+
+    Map getBuildResultsInSuccess( int projectGroupId );
 
     Map getBuildResultsInSuccess();
 

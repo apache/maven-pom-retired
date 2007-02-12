@@ -166,7 +166,7 @@ public class NotifierSummaryAction
         throws ContinuumException
     {
         List summaryList = new ArrayList();
-        projectGroup = getContinuum().getProjectGroup( projectGroupId );
+        projectGroup = getContinuum().getProjectGroupWithBuildDetails( projectGroupId );
 
         for ( Iterator i = projectGroup.getNotifiers().iterator(); i.hasNext(); )
         {

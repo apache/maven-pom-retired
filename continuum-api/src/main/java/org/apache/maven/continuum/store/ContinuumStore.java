@@ -225,11 +225,15 @@ public interface ContinuumStore
 
     List getBuildResultsForProject( int projectId, long fromDate );
 
+    Map getLatestBuildResults( int projectGroupId );
+
     Map getLatestBuildResults();
 
     List getBuildResultByBuildNumber( int projectId, int buildNumber );
 
     Map getBuildResultsInSuccess();
+
+    Map getBuildResultsInSuccess( int projectGroupId );
 
     void addBuildResult( Project project, BuildResult build )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;

@@ -228,7 +228,7 @@ public class JdoContinuumStore
         // might define their own build definitions
         if ( projectGroupSource != null )
         {
-        	for ( Iterator i = projectGroupSource.keySet().iterator(); i.hasNext(); )
+            for ( Iterator i = projectGroupSource.keySet().iterator(); i.hasNext(); )
             {
                 Integer projectGroupId = (Integer) i.next();
                 List projectsInGroup = getProjectsInGroup( projectGroupId.intValue() );
@@ -243,7 +243,6 @@ public class JdoContinuumStore
                 }
             }
         }
-        
         return aggregate;
     }
 
@@ -484,7 +483,7 @@ public class JdoContinuumStore
         return null;
     }
 
-    public Map getLatestBuildResults()
+    public Map getLatestBuildResults( int projectGroupId )
     {
         PersistenceManager pm = getPersistenceManager();
 
@@ -498,9 +497,25 @@ public class JdoContinuumStore
 
             Query query = pm.newQuery( extent );
 
-            query.setFilter( "this.project.latestBuildId == this.id" );
+            String filter = "this.project.latestBuildId == this.id";
 
-            List result = (List) query.execute();
+            if ( projectGroupId > 0 )
+            {
+                query.declareParameters( "int projectGroupId" );
+                filter += " && this.project.projectGroup.id == projectGroupId";
+            }
+
+            query.setFilter( filter );
+
+            List result = null;
+            if ( projectGroupId > 0 )
+            {
+                result = (List) query.execute( new Integer( projectGroupId ) );
+            }
+            else
+            {
+                result = (List) query.execute();
+            }
 
             result = (List) pm.detachCopyAll( result );
 
@@ -528,6 +543,11 @@ public class JdoContinuumStore
         return null;
     }
 
+    public Map getLatestBuildResults()
+    {
+        return getLatestBuildResults( -1 );
+    }
+
     public void removeNotifier( ProjectNotifier notifier )
         throws ContinuumStoreException
     {
@@ -545,7 +565,6 @@ public class JdoContinuumStore
     public BuildDefinition getDefaultBuildDefinition( int projectId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
-
         BuildDefinition bd = null;
 
         try
@@ -616,6 +635,7 @@ public class JdoContinuumStore
                 return bd;
             }
         }
+
         return null;
     }
 
@@ -810,7 +830,6 @@ public class JdoContinuumStore
                 groupProjects.add( project );
             }
         }
-
         return groupProjects;
     }
 
@@ -1070,11 +1089,10 @@ public class JdoContinuumStore
                 }
             }
         }
-
         return results;
     }
 
-    public Map getBuildResultsInSuccess()
+    public Map getBuildResultsInSuccess( int projectGroupId )
     {
         PersistenceManager pm = getPersistenceManager();
 
@@ -1088,9 +1106,26 @@ public class JdoContinuumStore
 
             Query query = pm.newQuery( extent );
 
-            query.setFilter( "this.project.buildNumber == this.buildNumber" );
+            String filter = "this.project.buildNumber == this.buildNumber";
 
-            List result = (List) query.execute();
+            if ( projectGroupId > 0 )
+            {
+                query.declareParameters( "int projectGroupId" );
+                filter += " && this.project.projectGroup.id == projectGroupId";
+            }
+
+            query.setFilter( filter );
+
+            List result = null;
+
+            if ( projectGroupId > 0 )
+            {
+                result = (List) query.execute( new Integer( projectGroupId ) );
+            }
+            else
+            {
+                result = (List) query.execute();
+            }
 
             result = (List) pm.detachCopyAll( result );
 
@@ -1116,6 +1151,11 @@ public class JdoContinuumStore
         }
 
         return null;
+    }
+
+    public Map getBuildResultsInSuccess()
+    {
+        return getBuildResultsInSuccess( -1 );
     }
 
     public void removeProject( Project project )
@@ -1149,34 +1189,7 @@ public class JdoContinuumStore
     public List getProjectsInGroup( int projectGroupId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
-        PersistenceManager pm = getPersistenceManager();
-
-        Transaction tx = pm.currentTransaction();
-
-        try
-        {
-            tx.begin();
-
-            Extent extent = pm.getExtent( Project.class, true );
-
-            Query query = pm.newQuery( extent, "projectGroup.id == " + projectGroupId );
-
-            query.setOrdering( "name ascending" );
-            
-            pm.getFetchPlan().addGroup( PROJECTGROUP_PROJECTS_FETCH_GROUP );
-
-            List result = (List) query.execute();
-
-            result = (List) pm.detachCopyAll( result );
-
-            tx.commit();
-
-            return result;
-        }
-        finally
-        {
-            rollback( tx );
-        }
+        return getProjectGroupWithProjects( projectGroupId ).getProjects();
     }
 
     public List getProjectsInGroupWithDependencies( int projectGroupId )
@@ -1333,26 +1346,16 @@ public class JdoContinuumStore
     public ProjectGroup getProjectGroupByProjectId( int projectId )
         throws ContinuumObjectNotFoundException
     {
-        // todo this chunk should be optimized in the store by a good query
-        Collection projectGroups = getAllProjectGroupsWithProjects();
-
-        for ( Iterator i = projectGroups.iterator(); i.hasNext(); )
+        try
         {
-            ProjectGroup projectGroup = (ProjectGroup) i.next();
-
-            for ( Iterator j = projectGroup.getProjects().iterator(); j.hasNext(); )
-            {
-                Project project = (Project) j.next();
-
-                if ( projectId == project.getId() )
-                {
-                    return projectGroup;
-                }
-            }
+            return getProject( projectId ).getProjectGroup();
         }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumObjectNotFoundException(
+                "unable to find project group containing project with id: " + projectId );
 
-        throw new ContinuumObjectNotFoundException(
-            "unable to find project group containing project with id: " + projectId );
+        }
     }
 
     public SystemConfiguration addSystemConfiguration( SystemConfiguration systemConf )

@@ -305,7 +305,7 @@ public class DefaultContinuumTest
             continuum.addNotifier( p.getId(), new ProjectNotifier() );
         }
 
-        projectGroup = continuum.getProjectGroup( projectGroup.getId() );
+        projectGroup = continuum.getProjectGroupWithBuildDetails( projectGroup.getId() );
 
         assertEquals( 1, projectGroup.getNotifiers().size() );
 

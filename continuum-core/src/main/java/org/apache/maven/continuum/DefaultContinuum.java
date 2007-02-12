@@ -201,19 +201,18 @@ public class DefaultContinuum
     public ProjectGroup getProjectGroup( int projectGroupId )
         throws ContinuumException
     {
-        List projectGroups = store.getAllProjectGroupsWithBuildDetails();
-
-        for ( Iterator i = projectGroups.iterator(); i.hasNext(); )
+        try
         {
-            ProjectGroup pg = (ProjectGroup) i.next();
-
-            if ( pg.getId() == projectGroupId )
-            {
-                return pg;
-            }
+            return store.getProjectGroup( projectGroupId );
         }
-
-        throw new ContinuumException( "invalid group id" );
+        catch ( ContinuumObjectNotFoundException e )
+        {
+            throw new ContinuumException( "invalid group id", e );
+        }
+        catch ( ContinuumStoreException e )
+        {
+            throw new ContinuumException( "Error while querying for project group.", e );
+        }
     }
 
     public ProjectGroup getProjectGroupWithProjects( int projectGroupId )
@@ -383,9 +382,33 @@ public class DefaultContinuum
         return store.getAllProjectsByNameWithDependencies();
     }
 
+    public Map getLatestBuildResults( int projectGroupId )
+    {
+        Map result = store.getLatestBuildResults( projectGroupId );
+
+        if ( result == null )
+        {
+            result = new HashMap();
+        }
+
+        return result;
+    }
+
     public Map getLatestBuildResults()
     {
         Map result = store.getLatestBuildResults();
+
+        if ( result == null )
+        {
+            result = new HashMap();
+        }
+
+        return result;
+    }
+
+    public Map getBuildResultsInSuccess( int projectGroupId )
+    {
+        Map result = store.getBuildResultsInSuccess( projectGroupId );
 
         if ( result == null )
         {
@@ -1410,7 +1433,7 @@ public class DefaultContinuum
     public ProjectNotifier getGroupNotifier( int projectGroupId, int notifierId )
         throws ContinuumException
     {
-        ProjectGroup projectGroup = getProjectGroup( projectGroupId );
+        ProjectGroup projectGroup = getProjectGroupWithBuildDetails( projectGroupId );
 
         List notifiers = projectGroup.getNotifiers();
 
@@ -1447,7 +1470,7 @@ public class DefaultContinuum
     public ProjectNotifier updateGroupNotifier( int projectGroupId, ProjectNotifier notifier )
         throws ContinuumException
     {
-        ProjectGroup projectGroup = getProjectGroup( projectGroupId );
+        ProjectGroup projectGroup = getProjectGroupWithBuildDetails( projectGroupId );
 
         ProjectNotifier notif = getGroupNotifier( projectGroupId, notifier.getId() );
 
@@ -1559,7 +1582,7 @@ public class DefaultContinuum
 
         notif.setFrom( ProjectNotifier.FROM_USER );
 
-        ProjectGroup projectGroup = getProjectGroup( projectGroupId );
+        ProjectGroup projectGroup = getProjectGroupWithBuildDetails( projectGroupId );
 
         projectGroup.addNotifier( notif );
         try
@@ -1637,7 +1660,7 @@ public class DefaultContinuum
     public void removeGroupNotifier( int projectGroupId, int notifierId )
         throws ContinuumException
     {
-        ProjectGroup projectGroup = getProjectGroup( projectGroupId );
+        ProjectGroup projectGroup = getProjectGroupWithBuildDetails( projectGroupId );
 
         ProjectNotifier n = getGroupNotifier( projectGroupId, notifierId );
 

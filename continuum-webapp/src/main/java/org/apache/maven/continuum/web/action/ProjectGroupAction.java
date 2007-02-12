@@ -119,9 +119,9 @@ public class ProjectGroupAction
     public String members()
         throws ContinuumException
     {
-        projectGroup = getContinuum().getProjectGroup( projectGroupId );
+        projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
 
-        groupProjects = getContinuum().getProjectsInGroup( projectGroupId );
+        groupProjects = projectGroup.getProjects();
 
         populateProjectGroupUsers( projectGroup );
 
@@ -149,7 +149,6 @@ public class ProjectGroupAction
     public String remove()
         throws ContinuumException
     {
-        //todo add confirm page like removing build definition
         if ( confirmed )
         {
             getContinuum().removeProjectGroup( projectGroupId );
@@ -166,13 +165,13 @@ public class ProjectGroupAction
     public String edit()
         throws ContinuumException
     {
-        projectGroup = getProjectGroup( projectGroupId );
+        projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
 
         name = projectGroup.getName();
 
         description = projectGroup.getDescription();
 
-        projectList = getContinuum().getProjectsInGroup( projectGroupId );
+        projectList = projectGroup.getProjects();
 
         if ( projectList != null )
         {
@@ -246,7 +245,7 @@ public class ProjectGroupAction
                 }
             }
 
-            ProjectGroup newProjectGroup = getProjectGroup( new Integer( id[0] ).intValue() );
+            ProjectGroup newProjectGroup = getContinuum().getProjectGroup( new Integer( id[0] ).intValue() );
 
             if ( newProjectGroup.getId() != projectGroup.getId() )
             {
@@ -436,12 +435,6 @@ public class ProjectGroupAction
     public ProjectGroup getProjectGroup()
     {
         return projectGroup;
-    }
-
-    public ProjectGroup getProjectGroup( int projectGroupId )
-        throws ContinuumException
-    {
-        return getContinuum().getProjectGroup( projectGroupId );
     }
 
     public void setProjectGroup( ProjectGroup projectGroup )
