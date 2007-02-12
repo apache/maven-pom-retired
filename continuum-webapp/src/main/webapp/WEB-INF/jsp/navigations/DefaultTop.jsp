@@ -44,6 +44,6 @@
       <a href="http://maven.apache.org/">Maven</a> |
       <a href="http://www.apache.org/">Apache</a>
     </div>
-    <c:import url="/WEB-INF/jsp/pss/include/securityLinks.jsp"/>
+    <%@ include file="/WEB-INF/jsp/pss/include/securityLinks.jsp" %>
   </div>
 </ww:i18n>
