@@ -48,6 +48,37 @@
   </load-on-start>
 
   <components>
+    <component>
+      <role>org.codehaus.plexus.registry.Registry</role>
+      <implementation>org.codehaus.plexus.registry.CommonsConfigurationRegistry</implementation>
+      <role-hint>commons-configuration</role-hint>
+      <configuration>
+        <properties>
+          <system/>
+          <jndi prefix="java:comp/env" config-optional="true"/>
+          <xml fileName="${user.home}/.m2/continuum.xml" config-optional="true" config-name="org.apache.maven.continuum"
+               config-at="org.apache.maven.continuum" config-forceCreate="true"/>
+          <xml fileName="${user.home}/.m2/shared.xml" config-optional="true"
+               config-name="org.apache.maven.shared.app" config-at="org.apache.maven.shared.app"
+               config-forceCreate="true"/>
+          <properties fileName="${user.home}/.m2/security.properties" config-optional="true"
+                      config-at="org.codehaus.plexus.security"/>
+          <properties fileName="${user.home}/.m2/continuum.properties" config-optional="true"
+                      config-at="org.codehaus.plexus.security"/>
+          <xml fileName="${appserver.base}/conf/continuum.xml" config-optional="true"
+               config-at="org.apache.maven.continuum"/>
+          <xml fileName="${appserver.base}/conf/common.xml" config-optional="true"/>
+          <properties fileName="${appserver.base}/security.properties" config-optional="true"
+                      config-at="org.codehaus.plexus.security"/>
+          <xml fileName="${appserver.home}/conf/continuum.xml" config-optional="true"
+               config-at="org.apache.maven.continuum"/>
+          <xml fileName="${appserver.home}/conf/common.xml" config-optional="true"/>
+          <properties fileName="${appserver.home}/security.properties" config-optional="true"
+                      config-at="org.codehaus.plexus.security"/>
+        </properties>
+      </configuration>
+    </component>
+
     <!--
     | The XML-RPC service
     |-->
@@ -475,19 +506,6 @@
         </levels>
       </configuration>
     </component>
-
-    <component>
-      <role>org.codehaus.plexus.security.configuration.UserConfiguration</role>
-      <implementation>org.codehaus.plexus.security.configuration.UserConfiguration</implementation>
-      <configuration>
-        <configs>
-          <config>${user.home}/.m2/security.properties</config>
-          <config>${user.home}/.m2/continuum.properties</config>
-          <config>/org/apache/maven/continuum/security.properties</config>
-        </configs>
-      </configuration>
-    </component>
-
   </components>
 
   <!-- Override default configuration of components -->
