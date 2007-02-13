@@ -131,7 +131,7 @@
         <param name="actionName">addadmin</param>
         <param name="namespace">/security</param>
       </result>
-      <result name="must-change-password" type="redirect-action">
+      <result name="security-must-change-password" type="redirect-action">
         <param name="actionName">password</param>
         <param name="namespace">/security</param>
       </result>
