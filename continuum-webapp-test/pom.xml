@@ -100,10 +100,6 @@
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-log4j-logging</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>derby</artifactId>
-    </dependency>
     <!--
     <dependency>
       <groupId>mysql</groupId>
@@ -340,7 +336,7 @@
                   <fileset dir="src/test/${container.name}"/>
                 </copy>
                 <copy todir="${project.build.directory}/installs/${container.name}/apache-tomcat-5.5.20/apache-tomcat-5.5.20/common/lib">
-                  <fileset dir="${project.build.directory}/${container.name}conf/webapps/continuum/WEB-INF/lib">
+                  <fileset dir="${project.build.directory}/providedDependencies">
                     <include name="**/derby-*.jar"/>
                   </fileset>
                 </copy>
