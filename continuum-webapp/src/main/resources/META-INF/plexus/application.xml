@@ -334,10 +334,12 @@
             <name>org.jpox.rdbms.dateTimezone</name>
             <value>JDK_DEFAULT_TIMEZONE</value>
           </property>
+<!--
           <property>
             <name>org.jpox.identifier.case</name>
             <value>PreserveCase</value>
           </property>
+-->
         </otherProperties>
       </configuration>
     </component>
@@ -377,10 +379,12 @@
             <name>org.jpox.transactionIsolation</name>
             <value>READ_UNCOMMITTED</value>
           </property>
+<!--
           <property>
             <name>org.jpox.identifier.case</name>
             <value>PreserveCase</value>
           </property>
+-->
         </otherProperties>
       </configuration>
     </component>
