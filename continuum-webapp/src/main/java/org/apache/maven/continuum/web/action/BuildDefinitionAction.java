@@ -115,7 +115,7 @@ public class BuildDefinitionAction
             }
             else
             {
-                List projects = getContinuum().getProjectGroup( projectGroupId ).getProjects();
+                List projects = getContinuum().getProjectGroupWithProjects( projectGroupId ).getProjects();
                 
                 if( projects.size() > 0 )
                 {
