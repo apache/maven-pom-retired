@@ -144,7 +144,7 @@
         this address instead the address specified in the project
         configuration
         -->
-        <to-override>${mail.override.to.address}</to-override>
+        <to-override></to-override>
       </configuration>
     </component>
 
