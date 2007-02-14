@@ -535,8 +535,7 @@ public class DefaultMavenBuilderHelper
     {
         try
         {
-            //TODO: buildSettings cache settings so if user modify it, we need to restart Continuum, we need to use a non-cached settings there
-            return mavenSettingsBuilder.buildSettings();
+            return mavenSettingsBuilder.buildSettings( false );
         }
         catch ( IOException e )
         {

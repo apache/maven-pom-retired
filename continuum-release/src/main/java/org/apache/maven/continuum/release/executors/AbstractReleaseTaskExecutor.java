@@ -100,7 +100,7 @@ public abstract class AbstractReleaseTaskExecutor
     {
         try
         {
-            settings = settingsBuilder.buildSettings();
+            settings = settingsBuilder.buildSettings( false );
         }
         catch ( IOException e )
         {
