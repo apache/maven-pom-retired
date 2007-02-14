@@ -102,7 +102,7 @@ public class DefaultContinuumScm
             getLogger().info( "Checking out project: '" + project.getName() + "', " + "id: '" + project.getId() + "' " +
                 "to '" + workingDirectory + "'" + tagMessage + "." );
 
-            ScmRepository repository = getScmRepositorty( project, false );
+            ScmRepository repository = getScmRepository( project, false );
 
             ScmResult result;
 
@@ -232,7 +232,7 @@ public class DefaultContinuumScm
                 }
             }
 
-            ScmRepository repository = getScmRepositorty( project, project.isScmUseCache() );
+            ScmRepository repository = getScmRepository( project, project.isScmUseCache() );
 
             ScmResult result;
 
@@ -320,7 +320,7 @@ public class DefaultContinuumScm
         return null;
     }
 
-    private ScmRepository getScmRepositorty( Project project, boolean useCredentialsCache )
+    private ScmRepository getScmRepository( Project project, boolean useCredentialsCache )
         throws ScmRepositoryException, NoSuchScmProviderException
     {
         ScmRepository repository = scmManager.makeScmRepository( project.getScmUrl().trim() );
