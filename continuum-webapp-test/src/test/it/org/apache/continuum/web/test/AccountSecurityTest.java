@@ -83,6 +83,7 @@ public class AccountSecurityTest
                 {
                     // TODO! this is due to a bug where roles are not removed with the user, so remove them by hand [CONTINUUM-1095]
                     clickLinkWithText( CUSTOM_USERNAME5 );
+                    clickLinkWithText( "Edit Roles" );
                     checkField( "removeRolesFromUser_removeSelectedRolesSystem Administrator" );
                     clickButtonWithValue( "Remove Selected Roles" );
                 }
@@ -242,14 +243,15 @@ public class AccountSecurityTest
         createUser( CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD, CUSTOM_PASSWORD, true );
 
         // upgrade the role of the user to system administrator
-        //TODO: check Permanent/validated/locked columns
-        String[] columnValues = {CUSTOM_USERNAME5, CUSTOM_FULLNAME, CUSTOM_EMAILADD};
-        clickLinkWithText( CUSTOM_USERNAME5 );
-
+        assertUserRolesPage();
         checkField( "addRolesToUser_addSelectedRolesSystem Administrator" );
         clickButtonWithValue( "Add Selected Roles" );
 
-        // verify roles        
+        // after adding roles, we are returned to the list of users
+        //TODO: check Permanent/validated/locked columns
+        clickLinkWithText( CUSTOM_USERNAME5 );
+
+        // verify roles
         String[] roleList = {"System Administrator", "User Administrator", 
             "Continuum Group Project Administrator", "Project Developer - Default Project Group",
             "Project User - Default Project Group"};
@@ -278,6 +280,10 @@ Thread.sleep( 20000 );
         setFieldValue( CREATE_FORM_PASSWORD_FIELD, password );
         setFieldValue( CREATE_FORM_CONFIRM_PASSWORD_FIELD, confirmPassword );
         submit();
+
+        // click past second page without adding any roles
+        assertUserRolesPage();
+        clickButtonWithValue( "Add Selected Roles" );
 
         if ( valid )
         {
