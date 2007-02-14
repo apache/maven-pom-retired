@@ -157,6 +157,7 @@
 
     <action name="companyInfo" class="companyInfo">
       <result name="success">/WEB-INF/jsp/components/companyLogo.jsp</result>
+      <interceptor-ref name="basicStack" />
     </action>
 
     <action name="groupSummary" class="groupSummary">
