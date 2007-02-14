@@ -191,6 +191,11 @@
           <type>String</type>
         </field>
         <field>
+          <name>scmUseCache</name>
+          <version>1.1.0+</version>
+          <type>boolean</type>
+        </field>
+        <field>
           <name>version</name>
           <version>1.1.0+</version>
           <type>String</type>

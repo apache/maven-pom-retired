@@ -50,6 +50,8 @@ public class ProjectEditAction
 
     private String scmTag;
 
+    private boolean scmUseCache;
+
     public String save()
         throws ContinuumException
     {
@@ -60,6 +62,8 @@ public class ProjectEditAction
         project.setVersion( version );
 
         project.setScmUrl( scmUrl );
+
+        project.setScmUseCache( scmUseCache );
 
         project.setScmUsername( scmUsername );
 
@@ -86,6 +90,8 @@ public class ProjectEditAction
         scmUsername = project.getScmUsername();
 
         scmPassword = project.getScmPassword();
+
+        scmUseCache = project.isScmUseCache();
 
         scmTag = project.getScmTag();
 
@@ -171,5 +177,15 @@ public class ProjectEditAction
     public Project getProject()
     {
         return project;
+    }
+
+    public void setScmUseCache( boolean scmUseCache )
+    {
+        this.scmUseCache = scmUseCache;
+    }
+
+    public boolean isScmUseCache()
+    {
+        return scmUseCache;
     }
 }

@@ -102,7 +102,7 @@ public class DefaultContinuumScm
             getLogger().info( "Checking out project: '" + project.getName() + "', " + "id: '" + project.getId() + "' " +
                 "to '" + workingDirectory + "'" + tagMessage + "." );
 
-            ScmRepository repository = getScmRepositorty( project );
+            ScmRepository repository = getScmRepositorty( project, false );
 
             ScmResult result;
 
@@ -232,7 +232,7 @@ public class DefaultContinuumScm
                 }
             }
 
-            ScmRepository repository = getScmRepositorty( project );
+            ScmRepository repository = getScmRepositorty( project, project.isScmUseCache() );
 
             ScmResult result;
 
@@ -320,24 +320,27 @@ public class DefaultContinuumScm
         return null;
     }
 
-    private ScmRepository getScmRepositorty( Project project )
+    private ScmRepository getScmRepositorty( Project project, boolean useCredentialsCache )
         throws ScmRepositoryException, NoSuchScmProviderException
     {
         ScmRepository repository = scmManager.makeScmRepository( project.getScmUrl().trim() );
 
         repository.getProviderRepository().setPersistCheckout( true );
 
-        if ( !StringUtils.isEmpty( project.getScmUsername() ) )
+        if ( !( useCredentialsCache && repository.getProvider().equals( "svn" ) ) )
         {
-            repository.getProviderRepository().setUser( project.getScmUsername() );
+            if ( !StringUtils.isEmpty( project.getScmUsername() ) )
+            {
+                repository.getProviderRepository().setUser( project.getScmUsername() );
 
-            if ( !StringUtils.isEmpty( project.getScmPassword() ) )
-            {
-                repository.getProviderRepository().setPassword( project.getScmPassword() );
-            }
-            else
-            {
-                repository.getProviderRepository().setPassword( "" );
+                if ( !StringUtils.isEmpty( project.getScmPassword() ) )
+                {
+                    repository.getProviderRepository().setPassword( project.getScmPassword() );
+                }
+                else
+                {
+                    repository.getProviderRepository().setPassword( "" );
+                }
             }
         }
 
