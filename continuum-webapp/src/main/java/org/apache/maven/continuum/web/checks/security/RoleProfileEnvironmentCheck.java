@@ -70,6 +70,8 @@ public class RoleProfileEnvironmentCheck
                 ProjectGroup group = (ProjectGroup) i.next();
 
                 // gets the role, making it if it doesn't exist
+                //TODO: use continuum.executeAction( "add-assignable-roles", context ); or something like that to avoid code duplication
+                continuumRoleManager.getDynamicRole( "continuum-group-project-administrator", group.getName() );
                 continuumRoleManager.getDynamicRole( "continuum-group-user", group.getName() );
                 continuumRoleManager.getDynamicRole( "continuum-group-developer", group.getName() );
 

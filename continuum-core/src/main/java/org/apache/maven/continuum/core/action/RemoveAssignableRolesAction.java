@@ -57,6 +57,8 @@ public class RemoveAssignableRolesAction
 
         try
         {
+            roleManager.deleteDynamicRole( "continuum-group-project-administrator", projectGroup.getName() );
+
             roleManager.deleteDynamicRole( "continuum-group-developer", projectGroup.getName() );
 
             roleManager.deleteDynamicRole( "continuum-group-user", projectGroup.getName() );

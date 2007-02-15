@@ -54,7 +54,7 @@ public class AddAssignableRolesAction
     {
         int projectGroupId = getProjectGroupId( context );
 
-        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( projectGroupId );
+        ProjectGroup projectGroup = store.getProjectGroup( projectGroupId );
 
         // TODO: make the resource the name of the project group and hide the id from the user
 
