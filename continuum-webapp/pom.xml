@@ -234,6 +234,11 @@
       <artifactId>continuum-configuration</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.plexus.registry</groupId>
+      <artifactId>plexus-registry-commons</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-app-configuration-model</artifactId>
     </dependency>
@@ -279,6 +284,12 @@
       <groupId>org.extremecomponents</groupId>
       <artifactId>extremecomponents</artifactId>
       <version>1.0.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-collections</groupId>
+          <artifactId>commons-collections</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
