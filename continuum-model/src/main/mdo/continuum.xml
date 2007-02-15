@@ -190,7 +190,7 @@
           <version>1.1.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field jpox.nullValue="default">
           <name>scmUseCache</name>
           <version>1.1.0+</version>
           <type>boolean</type>
