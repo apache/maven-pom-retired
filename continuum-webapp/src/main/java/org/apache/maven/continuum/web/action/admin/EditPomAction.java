@@ -103,6 +103,7 @@ public class EditPomAction
         {
             companyModel = new Model();
             companyModel.setModelVersion( "4.0.0" );
+            companyModel.setPackaging( "pom" );
 
             if ( companyPom != null )
             {
