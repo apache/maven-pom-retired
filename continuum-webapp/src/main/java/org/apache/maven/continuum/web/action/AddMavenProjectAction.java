@@ -173,6 +173,13 @@ public abstract class AddMavenProjectAction
             //}
         }
 
+        initializeProjectGroupName();
+
+        return INPUT;
+    }
+
+    private void initializeProjectGroupName()
+    {
         if ( disableGroupSelection == true && selectedProjectGroup != DEFINED_BY_POM_GROUP_ID )
         {
             try
@@ -184,8 +191,6 @@ public abstract class AddMavenProjectAction
                 e.printStackTrace();
             }
         }
-
-        return INPUT;
     }
 
     public String getPom()
@@ -271,6 +276,8 @@ public abstract class AddMavenProjectAction
     public SecureActionBundle getSecureActionBundle()
         throws SecureActionException
     {
+        initializeProjectGroupName();
+
         SecureActionBundle bundle = new SecureActionBundle();
         bundle.setRequiresAuthentication( true );
 
