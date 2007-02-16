@@ -23,6 +23,7 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
@@ -63,6 +64,13 @@ public class AddMavenTwoProjectAction
             try
             {
                 String filePath = pomUrl;
+
+                if ( !filePath.startsWith( FILE_SCHEME + "/" ) && filePath.startsWith( FILE_SCHEME ) )
+                {
+                    //Little hack for linux (CONTINUUM-1169)
+                    filePath = StringUtils.replace( filePath, FILE_SCHEME, FILE_SCHEME + "/" );
+                }
+
                 if ( filePath.startsWith( FILE_SCHEME ) )
                 {
                     filePath = filePath.substring( FILE_SCHEME.length() );
