@@ -414,7 +414,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-formica</artifactId>
-        <version>1.0-beta-13-SNAPSHOT</version>
+        <version>1.0-beta-13</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -573,6 +573,6 @@
     <wagon.version>1.0-beta-2</wagon.version>
     <maven-scm.version>1.0-beta-4</maven-scm.version>
     <plexus-security.version>1.0-alpha-10-SNAPSHOT</plexus-security.version>
-    <mail-sender.version>1.0-alpha-6-SNAPSHOT</mail-sender.version>
+    <mail-sender.version>1.0-alpha-6</mail-sender.version>
   </properties>
 </project>
