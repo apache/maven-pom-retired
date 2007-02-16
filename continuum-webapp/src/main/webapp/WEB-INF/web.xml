@@ -69,6 +69,19 @@
     <listener-class>org.codehaus.plexus.xwork.PlexusLifecycleListener</listener-class>
   </listener>
 
+  <error-page>
+    <error-code>403</error-code>
+    <location>/WEB-INF/jsp/error/httpError.jsp?errorCode=403</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/WEB-INF/jsp/error/httpError.jsp?errorCode=404</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/WEB-INF/jsp/error/httpError.jsp?errorCode=500</location>
+  </error-page>
+
   <!-- [jspc-maven-plugin:post-compiled-jsps-as-servlets] -->
 
 </web-app>
