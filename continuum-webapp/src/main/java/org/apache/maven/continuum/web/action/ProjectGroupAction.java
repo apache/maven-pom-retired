@@ -375,6 +375,7 @@ public class ProjectGroupAction
             try
             {
                 Collection effectiveRoles = rbac.getEffectivelyAssignedRoles( user.getUsername() );
+
                 for ( Iterator j = effectiveRoles.iterator(); j.hasNext(); )
                 {
                     Role role = (Role) j.next();
@@ -385,7 +386,6 @@ public class ProjectGroupAction
                         break;
                     }
                 }
-
             }
             catch ( RbacObjectNotFoundException e )
             {

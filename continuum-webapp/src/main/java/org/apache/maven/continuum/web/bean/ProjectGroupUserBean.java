@@ -19,12 +19,12 @@ package org.apache.maven.continuum.web.bean;
  * under the License.
  */
 
+import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.codehaus.plexus.security.user.User;
+import org.codehaus.plexus.security.rbac.Role;
+
 import java.util.Collection;
 import java.util.Iterator;
-
-import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.codehaus.plexus.security.rbac.Role;
-import org.codehaus.plexus.security.user.User;
 
 public class ProjectGroupUserBean
 {
@@ -39,49 +39,29 @@ public class ProjectGroupUserBean
     private ProjectGroup projectGroup;
     
     private Collection roles;
+
+    /*
+     * these booleans should be set on the addition of roles to this bean, see setRoles and addRole 
+     */
+    boolean isAdministrator = false;
+
+    boolean isDeveloper = false;
+
+    boolean isUser = false;
     
     public boolean isAdministrator()
     {
-        for ( Iterator i = roles.iterator(); i.hasNext(); )
-        {
-            Role role = (Role) i.next();
-            if ( role.getName().indexOf( ROLE_ADMINISTRATOR ) > -1 )
-            {
-                return true;
-            }
-        }
-        
-        return false;
+       return isAdministrator;
     }
 
     public boolean isDeveloper()
     {
-        for ( Iterator i = roles.iterator(); i.hasNext(); )
-        {
-            Role role = (Role) i.next();
-            if ( role.getName().indexOf( projectGroup.getName() ) > -1 && 
-                 role.getName().indexOf( ROLE_DEVELOPER ) > -1 )
-            {
-                return true;
-            }
-        }
-        
-        return false;
+       return isDeveloper;
     }
 
     public boolean isUser()
     {
-        for ( Iterator i = roles.iterator(); i.hasNext(); )
-        {
-            Role role = (Role) i.next();
-            if ( role.getName().indexOf( projectGroup.getName() ) > -1 && 
-                 role.getName().indexOf( ROLE_USER ) > -1 )
-            {
-                return true;
-            }
-        }
-        
-        return false;
+       return isUser;
     }
 
     public ProjectGroup getProjectGroup()
@@ -97,6 +77,21 @@ public class ProjectGroupUserBean
     public void addRole( String role )
     {
         roles.add( role );
+
+        if ( role.indexOf( ROLE_ADMINISTRATOR ) != -1 )
+        {
+            isAdministrator = true;
+        }
+
+        if ( role.indexOf( ROLE_DEVELOPER ) != -1 )
+        {
+            isDeveloper = true;
+        }
+
+        if ( role.indexOf( ROLE_USER ) != -1 )
+        {
+            isUser = true;
+        }        
     }
     
     public Collection getRoles()
@@ -107,6 +102,26 @@ public class ProjectGroupUserBean
     public void setRoles( Collection roles )
     {
         this.roles = roles;
+
+        for ( Iterator i = roles.iterator(); i.hasNext(); )
+        {
+            Role role = (Role)i.next();
+
+            if ( role.getName().indexOf( ROLE_ADMINISTRATOR ) != -1 )
+            {
+                isAdministrator = true;
+            }
+
+            if ( role.getName().indexOf( ROLE_DEVELOPER ) != -1 )
+            {
+                isDeveloper = true;
+            }
+
+            if ( role.getName().indexOf( ROLE_USER ) != -1 )
+            {
+                isUser = true;
+            }
+        }
     }
 
     public User getUser()
