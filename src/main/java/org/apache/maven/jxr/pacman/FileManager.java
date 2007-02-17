@@ -93,7 +93,7 @@ public class FileManager
     /**
      * see setEncoding(String)
      *
-     * @see setEncoding(String)
+     * @see #setEncoding(String)
      */
     public String getEncoding()
     {
