@@ -29,7 +29,7 @@
 
 Using Maven JXR in Java
 
- The cross-referencing API is pretty basic. You could generate xref for a given Java package or single Java source
+ The cross-referencing API is pretty basic. You can generate xref for a given Java package or single Java source
  class. The whole generated file is xref'd by line number.
 
 * Transforming Java Packages
@@ -46,7 +46,7 @@ jxr.xref( Collections.singletonList( "/src/main/java/" ), "templateDir",
                "WindowsTitle", "DocTitle", "Bottom" );
 +------+
 
- <<Note>>: the <templateDir> is a directory with several {{{http://jakarta.apache.org/velocity/}Velocity}} templates.
+ <<Note>>: the <templateDir> is a directory with several {{{http://velocity.apache.org/}Velocity}} templates.
  Maven JXR uses its own {{{https://svn.apache.org/repos/asf/maven/jxr/trunk/src/main/resources/templates}templates}}.
 
  The generated JXR structure should be like the following:
@@ -60,9 +60,9 @@ jxr.xref( Collections.singletonList( "/src/main/java/" ), "templateDir",
  ...
 +------+
 
-* Transforming Single Java Source File
+* Transforming a Single Java Source File
 
- You could transform a single Java source file with the following:
+ You can transform a single Java source file with the following:
 
 +------+
 File sourceFile = new File( "/src/main/java/Test.java" );

@@ -21,8 +21,8 @@ under the License.
 
 <faqs id="FAQ" title="Frequently Asked Questions">
   <part id="General">
-    <faq id="Is it possible to convert other source files that Java to HTML">
-      <question>Is it possible to convert other source files that Java to HTML?</question>
+    <faq id="Is it possible to convert other source files than Java to HTML">
+      <question>Is it possible to convert other source files than Java to HTML?</question>
       <answer>
         <p>
           Not yet but it is on the roadmap.
