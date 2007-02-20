@@ -22,6 +22,8 @@ package org.apache.maven.continuum.web.action.notifier;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
 
 import java.util.Map;
 
@@ -109,30 +111,45 @@ public abstract class AbstractNotifierEditActionSupport
     {
         ProjectNotifier notifier = getNotifier();
 
-        boolean isNew = ( notifier == null || getNotifierId() == 0 );
-
-        if ( isNew )
+        try
         {
-            notifier = new ProjectNotifier();
+            boolean isNew = ( notifier == null || getNotifierId() == 0 );
+
+            if ( isNew )
+            {
+                notifier = new ProjectNotifier();
+            }
+
+            if( isAuthorized() )
+            {
+                notifier.setType( getNotifierType() );
+
+                notifier.setSendOnSuccess( isSendOnSuccess() );
+
+                notifier.setSendOnFailure( isSendOnFailure() );
+
+                notifier.setSendOnError( isSendOnError() );
+
+                notifier.setSendOnWarning( isSendOnWarning() );
+
+                setNotifierConfiguration( notifier );
+
+                saveNotifier( notifier );
+
+                if ( fromGroupPage )
+                {
+                    return "to_group_page";
+                }
+            }
         }
-
-        notifier.setType( getNotifierType() );
-
-        notifier.setSendOnSuccess( isSendOnSuccess() );
-
-        notifier.setSendOnFailure( isSendOnFailure() );
-
-        notifier.setSendOnError( isSendOnError() );
-
-        notifier.setSendOnWarning( isSendOnWarning() );
-
-        setNotifierConfiguration( notifier );
-
-        saveNotifier( notifier );
-
-        if ( fromGroupPage )
+        catch ( AuthorizationRequiredException authzE )
         {
-            return "to_group_page";
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException authnE )
+        {
+            return REQUIRES_AUTHENTICATION;
         }
 
         return SUCCESS;
@@ -154,18 +171,33 @@ public abstract class AbstractNotifierEditActionSupport
             notifier = new ProjectNotifier();
         }
 
-        // setup Action fields 
-        setNotifierType( notifier.getType() );
+        try
+        {
+            if ( isAuthorized() )
+            {
+                // setup Action fields
+                setNotifierType( notifier.getType() );
 
-        setSendOnSuccess( notifier.isSendOnSuccess() );
+                setSendOnSuccess( notifier.isSendOnSuccess() );
 
-        setSendOnFailure( notifier.isSendOnFailure() );
+                setSendOnFailure( notifier.isSendOnFailure() );
 
-        setSendOnError( notifier.isSendOnError() );
+                setSendOnError( notifier.isSendOnError() );
 
-        setSendOnWarning( notifier.isSendOnWarning() );
+                setSendOnWarning( notifier.isSendOnWarning() );
 
-        initConfiguration( notifier.getConfiguration() );
+                initConfiguration( notifier.getConfiguration() );
+            }
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException authnE )
+        {
+            return REQUIRES_AUTHENTICATION;
+        }
 
         return SUCCESS;
     }
@@ -295,4 +327,7 @@ public abstract class AbstractNotifierEditActionSupport
      * @see #initConfiguration(Map)
      */
     protected abstract void setNotifierConfiguration( ProjectNotifier notifier );
+
+    protected abstract boolean isAuthorized() throws AuthorizationRequiredException,
+        AuthenticationRequiredException, ContinuumException;
 }

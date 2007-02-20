@@ -1,4 +1,5 @@
 package org.apache.maven.continuum.web.exception;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,21 +19,22 @@ package org.apache.maven.continuum.web.exception;
  * under the License.
  */
 
-/**                                                                                          
- * ContinuumActionException:
+/**
+ * Used when authentication is checked during authorization
+ * checks within action classes
  *
- * @author Jesse McConnell <jmcconnell@apache.org>
- * @version $Id$
+ * @author <a href="mailto:oching@apache.org">Maria Odea Ching</a>
+ * @version
  */
-public class ContinuumActionException
+public class AuthenticationRequiredException
     extends Exception
 {
-    public ContinuumActionException( String string )
+    public AuthenticationRequiredException( String string )
     {
         super( string );
     }
 
-    public ContinuumActionException( String string, Throwable throwable )
+    public AuthenticationRequiredException( String string, Throwable throwable )
     {
         super( string, throwable );
     }

@@ -23,6 +23,9 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.apache.maven.continuum.release.ContinuumReleaseManagerListener;
 import org.apache.maven.continuum.release.DefaultReleaseManagerListener;
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
+
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -32,6 +35,9 @@ import org.apache.maven.shared.release.versions.VersionInfo;
 import org.apache.maven.shared.release.versions.DefaultVersionInfo;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 
 import java.io.File;
 import java.io.FileReader;
@@ -51,6 +57,7 @@ import java.util.Properties;
  */
 public class ReleasePrepareAction
     extends ContinuumActionSupport
+    implements SecureAction
 {
     private static final String SCM_SVN_PROTOCOL_PREFIX = "scm:svn";
 
@@ -82,31 +89,48 @@ public class ReleasePrepareAction
 
     private ContinuumReleaseManagerListener listener;
 
+    private String projectGroupName = "";
+
     public String input()
         throws Exception
     {
-        Project project = getContinuum().getProject( projectId );
-        scmUsername = project.getScmUsername();
-        scmPassword = project.getScmPassword();
-        scmTag = project.getScmTag();
-
-        String scmUrl = project.getScmUrl();
-        if ( scmUrl.startsWith( SCM_SVN_PROTOCOL_PREFIX ) )
+       /* try
         {
-            scmTagBase = new SvnScmProviderRepository( scmUrl, scmUsername, scmPassword ).getTagBase();
-            // strip the Maven scm protocol prefix
-            scmTagBase = scmTagBase.substring( SCM_SVN_PROTOCOL_PREFIX.length() + 1 );
+            if ( isAuthorizedBuildProjectGroup( getProjectGroupName() ) )
+            { */
+                Project project = getContinuum().getProject( projectId );
+                scmUsername = project.getScmUsername();
+                scmPassword = project.getScmPassword();
+                scmTag = project.getScmTag();
+
+                String scmUrl = project.getScmUrl();
+                if ( scmUrl.startsWith( SCM_SVN_PROTOCOL_PREFIX ) )
+                {
+                    scmTagBase = new SvnScmProviderRepository( scmUrl, scmUsername, scmPassword ).getTagBase();
+                    // strip the Maven scm protocol prefix
+                    scmTagBase = scmTagBase.substring( SCM_SVN_PROTOCOL_PREFIX.length() + 1 );
+                }
+                else
+                {
+                    scmTagBase = "";
+                }
+
+                prepareGoals = "clean integration-test";
+
+                getReleasePluginParameters( project.getWorkingDirectory(), "pom.xml" );
+
+                processProject( project.getWorkingDirectory(), "pom.xml" );
+        /*    }
         }
-        else
+        catch ( AuthorizationRequiredException authzE )
         {
-            scmTagBase = "";
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
         }
-
-        prepareGoals = "clean integration-test";
-
-        getReleasePluginParameters( project.getWorkingDirectory(), "pom.xml" );
-
-        processProject( project.getWorkingDirectory(), "pom.xml" );
+        catch ( AuthenticationRequiredException authnE )
+        {
+            return REQUIRES_AUTHENTICATION;
+        }     */
 
         return SUCCESS;
     }
@@ -159,20 +183,35 @@ public class ReleasePrepareAction
     public String execute()
         throws Exception
     {
-        listener = new DefaultReleaseManagerListener();
-
-        Project project = getContinuum().getProject( projectId );
-
-        name = project.getName();
-        if ( name == null )
+       /* try
         {
-            name = project.getArtifactId();
+            if ( isAuthorizedBuildProjectGroup( getProjectGroupName() ) )
+            {       */
+                listener = new DefaultReleaseManagerListener();
+
+                Project project = getContinuum().getProject( projectId );
+
+                name = project.getName();
+                if ( name == null )
+                {
+                    name = project.getArtifactId();
+                }
+
+                ContinuumReleaseManager releaseManager = getContinuum().getReleaseManager();
+
+                releaseId = releaseManager.prepare( project, getReleaseProperties(), getRelVersionMap(),
+                                                    getDevVersionMap(), listener );
+     /*       }
         }
-
-        ContinuumReleaseManager releaseManager = getContinuum().getReleaseManager();
-
-        releaseId = releaseManager.prepare( project, getReleaseProperties(), getRelVersionMap(),
-                                            getDevVersionMap(), listener );
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException authnE )
+        {
+            return REQUIRES_AUTHENTICATION;
+        }       */
 
         return SUCCESS;
     }
@@ -455,5 +494,34 @@ public class ReleasePrepareAction
     public void validate()
     {
 
+    }
+
+    public String getProjectGroupName()
+        throws ContinuumException
+    {
+        if ( projectGroupName == null || "".equals( projectGroupName ) )
+        {
+            projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();
+        }
+
+        return projectGroupName;
+    }
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+    {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+        try
+        {
+            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_GROUP_OPERATION,
+                getProjectGroupName() );
+        }
+        catch ( ContinuumException e )
+        {
+            
+        }
+
+        return bundle;
     }
 }

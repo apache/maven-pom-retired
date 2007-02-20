@@ -21,8 +21,16 @@ package org.apache.maven.continuum.web.action;
 
 import org.apache.maven.continuum.Continuum;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
+import org.codehaus.plexus.security.system.SecuritySession;
+import org.codehaus.plexus.security.system.SecuritySystemConstants;
+
+import java.util.Map;
+import java.util.HashMap;
+
+import com.opensymphony.xwork.ActionContext;
 
 /**
  * Test for {@link ReleasePrepareAction}
@@ -38,10 +46,18 @@ public class ReleasePrepareActionTest
 
     private Mock continuumMock;
 
+    private Mock securitySessionMock;
+
+    private Mock actionContextMock;
+
     public ReleasePrepareActionTest()
     {
         action = new ReleasePrepareAction();
         continuumMock = new Mock( Continuum.class );
+        //securitySessionMock = new Mock( SecuritySession.class );
+        //Map map = new HashMap();
+        //map.put( SecuritySystemConstants.SECURITY_SESSION_KEY, securitySessionMock );
+        //action.setSession( map );
         action.setContinuum( (Continuum) continuumMock.proxy() );
     }
 
@@ -53,8 +69,12 @@ public class ReleasePrepareActionTest
     public void testScmTagBaseSvn()
         throws Exception
     {
+        //commented out because of problems in authorization checks
+
         String svnUrl = "https://svn.apache.org/repos/asf/maven/continuum";
         String scmUrl = "scm:svn:" + svnUrl + "/trunk/";
+        //ProjectGroup projectGroup = new ProjectGroup();
+        //continuumMock.expects( once() ).method( "getProjectGroupByProjectId" ).will( returnValue( projectGroup ) );
         Project project = new Project();
         project.setScmUrl( scmUrl );
         project.setWorkingDirectory(".");
@@ -72,6 +92,8 @@ public class ReleasePrepareActionTest
     public void testScmTagBaseNonSvn()
         throws Exception
     {
+        //commented out because of problems in authorization checks
+
         Project project = new Project();
         project.setScmUrl( "scm:cvs:xxx" );
         project.setWorkingDirectory(".");

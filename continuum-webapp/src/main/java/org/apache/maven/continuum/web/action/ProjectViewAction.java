@@ -20,8 +20,12 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -33,6 +37,7 @@ import org.apache.maven.continuum.model.project.ProjectGroup;
  */
 public class ProjectViewAction
     extends ContinuumActionSupport
+    implements SecureAction
 {
 
     private Project project;
@@ -47,9 +52,9 @@ public class ProjectViewAction
     public String execute()
         throws ContinuumException
     {
-        projectGroup = getContinuum().getProjectGroupByProjectId( projectId );
-        project = getContinuum().getProjectWithAllDetails( projectId );
+        projectGroup = getProjectGroup();
 
+        project = getContinuum().getProjectWithAllDetails( projectId );
         return SUCCESS;
     }
 
@@ -75,7 +80,29 @@ public class ProjectViewAction
      * @return the projectGroup
      */
     public ProjectGroup getProjectGroup()
+            throws ContinuumException
     {
-        return projectGroup;
+        return getContinuum().getProjectGroupByProjectId( projectId );
     }
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+    {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+        
+        try
+        {
+            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
+                getProjectGroup().getName() );
+        }
+        catch ( ContinuumException ce )
+        {
+
+        }
+
+        return bundle;
+    }
+
+
 }

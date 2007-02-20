@@ -20,7 +20,11 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.Project;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -32,6 +36,7 @@ import org.apache.maven.continuum.model.project.Project;
  */
 public class ProjectEditAction
     extends ContinuumActionSupport
+    implements SecureAction
 {
 
     private Project project;
@@ -188,4 +193,30 @@ public class ProjectEditAction
     {
         return scmUseCache;
     }
+
+    public String getProjectGroupName()
+        throws ContinuumException
+    {
+        return getProject( projectId ).getProjectGroup().getName();
+    }
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+    {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+
+        try
+        {
+            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_IN_GROUP_OPERATION,
+                    getProjectGroupName() );
+        }
+        catch ( ContinuumException e )
+        {
+            throw new SecureActionException( e.getMessage() );
+        }
+
+        return bundle;
+    }
+
 }

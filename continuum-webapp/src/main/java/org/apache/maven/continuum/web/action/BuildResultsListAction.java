@@ -20,7 +20,11 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.Project;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 
 import java.util.Collection;
 
@@ -34,6 +38,7 @@ import java.util.Collection;
  */
 public class BuildResultsListAction
     extends ContinuumActionSupport
+    implements SecureAction
 {
     private Project project;
 
@@ -42,6 +47,8 @@ public class BuildResultsListAction
     private int projectId;
 
     private String projectName;
+
+    private String projectGroupName = "";
 
     public String execute()
         throws ContinuumException
@@ -81,5 +88,34 @@ public class BuildResultsListAction
     public Project getProject()
     {
         return project;
+    }
+
+    public String getProjectGroupName()
+        throws ContinuumException
+    {
+        if( projectGroupName == null || "".equals( projectGroupName ) )
+        {
+            projectGroupName = getContinuum().getProject( projectId ).getProjectGroup().getName();
+        }
+
+        return projectGroupName;
+    }
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+    {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+
+        try
+        {
+            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION, getProjectGroupName() );
+        }
+        catch ( ContinuumException e )
+        {
+            throw new SecureActionException( e.getMessage() );
+        }
+
+        return bundle;
     }
 }

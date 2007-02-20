@@ -24,6 +24,8 @@ import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Schedule;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.web.exception.ContinuumActionException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -71,6 +73,8 @@ public class BuildDefinitionAction
 
     private boolean groupBuildDefinition = false;
 
+    private String projectGroupName = "";
+
     public void prepare()
         throws Exception
     {
@@ -96,7 +100,6 @@ public class BuildDefinitionAction
             profiles = new HashMap();
         }
 
-
     }
 
     /**
@@ -107,48 +110,67 @@ public class BuildDefinitionAction
     public String input()
         throws ContinuumException
     {
-        if ( executor == null )
+        try
         {
-            if ( projectId != 0 )
+            if ( executor == null )
             {
-                executor = getContinuum().getProject( projectId ).getExecutorId();
+                if ( projectId != 0 )
+                {
+                    executor = getContinuum().getProject( projectId ).getExecutorId();
+                }
+                else
+                {
+                    List projects = getContinuum().getProjectGroupWithProjects( projectGroupId ).getProjects();
+
+                    if( projects.size() > 0 )
+                    {
+                        Project project = (Project) projects.get( 0 );
+                        executor = project.getExecutorId();
+                    }
+                }
+            }
+
+            if ( buildDefinitionId != 0 )
+            {
+                if( isAuthorizedModifyProjectBuildDefinition( getProjectGroupName() ) ||
+                            isAuthorizedModifyGroupBuildDefinition( getProjectGroupName() ) )
+                {
+                    BuildDefinition buildDefinition = getContinuum().getBuildDefinition( buildDefinitionId );
+                    goals = buildDefinition.getGoals();
+                    arguments = buildDefinition.getArguments();
+                    buildFile = buildDefinition.getBuildFile();
+                    buildFresh = buildDefinition.isBuildFresh();
+                    scheduleId = buildDefinition.getSchedule().getId();
+                    defaultBuildDefinition = buildDefinition.isDefaultForProject();
+                }
             }
             else
             {
-                List projects = getContinuum().getProjectGroupWithProjects( projectGroupId ).getProjects();
-                
-                if( projects.size() > 0 )
+                if( isAuthorizedAddProjectBuildDefinition( getProjectGroupName() ) ||
+                        isAuthorizedAddGroupBuildDefinition( getProjectGroupName() ) )
                 {
-                    Project project = (Project) projects.get( 0 );
-                    executor = project.getExecutorId();
+                    if ( "maven2".equals(executor) )
+                    {
+                        buildFile = "pom.xml";
+                    }
+                    else if ( "maven-1".equals(executor) )
+                    {
+                        buildFile = "project.xml";
+                    }
+                    else if ( "ant".equals(executor) )
+                    {
+                        buildFile = "build.xml";
+                    }
                 }
             }
         }
-
-        if ( buildDefinitionId != 0 )
+        catch ( AuthenticationRequiredException authnE )
         {
-            BuildDefinition buildDefinition = getContinuum().getBuildDefinition( buildDefinitionId );
-            goals = buildDefinition.getGoals();
-            arguments = buildDefinition.getArguments();
-            buildFile = buildDefinition.getBuildFile();
-            buildFresh = buildDefinition.isBuildFresh();
-            scheduleId = buildDefinition.getSchedule().getId();
-            defaultBuildDefinition = buildDefinition.isDefaultForProject();
+            return REQUIRES_AUTHENTICATION;
         }
-        else
+        catch ( AuthorizationRequiredException authzE )
         {
-            if ( "maven2".equals(executor) )
-            {
-                buildFile = "pom.xml";
-            }
-            else if ( "maven-1".equals(executor) )
-            {
-                buildFile = "project.xml";
-            }
-            else if ( "ant".equals(executor) )
-            {
-                buildFile = "build.xml";
-            }
+            return REQUIRES_AUTHORIZATION;
         }
 
         return SUCCESS;
@@ -175,17 +197,32 @@ public class BuildDefinitionAction
         {
             if ( buildDefinitionId == 0 )
             {
-                getContinuum().addBuildDefinitionToProject( projectId, getBuildDefinitionFromInput() );
+                if ( isAuthorizedAddProjectBuildDefinition( getProjectGroupName() ) )
+                {
+                    getContinuum().addBuildDefinitionToProject( projectId, getBuildDefinitionFromInput() );
+                }
             }
             else
             {
-                getContinuum().updateBuildDefinitionForProject( projectId, getBuildDefinitionFromInput() );
+                if( isAuthorizedModifyProjectBuildDefinition( getProjectGroupName() ) )
+                {
+                    getContinuum().updateBuildDefinitionForProject( projectId, getBuildDefinitionFromInput() );
+                }
             }
         }
         catch ( ContinuumActionException cae )
         {
             addActionError( cae.getMessage() );
             return INPUT;
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException authnE )
+        {
+            return REQUIRES_AUTHENTICATION;
         }
 
         return SUCCESS;
@@ -205,17 +242,32 @@ public class BuildDefinitionAction
             
             if ( buildDefinitionId == 0 )
             {
-                getContinuum().addBuildDefinitionToProjectGroup( projectGroupId, newBuildDef );
+                if ( isAuthorizedAddGroupBuildDefinition( getProjectGroupName() ) )
+                {
+                    getContinuum().addBuildDefinitionToProjectGroup( projectGroupId, newBuildDef );
+                }
             }
             else
             {
-                getContinuum().updateBuildDefinitionForProjectGroup( projectGroupId, newBuildDef );
+                if ( isAuthorizedModifyGroupBuildDefinition( getProjectGroupName() ) )
+                {
+                    getContinuum().updateBuildDefinitionForProjectGroup( projectGroupId, newBuildDef );
+                }
             }
         }
         catch ( ContinuumActionException cae )
         {
             addActionError( cae.getMessage() );
             return INPUT;
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException authnE )
+        {
+            return REQUIRES_AUTHENTICATION;
         }
 
         if ( projectId != 0 )
@@ -231,31 +283,65 @@ public class BuildDefinitionAction
     public String removeFromProject()
         throws ContinuumException
     {
-        if ( confirmed )
+        try
         {
-            getContinuum().removeBuildDefinitionFromProject( projectId, buildDefinitionId );
+            if ( isAuthorizedRemoveProjectFromGroup( getProjectGroupName() ) )
+            {
+                if ( confirmed )
+                {
+                    getContinuum().removeBuildDefinitionFromProject( projectId, buildDefinitionId );
 
-            return SUCCESS;
+                    return SUCCESS;
+                }
+                else
+                {
+                    return CONFIRM;
+                }
+            }
         }
-        else
-        {            
-            return CONFIRM;
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
         }
+        catch ( AuthenticationRequiredException authnE )
+        {
+            return REQUIRES_AUTHENTICATION;
+        }
+
+        return SUCCESS;
     }
 
     public String removeFromProjectGroup()
         throws ContinuumException
     {
-        if ( confirmed )
+        try
         {
-            getContinuum().removeBuildDefinitionFromProjectGroup( projectGroupId, buildDefinitionId );
+            if ( isAuthorizedRemoveProjectGroup( getProjectGroupName() ) )
+            {
+                if ( confirmed )
+                {
+                    getContinuum().removeBuildDefinitionFromProjectGroup( projectGroupId, buildDefinitionId );
 
-            return SUCCESS;
+                    return SUCCESS;
+                }
+                else
+                {
+                    return CONFIRM;
+                }
+            }
         }
-        else
+        catch ( AuthorizationRequiredException authzE )
         {
-            return CONFIRM;
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
         }
+        catch ( AuthenticationRequiredException authnE )
+        {
+            return REQUIRES_AUTHENTICATION;
+        }
+
+        return SUCCESS;
     }
 
     private BuildDefinition getBuildDefinitionFromInput()
@@ -428,5 +514,23 @@ public class BuildDefinitionAction
     public void setGroupBuildDefinition( boolean groupBuildDefinition )
     {
         this.groupBuildDefinition = groupBuildDefinition;
+    }
+
+    public String getProjectGroupName()
+        throws ContinuumException
+    {
+        if ( projectGroupName == null || "".equals( projectGroupName ) )
+        {
+            if ( projectGroupId != 0 )
+            {
+                projectGroupName = getContinuum().getProjectGroup( projectGroupId ).getName();
+            }
+            else
+            {
+                projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();                
+            }
+        }
+                
+        return projectGroupName;
     }
 }

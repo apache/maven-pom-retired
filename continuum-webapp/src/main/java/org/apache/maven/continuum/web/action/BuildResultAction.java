@@ -24,13 +24,15 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.web.util.StateGenerator;
 import org.apache.maven.continuum.configuration.ConfigurationException;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.codehaus.plexus.util.FileUtils;
-
-import javax.servlet.jsp.PageContext;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 
 import com.opensymphony.webwork.ServletActionContext;
 
@@ -44,6 +46,7 @@ import com.opensymphony.webwork.ServletActionContext;
  */
 public class BuildResultAction
     extends ContinuumActionSupport
+    implements SecureAction
 {
     private Project project;
 
@@ -61,9 +64,12 @@ public class BuildResultAction
 
     private String state;
 
+    private String projectGroupName = "";
+
     public String execute()
         throws ContinuumException, ConfigurationException, IOException
     {
+
         //todo get this working for other types of test case rendering other then just surefire
         // check if there are surefire results to display
         project = getContinuum().getProject( getProjectId() );
@@ -81,6 +87,7 @@ public class BuildResultAction
         }
 
         state = StateGenerator.generate( buildResult.getState(), ServletActionContext.getRequest().getContextPath() );
+
 
         return SUCCESS;
     }
@@ -139,6 +146,36 @@ public class BuildResultAction
     public String getState()
     {
         return state;
+    }
+
+    public String getProjectGroupName()
+        throws ContinuumException
+    {
+        if( projectGroupName == null || "".equals( projectGroupName ) )
+        {               
+            projectGroupName = getContinuum().getProjectGroupByProjectId( getProjectId() ).getName();
+        }
+
+        return projectGroupName;
+    }
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+    {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+        
+        try
+        {
+            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
+                getProjectGroupName() );
+        }
+        catch ( ContinuumException e )
+        {
+
+        }
+
+        return bundle;
     }
 
 }

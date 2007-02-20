@@ -20,6 +20,11 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -31,6 +36,7 @@ import org.apache.maven.continuum.ContinuumException;
  */
 public class BuildProjectAction
     extends ContinuumActionSupport
+    implements SecureAction
 {
     private int projectId;
 
@@ -42,9 +48,12 @@ public class BuildProjectAction
 
     private boolean fromProjectPage = false;
 
+    private String projectGroupName = "";
+
     public String execute()
         throws ContinuumException
-    {
+    {            
+
         if ( projectId > 0 )
         {
             if ( buildDefinitionId > 0 )
@@ -79,6 +88,7 @@ public class BuildProjectAction
                 return "to_project_page";
             }
         }
+
 
         return SUCCESS;
     }
@@ -131,5 +141,42 @@ public class BuildProjectAction
     public void setFromProjectPage( boolean fromProjectPage )
     {
         this.fromProjectPage = fromProjectPage;
+    }
+
+    public String getProjectGroupName()
+        throws ContinuumException
+    {
+        if( projectGroupName == null || "".equals( projectGroupName ) )
+        {
+            if ( projectGroupId != 0 )
+            {
+                projectGroupName = getContinuum().getProjectGroup( projectGroupId ).getName();
+            }
+            else
+            {
+                projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();
+            }
+        }
+
+        return projectGroupName;
+    }
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+    {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );                
+
+        try
+        {
+            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_PROJECT_IN_GROUP_OPERATION,
+                    getProjectGroupName() );
+        }
+        catch ( ContinuumException e )
+        {
+            throw new SecureActionException( e.getMessage() );
+        }
+
+        return bundle;
     }
 }

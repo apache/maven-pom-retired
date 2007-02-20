@@ -78,8 +78,10 @@
       <result name="error">/WEB-INF/jsp/error/error.jsp</result>
       <result name="internal-error">/WEB-INF/jsp/error/error.jsp</result>
       <result name="internalError" type="redirect">/WEB-INF/jsp/error/error.jsp</result>
+      <result name="requires-authorization">/WEB-INF/jsp/error/authorizationError.jsp</result>
 
-      <result name="continuum-configuration-required" type="redirect-action">
+
+        <result name="continuum-configuration-required" type="redirect-action">
         <param name="actionName">configuration</param>
         <param name="namespace">/admin</param>
         <param name="method">input</param>

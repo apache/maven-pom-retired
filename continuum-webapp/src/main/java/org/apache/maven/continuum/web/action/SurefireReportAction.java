@@ -20,9 +20,15 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
 import org.apache.maven.continuum.model.project.Project;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -53,6 +59,7 @@ import java.util.StringTokenizer;
  */
 public class SurefireReportAction
     extends ContinuumActionSupport
+    implements SecureAction
 {
     private int buildId;
 
@@ -71,7 +78,7 @@ public class SurefireReportAction
     public String execute()
         throws ContinuumException
     {
-        project = getContinuum().getProject( projectId );
+        project = getProjectById( projectId );
 
         //@todo maven-surefire-report reportsDirectory should be detected ?
         File reportsDirectory = new File( project.getWorkingDirectory() + "/target/surefire-reports" );
@@ -742,5 +749,35 @@ public class SurefireReportAction
         {
             this.failureDetails = failureDetails;
         }
+    }
+
+    public Project getProjectById( int projectId )
+            throws ContinuumException
+    {
+        return getContinuum().getProject( projectId );
+    }
+
+    public String getProjectGroupName()
+        throws ContinuumException
+    {
+        return getProjectById( projectId ).getProjectGroup().getName();
+    }
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+
+        try
+        {
+            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
+                getProjectGroupName() );
+        }
+        catch ( ContinuumException ce )
+        {
+
+        }
+
+        return bundle;
     }
 }

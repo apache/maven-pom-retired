@@ -19,21 +19,14 @@ package org.apache.maven.continuum.web.action;
  * under the License.
  */
 
-import com.opensymphony.xwork.ActionContext;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.web.model.GroupSummary;
 import org.apache.maven.continuum.web.model.ProjectSummary;
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.security.authorization.AuthorizationException;
-import org.codehaus.plexus.security.system.SecuritySession;
-import org.codehaus.plexus.security.system.SecuritySystem;
-import org.codehaus.plexus.security.system.SecuritySystemConstants;
-import org.codehaus.plexus.xwork.PlexusLifecycleListener;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,7 +57,7 @@ public class GroupSummaryAction
         {
             ProjectGroup projectGroup = (ProjectGroup) j.next();
 
-            if ( isAuthorized( projectGroup ) )
+            if ( isAuthorized( projectGroup.getName() ) )
             {
                 getLogger().debug( "GroupSummaryAction: building group " + projectGroup.getName() );
 
@@ -198,34 +191,19 @@ public class GroupSummaryAction
         this.infoMessage = infoMessage;
     }
 
-    private boolean isAuthorized( ProjectGroup projectGroup )
+    private boolean isAuthorized( String projectGroupName )
     {
-        // do the authz bit
-        ActionContext context = ActionContext.getContext();
-
-        PlexusContainer container = (PlexusContainer) context.getApplication().get( PlexusLifecycleListener.KEY );
-        SecuritySession securitySession =
-            (SecuritySession) context.getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
-
         try
         {
-            SecuritySystem securitySystem = (SecuritySystem) container.lookup( SecuritySystem.ROLE );
-
-            if ( !securitySystem.isAuthorized( securitySession, ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
-                                               projectGroup.getName() ) )
-            {
-                return false;
-            }
+            return isAuthorizedViewProjectGroup( projectGroupName );
         }
-        catch ( ComponentLookupException cle )
+        catch ( AuthorizationRequiredException authzE )
         {
             return false;
         }
-        catch ( AuthorizationException ae )
+        catch ( AuthenticationRequiredException authnE )
         {
             return false;
         }
-
-        return true;
     }
 }

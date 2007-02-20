@@ -20,6 +20,8 @@ package org.apache.maven.continuum.web.action.notifier;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
@@ -41,6 +43,8 @@ public abstract class AbstractProjectNotifierEditAction
      * Identifier for the {@link ProjectGroup} instance that the current {@link Project} is a member of.
      */
     private int projectGroupId;
+
+    private String projectGroupName = "";
 
     /**
      * Save the notifier for the {@link Project} here.<p>
@@ -112,6 +116,37 @@ public abstract class AbstractProjectNotifierEditAction
     public void setProjectGroupId( int projectGroupId )
     {
         this.projectGroupId = projectGroupId;
+    }
+
+    protected boolean isAuthorized()
+        throws AuthorizationRequiredException, AuthenticationRequiredException, ContinuumException
+    {
+        if( getNotifier() == null )
+        {
+            return isAuthorizedAddProjectNotifier( getProjectGroupName() );
+        }
+        else
+        {
+            return isAuthorizedModifyProjectNotifier( getProjectGroupName() );
+        }
+    }
+
+    public String getProjectGroupName()
+        throws ContinuumException
+    {
+        if( projectGroupName == null || "".equals( projectGroupName ) )
+        {
+            if( projectGroupId != 0 )
+            {
+                projectGroupName = getContinuum().getProjectGroup( projectGroupId ).getName();
+            }
+            else
+            {
+                projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();
+            }
+        }
+
+        return projectGroupName;
     }
 
 }

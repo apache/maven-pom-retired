@@ -28,6 +28,8 @@ import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 import org.apache.maven.continuum.web.model.NotifierSummary;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,6 +69,8 @@ public class NotifierSummaryAction
 
     private List projectNotifierSummaries = new ArrayList();
 
+    private String projectGroupName = "";
+
     /**
      * Prepare Notifier summary for a {@link Project}.
      *
@@ -78,12 +82,24 @@ public class NotifierSummaryAction
 
         try
         {
-            projectNotifierSummaries = summarizeForProject( projectId );
+            if ( isAuthorizedViewProjectGroup( getProjectGroupName() ) )
+            {
+                projectNotifierSummaries = summarizeForProject( projectId );
+            }
         }
         catch ( ContinuumException e )
         {
             getLogger().error( "Unable to prepare Notifier summaries for Project Id: " + projectId, e );
             return ERROR;
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException authnE )
+        {
+            return REQUIRES_AUTHENTICATION;
         }
 
         return SUCCESS;
@@ -112,15 +128,18 @@ public class NotifierSummaryAction
 
         try
         {
-            projectGroupNotifierSummaries = gatherGroupNotifierSummaries();
-
-            Collection projects = getContinuum().getProjectsInGroup( projectGroupId );
-            if ( projects != null )
+            if ( isAuthorizedViewProjectGroup( getProjectGroupName() ) )
             {
-                for ( Iterator i = projects.iterator(); i.hasNext(); )
+                projectGroupNotifierSummaries = gatherGroupNotifierSummaries();
+
+                Collection projects = getContinuum().getProjectsInGroup( projectGroupId );
+                if ( projects != null )
                 {
-                    Project p = (Project) i.next();
-                    projectNotifierSummaries.addAll( summarizeForProject( p.getId() ) );
+                    for ( Iterator i = projects.iterator(); i.hasNext(); )
+                    {
+                        Project p = (Project) i.next();
+                        projectNotifierSummaries.addAll( summarizeForProject( p.getId() ) );
+                    }
                 }
             }
         }
@@ -128,6 +147,15 @@ public class NotifierSummaryAction
         {
             getLogger().error( "Unable to prepare Notifier summaries for ProjectGroup Id: " + projectGroupId, e );
             return ERROR;
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException authnE )
+        {
+            return REQUIRES_AUTHENTICATION;
         }
 
         return SUCCESS;
@@ -372,5 +400,23 @@ public class NotifierSummaryAction
     public void setProjectNotifierSummaries( List projectNotifierSummaries )
     {
         this.projectNotifierSummaries = projectNotifierSummaries;
+    }
+
+    public String getProjectGroupName()
+        throws ContinuumException
+    {
+        if ( projectGroupName == null || "".equals( projectGroupName ) )
+        {
+            if ( projectGroupId != 0 )
+            {
+                projectGroupName = getContinuum().getProjectGroup( projectGroupId ).getName();
+            }
+            else
+            {
+                projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();                
+            }
+        }
+
+        return projectGroupName;
     }
 }

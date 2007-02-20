@@ -20,9 +20,13 @@ package org.apache.maven.continuum.web.action.notifier;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 
 import java.util.Map;
 
@@ -37,6 +41,7 @@ import java.util.Map;
  */
 public class DeleteGroupNotifierAction
     extends ContinuumActionSupport
+    implements SecureAction
 {
 
     private int projectGroupId;
@@ -47,16 +52,21 @@ public class DeleteGroupNotifierAction
 
     private String recipient;
 
+    private String projectGroupName = "";
+
     public String execute()
         throws ContinuumException
     {
+
         getContinuum().removeGroupNotifier( projectGroupId, notifierId );
+
         return SUCCESS;
     }
 
     public String doDefault()
         throws ContinuumException
     {
+
         ProjectNotifier notifier = getContinuum().getGroupNotifier( projectGroupId, notifierId );
 
         Map configuration = notifier.getConfiguration();
@@ -134,5 +144,34 @@ public class DeleteGroupNotifierAction
     public void setRecipient( String recipient )
     {
         this.recipient = recipient;
+    }
+
+    public String getProjectGroupName()
+            throws ContinuumException
+    {
+        if ( projectGroupName == null || "".equals( projectGroupName ) )
+        {
+            projectGroupName = getContinuum().getProjectGroup( projectGroupId ).getName();
+        }
+
+        return projectGroupName;
+    }
+
+     public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+
+        try
+        {
+            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_NOTIFIER_OPERATION,
+                    getProjectGroupName() );
+        }
+        catch ( ContinuumException e )
+        {
+            throw new SecureActionException( e.getMessage() );
+        }
+
+        return bundle;
     }
 }

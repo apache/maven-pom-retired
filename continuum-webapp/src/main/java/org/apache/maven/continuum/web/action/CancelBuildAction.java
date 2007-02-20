@@ -20,9 +20,13 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -32,15 +36,19 @@ import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
  */
 public class CancelBuildAction
     extends ContinuumActionSupport
+    implements SecureAction
 {
     /** @plexus.requirement role-hint='build-project' */
     private TaskQueueExecutor taskQueueExecutor;
 
     private int projectId;
 
+    private String projectGroupName = "";
+
     public String execute()
         throws ContinuumException
     {
+
         Task task = taskQueueExecutor.getCurrentTask();
 
         getLogger().info("TaskQueueExecutor: " + taskQueueExecutor );
@@ -70,11 +78,41 @@ public class CancelBuildAction
             getLogger().warn( "No task running - not cancelling" );
         }
 
+
         return SUCCESS;
     }
 
     public void setProjectId( int projectId )
     {
         this.projectId = projectId;
+    }
+
+    public String getProjectGroupName()
+        throws ContinuumException
+    {
+        if( projectGroupName == null || "".equals( projectGroupName ) )
+        {
+            projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();
+        }
+
+        return projectGroupName;
+    }
+
+     public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+
+        try
+        {
+            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_PROJECT_IN_GROUP_OPERATION,
+                    getProjectGroupName() );
+        }
+        catch ( ContinuumException e )
+        {
+            throw new SecureActionException( e.getMessage() );
+        }
+
+        return bundle;
     }
 }

@@ -61,6 +61,7 @@ public class ProjectGroupDeveloperDynamicRoleProfile
         operations.add( ContinuumRoleConstants.CONTINUUM_MODIFY_GROUP_BUILD_DEFINITION_OPERATION );
         operations.add( ContinuumRoleConstants.CONTINUUM_MODIFY_GROUP_NOTIFIER_OPERATION );
         operations.add( ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_BUILD_DEFINITION_OPERATION );
+        operations.add( ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_NOTIFIER_OPERATION );
         operations.add( ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_IN_GROUP_OPERATION );
         operations.add( ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_BUILD_DEFINITION_OPERATION );
         operations.add( ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_NOTIFIER_OPERATION );
