@@ -398,11 +398,17 @@ public class ProjectGroupAction
                             {
                                 //currently, we have no provisions for releasing 2 or more parents
                                 //at the same time, this will be implemented in the future
-                                throw new ContinuumException(
-                                    "Cannot release two or more parent projects in the same project group at the same time." );
+                                addActionError( "projectGroup.release.error.severalParentProjects" );
+                                return INPUT;
                             }
                         }
                     }
+                }
+
+                if ( parent == null )
+                {
+                    addActionError( "projectGroup.release.error.emptyGroup" );
+                    return INPUT;
                 }
 
                 releaseProjectId = parent.getId();
@@ -413,8 +419,8 @@ public class ProjectGroupAction
                 }
                 else
                 {
-                    throw new ContinuumException(
-                        "Cannot release project group: one or more projects in the group were not built successfully." );
+                    addActionError( "projectGroup.release.error.projectNotInSuccess" );
+                    return INPUT;
                 }
             }
         }

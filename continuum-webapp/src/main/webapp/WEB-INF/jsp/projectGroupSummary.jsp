@@ -81,6 +81,14 @@
     <pss:ifAnyAuthorized permissions="continuum-build-group,continuum-remove-group" resource="${projectGroup.name}">
       <h3>Project Group Actions</h3>
 
+      <c:if test="${!empty actionErrors}">
+        <div class="errormessage">
+          <c:forEach items="${actionErrors}" var="actionError">
+            <p><ww:text name="${actionError}"/></p>
+          </c:forEach>
+        </div>
+      </c:if>
+
       <div class="functnbar3">
         <table>
           <tr>
