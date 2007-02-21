@@ -107,15 +107,20 @@
               <ec:column property="from" title="projectView.notifier.from" cell="org.apache.maven.continuum.web.view.projectview.NotifierFromCell"/>
               <ec:column property="editAction" title="&nbsp;" width="1%">
                 <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
-                  <c:if test="${!pageScope.notifier.fromProject}">
-                    <a href='<ww:url value="${notifier.type}ProjectNotifierEdit.action">
-                      <ww:param name="notifierId" value="${notifier.id}"/>
-                      <ww:param name="projectId" value="project.id"/>
-                      <ww:param name="projectGroupId" value="${project.projectGroup.id}"/>
-                      <ww:param name="notifierType">${notifier.type}</ww:param>
-                      </ww:url>'>
-                      <img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" /></a>
-                  </c:if>
+                  <c:choose>
+                    <c:when test="${!pageScope.notifier.fromProject}">
+                      <a href='<ww:url value="${notifier.type}ProjectNotifierEdit.action">
+                        <ww:param name="notifierId" value="${notifier.id}"/>
+                        <ww:param name="projectId" value="project.id"/>
+                        <ww:param name="projectGroupId" value="${project.projectGroup.id}"/>
+                        <ww:param name="notifierType">${notifier.type}</ww:param>
+                        </ww:url>'>
+                        <img src="<ww:url value='/images/edit.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" /></a>
+                    </c:when>
+                    <c:otherwise>
+                      <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />
+                    </c:otherwise>
+                </c:choose>
                 </pss:ifAuthorized>
                 <pss:elseAuthorized>
                   <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />
@@ -123,15 +128,20 @@
               </ec:column>
               <ec:column property="deleteAction" title="&nbsp;" width="1%">
                 <pss:ifAuthorized permission="continuum-modify-group" resource="${project.projectGroup.name}">
-                  <c:if test="${!pageScope.notifier.fromProject}">
-                    <a href='<ww:url value="/deleteProjectNotifier!default.action">
-                      <ww:param name="projectId" value="project.id"/>
-                      <ww:param name="projectGroupId" value="${project.projectGroup.id}"/>
-                      <ww:param name="notifierType">${notifier.type}</ww:param>
-                      <ww:param name="notifierId" value="${notifier.id}"/>
-                      </ww:url>'>
-                      <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></a>
-                  </c:if>
+                  <c:choose>
+                    <c:when test="${!pageScope.notifier.fromProject}">
+                      <a href='<ww:url value="/deleteProjectNotifier!default.action">
+                        <ww:param name="projectId" value="project.id"/>
+                        <ww:param name="projectGroupId" value="${project.projectGroup.id}"/>
+                        <ww:param name="notifierType">${notifier.type}</ww:param>
+                        <ww:param name="notifierId" value="${notifier.id}"/>
+                        </ww:url>'>
+                        <img src="<ww:url value='/images/delete.gif'/>" alt="<ww:text name='delete'/>" title="<ww:text name='delete'/>" border="0"></a>
+                    </c:when>
+                    <c:otherwise>
+                      <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />
+                    </c:otherwise>
+                  </c:choose>
                 </pss:ifAuthorized>
                 <pss:elseAuthorized>
                   <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="<ww:text name='edit'/>" title="<ww:text name='edit'/>" border="0" />

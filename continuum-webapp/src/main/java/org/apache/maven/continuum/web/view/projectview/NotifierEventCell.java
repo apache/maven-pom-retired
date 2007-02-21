@@ -23,6 +23,7 @@ import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.DisplayCell;
 import org.extremecomponents.table.core.TableModel;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Used in Project view
@@ -61,6 +62,8 @@ public class NotifierEventCell
         {
             event += "Errors";
         }
+
+        event = StringUtils.replace( event, " ", "/" );
 
         return event;
     }

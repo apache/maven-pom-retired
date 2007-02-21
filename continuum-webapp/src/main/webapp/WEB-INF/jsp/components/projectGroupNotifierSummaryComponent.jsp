@@ -105,18 +105,23 @@
         <!-- ec:column property="sender" title="projectView.notifier.sender"/ -->
         <ec:column property="editActions" title="&nbsp;" width="1%">
           <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroup.name}">
-            <c:if test="${!pageScope.projectNotifierSummary.fromProject}">
-              <ww:url id="editUrl" action="editProjectNotifier" namespace="/"  includeContext="false" includeParams="none">
-                <ww:param name="projectGroupId">${pageScope.projectNotifierSummary.projectGroupId}</ww:param>
-                <ww:param name="projectId">${pageScope.projectNotifierSummary.projectId}</ww:param>
-                <ww:param name="notifierId">${pageScope.projectNotifierSummary.id}</ww:param>
-                <ww:param name="notifierType">${pageScope.projectNotifierSummary.type}</ww:param>
-                <ww:param name="fromGroupPage" value="true"/>
-              </ww:url>
-              <ww:a href="%{editUrl}">
-                <img src="<ww:url value='/images/edit.gif'/>" alt="Edit" title="Edit" border="0">
-              </ww:a>
-            </c:if>
+            <c:choose>
+              <c:when test="${!pageScope.projectNotifierSummary.fromProject}">
+                <ww:url id="editUrl" action="editProjectNotifier" namespace="/" includeParams="none">
+                  <ww:param name="projectGroupId">${pageScope.projectNotifierSummary.projectGroupId}</ww:param>
+                  <ww:param name="projectId">${pageScope.projectNotifierSummary.projectId}</ww:param>
+                  <ww:param name="notifierId">${pageScope.projectNotifierSummary.id}</ww:param>
+                  <ww:param name="notifierType">${pageScope.projectNotifierSummary.type}</ww:param>
+                  <ww:param name="fromGroupPage" value="true"/>
+                </ww:url>
+                <ww:a href="%{editUrl}">
+                  <img src="<ww:url value='/images/edit.gif'/>" alt="Edit" title="Edit" border="0">
+                </ww:a>
+              </c:when>
+              <c:otherwise>
+                <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="Edit" title="Edit" border="0">
+              </c:otherwise>
+            </c:choose>
           </pss:ifAuthorized>
           <pss:elseAuthorized>
             <img src="<ww:url value='/images/edit_disabled.gif'/>" alt="Edit" title="Edit" border="0">
@@ -124,18 +129,23 @@
         </ec:column>
         <ec:column property="deleteActions" title="&nbsp;" width="1%">
           <pss:ifAuthorized permission="continuum-modify-group" resource="${projectGroup.name}">
-            <c:if test="${!pageScope.projectNotifierSummary.fromProject}">
-              <ww:url id="removeUrl" action="deleteProjectNotifier" namespace="/">
-                <ww:param name="projectGroupId">${pageScope.projectNotifierSummary.projectGroupId}</ww:param>
-                <ww:param name="projectId">${pageScope.projectNotifierSummary.projectId}</ww:param>
-                <ww:param name="notifierId">${pageScope.projectNotifierSummary.id}</ww:param>
-                <ww:param name="confirmed" value="false"/>
-                <ww:param name="fromGroupPage" value="true"/>
-              </ww:url>
-              <ww:a href="%{removeUrl}">
-                <img src="<ww:url value='/images/delete.gif'/>" alt="Delete" title="Delete" border="0">
-              </ww:a>
-            </c:if>
+            <c:choose>
+              <c:when test="${!pageScope.projectNotifierSummary.fromProject}">
+                <ww:url id="removeUrl" action="deleteProjectNotifier" namespace="/">
+                  <ww:param name="projectGroupId">${pageScope.projectNotifierSummary.projectGroupId}</ww:param>
+                  <ww:param name="projectId">${pageScope.projectNotifierSummary.projectId}</ww:param>
+                  <ww:param name="notifierId">${pageScope.projectNotifierSummary.id}</ww:param>
+                  <ww:param name="confirmed" value="false"/>
+                  <ww:param name="fromGroupPage" value="true"/>
+                </ww:url>
+                <ww:a href="%{removeUrl}">
+                  <img src="<ww:url value='/images/delete.gif'/>" alt="Delete" title="Delete" border="0">
+                </ww:a>
+              </c:when>
+              <c:otherwise>
+                <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Delete" title="Delete" border="0">
+              </c:otherwise>
+            </c:choose>
           </pss:ifAuthorized>
           <pss:elseAuthorized>
             <img src="<ww:url value='/images/delete_disabled.gif'/>" alt="Delete" title="Delete" border="0">
