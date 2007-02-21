@@ -498,11 +498,13 @@
     </action>
 
     <action name="projectGroupTab" class="continuumTab">
+      <result name="input">/WEB-INF/jsp/components/projectGroupTabComponent.jsp</result>
       <result name="success">/WEB-INF/jsp/components/projectGroupTabComponent.jsp</result>
       <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
     </action>
 
     <action name="projectSummary" class="summary">
+      <result name="input">/WEB-INF/jsp/components/projectSummaryComponent.jsp</result>
       <result name="success">/WEB-INF/jsp/components/projectSummaryComponent.jsp</result>
       <result name="error">/WEB-INF/jsp/components/failureComponent.jsp</result>
     </action>
