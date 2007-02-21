@@ -130,9 +130,9 @@ public class IrcContinuumNotifier
 
         String login = (String) configuration.get( "nick" );
 
-        if ( !StringUtils.isEmpty( login ) )
+        if ( StringUtils.isEmpty( login ) )
         {
-            ircClient.setLogin( login );
+            login = "continuum";
         }
 
         String fullName = (String) configuration.get( "fullName" );
@@ -155,7 +155,9 @@ public class IrcContinuumNotifier
 
         try
         {
-            ircClient.connect( host, port, "continuum" );
+            ircClient.connect( host, port );
+
+            ircClient.setLogin( login );
 
             ircClient.logon();
 
