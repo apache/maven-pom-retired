@@ -20,30 +20,25 @@ package org.apache.maven.continuum.web.action;
  */
 
 import com.opensymphony.xwork.Validateable;
-import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.codehaus.plexus.util.StringUtils;
 
-import java.util.Iterator;
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * @author Nick Gonzalez
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="addProject"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="addProject"
  */
 public class AddProjectAction
     extends ContinuumActionSupport
-    implements Validateable, SecureAction
+    implements Validateable
 {
 
     private String projectName;
@@ -102,6 +97,23 @@ public class AddProjectAction
     public String add()
         throws ContinuumException
     {
+        try
+        {
+            if ( StringUtils.isEmpty( getProjectGroupName() ) )
+            {
+                checkAddProjectGroupAuthorization();
+            }
+            else
+            {
+                checkAddProjectToGroupAuthorization( getProjectGroupName() );
+            }
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+
         Project project = new Project();
 
         project.setName( projectName );
@@ -124,6 +136,23 @@ public class AddProjectAction
     public String input()
         throws ContinuumException
     {
+        try
+        {
+            if ( StringUtils.isEmpty( getProjectGroupName() ) )
+            {
+                checkAddProjectGroupAuthorization();
+            }
+            else
+            {
+                checkAddProjectToGroupAuthorization( getProjectGroupName() );
+            }
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+
         projectGroups = new ArrayList();
 
         Collection allProjectGroups = getContinuum().getAllProjectGroups();
@@ -138,8 +167,8 @@ public class AddProjectAction
 
         if ( !disableGroupSelection )
         {
-            selectedProjectGroup = getContinuum().getProjectGroupByGroupId(
-                Continuum.DEFAULT_PROJECT_GROUP_GROUP_ID ).getId();
+            selectedProjectGroup =
+                getContinuum().getProjectGroupByGroupId( Continuum.DEFAULT_PROJECT_GROUP_GROUP_ID ).getId();
         }
 
         return SUCCESS;
@@ -213,17 +242,6 @@ public class AddProjectAction
     public void setProjectVersion( String projectVersion )
     {
         this.projectVersion = projectVersion;
-    }
-
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_OPERATION );
-
-        return bundle;
     }
 
     public Collection getProjectGroups()

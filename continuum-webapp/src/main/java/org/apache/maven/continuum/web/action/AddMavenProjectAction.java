@@ -22,10 +22,7 @@ package org.apache.maven.continuum.web.action;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -37,15 +34,13 @@ import java.util.Iterator;
 
 /**
  * Action to add a Maven project to Continuum, either Maven 1 or Maven 2.
- * 
+ *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
  */
 public abstract class AddMavenProjectAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
-
     private static final long serialVersionUID = -3965565189557706469L;
 
     private static final int DEFINED_BY_POM_GROUP_ID = -1;
@@ -55,9 +50,9 @@ public abstract class AddMavenProjectAction
     private File pomFile;
 
     private String pom = null;
-    
+
     private String scmUsername;
-    
+
     private String scmPassword;
 
     private Collection projectGroups;
@@ -71,6 +66,25 @@ public abstract class AddMavenProjectAction
     public String execute()
         throws ContinuumException
     {
+        try
+        {
+            initializeProjectGroupName();
+
+            if ( StringUtils.isEmpty( getProjectGroupName() ) )
+            {
+                checkAddProjectGroupAuthorization();
+            }
+            else
+            {
+                checkAddProjectToGroupAuthorization( getProjectGroupName() );
+            }
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+
         boolean checkProtocol = true;
 
         if ( !StringUtils.isEmpty( pomUrl ) )
@@ -78,17 +92,18 @@ public abstract class AddMavenProjectAction
             try
             {
                 URL url = new URL( pomUrl );
-                if ( pomUrl.startsWith( "http" ) && !StringUtils.isEmpty(scmUsername) )
+                if ( pomUrl.startsWith( "http" ) && !StringUtils.isEmpty( scmUsername ) )
                 {
                     StringBuffer urlBuffer = new StringBuffer();
                     urlBuffer.append( url.getProtocol() ).append( "://" );
-                    urlBuffer.append(scmUsername).append( ':' ).append(scmPassword).append( '@' ).append( url.getHost() );
+                    urlBuffer.append( scmUsername ).append( ':' ).append( scmPassword ).append( '@' ).append(
+                        url.getHost() );
                     if ( url.getPort() != -1 )
                     {
                         urlBuffer.append( url.getPort() );
                     }
                     urlBuffer.append( url.getPath() );
-                    
+
                     pom = urlBuffer.toString();
                 }
                 else
@@ -144,17 +159,37 @@ public abstract class AddMavenProjectAction
 
     /**
      * Subclasses must implement this method calling the appropiate operation on the continuum service.
-     * 
-     * @param pomUrl url of the pom specified by the user
+     *
+     * @param pomUrl               url of the pom specified by the user
      * @param selectedProjectGroup project group id selected by the user
-     * @param checkProtocol check if the protocol is allowed, use false if the pom is uploaded
+     * @param checkProtocol        check if the protocol is allowed, use false if the pom is uploaded
      * @return result of adding the pom to continuum
      */
-    protected abstract ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup, boolean checkProtocol )
+    protected abstract ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup,
+                                                                 boolean checkProtocol )
         throws ContinuumException;
 
     public String doDefault()
     {
+        try
+        {
+            initializeProjectGroupName();
+
+            if ( StringUtils.isEmpty( getProjectGroupName() ) )
+            {
+                checkAddProjectGroupAuthorization();
+            }
+            else
+            {
+                checkAddProjectToGroupAuthorization( getProjectGroupName() );
+            }
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+
         Collection allProjectGroups = getContinuum().getAllProjectGroups();
         projectGroups = new ArrayList();
 
@@ -169,7 +204,7 @@ public abstract class AddMavenProjectAction
             //TODO: must implement same functionality using plexus-security
             //if ( pg.getPermissions().isWrite() )
             //{
-                projectGroups.add( pg );
+            projectGroups.add( pg );
             //}
         }
 
@@ -223,7 +258,7 @@ public abstract class AddMavenProjectAction
         this.pomUrl = pomUrl;
     }
 
-    public void setScmPassword( String scmPassword)
+    public void setScmPassword( String scmPassword )
     {
         this.scmPassword = scmPassword;
     }
@@ -233,7 +268,7 @@ public abstract class AddMavenProjectAction
         return scmUsername;
     }
 
-    public void setScmUsername( String scmUsername)
+    public void setScmUsername( String scmUsername )
     {
         this.scmUsername = scmUsername;
     }
@@ -271,25 +306,5 @@ public abstract class AddMavenProjectAction
     public void setDisableGroupSelection( boolean disableGroupSelection )
     {
         this.disableGroupSelection = disableGroupSelection;
-    }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        initializeProjectGroupName();
-
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        if ( StringUtils.isEmpty( projectGroupName ) )
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_OPERATION );
-        }
-        else
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_PROJECT_TO_GROUP_OPERATION, projectGroupName );
-        }
-
-        return bundle;
     }
 }

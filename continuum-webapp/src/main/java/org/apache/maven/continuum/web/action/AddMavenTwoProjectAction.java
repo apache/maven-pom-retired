@@ -34,28 +34,27 @@ import java.util.List;
 
 /**
  * Add a Maven 2 project to Continuum.
- * 
+ *
  * @author Nick Gonzalez
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="addMavenTwoProject"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="addMavenTwoProject"
  */
 public class AddMavenTwoProjectAction
     extends AddMavenProjectAction
 {
     // TODO: remove this part once uploading of an m2 project with modules is supported ( CONTINUUM-1098 )
     public static final String ERROR_UPLOADING_M2_PROJECT_WITH_MODULES = "add.m2.project.upload.modules.error";
+
     public static final String ERROR_READING_POM_EXCEPTION_MESSAGE = "Error reading POM";
+
     public static final String FILE_SCHEME = "file:/";
-    
+
     protected ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup, boolean checkProtocol )
         throws ContinuumException
     {
         ContinuumProjectBuildingResult result = null;
-        
+
         // TODO: remove this part once uploading of an m2 project with modules is supported ( CONTINUUM-1098 )
         if ( checkProtocol == false )
         {
@@ -93,7 +92,7 @@ public class AddMavenTwoProjectAction
             catch ( IOException e )
             {
                 throw new ContinuumException( ERROR_READING_POM_EXCEPTION_MESSAGE, e );
-           }
+            }
             catch ( XmlPullParserException e )
             {
                 throw new ContinuumException( ERROR_READING_POM_EXCEPTION_MESSAGE, e );
@@ -104,7 +103,7 @@ public class AddMavenTwoProjectAction
         {
             result = getContinuum().addMavenTwoProject( pomUrl, selectedProjectGroup, checkProtocol );
         }
-        
+
         return result;
     }
 

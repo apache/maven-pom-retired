@@ -19,21 +19,18 @@ package org.apache.maven.continuum.web.action;
  * under the License.
  */
 
-import java.io.File;
-
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 
+import java.io.File;
+
 /**
  * Add a Maven 1 project to Continuum.
- * 
+ *
  * @author Nick Gonzalez
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="addMavenOneProject"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="addMavenOneProject"
  */
 public class AddMavenOneProjectAction
     extends AddMavenProjectAction

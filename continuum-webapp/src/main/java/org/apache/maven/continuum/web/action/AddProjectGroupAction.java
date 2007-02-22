@@ -71,33 +71,33 @@ public class AddProjectGroupAction
         try
         {
             checkAddProjectGroupAuthorization();
-
-            ProjectGroup projectGroup = new ProjectGroup();
-
-            projectGroup.setName( name );
-
-            projectGroup.setGroupId( groupId );
-
-            projectGroup.setDescription( description );
-
-            try
-            {
-                getContinuum().addProjectGroup( projectGroup );
-            }
-            catch ( ContinuumException e )
-            {
-                getLogger().error( "Error adding project group: " + e.getLocalizedMessage() );
-
-                return ERROR;
-            }
-
-            return SUCCESS;
         }
         catch ( AuthorizationRequiredException authzE )
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
+
+        ProjectGroup projectGroup = new ProjectGroup();
+
+        projectGroup.setName( name );
+
+        projectGroup.setGroupId( groupId );
+
+        projectGroup.setDescription( description );
+
+        try
+        {
+            getContinuum().addProjectGroup( projectGroup );
+        }
+        catch ( ContinuumException e )
+        {
+            getLogger().error( "Error adding project group: " + e.getLocalizedMessage() );
+
+            return ERROR;
+        }
+
+        return SUCCESS;
     }
 
     public String input()
