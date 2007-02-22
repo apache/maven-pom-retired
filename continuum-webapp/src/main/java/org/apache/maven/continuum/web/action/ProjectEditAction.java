@@ -20,25 +20,17 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.Project;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="projectEdit"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="projectEdit"
  */
 public class ProjectEditAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
-
     private Project project;
 
     private int projectId;
@@ -60,6 +52,15 @@ public class ProjectEditAction
     public String save()
         throws ContinuumException
     {
+        try
+        {
+            checkModifyProjectInGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
+
         project = getProject( projectId );
 
         project.setName( name );
@@ -84,6 +85,15 @@ public class ProjectEditAction
     public String edit()
         throws ContinuumException
     {
+        try
+        {
+            checkModifyProjectInGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
+
         project = getProject( projectId );
 
         name = project.getName();
@@ -199,24 +209,4 @@ public class ProjectEditAction
     {
         return getProject( projectId ).getProjectGroup().getName();
     }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_IN_GROUP_OPERATION,
-                    getProjectGroupName() );
-        }
-        catch ( ContinuumException e )
-        {
-            throw new SecureActionException( e.getMessage() );
-        }
-
-        return bundle;
-    }
-
 }

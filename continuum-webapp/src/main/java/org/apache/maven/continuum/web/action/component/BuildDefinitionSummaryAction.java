@@ -24,9 +24,8 @@ import org.apache.maven.continuum.model.project.BuildDefinition;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
-import org.apache.maven.continuum.web.model.BuildDefinitionSummary;
 import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
-import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
+import org.apache.maven.continuum.web.model.BuildDefinitionSummary;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -64,14 +63,13 @@ public class BuildDefinitionSummaryAction
             projectGroupId = projectGroup.getId();
             projectGroupName = projectGroup.getName();
 
-            if ( isAuthorizedViewProjectGroup( projectGroupName ) )
-            {
-                groupBuildDefinitionSummaries = gatherGroupBuildDefinitionSummaries( projectGroupId );
-                projectBuildDefinitionSummaries = gatherProjectBuildDefinitionSummaries( projectId );
+            checkViewProjectGroupAuthorization( projectGroupName );
 
-                allBuildDefinitionSummaries.addAll( groupBuildDefinitionSummaries );
-                allBuildDefinitionSummaries.addAll( projectBuildDefinitionSummaries );
-            }
+            groupBuildDefinitionSummaries = gatherGroupBuildDefinitionSummaries( projectGroupId );
+            projectBuildDefinitionSummaries = gatherProjectBuildDefinitionSummaries( projectId );
+
+            allBuildDefinitionSummaries.addAll( groupBuildDefinitionSummaries );
+            allBuildDefinitionSummaries.addAll( projectBuildDefinitionSummaries );
         }
         catch ( ContinuumException e )
         {
@@ -82,10 +80,6 @@ public class BuildDefinitionSummaryAction
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
-        }
-        catch ( AuthenticationRequiredException authnE )
-        {
-            return REQUIRES_AUTHENTICATION;
         }
 
         return SUCCESS;
@@ -99,18 +93,17 @@ public class BuildDefinitionSummaryAction
 
             projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
 
-            if ( isAuthorizedViewProjectGroup(  projectGroup.getName() ) )
+            checkViewProjectGroupAuthorization( projectGroup.getName() );
+
+            for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
             {
-                for ( Iterator i = projectGroup.getProjects().iterator(); i.hasNext(); )
-                {
-                    Project project = (Project) i.next();
-                    projectBuildDefinitionSummaries.addAll( gatherProjectBuildDefinitionSummaries( project.getId() ) );
+                Project project = (Project) i.next();
+                projectBuildDefinitionSummaries.addAll( gatherProjectBuildDefinitionSummaries( project.getId() ) );
 
-                }
-
-                allBuildDefinitionSummaries.addAll( groupBuildDefinitionSummaries );
-                allBuildDefinitionSummaries.addAll( projectBuildDefinitionSummaries );
             }
+
+            allBuildDefinitionSummaries.addAll( groupBuildDefinitionSummaries );
+            allBuildDefinitionSummaries.addAll( projectBuildDefinitionSummaries );
         }
         catch ( ContinuumException e )
         {
@@ -121,10 +114,6 @@ public class BuildDefinitionSummaryAction
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
-        }
-        catch ( AuthenticationRequiredException authnE )
-        {
-            return REQUIRES_AUTHENTICATION;
         }
 
         return SUCCESS;

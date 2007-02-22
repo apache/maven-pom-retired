@@ -19,34 +19,27 @@ package org.apache.maven.continuum.web.action;
  * under the License.
  */
 
+import com.opensymphony.webwork.ServletActionContext;
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.configuration.ConfigurationException;
+import org.apache.maven.continuum.model.project.BuildResult;
+import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.apache.maven.continuum.web.util.StateGenerator;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
-import org.apache.maven.continuum.web.util.StateGenerator;
-import org.apache.maven.continuum.configuration.ConfigurationException;
-import org.apache.maven.continuum.model.project.BuildResult;
-import org.apache.maven.continuum.model.project.Project;
-import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-
-import com.opensymphony.webwork.ServletActionContext;
-
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="buildResult"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="buildResult"
  */
 public class BuildResultAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
     private Project project;
 
@@ -69,6 +62,14 @@ public class BuildResultAction
     public String execute()
         throws ContinuumException, ConfigurationException, IOException
     {
+        try
+        {
+            checkViewProjectGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
 
         //todo get this working for other types of test case rendering other then just surefire
         // check if there are surefire results to display
@@ -87,7 +88,6 @@ public class BuildResultAction
         }
 
         state = StateGenerator.generate( buildResult.getState(), ServletActionContext.getRequest().getContextPath() );
-
 
         return SUCCESS;
     }
@@ -151,31 +151,11 @@ public class BuildResultAction
     public String getProjectGroupName()
         throws ContinuumException
     {
-        if( projectGroupName == null || "".equals( projectGroupName ) )
-        {               
+        if ( StringUtils.isEmpty( projectGroupName ) )
+        {
             projectGroupName = getContinuum().getProjectGroupByProjectId( getProjectId() ).getName();
         }
 
         return projectGroupName;
     }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-        
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
-                getProjectGroupName() );
-        }
-        catch ( ContinuumException e )
-        {
-
-        }
-
-        return bundle;
-    }
-
 }

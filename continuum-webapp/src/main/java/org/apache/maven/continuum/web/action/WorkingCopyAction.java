@@ -23,11 +23,9 @@ import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.webwork.views.util.UrlHelper;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.apache.maven.continuum.web.util.WorkingCopyContentGenerator;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.util.StringUtils;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
@@ -44,7 +42,6 @@ import java.util.List;
  */
 public class WorkingCopyAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
     /**
      * @plexus.requirement
@@ -78,6 +75,14 @@ public class WorkingCopyAction
     public String execute()
         throws ContinuumException
     {
+        try
+        {
+            checkViewProjectGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
 
         files = getContinuum().getFiles( projectId, userDirectory );
 
@@ -219,29 +224,11 @@ public class WorkingCopyAction
     public String getProjectGroupName()
         throws ContinuumException
     {
-        if( projectGroupName == null || "".equals( projectGroupName ) )
+        if ( StringUtils.isEmpty( projectGroupName ) )
         {
             projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();
         }
 
         return projectGroupName;
-    }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
-                getProjectGroupName() );
-        }
-        catch ( ContinuumException ce )
-        {
-
-        }
-
-        return bundle;
     }
 }

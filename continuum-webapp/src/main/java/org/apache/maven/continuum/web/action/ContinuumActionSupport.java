@@ -19,19 +19,18 @@ package org.apache.maven.continuum.web.action;
  * under the License.
  */
 
+import com.opensymphony.xwork.ActionContext;
+import com.opensymphony.xwork.Preparable;
 import org.apache.maven.continuum.Continuum;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
 import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
+import org.codehaus.plexus.security.authorization.AuthorizationException;
 import org.codehaus.plexus.security.system.SecuritySession;
 import org.codehaus.plexus.security.system.SecuritySystem;
 import org.codehaus.plexus.security.system.SecuritySystemConstants;
-import org.codehaus.plexus.security.authorization.AuthorizationException;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-
-import com.opensymphony.xwork.Preparable;
-import com.opensymphony.xwork.ActionContext;
+import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 /**
  * ContinuumActionSupport
@@ -42,7 +41,7 @@ import com.opensymphony.xwork.ActionContext;
 public class ContinuumActionSupport
     extends PlexusActionSupport
     implements Preparable
-{       
+{
     private SecuritySession securitySession;
 
     /**
@@ -57,7 +56,8 @@ public class ContinuumActionSupport
     protected static final String ERROR_MSG_AUTHORIZATION_REQUIRED = "You are not authorized to access this page. " +
         "Please contact your administrator to be granted the appropriate permissions.";
 
-    protected static final String ERROR_MSG_PROCESSING_AUTHORIZATION = "An error occurred while performing authorization.";
+    protected static final String ERROR_MSG_PROCESSING_AUTHORIZATION =
+        "An error occurred while performing authorization.";
 
     /**
      * @plexus.requirement
@@ -67,9 +67,10 @@ public class ContinuumActionSupport
     public void prepare()
         throws Exception
     {
-        if( securitySession == null )
+        if ( securitySession == null )
         {
-            securitySession = (SecuritySession) getContext().getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
+            securitySession =
+                (SecuritySession) getContext().getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
         }
     }
 
@@ -84,570 +85,194 @@ public class ContinuumActionSupport
     }
 
     /**
-     * Check if the current user is authorized to view the specified project group
+     * Check if the current user is authorized to do the action
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param role the role
+     * @throws AuthorizationRequiredException if the user isn't authorized
      */
-    protected boolean isAuthorizedViewProjectGroup( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkAuthorization( String role )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
+        checkAuthorization( role, null );
+    }
 
+    /**
+     * Check if the current user is authorized to do the action
+     *
+     * @param role     the role
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized
+     */
+    protected void checkAuthorization( String role, String resource )
+        throws AuthorizationRequiredException
+    {
         try
         {
-            if ( resource != null && !"".equals( resource.trim() ) )
+            if ( resource != null && StringUtils.isNotEmpty( resource.trim() ) )
             {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION, resource ) )
+                if ( !getSecuritySystem().isAuthorized( getSecuritySession(), role, resource ) )
                 {
                     throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
                 }
             }
             else
             {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION ) )
+                if ( !getSecuritySystem().isAuthorized( getSecuritySession(), role ) )
                 {
                     throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
                 }
             }
         }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
         catch ( AuthorizationException ae )
         {
             throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
         }
+    }
 
-        return true;
+    /**
+     * Check if the current user is authorized to view the specified project group
+     *
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
+     */
+    protected void checkViewProjectGroupAuthorization( String resource )
+        throws AuthorizationRequiredException
+    {
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to add a project group
      *
-     * @param resource the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedAddProjectGroup( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkAddProjectGroupAuthorization()
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_ADD_GROUP_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_ADD_GROUP_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_OPERATION );
     }
 
     /**
      * Check if the current user is authorized to delete the specified project group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedRemoveProjectGroup( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkRemoveProjectGroupAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )                           
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to build the specified project group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedBuildProjectGroup( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkBuildProjectGroupAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_BUILD_GROUP_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_BUILD_GROUP_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_GROUP_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to modify the specified project group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedModifyProjectGroup( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkModifyProjectGroupAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_MODIFY_GROUP_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_MODIFY_GROUP_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_MODIFY_GROUP_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to add a project to a specific project group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedAddProjectToGroup( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkAddProjectToGroupAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_ADD_PROJECT_TO_GROUP_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_ADD_PROJECT_TO_GROUP_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_PROJECT_TO_GROUP_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to delete a project from a specified group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedRemoveProjectFromGroup( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkRemoveProjectFromGroupAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_REMOVE_PROJECT_FROM_GROUP_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_REMOVE_PROJECT_FROM_GROUP_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_REMOVE_PROJECT_FROM_GROUP_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to modify a project in the specified group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedModifyProjectInGroup( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkModifyProjectInGroupAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_IN_GROUP_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_IN_GROUP_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_IN_GROUP_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to build a project in the specified group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedBuildProjectInGroup( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkBuildProjectInGroupAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_BUILD_PROJECT_IN_GROUP_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_BUILD_PROJECT_IN_GROUP_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_PROJECT_IN_GROUP_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to add a build definition for the specified
      * project group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedAddGroupBuildDefinition( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkAddGroupBuildDefinitionAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_ADD_GROUP_BUILD_DEFINTION_OPERATION, resource ) )
-                {
-                   throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_ADD_GROUP_BUILD_DEFINTION_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_BUILD_DEFINTION_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to delete a build definition in the specified
      * project group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedRemoveGroupBuildDefinition( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkRemoveGroupBuildDefinitionAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_BUILD_DEFINITION_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_BUILD_DEFINITION_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_BUILD_DEFINITION_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to modify a build definition in the specified
      * project group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedModifyGroupBuildDefinition( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkModifyGroupBuildDefinitionAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_MODIFY_GROUP_BUILD_DEFINITION_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_MODIFY_GROUP_BUILD_DEFINITION_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_MODIFY_GROUP_BUILD_DEFINITION_OPERATION, resource );
     }
 
     /**
@@ -655,497 +280,148 @@ public class ContinuumActionSupport
      * project
      *
      * @param resource the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedAddProjectBuildDefinition( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkAddProjectBuildDefinitionAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_ADD_PROJECT_BUILD_DEFINTION_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_ADD_PROJECT_BUILD_DEFINTION_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_PROJECT_BUILD_DEFINTION_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to modify a build definition of a specific project
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedModifyProjectBuildDefinition( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkModifyProjectBuildDefinitionAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_BUILD_DEFINITION_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_BUILD_DEFINITION_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_BUILD_DEFINITION_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to delete a build definition of a specific
      * project
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedRemoveProjectBuildDefinition( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkRemoveProjectBuildDefinitionAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_REMOVE_PROJECT_BUILD_DEFINITION_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_REMOVE_PROJECT_BUILD_DEFINITION_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_REMOVE_PROJECT_BUILD_DEFINITION_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to add a notifier to the specified
      * project group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedAddProjectGroupNotifier( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkAddProjectGroupNotifierAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_ADD_GROUP_NOTIFIER_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_ADD_GROUP_NOTIFIER_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_NOTIFIER_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to delete a notifier in the specified
      * project group
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedRemoveProjectGroupNotifier( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkRemoveProjectGroupNotifierAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_NOTIFIER_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_NOTIFIER_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_NOTIFIER_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to modify a notifier in the specified
      * project group
      *
-     * @param resource  the operartion resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operartion resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedModifyProjectGroupNotifier( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkModifyProjectGroupNotifierAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_MODIFY_GROUP_NOTIFIER_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_MODIFY_GROUP_NOTIFIER_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_MODIFY_GROUP_NOTIFIER_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to add a notifier to a specific project
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedAddProjectNotifier( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkAddProjectNotifierAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_ADD_PROJECT_NOTIFIER_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_ADD_PROJECT_NOTIFIER_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_PROJECT_NOTIFIER_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to delete a notifier in a specific project
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedRemoveProjectNotifier( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkRemoveProjectNotifierAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_REMOVE_PROJECT_NOTIFIER_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_REMOVE_PROJECT_NOTIFIER_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_REMOVE_PROJECT_NOTIFIER_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to modify a notifier in a specific project
      *
-     * @param resource  the operation resource
-     * @return
-     * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     * @param resource the operation resource
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedModifyProjectNotifier( String resource )
-        throws AuthenticationRequiredException, AuthorizationRequiredException
+    protected void checkModifyProjectNotifierAuthorization( String resource )
+        throws AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
-        {
-            throw new AuthenticationRequiredException( "Authentication required." );
-        }
-
-        try
-        {
-            if ( resource != null && !"".equals( resource.trim() ) )
-            {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                        ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_NOTIFIER_OPERATION, resource ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-            else
-            {
-                 if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                         ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_NOTIFIER_OPERATION ) )
-                {
-                    throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-                }
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_MODIFY_PROJECT_NOTIFIER_OPERATION, resource );
     }
 
     /**
      * Check if the current user is authorized to manage the application's configuration
      *
-     * @return
      * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     *                                        if the user isn't authorized if the user isn't authenticated
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedManageConfiguration()
+    protected void checkManageConfigurationAuthorization()
         throws AuthenticationRequiredException, AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
+        if ( !isAuthenticated() )
         {
             throw new AuthenticationRequiredException( "Authentication required." );
         }
 
-        try
-        {
-            if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                    ContinuumRoleConstants.CONTINUUM_MANAGE_CONFIGURATION ) )
-            {
-                throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_MANAGE_CONFIGURATION );
     }
 
     /**
      * Check if the current user is authorized to manage the project build schedules
      *
-     * @return
      * @throws AuthenticationRequiredException
-     * @throws AuthorizationRequiredException
+     *                                        if the user isn't authorized if the user isn't authenticated
+     * @throws AuthorizationRequiredException if the user isn't authorized if the user isn't authorized
      */
-    protected boolean isAuthorizedManageSchedules()
+    protected void checkManageSchedulesAuthorization()
         throws AuthenticationRequiredException, AuthorizationRequiredException
     {
-        if( !isAuthenticated() )
+        if ( !isAuthenticated() )
         {
             throw new AuthenticationRequiredException( "Authentication required." );
         }
 
-        try
-        {
-            if ( !getSecuritySystem().isAuthorized( getSecuritySession(),
-                                                    ContinuumRoleConstants.CONTINUUM_MANAGE_SCHEDULES ) )
-            {
-               throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
-            }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-        catch ( AuthorizationException ae )
-        {
-            throw new AuthorizationRequiredException( ERROR_MSG_PROCESSING_AUTHORIZATION );
-        }
-
-        return true;
+        checkAuthorization( ContinuumRoleConstants.CONTINUUM_MANAGE_SCHEDULES );
     }
 
     /**
@@ -1173,13 +449,10 @@ public class ContinuumActionSupport
     /**
      * Get the security system
      *
-     * @return
-     * @throws ComponentLookupException
+     * @return the security system
      */
     private SecuritySystem getSecuritySystem()
-        throws ComponentLookupException
     {
-
         return securitySystem;
     }
 
@@ -1190,8 +463,8 @@ public class ContinuumActionSupport
 
     /**
      * Check if the current user is already authenticated
-     * 
-     * @return
+     *
+     * @return true if the user is authenticated
      */
     public boolean isAuthenticated()
     {

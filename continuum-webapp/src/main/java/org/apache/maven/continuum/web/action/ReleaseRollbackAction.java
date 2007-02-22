@@ -19,26 +19,20 @@ package org.apache.maven.continuum.web.action;
  * under the License.
  */
 
+import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.apache.maven.continuum.release.ContinuumReleaseManagerListener;
 import org.apache.maven.continuum.release.DefaultReleaseManagerListener;
-import org.apache.maven.continuum.model.project.Project;
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author Edwin Punzalan
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="releaseRollback"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="releaseRollback"
  */
 public class ReleaseRollbackAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
     private int projectId;
 
@@ -49,43 +43,37 @@ public class ReleaseRollbackAction
     public String execute()
         throws Exception
     {
-        /*try
+        try
         {
-            if ( isAuthorizedBuildProjectGroup( getProjectGroupName() ) )
-            { */
-                ContinuumReleaseManager releaseManager = getContinuum().getReleaseManager();
-
-                ContinuumReleaseManagerListener listener = new DefaultReleaseManagerListener();
-
-                Project project = getContinuum().getProject( projectId );
-
-                releaseManager.rollback( releaseId, project.getWorkingDirectory(), listener );
-
-                //recurse until rollback is finished
-                while( listener.getState() != ContinuumReleaseManagerListener.FINISHED )
-                {
-                    try
-                    {
-                        Thread.sleep( 1000 );
-                    }
-                    catch( InterruptedException e )
-                    {
-                        //do nothing
-                    }
-                }
-
-                releaseManager.getPreparedReleases().remove( releaseId );
-        /*    }
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
         }
-        catch ( AuthorizationRequiredException authzE )
+        catch ( AuthorizationRequiredException e )
         {
-            addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
-        catch ( AuthenticationRequiredException authnE )
+
+        ContinuumReleaseManager releaseManager = getContinuum().getReleaseManager();
+
+        ContinuumReleaseManagerListener listener = new DefaultReleaseManagerListener();
+
+        Project project = getContinuum().getProject( projectId );
+
+        releaseManager.rollback( releaseId, project.getWorkingDirectory(), listener );
+
+        //recurse until rollback is finished
+        while ( listener.getState() != ContinuumReleaseManagerListener.FINISHED )
         {
-            return REQUIRES_AUTHENTICATION;
-        } */
+            try
+            {
+                Thread.sleep( 1000 );
+            }
+            catch ( InterruptedException e )
+            {
+                //do nothing
+            }
+        }
+
+        releaseManager.getPreparedReleases().remove( releaseId );
 
         return SUCCESS;
     }
@@ -93,23 +81,15 @@ public class ReleaseRollbackAction
     public String warn()
         throws Exception
     {
-        /*try
+        try
         {
-            if ( isAuthorizedBuildProjectGroup( getProjectGroupName() ) )
-            {
-                return SUCCESS;
-            }
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
         }
-        catch ( AuthorizationRequiredException authzE )
+        catch ( AuthorizationRequiredException e )
         {
-            addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
-        catch ( AuthenticationRequiredException authnE )
-        {
-            return REQUIRES_AUTHENTICATION;
-        } */
-        
+
         return SUCCESS;
     }
 
@@ -136,30 +116,11 @@ public class ReleaseRollbackAction
     public String getProjectGroupName()
         throws ContinuumException
     {
-        if ( projectGroupName == null || "".equals( projectGroupName ) )
+        if ( StringUtils.isEmpty( projectGroupName ) )
         {
             projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();
         }
 
         return projectGroupName;
     }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_PROJECT_IN_GROUP_OPERATION,
-                getProjectGroupName() );
-        }
-        catch ( ContinuumException ce )
-        {
-
-        }
-
-        return bundle;
-    }
-
 }

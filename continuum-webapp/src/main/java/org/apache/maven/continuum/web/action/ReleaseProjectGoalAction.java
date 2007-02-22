@@ -20,27 +20,21 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.artifact.ArtifactUtils;
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Map;
 
 /**
  * @author Edwin Punzalan
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="releaseProjectGoal"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="releaseProjectGoal"
  */
 public class ReleaseProjectGoalAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
     private int projectId;
 
@@ -57,6 +51,15 @@ public class ReleaseProjectGoalAction
     public String execute()
         throws Exception
     {
+        try
+        {
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
+
         Project project = getContinuum().getProjectWithAllDetails( projectId );
 
         String releaseId = ArtifactUtils.versionlessKey( project.getGroupId(), project.getArtifactId() );
@@ -74,7 +77,6 @@ public class ReleaseProjectGoalAction
         }
 
         projectName = project.getName();
-
 
         return SUCCESS;
     }
@@ -132,30 +134,11 @@ public class ReleaseProjectGoalAction
     public String getProjectGroupName()
         throws ContinuumException
     {
-        if ( projectGroupName == null || "".equals( projectGroupName ) )
+        if ( StringUtils.isEmpty( projectGroupName ) )
         {
             projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();
         }
 
         return projectGroupName;
-    }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_PROJECT_IN_GROUP_OPERATION,
-                getProjectGroupName() );
-        }
-        catch ( ContinuumException ce )
-        {
-
-        }
-
-        return bundle;
     }
 }

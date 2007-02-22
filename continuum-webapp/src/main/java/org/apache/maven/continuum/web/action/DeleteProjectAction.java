@@ -20,23 +20,16 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.Project;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="deleteProject"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="deleteProject"
  */
 public class DeleteProjectAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
     private int projectId;
 
@@ -49,6 +42,15 @@ public class DeleteProjectAction
     public String execute()
         throws ContinuumException
     {
+        try
+        {
+            checkRemoveProjectFromGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
+
         getContinuum().removeProject( projectId );
 
         return SUCCESS;
@@ -57,10 +59,18 @@ public class DeleteProjectAction
     public String doDefault()
         throws ContinuumException
     {
+        try
+        {
+            checkRemoveProjectFromGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
 
         Project project = getContinuum().getProject( projectId );
         projectName = project.getName();
-        
+
         return "delete";
     }
 
@@ -111,23 +121,4 @@ public class DeleteProjectAction
 
         return projectGroupName;
     }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_REMOVE_PROJECT_FROM_GROUP_OPERATION,
-                    getProjectGroupName() );
-        }
-        catch ( ContinuumException e )
-        {
-            throw new SecureActionException( e.getMessage() );
-        }
-
-        return bundle;
-    }
-    
 }

@@ -20,23 +20,16 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="buildProject"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="buildProject"
  */
 public class BuildProjectAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
     private int projectId;
 
@@ -52,7 +45,15 @@ public class BuildProjectAction
 
     public String execute()
         throws ContinuumException
-    {            
+    {
+        try
+        {
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
 
         if ( projectId > 0 )
         {
@@ -88,7 +89,6 @@ public class BuildProjectAction
                 return "to_project_page";
             }
         }
-
 
         return SUCCESS;
     }
@@ -146,7 +146,7 @@ public class BuildProjectAction
     public String getProjectGroupName()
         throws ContinuumException
     {
-        if( projectGroupName == null || "".equals( projectGroupName ) )
+        if ( StringUtils.isEmpty( projectGroupName ) )
         {
             if ( projectGroupId != 0 )
             {
@@ -159,24 +159,5 @@ public class BuildProjectAction
         }
 
         return projectGroupName;
-    }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );                
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_PROJECT_IN_GROUP_OPERATION,
-                    getProjectGroupName() );
-        }
-        catch ( ContinuumException e )
-        {
-            throw new SecureActionException( e.getMessage() );
-        }
-
-        return bundle;
     }
 }

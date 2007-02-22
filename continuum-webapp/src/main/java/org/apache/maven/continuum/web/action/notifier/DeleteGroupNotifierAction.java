@@ -20,13 +20,12 @@ package org.apache.maven.continuum.web.action.notifier;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Map;
 
@@ -41,9 +40,7 @@ import java.util.Map;
  */
 public class DeleteGroupNotifierAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
-
     private int projectGroupId;
 
     private int notifierId;
@@ -57,6 +54,15 @@ public class DeleteGroupNotifierAction
     public String execute()
         throws ContinuumException
     {
+        try
+        {
+            checkRemoveProjectGroupNotifierAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
 
         getContinuum().removeGroupNotifier( projectGroupId, notifierId );
 
@@ -66,6 +72,15 @@ public class DeleteGroupNotifierAction
     public String doDefault()
         throws ContinuumException
     {
+        try
+        {
+            checkRemoveProjectGroupNotifierAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
 
         ProjectNotifier notifier = getContinuum().getGroupNotifier( projectGroupId, notifierId );
 
@@ -147,31 +162,13 @@ public class DeleteGroupNotifierAction
     }
 
     public String getProjectGroupName()
-            throws ContinuumException
+        throws ContinuumException
     {
-        if ( projectGroupName == null || "".equals( projectGroupName ) )
+        if ( StringUtils.isEmpty( projectGroupName ) )
         {
             projectGroupName = getContinuum().getProjectGroup( projectGroupId ).getName();
         }
 
         return projectGroupName;
-    }
-
-     public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_REMOVE_GROUP_NOTIFIER_OPERATION,
-                    getProjectGroupName() );
-        }
-        catch ( ContinuumException e )
-        {
-            throw new SecureActionException( e.getMessage() );
-        }
-
-        return bundle;
     }
 }

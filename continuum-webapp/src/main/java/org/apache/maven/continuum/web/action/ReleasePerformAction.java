@@ -19,31 +19,25 @@ package org.apache.maven.continuum.web.action;
  * under the License.
  */
 
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.apache.maven.continuum.release.ContinuumReleaseManagerListener;
 import org.apache.maven.continuum.release.DefaultReleaseManagerListener;
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.apache.maven.scm.provider.svn.repository.SvnScmProviderRepository;
 import org.apache.maven.shared.release.ReleaseResult;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 
 import java.io.File;
 
 /**
  * @author Edwin Punzalan
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="releasePerform"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="releasePerform"
  */
 public class ReleasePerformAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
     private int projectId;
 
@@ -72,6 +66,14 @@ public class ReleasePerformAction
     public String inputFromScm()
         throws Exception
     {
+        try
+        {
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
 
         populateFromProject();
 
@@ -83,14 +85,29 @@ public class ReleasePerformAction
     public String input()
         throws Exception
     {
+        try
+        {
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
 
         return SUCCESS;
-
     }
 
     public String execute()
         throws Exception
     {
+        try
+        {
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
 
         listener = new DefaultReleaseManagerListener();
 
@@ -120,7 +137,8 @@ public class ReleasePerformAction
         do
         {
             releaseId = String.valueOf( System.currentTimeMillis() );
-        }while ( releaseManager.getPreparedReleases().containsKey( releaseId ) );
+        }
+        while ( releaseManager.getPreparedReleases().containsKey( releaseId ) );
 
         releaseManager.getPreparedReleases().put( releaseId, descriptor );
 
@@ -267,24 +285,5 @@ public class ReleasePerformAction
         }
 
         return projectGroupName;
-    }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_PROJECT_IN_GROUP_OPERATION,
-                getProjectGroupName() );
-        }
-        catch ( ContinuumException ce )
-        {
-
-        }
-
-        return bundle;
     }
 }

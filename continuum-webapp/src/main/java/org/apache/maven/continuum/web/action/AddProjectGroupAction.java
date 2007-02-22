@@ -22,23 +22,17 @@ package org.apache.maven.continuum.web.action;
 import com.opensymphony.xwork.Validateable;
 import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 
 import java.util.Iterator;
 
 /**
  * @author Henry Isidro <hisidro@exist.com>
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="addProjectGroup"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="addProjectGroup"
  */
 public class AddProjectGroupAction
     extends ContinuumActionSupport
-    implements Validateable, SecureAction
+    implements Validateable
 {
     private String name;
 
@@ -74,26 +68,51 @@ public class AddProjectGroupAction
 
     public String execute()
     {
-        ProjectGroup projectGroup = new ProjectGroup();
-
-        projectGroup.setName( name );
-
-        projectGroup.setGroupId( groupId );
-
-        projectGroup.setDescription( description );
-
         try
         {
-            getContinuum().addProjectGroup( projectGroup );
+            checkAddProjectGroupAuthorization();
+
+            ProjectGroup projectGroup = new ProjectGroup();
+
+            projectGroup.setName( name );
+
+            projectGroup.setGroupId( groupId );
+
+            projectGroup.setDescription( description );
+
+            try
+            {
+                getContinuum().addProjectGroup( projectGroup );
+            }
+            catch ( ContinuumException e )
+            {
+                getLogger().error( "Error adding project group: " + e.getLocalizedMessage() );
+
+                return ERROR;
+            }
+
+            return SUCCESS;
         }
-        catch ( ContinuumException e )
+        catch ( AuthorizationRequiredException authzE )
         {
-            getLogger().error( "Error adding project group: " + e.getLocalizedMessage() );
-
-            return ERROR;
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
         }
+    }
 
-        return SUCCESS;
+    public String input()
+    {
+        try
+        {
+            checkAddProjectGroupAuthorization();
+
+            return INPUT;
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
     }
 
     public String getDescription()
@@ -125,15 +144,4 @@ public class AddProjectGroupAction
     {
         this.name = name;
     }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_OPERATION );
-
-        return bundle;
-    }
-
 }

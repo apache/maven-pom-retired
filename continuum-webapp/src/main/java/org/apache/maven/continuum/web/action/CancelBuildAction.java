@@ -20,25 +20,23 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.buildqueue.BuildProjectTask;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.codehaus.plexus.taskqueue.Task;
 import org.codehaus.plexus.taskqueue.execution.TaskQueueExecutor;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- *
  * @plexus.component role="com.opensymphony.xwork.Action" role-hint="cancelBuild"
  */
 public class CancelBuildAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
-    /** @plexus.requirement role-hint='build-project' */
+    /**
+     * @plexus.requirement role-hint='build-project'
+     */
     private TaskQueueExecutor taskQueueExecutor;
 
     private int projectId;
@@ -48,10 +46,18 @@ public class CancelBuildAction
     public String execute()
         throws ContinuumException
     {
+        try
+        {
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
 
         Task task = taskQueueExecutor.getCurrentTask();
 
-        getLogger().info("TaskQueueExecutor: " + taskQueueExecutor );
+        getLogger().info( "TaskQueueExecutor: " + taskQueueExecutor );
 
         if ( task != null )
         {
@@ -64,8 +70,8 @@ public class CancelBuildAction
                 }
                 else
                 {
-                    getLogger().warn( "Current task is not for the given projectId (" + projectId + "): "
-                        + ( (BuildProjectTask) task ).getProjectId() + "; not cancelling" );
+                    getLogger().warn( "Current task is not for the given projectId (" + projectId + "): " +
+                        ( (BuildProjectTask) task ).getProjectId() + "; not cancelling" );
                 }
             }
             else
@@ -78,7 +84,6 @@ public class CancelBuildAction
             getLogger().warn( "No task running - not cancelling" );
         }
 
-
         return SUCCESS;
     }
 
@@ -90,29 +95,11 @@ public class CancelBuildAction
     public String getProjectGroupName()
         throws ContinuumException
     {
-        if( projectGroupName == null || "".equals( projectGroupName ) )
+        if ( StringUtils.isEmpty( projectGroupName ) )
         {
             projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();
         }
 
         return projectGroupName;
-    }
-
-     public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_PROJECT_IN_GROUP_OPERATION,
-                    getProjectGroupName() );
-        }
-        catch ( ContinuumException e )
-        {
-            throw new SecureActionException( e.getMessage() );
-        }
-
-        return bundle;
     }
 }

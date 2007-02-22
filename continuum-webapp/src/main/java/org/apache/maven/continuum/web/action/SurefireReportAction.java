@@ -20,15 +20,13 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
-import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
-import org.apache.maven.continuum.model.project.Project;
-import org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
 import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -50,16 +48,11 @@ import java.util.StringTokenizer;
 
 /**
  * @author Edwin Punzalan
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="surefireReport"
- *
- *  @todo too many inner classes, maybe a continuum-reports project group ?
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="surefireReport"
+ * @todo too many inner classes, maybe a continuum-reports project group ?
  */
 public class SurefireReportAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
     private int buildId;
 
@@ -78,6 +71,15 @@ public class SurefireReportAction
     public String execute()
         throws ContinuumException
     {
+        try
+        {
+            checkViewProjectGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
+
         project = getProjectById( projectId );
 
         //@todo maven-surefire-report reportsDirectory should be detected ?
@@ -136,7 +138,7 @@ public class SurefireReportAction
 
         float totalTime = 0.0f;
 
-        for( Iterator suites = suiteList.iterator(); suites.hasNext(); )
+        for ( Iterator suites = suiteList.iterator(); suites.hasNext(); )
         {
             ReportTestSuite suite = (ReportTestSuite) suites.next();
 
@@ -162,7 +164,7 @@ public class SurefireReportAction
     {
         Map testsByPackage = new LinkedHashMap();
 
-        for( Iterator suites = suiteList.iterator(); suites.hasNext(); )
+        for ( Iterator suites = suiteList.iterator(); suites.hasNext(); )
         {
             ReportTestSuite suite = (ReportTestSuite) suites.next();
 
@@ -537,7 +539,7 @@ public class SurefireReportAction
         {
             String s = new String( ch, start, length );
 
-            if ( ! "".equals( s.trim() ) )
+            if ( !"".equals( s.trim() ) )
             {
                 currentElement.append( s );
             }
@@ -752,7 +754,7 @@ public class SurefireReportAction
     }
 
     public Project getProjectById( int projectId )
-            throws ContinuumException
+        throws ContinuumException
     {
         return getContinuum().getProject( projectId );
     }
@@ -761,23 +763,5 @@ public class SurefireReportAction
         throws ContinuumException
     {
         return getProjectById( projectId ).getProjectGroup().getName();
-    }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
-                getProjectGroupName() );
-        }
-        catch ( ContinuumException ce )
-        {
-
-        }
-
-        return bundle;
     }
 }

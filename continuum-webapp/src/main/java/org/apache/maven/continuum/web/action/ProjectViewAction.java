@@ -20,24 +20,17 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="projectView"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="projectView"
  */
 public class ProjectViewAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
 
     private Project project;
@@ -52,6 +45,15 @@ public class ProjectViewAction
     public String execute()
         throws ContinuumException
     {
+        try
+        {
+            checkViewProjectGroupAuthorization( getProjectGroup().getName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
+
         projectGroup = getProjectGroup();
 
         project = getContinuum().getProjectWithAllDetails( projectId );
@@ -74,35 +76,14 @@ public class ProjectViewAction
     }
 
     /**
-     * Returns the {@link ProjectGroup} instance obtained for 
+     * Returns the {@link ProjectGroup} instance obtained for
      * the specified project group Id, or null if it were not set.
-     * 
+     *
      * @return the projectGroup
      */
     public ProjectGroup getProjectGroup()
-            throws ContinuumException
+        throws ContinuumException
     {
         return getContinuum().getProjectGroupByProjectId( projectId );
     }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-        
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
-                getProjectGroup().getName() );
-        }
-        catch ( ContinuumException ce )
-        {
-
-        }
-
-        return bundle;
-    }
-
-
 }

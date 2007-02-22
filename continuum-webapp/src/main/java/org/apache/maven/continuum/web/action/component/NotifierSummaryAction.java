@@ -27,9 +27,8 @@ import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
-import org.apache.maven.continuum.web.model.NotifierSummary;
 import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
-import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
+import org.apache.maven.continuum.web.model.NotifierSummary;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -82,10 +81,9 @@ public class NotifierSummaryAction
 
         try
         {
-            if ( isAuthorizedViewProjectGroup( getProjectGroupName() ) )
-            {
-                projectNotifierSummaries = summarizeForProject( projectId );
-            }
+            checkViewProjectGroupAuthorization( getProjectGroupName() );
+
+            projectNotifierSummaries = summarizeForProject( projectId );
         }
         catch ( ContinuumException e )
         {
@@ -96,10 +94,6 @@ public class NotifierSummaryAction
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
-        }
-        catch ( AuthenticationRequiredException authnE )
-        {
-            return REQUIRES_AUTHENTICATION;
         }
 
         return SUCCESS;
@@ -128,18 +122,17 @@ public class NotifierSummaryAction
 
         try
         {
-            if ( isAuthorizedViewProjectGroup( getProjectGroupName() ) )
-            {
-                projectGroupNotifierSummaries = gatherGroupNotifierSummaries();
+            checkViewProjectGroupAuthorization( getProjectGroupName() );
 
-                Collection projects = getContinuum().getProjectsInGroup( projectGroupId );
-                if ( projects != null )
+            projectGroupNotifierSummaries = gatherGroupNotifierSummaries();
+
+            Collection projects = getContinuum().getProjectsInGroup( projectGroupId );
+            if ( projects != null )
+            {
+                for ( Iterator i = projects.iterator(); i.hasNext(); )
                 {
-                    for ( Iterator i = projects.iterator(); i.hasNext(); )
-                    {
-                        Project p = (Project) i.next();
-                        projectNotifierSummaries.addAll( summarizeForProject( p.getId() ) );
-                    }
+                    Project p = (Project) i.next();
+                    projectNotifierSummaries.addAll( summarizeForProject( p.getId() ) );
                 }
             }
         }
@@ -152,10 +145,6 @@ public class NotifierSummaryAction
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
-        }
-        catch ( AuthenticationRequiredException authnE )
-        {
-            return REQUIRES_AUTHENTICATION;
         }
 
         return SUCCESS;
@@ -413,7 +402,7 @@ public class NotifierSummaryAction
             }
             else
             {
-                projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();                
+                projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();
             }
         }
 

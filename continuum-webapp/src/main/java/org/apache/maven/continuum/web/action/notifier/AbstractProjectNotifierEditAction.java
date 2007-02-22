@@ -20,11 +20,10 @@ package org.apache.maven.continuum.web.action.notifier;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
-import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
@@ -118,25 +117,25 @@ public abstract class AbstractProjectNotifierEditAction
         this.projectGroupId = projectGroupId;
     }
 
-    protected boolean isAuthorized()
-        throws AuthorizationRequiredException, AuthenticationRequiredException, ContinuumException
+    protected void checkAuthorization()
+        throws AuthorizationRequiredException, ContinuumException
     {
-        if( getNotifier() == null )
+        if ( getNotifier() == null )
         {
-            return isAuthorizedAddProjectNotifier( getProjectGroupName() );
+            checkAddProjectNotifierAuthorization( getProjectGroupName() );
         }
         else
         {
-            return isAuthorizedModifyProjectNotifier( getProjectGroupName() );
+            checkModifyProjectNotifierAuthorization( getProjectGroupName() );
         }
     }
 
     public String getProjectGroupName()
         throws ContinuumException
     {
-        if( projectGroupName == null || "".equals( projectGroupName ) )
+        if ( projectGroupName == null || "".equals( projectGroupName ) )
         {
-            if( projectGroupId != 0 )
+            if ( projectGroupId != 0 )
             {
                 projectGroupName = getContinuum().getProjectGroup( projectGroupId ).getName();
             }

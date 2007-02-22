@@ -20,10 +20,10 @@ package org.apache.maven.continuum.web.action.notifier;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
-import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Common base class for all Project Group notifier edit actions.
@@ -90,23 +90,23 @@ public abstract class AbstractGroupNotifierEditAction
         this.projectGroupId = projectGroupId;
     }
 
-    protected boolean isAuthorized()
-        throws AuthorizationRequiredException, AuthenticationRequiredException, ContinuumException
+    protected void checkAuthorization()
+        throws AuthorizationRequiredException, ContinuumException
     {
-        if( getNotifier() == null )
+        if ( getNotifier() == null )
         {
-            return isAuthorizedAddProjectGroupNotifier( getProjectGroupName() );
+            checkAddProjectGroupNotifierAuthorization( getProjectGroupName() );
         }
         else
         {
-            return isAuthorizedModifyProjectGroupNotifier( getProjectGroupName() );
+            checkModifyProjectGroupNotifierAuthorization( getProjectGroupName() );
         }
     }
 
     public String getProjectGroupName()
         throws ContinuumException
     {
-        if( projectGroupName == null || "".equals( projectGroupName ) )
+        if ( StringUtils.isEmpty( projectGroupName ) )
         {
             projectGroupName = getContinuum().getProjectGroup( projectGroupId ).getName();
         }

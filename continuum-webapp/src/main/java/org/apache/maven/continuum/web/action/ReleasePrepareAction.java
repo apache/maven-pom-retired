@@ -19,25 +19,22 @@ package org.apache.maven.continuum.web.action;
  * under the License.
  */
 
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.apache.maven.continuum.release.ContinuumReleaseManagerListener;
 import org.apache.maven.continuum.release.DefaultReleaseManagerListener;
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
-
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.scm.provider.svn.repository.SvnScmProviderRepository;
 import org.apache.maven.shared.release.ReleaseResult;
-import org.apache.maven.shared.release.versions.VersionInfo;
 import org.apache.maven.shared.release.versions.DefaultVersionInfo;
+import org.apache.maven.shared.release.versions.VersionInfo;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 
 import java.io.File;
 import java.io.FileReader;
@@ -50,14 +47,10 @@ import java.util.Properties;
 
 /**
  * @author Edwin Punzalan
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="releasePrepare"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="releasePrepare"
  */
 public class ReleasePrepareAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
     private static final String SCM_SVN_PROTOCOL_PREFIX = "scm:svn";
 
@@ -94,43 +87,37 @@ public class ReleasePrepareAction
     public String input()
         throws Exception
     {
-       /* try
+        try
         {
-            if ( isAuthorizedBuildProjectGroup( getProjectGroupName() ) )
-            { */
-                Project project = getContinuum().getProject( projectId );
-                scmUsername = project.getScmUsername();
-                scmPassword = project.getScmPassword();
-                scmTag = project.getScmTag();
-
-                String scmUrl = project.getScmUrl();
-                if ( scmUrl.startsWith( SCM_SVN_PROTOCOL_PREFIX ) )
-                {
-                    scmTagBase = new SvnScmProviderRepository( scmUrl, scmUsername, scmPassword ).getTagBase();
-                    // strip the Maven scm protocol prefix
-                    scmTagBase = scmTagBase.substring( SCM_SVN_PROTOCOL_PREFIX.length() + 1 );
-                }
-                else
-                {
-                    scmTagBase = "";
-                }
-
-                prepareGoals = "clean integration-test";
-
-                getReleasePluginParameters( project.getWorkingDirectory(), "pom.xml" );
-
-                processProject( project.getWorkingDirectory(), "pom.xml" );
-        /*    }
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
         }
-        catch ( AuthorizationRequiredException authzE )
+        catch ( AuthorizationRequiredException e )
         {
-            addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
-        catch ( AuthenticationRequiredException authnE )
+
+        Project project = getContinuum().getProject( projectId );
+        scmUsername = project.getScmUsername();
+        scmPassword = project.getScmPassword();
+        scmTag = project.getScmTag();
+
+        String scmUrl = project.getScmUrl();
+        if ( scmUrl.startsWith( SCM_SVN_PROTOCOL_PREFIX ) )
         {
-            return REQUIRES_AUTHENTICATION;
-        }     */
+            scmTagBase = new SvnScmProviderRepository( scmUrl, scmUsername, scmPassword ).getTagBase();
+            // strip the Maven scm protocol prefix
+            scmTagBase = scmTagBase.substring( SCM_SVN_PROTOCOL_PREFIX.length() + 1 );
+        }
+        else
+        {
+            scmTagBase = "";
+        }
+
+        prepareGoals = "clean integration-test";
+
+        getReleasePluginParameters( project.getWorkingDirectory(), "pom.xml" );
+
+        processProject( project.getWorkingDirectory(), "pom.xml" );
 
         return SUCCESS;
     }
@@ -143,12 +130,12 @@ public class ReleasePrepareAction
 
         if ( model.getBuild() != null && model.getBuild().getPlugins() != null )
         {
-            for( Iterator plugins = model.getBuild().getPlugins().iterator(); plugins.hasNext(); )
+            for ( Iterator plugins = model.getBuild().getPlugins().iterator(); plugins.hasNext(); )
             {
                 Plugin plugin = (Plugin) plugins.next();
 
                 if ( plugin.getGroupId() != null && plugin.getGroupId().equals( "org.apache.maven.plugins" ) &&
-                     plugin.getArtifactId() != null && plugin.getArtifactId().equals( "maven-release-plugin" ) )
+                    plugin.getArtifactId() != null && plugin.getArtifactId().equals( "maven-release-plugin" ) )
                 {
                     Xpp3Dom dom = (Xpp3Dom) plugin.getConfiguration();
 
@@ -183,35 +170,29 @@ public class ReleasePrepareAction
     public String execute()
         throws Exception
     {
-       /* try
+        try
         {
-            if ( isAuthorizedBuildProjectGroup( getProjectGroupName() ) )
-            {       */
-                listener = new DefaultReleaseManagerListener();
-
-                Project project = getContinuum().getProject( projectId );
-
-                name = project.getName();
-                if ( name == null )
-                {
-                    name = project.getArtifactId();
-                }
-
-                ContinuumReleaseManager releaseManager = getContinuum().getReleaseManager();
-
-                releaseId = releaseManager.prepare( project, getReleaseProperties(), getRelVersionMap(),
-                                                    getDevVersionMap(), listener );
-     /*       }
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
         }
-        catch ( AuthorizationRequiredException authzE )
+        catch ( AuthorizationRequiredException e )
         {
-            addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
-        catch ( AuthenticationRequiredException authnE )
+
+        listener = new DefaultReleaseManagerListener();
+
+        Project project = getContinuum().getProject( projectId );
+
+        name = project.getName();
+        if ( name == null )
         {
-            return REQUIRES_AUTHENTICATION;
-        }       */
+            name = project.getArtifactId();
+        }
+
+        ContinuumReleaseManager releaseManager = getContinuum().getReleaseManager();
+
+        releaseId =
+            releaseManager.prepare( project, getReleaseProperties(), getRelVersionMap(), getDevVersionMap(), listener );
 
         return SUCCESS;
     }
@@ -219,6 +200,15 @@ public class ReleasePrepareAction
     public String viewResult()
         throws Exception
     {
+        try
+        {
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
+
         result = (ReleaseResult) getContinuum().getReleaseManager().getReleaseResults().get( releaseId );
 
         return "viewResult";
@@ -227,6 +217,15 @@ public class ReleasePrepareAction
     public String checkProgress()
         throws Exception
     {
+        try
+        {
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
+
         String status;
 
         ContinuumReleaseManager releaseManager = getContinuum().getReleaseManager();
@@ -274,7 +273,7 @@ public class ReleasePrepareAction
 
         setProperties( model );
 
-        for( Iterator modules = model.getModules().iterator(); modules.hasNext(); )
+        for ( Iterator modules = model.getModules().iterator(); modules.hasNext(); )
         {
             processProject( workingDirectory + "/" + modules.next().toString(), "pom.xml" );
         }
@@ -493,35 +492,16 @@ public class ReleasePrepareAction
 
     public void validate()
     {
-
     }
 
     public String getProjectGroupName()
         throws ContinuumException
     {
-        if ( projectGroupName == null || "".equals( projectGroupName ) )
+        if ( StringUtils.isEmpty( projectGroupName ) )
         {
             projectGroupName = getContinuum().getProjectGroupByProjectId( projectId ).getName();
         }
 
         return projectGroupName;
-    }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_GROUP_OPERATION,
-                getProjectGroupName() );
-        }
-        catch ( ContinuumException e )
-        {
-            
-        }
-
-        return bundle;
     }
 }

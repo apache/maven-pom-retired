@@ -20,14 +20,12 @@ package org.apache.maven.continuum.web.action.notifier;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Map;
 
@@ -40,9 +38,7 @@ import java.util.Map;
  */
 public class DeleteProjectNotifierAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
-
     private int projectId;
 
     /**
@@ -63,6 +59,15 @@ public class DeleteProjectNotifierAction
     public String execute()
         throws ContinuumException
     {
+        try
+        {
+            checkRemoveProjectNotifierAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
 
         getContinuum().removeNotifier( projectId, notifierId );
 
@@ -77,6 +82,15 @@ public class DeleteProjectNotifierAction
     public String doDefault()
         throws ContinuumException
     {
+        try
+        {
+            checkRemoveProjectNotifierAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
 
         ProjectNotifier notifier = getContinuum().getNotifier( projectId, notifierId );
 
@@ -101,7 +115,6 @@ public class DeleteProjectNotifierAction
 
             recipient = recipient + ":" + (String) configuration.get( "channel" );
         }
-
 
         return "delete";
     }
@@ -169,9 +182,9 @@ public class DeleteProjectNotifierAction
     public String getProjectGroupName()
         throws ContinuumException
     {
-        if ( projectGroupName == null || "".equals( projectGroupName ) )
+        if ( StringUtils.isEmpty( projectGroupName ) )
         {
-            if( projectGroupId != 0 )
+            if ( projectGroupId != 0 )
             {
                 projectGroupName = getContinuum().getProjectGroup( projectGroupId ).getName();
             }
@@ -182,23 +195,5 @@ public class DeleteProjectNotifierAction
         }
 
         return projectGroupName;
-    }
-
-     public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_REMOVE_PROJECT_NOTIFIER_OPERATION,
-                    getProjectGroupName() );
-        }
-        catch ( ContinuumException e )
-        {
-            throw new SecureActionException( e.getMessage() );
-        }
-
-        return bundle;
     }
 }

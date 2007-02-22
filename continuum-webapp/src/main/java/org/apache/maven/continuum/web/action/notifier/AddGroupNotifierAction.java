@@ -22,14 +22,12 @@ package org.apache.maven.continuum.web.action.notifier;
  * under the License.
  */
 
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * WW action that sets up a new {@link ProjectNotifier} instance for
@@ -42,9 +40,7 @@ import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
  */
 public class AddGroupNotifierAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
-
     /**
      * Target {@link ProjectGroup} instance to add the Notifier for.
      */
@@ -66,6 +62,15 @@ public class AddGroupNotifierAction
     public String execute()
         throws ContinuumException
     {
+        try
+        {
+            checkAddProjectGroupNotifierAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
 
         return notifierType + "_" + INPUT;
     }
@@ -73,8 +78,17 @@ public class AddGroupNotifierAction
     public String doDefault()
         throws ContinuumException
     {
+        try
+        {
+            checkAddProjectGroupNotifierAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
 
-        return INPUT;           
+        return INPUT;
     }
 
     /**
@@ -122,30 +136,11 @@ public class AddGroupNotifierAction
     public String getProjectGroupName()
         throws ContinuumException
     {
-        if ( projectGroupName == null || "".equals( projectGroupName ) )
+        if ( StringUtils.isEmpty( projectGroupName ) )
         {
             projectGroupName = getContinuum().getProjectGroup( projectGroupId ).getName();
         }
 
         return projectGroupName;
     }
-
-     public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_ADD_GROUP_NOTIFIER_OPERATION,
-                    getProjectGroupName() );
-        }
-        catch ( ContinuumException e )
-        {
-            throw new SecureActionException( e.getMessage() );
-        }
-
-        return bundle;
-    }
-
 }

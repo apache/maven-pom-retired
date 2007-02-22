@@ -23,10 +23,9 @@ import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.model.project.ProjectGroup;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.apache.maven.continuum.web.model.GroupSummary;
 import org.apache.maven.continuum.web.model.ProjectSummary;
-import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
-import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -195,13 +194,10 @@ public class GroupSummaryAction
     {
         try
         {
-            return isAuthorizedViewProjectGroup( projectGroupName );
+            checkViewProjectGroupAuthorization( projectGroupName );
+            return true;
         }
         catch ( AuthorizationRequiredException authzE )
-        {
-            return false;
-        }
-        catch ( AuthenticationRequiredException authnE )
         {
             return false;
         }

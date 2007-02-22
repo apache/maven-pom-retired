@@ -20,13 +20,10 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.BuildResult;
 import org.apache.maven.continuum.model.project.Project;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.apache.maven.continuum.web.model.ProjectSummary;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,12 +36,10 @@ import java.util.Map;
  *
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.Action"
- * role-hint="summary"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="summary"
  */
 public class SummaryAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
     private int projectGroupId;
 
@@ -55,6 +50,16 @@ public class SummaryAction
     public String execute()
         throws ContinuumException
     {
+        try
+        {
+            checkViewProjectGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+
         Collection projectsInGroup;
 
         //TODO: Create a summary jpox request so code will be more simple and performance will be better
@@ -151,16 +156,4 @@ public class SummaryAction
     {
         this.projectGroupName = projectGroupName;
     }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_VIEW_GROUP_OPERATION,
-            getProjectGroupName() );
-
-        return bundle;
-    }
-
 }

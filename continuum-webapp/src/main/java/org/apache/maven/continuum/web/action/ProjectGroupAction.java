@@ -26,7 +26,6 @@ import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.project.ContinuumProjectState;
 import org.apache.maven.continuum.web.bean.ProjectGroupUserBean;
 import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
-import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
 import org.codehaus.plexus.rbac.profile.RoleProfileException;
 import org.codehaus.plexus.rbac.profile.RoleProfileManager;
 import org.codehaus.plexus.security.rbac.RBACManager;
@@ -50,8 +49,7 @@ import java.util.Map;
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.Action"
- * role-hint="projectGroup"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="projectGroup"
  */
 public class ProjectGroupAction
     extends ContinuumConfirmAction
@@ -115,20 +113,15 @@ public class ProjectGroupAction
     {
         try
         {
-            if( isAuthorizedViewProjectGroup( getProjectGroupName() ) )
-            {
-                projectGroup = getProjectGroup( projectGroupId );
-            }
+            checkViewProjectGroupAuthorization( getProjectGroupName() );
         }
         catch ( AuthorizationRequiredException authzE )
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
-        catch ( AuthenticationRequiredException authnE )
-        {
-            return REQUIRES_AUTHENTICATION;
-        }
+
+        projectGroup = getProjectGroup( projectGroupId );
 
         return SUCCESS;
     }
@@ -138,24 +131,19 @@ public class ProjectGroupAction
     {
         try
         {
-            projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
-
-            if ( isAuthorizedViewProjectGroup( getProjectGroupName() ) )
-            {
-                groupProjects = projectGroup.getProjects();
-
-                populateProjectGroupUsers( projectGroup );
-            }
+            checkViewProjectGroupAuthorization( getProjectGroupName() );
         }
         catch ( AuthorizationRequiredException authzE )
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
-        catch ( AuthenticationRequiredException authnE )
-        {
-            return REQUIRES_AUTHENTICATION;
-        }
+
+        projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
+
+        groupProjects = projectGroup.getProjects();
+
+        populateProjectGroupUsers( projectGroup );
 
         return SUCCESS;
     }
@@ -183,27 +171,22 @@ public class ProjectGroupAction
     {
         try
         {
-            if ( isAuthorizedRemoveProjectGroup( getProjectGroupName() ) )
-            {
-                if ( confirmed )
-                {
-                    getContinuum().removeProjectGroup( projectGroupId );
-                }
-                else
-                {
-                    name = getProjectGroupName();
-                    return CONFIRM;
-                }
-            }
+            checkRemoveProjectGroupAuthorization( getProjectGroupName() );
         }
         catch ( AuthorizationRequiredException authzE )
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
-        catch ( AuthenticationRequiredException authnE )
+
+        if ( confirmed )
         {
-            return REQUIRES_AUTHENTICATION;
+            getContinuum().removeProjectGroup( projectGroupId );
+        }
+        else
+        {
+            name = getProjectGroupName();
+            return CONFIRM;
         }
 
         return SUCCESS;
@@ -212,49 +195,44 @@ public class ProjectGroupAction
     public String edit()
         throws ContinuumException
     {
-        projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
-
         try
         {
-            if ( isAuthorizedModifyProjectGroup( getProjectGroupName() ) )
-            {
-                name = projectGroup.getName();
-
-                description = projectGroup.getDescription();
-
-                projectList = projectGroup.getProjects();
-
-                if ( projectList != null )
-                {
-                    Iterator proj = projectList.iterator();
-
-                    while ( proj.hasNext() )
-                    {
-                        Project p = (Project) proj.next();
-                        if ( getContinuum().isInCheckoutQueue( p.getId() ) )
-                        {
-                            projectInCOQueue = true;
-                        }
-                        projects.put( p, new Integer( p.getProjectGroup().getId() ) );
-                    }
-                }
-
-                Iterator proj_group = getContinuum().getAllProjectGroupsWithProjects().iterator();
-                while ( proj_group.hasNext() )
-                {
-                    ProjectGroup pg = (ProjectGroup) proj_group.next();
-                    projectGroups.put( new Integer( pg.getId() ), pg.getName() );
-                }
-            }
+            checkModifyProjectGroupAuthorization( getProjectGroupName() );
         }
         catch ( AuthorizationRequiredException authzE )
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
-        catch ( AuthenticationRequiredException authnE )
+
+        projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
+
+        name = projectGroup.getName();
+
+        description = projectGroup.getDescription();
+
+        projectList = projectGroup.getProjects();
+
+        if ( projectList != null )
         {
-            return REQUIRES_AUTHENTICATION;
+            Iterator proj = projectList.iterator();
+
+            while ( proj.hasNext() )
+            {
+                Project p = (Project) proj.next();
+                if ( getContinuum().isInCheckoutQueue( p.getId() ) )
+                {
+                    projectInCOQueue = true;
+                }
+                projects.put( p, new Integer( p.getProjectGroup().getId() ) );
+            }
+        }
+
+        Iterator proj_group = getContinuum().getAllProjectGroupsWithProjects().iterator();
+        while ( proj_group.hasNext() )
+        {
+            ProjectGroup pg = (ProjectGroup) proj_group.next();
+            projectGroups.put( new Integer( pg.getId() ), pg.getName() );
         }
 
         return SUCCESS;
@@ -263,74 +241,69 @@ public class ProjectGroupAction
     public String save()
         throws ContinuumException
     {
-        projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
-
         try
         {
-            if ( isAuthorizedModifyProjectGroup( getProjectGroupName() ) )
-            {
-                // need to administer roles since they are based off of this
-                // todo convert everything like to work off of string keys
-                if ( !name.equals( projectGroup.getName() ) )
-                {
-                    try
-                    {
-                        roleManager.renameDynamicRole( "continuum-group-developer", projectGroup.getName(), name );
-                        roleManager.renameDynamicRole( "continuum-group-user", projectGroup.getName(), name );
-
-                        projectGroup.setName( name );
-                    }
-                    catch ( RoleProfileException e )
-                    {
-                        throw new ContinuumException( "unable to rename the project group", e );
-                    }
-
-                }
-
-                projectGroup.setDescription( description );
-
-                getContinuum().updateProjectGroup( projectGroup );
-
-                Iterator keys = projects.keySet().iterator();
-                while ( keys.hasNext() )
-                {
-                    String key = (String) keys.next();
-
-                    String[] id = (String[]) projects.get( key );
-
-                    int projectId = Integer.parseInt( key );
-
-                    Project project = null;
-                    Iterator i = projectGroup.getProjects().iterator();
-                    while ( i.hasNext() )
-                    {
-                        project = (Project) i.next();
-                        if ( projectId == project.getId() )
-                        {
-                            break;
-                        }
-                    }
-
-                    ProjectGroup newProjectGroup = getContinuum().getProjectGroup( new Integer( id[0] ).intValue() );
-
-                    if ( newProjectGroup.getId() != projectGroup.getId() )
-                    {
-                        getLogger().info(
-                            "Moving project " + project.getName() + " to project group " + newProjectGroup.getName() );
-                        project.setProjectGroup( newProjectGroup );
-                        getContinuum().updateProject( project );
-                    }
-                }
-            }
+            checkModifyProjectGroupAuthorization( getProjectGroupName() );
         }
         catch ( AuthorizationRequiredException authzE )
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
-        catch ( AuthenticationRequiredException authnE )
+
+        projectGroup = getContinuum().getProjectGroupWithProjects( projectGroupId );
+
+        // need to administer roles since they are based off of this
+        // todo convert everything like to work off of string keys
+        if ( !name.equals( projectGroup.getName() ) )
         {
-            return REQUIRES_AUTHENTICATION;
+            try
+            {
+                roleManager.renameDynamicRole( "continuum-group-developer", projectGroup.getName(), name );
+                roleManager.renameDynamicRole( "continuum-group-user", projectGroup.getName(), name );
+
+                projectGroup.setName( name );
+            }
+            catch ( RoleProfileException e )
+            {
+                throw new ContinuumException( "unable to rename the project group", e );
+            }
+
+        }
+
+        projectGroup.setDescription( description );
+
+        getContinuum().updateProjectGroup( projectGroup );
+
+        Iterator keys = projects.keySet().iterator();
+        while ( keys.hasNext() )
+        {
+            String key = (String) keys.next();
+
+            String[] id = (String[]) projects.get( key );
+
+            int projectId = Integer.parseInt( key );
+
+            Project project = null;
+            Iterator i = projectGroup.getProjects().iterator();
+            while ( i.hasNext() )
+            {
+                project = (Project) i.next();
+                if ( projectId == project.getId() )
+                {
+                    break;
+                }
+            }
+
+            ProjectGroup newProjectGroup = getContinuum().getProjectGroup( new Integer( id[0] ).intValue() );
+
+            if ( newProjectGroup.getId() != projectGroup.getId() )
+            {
+                getLogger().info(
+                    "Moving project " + project.getName() + " to project group " + newProjectGroup.getName() );
+                project.setProjectGroup( newProjectGroup );
+                getContinuum().updateProject( project );
+            }
         }
 
         return SUCCESS;
@@ -341,20 +314,15 @@ public class ProjectGroupAction
     {
         try
         {
-            if ( isAuthorizedBuildProjectGroup( getProjectGroupName() ) )
-            {
-                getContinuum().buildProjectGroup( projectGroupId );
-            }
+            checkBuildProjectGroupAuthorization( getProjectGroupName() );
         }
         catch ( AuthorizationRequiredException authzE )
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
-        catch ( AuthenticationRequiredException authnE )
-        {
-            return REQUIRES_AUTHENTICATION;
-        }
+
+        getContinuum().buildProjectGroup( projectGroupId );
 
         return SUCCESS;
     }
@@ -362,79 +330,72 @@ public class ProjectGroupAction
     public String release()
         throws ContinuumException
     {
-        //get the parent of the group by finding the parent project
-        //i.e., the project that doesn't have a parent, or it's parent is not in the group.
-
         try
         {
-            if ( isAuthorizedBuildProjectGroup( getProjectGroupName() ) )
-            {
-                Project parent = null;
-
-                boolean allBuildsOk = true;
-
-                projectList = getContinuum().getProjectsInGroupWithDependencies( projectGroupId );
-
-                if ( projectList != null )
-                {
-                    Iterator proj = projectList.iterator();
-
-                    while ( proj.hasNext() )
-                    {
-                        Project p = (Project) proj.next();
-
-                        if ( p.getState() != ContinuumProjectState.OK )
-                        {
-                            allBuildsOk = false;
-                        }
-
-                        if ( ( p.getParent() == null ) || ( !isParentInProjectGroup( p.getParent(), projectList ) ) )
-                        {
-                            if ( parent == null )
-                            {
-                                parent = p;
-                            }
-                            else
-                            {
-                                //currently, we have no provisions for releasing 2 or more parents
-                                //at the same time, this will be implemented in the future
-                                addActionError( "projectGroup.release.error.severalParentProjects" );
-                                return INPUT;
-                            }
-                        }
-                    }
-                }
-
-                if ( parent == null )
-                {
-                    addActionError( "projectGroup.release.error.emptyGroup" );
-                    return INPUT;
-                }
-
-                releaseProjectId = parent.getId();
-
-                if ( allBuildsOk )
-                {
-                    return SUCCESS;
-                }
-                else
-                {
-                    addActionError( "projectGroup.release.error.projectNotInSuccess" );
-                    return INPUT;
-                }
-            }
+            checkBuildProjectGroupAuthorization( getProjectGroupName() );
         }
         catch ( AuthorizationRequiredException authzE )
         {
             addActionError( authzE.getMessage() );
             return REQUIRES_AUTHORIZATION;
         }
-        catch ( AuthenticationRequiredException authnE )
+
+        //get the parent of the group by finding the parent project
+        //i.e., the project that doesn't have a parent, or it's parent is not in the group.
+
+        Project parent = null;
+
+        boolean allBuildsOk = true;
+
+        projectList = getContinuum().getProjectsInGroupWithDependencies( projectGroupId );
+
+        if ( projectList != null )
         {
-            return REQUIRES_AUTHENTICATION;
+            Iterator proj = projectList.iterator();
+
+            while ( proj.hasNext() )
+            {
+                Project p = (Project) proj.next();
+
+                if ( p.getState() != ContinuumProjectState.OK )
+                {
+                    allBuildsOk = false;
+                }
+
+                if ( ( p.getParent() == null ) || ( !isParentInProjectGroup( p.getParent(), projectList ) ) )
+                {
+                    if ( parent == null )
+                    {
+                        parent = p;
+                    }
+                    else
+                    {
+                        //currently, we have no provisions for releasing 2 or more parents
+                        //at the same time, this will be implemented in the future
+                        addActionError( "projectGroup.release.error.severalParentProjects" );
+                        return INPUT;
+                    }
+                }
+            }
         }
 
-        return SUCCESS;
+        if ( parent == null )
+        {
+            addActionError( "projectGroup.release.error.emptyGroup" );
+            return INPUT;
+        }
+
+        releaseProjectId = parent.getId();
+
+        if ( allBuildsOk )
+        {
+            return SUCCESS;
+        }
+        else
+        {
+            addActionError( "projectGroup.release.error.projectNotInSuccess" );
+            return INPUT;
+        }
     }
 
     private boolean isParentInProjectGroup( ProjectDependency parent, Collection projectsInGroup )
@@ -683,7 +644,7 @@ public class ProjectGroupAction
         {
             if ( projectGroup.getId() != projectGroupId )
             {
-                projectGroup = getContinuum().getProjectGroup( projectGroupId );   
+                projectGroup = getContinuum().getProjectGroup( projectGroupId );
             }
         }
 

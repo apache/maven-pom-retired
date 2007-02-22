@@ -19,24 +19,17 @@ package org.apache.maven.continuum.web.action;
  * under the License.
  */
 
+import org.apache.maven.continuum.ContinuumException;
 import org.apache.maven.continuum.release.ContinuumReleaseManager;
 import org.apache.maven.continuum.release.ContinuumReleaseManagerListener;
-import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 
 /**
  * @author Edwin Punzalan
- *
- * @plexus.component
- *   role="com.opensymphony.xwork.Action"
- *   role-hint="releaseCleanup"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="releaseCleanup"
  */
 public class ReleaseCleanupAction
     extends ContinuumActionSupport
-    implements SecureAction
 {
     private int projectId;
 
@@ -46,13 +39,22 @@ public class ReleaseCleanupAction
 
     public String execute()
         throws Exception
-    {                 
+    {
+        try
+        {
+            checkBuildProjectInGroupAuthorization( getProjectGroupName() );
+        }
+        catch ( AuthorizationRequiredException e )
+        {
+            return REQUIRES_AUTHORIZATION;
+        }
 
         ContinuumReleaseManager releaseManager = getContinuum().getReleaseManager();
 
         releaseManager.getReleaseResults().remove( releaseId );
 
-        ContinuumReleaseManagerListener listener = (ContinuumReleaseManagerListener) releaseManager.getListeners().remove( releaseId );
+        ContinuumReleaseManagerListener listener =
+            (ContinuumReleaseManagerListener) releaseManager.getListeners().remove( releaseId );
 
         if ( listener != null )
         {
@@ -96,24 +98,5 @@ public class ReleaseCleanupAction
         }
 
         return projectGroupName;
-    }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-
-        try
-        {
-            bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_BUILD_PROJECT_IN_GROUP_OPERATION,
-                getProjectGroupName() );
-        }
-        catch ( ContinuumException ce )
-        {
-
-        }
-
-        return bundle;
     }
 }
