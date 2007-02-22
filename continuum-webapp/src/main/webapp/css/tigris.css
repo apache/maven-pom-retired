@@ -107,7 +107,6 @@ a:active,a:hover,#leftcol a:active,#leftcol a:hover {
   padding-bottom: 15px;
 }
 
-/* dagdag ko ung nasa itaas */
 .app h3 a:link,.app h3 a:visited,.app h4 a:link,.app h4 a:visited {
   color: black !important;
   /* TODO was #fff causing white on white issues for me, so set it black */
@@ -541,7 +540,6 @@ ol ol ol {
   margin-bottom: 7px;
 }
 
-/* dagdag ko ung nasa itaas */
 .app td,.app th {
   padding: 2px 3px;
 }
@@ -671,9 +669,9 @@ dd {
   padding: 6px 0px 0px 2px;
 }
 
-#legend { /*height: 25px;
-	width: 161px;	
-	overflow: hidden;*/
+#legend {
+  width: 161px;
+  overflow: hidden;
   background: url(../images/legendbg.gif) 8px 0 no-repeat;
   display: block;
 }
@@ -799,7 +797,6 @@ dd {
   padding: 0px 0px 1px 19px;
 }
 
-/* inedit ko */
 .toolgroup .body div {
   padding-bottom: .3em;
   padding-left: 1em;
@@ -932,7 +929,7 @@ td.filebrowse h3 {
 }
 
 .legend {
-  float: right;
+  float: left;
 }
 
 .legend th,.bars th {
