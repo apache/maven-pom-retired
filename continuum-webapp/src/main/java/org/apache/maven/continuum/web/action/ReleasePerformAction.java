@@ -28,7 +28,6 @@ import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.apache.maven.scm.provider.svn.repository.SvnScmProviderRepository;
 import org.apache.maven.shared.release.ReleaseResult;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 
 import java.io.File;
 

@@ -24,7 +24,6 @@ import org.apache.maven.continuum.model.project.ProjectGroup;
 import org.apache.maven.continuum.model.project.ProjectNotifier;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
 import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Map;

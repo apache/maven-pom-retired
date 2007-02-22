@@ -20,11 +20,9 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.model.project.Schedule;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
+import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 
 import java.util.Collection;
 
@@ -34,7 +32,6 @@ import java.util.Collection;
  */
 public class ScheduleAction
     extends ContinuumConfirmAction
-    implements SecureAction
 {
     private int id;
 
@@ -71,6 +68,21 @@ public class ScheduleAction
     public String summary()
         throws ContinuumException
     {
+        try
+        {
+            checkManageSchedulesAuthorization();
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException e )
+        {
+            addActionError( e.getMessage() );
+            return REQUIRES_AUTHENTICATION;
+        }
+
         schedules = getContinuum().getSchedules();
 
         return SUCCESS;
@@ -79,6 +91,21 @@ public class ScheduleAction
     public String input()
         throws ContinuumException
     {
+        try
+        {
+            checkManageSchedulesAuthorization();
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException e )
+        {
+            addActionError( e.getMessage() );
+            return REQUIRES_AUTHENTICATION;
+        }
+
         if ( id != 0 )
         {
             schedule = getContinuum().getSchedule( id );
@@ -113,10 +140,25 @@ public class ScheduleAction
     public String save()
         throws ContinuumException
     {
-        if ( ( "".equals( name ) ) || ( name == null ) ) 
+        try
+        {
+            checkManageSchedulesAuthorization();
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException e )
+        {
+            addActionError( e.getMessage() );
+            return REQUIRES_AUTHENTICATION;
+        }
+
+        if ( ( "".equals( name ) ) || ( name == null ) )
         {
             getLogger().error( "Can't create schedule. No schedule name was supplied." );
-            addActionError( "buildDefinition.noname.save.error.message");
+            addActionError( "buildDefinition.noname.save.error.message" );
             return ERROR;
         }
         else
@@ -130,7 +172,7 @@ public class ScheduleAction
             {
                 getContinuum().updateSchedule( setFields( getContinuum().getSchedule( id ) ) );
                 return SUCCESS;
-            }   
+            }
         }
     }
 
@@ -149,6 +191,21 @@ public class ScheduleAction
     public String confirm()
         throws ContinuumException
     {
+        try
+        {
+            checkManageSchedulesAuthorization();
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException e )
+        {
+            addActionError( e.getMessage() );
+            return REQUIRES_AUTHENTICATION;
+        }
+
         schedule = getContinuum().getSchedule( id );
 
         return SUCCESS;
@@ -157,16 +214,31 @@ public class ScheduleAction
     public String remove()
         throws ContinuumException
     {
+        try
+        {
+            checkManageSchedulesAuthorization();
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException e )
+        {
+            addActionError( e.getMessage() );
+            return REQUIRES_AUTHENTICATION;
+        }
+
         if ( confirmed )
         {
             getContinuum().removeSchedule( id );
         }
         else
-        {    
+        {
             setConfirmationInfo( "Schedule Removal", "removeSchedule", name, "id", "" + id );
-            
+
             name = getContinuum().getSchedule( id ).getName();
-                        
+
             return CONFIRM;
         }
 
@@ -330,17 +402,7 @@ public class ScheduleAction
 
     private String getCronExpression()
     {
-        return ( second + " " + minute + " " + hour + " " + dayOfMonth + " " +
-                    month + " " + dayOfWeek + " " + year ).trim();
-    }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_MANAGE_SCHEDULES );
-
-        return bundle;
+        return ( second + " " + minute + " " + hour + " " + dayOfMonth + " " + month + " " + dayOfWeek + " " +
+            year ).trim();
     }
 }

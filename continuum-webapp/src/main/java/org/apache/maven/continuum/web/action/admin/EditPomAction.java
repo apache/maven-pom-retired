@@ -24,30 +24,26 @@ import org.apache.maven.artifact.installer.ArtifactInstallationException;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.continuum.execution.maven.m2.SettingsConfigurationException;
-import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
+import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
+import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.shared.app.company.CompanyPomHandler;
 import org.apache.maven.shared.app.configuration.CompanyPom;
 import org.apache.maven.shared.app.configuration.Configuration;
 import org.apache.maven.shared.app.configuration.MavenAppConfiguration;
-import org.codehaus.plexus.security.rbac.Resource;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
-import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 
 import java.io.IOException;
 
 /**
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id: ConfigurationAction.java 480950 2006-11-30 14:58:35Z evenisse $
- * @plexus.component role="com.opensymphony.xwork.Action"
- * role-hint="editPom"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="editPom"
  */
 public class EditPomAction
     extends ContinuumActionSupport
-    implements ModelDriven, SecureAction
+    implements ModelDriven
 {
     /**
      * @plexus.requirement
@@ -74,6 +70,21 @@ public class EditPomAction
     public String execute()
         throws IOException, ArtifactInstallationException, SettingsConfigurationException
     {
+        try
+        {
+            checkManageConfigurationAuthorization();
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException e )
+        {
+            addActionError( e.getMessage() );
+            return REQUIRES_AUTHENTICATION;
+        }
+
         // TODO: hack for passed in String[]
         String[] logo = (String[]) companyModel.getProperties().get( "organization.logo" );
         if ( logo != null )
@@ -111,16 +122,6 @@ public class EditPomAction
                 companyModel.setArtifactId( companyPom.getArtifactId() );
             }
         }
-    }
-
-    public SecureActionBundle getSecureActionBundle()
-        throws SecureActionException
-    {
-        SecureActionBundle bundle = new SecureActionBundle();
-        bundle.setRequiresAuthentication( true );
-        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_MANAGE_CONFIGURATION, Resource.GLOBAL );
-
-        return bundle;
     }
 
     public Model getCompanyModel()
