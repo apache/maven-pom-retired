@@ -221,6 +221,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <excludes>
+            <exclude>**/ReleasePrepareActionTest.*</exclude>
             <!-- TODO: test not working, and doesn't belong here. It should be mocking the logger, not setting sys out. It fails because the logger can't be created as it tries to write to /logs/continuum.log -->
             <exclude>**/ContinuumActionLoggingTest.*</exclude>
           </excludes>
