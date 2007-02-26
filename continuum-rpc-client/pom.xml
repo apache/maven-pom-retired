@@ -70,5 +70,9 @@
       <artifactId>commons-httpclient</artifactId>
       <version>2.0.2</version>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-jdo2</artifactId>
+    </dependency>
   </dependencies>
 </project>
