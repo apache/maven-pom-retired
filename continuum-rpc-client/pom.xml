@@ -33,6 +33,25 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>modello-continuum</id>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <model>src/main/mdo/continuum.xml</model>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <version>1.1.0</version>
+          <packageWithVersion>false</packageWithVersion>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <configuration>
