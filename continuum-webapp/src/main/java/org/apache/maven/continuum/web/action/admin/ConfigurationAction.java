@@ -23,11 +23,14 @@ import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.xwork.Preparable;
 import org.apache.maven.continuum.configuration.ConfigurationService;
 import org.apache.maven.continuum.configuration.ConfigurationStoringException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.store.ContinuumStore;
 import org.apache.maven.continuum.store.ContinuumStoreException;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
-import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
-import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
+import org.codehaus.plexus.security.rbac.Resource;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 import org.codehaus.plexus.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +43,7 @@ import java.io.File;
  */
 public class ConfigurationAction
     extends ContinuumActionSupport
-    implements Preparable
+    implements Preparable, SecureAction
 {
 
     /**
@@ -92,21 +95,6 @@ public class ConfigurationAction
     public String save()
         throws ConfigurationStoringException, ContinuumStoreException
     {
-        try
-        {
-            checkManageConfigurationAuthorization();
-        }
-        catch ( AuthorizationRequiredException authzE )
-        {
-            addActionError( authzE.getMessage() );
-            return REQUIRES_AUTHORIZATION;
-        }
-        catch ( AuthenticationRequiredException e )
-        {
-            addActionError( e.getMessage() );
-            return REQUIRES_AUTHENTICATION;
-        }
-
         ConfigurationService configuration = getContinuum().getConfiguration();
 
         configuration.setWorkingDirectory( new File( workingDirectory ) );
@@ -166,4 +154,14 @@ public class ConfigurationAction
     {
         this.baseUrl = baseUrl;
     }
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+    {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_MANAGE_CONFIGURATION, Resource.GLOBAL );
+
+        return bundle;
+     }
 }
