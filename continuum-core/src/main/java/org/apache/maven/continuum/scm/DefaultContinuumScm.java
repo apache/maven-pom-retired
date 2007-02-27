@@ -344,6 +344,13 @@ public class DefaultContinuumScm
             }
         }
 
+        if ( repository.getProvider().equals( "perforce" ) )
+        {
+            //Remove the clientspec name, so it will be recalcuated between each command for each project
+            //instead of use the same for all projects
+            System.setProperty( "maven.scm.perforce.clientspec.name", null );
+        }
+
         return repository;
     }
 
