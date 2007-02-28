@@ -83,10 +83,14 @@ public class AddProjectNotifierAction
         return notifierType + "_" + INPUT;
     }
 
-    /**
-     * TODO: document!
-     */
+    // TODO: Remove this method because a default method return SUCCESS instead of INPUT
     public String doDefault()
+        throws ContinuumException
+    {
+        return doInput();
+    }
+
+    public String doInput()
         throws ContinuumException
     {
         try

@@ -93,7 +93,7 @@ public class ContinuumActionSupport
     protected void checkAuthorization( String role )
         throws AuthorizationRequiredException
     {
-        checkAuthorization( role, null );
+        checkAuthorization( role, null, false );
     }
 
     /**
@@ -104,6 +104,20 @@ public class ContinuumActionSupport
      * @throws AuthorizationRequiredException if the user isn't authorized
      */
     protected void checkAuthorization( String role, String resource )
+        throws AuthorizationRequiredException
+    {
+        checkAuthorization( role, resource, true );
+    }
+
+    /**
+     * Check if the current user is authorized to do the action
+     *
+     * @param role             the role
+     * @param resource         the operation resource
+     * @param requiredResource true if resource can't be null
+     * @throws AuthorizationRequiredException if the user isn't authorized
+     */
+    protected void checkAuthorization( String role, String resource, boolean requiredResource )
         throws AuthorizationRequiredException
     {
         try
@@ -117,7 +131,7 @@ public class ContinuumActionSupport
             }
             else
             {
-                if ( !getSecuritySystem().isAuthorized( getSecuritySession(), role ) )
+                if ( requiredResource || !getSecuritySystem().isAuthorized( getSecuritySession(), role ) )
                 {
                     throw new AuthorizationRequiredException( ERROR_MSG_AUTHORIZATION_REQUIRED );
                 }

@@ -169,7 +169,13 @@ public abstract class AddMavenProjectAction
                                                                  boolean checkProtocol )
         throws ContinuumException;
 
+    // TODO: Remove this method because a default method return SUCCESS instead of INPUT
     public String doDefault()
+    {
+        return doInput();
+    }
+
+    public String doInput()
     {
         try
         {

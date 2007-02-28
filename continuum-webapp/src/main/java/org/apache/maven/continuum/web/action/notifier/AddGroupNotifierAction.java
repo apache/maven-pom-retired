@@ -75,7 +75,14 @@ public class AddGroupNotifierAction
         return notifierType + "_" + INPUT;
     }
 
+    // TODO: Remove this method because a default method return SUCCESS instead of INPUT
     public String doDefault()
+        throws ContinuumException
+    {
+        return doInput();
+    }
+
+    public String doInput()
         throws ContinuumException
     {
         try

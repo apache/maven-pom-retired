@@ -89,6 +89,27 @@ public class ConfigureAppearanceAction
         return SUCCESS;
     }
 
+    public String doInput()
+        throws IOException, RegistryException
+    {
+        try
+        {
+            checkManageConfigurationAuthorization();
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException e )
+        {
+            addActionError( e.getMessage() );
+            return REQUIRES_AUTHENTICATION;
+        }
+
+        return INPUT;
+    }
+
     public Object getModel()
     {
         return configuration;

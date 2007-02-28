@@ -97,6 +97,26 @@ public class EditPomAction
         return SUCCESS;
     }
 
+    public String doInput()
+    {
+        try
+        {
+            checkManageConfigurationAuthorization();
+        }
+        catch ( AuthorizationRequiredException authzE )
+        {
+            addActionError( authzE.getMessage() );
+            return REQUIRES_AUTHORIZATION;
+        }
+        catch ( AuthenticationRequiredException e )
+        {
+            addActionError( e.getMessage() );
+            return REQUIRES_AUTHENTICATION;
+        }
+
+        return INPUT;
+    }
+
     public Object getModel()
     {
         return companyModel;

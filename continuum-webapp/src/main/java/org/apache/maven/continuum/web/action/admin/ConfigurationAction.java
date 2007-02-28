@@ -45,7 +45,6 @@ public class ConfigurationAction
     extends ContinuumActionSupport
     implements Preparable, SecureAction
 {
-
     /**
      * @plexus.requirement
      */
