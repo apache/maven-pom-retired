@@ -83,7 +83,7 @@ public class ReleasePrepareAction
 
     private String projectGroupName = "";
 
-    public String input()
+    public String doInput()
         throws Exception
     {
         try

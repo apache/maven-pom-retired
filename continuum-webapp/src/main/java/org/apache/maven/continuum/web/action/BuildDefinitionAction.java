@@ -104,7 +104,7 @@ public class BuildDefinitionAction
      *
      * @return action result
      */
-    public String input()
+    public String doInput()
         throws ContinuumException
     {
         try

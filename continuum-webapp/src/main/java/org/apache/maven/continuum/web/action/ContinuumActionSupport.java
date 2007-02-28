@@ -84,6 +84,24 @@ public class ContinuumActionSupport
         this.continuum = continuum;
     }
 
+    public String doDefault()
+        throws Exception
+    {
+        return REQUIRES_AUTHORIZATION;
+    }
+
+    public String doInput()
+        throws Exception
+    {
+        return REQUIRES_AUTHORIZATION;
+    }
+
+    public String execute()
+        throws Exception
+    {
+        return REQUIRES_AUTHORIZATION;
+    }
+
     /**
      * Check if the current user is authorized to do the action
      *

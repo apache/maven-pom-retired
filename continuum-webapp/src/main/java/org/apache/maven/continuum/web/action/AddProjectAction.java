@@ -133,7 +133,7 @@ public class AddProjectAction
         return SUCCESS;
     }
 
-    public String input()
+    public String doInput()
         throws ContinuumException
     {
         try
