@@ -461,6 +461,8 @@ public class DefaultContinuumXmlRpc
         Set excludedProperties = new HashSet();
 
         excludedProperties.add( "project" );
+        excludedProperties.add( "modifiedDependencies" );
+        excludedProperties.add( "testResult" );
 
         if ( summary )
         {
