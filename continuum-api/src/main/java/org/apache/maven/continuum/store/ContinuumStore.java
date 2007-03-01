@@ -185,7 +185,7 @@ public interface ContinuumStore
 
     void removeProjectGroup( ProjectGroup projectGroup );
 
-    ProjectGroup getProjectGroupWithBuildDetails( int projectGroupId )
+    ProjectGroup getProjectGroupWithBuildDetailsByProjectGroupId( int projectGroupId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException;
 
     List getProjectsInGroup( int projectGroupId )
@@ -225,7 +225,7 @@ public interface ContinuumStore
 
     List getBuildResultsForProject( int projectId, long fromDate );
 
-    Map getLatestBuildResults( int projectGroupId );
+    Map getLatestBuildResultsByProjectGroupId( int projectGroupId );
 
     Map getLatestBuildResults();
 
@@ -233,7 +233,7 @@ public interface ContinuumStore
 
     Map getBuildResultsInSuccess();
 
-    Map getBuildResultsInSuccess( int projectGroupId );
+    Map getBuildResultsInSuccessByProjectGroupId( int projectGroupId );
 
     void addBuildResult( Project project, BuildResult build )
         throws ContinuumStoreException, ContinuumObjectNotFoundException;

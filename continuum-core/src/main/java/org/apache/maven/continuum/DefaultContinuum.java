@@ -384,7 +384,7 @@ public class DefaultContinuum
 
     public Map getLatestBuildResults( int projectGroupId )
     {
-        Map result = store.getLatestBuildResults( projectGroupId );
+        Map result = store.getLatestBuildResultsByProjectGroupId( projectGroupId );
 
         if ( result == null )
         {
@@ -408,7 +408,7 @@ public class DefaultContinuum
 
     public Map getBuildResultsInSuccess( int projectGroupId )
     {
-        Map result = store.getBuildResultsInSuccess( projectGroupId );
+        Map result = store.getBuildResultsInSuccessByProjectGroupId( projectGroupId );
 
         if ( result == null )
         {
@@ -1344,7 +1344,7 @@ public class DefaultContinuum
                 }
             }
 
-            projectGroup = store.getProjectGroupWithBuildDetails( projectGroupId );
+            projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( projectGroupId );
 
             /* add the project group loaded from database, which has more info, like id */
             result.getProjectGroups().remove( 0 );
@@ -2553,7 +2553,7 @@ public class DefaultContinuum
     {
         try
         {
-            return store.getProjectGroupWithBuildDetails( projectGroupId );
+            return store.getProjectGroupWithBuildDetailsByProjectGroupId( projectGroupId );
         }
         catch ( ContinuumObjectNotFoundException e )
         {

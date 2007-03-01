@@ -45,7 +45,7 @@ public class RemoveBuildDefinitionFromProjectGroupAction
         BuildDefinition buildDefinition = getBuildDefinition( map );
         int projectGroupId =  getProjectGroupId( map );
 
-        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( projectGroupId );
+        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( projectGroupId );
 
         if ( buildDefinition.isDefaultForProject() )
         {

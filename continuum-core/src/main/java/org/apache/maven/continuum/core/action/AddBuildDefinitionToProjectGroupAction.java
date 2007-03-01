@@ -44,7 +44,7 @@ public class AddBuildDefinitionToProjectGroupAction
         BuildDefinition buildDefinition = getBuildDefinition( map );
         int projectGroupId =  getProjectGroupId( map );
 
-        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( projectGroupId );
+        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( projectGroupId );
 
         resolveDefaultBuildDefinitionsForProjectGroup( buildDefinition, projectGroup );
 

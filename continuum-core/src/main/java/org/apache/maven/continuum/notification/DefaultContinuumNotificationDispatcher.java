@@ -142,7 +142,7 @@ public class DefaultContinuumNotificationDispatcher
                 context.put( CONTEXT_UPDATE_SCM_RESULT, buildResult.getScmResult() );
             }
 
-            ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( project.getProjectGroup().getId() );
+            ProjectGroup projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( project.getProjectGroup().getId() );
 
             // perform the project lvl notifications
             for ( Iterator i = project.getNotifiers().iterator(); i.hasNext(); )

@@ -177,7 +177,7 @@ public class DefaultContinuumTest
 
         ProjectGroup projectGroup = getStore().getProjectGroupByProjectId( project.getId() );
 
-        projectGroup = getStore().getProjectGroupWithBuildDetails( projectGroup.getId() );
+        projectGroup = getStore().getProjectGroupWithBuildDetailsByProjectGroupId( projectGroup.getId() );
 
         List buildDefs = projectGroup.getBuildDefinitions();
 

@@ -483,7 +483,7 @@ public class JdoContinuumStore
         return null;
     }
 
-    public Map getLatestBuildResults( int projectGroupId )
+    public Map getLatestBuildResultsByProjectGroupId( int projectGroupId )
     {
         PersistenceManager pm = getPersistenceManager();
 
@@ -545,7 +545,7 @@ public class JdoContinuumStore
 
     public Map getLatestBuildResults()
     {
-        return getLatestBuildResults( -1 );
+        return getLatestBuildResultsByProjectGroupId( -1 );
     }
 
     public void removeNotifier( ProjectNotifier notifier )
@@ -623,7 +623,7 @@ public class JdoContinuumStore
     public BuildDefinition getDefaultBuildDefinitionForProjectGroup( int projectGroupId )
         throws ContinuumStoreException, ContinuumObjectNotFoundException
     {
-        ProjectGroup projectGroup = getProjectGroupWithBuildDetails( projectGroupId );
+        ProjectGroup projectGroup = getProjectGroupWithBuildDetailsByProjectGroupId( projectGroupId );
 
         for ( Iterator i = projectGroup.getBuildDefinitions().iterator(); i.hasNext(); )
         {
@@ -1092,7 +1092,7 @@ public class JdoContinuumStore
         return results;
     }
 
-    public Map getBuildResultsInSuccess( int projectGroupId )
+    public Map getBuildResultsInSuccessByProjectGroupId( int projectGroupId )
     {
         PersistenceManager pm = getPersistenceManager();
 
@@ -1155,7 +1155,7 @@ public class JdoContinuumStore
 
     public Map getBuildResultsInSuccess()
     {
-        return getBuildResultsInSuccess( -1 );
+        return getBuildResultsInSuccessByProjectGroupId( -1 );
     }
 
     public void removeProject( Project project )
@@ -1233,7 +1233,7 @@ public class JdoContinuumStore
         return (ProjectGroup) getObjectById( ProjectGroup.class, projectGroupId, PROJECTGROUP_PROJECTS_FETCH_GROUP );
     }
 
-    public ProjectGroup getProjectGroupWithBuildDetails( int projectGroupId )
+    public ProjectGroup getProjectGroupWithBuildDetailsByProjectGroupId( int projectGroupId )
         throws ContinuumObjectNotFoundException, ContinuumStoreException
     {
         return (ProjectGroup) getObjectById( ProjectGroup.class, projectGroupId, PROJECT_BUILD_DETAILS_FETCH_GROUP );

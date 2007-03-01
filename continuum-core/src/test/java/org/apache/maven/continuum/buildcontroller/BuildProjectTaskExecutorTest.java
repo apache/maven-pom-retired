@@ -237,7 +237,7 @@ public class BuildProjectTaskExecutorTest
 
         int projectGroupId = AbstractContinuumAction.getProjectGroupId( pgContext );
 
-        projectGroup = continuumStore.getProjectGroupWithBuildDetails( projectGroupId );
+        projectGroup = continuumStore.getProjectGroupWithBuildDetailsByProjectGroupId( projectGroupId );
 
         project = (Project) projectGroup.getProjects().get( 0 );
 

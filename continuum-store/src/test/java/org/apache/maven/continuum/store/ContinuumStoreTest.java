@@ -525,7 +525,7 @@ public class ContinuumStoreTest
     public void testGetProjectGroupWithDetails()
         throws ContinuumStoreException
     {
-        ProjectGroup retrievedGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        ProjectGroup retrievedGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
         assertProjectGroupEquals( defaultProjectGroup, retrievedGroup );
         assertNotifiersEqual( defaultProjectGroup.getNotifiers(), retrievedGroup.getNotifiers() );
         assertBuildDefinitionsEqual( retrievedGroup.getBuildDefinitions(), defaultProjectGroup.getBuildDefinitions() );
@@ -790,14 +790,14 @@ public class ContinuumStoreTest
     public void testAddNotifierToProjectGroup()
         throws ContinuumStoreException
     {
-        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
 
         ProjectNotifier notifier = createTestNotifier( 14, true, false, true, "TADNTPG type" );
         ProjectNotifier copy = createTestNotifier( notifier );
         projectGroup.addNotifier( notifier );
         store.updateProjectGroup( projectGroup );
 
-        projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
         assertEquals( "check # notifiers", 3, projectGroup.getNotifiers().size() );
         assertNotifierEquals( copy, (ProjectNotifier) projectGroup.getNotifiers().get( 2 ) );
     }
@@ -805,7 +805,7 @@ public class ContinuumStoreTest
     public void testEditGroupNotifier()
         throws ContinuumStoreException
     {
-        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
 
         ProjectNotifier newNotifier = (ProjectNotifier) projectGroup.getNotifiers().get( 0 );
         // If we use "type1.1", jpox-rc2 store "type1", weird
@@ -815,7 +815,7 @@ public class ContinuumStoreTest
         ProjectNotifier copy = createTestNotifier( newNotifier );
         store.updateProjectGroup( projectGroup );
 
-        projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
         assertEquals( "check # notifiers", 2, projectGroup.getNotifiers().size() );
         assertNotifierEquals( copy, (ProjectNotifier) projectGroup.getNotifiers().get( 0 ) );
     }
@@ -823,12 +823,12 @@ public class ContinuumStoreTest
     public void testDeleteGroupNotifier()
         throws ContinuumStoreException
     {
-        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
         ProjectNotifier notifier = (ProjectNotifier) projectGroup.getNotifiers().get( 1 );
         projectGroup.getNotifiers().remove( 0 );
         store.updateProjectGroup( projectGroup );
 
-        projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
         assertEquals( "check size is now 1", 1, projectGroup.getNotifiers().size() );
         assertNotifierEquals( notifier, (ProjectNotifier) projectGroup.getNotifiers().get( 0 ) );
 
@@ -839,7 +839,7 @@ public class ContinuumStoreTest
     public void testAddBuildDefinitionToProjectGroup()
         throws ContinuumStoreException
     {
-        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
 
         Profile profile = store.getProfile( testProfile1.getId() );
         Schedule schedule = store.getSchedule( testSchedule1.getId() );
@@ -849,7 +849,7 @@ public class ContinuumStoreTest
         projectGroup.addBuildDefinition( buildDefinition );
         store.updateProjectGroup( projectGroup );
 
-        projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
         assertEquals( "check # build defs", 2, projectGroup.getBuildDefinitions().size() );
         BuildDefinition retrievedBuildDefinition = (BuildDefinition) projectGroup.getBuildDefinitions().get( 1 );
         assertBuildDefinitionEquals( copy, retrievedBuildDefinition );
@@ -860,7 +860,7 @@ public class ContinuumStoreTest
     public void testEditGroupBuildDefinition()
         throws ContinuumStoreException
     {
-        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
 
         BuildDefinition newBuildDefinition = (BuildDefinition) projectGroup.getBuildDefinitions().get( 0 );
         // If we use "arguments1.1", jpox-rc2 store "arguments11", weird
@@ -870,7 +870,7 @@ public class ContinuumStoreTest
         BuildDefinition copy = createTestBuildDefinition( newBuildDefinition );
         store.updateProjectGroup( projectGroup );
 
-        projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
         assertEquals( "check # build defs", 1, projectGroup.getBuildDefinitions().size() );
         BuildDefinition retrievedBuildDefinition = (BuildDefinition) projectGroup.getBuildDefinitions().get( 0 );
         assertBuildDefinitionEquals( copy, retrievedBuildDefinition );
@@ -881,11 +881,11 @@ public class ContinuumStoreTest
     public void testDeleteGroupBuildDefinition()
         throws ContinuumStoreException
     {
-        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        ProjectGroup projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
         projectGroup.getBuildDefinitions().remove( 0 );
         store.updateProjectGroup( projectGroup );
 
-        projectGroup = store.getProjectGroupWithBuildDetails( defaultProjectGroup.getId() );
+        projectGroup = store.getProjectGroupWithBuildDetailsByProjectGroupId( defaultProjectGroup.getId() );
         assertEquals( "check size is now 0", 0, projectGroup.getBuildDefinitions().size() );
 
         // !! These actually aren't happening !!
