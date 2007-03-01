@@ -97,7 +97,7 @@ public class EditPomAction
         return SUCCESS;
     }
 
-    public String doInput()
+    public String input()
     {
         try
         {

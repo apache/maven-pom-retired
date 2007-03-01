@@ -100,7 +100,7 @@ public class AddProjectGroupAction
         return SUCCESS;
     }
 
-    public String doInput()
+    public String input()
     {
         try
         {

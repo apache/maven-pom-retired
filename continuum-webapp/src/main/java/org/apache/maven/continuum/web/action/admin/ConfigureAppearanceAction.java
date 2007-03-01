@@ -89,7 +89,7 @@ public class ConfigureAppearanceAction
         return SUCCESS;
     }
 
-    public String doInput()
+    public String input()
         throws IOException, RegistryException
     {
         try

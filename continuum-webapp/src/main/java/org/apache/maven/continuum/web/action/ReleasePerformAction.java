@@ -81,7 +81,7 @@ public class ReleasePerformAction
         return SUCCESS;
     }
 
-    public String doInput()
+    public String input()
         throws Exception
     {
         try

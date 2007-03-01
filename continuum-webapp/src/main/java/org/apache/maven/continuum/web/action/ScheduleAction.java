@@ -88,7 +88,7 @@ public class ScheduleAction
         return SUCCESS;
     }
 
-    public String doInput()
+    public String input()
         throws ContinuumException
     {
         try

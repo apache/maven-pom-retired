@@ -79,10 +79,10 @@ public class AddGroupNotifierAction
     public String doDefault()
         throws ContinuumException
     {
-        return doInput();
+        return input();
     }
 
-    public String doInput()
+    public String input()
         throws ContinuumException
     {
         try

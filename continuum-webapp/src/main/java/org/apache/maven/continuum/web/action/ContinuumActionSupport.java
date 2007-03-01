@@ -90,7 +90,7 @@ public class ContinuumActionSupport
         return REQUIRES_AUTHORIZATION;
     }
 
-    public String doInput()
+    public String input()
         throws Exception
     {
         return REQUIRES_AUTHORIZATION;

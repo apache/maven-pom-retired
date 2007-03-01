@@ -172,10 +172,10 @@ public abstract class AddMavenProjectAction
     // TODO: Remove this method because a default method return SUCCESS instead of INPUT
     public String doDefault()
     {
-        return doInput();
+        return input();
     }
 
-    public String doInput()
+    public String input()
     {
         try
         {
