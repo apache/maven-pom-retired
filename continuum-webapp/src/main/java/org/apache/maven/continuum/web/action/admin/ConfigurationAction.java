@@ -162,11 +162,9 @@ public class ConfigurationAction
     public SecureActionBundle getSecureActionBundle()
         throws SecureActionException
     {
-        getLogger().info( "1");
         SecureActionBundle bundle = new SecureActionBundle();
         bundle.setRequiresAuthentication( true );
         bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_MANAGE_CONFIGURATION, Resource.GLOBAL );
-        getLogger().info( "2");
 
         return bundle;
      }
