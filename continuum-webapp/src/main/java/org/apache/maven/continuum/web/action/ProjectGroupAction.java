@@ -259,6 +259,7 @@ public class ProjectGroupAction
         {
             try
             {
+            	roleManager.renameDynamicRole( "continuum-group-project-administrator", projectGroup.getName(), name );
                 roleManager.renameDynamicRole( "continuum-group-developer", projectGroup.getName(), name );
                 roleManager.renameDynamicRole( "continuum-group-user", projectGroup.getName(), name );
 
