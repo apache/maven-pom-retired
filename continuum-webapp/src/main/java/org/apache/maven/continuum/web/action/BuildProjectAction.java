@@ -70,7 +70,7 @@ public class BuildProjectAction
         {
             if ( buildDefinitionId > 0 )
             {
-                getContinuum().buildProjectsWithBuildDefinition( buildDefinitionId );
+                getContinuum().buildProjectGroupWithBuildDefinition( projectGroupId, buildDefinitionId );
             }
             else
             {

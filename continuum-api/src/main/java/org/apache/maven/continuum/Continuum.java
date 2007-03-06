@@ -176,6 +176,9 @@ public interface Continuum
     public void buildProjectGroup( int projectGroupId )
         throws ContinuumException;
 
+    public void buildProjectGroupWithBuildDefinition( int projectGroupId, int buildDefinitionId )
+        throws ContinuumException;
+
     // ----------------------------------------------------------------------
     // Build information
     // ----------------------------------------------------------------------

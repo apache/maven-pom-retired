@@ -693,21 +693,6 @@ public class DefaultContinuum
     public void buildProjectGroup( int projectGroupId )
         throws ContinuumException
     {
-        Collection projectsList;
-
-        try
-        {
-            projectsList = getProjectsInBuildOrder( store.getProjectsWithDependenciesByGroupId( projectGroupId ) );
-        }
-        catch ( CycleDetectedException e )
-        {
-            getLogger().warn( "Cycle detected while sorting projects for building, falling back to unsorted build." );
-
-            projectsList = getProjects();
-        }
-
-        //Map buildDefinitionsIds = store.getDefaultBuildDefinitions();
-
         BuildDefinition groupDefaultBD = null;
         try
         {
@@ -724,35 +709,79 @@ public class DefaultContinuum
                 " doens't have a default build definition, this should be impossible, it should always have a default definition set." );
         }
 
+        buildProjectGroupWithBuildDefinition( projectGroupId, groupDefaultBD.getId(), true );
+    }
+
+    /**
+     * fire off a build for all of the projects in a project group using their default builds
+     *
+     * @param projectGroupId
+     * @throws ContinuumException
+     */
+    public void buildProjectGroupWithBuildDefinition( int projectGroupId, int buildDefinitionId )
+        throws ContinuumException
+    {
+        buildProjectGroupWithBuildDefinition( projectGroupId, buildDefinitionId, false );
+    }
+
+    /**
+     * fire off a build for all of the projects in a project group using their default builds
+     *
+     * @param projectGroupId
+     * @throws ContinuumException
+     */
+    private void buildProjectGroupWithBuildDefinition( int projectGroupId, int buildDefinitionId,
+                                                       boolean checkDefaultBuildDefinitionForProject )
+        throws ContinuumException
+    {
+        Collection projectsList;
+
+        try
+        {
+            projectsList = getProjectsInBuildOrder( store.getProjectsWithDependenciesByGroupId( projectGroupId ) );
+        }
+        catch ( CycleDetectedException e )
+        {
+            getLogger().warn( "Cycle detected while sorting projects for building, falling back to unsorted build." );
+
+            projectsList = getProjects();
+        }
+
+        //Map buildDefinitionsIds = store.getDefaultBuildDefinitions();
+
         for ( Iterator i = projectsList.iterator(); i.hasNext(); )
         {
             Project project = (Project) i.next();
 
-            int buildDefId = groupDefaultBD.getId();
+            int buildDefId = buildDefinitionId;
 
-            BuildDefinition projectDefaultBD = null;
-            try
+            if ( checkDefaultBuildDefinitionForProject )
             {
-                projectDefaultBD = store.getDefaultBuildDefinitionForProject( project.getId() );
-            }
-            catch ( ContinuumObjectNotFoundException e )
-            {
-                getLogger().debug( e.getMessage() );
-            }
-            catch ( ContinuumStoreException e )
-            {
-                getLogger().debug( e.getMessage() );
+                BuildDefinition projectDefaultBD = null;
+                try
+                {
+                    projectDefaultBD = store.getDefaultBuildDefinitionForProject( project.getId() );
+                }
+                catch ( ContinuumObjectNotFoundException e )
+                {
+                    getLogger().debug( e.getMessage() );
+                }
+                catch ( ContinuumStoreException e )
+                {
+                    getLogger().debug( e.getMessage() );
+                }
+
+                if ( projectDefaultBD != null )
+                {
+                    buildDefId = projectDefaultBD.getId();
+                    getLogger().debug( "Project " + project.getId() +
+                        " has own default build definition, will use it instead of group's." );
+                }
             }
 
-            if ( projectDefaultBD != null )
+            if ( !"maven2".equals( project.getExecutorId() ) )
             {
-                buildDefId = projectDefaultBD.getId();
-                getLogger().debug( "Project " + project.getId() +
-                    " has own default build definition, will use it instead of group's." );
-            }
-            else if ( !"maven2".equals( project.getExecutorId() ) )
-            {
-                getLogger().debug(
+                getLogger().info(
                     "Project " + project.getId() + " is not a maven2 project, will not be included in group build." );
                 continue;
             }
