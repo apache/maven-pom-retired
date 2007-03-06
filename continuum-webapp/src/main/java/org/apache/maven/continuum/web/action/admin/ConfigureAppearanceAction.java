@@ -23,15 +23,18 @@ import com.opensymphony.xwork.ModelDriven;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.continuum.execution.maven.m2.MavenBuilderHelper;
 import org.apache.maven.continuum.execution.maven.m2.SettingsConfigurationException;
+import org.apache.maven.continuum.security.ContinuumRoleConstants;
 import org.apache.maven.continuum.web.action.ContinuumActionSupport;
-import org.apache.maven.continuum.web.exception.AuthenticationRequiredException;
-import org.apache.maven.continuum.web.exception.AuthorizationRequiredException;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.shared.app.company.CompanyPomHandler;
 import org.apache.maven.shared.app.configuration.Configuration;
 import org.apache.maven.shared.app.configuration.MavenAppConfiguration;
 import org.codehaus.plexus.registry.RegistryException;
+import org.codehaus.plexus.security.rbac.Resource;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureAction;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionBundle;
+import org.codehaus.plexus.security.ui.web.interceptor.SecureActionException;
 
 import java.io.IOException;
 
@@ -42,7 +45,7 @@ import java.io.IOException;
  */
 public class ConfigureAppearanceAction
     extends ContinuumActionSupport
-    implements ModelDriven
+    implements ModelDriven, SecureAction
 {
     /**
      * @plexus.requirement
@@ -69,21 +72,6 @@ public class ConfigureAppearanceAction
     public String execute()
         throws IOException, RegistryException
     {
-        try
-        {
-            checkManageConfigurationAuthorization();
-        }
-        catch ( AuthorizationRequiredException authzE )
-        {
-            addActionError( authzE.getMessage() );
-            return REQUIRES_AUTHORIZATION;
-        }
-        catch ( AuthenticationRequiredException e )
-        {
-            addActionError( e.getMessage() );
-            return REQUIRES_AUTHENTICATION;
-        }
-
         appConfiguration.save( configuration );
 
         return SUCCESS;
@@ -92,21 +80,6 @@ public class ConfigureAppearanceAction
     public String input()
         throws IOException, RegistryException
     {
-        try
-        {
-            checkManageConfigurationAuthorization();
-        }
-        catch ( AuthorizationRequiredException authzE )
-        {
-            addActionError( authzE.getMessage() );
-            return REQUIRES_AUTHORIZATION;
-        }
-        catch ( AuthenticationRequiredException e )
-        {
-            addActionError( e.getMessage() );
-            return REQUIRES_AUTHENTICATION;
-        }
-
         return INPUT;
     }
 
@@ -127,5 +100,15 @@ public class ConfigureAppearanceAction
     public Model getCompanyModel()
     {
         return companyModel;
+    }
+
+    public SecureActionBundle getSecureActionBundle()
+        throws SecureActionException
+    {
+        SecureActionBundle bundle = new SecureActionBundle();
+        bundle.setRequiresAuthentication( true );
+        bundle.addRequiredAuthorization( ContinuumRoleConstants.CONTINUUM_MANAGE_CONFIGURATION, Resource.GLOBAL );
+
+        return bundle;
     }
 }

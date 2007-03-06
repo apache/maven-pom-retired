@@ -32,7 +32,7 @@ package org.apache.maven.continuum.web.action;
 public class AboutAction
     extends ContinuumActionSupport
 {
-    public String doDefault()
+    public String execute()
         throws Exception
     {
         return SUCCESS;

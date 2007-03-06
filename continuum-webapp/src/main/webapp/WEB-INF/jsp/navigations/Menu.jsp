@@ -48,14 +48,14 @@
       </div>
       <div>
         <div class="body">
-          <ww:url id="addMavenTwoProjectUrl" action="addMavenTwoProject" method="default" namespace="/"
+          <ww:url id="addMavenTwoProjectUrl" action="addMavenTwoProject" method="input" namespace="/"
                   includeParams="none"/>
           <ww:a href="%{addMavenTwoProjectUrl}">
             <ww:text name="menu.add.m2Project"/>
           </ww:a>
         </div>
         <div class="body">
-          <ww:url id="addMavenOneProjectUrl" action="addMavenOneProject" method="default" namespace="/"
+          <ww:url id="addMavenOneProjectUrl" action="addMavenOneProject" method="input" namespace="/"
                   includeParams="none"/>
           <ww:a href="%{addMavenOneProjectUrl}">
             <ww:text name="menu.add.m1Project"/>
@@ -97,7 +97,7 @@
           </div>
         </pss:ifAuthorized>
         <pss:ifAuthorized permission="continuum-manage-configuration">
-          <ww:url id="configurationUrl" action="configuration" namespace="/admin" method="default" includeParams="none"/>
+          <ww:url id="configurationUrl" action="configuration" namespace="/admin" method="input" includeParams="none"/>
           <div class="body">
             <ww:a href="%{configurationUrl}">
               <ww:text name="menu.administration.configuration"/>
