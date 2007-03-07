@@ -1070,10 +1070,11 @@ public abstract class AbstractContinuumStoreTestCase
     protected ContinuumStore createStore()
         throws Exception
     {
-        DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) lookup( JdoFactory.ROLE );
+        DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) lookup( JdoFactory.ROLE,
+                                                                                           "continuum" );
 
         jdoFactory.setUrl( "jdbc:hsqldb:mem:" + getName() );
 
-        return (ContinuumStore) lookup( ContinuumStore.ROLE );
+        return (ContinuumStore) lookup( ContinuumStore.ROLE, "jdo" );
     }
 }
