@@ -63,7 +63,7 @@ public class MavenTwoContinuumProjectBuilder
     private MavenBuilderHelper builderHelper;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

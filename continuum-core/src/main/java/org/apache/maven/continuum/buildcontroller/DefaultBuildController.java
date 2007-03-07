@@ -56,7 +56,7 @@ public class DefaultBuildController
     implements BuildController
 {
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

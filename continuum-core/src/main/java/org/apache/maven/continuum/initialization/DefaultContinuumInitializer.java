@@ -57,7 +57,7 @@ public class DefaultContinuumInitializer
     // ----------------------------------------------------------------------
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

@@ -72,7 +72,7 @@ public class MailContinuumNotifier
     private ConfigurationService configurationService;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

@@ -49,7 +49,7 @@ public class AddProjectToCheckOutQueueAction
     private TaskQueue checkOutQueue;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

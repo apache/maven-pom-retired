@@ -182,7 +182,7 @@ public abstract class AbstractContinuumTest
         //
         // ----------------------------------------------------------------------
 
-        store = (ContinuumStore) lookup( ContinuumStore.ROLE );
+        store = (ContinuumStore) lookup( ContinuumStore.ROLE, "jdo" );
 
         return store;
     }

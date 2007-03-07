@@ -51,7 +51,7 @@ public class DefaultSchedulesActivator
     implements SchedulesActivator
 {
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

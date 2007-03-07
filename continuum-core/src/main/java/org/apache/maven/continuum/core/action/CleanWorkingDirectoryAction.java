@@ -44,7 +44,7 @@ public class CleanWorkingDirectoryAction
     private WorkingDirectoryService workingDirectoryService;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

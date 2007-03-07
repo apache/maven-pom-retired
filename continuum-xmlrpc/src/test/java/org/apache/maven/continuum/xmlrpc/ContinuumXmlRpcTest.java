@@ -42,7 +42,7 @@ public class ContinuumXmlRpcTest
     {
         ContinuumXmlRpc xmlRpc = (ContinuumXmlRpc) lookup( ContinuumXmlRpc.ROLE );
 
-        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE );
+        ContinuumStore store = (ContinuumStore) lookup( ContinuumStore.ROLE, "jdo" );
 
         // ----------------------------------------------------------------------
         //

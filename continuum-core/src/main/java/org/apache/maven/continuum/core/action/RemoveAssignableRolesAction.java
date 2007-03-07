@@ -39,7 +39,7 @@ public class RemoveAssignableRolesAction
     extends AbstractContinuumAction
 {
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

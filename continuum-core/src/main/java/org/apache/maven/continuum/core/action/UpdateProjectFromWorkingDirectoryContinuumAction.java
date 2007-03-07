@@ -53,7 +53,7 @@ public class UpdateProjectFromWorkingDirectoryContinuumAction
     private BuildExecutorManager buildExecutorManager;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

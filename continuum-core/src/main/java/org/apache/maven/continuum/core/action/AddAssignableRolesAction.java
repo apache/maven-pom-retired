@@ -40,7 +40,7 @@ public class AddAssignableRolesAction
     extends AbstractContinuumAction
 {
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

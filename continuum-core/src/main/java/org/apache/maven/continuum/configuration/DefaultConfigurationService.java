@@ -43,7 +43,7 @@ public class DefaultConfigurationService
     private File applicationHome;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

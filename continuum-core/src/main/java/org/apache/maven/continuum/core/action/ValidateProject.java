@@ -43,7 +43,7 @@ public class ValidateProject
     private BuildExecutorManager buildExecutorManager;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

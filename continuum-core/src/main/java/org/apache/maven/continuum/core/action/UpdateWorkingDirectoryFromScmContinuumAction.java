@@ -49,7 +49,7 @@ public class UpdateWorkingDirectoryFromScmContinuumAction
     private ContinuumScm scm;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 
