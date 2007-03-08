@@ -227,6 +227,24 @@
           </excludes>
         </configuration>
       </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <copy todir="${project.build.directory}/appserver-base">
+                  <fileset dir="src/appserver-base" />
+                </copy>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -237,7 +255,7 @@
     <dependency>
       <groupId>org.codehaus.plexus.registry</groupId>
       <artifactId>plexus-registry-commons</artifactId>
-      <version>1.0-alpha-1</version>
+      <version>1.0-alpha-2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.shared</groupId>

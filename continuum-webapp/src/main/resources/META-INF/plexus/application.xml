@@ -59,7 +59,7 @@
           <xml fileName="${user.home}/.m2/continuum.xml" config-optional="true" config-name="org.apache.maven.continuum"
                config-at="org.apache.maven.continuum" config-forceCreate="true"/>
           <xml fileName="${user.home}/.m2/shared.xml" config-optional="true"
-               config-name="org.apache.maven.shared.app" config-at="org.apache.maven.shared.app"
+               config-name="org.apache.maven.shared.app.user" config-at="org.apache.maven.shared.app"
                config-forceCreate="true"/>
           <properties fileName="${user.home}/.m2/security.properties" config-optional="true"
                       config-at="org.codehaus.plexus.security"/>
@@ -67,11 +67,15 @@
                       config-at="org.codehaus.plexus.security"/>
           <xml fileName="${appserver.base}/conf/continuum.xml" config-optional="true"
                config-at="org.apache.maven.continuum"/>
+          <xml fileName="${appserver.base}/conf/shared.xml" config-optional="true"
+               config-name="org.apache.maven.shared.app.base" config-at="org.apache.maven.shared.app"/>
           <xml fileName="${appserver.base}/conf/common.xml" config-optional="true"/>
           <properties fileName="${appserver.base}/conf/security.properties" config-optional="true"
                       config-at="org.codehaus.plexus.security"/>
           <xml fileName="${appserver.home}/conf/continuum.xml" config-optional="true"
                config-at="org.apache.maven.continuum"/>
+          <xml fileName="${appserver.home}/conf/shared.xml" config-optional="true"
+               config-at="org.apache.maven.shared.app"/>
           <xml fileName="${appserver.home}/conf/common.xml" config-optional="true"/>
           <properties fileName="${appserver.home}/conf/security.properties" config-optional="true"
                       config-at="org.codehaus.plexus.security"/>
