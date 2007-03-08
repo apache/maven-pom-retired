@@ -498,12 +498,14 @@
             <hierarchy>JPOX.MetaData</hierarchy>
             <level>ERROR</level>
           </level>
-          <!--
-                    <level>
-                      <hierarchy>JPOX.RDBMS.SQL</hierarchy>
-                      <level>DEBUG</level>
-                    </level>
-          -->
+          <level>
+            <hierarchy>JPOX.RDBMS.SQL</hierarchy>
+            <level>ERROR</level>
+          </level>
+          <level>
+            <hierarchy>SQL</hierarchy>
+            <level>ERROR</level>
+          </level>
           <level>
             <hierarchy>freemarker</hierarchy>
             <level>WARN</level>
