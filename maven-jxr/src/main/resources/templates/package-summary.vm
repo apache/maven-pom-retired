@@ -1,0 +1,94 @@
+#*
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+
+*#
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=$outputEncoding" />
+		<title>$windowTitle Package $pkgInfo.name</title>
+		<link rel="stylesheet" type="text/css" href="${pkgInfo.rootRef}stylesheet.css" title="style" />
+	</head>
+	<body>
+		## Navigation Bar -------- START --------
+      	<div class="overview">
+        	<ul>
+          		<li>
+            		<a href="${pkgInfo.rootRef}overview-summary.html">Overview</a>
+          		</li>
+          		<li class="selected">Package</li>
+        	</ul>
+      	</div>
+      	<div class="framenoframe">
+        	<ul>
+          		<li>
+            		<a href="${pkgInfo.rootRef}index.html" target="_top">FRAMES</a>
+          		</li>
+          		<li>
+            		<a href="package-summary.html" target="_top">NO FRAMES</a>
+          		</li>
+        	</ul>
+      	</div>
+		## Navigation Bar -------- END --------
+
+		## Package Summary -------- START --------
+      	<h2>Package $pkgInfo.name</h2>
+
+		<table class="summary">
+        	<thead>
+          		<tr>
+            		<th>Class Summary</th>
+          		</tr>
+        	</thead>
+        	<tbody>
+        		#foreach ($classInfo in $pkgInfo.classes.values())
+            	<tr>
+              		<td>
+                		<a href="${classInfo.filename}.html" target="classFrame">$classInfo.name</a>
+              		</td>
+            	</tr>
+				#end
+        	</tbody>
+      	</table>
+		## Package Summary -------- END --------
+
+		## Navigation Bar -------- START --------
+      	<div class="overview">
+        	<ul>
+          		<li>
+            		<a href="${pkgInfo.rootRef}overview-summary.html">Overview</a>
+          		</li>
+          		<li class="selected">Package</li>
+        	</ul>
+      	</div>
+      	<div class="framenoframe">
+        	<ul>
+          		<li>
+            		<a href="${pkgInfo.rootRef}index.html" target="_top">FRAMES</a>
+          		</li>
+          		<li>
+            		<a href="package-summary.html" target="_top">NO FRAMES</a>
+          		</li>
+        	</ul>
+      	</div>
+		## Navigation Bar -------- END --------
+		<hr />
+		${bottom}
+	</body>
+</html>
