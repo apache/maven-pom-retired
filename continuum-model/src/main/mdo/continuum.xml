@@ -201,7 +201,7 @@
           <type>String</type>
         </field>
         <!-- TODO: should these 3 just be queried from the builds list? -->
-        <field>
+        <field jpox.column="projectstate">
           <name>state</name>
           <version>1.1.0+</version>
           <type>int</type>
@@ -308,7 +308,7 @@
           <version>1.1.0+</version>
           <type>int</type>
         </field>
-        <field>
+        <field jpox.column="notifiertype">
           <name>type</name>
           <version>1.1.0+</version>
           <defaultValue>mail</defaultValue>
@@ -465,12 +465,12 @@
           <version>1.1.0+</version>
           <type>int</type>
         </field>
-        <field>
+        <field jpox.column="resultstate">
           <name>state</name>
           <version>1.1.0+</version>
           <type>int</type>
         </field>
-        <field>
+        <field jpox.column="resulttrigger">
           <name>trigger</name>
           <version>1.1.0+</version>
           <type>int</type>
@@ -585,12 +585,12 @@
           <version>1.1.0+</version>
           <type>String</type>
         </field>
-        <field stash.maxSize="8192">
+        <field stash.maxSize="8192" jpox.column="changecomment">
           <name>comment</name>
           <version>1.1.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field jpox.column="changedate">
           <name>date</name>
           <version>1.1.0+</version>
           <!-- TODO: Because JPOX persists as UTC and pulls back using the local time, we have to take over -->
@@ -842,7 +842,7 @@
             <type>Schedule</type>
           </association>
         </field>
-        <field>
+        <field jpox.column="buildprofile">
           <name>profile</name>
           <version>1.1.0+</version>
           <association xml.reference="true" stash.part="true" jpox.dependent="false">
@@ -886,7 +886,7 @@
           <version>1.1.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field jpox.column="scheduledelay">
           <name>delay</name>
           <description><![CDATA[
             Delay in seconds.
@@ -912,7 +912,7 @@
       </fields>
     </class>
 
-    <class>
+    <class jpox.table="profiles">
       <name>Profile</name>
       <version>1.1.0+</version>
       <fields>
@@ -974,7 +974,7 @@
           <version>1.1.0+</version>
           <type>String</type>
         </field>
-        <field>
+        <field jpox.column="installpath">
           <name>path</name>
           <version>1.1.0+</version>
           <type>String</type>
@@ -1050,7 +1050,7 @@
         Configures one method for notifying users/developers when a build breaks.
       </description>
       <fields>
-        <field>
+        <field jpox.column="notifiertype">
           <name>type</name>
           <version>1.1.0+</version>
           <defaultValue>mail</defaultValue>
