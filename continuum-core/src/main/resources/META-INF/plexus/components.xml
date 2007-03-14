@@ -33,6 +33,7 @@
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
+          <role-hint>jdo</role-hint>
         </requirement>
       </requirements>
       <configuration>

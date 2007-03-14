@@ -61,7 +61,7 @@ public class MsnContinuumNotifier
     private ConfigurationService configurationService;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement="jdo"
      */
     private ContinuumStore store;
 

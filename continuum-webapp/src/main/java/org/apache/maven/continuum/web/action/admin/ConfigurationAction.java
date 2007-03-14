@@ -46,7 +46,7 @@ public class ConfigurationAction
     implements Preparable, SecureAction
 {
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

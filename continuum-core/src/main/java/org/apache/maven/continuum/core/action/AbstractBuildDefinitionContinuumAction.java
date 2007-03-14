@@ -43,7 +43,7 @@ public abstract class AbstractBuildDefinitionContinuumAction
 {
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     ContinuumStore store;
 

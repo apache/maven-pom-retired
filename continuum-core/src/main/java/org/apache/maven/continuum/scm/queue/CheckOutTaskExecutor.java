@@ -50,7 +50,7 @@ public class CheckOutTaskExecutor
     private ActionManager actionManager;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

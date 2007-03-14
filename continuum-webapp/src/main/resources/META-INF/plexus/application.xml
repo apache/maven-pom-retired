@@ -120,6 +120,7 @@
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
+          <role-hint>jdo</role-hint>
         </requirement>
         <requirement>
           <role>org.codehaus.plexus.mailsender.MailSender</role>
@@ -174,6 +175,7 @@
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
+          <role-hint>jdo</role-hint>
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.configuration.ConfigurationService</role>
@@ -205,6 +207,7 @@
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
+          <role-hint>jdo</role-hint>
         </requirement>
       </requirements>
       <configuration>
@@ -238,6 +241,7 @@
         </requirement>
         <requirement>
           <role>org.apache.maven.continuum.store.ContinuumStore</role>
+          <role-hint>jdo</role-hint>
         </requirement>
       </requirements>
       <configuration>

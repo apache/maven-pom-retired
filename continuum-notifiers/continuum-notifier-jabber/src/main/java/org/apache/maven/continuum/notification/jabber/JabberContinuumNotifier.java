@@ -61,7 +61,7 @@ public class JabberContinuumNotifier
     private ConfigurationService configurationService;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 

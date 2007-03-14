@@ -50,7 +50,7 @@ public class IrcContinuumNotifier
     // ----------------------------------------------------------------------
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role-hint="jdo"
      */
     private ContinuumStore store;
 
