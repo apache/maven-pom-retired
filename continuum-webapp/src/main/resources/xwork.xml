@@ -38,11 +38,11 @@
       <interceptor name="pssEnvironmentChecker" class="pssEnvironmentCheckInterceptor"/>
 
       <interceptor-stack name="configuredContinuumStack">
-        <interceptor-ref name="defaultStack"/>
-        <interceptor-ref name="exception-logging"/>
         <interceptor-ref name="pssEnvironmentChecker"/>
         <interceptor-ref name="pssForceAdminUser"/>
         <interceptor-ref name="pssAutoLogin"/>
+        <interceptor-ref name="defaultStack"/>
+        <interceptor-ref name="exception-logging"/>
         <interceptor-ref name="pssSecureActions"/>
         <interceptor-ref name="pssPolicyEnforcement"/>
         <interceptor-ref name="continuumConfigurationCheck"/>
@@ -55,11 +55,11 @@
       </interceptor-stack>
 
       <interceptor-stack name="unconfiguredContinuumStack">
-        <interceptor-ref name="defaultStack"/>
-        <interceptor-ref name="exception-logging"/>
         <interceptor-ref name="pssEnvironmentChecker"/>
         <interceptor-ref name="pssForceAdminUser"/>
         <interceptor-ref name="pssAutoLogin"/>
+        <interceptor-ref name="defaultStack"/>
+        <interceptor-ref name="exception-logging"/>
         <interceptor-ref name="pssPolicyEnforcement"/>
         <interceptor-ref name="pssSecureActions"/>
         <interceptor-ref name="validation">
