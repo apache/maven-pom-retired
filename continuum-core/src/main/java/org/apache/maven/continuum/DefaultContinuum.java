@@ -1135,8 +1135,15 @@ public class DefaultContinuum
                                                               boolean checkProtocol )
         throws ContinuumException
     {
+        return addMavenOneProject( metadataUrl, projectGroupId, checkProtocol, false );
+    }
+
+    public ContinuumProjectBuildingResult addMavenOneProject( String metadataUrl, int projectGroupId,
+                                                              boolean checkProtocol, boolean useCredentialsCache )
+        throws ContinuumException
+    {
         return executeAddProjectsFromMetadataActivity( metadataUrl, MavenOneContinuumProjectBuilder.ID, projectGroupId,
-                                                       checkProtocol );
+                                                       checkProtocol, useCredentialsCache );
     }
 
     // ----------------------------------------------------------------------
@@ -1165,8 +1172,15 @@ public class DefaultContinuum
                                                               boolean checkProtocol )
         throws ContinuumException
     {
+        return addMavenTwoProject( metadataUrl, projectGroupId, checkProtocol, false );
+    }
+
+    public ContinuumProjectBuildingResult addMavenTwoProject( String metadataUrl, int projectGroupId,
+                                                              boolean checkProtocol, boolean useCredentialsCache )
+        throws ContinuumException
+    {
         return executeAddProjectsFromMetadataActivity( metadataUrl, MavenTwoContinuumProjectBuilder.ID, projectGroupId,
-                                                       checkProtocol );
+                                                       checkProtocol, useCredentialsCache );
     }
 
     // ----------------------------------------------------------------------
@@ -1264,6 +1278,16 @@ public class DefaultContinuum
                                                                                    String projectBuilderId,
                                                                                    int projectGroupId,
                                                                                    boolean checkProtocol )
+        throws ContinuumException
+    {
+        return executeAddProjectsFromMetadataActivity( metadataUrl, projectBuilderId, -1, checkProtocol, false );
+    }
+
+    private ContinuumProjectBuildingResult executeAddProjectsFromMetadataActivity( String metadataUrl,
+                                                                                   String projectBuilderId,
+                                                                                   int projectGroupId,
+                                                                                   boolean checkProtocol,
+                                                                                   boolean useCredentialsCache )
         throws ContinuumException
     {
         if ( checkProtocol )
@@ -1394,6 +1418,8 @@ public class DefaultContinuum
         for ( Iterator i = projects.iterator(); i.hasNext(); )
         {
             Project project = (Project) i.next();
+            
+            project.setScmUseCache( useCredentialsCache );
 
             projectGroup.addProject( project );
         }

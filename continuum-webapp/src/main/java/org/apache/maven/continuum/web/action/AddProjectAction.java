@@ -63,6 +63,8 @@ public class AddProjectAction
 
     private boolean disableGroupSelection;
 
+    private boolean projectScmUseCache;
+
     public void validate()
     {
         boolean projectNameAlreadyExist = false;
@@ -127,6 +129,8 @@ public class AddProjectAction
         project.setScmPassword( projectScmPassword );
 
         project.setScmTag( projectScmTag );
+
+        project.setScmUseCache( projectScmUseCache );
 
         getContinuum().addProject( project, projectType, selectedProjectGroup );
 
@@ -282,5 +286,15 @@ public class AddProjectAction
     public void setProjectGroupName( String projectGroupName )
     {
         this.projectGroupName = projectGroupName;
+    }
+
+    public boolean isProjectScmUseCache()
+    {
+        return projectScmUseCache;
+    }
+
+    public void setProjectScmUseCache( boolean projectScmUseCache )
+    {
+        this.projectScmUseCache = projectScmUseCache;
     }
 }

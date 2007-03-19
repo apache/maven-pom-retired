@@ -20,6 +20,7 @@ package org.apache.maven.continuum.web.action;
  */
 
 import org.apache.maven.continuum.ContinuumException;
+import org.apache.maven.continuum.model.project.Project;
 import org.apache.maven.continuum.project.builder.ContinuumProjectBuildingResult;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -50,7 +51,7 @@ public class AddMavenTwoProjectAction
 
     public static final String FILE_SCHEME = "file:/";
 
-    protected ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup, boolean checkProtocol )
+    protected ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup, boolean checkProtocol, boolean scmUseCache )
         throws ContinuumException
     {
         ContinuumProjectBuildingResult result = null;
@@ -101,7 +102,7 @@ public class AddMavenTwoProjectAction
 
         if ( result == null )
         {
-            result = getContinuum().addMavenTwoProject( pomUrl, selectedProjectGroup, checkProtocol );
+            result = getContinuum().addMavenTwoProject( pomUrl, selectedProjectGroup, checkProtocol, scmUseCache );
         }
 
         return result;

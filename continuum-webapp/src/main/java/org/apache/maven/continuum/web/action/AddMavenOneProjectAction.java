@@ -36,10 +36,10 @@ public class AddMavenOneProjectAction
     extends AddMavenProjectAction
 {
 
-    protected ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup, boolean checkProtocol )
+    protected ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup, boolean checkProtocol, boolean scmUseCache )
         throws ContinuumException
     {
-        return getContinuum().addMavenOneProject( pomUrl, selectedProjectGroup, checkProtocol );
+        return getContinuum().addMavenOneProject( pomUrl, selectedProjectGroup, checkProtocol, scmUseCache );
     }
 
     /**

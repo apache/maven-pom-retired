@@ -53,6 +53,10 @@
                                       <td><input type="password" name="scmPassword" size="20" id="addMavenOneProject_scmPassword"/><td>
                                     </tr>  
                                   </tbody>
+                                    <tr>
+                                      <td></td>
+                                      <td><ww:checkbox label="%{getText('projectEdit.project.scmUseCache.label')}" name="scmUseCache"/><td>
+                                    </tr>
                                 </table>  
                                   <p><ww:text name="add.m1.project.m1PomUrl.message"/></p>
                                 </ww:param>

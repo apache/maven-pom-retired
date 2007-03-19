@@ -63,6 +63,8 @@ public abstract class AddMavenProjectAction
 
     private boolean disableGroupSelection;
 
+    private boolean scmUseCache;
+
     public String execute()
         throws ContinuumException
     {
@@ -140,7 +142,7 @@ public abstract class AddMavenProjectAction
             }
         }
 
-        ContinuumProjectBuildingResult result = doExecute( pom, selectedProjectGroup, checkProtocol );
+        ContinuumProjectBuildingResult result = doExecute( pom, selectedProjectGroup, checkProtocol, scmUseCache );
 
         if ( result.hasErrors() )
         {
@@ -166,7 +168,7 @@ public abstract class AddMavenProjectAction
      * @return result of adding the pom to continuum
      */
     protected abstract ContinuumProjectBuildingResult doExecute( String pomUrl, int selectedProjectGroup,
-                                                                 boolean checkProtocol )
+                                                                 boolean checkProtocol, boolean scmUseCache )
         throws ContinuumException;
 
     // TODO: Remove this method because a default method return SUCCESS instead of INPUT
@@ -312,5 +314,15 @@ public abstract class AddMavenProjectAction
     public void setDisableGroupSelection( boolean disableGroupSelection )
     {
         this.disableGroupSelection = disableGroupSelection;
+    }
+
+    public boolean isScmUseCache()
+    {
+        return scmUseCache;
+    }
+
+    public void setScmUseCache( boolean scmUseCache )
+    {
+        this.scmUseCache = scmUseCache;
     }
 }

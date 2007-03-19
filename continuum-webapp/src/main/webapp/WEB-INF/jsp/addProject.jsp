@@ -73,6 +73,7 @@
                             <ww:textfield label="%{getText('projectScmTag.label')}" name="projectScmTag">
                                 <ww:param name="desc"><p><ww:text name="projectScmTag.message"/></p></ww:param>
                             </ww:textfield>
+                            <ww:checkbox label="%{getText('projectScmUseCache.label')}" name="projectScmUseCache"/>
                             <ww:if test="disableGroupSelection == true">
                               <ww:hidden name="selectedProjectGroup"/>
                               <ww:hidden name="disableGroupSelection"/>
