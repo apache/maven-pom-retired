@@ -135,7 +135,7 @@
       <configuration>
         <from-mailbox></from-mailbox>
         <from-name></from-name>
-        <timestamp-format>EEE, d MMM yyyy HH:mm:ss Z</timestamp-format>
+        <timestamp-format>EEE d MMM yyyy HH:mm:ss Z</timestamp-format>
         <includeBuildResult>true</includeBuildResult>
         <alwaysSend>false</alwaysSend>
       </configuration>
