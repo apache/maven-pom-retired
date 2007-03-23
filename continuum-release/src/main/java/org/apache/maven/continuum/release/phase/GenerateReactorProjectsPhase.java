@@ -105,6 +105,8 @@ public class GenerateReactorProjectsPhase
                                             getLocalRepository(), getProfileManager( getSettings() ) );
 
             reactorProjects.add( project );
+            
+            addModules( reactorProjects, project );
         }
         catch ( ProjectBuildingException e )
         {
@@ -117,33 +119,6 @@ public class GenerateReactorProjectsPhase
         catch ( ArtifactResolutionException e )
         {
             throw new ContinuumReleaseException( "Failed to build project.", e );
-        }
-
-        for( Iterator modules = project.getModules().iterator(); modules.hasNext(); )
-        {
-            String moduleDir = modules.next().toString();
-
-            File pomFile = new File( project.getBasedir(), moduleDir + "/pom.xml" );
-
-            try
-            {
-                MavenProject reactorProject = projectBuilder.buildWithDependencies( pomFile, getLocalRepository(),
-                                                                    getProfileManager( getSettings() ) );
-
-                reactorProjects.add( reactorProject );
-            }
-            catch ( ProjectBuildingException e )
-            {
-                throw new ContinuumReleaseException( "Failed to build project.", e );
-            }
-            catch ( ArtifactNotFoundException e )
-            {
-                throw new ContinuumReleaseException( "Failed to build project.", e );
-            }
-            catch ( ArtifactResolutionException e )
-            {
-                throw new ContinuumReleaseException( "Failed to build project.", e );
-            }
         }
 
         try
@@ -160,6 +135,39 @@ public class GenerateReactorProjectsPhase
         }
 
         return reactorProjects;
+    }
+    
+    private void addModules( List reactorProjects, MavenProject project )
+        throws ContinuumReleaseException
+    {
+        for( Iterator modules = project.getModules().iterator(); modules.hasNext(); )
+        {
+            String moduleDir = modules.next().toString();
+
+            File pomFile = new File( project.getBasedir(), moduleDir + "/pom.xml" );
+
+            try
+            {
+                MavenProject reactorProject = projectBuilder.buildWithDependencies( pomFile, getLocalRepository(),
+                                                                    getProfileManager( getSettings() ) );
+
+                reactorProjects.add( reactorProject );
+                
+                addModules( reactorProjects, reactorProject );
+            }
+            catch ( ProjectBuildingException e )
+            {
+                throw new ContinuumReleaseException( "Failed to build project.", e );
+            }
+            catch ( ArtifactNotFoundException e )
+            {
+                throw new ContinuumReleaseException( "Failed to build project.", e );
+            }
+            catch ( ArtifactResolutionException e )
+            {
+                throw new ContinuumReleaseException( "Failed to build project.", e );
+            }
+        }
     }
 
     private File getProjectDescriptorFile( ReleaseDescriptor descriptor )
