@@ -131,7 +131,7 @@ public class PerformReleaseTaskExecutor
         MavenProject project;
         try
         {
-            project = projectBuilder.buildWithDependencies( getProjectDescriptorFile( descriptor ),
+            project = projectBuilder.build( getProjectDescriptorFile( descriptor ),
                                             getLocalRepository(), getProfileManager( settings ) );
 
             reactorProjects.add( project );
@@ -139,14 +139,6 @@ public class PerformReleaseTaskExecutor
             addModules( reactorProjects, project );
         }
         catch ( ProjectBuildingException e )
-        {
-            throw new ContinuumReleaseException( "Failed to build project.", e );
-        }
-        catch ( ArtifactNotFoundException e )
-        {
-            throw new ContinuumReleaseException( "Failed to build project.", e );
-        }
-        catch ( ArtifactResolutionException e )
         {
             throw new ContinuumReleaseException( "Failed to build project.", e );
         }
@@ -175,10 +167,11 @@ public class PerformReleaseTaskExecutor
             String moduleDir = modules.next().toString();
 
             File pomFile = new File( project.getBasedir(), moduleDir + "/pom.xml" );
+            System.out.println( pomFile.getAbsolutePath());
 
             try
             {
-                MavenProject reactorProject = projectBuilder.buildWithDependencies( pomFile, getLocalRepository(),
+                MavenProject reactorProject = projectBuilder.build( pomFile, getLocalRepository(),
                                                                     getProfileManager( settings ) );
 
                 reactorProjects.add( reactorProject );
@@ -186,14 +179,6 @@ public class PerformReleaseTaskExecutor
                 addModules( reactorProjects, reactorProject );
             }
             catch ( ProjectBuildingException e )
-            {
-                throw new ContinuumReleaseException( "Failed to build project.", e );
-            }
-            catch ( ArtifactNotFoundException e )
-            {
-                throw new ContinuumReleaseException( "Failed to build project.", e );
-            }
-            catch ( ArtifactResolutionException e )
             {
                 throw new ContinuumReleaseException( "Failed to build project.", e );
             }
