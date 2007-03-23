@@ -144,9 +144,6 @@
           <role>org.apache.maven.settings.MavenSettingsBuilder</role>
         </requirement>
       </requirements>
-      <configuration>
-        <local-repository>${plexus.home}/local-repository</local-repository>
-      </configuration>
     </component>
 
     <component>
@@ -309,9 +306,6 @@
           <role>org.apache.maven.settings.MavenSettingsBuilder</role>
         </requirement>
       </requirements>
-      <configuration>
-        <local-repository>${plexus.home}/local-repository</local-repository>
-      </configuration>
     </component>
 
     <!-- This needs to be removed once we can upgrade maven-project to 2.1-SNAPSHOT or later. -->

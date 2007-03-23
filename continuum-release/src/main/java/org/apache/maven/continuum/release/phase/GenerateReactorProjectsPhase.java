@@ -68,8 +68,6 @@ public class GenerateReactorProjectsPhase
 
     private PlexusContainer container;
 
-    private String localRepository;
-
     public ReleaseResult execute( ReleaseDescriptor releaseDescriptor, Settings settings, List reactorProjects )
         throws ReleaseExecutionException, ReleaseFailureException
     {
@@ -178,8 +176,9 @@ public class GenerateReactorProjectsPhase
     }
 
     private ArtifactRepository getLocalRepository()
+        throws ContinuumReleaseException
     {
-        return new DefaultArtifactRepository( "local-repository", "file://" + localRepository,
+        return new DefaultArtifactRepository( "local-repository", "file://" + getSettings().getLocalRepository(),
                                                                                    new DefaultRepositoryLayout() );
     }
 

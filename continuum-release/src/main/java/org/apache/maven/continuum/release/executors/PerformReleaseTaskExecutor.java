@@ -65,11 +65,6 @@ public class PerformReleaseTaskExecutor
      */
     private MavenProjectBuilder projectBuilder;
 
-    /**
-     * @plexus.configuration
-     */
-    private String localRepository;
-
     private ProfileManager profileManager;
 
     private PlexusContainer container;
@@ -213,7 +208,7 @@ public class PerformReleaseTaskExecutor
 
     private ArtifactRepository getLocalRepository()
     {
-        return new DefaultArtifactRepository( "local-repository", "file://" + localRepository,
+        return new DefaultArtifactRepository( "local-repository", "file://" + settings.getLocalRepository(),
                                                                                    new DefaultRepositoryLayout() );
     }
 
