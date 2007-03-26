@@ -572,7 +572,7 @@
     <maven.version>2.0.5</maven.version>
     <wagon.version>1.0-beta-2</wagon.version>
     <maven-scm.version>1.0-beta-4</maven-scm.version>
-    <plexus-security.version>1.0-alpha-11-SNAPSHOT</plexus-security.version>
+    <plexus-security.version>1.0-alpha-11</plexus-security.version>
     <mail-sender.version>1.0-alpha-6</mail-sender.version>
   </properties>
 </project>
