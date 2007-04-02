@@ -30,6 +30,7 @@ import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.scm.repository.ScmRepository;
 import org.apache.maven.scm.repository.ScmRepositoryException;
 import org.apache.maven.scm.ScmFileSet;
+import org.apache.maven.scm.ScmVersion;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.taskqueue.Task;
@@ -104,7 +105,7 @@ public class ReleaseTaskExecutorTest
 
         ScmRepository repository = getScmRepositorty( descriptor.getScmSourceUrl() );
         ScmFileSet fileSet = new ScmFileSet( workDir );
-        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, null );
+        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, (ScmVersion)null );
 
         String pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
         assertTrue( "Test dev version", pom.indexOf( "<version>1.0-SNAPSHOT</version>" ) > 0 );
@@ -116,7 +117,7 @@ public class ReleaseTaskExecutorTest
 
         repository = getScmRepositorty( "scm:svn:file://localhost/" + scmPath + "/tags/test-artifact-1.0" );
         fileSet = new ScmFileSet( testDir );
-        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, null );
+        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, (ScmVersion)null );
 
         pom = FileUtils.fileRead( new File( testDir, "pom.xml" ) );
         assertTrue( "Test released version", pom.indexOf( "<version>1.0</version>" ) > 0 );
@@ -148,7 +149,7 @@ public class ReleaseTaskExecutorTest
 
         ScmRepository repository = getScmRepositorty( descriptor.getScmSourceUrl() );
         ScmFileSet fileSet = new ScmFileSet( workDir );
-        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, null );
+        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, (ScmVersion)null );
 
         String pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
         assertTrue( "Test dev version", pom.indexOf( "<version>1.1-SNAPSHOT</version>" ) > 0 );
@@ -160,7 +161,7 @@ public class ReleaseTaskExecutorTest
 
         repository = getScmRepositorty( "scm:svn:file://localhost/" + scmPath + "/tags/test-artifact-2.0" );
         fileSet = new ScmFileSet( testDir );
-        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, null );
+        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, (ScmVersion)null );
 
         pom = FileUtils.fileRead( new File( testDir, "pom.xml" ) );
         assertTrue( "Test released version", pom.indexOf( "<version>2.0</version>" ) > 0 );
@@ -190,7 +191,7 @@ public class ReleaseTaskExecutorTest
 
         ScmRepository repository = getScmRepositorty( descriptor.getScmSourceUrl() );
         ScmFileSet fileSet = new ScmFileSet( workDir );
-        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, null );
+        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, (ScmVersion)null );
 
         String pom = FileUtils.fileRead( new File( workDir, "pom.xml" ) );
         assertTrue( "Test dev version", pom.indexOf( "<version>1.1-SNAPSHOT</version>" ) > 0 );
@@ -202,7 +203,7 @@ public class ReleaseTaskExecutorTest
 
         repository = getScmRepositorty( "scm:svn:file://localhost/" + scmPath + "/tags/test-artifact-1.1" );
         fileSet = new ScmFileSet( testDir );
-        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, null );
+        scmManager.getProviderByRepository( repository ).checkOut( repository, fileSet, (ScmVersion)null );
 
         pom = FileUtils.fileRead( new File( testDir, "pom.xml" ) );
         assertTrue( "Test released version", pom.indexOf( "<version>1.1</version>" ) > 0 );

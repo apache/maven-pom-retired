@@ -34,6 +34,7 @@ import org.apache.maven.scm.provider.ScmProvider;
 import org.apache.maven.scm.manager.NoSuchScmProviderException;
 import org.apache.maven.scm.ScmFileSet;
 import org.apache.maven.scm.ScmException;
+import org.apache.maven.scm.ScmVersion;
 import org.apache.maven.scm.command.update.UpdateScmResult;
 
 import java.util.List;
@@ -83,7 +84,7 @@ public class UpdateWorkingCopyPhase
         try
         {
             result = provider.update(
-                repository, new ScmFileSet( new File( releaseDescriptor.getWorkingDirectory() ) ), null );
+                repository, new ScmFileSet( new File( releaseDescriptor.getWorkingDirectory() ) ), (ScmVersion)null );
         }
         catch ( ScmException e )
         {

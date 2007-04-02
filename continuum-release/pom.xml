@@ -66,18 +66,13 @@
     <dependency>
       <groupId>org.apache.maven.release</groupId>
       <artifactId>maven-release-manager</artifactId>
-      <version>1.0-20070315.153226-5</version>
+      <version>1.0-SNAPSHOT</version>
       <exclusions>
         <exclusion>
           <groupId>classworlds</groupId>
           <artifactId>classworlds</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-interactivity-api</artifactId>
-      <version>1.0-alpha-6-20070302.170858-2</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -101,6 +96,11 @@
     <dependency>
       <groupId>org.apache.maven.scm</groupId>
       <artifactId>maven-scm-provider-clearcase</artifactId>
+      <version>${maven-scm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-cvsjava</artifactId>
       <version>${maven-scm.version}</version>
     </dependency>
     <dependency>
