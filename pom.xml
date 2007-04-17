@@ -377,12 +377,12 @@
       <dependency>
         <groupId>org.apache.maven.shared</groupId>
         <artifactId>maven-app-configuration-model</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0-alpha-1</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.shared</groupId>
         <artifactId>maven-app-configuration-web</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0-alpha-1</version>
       </dependency>
       <dependency>
         <groupId>jpox</groupId>
@@ -581,7 +581,7 @@
     <continuumWebappVersion>${pom.version}</continuumWebappVersion>
     <maven.version>2.0.5</maven.version>
     <wagon.version>1.0-beta-2</wagon.version>
-    <maven-scm.version>1.0-SNAPSHOT</maven-scm.version>
+    <maven-scm.version>1.0-rc1</maven-scm.version>
     <plexus-security.version>1.0-alpha-11</plexus-security.version>
     <mail-sender.version>1.0-alpha-6</mail-sender.version>
   </properties>
