@@ -1,0 +1,53 @@
+// ========================================================================
+// Copyright 2008 Sonatype Inc.
+// ------------------------------------------------------------------------
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ========================================================================
+
+package org.apache.maven.mercury.validate;
+// ------------------------------------------------------------------------
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ========================================================================
+
+import java.util.List;
+
+/**
+ * Validator
+ * <p/>
+ * Interface for validating mercury content prior to completion
+ */
+public interface Validator
+{
+    /**
+     * The file extension the validator will process
+     *
+     * @return String file extension
+     */
+    public String getFileExtension();
+
+    /**
+     * validation for a given file target with errors being able to be logged in the list
+     *
+     * @param stagedFile
+     * @param errors
+     * @return true if target file is valid
+     */
+    public boolean validate( String stagedFile, List<String> errors );
+
+}
