@@ -23,22 +23,22 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.maven.mercury.client.BatchException;
+import org.apache.maven.mercury.client.MercuryException;
 
 public class DefaultDeployResponse implements DeployResponse
 {
-    private Set<BatchException> _exceptions = Collections.synchronizedSet( new HashSet<BatchException>() );
+    private Set<MercuryException> _exceptions = Collections.synchronizedSet( new HashSet<MercuryException>() );
 
     public DefaultDeployResponse()
     {
     }
 
-    public void add( BatchException e )
+    public void add( MercuryException e )
     {
         _exceptions.add( e );
     }
 
-    public Set<BatchException> getExceptions()
+    public Set<MercuryException> getExceptions()
     {
         return _exceptions;
     }

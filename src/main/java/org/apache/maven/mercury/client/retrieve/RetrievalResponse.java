@@ -21,7 +21,7 @@ package org.apache.maven.mercury.client.retrieve;
 
 import java.util.Set;
 
-import org.apache.maven.mercury.client.BatchException;
+import org.apache.maven.mercury.client.MercuryException;
 
 
 /**
@@ -38,5 +38,7 @@ public interface RetrievalResponse
      *
      * @return
      */
-    Set<BatchException> getExceptions();
+    Set<MercuryException> getExceptions();
+    
+    boolean hasExceptions();
 }

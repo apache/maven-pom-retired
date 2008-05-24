@@ -17,22 +17,9 @@
  * under the License.
  */
 
-// ========================================================================
-// Copyright 2008 Sonatype Inc.
-// ------------------------------------------------------------------------
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// ========================================================================
 package org.apache.maven.mercury.client.retrieve;
 
-import org.apache.maven.mercury.client.BatchException;
+import org.apache.maven.mercury.client.MercuryException;
 import org.apache.maven.mercury.client.Binding;
 import org.mortbay.jetty.client.HttpClient;
 
@@ -40,29 +27,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
 public class DefaultRetriever implements Retriever
 {
     private HttpClient _httpClient;
 
     public DefaultRetriever()
-        throws BatchException
+        throws MercuryException
     {
         // TODO take the default settings for now
         _httpClient = new HttpClient();
         _httpClient.setConnectorType( HttpClient.CONNECTOR_SELECT_CHANNEL );
         try
         {
+            //TODOJ: What are all the reasons that the httpclient couldn't start up correctly?
+            
             _httpClient.start();
         }
         catch ( Exception e )
         {
-            throw new BatchException( null, "unable to start http client", e );
+            throw new MercuryException( null, "Unable to start http client.", e );
         }
     }
 
     public DefaultRetriever( HttpClient client )
-        throws BatchException
+        throws MercuryException
     {
         // TODO take the default settings for now
         _httpClient = client;
@@ -75,7 +63,7 @@ public class DefaultRetriever implements Retriever
         }
         catch ( Exception e )
         {
-            throw new BatchException( null, "unable to start http client", e );
+            throw new MercuryException( null, "unable to start http client", e );
         }
     }
 
@@ -165,7 +153,7 @@ public class DefaultRetriever implements Retriever
                         boolean checksumOK = verifyChecksum();
                         if ( !checksumOK )
                         {
-                            response.add( new BatchException( binding,
+                            response.add( new MercuryException( binding,
                                 "Checksum failed: " + getRetrievedChecksum() + "!=" + getCalculatedChecksum() ) );
                         }
 
@@ -177,7 +165,7 @@ public class DefaultRetriever implements Retriever
                             {
                                 for ( String s : validateErrors )
                                 {
-                                    response.add( new BatchException( binding, s ) );
+                                    response.add( new MercuryException( binding, s ) );
                                 }
                             }
                         }
@@ -188,7 +176,7 @@ public class DefaultRetriever implements Retriever
                         }
                     }
 
-                    public void onError( BatchException exception )
+                    public void onError( MercuryException exception )
                     {
                         response.add( exception );
                         if ( DefaultRetriever.this.isComplete( count, request, response, targets ) )
@@ -202,7 +190,7 @@ public class DefaultRetriever implements Retriever
             }
             catch ( Exception e )
             {
-                response.add( new BatchException( binding, e ) );
+                response.add( new MercuryException( binding, e ) );
                 if ( isComplete( count, request, response, targets ) )
                 {
                     callback.onComplete( response );

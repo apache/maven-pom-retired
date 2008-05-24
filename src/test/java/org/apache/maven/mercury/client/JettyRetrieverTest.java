@@ -21,9 +21,10 @@ package org.apache.maven.mercury.client;
 
 import junit.framework.TestCase;
 
-import org.apache.maven.mercury.client.BatchException;
+import org.apache.maven.mercury.client.MercuryException;
 import org.apache.maven.mercury.client.Binding;
 import org.apache.maven.mercury.client.retrieve.DefaultRetriever;
+import org.apache.maven.mercury.client.retrieve.DefaultRetrievalRequest;
 import org.apache.maven.mercury.client.retrieve.RetrievalResponse;
 import org.apache.maven.mercury.server.SimpleTestServer;
 import org.apache.maven.mercury.validate.Validator;
@@ -133,7 +134,7 @@ public class JettyRetrieverTest extends TestCase
     {
         //make local dir to put stuff in
         final File dir = mkTempDir();
-        RetrievalRequestImpl request = new RetrievalRequestImpl();
+        DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
 
         file0 = new File(dir, "file0.txt");
@@ -189,7 +190,7 @@ public class JettyRetrieverTest extends TestCase
     {
         //make local dir to put stuff in
         final File dir = mkTempDir();
-        RetrievalRequestImpl request = new RetrievalRequestImpl();
+        DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
 
         file0 = new File(dir, "file0.txt");
@@ -225,7 +226,7 @@ public class JettyRetrieverTest extends TestCase
         bindings.add(binding5);
 
 
-        request = new RetrievalRequestImpl();
+        request = new DefaultRetrievalRequest();
         request.setBindings(bindings);
         request.setFailFast(true);
 
@@ -251,7 +252,7 @@ public class JettyRetrieverTest extends TestCase
     {
         //make local dir to put stuff in
         final File dir = mkTempDir();
-        RetrievalRequestImpl request = new RetrievalRequestImpl();
+        DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
 
         file0 = new File(dir, "file0.txt");
@@ -305,7 +306,7 @@ public class JettyRetrieverTest extends TestCase
     {
         //make local dir to put stuff in
         final File dir = mkTempDir();
-        RetrievalRequestImpl request = new RetrievalRequestImpl();
+        DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
 
         file0 = new File(dir, "file0.txt");
@@ -339,7 +340,7 @@ public class JettyRetrieverTest extends TestCase
         request.setFailFast(false);
         RetrievalResponse response = retriever.retrieve(request);
 
-        for (BatchException t:response.getExceptions())
+        for (MercuryException t:response.getExceptions())
             t.printStackTrace();
 
         assertEquals(0,response.getExceptions().size());
@@ -356,7 +357,7 @@ public class JettyRetrieverTest extends TestCase
     {
             //make local dir to put stuff in
             final File dir = mkTempDir();
-            RetrievalRequestImpl request = new RetrievalRequestImpl();
+            DefaultRetrievalRequest request = new DefaultRetrievalRequest();
             HashSet<Binding> bindings = new HashSet<Binding>();
             HashSet<Validator> validators = new HashSet<Validator>();
             validators.add(new TxtValidator());
@@ -410,7 +411,7 @@ public class JettyRetrieverTest extends TestCase
     {
         //make local dir to put stuff in
         final File dir = mkTempDir();
-        RetrievalRequestImpl request = new RetrievalRequestImpl();
+        DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
         HashSet<Validator> validators = new HashSet<Validator>();
         validators.add(new AlwaysFalseTxtValidator());

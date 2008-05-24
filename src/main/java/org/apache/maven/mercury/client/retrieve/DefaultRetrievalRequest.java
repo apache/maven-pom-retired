@@ -17,16 +17,15 @@
  * under the License.
  */
 
-package org.apache.maven.mercury.client;
+package org.apache.maven.mercury.client.retrieve;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.maven.mercury.client.Binding;
-import org.apache.maven.mercury.client.retrieve.RetrievalRequest;
 import org.apache.maven.mercury.validate.Validator;
 
-public class RetrievalRequestImpl implements RetrievalRequest
+public class DefaultRetrievalRequest implements RetrievalRequest
 {
     private boolean _isFailFast;
     private Set<Binding> _bindings;
@@ -40,6 +39,18 @@ public class RetrievalRequestImpl implements RetrievalRequest
     public boolean isFailFast()
     {
         return _isFailFast;
+    }
+    
+    public RetrievalRequest addBinding( Binding binding )
+    {
+        if ( _bindings == null )
+        {
+            _bindings = new HashSet<Binding>();
+        }
+        
+        _bindings.add( binding );
+        
+        return this;
     }
     
     public void setBindings(Set<Binding> bindings)

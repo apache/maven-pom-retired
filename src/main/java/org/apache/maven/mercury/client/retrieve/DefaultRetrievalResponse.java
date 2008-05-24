@@ -23,22 +23,22 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.maven.mercury.client.BatchException;
+import org.apache.maven.mercury.client.MercuryException;
 
 public class DefaultRetrievalResponse implements RetrievalResponse
 {
-    private Set<BatchException> _exceptions = Collections.synchronizedSet( new HashSet<BatchException>() );
+    private Set<MercuryException> _exceptions = Collections.synchronizedSet( new HashSet<MercuryException>() );
 
     public DefaultRetrievalResponse()
     {
     }
 
-    protected void add( BatchException exception )
+    protected void add( MercuryException exception )
     {
         _exceptions.add( exception );
     }
 
-    public Set<BatchException> getExceptions()
+    public Set<MercuryException> getExceptions()
     {
         return _exceptions;
     }
@@ -46,6 +46,11 @@ public class DefaultRetrievalResponse implements RetrievalResponse
     public String toString()
     {
         return _exceptions.toString();
+    }
+    
+    public boolean hasExceptions()
+    {
+        return _exceptions != null;
     }
 
 }

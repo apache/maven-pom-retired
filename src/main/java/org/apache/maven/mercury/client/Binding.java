@@ -33,6 +33,17 @@ public class Binding
     protected String remoteUrl;
     protected File localFile;
     protected boolean lenientChecksum;
+       
+    public Binding()
+    {        
+    }
+    
+    public Binding( String remoteUrl, File localFile, boolean lenientChecksum )
+    {
+        this.remoteUrl = remoteUrl;
+        this.localFile = localFile;
+        this.lenientChecksum = lenientChecksum;
+    }
 
     public String getRemoteUrl()
     {

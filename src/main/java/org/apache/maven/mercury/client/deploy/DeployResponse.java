@@ -21,7 +21,7 @@ package org.apache.maven.mercury.client.deploy;
 
 import java.util.Set;
 
-import org.apache.maven.mercury.client.BatchException;
+import org.apache.maven.mercury.client.MercuryException;
 
 /**
  * DeployResponse
@@ -38,5 +38,5 @@ public interface DeployResponse
      *
      * @return
      */
-    public Set<BatchException> getExceptions();
+    public Set<MercuryException> getExceptions();
 }

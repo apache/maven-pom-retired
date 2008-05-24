@@ -21,7 +21,7 @@ package org.apache.maven.mercury.client;
 
 import junit.framework.TestCase;
 
-import org.apache.maven.mercury.client.BatchException;
+import org.apache.maven.mercury.client.MercuryException;
 import org.apache.maven.mercury.client.Binding;
 import org.apache.maven.mercury.client.deploy.DeployRequest;
 import org.apache.maven.mercury.client.deploy.DeployResponse;
@@ -157,7 +157,7 @@ public class JettyDeployerTest extends TestCase
         
         DeployResponse response = _deployer.deploy(request);
 
-        for (BatchException t:response.getExceptions())
+        for (MercuryException t:response.getExceptions())
             t.printStackTrace();
         
         assertEquals(0, response.getExceptions().size());

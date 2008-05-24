@@ -19,7 +19,7 @@
 
 package org.apache.maven.mercury.client.retrieve;
 
-import org.apache.maven.mercury.client.BatchException;
+import org.apache.maven.mercury.client.MercuryException;
 import org.apache.maven.mercury.client.Binding;
 import org.apache.maven.mercury.client.FileExchange;
 import org.apache.maven.mercury.validate.Validator;
@@ -51,8 +51,8 @@ public abstract class RetrievalTarget
 
     private int _checksumState;
     private int _targetState;
-
-    private BatchException _exception;
+    
+    private MercuryException _exception;
     private Binding _binding;
     private File _tempFile;
     private String _checksumUrl;
@@ -65,7 +65,7 @@ public abstract class RetrievalTarget
 
     public abstract void onComplete();
 
-    public abstract void onError( BatchException exception );
+    public abstract void onError( MercuryException exception );
 
 
     /**
@@ -89,11 +89,11 @@ public abstract class RetrievalTarget
         _tempFile.deleteOnExit();
         if ( _tempFile.exists() )
         {
-            onError( new BatchException( binding, "File exists " + _tempFile.getAbsolutePath() ) );
+            onError( new MercuryException( binding, "File exists " + _tempFile.getAbsolutePath() ) );
         }
         else if ( !_tempFile.getParentFile().canWrite() )
         {
-            onError( new BatchException( binding,
+            onError( new MercuryException( binding,
                 "Unable to write to dir " + _tempFile.getParentFile().getAbsolutePath() ) );
         }
     }
@@ -217,13 +217,13 @@ public abstract class RetrievalTarget
         _checksumState = state;
         if ( _exception == null && ex != null )
         {
-            if ( ex instanceof BatchException )
+            if ( ex instanceof MercuryException )
             {
-                _exception = (BatchException) ex;
+                _exception = (MercuryException) ex;
             }
             else
             {
-                _exception = new BatchException( _binding, ex );
+                _exception = new MercuryException( _binding, ex );
             }
         }
 
@@ -252,13 +252,13 @@ public abstract class RetrievalTarget
         _targetState = state;
         if ( _exception == null && ex != null )
         {
-            if ( ex instanceof BatchException )
+            if ( ex instanceof MercuryException )
             {
-                _exception = (BatchException) ex;
+                _exception = (MercuryException) ex;
             }
             else
             {
-                _exception = new BatchException( _binding, ex );
+                _exception = new MercuryException( _binding, ex );
             }
         }
 

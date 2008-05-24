@@ -19,7 +19,7 @@
 
 package org.apache.maven.mercury.client.deploy;
 
-import org.apache.maven.mercury.client.BatchException;
+import org.apache.maven.mercury.client.MercuryException;
 import org.apache.maven.mercury.client.Binding;
 import org.apache.maven.mercury.validate.Validator;
 import org.mortbay.jetty.client.HttpClient;
@@ -42,13 +42,13 @@ public abstract class DeploymentTarget
     private String _calculatedChecksum;
     private TargetState _targetState;
     private TargetState _checksumState;
-    private BatchException _exception;
+    private MercuryException _exception;
     private String _remoteJettyUrl;
 
 
     public abstract void onComplete();
 
-    public abstract void onError( BatchException exception );
+    public abstract void onError( MercuryException exception );
 
 
     public class TargetState
@@ -143,7 +143,7 @@ public abstract class DeploymentTarget
     {
         if ( t != null && _exception == null )
         {
-            _exception = ( t instanceof BatchException ? (BatchException) t : new BatchException( _binding, t ) );
+            _exception = ( t instanceof MercuryException ? (MercuryException) t : new MercuryException( _binding, t ) );
         }
 
         //if the target file can be fetched then get it

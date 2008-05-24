@@ -32,10 +32,10 @@ import org.apache.maven.mercury.validate.Validator;
  * and a set of validators to apply to them.
  */
 public interface RetrievalRequest
-{
-    public abstract Set<Binding> getBindings();
+{    
+    Set<Binding> getBindings();
 
-    public abstract boolean isFailFast();
+    boolean isFailFast();
     
-    public Set<Validator> getValidators();
+    Set<Validator> getValidators();
 }

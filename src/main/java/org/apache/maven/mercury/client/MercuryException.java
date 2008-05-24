@@ -39,24 +39,24 @@ package org.apache.maven.mercury.client;
  * Exception that occurs whilst deploying or retrieving files
  * asynchronously.
  */
-public class BatchException
+public class MercuryException
     extends Exception
 {
     private Binding binding;
 
-    public BatchException( Binding b, String s )
+    public MercuryException( Binding b, String s )
     {
         super( s );
         binding = b;
     }
 
-    public BatchException( Binding b, String s, Throwable throwable )
+    public MercuryException( Binding b, String s, Throwable throwable )
     {
         super( s, throwable );
         binding = b;
     }
 
-    public BatchException( Binding b, Throwable throwable )
+    public MercuryException( Binding b, Throwable throwable )
     {
         super( throwable );
         binding = b;
