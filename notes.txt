@@ -1,0 +1,107 @@
+Maven Artifact is supposed to be a general artifact mechanism for retrieving, installing, and deploying artifacts
+to repositories. Maven Artifact was originally decoupled from Maven proper and as such carries a lot of baggage
+which prevents it from being used generally and carries many notions that are very specific to Maven itself. Artifacts
+currently have a notion of scope, classifiers, and behavioral attributes such as whether scopes should be inherited.
+For any mechanism to work generally these baked in notions need to be removed, vetted, and then made compatible with
+notions currently in Maven. A list of things that should not be in the Artifact:
+
+ * scope
+ * classifier
+ * dependency filter
+ * dependency trail
+ * resolved
+ * released
+ * optional
+ * available versions
+
+These are all attributes of the target system
+
+*Removal of the ArtifactFactory
+        
+ 3 February 2008 (Sunday)
+
+ I have removed the factory and left only a small set of constructors (which I would like to reduce to one) so that you
+ have a valid artifact after construction. I have also started to hide the VersionRange creation. You just pass in
+ a string and the constructor for the DefaultArtifact will do the right thing. This will ultimately need to be more
+ pluggable as different versioning strategies happen. But variations of the theme like Maven, OSGi, will have their
+ own subclasses and tools to operate on the graphs of dependencies.
+
+ 4 February 2008 (Monday)
+
+ John:
+ Some notes about classifiers taken from the mailing list in a discussion with John about classifiers:
+ I'd tend to disagree about classifier not being a 'core' part of the artifact system...it distinguishes a main
+ artifact from one of its derivatives, and serves as a pretty foundational part of how we retrieve artifacts from existing
+ remote repositories. Without it, I doubt that you can reconstruct the path to some existing artifacts (like sources or javadocs)
+ reliably without bastardizing the version string.
+
+ We can see that the artifact system has certain inescapable identity attributes. Scope is obviously more related
+ to how an artifact is used, since you can't see any trace of scope in the artifact as it's been deployed on a remote
+ repository. Classifier, however, doesn't fit this criteria...it's not a usage marker, but an identity marker.
+
+ The rest I agree with.
+
+ Jason:
+ This is where I think you've already baked in what you think about Maven. Look at how we deploy our derivative
+ artifacts right now. We don't track any of it in the metadata when we deploy. We toss it up there and things hope
+ they are there. Like javadocs, or sources. I think what's more important is that the coordinate be unique and we
+ have a way to associate what ever artifacts together in a scalable way. So you say "I want to associate this artifact
+ with that one, this is how I would like to record that relationship in the metadata.". Subsequently you can query
+ the metadata and know these relationships. We currently don't do this. It generally boils down to a bunch of
+ coordinates in the repository. How we choose to relate them via the metadata. We have all sort of problems with
+ classifiers currently because it was an adhoc method of association. A general model of association would be a
+ superset of what we currently do for classifiers. I agree we need an mechanism for association, I don't think
+ classifiers have worked all that well.
+
+ 5 February 2008 (Tuesday)
+
+ The rework of the artifact resolution mechanism is an attempt to entirely separate 1) the process of metadata retrieval into
+ a tree, 2) converting the tree to a graph by a process of conflict resolution, and 3) retrieving the complete set
+ of artifacts, and ultimately 4) Doing something in a particular fashion withe the retrieved set like make a classpath.
+ Currently we have an incremental processing model that doesn't let a complete graph be formed for analysis
+ which greatly complicates the process whereas having a graph and using standard graph analysis techniques and graph
+ optimization is the only reasonable way forward. There should be no doubt about what needs to be retrieved once the
+ analysis is complete. We could actually create an aggregrate request where instructions are sent to retrieve everything
+ required. The server could send a stream all the artifacts back in one shot.
+
+ What Oleg is attempting to do is create a working solution for 1) and 2) above. Along with the implementation we also
+ have a visualization tool that will help us determine what exactly the correct analysis is. The beauty of this is that
+ regardless of the analysis we arrive at a representation of the complete set can be modeled and we can start working on
+ the optimized retrieval mechanism. We still need to do some work to separate out 4) as we're doing some classpath
+ calculations already which we will need to further decouple but that should be relatively straight forward.
+
+ 7 February 2008 (Friday)
+
+ The number of methods in the artifact factory is simply insane, for each type that we ended up with in Maven just started
+ being effectively hard-coded in the factory which is totally unscalable, any new types with handlers become a nightmare
+ to maintain. I have reduced everything to two constructors in the DefaultArtifact and I would like to reduce it to being
+ one. Right now I have to account for needing to use a version string, or creating a range which is completely confusing
+ to anyone using the API. You should just need one constructor with a version string and everything else should be taken
+ care of for you. Right now there are bits of code all over the place that do the if/else versionRange detection. 
+
+ inheritedScope goes away entirely from the model when a graph is used because the scope selected will be a function of
+ how the graph is processed.
+ 
+ 24 May 2008
+ 
+ 1. Retrieval & Storage 
+    
+    There is the task of retrieving a set of resources from a data source atomically. Simple, and safe retrieval. Period. This has nothing to do with 
+    dependency management per se, but is the basis of any safe and reliable dependency management system. We need to deal with repository corruption
+    and recovery as well. The method employed by GIT with hierarchical checksums provides an efficient means to detect where in a repository corruption
+    has occured to make sure the problem can be correct, shunted around, or simply bring it to the users attention.
+ 
+ 2. Representation Processing 
+ 
+    There is the task of processing the representation of an artifact. In the case of Maven an artifact's representation is encapsulated in
+    a POM. If the representation refers to other representations i.e. dependencies then these have to be taken into account as well. The system
+    may allow transitive processing and this is where the real power of a dependency management system comes into play. The representations are
+    gathered into a tree structure where the flavour of the system imparts special processing on this tree to yield a graph. 
+    
+ Once the representation has been processed and we have a graph, we fall back to the retrieval mechanism to place the desired artifacts in
+ the storage system. Ultimately from this graph, according to the desired purpose we have set of artifacts that we can do something with.
+ 
+Processing
+
+I have come to the conclusion that providing the necessary support for version ranges cannot be done without a SAT solver, as we are 
+approaching an NP complete problem and we're going to end up with an approximation and all the heavy lifting is being done already by SAT4J.
