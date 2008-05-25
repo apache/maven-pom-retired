@@ -105,3 +105,12 @@ Processing
 
 I have come to the conclusion that providing the necessary support for version ranges cannot be done without a SAT solver, as we are 
 approaching an NP complete problem and we're going to end up with an approximation and all the heavy lifting is being done already by SAT4J.
+
+The Quality of providers
+
+The new processing model will allow the complete manipulation of the resultant set either in memory, or in a location that does not pollute the
+local repository. So any provider must guarantee the safe retrieval of the set the artifacts from remote sources, but must also guarantee the safe 
+placement of that set into the local repository and if the user aborts, or the machine crashes that the provider supplies a means to the 
+process to clean up anything half-baked. We need to provide a single place where a journal can be written which can be easily 
+detected and any action taken if partially complete operations have been detected. We know what can go wrong and every possible measure 
+needs to make sure the repository  cannot be corrupted. 

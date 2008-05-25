@@ -24,7 +24,7 @@ under the License.
   <defaults>
     <default>
       <key>package</key>
-      <value>org.apache.maven.artifact.repository.metadata</value>
+      <value>org.apache.maven.mercury.repository.metadata</value>
     </default>
   </defaults>
   <classes>

@@ -24,13 +24,13 @@ import java.io.File;
 import org.apache.maven.mercury.ArtifactRepository;
 import org.apache.maven.mercury.ArtifactRepositoryLayout;
 import org.apache.maven.mercury.DefaultRepositoryLayout;
-import org.apache.maven.mercury.client.Binding;
-import org.apache.maven.mercury.client.MercuryException;
-import org.apache.maven.mercury.client.retrieve.DefaultRetrievalRequest;
-import org.apache.maven.mercury.client.retrieve.DefaultRetriever;
-import org.apache.maven.mercury.client.retrieve.RetrievalRequest;
-import org.apache.maven.mercury.client.retrieve.RetrievalResponse;
-import org.apache.maven.mercury.client.retrieve.Retriever;
+import org.apache.maven.mercury.http.client.Binding;
+import org.apache.maven.mercury.http.client.MercuryException;
+import org.apache.maven.mercury.http.client.retrieve.DefaultRetrievalRequest;
+import org.apache.maven.mercury.http.client.retrieve.DefaultRetriever;
+import org.apache.maven.mercury.http.client.retrieve.RetrievalRequest;
+import org.apache.maven.mercury.http.client.retrieve.RetrievalResponse;
+import org.apache.maven.mercury.http.client.retrieve.Retriever;
 
 /**
  * @author Jason van Zyl
