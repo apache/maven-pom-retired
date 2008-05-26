@@ -1,4 +1,6 @@
-package org.apache.maven.mercury;
+package org.apache.maven.mercury.repository;
+
+import org.apache.maven.mercury.Artifact;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -24,7 +26,7 @@ package org.apache.maven.mercury;
  * @plexus.component role="org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout" role-hint="default"
  */
 public class DefaultRepositoryLayout
-    implements ArtifactRepositoryLayout
+    implements RepositoryLayout
 {
     private static final char PATH_SEPARATOR = '/';
 

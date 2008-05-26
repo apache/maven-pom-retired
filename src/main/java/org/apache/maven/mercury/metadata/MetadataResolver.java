@@ -17,6 +17,6 @@ public interface MetadataResolver
      * @return
      * @throws MetadataResolutionException
      */
-    MetadataResolutionResult resolveMetadata( MetadataResolutionRequest request )
+    MetadataResolutionResult resolve( MetadataResolutionRequest request )
         throws MetadataResolutionException;
 }

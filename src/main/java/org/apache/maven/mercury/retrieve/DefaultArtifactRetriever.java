@@ -21,9 +21,9 @@ package org.apache.maven.mercury.retrieve;
 
 import java.io.File;
 
-import org.apache.maven.mercury.ArtifactRepository;
-import org.apache.maven.mercury.ArtifactRepositoryLayout;
-import org.apache.maven.mercury.DefaultRepositoryLayout;
+import org.apache.maven.mercury.repository.DefaultRepositoryLayout;
+import org.apache.maven.mercury.repository.Repository;
+import org.apache.maven.mercury.repository.RepositoryLayout;
 import org.apache.maven.mercury.spi.http.client.Binding;
 import org.apache.maven.mercury.spi.http.client.MercuryException;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetrievalRequest;
@@ -39,7 +39,7 @@ import org.apache.maven.mercury.spi.http.client.retrieve.Retriever;
 public class DefaultArtifactRetriever
     implements ArtifactRetriever
 {
-    ArtifactRepositoryLayout layout = new DefaultRepositoryLayout();
+    RepositoryLayout layout = new DefaultRepositoryLayout();
 
     public ResolutionResult retrieve( ResolutionRequest request )
     {
@@ -60,11 +60,11 @@ public class DefaultArtifactRetriever
             return result;
         }
                         
-        for ( ArtifactRepository remoteRepository : request.getRemoteRepostories() )
+        for ( Repository remoteRepository : request.getRemoteRepostories() )
         {
             RetrievalRequest rr = new DefaultRetrievalRequest();                
             String remoteUrl = remoteRepository.getUrl() + "/" + layout.pathOf( request.getArtifact() );            
-            File localFile = new File( request.getLocalRepository().getBasedir(), layout.pathOf( request.getArtifact() ) );            
+            File localFile = new File( request.getLocalRepository().getDirectory(), layout.pathOf( request.getArtifact() ) );            
             Binding binding = new Binding( remoteUrl, localFile, true );            
             RetrievalResponse response = retriever.retrieve( rr );
             

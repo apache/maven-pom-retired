@@ -19,6 +19,8 @@ import java.io.File;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.maven.mercury.repository.Repository;
+
 /*
  * Description of an artifact.
  * 
@@ -84,11 +86,11 @@ public interface Artifact
 
     String getDependencyConflictId();
 
-    void setRepository( ArtifactRepository remoteRepository );
+    void setRepository( Repository remoteRepository );
 
-    ArtifactRepository getRepository();
+    Repository getRepository();
 
-    void updateVersion( String version, ArtifactRepository localRepository );
+    void updateVersion( String version, Repository localRepository );
 
     String getDownloadUrl();
 

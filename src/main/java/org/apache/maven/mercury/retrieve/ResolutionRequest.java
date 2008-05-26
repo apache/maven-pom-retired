@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.mercury.Artifact;
-import org.apache.maven.mercury.ArtifactRepository;
+import org.apache.maven.mercury.repository.Repository;
 
 /**
  * A resolution request allows you to either use an existing MavenProject, or a coordinate (gid:aid:version)
@@ -22,9 +22,9 @@ public class ResolutionRequest
 
     private String version;
 
-    private ArtifactRepository localRepository;
+    private Repository localRepository;
 
-    private List<ArtifactRepository> remoteRepostories;
+    private List<Repository> remoteRepostories;
 
     private List listeners = new ArrayList();
 
@@ -96,24 +96,24 @@ public class ResolutionRequest
         return this;
     }
 
-    public ArtifactRepository getLocalRepository()
+    public Repository getLocalRepository()
     {
         return localRepository;
     }
 
-    public ResolutionRequest setLocalRepository( ArtifactRepository localRepository )
+    public ResolutionRequest setLocalRepository( Repository localRepository )
     {
         this.localRepository = localRepository;
 
         return this;
     }
 
-    public List<ArtifactRepository> getRemoteRepostories()
+    public List<Repository> getRemoteRepostories()
     {
         return remoteRepostories;
     }
 
-    public ResolutionRequest setRemoteRepostories( List<ArtifactRepository> remoteRepostories )
+    public ResolutionRequest setRemoteRepostories( List<Repository> remoteRepostories )
     {
         this.remoteRepostories = remoteRepostories;
 

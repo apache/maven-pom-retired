@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.mercury.Artifact;
-import org.apache.maven.mercury.ArtifactRepository;
+import org.apache.maven.mercury.repository.Repository;
 
 /*
  * @author Jason van Zyl
@@ -34,7 +34,7 @@ public class ResolutionResult
 {
     private Artifact artifact;
 
-    private List<ArtifactRepository> repositories;
+    private List<Repository> repositories;
 
     private List<Exception> exceptions;
 
@@ -48,12 +48,12 @@ public class ResolutionResult
         this.artifact = artifact;
     }
 
-    public List<ArtifactRepository> getRepositories()
+    public List<Repository> getRepositories()
     {
         return repositories;
     }
 
-    public void setRepositories( List<ArtifactRepository> repositories )
+    public void setRepositories( List<Repository> repositories )
     {
         this.repositories = repositories;
     }

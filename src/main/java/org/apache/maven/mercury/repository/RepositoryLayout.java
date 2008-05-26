@@ -1,4 +1,6 @@
-package org.apache.maven.mercury.metadata;
+package org.apache.maven.mercury.repository;
+
+import org.apache.maven.mercury.Artifact;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,23 +21,10 @@ package org.apache.maven.mercury.metadata;
  * under the License.
  */
 
-import java.util.List;
-
-import org.apache.maven.mercury.repository.Repository;
-
-/**
- * Provides some metadata operations, like querying the remote repository for a list of versions available for an
- * artifact.
- *
- * @author Jason van Zyl
- * @version $Id$
- */
-public interface MetadataSource
+/** @author jdcasey */
+public interface RepositoryLayout
 {
-    String ROLE = MetadataSource.class.getName();
+    String ROLE = RepositoryLayout.class.getName();
 
-    MetadataResolution retrieve( ArtifactMetadata artifact,
-                                 Repository localRepository,
-                                 List<Repository> remoteRepositories )
-        throws MetadataRetrievalException;
+    String pathOf( Artifact artifact );
 }

@@ -1,4 +1,6 @@
-package org.apache.maven.mercury;
+package org.apache.maven.mercury.repository;
+
+import org.apache.maven.mercury.Artifact;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,28 +22,10 @@ package org.apache.maven.mercury;
  */
 
 /**
- * Specifies the repository used for artifact handling.
- *
- * @author <a href="mailto:brett@apache.org">Brett Porter</a>
- * @version $Id$
  */
-public interface ArtifactRepository
+public interface Repository
 {
     String pathOf( Artifact artifact );
 
-    String getUrl();
-
-    String getBasedir();
-
-    String getProtocol();
-
     String getId();
-
-    String getKey();
-
-    boolean isUniqueVersion();
-
-    void setBlacklisted( boolean blackListed );
-
-    boolean isBlacklisted();
 }

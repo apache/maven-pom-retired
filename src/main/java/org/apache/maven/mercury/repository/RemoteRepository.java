@@ -1,4 +1,4 @@
-package org.apache.maven.mercury;
+package org.apache.maven.mercury.repository;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,10 +19,10 @@ package org.apache.maven.mercury;
  * under the License.
  */
 
-/** @author jdcasey */
-public interface ArtifactRepositoryLayout
+/**
+ */
+public interface RemoteRepository
+    extends Repository
 {
-    String ROLE = ArtifactRepositoryLayout.class.getName();
-
-    String pathOf( Artifact artifact );
+    String getUrl();
 }

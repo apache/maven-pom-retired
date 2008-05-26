@@ -19,14 +19,13 @@ import java.io.File;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import org.apache.maven.mercury.repository.Repository;
 import org.codehaus.plexus.util.StringUtils;
 
 /*
  * @author Jason van Zyl
  * 
  * @version $Id$
- * 
- * @todo this should possibly be replaced by type handler
  */
 public class DefaultArtifact
     implements Artifact
@@ -34,13 +33,6 @@ public class DefaultArtifact
     private String groupId;
 
     private String artifactId;
-
-    /**
-     * The resolved version for the artifact after conflict resolution, that has not been transformed.
-     *
-     * @todo should be final
-     */
-    private String baseVersion;
 
     private String type;
 
@@ -63,7 +55,7 @@ public class DefaultArtifact
 
     // Why is this here? What repository is determined at runtime and is therefore a
     // runtime charactistic. This needs to go. jvz.
-    private ArtifactRepository repository;
+    private Repository repository;
 
     private String downloadUrl;
 
@@ -215,12 +207,12 @@ public class DefaultArtifact
         return file;
     }
 
-    public ArtifactRepository getRepository()
+    public Repository getRepository()
     {
         return repository;
     }
 
-    public void setRepository( ArtifactRepository repository )
+    public void setRepository( Repository repository )
     {
         this.repository = repository;
     }
@@ -420,10 +412,10 @@ public class DefaultArtifact
         return result;
     }
 
-    public void updateVersion( String version, ArtifactRepository localRepository )
+    public void updateVersion( String version, Repository localRepository )
     {
         setResolvedVersion( version );
-        setFile( new File( localRepository.getBasedir(), localRepository.pathOf( this ) ) );
+        setFile( new File( localRepository.getDirectory(), localRepository.pathOf( this ) ) );
     }
 
     public String getDownloadUrl()

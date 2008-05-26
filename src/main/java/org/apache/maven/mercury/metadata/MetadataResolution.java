@@ -2,7 +2,7 @@ package org.apache.maven.mercury.metadata;
 
 import java.util.Collection;
 
-import org.apache.maven.mercury.ArtifactRepository;
+import org.apache.maven.mercury.repository.Repository;
 
 /**
  * 
@@ -15,7 +15,7 @@ public class MetadataResolution
     private ArtifactMetadata artifactMetadata;
 
     /** repositories, added by this POM  */
-    private Collection<ArtifactRepository> metadataRepositories;
+    private Collection<Repository> metadataRepositories;
     //-------------------------------------------------------------------
     public MetadataResolution( ArtifactMetadata artifactMetadata )
     {
@@ -23,19 +23,19 @@ public class MetadataResolution
     }
     //-------------------------------------------------------------------
     public MetadataResolution( ArtifactMetadata artifactMetadata,
-    		Collection<ArtifactRepository> metadataRepositories )
+    		Collection<Repository> metadataRepositories )
     {
     	this( artifactMetadata );
         this.metadataRepositories = metadataRepositories;
     }
     //-------------------------------------------------------------------
-	public Collection<ArtifactRepository> getMetadataRepositories()
+	public Collection<Repository> getMetadataRepositories()
 	{
 		return metadataRepositories;
 	}
 
 	public void setMetadataRepositories(
-			Collection<ArtifactRepository> metadataRepositories)
+			Collection<Repository> metadataRepositories)
 	{
 		this.metadataRepositories = metadataRepositories;
 	}

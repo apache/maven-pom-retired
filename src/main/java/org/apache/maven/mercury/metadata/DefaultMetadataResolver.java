@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.maven.mercury.Artifact;
-import org.apache.maven.mercury.ArtifactRepository;
 import org.apache.maven.mercury.DefaultArtifact;
+import org.apache.maven.mercury.repository.Repository;
 import org.apache.maven.mercury.retrieve.ArtifactRetriever;
 import org.apache.maven.mercury.retrieve.ResolutionRequest;
 import org.apache.maven.mercury.retrieve.ResolutionResult;
@@ -28,8 +28,14 @@ public class DefaultMetadataResolver
     /** @plexus.requirement */
     MetadataSource metadataSource;
 
+    public DefaultMetadataResolver( ArtifactRetriever retriever, MetadataSource metadataSource )
+    {
+        this.artifactResolver = artifactResolver;
+        this.metadataSource = metadataSource;
+    }
+    
     //------------------------------------------------------------------------
-    public MetadataResolutionResult resolveMetadata( MetadataResolutionRequest request )
+    public MetadataResolutionResult resolve( MetadataResolutionRequest request )
         throws MetadataResolutionException
     {
         MetadataResolutionResult result = new MetadataResolutionResult();
@@ -42,7 +48,7 @@ public class DefaultMetadataResolver
     }
 
     //------------------------------------------------------------------------
-    private MetadataTreeNode resolveMetadataTree( ArtifactMetadata query, MetadataTreeNode parent, ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories )
+    private MetadataTreeNode resolveMetadataTree( ArtifactMetadata query, MetadataTreeNode parent, Repository localRepository, List<Repository> remoteRepositories )
         throws MetadataResolutionException
     {
         try
