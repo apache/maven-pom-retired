@@ -22,14 +22,12 @@ package org.apache.maven.mercury.retrieve;
 import java.io.File;
 
 import org.apache.maven.mercury.repository.RemoteRepository;
-import org.apache.maven.mercury.repository.Repository;
 import org.apache.maven.mercury.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.mercury.repository.layout.RepositoryLayout;
 import org.apache.maven.mercury.spi.http.client.Binding;
 import org.apache.maven.mercury.spi.http.client.MercuryException;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetrievalRequest;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetriever;
-import org.apache.maven.mercury.spi.http.client.retrieve.RetrievalRequest;
 import org.apache.maven.mercury.spi.http.client.retrieve.RetrievalResponse;
 import org.apache.maven.mercury.spi.http.client.retrieve.Retriever;
 
@@ -45,8 +43,6 @@ public class DefaultArtifactRetriever
     public ResolutionResult retrieve( ResolutionRequest request )
     {
         ResolutionResult result = new ResolutionResult();
-
-        // Setup the HTTP client
         
         Retriever retriever;
                 
@@ -63,10 +59,11 @@ public class DefaultArtifactRetriever
         
         for ( RemoteRepository remoteRepository : request.getRemoteRepostories() )
         {
-            RetrievalRequest rr = new DefaultRetrievalRequest();                
+            DefaultRetrievalRequest rr = new DefaultRetrievalRequest();                
             String remoteUrl = remoteRepository.getUrl() + "/" + layout.pathOf( request.getArtifact() );            
             File localFile = new File( request.getLocalRepository().getDirectory(), layout.pathOf( request.getArtifact() ) );            
-            Binding binding = new Binding( remoteUrl, localFile, true );            
+            Binding binding = new Binding( remoteUrl, localFile, true );
+            rr.addBinding( binding );
             RetrievalResponse response = retriever.retrieve( rr );
             
             // Not found versus an error. We need to know for each repository exactly what happened.

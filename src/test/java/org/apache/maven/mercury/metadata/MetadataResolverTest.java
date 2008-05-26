@@ -3,6 +3,8 @@ package org.apache.maven.mercury.metadata;
 import java.io.File;
 import java.util.Set;
 
+import junit.framework.TestCase;
+
 import org.apache.maven.mercury.Artifact;
 import org.apache.maven.mercury.repository.DefaultLocalRepository;
 import org.apache.maven.mercury.repository.DefaultRemoteRepository;
@@ -14,14 +16,20 @@ import org.apache.maven.mercury.retrieve.DefaultArtifactRetriever;
 import org.apache.maven.mercury.spi.http.server.SimpleTestServer;
 
 public class MetadataResolverTest
+    extends TestCase
 {
     protected File localRepositoryDirectory;
+
     protected String remoteRepository;
+
     protected SimpleTestServer server;
+
     protected File workDirectory;
-    
+
     protected String localPathFragment;
+
     protected String remotePathFragment;
+
     protected String remoteRepositoryHostUrl;
 
     protected void setUp()
@@ -29,16 +37,16 @@ public class MetadataResolverTest
     {
         if ( System.getProperty( "basedir" ) != null )
         {
-            workDirectory = new File( System.getProperty( "basedir"), "target" );
+            workDirectory = new File( System.getProperty( "basedir" ), "target" );
         }
         else
         {
-            workDirectory = new File( "", "target" );            
+            workDirectory = new File( "", "target" );
         }
-        
+
         localRepositoryDirectory = new File( workDirectory, "repository" );
         localPathFragment = "/repo/";
-        remotePathFragment = "/repo/";
+        remotePathFragment = "/repo";
         remoteRepositoryHostUrl = "http://localhost" + remotePathFragment;
         server = new SimpleTestServer( localPathFragment, remotePathFragment );
     }
@@ -55,7 +63,7 @@ public class MetadataResolverTest
         RepositoryLayout layout = new DefaultRepositoryLayout();
 
         MetadataResolver metadataResolver = new DefaultMetadataResolver( new DefaultArtifactRetriever(), source );
-        ArtifactMetadata metadata = new ArtifactMetadata( "a", "a", "1.0" );
+        ArtifactMetadata metadata = new ArtifactMetadata( "a", "a", "1.0", "foo" );
 
         LocalRepository localRepository = new DefaultLocalRepository( "local", layout, localRepositoryDirectory );
         RemoteRepository remoteRepository = new DefaultRemoteRepository( "remote", layout, remoteRepositoryHostUrl );
@@ -63,7 +71,7 @@ public class MetadataResolverTest
         MetadataResolutionRequest request = new MetadataResolutionRequest().setQuery( metadata ).setLocalRepository( localRepository ).addRemoteRepository( remoteRepository );
 
         // Do we do this in memory, in which case the layout?
-        
+
         MetadataResolutionResult result = metadataResolver.resolve( request );
     }
 

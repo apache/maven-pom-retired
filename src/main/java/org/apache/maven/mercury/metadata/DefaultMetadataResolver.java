@@ -26,14 +26,14 @@ public class DefaultMetadataResolver
     //------------------------------------------------------------------------
 
     /** @plexus.requirement */
-    ArtifactRetriever artifactResolver;
+    ArtifactRetriever retriever;
 
     /** @plexus.requirement */
     MetadataSource metadataSource;
 
     public DefaultMetadataResolver( ArtifactRetriever retriever, MetadataSource metadataSource )
     {
-        this.artifactResolver = artifactResolver;
+        this.retriever = retriever;
         this.metadataSource = metadataSource;
     }
     
@@ -60,7 +60,7 @@ public class DefaultMetadataResolver
 
             ResolutionRequest request = new ResolutionRequest().setArtifact( pomArtifact ).setLocalRepository( localRepository ).setRemoteRepostories( remoteRepositories );
 
-            ResolutionResult result = artifactResolver.retrieve( request );
+            ResolutionResult result = retriever.retrieve( request );
 
             // Here we just need to deal with basic retrieval problems.
             if ( result.hasExceptions() )

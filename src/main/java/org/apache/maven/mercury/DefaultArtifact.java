@@ -79,6 +79,7 @@ public class DefaultArtifact
         this.inheritedScope = inheritedScope;
         this.groupId = groupId;
         this.artifactId = artifactId;
+        this.version = version;
         //this.scope = scope;
         this.type = type;
         this.classifier = classifier;
