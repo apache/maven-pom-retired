@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.mercury.Artifact;
+import org.apache.maven.mercury.repository.RemoteRepository;
 import org.apache.maven.mercury.repository.Repository;
 
 /*
@@ -34,7 +35,7 @@ public class ResolutionResult
 {
     private Artifact artifact;
 
-    private List<Repository> repositories;
+    private Set<RemoteRepository> repositories;
 
     private List<Exception> exceptions;
 
@@ -48,12 +49,12 @@ public class ResolutionResult
         this.artifact = artifact;
     }
 
-    public List<Repository> getRepositories()
+    public Set<RemoteRepository> getRepositories()
     {
         return repositories;
     }
 
-    public void setRepositories( List<Repository> repositories )
+    public void setRepositories( Set<RemoteRepository> repositories )
     {
         this.repositories = repositories;
     }

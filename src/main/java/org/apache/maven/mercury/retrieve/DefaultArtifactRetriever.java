@@ -21,9 +21,10 @@ package org.apache.maven.mercury.retrieve;
 
 import java.io.File;
 
-import org.apache.maven.mercury.repository.DefaultRepositoryLayout;
+import org.apache.maven.mercury.repository.RemoteRepository;
 import org.apache.maven.mercury.repository.Repository;
-import org.apache.maven.mercury.repository.RepositoryLayout;
+import org.apache.maven.mercury.repository.layout.DefaultRepositoryLayout;
+import org.apache.maven.mercury.repository.layout.RepositoryLayout;
 import org.apache.maven.mercury.spi.http.client.Binding;
 import org.apache.maven.mercury.spi.http.client.MercuryException;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetrievalRequest;
@@ -58,9 +59,9 @@ public class DefaultArtifactRetriever
             result.addException( e );
             
             return result;
-        }
-                        
-        for ( Repository remoteRepository : request.getRemoteRepostories() )
+        }                            
+        
+        for ( RemoteRepository remoteRepository : request.getRemoteRepostories() )
         {
             RetrievalRequest rr = new DefaultRetrievalRequest();                
             String remoteUrl = remoteRepository.getUrl() + "/" + layout.pathOf( request.getArtifact() );            

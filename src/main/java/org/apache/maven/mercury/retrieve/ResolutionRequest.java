@@ -1,9 +1,10 @@
 package org.apache.maven.mercury.retrieve;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import org.apache.maven.mercury.Artifact;
+import org.apache.maven.mercury.repository.LocalRepository;
+import org.apache.maven.mercury.repository.RemoteRepository;
 import org.apache.maven.mercury.repository.Repository;
 
 /**
@@ -22,11 +23,9 @@ public class ResolutionRequest
 
     private String version;
 
-    private Repository localRepository;
+    private LocalRepository localRepository;
 
-    private List<Repository> remoteRepostories;
-
-    private List listeners = new ArrayList();
+    private Set<RemoteRepository> remoteRepostories;
 
     public Artifact getArtifact()
     {
@@ -96,24 +95,24 @@ public class ResolutionRequest
         return this;
     }
 
-    public Repository getLocalRepository()
+    public LocalRepository getLocalRepository()
     {
         return localRepository;
     }
 
-    public ResolutionRequest setLocalRepository( Repository localRepository )
+    public ResolutionRequest setLocalRepository( LocalRepository localRepository )
     {
         this.localRepository = localRepository;
 
         return this;
     }
 
-    public List<Repository> getRemoteRepostories()
+    public Set<RemoteRepository> getRemoteRepostories()
     {
         return remoteRepostories;
     }
 
-    public ResolutionRequest setRemoteRepostories( List<Repository> remoteRepostories )
+    public ResolutionRequest setRemoteRepostories( Set<RemoteRepository> remoteRepostories )
     {
         this.remoteRepostories = remoteRepostories;
 

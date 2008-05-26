@@ -1,4 +1,4 @@
-package org.apache.maven.mercury.repository;
+package org.apache.maven.mercury.repository.layout;
 
 import org.apache.maven.mercury.Artifact;
 

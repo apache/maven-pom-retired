@@ -51,8 +51,6 @@ public class DefaultArtifact
 
     private boolean resolved;
 
-    private List dependencyTrail;
-
     // Why is this here? What repository is determined at runtime and is therefore a
     // runtime charactistic. This needs to go. jvz.
     private Repository repository;
@@ -223,7 +221,7 @@ public class DefaultArtifact
 
     public String getId()
     {
-        return getDependencyConflictId() + ":" + getBaseVersion();
+        return getDependencyConflictId() + ":" + getVersion();
     }
 
     public String getDependencyConflictId()
@@ -264,7 +262,7 @@ public class DefaultArtifact
         
         if ( getVersion() != null )
         {
-            sb.append( getBaseVersionInternal() );
+            sb.append( getVersion() );
         }
         
         if ( scope != null )
@@ -329,47 +327,6 @@ public class DefaultArtifact
         return true;
     }
 
-    public String getBaseVersion()
-    {
-        if ( baseVersion == null )
-        {
-            if ( version == null )
-            {
-                throw new NullPointerException( "version was null for " + groupId + ":" + artifactId );
-            }
-            setBaseVersionInternal( version );
-        }
-        return baseVersion;
-    }
-
-    protected String getBaseVersionInternal()
-    {
-        if ( ( baseVersion == null ) && ( version != null ) )
-        {
-            setBaseVersionInternal( version );
-        }
-
-        return baseVersion;
-    }
-
-    public void setBaseVersion( String baseVersion )
-    {
-        setBaseVersionInternal( baseVersion );
-    }
-
-    protected void setBaseVersionInternal( String baseVersion )
-    {
-        Matcher m = VERSION_FILE_PATTERN.matcher( baseVersion );
-        if ( m.matches() )
-        {
-            this.baseVersion = m.group( 1 ) + "-" + SNAPSHOT_VERSION;
-        }
-        else
-        {
-            this.baseVersion = baseVersion;
-        }
-    }
-
     public int compareTo( Object o )
     {
         Artifact a = (Artifact) o;
@@ -412,12 +369,6 @@ public class DefaultArtifact
         return result;
     }
 
-    public void updateVersion( String version, Repository localRepository )
-    {
-        setResolvedVersion( version );
-        setFile( new File( localRepository.getDirectory(), localRepository.pathOf( this ) ) );
-    }
-
     public String getDownloadUrl()
     {
         return downloadUrl;
@@ -428,25 +379,9 @@ public class DefaultArtifact
         this.downloadUrl = downloadUrl;
     }
 
-    public List<String> getDependencyTrail()
-    {
-        return dependencyTrail;
-    }
-
-    public void setDependencyTrail( List<String> dependencyTrail )
-    {
-        this.dependencyTrail = dependencyTrail;
-    }
-
     public void setScope( String scope )
     {
         this.scope = scope;
-    }
-
-    public void selectVersion( String version )
-    {
-        this.version = version;
-        setBaseVersionInternal( version );
     }
 
     public void setGroupId( String groupId )
@@ -457,11 +392,6 @@ public class DefaultArtifact
     public void setArtifactId( String artifactId )
     {
         this.artifactId = artifactId;
-    }
-
-    public boolean isSnapshot()
-    {
-        return getBaseVersion() != null && ( getBaseVersion().endsWith( SNAPSHOT_VERSION ) || getBaseVersion().equals( LATEST_VERSION ) );
     }
 
     public void setResolved( boolean resolved )

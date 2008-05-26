@@ -16,12 +16,10 @@ public class MetadataResolutionRequest
     protected LocalRepository localRepository;
     protected Set<RemoteRepository> remoteRepositories;
 
-    //--------------------------------------------------------------------
     public MetadataResolutionRequest()
     {
     }
 
-    //--------------------------------------------------------------------
     public MetadataResolutionRequest( ArtifactMetadata query,
                                       LocalRepository localRepository,
                                       Set<RemoteRepository> remoteRepositories )
@@ -31,7 +29,6 @@ public class MetadataResolutionRequest
         this.remoteRepositories = remoteRepositories;
     }
 
-    //--------------------------------------------------------------------
     public ArtifactMetadata getQuery()
     {
         return query;
@@ -43,7 +40,7 @@ public class MetadataResolutionRequest
         return this;
     }
 
-    public Repository getLocalRepository()
+    public LocalRepository getLocalRepository()
     {
         return localRepository;
     }
@@ -76,6 +73,4 @@ public class MetadataResolutionRequest
         this.remoteRepositories = remoteRepositories;
         return this;
     }
-    //--------------------------------------------------------------------
-    //--------------------------------------------------------------------
 }

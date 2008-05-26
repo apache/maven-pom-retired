@@ -20,7 +20,10 @@ package org.apache.maven.mercury.metadata;
  */
 
 import java.util.List;
+import java.util.Set;
 
+import org.apache.maven.mercury.repository.LocalRepository;
+import org.apache.maven.mercury.repository.RemoteRepository;
 import org.apache.maven.mercury.repository.Repository;
 
 /**
@@ -35,7 +38,7 @@ public interface MetadataSource
     String ROLE = MetadataSource.class.getName();
 
     MetadataResolution retrieve( ArtifactMetadata artifact,
-                                 Repository localRepository,
-                                 List<Repository> remoteRepositories )
+                                 LocalRepository localRepository,
+                                 Set<RemoteRepository> remoteRepositories )
         throws MetadataRetrievalException;
 }

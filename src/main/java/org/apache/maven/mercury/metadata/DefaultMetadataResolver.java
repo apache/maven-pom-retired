@@ -2,9 +2,12 @@ package org.apache.maven.mercury.metadata;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.maven.mercury.Artifact;
 import org.apache.maven.mercury.DefaultArtifact;
+import org.apache.maven.mercury.repository.LocalRepository;
+import org.apache.maven.mercury.repository.RemoteRepository;
 import org.apache.maven.mercury.repository.Repository;
 import org.apache.maven.mercury.retrieve.ArtifactRetriever;
 import org.apache.maven.mercury.retrieve.ResolutionRequest;
@@ -48,7 +51,7 @@ public class DefaultMetadataResolver
     }
 
     //------------------------------------------------------------------------
-    private MetadataTreeNode resolveMetadataTree( ArtifactMetadata query, MetadataTreeNode parent, Repository localRepository, List<Repository> remoteRepositories )
+    private MetadataTreeNode resolveMetadataTree( ArtifactMetadata query, MetadataTreeNode parent, LocalRepository localRepository, Set<RemoteRepository> remoteRepositories )
         throws MetadataResolutionException
     {
         try

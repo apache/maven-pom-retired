@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.repository;
 
 import org.apache.maven.mercury.Artifact;
+import org.apache.maven.mercury.repository.layout.RepositoryLayout;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more contributor license

@@ -84,45 +84,11 @@ public interface Artifact
 
     String getId();
 
-    String getDependencyConflictId();
-
-    void setRepository( Repository remoteRepository );
-
-    Repository getRepository();
-
-    void updateVersion( String version, Repository localRepository );
-
-    String getDownloadUrl();
-
-    void setDownloadUrl( String downloadUrl );
-
-    List<String> getDependencyTrail();
-
-    void setDependencyTrail( List<String> dependencyTrail );
-
-    void setScope( String scope );
-
-    void selectVersion( String version );
-
     void setGroupId( String groupId );
 
     void setArtifactId( String artifactId );
-
-    boolean isSnapshot();
-
-    void setResolved( boolean resolved );
-
+    
     boolean isResolved();
-
-    void setResolvedVersion( String version );
-
-    boolean isRelease();
-
-    void setRelease( boolean release );
-
-    boolean isOptional();
-
-    void setOptional( boolean optional );
-
-    String getInheritedScope();
+    
+    void setResolved( boolean resolved );
 }
