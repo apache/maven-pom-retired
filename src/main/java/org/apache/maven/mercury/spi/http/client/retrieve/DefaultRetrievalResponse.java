@@ -50,7 +50,7 @@ public class DefaultRetrievalResponse implements RetrievalResponse
     
     public boolean hasExceptions()
     {
-        return _exceptions != null;
+        return _exceptions.size() > 0;
     }
 
 }

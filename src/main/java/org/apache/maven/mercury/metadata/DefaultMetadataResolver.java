@@ -62,7 +62,8 @@ public class DefaultMetadataResolver
 
             ResolutionResult result = retriever.retrieve( request );
 
-            // Here we just need to deal with basic retrieval problems.
+            // We need a mode that will find all the errors so that we can see where metadata cannot be retrieved.
+            
             if ( result.hasExceptions() )
             {
                 pomArtifact.setResolved( false );

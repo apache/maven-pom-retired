@@ -19,12 +19,10 @@ package org.apache.maven.mercury.metadata;
  * under the License.
  */
 
-import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.mercury.repository.LocalRepository;
 import org.apache.maven.mercury.repository.RemoteRepository;
-import org.apache.maven.mercury.repository.Repository;
 
 /**
  * Provides some metadata operations, like querying the remote repository for a list of versions available for an
@@ -37,7 +35,17 @@ public interface MetadataSource
 {
     String ROLE = MetadataSource.class.getName();
 
-    MetadataResolution retrieve( ArtifactMetadata artifact,
+    /**
+     * You would only ever need the remote repositories if the representation you were parsing contained repositories that
+     * you wanted added to the search list of remote repositories.
+     * 
+     * @param metadata
+     * @param localRepository
+     * @param remoteRepositories
+     * @return
+     * @throws MetadataRetrievalException
+     */
+    MetadataResolution retrieve( ArtifactMetadata metadata,
                                  LocalRepository localRepository,
                                  Set<RemoteRepository> remoteRepositories )
         throws MetadataRetrievalException;

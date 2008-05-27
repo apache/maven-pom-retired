@@ -2,12 +2,12 @@ package org.apache.maven.mercury.metadata;
 
 import java.util.Collection;
 
+import org.apache.maven.mercury.repository.RemoteRepository;
 import org.apache.maven.mercury.repository.Repository;
 
-/**
+/*
  * 
  * @author Jason van Zyl
- *  
  */
 public class MetadataResolution
 {
@@ -15,40 +15,36 @@ public class MetadataResolution
     private ArtifactMetadata artifactMetadata;
 
     /** repositories, added by this POM  */
-    private Collection<Repository> metadataRepositories;
-    //-------------------------------------------------------------------
+    private Collection<RemoteRepository> metadataRepositories;
+
     public MetadataResolution( ArtifactMetadata artifactMetadata )
     {
         this.artifactMetadata = artifactMetadata;
     }
-    //-------------------------------------------------------------------
-    public MetadataResolution( ArtifactMetadata artifactMetadata,
-    		Collection<Repository> metadataRepositories )
+
+    public MetadataResolution( ArtifactMetadata artifactMetadata, Collection<RemoteRepository> metadataRepositories )
     {
-    	this( artifactMetadata );
+        this( artifactMetadata );
         this.metadataRepositories = metadataRepositories;
     }
-    //-------------------------------------------------------------------
-	public Collection<Repository> getMetadataRepositories()
-	{
-		return metadataRepositories;
-	}
 
-	public void setMetadataRepositories(
-			Collection<Repository> metadataRepositories)
-	{
-		this.metadataRepositories = metadataRepositories;
-	}
-    //-------------------------------------------------------------------
-	public ArtifactMetadata getArtifactMetadata()
-	{
-		return artifactMetadata;
-	}
+    public Collection<RemoteRepository> getMetadataRepositories()
+    {
+        return metadataRepositories;
+    }
 
-	public void setArtifactMetadata(ArtifactMetadata artifactMetadata)
-	{
-		this.artifactMetadata = artifactMetadata;
-	}
-    //-------------------------------------------------------------------
-    //-------------------------------------------------------------------
+    public void setMetadataRepositories( Collection<RemoteRepository> metadataRepositories )
+    {
+        this.metadataRepositories = metadataRepositories;
+    }
+
+    public ArtifactMetadata getArtifactMetadata()
+    {
+        return artifactMetadata;
+    }
+
+    public void setArtifactMetadata( ArtifactMetadata artifactMetadata )
+    {
+        this.artifactMetadata = artifactMetadata;
+    }
 }

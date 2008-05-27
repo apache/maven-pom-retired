@@ -39,6 +39,8 @@ public class ResolutionResult
 
     private List<Exception> exceptions;
 
+    private RemoteRepository remoteRepository;
+    
     public Artifact getArtifact()
     {
         return artifact;
@@ -83,4 +85,17 @@ public class ResolutionResult
     {
         return exceptions != null;
     }
+    
+    // The repository where we found the artifact. We are going to need some additional information here to support
+    // information provided by repository managers.
+    
+    public RemoteRepository getRemoteRepository()
+    {
+        return remoteRepository;
+    }
+
+    public void setRemoteRepository( RemoteRepository remoteRepository )
+    {
+        this.remoteRepository = remoteRepository;
+    }    
 }

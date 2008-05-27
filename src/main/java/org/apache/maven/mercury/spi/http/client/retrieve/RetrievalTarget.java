@@ -67,7 +67,6 @@ public abstract class RetrievalTarget
 
     public abstract void onError( MercuryException exception );
 
-
     /**
      * Constructor
      *
@@ -85,8 +84,15 @@ public abstract class RetrievalTarget
         _validators = validators;
         _checksumUrl = _binding.getRemoteUrl() + __DIGEST_SUFFIX;
         _tempFile = new File( _binding.getLocalFile().getParentFile(),
-            __PREFIX + _binding.getLocalFile().getName() + __TEMP_SUFFIX );
+            __PREFIX + _binding.getLocalFile().getName() + __TEMP_SUFFIX );        
         _tempFile.deleteOnExit();
+        
+        // Create the directory if it doesn't exist
+        if ( !_tempFile.getParentFile().exists() )
+        {
+            _tempFile.getParentFile().mkdirs();
+        }
+        
         if ( _tempFile.exists() )
         {
             onError( new MercuryException( binding, "File exists " + _tempFile.getAbsolutePath() ) );

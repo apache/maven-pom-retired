@@ -10,45 +10,48 @@ import org.apache.maven.mercury.repository.DefaultLocalRepository;
 import org.apache.maven.mercury.repository.DefaultRemoteRepository;
 import org.apache.maven.mercury.repository.LocalRepository;
 import org.apache.maven.mercury.repository.RemoteRepository;
-import org.apache.maven.mercury.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.mercury.repository.layout.RepositoryLayout;
 import org.apache.maven.mercury.retrieve.DefaultArtifactRetriever;
-import org.apache.maven.mercury.spi.http.server.SimpleTestServer;
+import org.apache.maven.mercury.spi.http.server.HttpTestServer;
 
 public class MetadataResolverTest
     extends TestCase
 {
     protected File localRepositoryDirectory;
-
     protected String remoteRepository;
-
-    protected SimpleTestServer server;
-
+    protected HttpTestServer server;
     protected File workDirectory;
-
-    protected String localPathFragment;
-
     protected String remotePathFragment;
-
     protected String remoteRepositoryHostUrl;
-
+    protected File webserverResourceDirectory;
+    protected File basedir;
+    
     protected void setUp()
         throws Exception
     {
         if ( System.getProperty( "basedir" ) != null )
         {
-            workDirectory = new File( System.getProperty( "basedir" ), "target" );
+            basedir = new File( System.getProperty( "basedir" ) );
+
         }
         else
         {
-            workDirectory = new File( "", "target" );
+            basedir = new File( "" );
         }
 
+        workDirectory = new File( System.getProperty( "basedir" ), "target" );
+        webserverResourceDirectory = new File( basedir, "src/test/resources/repo" );        
         localRepositoryDirectory = new File( workDirectory, "repository" );
-        localPathFragment = "/repo/";
         remotePathFragment = "/repo";
-        remoteRepositoryHostUrl = "http://localhost" + remotePathFragment;
-        server = new SimpleTestServer( localPathFragment, remotePathFragment );
+        server = new HttpTestServer( webserverResourceDirectory, remotePathFragment );
+        server.start();      
+        remoteRepositoryHostUrl = "http://localhost:" + server.getPort() + remotePathFragment;
+    }
+
+    protected void tearDown()
+        throws Exception
+    {
+       server.stop();
     }
 
     public void testMetadataResolver()
@@ -59,8 +62,9 @@ public class MetadataResolverTest
         // maven
         // ivy
         // obr
+        
         MetadataSource source = new SimpleSource();
-        RepositoryLayout layout = new DefaultRepositoryLayout();
+        RepositoryLayout layout = new SimpleLayout();
 
         MetadataResolver metadataResolver = new DefaultMetadataResolver( new DefaultArtifactRetriever(), source );
         ArtifactMetadata metadata = new ArtifactMetadata( "a", "a", "1.0", "foo" );
@@ -70,9 +74,10 @@ public class MetadataResolverTest
 
         MetadataResolutionRequest request = new MetadataResolutionRequest().setQuery( metadata ).setLocalRepository( localRepository ).addRemoteRepository( remoteRepository );
 
-        // Do we do this in memory, in which case the layout?
-
+        // Resolving transitively or not
         MetadataResolutionResult result = metadataResolver.resolve( request );
+        
+        assertNotNull( result.getTree() );
     }
 
     class SimpleSource
@@ -81,7 +86,8 @@ public class MetadataResolverTest
         public MetadataResolution retrieve( ArtifactMetadata artifact, LocalRepository localRepository, Set<RemoteRepository> remoteRepositories )
             throws MetadataRetrievalException
         {
-            // TODO Auto-generated method stub
+            //TODO: This assumes that we have already pulled it down
+
             return null;
         }
 
