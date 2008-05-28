@@ -118,6 +118,11 @@
       <artifactId>org.sat4j.core</artifactId>
       <version>2.0.0.v20080430</version>
     </dependency>        
+    <dependency>
+      <groupId>org.sat4j</groupId>
+      <artifactId>org.sat4j.pb</artifactId>
+      <version>2.0.0.v20080430</version>
+    </dependency>        
     <!-- Test Dependencies -->
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
