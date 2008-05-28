@@ -78,6 +78,8 @@ public class MetadataResolverTest
         MetadataResolutionResult result = metadataResolver.resolve( request );
         
         assertNotNull( result.getTree() );
+        
+        System.out.println(result.getTree());
     }
 
     class SimpleSource

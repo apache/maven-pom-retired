@@ -17,6 +17,7 @@ import org.apache.maven.mercury.retrieve.ResolutionResult;
  * default implementation of the metadata resolver
  * 
  * @author Oleg Gusakov
+ * @author Jason van Zyl
  * 
  * @plexus.component
  */
@@ -43,6 +44,8 @@ public class DefaultMetadataResolver
     {
         MetadataResolutionResult result = new MetadataResolutionResult();
 
+        // We need to make the root and send it into the resolution.
+        
         MetadataTreeNode tree = resolveMetadataTree( request.getQuery(), null, request.getLocalRepository(), request.getRemoteRepositories() );
 
         result.setTree( tree );

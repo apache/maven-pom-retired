@@ -112,6 +112,12 @@
       <artifactId>plexus-utils</artifactId>
       <version>1.5.1</version>
     </dependency>
+    <!-- SAT solver used to calcuate viable ranges when dependencies are expressed in conjunctive normal form -->
+    <dependency>
+      <groupId>org.sat4j</groupId>
+      <artifactId>org.sat4j.core</artifactId>
+      <version>2.0.0.v20080430</version>
+    </dependency>        
     <!-- Test Dependencies -->
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
