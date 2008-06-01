@@ -11,35 +11,55 @@ import org.apache.maven.mercury.ArtifactScopeEnum;
 
 public class MetadataTreeNode
 {
-    ArtifactMetadata md; // this node
+  ArtifactMetadata md; // this node
 
-    MetadataTreeNode parent; // papa
+  MetadataTreeNode parent; // papa
 
-    /** default # of children. Used for tree creation optimization only */
-    int nChildren = 8;
+  /** default # of children. Used for tree creation optimization only */
+  int nChildren = 8;
 
-    MetadataTreeNode[] children; // of cause
+  MetadataTreeNode[] children; // of cause
 
-    public int getNChildren()
-	{
-		return nChildren;
-	}
-
+  //------------------------------------------------------------------------
+  public int countNodes()
+  {
+    return countNodes(this);
+  }
+  //------------------------------------------------------------------------
+  public int countNodes( MetadataTreeNode node )
+  {
+    int res = 1;
+    
+    if( children != null && children.length > 0)
+    {
+      for( MetadataTreeNode child : children )
+      {
+        res += countNodes( child );
+      }
+    }
+    
+    return res;
+  }
+  //------------------------------------------------------------------------
+  public int getNChildren()
+  {
+    return nChildren;
+  }
+  //------------------------------------------------------------------------
 	public void setNChildren(int children)
 	{
 		nChildren = children;
 	}
-
 	//------------------------------------------------------------------------
-    public MetadataTreeNode()
-    {
-    }
-    //------------------------------------------------------------------------
-    public MetadataTreeNode( ArtifactMetadata md,
+  public MetadataTreeNode()
+  {
+  }
+  //------------------------------------------------------------------------
+  public MetadataTreeNode( ArtifactMetadata md,
                              MetadataTreeNode parent,
                              boolean resolved,
                              ArtifactScopeEnum scope )
-    {
+  {
         if ( md != null )
         {
             md.setArtifactScope( ArtifactScopeEnum.checkScope(scope) );

@@ -51,6 +51,42 @@ public class ArtifactMetadata
     /** error message  */
     private String error;
 
+    //------------------------------------------------------------------
+    /**
+     * group:artifact:version:classifier:packaging
+     */
+    public ArtifactMetadata( String name )
+    {
+      if( name == null )
+        return;
+      
+      String [] tokens = name.split(":");
+      
+      if( tokens == null || tokens.length < 1 )
+        return;
+ 
+      int count = tokens.length;
+      
+    this.groupId = nullify( tokens[0] );
+
+    if( count > 1 )
+      this.artifactId = nullify( tokens[1] );
+    
+    if( count > 2 )
+      this.version = nullify( tokens[2] );
+    
+    if( count > 3 )
+      this.classifier = nullify( tokens[3] );
+    
+    if( count > 4 )
+      this.type = nullify( tokens[4] );
+    }
+    private static final String nullify( String s )
+    {
+      if( s == null || s.length() < 1 )
+        return null;
+      return s;
+    }
     public ArtifactMetadata( String groupId, String name, String version )
     {
         this( groupId, name, version, null );
