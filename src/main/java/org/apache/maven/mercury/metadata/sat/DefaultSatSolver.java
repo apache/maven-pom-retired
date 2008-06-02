@@ -77,17 +77,26 @@ implements SatSolver
   public SatConstraint addOrGroup( List<List<ArtifactMetadata>> orGroup )
   throws SatException
   {
+    if( orGroup == null || orGroup.size() < 1 )
+      throw new SatException("cannot process empty OR group");
+    
     SatConstraint constraint = null;
+    int minLen = orGroup.get(0).size();
+ 
     for( List<ArtifactMetadata> branch : orGroup )
     {
       if( constraint == null )
         constraint = new SatConstraint( branch, context );
       else
-        constraint.addOr( branch, context );
+        constraint.addOrGroupMember( branch, context );
+      if( branch.size() < minLen )
+        minLen = branch.size();
     }
     
     if( constraint != null )
     {
+      constraint.cardinality = minLen;
+      System.out.println("Contraint is "+constraint.toString() );
       SatClause clause = constraint.getClause();
       try
       {
@@ -112,17 +121,11 @@ implements SatSolver
   {
     SatConstraint constraint = new SatConstraint( pivot, context );
 
-System.out.print("\n context is : "+context.toString() );
-System.out.println("\n pivot is : "+pivot );
-
     try
     {
       int [] vars1 = constraint.getVarray();
       int varCount1 = vars1.length;
 
-System.out.print("\n\n array is :");SatHelper.show(vars1);System.out.print("\n");
-System.out.flush();
-      
       solver.addPseudoBoolean( 
           SatHelper.getSmallOnes( vars1 )
         , SatHelper.getBigOnes( varCount1 )
@@ -133,22 +136,15 @@ System.out.flush();
       int [] vars2 = constraint.getVarray();
       int varCount2 = vars2.length;
 
-System.out.print(">= 1 is OK\n array is :");SatHelper.show(vars2);System.out.print("\n");
-System.out.flush();
-
       solver.addPseudoBoolean( 
             SatHelper.getSmallOnes( vars2 )
           , SatHelper.getBigOnes( varCount2, true )
           , true
           , new BigInteger("-1") 
                     );
-
-System.out.println(">= -1 is OK");
-System.out.flush();
     }
     catch (ContradictionException e)
     {
-e.printStackTrace();
       throw new SatException( e );
     }
     
@@ -165,8 +161,6 @@ e.printStackTrace();
       if( solver.isSatisfiable() )
       {
         res = new ArrayList<ArtifactMetadata>( context.varCount );
-System.out.println("Resulting model : "+solver.model() );
-
         for( SatVar v : context.variables )
         {
           boolean yes = solver.model( v.getNo() );
@@ -174,21 +168,12 @@ System.out.println("Resulting model : "+solver.model() );
             res.add( v.getMd() );
         }
       }
-      else
-      {
-System.out.println("Failed to solve the problem");
-      }
     }
     catch (TimeoutException e)
     {
       throw new SatException( e );
     }
     return res;
-  }
-  //-----------------------------------------------------------------------
-  private int addConstraint( ArtifactMetadata md )
-  {
-    return -1;
   }
   //-----------------------------------------------------------------------
   //-----------------------------------------------------------------------

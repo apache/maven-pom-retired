@@ -213,5 +213,182 @@ extends TestCase
     showRes( title );
   }
   //---------------------------------------------------------------
+  public void testSmallestRealProblem()
+  throws ContradictionException, TimeoutException
+  {
+    //      x2
+    // x1 <or
+    //      x3
+    String title = "Smallest Real problem";
+    pbSolver.newVar(3);
+    
+    // x2 + x3 = 1
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 2, 3 )
+      , SatHelper.getBigOnes(2)
+      , true, new BigInteger("1") 
+      );
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 2, 3 )
+      , SatHelper.getBigOnes( 2, true )
+      , true, new BigInteger("-1")
+      );
+
+    // x1 + x2 >= 2 OR x1 + x3 >= 2
+    // x1 + x2 + x3 >= 2
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 1, 2, 3 )
+      , SatHelper.getBigOnes( 3 )
+      , true, new BigInteger("2")
+      );
+    
+    boolean satisfiable = pbSolver.isSatisfiable();
+    assert satisfiable : "Cannot find a solution to "+title+" problem";
+    
+    assert pbSolver.model(1) : "x1 should be true";
+    assert pbSolver.model(2) || pbSolver.model(3) : "x2 or x3 should be true";
+    
+    showRes( title );
+  }
+  //---------------------------------------------------------------
+  public void testTwoStepRealProblem()
+  throws ContradictionException, TimeoutException
+  {
+    //           x3
+    //      x2 <or
+    //      /    x4 
+    // x1 <
+    //      \
+    //      x5 - x6
+    //        \ or
+    //         x7
+    String title = "2-step real problem";
+    pbSolver.newVar(7);
+    
+    // x3 + x4 = 1
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 3, 4 )
+      , SatHelper.getBigOnes(2)
+      , true, new BigInteger("1") 
+      );
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 3, 4 )
+      , SatHelper.getBigOnes( 2, true )
+      , true, new BigInteger("-1")
+      );
+    
+    // x6 + x7 = 1
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 6, 7 )
+      , SatHelper.getBigOnes(2)
+      , true, new BigInteger("1") 
+      );
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 6, 7 )
+      , SatHelper.getBigOnes( 2, true )
+      , true, new BigInteger("-1")
+      );
+
+    // x1 + x2 + x3 >= 2 OR x1 + x2 + x4 >= 2
+    // x1 + x2 + x3 +x4 >= 3
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 1, 2, 3, 4 )
+      , SatHelper.getBigOnes( 4 )
+      , true, new BigInteger("3")
+      );
+
+    // x1 + x5 + x6 >= 3 OR x1 + x5 + x7 >= 3
+    // x1 + x5 + x6 + x7 >= 3
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 1, 5, 6, 7 )
+      , SatHelper.getBigOnes( 4 )
+      , true, new BigInteger("3")
+      );
+    
+    boolean satisfiable = pbSolver.isSatisfiable();
+    assert satisfiable : "Cannot find a solution to "+title+" problem";
+    
+    assert pbSolver.model(1) : "x1 should be true";
+    assert pbSolver.model(2) : "x2 should be true";
+    assert pbSolver.model(3) || pbSolver.model(4) : "x3 or x4 should be true";
+    assert ! (pbSolver.model(3) && pbSolver.model(4)) : "x3 or x4 should be false";
+    assert pbSolver.model(5) : "x5 should be true";
+    assert pbSolver.model(6) || pbSolver.model(7) : "x6 or x7 should be true";
+    assert ! (pbSolver.model(6) && pbSolver.model(7)) : "x6 or x7 should be false";
+    
+    showRes( title );
+  }
+  //---------------------------------------------------------------
+  public void testTwoOrsInOneBranch()
+  throws ContradictionException, TimeoutException
+  {
+    //             x3
+    //        x2 <or
+    //        /    x4 
+    //       /      \
+    //      /        x5 - x6
+    //     /          \ or
+    //    /            +- x7
+    // x1 <
+    //     \ x8 - x7
+    String title = "really real problem";
+    pbSolver.newVar(8);
+    
+    // x3 + x4 = 1
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 3, 4 )
+      , SatHelper.getBigOnes(2)
+      , true, new BigInteger("1") 
+      );
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 3, 4 )
+      , SatHelper.getBigOnes( 2, true )
+      , true, new BigInteger("-1")
+      );
+    
+    // x6 + x7 = 1
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 6, 7 )
+      , SatHelper.getBigOnes(2)
+      , true, new BigInteger("1") 
+      );
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 6, 7 )
+      , SatHelper.getBigOnes( 2, true )
+      , true, new BigInteger("-1")
+      );
+
+    // x1 + x2 + x3 >= 3 OR x1 + x2 + x4 + x5 + x6 >= 5 OR x1 + x2 + x4 + x5 + x7 >= 5
+    //  x1 + x2 + x3 >= 3 OR x1 + x2 + x4 + x5 + x6 +x7 >= 5
+    //  x1 + x2 + x3 + x4 + x5 + x6 +x7 >= 5
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 1, 2, 3, 4, 5, 6, 7 )
+      , SatHelper.getBigOnes( 7 )
+      , true, new BigInteger("5")
+      );
+
+    // x1 + x8 + x7 >= 3
+    pbSolver.addPseudoBoolean(
+        SatHelper.getSmallOnes( 1, 8, 7 )
+      , SatHelper.getBigOnes( 3 )
+      , true, new BigInteger("3")
+      );
+    
+    boolean satisfiable = pbSolver.isSatisfiable();
+    assert satisfiable : "Cannot find a solution to "+title+" problem";
+    
+    assert pbSolver.model(1)
+         && pbSolver.model(2)
+         && pbSolver.model(4)
+         && pbSolver.model(5)
+         && pbSolver.model(7)
+         && pbSolver.model(8)
+    : "x1 & x2 & x4 & x5 & x7 & x8 should be true";
+     assert !pbSolver.model(3) : "x3 should be false";
+     assert !pbSolver.model(6) : "x6 should be false";
+    
+    showRes( title );
+  }
+  //---------------------------------------------------------------
   //---------------------------------------------------------------
 }

@@ -23,6 +23,7 @@ public class SatConstraint
     
     variables = new HashMap<Integer,Integer>( mdl.size() );
     
+    // first member of the group => do not decrement cardinality
     for( ArtifactMetadata md : mdl )
     {
       SatVar var = context.find( md );
@@ -30,25 +31,31 @@ public class SatConstraint
     }
   }
   //----------------------------------------------------------------------------
-  private void add( SatVar var )
+  /**
+   * @return true if a new literal was added to this constraint
+   */
+  private boolean add( SatVar var )
   {
     Integer varNo = new Integer( var.getNo() );
 
     // TODO ?? check if this does not break the solver
     if( variables.containsKey(varNo) )
-      return;
+      return false;
     
     variables.put( varNo, new Integer(1) );
     ++cardinality;
+    return true;
   }
   //----------------------------------------------------------------------------
-  public void addOr(List<ArtifactMetadata> branch, SatContext context )
+  public void addOrGroupMember(List<ArtifactMetadata> branch, SatContext context )
   throws SatException
   {
+    boolean newVars = false; 
     for( ArtifactMetadata md : branch )
     {
       SatVar var = context.find( md );
-      add( var );
+      if( add( var ) )
+        newVars = true;
     }
   }
   //----------------------------------------------------------------------------
@@ -111,7 +118,7 @@ public class SatConstraint
     {
       sb.append( " +"+e.getValue()+"*x"+e.getKey() );
     }
-    return sb.toString();
+    return sb.toString()+" >= "+cardinality;
   }
   
   //----------------------------------------------------------------------------
