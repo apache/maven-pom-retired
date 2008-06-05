@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.apache.maven.mercury.metadata.ArtifactMetadata;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
-import org.sat4j.core.Vec;
-import org.sat4j.core.VecInt;
 import org.sat4j.pb.IPBSolver;
 import org.sat4j.pb.SolverFactory;
 import org.sat4j.specs.ContradictionException;
@@ -41,7 +39,8 @@ implements SatSolver
     
     int nNodes = tree.countNodes();
     context = new SatContext( nNodes );
-    setVars( tree );
+    setPivots( tree );
+    setOthers( tree );
     
     solver.newVar( context.varCount );
   }
@@ -60,18 +59,93 @@ implements SatSolver
     solver.newVar( nVars );
   }
   //-----------------------------------------------------------------------
-  private final void setVars( MetadataTreeNode tree )
+  private final void setPivots( MetadataTreeNode tree )
+  throws SatException
+  {
+    if( tree == null )
+      return;
+
+// TODO implement    
+if(true) throw new SatException("Not implemented yet");
+    
+    context.addWeak( tree.getMd() );
+    if( tree.getChildren() != null )
+      for( MetadataTreeNode child : tree.getChildren() )
+      {
+        setPivots( child );
+      }
+  }
+  //-----------------------------------------------------------------------
+  private final void setOthers( MetadataTreeNode tree )
   throws SatException
   {
     if( tree == null )
       return;
     
-    context.find( tree.getMd() );
+    context.addStrong( tree.getMd() );
     if( tree.getChildren() != null )
       for( MetadataTreeNode child : tree.getChildren() )
       {
-        setVars( child );
+        setOthers( child );
       }
+  }
+  //-----------------------------------------------------------------------
+  private List<ArtifactMetadata> groupCommonHear( List<List<ArtifactMetadata>> orGroup )
+  throws SatException
+  {
+    if( orGroup == null || orGroup.size() < 1 )
+      throw new SatException("cannot scan empty group for common head");
+    
+    int groupSize = orGroup.size();
+    List<ArtifactMetadata> res = new ArrayList<ArtifactMetadata>( orGroup.get(0) );
+    
+    // one member? - done
+    if( groupSize == 1 )
+      return res;
+    
+    int index = 0;
+
+    for( List<ArtifactMetadata> branch : orGroup )
+    {
+      if( index++ == 0 )
+        continue;
+
+      for( ArtifactMetadata md : branch )
+      {
+        int len = res.size();
+        
+        for( int i=0; i<len; i++ )
+        {
+          ArtifactMetadata hmd = res.get(i);
+
+          if( hmd.sameGAV(md) )
+            continue;
+
+          // remove the rest
+          for( int j=i; j<len; j++ )
+            res.remove(i);
+          
+          break;
+        }
+      }
+    }
+    
+    return res;
+  }
+  //-----------------------------------------------------------------------
+  private int calcWeekness( List<ArtifactMetadata> branch, int currentMin )
+  {
+    int res = 0;
+    
+    for( ArtifactMetadata md : branch )
+    {
+      SatVar v = context.find(md);
+      
+      if( v.isWeak() )
+        ++res;
+    }
+    
+    return res < currentMin ? res : currentMin;
   }
   //-----------------------------------------------------------------------
   public SatConstraint addOrGroup( List<List<ArtifactMetadata>> orGroup )
@@ -80,46 +154,91 @@ implements SatSolver
     if( orGroup == null || orGroup.size() < 1 )
       throw new SatException("cannot process empty OR group");
     
-    SatConstraint constraint = null;
-    int minLen = orGroup.get(0).size();
- 
-    for( List<ArtifactMetadata> branch : orGroup )
+    try
     {
-      if( constraint == null )
-        constraint = new SatConstraint( branch, context );
-      else
-        constraint.addOrGroupMember( branch, context );
-      if( branch.size() < minLen )
-        minLen = branch.size();
+      SatConstraint constraint = null;
+      int groupSize = orGroup.size();
+      int maxLen = 0;
+      int minWeekness = Integer.MAX_VALUE;
+   
+      for( List<ArtifactMetadata> branch : orGroup )
+      {
+        if( constraint == null )
+          constraint = new SatConstraint( branch, context, SatContext.STRONG_VAR );
+        else
+          constraint.addOrGroupMember( branch, context );
+  
+        if( maxLen < branch.size() )
+          maxLen = branch.size();
+        
+        minWeekness = calcWeekness(branch, minWeekness );
+      }
+  
+      // second pass - adjust each branch with strong variable up to the max length
+      for( List<ArtifactMetadata> branch : orGroup )
+      {
+        constraint.adjust( branch, maxLen, minWeekness, context );
+      }
+      
+      // 3rd pass - generate branch structure implications
+      for( List<ArtifactMetadata> branch : orGroup )
+      {
+        int blen = branch.size();
+        if( blen == 1 )
+          break;
+        
+        SatVar currLit = context.find( branch.get(0) );
+        SatVar nextLit = null;
+        
+        for( int i=1; i < blen; i++ )
+        {
+          nextLit = context.find( branch.get(i) );
+System.out.println(nextLit._md+" -> "+currLit._md + " : -x"+ nextLit._no+" +x"+currLit._no+" >= -1");
+          // generate implication nextLit -> currLit
+          solver.addPseudoBoolean( 
+              SatHelper.getSmallOnes( nextLit._no, currLit._no )
+            , SatHelper.getBigOnes( -1, 1 )
+            , true
+            , new BigInteger("0") 
+                        );
+          solver.addPseudoBoolean( 
+              SatHelper.getSmallOnes( nextLit._no, currLit._no )
+            , SatHelper.getBigOnes( -1, 1 )
+            , false
+            , new BigInteger("1") 
+                      );
+          currLit = nextLit;
+        }
+      }
+      
+      constraint.finalAdjust( orGroup.get(0), groupSize, minWeekness, context );
+  
+      if( constraint != null )
+      {
+        constraint.cardinality = groupSize * maxLen;
+System.out.println("Contraint is "+constraint.toString() );
+        SatClause clause = constraint.getClause();
+          solver.addPseudoBoolean( 
+                        SatHelper.getSmallOnes( clause._vars )
+                      , SatHelper.getBigOnes( clause._coeff )
+                      , true
+                      , new BigInteger(""+constraint.cardinality) 
+                                  );
+      }
+      
+      return constraint;
     }
-    
-    if( constraint != null )
+    catch (ContradictionException e)
     {
-      constraint.cardinality = minLen;
-      System.out.println("Contraint is "+constraint.toString() );
-      SatClause clause = constraint.getClause();
-      try
-      {
-        solver.addPseudoBoolean( 
-                      new VecInt( clause._vars )
-                    , new Vec<BigInteger>( clause._coeff )
-                    , true
-                    , new BigInteger(""+constraint.cardinality) 
-                                );
-      }
-      catch (ContradictionException e)
-      {
-        throw new SatException( e );
-      }
+      throw new SatException( e );
     }
-    
-    return constraint;
   }
   //-----------------------------------------------------------------------
   public SatConstraint addPivot( List<ArtifactMetadata> pivot )
   throws SatException
   {
-    SatConstraint constraint = new SatConstraint( pivot, context );
+System.out.println("Pivot: " + pivot );
+    SatConstraint constraint = new SatConstraint( pivot, context, SatContext.WEAK_VAR );
 
     try
     {

@@ -10,8 +10,9 @@ implements Comparable<ArtifactMetadata>
 {
   ArtifactMetadata _md;
   int _no;
+  boolean _optional;
   //---------------------------------------------------------------------
-  public SatVar( ArtifactMetadata md, int var )
+  public SatVar( ArtifactMetadata md, int var, boolean optional )
   throws SatException
   {
     if( md == null
@@ -23,28 +24,7 @@ implements Comparable<ArtifactMetadata>
 
     this._md = md;
     this._no = var;
-  }
-  //---------------------------------------------------------------------
-  public boolean sameGAV( ArtifactMetadata md )
-  {
-    if( md == null )
-      return false;
-    
-    return 
-        sameGA( md )
-        && this._md.getVersion().equals( md.getVersion() )
-    ;
-  }
-  //---------------------------------------------------------------------
-  public boolean sameGA( ArtifactMetadata md )
-  {
-    if( md == null )
-      return false;
-    
-    return 
-        this._md.getGroupId().equals( md.getGroupId() )
-        && this._md.getArtifactId().equals( md.getArtifactId() )
-    ;
+    this._optional = optional;
   }
   //---------------------------------------------------------------------
   public ArtifactMetadata getMd()
@@ -62,6 +42,11 @@ implements Comparable<ArtifactMetadata>
   public void setNo(int var)
   {
     this._no = var;
+  }
+
+  public boolean isWeak()
+  {
+    return this._optional;
   }
   //---------------------------------------------------------------------
   public int compareTo(ArtifactMetadata md)

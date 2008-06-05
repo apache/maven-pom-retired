@@ -8,14 +8,14 @@ import java.math.BigInteger;
 public class SatClause
 {
   int [] _vars;
-  BigInteger [] _coeff;
+  int [] _coeff;
   int _sz = 0;
   int _ptr = 0;
   //---------------------------------------------------------------------------
   public SatClause( int sz )
   {
     _vars = new int [ sz ];
-    _coeff = new BigInteger[ sz ];
+    _coeff = new int[ sz ];
     _sz = sz;
     _ptr = 0;
   }
@@ -24,9 +24,10 @@ public class SatClause
   throws SatException
   {
     if( _ptr >= _sz )
-      throw new SatException("trying to add element "+_ptr+" outsize of initialized size: "+_sz);
+      throw new SatException("trying to add element "+_ptr+" outsize of initialized size "+_sz);
+    
     _vars[_ptr] = v.intValue();
-    _coeff[_ptr++] = new BigInteger( ""+c.intValue() ) ;
+    _coeff[_ptr++] = c.intValue();
   }
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------

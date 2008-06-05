@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.mercury.metadata.ArtifactMetadata;
+import org.sat4j.core.ReadOnlyVec;
+import org.sat4j.core.ReadOnlyVecInt;
 import org.sat4j.core.Vec;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.IVec;
@@ -23,54 +25,45 @@ public class SatHelper
     return aml;
   }
   //-----------------------------------------------------------------------
-  public static final IVecInt getSmallOnes( int... ones )
+  public static final IVecInt getSmallOnes( int... ints )
   {
-    VecInt res = new VecInt( ones.length );
-    
-    for( int i=0; i<ones.length; i++ )
-      res.push( ones[i] );
-    
-    return res;
+    VecInt res = new VecInt( ints );
+    return new ReadOnlyVecInt(res);
+  }
+  //-----------------------------------------------------------------------
+  private static final IVec<BigInteger> toVec( BigInteger... bis  )
+  {
+    return new ReadOnlyVec<BigInteger>( new Vec<BigInteger>( bis ) );
   }
   //-----------------------------------------------------------------------
   public static final IVec<BigInteger> getBigOnes( int... ones )
   {
-    IVec<BigInteger> res = new Vec<BigInteger>( ones.length );
+    BigInteger [] res = new BigInteger[ ones.length ];
     
     for( int i=0; i<ones.length; i++ )
-      res.push( new BigInteger(""+ones[i]) );
+      res[ i ] = new BigInteger(""+ones[i]);
     
-    return res;
+    return toVec( res );
   }
   //-----------------------------------------------------------------------
   public static final IVec<BigInteger> getBigOnes( int nOnes )
   {
-    return getBigOnes(nOnes, false);
+    return getBigOnes( nOnes, false );
   }
   //-----------------------------------------------------------------------
   public static final IVec<BigInteger> getBigOnes( int nOnes, boolean negate )
   {
-    Vec<BigInteger> res = new Vec<BigInteger>( nOnes );
+    BigInteger [] res = new BigInteger[ nOnes ];
     BigInteger bi = negate ? BigInteger.ONE.negate() : BigInteger.ONE;
     
     for( int i=0; i<nOnes; i++ )
-      res.push( bi );
+      res[i] = bi;
     
-    return res;
-  }
-  //-----------------------------------------------------------------------
-  public static final void showContext( int... ones )
-  {
-    VecInt res = new VecInt( ones.length );
-    
-    for( int i=0; i<ones.length; i++ )
-      System.out.print( " x"+ones[i] );
+    return toVec(res);
   }
   //-----------------------------------------------------------------------
   public static final void show( int... ones )
   {
-    VecInt res = new VecInt( ones.length );
-    
     for( int i=0; i<ones.length; i++ )
       System.out.print( " x"+ones[i] );
   }

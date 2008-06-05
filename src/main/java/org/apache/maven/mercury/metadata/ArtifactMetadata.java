@@ -135,6 +135,32 @@ public class ArtifactMetadata
     public ArtifactMetadata( Artifact af )
     {
     }
+    
+    //---------------------------------------------------------------------
+    public boolean sameGAV( ArtifactMetadata md )
+    {
+      if( md == null )
+        return false;
+      
+      return 
+          sameGA( md )
+          && version != null
+          && version.equals( md.getVersion() )
+      ;
+    }
+    //---------------------------------------------------------------------
+    public boolean sameGA( ArtifactMetadata md )
+    {
+      if( md == null )
+        return false;
+      
+      return
+          groupId != null
+          && artifactId != null
+          && groupId.equals( md.getGroupId() )
+          && artifactId.equals( md.getArtifactId() )
+      ;
+    }
 
     @Override
     public String toString()
