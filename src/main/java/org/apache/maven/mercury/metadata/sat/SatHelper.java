@@ -12,6 +12,8 @@ import org.sat4j.core.VecInt;
 import org.sat4j.specs.IVec;
 import org.sat4j.specs.IVecInt;
 
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
+
 public class SatHelper
 {
   //-----------------------------------------------------------------------
@@ -31,6 +33,23 @@ public class SatHelper
     return new ReadOnlyVecInt(res);
   }
   //-----------------------------------------------------------------------
+  public static final IVecInt getSmallOnes( int first, int second )
+  {
+    return getSmallOnes( new int [] {first, second} );
+  }
+  //-----------------------------------------------------------------------
+  public static int [] toIntArray( int first, int... ints )
+  {
+    int [] lits = new int[ ints.length+1 ];
+    lits[0] = first;
+    int ptr = 1;
+
+    for( int i : ints )
+      lits[ptr++] = i;
+    
+    return lits;
+  }
+  //-----------------------------------------------------------------------
   private static final IVec<BigInteger> toVec( BigInteger... bis  )
   {
     return new ReadOnlyVec<BigInteger>( new Vec<BigInteger>( bis ) );
@@ -41,14 +60,9 @@ public class SatHelper
     BigInteger [] res = new BigInteger[ ones.length ];
     
     for( int i=0; i<ones.length; i++ )
-      res[ i ] = new BigInteger(""+ones[i]);
+      res[ i ] = BigInteger.valueOf( ones[i] );
     
     return toVec( res );
-  }
-  //-----------------------------------------------------------------------
-  public static final IVec<BigInteger> getBigOnes( int nOnes )
-  {
-    return getBigOnes( nOnes, false );
   }
   //-----------------------------------------------------------------------
   public static final IVec<BigInteger> getBigOnes( int nOnes, boolean negate )
@@ -58,6 +72,21 @@ public class SatHelper
     
     for( int i=0; i<nOnes; i++ )
       res[i] = bi;
+    
+    return toVec(res);
+  }
+  //-----------------------------------------------------------------------
+  public static final IVec<BigInteger> getBigOnes( int first, int nOnes, boolean negateOnes )
+  {
+    int len = nOnes + 1;
+
+    BigInteger [] res = new BigInteger[ len ];
+    res[ 0 ] = BigInteger.valueOf(first);
+    
+    BigInteger bi = negateOnes ? BigInteger.ONE.negate() : BigInteger.ONE;
+    
+    for( int i=0; i<nOnes; i++ )
+      res[i+1] = bi;
     
     return toVec(res);
   }

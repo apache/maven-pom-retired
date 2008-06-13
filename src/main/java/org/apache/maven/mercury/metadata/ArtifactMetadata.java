@@ -26,6 +26,8 @@ public class ArtifactMetadata
     protected ArtifactScopeEnum artifactScope;
 
     protected String classifier;
+    
+    protected boolean optional;
 
     /** 
      * explanation: why this MD was chosen over it's siblings
@@ -162,6 +164,16 @@ public class ArtifactMetadata
       ;
     }
 
+    public String getGA()
+    {
+      return toDomainString();
+    }
+
+    public String getGAV()
+    {
+      return toString();
+    }
+    
     @Override
     public String toString()
     {
@@ -332,4 +344,14 @@ public class ArtifactMetadata
     {
         return groupId + ":" + artifactId;
     }
+    public boolean isOptional()
+    {
+      return optional;
+    }
+    public void setOptional(boolean optional)
+    {
+      this.optional = optional;
+    }
+    
+    
 }

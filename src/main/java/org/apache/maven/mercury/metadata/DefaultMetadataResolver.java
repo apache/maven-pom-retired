@@ -82,25 +82,22 @@ public class DefaultMetadataResolver
                     found.setArtifactUri( pomArtifact.getFile().toURI().toString() );
                 }
 
-                MetadataTreeNode node = new MetadataTreeNode( found, parent, true, found.getScopeAsEnum() );
+                MetadataTreeNode node = new MetadataTreeNode( found, parent, query, true, found.getScopeAsEnum() );
                 Collection<ArtifactMetadata> dependencies = metadataResolution.getArtifactMetadata().getDependencies();
 
                 if ( dependencies != null && dependencies.size() > 0 )
                 {
-                    int numberOfChildren = dependencies.size();
-                    node.setNChildren( numberOfChildren );
-                    int kidNo = 0;
                     for ( ArtifactMetadata a : dependencies )
                     {
                         MetadataTreeNode kidNode = resolveMetadataTree( a, node, localRepository, remoteRepositories );
-                        node.addChild( kidNo++, kidNode );
+                        node.addChild( kidNode );
                     }
                 }
                 return node;
             }
             else
             {
-                return new MetadataTreeNode( pomArtifact, parent, false, query.getArtifactScope() );
+                return new MetadataTreeNode( new ArtifactMetadata(pomArtifact), parent, query, false, query.getArtifactScope() );
             }
         }
         catch ( Exception anyEx )

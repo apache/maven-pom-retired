@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.metadata;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,15 +141,15 @@ public class MetadataGraph
         	entry = vertex;
         }
 
-        MetadataTreeNode[] kids = node.getChildren();
-        if ( kids == null || kids.length < 1 )
+        List<MetadataTreeNode> kids = node.getChildren();
+        if ( kids == null || kids.size() < 1 )
         {
             return;
         }
 
-        for( int i = 0; i< kids.length; i++ )
+        for( int i = 0; i< kids.size(); i++ )
         {
-        	MetadataTreeNode n = kids[i];
+        	MetadataTreeNode n = kids.get(i);
             processTreeNodes( vertex, n, depth + 1, i );
         }
     }
@@ -336,8 +337,8 @@ public class MetadataGraph
         }
 
         int count = 1;
-        MetadataTreeNode[] kids = tree.getChildren();
-        if ( kids == null || kids.length < 1 )
+        List<MetadataTreeNode> kids = tree.getChildren();
+        if ( kids == null || kids.size() < 1 )
         {
             return count;
         }

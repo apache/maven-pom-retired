@@ -72,7 +72,8 @@ public class ClasspathContainer
 
         for ( ArtifactMetadata md : classpath )
         {
-            node = new MetadataTreeNode( md, parent, md.isResolved(), md.getArtifactScope() );
+          // TODO Oleg: is null for query good here ??
+            node = new MetadataTreeNode( md, parent, null, md.isResolved(), md.getArtifactScope() );
             if ( tree == null )
             {
                 tree = node;
@@ -80,8 +81,7 @@ public class ClasspathContainer
 
             if ( parent != null )
             {
-                parent.setNChildren( 1 );
-                parent.addChild( 0, node );
+                parent.addChild( node );
             }
 
             parent = node;

@@ -9,10 +9,10 @@ class SatVar
 implements Comparable<ArtifactMetadata>
 {
   ArtifactMetadata _md;
-  int _no;
+  int _literal;
   boolean _optional;
   //---------------------------------------------------------------------
-  public SatVar( ArtifactMetadata md, int var, boolean optional )
+  public SatVar( ArtifactMetadata md, int literal )
   throws SatException
   {
     if( md == null
@@ -23,8 +23,7 @@ implements Comparable<ArtifactMetadata>
       throw new SatException("Cannot create SatVar from a null Metadata: "+md);
 
     this._md = md;
-    this._no = var;
-    this._optional = optional;
+    this._literal = literal;
   }
   //---------------------------------------------------------------------
   public ArtifactMetadata getMd()
@@ -35,13 +34,13 @@ implements Comparable<ArtifactMetadata>
   {
     this._md = md;
   }
-  public int getNo()
+  public int getLiteral()
   {
-    return _no;
+    return _literal;
   }
   public void setNo(int var)
   {
-    this._no = var;
+    this._literal = var;
   }
 
   public boolean isWeak()

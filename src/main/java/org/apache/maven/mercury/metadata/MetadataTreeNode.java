@@ -1,5 +1,8 @@
 package org.apache.maven.mercury.metadata;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.maven.mercury.Artifact;
 import org.apache.maven.mercury.ArtifactScopeEnum;
 /**
@@ -11,28 +14,50 @@ import org.apache.maven.mercury.ArtifactScopeEnum;
 
 public class MetadataTreeNode
 {
-  ArtifactMetadata md; // this node
+  private static final int DEFAULT_CHILDREN_COUNT = 8;
+  
+  /**
+   * this node's artifact MD
+   */
+  ArtifactMetadata md;
+  
+  /**
+   * fail resolution if it could not be found?
+   */
+  boolean optional = false;
 
-  MetadataTreeNode parent; // papa
+  /**
+   * parent node
+   */
+  MetadataTreeNode parent;
+  
+  /**
+   * query node - the one that originated this actual node
+   */
+  ArtifactMetadata query;
 
-  /** default # of children. Used for tree creation optimization only */
-  int nChildren = 8;
+  /**
+   * queries - one per POM dependency
+   */
+  List<ArtifactMetadata> queries;
 
-  MetadataTreeNode[] children; // of cause
-
+  /**
+   * actual found versions
+   */
+  List<MetadataTreeNode> children;
   //------------------------------------------------------------------------
   public int countNodes()
   {
     return countNodes(this);
   }
   //------------------------------------------------------------------------
-  public int countNodes( MetadataTreeNode node )
+  public static int countNodes( MetadataTreeNode node )
   {
     int res = 1;
     
-    if( children != null && children.length > 0)
+    if( node.children != null && node.children.size() > 0)
     {
-      for( MetadataTreeNode child : children )
+      for( MetadataTreeNode child : node.children )
       {
         res += countNodes( child );
       }
@@ -40,25 +65,20 @@ public class MetadataTreeNode
     
     return res;
   }
-  //------------------------------------------------------------------------
-  public int getNChildren()
-  {
-    return nChildren;
-  }
-  //------------------------------------------------------------------------
-	public void setNChildren(int children)
-	{
-		nChildren = children;
-	}
 	//------------------------------------------------------------------------
   public MetadataTreeNode()
   {
   }
   //------------------------------------------------------------------------
-  public MetadataTreeNode( ArtifactMetadata md,
+  /**
+   * pointers to parent and query are a must. 
+   */
+  public MetadataTreeNode(   ArtifactMetadata md,
                              MetadataTreeNode parent,
+                             ArtifactMetadata query,
                              boolean resolved,
-                             ArtifactScopeEnum scope )
+                             ArtifactScopeEnum scope
+                         )
   {
         if ( md != null )
         {
@@ -68,49 +88,63 @@ public class MetadataTreeNode
 
         this.md = md;
         this.parent = parent;
-    }
-    //------------------------------------------------------------------------
-    public MetadataTreeNode( Artifact af,
-                             MetadataTreeNode parent,
-                             boolean resolved,
-                             ArtifactScopeEnum scope
-                           )
-    {
-        this( new ArtifactMetadata( af ), parent, resolved, scope );
-    }
-    //------------------------------------------------------------------------
-    public void addChild( int index, MetadataTreeNode kid )
-    {
-        if ( kid == null )
-        {
-            return;
-        }
+        this.query = query;
+  }
+  //------------------------------------------------------------------------
+  public MetadataTreeNode( ArtifactMetadata md, MetadataTreeNode parent, ArtifactMetadata query )
+  {
+    this( md, parent, query, true, ArtifactScopeEnum.compile );
+  }
+  //------------------------------------------------------------------------
+  /**
+   * dependencies are ordered in the POM - they should be added in the POM order
+   */
+  public MetadataTreeNode addChild( MetadataTreeNode kid )
+  {
+      if ( kid == null )
+      {
+          return this;
+      }
 
-        if( children == null )
-        	children = new MetadataTreeNode[nChildren];
-        
-        children[index % nChildren] = kid;
-    }
+      if( children == null )
+      {
+      	children = new ArrayList<MetadataTreeNode>( DEFAULT_CHILDREN_COUNT );
+      }
+              
+      kid.setParent( this );
+      children.add( kid );
+      
+      return this;
+  }
+  //------------------------------------------------------------------------
+  /**
+   * dependencies are ordered in the POM - they should be added in the POM order
+   */
+  public MetadataTreeNode addQuery( ArtifactMetadata query )
+  {
+      if ( query == null )
+      {
+          return this;
+      }
+
+      if( queries == null )
+      {
+        queries = new ArrayList<ArtifactMetadata>( DEFAULT_CHILDREN_COUNT );
+      }
+              
+      queries.add( query );
+      
+      return this;
+  }
     //------------------------------------------------------------------
     @Override
     public String toString()
     {
-        return md == null ? "no metadata" : md.toString();
+        return md == null 
+            ? "no metadata, parent " + ( parent == null ? "null"
+            : parent.toString() ) : md.toString()
+            ;
     }
-    //------------------------------------------------------------------
-    public String graphHash()
-        throws MetadataResolutionException
-    {
-        if ( md == null )
-        {
-            throw new MetadataResolutionException( "treenode without metadata, parent: "
-                + ( parent == null ? "null" : parent.toString() )
-            );
-        }
-
-        return md.groupId + ":" + md.artifactId;
-    }
-
     //------------------------------------------------------------------------
     public boolean hasChildren()
     {
@@ -137,14 +171,39 @@ public class MetadataTreeNode
         this.parent = parent;
     }
 
-    public MetadataTreeNode[] getChildren()
+    public List<MetadataTreeNode> getChildren()
     {
         return children;
     }
 
-    public void setChildren( MetadataTreeNode[] children )
+    public boolean isOptional()
     {
-        this.children = children;
+        return optional;
+    }
+    
+    public void setOptional( boolean optional )
+    {
+      this.optional = optional;
+    }
+    public ArtifactMetadata getQuery()
+    {
+      return query;
+    }
+    public void setQuery(ArtifactMetadata query)
+    {
+      this.query = query;
+    }
+    public List<ArtifactMetadata> getQueries()
+    {
+      return queries;
+    }
+    public void setQueries(List<ArtifactMetadata> queries)
+    {
+      this.queries = queries;
+    }
+    public void setChildren(List<MetadataTreeNode> children)
+    {
+      this.children = children;
     }
     //------------------------------------------------------------------------
     //------------------------------------------------------------------------
