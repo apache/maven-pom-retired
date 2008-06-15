@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.apache.maven.mercury.Artifact;
 import org.apache.maven.mercury.ArtifactScopeEnum;
 
-/*
+/**
  * Artifact Metadata that is resolved independent of Artifact itself.
  * 
  * @author <a href="oleg@codehaus.org">Oleg Gusakov</a>

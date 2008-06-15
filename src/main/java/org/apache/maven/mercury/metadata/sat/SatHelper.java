@@ -12,8 +12,9 @@ import org.sat4j.core.VecInt;
 import org.sat4j.specs.IVec;
 import org.sat4j.specs.IVecInt;
 
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
-
+/**
+ * @author <a href="oleg@codehaus.org">Oleg Gusakov</a>
+ */
 public class SatHelper
 {
   //-----------------------------------------------------------------------
