@@ -3,7 +3,6 @@ package org.apache.maven.mercury.metadata;
 import java.util.Collection;
 
 import org.apache.maven.mercury.repository.RemoteRepository;
-import org.apache.maven.mercury.repository.Repository;
 
 /*
  * 
