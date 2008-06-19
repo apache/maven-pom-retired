@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.metadata;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -91,6 +92,15 @@ public class MetadataResolverTest
             //TODO: This assumes that we have already pulled it down
 
             return null;
+        }
+
+        public Collection<ArtifactMetadata> expand(
+            ArtifactMetadata metadataQuery, LocalRepository localRepository,
+            Set<RemoteRepository> remoteRepositories)
+            throws MetadataRetrievalException
+        {
+          // TODO Auto-generated method stub
+          return null;
         }
 
     }
