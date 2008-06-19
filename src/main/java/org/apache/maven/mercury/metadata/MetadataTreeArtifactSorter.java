@@ -8,6 +8,6 @@ package org.apache.maven.mercury.metadata;
  */
 public interface MetadataTreeArtifactSorter
 {
-  public int compare( ArtifactMetadata md1,  ArtifactMetadata md2  )
+  public int compare( MetadataTreeNode n1,  MetadataTreeNode n2  )
   ;
 }

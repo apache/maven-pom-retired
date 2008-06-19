@@ -19,6 +19,7 @@ package org.apache.maven.mercury.metadata;
  * under the License.
  */
 
+import java.util.Collection;
 import java.util.Set;
 
 import org.apache.maven.mercury.repository.LocalRepository;
@@ -29,6 +30,8 @@ import org.apache.maven.mercury.repository.RemoteRepository;
  * artifact.
  *
  * @author Jason van Zyl
+ * @author Oleg Gusakov
+ * 
  * @version $Id$
  */
 public interface MetadataSource
@@ -39,6 +42,9 @@ public interface MetadataSource
      * You would only ever need the remote repositories if the representation you were parsing contained repositories that
      * you wanted added to the search list of remote repositories.
      * 
+     * This entry is called by tree builder to get the recorded dependencies, i.e. queries, which will later be expanded 
+     * into actual "existing" ArtifactMetadata objects
+     * 
      * @param metadata
      * @param localRepository
      * @param remoteRepositories
@@ -46,6 +52,20 @@ public interface MetadataSource
      * @throws MetadataRetrievalException
      */
     MetadataResolution retrieve( ArtifactMetadata metadata,
+                                 LocalRepository localRepository,
+                                 Set<RemoteRepository> remoteRepositories )
+        throws MetadataRetrievalException;
+
+    /**
+     * returns all existing versions, treating the provided metadata as a query
+     * 
+     * @param metadata
+     * @param localRepository
+     * @param remoteRepositories
+     * @return
+     * @throws MetadataRetrievalException
+     */
+    Collection<ArtifactMetadata> expand( ArtifactMetadata metadataQuery,
                                  LocalRepository localRepository,
                                  Set<RemoteRepository> remoteRepositories )
         throws MetadataRetrievalException;
