@@ -8,7 +8,8 @@ import org.apache.maven.mercury.ArtifactScopeEnum;
 /**
  * Artifact Metadata that is resolved independent of Artifact itself.
  * 
- * @author <a href="oleg@codehaus.org">Oleg Gusakov</a>
+ * @author Oleg Gusakov
+ * @version $Id$
  */
 public class ArtifactMetadata
 {
@@ -53,6 +54,12 @@ public class ArtifactMetadata
     /** error message  */
     private String error;
 
+    /**
+     * for testing - required for mock MetadataSource
+     */
+    protected ArtifactMetadata()
+    {
+    }
     //------------------------------------------------------------------
     /**
      * group:artifact:version:classifier:packaging
@@ -351,6 +358,10 @@ public class ArtifactMetadata
     public void setOptional(boolean optional)
     {
       this.optional = optional;
+    }
+    public void setOptional(String optional)
+    {
+      this.optional = "true".equals(optional) ? true : false;
     }
     
     
