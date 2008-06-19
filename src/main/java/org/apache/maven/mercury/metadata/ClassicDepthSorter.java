@@ -6,8 +6,10 @@ package org.apache.maven.mercury.metadata;
 public class ClassicDepthSorter
 implements MetadataTreeArtifactSorter
 {
-  public int compare(ArtifactMetadata md1, ArtifactMetadata md2)
+
+  public int compare(MetadataTreeNode n1, MetadataTreeNode n2)
   {
+    // TODO Auto-generated method stub
     return 0;
   }
   
