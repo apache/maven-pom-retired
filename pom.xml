@@ -24,8 +24,8 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:https://svn.sonatype.org/mercury/trunk</connection>
-    <developerConnection>scm:svn:https://svn.sonatype.org/mercury</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</developerConnection>
   </scm>
   <build>
     <defaultGoal>install</defaultGoal>
