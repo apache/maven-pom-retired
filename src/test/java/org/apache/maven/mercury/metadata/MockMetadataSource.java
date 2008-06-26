@@ -12,23 +12,54 @@ import org.apache.maven.mercury.repository.DefaultLocalRepository;
 import org.apache.maven.mercury.repository.LocalRepository;
 import org.apache.maven.mercury.repository.RemoteRepository;
 import org.apache.maven.mercury.repository.layout.RepositoryLayout;
+import org.mortbay.log.Log;
 import org.xml.sax.SAXException;
 
 public class MockMetadataSource
 implements MetadataSource
 {
 
-  public Collection<ArtifactMetadata> expand(ArtifactMetadata metadataQuery,
-      LocalRepository localRepository, Set<RemoteRepository> remoteRepositories)
+  public Collection<ArtifactMetadata> expand(
+                    ArtifactMetadata mdq
+                  , LocalRepository localRepository
+                  , Set<RemoteRepository> remoteRepositories
+                                        )
       throws MetadataRetrievalException
   {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
+    if( localRepository == null || mdq == null )
+      return null;
+    
+    File queryDir = new File( localRepository.getDirectory(), mdq.groupId.replace('.', File.separatorChar)+File.separatorChar+mdq.artifactId );
+    if( !queryDir.exists() || !queryDir.isDirectory() )
+      return null;
+    
+    File [] files = queryDir.listFiles();
+    
+    if( files == null || files.length < 1 )
+      return null;
+    
+    ArrayList<ArtifactMetadata> res = new ArrayList<ArtifactMetadata>( files.length );
+    for( File f : files )
+    {
+      if( !f.isDirectory() )
+        continue;
+      File pom = new File( f, mdq.artifactId+"-"+f.getName()+".pom" );
+      if( pom.exists() )
+      {
+        ArtifactMetadata md = getMD(pom);
+        res.add(md);
+      }
+    }
 
-  public MetadataResolution retrieve(ArtifactMetadata metadata,
-      LocalRepository localRepository, Set<RemoteRepository> remoteRepositories)
+Log.info("Expanded "+mdq+" into:\n"+res );
+    return res;
+  }
+
+  public MetadataResolution retrieve( 
+                      ArtifactMetadata metadata
+                    , LocalRepository localRepository
+                    , Set<RemoteRepository> remoteRepositories
+                                    )
       throws MetadataRetrievalException
   {
     if( localRepository == null || metadata == null )
@@ -36,7 +67,7 @@ implements MetadataSource
 
     try
     {
-      metadata.setDependencies( getMD( localRepository.getDirectory(), metadata) );
+      metadata.setDependencies( getDeps( localRepository.getDirectory(), metadata) );
       MetadataResolution mr = new MetadataResolution(metadata);
       
       return mr;
@@ -48,7 +79,7 @@ implements MetadataSource
     }
   }
   
-  private static final List<ArtifactMetadata> getMD( File repo, ArtifactMetadata md )
+  private static final List<ArtifactMetadata> getDeps( File repo, ArtifactMetadata md )
   throws IOException, SAXException
   {
     File pom = new File( repo, md.groupId.replace('.', '/')
@@ -72,6 +103,37 @@ implements MetadataSource
     return dc.mds;
   }
   
+  private static final ArtifactMetadata getMD( File pom )
+  throws MetadataRetrievalException
+  {
+    Digester digester = new Digester();
+    digester.setValidating(false);
+    digester.addObjectCreate( "project", ArtifactMetadata.class );
+    digester.addCallMethod("project/groupId", "setGroupId", 1 );
+    digester.addCallParam( "project/groupId", 0 );
+    digester.addCallMethod("project/artifactId", "setArtifactId", 1 );
+    digester.addCallParam( "project/artifactId", 0 );
+    digester.addCallMethod("project/version", "setVersion", 1 );
+    digester.addCallParam( "project/version", 0 );
+    digester.addCallMethod("project/packaging", "setType", 1 );
+    digester.addCallParam( "project/packaging", 0 );
+    
+    ArtifactMetadata md;
+    try
+    {
+      md = (ArtifactMetadata) digester.parse(pom);
+    }
+    catch (Exception e)
+    {
+      throw new MetadataRetrievalException(e);
+    }
+    
+    if( md.getType() == null )
+      md.setType("jar");
+    
+    return md;
+  }
+  
   public static void main( String[] args )
   throws MetadataRetrievalException
   {
@@ -81,7 +143,7 @@ implements MetadataSource
   }
 
 }
-
+//==============================================================================================
 class DependencyCreator
 {
   List<ArtifactMetadata> mds = new ArrayList<ArtifactMetadata>(8);
@@ -99,3 +161,4 @@ class DependencyCreator
     mds.add(md);
   }
 }
+//==============================================================================================

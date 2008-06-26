@@ -57,7 +57,7 @@ public class ArtifactMetadata
     /**
      * for testing - required for mock MetadataSource
      */
-    protected ArtifactMetadata()
+    public ArtifactMetadata()
     {
     }
     //------------------------------------------------------------------

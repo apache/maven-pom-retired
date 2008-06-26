@@ -22,8 +22,7 @@ public class MetadataTree
   private Set<RemoteRepository> remoteRepositories;
   
   public MetadataTree(
-        ArtifactMetadata startMD
-      , MetadataSource mdSource
+        MetadataSource mdSource
       , Set<MetadataTreeArtifactFilter> filters
       , List<MetadataTreeArtifactFilter> sorters
       , LocalRepository localRepository
@@ -49,20 +48,23 @@ public class MetadataTree
     if( localRepository == null )
       throw new MetadataTreeException( "null local repo" );
     
-    MetadataTreeNode root = createNode( startMD, null );
+    MetadataTreeNode root = createNode( startMD, null, startMD );
     return root;
   }
   //-----------------------------------------------------
-  private MetadataTreeNode createNode( ArtifactMetadata nodeQuery, MetadataTreeNode parent )
+  private MetadataTreeNode createNode( ArtifactMetadata nodeMD, MetadataTreeNode parent, ArtifactMetadata nodeQuery )
   throws MetadataTreeException
   {
+    checkForCircularDependency( nodeMD, parent );
+
     MetadataResolution mr;
+    
     try
     {
-      mr = mdSource.retrieve(nodeQuery, localRepository, remoteRepositories );
+      mr = mdSource.retrieve( nodeMD, localRepository, remoteRepositories );
 
       if( mr == null || mr.getArtifactMetadata() == null )
-        throw new MetadataTreeException( "no result found for " + nodeQuery );
+        throw new MetadataTreeException( "no result found for " + nodeMD );
       
       MetadataTreeNode node = new MetadataTreeNode( mr.getArtifactMetadata(), parent, nodeQuery );
   
@@ -87,7 +89,7 @@ public class MetadataTree
           if( veto( ver, filters) )
             continue;
           
-          MetadataTreeNode kid = createNode( ver, node );
+          MetadataTreeNode kid = createNode( ver, node, md );
           node.addChild( kid );
           
           noGoodVersions = false;
@@ -103,11 +105,22 @@ public class MetadataTree
         node.addQuery(md);
       }
     
-    return node;
+      return node;
     }
     catch (MetadataRetrievalException e)
     {
       throw new MetadataTreeException( e );
+    }
+  }
+  //-----------------------------------------------------
+  private void checkForCircularDependency( ArtifactMetadata md, MetadataTreeNode parent )
+  throws MetadataTreeException
+  {
+    MetadataTreeNode p = parent;
+    while( p != null )
+    {
+      if( md.sameGA(p.md) )
+        throw new MetadataTreeException("circular dependency for " + md );
     }
   }
   //-----------------------------------------------------

@@ -57,9 +57,9 @@ public interface MetadataSource
         throws MetadataRetrievalException;
 
     /**
-     * returns all existing versions, treating the provided metadata as a query
+     * returns all existing versions of the supplied artifact, treating the provided metadata as a query. This is used by the tree builder
      * 
-     * @param metadata
+     * @param metadataQuery metadata to look for: ranges, etc.
      * @param localRepository
      * @param remoteRepositories
      * @return
