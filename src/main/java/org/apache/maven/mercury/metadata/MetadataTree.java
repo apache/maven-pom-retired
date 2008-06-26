@@ -123,7 +123,22 @@ public class MetadataTree
       count++;
 System.out.println("circ "+md+" vs "+p.md);
       if( md.sameGA(p.md) )
-        throw new MetadataTreeException("circular dependency "+count+" levels up for " + md + " as dependency of "+parent.md );
+      {
+        p = parent;
+        StringBuilder sb = new StringBuilder( 128 );
+        sb.append( md.toString() );
+        while( p!= null )
+        {
+          sb.append(" <- "+p.md.toString() );
+
+          if( md.sameGA(p.md) )
+          {
+            throw new MetadataTreeException("circular dependency "+count + " levels up. "
+                + sb.toString() + " <= "+(p.parent == null ? "no parent" : p.parent.md) );
+          }
+          p = p.parent;
+        }
+      }
       p = p.parent;
     }
   }

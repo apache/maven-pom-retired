@@ -47,7 +47,10 @@ implements MetadataSource
       if( pom.exists() )
       {
         ArtifactMetadata md = getMD(pom);
-        res.add(md);
+        
+        // TODO abstract into a range matcher
+        if( md.sameGAV(mdq) )
+          res.add(md);
       }
     }
 
