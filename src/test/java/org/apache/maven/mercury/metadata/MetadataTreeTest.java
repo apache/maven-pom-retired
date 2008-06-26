@@ -13,8 +13,10 @@ extends TestCase
 {
   private static final Log log = LogFactoryImpl.getLog( MetadataTreeTest.class );
   
-//ArtifactMetadata md = new ArtifactMetadata( "pmd:pmd:3.9" );
+//  ArtifactMetadata md = new ArtifactMetadata( "pmd:pmd:3.9" );
+//  File repo = new File("./target/test-classes/localRepo");
   ArtifactMetadata md = new ArtifactMetadata( "a:a:1" );
+  File repo = new File("./target/test-classes/controlledRepo");
   MetadataTree mt;
   MockMetadataSource mms = new MockMetadataSource();
 
@@ -29,7 +31,7 @@ System.out.println("Current dir is "+ new File(".").getCanonicalPath() );
           mms
         , null
         , null
-        , new DefaultLocalRepository( "local", null, new File("./target/test-classes/controlledRepo") )
+        , new DefaultLocalRepository( "local", null, repo )
         , null
                           );
   }

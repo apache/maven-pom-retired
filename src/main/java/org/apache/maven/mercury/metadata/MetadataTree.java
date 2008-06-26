@@ -117,10 +117,14 @@ public class MetadataTree
   throws MetadataTreeException
   {
     MetadataTreeNode p = parent;
+    int count = 0;
     while( p != null )
     {
+      count++;
+System.out.println("circ "+md+" vs "+p.md);
       if( md.sameGA(p.md) )
-        throw new MetadataTreeException("circular dependency for " + md );
+        throw new MetadataTreeException("circular dependency "+count+" levels up for " + md + " as dependency of "+parent.md );
+      p = p.parent;
     }
   }
   //-----------------------------------------------------
