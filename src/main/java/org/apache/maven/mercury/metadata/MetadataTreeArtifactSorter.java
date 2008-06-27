@@ -5,6 +5,7 @@ package org.apache.maven.mercury.metadata;
  * phase of the resolution process - conflict resolution
  * 
  * @author Oleg Gusakov
+ * @version $Id$
  */
 public interface MetadataTreeArtifactSorter
 {

@@ -3,6 +3,7 @@ package org.apache.maven.mercury.metadata;
 /**
  * 
  * @author Oleg Gusakov
+ * @version $Id$
  */
 public class MetadataTreeException
     extends Exception

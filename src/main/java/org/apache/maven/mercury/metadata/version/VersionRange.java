@@ -110,7 +110,7 @@ public class VersionRange
     }
   }
   
-  public boolean isInRange( String version )
+  public boolean includes( String version )
   {
     DefaultArtifactVersion ver = new DefaultArtifactVersion( version );
     

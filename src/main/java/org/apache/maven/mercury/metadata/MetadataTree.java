@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.maven.mercury.metadata.sat.DefaultSatSolver;
+import org.apache.maven.mercury.metadata.sat.SatException;
 import org.apache.maven.mercury.repository.LocalRepository;
 import org.apache.maven.mercury.repository.RemoteRepository;
 
@@ -12,6 +14,7 @@ import org.apache.maven.mercury.repository.RemoteRepository;
  * It implements 3-phase 
  * 
  * @author Oleg Gusakov
+ * @version $Id$
  */
 public class MetadataTree
 {
@@ -114,14 +117,14 @@ public class MetadataTree
   }
   //-----------------------------------------------------
   private void checkForCircularDependency( ArtifactMetadata md, MetadataTreeNode parent )
-  throws MetadataTreeException
+  throws MetadataTreeCircularDependencyException
   {
     MetadataTreeNode p = parent;
     int count = 0;
     while( p != null )
     {
       count++;
-System.out.println("circ "+md+" vs "+p.md);
+//System.out.println("circ "+md+" vs "+p.md);
       if( md.sameGA(p.md) )
       {
         p = parent;
@@ -133,7 +136,7 @@ System.out.println("circ "+md+" vs "+p.md);
 
           if( md.sameGA(p.md) )
           {
-            throw new MetadataTreeException("circular dependency "+count + " levels up. "
+            throw new MetadataTreeCircularDependencyException("circular dependency "+count + " levels up. "
                 + sb.toString() + " <= "+(p.parent == null ? "no parent" : p.parent.md) );
           }
           p = p.parent;
@@ -153,10 +156,24 @@ System.out.println("circ "+md+" vs "+p.md);
   }
   //-----------------------------------------------------
   // TODO
-  public MetadataTreeNode resolveConflicts( MetadataTreeNode root )
+  public List<ArtifactMetadata> resolveConflicts( MetadataTreeNode root )
   throws MetadataTreeException
   {
-    return null;
+    if( root == null )
+      throw new MetadataTreeException("null tree");
+    
+    try
+    {
+      DefaultSatSolver solver = new DefaultSatSolver( root );
+      List<ArtifactMetadata> res = solver.solve();
+      
+      return res;
+    }
+    catch (SatException e)
+    {
+      throw new MetadataTreeException(e);
+    }
+    
   }
   //-----------------------------------------------------
   //-----------------------------------------------------

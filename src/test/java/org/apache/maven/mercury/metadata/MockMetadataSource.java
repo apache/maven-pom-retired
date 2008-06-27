@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.digester.Digester;
+import org.apache.maven.mercury.metadata.version.VersionException;
+import org.apache.maven.mercury.metadata.version.VersionRange;
 import org.apache.maven.mercury.repository.DefaultLocalRepository;
 import org.apache.maven.mercury.repository.LocalRepository;
 import org.apache.maven.mercury.repository.RemoteRepository;
@@ -15,6 +17,12 @@ import org.apache.maven.mercury.repository.layout.RepositoryLayout;
 import org.mortbay.log.Log;
 import org.xml.sax.SAXException;
 
+
+/**
+ * 
+ * @author Oleg Gusakov
+ * @version $Id$
+ */
 public class MockMetadataSource
 implements MetadataSource
 {
@@ -39,17 +47,30 @@ implements MetadataSource
       return null;
     
     ArrayList<ArtifactMetadata> res = new ArrayList<ArtifactMetadata>( files.length );
+    
+    VersionRange range;
+    try
+    {
+      range = new VersionRange( mdq.getVersion() );
+    }
+    catch (VersionException e)
+    {
+      throw new MetadataRetrievalException(e);
+    }
+    
     for( File f : files )
     {
       if( !f.isDirectory() )
         continue;
+      
       File pom = new File( f, mdq.artifactId+"-"+f.getName()+".pom" );
       if( pom.exists() )
       {
         ArtifactMetadata md = getMD(pom);
         
         // TODO abstract into a range matcher
-        if( md.sameGAV(mdq) )
+//        if( md.sameGAV(mdq) )
+        if( range.includes( md.getVersion() ) )
           res.add(md);
       }
     }

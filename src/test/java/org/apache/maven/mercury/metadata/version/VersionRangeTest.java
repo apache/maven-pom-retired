@@ -28,22 +28,22 @@ public class VersionRangeTest
   
   public void testSimple()
   {
-    assert range.isInRange( "1.2.4" ) : "1.2.4 did not match the range "+rangeS; 
-    assert range.isInRange( "1.3.1" ) : "1.3.1 did not match the range "+rangeS; 
-    assert range.isInRange( "1.2.3" ) : "1.2.3 did not match the range "+rangeS; 
-    assert ! range.isInRange( "1.2.2" ) : "1.2.2 did matches the range "+rangeS; 
-    assert ! range.isInRange( "2.0.0" ) : "2.0.0 did matches the range "+rangeS; 
-    assert ! range.isInRange( "3.1.0" ) : "3.1.0 did matches the range "+rangeS; 
+    assert range.includes( "1.2.4" ) : "1.2.4 did not match the range "+rangeS; 
+    assert range.includes( "1.3.1" ) : "1.3.1 did not match the range "+rangeS; 
+    assert range.includes( "1.2.3" ) : "1.2.3 did not match the range "+rangeS; 
+    assert ! range.includes( "1.2.2" ) : "1.2.2 did matches the range "+rangeS; 
+    assert ! range.includes( "2.0.0" ) : "2.0.0 did matches the range "+rangeS; 
+    assert ! range.includes( "3.1.0" ) : "3.1.0 did matches the range "+rangeS; 
   }
   
   public void testEternity()
   {
-    assert rangeE.isInRange( "1.2.4" ) : "1.2.4 did not match the range "+rangeS; 
-    assert rangeE.isInRange( "1.3.1" ) : "1.3.1 did not match the range "+rangeS; 
-    assert rangeE.isInRange( "1.2.3" ) : "1.2.3 did not match the range "+rangeS; 
-    assert ! rangeE.isInRange( "1.2.2" ) : "1.2.2 did matches the range "+rangeS; 
-    assert rangeE.isInRange( "2.0.0" ) : "2.0.0 did matches the range "+rangeS; 
-    assert rangeE.isInRange( "3.1.0" ) : "3.1.0 did matches the range "+rangeS; 
+    assert rangeE.includes( "1.2.4" ) : "1.2.4 did not match the range "+rangeS; 
+    assert rangeE.includes( "1.3.1" ) : "1.3.1 did not match the range "+rangeS; 
+    assert rangeE.includes( "1.2.3" ) : "1.2.3 did not match the range "+rangeS; 
+    assert ! rangeE.includes( "1.2.2" ) : "1.2.2 did matches the range "+rangeS; 
+    assert rangeE.includes( "2.0.0" ) : "2.0.0 did matches the range "+rangeS; 
+    assert rangeE.includes( "3.1.0" ) : "3.1.0 did matches the range "+rangeS; 
   }
 
 }
