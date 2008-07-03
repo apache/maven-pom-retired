@@ -26,8 +26,10 @@ import org.apache.maven.mercury.spi.http.client.MercuryException;
 import org.apache.maven.mercury.spi.http.client.deploy.DefaultDeployer;
 import org.apache.maven.mercury.spi.http.client.deploy.DeployRequest;
 import org.apache.maven.mercury.spi.http.client.deploy.DeployResponse;
+import org.apache.maven.mercury.spi.http.server.SecurePutServer;
 import org.apache.maven.mercury.spi.http.server.SimplePutServer;
 import org.apache.maven.mercury.spi.http.validate.Validator;
+import org.mortbay.jetty.Server;
 import org.mortbay.util.IO;
 
 import java.io.File;
@@ -41,11 +43,11 @@ import java.util.Set;
 
 public class JettyDeployerTest extends TestCase
 {
-    public static final String __HOST_FRAGMENT = "http://localhost:";
+    public String _HOST_FRAGMENT = "http://localhost:";
     public static final String __PATH_FRAGMENT = "/maven2/repo/";
-    private DefaultDeployer _deployer;
-    private SimplePutServer _putServer;
-    private String _port;
+    protected DefaultDeployer _deployer;
+    protected SimplePutServer _putServer;
+    protected String _port;
     File _baseDir;
     File _file0;
     File _file1;
@@ -137,19 +139,19 @@ public class JettyDeployerTest extends TestCase
         _file4 = new File(_baseDir, "file4.so");
         _file5 = new File(_baseDir, "file5.jpg");
         
-        _binding0.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file0.txt");
+        _binding0.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file0.txt");
         _binding0.setLocalFile(_file0);
         bindings.add(_binding0);
       
-        _binding3.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
+        _binding3.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
         _binding3.setLocalFile(_file3);
         bindings.add(_binding3);
         
-        _binding4.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file4.so");
+        _binding4.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file4.so");
         _binding4.setLocalFile(_file4);
         bindings.add(_binding4);
        
-        _binding5.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file5.jpg");
+        _binding5.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file5.jpg");
         _binding5.setLocalFile(_file5);
         bindings.add(_binding5);
           
@@ -194,24 +196,24 @@ public class JettyDeployerTest extends TestCase
         _file4 = new File(_baseDir, "file4.so");
         _file5 = new File(_baseDir, "file5.jpg");
         
-        _binding0.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file0.txt");
+        _binding0.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file0.txt");
         _binding0.setLocalFile(_file0);
         bindings.add(_binding0);
         
-        _binding1.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file1.txt"); //has no sha file
+        _binding1.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file1.txt"); //has no sha file
         _binding1.setLocalFile(_file1);
         _binding1.setLenientChecksum(true);
         bindings.add(_binding1);
       
-        _binding3.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
+        _binding3.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
         _binding3.setLocalFile(_file3);
         bindings.add(_binding3);
         
-        _binding4.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file4.so");
+        _binding4.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file4.so");
         _binding4.setLocalFile(_file4);
         bindings.add(_binding4);
        
-        _binding5.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file5.jpg");
+        _binding5.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file5.jpg");
         _binding5.setLocalFile(_file5);
         bindings.add(_binding5);
           
@@ -264,29 +266,29 @@ public class JettyDeployerTest extends TestCase
         File file6 = new File(_baseDir, "file6.txt");//doesn't exist
         File file7 = new File(_baseDir, "file7.txt");//doesn't exist
         
-        _binding0.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file0.txt");
+        _binding0.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file0.txt");
         _binding0.setLocalFile(_file0);
         bindings.add(_binding0);
 
-        _binding3.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
+        _binding3.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
         _binding3.setLocalFile(_file3);
         bindings.add(_binding3);
 
-        _binding4.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file4.so");
+        _binding4.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file4.so");
         _binding4.setLocalFile(_file4);
         bindings.add(_binding4);
 
-        _binding5.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file5.jpg");
+        _binding5.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file5.jpg");
         _binding5.setLocalFile(_file5);
         bindings.add(_binding5);
 
         Binding binding6 = new Binding();
-        binding6.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file6.txt");
+        binding6.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file6.txt");
         binding6.setLocalFile(file6);
         bindings.add(binding6);
         
         Binding binding7 = new Binding();
-        binding6.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file7.txt");
+        binding6.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file7.txt");
         binding6.setLocalFile(file7);
         bindings.add(binding7);
         
@@ -344,29 +346,29 @@ public class JettyDeployerTest extends TestCase
         File file6 = new File(_baseDir, "file6.txt");//doesn't exist
         File file7 = new File(_baseDir, "file7.txt");//doesn't exist
 
-        _binding0.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file0.txt");
+        _binding0.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file0.txt");
         _binding0.setLocalFile(_file0);
         bindings.add(_binding0);
 
-        _binding3.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
+        _binding3.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
         _binding3.setLocalFile(_file3);
         bindings.add(_binding3);
 
-        _binding4.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file4.so");
+        _binding4.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file4.so");
         _binding4.setLocalFile(_file4);
         bindings.add(_binding4);
 
-        _binding5.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file5.jpg");
+        _binding5.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file5.jpg");
         _binding5.setLocalFile(_file5);
         bindings.add(_binding5);
 
         Binding binding6 = new Binding();
-        binding6.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file6.txt");
+        binding6.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file6.txt");
         binding6.setLocalFile(file6);
         bindings.add(binding6);
         
         Binding binding7 = new Binding();
-        binding6.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file7.txt");
+        binding6.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file7.txt");
         binding6.setLocalFile(file7);
         bindings.add(binding7);
 

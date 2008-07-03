@@ -51,6 +51,7 @@ public class DefaultDeployer implements Deployer
         _idGenerator = new RandomBatchIdGenerator();
         _httpClient = new HttpClient();
         _httpClient.setConnectorType( HttpClient.CONNECTOR_SELECT_CHANNEL );
+        _httpClient.registerListener( "org.mortbay.jetty.client.webdav.WebdavListener");
         try
         {
             _httpClient.start();
