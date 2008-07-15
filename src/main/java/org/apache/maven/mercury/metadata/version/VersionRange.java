@@ -21,7 +21,7 @@ public class VersionRange
   
   DefaultArtifactVersion _toVersion;
   boolean _toInclusive = false;
-  
+  //--------------------------------------------------------------------------------------------
   public VersionRange( String range )
   throws VersionException
   {
@@ -81,7 +81,7 @@ public class VersionRange
       _fromVersion = new DefaultArtifactVersion( range );
     }
   }
-  
+  //--------------------------------------------------------------------------------------------
   private void checkForValidCharacters( String v )
   throws VersionException
   {
@@ -109,7 +109,7 @@ public class VersionRange
       throw new VersionException( "invalid character '"+c+"' in version \""+v+"\"" );
     }
   }
-  
+  //--------------------------------------------------------------------------------------------
   public boolean includes( String version )
   {
     DefaultArtifactVersion ver = new DefaultArtifactVersion( version );
@@ -135,5 +135,6 @@ public class VersionRange
     
     return false;
   }
-
+  //--------------------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------------
 }

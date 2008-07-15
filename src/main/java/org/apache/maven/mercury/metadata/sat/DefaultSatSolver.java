@@ -16,7 +16,10 @@ import org.sat4j.specs.IVecInt;
 import org.sat4j.specs.TimeoutException;
 
 /**
- * @author <a href="oleg@codehaus.org">Oleg Gusakov</a>
+ * Default SAT4J implementation.
+ * 
+ * @author Oleg Gusakov
+ * @version $Id$
  */
 public class DefaultSatSolver
 implements SatSolver
@@ -57,14 +60,21 @@ implements SatSolver
     
     System.out.print("PB: ");
     for( int i=0; i<lits.size(); i++ )
-      System.out.print( " "+coeff.get(i)+" x"+lits.get(i) );
-    System.out.println(" "+( ge ? ">=" : "<")+" "+cardinality );
+    {
+      int co = Integer.parseInt( ""+coeff.get(i) );
+      String sign = co < 0 ? "-" : "+";
+      int    val = Math.abs(co);
+      String space = val == 1 ? "" : " ";
+      
+      System.out.print( " " + sign + (val==1?"":val) + space  + "x"+lits.get(i) );
+    }
+    System.out.println(( ge ? " >= " : " < ")+" "+cardinality );
   }
   //-----------------------------------------------------------------------
-  private Map<ArtifactMetadata, List<MetadataTreeNode>> processChildren(
-                                        List<ArtifactMetadata> queries
-                                        , List<MetadataTreeNode> children
-                                                              )
+  private final Map<ArtifactMetadata, List<MetadataTreeNode>> processChildren(
+                                                        List<ArtifactMetadata> queries
+                                                        , List<MetadataTreeNode> children
+                                                                              )
   throws SatException
   {
     HashMap<ArtifactMetadata, List<MetadataTreeNode>> res = new HashMap<ArtifactMetadata, List<MetadataTreeNode>>( queries.size() );
@@ -99,7 +109,7 @@ implements SatSolver
     return res;
   } 
   //-----------------------------------------------------------------------
-  private void addNode( MetadataTreeNode node )
+  private final void addNode( MetadataTreeNode node )
   throws ContradictionException, SatException
   {
     if( node == null )
@@ -161,7 +171,7 @@ implements SatSolver
     }
   }
   //-----------------------------------------------------------------------
-  private int [] addRange( List<MetadataTreeNode> range, boolean optional )
+  private final int [] addRange( List<MetadataTreeNode> range, boolean optional )
   throws ContradictionException, SatException
   {
     SatVar literal;
@@ -204,7 +214,7 @@ implements SatSolver
   }
   //-----------------------------------------------------------------------
   // test only factory & constructor
-  protected static SatSolver create( int nVars )
+  protected final static SatSolver create( int nVars )
   throws SatException
   {
     return new DefaultSatSolver( nVars );
@@ -217,7 +227,7 @@ implements SatSolver
     solver.newVar( nVars );
   }
   //-----------------------------------------------------------------------
-  public List<ArtifactMetadata> solve()
+  public final List<ArtifactMetadata> solve()
   throws SatException
   {
     List<ArtifactMetadata> res = null;

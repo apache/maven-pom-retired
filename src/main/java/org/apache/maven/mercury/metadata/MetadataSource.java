@@ -51,13 +51,17 @@ public interface MetadataSource
      * @return
      * @throws MetadataRetrievalException
      */
-    MetadataResolution retrieve( ArtifactMetadata metadata,
-                                 LocalRepository localRepository,
-                                 Set<RemoteRepository> remoteRepositories )
-        throws MetadataRetrievalException;
+    MetadataResolution retrieve( 
+                         ArtifactMetadata metadata
+                       , LocalRepository localRepository
+                       , Set<RemoteRepository> remoteRepositories
+                               )
+    throws MetadataRetrievalException
+    ;
 
     /**
-     * returns all existing versions of the supplied artifact, treating the provided metadata as a query. This is used by the tree builder
+     * returns all existing versions of the supplied artifact, treating the provided metadata as a query. This is used 
+     * by the tree builder to construct the "dirty" tree
      * 
      * @param metadataQuery metadata to look for: ranges, etc.
      * @param localRepository
@@ -65,8 +69,11 @@ public interface MetadataSource
      * @return
      * @throws MetadataRetrievalException
      */
-    Collection<ArtifactMetadata> expand( ArtifactMetadata metadataQuery,
-                                 LocalRepository localRepository,
-                                 Set<RemoteRepository> remoteRepositories )
-        throws MetadataRetrievalException;
+    Collection<ArtifactMetadata> expand( 
+                                   ArtifactMetadata metadataQuery
+                                 , LocalRepository localRepository
+                                 , Set<RemoteRepository> remoteRepositories 
+                                       )
+    throws MetadataRetrievalException
+    ;
 }

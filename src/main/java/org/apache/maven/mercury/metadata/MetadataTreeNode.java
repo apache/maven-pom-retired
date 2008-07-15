@@ -156,14 +156,19 @@ public class MetadataTreeNode
         return md;
     }
 
-    public void setMd( ArtifactMetadata md )
-    {
-        this.md = md;
-    }
-
     public MetadataTreeNode getParent()
     {
         return parent;
+    }
+
+    public int getDepth()
+    {
+      int depth = 0;
+      
+      for( MetadataTreeNode p = parent; p != null; p = p.parent )
+        ++depth;
+      
+      return depth;
     }
 
     public void setParent( MetadataTreeNode parent )
@@ -181,29 +186,14 @@ public class MetadataTreeNode
         return optional;
     }
     
-    public void setOptional( boolean optional )
-    {
-      this.optional = optional;
-    }
     public ArtifactMetadata getQuery()
     {
       return query;
     }
-    public void setQuery(ArtifactMetadata query)
-    {
-      this.query = query;
-    }
+    
     public List<ArtifactMetadata> getQueries()
     {
       return queries;
-    }
-    public void setQueries(List<ArtifactMetadata> queries)
-    {
-      this.queries = queries;
-    }
-    public void setChildren(List<MetadataTreeNode> children)
-    {
-      this.children = children;
     }
     //------------------------------------------------------------------------
     //------------------------------------------------------------------------

@@ -23,18 +23,17 @@ extends TestCase
 //  ArtifactMetadata md = new ArtifactMetadata( "pmd:pmd:3.9" );
 //  File repo = new File("./target/test-classes/localRepo");
 
-  ArtifactMetadata a1 = new ArtifactMetadata( "a:a:1" );
-  ArtifactMetadata md = new ArtifactMetadata( "a:a:2" );
   File repo = new File("./target/test-classes/controlledRepo");
   
   MetadataTree mt;
   MockMetadataSource mms = new MockMetadataSource();
-
+  //----------------------------------------------------------------------------------------------
   @Override
   protected void setUp()
   throws Exception
   {
 System.out.println("Current dir is "+ new File(".").getCanonicalPath() );
+
     mms = new MockMetadataSource();
     
     mt = new MetadataTree( 
@@ -45,43 +44,92 @@ System.out.println("Current dir is "+ new File(".").getCanonicalPath() );
         , null
                           );
   }
-
+  //----------------------------------------------------------------------------------------------
   @Override
-  protected void tearDown() throws Exception
+  protected void tearDown()
+  throws Exception
   {
     super.tearDown();
   }
-  
+  //----------------------------------------------------------------------------------------------
   public void testCircularDependency()
   {
-    
+    ArtifactMetadata circularMd = new ArtifactMetadata( "a:a:1" );
     try
     {
-      mt.buildTree( a1 );
+      mt.buildTree( circularMd );
     }
     catch (MetadataTreeException e)
     {
-      assert e instanceof MetadataTreeCircularDependencyException : "expected circular dependency exception, but got "+e.getClass().getName();
+      assertTrue( "expected circular dependency exception, but got "+e.getClass().getName()
+          , e instanceof MetadataTreeCircularDependencyException
+      );
       return;
     }
     fail("circular dependency was not detected");
   }
-  
+  //----------------------------------------------------------------------------------------------
   public void testBuildTree()
   throws MetadataTreeException
   {
-    MetadataTreeNode root = mt.buildTree( md );
+    ArtifactMetadata md = new ArtifactMetadata( "a:a:2" );
     
-    System.out.println( "got tree of "+root.countNodes() );
+    MetadataTreeNode root = mt.buildTree( md );
+    assertNotNull( "null tree built", root );
+    assertEquals( "wrong tree size", 4, root.countNodes() );
   }
-  
+  //----------------------------------------------------------------------------------------------
   public void testResolveConflicts()
   throws MetadataTreeException
   {
+    ArtifactMetadata md = new ArtifactMetadata( "a:a:2" );
+    
     MetadataTreeNode root = mt.buildTree( md );
+    assertNotNull( "null tree built", root );
+    assertEquals( "wrong tree size", 4, root.countNodes() );
+
     List<ArtifactMetadata> res = mt.resolveConflicts(root);
+    assertNotNull( "null resolution", res );
+    assertEquals( "wrong tree size", 3, res.size() );
+    
+    assertTrue( "no a:a:2 in the result", assertHasArtifact( res, "a:a:2" ) );
+    assertTrue( "no b:b:1 in the result", assertHasArtifact( res, "b:b:1" ) );
+    assertTrue( "no c:c:2 in the result", assertHasArtifact( res, "c:c:2" ) );
     
     System.out.println( "No Conflict: " + res );
   }
+  //----------------------------------------------------------------------------------------------
+  public void testBigResolveConflicts()
+  throws MetadataTreeException
+  {
+    ArtifactMetadata md = new ArtifactMetadata( "a:a:3" );
+    
+    MetadataTreeNode root = mt.buildTree( md );
+    assertNotNull( "null tree built", root );
+    assertTrue( "wrong tree size, expected gte 4", 4 <= root.countNodes() );
 
+    List<ArtifactMetadata> res = mt.resolveConflicts(root);
+    assertNotNull( "null resolution", res );
+
+System.out.println("BigRes: "+res);    
+    
+    assertEquals( "wrong tree size", 3, res.size() );
+    
+    assertTrue( "no a:a:2 in the result", assertHasArtifact( res, "a:a:2" ) );
+    assertTrue( "no b:b:1 in the result", assertHasArtifact( res, "b:b:1" ) );
+    assertTrue( "no c:c:2 in the result", assertHasArtifact( res, "c:c:2" ) );
+  }
+  //----------------------------------------------------------------------------------------------
+  private static boolean assertHasArtifact( List<ArtifactMetadata> res, String gav )
+  {
+    ArtifactMetadata gavMd = new ArtifactMetadata(gav);
+    
+    for( ArtifactMetadata md : res )
+      if( md.sameGAV( gavMd ) )
+        return true;
+    
+    return false;
+  }
+  //----------------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------------
 }
