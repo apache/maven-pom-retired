@@ -37,7 +37,7 @@ public class MetadataResolverTest
         }
         else
         {
-            basedir = new File( "" );
+            basedir = new File( "." );
         }
 
         workDirectory = new File( System.getProperty( "basedir" ), "target" );
