@@ -171,6 +171,23 @@ public class MetadataTreeNode
       return depth;
     }
 
+    public int getMaxDepth( int depth )
+    {
+      int res = 0;
+      
+      if( ! hasChildren() )
+        return depth + 1;
+      
+      for( MetadataTreeNode kid : children )
+      {
+        int kidDepth = kid.getMaxDepth( depth + 1 );
+        if( kidDepth > res )
+          res = kidDepth;
+      }
+      
+      return res;
+    }
+
     public void setParent( MetadataTreeNode parent )
     {
         this.parent = parent;

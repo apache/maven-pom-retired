@@ -1,5 +1,7 @@
 package org.apache.maven.mercury.metadata;
 
+import java.util.Comparator;
+
 import org.apache.maven.mercury.metadata.version.DefaultArtifactVersion;
 
 /**
@@ -9,16 +11,16 @@ import org.apache.maven.mercury.metadata.version.DefaultArtifactVersion;
  * @author Oleg Gusakov
  * @version $Id$
  */
-public class ClassicVersionSorter
-implements MetadataTreeArtifactSorter
+public class ClassicVersionComparator
+implements Comparator<MetadataTreeNode>
 {
   boolean _newerBetter = true;
   
-  public ClassicVersionSorter()
+  public ClassicVersionComparator()
   {
   }
 
-  public ClassicVersionSorter( boolean newerBetter )
+  public ClassicVersionComparator( boolean newerBetter )
   {
     _newerBetter = newerBetter;
   }
@@ -33,5 +35,5 @@ implements MetadataTreeArtifactSorter
     
     return _newerBetter ? v1.compareTo(v2) : v2.compareTo(v1) ;
   }
-
+  
 }

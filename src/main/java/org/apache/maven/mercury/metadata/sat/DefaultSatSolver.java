@@ -2,6 +2,8 @@ package org.apache.maven.mercury.metadata.sat;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +26,11 @@ import org.sat4j.specs.TimeoutException;
 public class DefaultSatSolver
 implements SatSolver
 {
-  protected SatContext context;
-  protected IPBSolver solver = SolverFactory.newEclipseP2();
+//  private static final Log _log = LogFactoryImpl.getLog( DefaultSatSolver.class );
+  
+  protected SatContext _context;
+  protected IPBSolver _solver = SolverFactory.newEclipseP2();
+  protected MetadataTreeNode _root;
   //-----------------------------------------------------------------------
   public static SatSolver create( MetadataTreeNode tree )
   throws SatException
@@ -40,8 +45,8 @@ implements SatSolver
       throw new SatException("cannot create a solver for an empty [null] tree");
     
     int nNodes = tree.countNodes();
-    context = new SatContext( nNodes );
-    solver.newVar( context.varCount );
+    _context = new SatContext( nNodes );
+    _solver.newVar( _context.varCount );
     
     try
     {
@@ -53,10 +58,65 @@ implements SatSolver
     }
   }
   //-----------------------------------------------------------------------
+  public final void applyPolicies( List<Comparator<MetadataTreeNode>> comparators )
+  throws SatException
+  {
+    if( comparators == null || comparators.size() < 1 )
+      return;
+    
+    // TODO og: assumption - around 128 GA's per tree
+    Map<String, List<MetadataTreeNode>> buckets = new HashMap<String, List<MetadataTreeNode>>(128);
+    fillBuckets( buckets, _root );
+    sortBuckets( buckets, comparators );
+  }
+  
+  private void sortBuckets(
+        Map<String, List<MetadataTreeNode>> buckets
+      , List<Comparator<MetadataTreeNode>> comparators
+      )
+  {
+    for( List<MetadataTreeNode> bucket : buckets.values() )
+    {
+      for( Comparator<MetadataTreeNode> comparator : comparators )
+      {
+        Collections.sort( bucket, comparator);
+      }
+    }
+    
+  }
+  
+  private void fillBuckets(
+        Map<String, List<MetadataTreeNode>> buckets
+      , MetadataTreeNode node
+                          )
+  {
+    String ga = node.getMd().getGA();
+    List<MetadataTreeNode> bucket = buckets.get(ga);
+    if( bucket == null )
+    {
+      // TODO og: assumption - around 32 different versions per GA
+      bucket = new ArrayList<MetadataTreeNode>( 32 );
+      buckets.put(ga, bucket );
+    }
+    
+    bucket.add( node );
+    
+    if( ! node.hasChildren() )
+      return;
+    
+    for( MetadataTreeNode kid : node.getChildren() )
+    {
+      fillBuckets( buckets, kid );
+    }
+
+    
+    
+  }
+  //-----------------------------------------------------------------------
   private final void addPB( IVecInt lits, IVec<BigInteger> coeff, boolean ge, BigInteger cardinality )
   throws ContradictionException
   {
-    solver.addPseudoBoolean( lits, coeff, ge, cardinality );
+    _solver.addPseudoBoolean( lits, coeff, ge, cardinality );
     
     System.out.print("PB: ");
     for( int i=0; i<lits.size(); i++ )
@@ -118,7 +178,7 @@ implements SatSolver
     if( node.getMd() == null )
       throw new SatException("found a node without metadata");
     
-    SatVar nodeLit = context.findOrAdd( node.getMd() );
+    SatVar nodeLit = _context.findOrAdd( node.getMd() );
 
     if( node.getParent() == null )
       {
@@ -159,7 +219,7 @@ implements SatSolver
       else
       {
         MetadataTreeNode child = range.get(0);
-        SatVar kidLit = context.findOrAdd( child.getMd() );
+        SatVar kidLit = _context.findOrAdd( child.getMd() );
         
         addPB( SatHelper.getSmallOnes( new int [] { nodeLit.getLiteral(), kidLit.getLiteral() } )
                               , SatHelper.getBigOnes( -1, 1 )
@@ -182,7 +242,7 @@ implements SatSolver
     
     for( MetadataTreeNode tn : range )
     {
-      literal = context.findOrAdd( tn.getMd() );
+      literal = _context.findOrAdd( tn.getMd() );
       literals[count++] = literal.getLiteral();
     }
     
@@ -223,8 +283,8 @@ implements SatSolver
   protected DefaultSatSolver( int nVars )
   throws SatException
   {
-    context = new SatContext( nVars );
-    solver.newVar( nVars );
+    _context = new SatContext( nVars );
+    _solver.newVar( nVars );
   }
   //-----------------------------------------------------------------------
   public final List<ArtifactMetadata> solve()
@@ -234,12 +294,12 @@ implements SatSolver
     
     try
     {
-      if( solver.isSatisfiable() )
+      if( _solver.isSatisfiable() )
       {
-        res = new ArrayList<ArtifactMetadata>( context.varCount );
-        for( SatVar v : context.variables )
+        res = new ArrayList<ArtifactMetadata>( _context.varCount );
+        for( SatVar v : _context.variables )
         {
-          boolean yes = solver.model( v.getLiteral() );
+          boolean yes = _solver.model( v.getLiteral() );
           if( yes )
             res.add( v.getMd() );
         }

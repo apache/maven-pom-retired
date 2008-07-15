@@ -41,17 +41,17 @@ public class DefaultSatSolverTest
     System.out.println("\n\n==========================\n"+title+"\n");
     
     ss = (DefaultSatSolver) DefaultSatSolver.create(3);
-    ss.context.findOrAdd( b1 );
-    ss.context.findOrAdd( b2 );
+    ss._context.findOrAdd( b1 );
+    ss._context.findOrAdd( b2 );
     
-    assert ss.context != null : "created solver has a null context";
-    assert ss.context.varCount == 2 : "expected 2 variables in the context, but found "+ss.context.varCount;
+    assert ss._context != null : "created solver has a null context";
+    assert ss._context.varCount == 2 : "expected 2 variables in the context, but found "+ss._context.varCount;
 
-    ss.context.findOrAdd( a1 );
-    assert ss.context.varCount == 3 : "expected 3 variables in the context, but found "+ss.context.varCount;
+    ss._context.findOrAdd( a1 );
+    assert ss._context.varCount == 3 : "expected 3 variables in the context, but found "+ss._context.varCount;
 
-    ss.context.findOrAdd( b1 );
-    assert ss.context.varCount == 3 : "expected 3 variables in the context, but found "+ss.context.varCount;
+    ss._context.findOrAdd( b1 );
+    assert ss._context.varCount == 3 : "expected 3 variables in the context, but found "+ss._context.varCount;
   }
   //----------------------------------------------------------------------
   //
@@ -103,7 +103,7 @@ public class DefaultSatSolverTest
 
     List<ArtifactMetadata> res = ss.solve();
     
-    int m[] = ss.solver.model();
+    int m[] = ss._solver.model();
 
     System.out.print("model: " );
     for( int i=0; i<m.length; i++ )

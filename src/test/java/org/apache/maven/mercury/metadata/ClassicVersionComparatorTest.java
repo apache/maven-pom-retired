@@ -1,7 +1,9 @@
 package org.apache.maven.mercury.metadata;
 
+import java.util.Comparator;
 
-public class ClassicVersionSorterTest
+
+public class ClassicVersionComparatorTest
 extends AbstractSimpleTreeTest
 {
   
@@ -14,25 +16,25 @@ extends AbstractSimpleTreeTest
 
   public void testNewestBest()
   {
-    MetadataTreeArtifactSorter sorter = new ClassicVersionSorter();
+    Comparator<MetadataTreeNode> comparator = new ClassicVersionComparator();
     
-    int res = sorter.compare( bb1, cc1bb1 );
+    int res = comparator.compare( bb1, cc1bb1 );
     
     assertTrue( "bb1 should be the same cc1bb1",  res == 0 );
     
-    res = sorter.compare( bb1, cc1bb2 );
+    res = comparator.compare( bb1, cc1bb2 );
     assertTrue( "bb1 should be older'n cc1bb2",  res < 0 );
   }
 
   public void testOldestBest()
   {
-    MetadataTreeArtifactSorter sorter = new ClassicVersionSorter(false);
+    Comparator<MetadataTreeNode> comparator = new ClassicVersionComparator(false);
     
-    int res = sorter.compare( bb1, cc1bb1 );
+    int res = comparator.compare( bb1, cc1bb1 );
     
     assertTrue( "bb1 should be the same cc1bb1",  res == 0 );
     
-    res = sorter.compare( bb1, cc1bb2 );
+    res = comparator.compare( bb1, cc1bb2 );
     assertTrue( "bb1 should be older'n cc1bb2",  res > 0 );
   }
 }
