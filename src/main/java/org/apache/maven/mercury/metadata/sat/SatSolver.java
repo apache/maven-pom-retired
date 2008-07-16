@@ -18,7 +18,7 @@ public interface SatSolver
    * @param sorts - policies expressed as sorted list of node sorters - from most important to the least
    * @throws SatException
    */
-  public void applyPolicies( List< Comparator<MetadataTreeNode> > omparators )
+  public void applyPolicies( List< Comparator<MetadataTreeNode> > comparators )
   throws SatException;
   
   /**

@@ -1,9 +1,12 @@
 package org.apache.maven.mercury.metadata;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.maven.mercury.ArtifactScopeEnum;
 import org.apache.maven.mercury.metadata.sat.DefaultSatSolver;
 import org.apache.maven.mercury.metadata.sat.SatException;
 import org.apache.maven.mercury.repository.LocalRepository;
@@ -18,25 +21,27 @@ import org.apache.maven.mercury.repository.RemoteRepository;
  */
 public class MetadataTree
 {
-  private MetadataSource mdSource;
-  private Set<MetadataTreeArtifactFilter> filters;
-  private List<MetadataTreeArtifactFilter> sorters;
-  private LocalRepository localRepository;
-  private Set<RemoteRepository> remoteRepositories;
+  private MetadataSource _mdSource;
+  private Set<MetadataTreeArtifactFilter> _filters;
+  private List<Comparator<MetadataTreeNode>> _comparators;
+  private LocalRepository _localRepository;
+  private Set<RemoteRepository> _remoteRepositories;
+  
+  MetadataTreeNode _root;
   
   public MetadataTree(
         MetadataSource mdSource
       , Set<MetadataTreeArtifactFilter> filters
-      , List<MetadataTreeArtifactFilter> sorters
+      , List<Comparator<MetadataTreeNode>> comparators
       , LocalRepository localRepository
       , Set<RemoteRepository> remoteRepositories
                         )
   {
-    this.mdSource = mdSource;
-    this.filters = filters;
-    this.sorters = sorters;
-    this.localRepository = localRepository;
-    this.remoteRepositories = remoteRepositories;
+    this._mdSource = mdSource;
+    this._filters = filters;
+    this._comparators = comparators;
+    this._localRepository = localRepository;
+    this._remoteRepositories = remoteRepositories;
   }
   //-----------------------------------------------------
   public MetadataTreeNode buildTree( ArtifactMetadata startMD )
@@ -45,14 +50,14 @@ public class MetadataTree
     if( startMD == null )
       throw new MetadataTreeException( "null start point" );
     
-    if( mdSource == null )
+    if( _mdSource == null )
       throw new MetadataTreeException( "null metadata source" );
     
-    if( localRepository == null )
+    if( _localRepository == null )
       throw new MetadataTreeException( "null local repo" );
     
-    MetadataTreeNode root = createNode( startMD, null, startMD );
-    return root;
+    _root = createNode( startMD, null, startMD );
+    return _root;
   }
   //-----------------------------------------------------
   private MetadataTreeNode createNode( ArtifactMetadata nodeMD, MetadataTreeNode parent, ArtifactMetadata nodeQuery )
@@ -64,7 +69,7 @@ public class MetadataTree
     
     try
     {
-      mr = mdSource.retrieve( nodeMD, localRepository, remoteRepositories );
+      mr = _mdSource.retrieve( nodeMD, _localRepository, _remoteRepositories );
 
       if( mr == null || mr.getArtifactMetadata() == null )
         throw new MetadataTreeException( "no result found for " + nodeMD );
@@ -78,7 +83,7 @@ public class MetadataTree
       
       for( ArtifactMetadata md : dependencies )
       {
-        Collection<ArtifactMetadata> versions = mdSource.expand( md, localRepository, remoteRepositories );
+        Collection<ArtifactMetadata> versions = _mdSource.expand( md, _localRepository, _remoteRepositories );
         if( versions == null || versions.size() < 1 )
         {
           if( md.isOptional() )
@@ -89,7 +94,7 @@ public class MetadataTree
         boolean noGoodVersions = true;
         for( ArtifactMetadata ver : versions )
         {
-          if( veto( ver, filters) )
+          if( veto( ver, _filters) )
             continue;
           
           MetadataTreeNode kid = createNode( ver, node, md );
@@ -155,16 +160,26 @@ public class MetadataTree
     return false;
   }
   //-----------------------------------------------------
-  // TODO
-  public List<ArtifactMetadata> resolveConflicts( MetadataTreeNode root )
+  public List<ArtifactMetadata> resolveConflicts( ArtifactScopeEnum scope )
   throws MetadataTreeException
   {
-    if( root == null )
+    if( _root == null )
       throw new MetadataTreeException("null tree");
     
     try
     {
-      DefaultSatSolver solver = new DefaultSatSolver( root );
+      DefaultSatSolver solver = new DefaultSatSolver( _root );
+      
+      if( _comparators == null )
+        _comparators = new ArrayList<Comparator<MetadataTreeNode>>(2);
+      
+      if( _comparators.size() < 1 )
+      {
+        _comparators.add( new ClassicDepthComparator() );
+        _comparators.add( new ClassicVersionComparator() );
+      }
+      solver.applyPolicies( _comparators );
+
       List<ArtifactMetadata> res = solver.solve();
       
       return res;

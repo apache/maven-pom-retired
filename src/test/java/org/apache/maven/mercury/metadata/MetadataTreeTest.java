@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
+import org.apache.maven.mercury.ArtifactScopeEnum;
 import org.apache.maven.mercury.repository.DefaultLocalRepository;
 
 
@@ -88,15 +89,15 @@ System.out.println("Current dir is "+ new File(".").getCanonicalPath() );
     assertNotNull( "null tree built", root );
     assertEquals( "wrong tree size", 4, root.countNodes() );
 
-    List<ArtifactMetadata> res = mt.resolveConflicts(root);
+    List<ArtifactMetadata> res = mt.resolveConflicts( ArtifactScopeEnum.compile );
     assertNotNull( "null resolution", res );
     assertEquals( "wrong tree size", 3, res.size() );
     
     assertTrue( "no a:a:2 in the result", assertHasArtifact( res, "a:a:2" ) );
-    assertTrue( "no b:b:1 in the result", assertHasArtifact( res, "b:b:1" ) );
+    assertTrue( "no b:b:2 in the result", assertHasArtifact( res, "b:b:2" ) );
     assertTrue( "no c:c:2 in the result", assertHasArtifact( res, "c:c:2" ) );
     
-    System.out.println( "No Conflict: " + res );
+    System.out.println( "testResolveConflicts: " + res );
   }
   //----------------------------------------------------------------------------------------------
   public void testBigResolveConflicts()
@@ -108,7 +109,7 @@ System.out.println("Current dir is "+ new File(".").getCanonicalPath() );
     assertNotNull( "null tree built", root );
     assertTrue( "wrong tree size, expected gte 4", 4 <= root.countNodes() );
 
-    List<ArtifactMetadata> res = mt.resolveConflicts(root);
+    List<ArtifactMetadata> res = mt.resolveConflicts( ArtifactScopeEnum.compile );
     assertNotNull( "null resolution", res );
 
 System.out.println("BigRes: "+res);    

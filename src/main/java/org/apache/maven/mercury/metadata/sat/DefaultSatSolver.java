@@ -2,6 +2,7 @@ package org.apache.maven.mercury.metadata.sat;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -10,7 +11,10 @@ import java.util.Map;
 
 import org.apache.maven.mercury.metadata.ArtifactMetadata;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
+import org.sat4j.core.Vec;
+import org.sat4j.core.VecInt;
 import org.sat4j.pb.IPBSolver;
+import org.sat4j.pb.ObjectiveFunction;
 import org.sat4j.pb.SolverFactory;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IVec;
@@ -31,6 +35,7 @@ implements SatSolver
   protected SatContext _context;
   protected IPBSolver _solver = SolverFactory.newEclipseP2();
   protected MetadataTreeNode _root;
+  protected static final Comparator<MetadataTreeNode> gaComparator = new MetadataTreeNodeGAComparator();
   //-----------------------------------------------------------------------
   public static SatSolver create( MetadataTreeNode tree )
   throws SatException
@@ -47,6 +52,7 @@ implements SatSolver
     int nNodes = tree.countNodes();
     _context = new SatContext( nNodes );
     _solver.newVar( _context.varCount );
+    _root = tree;
     
     try
     {
@@ -64,28 +70,173 @@ implements SatSolver
     if( comparators == null || comparators.size() < 1 )
       return;
     
+    if( _root == null )
+      throw new SatException( "cannot apply policies to a null tree" );
+    
     // TODO og: assumption - around 128 GA's per tree
     Map<String, List<MetadataTreeNode>> buckets = new HashMap<String, List<MetadataTreeNode>>(128);
     fillBuckets( buckets, _root );
     sortBuckets( buckets, comparators );
+    useBuckets( buckets );
   }
-  
-  private void sortBuckets(
-        Map<String, List<MetadataTreeNode>> buckets
-      , List<Comparator<MetadataTreeNode>> comparators
-      )
+  //-----------------------------------------------------------------------
+  private void useBuckets( Map<String, List<MetadataTreeNode>> buckets )
+  throws SatException
   {
+    if( buckets == null || buckets.size() < 1 )
+      return;
+    
+    IVecInt vars = new VecInt( 128 );
+    IVec<BigInteger> coeffs = new Vec<BigInteger>( 128 );
+
     for( List<MetadataTreeNode> bucket : buckets.values() )
     {
-      for( Comparator<MetadataTreeNode> comparator : comparators )
+      if( bucket.size() < 2 )
+        continue;
+      
+      for( int i=0; i<bucket.size(); i++ )
       {
-        Collections.sort( bucket, comparator);
+        MetadataTreeNode n  = bucket.get(i);
+        ArtifactMetadata md = n.getMd();
+        SatVar var = _context.findOrAdd(md);
+        vars.push( var.getLiteral() );
+        coeffs.push( BigInteger.valueOf( (long)Math.pow( 2, i ) ) );
       }
     }
     
+    if( vars.isEmpty() )
+      return;
+    
+    _solver.setObjectiveFunction( new ObjectiveFunction( vars, coeffs ) );
   }
-  
-  private void fillBuckets(
+  //-----------------------------------------------------------------------
+  protected static final void sortBuckets(
+        Map<String, List<MetadataTreeNode>> buckets
+      , List<Comparator<MetadataTreeNode>> comparators
+                                          )
+  {
+    Comparator<MetadataTreeNode> lastComparator;
+    for( List<MetadataTreeNode> bucket : buckets.values() )
+    {
+      lastComparator = gaComparator;
+      for( Comparator<MetadataTreeNode> comparator : comparators )
+      {
+        sortBucket( bucket, comparator, lastComparator );
+        lastComparator = comparator;
+      }
+      // due to the nature of Comparator need to reverse the result
+      // as the bets fit is now last
+      Collections.reverse( bucket );
+
+      // we don't need duplicate GAVs
+      removeDuplicateGAVs( bucket );
+ 
+    }
+  }
+  //-----------------------------------------------------------------------
+  private static final void removeDuplicateGAVs(List<MetadataTreeNode> bucket)
+  {
+    if( bucket == null || bucket.size() < 2 )
+      return;
+
+    Comparator<MetadataTreeNode> gav = new MetadataTreeNodeGAVComparator();
+    
+    int len = bucket.size();
+    int [] dups = new int[ len-1 ];
+    int cnt = 0;
+    
+    for( int i=1; i<len; i++ )
+      for( int j=0; j<i; j++ )
+        if( gav.compare( bucket.get(i), bucket.get(j) ) == 0 )
+          dups[cnt++] = i;
+    
+    if( cnt > 0 )
+      for( int i=0; i<cnt; i++ )
+        bucket.remove( dups[cnt-i-1] );
+  }
+  //-----------------------------------------------------------------------
+  /**
+   * reorders the bucket's lastComparator "equals" with comparator, most desirable - positive - elements first.
+   */
+  protected static final void sortBucket(
+               List<MetadataTreeNode> bucket
+               , Comparator<MetadataTreeNode> comparator
+               , Comparator<MetadataTreeNode> lastComparator
+               )
+  {
+    if( bucket == null || bucket.size() < 2 )
+      return;
+    
+    int bLen = bucket.size();
+    MetadataTreeNode [] temp = bucket.toArray( new MetadataTreeNode[ bLen ] );
+    
+    int wStart = -1;
+    int wLen = 0;
+    MetadataTreeNode [] work = new MetadataTreeNode[ bLen ];
+    
+    MetadataTreeNode lastNode = null;
+    for( int i=0; i<bLen; i++ )
+    {
+      MetadataTreeNode n = temp[i];
+      
+      if( lastNode == null )
+      {
+        lastNode = n;
+        continue;
+      }
+      
+      if( lastComparator.compare(lastNode, n) == 0 )
+      {
+        if( wLen == 0 )
+        {
+          work[ wLen++ ] = lastNode;
+          wStart = i-1;
+        }
+        
+        work[ wLen++ ] = n;
+
+        lastNode = n;
+
+        if( i < (bLen-1) )
+          continue;
+      }
+      
+      if( wLen > 0 ) // eq list formed
+      {
+        reorder( work, wLen, comparator );
+        for( int j=0; j<wLen; j++ )
+          temp[ wStart+j ] = work[ j ];
+        wLen = 0;
+        wStart = -1;
+      }
+      
+      lastNode = n;
+    }
+    
+    bucket.clear();
+    for( int i=0; i<bLen; i++ )
+      bucket.add( temp[ i ] );
+  }
+  //-----------------------------------------------------------------------
+  private static final void reorder(
+      MetadataTreeNode[] work
+      , int wLen
+      , Comparator<MetadataTreeNode> comparator
+                     )
+  {
+    MetadataTreeNode[] temp = new MetadataTreeNode[ wLen ];
+    
+    for( int i=0; i< wLen; i++ )
+      temp[i] = work[i];
+    
+    Arrays.sort( temp, comparator );
+    
+    for( int i=0; i<wLen; i++ )
+      work[i] = temp[i];
+    
+  }
+  //-----------------------------------------------------------------------
+  protected static final void fillBuckets(
         Map<String, List<MetadataTreeNode>> buckets
       , MetadataTreeNode node
                           )
@@ -94,7 +245,7 @@ implements SatSolver
     List<MetadataTreeNode> bucket = buckets.get(ga);
     if( bucket == null )
     {
-      // TODO og: assumption - around 32 different versions per GA
+      // TODO og: assumption - around 32 GAVs per GA
       bucket = new ArrayList<MetadataTreeNode>( 32 );
       buckets.put(ga, bucket );
     }
@@ -108,9 +259,6 @@ implements SatSolver
     {
       fillBuckets( buckets, kid );
     }
-
-    
-    
   }
   //-----------------------------------------------------------------------
   private final void addPB( IVecInt lits, IVec<BigInteger> coeff, boolean ge, BigInteger cardinality )
@@ -137,15 +285,15 @@ implements SatSolver
                                                                               )
   throws SatException
   {
+    if( queries == null || queries.size() < 1 )
+      return null;
+    
+    if( children == null || children.size() < 1 )
+      throw new SatException("there are queries, but not results. Queries: "+queries);
+    
     HashMap<ArtifactMetadata, List<MetadataTreeNode>> res = new HashMap<ArtifactMetadata, List<MetadataTreeNode>>( queries.size() );
     for( ArtifactMetadata q : queries )
     {
-      if( queries == null || queries.size() < 1 )
-        return null;
-      
-      if( children == null || children.size() < 1 )
-        throw new SatException("there are queries, but not results. Queries: "+queries);
-      
       List<MetadataTreeNode> bucket = new ArrayList<MetadataTreeNode>(4);
       String queryGA = q.getGA();
       

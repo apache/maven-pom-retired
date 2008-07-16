@@ -28,9 +28,13 @@ extends TestCase
   {
     aa1 = new MetadataTreeNode( mdaa1, null, mdaa1 );
     bb1 = new MetadataTreeNode( mdbb1, aa1, mdbb1 );
+    aa1.addChild(bb1);
     cc1 = new MetadataTreeNode( mdcc1, aa1, mdcc1 );
+    aa1.addChild(cc1);
     cc1bb1 = new MetadataTreeNode( mdbb1, cc1, mdbb1 );
+    cc1.addChild( cc1bb1 );
     cc1bb2 = new MetadataTreeNode( mdbb2, cc1, mdbb2 );
+    cc1.addChild( cc1bb2 );
   }
 
 }

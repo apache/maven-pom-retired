@@ -1,10 +1,15 @@
 package org.apache.maven.mercury.metadata.sat;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.mercury.ArtifactScopeEnum;
 import org.apache.maven.mercury.metadata.ArtifactMetadata;
+import org.apache.maven.mercury.metadata.ClassicDepthComparator;
+import org.apache.maven.mercury.metadata.ClassicVersionComparator;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 
 import junit.framework.TestCase;
@@ -52,6 +57,70 @@ public class DefaultSatSolverTest
 
     ss._context.findOrAdd( b1 );
     assert ss._context.varCount == 3 : "expected 3 variables in the context, but found "+ss._context.varCount;
+  }
+  //----------------------------------------------------------------------
+  public void testOptimization()
+  throws SatException
+  {
+    title = "optimization test";
+    System.out.println("\n\n==========================\n"+title+"\n");
+
+    //       b:b:1
+    //      / 
+    // a:a:1       b:b:2
+    //    \     /
+    //     c:c:1
+    //          \ b:b:1
+    
+    ArtifactMetadata mdaa1 = new ArtifactMetadata("a:a:1");
+    ArtifactMetadata mdbb1 = new ArtifactMetadata("b:b:1");
+    ArtifactMetadata mdbb2 = new ArtifactMetadata("b:b:2");
+    ArtifactMetadata mdcc1 = new ArtifactMetadata("c:c:1");
+    
+    MetadataTreeNode aa1;
+    MetadataTreeNode bb1;
+    MetadataTreeNode cc1;
+    MetadataTreeNode cc1bb1;
+    MetadataTreeNode cc1bb2;
+    
+    aa1 = new MetadataTreeNode( mdaa1, null, mdaa1 );
+    bb1 = new MetadataTreeNode( mdbb1, aa1, mdbb1 );
+    aa1.addChild(bb1);
+    cc1 = new MetadataTreeNode( mdcc1, aa1, mdcc1 );
+    aa1.addChild(cc1);
+    cc1bb1 = new MetadataTreeNode( mdbb1, cc1, mdbb1 );
+    cc1.addChild( cc1bb1 );
+    cc1bb2 = new MetadataTreeNode( mdbb2, cc1, mdbb2 );
+    cc1.addChild( cc1bb2 );
+    
+    ss = (DefaultSatSolver) DefaultSatSolver.create( aa1 );
+    
+    List< Comparator<MetadataTreeNode>> comparators = new ArrayList<Comparator<MetadataTreeNode>>(2);
+    comparators.add( new ClassicDepthComparator() );
+    comparators.add( new ClassicVersionComparator() );
+    
+    Map<String, List<MetadataTreeNode>> buckets = new HashMap<String, List<MetadataTreeNode>>(128);
+    DefaultSatSolver.fillBuckets( buckets, aa1 );
+    DefaultSatSolver.sortBuckets( buckets, comparators );
+
+    assertNotNull("no resulting map", buckets ); 
+    assertEquals( "bad map size", 3, buckets.size() ); 
+    
+    System.out.println("optimized buckets: "+buckets);
+    
+    List<MetadataTreeNode> bbl = buckets.get("b:b");
+    assertNotNull("no b:b list", bbl );
+    assertEquals( "bad b:b list size", 2, bbl.size() ); 
+    
+    MetadataTreeNode first = bbl.get(0);
+    assertNotNull("bad first element", first );
+    assertEquals( "bad first element's GAV", "b:b:1", first.getMd().getGAV() );
+    assertEquals( "bad first element's depth", 1, first.getDepth() );
+    
+    MetadataTreeNode second = bbl.get(1);
+    assertNotNull("bad second element", second );
+    assertEquals( "bad second element's GAV", "b:b:2", second.getMd().getGAV() );
+    assertEquals( "bad second element's depth", 2, second.getDepth() );
   }
   //----------------------------------------------------------------------
   //

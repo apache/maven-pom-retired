@@ -141,8 +141,9 @@ public class MetadataTreeNode
     public String toString()
     {
         return md == null 
-            ? "no metadata, parent " + ( parent == null ? "null"
-            : parent.toString() ) : md.toString()
+            ? "no metadata, parent " + 
+                ( parent == null ? "null" : parent.toString() ) 
+            : md.toString()+":d="+getDepth()
             ;
     }
     //------------------------------------------------------------------------
