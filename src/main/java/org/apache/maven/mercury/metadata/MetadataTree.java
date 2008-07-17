@@ -168,7 +168,7 @@ public class MetadataTree
     
     try
     {
-      DefaultSatSolver solver = new DefaultSatSolver( _root );
+      DefaultSatSolver solver = new DefaultSatSolver( _root, scope );
       
       if( _comparators == null )
         _comparators = new ArrayList<Comparator<MetadataTreeNode>>(2);

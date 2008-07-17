@@ -93,7 +93,7 @@ public class DefaultSatSolverTest
     cc1bb2 = new MetadataTreeNode( mdbb2, cc1, mdbb2 );
     cc1.addChild( cc1bb2 );
     
-    ss = (DefaultSatSolver) DefaultSatSolver.create( aa1 );
+    ss = (DefaultSatSolver) DefaultSatSolver.create( aa1, ArtifactScopeEnum.compile );
     
     List< Comparator<MetadataTreeNode>> comparators = new ArrayList<Comparator<MetadataTreeNode>>(2);
     comparators.add( new ClassicDepthComparator() );
@@ -168,7 +168,7 @@ public class DefaultSatSolverTest
       .addChild(nb3)
     ;
 
-    ss = (DefaultSatSolver) DefaultSatSolver.create(na1);
+    ss = (DefaultSatSolver) DefaultSatSolver.create(na1, ArtifactScopeEnum.compile);
 
     List<ArtifactMetadata> res = ss.solve();
     

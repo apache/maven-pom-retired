@@ -100,6 +100,26 @@ System.out.println("Current dir is "+ new File(".").getCanonicalPath() );
     System.out.println( "testResolveConflicts: " + res );
   }
   //----------------------------------------------------------------------------------------------
+  public void testResolveScopedConflicts()
+  throws MetadataTreeException
+  {
+    ArtifactMetadata md = new ArtifactMetadata( "a:a:4" );
+    
+    MetadataTreeNode root = mt.buildTree( md );
+    assertNotNull( "null tree built", root );
+    assertEquals( "wrong tree size", 4, root.countNodes() );
+
+    List<ArtifactMetadata> res = mt.resolveConflicts( ArtifactScopeEnum.compile );
+    assertNotNull( "null resolution", res );
+    assertEquals( "wrong tree size", 2, res.size() );
+
+    System.out.println( "testResolveScopedConflicts: " + res );
+    
+    assertTrue( "no a:a:4 in the result", assertHasArtifact( res, "a:a:4" ) );
+    assertTrue( "no c:c:3 in the result", assertHasArtifact( res, "c:c:3" ) );
+    
+  }
+  //----------------------------------------------------------------------------------------------
   public void testBigResolveConflicts()
   throws MetadataTreeException
   {

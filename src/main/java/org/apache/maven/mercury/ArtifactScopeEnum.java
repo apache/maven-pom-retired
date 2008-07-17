@@ -70,7 +70,7 @@ public enum ArtifactScopeEnum
     
     private static final ArtifactScopeEnum [][][] _compliancySets = {
     	  { { compile  }, { compile,                provided, system } }
-      	, { { test     }, { compile, test,          provided, system } }
+    	, { { test     }, { compile, test,          provided, system } }
     	, { { runtime  }, { compile,       runtime,           system } }
     	, { { provided }, { compile, test,          provided         } }
     };

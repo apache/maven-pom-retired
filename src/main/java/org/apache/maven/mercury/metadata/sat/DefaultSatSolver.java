@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.mercury.ArtifactScopeEnum;
 import org.apache.maven.mercury.metadata.ArtifactMetadata;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 import org.sat4j.core.Vec;
@@ -35,15 +36,16 @@ implements SatSolver
   protected SatContext _context;
   protected IPBSolver _solver = SolverFactory.newEclipseP2();
   protected MetadataTreeNode _root;
+  protected ArtifactScopeEnum _scope;
   protected static final Comparator<MetadataTreeNode> gaComparator = new MetadataTreeNodeGAComparator();
   //-----------------------------------------------------------------------
-  public static SatSolver create( MetadataTreeNode tree )
+  public static SatSolver create( MetadataTreeNode tree, ArtifactScopeEnum scope )
   throws SatException
   {
-    return new DefaultSatSolver( tree );
+    return new DefaultSatSolver( tree, scope );
   }
   //-----------------------------------------------------------------------
-  public DefaultSatSolver( MetadataTreeNode tree )
+  public DefaultSatSolver( MetadataTreeNode tree, ArtifactScopeEnum scope )
   throws SatException
   {
     if( tree == null)
@@ -53,6 +55,7 @@ implements SatSolver
     _context = new SatContext( nNodes );
     _solver.newVar( _context.varCount );
     _root = tree;
+    _scope = scope == null ? ArtifactScopeEnum.DEFAULT_SCOPE : scope;
     
     try
     {
@@ -125,7 +128,7 @@ implements SatSolver
         lastComparator = comparator;
       }
       // due to the nature of Comparator need to reverse the result
-      // as the bets fit is now last
+      // as the best fit is now last
       Collections.reverse( bucket );
 
       // we don't need duplicate GAVs
@@ -156,7 +159,7 @@ implements SatSolver
   }
   //-----------------------------------------------------------------------
   /**
-   * reorders the bucket's lastComparator "equals" with comparator, most desirable - positive - elements first.
+   * reorders the bucket's lastComparator equal subsets with comparator.
    */
   protected static final void sortBucket(
                List<MetadataTreeNode> bucket
@@ -348,6 +351,9 @@ implements SatSolver
     for( Map.Entry<ArtifactMetadata,List<MetadataTreeNode>> kid : kids.entrySet() )
     {
       ArtifactMetadata query = kid.getKey();
+      if( ! _scope.encloses( query.getArtifactScope()) )
+        continue;
+      
       List<MetadataTreeNode> range = kid.getValue();
 
       if( range.size() > 1 )
