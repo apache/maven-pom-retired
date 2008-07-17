@@ -12,6 +12,8 @@ import java.util.Map;
 import org.apache.maven.mercury.ArtifactScopeEnum;
 import org.apache.maven.mercury.metadata.ArtifactMetadata;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
+import org.apache.maven.mercury.metadata.MetadataTreeNodeGAComparator;
+import org.apache.maven.mercury.metadata.MetadataTreeNodeGAVComparator;
 import org.sat4j.core.Vec;
 import org.sat4j.core.VecInt;
 import org.sat4j.pb.IPBSolver;

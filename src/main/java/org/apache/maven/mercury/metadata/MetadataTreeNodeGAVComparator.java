@@ -1,9 +1,6 @@
-package org.apache.maven.mercury.metadata.sat;
+package org.apache.maven.mercury.metadata;
 
 import java.util.Comparator;
-
-import org.apache.maven.mercury.metadata.MetadataTreeNode;
-
 
 /**
  * utility class for DefaultSatSolver. Assumes good data - no null's
@@ -11,7 +8,7 @@ import org.apache.maven.mercury.metadata.MetadataTreeNode;
  * @author Oleg Gusakov
  * @version $Id$
  */
-class MetadataTreeNodeGAVComparator
+public class MetadataTreeNodeGAVComparator
 implements Comparator<MetadataTreeNode>
 {
 
