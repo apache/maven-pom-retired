@@ -364,5 +364,10 @@ public class ArtifactMetadata
       this.optional = "true".equals(optional) ? true : false;
     }
     
+    public boolean hasClassifier()
+    {
+      return classifier == null;
+    }
+    
     
 }

@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.repository.layout;
 
 import org.apache.maven.mercury.Artifact;
+import org.apache.maven.mercury.metadata.ArtifactMetadata;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,10 +22,15 @@ import org.apache.maven.mercury.Artifact;
  * under the License.
  */
 
-/** @author jdcasey */
+/** 
+ * 
+ * @author jdcasey
+ * @author Oleg Gusakov
+ * @version $Id$
+ **/
 public interface RepositoryLayout
 {
     String ROLE = RepositoryLayout.class.getName();
 
-    String pathOf( Artifact artifact );
+    String pathOf( ArtifactMetadata md );
 }

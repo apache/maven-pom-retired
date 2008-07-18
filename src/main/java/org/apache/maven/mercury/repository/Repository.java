@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.repository;
 
 import org.apache.maven.mercury.Artifact;
+import org.apache.maven.mercury.metadata.ArtifactMetadata;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -25,7 +26,7 @@ import org.apache.maven.mercury.Artifact;
  */
 public interface Repository
 {
-    String pathOf( Artifact artifact );
+    String pathOf( ArtifactMetadata md );
 
     String getId();
 }

@@ -31,7 +31,7 @@ import org.apache.maven.mercury.spi.http.client.retrieve.Retriever;
  * @plexus.component
  */
 public class DefaultArtifactRetriever
-    implements ArtifactRetriever
+implements ArtifactRetriever
 {
     public ResolutionResult retrieve( ResolutionRequest request )
     {
@@ -53,8 +53,8 @@ public class DefaultArtifactRetriever
         for ( RemoteRepository remoteRepository : request.getRemoteRepostories() )
         {
             DefaultRetrievalRequest rr = new DefaultRetrievalRequest();
-            String remoteUrl = remoteRepository.getUrl() + "/" + remoteRepository.pathOf( request.getArtifact() );
-            File localFile = new File( request.getLocalRepository().getDirectory(), request.getLocalRepository().pathOf( request.getArtifact() ) );
+            String remoteUrl = remoteRepository.getUrl() + "/" + remoteRepository.pathOf( request.getMd() );
+            File localFile = new File( request.getLocalRepository().getDirectory(), request.getLocalRepository().pathOf( request.getMd() ) );
             Binding binding = new Binding( remoteUrl, localFile, true );
             rr.addBinding( binding );
             RetrievalResponse response = retriever.retrieve( rr );

@@ -106,11 +106,11 @@ public class MetadataResolverTest
     }
 
     class SimpleLayout
-        implements RepositoryLayout
+    implements RepositoryLayout
     {
-        public String pathOf( Artifact artifact )
+        public String pathOf( ArtifactMetadata md )
         {
-            return artifact.getArtifactId() + "-" + artifact.getVersion() + ".txt";
+            return md.getArtifactId() + "-" + md.getVersion() + ".txt";
         }
     }
 }

@@ -3,8 +3,8 @@ package org.apache.maven.mercury.repository;
 import org.apache.maven.mercury.repository.layout.RepositoryLayout;
 
 public class DefaultRemoteRepository
-    extends AbstractRepository
-    implements RemoteRepository
+extends AbstractRepository
+implements RemoteRepository
 {
     private String url;
     

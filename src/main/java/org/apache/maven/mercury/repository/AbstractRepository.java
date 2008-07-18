@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.repository;
 
 import org.apache.maven.mercury.Artifact;
+import org.apache.maven.mercury.metadata.ArtifactMetadata;
 import org.apache.maven.mercury.repository.layout.RepositoryLayout;
 
 /*
@@ -19,7 +20,7 @@ import org.apache.maven.mercury.repository.layout.RepositoryLayout;
  */
 
 public abstract class AbstractRepository
-    implements Repository
+implements Repository
 {
     private String id;
         
@@ -41,8 +42,8 @@ public abstract class AbstractRepository
         return layout;
     }
 
-    public String pathOf( Artifact artifact )
+    public String pathOf( ArtifactMetadata md )
     {
-        return layout.pathOf( artifact );
+        return layout.pathOf( md );
     }
 }

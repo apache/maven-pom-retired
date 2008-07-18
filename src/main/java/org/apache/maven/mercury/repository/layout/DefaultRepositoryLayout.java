@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.repository.layout;
 
 import org.apache.maven.mercury.Artifact;
+import org.apache.maven.mercury.metadata.ArtifactMetadata;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,10 +24,12 @@ import org.apache.maven.mercury.Artifact;
 
 /**
  * @author jdcasey
+ * @author Oleg Gusakov
+ * 
  * @plexus.component role="org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout" role-hint="default"
  */
 public class DefaultRepositoryLayout
-    implements RepositoryLayout
+implements RepositoryLayout
 {
     private static final char PATH_SEPARATOR = '/';
 
@@ -34,18 +37,18 @@ public class DefaultRepositoryLayout
 
     private static final char ARTIFACT_SEPARATOR = '-';
 
-    public String pathOf( Artifact artifact )
+    public String pathOf( ArtifactMetadata md )
     {
         StringBuffer path = new StringBuffer();
 
-        path.append( formatAsDirectory( artifact.getGroupId() ) ).append( PATH_SEPARATOR );
-        path.append( artifact.getArtifactId() ).append( PATH_SEPARATOR );
-        path.append( artifact.getVersion() ).append( PATH_SEPARATOR );
-        path.append( artifact.getArtifactId() ).append( ARTIFACT_SEPARATOR ).append( artifact.getVersion() );
+        path.append( formatAsDirectory( md.getGroupId() ) ).append( PATH_SEPARATOR );
+        path.append( md.getArtifactId() ).append( PATH_SEPARATOR );
+        path.append( md.getVersion() ).append( PATH_SEPARATOR );
+        path.append( md.getArtifactId() ).append( ARTIFACT_SEPARATOR ).append( md.getVersion() );
 
-        if ( artifact.hasClassifier() )
+        if ( md.hasClassifier() )
         {
-            path.append( ARTIFACT_SEPARATOR ).append( artifact.getClassifier() );
+            path.append( ARTIFACT_SEPARATOR ).append( md.getClassifier() );
         }
 
         path.append( GROUP_SEPARATOR ).append( "pom" );

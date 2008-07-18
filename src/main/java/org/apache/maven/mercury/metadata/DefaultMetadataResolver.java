@@ -54,14 +54,18 @@ public class DefaultMetadataResolver
     }
 
     //------------------------------------------------------------------------
-    private MetadataTreeNode resolveMetadataTree( ArtifactMetadata query, MetadataTreeNode parent, LocalRepository localRepository, Set<RemoteRepository> remoteRepositories )
+    private MetadataTreeNode resolveMetadataTree( ArtifactMetadata query
+                                                , MetadataTreeNode parent
+                                                , LocalRepository localRepository
+                                                , Set<RemoteRepository> remoteRepositories
+                                                )
         throws MetadataResolutionException
     {
         try
         {
             Artifact pomArtifact = new DefaultArtifact( query.getGroupId(), query.getArtifactId(), query.getVersion(), query.getType(), null, false, query.getScope(), null );
 
-            ResolutionRequest request = new ResolutionRequest().setArtifact( pomArtifact ).setLocalRepository( localRepository ).setRemoteRepostories( remoteRepositories );
+            ResolutionRequest request = new ResolutionRequest().setMd( query ).setLocalRepository( localRepository ).setRemoteRepostories( remoteRepositories );
 
             ResolutionResult result = retriever.retrieve( request );
 

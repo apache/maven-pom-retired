@@ -3,6 +3,7 @@ package org.apache.maven.mercury.retrieve;
 import java.util.Set;
 
 import org.apache.maven.mercury.Artifact;
+import org.apache.maven.mercury.metadata.ArtifactMetadata;
 import org.apache.maven.mercury.repository.LocalRepository;
 import org.apache.maven.mercury.repository.RemoteRepository;
 import org.apache.maven.mercury.repository.Repository;
@@ -15,84 +16,71 @@ import org.apache.maven.mercury.repository.Repository;
  */
 public class ResolutionRequest
 {
-    private Artifact artifact;
-
-    private String groupId;
-
-    private String artifactId;
-
-    private String version;
-
+    private ArtifactMetadata _md;
     private LocalRepository localRepository;
-
     private Set<RemoteRepository> remoteRepostories;
 
-    public Artifact getArtifact()
+    public ArtifactMetadata getMd()
     {
-        return artifact;
+        return _md;
     }
 
-    public ResolutionRequest setArtifact( Artifact artifact )
+    public ResolutionRequest setMd( ArtifactMetadata md )
     {
-        this.artifact = artifact;
-
+        this._md = md;
         return this;
     }
 
-    public boolean hasArtifact()
+    public boolean hasMd()
     {
-        return artifact != null;
+        return _md != null;
+    }
+    
+    private void checkMd()
+    {
+      if( _md == null )
+        _md = new ArtifactMetadata();
     }
 
     public String getGroupId()
     {
-        if ( artifact != null )
-        {
-            return artifact.getGroupId();
-        }
-
-        return groupId;
+      checkMd();
+      return _md.getGroupId();
     }
 
     public ResolutionRequest setGroupId( String groupId )
     {
-        this.groupId = groupId;
+      checkMd();
+      this._md.setGroupId( groupId );
 
-        return this;
+      return this;
     }
 
     public String getArtifactId()
     {
-        if ( artifact != null )
-        {
-            return artifact.getArtifactId();
-        }
-
-        return artifactId;
+      checkMd();
+      return _md.getArtifactId();
     }
 
     public ResolutionRequest setArtifactId( String artifactId )
     {
-        this.artifactId = artifactId;
+      checkMd();
+      this._md.setArtifactId( artifactId );
 
-        return this;
+      return this;
     }
 
     public String getVersion()
     {
-        if ( artifact != null )
-        {
-            return artifact.getVersion();
-        }
-
-        return version;
+      checkMd();
+      return _md.getVersion();
     }
 
     public ResolutionRequest setVersion( String version )
     {
-        this.version = version;
-
-        return this;
+      checkMd();
+      this._md.setVersion(version);
+      return this;
     }
 
     public LocalRepository getLocalRepository()
