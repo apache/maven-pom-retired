@@ -20,7 +20,7 @@ package org.apache.maven.mercury.metadata;
  */
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import org.apache.maven.mercury.repository.LocalRepository;
 import org.apache.maven.mercury.repository.RemoteRepository;
@@ -54,7 +54,7 @@ public interface MetadataSource
     MetadataResolution retrieve( 
                          ArtifactMetadata metadata
                        , LocalRepository localRepository
-                       , Set<RemoteRepository> remoteRepositories
+                       , List<RemoteRepository> remoteRepositories
                                )
     throws MetadataRetrievalException
     ;
@@ -72,7 +72,7 @@ public interface MetadataSource
     Collection<ArtifactMetadata> expand( 
                                    ArtifactMetadata metadataQuery
                                  , LocalRepository localRepository
-                                 , Set<RemoteRepository> remoteRepositories 
+                                 , List<RemoteRepository> remoteRepositories 
                                        )
     throws MetadataRetrievalException
     ;

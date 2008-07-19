@@ -30,7 +30,7 @@ implements MetadataSource
   public Collection<ArtifactMetadata> expand(
                     ArtifactMetadata mdq
                   , LocalRepository localRepository
-                  , Set<RemoteRepository> remoteRepositories
+                  , List<RemoteRepository> remoteRepositories
                                         )
       throws MetadataRetrievalException
   {
@@ -82,7 +82,7 @@ Log.info("Expanded "+mdq+" into:\n"+res );
   public MetadataResolution retrieve( 
                       ArtifactMetadata metadata
                     , LocalRepository localRepository
-                    , Set<RemoteRepository> remoteRepositories
+                    , List<RemoteRepository> remoteRepositories
                                     )
       throws MetadataRetrievalException
   {

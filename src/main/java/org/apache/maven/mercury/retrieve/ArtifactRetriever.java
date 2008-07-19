@@ -24,6 +24,7 @@ package org.apache.maven.mercury.retrieve;
  * Responsible for retrieving a set of artifacts.
  * 
  * @author Jason van Zyl
+ * @author Oleg Gusakov
  */
 public interface ArtifactRetriever
 {
@@ -31,4 +32,5 @@ public interface ArtifactRetriever
 
     /** @since 3.0 */
     ResolutionResult retrieve( ResolutionRequest request );
+
 }

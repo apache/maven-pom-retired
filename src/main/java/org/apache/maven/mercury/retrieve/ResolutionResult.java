@@ -28,7 +28,7 @@ import org.apache.maven.mercury.Artifact;
 import org.apache.maven.mercury.repository.RemoteRepository;
 import org.apache.maven.mercury.repository.Repository;
 
-/*
+/**
  * @author Jason van Zyl
  */
 public class ResolutionResult

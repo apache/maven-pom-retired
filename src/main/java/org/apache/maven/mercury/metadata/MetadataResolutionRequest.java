@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.metadata;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +15,7 @@ public class MetadataResolutionRequest
 {
     protected ArtifactMetadata query;
     protected LocalRepository localRepository;
-    protected Set<RemoteRepository> remoteRepositories;
+    protected List<RemoteRepository> remoteRepositories;
 
     public MetadataResolutionRequest()
     {
@@ -22,7 +23,7 @@ public class MetadataResolutionRequest
 
     public MetadataResolutionRequest( ArtifactMetadata query,
                                       LocalRepository localRepository,
-                                      Set<RemoteRepository> remoteRepositories )
+                                      List<RemoteRepository> remoteRepositories )
     {
         this.query = query;
         this.localRepository = localRepository;
@@ -49,7 +50,7 @@ public class MetadataResolutionRequest
     {
         if ( remoteRepositories == null )
         {
-            remoteRepositories = new HashSet();
+            remoteRepositories = new ArrayList<RemoteRepository>();
         }
         
         remoteRepositories.add( repository );
@@ -63,12 +64,12 @@ public class MetadataResolutionRequest
         return this;
     }
 
-    public Set<RemoteRepository> getRemoteRepositories()
+    public List<RemoteRepository> getRemoteRepositories()
     {
         return remoteRepositories;
     }
 
-    public MetadataResolutionRequest setRemoteRepositories( Set<RemoteRepository> remoteRepositories )
+    public MetadataResolutionRequest setRemoteRepositories( List<RemoteRepository> remoteRepositories )
     {
         this.remoteRepositories = remoteRepositories;
         return this;

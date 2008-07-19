@@ -25,7 +25,7 @@ import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetriever;
 import org.apache.maven.mercury.spi.http.client.retrieve.RetrievalResponse;
 import org.apache.maven.mercury.spi.http.client.retrieve.Retriever;
 
-/*
+/**
  * @author Jason van Zyl
  * 
  * @plexus.component

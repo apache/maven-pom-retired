@@ -13,7 +13,7 @@ import org.apache.maven.mercury.retrieve.ArtifactRetriever;
 import org.apache.maven.mercury.retrieve.ResolutionRequest;
 import org.apache.maven.mercury.retrieve.ResolutionResult;
 
-/*
+/**
  * default implementation of the metadata resolver
  * 
  * @author Oleg Gusakov
@@ -57,7 +57,7 @@ public class DefaultMetadataResolver
     private MetadataTreeNode resolveMetadataTree( ArtifactMetadata query
                                                 , MetadataTreeNode parent
                                                 , LocalRepository localRepository
-                                                , Set<RemoteRepository> remoteRepositories
+                                                , List<RemoteRepository> remoteRepositories
                                                 )
         throws MetadataResolutionException
     {

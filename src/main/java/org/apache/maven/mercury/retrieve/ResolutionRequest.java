@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.retrieve;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.mercury.Artifact;
@@ -13,12 +14,13 @@ import org.apache.maven.mercury.repository.Repository;
  * to process a POMs dependencies.
  *
  * @author Jason van Zyl
+ * @author Oleg Gusakov
  */
 public class ResolutionRequest
 {
     private ArtifactMetadata _md;
     private LocalRepository localRepository;
-    private Set<RemoteRepository> remoteRepostories;
+    private List<RemoteRepository> remoteRepostories;
 
     public ArtifactMetadata getMd()
     {
@@ -95,12 +97,12 @@ public class ResolutionRequest
         return this;
     }
 
-    public Set<RemoteRepository> getRemoteRepostories()
+    public List<RemoteRepository> getRemoteRepostories()
     {
         return remoteRepostories;
     }
 
-    public ResolutionRequest setRemoteRepostories( Set<RemoteRepository> remoteRepostories )
+    public ResolutionRequest setRemoteRepostories( List<RemoteRepository> remoteRepostories )
     {
         this.remoteRepostories = remoteRepostories;
 

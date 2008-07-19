@@ -25,7 +25,7 @@ public class MetadataTree
   private Set<MetadataTreeArtifactFilter> _filters;
   private List<Comparator<MetadataTreeNode>> _comparators;
   private LocalRepository _localRepository;
-  private Set<RemoteRepository> _remoteRepositories;
+  private List<RemoteRepository> _remoteRepositories;
   
   MetadataTreeNode _root;
   
@@ -34,7 +34,7 @@ public class MetadataTree
       , Set<MetadataTreeArtifactFilter> filters
       , List<Comparator<MetadataTreeNode>> comparators
       , LocalRepository localRepository
-      , Set<RemoteRepository> remoteRepositories
+      , List<RemoteRepository> remoteRepositories
                         )
   {
     this._mdSource = mdSource;

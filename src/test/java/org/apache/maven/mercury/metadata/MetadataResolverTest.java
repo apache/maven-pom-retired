@@ -2,6 +2,7 @@ package org.apache.maven.mercury.metadata;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -84,9 +85,9 @@ public class MetadataResolverTest
     }
 
     class SimpleSource
-        implements MetadataSource
+    implements MetadataSource
     {
-        public MetadataResolution retrieve( ArtifactMetadata artifact, LocalRepository localRepository, Set<RemoteRepository> remoteRepositories )
+        public MetadataResolution retrieve( ArtifactMetadata artifact, LocalRepository localRepository, List<RemoteRepository> remoteRepositories )
             throws MetadataRetrievalException
         {
             //TODO: This assumes that we have already pulled it down
@@ -96,7 +97,7 @@ public class MetadataResolverTest
 
         public Collection<ArtifactMetadata> expand(
             ArtifactMetadata metadataQuery, LocalRepository localRepository,
-            Set<RemoteRepository> remoteRepositories)
+            List<RemoteRepository> remoteRepositories)
             throws MetadataRetrievalException
         {
           // TODO Auto-generated method stub
