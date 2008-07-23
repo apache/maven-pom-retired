@@ -34,6 +34,7 @@ public class Binding
     protected File localFile;
     protected boolean lenientChecksum;
        
+    
     public Binding()
     {        
     }
