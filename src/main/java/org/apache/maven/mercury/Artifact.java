@@ -30,7 +30,7 @@ import org.apache.maven.mercury.repository.Repository;
  * snapshot, etc) - construct subclasses and use accordingly?
  */
 public interface Artifact
-    extends Comparable
+extends Comparable
 {
     String LATEST_VERSION = "LATEST";
 

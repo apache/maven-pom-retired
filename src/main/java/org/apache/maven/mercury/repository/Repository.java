@@ -1,7 +1,8 @@
 package org.apache.maven.mercury.repository;
 
-import org.apache.maven.mercury.Artifact;
-import org.apache.maven.mercury.metadata.ArtifactMetadata;
+import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
+import org.apache.maven.mercury.repository.api.RepositoryReader;
+import org.apache.maven.mercury.repository.api.RepositoryWriter;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,7 +27,37 @@ import org.apache.maven.mercury.metadata.ArtifactMetadata;
  */
 public interface Repository
 {
-    String pathOf( ArtifactMetadata md );
-
     String getId();
+    
+    /**
+     * get default reader, if any
+     * 
+     * @return default reader or null, if none exists
+     */
+    RepositoryReader getReader();
+    
+    /**
+     * 
+     * @param protocol
+     * @return reader instance for the specified protocol
+     * @throws NonExistentProtocolException if protocol not supported
+     */
+    RepositoryReader getReader( String protocol );
+
+    
+    /**
+     * get default writer, if any
+     * 
+     * @return default writer or null, if none exists
+     */
+    RepositoryWriter getWriter();
+    
+    /**
+     * 
+     * @param protocol
+     * @return writer instance for the specified protocol
+     * @throws NonExistentProtocolException if protocol not supported
+     */
+    RepositoryWriter getWriter( String protocol )
+    throws NonExistentProtocolException;
 }

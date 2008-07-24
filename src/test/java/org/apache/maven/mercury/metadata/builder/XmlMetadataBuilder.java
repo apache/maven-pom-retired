@@ -3,7 +3,7 @@ package org.apache.maven.mercury.metadata.builder;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.maven.mercury.metadata.ArtifactMetadata;
+import org.apache.maven.mercury.ArtifactMetadata;
 
 public class XmlMetadataBuilder
 implements MetadataBuilder

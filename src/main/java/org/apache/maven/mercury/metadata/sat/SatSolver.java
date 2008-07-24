@@ -3,7 +3,7 @@ package org.apache.maven.mercury.metadata.sat;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.maven.mercury.metadata.ArtifactMetadata;
+import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 
 /**

@@ -1,8 +1,5 @@
 package org.apache.maven.mercury.repository;
 
-import org.apache.maven.mercury.Artifact;
-import org.apache.maven.mercury.metadata.ArtifactMetadata;
-import org.apache.maven.mercury.repository.layout.RepositoryLayout;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more contributor license
@@ -19,31 +16,54 @@ import org.apache.maven.mercury.repository.layout.RepositoryLayout;
  * the License.
  */
 
+/**
+ * parent of all repositories
+ */
 public abstract class AbstractRepository
 implements Repository
 {
-    private String id;
-        
-    private RepositoryLayout layout;
+  public static final String DEFAULT_READ_PROTOCOL  = "http";
+  public static final String DEFAULT_WRITE_PROTOCOL = "http";
 
-    public AbstractRepository( String id, RepositoryLayout layout )
-    {
-        this.id = id;
-        this.layout = layout;
-    }
+  public static final String DEFAULT_LOCAL_READ_PROTOCOL  = "file";
+  public static final String DEFAULT_LOCAL_WRITE_PROTOCOL = "file";
 
-    public String getId()
-    {
-        return id;
-    }
+  private String             id;
 
-    public RepositoryLayout getLayout()
-    {
-        return layout;
-    }
+  private String             defaultReadProtocol    = DEFAULT_READ_PROTOCOL;
 
-    public String pathOf( ArtifactMetadata md )
-    {
-        return layout.pathOf( md );
-    }
+  private String             defaultWriteProtocol   = DEFAULT_WRITE_PROTOCOL;
+
+  public AbstractRepository( String id )
+  {
+    this.id = id;
+  }
+
+  public String getId()
+  {
+    return id;
+  }
+
+  public String getDefaultReadProtocol()
+  {
+    return defaultReadProtocol;
+  }
+
+  public void setDefaultReadProtocol(
+      String defaultReadProtocol )
+  {
+    this.defaultReadProtocol = defaultReadProtocol;
+  }
+
+  public String getDefaultWriteProtocol()
+  {
+    return defaultWriteProtocol;
+  }
+
+  public void setDefaultWriteProtocol(
+      String defaultWriteProtocol )
+  {
+    this.defaultWriteProtocol = defaultWriteProtocol;
+  }
+
 }

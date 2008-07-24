@@ -28,28 +28,12 @@ import org.codehaus.plexus.util.StringUtils;
  * @version $Id$
  */
 public class DefaultArtifact
-    implements Artifact
+extends ArtifactMetadata
+implements Artifact
 {
-    private String groupId;
-
-    private String artifactId;
-
-    private String type;
-
     private File file;
 
-    private String version;
-
-    // This is Maven specific. jvz/
     private String classifier;
-
-    private String scope;
-
-    private boolean optional;
-
-    private boolean release;
-
-    private boolean resolved;
 
     // Why is this here? What repository is determined at runtime and is therefore a
     // runtime charactistic. This needs to go. jvz.
@@ -156,46 +140,6 @@ public class DefaultArtifact
         return ( value == null ) || ( value.trim().length() < 1 );
     }
 
-    public String getClassifier()
-    {
-        return classifier;
-    }
-
-    public boolean hasClassifier()
-    {
-        return StringUtils.isNotEmpty( classifier );
-    }
-
-    public String getScope()
-    {
-        return scope;
-    }
-
-    public String getGroupId()
-    {
-        return groupId;
-    }
-
-    public String getArtifactId()
-    {
-        return artifactId;
-    }
-
-    public String getVersion()
-    {
-        return version;
-    }
-
-    public void setVersion( String version )
-    {
-        this.version = version;
-    }
-
-    public String getType()
-    {
-        return type;
-    }
-
     public void setFile( File file )
     {
         this.file = file;
@@ -227,14 +171,14 @@ public class DefaultArtifact
 
     public String getDependencyConflictId()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append( getGroupId() );
         sb.append( ":" );
         appendArtifactTypeClassifierString( sb );
         return sb.toString();
     }
 
-    private void appendArtifactTypeClassifierString( StringBuffer sb )
+    private void appendArtifactTypeClassifierString( StringBuilder sb )
     {
         sb.append( getArtifactId() );
         sb.append( ":" );
@@ -249,10 +193,10 @@ public class DefaultArtifact
     // ----------------------------------------------------------------------
     // Object overrides
     // ----------------------------------------------------------------------
-
+    @Override
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if ( getGroupId() != null )
         {
             sb.append( getGroupId() );
@@ -274,6 +218,7 @@ public class DefaultArtifact
         return sb.toString();
     }
 
+    @Override
     public int hashCode()
     {
         int result = 17;
@@ -288,6 +233,7 @@ public class DefaultArtifact
         return result;
     }
 
+    @Override
     public boolean equals( Object o )
     {
         if ( o == this )
@@ -380,54 +326,9 @@ public class DefaultArtifact
         this.downloadUrl = downloadUrl;
     }
 
-    public void setScope( String scope )
-    {
-        this.scope = scope;
-    }
-
-    public void setGroupId( String groupId )
-    {
-        this.groupId = groupId;
-    }
-
-    public void setArtifactId( String artifactId )
-    {
-        this.artifactId = artifactId;
-    }
-
-    public void setResolved( boolean resolved )
-    {
-        this.resolved = resolved;
-    }
-
-    public boolean isResolved()
-    {
-        return resolved;
-    }
-
     public void setResolvedVersion( String version )
     {
         this.version = version;
         // retain baseVersion
-    }
-
-    public void setRelease( boolean release )
-    {
-        this.release = release;
-    }
-
-    public boolean isRelease()
-    {
-        return release;
-    }
-
-    public boolean isOptional()
-    {
-        return optional;
-    }
-
-    public void setOptional( boolean optional )
-    {
-        this.optional = optional;
     }
 }

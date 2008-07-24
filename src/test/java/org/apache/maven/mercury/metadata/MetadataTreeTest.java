@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
+import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.ArtifactScopeEnum;
 import org.apache.maven.mercury.repository.DefaultLocalRepository;
 

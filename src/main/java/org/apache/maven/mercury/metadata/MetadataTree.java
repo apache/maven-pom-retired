@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.maven.mercury.ArtifactBasicMetadata;
+import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.ArtifactScopeEnum;
 import org.apache.maven.mercury.metadata.sat.DefaultSatSolver;
 import org.apache.maven.mercury.metadata.sat.SatException;
 import org.apache.maven.mercury.repository.LocalRepository;
 import org.apache.maven.mercury.repository.RemoteRepository;
+import org.apache.maven.mercury.repository.api.RepositoryException;
+import org.apache.maven.mercury.repository.api.RepositoryReader;
+import org.apache.maven.mercury.repository.api.VirtualRepositoryReader;
 
 /**
  * This is the new entry point into Artifact resolution process.
@@ -21,27 +27,26 @@ import org.apache.maven.mercury.repository.RemoteRepository;
  */
 public class MetadataTree
 {
-  private MetadataSource _mdSource;
+//  private MetadataSource _mdSource;
+  
   private Set<MetadataTreeArtifactFilter> _filters;
   private List<Comparator<MetadataTreeNode>> _comparators;
-  private LocalRepository _localRepository;
-  private List<RemoteRepository> _remoteRepositories;
+  
+  private VirtualRepositoryReader _reader;
   
   MetadataTreeNode _root;
   
   public MetadataTree(
-        MetadataSource mdSource
-      , Set<MetadataTreeArtifactFilter> filters
+        Set<MetadataTreeArtifactFilter> filters
       , List<Comparator<MetadataTreeNode>> comparators
       , LocalRepository localRepository
       , List<RemoteRepository> remoteRepositories
-                        )
+                     )
+  throws RepositoryException
   {
-    this._mdSource = mdSource;
     this._filters = filters;
     this._comparators = comparators;
-    this._localRepository = localRepository;
-    this._remoteRepositories = remoteRepositories;
+    this._reader = new VirtualRepositoryReader( localRepository, remoteRepositories );
   }
   //-----------------------------------------------------
   public MetadataTreeNode buildTree( ArtifactMetadata startMD )
@@ -50,40 +55,38 @@ public class MetadataTree
     if( startMD == null )
       throw new MetadataTreeException( "null start point" );
     
-    if( _mdSource == null )
-      throw new MetadataTreeException( "null metadata source" );
-    
-    if( _localRepository == null )
-      throw new MetadataTreeException( "null local repo" );
+    _reader.init();
     
     _root = createNode( startMD, null, startMD );
     return _root;
   }
   //-----------------------------------------------------
-  private MetadataTreeNode createNode( ArtifactMetadata nodeMD, MetadataTreeNode parent, ArtifactMetadata nodeQuery )
+  private MetadataTreeNode createNode( ArtifactBasicMetadata nodeMD, MetadataTreeNode parent, ArtifactMetadata nodeQuery )
   throws MetadataTreeException
   {
     checkForCircularDependency( nodeMD, parent );
 
-    MetadataResolution mr;
+    ArtifactMetadata mr;
     
     try
     {
-      mr = _mdSource.retrieve( nodeMD, _localRepository, _remoteRepositories );
+      mr = _reader.readMetadata( nodeMD );
 
-      if( mr == null || mr.getArtifactMetadata() == null )
+      if( mr == null )
         throw new MetadataTreeException( "no result found for " + nodeMD );
       
-      MetadataTreeNode node = new MetadataTreeNode( mr.getArtifactMetadata(), parent, nodeQuery );
+      MetadataTreeNode node = new MetadataTreeNode( mr, parent, nodeQuery );
   
-      Collection<ArtifactMetadata> dependencies = mr.getArtifactMetadata().getDependencies();
+      List<ArtifactMetadata> dependencies = mr.getDependencies();
       
       if( dependencies == null || dependencies.size() < 1 )
         return node;
       
+      Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> expandedDeps = _reader.findMetadata( dependencies );
+      
       for( ArtifactMetadata md : dependencies )
       {
-        Collection<ArtifactMetadata> versions = _mdSource.expand( md, _localRepository, _remoteRepositories );
+        List<ArtifactBasicMetadata> versions = expandedDeps.get(  md );
         if( versions == null || versions.size() < 1 )
         {
           if( md.isOptional() )
@@ -92,7 +95,7 @@ public class MetadataTree
         }
         
         boolean noGoodVersions = true;
-        for( ArtifactMetadata ver : versions )
+        for( ArtifactBasicMetadata ver : versions )
         {
           if( veto( ver, _filters) )
             continue;
@@ -115,13 +118,13 @@ public class MetadataTree
     
       return node;
     }
-    catch (MetadataRetrievalException e)
+    catch (RepositoryException e)
     {
       throw new MetadataTreeException( e );
     }
   }
   //-----------------------------------------------------
-  private void checkForCircularDependency( ArtifactMetadata md, MetadataTreeNode parent )
+  private void checkForCircularDependency( ArtifactBasicMetadata md, MetadataTreeNode parent )
   throws MetadataTreeCircularDependencyException
   {
     MetadataTreeNode p = parent;
@@ -151,7 +154,7 @@ public class MetadataTree
     }
   }
   //-----------------------------------------------------
-  private boolean veto(ArtifactMetadata md, Set<MetadataTreeArtifactFilter> filters )
+  private boolean veto(ArtifactBasicMetadata md, Set<MetadataTreeArtifactFilter> filters )
   {
     if( filters != null && filters.size() > 1)
       for( MetadataTreeArtifactFilter filter : filters )

@@ -3,7 +3,7 @@ package org.apache.maven.mercury.metadata.sat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.maven.mercury.metadata.ArtifactMetadata;
+import org.apache.maven.mercury.ArtifactMetadata;
 
  /**
   * This class hold all variables fed to the SAT solver. Because of the

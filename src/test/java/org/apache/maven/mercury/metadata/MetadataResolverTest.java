@@ -8,6 +8,7 @@ import java.util.Set;
 import junit.framework.TestCase;
 
 import org.apache.maven.mercury.Artifact;
+import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.repository.DefaultLocalRepository;
 import org.apache.maven.mercury.repository.DefaultRemoteRepository;
 import org.apache.maven.mercury.repository.LocalRepository;

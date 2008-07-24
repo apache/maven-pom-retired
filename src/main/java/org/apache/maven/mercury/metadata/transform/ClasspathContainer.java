@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.ArtifactScopeEnum;
-import org.apache.maven.mercury.metadata.ArtifactMetadata;
-import org.apache.maven.mercury.metadata.MetadataResolutionException;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 
 /*
@@ -61,7 +60,6 @@ public class ClasspathContainer
 
     //-------------------------------------------------------------------------------------------
     public MetadataTreeNode getClasspathAsTree()
-        throws MetadataResolutionException
     {
         if ( classpath == null || classpath.size() < 1 )
             return null;

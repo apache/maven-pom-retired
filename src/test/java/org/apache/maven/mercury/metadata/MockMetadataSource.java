@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.digester.Digester;
+import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.metadata.version.VersionException;
 import org.apache.maven.mercury.metadata.version.VersionRange;
 import org.apache.maven.mercury.repository.DefaultLocalRepository;

@@ -1,5 +1,6 @@
 package org.apache.maven.mercury;
 
+
 /**
  * Type safe reincarnation of Artifact scope. Also supplies the <code>DEFAULT_SCOPE<code> as well
  * as convenience method to deal with scope relationships.

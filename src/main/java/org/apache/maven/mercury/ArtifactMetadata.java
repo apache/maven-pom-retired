@@ -1,34 +1,28 @@
-package org.apache.maven.mercury.metadata;
+package org.apache.maven.mercury;
 
 import java.util.Collection;
+import java.util.List;
 
-import org.apache.maven.mercury.Artifact;
-import org.apache.maven.mercury.ArtifactScopeEnum;
 
 /**
- * Artifact Metadata that is resolved independent of Artifact itself.
+ * Artifact Metadata that is resolved independent of Artifact itself. It's
+ * built on top of ArtifactBasicMetadata
  * 
  * @author Oleg Gusakov
  * @version $Id$
  */
 public class ArtifactMetadata
+extends ArtifactBasicMetadata
 {
-    /** 
-     * standard glorified artifact coordinates
-     */
-    protected String groupId;
-
-    protected String artifactId;
-
-    protected String version;
-
-    protected String type = "jar";
-
+    // in addition to basic coordinates
+  
     protected ArtifactScopeEnum artifactScope;
 
-    protected String classifier;
-    
+    protected String scope;
+
     protected boolean optional;
+
+    private boolean release;
 
     /** 
      * explanation: why this MD was chosen over it's siblings
@@ -37,7 +31,7 @@ public class ArtifactMetadata
     protected String why;
 
     /** dependencies of the artifact behind this metadata */
-    protected Collection<ArtifactMetadata> dependencies;
+    protected List<ArtifactMetadata> dependencies;
 
     /** metadata URI */
     protected String uri;
@@ -145,98 +139,6 @@ public class ArtifactMetadata
     {
     }
     
-    //---------------------------------------------------------------------
-    public boolean sameGAV( ArtifactMetadata md )
-    {
-      if( md == null )
-        return false;
-      
-      return 
-          sameGA( md )
-          && version != null
-          && version.equals( md.getVersion() )
-      ;
-    }
-    //---------------------------------------------------------------------
-    public boolean sameGA( ArtifactMetadata md )
-    {
-      if( md == null )
-        return false;
-      
-      return
-          groupId != null
-          && artifactId != null
-          && groupId.equals( md.getGroupId() )
-          && artifactId.equals( md.getArtifactId() )
-      ;
-    }
-
-    public String getGA()
-    {
-      return toDomainString();
-    }
-
-    public String getGAV()
-    {
-      return toString();
-    }
-    
-    @Override
-    public String toString()
-    {
-        return groupId + ":" + artifactId + ":" + version;
-    }
-
-    public String toDomainString()
-    {
-        return groupId + ":" + artifactId;
-    }
-
-    public String getGroupId()
-    {
-        return groupId;
-    }
-
-    public void setGroupId( String groupId )
-    {
-        this.groupId = groupId;
-    }
-
-    public String getArtifactId()
-    {
-        return artifactId;
-    }
-
-    public void setArtifactId( String name )
-    {
-        this.artifactId = name;
-    }
-
-    public String getVersion()
-    {
-        return version;
-    }
-
-    public void setVersion( String version )
-    {
-        this.version = version;
-    }
-
-    public String getType()
-    {
-        return type;
-    }
-
-    public String getCheckedType()
-    {
-        return type == null ? "jar" : type;
-    }
-
-    public void setType( String type )
-    {
-        this.type = type;
-    }
-
     public ArtifactScopeEnum getArtifactScope()
     {
         return artifactScope == null ? ArtifactScopeEnum.DEFAULT_SCOPE : artifactScope;
@@ -250,16 +152,6 @@ public class ArtifactMetadata
     public void setScope( String scope )
     {
         this.artifactScope = scope == null ? ArtifactScopeEnum.DEFAULT_SCOPE : ArtifactScopeEnum.valueOf( scope );
-    }
-
-    public String getClassifier()
-    {
-        return classifier;
-    }
-
-    public void setClassifier( String classifier )
-    {
-        this.classifier = classifier;
     }
 
     public boolean isResolved()
@@ -302,12 +194,12 @@ public class ArtifactMetadata
         this.artifactExists = artifactExists;
     }
 
-    public Collection<ArtifactMetadata> getDependencies()
+    public List<ArtifactMetadata> getDependencies()
     {
         return dependencies;
     }
 
-    public void setDependencies( Collection<ArtifactMetadata> dependencies )
+    public void setDependencies( List<ArtifactMetadata> dependencies )
     {
         this.dependencies = dependencies;
     }
@@ -367,6 +259,16 @@ public class ArtifactMetadata
     public boolean hasClassifier()
     {
       return classifier == null;
+    }
+
+    public void setRelease( boolean release )
+    {
+        this.release = release;
+    }
+
+    public boolean isRelease()
+    {
+        return release;
     }
     
     

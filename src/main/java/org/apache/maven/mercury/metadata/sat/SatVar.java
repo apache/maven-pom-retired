@@ -1,6 +1,6 @@
 package org.apache.maven.mercury.metadata.sat;
 
-import org.apache.maven.mercury.metadata.ArtifactMetadata;
+import org.apache.maven.mercury.ArtifactMetadata;
 
 /**
  * @author <a href="oleg@codehaus.org">Oleg Gusakov</a>

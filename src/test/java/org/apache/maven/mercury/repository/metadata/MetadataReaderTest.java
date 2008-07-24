@@ -7,16 +7,15 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.mercury.spi.http.client.Binding;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetrievalRequest;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetriever;
 import org.apache.maven.mercury.spi.http.client.retrieve.RetrievalResponse;
 import org.apache.maven.mercury.spi.http.server.HttpTestServer;
-import org.apache.maven.mercury.spi.http.server.SimpleTestServer;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
-import junit.framework.TestCase;
 
 public class MetadataReaderTest
 extends TestCase
@@ -28,20 +27,11 @@ extends TestCase
   HttpTestServer _server;
   DefaultRetrievalRequest _request;
 
-
+  //-------------------------------------------------------------------------
   @Override
   protected void setUp()
   throws Exception
   {
-//    File [] list = _testBase.listFiles();
-//    if( list != null )
-//    {
-//      for( File f : list )
-//        System.out.println( f.getCanonicalPath() );
-//    }
-//    else
-//      System.out.println("no files in "+_testBase.getCanonicalPath() );
-    
     _retriever = new DefaultRetriever();
     _server = new HttpTestServer( _testBase, "/repo" );
     _server.start();
@@ -58,15 +48,14 @@ extends TestCase
       _server.stop();
       _server.destroy();
   }
-
+  //-------------------------------------------------------------------------
   public void testReadMd()
   throws FileNotFoundException, IOException, XmlPullParserException
   {
      Metadata mmd = _reader.read( new FileInputStream( new File( _testBase, "a/a/maven-metadata.xml") ) );
      validateMmd( mmd );
   }
-
-
+  //-------------------------------------------------------------------------
   public void testReadRemoteMd()
   throws FileNotFoundException, IOException, XmlPullParserException
   {
@@ -89,7 +78,7 @@ extends TestCase
     validateMmd( mmd );
     
   }
-  
+  //-------------------------------------------------------------------------
   private void validateMmd( Metadata mmd )
   {
     assertNotNull( mmd );
@@ -103,5 +92,6 @@ extends TestCase
     assertNotNull( versions );
     assertTrue( versions.size() > 3 );
   }
-  
+  //-------------------------------------------------------------------------
+  //-------------------------------------------------------------------------
 }
