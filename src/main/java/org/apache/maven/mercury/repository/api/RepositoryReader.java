@@ -21,7 +21,7 @@ public interface RepositoryReader
 {
   /**
    * given basic coordinates query - instantiate all available matches as ArtifactBasicMetadata objects. 
-   * Analogous to reading maven-metadata.xml file from GA folder i.e. this transforms
+   * <b>Analogous to reading maven-metadata.xml</b> file from GA folder i.e. this transforms
    * GA[Vrange] -> [GAV1, GAV2, ... GAVn]
    * 
    * @param query list of MD coordinate queries to find 
@@ -30,13 +30,13 @@ public interface RepositoryReader
    * it with hasExceptions() 
    * @throws RepositoryException
    */
-  public Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> findMetadata( List<? extends ArtifactBasicMetadata> query )
+  public Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> readVersions( List<? extends ArtifactBasicMetadata> query )
   throws RepositoryException, IllegalArgumentException;
   
   /**
    * given basic coordinates query read full ArtifactMetadata objects -
    * with dependencies as queries i.e. each dependency at this stage is an ArtifactBasicMetadata
-   * Analogous to reading pom.xml file for given GAV
+   * <b>Analogous to reading pom.xml</b> file for given GAV
    * 
    * @param query list of MD coordinate queries to read. They are found by previous call to findMetadata 
    * @return result as list of available MD objects with dependencies filled in. Order is the same 

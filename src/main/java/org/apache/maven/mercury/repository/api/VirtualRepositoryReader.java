@@ -74,7 +74,7 @@ public class VirtualRepositoryReader
 
     for( RepositoryReader rr : _repositoryReaders )
     {
-      Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> repoRes = rr.findMetadata( query );
+      Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> repoRes = rr.readVersions( query );
       
       if( repoRes != null )
         for( ArtifactBasicMetadata key : repoRes.keySet() )
