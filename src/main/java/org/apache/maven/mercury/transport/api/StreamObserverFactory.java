@@ -18,11 +18,8 @@
  */
 package org.apache.maven.mercury.transport.api;
 
-public interface Verifier extends StreamObserver
+public interface StreamObserverFactory
 {
-    public String getSignature();
-    public void verifySignature (String signature);
-    public boolean isLenient();
-    public boolean isSufficient();
-    public String getExtension();
+    public StreamObserver newInstance();
+
 }
