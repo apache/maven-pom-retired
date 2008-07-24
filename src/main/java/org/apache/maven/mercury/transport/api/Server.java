@@ -18,13 +18,23 @@
  */
 package org.apache.maven.mercury.transport.api;
 
+import java.net.URL;
 import java.util.Set;
 
 public class Server
 {
     private Set<StreamObserverFactory> streamObserverFactories;
-    
+    private URL url;
  
+    public Server (URL url)
+    {
+        this.url = url;
+    }
+    
+    public URL getURL()
+    {
+        return this.url;
+    }
     
     public Set<StreamObserverFactory> getStreamObserverFactories()
     {
