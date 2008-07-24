@@ -45,4 +45,9 @@ implements RemoteRepository
       // TODO Auto-generated method stub
       return null;
     }
+
+    public boolean isLocal()
+    {
+     return false;
+    }
 }

@@ -113,10 +113,19 @@ public class ArtifactBasicMetadata
     return toString();
   }
   
+  private static final String nvl( String val, String dflt )
+  {
+    return val == null ? dflt : val;
+  }
+  private static final String nvl( String val )
+  {
+    return nvl(val,"");
+  }
+  
   @Override
   public String toString()
   {
-      return groupId + ":" + artifactId + ":" + version;
+      return nvl(groupId) + ":" + nvl(artifactId) + ":" + nvl(version) + ":" + nvl(classifier) + ":" + nvl(type);
   }
 
   public String toDomainString()
@@ -183,6 +192,21 @@ public class ArtifactBasicMetadata
   public void setReader( RepositoryReader reader )
   {
     this._reader = reader;
+  }
+  
+  
+  @Override
+  public boolean equals( Object obj )
+  {
+    if( obj == null || !( obj instanceof ArtifactBasicMetadata ) )
+      return false;
+    
+    return toString().equals( obj.toString() );
+  }
+  @Override
+  public int hashCode()
+  {
+    return toString().hashCode();
   }
   
   

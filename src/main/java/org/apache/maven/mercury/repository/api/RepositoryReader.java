@@ -7,6 +7,7 @@ import org.apache.maven.mercury.Artifact;
 import org.apache.maven.mercury.ArtifactBasicMetadata;
 import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.DefaultArtifact;
+import org.apache.maven.mercury.repository.Repository;
 
 /**
  * Repository reader API to be implemented by any repo implementation that wishes 
@@ -58,12 +59,7 @@ public interface RepositoryReader
   throws RepositoryException, IllegalArgumentException;
 
   /**
-   * Indicates whether this reader is wrapping the localRepo. This flag defines the necessity to download
-   * the artifact, if it was cleared by the conflict resolver but not read from a localRepo.
-   * 
-   * @param query list of MD coordinate queries to read. 
-   * @return array of results - lists of available matches. Order is the same as in query list. null means not found or worse
-   * @throws RepositoryException
+   * Need if for explanation function - where and how(protocol) this artifact is found.
    */
-  public boolean isLocal();
+  public Repository getRepository();
 }

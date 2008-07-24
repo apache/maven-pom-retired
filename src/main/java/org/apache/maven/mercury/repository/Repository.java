@@ -27,8 +27,15 @@ import org.apache.maven.mercury.repository.api.RepositoryWriter;
  */
 public interface Repository
 {
-    String getId();
-    
+  String getId();
+  
+
+  /**
+   * Indicates whether this is local Repository. This flag defines the necessity to download
+   * the artifact, if it was cleared by the conflict resolver but not read from a localRepo.
+   */
+  public boolean isLocal();
+  
     /**
      * get default reader, if any
      * 

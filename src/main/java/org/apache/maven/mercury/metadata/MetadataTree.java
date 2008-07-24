@@ -1,7 +1,6 @@
 package org.apache.maven.mercury.metadata;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import org.apache.maven.mercury.metadata.sat.SatException;
 import org.apache.maven.mercury.repository.LocalRepository;
 import org.apache.maven.mercury.repository.RemoteRepository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
-import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.VirtualRepositoryReader;
 
 /**
@@ -46,6 +44,15 @@ public class MetadataTree
   {
     this._filters = filters;
     this._comparators = comparators;
+    
+    // if used does not want to bother.
+    // if it's an empty list - user does not want any comparators - so be it
+    if( _comparators == null )
+    {
+      _comparators.add( new ClassicDepthComparator() );
+      _comparators.add( new ClassicVersionComparator() );
+    }
+    
     this._reader = new VirtualRepositoryReader( localRepository, remoteRepositories );
   }
   //-----------------------------------------------------
@@ -82,7 +89,7 @@ public class MetadataTree
       if( dependencies == null || dependencies.size() < 1 )
         return node;
       
-      Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> expandedDeps = _reader.findMetadata( dependencies );
+      Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> expandedDeps = _reader.readVersions( dependencies );
       
       for( ArtifactMetadata md : dependencies )
       {

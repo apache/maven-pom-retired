@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.repository.api;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.metadata.MetadataTreeException;
 import org.apache.maven.mercury.repository.LocalRepository;
 import org.apache.maven.mercury.repository.RemoteRepository;
+import org.apache.maven.mercury.repository.Repository;
 
 /**
  * this helper class hides the necessity to talk to localRepo and a bunch of remoteRepos.
@@ -23,15 +25,16 @@ import org.apache.maven.mercury.repository.RemoteRepository;
 public class VirtualRepositoryReader
 {
   //----------------------------------------------------------------------------------------------------------------------------
-  private LocalRepository        _localRepository;
-  private List<RemoteRepository> _remoteRepositories;
-  
-  private int                    _repositoryCount = 1;
+  private List<Repository>       _repositories = new ArrayList<Repository>(8);
   private RepositoryReader[]     _repositoryReaders;
+
+  private LocalRepository       _localRepository;
+  
+  private boolean _initialized = false;
   //----------------------------------------------------------------------------------------------------------------------------
   public VirtualRepositoryReader(
-                LocalRepository localRepository
-              , List<RemoteRepository> remoteRepositories
+                  LocalRepository localRepository
+                , List<RemoteRepository> remoteRepositories
                           )
   throws RepositoryException
   {
@@ -40,29 +43,41 @@ public class VirtualRepositoryReader
     
     this._localRepository = localRepository;
 
-    this._remoteRepositories = remoteRepositories;
+    this._repositories.add( localRepository );
     
-    if( _remoteRepositories != null && _remoteRepositories.size() > 0 )
-      _repositoryCount += _remoteRepositories.size();
+    if( remoteRepositories != null && remoteRepositories.size() > 0 )
+      this._repositories.addAll( remoteRepositories );
+  }
+  //----------------------------------------------------------------------------------------------------------------------------
+  public void addRepository( Repository repo )
+  throws RepositoryException
+  {
+    if( _initialized )
+      throw new RepositoryException("cannot add repositories after VirtualReader has been initialized");
+    
+    _repositories.add( repo );
   }
   //----------------------------------------------------------------------------------------------------------------------------
   public void init()
   {
-    if( _repositoryReaders != null )
+    if( _initialized )
       return;
     
-    _repositoryReaders = new RepositoryReader[ _repositoryCount ];
-    _repositoryReaders[0] = _localRepository.getReader();
+    int repositoryCount = _repositories.size();
     
-    if( _repositoryCount > 1 )
+    _repositoryReaders = new RepositoryReader[ repositoryCount ];
+    
+    int i = 0;
+    for( Repository r : _repositories )
     {
-      int i = 1;
-      for( RemoteRepository rr : _remoteRepositories )
-        _repositoryReaders[ i++ ] = rr.getReader();
+      _repositoryReaders[ i++ ] = r.getReader();
+      if( r.isLocal() )
+        _localRepository = (LocalRepository)r.getReader().getRepository();
     }
+    _initialized = true;
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  public Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> findMetadata( List<? extends ArtifactBasicMetadata> query )
+  public Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> readVersions( List<? extends ArtifactBasicMetadata> query )
   throws IllegalArgumentException, RepositoryException
   {
     if( query == null )
