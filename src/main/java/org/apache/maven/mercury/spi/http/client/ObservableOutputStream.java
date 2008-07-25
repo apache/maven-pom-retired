@@ -27,6 +27,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.maven.mercury.transport.api.StreamObserver;
+
 
 
 public class ObservableOutputStream extends FilterOutputStream
@@ -42,13 +44,13 @@ public class ObservableOutputStream extends FilterOutputStream
     public void write(int b) throws IOException 
     {
         notifyListeners(b);
-        out.write(b);
+        this.out.write(b);
     }
 
     public void write(byte[] b, int off, int len) throws IOException 
     {  
         notifyListeners(b, off, len);
-        out.write(b, off, len);
+        this.out.write(b, off, len);
     }
     public void addObserver (StreamObserver o)
     {

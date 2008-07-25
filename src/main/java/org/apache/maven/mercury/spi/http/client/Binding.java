@@ -32,7 +32,6 @@ public class Binding
 {
     protected String remoteUrl;
     protected File localFile;
-    protected boolean lenientChecksum;
        
     
     public Binding()
@@ -43,7 +42,6 @@ public class Binding
     {
         this.remoteUrl = remoteUrl;
         this.localFile = localFile;
-        this.lenientChecksum = lenientChecksum;
     }
 
     public String getRemoteUrl()
@@ -66,18 +64,10 @@ public class Binding
         this.localFile = localFile;
     }
 
-    public boolean isLenientChecksum()
-    {
-        return lenientChecksum;
-    }
-
-    public void setLenientChecksum( boolean leniantChecksum )
-    {
-        this.lenientChecksum = leniantChecksum;
-    }
+  
 
     public String toString()
     {
-        return "[" + remoteUrl + "," + localFile + "," + lenientChecksum + "]";
+        return "[" + remoteUrl + "," + localFile + "]";
     }
 }

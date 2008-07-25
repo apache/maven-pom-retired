@@ -20,9 +20,9 @@
 package org.apache.maven.mercury.spi.http.client.deploy;
 
 import org.apache.maven.mercury.spi.http.client.Binding;
-import org.apache.maven.mercury.spi.http.client.ChecksumCalculator;
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.MercuryException;
+import org.apache.maven.mercury.transport.ChecksumCalculator;
 import org.mortbay.io.Buffer;
 import org.mortbay.jetty.HttpMethods;
 import org.mortbay.jetty.client.HttpClient;
@@ -45,7 +45,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public abstract class FilePutExchange extends FileExchange
 {
-
+    private boolean _digestRequired;
     private String _batchId;
     private InputStream _inputStream;
     private String _remoteRepoUrl;
@@ -56,9 +56,10 @@ public abstract class FilePutExchange extends FileExchange
     public abstract void onFileError( String url, Exception e );
 
 
-    public FilePutExchange( String batchId, Binding binding, File localFile, boolean digestRequired, HttpClient client )
+    public FilePutExchange( String batchId, Binding binding, File localFile, boolean isDigestRequired, HttpClient client )
     {
-        super( binding, localFile, digestRequired, client );
+        super( binding, localFile, client );
+        _digestRequired = isDigestRequired;
         _batchId = batchId;
     }
 
@@ -152,7 +153,7 @@ public abstract class FilePutExchange extends FileExchange
             }
             else
             {
-                MessageDigest digest = MessageDigest.getInstance( _digestAlgorithm );
+                MessageDigest digest = MessageDigest.getInstance( "SHA-1" );
                 _inputStream = new DigestInputStream( new FileInputStream( _localFile ), digest );
             }
         }

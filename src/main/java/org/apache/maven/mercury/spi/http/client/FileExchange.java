@@ -36,10 +36,9 @@ public abstract class FileExchange extends HttpExchange
     public static final String __BATCH_SUPPORTED_HEADER = "Jetty-Batch-Supported";
     public static final String __BATCH_COMMIT_HEADER = "Jetty-Batch-Commit";
     public static final String __BATCH_DISCARD_HEADER = "Jetty-Batch-Discard";
-    public static final String _digestAlgorithm = "SHA-1";
+
 
     protected HttpClient _httpClient;
-    protected boolean _digestRequired;
     protected int _status;
     protected String _url;
     protected File _localFile;
@@ -50,13 +49,12 @@ public abstract class FileExchange extends HttpExchange
     public abstract void onFileError( String url, Exception e );
 
 
-    public FileExchange( Binding binding, File localFile, boolean digestRequired, HttpClient client )
+    public FileExchange( Binding binding, File localFile, HttpClient client )
     {
         _binding = binding;
         _url = binding.getRemoteUrl();
         _localFile = localFile;
         _httpClient = client;
-        _digestRequired = digestRequired;
         setURL( _url );
     }
 

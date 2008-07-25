@@ -23,12 +23,20 @@ import org.apache.maven.mercury.spi.http.client.Binding;
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.MercuryException;
 import org.apache.maven.mercury.spi.http.validate.Validator;
+import org.apache.maven.mercury.transport.api.StreamObserver;
+import org.apache.maven.mercury.transport.api.Verifier;
 import org.mortbay.jetty.client.HttpExchange;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -38,31 +46,31 @@ import java.util.Set;
  * A RetrievalTarget is a remote file that must be downloaded locally, checksummed
  * and then atomically moved to its final location. The RetrievalTarget encapsulates
  * the temporary local file to which the remote file is downloaded, and also the
- * retrieval of the checksum file and the checksum calculation.
+ * retrieval of the checksum file(s) and the checksum calculation(s).
  */
 public abstract class RetrievalTarget
 {
     public static final String __PREFIX = "JTY_";
-    public static final String __DIGEST_SUFFIX = ".sha1";
     public static final String __TEMP_SUFFIX = ".tmp";
     public static final int __START_STATE = 1;
     public static final int __REQUESTED_STATE = 2;
     public static final int __READY_STATE = 3;
 
-    private int _checksumState;
-    private int _targetState;
+    protected int _checksumState;
+    protected int _targetState;
     
-    private MercuryException _exception;
-    private Binding _binding;
-    private File _tempFile;
-    private String _checksumUrl;
-    private String _retrievedChecksum;
-    private String _calculatedChecksum;
-    private DefaultRetriever _retriever;
-    private boolean _complete;
-    private HttpExchange _exchange;
-    private Set<Validator> _validators;
-
+    protected MercuryException _exception;
+    protected Binding _binding;
+    protected File _tempFile;
+    protected DefaultRetriever _retriever;
+    protected boolean _complete;
+    protected HttpExchange _exchange;
+    protected Set<Validator> _validators;
+    protected Set<StreamObserver> _observers = new HashSet<StreamObserver>();
+    protected List<Verifier> _verifiers = new ArrayList<Verifier>();
+    protected Map<Verifier, String> _verifierMap = new HashMap<Verifier, String>();
+ 
+    
     public abstract void onComplete();
 
     public abstract void onError( MercuryException exception );
@@ -73,7 +81,7 @@ public abstract class RetrievalTarget
      * @param binding
      * @param callback
      */
-    public RetrievalTarget( DefaultRetriever retriever, Binding binding, Set<Validator> validators )
+    public RetrievalTarget( DefaultRetriever retriever, Binding binding, Set<Validator> validators, Set<StreamObserver> observers )
     {
         if ( binding == null || binding.getRemoteUrl() == null || binding.getLocalFile() == null )
         {
@@ -82,9 +90,18 @@ public abstract class RetrievalTarget
         _retriever = retriever;
         _binding = binding;
         _validators = validators;
-        _checksumUrl = _binding.getRemoteUrl() + __DIGEST_SUFFIX;
+       
+        //sift out the potential checksum verifiers
+        for (StreamObserver o: observers)
+        {
+            if (Verifier.class.isAssignableFrom(o.getClass()))
+                _verifiers.add((Verifier)o);
+            else
+                _observers.add(o);
+        }
+        
         _tempFile = new File( _binding.getLocalFile().getParentFile(),
-            __PREFIX + _binding.getLocalFile().getName() + __TEMP_SUFFIX );        
+                              __PREFIX + _binding.getLocalFile().getName() + __TEMP_SUFFIX );        
         _tempFile.deleteOnExit();
         
         // Create the directory if it doesn't exist
@@ -104,30 +121,7 @@ public abstract class RetrievalTarget
         }
     }
 
-    public boolean isLenientChecksum()
-    {
-        return _binding.isLenientChecksum();
-    }
-
-    public void setRetrievedChecksum( String retrievedChecksum )
-    {
-        _retrievedChecksum = retrievedChecksum;
-    }
-
-    public String getExpectedChecksum()
-    {
-        return _retrievedChecksum;
-    }
-
-    public void setCalculatedChecksum( String calculatedChecksum )
-    {
-        _calculatedChecksum = calculatedChecksum;
-    }
-
-    public String getActualChecksum()
-    {
-        return _calculatedChecksum;
-    }
+   
 
     public File getTempFile()
     {
@@ -140,11 +134,20 @@ public abstract class RetrievalTarget
     }
 
 
-    /** Retrieve the remote file and its checksum file using jetty async httpclient. */
+    /** Start by getting the appropriate checksums */
     public void retrieve()
     {
-        updateChecksumState( __START_STATE, null );
-        updateTargetState( __START_STATE, null );
+        //if there are no checksum verifiers configured, proceed directly to get the file
+        if (_verifiers.size() == 0)
+        {
+            _checksumState = __READY_STATE;
+            updateTargetState(__START_STATE, null);
+        }
+        else
+        {
+            _checksumState = __START_STATE;
+            updateChecksumState(-1, null);
+        }
     }
 
 
@@ -164,6 +167,69 @@ public abstract class RetrievalTarget
         }
     }
 
+    public synchronized boolean isComplete()
+    {
+        return _complete;
+    }
+
+    public String toString()
+    {
+        return "T:" + _binding.getRemoteUrl() + ":" + _targetState + ":" + _checksumState + ":" + _complete;
+    }
+
+    private void updateChecksumState (int index, Throwable ex)
+    {
+        if ( _exception == null && ex != null )
+        {
+            if ( ex instanceof MercuryException )
+            {
+                _exception = (MercuryException) ex;
+            }
+            else
+            {
+                _exception = new MercuryException( _binding, ex );
+            }
+        }
+        
+        if (ex != null)
+        {
+            _checksumState = __READY_STATE;
+            onError(_exception);
+        }
+        else
+        {     
+            boolean proceedWithTargetFile = false;
+            if (index >= 0)
+            {
+                //check if the just-completed retrieval means that we can stop trying to download checksums 
+                Verifier v = _verifiers.get(index);
+                if (_verifierMap.containsKey(v) && v.isSufficient())
+                    proceedWithTargetFile = true;
+            }
+
+            index++;
+            
+            if ((index < _verifiers.size()) && !proceedWithTargetFile)
+            {
+                retrieveChecksum(index);
+            }
+            else
+            {
+                _checksumState = __READY_STATE;
+
+                //finished retrieving all possible checksums. Add all verifiers
+                //that had matching checksums into the observers list
+                _observers.addAll(_verifierMap.keySet());
+
+                //now get the file now we have the checksum sorted out
+                updateTargetState( __START_STATE, null );
+            }
+        }
+    }
+    
+    
+   
+   
 
     /**
      * Check the actual checksum against the expected checksum
@@ -172,18 +238,22 @@ public abstract class RetrievalTarget
      */
     public boolean verifyChecksum()
     {
-        if ( _retrievedChecksum != null && _calculatedChecksum != null && _calculatedChecksum.equals(
-            _retrievedChecksum ) )
+        boolean ok = true;
+        
+        synchronized (_verifierMap)
         {
-            return true;
+            Iterator<Map.Entry<Verifier, String>> itor = _verifierMap.entrySet().iterator();
+            while (itor.hasNext() && ok)
+            {               
+                Map.Entry<Verifier, String> e = itor.next();
+                ok = e.getKey().verifySignature(e.getValue());
+            }
         }
-        else if ( _retrievedChecksum == null && _binding.isLenientChecksum() )
-        {
-            return true;
-        }
-
-        return false;
+        
+        return ok;
     }
+        
+    
 
     public boolean validate( List<String> errors )
     {
@@ -218,40 +288,7 @@ public abstract class RetrievalTarget
         return true;
     }
 
-    protected synchronized void updateChecksumState( int state, Throwable ex )
-    {
-        _checksumState = state;
-        if ( _exception == null && ex != null )
-        {
-            if ( ex instanceof MercuryException )
-            {
-                _exception = (MercuryException) ex;
-            }
-            else
-            {
-                _exception = new MercuryException( _binding, ex );
-            }
-        }
-
-        if ( _checksumState == __START_STATE )
-        {
-            _exchange = retrieveChecksum();
-        }
-
-        //if both checksum and target file are ready, we're ready to return callback
-        if ( _checksumState == __READY_STATE && _targetState == __READY_STATE )
-        {
-            _complete = true;
-            if ( _exception == null )
-            {
-                onComplete();
-            }
-            else
-            {
-                onError( _exception );
-            }
-        }
-    }
+  
 
     protected synchronized void updateTargetState( int state, Throwable ex )
     {
@@ -274,7 +311,7 @@ public abstract class RetrievalTarget
         }
 
         //if both checksum and target file are ready, we're ready to return callback
-        if ( _checksumState == __READY_STATE && _targetState == __READY_STATE )
+        if (_targetState == __READY_STATE )
         {
             _complete = true;
             if ( _exception == null )
@@ -289,28 +326,53 @@ public abstract class RetrievalTarget
     }
 
     /** Asynchronously fetch the checksum for the target file. */
-    private HttpExchange retrieveChecksum()
+    private HttpExchange retrieveChecksum(final int index)
     {
-        updateChecksumState( __REQUESTED_STATE, null );
         HttpExchange exchange = new HttpExchange.ContentExchange()
         {
             protected void onException( Throwable ex )
             {
-                updateChecksumState( __READY_STATE, ex );
+                //if the checksum is mandatory, then propagate the exception and stop processing
+                if (!_verifiers.get(index).isLenient())
+                {
+                    updateChecksumState(index, ex);
+                }
+                else
+                    updateChecksumState(index, null);
+                
             }
 
             protected void onResponseComplete() throws IOException
             {
                 super.onResponseComplete();
+                Verifier v = _verifiers.get(index);
+                
                 if ( getResponseStatus() == HttpServletResponse.SC_OK )
                 {
-                    setRetrievedChecksum( getResponseContent().trim() );
+                    //We got a checksum so match it up with the verifier it is for
+                    synchronized (_verifierMap)
+                    {
+                        if (v.isSufficient())
+                            _verifierMap.clear(); //remove all other entries, we only need one checksum
+                        
+                        _verifierMap.put(v, getResponseContent());
+                    }
+                    updateChecksumState(index, null);
                 }
-
-                updateChecksumState( __READY_STATE, null );
+                else 
+                {
+                    if (!v.isLenient()) 
+                    {
+                        //checksum file MUST be present, fail
+                        updateChecksumState(index, new Exception ("Mandatory checksum file not found "+this.getURI()));
+                    }
+                    else
+                        updateChecksumState(index, null);
+                }
             }
         };
-        exchange.setURL( _checksumUrl );
+        
+        exchange.setURL( getChecksumFileURLAsString( _verifiers.get(index)) );
 
         try
         {
@@ -318,7 +380,7 @@ public abstract class RetrievalTarget
         }
         catch ( IOException ex )
         {
-            updateChecksumState( __READY_STATE, ex );
+            updateChecksumState(index, ex);
         }
         return exchange;
     }
@@ -330,13 +392,12 @@ public abstract class RetrievalTarget
         updateTargetState( __REQUESTED_STATE, null );
 
         //get the file, calculating the digest for it on the fly
-        FileExchange exchange = new FileGetExchange( _binding, getTempFile(), true, _retriever.getHttpClient() )
+        FileExchange exchange = new FileGetExchange( _binding, getTempFile(), _observers, _retriever.getHttpClient() )
         {
             public void onFileComplete( String url, File localFile, String digest )
             {
                 //we got the target file ok, so tell our main callback
                 _targetState = __READY_STATE;
-                setCalculatedChecksum( digest );
                 updateTargetState( __READY_STATE, null );
             }
 
@@ -351,6 +412,13 @@ public abstract class RetrievalTarget
         return exchange;
     }
 
+    private String getChecksumFileURLAsString (Verifier verifier)
+    {
+        String extension = verifier.getExtension();
+        if (extension.charAt(0) != '.')
+            extension = "."+extension;
+        return _binding.getRemoteUrl() + extension;
+    }
 
     private boolean deleteTempFile()
     {
@@ -360,24 +428,5 @@ public abstract class RetrievalTarget
         }
         return false;
     }
-
-    public synchronized boolean isComplete()
-    {
-        return _complete;
-    }
-
-    public String toString()
-    {
-        return "T:" + _binding.getRemoteUrl() + ":" + _targetState + ":" + _checksumState + ":" + _complete;
-    }
-
-    public String getRetrievedChecksum()
-    {
-        return _retrievedChecksum;
-    }
-
-    public String getCalculatedChecksum()
-    {
-        return _calculatedChecksum;
-    }
+    
 }

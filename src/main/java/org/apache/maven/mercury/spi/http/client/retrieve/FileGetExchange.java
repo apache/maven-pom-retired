@@ -19,23 +19,25 @@
 
 package org.apache.maven.mercury.spi.http.client.retrieve;
 
-import org.apache.maven.mercury.spi.http.client.Binding;
-import org.apache.maven.mercury.spi.http.client.ChecksumCalculator;
-import org.apache.maven.mercury.spi.http.client.FileExchange;
-import org.apache.maven.mercury.spi.http.client.MercuryException;
-import org.mortbay.io.Buffer;
-import org.mortbay.jetty.HttpMethods;
-import org.mortbay.jetty.client.HttpClient;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.security.DigestOutputStream;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.maven.mercury.spi.http.client.Binding;
+import org.apache.maven.mercury.spi.http.client.FileExchange;
+import org.apache.maven.mercury.spi.http.client.MercuryException;
+import org.apache.maven.mercury.spi.http.client.ObservableOutputStream;
+import org.apache.maven.mercury.transport.api.StreamObserver;
+import org.mortbay.io.Buffer;
+import org.mortbay.jetty.HttpMethods;
+import org.mortbay.jetty.client.HttpClient;
 
 
 /**
@@ -50,18 +52,20 @@ import java.security.NoSuchAlgorithmException;
 public abstract class FileGetExchange extends FileExchange
 {
     private OutputStream _outputStream;
+    private Set<StreamObserver> _observers = new HashSet<StreamObserver>();
 
     /**
      * Constructor.
      *
      * @param binding        the remote file to fetch
      * @param localFile      the local file location to store the remote file
-     * @param digestRequired if true, the file stream will be passed thru the digest calculator
+     * @param observers      observers of the io stream
      * @param client         async http client
      */
-    public FileGetExchange( Binding binding, File localFile, boolean digestRequired, HttpClient client )
+    public FileGetExchange( Binding binding, File localFile, Set<StreamObserver> observers, HttpClient client )
     {
-        super( binding, localFile, digestRequired, client );
+        super( binding, localFile, client );
+        _observers.addAll(observers);
     }
 
 
@@ -91,10 +95,12 @@ public abstract class FileGetExchange extends FileExchange
                 return;
             }
 
-            if ( _digestRequired && _outputStream != null )
+            if ( _outputStream != null )
             {
-                byte[] bytes = ( (DigestOutputStream) _outputStream ).getMessageDigest().digest();
-                digest = ChecksumCalculator.encodeToAsciiHex( bytes );
+                
+                /*
+             
+                */
             }
             onFileComplete( _url, _localFile, digest );
         }
@@ -138,16 +144,11 @@ public abstract class FileGetExchange extends FileExchange
     {
         if ( _outputStream == null )
         {
-            if ( !_digestRequired )
-            {
-                _outputStream = new FileOutputStream( _localFile );
-            }
-            else
-            {
-                MessageDigest digest = MessageDigest.getInstance( _digestAlgorithm );
-                _outputStream = new DigestOutputStream( new FileOutputStream( _localFile ), digest );
-            }
+            ObservableOutputStream oos = new ObservableOutputStream( new FileOutputStream( _localFile ));
+            oos.addObservers(_observers);
+            _outputStream = oos;
         }
+         
         return _outputStream;
     }
 }

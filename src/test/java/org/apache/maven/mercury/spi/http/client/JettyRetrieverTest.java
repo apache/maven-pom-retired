@@ -28,8 +28,15 @@ import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetriever;
 import org.apache.maven.mercury.spi.http.client.retrieve.RetrievalResponse;
 import org.apache.maven.mercury.spi.http.server.SimpleTestServer;
 import org.apache.maven.mercury.spi.http.validate.Validator;
+import org.apache.maven.mercury.transport.SHA1Verifier;
+import org.apache.maven.mercury.transport.SHA1VerifierFactory;
+import org.apache.maven.mercury.transport.api.Server;
+import org.apache.maven.mercury.transport.api.StreamObserver;
+import org.apache.maven.mercury.transport.api.StreamObserverFactory;
+import org.apache.maven.mercury.transport.api.Verifier;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 
@@ -52,8 +59,10 @@ public class JettyRetrieverTest extends TestCase
     Binding binding5 = new Binding();
     DefaultRetriever retriever;
     SimpleTestServer server;
+    Server remoteServerType;
+    HashSet<StreamObserverFactory> factories;
     
-    
+
     public class TxtValidator implements Validator 
     {
 
@@ -84,13 +93,11 @@ public class JettyRetrieverTest extends TestCase
     {
         public String getFileExtension()
         {
-            System.err.println("Returning extension for AlwaysFalseTxtValidator");
             return "txt";
         }
 
         public boolean validate(String stagedFile, List<String> errors)
         {
-            System.err.println("Evaluating "+stagedFile);
             errors.add("Always false");
             return false;
         }
@@ -99,11 +106,18 @@ public class JettyRetrieverTest extends TestCase
     public void setUp ()
     throws Exception
     {
-        retriever = new DefaultRetriever();
-        
         server = new SimpleTestServer();
         server.start();
         _port=String.valueOf(server.getPort()); 
+        
+        HashSet<Server> remoteServerTypes = new HashSet<Server>();
+        remoteServerType = new Server(new URL(__HOST_FRAGMENT+_port));
+        factories = new HashSet<StreamObserverFactory>();
+            
+        remoteServerTypes.add(remoteServerType);
+        
+        retriever = new DefaultRetriever();
+        retriever.setServers(remoteServerTypes);
     }
     
     
@@ -132,6 +146,9 @@ public class JettyRetrieverTest extends TestCase
     public void testSyncRetrievalAllGood()
     throws Exception
     {
+        factories.add(new SHA1VerifierFactory(false, true)); //!lenient, sufficient
+        remoteServerType.setStreamObserverFactories(factories);
+        
         //make local dir to put stuff in
         final File dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
@@ -171,8 +188,8 @@ public class JettyRetrieverTest extends TestCase
         
         RetrievalResponse response = retriever.retrieve(request);
         
-//        for (BatchException t:response.getExceptions())
-//            t.printStackTrace();
+        //for (MercuryException t:response.getExceptions())
+        //    t.printStackTrace();
         
         assertEquals(2,response.getExceptions().size());
         assertTrue(!file0.exists());
@@ -188,6 +205,9 @@ public class JettyRetrieverTest extends TestCase
     public void testSyncRetrievalFailFast()
         throws Exception
     {
+        factories.add(new SHA1VerifierFactory(false, true)); //!lenient, sufficient
+        remoteServerType.setStreamObserverFactories(factories);
+        
         //make local dir to put stuff in
         final File dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
@@ -205,12 +225,10 @@ public class JettyRetrieverTest extends TestCase
 
         binding1.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file1.txt"); //has no sha file
         binding1.setLocalFile(file1);
-        binding1.setLenientChecksum(false);
         bindings.add(binding1);
 
         binding2.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file2.txt"); //has wrong sha file
         binding2.setLocalFile(file2);
-        binding2.setLenientChecksum(true);
         bindings.add(binding2);
 
         binding3.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
@@ -234,7 +252,7 @@ public class JettyRetrieverTest extends TestCase
         
         RetrievalResponse response = retriever.retrieve(request);
 
-        //for (BatchException t:response.getExceptions())
+        //for (MercuryException t:response.getExceptions())
         //   t.printStackTrace();
 
         assertTrue(!file0.exists());
@@ -250,6 +268,9 @@ public class JettyRetrieverTest extends TestCase
     public void testSyncRetrievalLenient0()
         throws Exception
     {
+        factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
+        remoteServerType.setStreamObserverFactories(factories);
+        
         //make local dir to put stuff in
         final File dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
@@ -267,12 +288,10 @@ public class JettyRetrieverTest extends TestCase
 
         binding1.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file1.txt"); //has no sha file
         binding1.setLocalFile(file1);
-        binding1.setLenientChecksum(true);
         bindings.add(binding1);
 
         binding2.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file2.txt"); //has wrong sha file
         binding2.setLocalFile(file2);
-        binding2.setLenientChecksum(true);
         bindings.add(binding2);
 
         binding3.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
@@ -304,6 +323,8 @@ public class JettyRetrieverTest extends TestCase
     public void testSyncRetrievalLenient1()
     throws Exception
     {
+        factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
+        remoteServerType.setStreamObserverFactories(factories);
         //make local dir to put stuff in
         final File dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
@@ -321,7 +342,6 @@ public class JettyRetrieverTest extends TestCase
 
         binding1.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file1.txt"); //has no sha file
         binding1.setLocalFile(file1);
-        binding1.setLenientChecksum(true);
         bindings.add(binding1);
 
         binding3.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
@@ -340,8 +360,8 @@ public class JettyRetrieverTest extends TestCase
         request.setFailFast(false);
         RetrievalResponse response = retriever.retrieve(request);
 
-        for (MercuryException t:response.getExceptions())
-            t.printStackTrace();
+        //for (MercuryException t:response.getExceptions())
+        //    t.printStackTrace();
 
         assertEquals(0,response.getExceptions().size());
         assertTrue(file0.exists());
@@ -355,60 +375,65 @@ public class JettyRetrieverTest extends TestCase
     
     public void testValidatorSuccess() throws Exception
     {
-            //make local dir to put stuff in
-            final File dir = mkTempDir();
-            DefaultRetrievalRequest request = new DefaultRetrievalRequest();
-            HashSet<Binding> bindings = new HashSet<Binding>();
-            HashSet<Validator> validators = new HashSet<Validator>();
-            validators.add(new TxtValidator());
-            request.setValidators(validators);
+        factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
+        remoteServerType.setStreamObserverFactories(factories);
 
-            file0 = new File(dir, "file0.txt");
-            file1 = new File(dir, "file1.txt");
-            file2 = new File(dir, "file2.txt");
-            file3 = new File(dir, "file3.jar");
-            file4 = new File(dir, "file4.so");
-            file5 = new File(dir, "file5.jpg");
-            binding0.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file0.txt");
-            binding0.setLocalFile(file0);
-            bindings.add(binding0);
+        //make local dir to put stuff in
+        final File dir = mkTempDir();
+        DefaultRetrievalRequest request = new DefaultRetrievalRequest();
+        HashSet<Binding> bindings = new HashSet<Binding>();
+        HashSet<Validator> validators = new HashSet<Validator>();
+        validators.add(new TxtValidator());
+        request.setValidators(validators);
 
-            binding1.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file1.txt"); //has no sha file
-            binding1.setLocalFile(file1);
-            binding1.setLenientChecksum(true);
-            bindings.add(binding1);
+        file0 = new File(dir, "file0.txt");
+        file1 = new File(dir, "file1.txt");
+        file2 = new File(dir, "file2.txt");
+        file3 = new File(dir, "file3.jar");
+        file4 = new File(dir, "file4.so");
+        file5 = new File(dir, "file5.jpg");
+        binding0.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file0.txt");
+        binding0.setLocalFile(file0);
+        bindings.add(binding0);
 
-            binding3.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
-            binding3.setLocalFile(file3);
-            bindings.add(binding3);
+        binding1.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file1.txt"); //has no sha file
+        binding1.setLocalFile(file1);
+        bindings.add(binding1);
 
-            binding4.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file4.so");
-            binding4.setLocalFile(file4);
-            bindings.add(binding4);
+        binding3.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
+        binding3.setLocalFile(file3);
+        bindings.add(binding3);
 
-            binding5.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file5.jpg");
-            binding5.setLocalFile(file5);
-            bindings.add(binding5);
+        binding4.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file4.so");
+        binding4.setLocalFile(file4);
+        bindings.add(binding4);
 
-            request.setFailFast(false);
+        binding5.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file5.jpg");
+        binding5.setLocalFile(file5);
+        bindings.add(binding5);
 
-            request.setBindings(bindings);
-            RetrievalResponse response = retriever.retrieve(request);
+        request.setFailFast(false);
 
-            //for (BatchException t:response.getExceptions())
-            //    t.printStackTrace();
+        request.setBindings(bindings);
+        RetrievalResponse response = retriever.retrieve(request);
 
-            assertEquals(0,response.getExceptions().size());
-            assertTrue(file0.exists());
-            assertTrue(file1.exists());
-            assertTrue(!file2.exists());
-            assertTrue(file3.exists());
-            assertTrue(file4.exists());
-            assertTrue(file5.exists());
+        //for (MercuryException t:response.getExceptions())
+        //    t.printStackTrace();
+
+        assertEquals(0,response.getExceptions().size());
+        assertTrue(file0.exists());
+        assertTrue(file1.exists());
+        assertTrue(!file2.exists());
+        assertTrue(file3.exists());
+        assertTrue(file4.exists());
+        assertTrue(file5.exists());
     }
     
     public void testValidatorFailure () throws Exception
     {
+        factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
+        remoteServerType.setStreamObserverFactories(factories);
+        
         //make local dir to put stuff in
         final File dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
@@ -429,7 +454,6 @@ public class JettyRetrieverTest extends TestCase
 
         binding1.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file1.txt"); //has no sha file
         binding1.setLocalFile(file1);
-        binding1.setLenientChecksum(true);
         bindings.add(binding1);
 
         binding3.setRemoteUrl(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
@@ -449,7 +473,7 @@ public class JettyRetrieverTest extends TestCase
         request.setBindings(bindings);
         RetrievalResponse response = retriever.retrieve(request);
 
-        //for (BatchException t:response.getExceptions())
+        //for (MercuryException t:response.getExceptions())
         //    t.printStackTrace();
 
         assertEquals(2,response.getExceptions().size());

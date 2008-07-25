@@ -200,9 +200,10 @@ public class JettyDeployerTest extends TestCase
         _binding0.setLocalFile(_file0);
         bindings.add(_binding0);
         
+        //TODO Test Lenient
         _binding1.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file1.txt"); //has no sha file
         _binding1.setLocalFile(_file1);
-        _binding1.setLenientChecksum(true);
+        //_binding1.setLenientChecksum(true);
         bindings.add(_binding1);
       
         _binding3.setRemoteUrl(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar");
@@ -221,7 +222,7 @@ public class JettyDeployerTest extends TestCase
         
         DeployResponse response = _deployer.deploy(request);
 
-        //for (BatchException t:response.getExceptions())
+        //for (MercuryException t:response.getExceptions())
         //    t.printStackTrace();
         
         assertEquals(10, _putServer.getPutDir().list().length);
@@ -376,7 +377,7 @@ public class JettyDeployerTest extends TestCase
         request.setFailFast(true);
         DeployResponse response = _deployer.deploy(request);
 
-        //for (BatchException t:response.getExceptions())
+        //for (MercuryException t:response.getExceptions())
         //    t.printStackTrace();
         
         //with failfast==true and the server side not running the mercury enhancements, we have no way to know

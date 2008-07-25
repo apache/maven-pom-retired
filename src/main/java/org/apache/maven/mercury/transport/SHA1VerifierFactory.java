@@ -16,13 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.mercury.transport.api;
 
-public interface Verifier extends StreamObserver
+package org.apache.maven.mercury.transport;
+
+import org.apache.maven.mercury.transport.api.StreamObserver;
+import org.apache.maven.mercury.transport.api.StreamObserverFactory;
+
+public class SHA1VerifierFactory implements StreamObserverFactory
 {
-    public String getSignature();
-    public boolean verifySignature (String signature);
-    public boolean isLenient();
-    public boolean isSufficient();
-    public String getExtension();
+    private boolean isLenient;
+    private boolean isSufficient;
+
+    public SHA1VerifierFactory (boolean isLenient, boolean isSufficient)
+    {
+        this.isLenient = isLenient;
+        this.isSufficient = isSufficient;
+    }
+    public StreamObserver newInstance()
+    {
+       return new SHA1Verifier(this.isLenient, this.isSufficient);
+    }
+
 }
