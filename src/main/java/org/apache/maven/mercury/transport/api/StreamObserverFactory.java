@@ -21,5 +21,4 @@ package org.apache.maven.mercury.transport.api;
 public interface StreamObserverFactory
 {
     public StreamObserver newInstance();
-
 }

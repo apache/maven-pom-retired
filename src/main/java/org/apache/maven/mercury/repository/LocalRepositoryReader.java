@@ -52,7 +52,7 @@ implements RepositoryReader
   /**
    * 
    */
-  public RepositoryOperationResult<ArtifactMetadata> readMetadata( List<? extends ArtifactBasicMetadata> query )
+  public RepositoryOperationResult<ArtifactMetadata> readDependencies( List<? extends ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {

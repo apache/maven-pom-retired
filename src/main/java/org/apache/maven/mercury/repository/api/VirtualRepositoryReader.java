@@ -140,7 +140,7 @@ public class VirtualRepositoryReader
   private List<ArtifactMetadata> readMetadataFromRepository( List<ArtifactBasicMetadata> query, RepositoryReader reader )
   throws RepositoryException
   {
-    RepositoryOperationResult<ArtifactMetadata> res = reader.readMetadata( query );
+    RepositoryOperationResult<ArtifactMetadata> res = reader.readDependencies( query );
     if( res != null && !res.hasExceptions() && res.hasResults() )
     {
       List<ArtifactMetadata> resList = res.getResults();

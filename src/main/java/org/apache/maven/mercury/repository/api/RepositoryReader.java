@@ -44,7 +44,7 @@ public interface RepositoryReader
    * as in query list. null means not found or worse
    * @throws RepositoryException
    */
-  public RepositoryOperationResult<ArtifactMetadata> readMetadata( List<? extends ArtifactBasicMetadata> query )
+  public RepositoryOperationResult<ArtifactMetadata> readDependencies( List<? extends ArtifactBasicMetadata> query )
   throws RepositoryException, IllegalArgumentException;
 
   /**
