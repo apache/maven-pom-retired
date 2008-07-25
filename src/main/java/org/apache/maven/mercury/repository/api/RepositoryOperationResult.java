@@ -21,6 +21,24 @@ public class RepositoryOperationResult<T extends ArtifactBasicMetadata>
 {
   private Set<RepositoryException> _exceptions = Collections.synchronizedSet( new HashSet<RepositoryException>() );
   private List<T> _results = Collections.synchronizedList( new ArrayList<T>() );
+  
+  public static RepositoryOperationResult<ArtifactBasicMetadata> add( RepositoryOperationResult<ArtifactBasicMetadata> rep, RepositoryException exception )
+  {
+    if( rep == null )
+      rep = new RepositoryOperationResult<ArtifactBasicMetadata>();
+
+    rep.add( exception );
+    return rep;
+  }
+  
+  public static RepositoryOperationResult<ArtifactBasicMetadata> add( RepositoryOperationResult<ArtifactBasicMetadata> rep, ArtifactBasicMetadata abmd )
+  {
+    if( rep == null )
+      rep = new RepositoryOperationResult<ArtifactBasicMetadata>();
+
+    rep.add( abmd );
+    return rep;
+  }
 
   public RepositoryOperationResult()
   {

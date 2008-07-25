@@ -44,7 +44,11 @@ implements LocalRepository
     public RepositoryWriter getWriter( String protocol )
         throws NonExistentProtocolException
     {
-      // TODO Auto-generated method stub
       return null;
+    }
+
+    public boolean isLocal()
+    {
+      return true;
     }
 }
