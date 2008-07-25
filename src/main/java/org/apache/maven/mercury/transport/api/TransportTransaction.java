@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.transport.api;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,10 +51,7 @@ public class TransportTransaction
     return this;
   }
   //------------------------------------------------------------------------------------------------
-  /**
-   * 
-   */
-  public TransportTransaction add( URI remoteResource, URI localResource, boolean lenientChecksum )
+  public TransportTransaction add( URI remoteResource, File localResource, boolean lenientChecksum )
   {
     init();
     
@@ -62,10 +60,25 @@ public class TransportTransaction
     return this;
   }
   //------------------------------------------------------------------------------------------------
-  /**
-   * 
-   */
-  public TransportTransaction add( URI remoteResource, URI localResource )
+  public TransportTransaction add( URI remoteResource, byte [] localResource, boolean lenientChecksum )
+  {
+    init();
+    
+    _bindings.add( new Binding( remoteResource, localResource, lenientChecksum ) );
+    
+    return this;
+  }
+  //------------------------------------------------------------------------------------------------
+  public TransportTransaction add( URI remoteResource, File localResource )
+  {
+    init();
+    
+    _bindings.add( new Binding( remoteResource, localResource, true ) );
+    
+    return this;
+  }
+  //------------------------------------------------------------------------------------------------
+  public TransportTransaction add( URI remoteResource, byte [] localResource )
   {
     init();
     

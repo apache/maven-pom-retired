@@ -19,83 +19,92 @@
 
 package org.apache.maven.mercury.transport.api;
 
+import java.io.File;
 import java.net.URI;
 
 import org.apache.maven.mercury.repository.api.RepositoryException;
 
 /**
- * Binding
- * <p/>
- * A Binding represents a remote uri whose contents are to be downloaded
- * and stored in a locally, or a local resource whose contents are to be
- * uploaded to the remote uri.
+ * Binding <p/> A Binding represents a remote uri whose contents are to be
+ * downloaded and stored in a locally, or a local resource whose contents are to
+ * be uploaded to the remote uri.
  */
 public class Binding
 {
-    protected URI     remoteResource;
-    protected URI     localResource;
-    protected boolean lenientChecksum = true;
-    
-    protected RepositoryException error;
-       
-    public Binding()
-    {        
-    }
-    
-    public Binding( URI remoteUrl, URI localFile, boolean lenientChecksum )
-    {
-        this.remoteResource = remoteUrl;
-        this.localResource = localFile;
-        this.lenientChecksum = lenientChecksum;
-    }
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger( Binding.class );
+  
+  protected URI                 remoteResource;
+  protected File                localFile;
+  protected byte []             localBuffer;
+  protected boolean             lenientChecksum = true;
 
-    public boolean isLenientChecksum()
-    {
-        return lenientChecksum;
-    }
+  protected RepositoryException error;
 
-    public void setLenientChecksum( boolean leniantChecksum )
-    {
-        this.lenientChecksum = leniantChecksum;
-    }
+  public Binding()
+  {
+  }
 
-    public URI getRemoteResource()
-    {
-      return remoteResource;
-    }
+  public Binding(
+      URI remoteUrl,
+      File localFile,
+      boolean lenientChecksum )
+  {
+    this.remoteResource = remoteUrl;
+    this.localFile = localFile;
+    this.lenientChecksum = lenientChecksum;
+  }
 
-    public void setRemoteResource(
-        URI remoteResource )
-    {
-      this.remoteResource = remoteResource;
-    }
+  public Binding(
+      URI remoteUrl,
+      byte [] localbuffer,
+      boolean lenientChecksum )
+  {
+    this.remoteResource = remoteUrl;
+    this.localBuffer = localbuffer;
+    this.lenientChecksum = lenientChecksum;
+  }
 
-    public URI getLocalResource()
-    {
-      return localResource;
-    }
+  public boolean isLenientChecksum()
+  {
+    return lenientChecksum;
+  }
 
-    public void setLocalResource(
-        URI localResource )
-    {
-      this.localResource = localResource;
-    }
+  public void setLenientChecksum(
+      boolean leniantChecksum )
+  {
+    this.lenientChecksum = leniantChecksum;
+  }
 
-    public RepositoryException getError()
-    {
-      return error;
-    }
+  public URI getRemoteResource()
+  {
+    return remoteResource;
+  }
 
-    public void setError(
-        RepositoryException error )
-    {
-      this.error = error;
-    }
+  public void setRemoteResource(
+      URI remoteResource )
+  {
+    this.remoteResource = remoteResource;
+  }
 
-    public String toString()
-    {
-        return "[" + remoteResource + "," + localResource + "," + lenientChecksum + "]";
-    }
-    
-    
+  public RepositoryException getError()
+  {
+    return error;
+  }
+
+  public void setError(
+      RepositoryException error )
+  {
+    this.error = error;
+  }
+  
+  public boolean isInMemory()
+  {
+    return localBuffer != null;
+  }
+  
+  public boolean isFile()
+  {
+    return localFile != null;
+  }
+
 }
