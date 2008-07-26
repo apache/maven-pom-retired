@@ -3,7 +3,8 @@ package org.apache.maven.mercury;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 
 /**
- * this is the most primitive metadata there is, usually used to query repository for "real" metadata
+ * this is the most primitive metadata there is, usually used to query repository for "real" metadata.
+ * It holds everything a project.dependencies.dependency element can have
  *
  *
  * @author Oleg Gusakov
@@ -28,6 +29,14 @@ public class ArtifactBasicMetadata
 
   protected String type = DEFAULT_ARTIFACT_TYPE;
   
+  protected ArtifactScopeEnum artifactScope;
+
+  protected String scope;
+
+  protected boolean optional;
+
+  /** metadata URI */
+  protected String uri;
   
   // oleg: resolution convenience transient data
   
@@ -132,6 +141,11 @@ public class ArtifactBasicMetadata
   {
       return groupId + ":" + artifactId;
   }
+  
+  public String getBaseName()
+  {
+    return artifactId + "-" + version + (classifier == null ? "" :"-"+classifier);
+  }
 
   public String getCheckedType()
   {
@@ -182,6 +196,58 @@ public class ArtifactBasicMetadata
       String type )
   {
     this.type = type;
+  }
+
+  public String getScope()
+  {
+      return getArtifactScope().getScope();
+  }
+
+  public ArtifactScopeEnum getScopeAsEnum()
+  {
+      return artifactScope == null ? ArtifactScopeEnum.DEFAULT_SCOPE : artifactScope;
+  }
+  
+  public ArtifactScopeEnum getArtifactScope()
+  {
+      return artifactScope == null ? ArtifactScopeEnum.DEFAULT_SCOPE : artifactScope;
+  }
+
+  public void setArtifactScope( ArtifactScopeEnum artifactScope )
+  {
+      this.artifactScope = artifactScope;
+  }
+
+  public void setScope( String scope )
+  {
+      this.artifactScope = scope == null ? ArtifactScopeEnum.DEFAULT_SCOPE : ArtifactScopeEnum.valueOf( scope );
+  }
+  public boolean isOptional()
+  {
+    return optional;
+  }
+  public void setOptional(boolean optional)
+  {
+    this.optional = optional;
+  }
+  public void setOptional(String optional)
+  {
+    this.optional = "true".equals(optional) ? true : false;
+  }
+
+  public String getUri()
+  {
+      return uri;
+  }
+
+  public void setUri( String uri )
+  {
+      this.uri = uri;
+  }
+  
+  public boolean hasClassifier()
+  {
+    return classifier == null;
   }
   
   

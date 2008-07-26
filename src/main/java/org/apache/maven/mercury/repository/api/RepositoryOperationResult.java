@@ -19,7 +19,7 @@ import org.apache.maven.mercury.ArtifactBasicMetadata;
  */
 public class RepositoryOperationResult<T extends ArtifactBasicMetadata>
 {
-  private Set<RepositoryException> _exceptions = Collections.synchronizedSet( new HashSet<RepositoryException>() );
+  private Set<Exception> _exceptions = Collections.synchronizedSet( new HashSet<Exception>() );
   private List<T> _results = Collections.synchronizedList( new ArrayList<T>() );
   
   public static RepositoryOperationResult<ArtifactBasicMetadata> add( RepositoryOperationResult<ArtifactBasicMetadata> rep, RepositoryException exception )
@@ -44,12 +44,12 @@ public class RepositoryOperationResult<T extends ArtifactBasicMetadata>
   {
   }
 
-  protected void add( RepositoryException exception )
+  public void add( Exception exception )
   {
       _exceptions.add( exception );
   }
 
-  public Set<RepositoryException> getExceptions()
+  public Set<Exception> getExceptions()
   {
       return _exceptions;
   }

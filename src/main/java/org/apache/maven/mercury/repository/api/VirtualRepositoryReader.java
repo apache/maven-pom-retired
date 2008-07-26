@@ -49,6 +49,23 @@ public class VirtualRepositoryReader
       this._repositories.addAll( remoteRepositories );
   }
   //----------------------------------------------------------------------------------------------------------------------------
+  public VirtualRepositoryReader(
+                  List<Repository> repositories
+                          )
+  throws RepositoryException
+  {
+    if( repositories != null && repositories.size() > 0 )
+      this._repositories.addAll( repositories );
+  }
+  //----------------------------------------------------------------------------------------------------------------------------
+  public VirtualRepositoryReader( Repository... repositories )
+  throws RepositoryException
+  {
+    if( repositories != null && repositories.length > 0 )
+      for( Repository r : repositories )
+        this._repositories.add( r );
+  }
+  //----------------------------------------------------------------------------------------------------------------------------
   public void addRepository( Repository repo )
   throws RepositoryException
   {
@@ -115,7 +132,7 @@ public class VirtualRepositoryReader
     return res;
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  public ArtifactMetadata readMetadata( ArtifactBasicMetadata bmd )
+  public ArtifactMetadata readDependencies( ArtifactBasicMetadata bmd )
   throws IllegalArgumentException, RepositoryException
   {
     if( bmd == null )
@@ -126,28 +143,15 @@ public class VirtualRepositoryReader
     List<ArtifactBasicMetadata> query = new ArrayList<ArtifactBasicMetadata>(1);
     query.add( bmd );
     
-    List<ArtifactMetadata> resList = null;
     for( RepositoryReader rr : _repositoryReaders )
     {
-      resList = readMetadataFromRepository( query, rr );
-      if( resList != null )
-        return resList.get( 0 );
-    }
-    
-    return null;
-  }
-  //----------------------------------------------------------------------------------------------------------------------------
-  private List<ArtifactMetadata> readMetadataFromRepository( List<ArtifactBasicMetadata> query, RepositoryReader reader )
-  throws RepositoryException
-  {
-    RepositoryOperationResult<ArtifactMetadata> res = reader.readDependencies( query );
-    if( res != null && !res.hasExceptions() && res.hasResults() )
-    {
-      List<ArtifactMetadata> resList = res.getResults();
-      for( ArtifactBasicMetadata bmd : resList )
-        bmd.setReader( reader );
-      
-      return resList;
+      Map<ArtifactBasicMetadata, ArtifactMetadata> res = rr.readDependencies( query );
+      if( res != null && ! res.isEmpty() )
+      {
+        ArtifactMetadata md = res.get( bmd );
+        md.setReader( rr );
+        return md;
+      }
     }
     
     return null;

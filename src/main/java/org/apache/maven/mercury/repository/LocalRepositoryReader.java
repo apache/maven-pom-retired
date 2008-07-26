@@ -1,6 +1,8 @@
 package org.apache.maven.mercury.repository;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,15 +15,19 @@ import org.apache.maven.mercury.metadata.version.VersionRange;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryOperationResult;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
+import org.mortbay.log.Log;
 
 public class LocalRepositoryReader
-implements RepositoryReader
+implements RepositoryReader, MetadataReader
 {
+  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( LocalRepositoryReader.class ); 
   //---------------------------------------------------------------------------------------------------------------
   LocalRepository _repo;
   File _repoDir;
+  
+  MetadataProcessor _mdProcessor;
   //---------------------------------------------------------------------------------------------------------------
-  public LocalRepositoryReader( LocalRepository repo )
+  public LocalRepositoryReader( LocalRepository repo, MetadataProcessor mdProcessor )
   {
     if( repo == null )
       throw new IllegalArgumentException("localRepo cannot be null");
@@ -34,6 +40,11 @@ implements RepositoryReader
       throw new IllegalArgumentException("localRepo directory \""+_repoDir.getAbsolutePath()+"\" should exist");
 
     _repo = repo;
+    
+    if( mdProcessor == null )
+      throw new IllegalArgumentException("MetadataProcessor cannot be null ");
+    
+    setMetadataProcessor(  mdProcessor );
   }
   //---------------------------------------------------------------------------------------------------------------
   public Repository getRepository()
@@ -52,23 +63,51 @@ implements RepositoryReader
   /**
    * 
    */
-  public RepositoryOperationResult<ArtifactMetadata> readDependencies( List<? extends ArtifactBasicMetadata> query )
+  public Map<ArtifactBasicMetadata, ArtifactMetadata> readDependencies( List<? extends ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {
     if( query == null || query.size() < 1 )
       return null;
 
-    RepositoryOperationResult<ArtifactMetadata> rr = new RepositoryOperationResult<ArtifactMetadata>();
+    Map<ArtifactBasicMetadata, ArtifactMetadata> ror = new HashMap<ArtifactBasicMetadata, ArtifactMetadata>(16);
     
-    File gavDir = null;
+    File pomFile = null;
     for( ArtifactBasicMetadata bmd : query )
     {
-      gavDir = new File( _repoDir, bmd.getGroupId().replace( '.', '/' )+"/"+bmd.getArtifactId()+"/"+bmd.getVersion() );
-      // TODO og: the rest
+      String pomPath = bmd.getGroupId().replace( '.', '/' )
+                      + "/" + bmd.getArtifactId()
+                      + "/" + bmd.getVersion()
+                      + "/" + bmd.getBaseName()
+                      + ".pom"
+                      ;
+      
+      pomFile = new File( _repoDir, pomPath );
+      if( ! pomFile.exists() )
+      {
+        _log.warn( "file \""+pomPath+"\" does not exist in local repo" );
+        continue;
+      }
+      
+      // TODO HIGH og: delegate POM processing to maven-project
+      // for testing purpose - I plug in my test processor
+      try
+      {
+        List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, this );
+        ArtifactMetadata md = new ArtifactMetadata( bmd );
+        md.setDependencies( deps );
+        
+        ror.put( bmd, md );
+      }
+      catch( MetadataProcessingException e )
+      {
+        _log.warn( "error reading "+bmd.toString()+" dependencies", e );
+        continue;
+      }
+      
     }
     
-    return rr;
+    return ror;
   }
   //---------------------------------------------------------------------------------------------------------------
   /**
@@ -124,6 +163,41 @@ implements RepositoryReader
     }
     
     return res;
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  public void setMetadataProcessor( MetadataProcessor mdProcessor )
+  {
+    this._mdProcessor = mdProcessor;
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  public byte[] readMetadata( ArtifactBasicMetadata bmd )
+  throws MetadataProcessingException
+  {
+    String bmdPath = bmd.getGroupId().replace( '.', '/' )+"/"+bmd.getArtifactId()+"/"+bmd.getVersion();
+    
+    File pomFile = new File( _repoDir, bmdPath+"/"+bmd.getBaseName()+".pom" );
+    
+    if( ! pomFile.exists() )
+      return null;
+    
+    FileInputStream fis = null;
+    
+    try
+    {
+      fis = new FileInputStream( pomFile );
+      int len = (int)pomFile.length();
+      byte [] pom = new byte [ len ];
+      fis.read( pom );
+      return pom;
+    }
+    catch( IOException e )
+    {
+      throw new MetadataProcessingException(e);
+    }
+    finally
+    {
+      if( fis != null ) try { fis.close(); } catch( Exception any ) {}
+    }
   }
   //---------------------------------------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------------------------------------

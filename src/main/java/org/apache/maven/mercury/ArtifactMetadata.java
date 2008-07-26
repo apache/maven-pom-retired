@@ -15,12 +15,6 @@ public class ArtifactMetadata
 extends ArtifactBasicMetadata
 {
     // in addition to basic coordinates
-  
-    protected ArtifactScopeEnum artifactScope;
-
-    protected String scope;
-
-    protected boolean optional;
 
     private boolean release;
 
@@ -31,10 +25,7 @@ extends ArtifactBasicMetadata
     protected String why;
 
     /** dependencies of the artifact behind this metadata */
-    protected List<ArtifactMetadata> dependencies;
-
-    /** metadata URI */
-    protected String uri;
+    protected List<ArtifactBasicMetadata> dependencies;
 
     /** is metadata found anywhere */
     protected boolean resolved = false;
@@ -130,6 +121,11 @@ extends ArtifactBasicMetadata
         this.error = error;
     }
 
+    public ArtifactMetadata( ArtifactBasicMetadata bmd )
+    {
+      this( bmd.getGroupId(), bmd.getArtifactId(), bmd.getVersion(), bmd.getType(), null, bmd.getClassifier() );
+    }
+
     public ArtifactMetadata( String groupId, String name, String version, String type, String scopeString, String classifier, String artifactUri, String why, boolean resolved, String error )
     {
         this( groupId, name, version, type, scopeString == null ? ArtifactScopeEnum.DEFAULT_SCOPE : ArtifactScopeEnum.valueOf( scopeString ), classifier, artifactUri, why, resolved, error );
@@ -137,21 +133,6 @@ extends ArtifactBasicMetadata
 
     public ArtifactMetadata( Artifact af )
     {
-    }
-    
-    public ArtifactScopeEnum getArtifactScope()
-    {
-        return artifactScope == null ? ArtifactScopeEnum.DEFAULT_SCOPE : artifactScope;
-    }
-
-    public void setArtifactScope( ArtifactScopeEnum artifactScope )
-    {
-        this.artifactScope = artifactScope;
-    }
-
-    public void setScope( String scope )
-    {
-        this.artifactScope = scope == null ? ArtifactScopeEnum.DEFAULT_SCOPE : ArtifactScopeEnum.valueOf( scope );
     }
 
     public boolean isResolved()
@@ -164,26 +145,6 @@ extends ArtifactBasicMetadata
         this.resolved = resolved;
     }
 
-    public String getUri()
-    {
-        return uri;
-    }
-
-    public void setUri( String uri )
-    {
-        this.uri = uri;
-    }
-
-    public String getScope()
-    {
-        return getArtifactScope().getScope();
-    }
-
-    public ArtifactScopeEnum getScopeAsEnum()
-    {
-        return artifactScope == null ? ArtifactScopeEnum.DEFAULT_SCOPE : artifactScope;
-    }
-
     public boolean isArtifactExists()
     {
         return artifactExists;
@@ -194,12 +155,12 @@ extends ArtifactBasicMetadata
         this.artifactExists = artifactExists;
     }
 
-    public List<ArtifactMetadata> getDependencies()
+    public List<ArtifactBasicMetadata> getDependencies()
     {
         return dependencies;
     }
 
-    public void setDependencies( List<ArtifactMetadata> dependencies )
+    public void setDependencies( List<ArtifactBasicMetadata> dependencies )
     {
         this.dependencies = dependencies;
     }
@@ -237,28 +198,6 @@ extends ArtifactBasicMetadata
     public boolean isError()
     {
         return error == null;
-    }
-
-    public String getDependencyConflictId()
-    {
-        return groupId + ":" + artifactId;
-    }
-    public boolean isOptional()
-    {
-      return optional;
-    }
-    public void setOptional(boolean optional)
-    {
-      this.optional = optional;
-    }
-    public void setOptional(String optional)
-    {
-      this.optional = "true".equals(optional) ? true : false;
-    }
-    
-    public boolean hasClassifier()
-    {
-      return classifier == null;
     }
 
     public void setRelease( boolean release )

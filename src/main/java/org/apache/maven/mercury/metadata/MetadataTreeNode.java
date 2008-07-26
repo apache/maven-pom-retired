@@ -3,6 +3,7 @@ package org.apache.maven.mercury.metadata;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.maven.mercury.ArtifactBasicMetadata;
 import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.ArtifactScopeEnum;
 /**
@@ -34,12 +35,12 @@ public class MetadataTreeNode
   /**
    * query node - the one that originated this actual node
    */
-  ArtifactMetadata query;
+  ArtifactBasicMetadata query;
 
   /**
    * queries - one per POM dependency
    */
-  List<ArtifactMetadata> queries;
+  List<ArtifactBasicMetadata> queries;
 
   /**
    * actual found versions
@@ -75,7 +76,7 @@ public class MetadataTreeNode
    */
   public MetadataTreeNode(   ArtifactMetadata md,
                              MetadataTreeNode parent,
-                             ArtifactMetadata query,
+                             ArtifactBasicMetadata query,
                              boolean resolved,
                              ArtifactScopeEnum scope
                          )
@@ -91,7 +92,7 @@ public class MetadataTreeNode
         this.query = query;
   }
   //------------------------------------------------------------------------
-  public MetadataTreeNode( ArtifactMetadata md, MetadataTreeNode parent, ArtifactMetadata query )
+  public MetadataTreeNode( ArtifactMetadata md, MetadataTreeNode parent, ArtifactBasicMetadata query )
   {
     this( md, parent, query, true, ArtifactScopeEnum.compile );
   }
@@ -120,7 +121,7 @@ public class MetadataTreeNode
   /**
    * dependencies are ordered in the POM - they should be added in the POM order
    */
-  public MetadataTreeNode addQuery( ArtifactMetadata query )
+  public MetadataTreeNode addQuery( ArtifactBasicMetadata query )
   {
       if ( query == null )
       {
@@ -129,7 +130,7 @@ public class MetadataTreeNode
 
       if( queries == null )
       {
-        queries = new ArrayList<ArtifactMetadata>( DEFAULT_CHILDREN_COUNT );
+        queries = new ArrayList<ArtifactBasicMetadata>( DEFAULT_CHILDREN_COUNT );
       }
               
       queries.add( query );
@@ -204,12 +205,12 @@ public class MetadataTreeNode
         return optional;
     }
     
-    public ArtifactMetadata getQuery()
+    public ArtifactBasicMetadata getQuery()
     {
       return query;
     }
     
-    public List<ArtifactMetadata> getQueries()
+    public List<ArtifactBasicMetadata> getQueries()
     {
       return queries;
     }

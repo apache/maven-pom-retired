@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.metadata;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -10,6 +11,9 @@ import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.ArtifactScopeEnum;
 import org.apache.maven.mercury.repository.DefaultLocalRepository;
+import org.apache.maven.mercury.repository.MetadataProcessor;
+import org.apache.maven.mercury.repository.MetadataProcessorMock;
+import org.apache.maven.mercury.repository.Repository;
 
 
 /**
@@ -28,23 +32,22 @@ extends TestCase
   File repo = new File("./target/test-classes/controlledRepo");
   
   MetadataTree mt;
-  MockMetadataSource mms = new MockMetadataSource();
+  DefaultLocalRepository localRepo;
+  List<Repository> reps;
+  MetadataProcessor processor;
   //----------------------------------------------------------------------------------------------
   @Override
   protected void setUp()
   throws Exception
   {
 System.out.println("Current dir is "+ new File(".").getCanonicalPath() );
-
-    mms = new MockMetadataSource();
+    processor = new MetadataProcessorMock();
+    localRepo = new DefaultLocalRepository( "local", repo, processor );
     
-    mt = new MetadataTree( 
-          mms
-        , null
-        , null
-        , new DefaultLocalRepository( "local", null, repo )
-        , null
-                          );
+    reps = new ArrayList<Repository>(4);
+    reps.add(  localRepo );
+
+    mt = new MetadataTree( null, null, reps );
   }
   //----------------------------------------------------------------------------------------------
   @Override

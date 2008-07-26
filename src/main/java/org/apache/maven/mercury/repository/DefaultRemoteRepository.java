@@ -10,9 +10,9 @@ implements RemoteRepository
 {
     private String url;
     
-    public DefaultRemoteRepository( String id, String url )
+    public DefaultRemoteRepository( String id, String url, MetadataProcessor processor  )
     {
-        super( id );
+        super( id, processor );
         this.url = url;
     }
 
@@ -23,7 +23,6 @@ implements RemoteRepository
 
     public RepositoryReader getReader()
     {
-      // TODO Auto-generated method stub
       return null;
     }
 

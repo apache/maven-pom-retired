@@ -13,6 +13,7 @@ import org.apache.maven.mercury.metadata.sat.DefaultSatSolver;
 import org.apache.maven.mercury.metadata.sat.SatException;
 import org.apache.maven.mercury.repository.LocalRepository;
 import org.apache.maven.mercury.repository.RemoteRepository;
+import org.apache.maven.mercury.repository.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.VirtualRepositoryReader;
 
@@ -34,11 +35,24 @@ public class MetadataTree
   
   MetadataTreeNode _root;
   
+  /**
+   * creates an instance of MetadataTree. Use this instance to 
+   * <ul>
+   *    <li>buildTree - process all the dependencies</li>
+   *    <li>resolveConflicts</li>
+   * <ul>
+   * 
+   * @param filters - can veto any artifact before it's added to the tree
+   * @param comparators - used to define selection policies. If null is passed, 
+   * classic comparators - nearest/newest first - will be used. 
+   * @param repositories - order is <b>very</b> important. Ordering allows 
+   * m2eclipse, for instance, insert a workspace repository
+   * @throws RepositoryException
+   */
   public MetadataTree(
         Set<MetadataTreeArtifactFilter> filters
       , List<Comparator<MetadataTreeNode>> comparators
-      , LocalRepository localRepository
-      , List<RemoteRepository> remoteRepositories
+      , List<Repository> repositories
                      )
   throws RepositoryException
   {
@@ -49,11 +63,12 @@ public class MetadataTree
     // if it's an empty list - user does not want any comparators - so be it
     if( _comparators == null )
     {
+      _comparators = new ArrayList<Comparator<MetadataTreeNode>>(2);
       _comparators.add( new ClassicDepthComparator() );
       _comparators.add( new ClassicVersionComparator() );
     }
     
-    this._reader = new VirtualRepositoryReader( localRepository, remoteRepositories );
+    this._reader = new VirtualRepositoryReader( repositories );
   }
   //-----------------------------------------------------
   public MetadataTreeNode buildTree( ArtifactMetadata startMD )
@@ -68,7 +83,7 @@ public class MetadataTree
     return _root;
   }
   //-----------------------------------------------------
-  private MetadataTreeNode createNode( ArtifactBasicMetadata nodeMD, MetadataTreeNode parent, ArtifactMetadata nodeQuery )
+  private MetadataTreeNode createNode( ArtifactBasicMetadata nodeMD, MetadataTreeNode parent, ArtifactBasicMetadata nodeQuery )
   throws MetadataTreeException
   {
     checkForCircularDependency( nodeMD, parent );
@@ -77,50 +92,53 @@ public class MetadataTree
     
     try
     {
-      mr = _reader.readMetadata( nodeMD );
-
-      if( mr == null )
-        throw new MetadataTreeException( "no result found for " + nodeMD );
-      
-      MetadataTreeNode node = new MetadataTreeNode( mr, parent, nodeQuery );
+        mr = _reader.readDependencies( nodeMD );
   
-      List<ArtifactMetadata> dependencies = mr.getDependencies();
-      
-      if( dependencies == null || dependencies.size() < 1 )
-        return node;
-      
-      Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> expandedDeps = _reader.readVersions( dependencies );
-      
-      for( ArtifactMetadata md : dependencies )
-      {
-        List<ArtifactBasicMetadata> versions = expandedDeps.get(  md );
-        if( versions == null || versions.size() < 1 )
-        {
-          if( md.isOptional() )
-            continue;
-          throw new MetadataTreeException( "did not find non-optional artifact for " + md );
-        }
+        if( mr == null )
+          throw new MetadataTreeException( "no result found for " + nodeMD );
         
-        boolean noGoodVersions = true;
-        for( ArtifactBasicMetadata ver : versions )
+        MetadataTreeNode node = new MetadataTreeNode( mr, parent, nodeQuery );
+    
+        List<ArtifactBasicMetadata> dependencies = mr.getDependencies();
+        
+        if( dependencies == null || dependencies.size() < 1 )
+          return node;
+        
+        Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> expandedDeps = _reader.readVersions( dependencies );
+        
+//        if( expandedDeps == null )
+//          return node;
+      
+        for( ArtifactBasicMetadata md : dependencies )
         {
-          if( veto( ver, _filters) )
-            continue;
+          List<ArtifactBasicMetadata> versions = expandedDeps.get(  md );
+          if( versions == null || versions.size() < 1 )
+          {
+            if( md.isOptional() )
+              continue;
+            throw new MetadataTreeException( "did not find non-optional artifact for " + md );
+          }
           
-          MetadataTreeNode kid = createNode( ver, node, md );
-          node.addChild( kid );
+          boolean noGoodVersions = true;
+          for( ArtifactBasicMetadata ver : versions )
+          {
+            if( veto( ver, _filters) )
+              continue;
+            
+            MetadataTreeNode kid = createNode( ver, node, md );
+            node.addChild( kid );
+            
+            noGoodVersions = false;
+          }
           
-          noGoodVersions = false;
-        }
-        
-        if( noGoodVersions )
-        {
-          if( md.isOptional() )
-            continue;
-          throw new MetadataTreeException( "did not find non-optional artifact for " + md );
-        }
-        
-        node.addQuery(md);
+          if( noGoodVersions )
+          {
+            if( md.isOptional() )
+              continue;
+            throw new MetadataTreeException( "did not find non-optional artifact for " + md );
+          }
+          
+          node.addQuery(md);
       }
     
       return node;

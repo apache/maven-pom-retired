@@ -11,10 +11,11 @@ extends AbstractRepository
 implements LocalRepository
 {
     private File directory;
+    private RepositoryReader reader;
     
-    public DefaultLocalRepository( String id, File directory )
+    public DefaultLocalRepository( String id, File directory, MetadataProcessor processor )
     {
-        super( id );
+        super( id, processor );
         this.directory = directory;
     }
 
@@ -25,14 +26,15 @@ implements LocalRepository
 
     public RepositoryReader getReader()
     {
-      // TODO Auto-generated method stub
-      return null;
+      if( reader == null )
+        reader = new LocalRepositoryReader( this, processor );
+
+      return reader;
     }
 
     public RepositoryReader getReader( String protocol )
     {
-      // TODO Auto-generated method stub
-      return null;
+       return getReader();
     }
 
     public RepositoryWriter getWriter()

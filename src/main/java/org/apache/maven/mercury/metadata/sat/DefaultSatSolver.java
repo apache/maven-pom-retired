@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.mercury.ArtifactBasicMetadata;
 import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.ArtifactScopeEnum;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
@@ -284,8 +285,8 @@ implements SatSolver
     System.out.println(( ge ? " >= " : " < ")+" "+cardinality );
   }
   //-----------------------------------------------------------------------
-  private final Map<ArtifactMetadata, List<MetadataTreeNode>> processChildren(
-                                                        List<ArtifactMetadata> queries
+  private final Map<ArtifactBasicMetadata, List<MetadataTreeNode>> processChildren(
+                                                        List<ArtifactBasicMetadata> queries
                                                         , List<MetadataTreeNode> children
                                                                               )
   throws SatException
@@ -296,8 +297,8 @@ implements SatSolver
     if( children == null || children.size() < 1 )
       throw new SatException("there are queries, but not results. Queries: "+queries);
     
-    HashMap<ArtifactMetadata, List<MetadataTreeNode>> res = new HashMap<ArtifactMetadata, List<MetadataTreeNode>>( queries.size() );
-    for( ArtifactMetadata q : queries )
+    HashMap<ArtifactBasicMetadata, List<MetadataTreeNode>> res = new HashMap<ArtifactBasicMetadata, List<MetadataTreeNode>>( queries.size() );
+    for( ArtifactBasicMetadata q : queries )
     {
       List<MetadataTreeNode> bucket = new ArrayList<MetadataTreeNode>(4);
       String queryGA = q.getGA();
@@ -344,15 +345,15 @@ implements SatSolver
       if( ! node.hasChildren() )
         return;
     
-    Map<ArtifactMetadata,List<MetadataTreeNode>> kids = processChildren( node.getQueries(), node.getChildren() );
+    Map<ArtifactBasicMetadata,List<MetadataTreeNode>> kids = processChildren( node.getQueries(), node.getChildren() );
     
     // leaf node
     if( kids == null )
       return;
     
-    for( Map.Entry<ArtifactMetadata,List<MetadataTreeNode>> kid : kids.entrySet() )
+    for( Map.Entry<ArtifactBasicMetadata,List<MetadataTreeNode>> kid : kids.entrySet() )
     {
-      ArtifactMetadata query = kid.getKey();
+      ArtifactBasicMetadata query = kid.getKey();
       if( ! _scope.encloses( query.getArtifactScope()) )
         continue;
       

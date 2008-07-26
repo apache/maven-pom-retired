@@ -7,6 +7,7 @@ import org.apache.maven.mercury.Artifact;
 import org.apache.maven.mercury.ArtifactBasicMetadata;
 import org.apache.maven.mercury.ArtifactMetadata;
 import org.apache.maven.mercury.DefaultArtifact;
+import org.apache.maven.mercury.repository.MetadataProcessor;
 import org.apache.maven.mercury.repository.Repository;
 
 /**
@@ -44,7 +45,7 @@ public interface RepositoryReader
    * as in query list. null means not found or worse
    * @throws RepositoryException
    */
-  public RepositoryOperationResult<ArtifactMetadata> readDependencies( List<? extends ArtifactBasicMetadata> query )
+  public Map< ArtifactBasicMetadata, ArtifactMetadata > readDependencies( List<? extends ArtifactBasicMetadata> query )
   throws RepositoryException, IllegalArgumentException;
 
   /**
@@ -62,4 +63,9 @@ public interface RepositoryReader
    * Need if for explanation function - where and how(protocol) this artifact is found.
    */
   public Repository getRepository();
+
+  /**
+   * Need if to trick circular dependency on maven-project, projectBuilder hides behind this processor
+   */
+  public void setMetadataProcessor( MetadataProcessor mdProcessor );
 }

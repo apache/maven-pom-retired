@@ -33,10 +33,13 @@ implements Repository
   private String             defaultReadProtocol    = DEFAULT_READ_PROTOCOL;
 
   private String             defaultWriteProtocol   = DEFAULT_WRITE_PROTOCOL;
+  
+  protected MetadataProcessor  processor;
 
-  public AbstractRepository( String id )
+  public AbstractRepository( String id, MetadataProcessor processor )
   {
     this.id = id;
+    this.processor = processor;
   }
 
   public String getId()
