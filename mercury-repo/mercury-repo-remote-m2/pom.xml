@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-repo-remote-m2</artifactId>
-  <name>Mercury dependency calulator</name>
+  <name>Mercury Remote M2 Repository</name>
   <version>1.0.0-SNAPSHOT</version>
   <description/>
   <parent>
