@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.maven.mercury</groupId>
+  <artifactId>mercury-md-shared</artifactId>
+  <name>Mercury shared MD models</name>
+  <version>1.0.0-SNAPSHOT</version>
+  <description/>
+
+  <parent>
+  	<groupId>org.apache.maven.mercury</groupId>
+  	<artifactId>mercury-md</artifactId>
+  	<version>1.0.0-SNAPSHOT</version>
+  </parent>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-maven-plugin</artifactId>
+        <version>1.0-alpha-17</version>
+        <configuration>
+          <version>1.0.0</version>
+          <model>src/main/mdo/metadata.mdo</model>
+        </configuration>
+        <executions>
+          <execution>
+            <id>site-docs</id>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>xdoc</goal>
+              <goal>xsd</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>standard</id>
+            <goals>
+              <goal>java</goal>
+              <goal>xpp3-reader</goal>
+              <goal>xpp3-writer</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
+        <version>1.3.8</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>      
+</plugins>
+</build>
+  
+</project>

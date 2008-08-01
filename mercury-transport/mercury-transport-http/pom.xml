@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>mercury-transport-http</artifactId>
+  <name>Mercury Jetty HTTP transport implementation</name>
+  <description/>
+  <parent>
+  	<groupId>org.apache.maven.mercury</groupId>
+  	<artifactId>mercury-transport</artifactId>
+  	<version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+<build>
+
+<plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+          	<id>package-tests</id>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>      
+    </plugins>
+ 
+  </build>
+  
+
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-client</artifactId>
+      <version>7.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-servlet</artifactId>
+      <version>7.0-SNAPSHOT</version>
+    </dependency>
+    <!-- Test Dependencies -->
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-servlet-tester</artifactId>
+      <version>7.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- Mercury Dependencies -->
+  	<dependency>
+  		<groupId>org.apache.maven.mercury</groupId>
+  		<artifactId>mercury-transport-api</artifactId>
+  		<version>1.0.0-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
+
+</project>

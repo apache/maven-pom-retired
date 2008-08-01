@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.mercury</groupId>
+    <artifactId>mercury-pom</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+  <artifactId>mercury-repo</artifactId>
+  <packaging>pom</packaging>
+  <name>Mercury Repository reactor</name>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <modules>
+    <module>mercury-repo-api</module>
+    <module>mercury-repo-local-m2</module>
+    <module>mercury-repo-remote-m2</module>
+  </modules>
+
+</project>

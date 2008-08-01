@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven.mercury</groupId>
+    <artifactId>mercury-pom</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+  <artifactId>mercury-transport</artifactId>
+  <packaging>pom</packaging>
+  <name>Mercury Transport Reactor</name>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <modules>
+    <module>mercury-transport-api</module>
+    <module>mercury-transport-http</module>
+  </modules>
+
+</project>

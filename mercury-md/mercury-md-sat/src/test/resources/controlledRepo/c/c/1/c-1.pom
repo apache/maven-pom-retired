@@ -1,0 +1,21 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>c</groupId>
+  <artifactId>c</artifactId>
+  <version>1</version>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>b</groupId>
+      <artifactId>b</artifactId>
+      <version>1</version>
+    </dependency>
+    <dependency>
+      <groupId>a</groupId>
+      <artifactId>a</artifactId>
+      <version>1</version>
+    </dependency>
+  </dependencies>
+
+</project>
