@@ -139,11 +139,18 @@ public abstract class DeploymentTarget
             _observers.add(o);
         }
       
-        if ( _binding == null || 
-                (_binding.isFile() && (_binding.getLocalFile() == null || !_binding.getLocalFile().exists())) ||
-                (_binding.isInMemory() && _binding.getLocalInputStream() == null))
+        if ( _binding == null )
         {
-            throw new IllegalArgumentException( "Nothing to deploy" );
+            throw new IllegalArgumentException( "Nothing to deploy - null binding" );
+        }
+        
+        if ( _binding.isFile() && (_binding.getLocalFile() == null || !_binding.getLocalFile().exists()) )
+        {
+            throw new IllegalArgumentException( "Nothing to deploy - local file not found: " + _binding.getLocalFile() );
+        }
+        if( _binding.isInMemory() && _binding.getLocalInputStream() == null )
+        {
+            throw new IllegalArgumentException( "Nothing to deploy - inMemory binding with null stream" );
         }
         _targetState = new TargetState();
         _checksumState = new TargetState();
