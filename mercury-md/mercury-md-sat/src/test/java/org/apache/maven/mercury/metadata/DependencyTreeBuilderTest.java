@@ -19,17 +19,17 @@ import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
  * @author Oleg Gusakov
  * @version $Id$
  */
-public class MetadataTreeTest
+public class DependencyTreeBuilderTest
 extends TestCase
 {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger( MetadataTreeTest.class ); 
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger( DependencyTreeBuilderTest.class ); 
   
 //  ArtifactMetadata md = new ArtifactMetadata( "pmd:pmd:3.9" );
 //  File repo = new File("./target/test-classes/localRepo");
 
   File repoDir = new File("./target/test-classes/controlledRepo");
   
-  MetadataTree mt;
+  DependencyTreeBuilder mt;
   LocalRepositoryM2 localRepo;
   List<Repository> reps;
   MetadataProcessor processor;
@@ -45,7 +45,7 @@ System.out.println("Current dir is "+ new File(".").getCanonicalPath() );
     reps = new ArrayList<Repository>(4);
     reps.add(  localRepo );
 
-    mt = new MetadataTree( null, null, reps, processor );
+    mt = new DependencyTreeBuilder( null, null, reps, processor );
   }
   //----------------------------------------------------------------------------------------------
   @Override

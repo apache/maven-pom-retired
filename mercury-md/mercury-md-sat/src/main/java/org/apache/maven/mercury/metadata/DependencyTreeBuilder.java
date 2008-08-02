@@ -23,7 +23,7 @@ import org.apache.maven.mercury.repository.api.VirtualRepositoryReader;
  * @author Oleg Gusakov
  * @version $Id: MetadataTree.java 681180 2008-07-30 19:34:16Z ogusakov $
  */
-public class MetadataTree
+public class DependencyTreeBuilder
 {
 //  private MetadataSource _mdSource;
   
@@ -48,7 +48,7 @@ public class MetadataTree
    * m2eclipse, for instance, insert a workspace repository
    * @throws RepositoryException
    */
-  public MetadataTree(
+  public DependencyTreeBuilder(
         Set<MetadataTreeArtifactFilter> filters
       , List<Comparator<MetadataTreeNode>> comparators
       , List<Repository> repositories
