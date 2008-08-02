@@ -100,7 +100,7 @@ implements RepositoryReader, MetadataReader
       // for testing purpose - I plug in my test processor
       try
       {
-        List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, this );
+        List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, this, System.getProperties() );
         ArtifactMetadata md = new ArtifactMetadata( bmd );
         md.setDependencies( deps );
         

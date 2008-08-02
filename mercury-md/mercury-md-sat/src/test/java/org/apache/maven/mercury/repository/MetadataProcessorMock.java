@@ -3,6 +3,7 @@ package org.apache.maven.mercury.repository;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.commons.digester.Digester;
@@ -24,7 +25,7 @@ public class MetadataProcessorMock
 implements MetadataProcessor
 {
 
-  public List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader )
+  public List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Hashtable env )
   throws MetadataProcessingException
   {
     List<ArtifactBasicMetadata> deps = null;
