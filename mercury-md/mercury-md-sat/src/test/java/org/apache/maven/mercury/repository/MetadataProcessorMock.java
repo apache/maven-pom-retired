@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.apache.commons.digester.Digester;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
-import org.apache.maven.mercury.repository.api.MetadataProcessingException;
-import org.apache.maven.mercury.repository.api.MetadataProcessor;
-import org.apache.maven.mercury.repository.api.MetadataReader;
+import org.apache.maven.mercury.builder.api.MetadataProcessingException;
+import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.xml.sax.SAXException;
 
 /**

@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.LocalRepository;
-import org.apache.maven.mercury.repository.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;

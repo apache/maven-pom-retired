@@ -10,4 +10,11 @@
   	<artifactId>mercury-pom</artifactId>
   	<version>1-SNAPSHOT</version>
   </parent>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.apache.maven.mercury</groupId>
+  		<artifactId>mercury-artifact</artifactId>
+  		<version>1.0.0-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

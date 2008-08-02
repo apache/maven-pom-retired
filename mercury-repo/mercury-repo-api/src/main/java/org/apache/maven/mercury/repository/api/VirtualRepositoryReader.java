@@ -7,6 +7,9 @@ import java.util.Map;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
+import org.apache.maven.mercury.builder.api.MetadataProcessingException;
+import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.MetadataReader;
 
 /**
  * this helper class hides the necessity to talk to localRepo and a bunch of remoteRepos.

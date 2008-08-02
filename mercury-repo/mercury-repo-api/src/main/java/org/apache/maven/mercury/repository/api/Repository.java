@@ -1,5 +1,7 @@
 package org.apache.maven.mercury.repository.api;
 
+import org.apache.maven.mercury.builder.api.MetadataProcessor;
+
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

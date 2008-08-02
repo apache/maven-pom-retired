@@ -6,6 +6,9 @@ import java.util.Map;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
+import org.apache.maven.mercury.builder.api.MetadataProcessingException;
+import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.MetadataReader;
 
 /**
  * Repository reader API to be implemented by any repo implementation that wishes 

@@ -2,7 +2,7 @@ package org.apache.maven.mercury.repository.local.m2;
 
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.LocalRepository;
-import org.apache.maven.mercury.repository.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryReader;

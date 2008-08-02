@@ -1,4 +1,4 @@
-package org.apache.maven.mercury.repository.api;
+package org.apache.maven.mercury.builder.api;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 
