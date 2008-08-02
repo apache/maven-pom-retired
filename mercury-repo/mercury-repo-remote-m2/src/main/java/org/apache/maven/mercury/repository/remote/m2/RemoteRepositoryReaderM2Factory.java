@@ -1,7 +1,7 @@
 package org.apache.maven.mercury.repository.remote.m2;
 
-import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;

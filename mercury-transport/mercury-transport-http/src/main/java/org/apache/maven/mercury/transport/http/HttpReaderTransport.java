@@ -3,7 +3,6 @@ package org.apache.maven.mercury.transport.http;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetrievalRequest;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetriever;
-import org.apache.maven.mercury.spi.http.client.retrieve.RetrievalRequest;
 import org.apache.maven.mercury.spi.http.client.retrieve.RetrievalResponse;
 import org.apache.maven.mercury.transport.api.AbstractTransport;
 import org.apache.maven.mercury.transport.api.Binding;

@@ -4,10 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.codehaus.plexus.i18n.DefaultLanguage;
 import org.codehaus.plexus.i18n.Language;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
-import org.apache.maven.mercury.builder.api.MetadataReader;
 
 
 /*

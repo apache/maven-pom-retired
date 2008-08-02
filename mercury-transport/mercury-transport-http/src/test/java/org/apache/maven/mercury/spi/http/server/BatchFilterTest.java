@@ -19,18 +19,18 @@
 
 package org.apache.maven.mercury.spi.http.server;
 
+import java.io.File;
+import java.io.FileInputStream;
+
+import javax.servlet.http.HttpServletResponse;
+
 import junit.framework.TestCase;
 
-import org.apache.maven.mercury.spi.http.server.StagingBatchFilter;
-import org.mortbay.jetty.servlet.FilterHolder;
 import org.mortbay.jetty.servlet.DefaultServlet;
+import org.mortbay.jetty.servlet.FilterHolder;
 import org.mortbay.jetty.testing.HttpTester;
 import org.mortbay.jetty.testing.ServletTester;
 import org.mortbay.util.IO;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 
 public class BatchFilterTest extends TestCase
 {

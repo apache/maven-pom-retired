@@ -30,7 +30,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.client.ObservableOutputStream;

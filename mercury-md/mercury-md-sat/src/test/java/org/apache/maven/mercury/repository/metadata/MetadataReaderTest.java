@@ -11,8 +11,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.apache.maven.mercury.repository.MetadataProcessorMock;
 import org.apache.maven.mercury.builder.api.MetadataProcessingException;
+import org.apache.maven.mercury.repository.MetadataProcessorMock;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Reader;

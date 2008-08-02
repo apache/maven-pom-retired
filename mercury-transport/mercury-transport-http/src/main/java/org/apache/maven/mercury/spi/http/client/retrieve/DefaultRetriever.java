@@ -20,13 +20,6 @@
 package org.apache.maven.mercury.spi.http.client.retrieve;
 
 
-import org.apache.maven.mercury.spi.http.client.HttpClientException;
-import org.apache.maven.mercury.transport.api.Binding;
-import org.apache.maven.mercury.transport.api.Server;
-import org.apache.maven.mercury.transport.api.StreamObserver;
-import org.apache.maven.mercury.transport.api.StreamObserverFactory;
-import org.mortbay.jetty.client.HttpClient;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,6 +28,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.maven.mercury.spi.http.client.HttpClientException;
+import org.apache.maven.mercury.transport.api.Binding;
+import org.apache.maven.mercury.transport.api.Server;
+import org.apache.maven.mercury.transport.api.StreamObserver;
+import org.apache.maven.mercury.transport.api.StreamObserverFactory;
+import org.mortbay.jetty.client.HttpClient;
 
 public class DefaultRetriever implements Retriever
 {

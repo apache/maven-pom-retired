@@ -16,18 +16,12 @@
 package org.apache.maven.mercury.spi.http.server;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.io.OutputStream;
-import java.net.URL;
 
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.DefaultHandler;
 import org.mortbay.jetty.handler.HandlerCollection;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.DefaultServlet;
-import org.mortbay.util.IO;
 
 public class HttpTestServer
     extends Server

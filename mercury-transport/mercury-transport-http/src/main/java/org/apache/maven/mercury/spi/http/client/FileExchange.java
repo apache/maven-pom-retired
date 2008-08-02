@@ -19,13 +19,13 @@
 
 package org.apache.maven.mercury.spi.http.client;
 
+import java.io.File;
+import java.net.URL;
+
 import org.apache.maven.mercury.transport.api.Binding;
 import org.mortbay.io.Buffer;
 import org.mortbay.jetty.client.HttpClient;
 import org.mortbay.jetty.client.HttpExchange;
-
-import java.io.File;
-import java.net.URL;
 
 /**
  * FileExchange

@@ -22,7 +22,6 @@ package org.apache.maven.mercury.spi.http.client.retrieve;
 import java.util.HashSet;
 import java.util.Set;
 
-
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
 

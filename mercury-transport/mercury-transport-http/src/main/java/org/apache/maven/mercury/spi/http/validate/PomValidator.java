@@ -19,10 +19,10 @@
 
 package org.apache.maven.mercury.spi.http.validate;
 
-import org.codehaus.plexus.util.FileUtils;
-
 import java.io.IOException;
 import java.util.List;
+
+import org.codehaus.plexus.util.FileUtils;
 
 public class PomValidator implements Validator
 {

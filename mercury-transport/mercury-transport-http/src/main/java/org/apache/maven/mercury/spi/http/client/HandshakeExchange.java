@@ -19,12 +19,13 @@
 
 package org.apache.maven.mercury.spi.http.client;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.mortbay.io.Buffer;
 import org.mortbay.jetty.client.HttpClient;
 import org.mortbay.jetty.client.HttpExchange;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * HandshakeExchange

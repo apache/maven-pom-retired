@@ -19,18 +19,19 @@
 
 package org.apache.maven.mercury.spi.http.server;
 
-import org.mortbay.util.IO;
-import org.mortbay.util.URIUtil;
-
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.mortbay.util.IO;
+import org.mortbay.util.URIUtil;
 
 
 /**
