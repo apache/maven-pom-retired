@@ -20,4 +20,18 @@
     <defaultGoal>install</defaultGoal>
   </build>
 
+  <properties>
+  	<distMgmtSnapshotsName>CI Snapshot Repository</distMgmtSnapshotsName>
+  	<distMgmtSnapshotsUrl>http://localhost:8081/content/repositories/maven.snapshots</distMgmtSnapshotsUrl>
+  </properties>
+  
+  <distributionManagement>
+	<snapshotRepository>
+		<id>apache.snapshots</id>
+		<name>${distMgmtSnapshotsName}</name>
+		<url>${distMgmtSnapshotsUrl}</url>
+	</snapshotRepository>
+  </distributionManagement>
+  
+
 </project>
