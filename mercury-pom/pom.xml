@@ -23,10 +23,25 @@
       <name>Greg Wilkins</name>
     </developer>
   </developers>
+
+  <properties>
+  	<distMgmtSnapshotsName>Plexus Central Development Repository</distMgmtSnapshotsName>
+  	<distMgmtSnapshotsUrl>dav:https://dav.codehaus.org/snapshots.repository/plexus</distMgmtSnapshotsUrl>
+  </properties>
+  
+  <distributionManagement>
+	<snapshotRepository>
+		<id>codehaus.org</id>
+		<name>${distMgmtSnapshotsName}</name>
+		<url>${distMgmtSnapshotsUrl}</url>
+	</snapshotRepository>
+  </distributionManagement>
+  
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</developerConnection>
   </scm>
+  
  
 <profiles>
   <profile>
