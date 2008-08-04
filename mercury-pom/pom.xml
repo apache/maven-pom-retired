@@ -25,8 +25,8 @@
   </developers>
 
   <properties>
-  	<distMgmtSnapshotsName>Plexus Central Development Repository</distMgmtSnapshotsName>
-  	<distMgmtSnapshotsUrl>dav:https://dav.codehaus.org/snapshots.repository/plexus</distMgmtSnapshotsUrl>
+  	<distMgmtSnapshotsName>CI Snapshot Repository</distMgmtSnapshotsName>
+  	<distMgmtSnapshotsUrl>http://localhost:8081/content/repositories/maven.snapshots</distMgmtSnapshotsUrl>
   </properties>
   
   <distributionManagement>
