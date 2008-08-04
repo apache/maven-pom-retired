@@ -31,7 +31,7 @@
   
   <distributionManagement>
 	<snapshotRepository>
-		<id>codehaus.org</id>
+		<id>apache.snapshots</id>
 		<name>${distMgmtSnapshotsName}</name>
 		<url>${distMgmtSnapshotsUrl}</url>
 	</snapshotRepository>
