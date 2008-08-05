@@ -1,5 +1,10 @@
 package org.apache.maven.mercury.artifact;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.codehaus.plexus.util.StringUtils;
+
 
 /**
  * this is the most primitive metadata there is, usually used to query repository for "real" metadata.
@@ -22,6 +27,13 @@ public class ArtifactBasicMetadata
   protected String artifactId;
 
   protected String version;
+  
+  /** 
+   * relocation chain after processing by
+   * ProjectBuilder
+   */
+  protected List<ArtifactCoordinates> relocations;
+  protected ArtifactCoordinates effectiveCoordinates;
 
   // This is Maven specific. jvz/
   protected String classifier;
@@ -34,8 +46,9 @@ public class ArtifactBasicMetadata
 
   protected boolean optional;
 
-  /** transient helper object, used by DependencyBuilder */
+  /** transient helper objects, used by DependencyBuilder */
   transient Object tracker;
+  transient Boolean local = false;
     
   //------------------------------------------------------------------
   public ArtifactBasicMetadata()
@@ -260,7 +273,63 @@ public class ArtifactBasicMetadata
   {
     return classifier == null;
   }
+
+  public Boolean isLocal()
+  {
+    return local;
+  }
+
+  public void setLocal( Boolean local )
+  {
+    this.local = local;
+  }
+  
+  public ArtifactCoordinates getEffectiveCoordinates()
+  {
+    if( relocations == null || relocations.isEmpty() )
+      return new ArtifactCoordinates( groupId, artifactId, version );
     
+    return relocations.get( relocations.size() - 1 );
+  }
+  
+  public ArtifactBasicMetadata addRelocation( ArtifactCoordinates coord )
+  {
+    if( coord == null )
+      return this;
+
+    if( relocations == null )
+      relocations = new ArrayList<ArtifactCoordinates>(2);
+    
+    if( coord.getGroupId() == null )
+      coord.setGroupId( groupId );
+    
+    if( coord.getArtifactId() == null )
+      coord.setArtifactId( artifactId );
+    
+    if( coord.getVersion() == null )
+      coord.setVersion( version );
+    
+    relocations.add( coord );
+    effectiveCoordinates = coord;
+    
+    return this;
+  }
+  
+  public String getEffectiveGroupId()
+  {
+    return effectiveCoordinates == null ? groupId: effectiveCoordinates.getGroupId();
+  }
+  
+  public String getEffectiveArtifactId()
+  {
+    return effectiveCoordinates == null ? artifactId: effectiveCoordinates.getArtifactId();
+  }
+  
+  public String getEffectiveersion()
+  {
+    return effectiveCoordinates == null ? version: effectiveCoordinates.getVersion();
+  }
+
   @Override
   public boolean equals( Object obj )
   {
@@ -269,6 +338,7 @@ public class ArtifactBasicMetadata
     
     return toString().equals( obj.toString() );
   }
+  
   @Override
   public int hashCode()
   {
