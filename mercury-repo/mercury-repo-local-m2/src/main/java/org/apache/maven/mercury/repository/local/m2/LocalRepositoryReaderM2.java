@@ -22,12 +22,15 @@ import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryOperationResult;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
+import org.codehaus.plexus.i18n.DefaultLanguage;
+import org.codehaus.plexus.i18n.Language;
 
 public class LocalRepositoryReaderM2
 extends AbstracRepositoryReader
 implements RepositoryReader, MetadataReader
 {
   private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( LocalRepositoryReaderM2.class ); 
+  private static final Language _lang = new DefaultLanguage( LocalRepositoryReaderM2.class );
   //---------------------------------------------------------------------------------------------------------------
   private static final String [] _protocols = new String [] { "file" };
   
@@ -63,7 +66,18 @@ implements RepositoryReader, MetadataReader
       throws RepositoryException,
       IllegalArgumentException
   {
-    // TODO Auto-generated method stub
+    if( query == null || query.isEmpty() )
+      throw new IllegalArgumentException( _lang.getMessage( "empty.query", query==null?"null":"empty" ) );
+    
+    RepositoryOperationResult<DefaultArtifact> res = new RepositoryOperationResult<DefaultArtifact>();
+    
+    for( ArtifactBasicMetadata bmd : query )
+    {
+      if( bmd.getEffectiveGroupId() == null )
+      { // this metadata has not been processed by MetadataProcessor
+        
+      }
+    }
     return null;
   }
   //---------------------------------------------------------------------------------------------------------------
