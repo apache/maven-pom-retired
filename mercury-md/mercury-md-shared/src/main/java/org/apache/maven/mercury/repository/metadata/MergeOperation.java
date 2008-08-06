@@ -21,7 +21,7 @@ public class MergeOperation
    * @throws MetadataException 
    * 
    */
-  public MergeOperation( Object data )
+  public MergeOperation( MetadataOperand data )
   throws MetadataException
   {
     setOperand( data );

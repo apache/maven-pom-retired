@@ -1,21 +1,19 @@
 package org.apache.maven.mercury.repository.metadata;
 
-import java.util.List;
-
 import org.codehaus.plexus.i18n.DefaultLanguage;
 import org.codehaus.plexus.i18n.Language;
 
 /**
- * adds new version to metadata
+ * adds new snapshot to metadata
  *
  * @author Oleg Gusakov
  * @version $Id$
  *
  */
-public class AddVersionOperation
+public class SetVersionOperation
     implements MetadataOperation
 {
-  private static final Language lang = new DefaultLanguage( AddVersionOperation.class );
+  private static final Language lang = new DefaultLanguage( SetVersionOperation.class );
   
   private String version;
   
@@ -23,7 +21,7 @@ public class AddVersionOperation
    * @throws MetadataException 
    * 
    */
-  public AddVersionOperation(  StringOperand data  )
+  public SetVersionOperation(  StringOperand data  )
   throws MetadataException
   {
     setOperand( data );
@@ -33,16 +31,15 @@ public class AddVersionOperation
   throws MetadataException
   {
     if( data == null || !(data instanceof StringOperand) )
-      throw new MetadataException( lang.getMessage( "bad.operand", "StringOperand", data == null ? "null" : data.getClass().getName() ) );
+      throw new MetadataException( lang.getMessage( "bad.operand", "SnapshotOperand", data == null ? "null" : data.getClass().getName() ) );
     
     version = ((StringOperand)data).getOperand();
   }
 
   /**
-   * add version to the in-memory metadata instance
+   * add/replace snapshot to the in-memory metadata instance
    * 
    * @param metadata
-   * @param version
    * @return
    * @throws MetadataException 
    */
@@ -52,23 +49,18 @@ public class AddVersionOperation
     if( metadata == null )
       return false;
    
-    Versioning vs = metadata.getVersioning(); 
+    String vs = metadata.getVersion(); 
     
     if( vs == null )
     {
-      vs = new Versioning();
-      metadata.setVersioning( vs );
-    }
-    
-    if( vs.getVersions() != null && vs.getVersions().size() > 0 )
-    {
-      List<String> vl = vs.getVersions();
-      if( vl.contains( version ) )
+      if( version == null )
         return false;
     }
+    else 
+      if( vs.equals( version ) )
+        return false;
     
-    vs.addVersion( version );
-    vs.setLastUpdated( MetadataBuilder.getUTCTimestamp() );
+    metadata.setVersion( version );
     
     return true;
   }

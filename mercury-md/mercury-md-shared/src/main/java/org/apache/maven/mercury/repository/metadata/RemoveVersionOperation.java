@@ -23,7 +23,7 @@ implements MetadataOperation
    * @throws MetadataException 
    * 
    */
-  public RemoveVersionOperation(  Object data  )
+  public RemoveVersionOperation(  StringOperand data  )
   throws MetadataException
   {
     setOperand( data );

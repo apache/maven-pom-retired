@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.repository.metadata;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -190,6 +191,53 @@ public class MetadataBuilderTest
      assertTrue( versions.contains("2") );
      assertTrue( versions.contains("3") );
      assertTrue( versions.contains("4") );
+  }
+  //-------------------------------------------------------------------------
+  public void testSetSnapshotOperation()
+  throws FileNotFoundException, IOException, XmlPullParserException, MetadataException
+  {
+    File groupMd = new File( testBase, "group-maven-metadata.xml");
+    byte [] targetBytes = readRawData( groupMd );
+    
+    Snapshot sn = new Snapshot();
+    sn.setLocalCopy( false );
+    sn.setBuildNumber( 35 );
+    String ts = MetadataBuilder.getUTCTimestamp();
+    sn.setTimestamp( ts );
+
+    byte [] resBytes = MetadataBuilder.changeMetadata( targetBytes, new SetSnapshotOperation( new SnapshotOperand(sn) ) );
+    
+    File resFile = new File( testBase, "group-maven-metadata-write.xml");
+
+    writeRawData( resFile, resBytes );
+    
+     Metadata mmd = MetadataBuilder.read( new FileInputStream(resFile) );
+
+     assertNotNull( mmd );
+     assertEquals("a", mmd.getGroupId() );
+     assertEquals("a", mmd.getArtifactId() );
+     assertEquals("4", mmd.getVersion() );
+
+     assertNotNull( mmd.getVersioning() );
+     Snapshot snapshot = mmd.getVersioning().getSnapshot();
+     assertNotNull( snapshot );
+     assertEquals( ts, snapshot.getTimestamp() );
+     
+     // now let's drop sn
+     targetBytes = readRawData( resFile );
+     resBytes = MetadataBuilder.changeMetadata( targetBytes, new SetSnapshotOperation( new SnapshotOperand(null) ) );
+     
+     Metadata mmd2 = MetadataBuilder.read( new ByteArrayInputStream(resBytes) );
+
+     assertNotNull( mmd2 );
+     assertEquals("a", mmd2.getGroupId() );
+     assertEquals("a", mmd2.getArtifactId() );
+     assertEquals("4", mmd2.getVersion() );
+
+     assertNotNull( mmd2.getVersioning() );
+     
+     snapshot = mmd2.getVersioning().getSnapshot();
+     assertNull( snapshot );
   }
   //-------------------------------------------------------------------------
   public void testMultipleOperations()
