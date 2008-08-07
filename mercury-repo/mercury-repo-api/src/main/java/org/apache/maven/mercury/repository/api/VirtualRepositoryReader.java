@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
-import org.apache.maven.mercury.artifact.ArtifactListProcessor;
-import org.apache.maven.mercury.artifact.ArtifactListProcessorException;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
+import org.apache.maven.mercury.artifact.api.ArtifactListProcessor;
+import org.apache.maven.mercury.artifact.api.ArtifactListProcessorException;
 import org.apache.maven.mercury.builder.api.MetadataProcessingException;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
