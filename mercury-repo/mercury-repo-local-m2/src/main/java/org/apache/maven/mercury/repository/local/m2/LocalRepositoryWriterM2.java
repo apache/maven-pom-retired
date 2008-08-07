@@ -58,8 +58,7 @@ implements RepositoryWriter
   /* (non-Javadoc)
    * @see org.apache.maven.mercury.repository.api.RepositoryWriter#writeArtifact(java.util.Collection)
    */
-  public void writeArtifact(
-      Collection<Artifact> artifact )
+  public void writeArtifact( Collection<Artifact> artifact )
       throws RepositoryException
   {
     // TODO Auto-generated method stub

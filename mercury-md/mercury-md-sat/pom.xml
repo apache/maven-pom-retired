@@ -10,6 +10,25 @@
   	<artifactId>mercury-md</artifactId>
   	<version>1.0.0-SNAPSHOT</version>
   </parent>
+  <build>
+
+  <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>package-tests</id>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>      
+    </plugins>
+ 
+  </build>
+
   <dependencies>
     <!-- SAT solver used to calculate viable ranges when dependencies are expressed pseudo boolean form -->
     <dependency>

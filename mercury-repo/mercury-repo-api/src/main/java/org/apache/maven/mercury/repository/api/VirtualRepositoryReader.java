@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
+import org.apache.maven.mercury.artifact.ArtifactListProcessor;
+import org.apache.maven.mercury.artifact.ArtifactListProcessorException;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.builder.api.MetadataProcessingException;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
@@ -14,6 +16,8 @@ import org.apache.maven.mercury.builder.api.MetadataReader;
 /**
  * this helper class hides the necessity to talk to localRepo and a bunch of remoteRepos.
  * It also adds discrete convenience methods, hiding batch nature of RepositoryReader
+ * 
+ * Please don't forget to initialize target platform if you really need one
  *
  *
  * @author Oleg Gusakov
@@ -25,11 +29,14 @@ implements MetadataReader
 {
   //----------------------------------------------------------------------------------------------------------------------------
   private List<Repository>       _repositories = new ArrayList<Repository>(8);
+
   private RepositoryReader[]     _repositoryReaders;
 
   private LocalRepository       _localRepository;
   
   private MetadataProcessor     _processor;
+
+  private Map<String,ArtifactListProcessor>   _processors;
   
   private boolean _initialized = false;
   //----------------------------------------------------------------------------------------------------------------------------
@@ -83,6 +90,11 @@ implements MetadataReader
     _repositories.add( repo );
   }
   //----------------------------------------------------------------------------------------------------------------------------
+  public void setProcessors( Map<String, ArtifactListProcessor> processors )
+  {
+    _processors = processors; 
+  }
+  //----------------------------------------------------------------------------------------------------------------------------
   public void init()
   throws RepositoryException
   {
@@ -123,6 +135,7 @@ implements MetadataReader
     init();
         
     Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> res = null;
+    ArtifactListProcessor tp = _processors == null ? null : _processors.get( ArtifactListProcessor.FUNCTION_TP );
 
     for( RepositoryReader rr : _repositoryReaders )
     {
@@ -135,6 +148,23 @@ implements MetadataReader
           if( ror != null && !ror.hasExceptions() && ror.hasResults() )
           {
             List<ArtifactBasicMetadata> rorRes = ror.getResults();
+            
+            if( tp != null )
+            {
+              try
+              {
+                tp.configure( key );
+                rorRes = tp.process( rorRes );
+              }
+              catch( ArtifactListProcessorException e )
+              {
+                throw new RepositoryException(e);
+              }
+            }
+            
+            if( rorRes == null )
+              continue;
+            
             for( ArtifactBasicMetadata bmd : rorRes )
               bmd.setTracker(  rr );
             

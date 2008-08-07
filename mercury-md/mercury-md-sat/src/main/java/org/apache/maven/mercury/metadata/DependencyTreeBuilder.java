@@ -2,11 +2,13 @@ package org.apache.maven.mercury.metadata;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
+import org.apache.maven.mercury.artifact.ArtifactListProcessor;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
@@ -29,6 +31,7 @@ public class DependencyTreeBuilder
   
   private Set<MetadataTreeArtifactFilter> _filters;
   private List<Comparator<MetadataTreeNode>> _comparators;
+  private Map<String,ArtifactListProcessor> _processors;
   
   private VirtualRepositoryReader _reader;
   
@@ -51,6 +54,7 @@ public class DependencyTreeBuilder
   public DependencyTreeBuilder(
         Set<MetadataTreeArtifactFilter> filters
       , List<Comparator<MetadataTreeNode>> comparators
+      , Map<String,ArtifactListProcessor> processors
       , List<Repository> repositories
       , MetadataProcessor processor
                      )
@@ -68,9 +72,21 @@ public class DependencyTreeBuilder
       _comparators.add( new ClassicVersionComparator() );
     }
     
+    if( processors != null )
+      _processors = processors;
+    
     this._reader = new VirtualRepositoryReader( repositories, processor );
   }
-  //-----------------------------------------------------
+  //------------------------------------------------------------------------
+  /**
+   * build the tree, using the repositories specified in the
+   * constructor
+   * 
+   * @param startMD - root of the tree to build
+   * @param targetPlatform - limitations to use when retrieving metadata. Format is G:A=V, where V is Version Range
+   * @return the root of the tree built
+   * @throws MetadataTreeException
+   */
   public MetadataTreeNode buildTree( ArtifactMetadata startMD )
   throws MetadataTreeException
   {
@@ -79,6 +95,7 @@ public class DependencyTreeBuilder
     
     try
     {
+      _reader.setProcessors( _processors );
       _reader.init();
     }
     catch( RepositoryException e )

@@ -43,6 +43,18 @@ implements Artifact
 
         initialize( groupId, artifactId, version, type, classifier, optional, scope, inheritedScope );
     }
+    
+    public DefaultArtifact( ArtifactBasicMetadata bmd )
+    {
+        if ( bmd.getVersion() == null )
+        {
+            throw new IllegalArgumentException( "Version cannot be null." );
+        }
+
+        initialize( bmd.getGroupId(), bmd.getArtifactId(), bmd.getVersion(), bmd.getType()
+                  , bmd.getClassifier(), bmd.isOptional(), bmd.getScope(), bmd.getScope() 
+                  );
+    }
 
     public String getInheritedScope()
     {

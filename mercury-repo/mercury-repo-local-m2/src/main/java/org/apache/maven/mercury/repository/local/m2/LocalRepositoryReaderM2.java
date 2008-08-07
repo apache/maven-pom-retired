@@ -73,10 +73,18 @@ implements RepositoryReader, MetadataReader
     
     for( ArtifactBasicMetadata bmd : query )
     {
-      if( bmd.getEffectiveGroupId() == null )
-      { // this metadata has not been processed by MetadataProcessor
-        
+      DefaultArtifact da = bmd instanceof DefaultArtifact ? (DefaultArtifact)bmd : new DefaultArtifact( bmd );
+
+      File binary = new File( _repoDir, pathOf( bmd, null, null) );
+      if( ! binary.exists() )
+      {
+        res.add( new RepositoryException( _lang.getMessage( "binary.not.found", binary.getAbsolutePath() ) ) );
+        continue;
       }
+
+      da.setFile( binary );
+
+      res.add( da );
     }
     return null;
   }
@@ -191,11 +199,16 @@ implements RepositoryReader, MetadataReader
   public byte[] readRawData( ArtifactBasicMetadata bmd, String classifier, String type )
   throws MetadataProcessingException
   {
+    return readRawData( pathOf(bmd, classifier, type) );
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  private String pathOf( ArtifactBasicMetadata bmd, String classifier, String type )
+  {
     String bmdPath = bmd.getGroupId().replace( '.', '/' )+"/"+bmd.getArtifactId()+"/"+bmd.getVersion();
     
     String path = bmdPath+"/"+bmd.getBaseName(classifier)+'.' + (type == null ? bmd.getType() : type );
     
-    return readRawData( path );
+    return path ;
   }
   //---------------------------------------------------------------------------------------------------------------
   public byte[] readRawData( String path )

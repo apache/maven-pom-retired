@@ -2,6 +2,7 @@ package org.apache.maven.mercury.metadata;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -33,6 +34,7 @@ extends TestCase
   LocalRepositoryM2 localRepo;
   List<Repository> reps;
   MetadataProcessor processor;
+  
   //----------------------------------------------------------------------------------------------
   @Override
   protected void setUp()
@@ -45,7 +47,7 @@ System.out.println("Current dir is "+ new File(".").getCanonicalPath() );
     reps = new ArrayList<Repository>(4);
     reps.add(  localRepo );
 
-    mt = new DependencyTreeBuilder( null, null, reps, processor );
+    mt = new DependencyTreeBuilder( null, null, null, reps, processor );
   }
   //----------------------------------------------------------------------------------------------
   @Override
