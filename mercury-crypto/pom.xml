@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.apache.maven.mercury</groupId>
     <artifactId>mercury-pom</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1-SNAPSHOT</version>
   </parent>
   <artifactId>mercury-crypto</artifactId>
   <name>Mercury Crypto Components Reactor</name>
