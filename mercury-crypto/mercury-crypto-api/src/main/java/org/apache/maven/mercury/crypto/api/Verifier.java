@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.mercury.transport.api;
+package org.apache.maven.mercury.crypto.api;
 
 public interface Verifier extends StreamObserver
 {

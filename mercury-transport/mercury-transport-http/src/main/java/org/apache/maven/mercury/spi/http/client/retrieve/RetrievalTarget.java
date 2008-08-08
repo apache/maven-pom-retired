@@ -32,12 +32,12 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.maven.mercury.crypto.api.StreamObserver;
+import org.apache.maven.mercury.crypto.api.Verifier;
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
-import org.apache.maven.mercury.transport.api.StreamObserver;
-import org.apache.maven.mercury.transport.api.Verifier;
 import org.mortbay.jetty.client.HttpExchange;
 
 

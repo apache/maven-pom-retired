@@ -34,14 +34,14 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
 import org.apache.maven.mercury.spi.http.client.deploy.DefaultDeployer;
 import org.apache.maven.mercury.spi.http.client.deploy.DeployRequest;
 import org.apache.maven.mercury.spi.http.client.deploy.DeployResponse;
 import org.apache.maven.mercury.spi.http.server.SimplePutServer;
 import org.apache.maven.mercury.spi.http.validate.Validator;
-import org.apache.maven.mercury.transport.SHA1VerifierFactory;
 import org.apache.maven.mercury.transport.api.Binding;
-import org.apache.maven.mercury.transport.api.StreamObserverFactory;
+import org.apache.maven.mercury.transport.http.SHA1VerifierFactory;
 import org.mortbay.util.IO;
 
 public class JettyDeployerTest extends TestCase

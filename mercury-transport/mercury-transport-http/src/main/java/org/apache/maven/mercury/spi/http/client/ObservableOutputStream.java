@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.maven.mercury.transport.api.StreamObserver;
+import org.apache.maven.mercury.crypto.api.StreamObserver;
 
 
 

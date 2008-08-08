@@ -28,15 +28,15 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetrievalRequest;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetriever;
 import org.apache.maven.mercury.spi.http.client.retrieve.RetrievalResponse;
 import org.apache.maven.mercury.spi.http.server.SimpleTestServer;
 import org.apache.maven.mercury.spi.http.validate.Validator;
-import org.apache.maven.mercury.transport.SHA1VerifierFactory;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
-import org.apache.maven.mercury.transport.api.StreamObserverFactory;
+import org.apache.maven.mercury.transport.http.SHA1VerifierFactory;
 import org.mortbay.util.IO;
 
 public class JettyRetrieverTest extends TestCase

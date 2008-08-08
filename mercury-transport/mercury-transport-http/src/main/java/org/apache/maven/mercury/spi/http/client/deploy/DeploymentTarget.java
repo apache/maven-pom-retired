@@ -29,11 +29,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.maven.mercury.crypto.api.StreamObserver;
+import org.apache.maven.mercury.crypto.api.Verifier;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
-import org.apache.maven.mercury.transport.api.StreamObserver;
-import org.apache.maven.mercury.transport.api.Verifier;
 import org.mortbay.jetty.client.HttpClient;
 
 public abstract class DeploymentTarget

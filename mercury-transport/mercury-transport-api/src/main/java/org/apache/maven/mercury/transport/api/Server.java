@@ -21,6 +21,8 @@ package org.apache.maven.mercury.transport.api;
 import java.net.URL;
 import java.util.Set;
 
+import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
+
 public class Server
 {
   private String                      id;

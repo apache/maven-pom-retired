@@ -12,7 +12,7 @@
 
   <modules>
   <module>mercury-crypto-api</module>
-  <module>mercury-crypto-pgp</module>
+  <module>mercury-crypto-basic</module>
   </modules>
 
 </project>

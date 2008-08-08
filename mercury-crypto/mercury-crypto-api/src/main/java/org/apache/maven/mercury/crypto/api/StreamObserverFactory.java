@@ -16,28 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.mercury.crypto.api;
 
-package org.apache.maven.mercury.transport;
-
-
-
-public class ChecksumCalculator
+public interface StreamObserverFactory
 {
-    private static final byte[] __HEX_DIGITS = "0123456789abcdef".getBytes();
-
-
-    public static String encodeToAsciiHex( byte[] bytes )
-    {
-        int l = bytes.length;
-
-        byte[] raw = new byte[l * 2];
-
-        for ( int i = 0, j = 0; i < l; i++ )
-        {
-            raw[j++] = __HEX_DIGITS[( 0xF0 & bytes[i] ) >>> 4];
-            raw[j++] = __HEX_DIGITS[0x0F & bytes[i]];
-        }
-
-        return new String( raw );
-    }
+    public StreamObserver newInstance();
 }

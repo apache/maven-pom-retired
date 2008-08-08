@@ -17,24 +17,27 @@
  * under the License.
  */
 
-package org.apache.maven.mercury.transport;
+package org.apache.maven.mercury.crypto.basic;
 
-import org.apache.maven.mercury.transport.api.StreamObserver;
-import org.apache.maven.mercury.transport.api.StreamObserverFactory;
 
-public class SHA1VerifierFactory implements StreamObserverFactory
+
+public class ChecksumCalculator
 {
-    private boolean isLenient;
-    private boolean isSufficient;
+    private static final byte[] __HEX_DIGITS = "0123456789abcdef".getBytes();
 
-    public SHA1VerifierFactory (boolean isLenient, boolean isSufficient)
-    {
-        this.isLenient = isLenient;
-        this.isSufficient = isSufficient;
-    }
-    public StreamObserver newInstance()
-    {
-       return new SHA1Verifier(this.isLenient, this.isSufficient);
-    }
 
+    public static String encodeToAsciiHex( byte[] bytes )
+    {
+        int l = bytes.length;
+
+        byte[] raw = new byte[l * 2];
+
+        for ( int i = 0, j = 0; i < l; i++ )
+        {
+            raw[j++] = __HEX_DIGITS[( 0xF0 & bytes[i] ) >>> 4];
+            raw[j++] = __HEX_DIGITS[0x0F & bytes[i]];
+        }
+
+        return new String( raw );
+    }
 }

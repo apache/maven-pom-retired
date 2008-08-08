@@ -17,19 +17,18 @@
  * under the License.
  */
 
-package org.apache.maven.mercury.transport;
+package org.apache.maven.mercury.crypto.basic;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.maven.mercury.transport.api.Verifier;
 
 /**
  * SHA1Verifier
  *
  *
  */
-public class SHA1Verifier implements Verifier
+public class SHA1Verifier implements org.apache.maven.mercury.crypto.api.Verifier
 {
     public static final String digestAlgorithm = "SHA-1";
     private MessageDigest digest;
