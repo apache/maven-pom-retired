@@ -23,12 +23,14 @@ import java.util.Set;
 
 public class Server
 {
-  private String                     id;
-  private Set<StreamObserverFactory> streamObserverFactories;
-  private URL                        url;
-  private Credentials          serverCredentials;
-  private URL                        proxy;
-  private Credentials          proxyCredentials;
+  private String                      id;
+  private Set<StreamObserverFactory>  streamObserverFactories;
+  private URL                         url;
+  private Credentials                 serverCredentials;
+  private URL                         proxy;
+  private Credentials                 proxyCredentials;
+  private boolean                     requireEncryption = false;
+  private boolean                     requireTrustedServer = false;
 
   public Server( String id, URL url )
   {
@@ -36,21 +38,29 @@ public class Server
     this.id = id;
   }
 
-  public Server( String id, URL url, Credentials serverCredentials )
+  public Server( String id, URL url, boolean requireEncryption, boolean requireTrustedServer )
   {
     this( id, url );
+    
+    this.requireEncryption = requireEncryption;
+    this.requireTrustedServer = requireTrustedServer;
+  }
+
+  public Server( String id, URL url, boolean requireEncryption, boolean requireTrustedServer, Credentials serverCredentials )
+  {
+    this( id, url, requireEncryption, requireTrustedServer );
     this.serverCredentials = serverCredentials;
   }
 
-  public Server( String id, URL url, Credentials serverCredentials, URL proxy )
+  public Server( String id, URL url, boolean requireEncryption, boolean requireTrustedServer, Credentials serverCredentials, URL proxy )
   {
-    this( id, url, serverCredentials );
+    this( id, url, requireEncryption, requireTrustedServer, serverCredentials );
     this.proxy = proxy;
   }
 
-  public Server( String id, URL url, Credentials serverCredentials, URL proxy, Credentials proxyCredentials )
+  public Server( String id, URL url, boolean requireEncryption, boolean requireTrustedServer, Credentials serverCredentials, URL proxy, Credentials proxyCredentials )
   {
-    this( id, url, serverCredentials, proxy );
+    this( id, url, requireEncryption, requireTrustedServer, serverCredentials, proxy );
     this.proxyCredentials = proxyCredentials;
   }
 
@@ -74,6 +84,11 @@ public class Server
     return this.proxy;
   }
 
+  public boolean hasProxy()
+  {
+    return this.proxy != null;
+  }
+
   public Credentials getProxyCredentials()
   {
     return this.serverCredentials;
@@ -87,6 +102,16 @@ public class Server
   public void setStreamObserverFactories( Set<StreamObserverFactory> factories )
   {
     streamObserverFactories = factories;
+  }
+
+  public boolean isRequireEncryption()
+  {
+    return requireEncryption;
+  }
+  
+  public boolean isRequireTrustedServer()
+  {
+    return requireTrustedServer;
   }
 
 }

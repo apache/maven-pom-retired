@@ -34,6 +34,8 @@ extends Comparable<Artifact>
 
     String SNAPSHOT_VERSION = "SNAPSHOT";
 
+    String RELEASE_VERSION = "RELEASE";
+
     Pattern VERSION_FILE_PATTERN = Pattern.compile( "^(.*)-([0-9]{8}.[0-9]{6})-([0-9]+)$" );
 
     // TODO: into artifactScope handler
@@ -47,8 +49,6 @@ extends Comparable<Artifact>
     String SCOPE_PROVIDED = ArtifactScopeEnum.provided.toString();
 
     String SCOPE_SYSTEM = ArtifactScopeEnum.system.toString();
-
-    String RELEASE_VERSION = "RELEASE";
 
     String getGroupId();
 

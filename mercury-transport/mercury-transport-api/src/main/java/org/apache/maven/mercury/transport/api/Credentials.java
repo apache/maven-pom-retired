@@ -55,6 +55,11 @@ public class Credentials
   {
     return cert;
   }
+  
+  public boolean isCertificate()
+  {
+    return cert != null && cert.length > 1;
+  }
 
   public void setCertificate( byte [] cert )
   {
