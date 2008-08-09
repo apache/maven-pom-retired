@@ -22,25 +22,27 @@ package org.apache.maven.mercury.crypto.basic;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.maven.mercury.crypto.api.AbstractVerifier;
+import org.apache.maven.mercury.crypto.api.Verifier;
+
 
 /**
  * SHA1Verifier
  *
  *
  */
-public class SHA1Verifier implements org.apache.maven.mercury.crypto.api.Verifier
+public class SHA1Verifier
+extends AbstractVerifier
+implements Verifier
 {
     public static final String digestAlgorithm = "SHA-1";
     private MessageDigest digest;
     private byte[] digestBytes;
-    private boolean isLenient;
-    private boolean isSufficient;
     
-    
-    public SHA1Verifier (boolean isLenient, boolean isSufficient)
+    public SHA1Verifier( boolean isLenient, boolean isSufficient )
     {
-        this.isLenient = isLenient;
-        this.isSufficient = isSufficient;
+      super( isLenient, isSufficient );
+
         try
         {
             digest = MessageDigest.getInstance( digestAlgorithm );
@@ -66,25 +68,6 @@ public class SHA1Verifier implements org.apache.maven.mercury.crypto.api.Verifie
     public String getSignature()
     {
         return ChecksumCalculator.encodeToAsciiHex( getSignatureBytes() );
-    }
-    
-    public void setLenient (boolean lenient)
-    {
-        isLenient = lenient;
-    }
-
-    public boolean isLenient()
-    {
-        return isLenient;
-    }
-
-    public void setSufficient (boolean sufficient)
-    {
-        isSufficient = sufficient;
-    }
-    public boolean isSufficient()
-    {
-        return isSufficient;
     }
 
     public boolean verifySignature(String sig)
