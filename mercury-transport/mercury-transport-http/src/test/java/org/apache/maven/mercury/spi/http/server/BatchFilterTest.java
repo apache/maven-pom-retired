@@ -65,8 +65,24 @@ public class BatchFilterTest extends TestCase
     protected void tearDown() throws Exception
     {
         super.tearDown();
+        tester.stop();
+        destroy(_baseDir);
     }
     
+    public void destroy (File f)
+    {
+        if (f == null)
+            return;
+        if (f.isDirectory())
+        {
+            File[] files = f.listFiles();
+            for (int i=0;files!=null && i<files.length; i++)
+            {
+                destroy (files[i]);
+            }  
+        }
+        f.delete(); 
+    }
 
     public void testHandlePutWithoutBatching() throws Exception
     {

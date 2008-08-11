@@ -33,6 +33,7 @@ public class SecureJettyDeployerTest extends JettyDeployerTest
     {        
         _HOST_FRAGMENT = "https://localhost:";
         
+        setUpFiles();
         _deployer = new DefaultDeployer();
         _putServer = new SecurePutServer();
         _putServer.start();

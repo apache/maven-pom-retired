@@ -32,6 +32,9 @@ import org.mortbay.util.IO;
 public class SimpleTestServer
     extends Server
 {
+    File base;
+    
+    
     public SimpleTestServer()
         throws Exception
     {
@@ -49,7 +52,7 @@ public class SimpleTestServer
         Context context = new Context( handlers, remotePathFragment );
         handlers.addHandler( new DefaultHandler() );
 
-        File base = File.createTempFile( "simpleTestServer", null );
+        base = File.createTempFile( "simpleTestServer", null );
         base.delete();
         base.mkdir();
         base.deleteOnExit();
@@ -75,6 +78,28 @@ public class SimpleTestServer
     {
         return getConnectors()[0].getLocalPort();
     }
+    
+    public void destroy()
+    {
+        super.destroy();
+        destroy(base);
+    }
+    
+    public void destroy (File f)
+    {
+        if (f == null)
+            return;
+        if (f.isDirectory())
+        {
+            File[] files = f.listFiles();
+            for (int i=0;files!=null && i<files.length; i++)
+            {
+                destroy (files[i]);
+            }  
+        }
+        f.delete(); 
+    }
+    
 
     public static void main( String[] args )
         throws Exception

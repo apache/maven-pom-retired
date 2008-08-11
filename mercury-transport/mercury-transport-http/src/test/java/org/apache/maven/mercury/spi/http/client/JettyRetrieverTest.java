@@ -54,6 +54,7 @@ public class JettyRetrieverTest extends TestCase
     SimpleTestServer server;
     Server remoteServerType;
     HashSet<StreamObserverFactory> factories;
+    File dir;
     
 
     public class TxtValidator implements Validator 
@@ -119,8 +120,24 @@ public class JettyRetrieverTest extends TestCase
         super.tearDown();
         server.stop();
         server.destroy();
+        destroy(dir);
     }
-
+    
+    
+    public void destroy (File f)
+    {
+        if (f == null)
+            return;
+        if (f.isDirectory())
+        {
+            File[] files = f.listFiles();
+            for (int i=0;files!=null && i<files.length; i++)
+            {
+                destroy (files[i]);
+            }  
+        }
+        f.delete(); 
+    }
 
 
     public File mkTempDir()
@@ -143,7 +160,7 @@ public class JettyRetrieverTest extends TestCase
         remoteServerType.setStreamObserverFactories(factories);
         
         //make local dir to put stuff in
-        final File dir = mkTempDir();
+        dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
 
@@ -196,7 +213,7 @@ public class JettyRetrieverTest extends TestCase
         remoteServerType.setStreamObserverFactories(factories);
         
         //make local dir to put stuff in
-        final File dir = mkTempDir();
+        dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
 
@@ -254,7 +271,7 @@ public class JettyRetrieverTest extends TestCase
         remoteServerType.setStreamObserverFactories(factories);
         
         //make local dir to put stuff in
-        final File dir = mkTempDir();
+        dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
 
@@ -302,7 +319,7 @@ public class JettyRetrieverTest extends TestCase
         factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
         remoteServerType.setStreamObserverFactories(factories);
         //make local dir to put stuff in
-        final File dir = mkTempDir();
+        dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
 
@@ -350,7 +367,7 @@ public class JettyRetrieverTest extends TestCase
         remoteServerType.setStreamObserverFactories(factories);
 
         //make local dir to put stuff in
-        final File dir = mkTempDir();
+        dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
         HashSet<Validator> validators = new HashSet<Validator>();
@@ -402,7 +419,7 @@ public class JettyRetrieverTest extends TestCase
         remoteServerType.setStreamObserverFactories(factories);
         
         //make local dir to put stuff in
-        final File dir = mkTempDir();
+        dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
         HashSet<Validator> validators = new HashSet<Validator>();
@@ -455,7 +472,7 @@ public class JettyRetrieverTest extends TestCase
         remoteServerType.setStreamObserverFactories(factories);
 
         //make local dir to put stuff in
-        final File dir = mkTempDir();
+        dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
         HashSet<Binding> bindings = new HashSet<Binding>();
         HashSet<Validator> validators = new HashSet<Validator>();

@@ -93,6 +93,11 @@ public class JettyDeployerTest extends TestCase
     
     public JettyDeployerTest () throws Exception
     {
+       
+    }
+    
+    public void setUpFiles () throws Exception
+    {
         //copy the test files from the classpath to disk
         _baseDir = File.createTempFile("deployerTestFiles",null);
         _baseDir.delete();
@@ -113,13 +118,29 @@ public class JettyDeployerTest extends TestCase
 
     protected void setUp() throws Exception
     {        
-
+        setUpFiles();
         _deployer = new DefaultDeployer();
         _putServer = new SimplePutServer();
         _putServer.start();
         _port = String.valueOf(_putServer.getPort());
         setUpVerifiers();
         super.setUp();
+    }
+    
+   
+    public void destroy (File f)
+    {
+        if (f == null)
+            return;
+        if (f.isDirectory())
+        {
+            File[] files = f.listFiles();
+            for (int i=0;files!=null && i<files.length; i++)
+            {
+                destroy (files[i]);
+            }  
+        }
+        f.delete(); 
     }
     
     protected void setUpVerifiers () throws Exception
@@ -134,7 +155,9 @@ public class JettyDeployerTest extends TestCase
     protected void tearDown() throws Exception
     {
         _putServer.stop();
-        _putServer.destroy();
+        _putServer.destroy();        
+        destroy(_baseDir);
+        System.err.println("Destroyed "+_baseDir.getAbsolutePath());
         super.tearDown();
     }
     
@@ -144,6 +167,8 @@ public class JettyDeployerTest extends TestCase
         DeployRequestImpl request = new DeployRequestImpl();
         factories.add(new SHA1VerifierFactory(false, true)); //!lenient, sufficient
         remoteServerType.setStreamObserverFactories(factories);
+        
+        System.err.println("Basedir = "+_baseDir.getAbsolutePath());
         
         _file0 = new File(_baseDir, "file0.txt");
         _file1 = new File(_baseDir, "file1.txt");

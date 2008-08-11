@@ -57,13 +57,25 @@ public class SimplePutServer extends Server
     public void destroy ()
     {
         super.destroy();
-        File[] files = _base.listFiles();
-        for (int i=0;files!=null && i>0; i++)
-        {
-            files[i].delete();
-        }
-        _base.delete();
+        destroy(_base);
     }
+    
+    public void destroy (File f)
+    {
+        if (f == null)
+            return;
+        if (f.isDirectory())
+        {
+            File[] files = f.listFiles();
+            for (int i=0;files!=null && i<files.length; i++)
+            {
+                destroy (files[i]);
+            }  
+        }
+        f.delete(); 
+    }
+    
+  
     
     /* (non-Javadoc)
      * @see org.apache.maven.mercury.spi.http.server.PutServer#getPutDir()

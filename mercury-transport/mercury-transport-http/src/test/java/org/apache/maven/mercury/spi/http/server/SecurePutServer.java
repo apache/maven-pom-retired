@@ -74,12 +74,7 @@ public class SecurePutServer extends SimplePutServer
     public void destroy ()
     {
         super.destroy();
-        File[] files = _base.listFiles();
-        for (int i=0;files!=null && i>0; i++)
-        {
-            files[i].delete();
-        }
-        _base.delete();
+        destroy(_base);
     }
     
     public static void main(String[] args)
