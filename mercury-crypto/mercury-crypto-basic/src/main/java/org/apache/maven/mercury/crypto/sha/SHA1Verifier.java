@@ -17,13 +17,15 @@
  * under the License.
  */
 
-package org.apache.maven.mercury.crypto.basic;
+package org.apache.maven.mercury.crypto.sha;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.maven.mercury.crypto.api.AbstractVerifier;
-import org.apache.maven.mercury.crypto.api.Verifier;
+import org.apache.maven.mercury.crypto.api.AbstractStreamVerifier;
+import org.apache.maven.mercury.crypto.api.StreamVerifier;
+import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
+import org.apache.maven.mercury.crypto.basic.ChecksumCalculator;
 
 
 /**
@@ -32,30 +34,31 @@ import org.apache.maven.mercury.crypto.api.Verifier;
  *
  */
 public class SHA1Verifier
-extends AbstractVerifier
-implements Verifier
+extends AbstractStreamVerifier
+implements StreamVerifier
 {
     public static final String digestAlgorithm = "SHA-1";
+
     private MessageDigest digest;
     private byte[] digestBytes;
     
-    public SHA1Verifier( boolean isLenient, boolean isSufficient )
+    public SHA1Verifier( StreamVerifierAttributes attributes )
     {
-      super( isLenient, isSufficient );
+      super( attributes );
 
-        try
-        {
-            digest = MessageDigest.getInstance( digestAlgorithm );
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            //TODO
-        }
+      try
+      {
+          digest = MessageDigest.getInstance( digestAlgorithm );
+      }
+      catch (NoSuchAlgorithmException e)
+      {
+          //TODO
+      }
     }
 
     public String getExtension()
     {
-        return ".sha1";
+        return '.'+SHA1VerifierFactory.DEFAULT_EXTENSION;
     }
 
     public byte[] getSignatureBytes ()

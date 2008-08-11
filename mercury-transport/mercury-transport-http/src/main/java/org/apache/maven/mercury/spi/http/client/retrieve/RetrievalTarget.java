@@ -33,7 +33,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
-import org.apache.maven.mercury.crypto.api.Verifier;
+import org.apache.maven.mercury.crypto.api.StreamVerifier;
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.validate.Validator;
@@ -68,8 +68,8 @@ public abstract class RetrievalTarget
     protected HttpExchange _exchange;
     protected Set<Validator> _validators;
     protected Set<StreamObserver> _observers = new HashSet<StreamObserver>();
-    protected List<Verifier> _verifiers = new ArrayList<Verifier>();
-    protected Map<Verifier, String> _verifierMap = new HashMap<Verifier, String>();
+    protected List<StreamVerifier> _verifiers = new ArrayList<StreamVerifier>();
+    protected Map<StreamVerifier, String> _verifierMap = new HashMap<StreamVerifier, String>();
  
     
     public abstract void onComplete();
@@ -98,8 +98,8 @@ public abstract class RetrievalTarget
         //sift out the potential checksum verifiers
         for (StreamObserver o: observers)
         {
-            if (Verifier.class.isAssignableFrom(o.getClass()))
-                _verifiers.add((Verifier)o);
+            if (StreamVerifier.class.isAssignableFrom(o.getClass()))
+                _verifiers.add((StreamVerifier)o);
             else
                 _observers.add(o);
         }
@@ -210,8 +210,8 @@ public abstract class RetrievalTarget
             if (index >= 0)
             {
                 //check if the just-completed retrieval means that we can stop trying to download checksums 
-                Verifier v = _verifiers.get(index);
-                if (_verifierMap.containsKey(v) && v.isSufficient())
+                StreamVerifier v = _verifiers.get(index);
+                if (_verifierMap.containsKey(v) && v.getAttributes().isSufficient())
                     proceedWithTargetFile = true;
             }
 
@@ -250,10 +250,10 @@ public abstract class RetrievalTarget
         
         synchronized (_verifierMap)
         {
-            Iterator<Map.Entry<Verifier, String>> itor = _verifierMap.entrySet().iterator();
+            Iterator<Map.Entry<StreamVerifier, String>> itor = _verifierMap.entrySet().iterator();
             while (itor.hasNext() && ok)
             {               
-                Map.Entry<Verifier, String> e = itor.next();
+                Map.Entry<StreamVerifier, String> e = itor.next();
                 ok = e.getKey().verifySignature(e.getValue());
             }
         }
@@ -352,7 +352,7 @@ public abstract class RetrievalTarget
             protected void onException( Throwable ex )
             {
                 //if the checksum is mandatory, then propagate the exception and stop processing
-                if (!_verifiers.get(index).isLenient())
+                if (!_verifiers.get(index).getAttributes().isLenient())
                 {
                     updateChecksumState(index, ex);
                 }
@@ -364,14 +364,14 @@ public abstract class RetrievalTarget
             protected void onResponseComplete() throws IOException
             {
                 super.onResponseComplete();
-                Verifier v = _verifiers.get(index);
+                StreamVerifier v = _verifiers.get(index);
                 
                 if ( getResponseStatus() == HttpServletResponse.SC_OK )
                 {
                     //We got a checksum so match it up with the verifier it is for
                     synchronized (_verifierMap)
                     {
-                        if (v.isSufficient())
+                        if (v.getAttributes().isSufficient())
                             _verifierMap.clear(); //remove all other entries, we only need one checksum
                         _verifierMap.put(v, getResponseContent().trim());
                     }
@@ -379,7 +379,7 @@ public abstract class RetrievalTarget
                 }
                 else 
                 {
-                    if (!v.isLenient()) 
+                    if (!v.getAttributes().isLenient()) 
                     {
                         //checksum file MUST be present, fail
                         updateChecksumState(index, new Exception ("Mandatory checksum file not found "+this.getURI()));
@@ -430,9 +430,9 @@ public abstract class RetrievalTarget
         return exchange;
     }
 
-    private String getChecksumFileURLAsString (Verifier verifier)
+    private String getChecksumFileURLAsString (StreamVerifier verifier)
     {
-        String extension = verifier.getExtension();
+        String extension = verifier.getAttributes().getExtension();
         if (extension.charAt(0) != '.')
             extension = "."+extension;
         return _binding.getRemoteResource().toString() + extension;

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
-import org.apache.maven.mercury.crypto.api.Verifier;
+import org.apache.maven.mercury.crypto.api.StreamVerifier;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
@@ -50,7 +50,7 @@ public abstract class DeploymentTarget
     protected HttpClientException _exception;
     protected String _remoteJettyUrl;
     protected Set<StreamObserver> _observers = new HashSet<StreamObserver>();
-    protected List<Verifier> _verifiers = new ArrayList<Verifier>();
+    protected List<StreamVerifier> _verifiers = new ArrayList<StreamVerifier>();
     protected int _index = -1; 
 
     
@@ -134,8 +134,8 @@ public abstract class DeploymentTarget
         
         for (StreamObserver o:observers)
         {
-            if (Verifier.class.isAssignableFrom(o.getClass()))
-                _verifiers.add((Verifier)o);
+            if (StreamVerifier.class.isAssignableFrom(o.getClass()))
+                _verifiers.add((StreamVerifier)o);
             _observers.add(o);
         }
       
@@ -221,7 +221,7 @@ public abstract class DeploymentTarget
     {
         Binding binding = _binding;
         File file = null;
-        Verifier v =  _verifiers.get(_index);
+        StreamVerifier v =  _verifiers.get(_index);
 
         //No local checksum file, so make a temporary one using the checksum we 
         //calculated as we uploaded the file
@@ -230,7 +230,7 @@ public abstract class DeploymentTarget
             URL url = _binding.getRemoteResource();
             if (url != null)
             {
-                url = new URL( url.toString() + v.getExtension());
+                url = new URL( url.toString() + v.getAttributes().getExtension() );
             }
       
             String localFileName = getFileName(url);

@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
-import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
+import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
@@ -303,8 +303,8 @@ public class DefaultRetriever implements Retriever
         HashSet<StreamObserver> observers = new HashSet<StreamObserver>();
         if (server != null)
         {
-            Set<StreamObserverFactory> factories = server.getStreamObserverFactories();
-            for (StreamObserverFactory f:factories)
+            Set<StreamVerifierFactory> factories = server.getStreamObserverFactories();
+            for (StreamVerifierFactory f:factories)
             {
                 observers.add(f.newInstance());
             }

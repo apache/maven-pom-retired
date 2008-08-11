@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
-import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
+import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HandshakeExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
@@ -328,8 +328,8 @@ public class DefaultDeployer implements Deployer
     private Set<StreamObserver> createStreamObservers (Server server)
     {
         HashSet<StreamObserver> observers = new HashSet<StreamObserver>();
-        Set<StreamObserverFactory> factories = server.getStreamObserverFactories();
-        for (StreamObserverFactory f:factories)
+        Set<StreamVerifierFactory> factories = server.getStreamObserverFactories();
+        for (StreamVerifierFactory f:factories)
         {
             observers.add(f.newInstance());
         }

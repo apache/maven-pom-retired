@@ -34,14 +34,14 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
+import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
+import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
 import org.apache.maven.mercury.spi.http.client.deploy.DefaultDeployer;
 import org.apache.maven.mercury.spi.http.client.deploy.DeployRequest;
 import org.apache.maven.mercury.spi.http.client.deploy.DeployResponse;
 import org.apache.maven.mercury.spi.http.server.SimplePutServer;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
-import org.apache.maven.mercury.transport.http.SHA1VerifierFactory;
 import org.mortbay.util.IO;
 
 public class JettyDeployerTest extends TestCase
@@ -60,7 +60,7 @@ public class JettyDeployerTest extends TestCase
     File _file5;
 
     org.apache.maven.mercury.transport.api.Server remoteServerType;
-    HashSet<StreamObserverFactory> factories;
+    HashSet<StreamVerifierFactory> factories;
     
     private class DeployRequestImpl implements DeployRequest
     {
@@ -147,7 +147,7 @@ public class JettyDeployerTest extends TestCase
     {
         HashSet<org.apache.maven.mercury.transport.api.Server> remoteServerTypes = new HashSet<org.apache.maven.mercury.transport.api.Server>();
         remoteServerType = new org.apache.maven.mercury.transport.api.Server( "test", new URL(_HOST_FRAGMENT+_port));
-        factories = new HashSet<StreamObserverFactory>();       
+        factories = new HashSet<StreamVerifierFactory>();       
         remoteServerTypes.add(remoteServerType);
         _deployer.setServers(remoteServerTypes);
     }

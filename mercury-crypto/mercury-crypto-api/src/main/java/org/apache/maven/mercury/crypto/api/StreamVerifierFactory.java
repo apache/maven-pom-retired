@@ -16,26 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.mercury.crypto.api;
 
-package org.apache.maven.mercury.transport.http;
-
-import org.apache.maven.mercury.crypto.basic.SHA1Verifier;
-import org.apache.maven.mercury.crypto.api.StreamObserver;
-import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
-
-public class SHA1VerifierFactory implements StreamObserverFactory
+public interface StreamVerifierFactory
 {
-    private boolean isLenient;
-    private boolean isSufficient;
-
-    public SHA1VerifierFactory (boolean isLenient, boolean isSufficient)
-    {
-        this.isLenient = isLenient;
-        this.isSufficient = isSufficient;
-    }
-    public StreamObserver newInstance()
-    {
-       return new SHA1Verifier(this.isLenient, this.isSufficient);
-    }
-
+  public StreamVerifier newInstance();
+  public String getDefaultExtension();
 }

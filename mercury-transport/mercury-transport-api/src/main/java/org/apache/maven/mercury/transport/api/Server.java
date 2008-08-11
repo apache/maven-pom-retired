@@ -21,18 +21,19 @@ package org.apache.maven.mercury.transport.api;
 import java.net.URL;
 import java.util.Set;
 
-import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
+import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 
 public class Server
 {
   private String                      id;
-  private Set<StreamObserverFactory>  streamObserverFactories;
   private URL                         url;
   private Credentials                 serverCredentials;
   private URL                         proxy;
   private Credentials                 proxyCredentials;
   private boolean                     requireEncryption = false;
   private boolean                     requireTrustedServer = false;
+
+  private Set<StreamVerifierFactory>  streamObserverFactories;
 
   public Server( String id, URL url )
   {
@@ -96,12 +97,12 @@ public class Server
     return this.serverCredentials;
   }
 
-  public Set<StreamObserverFactory> getStreamObserverFactories()
+  public Set<StreamVerifierFactory> getStreamObserverFactories()
   {
     return streamObserverFactories;
   }
 
-  public void setStreamObserverFactories( Set<StreamObserverFactory> factories )
+  public void setStreamObserverFactories( Set<StreamVerifierFactory> factories )
   {
     streamObserverFactories = factories;
   }

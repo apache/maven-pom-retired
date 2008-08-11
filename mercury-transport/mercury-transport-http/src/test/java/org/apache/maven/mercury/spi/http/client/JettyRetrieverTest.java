@@ -28,7 +28,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
+import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
+import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetrievalRequest;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetriever;
 import org.apache.maven.mercury.spi.http.client.retrieve.RetrievalResponse;
@@ -36,7 +37,6 @@ import org.apache.maven.mercury.spi.http.server.SimpleTestServer;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
-import org.apache.maven.mercury.transport.http.SHA1VerifierFactory;
 import org.mortbay.util.IO;
 
 public class JettyRetrieverTest extends TestCase
@@ -53,7 +53,7 @@ public class JettyRetrieverTest extends TestCase
     DefaultRetriever retriever;
     SimpleTestServer server;
     Server remoteServerType;
-    HashSet<StreamObserverFactory> factories;
+    HashSet<StreamVerifierFactory> factories;
     File dir;
     
 
@@ -106,7 +106,7 @@ public class JettyRetrieverTest extends TestCase
         
         HashSet<Server> remoteServerTypes = new HashSet<Server>();
         remoteServerType = new Server( "test", new URL(__HOST_FRAGMENT+_port));
-        factories = new HashSet<StreamObserverFactory>();
+        factories = new HashSet<StreamVerifierFactory>();
             
         remoteServerTypes.add(remoteServerType);
         
@@ -156,7 +156,7 @@ public class JettyRetrieverTest extends TestCase
     public void testSyncRetrievalAllGood()
     throws Exception
     {
-        factories.add(new SHA1VerifierFactory(false, true)); //!lenient, sufficient
+        factories.add( new SHA1VerifierFactory(false, true) ); //!lenient, sufficient
         remoteServerType.setStreamObserverFactories(factories);
         
         //make local dir to put stuff in

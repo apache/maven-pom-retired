@@ -18,7 +18,11 @@
  */
 package org.apache.maven.mercury.crypto.api;
 
-public interface StreamObserverFactory
+public interface StreamVerifier
+extends StreamObserver
 {
-    public StreamObserver newInstance();
+  public StreamVerifierAttributes getAttributes();
+
+  public String getSignature();
+  public boolean verifySignature( String signature );
 }
