@@ -39,7 +39,6 @@ public class PgpStreamVerifier
 extends AbstractStreamVerifier
 implements StreamVerifier
 {
-  public static final String TYPE = "pgp";
   private static final Language lang = new DefaultLanguage( PgpStreamVerifier.class );
   
   private PGPPublicKeyRingCollection trustedPublicKeyRing;
@@ -162,7 +161,8 @@ implements StreamVerifier
 
     try
     {
-      return signature.verify();
+      boolean res = signature.verify(); 
+      return res;
     }
     catch( Exception e )
     {

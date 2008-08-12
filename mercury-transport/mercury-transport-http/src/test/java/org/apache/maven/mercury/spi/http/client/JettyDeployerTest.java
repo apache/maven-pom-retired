@@ -34,7 +34,9 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
+import org.apache.maven.mercury.crypto.pgp.PgpStreamVerifierFactory;
 import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
 import org.apache.maven.mercury.spi.http.client.deploy.DefaultDeployer;
 import org.apache.maven.mercury.spi.http.client.deploy.DeployRequest;
@@ -42,12 +44,27 @@ import org.apache.maven.mercury.spi.http.client.deploy.DeployResponse;
 import org.apache.maven.mercury.spi.http.server.SimplePutServer;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
+import org.bouncycastle.openpgp.PGPPublicKey;
+import org.bouncycastle.openpgp.PGPSecretKey;
+import org.bouncycastle.openpgp.PGPSecretKeyRing;
 import org.mortbay.util.IO;
 
 public class JettyDeployerTest extends TestCase
 {
     public String _HOST_FRAGMENT = "http://localhost:";
     public static final String __PATH_FRAGMENT = "/maven2/repo/";
+
+    private static final String keyId   = "0EDB5D91141BC4F2";
+
+    private static final String secretKeyFile = "/pgp/secring.gpg";
+    private static final String secretKeyPass = "testKey82";
+
+    private static final String publicKeyFile = "/pgp/pubring.gpg";
+    
+    private PGPSecretKeyRing secretKeyRing;
+    private PGPSecretKey secretKey;
+    private PGPPublicKey publicKey;
+    
     protected DefaultDeployer _deployer;
     protected SimplePutServer _putServer;
     protected String _port;
@@ -58,6 +75,7 @@ public class JettyDeployerTest extends TestCase
     File _file3;
     File _file4;
     File _file5;
+    File _file6;
 
     org.apache.maven.mercury.transport.api.Server remoteServerType;
     HashSet<StreamVerifierFactory> factories;
@@ -165,7 +183,14 @@ public class JettyDeployerTest extends TestCase
     {
         HashSet<Binding> bindings = new HashSet<Binding>();
         DeployRequestImpl request = new DeployRequestImpl();
-        factories.add(new SHA1VerifierFactory(false, true)); //!lenient, sufficient
+        factories.add( new SHA1VerifierFactory(false, true) ); //!lenient, sufficient
+        factories.add( 
+            new PgpStreamVerifierFactory(
+                    new StreamVerifierAttributes( PgpStreamVerifierFactory.DEFAULT_EXTENSION, false, true )
+                    , getClass().getResourceAsStream( secretKeyFile )
+                    , keyId, secretKeyPass
+                                        )
+                      );
         remoteServerType.setStreamObserverFactories(factories);
         
         System.err.println("Basedir = "+_baseDir.getAbsolutePath());
@@ -176,15 +201,18 @@ public class JettyDeployerTest extends TestCase
         _file3 = new File(_baseDir, "file3.jar");
         _file4 = new File(_baseDir, "file4.so");
         _file5 = new File(_baseDir, "file5.jpg");
+        _file6 = new File(_baseDir, "file6.gif");
         Binding binding0 = new Binding(new URL(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file0.txt"), _file0);
         Binding binding3 = new Binding(new URL(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file3.jar"), _file3);
         Binding binding4 = new Binding(new URL(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file4.so"), _file4);
         Binding binding5 = new Binding(new URL(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file5.jpg"), _file5);      
+        Binding binding6 = new Binding(new URL(_HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file6.gif"), _file6);      
 
         bindings.add(binding0);
         bindings.add(binding3);
         bindings.add(binding4);
         bindings.add(binding5);
+        bindings.add(binding6);
           
         request.setBindings(bindings);
         
@@ -213,6 +241,11 @@ public class JettyDeployerTest extends TestCase
         File f5cs = new File (_putServer.getPutDir(), "file5.jpg.sha1");
         assertTrue (f5.exists());
         assertTrue (f5cs.exists());
+        
+        File f6 = new File(_putServer.getPutDir(), "file6.gif");
+        File f6cs = new File (_putServer.getPutDir(), "file6.gif.asc");
+        assertTrue (f6.exists());
+        assertTrue (f6cs.exists());
     }
     /* This test duplicates the one above unless we allow for checksum files to
      * be pre-existing
@@ -287,8 +320,6 @@ public class JettyDeployerTest extends TestCase
     }
     */
     
-    
-
     public void testUploadFail () throws Exception 
     {        
         factories.add(new SHA1VerifierFactory(false, true)); //!lenient, sufficient

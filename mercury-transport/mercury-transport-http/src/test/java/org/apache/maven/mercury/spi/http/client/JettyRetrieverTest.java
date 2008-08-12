@@ -28,7 +28,9 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
+import org.apache.maven.mercury.crypto.pgp.PgpStreamVerifierFactory;
 import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetrievalRequest;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetriever;
@@ -37,12 +39,29 @@ import org.apache.maven.mercury.spi.http.server.SimpleTestServer;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
+import org.bouncycastle.openpgp.PGPPublicKey;
+import org.bouncycastle.openpgp.PGPSecretKey;
+import org.bouncycastle.openpgp.PGPSecretKeyRing;
 import org.mortbay.util.IO;
 
 public class JettyRetrieverTest extends TestCase
 {
     public static final String __HOST_FRAGMENT = "http://localhost:";
     public static final String __PATH_FRAGMENT = "/maven2/repo/";
+    
+
+    private static final String keyId   = "0EDB5D91141BC4F2";
+
+    private static final String secretKeyFile = "/pgp/secring.gpg";
+    private static final String secretKeyPass = "testKey82";
+
+    private static final String publicKeyFile = "/pgp/pubring.gpg";
+    
+    private PGPSecretKeyRing secretKeyRing;
+    private PGPSecretKey secretKey;
+    private PGPPublicKey publicKey;
+    
+    
     public String _port;
     File file0;
     File file1;
@@ -50,6 +69,8 @@ public class JettyRetrieverTest extends TestCase
     File file3;
     File file4;
     File file5;
+    File file6;
+    
     DefaultRetriever retriever;
     SimpleTestServer server;
     Server remoteServerType;
@@ -203,6 +224,38 @@ public class JettyRetrieverTest extends TestCase
         assertTrue(!file4.exists());
         assertTrue(!file5.exists());
 
+    }
+
+    
+    public void testSyncRetrievalPgpGood()
+    throws Exception
+    {
+      factories.add( 
+          new PgpStreamVerifierFactory(
+                  new StreamVerifierAttributes( PgpStreamVerifierFactory.DEFAULT_EXTENSION, false, true )
+                  , getClass().getResourceAsStream( publicKeyFile )
+                                      )
+                    );
+        remoteServerType.setStreamObserverFactories(factories);
+        
+        //make local dir to put stuff in
+        dir = mkTempDir();
+        DefaultRetrievalRequest request = new DefaultRetrievalRequest();
+        HashSet<Binding> bindings = new HashSet<Binding>();
+
+        file6 = new File(dir, "file6.gif");
+        Binding binding0 = new Binding(new URL(__HOST_FRAGMENT+_port+__PATH_FRAGMENT+"file6.gif"), file6);
+        bindings.add(binding0);
+          
+        request.setBindings(bindings);
+        
+        RetrievalResponse response = retriever.retrieve(request);
+        
+        //for (MercuryException t:response.getExceptions())
+        //    t.printStackTrace();
+        
+        assertEquals( 0, response.getExceptions().size() );
+        assertTrue( file6.exists() );
     }
 
 
