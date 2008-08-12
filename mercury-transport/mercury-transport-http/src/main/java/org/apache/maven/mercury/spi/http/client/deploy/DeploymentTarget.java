@@ -51,7 +51,7 @@ public abstract class DeploymentTarget
     protected String _remoteJettyUrl;
     protected Set<StreamObserver> _observers = new HashSet<StreamObserver>();
     protected List<StreamVerifier> _verifiers = new ArrayList<StreamVerifier>();
-    protected int _index = -1; 
+    protected int _checkSumFilesDeployed = -1; 
 
     
     public abstract void onComplete();
@@ -156,6 +156,10 @@ public abstract class DeploymentTarget
         _checksumState = new TargetState();
     }
 
+    public Binding getBinding()
+    {
+        return _binding;
+    }
 
     public void deploy()
     {
@@ -164,6 +168,7 @@ public abstract class DeploymentTarget
 
     private synchronized void updateState( Throwable t )
     {
+  
         if ( t != null && _exception == null )
         {
             _exception = ( t instanceof HttpClientException ? (HttpClientException) t : new HttpClientException( _binding, t ) );
@@ -180,14 +185,12 @@ public abstract class DeploymentTarget
             {
                 deployLocalFile();
             }
-
             //Upload the checksums
-            if ( _targetState.isReady() && (++_index) < _verifiers.size() )
+            else if ( _targetState.isReady() && (_verifiers.size()>0) && (_checkSumFilesDeployed < (_verifiers.size() -1)) )
             {
-                deployChecksumFile();
+                deployNextChecksumFile();
             }
-
-            if ( _targetState.isReady() && _checksumState.isReady() )
+            else if ( _targetState.isReady() && _checksumState.isReady() )
             {
                 onComplete();
             }
@@ -196,10 +199,11 @@ public abstract class DeploymentTarget
 
     private void deployLocalFile()
     {
-        FilePutExchange exchange = new FilePutExchange( _batchId, _binding, _binding.getLocalFile(), _observers, _httpClient )
+        FilePutExchange fileExchange = new FilePutExchange( _batchId, _binding, _binding.getLocalFile(), _observers, _httpClient )
         {
             public void onFileComplete( String url, File localFile )
             {
+                
                 DeploymentTarget.this._remoteJettyUrl = getRemoteJettyUrl();
                 _targetState.ready();
                 updateState( null );
@@ -207,21 +211,22 @@ public abstract class DeploymentTarget
 
             public void onFileError( String url, Exception e )
             {
+                
                 DeploymentTarget.this._remoteJettyUrl = getRemoteJettyUrl();
                 _targetState.ready( e );
                 updateState( e );
             }
         };
         _targetState.requested();
-        exchange.send();
+        fileExchange.send();
     }
 
 
-    private void deployChecksumFile()
+    private void deployNextChecksumFile()
     {
         Binding binding = _binding;
         File file = null;
-        StreamVerifier v =  _verifiers.get(_index);
+        StreamVerifier v =  _verifiers.get(++_checkSumFilesDeployed);
 
         //No local checksum file, so make a temporary one using the checksum we 
         //calculated as we uploaded the file
@@ -250,26 +255,26 @@ public abstract class DeploymentTarget
 
         //upload the checksum file
         Set<StreamObserver> emptySet = Collections.emptySet();
-        FilePutExchange exchange = new FilePutExchange( _batchId, binding, file, emptySet, _httpClient )
+        FilePutExchange checksumExchange = new FilePutExchange( _batchId, binding, file, emptySet, _httpClient )
         {
             public void onFileComplete( String url, File localFile )
-            {
+            {      
                 DeploymentTarget.this._remoteJettyUrl = getRemoteJettyUrl();
-                if (_index == (_verifiers.size() - 1))
+                if (_checkSumFilesDeployed == (_verifiers.size() - 1))
                     _checksumState.ready();
                 updateState( null );
             }
 
             public void onFileError( String url, Exception e )
-            {
+            {             
                 DeploymentTarget.this._remoteJettyUrl = getRemoteJettyUrl();
-                if (_index == (_verifiers.size() - 1))
+                if (_checkSumFilesDeployed == (_verifiers.size() - 1))
                     _checksumState.ready( e );
                 updateState( e );
             }
         };
         _checksumState.requested();
-        exchange.send();
+        checksumExchange.send();
     }
 
     public boolean isRemoteJetty()
@@ -307,4 +312,5 @@ public abstract class DeploymentTarget
     {
         return "DeploymentTarget:" + _binding.getRemoteResource() + ":" + _targetState + ":" + _checksumState + ":" + isComplete();
     }
+   
 }
