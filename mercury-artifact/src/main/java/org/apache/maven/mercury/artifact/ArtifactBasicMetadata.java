@@ -3,8 +3,6 @@ package org.apache.maven.mercury.artifact;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.plexus.util.StringUtils;
-
 
 /**
  * this is the most primitive metadata there is, usually used to query repository for "real" metadata.

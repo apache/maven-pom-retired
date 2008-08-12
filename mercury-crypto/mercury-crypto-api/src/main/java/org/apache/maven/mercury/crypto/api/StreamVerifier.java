@@ -18,7 +18,6 @@
  */
 package org.apache.maven.mercury.crypto.api;
 
-import java.io.InputStream;
 
 public interface StreamVerifier
 extends StreamObserver

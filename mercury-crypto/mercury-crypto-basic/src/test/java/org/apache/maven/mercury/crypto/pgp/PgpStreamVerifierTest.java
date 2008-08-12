@@ -3,14 +3,13 @@ package org.apache.maven.mercury.crypto.pgp;
 import java.io.IOException;
 import java.io.InputStream;
 
+import junit.framework.TestCase;
+
 import org.apache.maven.mercury.crypto.api.StreamObserverException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
-import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.bouncycastle.openpgp.PGPPublicKey;
 import org.bouncycastle.openpgp.PGPSecretKey;
 import org.bouncycastle.openpgp.PGPSecretKeyRing;
-
-import junit.framework.TestCase;
 
 /**
  *

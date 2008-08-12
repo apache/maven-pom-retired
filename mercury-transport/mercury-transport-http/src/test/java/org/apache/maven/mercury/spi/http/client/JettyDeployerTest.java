@@ -44,9 +44,6 @@ import org.apache.maven.mercury.spi.http.client.deploy.DeployResponse;
 import org.apache.maven.mercury.spi.http.server.SimplePutServer;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
-import org.bouncycastle.openpgp.PGPPublicKey;
-import org.bouncycastle.openpgp.PGPSecretKey;
-import org.bouncycastle.openpgp.PGPSecretKeyRing;
 import org.mortbay.util.IO;
 
 public class JettyDeployerTest extends TestCase

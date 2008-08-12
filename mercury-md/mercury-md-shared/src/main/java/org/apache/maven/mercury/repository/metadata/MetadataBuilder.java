@@ -2,7 +2,6 @@ package org.apache.maven.mercury.repository.metadata;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -12,7 +11,6 @@ import java.util.List;
 
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Writer;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
  * utility class to help with de/serializing metadata from/to XML

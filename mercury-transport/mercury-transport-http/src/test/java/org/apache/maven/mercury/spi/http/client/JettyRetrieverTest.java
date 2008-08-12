@@ -39,9 +39,6 @@ import org.apache.maven.mercury.spi.http.server.SimpleTestServer;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
-import org.bouncycastle.openpgp.PGPPublicKey;
-import org.bouncycastle.openpgp.PGPSecretKey;
-import org.bouncycastle.openpgp.PGPSecretKeyRing;
 import org.mortbay.util.IO;
 
 public class JettyRetrieverTest extends TestCase
