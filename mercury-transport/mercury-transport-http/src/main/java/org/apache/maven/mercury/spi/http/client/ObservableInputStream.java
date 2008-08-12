@@ -27,10 +27,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
+import org.apache.maven.mercury.crypto.api.StreamObserverException;
 
 
 
-public class ObservableInputStream extends FilterInputStream
+public class ObservableInputStream
+extends FilterInputStream
 {
     Set<StreamObserver> observers = new HashSet<StreamObserver>();
 
@@ -39,7 +41,8 @@ public class ObservableInputStream extends FilterInputStream
         super(in);
     }
 
-    public int read(byte[] b, int off, int len) throws IOException
+    public int read(byte[] b, int off, int len)
+    throws IOException
     {
         int result = in.read(b, off, len);
         if (result != -1) 
@@ -78,23 +81,39 @@ public class ObservableInputStream extends FilterInputStream
     }
     
     private void notifyListeners (byte[]b, int off, int len)
+    throws IOException
     {
         synchronized (this.observers)
         {
             for (StreamObserver o: this.observers)
             {
-                o.bytesReady(b, off, len);
+                try
+                {
+                  o.bytesReady(b, off, len);
+                }
+                catch( StreamObserverException e )
+                {
+                  throw new IOException(e.getMessage());
+                }
             }
         }
     }
 
     private void notifyListeners (int b)
+    throws IOException
     {
         synchronized (this.observers)
         {
             for (StreamObserver o: this.observers)
             {
-                o.byteReady(b);
+                try
+                {
+                  o.byteReady(b);
+                }
+                catch( StreamObserverException e )
+                {
+                  throw new IOException(e.getMessage());
+                }
             }
         }
     } 

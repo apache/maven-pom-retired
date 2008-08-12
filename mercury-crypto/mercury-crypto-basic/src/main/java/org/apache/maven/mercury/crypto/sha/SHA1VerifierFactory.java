@@ -45,9 +45,6 @@ implements StreamVerifierFactory
      return new SHA1Verifier( attributes );
   }
 
-  /* (non-Javadoc)
-   * @see org.apache.maven.mercury.crypto.api.StreamVerifierFactory#getDefaultExtension()
-   */
   public String getDefaultExtension()
   {
     return DEFAULT_EXTENSION;

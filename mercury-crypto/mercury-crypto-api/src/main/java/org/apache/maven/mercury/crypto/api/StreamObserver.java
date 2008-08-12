@@ -20,6 +20,10 @@ package org.apache.maven.mercury.crypto.api;
 
 public interface StreamObserver
 {
-    void byteReady(int b);
-    void bytesReady(byte[]b, int off, int len);
+    void byteReady(int b)
+    throws StreamObserverException;
+    
+    void bytesReady(byte[]b, int off, int len)
+    throws StreamObserverException;
+
 }

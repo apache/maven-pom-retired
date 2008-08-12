@@ -1,7 +1,7 @@
 package org.apache.maven.mercury.crypto.api;
 
 /**
- *
+ * Helper for implementing stream verifier factories, takes care of attributes
  *
  * @author Oleg Gusakov
  * @version $Id$

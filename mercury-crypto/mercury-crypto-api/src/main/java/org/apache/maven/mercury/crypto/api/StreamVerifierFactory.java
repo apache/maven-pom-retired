@@ -20,6 +20,8 @@ package org.apache.maven.mercury.crypto.api;
 
 public interface StreamVerifierFactory
 {
-  public StreamVerifier newInstance();
+  public StreamVerifier newInstance()
+  throws StreamVerifierException;
+  
   public String getDefaultExtension();
 }

@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
+import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.transport.api.Binding;
@@ -175,10 +176,18 @@ public class DefaultRetriever implements Retriever
                     public void onComplete()
                     {
                         //got the file, check the checksum
-                        boolean checksumOK = verifyChecksum();
-                        if ( !checksumOK )
+                        boolean checksumOK = false;
+                        try
                         {
-                            response.add( new HttpClientException( binding, "Checksum failed") );
+                          checksumOK = verifyChecksum();
+                          if ( !checksumOK )
+                          {
+                              response.add( new HttpClientException( binding, "Checksum failed") );
+                          }
+                        }
+                        catch( StreamVerifierException e )
+                        {
+                          response.add( new HttpClientException( binding, e.getMessage()) );
                         }
 
                         //if the file checksum is ok, then apply the validators
@@ -297,16 +306,16 @@ public class DefaultRetriever implements Retriever
         return server;
     }
     
-    
     private Set<StreamObserver> createStreamObservers (Server server)
+    throws StreamVerifierException
     {
         HashSet<StreamObserver> observers = new HashSet<StreamObserver>();
         if (server != null)
         {
             Set<StreamVerifierFactory> factories = server.getStreamObserverFactories();
-            for (StreamVerifierFactory f:factories)
+            for( StreamVerifierFactory f:factories )
             {
-                observers.add(f.newInstance());
+                observers.add( f.newInstance() );
             }
         }
         return observers;

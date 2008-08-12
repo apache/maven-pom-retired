@@ -8,7 +8,7 @@ package org.apache.maven.mercury.crypto.api;
  *
  */
 public class StreamVerifierException
-    extends Exception
+extends StreamObserverException
 {
 
   /**
@@ -22,11 +22,9 @@ public class StreamVerifierException
   /**
    * @param message
    */
-  public StreamVerifierException(
-      String message )
+  public StreamVerifierException( String message )
   {
     super( message );
-    // TODO Auto-generated constructor stub
   }
 
   /**

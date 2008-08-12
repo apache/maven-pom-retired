@@ -19,12 +19,17 @@
 
 package org.apache.maven.mercury.crypto.sha;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.maven.mercury.crypto.api.AbstractStreamVerifier;
 import org.apache.maven.mercury.crypto.api.StreamVerifier;
 import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
+import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.basic.ChecksumCalculator;
 
 
@@ -42,6 +47,8 @@ implements StreamVerifier
     private MessageDigest digest;
     private byte[] digestBytes;
     
+    private String sig;
+    
     public SHA1Verifier( StreamVerifierAttributes attributes )
     {
       super( attributes );
@@ -56,12 +63,7 @@ implements StreamVerifier
       }
     }
 
-    public String getExtension()
-    {
-        return '.'+SHA1VerifierFactory.DEFAULT_EXTENSION;
-    }
-
-    public byte[] getSignatureBytes ()
+    private byte[] getSignatureBytes ()
     {
         if (digestBytes == null)
             digestBytes = digest.digest();
@@ -72,14 +74,27 @@ implements StreamVerifier
     {
         return ChecksumCalculator.encodeToAsciiHex( getSignatureBytes() );
     }
+    
+    public void initSignature( String signatureString )
+    throws StreamVerifierException
+    {
+      if( signatureString == null || signatureString.length() < 1 )
+        throw new IllegalArgumentException("null signature stream");
+      
+      sig =  signatureString;
+    
+    }
 
-    public boolean verifySignature(String sig)
+    public boolean verifySignature()
     {
         String calculatedSignature = getSignature();
+
         if (calculatedSignature == null && sig == null)
             return true;
+
         if ((calculatedSignature != null) && calculatedSignature.equals(sig))
             return true;
+        
         return false;
     }
 

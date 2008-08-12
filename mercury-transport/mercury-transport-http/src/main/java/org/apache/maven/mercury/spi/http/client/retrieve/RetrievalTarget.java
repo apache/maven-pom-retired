@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
 import org.apache.maven.mercury.crypto.api.StreamVerifier;
+import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.validate.Validator;
@@ -243,8 +244,10 @@ public abstract class RetrievalTarget
      * Check the actual checksum against the expected checksum
      *
      * @return
+     * @throws StreamVerifierException 
      */
     public boolean verifyChecksum()
+    throws StreamVerifierException
     {
         boolean ok = true;
         
@@ -254,7 +257,7 @@ public abstract class RetrievalTarget
             while (itor.hasNext() && ok)
             {               
                 Map.Entry<StreamVerifier, String> e = itor.next();
-                ok = e.getKey().verifySignature(e.getValue());
+                ok = e.getKey().verifySignature();
             }
         }
         
@@ -371,9 +374,19 @@ public abstract class RetrievalTarget
                     //We got a checksum so match it up with the verifier it is for
                     synchronized (_verifierMap)
                     {
-                        if (v.getAttributes().isSufficient())
+                        if( v.getAttributes().isSufficient() )
                             _verifierMap.clear(); //remove all other entries, we only need one checksum
-                        _verifierMap.put(v, getResponseContent().trim());
+                        
+                        String actualSignature = getResponseContent().trim(); 
+                        try
+                        { // Oleg: verifier need to be loaded upfront
+                          v.initSignature( actualSignature );
+                        }
+                        catch( StreamVerifierException e )
+                        {
+                          throw new IOException(e.getMessage());
+                        }
+                        _verifierMap.put( v, actualSignature );
                     }
                     updateChecksumState(index, null);
                 }
