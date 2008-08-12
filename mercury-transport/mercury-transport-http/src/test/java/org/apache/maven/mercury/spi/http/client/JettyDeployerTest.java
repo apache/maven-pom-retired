@@ -58,12 +58,6 @@ public class JettyDeployerTest extends TestCase
 
     private static final String secretKeyFile = "/pgp/secring.gpg";
     private static final String secretKeyPass = "testKey82";
-
-    private static final String publicKeyFile = "/pgp/pubring.gpg";
-    
-    private PGPSecretKeyRing secretKeyRing;
-    private PGPSecretKey secretKey;
-    private PGPPublicKey publicKey;
     
     protected DefaultDeployer _deployer;
     protected SimplePutServer _putServer;

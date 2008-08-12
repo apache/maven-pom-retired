@@ -49,18 +49,7 @@ public class JettyRetrieverTest extends TestCase
     public static final String __HOST_FRAGMENT = "http://localhost:";
     public static final String __PATH_FRAGMENT = "/maven2/repo/";
     
-
-    private static final String keyId   = "0EDB5D91141BC4F2";
-
-    private static final String secretKeyFile = "/pgp/secring.gpg";
-    private static final String secretKeyPass = "testKey82";
-
     private static final String publicKeyFile = "/pgp/pubring.gpg";
-    
-    private PGPSecretKeyRing secretKeyRing;
-    private PGPSecretKey secretKey;
-    private PGPPublicKey publicKey;
-    
     
     public String _port;
     File file0;
