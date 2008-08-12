@@ -331,9 +331,8 @@ public abstract class RetrievalTarget
         {
             _exchange = retrieveTargetFile();
         }
-
         //if both checksum and target file are ready, we're ready to return callback
-        if (_targetState == __READY_STATE )
+        else if (_targetState == __READY_STATE )
         {
             _complete = true;
             if ( _exception == null )
