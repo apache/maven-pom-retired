@@ -39,6 +39,7 @@ import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
+import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.jetty.client.HttpExchange;
 
 
@@ -61,6 +62,7 @@ public abstract class RetrievalTarget
     protected int _checksumState;
     protected int _targetState;
     
+   
     protected HttpClientException _exception;
     protected Binding _binding;
     protected File _tempFile;
@@ -92,6 +94,7 @@ public abstract class RetrievalTarget
         {
             throw new IllegalArgumentException( "Nothing to retrieve" );
         }
+      
         _retriever = retriever;
         _binding = binding;
         _validators = validators;
@@ -161,7 +164,11 @@ public abstract class RetrievalTarget
     public boolean move()
     {
         if (_binding.isFile())
-            return _tempFile.renameTo( _binding.getLocalFile() );
+        {
+            boolean ok = _tempFile.renameTo( _binding.getLocalFile() );
+            System.err.println("Renaming "+_tempFile.getAbsolutePath()+" to "+_binding.getLocalFile().getAbsolutePath()+": "+ok);
+            return ok;
+        }
         else
             return true;
     }
@@ -454,7 +461,9 @@ public abstract class RetrievalTarget
     {
         if ( _tempFile != null && _tempFile.exists() )
         {
-            return _tempFile.delete();
+            boolean ok = _tempFile.delete();
+            System.err.println("Deleting "+_tempFile.getAbsolutePath()+" : "+ok);
+            return ok;
         }
         return false;
     }
