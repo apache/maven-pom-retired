@@ -359,6 +359,7 @@ public abstract class BatchFilter extends PutFilter
         }
         catch ( Exception ex )
         {
+            ex.printStackTrace();
             _context.log( ex.toString(), ex );
             response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
         }

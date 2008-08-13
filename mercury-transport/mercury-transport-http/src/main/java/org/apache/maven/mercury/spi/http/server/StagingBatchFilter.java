@@ -152,11 +152,13 @@ public class StagingBatchFilter extends BatchFilter
             if ( !files[i].renameTo( dest ) )
             {
                 ok = false;
+                System.err.println("Couldn't rename "+files[i].getCanonicalPath()+" to "+dest.getCanonicalPath());
             }
         }
         if ( ok )
         {
             ok = batchDir.delete();
+            System.err.println("Deleting the batch dir = "+ok);
         }
         return ok;
     }
@@ -201,7 +203,9 @@ public class StagingBatchFilter extends BatchFilter
         }
         if ( f.isFile() )
         {
-            return f.delete();
+            boolean ok = f.delete();
+            System.err.println("Resulting of deleting file "+f.getAbsolutePath()+" : "+ok);
+            return ok;   
         }
         else if ( f.isDirectory() )
         {
@@ -218,6 +222,7 @@ public class StagingBatchFilter extends BatchFilter
             if ( !f.delete() )
             {
                 ok = false;
+                System.err.println("Result of deleting dir "+f.getAbsolutePath()+" : "+ok);
             }
 
             return ok;
