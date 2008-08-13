@@ -152,13 +152,14 @@ public class StagingBatchFilter extends BatchFilter
             if ( !files[i].renameTo( dest ) )
             {
                 ok = false;
-                System.err.println("Couldn't rename "+files[i].getCanonicalPath()+" to "+dest.getCanonicalPath());
+                _context.log("Unable to rename file "+files[i].getAbsolutePath()+" to "+dest.getAbsolutePath());
             }
         }
         if ( ok )
         {
             ok = batchDir.delete();
-            System.err.println("Deleting the batch dir = "+ok);
+            if (!ok)
+                _context.log("Unable to delete batch dir "+batchDir.getAbsolutePath());
         }
         return ok;
     }
@@ -196,7 +197,6 @@ public class StagingBatchFilter extends BatchFilter
      */
     private boolean deleteFile( File f )
     {
-
         if ( f == null )
         {
             return true;
@@ -204,8 +204,9 @@ public class StagingBatchFilter extends BatchFilter
         if ( f.isFile() )
         {
             boolean ok = f.delete();
-            System.err.println("Resulting of deleting file "+f.getAbsolutePath()+" : "+ok);
-            return ok;   
+            if (!ok)
+                _context.log("Unable to delete file "+f.getAbsolutePath());
+            return ok;
         }
         else if ( f.isDirectory() )
         {
@@ -222,7 +223,7 @@ public class StagingBatchFilter extends BatchFilter
             if ( !f.delete() )
             {
                 ok = false;
-                System.err.println("Result of deleting dir "+f.getAbsolutePath()+" : "+ok);
+                _context.log("Unable to delete dir "+f.getAbsolutePath());
             }
 
             return ok;
