@@ -159,7 +159,7 @@ public class JettyRetrieverTest extends TestCase
         assert dir.canWrite();
         return dir;
     }
-    /*
+ 
     public void testSyncRetrievalAllGood()
     throws Exception
     {
@@ -212,7 +212,7 @@ public class JettyRetrieverTest extends TestCase
         assertTrue(!file5.exists());
 
     }
-*/
+
     
     public void testSyncRetrievalPgpGood()
     throws Exception
@@ -247,7 +247,7 @@ public class JettyRetrieverTest extends TestCase
        
     }
 
-/*
+
     public void testSyncRetrievalFailFast()
         throws Exception
     {
@@ -307,8 +307,7 @@ public class JettyRetrieverTest extends TestCase
         
         Thread.sleep(100);
     }
-    */
-/*
+
     public void testSyncRetrievalLenient0()
         throws Exception
     {
@@ -362,7 +361,7 @@ public class JettyRetrieverTest extends TestCase
         assertTrue(!file4.exists());
         assertTrue(!file5.exists());
     }
-*/
+
     public void testSyncRetrievalLenient1()
     throws Exception
     {
@@ -412,7 +411,7 @@ public class JettyRetrieverTest extends TestCase
         assertTrue(file5.exists());
 
     }
-    /*
+   
     public void testValidatorSuccess() throws Exception
     {
         factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
@@ -466,8 +465,7 @@ public class JettyRetrieverTest extends TestCase
         assertTrue(file4.exists());
         assertTrue(file5.exists());
     }
-    */
-    /*
+   
     public void testValidatorFailure () throws Exception
     {
         factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
@@ -521,9 +519,7 @@ public class JettyRetrieverTest extends TestCase
         assertTrue(!file4.exists());
         assertTrue(!file5.exists());
     }
-    */
-    /*
-
+   
     public void testMemoryRetrieval () throws Exception
     {
         factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
@@ -566,5 +562,5 @@ public class JettyRetrieverTest extends TestCase
         IO.copy(is,os);
         assertEquals(os.toByteArray().length, binding5.getInboundContent().length);
     }
-    */
+   
 }

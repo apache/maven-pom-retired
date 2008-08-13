@@ -41,6 +41,9 @@ import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.jetty.client.HttpExchange;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 /**
@@ -53,6 +56,7 @@ import org.mortbay.jetty.client.HttpExchange;
  */
 public abstract class RetrievalTarget
 {
+    private static final Logger log = LoggerFactory.getLogger( RetrievalTarget.class );
     public static final String __PREFIX = "JTY_";
     public static final String __TEMP_SUFFIX = ".tmp";
     public static final int __START_STATE = 1;
@@ -166,7 +170,8 @@ public abstract class RetrievalTarget
         if (_binding.isFile())
         {
             boolean ok = _tempFile.renameTo( _binding.getLocalFile() );
-            System.err.println("Renaming "+_tempFile.getAbsolutePath()+" to "+_binding.getLocalFile().getAbsolutePath()+": "+ok);
+            if (log.isDebugEnabled())
+                log.debug("Renaming "+_tempFile.getAbsolutePath()+" to "+_binding.getLocalFile().getAbsolutePath()+": "+ok);
             return ok;
         }
         else
@@ -461,8 +466,9 @@ public abstract class RetrievalTarget
     {
         if ( _tempFile != null && _tempFile.exists() )
         {
-            boolean ok = _tempFile.delete();
-            System.err.println("Deleting "+_tempFile.getAbsolutePath()+" : "+ok);
+            boolean ok =  _tempFile.delete();
+            if (log.isDebugEnabled())
+                log.debug("Deleting file "+_tempFile.getAbsolutePath()+" : "+ok);
             return ok;
         }
         return false;

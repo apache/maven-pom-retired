@@ -209,8 +209,8 @@ public class JettyDeployerTest extends TestCase
         
         DeployResponse response = _deployer.deploy(request);
 
-        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();
+/*        for (HttpClientException t:response.getExceptions())
+            t.printStackTrace();*/
         
         assertEquals(0, response.getExceptions().size());
         File f0 = new File(_putServer.getPutDir(), "file0.txt");
@@ -348,9 +348,9 @@ public class JettyDeployerTest extends TestCase
         request.setBindings(bindings);            
         DeployResponse response = _deployer.deploy(request);
 
-        for (HttpClientException t:response.getExceptions())
+/*        for (HttpClientException t:response.getExceptions())
             t.printStackTrace();
-
+*/
         //as the serverside is not running the mercury enhancements to the put filter, then
         //all the files except for the 2 which don't exists should have been uploaded
         assertEquals(2, response.getExceptions().size());
@@ -423,8 +423,8 @@ public class JettyDeployerTest extends TestCase
         request.setFailFast(true);
         DeployResponse response = _deployer.deploy(request);
 
-        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();
+/*        for (HttpClientException t:response.getExceptions())
+            t.printStackTrace();*/
         
         //with failfast==true and the server side not running the mercury enhancements, we have no way to know
         //how many files actually did get uploaded, but the first exception should cause it to stop
@@ -464,8 +464,8 @@ public class JettyDeployerTest extends TestCase
         request.setFailFast(true);
         DeployResponse response = _deployer.deploy(request);
 
-        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();
+/*        for (HttpClientException t:response.getExceptions())
+            t.printStackTrace();*/
         
   
         assertEquals(0, response.getExceptions().size());
