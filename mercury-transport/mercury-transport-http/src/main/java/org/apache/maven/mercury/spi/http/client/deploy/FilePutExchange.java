@@ -35,6 +35,7 @@ import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.client.ObservableInputStream;
 import org.apache.maven.mercury.transport.api.Binding;
+import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.io.Buffer;
 import org.mortbay.jetty.HttpMethods;
 import org.mortbay.jetty.client.HttpClient;
@@ -117,6 +118,9 @@ public abstract class FilePutExchange extends FileExchange
     {
         try
         {
+            if (_inputStream != null)
+                _inputStream.close();
+            
             if ( _status != HttpServletResponse.SC_OK && _status != HttpServletResponse.SC_CREATED && _status != HttpServletResponse.SC_NO_CONTENT )
             {
                 onFileError( _url, new HttpClientException( _binding, "Http status code=" + _status ) );

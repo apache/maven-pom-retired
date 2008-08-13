@@ -35,6 +35,7 @@ import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.client.ObservableOutputStream;
 import org.apache.maven.mercury.transport.api.Binding;
+import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.io.Buffer;
 import org.mortbay.jetty.HttpMethods;
 import org.mortbay.jetty.client.HttpClient;
@@ -82,6 +83,9 @@ public abstract class FileGetExchange extends FileExchange
         //All bytes of file have been received
         try
         {
+            if (_outputStream != null)
+                _outputStream.close();
+            
             if ( _status == HttpServletResponse.SC_NOT_FOUND )
             {
                 onFileError( _url, new FileNotFoundException( "File not found on remote server" ) );
