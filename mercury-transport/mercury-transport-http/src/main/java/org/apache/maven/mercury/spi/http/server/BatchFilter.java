@@ -215,7 +215,6 @@ public abstract class BatchFilter extends PutFilter
         //we can't do  atomic batches, handle as a normal PUT
         if ( batchId == null && commitId == null && discardId == null )
         {
-            System.err.println( "Not a batching request, doing PutFilter instead" );
             super.doFilter( req, res, chain );
             return;
         }
