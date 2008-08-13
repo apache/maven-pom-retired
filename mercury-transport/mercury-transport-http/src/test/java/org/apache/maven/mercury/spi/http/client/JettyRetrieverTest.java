@@ -237,8 +237,8 @@ public class JettyRetrieverTest extends TestCase
         
         RetrievalResponse response = retriever.retrieve(request);
         
-        //for (MercuryException t:response.getExceptions())
-        //    t.printStackTrace();
+        for (HttpClientException t:response.getExceptions())
+            t.printStackTrace();
         
         assertEquals( 0, response.getExceptions().size() );
         assertTrue( file6.exists() );
@@ -290,8 +290,8 @@ public class JettyRetrieverTest extends TestCase
         
         RetrievalResponse response = retriever.retrieve(request);
 
-        //for (MercuryException t:response.getExceptions())
-        //   t.printStackTrace();
+        for (HttpClientException t:response.getExceptions())
+           t.printStackTrace();
 
         assertTrue(!file0.exists());
         assertTrue(!file1.exists());
@@ -387,8 +387,8 @@ public class JettyRetrieverTest extends TestCase
         request.setFailFast(false);
         RetrievalResponse response = retriever.retrieve(request);
 
-        //for (MercuryException t:response.getExceptions())
-        //    t.printStackTrace();
+        for (HttpClientException t:response.getExceptions())
+            t.printStackTrace();
 
         assertEquals(0,response.getExceptions().size());
         assertTrue(file0.exists());
@@ -440,8 +440,8 @@ public class JettyRetrieverTest extends TestCase
         request.setBindings(bindings);
         RetrievalResponse response = retriever.retrieve(request);
 
-        //for (MercuryException t:response.getExceptions())
-        //    t.printStackTrace();
+        for (HttpClientException t:response.getExceptions())
+            t.printStackTrace();
 
         assertEquals(0,response.getExceptions().size());
         assertTrue(file0.exists());
@@ -492,8 +492,8 @@ public class JettyRetrieverTest extends TestCase
         request.setBindings(bindings);
         RetrievalResponse response = retriever.retrieve(request);
 
-        //for (MercuryException t:response.getExceptions())
-        //    t.printStackTrace();
+        for (HttpClientException t:response.getExceptions())
+            t.printStackTrace();
 
         assertEquals(2,response.getExceptions().size());
         assertTrue(!file0.exists());
@@ -529,8 +529,8 @@ public class JettyRetrieverTest extends TestCase
         request.setBindings(bindings);
         RetrievalResponse response = retriever.retrieve(request);
 
-        //for (MercuryException t:response.getExceptions())
-        //    t.printStackTrace();
+        for (HttpClientException t:response.getExceptions())
+            t.printStackTrace();
 
         assertEquals(0,response.getExceptions().size());
         
