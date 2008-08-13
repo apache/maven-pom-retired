@@ -128,7 +128,9 @@ public class BatchFilterTest extends TestCase
         File stagedFile = new File (batchDir, "file1.txt");
         System.err.println("Checking existence of "+stagedFile.getCanonicalPath());
         assertTrue(stagedFile.exists());
-        assertEquals(data1,IO.toString(new FileInputStream(stagedFile)));
+        FileInputStream fis = new FileInputStream(stagedFile);
+        assertEquals(data1,IO.toString(fis));
+        fis.close();
 
         request.setMethod("PUT");
         request.setURI("/context/file2.txt");
@@ -142,7 +144,9 @@ public class BatchFilterTest extends TestCase
         batchDir = new File (_stagingDir, "999999");
         stagedFile = new File (batchDir, "file2.txt");
         assertTrue(stagedFile.exists());
-        assertEquals(data2,IO.toString(new FileInputStream(stagedFile)));
+        fis = new FileInputStream(stagedFile);
+        assertEquals(data2,IO.toString(fis));
+        fis.close();
 
         // test POST commit
         request = new HttpTester();
@@ -187,9 +191,11 @@ public class BatchFilterTest extends TestCase
         stagedFile = new File(stagedFile, "foo");
         stagedFile = new File (stagedFile, "file1.txt");
         System.err.println("Checking existence of "+stagedFile.getCanonicalPath());
+        FileInputStream fis = new FileInputStream(stagedFile);
         assertTrue(stagedFile.exists());
-        assertEquals(data1,IO.toString(new FileInputStream(stagedFile)));
-
+        assertEquals(data1,IO.toString(fis));
+        fis.close();
+        
         request.setMethod("PUT");
         request.setVersion("HTTP/1.1");
         request.setHeader("Host","tester");
@@ -204,8 +210,10 @@ public class BatchFilterTest extends TestCase
         batchDir = new File (_stagingDir, "999999");
         stagedFile = new File (batchDir, "file2.txt");
         assertTrue(stagedFile.exists());
-        assertEquals(data2,IO.toString(new FileInputStream(stagedFile)));
-
+        fis = new FileInputStream(stagedFile);
+        assertEquals(data2,IO.toString(fis));
+        fis.close();
+        
         // test POST discard
         request = new HttpTester();
         request.setMethod("POST");
