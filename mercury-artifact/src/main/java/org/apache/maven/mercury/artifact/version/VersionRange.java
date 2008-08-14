@@ -1,5 +1,7 @@
 package org.apache.maven.mercury.artifact.version;
 
+import org.apache.maven.mercury.artifact.Artifact;
+
 /**
  * Single range implementation, similar to OSGi specification:
  * 
@@ -53,6 +55,9 @@ public class VersionRange
         if( sFromT != null && sFromT.length() > 0 )
         {
           checkForValidCharacters( sFromT );
+// TODO og: look for snapshots
+//        if( sFromT.indexOf( Artifact.SNAPSHOT_VERSION ) != -1 )
+//        throw new VersionException();
           _fromVersion = new DefaultArtifactVersion( sFromT );
         }
       }

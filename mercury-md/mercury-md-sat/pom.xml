@@ -2,13 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-md-sat</artifactId>
-  <name>Mercury dependency calulator</name>
+  <name>Mercury Dependency Builder: ${project.version}</name>
   <version>1.0.0-SNAPSHOT</version>
   <description/>
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>
   	<artifactId>mercury-md</artifactId>
-  	<version>1.0.0-SNAPSHOT</version>
+  	<version>1.0.0-alpha-1-SNAPSHOT</version>
   </parent>
   <build>
 
@@ -50,38 +50,38 @@
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-md-shared</artifactId>
-  		<version>1.0.0-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-repo-api</artifactId>
-  		<version>1.0.0-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1-SNAPSHOT</version>
   	</dependency>
 	<!--  test deps -->
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-repo-local-m2</artifactId>
-  		<version>1.0.0-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1-SNAPSHOT</version>
   		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-repo-remote-m2</artifactId>
-  		<version>1.0.0-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1-SNAPSHOT</version>
   		<scope>test</scope>
   	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-transport-http</artifactId>
-  		<version>1.0.0-SNAPSHOT</version>
-  		<scope>test</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-transport-http</artifactId>
-  		<classifier>tests</classifier>
-  		<version>1.0.0-SNAPSHOT</version>
-  		<scope>test</scope>
-  	</dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-transport-http</artifactId>
+      <version>1.0.0-alpha-1-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-transport-http</artifactId>
+      <version>1.0.0-alpha-1-SNAPSHOT</version>
+      <classifier>tests</classifier>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

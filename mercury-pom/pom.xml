@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-pom</artifactId>
-  <version>1-SNAPSHOT</version>
+  <version>1-alpha-1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>Mercury parent POM</name>
+  <name>Mercury parent POM: ${project.version}</name>
   <developers>
     <developer>
       <name>Jan Bartel</name>
@@ -25,8 +25,15 @@
   </developers>
 
   <properties>
+  	
   	<distMgmtSnapshotsName>CI Snapshot Repository</distMgmtSnapshotsName>
   	<distMgmtSnapshotsUrl>http://localhost:8081/content/repositories/maven.snapshots</distMgmtSnapshotsUrl>
+  	
+    <mercuryVersionArtifact>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionArtifact>
+    <mercuryVersionCrypto>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionCrypto>
+    <mercuryVersionMd>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionMd>
+    <mercuryVersionRepo>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionRepo>
+    <mercuryVersionTransport>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionTransport>
   </properties>
   
   <distributionManagement>
@@ -42,6 +49,60 @@
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</developerConnection>
   </scm>
   
+  <dependencyManagement>
+    <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-crypto-api</artifactId>
+      <version>${mercuryVersionCrypto}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-crypto-basic</artifactId>
+      <version>${mercuryVersionCrypto}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-transport-api</artifactId>
+      <version>${mercuryVersionTransport}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-transport-http</artifactId>
+      <version>${mercuryVersionTransport}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-md-api</artifactId>
+      <version>${mercuryVersionMd}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-md-sat</artifactId>
+      <version>${mercuryVersionMd}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-repo-api</artifactId>
+      <version>${mercuryVersionRepo}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-repo-local-m2</artifactId>
+      <version>${mercuryVersionRepo}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-repo-remote-m2</artifactId>
+      <version>${mercuryVersionRepo}</version>
+    </dependency>
+
+    </dependencies>
+  </dependencyManagement>
  
 <profiles>
   <profile>

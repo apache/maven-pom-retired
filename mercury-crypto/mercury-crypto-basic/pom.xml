@@ -1,12 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>mercury-crypto-basic</artifactId>
-  <name>Mercury Crypto PGP implementation</name>
+  <name>Mercury Crypto Basics: ${project.version}</name>
+
   <parent>
     <groupId>org.apache.maven.mercury</groupId>
     <artifactId>mercury-crypto</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-alpha-1-SNAPSHOT</version>
   </parent>
+
   <dependencies>
   	<dependency>
   		<groupId>bouncycastle</groupId>
@@ -21,7 +23,7 @@
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-crypto-api</artifactId>
-  		<version>1.0.0-SNAPSHOT</version>
+      <version>1.0.0-alpha-1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 

@@ -83,6 +83,9 @@ public class ArtifactBasicMetadata
     
     if( count > 4 )
       this.type = nullify( tokens[4] );
+    
+    if( this.type == null || this.type.length() < 1 )
+      this.type = DEFAULT_ARTIFACT_TYPE;
   }
   //------------------------------------------------------------------
   /**
@@ -151,7 +154,7 @@ public class ArtifactBasicMetadata
   @Override
   public String toString()
   {
-      return nvl(groupId) + ":" + nvl(artifactId) + ":" + nvl(version) + ":" + nvl(classifier) + ":" + nvl(type);
+      return nvl(groupId) + ":" + nvl(artifactId) + ":" + nvl(version) + ":" + nvl(classifier) + ":" + nvl(type,DEFAULT_ARTIFACT_TYPE);
   }
 
   public String toDomainString()
@@ -333,6 +336,9 @@ public class ArtifactBasicMetadata
   {
     if( obj == null || !( obj instanceof ArtifactBasicMetadata ) )
       return false;
+    
+    String me = toString();
+    String him = obj.toString();
     
     return toString().equals( obj.toString() );
   }

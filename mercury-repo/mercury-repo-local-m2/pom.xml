@@ -2,19 +2,24 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-repo-local-m2</artifactId>
-  <name>Mercury Local M2 Repository</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <name>Mercury Local M2 Repository: ${project.version}</name>
   <description/>
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>
   	<artifactId>mercury-repo</artifactId>
-  	<version>1.0.0-SNAPSHOT</version>
+  	<version>1.0.0-alpha-1-SNAPSHOT</version>
   </parent>
   <dependencies>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-repo-api</artifactId>
-  		<version>1.0.0-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>commons-digester</groupId>
+  		<artifactId>commons-digester</artifactId>
+  		<version>1.8</version>
+  		<scope>test</scope>
   	</dependency>
   </dependencies>
 </project>

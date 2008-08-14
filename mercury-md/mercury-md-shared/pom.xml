@@ -2,14 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-md-shared</artifactId>
-  <name>Mercury shared MD models</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <name>Mercury Shared Metadata: ${project.version}</name>
   <description/>
 
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>
   	<artifactId>mercury-md</artifactId>
-  	<version>1.0.0-SNAPSHOT</version>
+  	<version>1.0.0-alpha-1-SNAPSHOT</version>
   </parent>
   
   <build>
@@ -59,7 +58,7 @@
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-artifact</artifactId>
-  		<version>1.0.0-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
   

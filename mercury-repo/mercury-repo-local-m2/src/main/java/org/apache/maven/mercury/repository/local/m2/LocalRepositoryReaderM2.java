@@ -142,13 +142,14 @@ implements RepositoryReader, MetadataReader
   /**
    * direct disk search, no redirects, first attempt
    */
-  public Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> readVersions(
-      List<? extends ArtifactBasicMetadata> query )
+  public Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>>
+  readVersions( List<? extends ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {
     if( query == null || query.size() < 1 )
       return null;
+    
     Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> res = new HashMap<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>>( query.size() );
     
     File gaDir = null;
