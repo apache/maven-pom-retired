@@ -38,6 +38,9 @@ implements StreamVerifier
   private PGPSignature signature;
   
   private String signatureString;
+  
+  private long length = -1;
+  
 
   //-----------------------------------------------------------------------------------
   public PgpStreamVerifier( StreamVerifierAttributes attributes )
@@ -196,5 +199,14 @@ implements StreamVerifier
     return signatureString;
   }
   //-----------------------------------------------------------------------------------
+  public long getLength()
+  {
+      return length;
+  }
   //-----------------------------------------------------------------------------------
+  public void setLength(long length)
+  {
+      this.length = length;
+
+  }
 }

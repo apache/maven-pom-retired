@@ -37,8 +37,12 @@ import org.apache.maven.mercury.spi.http.client.ObservableOutputStream;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.io.Buffer;
+import org.mortbay.io.BufferUtil;
+import org.mortbay.jetty.HttpHeaders;
 import org.mortbay.jetty.HttpMethods;
 import org.mortbay.jetty.client.HttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -52,9 +56,11 @@ import org.mortbay.jetty.client.HttpClient;
  */
 public abstract class FileGetExchange extends FileExchange
 {
+    private static final Logger log = LoggerFactory.getLogger(FileGetExchange.class);
     private OutputStream _outputStream;
     private Set<StreamObserver> _observers = new HashSet<StreamObserver>();
-
+    int _contentLength = -1;
+    
     /**
      * Constructor.
      *
@@ -63,9 +69,9 @@ public abstract class FileGetExchange extends FileExchange
      * @param observers      observers of the io stream
      * @param client         async http client
      */
-    public FileGetExchange( Binding binding, File localFile, Set<StreamObserver> observers, HttpClient client )
+    public FileGetExchange( Server server, Binding binding, File localFile, Set<StreamObserver> observers, HttpClient client )
     {
-        super( binding, localFile, client );
+        super( server, binding, localFile, client );
         _observers.addAll(observers);
     }
 
@@ -77,6 +83,23 @@ public abstract class FileGetExchange extends FileExchange
         super.send();
     }
 
+    protected void onResponseHeader(Buffer name, Buffer value) throws IOException
+    {
+        int header = HttpHeaders.CACHE.getOrdinal(value);
+        switch (header)
+        {
+            case HttpHeaders.CONTENT_LENGTH_ORDINAL:
+                _contentLength = BufferUtil.toInt(value);
+                for (StreamObserver o:_observers)
+                {
+                    o.setLength(_contentLength);
+                }
+                if (log.isDebugEnabled())
+                    log.debug("GET of "+_contentLength +" bytes");
+                break;
+        }
+    }
+    
 
     protected void onResponseComplete()
     {

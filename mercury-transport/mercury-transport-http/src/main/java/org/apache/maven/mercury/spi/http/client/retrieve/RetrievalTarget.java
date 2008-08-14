@@ -66,7 +66,7 @@ public abstract class RetrievalTarget
     protected int _checksumState;
     protected int _targetState;
     
-   
+    protected Server _server;
     protected HttpClientException _exception;
     protected Binding _binding;
     protected File _tempFile;
@@ -89,7 +89,7 @@ public abstract class RetrievalTarget
      * @param binding
      * @param callback
      */
-    public RetrievalTarget( DefaultRetriever retriever, Binding binding, Set<Validator> validators, Set<StreamObserver> observers )
+    public RetrievalTarget( Server server, DefaultRetriever retriever, Binding binding, Set<Validator> validators, Set<StreamObserver> observers )
     {
         if ( binding == null || 
                 (binding.getRemoteResource() == null) || 
@@ -98,7 +98,7 @@ public abstract class RetrievalTarget
         {
             throw new IllegalArgumentException( "Nothing to retrieve" );
         }
-      
+        _server = server;
         _retriever = retriever;
         _binding = binding;
         _validators = validators;
@@ -434,7 +434,7 @@ public abstract class RetrievalTarget
         updateTargetState( __REQUESTED_STATE, null );
 
         //get the file, calculating the digest for it on the fly
-        FileExchange exchange = new FileGetExchange( _binding, getTempFile(), _observers, _retriever.getHttpClient() )
+        FileExchange exchange = new FileGetExchange( _server, _binding, getTempFile(), _observers, _retriever.getHttpClient() )
         {
             public void onFileComplete( String url, File localFile )
             {

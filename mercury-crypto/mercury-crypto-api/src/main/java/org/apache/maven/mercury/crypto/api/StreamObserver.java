@@ -25,5 +25,8 @@ public interface StreamObserver
     
     void bytesReady(byte[]b, int off, int len)
     throws StreamObserverException;
+    
+    void setLength(long length);
+    long getLength();
 
 }

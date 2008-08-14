@@ -34,13 +34,12 @@ import org.apache.maven.mercury.crypto.api.StreamVerifier;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
+import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.jetty.client.HttpClient;
 
 public abstract class DeploymentTarget
 {
-    public static final String __DIGEST_SUFFIX = ".sha1";
-
-
+    protected Server _server;
     protected HttpClient _httpClient;
     protected String _batchId;
     protected Binding _binding;
@@ -125,8 +124,9 @@ public abstract class DeploymentTarget
         }
     }
 
-    public DeploymentTarget( HttpClient client, String batchId, Binding binding, Set<Validator> validators, Set<StreamObserver> observers )
+    public DeploymentTarget( Server server, HttpClient client, String batchId, Binding binding, Set<Validator> validators, Set<StreamObserver> observers )
     {
+        _server = server;
         _httpClient = client;
         _batchId = batchId;
         _binding = binding;
@@ -199,7 +199,7 @@ public abstract class DeploymentTarget
 
     private void deployLocalFile()
     {
-        FilePutExchange fileExchange = new FilePutExchange( _batchId, _binding, _binding.getLocalFile(), _observers, _httpClient )
+        FilePutExchange fileExchange = new FilePutExchange( _server, _batchId, _binding, _binding.getLocalFile(), _observers, _httpClient )
         {
             public void onFileComplete( String url, File localFile )
             {
@@ -255,7 +255,7 @@ public abstract class DeploymentTarget
 
         //upload the checksum file
         Set<StreamObserver> emptySet = Collections.emptySet();
-        FilePutExchange checksumExchange = new FilePutExchange( _batchId, binding, file, emptySet, _httpClient )
+        FilePutExchange checksumExchange = new FilePutExchange( _server, _batchId, binding, file, emptySet, _httpClient )
         {
             public void onFileComplete( String url, File localFile )
             {      

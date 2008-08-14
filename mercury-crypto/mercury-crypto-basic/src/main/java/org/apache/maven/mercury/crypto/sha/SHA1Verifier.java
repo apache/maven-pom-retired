@@ -42,6 +42,7 @@ implements StreamVerifier
 
     private MessageDigest digest;
     private byte[] digestBytes;
+    private long length  = -1;
     
     private String sig;
     
@@ -105,5 +106,14 @@ implements StreamVerifier
         if (digest != null)
             digest.update(b, off, len);
     }
-
+    //-----------------------------------------------------------------------------------
+    public long getLength()
+    {
+        return length;
+    }
+    //-----------------------------------------------------------------------------------
+    public void setLength(long length)
+    {
+        this.length = length;
+    }
 }

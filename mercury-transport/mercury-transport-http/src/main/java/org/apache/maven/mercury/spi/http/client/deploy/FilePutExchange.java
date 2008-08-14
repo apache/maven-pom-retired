@@ -39,6 +39,8 @@ import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.io.Buffer;
 import org.mortbay.jetty.HttpMethods;
 import org.mortbay.jetty.client.HttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -49,6 +51,7 @@ import org.mortbay.jetty.client.HttpClient;
  */
 public abstract class FilePutExchange extends FileExchange
 {
+    private static final Logger log = LoggerFactory.getLogger(FilePutExchange.class);
     private String _batchId;
     private InputStream _inputStream;
     private String _remoteRepoUrl;
@@ -60,9 +63,9 @@ public abstract class FilePutExchange extends FileExchange
     public abstract void onFileError( String url, Exception e );
 
 
-    public FilePutExchange( String batchId, Binding binding, File localFile, Set<StreamObserver> observers, HttpClient client )
+    public FilePutExchange( Server server, String batchId, Binding binding, File localFile, Set<StreamObserver> observers, HttpClient client )
     {
-        super( binding, localFile, client );
+        super( server, binding, localFile, client );
         _observers.addAll(observers);
         _batchId = batchId;
     }
@@ -79,8 +82,14 @@ public abstract class FilePutExchange extends FileExchange
             setMethod( HttpMethods.PUT );
             setRequestHeader( "Content-Type", "application/octet-stream" );
             if (_binding.isFile())
+            {
                 setRequestHeader( "Content-Length", String.valueOf( _localFile.length() ) );
-            
+                if (log.isDebugEnabled())
+                    log.debug("PUT of "+_localFile.length()+" bytes");
+                
+                for (StreamObserver o: _observers)
+                    o.setLength(_localFile.length());
+            }
             setRequestContentSource( getInputStream() );
             setRequestHeader( __BATCH_HEADER, _batchId );            
             super.send();

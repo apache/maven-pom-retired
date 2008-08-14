@@ -199,10 +199,10 @@ public class JettyRetrieverTest extends TestCase
         
         RetrievalResponse response = retriever.retrieve(request);
         
-        System.err.println("--------- testSyncRetrievalAllGood --------------");
-        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();
-        System.err.println("-------------------------------------------------");
+//        System.err.println("--------- testSyncRetrievalAllGood --------------");
+//        for (HttpClientException t:response.getExceptions())
+//            t.printStackTrace();
+//        System.err.println("-------------------------------------------------");
         assertEquals(2,response.getExceptions().size());
         assertTrue(!file0.exists());
         assertTrue(!file1.exists());
@@ -238,10 +238,10 @@ public class JettyRetrieverTest extends TestCase
         
         RetrievalResponse response = retriever.retrieve(request);
         
-        System.err.println("--------- testSyncRetrievalPgpGood --------------");
-        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();
-        System.err.println("-------------------------------------------------");
+//        System.err.println("--------- testSyncRetrievalPgpGood --------------");
+//        for (HttpClientException t:response.getExceptions())
+//            t.printStackTrace();
+//        System.err.println("-------------------------------------------------");
         assertEquals( 0, response.getExceptions().size() );
         assertTrue( file6.exists() );
        
@@ -293,10 +293,10 @@ public class JettyRetrieverTest extends TestCase
         
         RetrievalResponse response = retriever.retrieve(request);
 
-        System.err.println("--------- testSyncRetrievalFailFast -------------");
-        for (HttpClientException t:response.getExceptions())
-           t.printStackTrace();
-        System.err.println("-------------------------------------------------");
+//        System.err.println("--------- testSyncRetrievalFailFast -------------");
+//        for (HttpClientException t:response.getExceptions())
+//           t.printStackTrace();
+//        System.err.println("-------------------------------------------------");
 
         assertTrue(!file0.exists());
         assertTrue(!file1.exists());
@@ -347,10 +347,10 @@ public class JettyRetrieverTest extends TestCase
         request.setFailFast(false);
         RetrievalResponse response = retriever.retrieve(request);
 
-        System.err.println("--------- testSyncRetrievalLenient0 -------------");
-        for (HttpClientException t:response.getExceptions())
-           t.printStackTrace();
-        System.err.println("-------------------------------------------------");
+//        System.err.println("--------- testSyncRetrievalLenient0 -------------");
+//        for (HttpClientException t:response.getExceptions())
+//           t.printStackTrace();
+//        System.err.println("-------------------------------------------------");
 
         assertEquals(1,response.getExceptions().size());
         assertEquals(binding2,response.getExceptions().iterator().next().getBinding());
@@ -397,10 +397,10 @@ public class JettyRetrieverTest extends TestCase
         request.setFailFast(false);
         RetrievalResponse response = retriever.retrieve(request);
 
-        System.err.println("------------- testSyncRetrievalLenient1 ---------");
-        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();
-        System.err.println("-------------------------------------------------");
+//        System.err.println("------------- testSyncRetrievalLenient1 ---------");
+//        for (HttpClientException t:response.getExceptions())
+//            t.printStackTrace();
+//        System.err.println("-------------------------------------------------");
 
         assertEquals(0,response.getExceptions().size());
         assertTrue(file0.exists());
@@ -452,10 +452,10 @@ public class JettyRetrieverTest extends TestCase
         request.setBindings(bindings);
         RetrievalResponse response = retriever.retrieve(request);
 
-        System.err.println("------------ testValidatorSuccess ---------------");
-        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();
-        System.err.println("-------------------------------------------------");
+//        System.err.println("------------ testValidatorSuccess ---------------");
+//        for (HttpClientException t:response.getExceptions())
+//            t.printStackTrace();
+//        System.err.println("-------------------------------------------------");
 
         assertEquals(0,response.getExceptions().size());
         assertTrue(file0.exists());
@@ -506,10 +506,10 @@ public class JettyRetrieverTest extends TestCase
         request.setBindings(bindings);
         RetrievalResponse response = retriever.retrieve(request);
 
-        System.err.println("---------- testValidatorFail --------------------");
-        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();
-        System.err.println("-------------------------------------------------");
+//        System.err.println("---------- testValidatorFail --------------------");
+//        for (HttpClientException t:response.getExceptions())
+//            t.printStackTrace();
+//        System.err.println("-------------------------------------------------");
 
         assertEquals(2,response.getExceptions().size());
         assertTrue(!file0.exists());
@@ -544,10 +544,10 @@ public class JettyRetrieverTest extends TestCase
         request.setBindings(bindings);
         RetrievalResponse response = retriever.retrieve(request);
 
-        System.err.println("--------- testMemoryRetrieval -------------------");
-        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();
-        System.err.println("-------------------------------------------------");
+//        System.err.println("--------- testMemoryRetrieval -------------------");
+//        for (HttpClientException t:response.getExceptions())
+//            t.printStackTrace();
+//        System.err.println("-------------------------------------------------");
 
         assertEquals(0,response.getExceptions().size());
         

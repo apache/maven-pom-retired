@@ -20,12 +20,18 @@
 package org.apache.maven.mercury.spi.http.client;
 
 import java.io.File;
+import java.net.InetSocketAddress;
 import java.net.URL;
 
 import org.apache.maven.mercury.transport.api.Binding;
+import org.apache.maven.mercury.transport.api.Credentials;
+import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.io.Buffer;
 import org.mortbay.jetty.client.HttpClient;
+import org.mortbay.jetty.client.HttpDestination;
 import org.mortbay.jetty.client.HttpExchange;
+import org.mortbay.jetty.client.security.BasicAuthorization;
+import org.mortbay.jetty.client.security.ProxyAuthorization;
 
 /**
  * FileExchange
@@ -45,14 +51,16 @@ public abstract class FileExchange extends HttpExchange
     protected String _url;
     protected File _localFile;
     protected Binding _binding;
+    protected Server _server;
 
     public abstract void onFileComplete( String url, File localFile );
 
     public abstract void onFileError( String url, Exception e );
 
 
-    public FileExchange( Binding binding, File localFile, HttpClient client )
+    public FileExchange( Server server, Binding binding, File localFile, HttpClient client )
     {
+        _server = server;
         _binding = binding;
         if (_binding != null)
         {
@@ -70,7 +78,40 @@ public abstract class FileExchange extends HttpExchange
     {
         try
         {
-            _httpClient.send( this );
+            if (_server != null && _server.hasProxy() && (_server.getProxy() != null))
+            {
+                URL url = new URL(_url);
+                boolean ssl = "https".equalsIgnoreCase(url.getProtocol());
+                URL proxy = _server.getProxy();
+                
+                String host = proxy.getHost();
+                int port = proxy.getPort();
+                boolean proxySsl = "https".equalsIgnoreCase(proxy.getProtocol());
+                if (port < 0)
+                {
+                    port = proxySsl?443:80;
+                }
+                InetSocketAddress proxyAddress = new InetSocketAddress(host,port);
+                HttpDestination destination = _httpClient.getDestination(this.getAddress(), ssl);  
+                destination.setProxy(proxyAddress);
+                
+                //set up authentication for the proxy
+                Credentials proxyCredentials = _server.getProxyCredentials();
+                
+                if (proxyCredentials != null)
+                {
+                    if (proxyCredentials.isCertificate())
+                        throw new UnsupportedOperationException ("Proxy credential not supported");
+                    else
+                    destination.setProxyAuthentication(new ProxyAuthorization (proxyCredentials.getUser(), proxyCredentials.getPass()));
+                }
+                destination.send(this); 
+            }
+            else
+            { 
+                _httpClient.send( this );
+            }
+            
         }
         catch ( Exception e )
         {

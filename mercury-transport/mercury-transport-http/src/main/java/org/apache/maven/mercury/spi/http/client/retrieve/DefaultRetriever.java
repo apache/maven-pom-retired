@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.maven.mercury.crypto.api.StreamObserver;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
+import org.apache.maven.mercury.spi.http.client.DestinationRealmResolver;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
@@ -83,6 +84,7 @@ public class DefaultRetriever implements Retriever
     {
         _servers.clear();
         _servers.addAll(servers);
+        _httpClient.setRealmResolver(new DestinationRealmResolver(_servers));
     }
     
     public Set<Server> getServers()
@@ -171,7 +173,7 @@ public class DefaultRetriever implements Retriever
                 Server server = resolveServer(binding);
                 Set<StreamObserver> observers = createStreamObservers(server);
                 
-                target = new RetrievalTarget( DefaultRetriever.this, binding, request.getValidators(), observers )
+                target = new RetrievalTarget( server, DefaultRetriever.this, binding, request.getValidators(), observers )
                 {
                     public void onComplete()
                     {

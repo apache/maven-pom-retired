@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.maven.mercury.crypto.api.StreamObserver;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
+import org.apache.maven.mercury.spi.http.client.DestinationRealmResolver;
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HandshakeExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
@@ -107,6 +108,7 @@ public class DefaultDeployer implements Deployer
     {
         _servers.clear();
         _servers.addAll(servers);
+        _httpClient.setRealmResolver(new DestinationRealmResolver(_servers));
     }
     
     public Set<Server> getServers()
@@ -189,7 +191,7 @@ public class DefaultDeployer implements Deployer
             {
                 Server server = resolveServer(binding);
                 Set<StreamObserver> observers = createStreamObservers(server);
-                target = new DeploymentTarget( _httpClient, batchId, binding, request.getValidators(), observers )
+                target = new DeploymentTarget( server, _httpClient, batchId, binding, request.getValidators(), observers )
                 {
                     public void onComplete()
                     {
