@@ -4,7 +4,7 @@
   <groupId>org.apache.maven.mercury</groupId>
    <artifactId>mercury</artifactId>
   <packaging>pom</packaging>
-  <name>Mercury Reactor: ${project.version}</name>
+  <name>Mercury Reactor:                ${project.version}</name>
   <version>1.0.0-alpha-1-SNAPSHOT</version>
 
   <modules>

@@ -3,7 +3,9 @@ package org.apache.maven.mercury.repository.api;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.maven.mercury.artifact.QualityEnum;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.codehaus.plexus.i18n.DefaultLanguage;
 import org.codehaus.plexus.i18n.Language;
@@ -52,6 +54,11 @@ implements Repository
   private static Map< String, RepositoryWriterFactory > writerRegistry  = Collections.synchronizedMap( new HashMap<String, RepositoryWriterFactory>(4) );
   //---------------------------------------------------------------------------
   protected String             type = DEFAULT_REPOSITORY_TYPE;
+  
+  protected boolean snapshots;
+  protected Set<Integer>  alpha;
+  protected Set<Integer>  beta;
+  protected boolean releases;
   
   protected RepositoryReader   reader;
   protected RepositoryWriter   writer;
@@ -162,6 +169,21 @@ implements Repository
       throw new RepositoryException( lang.getMessage( "null.writer.factory.found" ) );
     
     return wf.getWriter( repo, mdProcessor );
+  }
+  //---------------------------------------------------------------------------
+  public boolean isSnapshots()
+  {
+    return snapshots;
+  }
+  //---------------------------------------------------------------------------
+  public boolean isReleases()
+  {
+    return releases;
+  }
+  //---------------------------------------------------------------------------
+  public boolean isAccepted(QualityEnum quality, int quantity )
+  {
+    return releases;
   }
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------

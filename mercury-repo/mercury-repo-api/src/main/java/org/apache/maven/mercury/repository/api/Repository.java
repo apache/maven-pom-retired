@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.repository.api;
 
+import org.apache.maven.mercury.artifact.QualityEnum;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 
 
@@ -40,13 +41,27 @@ public interface Repository
    * the artifact, if it was cleared by the conflict resolver but not read from a localRepo.
    */
   public boolean isLocal();
-  
 
   /**
    * Indicates whether it's even possible to write to this Repository. If there are multiple localRepo's and Artifact
    * needs to be downloaded - it will be "written" to all "local" repositories that are not "readOnly".
    */
   public boolean isReadOnly();
+
+  /**
+   * Indicates whether this repository contains releases
+   */
+  public boolean isReleases();
+
+  /**
+   * Indicates whether this repository contains snapshots
+   */
+  public boolean isSnapshots();
+
+  /**
+   * reserved
+   */
+  public boolean isAccepted( QualityEnum quality, int quantity );
   
     /**
      * get default reader, if any
