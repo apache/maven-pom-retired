@@ -98,6 +98,9 @@ extends TestCase
     
     byte [] mmBuf = reader.readRawData( "a/a/maven-metadata.xml" );
     
+    assertNotNull( mmBuf );
+    assertTrue( mmBuf.length > 1 );
+    
     Metadata mmd = _reader.read( new ByteArrayInputStream( mmBuf ) );
     
     validateMmd( mmd );
