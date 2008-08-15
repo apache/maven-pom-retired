@@ -8,7 +8,7 @@
   </parent>
   <artifactId>mercury-repo</artifactId>
   <packaging>pom</packaging>
-  <name>Mercury Repository Reactor: ${project.version}</name>
+  <name>Mercury Repository Reactor:     ${project.version}</name>
   <version>1.0.0-alpha-1-SNAPSHOT</version>
 
   <modules>

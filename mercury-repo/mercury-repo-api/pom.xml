@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-repo-api</artifactId>
-  <name>Mercury Repository APIs: ${project.version}</name>
+  <name>Mercury Repository APIs:        ${project.version}</name>
   <description>Repository APIs</description>
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>

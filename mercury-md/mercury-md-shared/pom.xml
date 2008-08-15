@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-md-shared</artifactId>
-  <name>Mercury Shared Metadata: ${project.version}</name>
+  <name>Mercury Shared Metadata:        ${project.version}</name>
   <description/>
 
   <parent>

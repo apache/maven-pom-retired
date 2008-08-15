@@ -8,7 +8,7 @@
   </parent>
   <artifactId>mercury-md</artifactId>
   <packaging>pom</packaging>
-  <name>Mercury Metadata Reactor: ${project.version}</name>
+  <name>Mercury Metadata Reactor:       ${project.version}</name>
   <version>1.0.0-alpha-1-SNAPSHOT</version>
 
   <modules>
