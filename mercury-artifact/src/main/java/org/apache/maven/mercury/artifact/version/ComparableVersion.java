@@ -260,6 +260,7 @@ public class ComparableVersion
                 Item first = (Item) get( 0 );
                 return first.compareTo( null );
             }
+
             switch ( item.getType() )
             {
                 case INTEGER_ITEM:

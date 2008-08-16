@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.repository.api;
 
+import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.QualityEnum;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 
@@ -61,7 +62,7 @@ public interface Repository
   /**
    * reserved
    */
-  public boolean isAccepted( QualityEnum quality, int quantity );
+  public boolean isAcceptedQuality( Quality quality );
   
     /**
      * get default reader, if any

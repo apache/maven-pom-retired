@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.QualityEnum;
+import org.apache.maven.mercury.artifact.QualityRange;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.codehaus.plexus.i18n.DefaultLanguage;
 import org.codehaus.plexus.i18n.Language;
@@ -55,11 +57,8 @@ implements Repository
   //---------------------------------------------------------------------------
   protected String             type = DEFAULT_REPOSITORY_TYPE;
   
-  protected boolean snapshots;
-  protected Set<Integer>  alpha;
-  protected Set<Integer>  beta;
-  protected boolean releases;
-  
+  protected QualityRange       qualityRange = QualityRange.ALL;
+
   protected RepositoryReader   reader;
   protected RepositoryWriter   writer;
   //---------------------------------------------------------------------------
@@ -173,17 +172,17 @@ implements Repository
   //---------------------------------------------------------------------------
   public boolean isSnapshots()
   {
-    return snapshots;
+    return qualityRange.isAcceptedQuality( Quality.SNAPSHOT_QUALITY );
   }
   //---------------------------------------------------------------------------
   public boolean isReleases()
   {
-    return releases;
+    return qualityRange.isAcceptedQuality( Quality.RELEASE_QUALITY );
   }
   //---------------------------------------------------------------------------
-  public boolean isAccepted(QualityEnum quality, int quantity )
+  public boolean isAcceptedQuality( Quality quality )
   {
-    return releases;
+    return qualityRange.isAcceptedQuality( quality );
   }
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------

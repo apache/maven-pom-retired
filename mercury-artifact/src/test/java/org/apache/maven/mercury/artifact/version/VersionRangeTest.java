@@ -1,5 +1,8 @@
 package org.apache.maven.mercury.artifact.version;
 
+import org.apache.maven.mercury.artifact.Quality;
+import org.apache.maven.mercury.artifact.QualityRange;
+
 import junit.framework.TestCase;
 
 /**
@@ -53,7 +56,7 @@ public class VersionRangeTest
     assertFalse( "1.0.0.1.2.1-alpha-1 does match the range "+rangeS, range.includes( "1.0.0.1.2.1-alpha-1" ) );
     assertTrue(  "1.0.0.1.2.2-alpha-1 does not match the range "+rangeS, range.includes( "1.0.0.1.2.2-alpha-1" ) );
   }
- 
+  
   public void testAlphaNumeric()
   throws VersionException
   {
@@ -61,6 +64,48 @@ public class VersionRangeTest
     range = new VersionRange( rangeS );
 
     assertFalse( "1.0.0.0.9 does match the range "+rangeS, range.includes( "1.0.0.0.9" ) );
+  }
+  
+  public void testEdge()
+  throws VersionException
+  {
+    String rangeS = "[1.0,2.0)";
+    range = new VersionRange( rangeS );
+
+    assertFalse( range.includes( "1.0-SNAPSHOT" ) );
+    assertTrue( range.includes( "1.1-SNAPSHOT" ) );
+    assertTrue( range.includes( "2.0-SNAPSHOT" ) );
+    assertTrue( range.includes( "2.0-alpha-1" ) );
+    assertFalse( range.includes( "2.0" ) );
+  }
+  
+  public void testBetaEdge()
+  throws VersionException
+  {
+    String rangeS = "[1.0,2.0)";
+    range = new VersionRange( rangeS );
+    range.setToQualityRange( new QualityRange( Quality.BETA_QUALITY, true, Quality.RELEASE_QUALITY, true  ) );
+
+    assertFalse( range.includes( "1.0-SNAPSHOT" ) );
+    assertTrue( range.includes( "1.1-SNAPSHOT" ) );
+    assertFalse( range.includes( "2.0-SNAPSHOT" ) );
+    assertTrue( range.includes( "2.0-beta-1" ) );
+    assertFalse( range.includes( "2.0" ) );
+  }
+  
+  public void testAlphaEdge()
+  throws VersionException
+  {
+    String rangeS = "[1.0,2.0)";
+    range = new VersionRange( rangeS );
+    range.setToQualityRange( new QualityRange( Quality.ALPHA_QUALITY, true, Quality.RELEASE_QUALITY, true  ) );
+
+    assertFalse( range.includes( "1.0-SNAPSHOT" ) );
+    assertTrue( range.includes( "1.1-SNAPSHOT" ) );
+    assertFalse( range.includes( "2.0-SNAPSHOT" ) );
+    assertTrue( range.includes( "2.0-alpha-35" ) );
+    assertTrue( range.includes( "2.0-beta-1" ) );
+    assertFalse( range.includes( "2.0" ) );
   }
 
 }

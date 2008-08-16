@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.artifact.version;
 
 import org.apache.maven.mercury.artifact.Artifact;
+import org.apache.maven.mercury.artifact.QualityRange;
 
 /**
  * Single range implementation, similar to OSGi specification:
@@ -17,6 +18,8 @@ import org.apache.maven.mercury.artifact.Artifact;
 public class VersionRange
 {
   private static final DefaultArtifactVersion ZERO_VERSION = new DefaultArtifactVersion("0.0.0");
+  
+  QualityRange _toQualityRange = QualityRange.ALL;
   
   DefaultArtifactVersion _fromVersion = ZERO_VERSION;
   boolean _fromInclusive = true;
@@ -87,6 +90,11 @@ public class VersionRange
     }
   }
   //--------------------------------------------------------------------------------------------
+  public void setToQualityRange( QualityRange qRange )
+  {
+    this._toQualityRange = qRange;
+  }
+  //--------------------------------------------------------------------------------------------
   private void checkForValidCharacters( String v )
   throws VersionException
   {
@@ -133,7 +141,15 @@ public class VersionRange
     int cmp2 = ver.compareTo( _toVersion );
     
     if( cmp2 < 0 )
+    {
+      if( ver.sameBase( _toVersion ) )
+      {
+        if( _toQualityRange.isAcceptedQuality( ver.getQuality() ) )
+          return true;
+        return false;
+      }
       return true;
+    }
     
     if( cmp2 == 0 )
       return _toInclusive;

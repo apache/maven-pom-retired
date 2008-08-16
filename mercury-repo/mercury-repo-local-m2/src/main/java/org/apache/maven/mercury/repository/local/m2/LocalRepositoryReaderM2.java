@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
+import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.VersionException;
 import org.apache.maven.mercury.artifact.version.VersionRange;
 import org.apache.maven.mercury.builder.api.MetadataProcessingException;
@@ -143,9 +144,8 @@ implements RepositoryReader, MetadataReader
    * direct disk search, no redirects, first attempt
    */
   public Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>>
-  readVersions( List<? extends ArtifactBasicMetadata> query )
-      throws RepositoryException,
-      IllegalArgumentException
+                                      readVersions( List<? extends ArtifactBasicMetadata> query )
+  throws RepositoryException, IllegalArgumentException
   {
     if( query == null || query.size() < 1 )
       return null;
@@ -176,6 +176,12 @@ implements RepositoryReader, MetadataReader
       for( File vf : versionFiles )
       {
         if( !vf.isDirectory() )
+          continue;
+        
+        String version = vf.getName();
+        
+        Quality q = new Quality( version );
+        if( ! _repo.isAcceptedQuality( q ) )
           continue;
         
         if( !versionQuery.includes(  vf.getName() )  )

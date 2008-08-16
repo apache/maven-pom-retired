@@ -9,13 +9,14 @@ package org.apache.maven.mercury.artifact;
  */
 public enum QualityEnum
 {
-  snapshot(1)
+    unknown(-1)
+  , snapshot(1)
   , alpha(2)
   , beta(3)
   , release(10)
   ;
 
-  public static final QualityEnum DEFAULT_QUALITY = snapshot;
+  public static final QualityEnum DEFAULT_QUALITY = unknown;
 
   private int id;
 
@@ -29,5 +30,5 @@ public enum QualityEnum
   {
       return id;
   }
-  
+
 }
