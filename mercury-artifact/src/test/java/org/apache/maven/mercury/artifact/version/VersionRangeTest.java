@@ -75,6 +75,7 @@ public class VersionRangeTest
     assertFalse( range.includes( "1.0-SNAPSHOT" ) );
     assertTrue( range.includes( "1.1-SNAPSHOT" ) );
     assertTrue( range.includes( "2.0-SNAPSHOT" ) );
+    assertFalse( range.includes( "2.0-20080815.235653-15" ) ); // this is still considered a release :(
     assertTrue( range.includes( "2.0-alpha-1" ) );
     assertFalse( range.includes( "2.0" ) );
   }
@@ -89,6 +90,7 @@ public class VersionRangeTest
     assertFalse( range.includes( "1.0-SNAPSHOT" ) );
     assertTrue( range.includes( "1.1-SNAPSHOT" ) );
     assertFalse( range.includes( "2.0-SNAPSHOT" ) );
+    assertFalse( range.includes( "2.0-20080815.235653-15" ) );
     assertFalse( range.includes( "2.0-alpha-35" ) );
     assertTrue( range.includes( "2.0-beta-1" ) );
     assertFalse( range.includes( "2.0" ) );
@@ -104,6 +106,7 @@ public class VersionRangeTest
     assertFalse( range.includes( "1.0-SNAPSHOT" ) );
     assertTrue( range.includes( "1.1-SNAPSHOT" ) );
     assertFalse( range.includes( "2.0-SNAPSHOT" ) );
+    assertFalse( range.includes( "2.0-20080815.235653-15" ) );
     assertTrue( range.includes( "2.0-alpha-35" ) );
     assertTrue( range.includes( "2.0-beta-1" ) );
     assertFalse( range.includes( "2.0" ) );

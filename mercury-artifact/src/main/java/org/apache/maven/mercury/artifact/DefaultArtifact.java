@@ -16,6 +16,7 @@ package org.apache.maven.mercury.artifact;
  */
 
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * @author Jason van Zyl
@@ -26,301 +27,323 @@ public class DefaultArtifact
 extends ArtifactMetadata
 implements Artifact
 {
-    private File file;
+  private File file;
 
-    private String classifier;
+  private InputStream stream;
 
-    private String downloadUrl;
+  private String downloadUrl;
 
-    private String inheritedScope;
-    
-    public DefaultArtifact( String groupId, String artifactId, String version, String type, String classifier, boolean optional, String scope, String inheritedScope )
-    {
-        if ( version == null )
-        {
-            throw new IllegalArgumentException( "Version cannot be null." );
-        }
+  private String inheritedScope;
+  
+  private byte [] pomBlob;
+  
+  public DefaultArtifact( String groupId, String artifactId, String version, String type, String classifier, boolean optional, String scope, String inheritedScope )
+  {
+      if ( version == null )
+      {
+          throw new IllegalArgumentException( "Version cannot be null." );
+      }
 
-        initialize( groupId, artifactId, version, type, classifier, optional, scope, inheritedScope );
-    }
-    
-    public DefaultArtifact( ArtifactBasicMetadata bmd )
-    {
-        if ( bmd.getVersion() == null )
-        {
-            throw new IllegalArgumentException( "Version cannot be null." );
-        }
+      initialize( groupId, artifactId, version, type, classifier, optional, scope, inheritedScope );
+  }
+  
+  public DefaultArtifact( ArtifactBasicMetadata bmd )
+  {
+      if ( bmd.getVersion() == null )
+      {
+          throw new IllegalArgumentException( "Version cannot be null." );
+      }
 
-        initialize( bmd.getGroupId(), bmd.getArtifactId(), bmd.getVersion(), bmd.getType()
-                  , bmd.getClassifier(), bmd.isOptional(), bmd.getScope(), bmd.getScope() 
-                  );
-    }
+      initialize( bmd.getGroupId(), bmd.getArtifactId(), bmd.getVersion(), bmd.getType()
+                , bmd.getClassifier(), bmd.isOptional(), bmd.getScope(), bmd.getScope() 
+                );
+  }
 
-    public String getInheritedScope()
-    {
-        return inheritedScope;
-    }
-    
-    private void initialize( String groupId, String artifactId, String version, String type, String classifier, boolean optional, String scope, String inheritedScope )
-    {
-        this.inheritedScope = inheritedScope;
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.version = version;
-        //this.scope = scope;
-        this.type = type;
-        this.classifier = classifier;
-        this.optional = optional;
+  public String getInheritedScope()
+  {
+      return inheritedScope;
+  }
+  
+  private void initialize( String groupId, String artifactId, String version, String type, String classifier, boolean optional, String scope, String inheritedScope )
+  {
+      this.inheritedScope = inheritedScope;
+      this.groupId = groupId;
+      this.artifactId = artifactId;
+      this.version = version;
+      //this.scope = scope;
+      this.type = type;
+      this.classifier = classifier;
+      this.optional = optional;
 
-        String desiredScope = Artifact.SCOPE_RUNTIME;
+      String desiredScope = Artifact.SCOPE_RUNTIME;
 
-        boolean calc = true;
+      boolean calc = true;
 
-        if ( inheritedScope == null )
-        {
-            desiredScope = scope;
-        }
-        else if ( Artifact.SCOPE_TEST.equals( scope ) || Artifact.SCOPE_PROVIDED.equals( scope ) )
-        {
-            desiredScope = scope;
-            //calc = false;
-        }
-        else if ( Artifact.SCOPE_COMPILE.equals( scope ) && Artifact.SCOPE_COMPILE.equals( inheritedScope ) )
-        {
-            // added to retain compile artifactScope. Remove if you want compile inherited as runtime
-            desiredScope = Artifact.SCOPE_COMPILE;
-        }
+      if ( inheritedScope == null )
+      {
+          desiredScope = scope;
+      }
+      else if ( Artifact.SCOPE_TEST.equals( scope ) || Artifact.SCOPE_PROVIDED.equals( scope ) )
+      {
+          desiredScope = scope;
+          //calc = false;
+      }
+      else if ( Artifact.SCOPE_COMPILE.equals( scope ) && Artifact.SCOPE_COMPILE.equals( inheritedScope ) )
+      {
+          // added to retain compile artifactScope. Remove if you want compile inherited as runtime
+          desiredScope = Artifact.SCOPE_COMPILE;
+      }
 
-        if ( calc )
-        {
-            if ( Artifact.SCOPE_TEST.equals( inheritedScope ) )
-            {
-                desiredScope = Artifact.SCOPE_TEST;
-            }
+      if ( calc )
+      {
+          if ( Artifact.SCOPE_TEST.equals( inheritedScope ) )
+          {
+              desiredScope = Artifact.SCOPE_TEST;
+          }
 
-            if ( Artifact.SCOPE_PROVIDED.equals( inheritedScope ) )
-            {
-                desiredScope = Artifact.SCOPE_PROVIDED;
-            }
+          if ( Artifact.SCOPE_PROVIDED.equals( inheritedScope ) )
+          {
+              desiredScope = Artifact.SCOPE_PROVIDED;
+          }
 
-            if ( Artifact.SCOPE_SYSTEM.equals( scope ) )
-            {
-                // system scopes come through unchanged...
-                desiredScope = Artifact.SCOPE_SYSTEM;
-            }
-        }
-        
-        this.scope = desiredScope;
+          if ( Artifact.SCOPE_SYSTEM.equals( scope ) )
+          {
+              // system scopes come through unchanged...
+              desiredScope = Artifact.SCOPE_SYSTEM;
+          }
+      }
+      
+      this.scope = desiredScope;
 
-        validateIdentity();
-    }
+      validateIdentity();
+  }
 
-    private void validateIdentity()
-    {
-        if ( empty( groupId ) )
-        {
-            throw new IllegalArgumentException( "The groupId cannot be empty." );
-        }
+  private void validateIdentity()
+  {
+      if ( empty( groupId ) )
+      {
+          throw new IllegalArgumentException( "The groupId cannot be empty." );
+      }
 
-        if ( artifactId == null )
-        {
-            throw new IllegalArgumentException( "The artifactId cannot be empty." );
-        }
+      if ( artifactId == null )
+      {
+          throw new IllegalArgumentException( "The artifactId cannot be empty." );
+      }
 
-        if ( type == null )
-        {
-            throw new IllegalArgumentException( "The type cannot be empty." );
-        }
+      if ( type == null )
+      {
+          throw new IllegalArgumentException( "The type cannot be empty." );
+      }
 
-        if ( ( version == null ) )
-        {
-            throw new IllegalArgumentException( "The version cannot be empty." );
-        }
-    }
+      if ( ( version == null ) )
+      {
+          throw new IllegalArgumentException( "The version cannot be empty." );
+      }
+  }
 
-    private boolean empty( String value )
-    {
-        return ( value == null ) || ( value.trim().length() < 1 );
-    }
+  private boolean empty( String value )
+  {
+      return ( value == null ) || ( value.trim().length() < 1 );
+  }
 
-    public void setFile( File file )
-    {
-        this.file = file;
-    }
+  public void setFile( File file )
+  {
+      this.file = file;
+  }
 
-    public File getFile()
-    {
-        return file;
-    }
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
+  public File getFile()
+  {
+      return file;
+  }
 
-    public String getId()
-    {
-        return getDependencyConflictId() + ":" + getVersion();
-    }
+  public void setStream( InputStream stream )
+  {
+      this.stream = stream;
+  }
 
-    public String getDependencyConflictId()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append( getGroupId() );
-        sb.append( ":" );
-        appendArtifactTypeClassifierString( sb );
-        return sb.toString();
-    }
+  public InputStream getStream()
+  {
+      return stream;
+  }
+  // ----------------------------------------------------------------------
+  //
+  // ----------------------------------------------------------------------
 
-    private void appendArtifactTypeClassifierString( StringBuilder sb )
-    {
-        sb.append( getArtifactId() );
-        sb.append( ":" );
-        sb.append( getType() );
-        if ( hasClassifier() )
-        {
-            sb.append( ":" );
-            sb.append( getClassifier() );
-        }
-    }
+  public String getId()
+  {
+      return getDependencyConflictId() + ":" + getVersion();
+  }
 
-    // ----------------------------------------------------------------------
-    // Object overrides
-    // ----------------------------------------------------------------------
-    @Override
-    public String toString()
-    {
-        StringBuilder sb = new StringBuilder();
-        if ( getGroupId() != null )
-        {
-            sb.append( getGroupId() );
-            sb.append( ":" );
-        }
-        appendArtifactTypeClassifierString( sb );
-        sb.append( ":" );
-        
-        if ( getVersion() != null )
-        {
-            sb.append( getVersion() );
-        }
-        
-        if ( scope != null )
-        {
-            sb.append( ":" );
-            sb.append( scope );
-        }
-        return sb.toString();
-    }
+  public String getDependencyConflictId()
+  {
+      StringBuilder sb = new StringBuilder();
+      sb.append( getGroupId() );
+      sb.append( ":" );
+      appendArtifactTypeClassifierString( sb );
+      return sb.toString();
+  }
 
-    @Override
-    public int hashCode()
-    {
-        int result = 17;
-        result = 37 * result + groupId.hashCode();
-        result = 37 * result + artifactId.hashCode();
-        result = 37 * result + type.hashCode();
-        if ( version != null )
-        {
-            result = 37 * result + version.hashCode();
-        }
-        result = 37 * result + ( classifier != null ? classifier.hashCode() : 0 );
-        return result;
-    }
+  private void appendArtifactTypeClassifierString( StringBuilder sb )
+  {
+      sb.append( getArtifactId() );
+      sb.append( ":" );
+      sb.append( getType() );
+      if ( hasClassifier() )
+      {
+          sb.append( ":" );
+          sb.append( getClassifier() );
+      }
+  }
+  
+  public void setPomBlob( byte [] pomBlob )
+  {
+    this.pomBlob = pomBlob;
+  }
+  
+  public byte [] getPomBlob()
+  {
+    return pomBlob;
+  }
 
-    @Override
-    public boolean equals( Object o )
-    {
-        if ( o == this )
-        {
-            return true;
-        }
+  // ----------------------------------------------------------------------
+  // Object overrides
+  // ----------------------------------------------------------------------
+  @Override
+  public String toString()
+  {
+      StringBuilder sb = new StringBuilder();
+      if ( getGroupId() != null )
+      {
+          sb.append( getGroupId() );
+          sb.append( ":" );
+      }
+      appendArtifactTypeClassifierString( sb );
+      sb.append( ":" );
+      
+      if ( getVersion() != null )
+      {
+          sb.append( getVersion() );
+      }
+      
+      if ( scope != null )
+      {
+          sb.append( ":" );
+          sb.append( scope );
+      }
+      return sb.toString();
+  }
 
-        if ( !( o instanceof Artifact ) )
-        {
-            return false;
-        }
+  @Override
+  public int hashCode()
+  {
+      int result = 17;
+      result = 37 * result + groupId.hashCode();
+      result = 37 * result + artifactId.hashCode();
+      result = 37 * result + type.hashCode();
+      if ( version != null )
+      {
+          result = 37 * result + version.hashCode();
+      }
+      result = 37 * result + ( classifier != null ? classifier.hashCode() : 0 );
+      return result;
+  }
 
-        Artifact a = (Artifact) o;
+  @Override
+  public boolean equals( Object o )
+  {
+      if ( o == this )
+      {
+          return true;
+      }
 
-        if ( !a.getGroupId().equals( groupId ) )
-        {
-            return false;
-        }
-        else if ( !a.getArtifactId().equals( artifactId ) )
-        {
-            return false;
-        }
-        else if ( !a.getVersion().equals( version ) )
-        {
-            return false;
-        }
-        else if ( !a.getType().equals( type ) )
-        {
-            return false;
-        }
-        else if ( a.getClassifier() == null ? classifier != null : !a.getClassifier().equals( classifier ) )
-        {
-            return false;
-        }
+      if ( !( o instanceof Artifact ) )
+      {
+          return false;
+      }
 
-        // We don't consider the version range in the comparison, just the resolved version
+      Artifact a = (Artifact) o;
 
-        return true;
-    }
+      if ( !a.getGroupId().equals( groupId ) )
+      {
+          return false;
+      }
+      else if ( !a.getArtifactId().equals( artifactId ) )
+      {
+          return false;
+      }
+      else if ( !a.getVersion().equals( version ) )
+      {
+          return false;
+      }
+      else if ( !a.getType().equals( type ) )
+      {
+          return false;
+      }
+      else if ( a.getClassifier() == null ? classifier != null : !a.getClassifier().equals( classifier ) )
+      {
+          return false;
+      }
 
-    public int compareTo( Artifact o )
-    {
-        Artifact a = (Artifact) o;
+      // We don't consider the version range in the comparison, just the resolved version
 
-        int result = groupId.compareTo( a.getGroupId() );
-        if ( result == 0 )
-        {
-            result = artifactId.compareTo( a.getArtifactId() );
-            if ( result == 0 )
-            {
-                result = type.compareTo( a.getType() );
-                if ( result == 0 )
-                {
-                    if ( classifier == null )
-                    {
-                        if ( a.getClassifier() != null )
-                        {
-                            result = 1;
-                        }
-                    }
-                    else
-                    {
-                        if ( a.getClassifier() != null )
-                        {
-                            result = classifier.compareTo( a.getClassifier() );
-                        }
-                        else
-                        {
-                            result = -1;
-                        }
-                    }
-                    if ( result == 0 )
-                    {
-                        // We don't consider the version range in the comparison, just the resolved version
-                        result = version.compareTo( a.getVersion() );
-                    }
-                }
-            }
-        }
-        return result;
-    }
+      return true;
+  }
 
-    public String getDownloadUrl()
-    {
-        return downloadUrl;
-    }
+  public int compareTo( Artifact o )
+  {
+      Artifact a = (Artifact) o;
 
-    public void setDownloadUrl( String downloadUrl )
-    {
-        this.downloadUrl = downloadUrl;
-    }
+      int result = groupId.compareTo( a.getGroupId() );
+      if ( result == 0 )
+      {
+          result = artifactId.compareTo( a.getArtifactId() );
+          if ( result == 0 )
+          {
+              result = type.compareTo( a.getType() );
+              if ( result == 0 )
+              {
+                  if ( classifier == null )
+                  {
+                      if ( a.getClassifier() != null )
+                      {
+                          result = 1;
+                      }
+                  }
+                  else
+                  {
+                      if ( a.getClassifier() != null )
+                      {
+                          result = classifier.compareTo( a.getClassifier() );
+                      }
+                      else
+                      {
+                          result = -1;
+                      }
+                  }
+                  if ( result == 0 )
+                  {
+                      // We don't consider the version range in the comparison, just the resolved version
+                      result = version.compareTo( a.getVersion() );
+                  }
+              }
+          }
+      }
+      return result;
+  }
 
-    public void setResolvedVersion( String version )
-    {
-        this.version = version;
-        // retain baseVersion
-    }
+  public String getDownloadUrl()
+  {
+      return downloadUrl;
+  }
+
+  public void setDownloadUrl( String downloadUrl )
+  {
+      this.downloadUrl = downloadUrl;
+  }
+
+  public void setResolvedVersion( String version )
+  {
+      this.version = version;
+      // retain baseVersion
+  }
 }

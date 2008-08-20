@@ -105,16 +105,37 @@ public class MetadataBuilder
     
     return res; 
   }
-
-
   /**
-   * apply an of operation to the specified serialized Metadata object
+   * apply a list of operators to the specified serialized Metadata object
    * 
    * @param metadataBytes - serialized Metadata object
-   * @param op - operation
+   * @param mutators - operators
    * @return changed serialized object
    * @throws MetadataException
    */
+  public static byte [] changeMetadata( Metadata metadata, List<MetadataOperation> mutators )
+  throws MetadataException
+  {
+    
+    if( metadata == null )
+    {
+      metadata = new Metadata();
+    }
+
+    if( mutators != null && mutators.size() > 0 )
+      for( MetadataOperation op : mutators )
+      {
+        boolean changed = op.perform( metadata );
+      }
+    
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    write( metadata, out );
+    
+    byte [] res = out.toByteArray(); 
+    
+    return res; 
+  }
+
   public static byte [] changeMetadata( byte [] metadataBytes, MetadataOperation op )
   throws MetadataException
   {
@@ -122,6 +143,15 @@ public class MetadataBuilder
     ops.add( op );
     
     return changeMetadata( metadataBytes, ops );
+  }
+
+  public static byte [] changeMetadata( Metadata metadata, MetadataOperation op )
+  throws MetadataException
+  {
+    ArrayList<MetadataOperation> ops = new ArrayList<MetadataOperation>(1);
+    ops.add( op );
+    
+    return changeMetadata( metadata, ops );
   }
   
   /**

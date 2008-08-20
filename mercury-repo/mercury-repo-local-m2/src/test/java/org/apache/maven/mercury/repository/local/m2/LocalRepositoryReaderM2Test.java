@@ -2,18 +2,21 @@ package org.apache.maven.mercury.repository.local.m2;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import junit.framework.TestCase;
+
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
+import org.apache.maven.mercury.artifact.DefaultArtifact;
+import org.apache.maven.mercury.artifact.QualityRange;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryOperationResult;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
-
-import junit.framework.TestCase;
+import org.apache.maven.mercury.repository.api.RepositoryWriter;
+import org.apache.maven.mercury.util.FileUtil;
 
 /**
  *
@@ -71,6 +74,8 @@ public class LocalRepositoryReaderM2Test
   public void testReadReleaseRange()
   throws IllegalArgumentException, RepositoryException
   {
+    repo.setRepositoryQualityRange( QualityRange.RELEASES_ONLY );
+  
     bmd = new ArtifactBasicMetadata("a:a:3");
     query.add( bmd );
     Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> res = reader.readVersions( query );
@@ -89,7 +94,7 @@ public class LocalRepositoryReaderM2Test
     assertNotNull( qr );
     assertTrue( qr.size() > 1 );
     
-//    assertFalse( qr.contains( new ArtifactBasicMetadata("a:a:5-SNAPSHOT") ) );
+    assertFalse( qr.contains( new ArtifactBasicMetadata("a:a:5-SNAPSHOT") ) );
     
     System.out.println("query "+bmd+"->"+qr);
     
@@ -109,6 +114,33 @@ public class LocalRepositoryReaderM2Test
     assertTrue( deps.contains( new ArtifactBasicMetadata("b:b:2") ) );
     assertTrue( deps.contains( new ArtifactBasicMetadata("c:c:(1,)") ) );
     
+  }
+  //------------------------------------------------------------------------------
+  public void testReadArtifacts()
+  throws IllegalArgumentException, RepositoryException
+  {
+    bmd = new ArtifactBasicMetadata("a:a:3");
+    query.add( bmd );
+
+    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
+    
+    assertNotNull( ror );
+    assertFalse( ror.hasExceptions() );
+    assertTrue( ror.hasResults() );
+    
+    List<DefaultArtifact> res = ror.getResults();
+    
+    assertNotNull( res );
+    assertEquals( 1, res.size() );
+    
+    DefaultArtifact da = res.get( 0 );
+    
+    assertNotNull( da );
+    assertNotNull( da.getFile() );
+    assertTrue( da.getFile().exists() );
+    assertNotNull( da.getPomBlob() );
+    
+System.out.println(da.getPomBlob());
   }
   //------------------------------------------------------------------------------
   public void testReadLatest()

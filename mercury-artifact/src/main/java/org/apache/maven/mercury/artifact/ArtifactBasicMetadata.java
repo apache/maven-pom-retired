@@ -272,7 +272,7 @@ public class ArtifactBasicMetadata
   
   public boolean hasClassifier()
   {
-    return classifier == null;
+    return classifier != null && classifier.length() > 0;
   }
 
   public Boolean isLocal()

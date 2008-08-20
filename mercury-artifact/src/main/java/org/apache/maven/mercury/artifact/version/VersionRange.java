@@ -27,6 +27,13 @@ public class VersionRange
   DefaultArtifactVersion _toVersion;
   boolean _toInclusive = false;
   //--------------------------------------------------------------------------------------------
+  public VersionRange( String range, QualityRange qRange )
+  throws VersionException
+  {
+    this( range );
+    setToQualityRange( qRange );
+  }
+  //--------------------------------------------------------------------------------------------
   public VersionRange( String range )
   throws VersionException
   {

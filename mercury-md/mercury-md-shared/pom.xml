@@ -60,6 +60,11 @@
   		<artifactId>mercury-artifact</artifactId>
   		<version>1.0.0-alpha-1-SNAPSHOT</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.apache.maven.mercury</groupId>
+  		<artifactId>mercury-util</artifactId>
+  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
   
 </project>

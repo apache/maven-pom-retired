@@ -2,7 +2,9 @@ package org.apache.maven.mercury.repository.api;
 
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.QualityEnum;
+import org.apache.maven.mercury.artifact.QualityRange;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.transport.api.Server;
 
 
 /*
@@ -64,6 +66,15 @@ public interface Repository
    */
   public boolean isAcceptedQuality( Quality quality );
   
+  /**
+   * defines how VersionRnage treats upper boundary - which Artifacts should be treated as belonging 
+   * to the vicinity - http://docs.codehaus.org/x/twDPBQ  
+   * 
+   * @return
+   * @throws NonExistentProtocolException if protocol not supported
+   */
+  public QualityRange getVersionRangeQualityRange();
+  
     /**
      * get default reader, if any
      * 
@@ -98,4 +109,11 @@ public interface Repository
      */
     RepositoryWriter getWriter( String protocol )
     throws NonExistentProtocolException;
+    
+    /**
+     * returns server where this repo resides
+     * 
+     * @return server
+     */
+    Server getServer();
 }

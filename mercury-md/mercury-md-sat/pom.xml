@@ -57,12 +57,19 @@
   		<version>1.0.0-alpha-1-SNAPSHOT</version>
   	</dependency>
 	<!--  test deps -->
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-repo-local-m2</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
-  		<scope>test</scope>
-  	</dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-repo-local-m2</artifactId>
+      <version>1.0.0-alpha-1-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-repo-local-m2</artifactId>
+      <version>1.0.0-alpha-1-SNAPSHOT</version>
+      <classifier>tests</classifier>
+      <scope>test</scope>
+    </dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-repo-remote-m2</artifactId>

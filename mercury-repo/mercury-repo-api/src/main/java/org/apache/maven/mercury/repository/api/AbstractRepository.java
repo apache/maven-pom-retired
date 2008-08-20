@@ -9,6 +9,7 @@ import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.QualityEnum;
 import org.apache.maven.mercury.artifact.QualityRange;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.transport.api.Server;
 import org.codehaus.plexus.i18n.DefaultLanguage;
 import org.codehaus.plexus.i18n.Language;
 
@@ -57,10 +58,14 @@ implements Repository
   //---------------------------------------------------------------------------
   protected String             type = DEFAULT_REPOSITORY_TYPE;
   
-  protected QualityRange       qualityRange = QualityRange.ALL;
+  protected QualityRange       repositoryQualityRange = QualityRange.ALL;
+  
+  protected QualityRange       versionRangeQualityRange = QualityRange.ALL;
 
   protected RepositoryReader   reader;
   protected RepositoryWriter   writer;
+  
+  protected Server server;
   //---------------------------------------------------------------------------
   public AbstractRepository( String id, String type )
   {
@@ -73,13 +78,33 @@ implements Repository
     return id;
   }
   //---------------------------------------------------------------------------
+  public QualityRange getRepositoryQualityRange()
+  {
+    return repositoryQualityRange;
+  }
+  //---------------------------------------------------------------------------
+  public void setRepositoryQualityRange(
+      QualityRange repositoryQualityRange )
+  {
+    this.repositoryQualityRange = repositoryQualityRange;
+  }
+  //---------------------------------------------------------------------------
+  public QualityRange getVersionRangeQualityRange()
+  {
+    return versionRangeQualityRange;
+  }
+  //---------------------------------------------------------------------------
+  public void setVersionRangeQualityRange( QualityRange versionRangeQualityRange )
+  {
+    this.versionRangeQualityRange = versionRangeQualityRange;
+  }
+  //---------------------------------------------------------------------------
   public String getDefaultReadProtocol()
   {
     return defaultReadProtocol;
   }
   //---------------------------------------------------------------------------
-  public void setDefaultReadProtocol(
-      String defaultReadProtocol )
+  public void setDefaultReadProtocol( String defaultReadProtocol )
   {
     this.defaultReadProtocol = defaultReadProtocol;
   }
@@ -172,17 +197,22 @@ implements Repository
   //---------------------------------------------------------------------------
   public boolean isSnapshots()
   {
-    return qualityRange.isAcceptedQuality( Quality.SNAPSHOT_QUALITY );
+    return repositoryQualityRange.isAcceptedQuality( Quality.SNAPSHOT_QUALITY );
   }
   //---------------------------------------------------------------------------
   public boolean isReleases()
   {
-    return qualityRange.isAcceptedQuality( Quality.RELEASE_QUALITY );
+    return repositoryQualityRange.isAcceptedQuality( Quality.RELEASE_QUALITY );
   }
   //---------------------------------------------------------------------------
   public boolean isAcceptedQuality( Quality quality )
   {
-    return qualityRange.isAcceptedQuality( quality );
+    return repositoryQualityRange.isAcceptedQuality( quality );
+  }
+  //---------------------------------------------------------------------------
+  public Server getServer()
+  {
+    return server;
   }
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------

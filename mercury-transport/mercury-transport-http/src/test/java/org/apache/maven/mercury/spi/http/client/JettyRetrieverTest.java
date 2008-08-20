@@ -164,7 +164,7 @@ public class JettyRetrieverTest extends TestCase
     throws Exception
     {
         factories.add( new SHA1VerifierFactory(false, true) ); //!lenient, sufficient
-        remoteServerType.setStreamObserverFactories(factories);
+        remoteServerType.setStreamVerifierFactories(factories);
         
         //make local dir to put stuff in
         dir = mkTempDir();
@@ -223,7 +223,7 @@ public class JettyRetrieverTest extends TestCase
                   , getClass().getResourceAsStream( publicKeyFile )
                                       )
                     );
-        remoteServerType.setStreamObserverFactories(factories);
+        remoteServerType.setStreamVerifierFactories(factories);
         
         //make local dir to put stuff in
         dir = mkTempDir();
@@ -252,7 +252,7 @@ public class JettyRetrieverTest extends TestCase
         throws Exception
     {
         factories.add(new SHA1VerifierFactory(false, true)); //!lenient, sufficient
-        remoteServerType.setStreamObserverFactories(factories);
+        remoteServerType.setStreamVerifierFactories(factories);
         
         //make local dir to put stuff in
         dir = mkTempDir();
@@ -312,7 +312,7 @@ public class JettyRetrieverTest extends TestCase
         throws Exception
     {
         factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
-        remoteServerType.setStreamObserverFactories(factories);
+        remoteServerType.setStreamVerifierFactories(factories);
         
         //make local dir to put stuff in
         dir = mkTempDir();
@@ -366,7 +366,7 @@ public class JettyRetrieverTest extends TestCase
     throws Exception
     {
         factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
-        remoteServerType.setStreamObserverFactories(factories);
+        remoteServerType.setStreamVerifierFactories(factories);
         //make local dir to put stuff in
         dir = mkTempDir();
         DefaultRetrievalRequest request = new DefaultRetrievalRequest();
@@ -415,7 +415,7 @@ public class JettyRetrieverTest extends TestCase
     public void testValidatorSuccess() throws Exception
     {
         factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
-        remoteServerType.setStreamObserverFactories(factories);
+        remoteServerType.setStreamVerifierFactories(factories);
 
         //make local dir to put stuff in
         dir = mkTempDir();
@@ -469,7 +469,7 @@ public class JettyRetrieverTest extends TestCase
     public void testValidatorFailure () throws Exception
     {
         factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
-        remoteServerType.setStreamObserverFactories(factories);
+        remoteServerType.setStreamVerifierFactories(factories);
         
         //make local dir to put stuff in
         dir = mkTempDir();
@@ -523,7 +523,7 @@ public class JettyRetrieverTest extends TestCase
     public void testMemoryRetrieval () throws Exception
     {
         factories.add(new SHA1VerifierFactory(true, true)); //lenient, sufficient
-        remoteServerType.setStreamObserverFactories(factories);
+        remoteServerType.setStreamVerifierFactories(factories);
 
         //make local dir to put stuff in
         dir = mkTempDir();

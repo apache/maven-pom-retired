@@ -11,6 +11,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
@@ -92,7 +93,7 @@ public class MetadataBuilderTest
   throws FileNotFoundException, IOException, XmlPullParserException, MetadataException
   {
     File groupMd = new File( testBase, "group-maven-metadata.xml");
-    byte [] targetBytes = readRawData( groupMd );
+    byte [] targetBytes = FileUtil.readRawData( groupMd );
 
     Metadata source = new Metadata();
     source.setGroupId( "a" );
@@ -107,7 +108,7 @@ public class MetadataBuilderTest
     
     File resFile = new File( testBase, "group-maven-metadata-write.xml");
 
-    writeRawData( resFile, resBytes );
+    FileUtil.writeRawData( resFile, resBytes );
     
      Metadata mmd = MetadataBuilder.read( new FileInputStream(resFile) );
 
@@ -134,13 +135,13 @@ public class MetadataBuilderTest
   throws FileNotFoundException, IOException, XmlPullParserException, MetadataException
   {
     File groupMd = new File( testBase, "group-maven-metadata.xml");
-    byte [] targetBytes = readRawData( groupMd );
+    byte [] targetBytes = FileUtil.readRawData( groupMd );
 
     byte [] resBytes = MetadataBuilder.changeMetadata( targetBytes, new AddVersionOperation( new StringOperand("5") ) );
     
     File resFile = new File( testBase, "group-maven-metadata-write.xml");
 
-    writeRawData( resFile, resBytes );
+    FileUtil.writeRawData( resFile, resBytes );
     
      Metadata mmd = MetadataBuilder.read( new FileInputStream(resFile) );
 
@@ -166,13 +167,13 @@ public class MetadataBuilderTest
   throws FileNotFoundException, IOException, XmlPullParserException, MetadataException
   {
     File groupMd = new File( testBase, "group-maven-metadata.xml");
-    byte [] targetBytes = readRawData( groupMd );
+    byte [] targetBytes = FileUtil.readRawData( groupMd );
 
     byte [] resBytes = MetadataBuilder.changeMetadata( targetBytes, new RemoveVersionOperation( new StringOperand("1") ) );
     
     File resFile = new File( testBase, "group-maven-metadata-write.xml");
 
-    writeRawData( resFile, resBytes );
+    FileUtil.writeRawData( resFile, resBytes );
     
      Metadata mmd = MetadataBuilder.read( new FileInputStream(resFile) );
 
@@ -197,7 +198,7 @@ public class MetadataBuilderTest
   throws FileNotFoundException, IOException, XmlPullParserException, MetadataException
   {
     File groupMd = new File( testBase, "group-maven-metadata.xml");
-    byte [] targetBytes = readRawData( groupMd );
+    byte [] targetBytes = FileUtil.readRawData( groupMd );
     
     Snapshot sn = new Snapshot();
     sn.setLocalCopy( false );
@@ -209,7 +210,7 @@ public class MetadataBuilderTest
     
     File resFile = new File( testBase, "group-maven-metadata-write.xml");
 
-    writeRawData( resFile, resBytes );
+    FileUtil.writeRawData( resFile, resBytes );
     
      Metadata mmd = MetadataBuilder.read( new FileInputStream(resFile) );
 
@@ -224,7 +225,7 @@ public class MetadataBuilderTest
      assertEquals( ts, snapshot.getTimestamp() );
      
      // now let's drop sn
-     targetBytes = readRawData( resFile );
+     targetBytes = FileUtil.readRawData( resFile );
      resBytes = MetadataBuilder.changeMetadata( targetBytes, new SetSnapshotOperation( new SnapshotOperand(null) ) );
      
      Metadata mmd2 = MetadataBuilder.read( new ByteArrayInputStream(resBytes) );
@@ -244,7 +245,7 @@ public class MetadataBuilderTest
   throws FileNotFoundException, IOException, XmlPullParserException, MetadataException
   {
     File groupMd = new File( testBase, "group-maven-metadata.xml");
-    byte [] targetBytes = readRawData( groupMd );
+    byte [] targetBytes = FileUtil.readRawData( groupMd );
 
     ArrayList<MetadataOperation> ops = new ArrayList<MetadataOperation>(2);
     ops.add( new RemoveVersionOperation( new StringOperand("1") ) );
@@ -254,7 +255,7 @@ public class MetadataBuilderTest
     
     File resFile = new File( testBase, "group-maven-metadata-write.xml");
 
-    writeRawData( resFile, resBytes );
+    FileUtil.writeRawData( resFile, resBytes );
     
      Metadata mmd = MetadataBuilder.read( new FileInputStream(resFile) );
 
@@ -274,55 +275,6 @@ public class MetadataBuilderTest
      assertTrue( versions.contains("3") );
      assertTrue( versions.contains("4") );
      assertTrue( versions.contains("8") );
-  }
-  //---------------------------------------------------------------------------------------------------------------
-  private byte[] readRawData( File file )
-  throws IOException
-  {
-    if( ! file.exists() )
-      return null;
-    
-    FileInputStream fis = null;
-    
-    try
-    {
-      fis = new FileInputStream( file );
-      int len = (int)file.length();
-      byte [] pom = new byte [ len ];
-      fis.read( pom );
-      return pom;
-    }
-    catch( IOException e )
-    {
-      throw  e;
-    }
-    finally
-    {
-      if( fis != null ) try { fis.close(); } catch( Exception any ) {}
-    }
-  }
-  //---------------------------------------------------------------------------------------------------------------
-  private void writeRawData( File file, byte [] bytes )
-  throws IOException
-  {
-    if( file.exists() )
-      file.delete();
-    
-    FileOutputStream fos = null;
-    
-    try
-    {
-      fos = new FileOutputStream( file );
-      fos.write( bytes );
-    }
-    catch( IOException e )
-    {
-      throw  e;
-    }
-    finally
-    {
-      if( fos != null ) try { fos.close(); } catch( Exception any ) {}
-    }
   }
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------

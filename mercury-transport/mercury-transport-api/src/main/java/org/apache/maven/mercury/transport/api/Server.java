@@ -33,7 +33,7 @@ public class Server
   private boolean                     requireEncryption = false;
   private boolean                     requireTrustedServer = false;
 
-  private Set<StreamVerifierFactory>  streamObserverFactories;
+  private Set<StreamVerifierFactory>  streamVerifierFactories;
 
   public Server( String id, URL url )
   {
@@ -97,14 +97,19 @@ public class Server
     return this.serverCredentials;
   }
 
-  public Set<StreamVerifierFactory> getStreamObserverFactories()
+  public boolean hasStreamVerifierFactories()
   {
-    return streamObserverFactories;
+    return streamVerifierFactories != null && streamVerifierFactories.size() > 0;
   }
 
-  public void setStreamObserverFactories( Set<StreamVerifierFactory> factories )
+  public Set<StreamVerifierFactory> getStreamVerifierFactories()
   {
-    streamObserverFactories = factories;
+    return streamVerifierFactories;
+  }
+
+  public void setStreamVerifierFactories( Set<StreamVerifierFactory> factories )
+  {
+    streamVerifierFactories = factories;
   }
 
   public boolean isRequireEncryption()

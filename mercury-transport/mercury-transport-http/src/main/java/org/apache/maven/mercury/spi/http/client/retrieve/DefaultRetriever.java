@@ -314,7 +314,7 @@ public class DefaultRetriever implements Retriever
         HashSet<StreamObserver> observers = new HashSet<StreamObserver>();
         if (server != null)
         {
-            Set<StreamVerifierFactory> factories = server.getStreamObserverFactories();
+            Set<StreamVerifierFactory> factories = server.getStreamVerifierFactories();
             for( StreamVerifierFactory f:factories )
             {
                 observers.add( f.newInstance() );

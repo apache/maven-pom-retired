@@ -16,6 +16,7 @@ package org.apache.maven.mercury.artifact;
  */
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.regex.Pattern;
 
 
@@ -75,8 +76,16 @@ extends Comparable<Artifact>
     boolean hasClassifier();
 
     File getFile();
+    
+    InputStream getStream();
 
     void setFile( File destination );
+    
+    byte [] getPomBlob();
+    
+    String getBaseName();
+    
+    String getBaseName( String classifier );
 
     // ----------------------------------------------------------------------
 

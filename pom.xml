@@ -15,6 +15,7 @@
     <module>mercury-transport</module>
     <module>mercury-external</module>
     <module>mercury-crypto</module>
+    <module>mercury-util</module>
     <module>mercury-it</module>
   </modules>
 

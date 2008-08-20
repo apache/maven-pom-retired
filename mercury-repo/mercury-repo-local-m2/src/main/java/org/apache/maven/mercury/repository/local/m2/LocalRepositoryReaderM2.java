@@ -23,6 +23,7 @@ import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryOperationResult;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
+import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.i18n.DefaultLanguage;
 import org.codehaus.plexus.i18n.Language;
 
@@ -76,18 +77,35 @@ implements RepositoryReader, MetadataReader
     {
       DefaultArtifact da = bmd instanceof DefaultArtifact ? (DefaultArtifact)bmd : new DefaultArtifact( bmd );
 
-      File binary = new File( _repoDir, pathOf( bmd, null, null) );
+      File binary = new File( _repoDir, relPathOf( bmd, null, null) );
       if( ! binary.exists() )
       {
-        res.add( new RepositoryException( _lang.getMessage( "binary.not.found", binary.getAbsolutePath() ) ) );
+        res.add( new RepositoryException( _lang.getMessage( "binary.not.found", bmd.toString(), binary.getAbsolutePath() ) ) );
         continue;
       }
 
       da.setFile( binary );
+      
+      File pomFile = new File( _repoDir, relPathOf( bmd, null, "pom") );
+      if( pomFile.exists() )
+      {
+        try
+        {
+          da.setPomBlob( FileUtil.readRawData( pomFile ) );
+        }
+        catch( Exception e )
+        {
+          throw new RepositoryException( e );
+        }
+      }
+      else
+      {
+        _log.warn( _lang.getMessage( "pom.not.found", bmd.toString()) );
+      }
 
       res.add( da );
     }
-    return null;
+    return res;
   }
   //---------------------------------------------------------------------------------------------------------------
   /**
@@ -108,7 +126,7 @@ implements RepositoryReader, MetadataReader
       String pomPath = bmd.getGroupId().replace( '.', '/' )
                       + "/" + bmd.getArtifactId()
                       + "/" + bmd.getVersion()
-                      + "/" + bmd.getBaseName()
+                      + "/" + bmd.getArtifactId()+'-'+bmd.getVersion()
                       + ".pom"
                       ;
       
@@ -165,7 +183,7 @@ implements RepositoryReader, MetadataReader
       VersionRange versionQuery;
       try
       {
-        versionQuery = new VersionRange( bmd.getVersion() );
+        versionQuery = new VersionRange( bmd.getVersion(), _repo.getVersionRangeQualityRange() );
       }
       catch( VersionException e )
       {
@@ -206,10 +224,10 @@ implements RepositoryReader, MetadataReader
   public byte[] readRawData( ArtifactBasicMetadata bmd, String classifier, String type )
   throws MetadataProcessingException
   {
-    return readRawData( pathOf(bmd, classifier, type) );
+    return readRawData( relPathOf(bmd, classifier, type) );
   }
   //---------------------------------------------------------------------------------------------------------------
-  private String pathOf( ArtifactBasicMetadata bmd, String classifier, String type )
+  private static String relPathOf( ArtifactBasicMetadata bmd, String classifier, String type )
   {
     String bmdPath = bmd.getGroupId().replace( '.', '/' )+"/"+bmd.getArtifactId()+"/"+bmd.getVersion();
     
@@ -244,6 +262,16 @@ implements RepositoryReader, MetadataReader
     {
       if( fis != null ) try { fis.close(); } catch( Exception any ) {}
     }
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  public String readStringData( String path )
+  throws MetadataProcessingException
+  {
+    byte [] data = readRawData( path );
+    if( data == null )
+      return null;
+
+    return new String( data );
   }
   //---------------------------------------------------------------------------------------------------------------
   public boolean canHandle( String protocol )
