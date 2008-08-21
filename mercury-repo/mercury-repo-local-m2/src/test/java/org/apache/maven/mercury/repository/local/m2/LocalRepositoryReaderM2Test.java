@@ -2,6 +2,7 @@ package org.apache.maven.mercury.repository.local.m2;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -12,11 +13,15 @@ import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
 import org.apache.maven.mercury.artifact.QualityRange;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
+import org.apache.maven.mercury.crypto.api.StreamVerifierException;
+import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
+import org.apache.maven.mercury.crypto.pgp.PgpStreamVerifierFactory;
+import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryOperationResult;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
-import org.apache.maven.mercury.repository.api.RepositoryWriter;
-import org.apache.maven.mercury.util.FileUtil;
+import org.apache.maven.mercury.transport.api.Server;
 
 /**
  *
@@ -34,16 +39,24 @@ public class LocalRepositoryReaderM2Test
   List<ArtifactBasicMetadata> query;
   
   ArtifactBasicMetadata bmd;
+  
+  private static final String publicKeyFile = "/pgp/pubring.gpg";
+  
+  Server server;
+  HashSet<StreamVerifierFactory> factories;
   //------------------------------------------------------------------------------
   @Override
   protected void setUp()
       throws Exception
   {
-    repo = new LocalRepositoryM2( "local-repo-m2", new File("./target/test-classes/repo") );
     mdProcessor = new MetadataProcessorMock();
-    reader = repo.getReader( mdProcessor );
-    
+
     query = new ArrayList<ArtifactBasicMetadata>();
+    
+    server = new Server( "test", new File("./target/test-classes/repo").toURL() );
+      
+    repo = new LocalRepositoryM2( server );
+    reader = repo.getReader( mdProcessor );
   }
   //------------------------------------------------------------------------------
   public void testReadReleaseVersion()
@@ -60,6 +73,10 @@ public class LocalRepositoryReaderM2Test
     RepositoryOperationResult<ArtifactBasicMetadata> ror = res.get( bmd );
     
     assertNotNull( ror );
+    
+    if( ror.hasExceptions() )
+      System.out.println( ror.getExceptions() );
+    
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
@@ -86,6 +103,10 @@ public class LocalRepositoryReaderM2Test
     RepositoryOperationResult<ArtifactBasicMetadata> ror = res.get( bmd );
     
     assertNotNull( ror );
+    
+    if( ror.hasExceptions() )
+      System.out.println( ror.getExceptions() );
+    
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
@@ -125,6 +146,10 @@ public class LocalRepositoryReaderM2Test
     RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
     
     assertNotNull( ror );
+    
+    if( ror.hasExceptions() )
+      System.out.println( ror.getExceptions() );
+    
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
@@ -150,6 +175,10 @@ public class LocalRepositoryReaderM2Test
     RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
     
     assertNotNull( ror );
+    
+    if( ror.hasExceptions() )
+      System.out.println( ror.getExceptions() );
+    
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
@@ -165,8 +194,6 @@ public class LocalRepositoryReaderM2Test
     assertTrue( da.getFile().exists() );
     assertEquals( 159630, da.getFile().length() );
     assertNotNull( da.getPomBlob() );
-    
-System.out.println( new String(da.getPomBlob()) );
   }
   //------------------------------------------------------------------------------
   public void testReadSnapshotTS()
@@ -178,6 +205,10 @@ System.out.println( new String(da.getPomBlob()) );
     RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
     
     assertNotNull( ror );
+    
+    if( ror.hasExceptions() )
+      System.out.println( ror.getExceptions() );
+    
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
@@ -193,8 +224,6 @@ System.out.println( new String(da.getPomBlob()) );
     assertTrue( da.getFile().exists() );
     assertEquals( 14800, da.getFile().length() );
     assertNotNull( da.getPomBlob() );
-    
-System.out.println( new String(da.getPomBlob()) );
   }
   //------------------------------------------------------------------------------
   public void testReadLatest()
@@ -206,6 +235,10 @@ System.out.println( new String(da.getPomBlob()) );
     RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
     
     assertNotNull( ror );
+    
+    if( ror.hasExceptions() )
+      System.out.println( ror.getExceptions() );
+    
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
@@ -235,6 +268,10 @@ System.out.println( new String(da.getPomBlob()) );
     RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
     
     assertNotNull( ror );
+    
+    if( ror.hasExceptions() )
+      System.out.println( ror.getExceptions() );
+    
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
@@ -252,8 +289,129 @@ System.out.println( new String(da.getPomBlob()) );
     assertTrue( da.getFile().exists() );
     assertEquals( 14800, da.getFile().length() );
     assertNotNull( da.getPomBlob() );
+  }
+  //------------------------------------------------------------------------------
+  public void testReadAndVerifyGoodArtifact()
+  throws IllegalArgumentException, RepositoryException, StreamVerifierException
+  {
+    // verifiers
+    factories = new HashSet<StreamVerifierFactory>();       
+    factories.add( 
+        new PgpStreamVerifierFactory(
+                new StreamVerifierAttributes( PgpStreamVerifierFactory.DEFAULT_EXTENSION, false, true )
+                , getClass().getResourceAsStream( publicKeyFile )
+                                    )
+                  );
+    factories.add( new SHA1VerifierFactory(false,false) );
+    server.setReaderStreamVerifierFactories(factories);
+
+    bmd = new ArtifactBasicMetadata("a:a:4");
+    query.add( bmd );
+
+    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
     
-System.out.println( new String(da.getPomBlob()) );
+    assertNotNull( ror );
+    
+    if( ror.hasExceptions() )
+      System.out.println( ror.getExceptions() );
+    
+    assertFalse( ror.hasExceptions() );
+    assertTrue( ror.hasResults() );
+    
+    List<DefaultArtifact> res = ror.getResults();
+    
+    assertNotNull( res );
+    assertEquals( 1, res.size() );
+    
+    DefaultArtifact da = res.get( 0 );
+    
+    assertNotNull( da );
+    assertNotNull( da.getFile() );
+    assertTrue( da.getFile().exists() );
+    assertNotNull( da.getPomBlob() );
+  }
+  //------------------------------------------------------------------------------
+  public void testReadAndVerifyArtifactNoSig()
+  throws IllegalArgumentException, StreamVerifierException
+  {
+    // verifiers
+    factories = new HashSet<StreamVerifierFactory>();       
+    factories.add( 
+        new PgpStreamVerifierFactory(
+                new StreamVerifierAttributes( PgpStreamVerifierFactory.DEFAULT_EXTENSION, false, true )
+                , getClass().getResourceAsStream( publicKeyFile )
+                                    )
+                  );
+    server.setReaderStreamVerifierFactories(factories);
+
+    bmd = new ArtifactBasicMetadata("a:a:3");
+    query.add( bmd );
+
+    try
+    {
+      reader.readArtifacts( query );
+    }
+    catch( RepositoryException e )
+    {
+      System.out.println( "Expected exception: "+e.getMessage() );
+      return;
+    }
+    fail( "Artifact a:a:3 does not have .asc signature, PGP verifier is not lenient, but this did not cause a RepositoryException" );
+  }
+  //------------------------------------------------------------------------------
+  public void testReadAndVerifyArtifactBadSig()
+  throws IllegalArgumentException, StreamVerifierException
+  {
+    // verifiers
+    factories = new HashSet<StreamVerifierFactory>();       
+    factories.add( 
+        new PgpStreamVerifierFactory(
+                new StreamVerifierAttributes( PgpStreamVerifierFactory.DEFAULT_EXTENSION, false, true )
+                , getClass().getResourceAsStream( publicKeyFile )
+                                    )
+                  );
+    server.setReaderStreamVerifierFactories(factories);
+
+    bmd = new ArtifactBasicMetadata("a:a:2");
+    query.add( bmd );
+
+    try
+    {
+      reader.readArtifacts( query );
+    }
+    catch( RepositoryException e )
+    {
+      System.out.println( "Expected exception: "+e.getMessage() );
+      return;
+    }
+    fail( "Artifact a:a:2 does have a bad .asc (PGP) signature, PGP verifier is not lenient, but this did not cause a RepositoryException" );
+  }
+  //------------------------------------------------------------------------------
+  public void testReadAndVerifyArtifactNoSigLenientVerifier()
+  throws IllegalArgumentException, StreamVerifierException
+  {
+    // verifiers
+    factories = new HashSet<StreamVerifierFactory>();       
+    factories.add( 
+        new PgpStreamVerifierFactory(
+                new StreamVerifierAttributes( PgpStreamVerifierFactory.DEFAULT_EXTENSION, true, true )
+                , getClass().getResourceAsStream( publicKeyFile )
+                                    )
+                  );
+    factories.add( new SHA1VerifierFactory(true,false) );
+    server.setReaderStreamVerifierFactories(factories);
+
+    bmd = new ArtifactBasicMetadata("a:a:3");
+    query.add( bmd );
+
+    try
+    {
+      reader.readArtifacts( query );
+    }
+    catch( RepositoryException e )
+    {
+      fail( "Artifact a:a:3 does not have .asc signature, PGP verifier is lenient, but still caused a RepositoryException: "+e.getMessage() );
+    }
   }
   //------------------------------------------------------------------------------
   //------------------------------------------------------------------------------

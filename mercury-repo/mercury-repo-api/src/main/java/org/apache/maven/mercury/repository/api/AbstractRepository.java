@@ -210,6 +210,11 @@ implements Repository
     return repositoryQualityRange.isAcceptedQuality( quality );
   }
   //---------------------------------------------------------------------------
+  public boolean hasServer()
+  {
+    return server != null;
+  }
+  //---------------------------------------------------------------------------
   public Server getServer()
   {
     return server;

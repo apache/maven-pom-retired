@@ -2,10 +2,13 @@ package org.apache.maven.mercury.repository.local.m2;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
@@ -18,6 +21,10 @@ import org.apache.maven.mercury.artifact.version.VersionRange;
 import org.apache.maven.mercury.builder.api.MetadataProcessingException;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
+import org.apache.maven.mercury.crypto.api.StreamObserverException;
+import org.apache.maven.mercury.crypto.api.StreamVerifier;
+import org.apache.maven.mercury.crypto.api.StreamVerifierException;
+import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.repository.api.AbstracRepositoryReader;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.LocalRepository;
@@ -74,6 +81,11 @@ implements RepositoryReader, MetadataReader
       throw new IllegalArgumentException( _lang.getMessage( "empty.query", query==null?"null":"empty" ) );
     
     RepositoryOperationResult<DefaultArtifact> res = new RepositoryOperationResult<DefaultArtifact>();
+    
+    Set<StreamVerifierFactory> vFacs = null;
+    
+    if( _repo.hasServer() && _repo.getServer().hasReaderStreamVerifierFactories() )
+      vFacs = _repo.getServer().getReaderStreamVerifierFactories();
     
     for( ArtifactBasicMetadata bmd : query )
     {
@@ -195,10 +207,11 @@ implements RepositoryReader, MetadataReader
         continue;
       }
 
-      da.setFile( binary );
-      
       try // reading pom if one exists
       {
+        if( checkFile( binary, vFacs ) )
+          da.setFile( binary );
+
         if( "pom".equals( bmd.getType() ) ) 
         {
             da.setPomBlob( FileUtil.readRawData( binary ) );
@@ -207,19 +220,102 @@ implements RepositoryReader, MetadataReader
         {
           File pomFile = new File( _repoDir, relPathOf( da, null, "pom", dav) );
           if( pomFile.exists() )
+          {
+            if( checkFile( pomFile, vFacs ) )
               da.setPomBlob( FileUtil.readRawData( pomFile ) );
+          }
           else
             _log.warn( _lang.getMessage( "pom.not.found", bmd.toString()) );
         }
 
         res.add( da );
       }
-      catch( IOException e )
+      catch( Exception e )
       {
         throw new RepositoryException( e );
       }
     }
     return res;
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  private static boolean checkFile( File f, Set<StreamVerifierFactory> vFacs )
+  throws RepositoryException, StreamVerifierException
+  {
+    if( vFacs != null )
+    {
+      String fileName = f.getAbsolutePath();
+      
+      HashSet<StreamVerifier> vs = new HashSet<StreamVerifier>( vFacs.size() );
+      
+      for( StreamVerifierFactory svf : vFacs )
+      {
+        StreamVerifier sv = svf.newInstance();
+        String ext = sv.getAttributes().getExtension();
+        String sigFileName = fileName+(ext.startsWith( "." )?"":".")+ext;
+        File sigFile = new File( sigFileName );
+        if( sigFile.exists() )
+        {
+          try
+          {
+            sv.initSignature( FileUtil.readRawDataAsString( sigFile ) );
+          }
+          catch( IOException e )
+          {
+            throw new RepositoryException( _lang.getMessage( "cannot.read.signature.file", sigFileName, e.getMessage() ) );
+          }
+          vs.add( sv );
+        }
+        else if( ! sv.getAttributes().isLenient() )
+        {
+          throw new RepositoryException( _lang.getMessage( "no.signature.file", ext, sigFileName ) );
+        }
+        // otherwise ignore absence of signature file, if verifier is lenient
+      }
+
+      FileInputStream fin = null;
+      try
+      {
+        fin = new FileInputStream( f );
+        byte [] buf = new byte[ 1024 ];
+        int n = -1;
+        while( (n = fin.read( buf )) != -1 )
+        {
+          for( StreamVerifier sv : vs )
+            try
+            {
+              sv.bytesReady( buf, 0, n );
+            }
+            catch( StreamObserverException e )
+            {
+              if( ! sv.getAttributes().isLenient() )
+                throw new RepositoryException(e);
+            }
+        }
+        
+        for( StreamVerifier sv : vs )
+        {
+          if( sv.verifySignature() )
+          {
+            if( sv.getAttributes().isSufficient() )
+              break;
+          }
+          else
+          {
+            if( !sv.getAttributes().isLenient() )
+              throw new RepositoryException( _lang.getMessage( "signature.failed", sv.getAttributes().getExtension(), fileName ) );
+          }
+        }
+      }
+      catch( IOException e )
+      {
+        throw new RepositoryException(e);
+      }
+      finally
+      {
+        if( fin != null ) try { fin.close(); } catch( Exception any ) {}
+      }
+    }
+    return true;
   }
   //---------------------------------------------------------------------------------------------------------------
   /**

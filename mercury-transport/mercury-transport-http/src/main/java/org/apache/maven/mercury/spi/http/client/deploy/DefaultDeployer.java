@@ -332,7 +332,7 @@ public class DefaultDeployer implements Deployer
     throws StreamVerifierException
     {
         HashSet<StreamObserver> observers = new HashSet<StreamObserver>();
-        Set<StreamVerifierFactory> factories = server.getStreamVerifierFactories();
+        Set<StreamVerifierFactory> factories = server.getWriterStreamVerifierFactories();
         for (StreamVerifierFactory f:factories)
         {
             observers.add( f.newInstance() );

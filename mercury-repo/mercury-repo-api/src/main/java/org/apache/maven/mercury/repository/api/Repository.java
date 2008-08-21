@@ -111,9 +111,10 @@ public interface Repository
     throws NonExistentProtocolException;
     
     /**
-     * returns server where this repo resides
+     * server where this repo resides. For local repo - folder as URL and stream verifiers are important.
      * 
      * @return server
      */
+    boolean hasServer();
     Server getServer();
 }

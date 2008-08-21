@@ -182,7 +182,7 @@ public class JettyDeployerTest extends TestCase
                     , keyId, secretKeyPass
                                         )
                       );
-        remoteServerType.setStreamVerifierFactories(factories);
+        remoteServerType.setWriterStreamVerifierFactories(factories);
         
         System.err.println("Basedir = "+_baseDir.getAbsolutePath());
         
@@ -314,7 +314,7 @@ public class JettyDeployerTest extends TestCase
     public void testUploadFail () throws Exception 
     {        
         factories.add(new SHA1VerifierFactory(false, true)); //!lenient, sufficient
-        remoteServerType.setStreamVerifierFactories(factories);
+        remoteServerType.setWriterStreamVerifierFactories(factories);
         HashSet<Binding> bindings = new HashSet<Binding>();
         DeployRequestImpl request = new DeployRequestImpl();
 
@@ -388,7 +388,7 @@ public class JettyDeployerTest extends TestCase
     public void testUploadFailFast () throws Exception 
     {
         factories.add(new SHA1VerifierFactory(false, true)); //!lenient, sufficient
-        remoteServerType.setStreamVerifierFactories(factories);
+        remoteServerType.setWriterStreamVerifierFactories(factories);
         HashSet<Binding> bindings = new HashSet<Binding>();
         DeployRequestImpl request = new DeployRequestImpl();
 
@@ -446,7 +446,7 @@ public class JettyDeployerTest extends TestCase
     public void testMemoryDeployment () throws Exception
     {
         factories.add(new SHA1VerifierFactory(false, true)); //!lenient, sufficient
-        remoteServerType.setStreamVerifierFactories(factories);
+        remoteServerType.setWriterStreamVerifierFactories(factories);
         HashSet<Binding> bindings = new HashSet<Binding>();
         DeployRequestImpl request = new DeployRequestImpl();
 

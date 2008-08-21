@@ -71,6 +71,12 @@ public class FileUtil
     writeRawData( fOut, fis );
   }
   //---------------------------------------------------------------------------------------------------------------
+  public static String readRawDataAsString( File file )
+  throws IOException
+  {
+    return new String( readRawData( file ), DEFAULT_CHARSET );
+  }
+  //---------------------------------------------------------------------------------------------------------------
   public static byte[] readRawData( File file )
   throws IOException
   {

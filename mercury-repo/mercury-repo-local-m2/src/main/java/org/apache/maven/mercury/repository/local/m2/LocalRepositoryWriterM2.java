@@ -93,8 +93,8 @@ implements RepositoryWriter
     
     Set<StreamVerifierFactory> vFacs = null;
     Server server = _repo.getServer();
-    if( server != null && server.hasStreamVerifierFactories() )
-      vFacs = server.getStreamVerifierFactories();
+    if( server != null && server.hasWriterStreamVerifierFactories() )
+      vFacs = server.getWriterStreamVerifierFactories();
     
     if( vFacs == null ) // let it be empty, but not null
       vFacs = new HashSet<StreamVerifierFactory>(1);

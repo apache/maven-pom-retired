@@ -75,7 +75,7 @@ public class LocalRepositoryWriterM2Test
                                     )
                   );
     factories.add( new SHA1VerifierFactory(false,false) );
-    server.setStreamVerifierFactories(factories);
+    server.setWriterStreamVerifierFactories(factories);
       
     repo = new LocalRepositoryM2( server );
     reader = repo.getReader( mdProcessor );
@@ -140,6 +140,18 @@ public class LocalRepositoryWriterM2Test
     File ap = new File( repo.getDirectory(), "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-SNAPSHOT.pom");
     assertTrue( ap.exists() );
     assertEquals( 7785, ap.length() );  
+  }
+  
+  public void ntestTemp()
+  throws Exception
+  {
+    Set<Artifact> set = new HashSet<Artifact>(3);
+    DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("a:a:4") );
+    da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/a-4.pom" ) ) );
+    da.setStream( getClass().getResourceAsStream( "/a-4.jar" ) );
+    set.add( da );
+    
+    writer.writeArtifact( set );
   }
   
 }
