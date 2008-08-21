@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Writer;
 
@@ -194,6 +195,26 @@ public class MetadataBuilder
       java.text.DateFormat fmt = new java.text.SimpleDateFormat( "yyyyMMddHHmmss" );
       fmt.setTimeZone( timezone );
       return fmt.format( date );
+  }
+  
+  public static Snapshot createSnapshot( String version )
+  {
+    Snapshot sn = new Snapshot();
+    
+    if( version == null || version.length() < 3 )
+      return sn;
+    
+    String utc = MetadataBuilder.getUTCTimestamp();
+    sn.setTimestamp( utc );
+    
+    if( version.endsWith( Artifact.SNAPSHOT_VERSION ))
+      return sn;
+    
+    String sbn = version.substring( version.lastIndexOf( '-' )+1 );
+    int    bn = Integer.parseInt( sbn ); 
+    sn.setBuildNumber( bn );
+    
+    return sn;
   }
   
 }

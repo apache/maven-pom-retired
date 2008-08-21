@@ -207,7 +207,13 @@ public class DefaultArtifactVersion
         if( qualifier == null )
           base = version;
         else
-          base = version.substring( 0, version.indexOf( qualifier )-1 );
+        {
+          int ind = version.indexOf( qualifier );
+          if( ind == 0 )
+            base = qualifier;
+          else
+            base = version.substring( 0, version.indexOf( qualifier )-1 );
+        }
       }
   }
 

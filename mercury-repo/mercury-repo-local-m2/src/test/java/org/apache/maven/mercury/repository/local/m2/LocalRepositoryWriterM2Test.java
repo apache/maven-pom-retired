@@ -64,6 +64,7 @@ public class LocalRepositoryWriterM2Test
     query = new ArrayList<ArtifactBasicMetadata>();
     
     server = new Server( "test", repoFile.toURL() );
+    // verifiers
     factories = new HashSet<StreamVerifierFactory>();       
     factories.add( 
         new PgpStreamVerifierFactory(
@@ -79,10 +80,8 @@ public class LocalRepositoryWriterM2Test
     repo = new LocalRepositoryM2( server );
     reader = repo.getReader( mdProcessor );
     writer = repo.getWriter();
-    
-      
   }
-    
+  
   public void testWriteArtifact()
   throws Exception
   {
@@ -100,10 +99,47 @@ public class LocalRepositoryWriterM2Test
     
     File ap = new File( repo.getDirectory(), "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.pom");
     assertTrue( ap.exists() );
-    assertEquals( 7785, ap.length() );
-    
-    
+    assertEquals( 7785, ap.length() );  
   }
-
+  
+  public void testWriteSnapshotAsTS()
+  throws Exception
+  {
+    Set<Artifact> set = new HashSet<Artifact>(3);
+    DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0.9-20080805.215925-8") );
+    da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
+    da.setStream( getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
+    set.add( da );
+    
+    writer.writeArtifact( set );
+    
+    File af = new File( repo.getDirectory(), "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-20080805.215925-8.jar");
+    assertTrue( af.exists() );
+    assertEquals( 159630, af.length() );
+    
+    File ap = new File( repo.getDirectory(), "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-20080805.215925-8.pom");
+    assertTrue( ap.exists() );
+    assertEquals( 7785, ap.length() );  
+  }
+  
+  public void testWriteSnapshot()
+  throws Exception
+  {
+    Set<Artifact> set = new HashSet<Artifact>(3);
+    DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0.9-SNAPSHOT") );
+    da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
+    da.setStream( getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
+    set.add( da );
+    
+    writer.writeArtifact( set );
+    
+    File af = new File( repo.getDirectory(), "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-SNAPSHOT.jar");
+    assertTrue( af.exists() );
+    assertEquals( 159630, af.length() );
+    
+    File ap = new File( repo.getDirectory(), "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-SNAPSHOT.pom");
+    assertTrue( ap.exists() );
+    assertEquals( 7785, ap.length() );  
+  }
   
 }

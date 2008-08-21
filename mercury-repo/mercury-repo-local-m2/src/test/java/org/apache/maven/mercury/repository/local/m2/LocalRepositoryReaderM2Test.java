@@ -139,23 +139,121 @@ public class LocalRepositoryReaderM2Test
     assertNotNull( da.getFile() );
     assertTrue( da.getFile().exists() );
     assertNotNull( da.getPomBlob() );
-    
-System.out.println(da.getPomBlob());
-  }
-  //------------------------------------------------------------------------------
-  public void testReadLatest()
-  {
-    // TODO
   }
   //------------------------------------------------------------------------------
   public void testReadSnapshot()
+  throws IllegalArgumentException, RepositoryException
   {
-    // TODO
+    bmd = new ArtifactBasicMetadata("a:a:5-SNAPSHOT");
+    query.add( bmd );
+
+    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
+    
+    assertNotNull( ror );
+    assertFalse( ror.hasExceptions() );
+    assertTrue( ror.hasResults() );
+    
+    List<DefaultArtifact> res = ror.getResults();
+    
+    assertNotNull( res );
+    assertEquals( 1, res.size() );
+    
+    DefaultArtifact da = res.get( 0 );
+    
+    assertNotNull( da );
+    assertNotNull( da.getFile() );
+    assertTrue( da.getFile().exists() );
+    assertEquals( 159630, da.getFile().length() );
+    assertNotNull( da.getPomBlob() );
+    
+System.out.println( new String(da.getPomBlob()) );
   }
   //------------------------------------------------------------------------------
-  public void testReadSnapshotTimeStamp()
+  public void testReadSnapshotTS()
+  throws IllegalArgumentException, RepositoryException
   {
-    // TODO
+    bmd = new ArtifactBasicMetadata("a:a:5-20080807.234713-11");
+    query.add( bmd );
+
+    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
+    
+    assertNotNull( ror );
+    assertFalse( ror.hasExceptions() );
+    assertTrue( ror.hasResults() );
+    
+    List<DefaultArtifact> res = ror.getResults();
+    
+    assertNotNull( res );
+    assertEquals( 1, res.size() );
+    
+    DefaultArtifact da = res.get( 0 );
+    
+    assertNotNull( da );
+    assertNotNull( da.getFile() );
+    assertTrue( da.getFile().exists() );
+    assertEquals( 14800, da.getFile().length() );
+    assertNotNull( da.getPomBlob() );
+    
+System.out.println( new String(da.getPomBlob()) );
+  }
+  //------------------------------------------------------------------------------
+  public void testReadLatest()
+  throws IllegalArgumentException, RepositoryException
+  {
+    bmd = new ArtifactBasicMetadata("a:a:LATEST");
+    query.add( bmd );
+
+    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
+    
+    assertNotNull( ror );
+    assertFalse( ror.hasExceptions() );
+    assertTrue( ror.hasResults() );
+    
+    List<DefaultArtifact> res = ror.getResults();
+    
+    assertNotNull( res );
+    assertEquals( 1, res.size() );
+    
+    DefaultArtifact da = res.get( 0 );
+    
+    assertNotNull( da );
+    assertEquals( "5-SNAPSHOT", da.getVersion() );
+    
+    assertNotNull( da.getFile() );
+    assertTrue( da.getFile().exists() );
+    assertEquals( 159630, da.getFile().length() );
+    assertNotNull( da.getPomBlob() );
+    
+  }
+  //------------------------------------------------------------------------------
+  public void testReadRelease()
+  throws IllegalArgumentException, RepositoryException
+  {
+    bmd = new ArtifactBasicMetadata("a:a:RELEASE");
+    query.add( bmd );
+
+    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
+    
+    assertNotNull( ror );
+    assertFalse( ror.hasExceptions() );
+    assertTrue( ror.hasResults() );
+    
+    List<DefaultArtifact> res = ror.getResults();
+    
+    assertNotNull( res );
+    assertEquals( 1, res.size() );
+    
+    DefaultArtifact da = res.get( 0 );
+    
+    assertNotNull( da );
+    assertEquals( "4", da.getVersion() );
+    
+    assertNotNull( da.getFile() );
+    assertTrue( da.getFile().exists() );
+    assertEquals( 14800, da.getFile().length() );
+    assertNotNull( da.getPomBlob() );
+    
+System.out.println( new String(da.getPomBlob()) );
   }
   //------------------------------------------------------------------------------
   //------------------------------------------------------------------------------

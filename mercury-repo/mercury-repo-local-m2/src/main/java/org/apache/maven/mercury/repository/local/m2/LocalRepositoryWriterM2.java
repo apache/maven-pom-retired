@@ -12,6 +12,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.maven.mercury.artifact.Artifact;
+import org.apache.maven.mercury.artifact.Quality;
+import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
+import org.apache.maven.mercury.artifact.version.VersionQuery;
 import org.apache.maven.mercury.crypto.api.StreamObserver;
 import org.apache.maven.mercury.crypto.api.StreamObserverException;
 import org.apache.maven.mercury.crypto.api.StreamVerifier;
@@ -26,6 +29,10 @@ import org.apache.maven.mercury.repository.metadata.AddVersionOperation;
 import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.MetadataBuilder;
 import org.apache.maven.mercury.repository.metadata.MetadataException;
+import org.apache.maven.mercury.repository.metadata.MetadataOperation;
+import org.apache.maven.mercury.repository.metadata.SetSnapshotOperation;
+import org.apache.maven.mercury.repository.metadata.Snapshot;
+import org.apache.maven.mercury.repository.metadata.SnapshotOperand;
 import org.apache.maven.mercury.repository.metadata.StringOperand;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileUtil;
@@ -128,10 +135,12 @@ implements RepositoryWriter
           throw new RepositoryException( e );
       }
     }
-
+    DefaultArtifactVersion dav = new DefaultArtifactVersion( artifact.getVersion() );
+    Quality aq = dav.getQuality();
+    boolean isSnapshot = aq.equals( Quality.SNAPSHOT_QUALITY ) || aq.equals( Quality.SNAPSHOT_TS_QUALITY );
 
     String relGroupPath = artifact.getGroupId().replace( '.', '/' )+"/"+artifact.getArtifactId();
-    String relVersionPath = relGroupPath + '/' + artifact.getVersion();
+    String relVersionPath = relGroupPath + '/' + (isSnapshot ? (dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION) : artifact.getVersion() );
 
     try
     {
@@ -149,7 +158,11 @@ implements RepositoryWriter
         }
           
       }
-      
+
+      // create folders
+      File gav = new File( _repoDir, relVersionPath );
+      gav.mkdirs();
+
       String fName = _repoDir.getAbsolutePath()+'/'+relVersionPath+'/'+artifact.getBaseName()+'.'+artifact.getType();
       
       if( !isPom )
@@ -160,26 +173,52 @@ implements RepositoryWriter
         // if classier - nothing else to do :)
         if( artifact.hasClassifier() )
           return;
-
-        File groupMd = new File( _repoDir, relGroupPath+'/'+"maven-metadata.xml");
-        Metadata gmd = null;
         
-        if( groupMd.exists() )
-          gmd = MetadataBuilder.read( new FileInputStream(groupMd) );
+        // GA metadata
+        File mdFile = new File( _repoDir, relGroupPath+'/'+"maven-metadata-local.xml");
+        Metadata localMd = null;
+        
+        if( mdFile.exists() )
+          localMd = MetadataBuilder.read( new FileInputStream(mdFile) );
         else
         {
-          gmd = new Metadata();
-          gmd.setGroupId( artifact.getGroupId() );
-          gmd.setArtifactId( artifact.getArtifactId() );
-          gmd.setVersion( artifact.getVersion() );
+          localMd = new Metadata();
+          localMd.setGroupId( artifact.getGroupId() );
+          localMd.setArtifactId( artifact.getArtifactId() );
         }
         
-        byte [] resBytes = MetadataBuilder.changeMetadata( 
-                        gmd
-                      , new AddVersionOperation( new StringOperand(artifact.getVersion()) ) 
-                                                          );
+        MetadataOperation mdOp = null;
+        
+        if( isSnapshot )
+        {
+          Snapshot sn = MetadataBuilder.createSnapshot( artifact.getVersion() );
+          sn.setLocalCopy( true );
+          mdOp = new SetSnapshotOperation( new SnapshotOperand(sn) );
+        }
+        else
+          mdOp = new AddVersionOperation( new StringOperand(artifact.getVersion()) ); 
+        
+        byte [] resBytes = MetadataBuilder.changeMetadata( localMd, mdOp );
 
-        FileUtil.writeRawData( groupMd, resBytes );
+        FileUtil.writeRawData( mdFile, resBytes );
+
+        // now - GAV metadata
+        mdFile = new File( _repoDir, relVersionPath+'/'+"maven-metadata-local.xml");
+        localMd = null;
+        
+        if( mdFile.exists() )
+          localMd = MetadataBuilder.read( new FileInputStream(mdFile) );
+        else
+        {
+          localMd = new Metadata();
+          localMd.setGroupId( artifact.getGroupId() );
+          localMd.setArtifactId( artifact.getArtifactId() );
+          localMd.setVersion( artifact.getVersion() );
+        }
+        
+        resBytes = MetadataBuilder.changeMetadata( localMd, mdOp );
+
+        FileUtil.writeRawData( mdFile, resBytes );
       }
       
       if( hasPomBlob )
