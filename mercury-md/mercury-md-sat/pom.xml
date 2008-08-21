@@ -76,18 +76,5 @@
   		<version>1.0.0-alpha-1-SNAPSHOT</version>
   		<scope>test</scope>
   	</dependency>
-    <dependency>
-      <groupId>org.apache.maven.mercury</groupId>
-      <artifactId>mercury-transport-http</artifactId>
-      <version>1.0.0-alpha-1-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.mercury</groupId>
-      <artifactId>mercury-transport-http</artifactId>
-      <version>1.0.0-alpha-1-SNAPSHOT</version>
-      <classifier>tests</classifier>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 </project>
