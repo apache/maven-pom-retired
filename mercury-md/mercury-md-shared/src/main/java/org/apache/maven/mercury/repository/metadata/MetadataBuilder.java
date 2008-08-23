@@ -121,11 +121,12 @@ public class MetadataBuilder
     
     for( MetadataOperation op : mutators )
     {
-      changed = changed || op.perform( metadata );
+      changed = op.perform( metadata ) || changed;
     }
-    
-    if( !changed )
-      return metadataBytes;
+
+// TODO og: does not work - check    
+//    if( !changed )
+//      return metadataBytes;
     
     return getBytes( metadata ); 
   }
@@ -169,7 +170,7 @@ public class MetadataBuilder
     if( mutators != null && mutators.size() > 0 )
       for( MetadataOperation op : mutators )
       {
-        changed = changed || op.perform( metadata );
+        changed = op.perform( metadata ) || changed;
       }
     
     ByteArrayOutputStream out = new ByteArrayOutputStream();

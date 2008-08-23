@@ -62,9 +62,22 @@ extends TestCase
   {
     File af = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar");
     assertFalse( af.exists() );
+    assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar.asc").exists() );
+    assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar.sha1").exists() );
     
     File ap = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.pom");
     assertFalse( ap.exists() );
+    assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.pom.asc").exists() );
+    assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.pom.sha1").exists() );
+    
+    
+    assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName()).exists() );
+    assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName()+".asc").exists() );
+    assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName()+".sha1").exists() );
+
+    assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/"+repo.getMetadataName()).exists() );
+    assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/"+repo.getMetadataName()+".asc").exists() );
+    assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/"+repo.getMetadataName()+".sha1").exists() );
 
     Set<Artifact> artifacts = new HashSet<Artifact>(3);
     DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0.9") );
@@ -74,6 +87,14 @@ extends TestCase
     
     writer.writeArtifact( artifacts );
     
+    assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName()).exists() );
+    assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName()+".asc").exists() );
+    assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName()+".sha1").exists() );
+
+    assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/"+repo.getMetadataName()).exists() );
+    assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/"+repo.getMetadataName()+".asc").exists() );
+    assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/"+repo.getMetadataName()+".sha1").exists() );
+
     assertTrue( af.exists() );
     assertEquals( 159630, af.length() );
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar.asc").exists() );
