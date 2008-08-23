@@ -16,24 +16,30 @@ extends AbstractRepository
 implements LocalRepository
 {
     private File directory;
+    
+    private static final String METADATA_NAME = "maven-metadata-local.xml";
+
     //----------------------------------------------------------------------------------
     public LocalRepositoryM2( Server server )
     {
         super( server.getId(), DEFAULT_REPOSITORY_TYPE );
         this.directory = new File( server.getURL().getFile() );
         this.server = server;
+        this.metadataName = METADATA_NAME;
     }
     //----------------------------------------------------------------------------------
     public LocalRepositoryM2( String id, File directory )
     {
         super( id, DEFAULT_REPOSITORY_TYPE );
         this.directory = directory;
+        this.metadataName = METADATA_NAME;
     }
     //----------------------------------------------------------------------------------
     public LocalRepositoryM2( String id, File directory, String type )
     {
         super( id, type );
         this.directory = directory;
+        this.metadataName = METADATA_NAME;
     }
     //----------------------------------------------------------------------------------
     public File getDirectory()

@@ -86,6 +86,18 @@ public class Binding
     this.localIS = is;
   }
 
+  /**
+   * inbound constructor - read contents of the remoteUrl to the stream
+   * 
+   * @param remoteUrl
+   * @param is
+   */
+  public Binding( URL remoteUrl, ByteArrayOutputStream os )
+  {
+    this.remoteResource = remoteUrl;
+    this.localOS = os;
+  }
+
   public URL getRemoteResource()
   {
     return remoteResource;
@@ -138,5 +150,17 @@ public class Binding
   {
       return localFile;
   }
+
+  @Override
+  public String toString()
+  {
+    return '['
+            + (remoteResource == null ? "null URL" : remoteResource.toString() )+" <=> "
+            + (localFile == null ?  ( localIS == null ? (localOS == null ? "null local Res" : localOS) : "localIS" ) : localFile.getAbsolutePath() )
+            +']'
+    ;
+  }
+  
+  
 
 }

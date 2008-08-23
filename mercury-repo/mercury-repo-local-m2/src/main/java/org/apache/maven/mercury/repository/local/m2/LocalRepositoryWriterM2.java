@@ -168,14 +168,14 @@ implements RepositoryWriter
       if( !isPom )
       {
         // first - take care of the binary
-        writeFile( in, vFacs , fName );
+        FileUtil.writeAndSign( fName, in, vFacs );
         
         // if classier - nothing else to do :)
         if( artifact.hasClassifier() )
           return;
         
         // GA metadata
-        File mdFile = new File( _repoDir, relGroupPath+'/'+"maven-metadata-local.xml");
+        File mdFile = new File( _repoDir, relGroupPath+'/'+_repo.getMetadataName() );
         Metadata localMd = null;
         
         if( mdFile.exists() )
@@ -200,10 +200,10 @@ implements RepositoryWriter
         
         byte [] resBytes = MetadataBuilder.changeMetadata( localMd, mdOp );
 
-        FileUtil.writeRawData( mdFile, resBytes );
+        FileUtil.writeAndSign( mdFile.getAbsolutePath(), resBytes, vFacs );
 
         // now - GAV metadata
-        mdFile = new File( _repoDir, relVersionPath+'/'+"maven-metadata-local.xml");
+        mdFile = new File( _repoDir, relVersionPath+'/'+_repo.getMetadataName() );
         localMd = null;
         
         if( mdFile.exists() )
@@ -217,67 +217,20 @@ implements RepositoryWriter
         }
         
         resBytes = MetadataBuilder.changeMetadata( localMd, mdOp );
-
-        FileUtil.writeRawData( mdFile, resBytes );
+        FileUtil.writeAndSign( mdFile.getAbsolutePath(), resBytes, vFacs );
       }
       
       if( hasPomBlob )
       {
-        writeFile( pomBlob, vFacs , _repoDir.getAbsolutePath()+'/'+relVersionPath+'/'+artifact.getBaseName()+".pom" );
+        FileUtil.writeAndSign( _repoDir.getAbsolutePath()+'/'+relVersionPath
+                              +'/'+artifact.getArtifactId()+'-'+artifact.getVersion()+".pom", pomBlob, vFacs
+                              );
       }
         
     }
     catch( Exception e )
     {
       throw new RepositoryException( e );
-    }
-    
-  }
-  //---------------------------------------------------------------------------------------------------------------
-  private static void writeFile( byte [] bytes, Set<StreamVerifierFactory> vFacs, String fName )
-  throws IOException, StreamObserverException
-  {
-    ByteArrayInputStream bais = new ByteArrayInputStream( bytes );
-    writeFile( bais, vFacs, fName );
-  }
-  //---------------------------------------------------------------------------------------------------------------
-  private static void writeFile( InputStream in, Set<StreamVerifierFactory> vFacs, String fName )
-  throws IOException, StreamObserverException
-  {
-    byte [] buf = new byte[ 10240 ];
-    int n = -1;
-    HashSet<StreamVerifier> vSet = new HashSet<StreamVerifier>( vFacs.size() );
-    
-    for( StreamVerifierFactory vf : vFacs )
-      vSet.add( vf.newInstance() );
-    
-    FileOutputStream fout = null;
-    
-    try
-    {
-      File f = new File( fName );
-      f.getParentFile().mkdirs();
-      
-      fout = new FileOutputStream( f );
-      
-      while( (n = in.read( buf )) != -1 )
-      {
-        for( StreamVerifier sv : vSet )
-          sv.bytesReady( buf, 0, n );
-        
-        fout.write( buf, 0, n );
-      }
-      
-      for( StreamVerifier sv : vSet )
-      {
-        String sig = sv.getSignature();
-        FileUtil.writeRawData( new File( fName+sv.getAttributes().getExtension() ), sig );
-      }
-      
-    }
-    finally
-    {
-      if( fout != null ) try { fout.close(); } catch( Exception any ) {}
     }
     
   }

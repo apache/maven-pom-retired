@@ -6,6 +6,7 @@
   <version>1-alpha-1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Mercury parent POM:                 ${project.version}</name>
+  
   <developers>
     <developer>
       <name>Jan Bartel</name>
@@ -34,6 +35,7 @@
     <mercuryVersionMd>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionMd>
     <mercuryVersionRepo>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionRepo>
     <mercuryVersionTransport>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionTransport>
+
   </properties>
   
   <distributionManagement>
@@ -275,8 +277,7 @@
     	<artifactId>plexus-i18n</artifactId>
     	<version>1.0-beta-10</version>
     </dependency>
+    
   </dependencies>
-
-
 
 </project>

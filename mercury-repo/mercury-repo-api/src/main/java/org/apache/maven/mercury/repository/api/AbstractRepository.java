@@ -66,6 +66,8 @@ implements Repository
   protected RepositoryWriter   writer;
   
   protected Server server;
+  
+  protected String metadataName = "maven-metadata.xml";
   //---------------------------------------------------------------------------
   public AbstractRepository( String id, String type )
   {
@@ -178,7 +180,7 @@ implements Repository
     return rf.getReader( repo, mdProcessor );
   }
   //---------------------------------------------------------------------------
-  public static RepositoryWriter getWriter( String type, Repository repo, MetadataProcessor mdProcessor )
+  public static RepositoryWriter getWriter( String type, Repository repo )
   throws IllegalArgumentException, RepositoryException
   {
     if( type == null || type.length() < 1 )
@@ -192,7 +194,7 @@ implements Repository
     if( wf == null )
       throw new RepositoryException( lang.getMessage( "null.writer.factory.found" ) );
     
-    return wf.getWriter( repo, mdProcessor );
+    return wf.getWriter( repo );
   }
   //---------------------------------------------------------------------------
   public boolean isSnapshots()
@@ -218,6 +220,11 @@ implements Repository
   public Server getServer()
   {
     return server;
+  }
+  //---------------------------------------------------------------------------
+  public String getMetadataName()
+  {
+    return metadataName;
   }
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------

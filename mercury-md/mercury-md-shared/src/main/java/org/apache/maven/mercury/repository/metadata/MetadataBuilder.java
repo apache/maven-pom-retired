@@ -6,12 +6,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Writer;
+import org.apache.maven.mercury.util.TimeUtil;
 
 /**
  * utility class to help with de/serializing metadata from/to XML
@@ -36,6 +36,29 @@ public class MetadataBuilder
     try
     {
       return new MetadataXpp3Reader().read( in );
+    }
+    catch( Exception e )
+    {
+      throw new MetadataException(e);
+    }
+  }
+  
+  /**
+   * instantiate Metadata from a byte array
+   * 
+   * @param in
+   * @return
+   * @throws MetadataException
+   */
+  public static Metadata getMetadata( byte [] in )
+  throws MetadataException
+  {
+    if( in == null || in.length < 10 )
+      return null;
+
+    try
+    {
+      return new MetadataXpp3Reader().read( new ByteArrayInputStream(in) );
     }
     catch( Exception e )
     {
@@ -84,6 +107,8 @@ public class MetadataBuilder
       return metadataBytes;
     
     Metadata metadata;
+    boolean changed = false;
+    
     if( metadataBytes == null || metadataBytes.length < 10 )
     {
       metadata = new Metadata();
@@ -96,9 +121,25 @@ public class MetadataBuilder
     
     for( MetadataOperation op : mutators )
     {
-      boolean changed = op.perform( metadata );
+      changed = changed || op.perform( metadata );
     }
     
+    if( !changed )
+      return metadataBytes;
+    
+    return getBytes( metadata ); 
+  }
+
+  /**
+   * marshall metadata into a byte array 
+   * 
+   * @param metadata
+   * @return
+   * @throws MetadataException
+   */
+  public static byte [] getBytes( Metadata metadata )
+  throws MetadataException
+  {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     write( metadata, out );
     
@@ -118,6 +159,8 @@ public class MetadataBuilder
   throws MetadataException
   {
     
+    boolean changed = false;
+
     if( metadata == null )
     {
       metadata = new Metadata();
@@ -126,7 +169,7 @@ public class MetadataBuilder
     if( mutators != null && mutators.size() > 0 )
       for( MetadataOperation op : mutators )
       {
-        boolean changed = op.perform( metadata );
+        changed = changed || op.perform( metadata );
       }
     
     ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -162,7 +205,7 @@ public class MetadataBuilder
    */
   public static void updateTimestamp( Snapshot target )
   {
-      target.setTimestamp( getUTCTimestamp() );
+      target.setTimestamp( TimeUtil.getUTCTimestamp() );
   }
   
   /**
@@ -172,29 +215,7 @@ public class MetadataBuilder
    */
   public static void updateTimestamp( Versioning target )
   {
-      target.setLastUpdated( getUTCTimestamp() );
-  }
-  
-  /**
-   * 
-   * @return current UTC timestamp by yyyyMMddHHmmss mask
-   */
-  public static String getUTCTimestamp( )
-  {
-    return getUTCTimestamp( new Date() );
-  }
-
-  /**
-   * 
-   * @param date
-   * @return current date converted to UTC timestamp by yyyyMMddHHmmss mask
-   */
-  public static String getUTCTimestamp( Date date )
-  {
-      java.util.TimeZone timezone = java.util.TimeZone.getTimeZone( "UTC" );
-      java.text.DateFormat fmt = new java.text.SimpleDateFormat( "yyyyMMddHHmmss" );
-      fmt.setTimeZone( timezone );
-      return fmt.format( date );
+      target.setLastUpdated( TimeUtil.getUTCTimestamp() );
   }
   
   public static Snapshot createSnapshot( String version )
@@ -204,7 +225,7 @@ public class MetadataBuilder
     if( version == null || version.length() < 3 )
       return sn;
     
-    String utc = MetadataBuilder.getUTCTimestamp();
+    String utc = TimeUtil.getUTCTimestamp();
     sn.setTimestamp( utc );
     
     if( version.endsWith( Artifact.SNAPSHOT_VERSION ))

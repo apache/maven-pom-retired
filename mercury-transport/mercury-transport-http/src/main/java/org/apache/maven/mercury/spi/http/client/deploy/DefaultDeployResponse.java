@@ -25,7 +25,8 @@ import java.util.Set;
 
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 
-public class DefaultDeployResponse implements DeployResponse
+public class DefaultDeployResponse
+implements DeployResponse
 {
     private Set<HttpClientException> _exceptions = Collections.synchronizedSet( new HashSet<HttpClientException>() );
 
@@ -46,6 +47,11 @@ public class DefaultDeployResponse implements DeployResponse
     public String toString()
     {
         return _exceptions.toString();
+    }
+
+    public boolean hasExceptions()
+    {
+      return _exceptions != null && _exceptions.size() > 0;
     }
 
 }

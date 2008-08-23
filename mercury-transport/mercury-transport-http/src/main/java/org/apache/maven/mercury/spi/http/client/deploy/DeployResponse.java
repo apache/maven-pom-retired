@@ -39,4 +39,6 @@ public interface DeployResponse
      * @return
      */
     public Set<HttpClientException> getExceptions();
+    
+    public boolean hasExceptions();
 }

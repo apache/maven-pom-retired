@@ -328,14 +328,17 @@ public class DefaultDeployer implements Deployer
         return server;
     }
     
-    private Set<StreamObserver> createStreamObservers (Server server)
+    private Set<StreamObserver> createStreamObservers( Server server )
     throws StreamVerifierException
     {
         HashSet<StreamObserver> observers = new HashSet<StreamObserver>();
-        Set<StreamVerifierFactory> factories = server.getWriterStreamVerifierFactories();
-        for (StreamVerifierFactory f:factories)
+        if( server != null && server.hasWriterStreamVerifierFactories() )
         {
-            observers.add( f.newInstance() );
+          Set<StreamVerifierFactory> factories = server.getWriterStreamVerifierFactories();
+          for (StreamVerifierFactory f:factories)
+          {
+              observers.add( f.newInstance() );
+          }
         }
         return observers;
     }

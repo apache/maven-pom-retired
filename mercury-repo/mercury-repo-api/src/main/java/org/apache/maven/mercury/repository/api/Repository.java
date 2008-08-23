@@ -117,4 +117,18 @@ public interface Repository
      */
     boolean hasServer();
     Server getServer();
+
+    /**
+     * maven-metadata.xml file name for this repository. This is internal to repository and should never be used 
+     * outside of readers and wrters
+     * 
+     * @return server
+     */
+    String getMetadataName();
+
+
+    /**
+     * @param releasesOnly
+     */
+    void setRepositoryQualityRange( QualityRange releasesOnly );
 }

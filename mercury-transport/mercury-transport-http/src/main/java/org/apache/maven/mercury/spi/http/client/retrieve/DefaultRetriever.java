@@ -312,7 +312,7 @@ public class DefaultRetriever implements Retriever
     throws StreamVerifierException
     {
         HashSet<StreamObserver> observers = new HashSet<StreamObserver>();
-        if (server != null)
+        if (server != null && server.hasReaderStreamVerifierFactories() )
         {
             Set<StreamVerifierFactory> factories = server.getReaderStreamVerifierFactories();
             for( StreamVerifierFactory f:factories )

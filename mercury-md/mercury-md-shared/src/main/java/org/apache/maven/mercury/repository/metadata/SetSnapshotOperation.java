@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.repository.metadata;
 
+import org.apache.maven.mercury.util.TimeUtil;
 import org.codehaus.plexus.i18n.DefaultLanguage;
 import org.codehaus.plexus.i18n.Language;
 
@@ -58,7 +59,7 @@ public class SetSnapshotOperation
     }
     
     vs.setSnapshot( snapshot );
-    vs.setLastUpdated( MetadataBuilder.getUTCTimestamp() );
+    vs.setLastUpdated( TimeUtil.getUTCTimestamp() );
     
     return true;
   }

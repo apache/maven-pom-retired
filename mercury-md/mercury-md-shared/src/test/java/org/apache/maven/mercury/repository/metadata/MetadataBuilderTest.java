@@ -12,6 +12,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.apache.maven.mercury.util.FileUtil;
+import org.apache.maven.mercury.util.TimeUtil;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
@@ -203,7 +204,7 @@ public class MetadataBuilderTest
     Snapshot sn = new Snapshot();
     sn.setLocalCopy( false );
     sn.setBuildNumber( 35 );
-    String ts = MetadataBuilder.getUTCTimestamp();
+    String ts = TimeUtil.getUTCTimestamp();
     sn.setTimestamp( ts );
 
     byte [] resBytes = MetadataBuilder.changeMetadata( targetBytes, new SetSnapshotOperation( new SnapshotOperand(sn) ) );
