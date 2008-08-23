@@ -46,7 +46,7 @@ import org.codehaus.plexus.i18n.DefaultLanguage;
 import org.codehaus.plexus.i18n.Language;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 /**
- * implementation of M2 remote repository reader. Actual Transport (protocol, URL) come from RemoteRepository Server URL
+ * implementation of M2 remote repository reader. Actual Transport (protocol, URL) [should] come from RemoteRepository Server URL
  * 
  *  Current implementation does not do the check and uses jetty-client directly. 
  *  TODO - re-implements after jetty-client implements ReaderTransport 
@@ -66,7 +66,7 @@ implements RepositoryReader, MetadataReader
   private static final String [] _protocols = new String [] { "http", "https", "dav", "webdav" };
   
   // TODO replace with Transport
-  private DefaultRetriever _transport;
+  DefaultRetriever _transport;
   //---------------------------------------------------------------------------------------------------------------
   RemoteRepository _repo;
   //---------------------------------------------------------------------------------------------------------------

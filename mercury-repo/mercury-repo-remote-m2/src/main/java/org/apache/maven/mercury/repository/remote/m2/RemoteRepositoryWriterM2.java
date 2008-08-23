@@ -54,8 +54,10 @@ implements RepositoryWriter
   
   RemoteRepository _repo;
   Server _server;
-  DefaultDeployer _transport;
   RepositoryReader _reader;
+  
+  // TODO og: 2008-08-22 should be replaced with real transport
+  DefaultDeployer _transport;
   //---------------------------------------------------------------------------------------------------------------
   public RemoteRepositoryWriterM2( RemoteRepository repo )
   throws RepositoryException
@@ -81,7 +83,7 @@ implements RepositoryWriter
         return null;
       }
                                 }
-                                            );
+                              );
 
     try
     {
