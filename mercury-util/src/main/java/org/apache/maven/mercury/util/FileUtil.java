@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.security.acl.Group;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +23,7 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.maven.mercury.crypto.api.StreamObserverException;
@@ -92,10 +95,14 @@ public class FileUtil
    
   }
   //---------------------------------------------------------------------------------------------------------------
-  private static void copyFile( File f, File toDir )
+  private static void copyFile( File f, File toFile )
   throws IOException
   {
-    File fOut = new File(toDir, f.getName() );
+    File fOut = null;
+    if( toFile.isDirectory() )
+      fOut = new File(toFile, f.getName() );
+    else
+      fOut = toFile;
     FileInputStream fis = new FileInputStream(f);
     writeRawData( fOut, fis );
   }
@@ -331,7 +338,7 @@ public class FileUtil
     
   }
   //---------------------------------------------------------------------------------------------------------------
-  public static void sign( File f, Set<StreamVerifierFactory> vFacs, boolean force )
+  public static void sign( File f, Set<StreamVerifierFactory> vFacs, boolean recurse, boolean force )
   throws IOException, StreamObserverException
   {
     if( vFacs == null || vFacs.size() < 1 )
@@ -339,9 +346,12 @@ public class FileUtil
 
     if( f.isDirectory() )
     {
+      if( ! recurse )
+        return;
+      
       File [] kids = f.listFiles();
       for( File kid : kids )
-        sign( kid, vFacs, force );
+        sign( kid, vFacs, recurse, force );
       return;
     }
     
@@ -398,10 +408,103 @@ public class FileUtil
     
   }
   //---------------------------------------------------------------------------------------------------------------
+  public static void verify( File f, Set<StreamVerifierFactory> vFacs, boolean recurse, boolean force )
+  throws IOException, StreamObserverException
+  {
+    if( vFacs == null || vFacs.size() < 1 )
+      return;
+
+    if( f.isDirectory() )
+    {
+      if( !recurse )
+        return;
+
+      File [] kids = f.listFiles();
+      for( File kid : kids )
+        verify( kid, vFacs, recurse, force );
+      return;
+    }
+    
+    String fName = f.getAbsolutePath();
+    
+    HashSet<StreamVerifier> vs = new HashSet<StreamVerifier>( vFacs.size() );
+    for( StreamVerifierFactory vf : vFacs )
+    {
+      StreamVerifier sv = vf.newInstance();
+      String ext = sv.getAttributes().getExtension();
+      
+      // don't verify signature files
+      if( fName.endsWith( ext ) )
+        return;
+
+      File sf = new File( fName+ext );
+      if( !sf.exists() )
+      {
+        if( force )
+          throw new StreamVerifierException( _lang.getMessage( "no.mandatory.signature", f.getAbsolutePath(), sf.getAbsolutePath() ));
+        else
+          continue;
+      }
+      else
+      {
+        String sig = readRawDataAsString( sf );
+        sv.initSignature( sig );
+      }
+      vs.add( sv );
+    }
+    
+    byte [] buf = new byte[ DEFAULT_BUFFER_SIZE ];
+    FileInputStream fis = null;
+    try
+    {
+      fis = new FileInputStream( f );
+      int n = -1;
+      
+      while( (n=fis.read( buf )) != -1 )
+      {
+        for( StreamVerifier sv : vs )
+        {
+          sv.bytesReady( buf, 0, n );
+        }
+      }
+      
+      List<String> fl = null;
+      char comma = ' ';
+      
+      for( StreamVerifier sv : vs )
+      {
+        if( sv.verifySignature() )
+          continue;
+        
+        if( fl == null )
+          fl = new ArrayList<String>(4);
+        
+        fl.add( sv.getAttributes().getExtension().replace( '.', comma ) );
+        comma = ',';
+      }
+      
+      if( fl != null )
+      {
+        throw new StreamVerifierException( _lang.getMessage( "file.failed.verification", f.getAbsolutePath(), fl.toString() ) );
+      }
+    }
+    finally
+    {
+      if( fis != null ) try { fis.close(); } catch( Exception any ) {}
+    }
+    
+  }
+  //---------------------------------------------------------------------------------------------------------------
   @SuppressWarnings("static-access")
   public static void main( String[] args )
   throws IOException, StreamObserverException
   {
+    Option sign      = new Option( "sign", _lang.getMessage( "option.sign" ) );
+    Option verify    = new Option( "verify", _lang.getMessage( "option.verify" ) );
+    OptionGroup  cmd = new OptionGroup();
+    cmd.addOption( sign );
+    cmd.addOption( verify );
+    
     Option recurce   = new Option( "r", _lang.getMessage( "option.r" ) );
     Option force     = new Option( "force", _lang.getMessage( "option.force" ) );
     Option sha1      = new Option( "sha1", _lang.getMessage( "option.sha1" ) );
@@ -424,6 +527,9 @@ public class FileUtil
                                     ;
 
     Options options = new Options();
+    options.addOptionGroup( cmd );
+    options.addOption( sign );
+    options.addOption( verify );
     options.addOption( recurce );
     options.addOption( force );
     options.addOption( sha1 );
@@ -482,11 +588,11 @@ public class FileUtil
       vFacs.add( new SHA1VerifierFactory(true,false) );
     }
     
-    signAll( commandLine.getArgList(), vFacs, commandLine.hasOption( "r" ), commandLine.hasOption( "force" ) );
+      signAll( commandLine.getArgList(), vFacs, commandLine.hasOption( "r" ), commandLine.hasOption( "force" ), commandLine.hasOption( "sign" ) );
  
   }
   //---------------------------------------------------------------------------------------------------------------
-  private static void signAll( List<String> fileNames, Set<StreamVerifierFactory> vFacs, boolean recurse, boolean force )
+  private static void signAll( List<String> fileNames, Set<StreamVerifierFactory> vFacs, boolean recurse, boolean force, boolean sign )
   throws IOException, StreamObserverException
   {
     if( vFacs == null || vFacs.size() < 1 )
@@ -510,7 +616,10 @@ public class FileUtil
         System.out.println( _lang.getMessage( "file.is.directory", fName ));
         continue;
       }
-      sign( f, vFacs, force );
+      if( sign )
+        sign( f, vFacs, recurse, force );
+      else
+        verify( f, vFacs, recurse, force );
     }
   }
   //---------------------------------------------------------------------------------------------------------------

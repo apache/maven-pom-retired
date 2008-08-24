@@ -2,6 +2,7 @@ package org.apache.maven.mercury.repository.remote.m2;
 
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
+import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
@@ -68,4 +69,12 @@ implements RemoteRepository
     }
     //----------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------
+    /* (non-Javadoc)
+     * @see org.apache.maven.mercury.repository.api.RemoteRepository#addLocalRepository(org.apache.maven.mercury.repository.api.LocalRepository)
+     */
+    public void addLocalRepository( LocalRepository localRepo )
+    {
+      // TODO Auto-generated method stub
+      
+    }
 }

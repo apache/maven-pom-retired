@@ -1,5 +1,7 @@
 package org.apache.maven.mercury.repository.api;
 
+import java.util.List;
+
 import org.apache.maven.mercury.transport.api.Server;
 
 
@@ -27,5 +29,8 @@ import org.apache.maven.mercury.transport.api.Server;
 public interface RemoteRepository
 extends Repository
 {
+  /**
+   *  this is the Server with many useful fields to describe the home of this remote repo
+   */
     Server getServer();
 }
