@@ -25,8 +25,6 @@ import junit.framework.TestCase;
 public class FileUtilTest
     extends TestCase
 {
-  private static final Language _lang = new DefaultLanguage( FileUtilTest.class );
-  
   private static final String publicKeyFile = "/pgp/pubring.gpg";
   private static final String secretKeyFile = "/pgp/secring.gpg";
   private static final String keyId         = "0EDB5D91141BC4F2";
@@ -113,7 +111,7 @@ public class FileUtilTest
       System.out.println( "Caught expected exception: "+e.getMessage() );
       return;
     }
-    fail( _lang.getMessage( "test.no.exception", StreamObserverException.class.getName() ) );
+    fail( "Expected exception never thrown:"+StreamObserverException.class.getName() );
   }
   //----------------------------------------------------------------------------------------
   public void testVerifyNoSigNoForce()
@@ -137,7 +135,7 @@ public class FileUtilTest
       System.out.println( "Caught expected exception: "+e.getMessage() );
       return;
     }
-    fail( _lang.getMessage( "test.no.exception", StreamObserverException.class.getName() ) );
+    fail( "Expected exception never thrown:"+StreamObserverException.class.getName() );
   }
   //----------------------------------------------------------------------------------------
   public void testSign()
