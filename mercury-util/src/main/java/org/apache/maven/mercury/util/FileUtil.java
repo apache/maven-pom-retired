@@ -37,7 +37,7 @@ import org.codehaus.plexus.i18n.DefaultLanguage;
 import org.codehaus.plexus.i18n.Language;
 
 /**
- *
+ * File related utilities: copy, write, sign, verify, etc.
  *
  * @author Oleg Gusakov
  * @version $Id$
@@ -425,8 +425,7 @@ public class FileUtil
       return;
     }
     
-    String fName = f.getAbsolutePath();
-    
+    String fName = f.getAbsolutePath();    
     HashSet<StreamVerifier> vs = new HashSet<StreamVerifier>( vFacs.size() );
     for( StreamVerifierFactory vf : vFacs )
     {
@@ -507,8 +506,13 @@ public class FileUtil
     
     Option recurce   = new Option( "r", _lang.getMessage( "option.r" ) );
     Option force     = new Option( "force", _lang.getMessage( "option.force" ) );
+
+    OptionGroup  sig = new OptionGroup();
     Option sha1      = new Option( "sha1", _lang.getMessage( "option.sha1" ) );
     Option pgp       = new Option( "pgp", _lang.getMessage( "option.pgp" ) );
+    sig.addOption( sha1 );
+    sig.addOption( pgp );
+    
     Option keyring   = OptionBuilder.withArgName( "file" )
                                     .hasArg()
                                     .withType( java.io.File.class )
@@ -528,12 +532,11 @@ public class FileUtil
 
     Options options = new Options();
     options.addOptionGroup( cmd );
-    options.addOption( sign );
-    options.addOption( verify );
+    options.addOptionGroup( sig );
+    
     options.addOption( recurce );
     options.addOption( force );
-    options.addOption( sha1 );
-    options.addOption( pgp );
+
     options.addOption( keyring );
     options.addOption( keyid );
     options.addOption( keypass );
@@ -562,7 +565,7 @@ public class FileUtil
     
     if( commandLine.hasOption("pgp") )
     {
-      if( commandLine.hasOption("keyring") && commandLine.hasOption("keyid") )
+      if( commandLine.hasOption( "sign" ) && commandLine.hasOption("keyring") && commandLine.hasOption("keyid") )
       {
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
         String pass = commandLine.hasOption( "keypass" ) ? commandLine.getOptionValue( "keypass" ) : r.readLine();
@@ -573,6 +576,16 @@ public class FileUtil
                     , new FileInputStream( commandLine.getOptionValue( "keyring" ) )
                     , commandLine.getOptionValue( "keyid" )
                     , pass
+                                        )
+                    );
+      }
+      else if( commandLine.hasOption( "verify" ) && commandLine.hasOption("keyring") )
+      {
+        
+        vFacs.add( 
+            new PgpStreamVerifierFactory(
+                    new StreamVerifierAttributes( PgpStreamVerifierFactory.DEFAULT_EXTENSION, false, true )
+                    , new FileInputStream( commandLine.getOptionValue( "keyring" ) )
                                         )
                     );
       }
@@ -588,7 +601,16 @@ public class FileUtil
       vFacs.add( new SHA1VerifierFactory(true,false) );
     }
     
+    try
+    {
       signAll( commandLine.getArgList(), vFacs, commandLine.hasOption( "r" ), commandLine.hasOption( "force" ), commandLine.hasOption( "sign" ) );
+    }
+    catch( Exception e )
+    {
+      System.err.println( "Bummer: "+e.getMessage() );
+      return;
+    }
+    System.out.println("Done");
  
   }
   //---------------------------------------------------------------------------------------------------------------
