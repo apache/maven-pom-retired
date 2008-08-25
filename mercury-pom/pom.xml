@@ -211,6 +211,10 @@
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
+          <includes>
+            <include>**/*.java</include>
+            <include>**/*.properties</include>
+          </includes>
         </configuration>
       </plugin>
       
