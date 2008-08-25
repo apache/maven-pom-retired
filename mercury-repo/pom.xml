@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.apache.maven.mercury</groupId>
     <artifactId>mercury-pom</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>1-alpha-1-SNAPSHOT</version>
   </parent>
   <artifactId>mercury-repo</artifactId>
   <packaging>pom</packaging>
