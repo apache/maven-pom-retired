@@ -52,7 +52,7 @@ public class DefaultRetriever implements Retriever
         _httpClient.setConnectorType( HttpClient.CONNECTOR_SELECT_CHANNEL );
         try
         {
-            //TODOJ: What are all the reasons that the httpclient couldn't start up correctly?
+            //TODO: What are all the reasons that the httpclient couldn't start up correctly?
             
             _httpClient.start();
         }
