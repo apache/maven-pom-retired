@@ -476,6 +476,7 @@ public class JettyDeployerTest extends TestCase
         assertTrue (f0.exists());
         BufferedReader reader = new BufferedReader(new FileReader(f0));
         String s = reader.readLine();
+        reader.close();
         assertEquals(s0, s.trim());
         assertTrue (f0cs.exists()); 
         
@@ -484,6 +485,7 @@ public class JettyDeployerTest extends TestCase
         assertTrue (f5.exists());
         reader = new BufferedReader(new FileReader(f5));
         s = reader.readLine();
+        reader.close();
         assertEquals(s5, s.trim());
         assertTrue (f5cs.exists());  
     }
