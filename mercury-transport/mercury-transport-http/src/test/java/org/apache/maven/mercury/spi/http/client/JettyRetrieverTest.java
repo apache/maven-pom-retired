@@ -556,11 +556,15 @@ public class JettyRetrieverTest extends TestCase
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         IO.copy(is, os);
         assertEquals(os.toByteArray().length, binding0.getInboundContent().length);
+        is.close();
+        os.close();
 
         is = this.getClass().getResourceAsStream("/testRepo/file5.jpg");
         os.reset();
         IO.copy(is,os);
         assertEquals(os.toByteArray().length, binding5.getInboundContent().length);
+        is.close();
+        os.close();
     }
    
 }
