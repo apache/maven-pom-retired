@@ -12,5 +12,5 @@ package org.apache.maven.mercury.repository.api;
  */
 public interface RepositoryCallback
 {
-  public void done( RepositoryOperationResult<?> result );
+  public void done( AbstractRepOpResult results );
 }

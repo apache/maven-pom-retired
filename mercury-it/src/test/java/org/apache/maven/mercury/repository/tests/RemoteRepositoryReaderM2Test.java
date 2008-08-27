@@ -20,7 +20,7 @@ import org.apache.maven.mercury.builder.api.MetadataProcessingException;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
 import org.apache.maven.mercury.repository.api.RepositoryException;
-import org.apache.maven.mercury.repository.api.RepositoryOperationResult;
+import org.apache.maven.mercury.repository.api.AbstractRepOpResult;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Reader;

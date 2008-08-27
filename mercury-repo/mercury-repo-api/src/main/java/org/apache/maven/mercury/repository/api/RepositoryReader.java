@@ -33,20 +33,19 @@ extends RepositoryOperator, MetadataReader
    * it with hasExceptions() 
    * @throws RepositoryException
    */
-  public Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> readVersions( List<? extends ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
   throws RepositoryException, IllegalArgumentException;
   
   /**
-   * given basic coordinates query read full ArtifactMetadata objects -
+   * given basic coordinates query read dependencies as a GAV list
    * with dependencies as queries i.e. each dependency at this stage is an ArtifactBasicMetadata
    * <b>Analogous to reading pom.xml</b> file for given GAV
    * 
    * @param query list of MD coordinate queries to read. They are found by previous call to findMetadata 
-   * @return result as list of available MD objects with dependencies filled in. Order is the same 
-   * as in query list. null means not found or worse
+   * @return result as a map GAV -> [GAV1, GAV2, ... GAVn]
    * @throws RepositoryException
    */
-  public Map< ArtifactBasicMetadata, ArtifactMetadata > readDependencies( List<? extends ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readDependencies( List<ArtifactBasicMetadata> query )
   throws RepositoryException, IllegalArgumentException;
 
   /**
@@ -57,7 +56,7 @@ extends RepositoryOperator, MetadataReader
    * @return array of results - lists of available matches. Order is the same as in query list. null means not found or worse
    * @throws RepositoryException
    */
-  public RepositoryOperationResult<DefaultArtifact> readArtifacts( List<? extends ArtifactBasicMetadata> query )
+  public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
   throws RepositoryException, IllegalArgumentException;
 
   /**

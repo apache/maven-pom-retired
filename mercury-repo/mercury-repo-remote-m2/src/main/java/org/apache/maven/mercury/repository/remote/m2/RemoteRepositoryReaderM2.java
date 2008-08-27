@@ -25,10 +25,12 @@ import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.repository.api.AbstracRepositoryReader;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
+import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
+import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
-import org.apache.maven.mercury.repository.api.RepositoryOperationResult;
+import org.apache.maven.mercury.repository.api.AbstractRepOpResult;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.MetadataBuilder;
@@ -110,25 +112,25 @@ implements RepositoryReader, MetadataReader
     return _repo;
   }
   //---------------------------------------------------------------------------------------------------------------
-  public RepositoryOperationResult<DefaultArtifact> readArtifacts( List<? extends ArtifactBasicMetadata> query )
+  public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {
     if( query == null || query.size() < 1 )
       return null;
     
-    RepositoryOperationResult<DefaultArtifact> res = new RepositoryOperationResult<DefaultArtifact>();
+    ArtifactResults res = new ArtifactResults();
     
     for( ArtifactBasicMetadata bmd : query )
     {
       try
       {
         DefaultArtifact da = readArtifact( bmd );
-        res.add( da );
+        res.add( bmd, da );
       }
       catch( Exception e )
       {
-        res.add( e );
+        res.addError( bmd, e );
       }
     }
 
@@ -149,7 +151,6 @@ implements RepositoryReader, MetadataReader
     if( gavMd == null || gavMd.getVersioning() == null )
       throw new RepositoryException( _lang.getMessage( "gav.md.no.versions", _repo.getServer().getURL().toString(), gavPath+'/'+ver+'/'+_repo.getMetadataName() ) );
       
-    
     List<String> versions = gavMd.getVersioning().getVersions();
     if( versions == null || versions.size() < 1 )
       throw new RepositoryException( _lang.getMessage( "gav.md.no.versions", _repo.getServer().getURL().toString(), gavPath+'/'+ver+'/'+_repo.getMetadataName() ) );
@@ -216,6 +217,7 @@ implements RepositoryReader, MetadataReader
     Quality vq = dav.getQuality();
     
     String relGaPath = bmd.getGroupId().replace( '.', '/' ) + '/' + bmd.getArtifactId();
+    String versionDir = bmd.getVersion();
 
     byte [] mdBytes = readRawData( relGaPath+'/'+_repo.getMetadataName() );
     if( mdBytes == null )
@@ -275,12 +277,17 @@ implements RepositoryReader, MetadataReader
 
         if( relBinaryPath == null )
           throw new RepositoryException( _lang.getMessage( "gav.not.found", bmd.toString(), relGaPath ) );
+
+        versionDir = version;
       }
       else
       {
-        relBinaryPath = relGaPath+'/'+version+'/'+bmd.getArtifactId()+'-'+version
+        versionDir = version;
+        relBinaryPath = relGaPath+'/'+versionDir
+            +'/'+bmd.getArtifactId()+'-'+version
             + ( bmd.hasClassifier() ? '-'+bmd.getClassifier() : "" )+'.'+bmd.getType()
         ;
+
         da.setVersion( version );
       }
     }
@@ -288,6 +295,7 @@ implements RepositoryReader, MetadataReader
     else if( version.endsWith( Artifact.SNAPSHOT_VERSION ) )
     {
       relBinaryPath = findLatestSnapshot( relGaPath, version, da );
+      versionDir = dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION;
 
       if( relBinaryPath == null )
         throw new RepositoryException( _lang.getMessage( "gav.not.found", bmd.toString(), relGaPath ) );
@@ -295,8 +303,8 @@ implements RepositoryReader, MetadataReader
     // time stamped snapshot requested
     else if( vq.equals( Quality.SNAPSHOT_TS_QUALITY ))
     {
-      relBinaryPath = relGaPath
-          + '/'+dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION 
+      versionDir = dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION;
+      relBinaryPath = relGaPath + '/' + versionDir 
           + '/' + bmd.getArtifactId() + '-' + bmd.getVersion() + ( bmd.hasClassifier() ? '-'+bmd.getClassifier() : "" ) 
           + '.' + bmd.getType()
       ;
@@ -312,7 +320,7 @@ implements RepositoryReader, MetadataReader
     
     // binary calculated 
     
-    File binFile = File.createTempFile( "remote-repo-", bmd.getArtifactId()+bmd.getVersion()+'.'+bmd.getType() );
+    File binFile = File.createTempFile( "remote-repo-" + _repo.getId(), bmd.getArtifactId()+bmd.getVersion()+'.'+bmd.getType() );
     File pomFile = null;
 
     Binding binBinding = new Binding( new URL(_repo.getServer().getURL().toString() + '/'+ relBinaryPath) , binFile );
@@ -322,14 +330,14 @@ implements RepositoryReader, MetadataReader
     
     if( !"pom".equals( bmd.getType() ) ) 
     {
-      String relPomPath = relGaPath + '/'+version
+      String relPomPath = relGaPath + '/' + versionDir
                           + '/'+bmd.getArtifactId()+'-'+version
                           + ".pom"
       ;
 
-      pomFile = File.createTempFile( "remote-repo-", bmd.getArtifactId()+bmd.getVersion()+'.'+bmd.getType() );
+      pomFile = File.createTempFile( "remote-repo-" + _repo.getId(), bmd.getArtifactId()+bmd.getVersion()+".pom" );
       Binding pomBinding = new Binding( new URL(_repo.getServer().getURL().toString() + '/'+ relPomPath) , pomFile );
-      request.addBinding( binBinding );
+      request.addBinding( pomBinding );
     }
     
     RetrievalResponse response = _transport.retrieve( request );
@@ -356,24 +364,21 @@ implements RepositoryReader, MetadataReader
   /**
    * 
    */
-  public Map<ArtifactBasicMetadata, ArtifactMetadata> readDependencies( List<? extends ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readDependencies( List<ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {
     if( query == null || query.size() < 1 )
       return null;
 
-    Map<ArtifactBasicMetadata, ArtifactMetadata> ror = new HashMap<ArtifactBasicMetadata, ArtifactMetadata>(16);
+    ArtifactBasicResults ror = new ArtifactBasicResults(16);
     
     for( ArtifactBasicMetadata bmd : query )
     {
       try
       {
         List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, this, System.getProperties() );
-        ArtifactMetadata md = new ArtifactMetadata( bmd );
-        md.setDependencies( deps );
-        
-        ror.put( bmd, md );
+        ror.add( bmd, deps );
       }
       catch( MetadataProcessingException e )
       {
@@ -389,14 +394,14 @@ implements RepositoryReader, MetadataReader
   /**
    * direct disk search, no redirects, first attempt
    */
-  public Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> readVersions( List<? extends ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {
     if( query == null || query.size() < 1 )
       return null;
 
-    Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> res = new HashMap<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>>( query.size() );
+    ArtifactBasicResults res = new ArtifactBasicResults( query.size() );
     
     String gaPath = null;
     for( ArtifactBasicMetadata bmd : query )
@@ -433,7 +438,6 @@ implements RepositoryReader, MetadataReader
         throw new RepositoryException( pe );
       }
 
-      RepositoryOperationResult<ArtifactBasicMetadata> rr = null;
       VersionRange versionQuery;
       try
       {
@@ -441,7 +445,7 @@ implements RepositoryReader, MetadataReader
       }
       catch( VersionException e )
       {
-        rr = RepositoryOperationResult.add( rr, new RepositoryException(e) );
+        res.addError( bmd, new RepositoryException(e) );
         continue;
       }
       
@@ -466,10 +470,8 @@ implements RepositoryReader, MetadataReader
         vmd.setType( bmd.getType() );
         vmd.setVersion( v );
         
-        rr = RepositoryOperationResult.add( rr, vmd );
+        res.add( bmd, vmd );
       }
-      if( rr != null )
-        res.put( bmd, rr );
     }
     
     return res;

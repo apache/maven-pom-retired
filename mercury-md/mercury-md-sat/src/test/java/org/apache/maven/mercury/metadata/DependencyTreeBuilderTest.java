@@ -39,7 +39,6 @@ extends TestCase
   protected void setUp()
   throws Exception
   {
-System.out.println("Current dir is "+ new File(".").getCanonicalPath() );
     processor = new MetadataProcessorMock();
     localRepo = new LocalRepositoryM2( "local", repoDir );
     
@@ -123,7 +122,7 @@ System.out.println("Current dir is "+ new File(".").getCanonicalPath() );
     
   }
   //----------------------------------------------------------------------------------------------
-  public void testBigResolveConflicts()
+  public void testResolveBigConflicts()
   throws MetadataTreeException
   {
     ArtifactMetadata md = new ArtifactMetadata( "a:a:3" );

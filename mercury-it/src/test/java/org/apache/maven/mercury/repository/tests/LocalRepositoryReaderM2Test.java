@@ -15,7 +15,7 @@ import org.apache.maven.mercury.transport.api.Server;
  * @version $Id$
  *
  */
-public class LocalRepositoryM2Test
+public class LocalRepositoryReaderM2Test
 extends AbstractRepositoryReaderM2Test
 {
 

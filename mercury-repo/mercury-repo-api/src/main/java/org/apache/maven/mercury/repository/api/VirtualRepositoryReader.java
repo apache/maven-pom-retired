@@ -17,9 +17,6 @@ import org.apache.maven.mercury.builder.api.MetadataReader;
  * this helper class hides the necessity to talk to localRepo and a bunch of remoteRepos.
  * It also adds discrete convenience methods, hiding batch nature of RepositoryReader
  * 
- * Please don't forget to initialize target platform if you really need one
- *
- *
  * @author Oleg Gusakov
  * @version $Id$
  *
@@ -126,56 +123,69 @@ implements MetadataReader
     _initialized = true;
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  public Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> readVersions( List<? extends ArtifactBasicMetadata> query )
+  /**
+   * 
+   * 
+   * @param query
+   * @param reader
+   * @param res
+   * @return
+   */
+  private List<ArtifactBasicMetadata> applyScanPolicy(
+                                          List<ArtifactBasicMetadata> query
+                                        , RepositoryReader reader
+                                        , AbstractRepOpResult res 
+                                                    )
+  {
+    // TODO 2008-08-26 og: implement real policy
+    return query;
+  }
+  //----------------------------------------------------------------------------------------------------------------------------
+  public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
   throws IllegalArgumentException, RepositoryException
   {
     if( query == null )
       throw new IllegalArgumentException("null bmd supplied");
     
     init();
-        
-    Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> res = null;
+
+    ArtifactBasicResults res = null;
     ArtifactListProcessor tp = _processors == null ? null : _processors.get( ArtifactListProcessor.FUNCTION_TP );
 
     for( RepositoryReader rr : _repositoryReaders )
     {
-      Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> repoRes = rr.readVersions( query );
+      List<ArtifactBasicMetadata> leftOvers = applyScanPolicy( query, rr, res );
+
+      ArtifactBasicResults repoRes = rr.readVersions( leftOvers );
       
-      if( repoRes != null )
-        for( ArtifactBasicMetadata key : repoRes.keySet() )
+      if( repoRes != null && repoRes.hasResults() )
+        for( ArtifactBasicMetadata key : repoRes.getResults().keySet() )
         {
-          RepositoryOperationResult<ArtifactBasicMetadata> ror = repoRes.get( key );
-          if( ror != null && !ror.hasExceptions() && ror.hasResults() )
+          List<ArtifactBasicMetadata> rorRes = repoRes.getResult(key);
+          
+          if( tp != null )
           {
-            List<ArtifactBasicMetadata> rorRes = ror.getResults();
-            
-            if( tp != null )
+            try
             {
-              try
-              {
-                tp.configure( key );
-                rorRes = tp.process( rorRes );
-              }
-              catch( ArtifactListProcessorException e )
-              {
-                throw new RepositoryException(e);
-              }
+              tp.configure( key );
+              rorRes = tp.process( rorRes );
             }
-            
-            if( rorRes == null )
-              continue;
-            
-            for( ArtifactBasicMetadata bmd : rorRes )
-              bmd.setTracker(  rr );
-            
-            if( res == null )
-              res = new HashMap<ArtifactBasicMetadata, List<ArtifactBasicMetadata>>( query.size() );
-            
-            if( res.containsKey( key ) )
-              res.get( key ).addAll( rorRes );
-            else
-              res.put( key, rorRes );
+            catch( ArtifactListProcessorException e )
+            {
+              throw new RepositoryException(e);
+            }
           }
+          
+          if( rorRes == null )
+            continue;
+          
+          for( ArtifactBasicMetadata bmd : rorRes )
+            bmd.setTracker(  rr );
+          
+          if( res == null )
+            res = new ArtifactBasicResults( key, rorRes );
+          else
+            res.add( key, rorRes );
         }
     }
     
@@ -193,18 +203,20 @@ implements MetadataReader
     List<ArtifactBasicMetadata> query = new ArrayList<ArtifactBasicMetadata>(1);
     query.add( bmd );
     
+    ArtifactMetadata md = new ArtifactMetadata( bmd ); 
     for( RepositoryReader rr : _repositoryReaders )
     {
-      Map<ArtifactBasicMetadata, ArtifactMetadata> res = rr.readDependencies( query );
-      if( res != null && ! res.isEmpty() )
+      ArtifactBasicResults res = rr.readDependencies( query );
+      
+      if( res != null && res.hasResults( bmd ) )
       {
-        ArtifactMetadata md = res.get( bmd );
+        md.setDependencies( res.getResult( bmd ) );
         md.setTracker( rr );
         return md;
       }
     }
     
-    return null;
+    return md;
   }
   //----------------------------------------------------------------------------------------------------------------------------
   /* (non-Javadoc)

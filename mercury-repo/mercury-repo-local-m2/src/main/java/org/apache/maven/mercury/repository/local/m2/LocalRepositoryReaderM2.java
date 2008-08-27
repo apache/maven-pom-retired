@@ -27,10 +27,12 @@ import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.repository.api.AbstracRepositoryReader;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
+import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
+import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
-import org.apache.maven.mercury.repository.api.RepositoryOperationResult;
+import org.apache.maven.mercury.repository.api.AbstractRepOpResult;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.i18n.DefaultLanguage;
@@ -73,14 +75,14 @@ implements RepositoryReader, MetadataReader
     return _repo;
   }
   //---------------------------------------------------------------------------------------------------------------
-  public RepositoryOperationResult<DefaultArtifact> readArtifacts( List<? extends ArtifactBasicMetadata> query )
+  public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {
     if( query == null || query.isEmpty() )
       throw new IllegalArgumentException( _lang.getMessage( "empty.query", query==null?"null":"empty" ) );
     
-    RepositoryOperationResult<DefaultArtifact> res = new RepositoryOperationResult<DefaultArtifact>();
+    ArtifactResults res = new ArtifactResults();
     
     Set<StreamVerifierFactory> vFacs = null;
     
@@ -100,7 +102,7 @@ implements RepositoryReader, MetadataReader
       
       if( !gaDir.exists() )
       {
-        res.add( new RepositoryException( _lang.getMessage( "ga.not.found", bmd.toString(), relGaPath ) ) );
+        res.addError( bmd, new RepositoryException( _lang.getMessage( "ga.not.found", bmd.toString(), relGaPath ) ) );
         continue;
       }
       
@@ -150,7 +152,7 @@ implements RepositoryReader, MetadataReader
 
         if( version == null )
         {
-          res.add( new RepositoryException( _lang.getMessage( "gav.not.found", bmd.toString(), relGaPath ) ) );
+          res.addError( bmd, new RepositoryException( _lang.getMessage( "gav.not.found", bmd.toString(), relGaPath ) ) );
           continue;
         }
         
@@ -174,7 +176,7 @@ implements RepositoryReader, MetadataReader
         File gavDir = new File( gaDir, version );
         if( !gavDir.exists() )
         {
-          res.add( new RepositoryException( _lang.getMessage( "gavdir.not.found", bmd.toString(), gavDir.getAbsolutePath() ) ) );
+          res.addError( bmd, new RepositoryException( _lang.getMessage( "gavdir.not.found", bmd.toString(), gavDir.getAbsolutePath() ) ) );
           continue;
         }
         
@@ -203,7 +205,7 @@ implements RepositoryReader, MetadataReader
       // binary calculated 
       if( ! binary.exists() )
       {
-        res.add( new RepositoryException( _lang.getMessage( "binary.not.found", bmd.toString(), binary.getAbsolutePath() ) ) );
+        res.addError( bmd, new RepositoryException( _lang.getMessage( "binary.not.found", bmd.toString(), binary.getAbsolutePath() ) ) );
         continue;
       }
 
@@ -228,7 +230,7 @@ implements RepositoryReader, MetadataReader
             _log.warn( _lang.getMessage( "pom.not.found", bmd.toString()) );
         }
 
-        res.add( da );
+        res.add( bmd, da );
       }
       catch( Exception e )
       {
@@ -321,14 +323,14 @@ implements RepositoryReader, MetadataReader
   /**
    * 
    */
-  public Map<ArtifactBasicMetadata, ArtifactMetadata> readDependencies( List<? extends ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readDependencies( List<ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {
     if( query == null || query.size() < 1 )
       return null;
 
-    Map<ArtifactBasicMetadata, ArtifactMetadata> ror = new HashMap<ArtifactBasicMetadata, ArtifactMetadata>(16);
+    ArtifactBasicResults ror = null;
     
     File pomFile = null;
     for( ArtifactBasicMetadata bmd : query )
@@ -352,10 +354,7 @@ implements RepositoryReader, MetadataReader
       try
       {
         List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, this, System.getProperties() );
-        ArtifactMetadata md = new ArtifactMetadata( bmd );
-        md.setDependencies( deps );
-        
-        ror.put( bmd, md );
+        ror = ArtifactBasicResults.add( ror, bmd, deps );
       }
       catch( MetadataProcessingException e )
       {
@@ -368,7 +367,7 @@ implements RepositoryReader, MetadataReader
     return ror;
   }
   //---------------------------------------------------------------------------------------------------------------
-  private static File findLatestSnapshot( File gavDir, DefaultArtifact da, RepositoryOperationResult<DefaultArtifact> res )
+  private static File findLatestSnapshot( File gavDir, DefaultArtifact da, AbstractRepOpResult res )
   {
       
     String version = gavDir.getName();
@@ -424,7 +423,7 @@ implements RepositoryReader, MetadataReader
 
     if( version == null )
     {
-      res.add( new RepositoryException( _lang.getMessage( "snapshot.not.found", da.toString(), gavDir.getAbsolutePath() ) ) );
+      res.addError( da, new RepositoryException( _lang.getMessage( "snapshot.not.found", da.toString(), gavDir.getAbsolutePath() ) ) );
       return null;
     }
     
@@ -440,14 +439,13 @@ implements RepositoryReader, MetadataReader
   /**
    * direct disk search, no redirects, first attempt
    */
-  public Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>>
-                                      readVersions( List<? extends ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
   throws RepositoryException, IllegalArgumentException
   {
     if( query == null || query.size() < 1 )
       return null;
     
-    Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> res = new HashMap<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>>( query.size() );
+    ArtifactBasicResults res = new ArtifactBasicResults( query.size() );
     
     File gaDir = null;
     for( ArtifactBasicMetadata bmd : query )
@@ -458,7 +456,6 @@ implements RepositoryReader, MetadataReader
       
       File [] versionFiles = gaDir.listFiles();
       
-      RepositoryOperationResult<ArtifactBasicMetadata> rr = null;
       VersionRange versionQuery;
       try
       {
@@ -466,7 +463,7 @@ implements RepositoryReader, MetadataReader
       }
       catch( VersionException e )
       {
-        rr = RepositoryOperationResult.add( rr, new RepositoryException(e) );
+        res = ArtifactBasicResults.add( res, bmd, new RepositoryException(e) );
         continue;
       }
       
@@ -491,10 +488,8 @@ implements RepositoryReader, MetadataReader
         vmd.setType( bmd.getType() );
         vmd.setVersion( vf.getName() );
         
-        rr = RepositoryOperationResult.add( rr, vmd );
+        res = ArtifactBasicResults.add( res, bmd, vmd );
       }
-      if( rr != null )
-        res.put( bmd, rr );
     }
     
     return res;

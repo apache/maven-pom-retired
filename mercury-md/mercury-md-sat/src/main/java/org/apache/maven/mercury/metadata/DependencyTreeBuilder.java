@@ -13,6 +13,7 @@ import org.apache.maven.mercury.artifact.api.ArtifactListProcessor;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.metadata.sat.DefaultSatSolver;
 import org.apache.maven.mercury.metadata.sat.SatException;
+import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.VirtualRepositoryReader;
@@ -127,7 +128,8 @@ public class DependencyTreeBuilder
         if( dependencies == null || dependencies.size() < 1 )
           return node;
         
-        Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> expandedDeps = _reader.readVersions( dependencies );
+        ArtifactBasicResults res = _reader.readVersions( dependencies );
+        Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> expandedDeps = res.getResults();
         
 //        if( expandedDeps == null )
 //          return node;

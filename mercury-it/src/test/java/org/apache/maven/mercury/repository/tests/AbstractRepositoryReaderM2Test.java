@@ -8,6 +8,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
@@ -18,9 +19,11 @@ import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.crypto.pgp.PgpStreamVerifierFactory;
 import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
+import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
+import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
-import org.apache.maven.mercury.repository.api.RepositoryOperationResult;
+import org.apache.maven.mercury.repository.api.AbstractRepOpResult;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
@@ -54,26 +57,23 @@ extends TestCase
   {
     bmd = new ArtifactBasicMetadata("a:a:[3,3]");
     query.add( bmd );
-    Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> 
-            res = reader.readVersions( query );
+    
+    ArtifactBasicResults res = reader.readVersions( query );
     
     assertNotNull( res );
-    assertEquals( 1, res.size() );
+    assertFalse( res.hasExceptions() );
+    assertTrue( res.hasResults() );
     
-    RepositoryOperationResult<ArtifactBasicMetadata> ror = res.get( bmd );
+    assertEquals( 1, res.getResults().size() );
+    
+    List<ArtifactBasicMetadata> ror = res.getResult( bmd );
     
     assertNotNull( ror );
     
-    if( ror.hasExceptions() )
-      System.out.println( ror.getExceptions() );
-    
-    assertFalse( ror.hasExceptions() );
-    assertTrue( ror.hasResults() );
-    
-    List<ArtifactBasicMetadata> qr = ror.getResults();
-    
-    assertNotNull( qr );
-    assertEquals( 1, qr.size() );
+    if( res.hasExceptions() )
+      System.out.println( res.getExceptions() );
+
+    assertEquals( 1, ror.size() );
     
 //    System.out.println(qr);
   }
@@ -85,22 +85,20 @@ extends TestCase
   
     bmd = new ArtifactBasicMetadata("a:a:3");
     query.add( bmd );
-    Map<ArtifactBasicMetadata, RepositoryOperationResult<ArtifactBasicMetadata>> res = reader.readVersions( query );
+    
+    ArtifactBasicResults res = reader.readVersions( query );
     
     assertNotNull( res );
-    assertEquals( 1, res.size() );
     
-    RepositoryOperationResult<ArtifactBasicMetadata> ror = res.get( bmd );
+    if( res.hasExceptions() )
+      System.out.println( res.getExceptions() );
+
+    assertFalse( res.hasExceptions() );
+    assertTrue( res.hasResults() );
     
-    assertNotNull( ror );
+    assertEquals( 1, res.getResults().size() );
     
-    if( ror.hasExceptions() )
-      System.out.println( ror.getExceptions() );
-    
-    assertFalse( ror.hasExceptions() );
-    assertTrue( ror.hasResults() );
-    
-    List<ArtifactBasicMetadata> qr = ror.getResults();
+    List<ArtifactBasicMetadata> qr = res.getResult( bmd );
     
     assertNotNull( qr );
     assertTrue( qr.size() > 1 );
@@ -109,16 +107,17 @@ extends TestCase
     
     System.out.println("query "+bmd+"->"+qr);
     
-    Map<ArtifactBasicMetadata,ArtifactMetadata> depRes = reader.readDependencies( qr );
+    ArtifactBasicResults depRes = reader.readDependencies( qr );
     
     assertNotNull( depRes );
-    assertTrue( depRes.size() > 1 );
-    assertTrue( depRes.containsKey( bmd ) );
+    assertFalse( depRes.hasExceptions() );
+    assertTrue( depRes.hasResults() );
     
-    ArtifactMetadata amd = depRes.get( bmd );
+    assertTrue( depRes.hasResults( bmd ) );
     
-    List<ArtifactBasicMetadata> deps = amd.getDependencies();
+    List<ArtifactBasicMetadata> deps = depRes.getResult( bmd );
     assertNotNull( deps );
+    assertFalse( deps.isEmpty() );
 
 //    System.out.println(deps);
 
@@ -133,7 +132,7 @@ extends TestCase
     bmd = new ArtifactBasicMetadata("a:a:3");
     query.add( bmd );
 
-    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
+    ArtifactResults ror = reader.readArtifacts( query );
     
     assertNotNull( ror );
     
@@ -143,12 +142,12 @@ extends TestCase
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
-    List<DefaultArtifact> res = ror.getResults();
+    List<Artifact> res = ror.getResults(bmd);
     
     assertNotNull( res );
     assertEquals( 1, res.size() );
     
-    DefaultArtifact da = res.get( 0 );
+    Artifact da = res.get( 0 );
     
     assertNotNull( da );
     assertNotNull( da.getFile() );
@@ -162,7 +161,7 @@ extends TestCase
     bmd = new ArtifactBasicMetadata("a:a:5-SNAPSHOT");
     query.add( bmd );
 
-    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
+    ArtifactResults ror = reader.readArtifacts( query );
     
     assertNotNull( ror );
     
@@ -172,12 +171,12 @@ extends TestCase
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
-    List<DefaultArtifact> res = ror.getResults();
+    List<Artifact> res = ror.getResults(bmd);
     
     assertNotNull( res );
     assertEquals( 1, res.size() );
     
-    DefaultArtifact da = res.get( 0 );
+    Artifact da = res.get( 0 );
     
     assertNotNull( da );
     assertNotNull( da.getFile() );
@@ -192,7 +191,7 @@ extends TestCase
     bmd = new ArtifactBasicMetadata("a:a:5-20080807.234713-11");
     query.add( bmd );
 
-    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
+    ArtifactResults ror = reader.readArtifacts( query );
     
     assertNotNull( ror );
     
@@ -202,12 +201,12 @@ extends TestCase
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
-    List<DefaultArtifact> res = ror.getResults();
+    List<Artifact> res = ror.getResults(bmd);
     
     assertNotNull( res );
     assertEquals( 1, res.size() );
     
-    DefaultArtifact da = res.get( 0 );
+    Artifact da = res.get( 0 );
     
     assertNotNull( da );
     assertNotNull( da.getFile() );
@@ -222,7 +221,7 @@ extends TestCase
     bmd = new ArtifactBasicMetadata("a:a:LATEST");
     query.add( bmd );
 
-    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
+    ArtifactResults ror = reader.readArtifacts( query );
     
     assertNotNull( ror );
     
@@ -232,12 +231,12 @@ extends TestCase
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
-    List<DefaultArtifact> res = ror.getResults();
+    List<Artifact> res = ror.getResults(bmd);
     
     assertNotNull( res );
     assertEquals( 1, res.size() );
     
-    DefaultArtifact da = res.get( 0 );
+    Artifact da = res.get( 0 );
     
     assertNotNull( da );
     assertEquals( "5-SNAPSHOT", da.getVersion() );
@@ -255,7 +254,7 @@ extends TestCase
     bmd = new ArtifactBasicMetadata("a:a:RELEASE");
     query.add( bmd );
 
-    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
+    ArtifactResults ror = reader.readArtifacts( query );
     
     assertNotNull( ror );
     
@@ -265,12 +264,12 @@ extends TestCase
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
-    List<DefaultArtifact> res = ror.getResults();
+    List<Artifact> res = ror.getResults(bmd);
     
     assertNotNull( res );
     assertEquals( 1, res.size() );
     
-    DefaultArtifact da = res.get( 0 );
+    Artifact da = res.get( 0 );
     
     assertNotNull( da );
     assertEquals( "4", da.getVersion() );
@@ -298,7 +297,7 @@ extends TestCase
     bmd = new ArtifactBasicMetadata("a:a:4");
     query.add( bmd );
 
-    RepositoryOperationResult<DefaultArtifact> ror = reader.readArtifacts( query );
+    ArtifactResults ror = reader.readArtifacts( query );
     
     assertNotNull( ror );
     
@@ -308,12 +307,12 @@ extends TestCase
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
     
-    List<DefaultArtifact> res = ror.getResults();
+    List<Artifact> res = ror.getResults(bmd);
     
     assertNotNull( res );
     assertEquals( 1, res.size() );
     
-    DefaultArtifact da = res.get( 0 );
+    Artifact da = res.get( 0 );
     
     assertNotNull( da );
     assertNotNull( da.getFile() );
@@ -337,7 +336,7 @@ extends TestCase
     bmd = new ArtifactBasicMetadata("a:a:3");
     query.add( bmd );
 
-    RepositoryOperationResult<DefaultArtifact> ror = null;
+    ArtifactResults ror = null;
     try
     {
       ror = reader.readArtifacts( query );
@@ -370,7 +369,7 @@ extends TestCase
     bmd = new ArtifactBasicMetadata("a:a:2");
     query.add( bmd );
 
-    RepositoryOperationResult<DefaultArtifact> ror = null;
+    ArtifactResults ror = null;
     try
     {
       ror = reader.readArtifacts( query );
@@ -404,7 +403,7 @@ extends TestCase
     bmd = new ArtifactBasicMetadata("a:a:3");
     query.add( bmd );
 
-    RepositoryOperationResult<DefaultArtifact> ror = null;
+    ArtifactResults ror = null;
     try
     {
       ror = reader.readArtifacts( query );
