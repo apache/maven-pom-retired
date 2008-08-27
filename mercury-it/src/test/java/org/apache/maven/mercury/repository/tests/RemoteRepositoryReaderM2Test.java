@@ -105,7 +105,9 @@ extends AbstractRepositoryReaderM2Test
   public void testReadMd()
   throws FileNotFoundException, IOException, XmlPullParserException
   {
-     Metadata mmd = _reader.read( new FileInputStream( new File( _testBase, "a/a/maven-metadata.xml") ) );
+      FileInputStream fis = new FileInputStream( new File( _testBase, "a/a/maven-metadata.xml") );
+     Metadata mmd = _reader.read( fis );
+     fis.close();
      validateMmd( mmd );
   }
   //-------------------------------------------------------------------------
@@ -141,7 +143,9 @@ extends AbstractRepositoryReaderM2Test
     assertNotNull( mmBuf );
     assertTrue( mmBuf.length > 1 );
     
-    Metadata mmd = _reader.read( new ByteArrayInputStream( mmBuf ) );
+    ByteArrayInputStream bais = new ByteArrayInputStream( mmBuf );
+    Metadata mmd = _reader.read( bais );
+    bais.close();
     
     validateMmd( mmd );
   }
