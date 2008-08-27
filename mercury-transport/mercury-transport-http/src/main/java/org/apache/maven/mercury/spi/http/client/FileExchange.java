@@ -78,40 +78,7 @@ public abstract class FileExchange extends HttpExchange
     {
         try
         {
-            if (_server != null && _server.hasProxy() && (_server.getProxy() != null))
-            {
-                URL url = new URL(_url);
-                boolean ssl = "https".equalsIgnoreCase(url.getProtocol());
-                URL proxy = _server.getProxy();
-                
-                String host = proxy.getHost();
-                int port = proxy.getPort();
-                boolean proxySsl = "https".equalsIgnoreCase(proxy.getProtocol());
-                if (port < 0)
-                {
-                    port = proxySsl?443:80;
-                }
-                InetSocketAddress proxyAddress = new InetSocketAddress(host,port);
-                HttpDestination destination = _httpClient.getDestination(this.getAddress(), ssl);  
-                destination.setProxy(proxyAddress);
-                
-                //set up authentication for the proxy
-                Credentials proxyCredentials = _server.getProxyCredentials();
-                
-                if (proxyCredentials != null)
-                {
-                    if (proxyCredentials.isCertificate())
-                        throw new UnsupportedOperationException ("Proxy credential not supported");
-                    else
-                    destination.setProxyAuthentication(new ProxyAuthorization (proxyCredentials.getUser(), proxyCredentials.getPass()));
-                }
-                destination.send(this); 
-            }
-            else
-            { 
-                _httpClient.send( this );
-            }
-            
+            SecureSender.send(_server, _httpClient, this);
         }
         catch ( Exception e )
         {

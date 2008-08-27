@@ -22,6 +22,7 @@ package org.apache.maven.mercury.spi.http.client.retrieve;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +38,7 @@ import org.apache.maven.mercury.crypto.api.StreamVerifier;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
+import org.apache.maven.mercury.spi.http.client.SecureSender;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
@@ -308,7 +310,7 @@ public abstract class RetrievalTarget
                     }
                     else if (_binding.isInMemory())
                     {
-                        //TODO ????
+                        //TODO Validation on in memory content?
                         //v.validate(_binding.getInboundContent()) 
                     }
                 }
@@ -360,7 +362,7 @@ public abstract class RetrievalTarget
 
     /** Asynchronously fetch the checksum for the target file. */
     private HttpExchange retrieveChecksum(final int index)
-    {
+    {    
         HttpExchange exchange = new HttpExchange.ContentExchange()
         {
             protected void onException( Throwable ex )
@@ -418,9 +420,9 @@ public abstract class RetrievalTarget
 
         try
         {
-            _retriever.getHttpClient().send( exchange );
+            SecureSender.send(_server, _retriever.getHttpClient(), exchange);
         }
-        catch ( IOException ex )
+        catch ( Exception ex )
         {
             updateChecksumState(index, ex);
         }

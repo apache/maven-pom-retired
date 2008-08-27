@@ -72,7 +72,8 @@ public abstract class FileGetExchange extends FileExchange
     public FileGetExchange( Server server, Binding binding, File localFile, Set<StreamObserver> observers, HttpClient client )
     {
         super( server, binding, localFile, client );
-        _observers.addAll(observers);
+        if (observers != null)
+            _observers.addAll(observers);
     }
 
 
