@@ -191,10 +191,13 @@ public abstract class FilePutExchange extends FileExchange
         return _inputStream;
     }
 
-    @Override
+   
     protected void onRetry() throws IOException
     {
         super.onRetry();
+        if (_inputStream != null)
+            _inputStream.close();
+        
         _inputStream = null;
         setRequestContent(null);
         setRequestContentSource(getInputStream());
