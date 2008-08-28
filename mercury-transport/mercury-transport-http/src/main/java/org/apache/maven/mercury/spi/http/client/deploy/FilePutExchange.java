@@ -51,6 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class FilePutExchange extends FileExchange
 {
+    private static final int __readLimit = 1024;
     private static final Logger log = LoggerFactory.getLogger(FilePutExchange.class);
     private String _batchId;
     private InputStream _inputStream;
@@ -154,7 +155,7 @@ public abstract class FilePutExchange extends FileExchange
 
 
     private InputStream getInputStream()
-        throws IOException, NoSuchAlgorithmException
+        throws IOException
     {
         if ( _inputStream == null )
         {
@@ -162,11 +163,40 @@ public abstract class FilePutExchange extends FileExchange
             if (_binding.isFile())
                 is = new FileInputStream( _localFile );
             else if (_binding.isInMemory())
+            {
                 is = _binding.getLocalInputStream();
-            ObservableInputStream ois = new ObservableInputStream( is );
-            _inputStream = ois;
-            ois.addObservers(_observers);
+                if (!getRetryStatus())
+                {                 
+                    if (is.markSupported())
+                        is.mark(__readLimit);
+                }
+                else
+                {
+                    if (is.markSupported())
+                        is.reset();
+                }
+            }
+
+            //if this request is being retried, then don't set up the observers a second
+            //time?
+            if (!getRetryStatus())
+            {
+                ObservableInputStream ois = new ObservableInputStream( is );
+                _inputStream = ois;
+                ois.addObservers(_observers);
+            }
+            else
+                _inputStream = is;
         }    
         return _inputStream;
+    }
+
+    @Override
+    protected void onRetry() throws IOException
+    {
+        super.onRetry();
+        _inputStream = null;
+        setRequestContent(null);
+        setRequestContentSource(getInputStream());
     }
 }

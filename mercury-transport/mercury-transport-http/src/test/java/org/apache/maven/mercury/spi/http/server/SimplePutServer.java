@@ -31,7 +31,9 @@ import org.mortbay.servlet.PutFilter;
 
 public class SimplePutServer extends Server
 {
-    private File _base;
+    protected File _base;
+    protected Context context;
+    
     
     public SimplePutServer()
     throws Exception
@@ -41,7 +43,7 @@ public class SimplePutServer extends Server
         HandlerCollection handlers = new HandlerCollection();
         setHandler(handlers);
 
-        Context context = new Context(handlers,"/maven2/repo");
+        context = new Context(handlers,"/maven2/repo");
         handlers.addHandler(new DefaultHandler());
 
         _base = File.createTempFile("simplePutServer",null);

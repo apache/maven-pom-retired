@@ -33,6 +33,7 @@ public class SimpleTestServer
     extends Server
 {
     File base;
+    Context context;
     
     
     public SimpleTestServer()
@@ -49,7 +50,7 @@ public class SimpleTestServer
         HandlerCollection handlers = new HandlerCollection();
         setHandler( handlers );
 
-        Context context = new Context( handlers, remotePathFragment );
+        context = new Context( handlers, remotePathFragment );
         handlers.addHandler( new DefaultHandler() );
 
         base = File.createTempFile( "simpleTestServer", null );

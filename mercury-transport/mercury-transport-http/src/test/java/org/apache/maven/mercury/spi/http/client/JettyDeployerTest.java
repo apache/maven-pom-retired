@@ -71,7 +71,7 @@ public class JettyDeployerTest extends TestCase
     org.apache.maven.mercury.transport.api.Server remoteServerType;
     HashSet<StreamVerifierFactory> factories;
     
-    private class DeployRequestImpl implements DeployRequest
+    protected class DeployRequestImpl implements DeployRequest
     {
         private Set<Binding> _bindings = new HashSet<Binding>();
         private boolean _failFast;
@@ -132,7 +132,7 @@ public class JettyDeployerTest extends TestCase
         _putServer = new SimplePutServer();
         _putServer.start();
         _port = String.valueOf(_putServer.getPort());
-        setUpVerifiers();
+        setUpServerType();
         super.setUp();
     }
     
@@ -152,7 +152,7 @@ public class JettyDeployerTest extends TestCase
         f.delete(); 
     }
     
-    protected void setUpVerifiers () throws Exception
+    protected void setUpServerType () throws Exception
     {
         HashSet<org.apache.maven.mercury.transport.api.Server> remoteServerTypes = new HashSet<org.apache.maven.mercury.transport.api.Server>();
         remoteServerType = new org.apache.maven.mercury.transport.api.Server( "test", new URL(_HOST_FRAGMENT+_port));
@@ -209,15 +209,15 @@ public class JettyDeployerTest extends TestCase
         
         DeployResponse response = _deployer.deploy(request);
 
-/*        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();*/
+        for (HttpClientException t:response.getExceptions())
+            t.printStackTrace();
         
         assertEquals(0, response.getExceptions().size());
         File f0 = new File(_putServer.getPutDir(), "file0.txt");
         File f0cs = new File (_putServer.getPutDir(), "file0.txt.sha1");
         assertTrue (f0.exists());
         assertTrue (f0cs.exists());
-        
+      
         File f3 = new File(_putServer.getPutDir(), "file3.jar");
         File f3cs = new File (_putServer.getPutDir(), "file3.jar.sha1");
         assertTrue(f3.exists());
@@ -237,6 +237,7 @@ public class JettyDeployerTest extends TestCase
         File f6cs = new File (_putServer.getPutDir(), "file6.gif.asc");
         assertTrue (f6.exists());
         assertTrue (f6cs.exists());
+        
     }
     /* This test duplicates the one above unless we allow for checksum files to
      * be pre-existing
@@ -311,6 +312,7 @@ public class JettyDeployerTest extends TestCase
     }
     */
     
+   
     public void testUploadFail () throws Exception 
     {        
         factories.add(new SHA1VerifierFactory(false, true)); //!lenient, sufficient
@@ -348,9 +350,9 @@ public class JettyDeployerTest extends TestCase
         request.setBindings(bindings);            
         DeployResponse response = _deployer.deploy(request);
 
-/*        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();
-*/
+//        for (HttpClientException t:response.getExceptions())
+//            t.printStackTrace();
+
         //as the serverside is not running the mercury enhancements to the put filter, then
         //all the files except for the 2 which don't exists should have been uploaded
         assertEquals(2, response.getExceptions().size());
@@ -423,8 +425,8 @@ public class JettyDeployerTest extends TestCase
         request.setFailFast(true);
         DeployResponse response = _deployer.deploy(request);
 
-/*        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();*/
+//        for (HttpClientException t:response.getExceptions())
+//            t.printStackTrace();
         
         //with failfast==true and the server side not running the mercury enhancements, we have no way to know
         //how many files actually did get uploaded, but the first exception should cause it to stop
@@ -464,8 +466,8 @@ public class JettyDeployerTest extends TestCase
         request.setFailFast(true);
         DeployResponse response = _deployer.deploy(request);
 
-/*        for (HttpClientException t:response.getExceptions())
-            t.printStackTrace();*/
+//        for (HttpClientException t:response.getExceptions())
+//            t.printStackTrace();
         
   
         assertEquals(0, response.getExceptions().size());
@@ -489,5 +491,4 @@ public class JettyDeployerTest extends TestCase
         assertEquals(s5, s.trim());
         assertTrue (f5cs.exists());  
     }
-    
 }
