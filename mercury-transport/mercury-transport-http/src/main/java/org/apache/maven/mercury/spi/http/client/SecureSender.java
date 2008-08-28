@@ -61,17 +61,23 @@ public class SecureSender
             }
             InetSocketAddress proxyAddress = new InetSocketAddress(host,port);
             HttpDestination destination = httpClient.getDestination(exchange.getAddress(), ssl);  
+            
+            System.err.println("Matched destination "+destination);
             destination.setProxy(proxyAddress);
+            System.err.println("Set proxy "+host+":"+port+" on destination");
             
             //set up authentication for the proxy
             Credentials proxyCredentials = server.getProxyCredentials();
-            
+
             if (proxyCredentials != null)
             {
                 if (proxyCredentials.isCertificate())
                     throw new UnsupportedOperationException ("Proxy credential not supported");
                 else
-                destination.setProxyAuthentication(new ProxyAuthorization (proxyCredentials.getUser(), proxyCredentials.getPass()));
+                {
+                    destination.setProxyAuthentication(new ProxyAuthorization (proxyCredentials.getUser(), proxyCredentials.getPass()));
+                    System.err.println("Set proxy authentication: "+proxyCredentials.getUser()+":"+proxyCredentials.getPass());
+                }
             }
             destination.send(exchange); 
         }

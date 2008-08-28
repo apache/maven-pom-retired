@@ -159,7 +159,7 @@ public class JettyRetrieverTest extends TestCase
         assert dir.canWrite();
         return dir;
     }
- 
+
     public void testSyncRetrievalAllGood()
     throws Exception
     {
@@ -566,5 +566,5 @@ public class JettyRetrieverTest extends TestCase
         is.close();
         os.close();
     }
-   
+  
 }

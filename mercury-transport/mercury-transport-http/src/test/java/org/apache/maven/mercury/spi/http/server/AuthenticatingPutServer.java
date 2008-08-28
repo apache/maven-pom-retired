@@ -8,14 +8,18 @@ import org.mortbay.jetty.security.SecurityHandler;
 
 public class AuthenticatingPutServer extends SimplePutServer
 {
+    private String _username = "foo";
+    private String _password = "bar";
+    private String _role = "foomeister";
+    
     public AuthenticatingPutServer()
     throws Exception
     {
         super();
         
         HashUserRealm realm = new HashUserRealm();
-        realm.put ("foo", "bar");
-        realm.addUserToRole("foo", "foomeister");
+        realm.put (_username, _password);
+        realm.addUserToRole(_username, _role);
         realm.setName("foorealm");
         
         SecurityHandler securityHandler = new SecurityHandler();
@@ -23,7 +27,7 @@ public class AuthenticatingPutServer extends SimplePutServer
         securityHandler.setUserRealm(realm);
         Constraint constraint = new Constraint();
         constraint.setAuthenticate(true);
-        constraint.setRoles(new String[]{"foomeister"});
+        constraint.setRoles(new String[]{_role});
         ConstraintMapping cm = new ConstraintMapping();
         cm.setConstraint(constraint);
         cm.setPathSpec("/*");
@@ -37,5 +41,15 @@ public class AuthenticatingPutServer extends SimplePutServer
         AuthenticatingPutServer server = new AuthenticatingPutServer();
         server.start();
         server.join();
+    }
+    
+    public String getUsername()
+    {
+        return _username;
+    }
+    
+    public String getPassword ()
+    {
+        return _password;
     }
 }
