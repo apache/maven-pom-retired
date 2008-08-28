@@ -95,7 +95,7 @@ public class Server
 
   public Credentials getProxyCredentials()
   {
-    return this.serverCredentials;
+    return this.proxyCredentials;
   }
 
   public boolean hasWriterStreamVerifierFactories()
