@@ -16,12 +16,18 @@ implements Comparable<Quality>
   public static final int DEFAULT_QUANTITY = 0;
   public static final int SNAPSHOT_TS_QUANTITY = 1;
 
+  public static final int FIXED_RELEASE_QUANTITY = -2;
+  public static final int FIXED_LATEST_QUANTITY  = -3;
+
   public static final Quality UNKNOWN_QUALITY = new Quality( QualityEnum.unknown, -1 );
   public static final Quality SNAPSHOT_QUALITY = new Quality( QualityEnum.snapshot, DEFAULT_QUANTITY );
   public static final Quality SNAPSHOT_TS_QUALITY = new Quality( QualityEnum.snapshot, SNAPSHOT_TS_QUANTITY );
   public static final Quality ALPHA_QUALITY = new Quality( QualityEnum.alpha, DEFAULT_QUANTITY );
   public static final Quality BETA_QUALITY = new Quality( QualityEnum.beta, DEFAULT_QUANTITY );
   public static final Quality RELEASE_QUALITY = new Quality( QualityEnum.release, DEFAULT_QUANTITY );
+
+  public static final Quality FIXED_RELEASE_QUALITY = new Quality( QualityEnum.unknown, FIXED_RELEASE_QUANTITY );
+  public static final Quality FIXED_LATEST_QUALITY = new Quality( QualityEnum.unknown, FIXED_LATEST_QUANTITY );
   
   private static final String snExp    = ".+-(SNAPSHOT|\\d{8}\\.\\d{6}-\\d+)";
   private static final String alphaExp = ".+-alpha-\\d+";
@@ -42,6 +48,21 @@ implements Comparable<Quality>
     {
       quality = QualityEnum.unknown;
       quantity = -1;
+      return;
+    }
+    
+    if( Artifact.RELEASE_VERSION.equals( version  ) )
+    {
+      quality = QualityEnum.unknown;
+      quantity = FIXED_RELEASE_QUANTITY;
+      return;
+    }
+    
+    if( Artifact.LATEST_VERSION.equals( version  ) )
+    {
+      quality = QualityEnum.unknown;
+      quantity = FIXED_LATEST_QUANTITY;
+      return;
     }
     
     if( version.matches( snExp ) )
@@ -78,13 +99,13 @@ implements Comparable<Quality>
     if( q == null )
       return quality == null ? 0 : 1;
     
-    int ql1 = (quality == null ? QualityEnum.unknown : quality).getId();
+    int ql = (quality == null ? QualityEnum.unknown : quality).getId();
     int ql2 = (q.quality == null ? QualityEnum.unknown : q.quality).getId();
     
-    if( ql1 == ql2 )
+    if( ql == ql2 )
     {
       // snapshots are always equal
-      if( ql1 == QualityEnum.snapshot.getId() )
+      if( ql == QualityEnum.snapshot.getId() )
         return 0;
       else
         return quantity - q.quantity;
@@ -94,12 +115,12 @@ implements Comparable<Quality>
 //    if( ql1 == QualityEnum.unknown.getId() )
 //      return -1;
 
-    return sign(ql1 - ql2);
+    return sign(ql - ql2);
   }
   
-  private int sign( int i )
+  private static int sign( int i )
   {
-    return i<0 ? -1: i == 0 ? 0 : 1;
+    return i<0 ? -1:1;
   }
   
   @Override
@@ -109,6 +130,7 @@ implements Comparable<Quality>
     {
       return false;
     }
+    
     if( obj.getClass().isAssignableFrom( Quality.class ))
       return this.compareTo( (Quality)obj ) == 0;
     else if( obj.getClass().isAssignableFrom( QualityEnum.class ))

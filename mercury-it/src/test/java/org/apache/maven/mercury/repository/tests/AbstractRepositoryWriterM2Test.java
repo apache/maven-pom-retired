@@ -1,12 +1,10 @@
 package org.apache.maven.mercury.repository.tests;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import junit.framework.TestCase;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
@@ -19,10 +17,11 @@ import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
-import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
-import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileUtil;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.PlexusTestCase;
+import org.sonatype.appbooter.ForkedAppBooter;
 
 /**
  *
@@ -32,8 +31,14 @@ import org.apache.maven.mercury.util.FileUtil;
  *
  */
 public abstract class AbstractRepositoryWriterM2Test
-extends TestCase
+extends PlexusTestCase
 {
+  public static final String TEST_NEXUS_ROLE = ForkedAppBooter.ROLE;
+  public static final String TEST_NEXUS_HINT = "NexusForkedAppBooter";
+  
+  PlexusContainer plexus;
+  ForkedAppBooter nexusForkedAppBooter;
+
   Repository repo;
   
   File targetDirectory; 
@@ -52,15 +57,69 @@ extends TestCase
   protected static final String keyId   = "0EDB5D91141BC4F2";
 
   protected static final String secretKeyFile = "/pgp/secring.gpg";
+  protected static final String publicKeyFile = "/pgp/pubring.gpg";
   protected static final String secretKeyPass = "testKey82";
+  
+  PgpStreamVerifierFactory pgpF;
+  SHA1VerifierFactory      sha1F;
+  HashSet<StreamVerifierFactory> vFacPgp;
+  HashSet<StreamVerifierFactory> vFacSha1;
   
   Server server;
   HashSet<StreamVerifierFactory> factories;
   
+  File f;
+  
+  File artifactBinary;
+  
+  /** current test works with snapshots */
+  abstract void setReleases() throws MalformedURLException;
+  /** current test works with releases */
+  abstract void setSnapshots() throws MalformedURLException;
+  
+  
+  @Override
+  protected void setUp()
+  throws Exception
+  {
+    super.setUp();
+
+    pgpF = new PgpStreamVerifierFactory(
+        new StreamVerifierAttributes( PgpStreamVerifierFactory.DEFAULT_EXTENSION, false, true )
+        , getClass().getResourceAsStream( publicKeyFile )
+                            );
+    sha1F = new SHA1VerifierFactory( false, false );
+
+    vFacPgp  = new HashSet<StreamVerifierFactory>(1);
+    vFacSha1 = new HashSet<StreamVerifierFactory>(1);
+
+    vFacPgp.add( pgpF );
+    vFacSha1.add( sha1F );
+
+    artifactBinary = File.createTempFile( "test-repo-writer", "bin" );
+    FileUtil.writeRawData( artifactBinary, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
+
+    plexus = getContainer();
+    nexusForkedAppBooter = (ForkedAppBooter)plexus.lookup( TEST_NEXUS_ROLE, TEST_NEXUS_HINT  );
+    
+    nexusForkedAppBooter.start();
+  }
+  
+  @Override
+  protected void tearDown()
+  throws Exception
+  {
+    super.tearDown();
+    nexusForkedAppBooter.stop();
+  }
+
   public void testWriteArtifact()
   throws Exception
   {
+    setReleases();
+    
     File af = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar");
+
     assertFalse( af.exists() );
     assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar.asc").exists() );
     assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar.sha1").exists() );
@@ -69,7 +128,6 @@ extends TestCase
     assertFalse( ap.exists() );
     assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.pom.asc").exists() );
     assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.pom.sha1").exists() );
-    
     
     assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName()).exists() );
     assertFalse( new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName()+".asc").exists() );
@@ -81,38 +139,51 @@ extends TestCase
 
     Set<Artifact> artifacts = new HashSet<Artifact>(3);
     DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0.9") );
+    
     da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
-    da.setStream( getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
+    da.setFile( artifactBinary );
     artifacts.add( da );
     
     writer.writeArtifact( artifacts );
     
-    assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName()).exists() );
+    f = new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName());
+    assertTrue( f.exists() );
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName()+".asc").exists() );
+    FileUtil.verify( f, vFacPgp, false, true );
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName()+".sha1").exists() );
+    FileUtil.verify( f, vFacSha1, false, true );
 
-    assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/"+repo.getMetadataName()).exists() );
+    f = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/"+repo.getMetadataName());
+    assertTrue( f.exists() );
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/"+repo.getMetadataName()+".asc").exists() );
+    FileUtil.verify( f, vFacPgp, false, true );
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/"+repo.getMetadataName()+".sha1").exists() );
-
+    FileUtil.verify( f, vFacSha1, false, true );
+    
     assertTrue( af.exists() );
     assertEquals( 159630, af.length() );
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar.asc").exists() );
+    FileUtil.verify( af, vFacPgp, false, true );
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar.sha1").exists() );
+    FileUtil.verify( af, vFacSha1, false, true );
     
     assertTrue( ap.exists() );
     assertEquals( 7785, ap.length() );  
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.pom.asc").exists() );
+    FileUtil.verify( ap, vFacPgp, false, true );
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.pom.sha1").exists() );
+    FileUtil.verify( ap, vFacSha1, false, true );
   }
   
   public void testWriteSnapshotAsTS()
   throws Exception
   {
+    setSnapshots();
+    
     Set<Artifact> artifacts = new HashSet<Artifact>(3);
     DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0.9-20080805.215925-8") );
     da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
-    da.setStream( getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
+    da.setFile( artifactBinary );
     artifacts.add( da );
     
     writer.writeArtifact( artifacts );
@@ -129,10 +200,12 @@ extends TestCase
   public void testWriteSnapshot()
   throws Exception
   {
+    setSnapshots();
+    
     Set<Artifact> set = new HashSet<Artifact>(3);
     DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0.9-SNAPSHOT") );
     da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
-    da.setStream( getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
+    da.setFile( artifactBinary );
     set.add( da );
     
     writer.writeArtifact( set );
@@ -144,18 +217,6 @@ extends TestCase
     File ap = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-SNAPSHOT.pom");
     assertTrue( ap.exists() );
     assertEquals( 7785, ap.length() );  
-  }
-  
-  public void ntestTemp()
-  throws Exception
-  {
-    Set<Artifact> set = new HashSet<Artifact>(3);
-    DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("a:a:4") );
-    da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/a-4.pom" ) ) );
-    da.setStream( getClass().getResourceAsStream( "/a-4.jar" ) );
-    set.add( da );
-    
-    writer.writeArtifact( set );
   }
   
 }

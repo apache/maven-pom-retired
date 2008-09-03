@@ -1,12 +1,9 @@
 package org.apache.maven.mercury.repository.api;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
-import org.apache.maven.mercury.artifact.ArtifactMetadata;
-import org.apache.maven.mercury.artifact.DefaultArtifact;
-import org.apache.maven.mercury.builder.api.MetadataProcessingException;
+import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 
@@ -75,9 +72,9 @@ extends RepositoryOperator, MetadataReader
    * 
    * @param path - realative resource path in this repository
    * @return byte [] of the resource content, pointed by the path
-   * @throws MetadataProcessingException
+   * @throws MetadataReaderException 
    */
   public byte [] readRawData( String path )
-  throws MetadataProcessingException;
+  throws MetadataReaderException;
 
 }

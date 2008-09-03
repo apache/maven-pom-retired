@@ -1,24 +1,15 @@
 package org.apache.maven.mercury.repository.tests;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-import junit.framework.TestCase;
-
-import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
-import org.apache.maven.mercury.artifact.DefaultArtifact;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.crypto.pgp.PgpStreamVerifierFactory;
 import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
-import org.apache.maven.mercury.repository.api.Repository;
-import org.apache.maven.mercury.repository.api.RepositoryReader;
-import org.apache.maven.mercury.repository.api.RepositoryWriter;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
 import org.apache.maven.mercury.transport.api.Server;
@@ -39,6 +30,8 @@ extends AbstractRepositoryWriterM2Test
   protected void setUp()
   throws Exception
   {
+    super.setUp();
+
     targetDirectory = new File("./target/test-classes/tempRepo");
     FileUtil.copy( new File("./target/test-classes/repo"), targetDirectory, true );
     
@@ -63,6 +56,18 @@ extends AbstractRepositoryWriterM2Test
     repo = new LocalRepositoryM2( server );
     reader = repo.getReader( mdProcessor );
     writer = repo.getWriter();
+  }
+
+  @Override
+  void setReleases()
+      throws MalformedURLException
+  {
+  }
+
+  @Override
+  void setSnapshots()
+      throws MalformedURLException
+  {
   }
   
 }

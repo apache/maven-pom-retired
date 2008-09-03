@@ -8,5 +8,5 @@ import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 public interface MetadataProcessor
 {
     List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Hashtable env )
-    throws MetadataProcessingException;
+    throws MetadataReaderException;
 }

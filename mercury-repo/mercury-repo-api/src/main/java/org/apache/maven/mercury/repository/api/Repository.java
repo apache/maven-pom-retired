@@ -98,8 +98,10 @@ public interface Repository
      * get default writer, if any
      * 
      * @return default writer or null, if none exists
+     * @throws RepositoryException 
      */
-    RepositoryWriter getWriter();
+    RepositoryWriter getWriter()
+    throws RepositoryException;
     
     /**
      * 

@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.commons.digester.Digester;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
-import org.apache.maven.mercury.builder.api.MetadataProcessingException;
+import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.xml.sax.SAXException;
@@ -26,7 +26,7 @@ implements MetadataProcessor
 {
 
   public List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Hashtable env )
-  throws MetadataProcessingException
+  throws MetadataReaderException
   {
     List<ArtifactBasicMetadata> deps = null;
     
@@ -35,7 +35,7 @@ implements MetadataProcessor
       byte [] pomBytes = mdReader.readMetadata( bmd );
       if( pomBytes == null )
       {
-        throw new MetadataProcessingException("no metadata found for "+bmd);
+        throw new MetadataReaderException("no metadata found for "+bmd);
       }
       deps = getDeps(  pomBytes );
       
@@ -43,7 +43,7 @@ implements MetadataProcessor
     }
     catch( Exception e )
     {
-      throw new MetadataProcessingException( e );
+      throw new MetadataReaderException( e );
     }
   }
   

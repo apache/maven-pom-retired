@@ -19,18 +19,19 @@ public interface MetadataReader
    * @param classifier - replaces the getClassifier() from bmd if not null
    * @param type - replaces the getType() from bmd if not null
    * @return
-   * @throws MetadataProcessingException
+   * @throws MetadataReaderException
+   * @throws RepositoryException 
    */
   public byte [] readRawData( ArtifactBasicMetadata bmd, String classifier, String type )
-  throws MetadataProcessingException;
+  throws MetadataReaderException;
 
   /**
    * read metadata for the artifact, pointed by bmd. It will return POM bytes regardless of actual bmd type
    * 
    * @param bmd
    * @return
-   * @throws MetadataProcessingException
+   * @throws MetadataReaderException
    */
   public byte [] readMetadata( ArtifactBasicMetadata bmd )
-  throws MetadataProcessingException;
+  throws MetadataReaderException;
 }

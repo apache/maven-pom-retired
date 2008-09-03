@@ -9,19 +9,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-
-import junit.framework.TestCase;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
-import org.apache.maven.mercury.artifact.ArtifactMetadata;
-import org.apache.maven.mercury.artifact.QualityRange;
-import org.apache.maven.mercury.builder.api.MetadataProcessingException;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
-import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
+import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.repository.api.RepositoryException;
-import org.apache.maven.mercury.repository.api.AbstractRepOpResult;
-import org.apache.maven.mercury.repository.api.RepositoryReader;
+import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
 import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
@@ -135,7 +127,7 @@ extends AbstractRepositoryReaderM2Test
   }
   //-------------------------------------------------------------------------
   public void testReadRemoteMdViaRepositoryReader()
-  throws FileNotFoundException, IOException, XmlPullParserException, RepositoryException, MetadataProcessingException
+  throws FileNotFoundException, IOException, XmlPullParserException, RepositoryException, MetadataReaderException
   {
     
     byte [] mmBuf = reader.readRawData( "a/a/maven-metadata.xml" );

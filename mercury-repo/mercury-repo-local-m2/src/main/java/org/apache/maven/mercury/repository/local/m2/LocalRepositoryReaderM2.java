@@ -2,23 +2,20 @@ package org.apache.maven.mercury.repository.local.m2;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
-import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
 import org.apache.maven.mercury.artifact.Quality;
+import org.apache.maven.mercury.artifact.QualityEnum;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 import org.apache.maven.mercury.artifact.version.VersionException;
 import org.apache.maven.mercury.artifact.version.VersionRange;
-import org.apache.maven.mercury.builder.api.MetadataProcessingException;
+import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.crypto.api.StreamObserverException;
@@ -26,13 +23,13 @@ import org.apache.maven.mercury.crypto.api.StreamVerifier;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.repository.api.AbstracRepositoryReader;
+import org.apache.maven.mercury.repository.api.AbstractRepOpResult;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
 import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
-import org.apache.maven.mercury.repository.api.AbstractRepOpResult;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.i18n.DefaultLanguage;
@@ -75,6 +72,102 @@ implements RepositoryReader, MetadataReader
     return _repo;
   }
   //---------------------------------------------------------------------------------------------------------------
+  private static ArtifactLocation calculateLocation( String root, ArtifactBasicMetadata bmd, AbstractRepOpResult res )
+  {
+    ArtifactLocation loc = new ArtifactLocation( root, bmd );
+
+    File   gaDir = new File( root, loc.getGaPath() );
+    
+    if( !gaDir.exists() )
+    {
+      res.addError( bmd, new RepositoryException( _lang.getMessage( "ga.not.found", bmd.toString(), loc.getGaPath() ) ) );
+      return null;
+    }
+    
+    Quality vq = new Quality( loc.getVersion() );
+    
+    // RELEASE = LATEST - SNAPSHOTs
+    if( Artifact.RELEASE_VERSION.equals( loc.getVersion() )
+        ||
+        Artifact.LATEST_VERSION.equals( loc.getVersion() ) 
+      )
+    {
+      boolean noSnapshots = Artifact.RELEASE_VERSION.equals( loc.getVersion() );
+      loc.setVersion( null );
+      DefaultArtifactVersion tempDav = null;
+      DefaultArtifactVersion tempDav2 = null;
+
+      File [] files = gaDir.listFiles();
+
+      // find latest
+      for( File vf : files )
+      {
+        if( vf.isFile() )
+          continue;
+        
+        String vn = vf.getName();
+        
+        // RELEASE?
+        if( noSnapshots && vn.endsWith( Artifact.SNAPSHOT_VERSION ))
+          continue;
+        
+        if( loc.getVersion() == null )
+        {
+          loc.setVersion( vn );
+          tempDav = new DefaultArtifactVersion( vn );
+          continue;
+        }
+        
+        tempDav2 = new DefaultArtifactVersion( vn );
+        if( tempDav2.compareTo( tempDav ) > 0 )
+        {
+          loc.setVersion( vn );
+          tempDav = tempDav2;
+        }
+        
+      }
+
+      if( loc.getVersion() == null )
+      {
+        res.addError( bmd, new RepositoryException( _lang.getMessage( "gav.not.found", bmd.toString(), loc.getGaPath() ) ) );
+        return null;
+      }
+      
+      // LATEST is a SNAPSHOT :(
+      if( loc.getVersion().endsWith( Artifact.SNAPSHOT_VERSION ) )
+      {
+        loc.setVersionDir( loc.getVersion() );
+
+        if( !findLatestSnapshot( bmd, loc, res ) )
+          return null;
+      }
+      else
+        // R or L found and actual captured in loc.version
+        loc.setVersionDir( loc.getVersion() );
+    }
+    // regular snapshot requested
+    else if( loc.getVersion().endsWith( Artifact.SNAPSHOT_VERSION ) )
+    {
+      File gavDir = new File( gaDir, loc.getVersion() );
+      if( !gavDir.exists() )
+      {
+        res.addError( bmd, new RepositoryException( _lang.getMessage( "gavdir.not.found", bmd.toString(), gavDir.getAbsolutePath() ) ) );
+        return null;
+      }
+      
+      if( !findLatestSnapshot( bmd, loc, res ) )
+        return null;
+        
+    }
+    // time stamped snapshot requested
+    else if( vq.equals( Quality.SNAPSHOT_TS_QUALITY ))
+    {
+      loc.setVersionDir( loc.getBaseVersion()+loc.DASH+Artifact.SNAPSHOT_VERSION );
+    }
+    
+    return loc;
+  }
+  //---------------------------------------------------------------------------------------------------------------
   public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
@@ -93,114 +186,12 @@ implements RepositoryReader, MetadataReader
     {
       DefaultArtifact da = bmd instanceof DefaultArtifact ? (DefaultArtifact)bmd : new DefaultArtifact( bmd );
       
-      String version = bmd.getVersion();
-      DefaultArtifactVersion dav = new DefaultArtifactVersion( version );
-      Quality vq = dav.getQuality();
+      ArtifactLocation loc = calculateLocation( _repoDir.getAbsolutePath(), bmd, res );
       
-      String relGaPath = bmd.getGroupId().replace( '.', '/' ) + '/' + bmd.getArtifactId();
-      File   gaDir = new File( _repoDir, relGaPath );
-      
-      if( !gaDir.exists() )
-      {
-        res.addError( bmd, new RepositoryException( _lang.getMessage( "ga.not.found", bmd.toString(), relGaPath ) ) );
+      if( loc == null )
         continue;
-      }
       
-
-      File binary = null;
-      
-      // merge RELEASE and LATEST, should be no difference
-      if( Artifact.RELEASE_VERSION.equals( version )
-          ||
-          Artifact.LATEST_VERSION.equals( version ) 
-        )
-      {
-        boolean noSnapshots = Artifact.RELEASE_VERSION.equals( version );
-        version = null;
-        DefaultArtifactVersion tempDav = null;
-        DefaultArtifactVersion tempDav2 = null;
-
-        File [] files = gaDir.listFiles();
-
-        // find latest
-        for( File vf : files )
-        {
-          if( vf.isFile() )
-            continue;
-          
-          String vn = vf.getName();
-          
-          // RELEASE?
-          if( noSnapshots && vn.endsWith( Artifact.SNAPSHOT_VERSION ))
-            continue;
-          
-          if( version == null )
-          {
-            version = vn;
-            tempDav = new DefaultArtifactVersion( vn );
-            continue;
-          }
-          
-          tempDav2 = new DefaultArtifactVersion( vn );
-          if( tempDav2.compareTo( tempDav ) > 0 )
-          {
-            version = vn;
-            tempDav = tempDav2;
-          }
-          
-        }
-
-        if( version == null )
-        {
-          res.addError( bmd, new RepositoryException( _lang.getMessage( "gav.not.found", bmd.toString(), relGaPath ) ) );
-          continue;
-        }
-        
-        // LATEST is a SNAPSHOT :(
-        if( version.endsWith( Artifact.SNAPSHOT_VERSION ) )
-        {
-          binary = findLatestSnapshot( new File( gaDir, version ), da, res );
-
-          if( binary == null )
-            continue;
-        }
-        else
-        {
-          binary = new File( gaDir, version+'/'+bmd.getArtifactId()+'-'+version+( bmd.hasClassifier() ? '-'+bmd.getClassifier() : "" )+'.'+bmd.getType() );
-          da.setVersion( version );
-        }
-      }
-      // regular snapshot requested
-      else if( version.endsWith( Artifact.SNAPSHOT_VERSION ) )
-      {
-        File gavDir = new File( gaDir, version );
-        if( !gavDir.exists() )
-        {
-          res.addError( bmd, new RepositoryException( _lang.getMessage( "gavdir.not.found", bmd.toString(), gavDir.getAbsolutePath() ) ) );
-          continue;
-        }
-        
-        binary = findLatestSnapshot( gavDir, da, res );
-        
-        if( binary == null )
-          continue;
-          
-      }
-      // time stamped snapshot requested
-      else if( vq.equals( Quality.SNAPSHOT_TS_QUALITY ))
-      {
-        binary = new File( gaDir,  dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION 
-            + '/' + bmd.getArtifactId() + '-' + bmd.getVersion() + ( bmd.hasClassifier() ? '-'+bmd.getClassifier() : "" ) 
-            + '.' + bmd.getType()
-                          );
-      }
-      else
-      {
-        binary = new File( gaDir,  version 
-            + '/' + bmd.getArtifactId() + '-' + bmd.getVersion() + ( bmd.hasClassifier() ? '-'+bmd.getClassifier() : "" ) 
-            + '.' + bmd.getType()
-                          );
-      }
+      File binary = new File( loc.getAbsPath() );
       
       // binary calculated 
       if( ! binary.exists() )
@@ -220,7 +211,7 @@ implements RepositoryReader, MetadataReader
         }
         else
         {
-          File pomFile = new File( _repoDir, relPathOf( da, null, "pom", dav) );
+          File pomFile = new File( loc.getAbsPomPath() );
           if( pomFile.exists() )
           {
             if( checkFile( pomFile, vFacs ) )
@@ -230,6 +221,7 @@ implements RepositoryReader, MetadataReader
             _log.warn( _lang.getMessage( "pom.not.found", bmd.toString()) );
         }
 
+        da.setVersion( loc.getVersion() );
         res.add( bmd, da );
       }
       catch( Exception e )
@@ -356,7 +348,7 @@ implements RepositoryReader, MetadataReader
         List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, this, System.getProperties() );
         ror = ArtifactBasicResults.add( ror, bmd, deps );
       }
-      catch( MetadataProcessingException e )
+      catch( MetadataReaderException e )
       {
         _log.warn( "error reading "+bmd.toString()+" dependencies", e );
         continue;
@@ -367,31 +359,21 @@ implements RepositoryReader, MetadataReader
     return ror;
   }
   //---------------------------------------------------------------------------------------------------------------
-  private static File findLatestSnapshot( File gavDir, DefaultArtifact da, AbstractRepOpResult res )
+  private static boolean findLatestSnapshot( ArtifactBasicMetadata bmd, ArtifactLocation loc, AbstractRepOpResult res )
   {
-      
-    String version = gavDir.getName();
-    DefaultArtifactVersion dav = new DefaultArtifactVersion( version );
+    File binary = new File( loc.getAbsPath() );
     
-    File binary = new File( gavDir, da.getArtifactId()+'-'+dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION
-            +( da.hasClassifier() ? '-'+da.getClassifier() : "" )
-            +'.'+da.getType()
-    );
-    
-    // no real SNAPSHOT file, let's look for one
     if( binary.exists() )
-    {
-      da.setVersion( dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION );
-      return binary;
-    }
+      return true;
 
-    
+    // no real SNAPSHOT file, let's try to find one
+    File gavDir = new File( loc.getGavPath() );
     File [] files = gavDir.listFiles();
-    version = null;
+    loc.setVersion( null );
     DefaultArtifactVersion tempDav = null;
     DefaultArtifactVersion tempDav2 = null;
     
-    int aLen = da.getArtifactId().length();
+    int aLen = loc.getBaseName().length();
     
     // find latest
     for( File vf : files )
@@ -405,9 +387,9 @@ implements RepositoryReader, MetadataReader
       if( vn.endsWith( Artifact.SNAPSHOT_VERSION ))
         continue;
 
-      if( version == null )
+      if( loc.getVersion() == null )
       {
-        version = vn;
+        loc.setVersion( vn );
         tempDav = new DefaultArtifactVersion( vn );
         continue;
       }
@@ -415,29 +397,23 @@ implements RepositoryReader, MetadataReader
       tempDav2 = new DefaultArtifactVersion( vn );
       if( tempDav2.compareTo( tempDav ) > 0 )
       {
-        version = vn;
+        loc.setVersion( vn );
         tempDav = tempDav2;
       }
     
     }
 
-    if( version == null )
+    if( loc.getVersion() == null )
     {
-      res.addError( da, new RepositoryException( _lang.getMessage( "snapshot.not.found", da.toString(), gavDir.getAbsolutePath() ) ) );
-      return null;
+      res.addError( bmd, new RepositoryException( _lang.getMessage( "snapshot.not.found", bmd.toString(), gavDir.getAbsolutePath() ) ) );
+      return false;
     }
     
-    binary = new File( gavDir, da.getArtifactId()+'-'+dav.getBase()+'-'+version
-                            + ( da.hasClassifier() ? '-'+da.getClassifier() : "" )
-                            + '.'+da.getType()
-                      );
-    da.setVersion( version );
-    
-    return binary;
+    return true;
   }
   //---------------------------------------------------------------------------------------------------------------
   /**
-   * direct disk search, no redirects, first attempt
+   * direct disk search, no redirects - I cannot process pom files :(
    */
   public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
   throws RepositoryException, IllegalArgumentException
@@ -467,6 +443,31 @@ implements RepositoryReader, MetadataReader
         continue;
       }
       
+      Quality vq = new Quality( bmd.getVersion() );
+      
+      if(    vq.equals( Quality.FIXED_RELEASE_QUALITY ) 
+          || vq.equals( Quality.FIXED_LATEST_QUALITY )
+          || vq.equals( Quality.SNAPSHOT_QUALITY     )
+      )
+      {
+        ArtifactLocation loc = calculateLocation( _repoDir.getAbsolutePath(), bmd, res );
+        
+        if( loc == null )
+          continue;
+          
+        ArtifactBasicMetadata vmd = new ArtifactBasicMetadata();
+        vmd.setGroupId( bmd.getGroupId() );
+        vmd.setArtifactId(  bmd.getArtifactId() );
+        vmd.setClassifier( bmd.getClassifier() );
+        vmd.setType( bmd.getType() );
+        vmd.setVersion( loc.getVersion() );
+          
+        res = ArtifactBasicResults.add( res, bmd, vmd );
+        
+        continue;
+
+      }
+      
       for( File vf : versionFiles )
       {
         if( !vf.isDirectory() )
@@ -491,12 +492,11 @@ implements RepositoryReader, MetadataReader
         res = ArtifactBasicResults.add( res, bmd, vmd );
       }
     }
-    
     return res;
   }
   //---------------------------------------------------------------------------------------------------------------
   public byte[] readRawData( ArtifactBasicMetadata bmd, String classifier, String type )
-  throws MetadataProcessingException
+  throws MetadataReaderException
   {
     return readRawData( relPathOf(bmd, classifier, type, null ) );
   }
@@ -518,7 +518,7 @@ implements RepositoryReader, MetadataReader
   }
   //---------------------------------------------------------------------------------------------------------------
   public byte[] readRawData( String path )
-  throws MetadataProcessingException
+  throws MetadataReaderException
   {
     File file = new File( _repoDir, path );
     
@@ -537,7 +537,7 @@ implements RepositoryReader, MetadataReader
     }
     catch( IOException e )
     {
-      throw new MetadataProcessingException(e);
+      throw new MetadataReaderException(e);
     }
     finally
     {
@@ -546,7 +546,7 @@ implements RepositoryReader, MetadataReader
   }
   //---------------------------------------------------------------------------------------------------------------
   public String readStringData( String path )
-  throws MetadataProcessingException
+  throws MetadataReaderException
   {
     byte [] data = readRawData( path );
     if( data == null )

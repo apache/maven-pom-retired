@@ -30,11 +30,11 @@
   	<distMgmtSnapshotsName>CI Snapshot Repository</distMgmtSnapshotsName>
   	<distMgmtSnapshotsUrl>http://localhost:8081/content/repositories/maven.snapshots</distMgmtSnapshotsUrl>
   	
-    <mercuryVersionArtifact>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionArtifact>
-    <mercuryVersionCrypto>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionCrypto>
-    <mercuryVersionMd>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionMd>
-    <mercuryVersionRepo>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionRepo>
-    <mercuryVersionTransport>1.0.0.-alpha-1-SNAPSHOT</mercuryVersionTransport>
+    <mercuryVersionArtifact>1.0.0-alpha-1-SNAPSHOT</mercuryVersionArtifact>
+    <mercuryVersionCrypto>1.0.0-alpha-1-SNAPSHOT</mercuryVersionCrypto>
+    <mercuryVersionMd>1.0.0-alpha-1-SNAPSHOT</mercuryVersionMd>
+    <mercuryVersionRepo>1.0.0-alpha-1-SNAPSHOT</mercuryVersionRepo>
+    <mercuryVersionTransport>1.0.0-alpha-1-SNAPSHOT</mercuryVersionTransport>
 
   </properties>
   

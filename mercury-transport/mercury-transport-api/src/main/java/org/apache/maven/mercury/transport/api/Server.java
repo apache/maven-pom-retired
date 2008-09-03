@@ -73,6 +73,11 @@ public class Server
     return id;
   }
 
+  public void setURL( URL url )
+  {
+    this.url = url;
+  }
+
   public URL getURL()
   {
     return this.url;

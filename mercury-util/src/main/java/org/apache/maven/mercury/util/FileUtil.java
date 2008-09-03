@@ -337,7 +337,38 @@ public class FileUtil
     }
     
   }
-  //---------------------------------------------------------------------------------------------------------------
+  
+  public List<String> dirToList( File dir, boolean includeDirs, boolean includeFiles )
+  {
+    if( ! dir.exists() )
+      return null;
+    
+    File [] files = dir.listFiles();
+    
+    List<String> res = new ArrayList<String>( files.length );
+    
+    for( File f : files )
+      if( f.isDirectory() )
+      {
+        if( includeDirs )
+          res.add( f.getName() );
+      }
+      else
+        if( includeFiles )
+          res.add( f.getName() );
+    
+    return res;
+  }
+  
+  /**
+   * 
+   * @param f
+   * @param vFacs
+   * @param recurse
+   * @param force
+   * @throws IOException
+   * @throws StreamObserverException
+   */
   public static void sign( File f, Set<StreamVerifierFactory> vFacs, boolean recurse, boolean force )
   throws IOException, StreamObserverException
   {

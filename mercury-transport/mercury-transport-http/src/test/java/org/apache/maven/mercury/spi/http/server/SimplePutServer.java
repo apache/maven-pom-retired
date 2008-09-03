@@ -38,24 +38,45 @@ public class SimplePutServer extends Server
     public SimplePutServer()
     throws Exception
     {
-        super(0);
+      this("/maven2/repo", null );
+    }
+    
+    /**
+     * @param string
+     * @param targetDirectory
+     */
+    public SimplePutServer( String contextPath, File targetDirectory )
+    throws Exception
+    {
+      super(0);
 
-        HandlerCollection handlers = new HandlerCollection();
-        setHandler(handlers);
+      HandlerCollection handlers = new HandlerCollection();
+      setHandler(handlers);
 
-        context = new Context(handlers,"/maven2/repo");
-        handlers.addHandler(new DefaultHandler());
+      context = new Context( handlers, contextPath );
+      handlers.addHandler(new DefaultHandler());
 
+      if( targetDirectory == null )
+      {
         _base = File.createTempFile("simplePutServer",null);
         _base.delete();
         _base.mkdir();
         _base.deleteOnExit();
-        FilterHolder holder = context.addFilter(PutFilter.class, "/*", 0);
-        holder.setInitParameter("delAllowed","true");
-        context.addServlet(DefaultServlet.class,"/");
-        context.setResourceBase(_base.getCanonicalPath());
+      }
+      else
+      {
+        _base = targetDirectory;
+      }
+      
+      if( _base == null || !_base.exists() || !_base.isDirectory() )
+        throw new Exception("File not appropriate for base directory: "+_base);
+
+      FilterHolder holder = context.addFilter(PutFilter.class, "/*", 0);
+      holder.setInitParameter("delAllowed","true");
+      context.addServlet(DefaultServlet.class,"/");
+      context.setResourceBase(_base.getCanonicalPath());
     }
-    
+
     public void destroy ()
     {
         super.destroy();

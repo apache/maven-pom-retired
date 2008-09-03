@@ -16,7 +16,7 @@ import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
-import org.apache.maven.mercury.builder.api.MetadataProcessingException;
+import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
@@ -78,7 +78,7 @@ implements RepositoryWriter
         new MetadataProcessor() {
 
       public List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Hashtable env )
-      throws MetadataProcessingException
+      throws MetadataReaderException
       {
         return null;
       }
@@ -141,7 +141,10 @@ implements RepositoryWriter
   throws RepositoryException
   {
     if( artifact == null )
-      return;
+      throw new RepositoryException( _lang.getMessage( "null.artifact") );
+    
+    if( artifact.getFile() == null || !artifact.getFile().exists() )
+      throw new RepositoryException( _lang.getMessage( "bad.artifact.file", artifact.toString(), (artifact.getFile() == null ? "null" : artifact.getFile().getAbsolutePath()) ) );
     
     boolean isPom = "pom".equals( artifact.getType() );
     
@@ -210,9 +213,7 @@ implements RepositoryWriter
       bindings.add( new Binding( new URL(binUrl), artifact.getFile() ) );
       
       // GA metadata
-      Metadata md = null;
-      
-      md = MetadataBuilder.getMetadata( gaMdBytes );
+      Metadata md = gaMdBytes == null ? null :  MetadataBuilder.getMetadata( gaMdBytes );
       
       if( md == null )
       {
@@ -236,7 +237,7 @@ implements RepositoryWriter
       bindings.add( new Binding(new URL(gaMdUrl), new ByteArrayInputStream(gaResBytes)) );
 
       // now - GAV metadata
-      md = MetadataBuilder.getMetadata( gavMdBytes );
+      md = gavMdBytes == null ? null : MetadataBuilder.getMetadata( gavMdBytes );
       
       if( md == null )
       {
@@ -247,7 +248,7 @@ implements RepositoryWriter
       }
       
       byte [] gavResBytes = MetadataBuilder.changeMetadata( md, mdOp );
-      bindings.add( new Binding(new URL(gaMdUrl), new ByteArrayInputStream(gaResBytes)) );
+      bindings.add( new Binding( new URL(gavMdUrl), new ByteArrayInputStream(gavResBytes)) );
       
       if( !isPom && hasPomBlob )
       {

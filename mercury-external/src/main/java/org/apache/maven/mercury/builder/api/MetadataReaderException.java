@@ -7,14 +7,14 @@ package org.apache.maven.mercury.builder.api;
  * @version $Id$
  *
  */
-public class MetadataProcessingException
+public class MetadataReaderException
     extends Exception
 {
 
   /**
    * 
    */
-  public MetadataProcessingException()
+  public MetadataReaderException()
   {
     // TODO Auto-generated constructor stub
   }
@@ -22,7 +22,7 @@ public class MetadataProcessingException
   /**
    * @param message
    */
-  public MetadataProcessingException(
+  public MetadataReaderException(
       String message )
   {
     super( message );
@@ -32,7 +32,7 @@ public class MetadataProcessingException
   /**
    * @param cause
    */
-  public MetadataProcessingException(
+  public MetadataReaderException(
       Throwable cause )
   {
     super( cause );
@@ -43,7 +43,7 @@ public class MetadataProcessingException
    * @param message
    * @param cause
    */
-  public MetadataProcessingException(
+  public MetadataReaderException(
       String message,
       Throwable cause )
   {

@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.security.acl.Group;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,18 +21,21 @@ import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 import org.apache.maven.mercury.artifact.version.VersionException;
 import org.apache.maven.mercury.artifact.version.VersionRange;
-import org.apache.maven.mercury.builder.api.MetadataProcessingException;
+import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.repository.api.AbstracRepositoryReader;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
 import org.apache.maven.mercury.repository.api.ArtifactResults;
+import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.AbstractRepOpResult;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
+import org.apache.maven.mercury.repository.local.m2.ArtifactLocation;
+import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.MetadataBuilder;
 import org.apache.maven.mercury.repository.metadata.MetadataException;
@@ -71,17 +75,25 @@ implements RepositoryReader, MetadataReader
   DefaultRetriever _transport;
   //---------------------------------------------------------------------------------------------------------------
   RemoteRepository _repo;
+  
+  List<LocalRepository> _localRepos;
+  File _defaultRoot;
   //---------------------------------------------------------------------------------------------------------------
   public RemoteRepositoryReaderM2( RemoteRepository repo, MetadataProcessor mdProcessor )
   throws RepositoryException
   {
-    
+    this( repo, mdProcessor, null );
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  public RemoteRepositoryReaderM2( RemoteRepository repo, MetadataProcessor mdProcessor, List<LocalRepository> localRepos )
+  throws RepositoryException
+  {
     if( repo == null )
       throw new IllegalArgumentException( _lang.getMessage( "bad.repository.null") );
     
     if( repo.getServer() == null )
       throw new IllegalArgumentException( _lang.getMessage( "bad.repository.server.null") );
-    
+
     if( repo.getServer().getURL() == null )
       throw new IllegalArgumentException( _lang.getMessage( "bad.repository.server.url.null") );
     
@@ -92,6 +104,26 @@ implements RepositoryReader, MetadataReader
     
     setMetadataProcessor(  mdProcessor );
     
+    try
+    {
+      File temp = File.createTempFile( "temp-", "-locator" );
+      _defaultRoot = new File( temp.getParentFile(), "repo" );
+      _defaultRoot.mkdirs();
+      _log.info( "temporary repository  folder set to "+_defaultRoot.getCanonicalPath() );
+    }
+    catch( IOException e )
+    {
+      throw new RepositoryException(e);
+    }
+
+    if( localRepos == null || localRepos.isEmpty() )
+    {
+      _localRepos = new ArrayList<LocalRepository>(1);
+      _localRepos.add( new LocalRepositoryM2("temp", _defaultRoot ) );
+    }
+    else
+      _localRepos = localRepos;
+
     try
     {
       // TODO 2008-07-29 og: here I should analyze Server protocol
@@ -112,9 +144,120 @@ implements RepositoryReader, MetadataReader
     return _repo;
   }
   //---------------------------------------------------------------------------------------------------------------
+  private final ArtifactLocation calculateLocation( String root, ArtifactBasicMetadata bmd, AbstractRepOpResult res ) throws RepositoryException, MetadataReaderException, MetadataException
+  {
+    ArtifactLocation loc = new ArtifactLocation( root, bmd );
+
+    byte [] mdBytes = readRawData( loc.getGaPath()+loc.SEP+ _repo.getMetadataName() );
+    if( mdBytes == null )
+      throw new RepositoryException( _lang.getMessage( "no.group.md", _repo.getServer().getURL().toString(), loc.getGaPath() ) );
+      
+    Metadata groupMd = MetadataBuilder.read( new ByteArrayInputStream(mdBytes) );
+    if( groupMd == null || groupMd.getVersioning() == null )
+      throw new RepositoryException( _lang.getMessage( "group.md.no.versions", _repo.getServer().getURL().toString(), loc.getGaPath() ) );
+      
+    List<String> versions = groupMd.getVersioning().getVersions();
+    if( versions == null || versions.size() < 1 )
+      throw new RepositoryException( _lang.getMessage( "group.md.no.versions", _repo.getServer().getURL().toString(), loc.getGaPath() ) );
+
+    Quality vq = new Quality( loc.getVersion() );
+    
+    // RELEASE = LATEST - SNAPSHOTs
+    if( Artifact.RELEASE_VERSION.equals( loc.getVersion() )
+        ||
+        Artifact.LATEST_VERSION.equals( loc.getVersion() ) 
+      )
+    {
+      boolean noSnapshots = Artifact.RELEASE_VERSION.equals( loc.getVersion() );
+      String ver = VersionRange.findLatest( versions, noSnapshots );
+
+      if( ver == null )
+      {
+        res.addError( bmd, new RepositoryException( _lang.getMessage( "gav.not.found", bmd.toString(), loc.getGaPath() ) ) );
+        return null;
+      }
+      
+      loc.setVersion( ver );
+      
+      // LATEST is a SNAPSHOT :(
+      if( loc.getVersion().endsWith( Artifact.SNAPSHOT_VERSION ) )
+      {
+        loc.setVersionDir( loc.getVersion() );
+
+        if( !findLatestSnapshot( bmd, loc, res ) )
+          return null;
+      }
+      else // R or L found and actual captured in loc.version
+        loc.setVersionDir( loc.getVersion() );
+    }
+    // regular snapshot requested
+    else if( loc.getVersion().endsWith( Artifact.SNAPSHOT_VERSION ) )
+    {
+      if( !versions.contains( loc.getVersion() ) && !findLatestSnapshot( bmd, loc, res ) )
+        return null;
+    }
+    // time stamped snapshot requested
+    else if( vq.equals( Quality.SNAPSHOT_TS_QUALITY ))
+    {
+      loc.setVersionDir( loc.getBaseVersion()+loc.DASH+Artifact.SNAPSHOT_VERSION );
+    }
+    
+    return loc;
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  private boolean findLatestSnapshot( ArtifactBasicMetadata bmd, ArtifactLocation loc, AbstractRepOpResult res )
+  throws MetadataReaderException, MetadataException, RemoteRepositoryM2OperationException
+  {
+    DefaultArtifactVersion dav = new DefaultArtifactVersion( loc.getVersion() );
+    
+    String mdPath = loc.getGavPath()+'/'+_repo.getMetadataName();
+
+    byte [] mdBytes = readRawData( mdPath );
+    if( mdBytes == null )
+    {
+      res.addError( bmd, new RepositoryException( _lang.getMessage( "no.gav.md", _repo.getServer().getURL().toString(), mdPath ) ) );
+      return false;
+    }
+      
+    Metadata gavMd = MetadataBuilder.read( new ByteArrayInputStream(mdBytes) );
+    if( gavMd == null || gavMd.getVersioning() == null )
+    {
+      res.addError( bmd, new RepositoryException( _lang.getMessage( "gav.md.no.versions", _repo.getServer().getURL().toString(), mdPath ) ) );
+      return false;
+    }
+      
+    List<String> versions = gavMd.getVersioning().getVersions();
+    if( versions == null || versions.size() < 1 )
+    {
+      res.addError( bmd, new RepositoryException( _lang.getMessage( "gav.md.no.versions", _repo.getServer().getURL().toString(), mdPath ) ) );
+      return false;
+    }
+
+    // version-SNAPSHOT or exact TS exists?
+    if( versions.contains( loc.getVersion() ) )
+    {
+      return true;
+    }
+    
+    // nothing to do, but find latest
+    String ver = VersionRange.findLatest( versions, true );
+
+    if( ver == null )
+    {
+      res.addError( bmd, new RepositoryException( _lang.getMessage( "snapshot.not.found", _repo.getServer().getURL().toString(), mdPath ) ) );
+      return false;
+    }
+    
+    loc.setVersion( ver );
+    return true;
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  /**
+   * TODO og: parallelize as soon as code stabilizes
+   */
   public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
-      throws RepositoryException,
-      IllegalArgumentException
+  throws RepositoryException,
+  IllegalArgumentException
   {
     if( query == null || query.size() < 1 )
       return null;
@@ -125,8 +268,7 @@ implements RepositoryReader, MetadataReader
     {
       try
       {
-        DefaultArtifact da = readArtifact( bmd );
-        res.add( bmd, da );
+        readArtifact( bmd, res );
       }
       catch( Exception e )
       {
@@ -137,228 +279,59 @@ implements RepositoryReader, MetadataReader
     return res;
   }
   //---------------------------------------------------------------------------------------------------------------
-  private String findLatestSnapshot( String gavPath, String version, DefaultArtifact da )
-  throws RepositoryException, MetadataProcessingException, MetadataException
+  private File findLocalRoot( Quality vq )
   {
-    String ver = version;
-    DefaultArtifactVersion dav = new DefaultArtifactVersion( ver );
+    for( LocalRepository lr : _localRepos )
+      if( !lr.isReadOnly() && lr.getVersionRangeQualityRange().isAcceptedQuality( vq ) )
+        return lr.getDirectory();
 
-    byte [] mdBytes = readRawData( gavPath+'/'+ver+'/'+_repo.getMetadataName() );
-    if( mdBytes == null )
-      throw new RepositoryException( _lang.getMessage( "no.gav.md", _repo.getServer().getURL().toString(), gavPath+'/'+ver+'/'+_repo.getMetadataName() ) );
-      
-    Metadata gavMd = MetadataBuilder.read( new ByteArrayInputStream(mdBytes) );
-    if( gavMd == null || gavMd.getVersioning() == null )
-      throw new RepositoryException( _lang.getMessage( "gav.md.no.versions", _repo.getServer().getURL().toString(), gavPath+'/'+ver+'/'+_repo.getMetadataName() ) );
-      
-    List<String> versions = gavMd.getVersioning().getVersions();
-    if( versions == null || versions.size() < 1 )
-      throw new RepositoryException( _lang.getMessage( "gav.md.no.versions", _repo.getServer().getURL().toString(), gavPath+'/'+ver+'/'+_repo.getMetadataName() ) );
-
-    if( versions.contains( ver ) )
-    {
-      da.setVersion( ver );
-      
-      return gavPath+'/'+ dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION
-              + '/'+da.getArtifactId()+'-'+dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION
-              + ( da.hasClassifier() ? '-'+da.getClassifier() : "" )
-              + '.'+da.getType()
-      ;
-    }
-    
-    ver = null;
-    DefaultArtifactVersion tempDav = null;
-    DefaultArtifactVersion tempDav2 = null;
-    
-    // find latest
-    for( String vn : versions )
-    {
-      // no snapshots any more
-      if( vn.endsWith( Artifact.SNAPSHOT_VERSION ))
-        continue;
-
-      if( ver == null )
-      {
-        ver = vn;
-        tempDav = new DefaultArtifactVersion( vn );
-        continue;
-      }
-      
-      tempDav2 = new DefaultArtifactVersion( vn );
-      if( tempDav2.compareTo( tempDav ) > 0 )
-      {
-        ver = vn;
-        tempDav = tempDav2;
-      }
-    
-    }
-
-    if( ver == null )
-    {
-      throw new RepositoryException( _lang.getMessage( "snapshot.not.found", _repo.getServer().getURL().toString(), gavPath+'/'+ver+'/'+_repo.getMetadataName() ) );
-    }
-    
-    da.setVersion( ver );
-    
-    return gavPath + '/' + dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION
-    + '/'+da.getArtifactId()+'-'+ver
-    + ( da.hasClassifier() ? '-'+da.getClassifier() : "" )
-    + '.'+da.getType()
-;
+    return _defaultRoot;
   }
   //---------------------------------------------------------------------------------------------------------------
-  public DefaultArtifact readArtifact( ArtifactBasicMetadata bmd )
-  throws IOException, RepositoryException, MetadataProcessingException, MetadataException
+  public void readArtifact( ArtifactBasicMetadata bmd, ArtifactResults res )
+  throws IOException, RepositoryException, MetadataReaderException, MetadataException
   {
     DefaultArtifact da = bmd instanceof DefaultArtifact ? (DefaultArtifact)bmd : new DefaultArtifact( bmd );
     
-    String version = bmd.getVersion();
-    DefaultArtifactVersion dav = new DefaultArtifactVersion( version );
-    Quality vq = dav.getQuality();
+    ArtifactLocation loc = calculateLocation( _repo.getServer().getURL().toString(), bmd, res );
     
-    String relGaPath = bmd.getGroupId().replace( '.', '/' ) + '/' + bmd.getArtifactId();
-    String versionDir = bmd.getVersion();
+    if( loc == null )
+      return;
+    
+    da.setVersion( loc.getVersion() );
 
-    byte [] mdBytes = readRawData( relGaPath+'/'+_repo.getMetadataName() );
-    if( mdBytes == null )
-      throw new RepositoryException( _lang.getMessage( "no.group.md", _repo.getServer().getURL().toString(), relGaPath ) );
-      
-    Metadata groupMd = MetadataBuilder.read( new ByteArrayInputStream(mdBytes) );
-    if( groupMd == null || groupMd.getVersioning() == null )
-      throw new RepositoryException( _lang.getMessage( "group.md.no.versions", _repo.getServer().getURL().toString(), relGaPath ) );
-      
-    List<String> versions = groupMd.getVersioning().getVersions();
-    if( versions == null || versions.size() < 1 )
-      throw new RepositoryException( _lang.getMessage( "group.md.no.versions", _repo.getServer().getURL().toString(), relGaPath ) );
+    Quality vq = new Quality( loc.getVersion() );
     
-    String relBinaryPath = null;
+    File root = findLocalRoot( vq );
     
-    // merge RELEASE and LATEST, should be no difference
-    if( Artifact.RELEASE_VERSION.equals( version )
-        ||
-        Artifact.LATEST_VERSION.equals( version ) 
-      )
+    File binFile = new File( root, loc.getRelPath() ); 
+    File pomFile = null; 
+    
+    DefaultRetrievalRequest drr = new DefaultRetrievalRequest();
+    
+    Binding binBinding = new Binding( new URL(loc.getAbsPath()), binFile );
+    drr.addBinding( binBinding );
+
+    boolean isPom = "pom".equals( bmd.getType() ); 
+    if( ! isPom ) 
     {
-      boolean noSnapshots = Artifact.RELEASE_VERSION.equals( version );
-      version = null;
-      DefaultArtifactVersion tempDav = null;
-      DefaultArtifactVersion tempDav2 = null;
-
-      // find latest
-      for( String vn : versions )
-      {
-        // RELEASE?
-        if( noSnapshots && vn.endsWith( Artifact.SNAPSHOT_VERSION ))
-          continue;
-        
-        if( version == null )
-        {
-          version = vn;
-          tempDav = new DefaultArtifactVersion( vn );
-          continue;
-        }
-        
-        tempDav2 = new DefaultArtifactVersion( vn );
-        if( tempDav2.compareTo( tempDav ) > 0 )
-        {
-          version = vn;
-          tempDav = tempDav2;
-        }
-        
-      }
-
-      if( version == null )
-        throw new RepositoryException( _lang.getMessage( "gav.not.found", bmd.toString(), relGaPath ) );
-      
-      // LATEST is a SNAPSHOT :(
-      if( version.endsWith( Artifact.SNAPSHOT_VERSION ) )
-      {
-        relBinaryPath = findLatestSnapshot( relGaPath, version, da );
-
-        if( relBinaryPath == null )
-          throw new RepositoryException( _lang.getMessage( "gav.not.found", bmd.toString(), relGaPath ) );
-
-        versionDir = version;
-      }
-      else
-      {
-        versionDir = version;
-        relBinaryPath = relGaPath+'/'+versionDir
-            +'/'+bmd.getArtifactId()+'-'+version
-            + ( bmd.hasClassifier() ? '-'+bmd.getClassifier() : "" )+'.'+bmd.getType()
-        ;
-
-        da.setVersion( version );
-      }
+      pomFile = new File( root, loc.getRelPomPath() );
+      Binding pomBinding = new Binding( new URL(loc.getAbsPomPath()), pomFile );
+      drr.addBinding( pomBinding );
     }
-    // regular snapshot requested
-    else if( version.endsWith( Artifact.SNAPSHOT_VERSION ) )
+    
+    RetrievalResponse resp = _transport.retrieve( drr );
+    
+    if( resp.hasExceptions() )
     {
-      relBinaryPath = findLatestSnapshot( relGaPath, version, da );
-      versionDir = dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION;
-
-      if( relBinaryPath == null )
-        throw new RepositoryException( _lang.getMessage( "gav.not.found", bmd.toString(), relGaPath ) );
-    }
-    // time stamped snapshot requested
-    else if( vq.equals( Quality.SNAPSHOT_TS_QUALITY ))
-    {
-      versionDir = dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION;
-      relBinaryPath = relGaPath + '/' + versionDir 
-          + '/' + bmd.getArtifactId() + '-' + bmd.getVersion() + ( bmd.hasClassifier() ? '-'+bmd.getClassifier() : "" ) 
-          + '.' + bmd.getType()
-      ;
+      res.addError( bmd, new RepositoryException(resp.getExceptions().toString() ) );
     }
     else
     {
-      relBinaryPath = relGaPath + '/'+version
-                      + '/'+bmd.getArtifactId()+'-'+version
-                      + ( bmd.hasClassifier() ? '-'+bmd.getClassifier() : "" )
-                      + '.'+bmd.getType()
-      ;
+      da.setFile( binFile );
+      da.setPomBlob(  FileUtil.readRawData( isPom ? binFile : pomFile ) );
+      res.add( bmd, da );
     }
-    
-    // binary calculated 
-    
-    File binFile = File.createTempFile( "remote-repo-" + _repo.getId(), bmd.getArtifactId()+bmd.getVersion()+'.'+bmd.getType() );
-    File pomFile = null;
-
-    Binding binBinding = new Binding( new URL(_repo.getServer().getURL().toString() + '/'+ relBinaryPath) , binFile );
-
-    DefaultRetrievalRequest request = new DefaultRetrievalRequest();
-    request.addBinding( binBinding );
-    
-    if( !"pom".equals( bmd.getType() ) ) 
-    {
-      String relPomPath = relGaPath + '/' + versionDir
-                          + '/'+bmd.getArtifactId()+'-'+version
-                          + ".pom"
-      ;
-
-      pomFile = File.createTempFile( "remote-repo-" + _repo.getId(), bmd.getArtifactId()+bmd.getVersion()+".pom" );
-      Binding pomBinding = new Binding( new URL(_repo.getServer().getURL().toString() + '/'+ relPomPath) , pomFile );
-      request.addBinding( pomBinding );
-    }
-    
-    RetrievalResponse response = _transport.retrieve( request );
-    
-    if( response.hasExceptions() )
-    {
-      throw new RepositoryException( response.getExceptions().toString() );
-    }
-    
-    da.setFile( binFile );
-
-    if( pomFile != null ) 
-    {
-      da.setPomBlob( FileUtil.readRawData( pomFile ) );
-    }
-    else
-    {
-      da.setPomBlob( FileUtil.readRawData( binFile ) );
-    }
-
-    return da;
   }
   //---------------------------------------------------------------------------------------------------------------
   /**
@@ -380,7 +353,7 @@ implements RepositoryReader, MetadataReader
         List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, this, System.getProperties() );
         ror.add( bmd, deps );
       }
-      catch( MetadataProcessingException e )
+      catch( MetadataReaderException e )
       {
         _log.warn( "error reading "+bmd.toString()+" dependencies", e );
         continue;
@@ -403,17 +376,18 @@ implements RepositoryReader, MetadataReader
 
     ArtifactBasicResults res = new ArtifactBasicResults( query.size() );
     
-    String gaPath = null;
+    String root = _repo.getServer().getURL().toString();
+    
     for( ArtifactBasicMetadata bmd : query )
     {
-      gaPath = bmd.getGroupId().replace( '.', '/' )+'/'+bmd.getArtifactId()+'/'+_repo.getMetadataName();
+      ArtifactLocation loc = new ArtifactLocation( root, bmd );
       
       byte[] mavenMetadata;
       try
       {
-        mavenMetadata = readRawData( gaPath );
+        mavenMetadata = readRawData( loc.getGaPath()+loc.SEP+_repo.getMetadataName() );
       }
-      catch( MetadataProcessingException e )
+      catch( MetadataReaderException e )
       {
         continue;
       }
@@ -421,21 +395,29 @@ implements RepositoryReader, MetadataReader
       if( mavenMetadata == null )
         continue;
       
-      MetadataXpp3Reader mmReader = new MetadataXpp3Reader();
       Metadata mmd;
       try
       {
-        mmd = mmReader.read( new ByteArrayInputStream(mavenMetadata) );
+        mmd = MetadataBuilder.getMetadata( mavenMetadata );
       }
-      catch( IOException e )
+      catch( MetadataException e1 )
       {
-        _log.warn( _lang.getMessage( "maven.metadata.xml.exception", e.getMessage(), gaPath, _repo.getId() ) );
+        res.addError( bmd, e1 );
         continue;
       }
-      catch( XmlPullParserException pe )
+
+      if( mmd == null || mmd.getVersioning() == null )
       {
-        _log.error( pe.getMessage() );
-        throw new RepositoryException( pe );
+        _log.warn( _lang.getMessage( "maven.bad.metadata", loc.getGaPath()+loc.SEP+_repo.getMetadataName(), _repo.getId() ) );
+        continue;
+      }
+      
+      List<String> versions = mmd.getVersioning().getVersions(); 
+
+      if( mmd == null || mmd.getVersioning() == null )
+      {
+        _log.warn( _lang.getMessage( "maven.metadata.no.versions", loc.getGaPath()+loc.SEP+_repo.getMetadataName(), _repo.getId() ) );
+        continue;
       }
 
       VersionRange versionQuery;
@@ -448,19 +430,48 @@ implements RepositoryReader, MetadataReader
         res.addError( bmd, new RepositoryException(e) );
         continue;
       }
+
+      Quality vq = new Quality( bmd.getVersion() );
       
-      for( Object vo : mmd.getVersioning().getVersions() )
+      if(    vq.equals( Quality.FIXED_RELEASE_QUALITY ) 
+          || vq.equals( Quality.FIXED_LATEST_QUALITY )
+          || vq.equals( Quality.SNAPSHOT_QUALITY     )
+      )
       {
-        if( vo == null || !(vo instanceof String) )
+        try
+        {
+          loc = calculateLocation( root, bmd, res );
+        }
+        catch( Exception e )
+        {
+          res.addError( bmd, e );
           continue;
+        }
         
-        String v = (String)vo;
+        if( loc == null )
+          continue;
+          
+        ArtifactBasicMetadata vmd = new ArtifactBasicMetadata();
+        vmd.setGroupId( bmd.getGroupId() );
+        vmd.setArtifactId(  bmd.getArtifactId() );
+        vmd.setClassifier( bmd.getClassifier() );
+        vmd.setType( bmd.getType() );
+        vmd.setVersion( loc.getVersion() );
+          
+        res = ArtifactBasicResults.add( res, bmd, vmd );
         
-        Quality q = new Quality( v );
+        continue;
+
+      }
+      
+      for( String version : versions )
+      {
+        Quality q = new Quality( version );
+
         if( ! _repo.isAcceptedQuality( q ) )
           continue;
         
-        if( !versionQuery.includes(  v )  )
+        if( !versionQuery.includes(  version )  )
           continue;
         
         ArtifactBasicMetadata vmd = new ArtifactBasicMetadata();
@@ -468,17 +479,18 @@ implements RepositoryReader, MetadataReader
         vmd.setArtifactId(  bmd.getArtifactId() );
         vmd.setClassifier( bmd.getClassifier() );
         vmd.setType( bmd.getType() );
-        vmd.setVersion( v );
+        vmd.setVersion( version );
         
-        res.add( bmd, vmd );
+        res = ArtifactBasicResults.add( res, bmd, vmd );
       }
+      
     }
     
     return res;
   }
   //---------------------------------------------------------------------------------------------------------------
   public byte[] readRawData( ArtifactBasicMetadata bmd, String classifier, String type )
-  throws MetadataProcessingException
+  throws MetadataReaderException
   {
     String bmdPath = bmd.getGroupId().replace( '.', '/' )
                     + '/'+bmd.getArtifactId()
@@ -491,7 +503,7 @@ implements RepositoryReader, MetadataReader
   }
   //---------------------------------------------------------------------------------------------------------------
   public byte[] readRawData( String path )
-  throws MetadataProcessingException
+  throws MetadataReaderException
   {
     if( path == null || path.length() < 1 )
       return null;
@@ -505,20 +517,25 @@ implements RepositoryReader, MetadataReader
       if( path.startsWith( separator ))
         separator = "";
       
-      Binding binding = new Binding( new URL(_repo.getServer().getURL().toString() + separator + path) , baos );
+      String url = (path.startsWith( "http" ) ? "" : _repo.getServer().getURL().toString() + separator) + path;
+      
+      Binding binding = new Binding( new URL( url ) , baos );
       DefaultRetrievalRequest request = new DefaultRetrievalRequest();
       request.addBinding( binding );
       
       RetrievalResponse response = _transport.retrieve( request );
       
       if( response.hasExceptions() )
-        throw new MetadataProcessingException( response.getExceptions().toString() );
+      {
+       _log.info(  _lang.getMessage( "read.raw.exceptions", path, response.getExceptions().toString() ) );
+        return null;
+      }
       
       return baos.toByteArray();
     }
     catch( IOException e )
     {
-      throw new MetadataProcessingException(e);
+      throw new MetadataReaderException(e);
     }
     finally
     {

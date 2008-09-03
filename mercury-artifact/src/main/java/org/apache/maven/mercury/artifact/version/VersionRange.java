@@ -1,7 +1,13 @@
 package org.apache.maven.mercury.artifact.version;
 
+import java.util.List;
+
 import org.apache.maven.mercury.artifact.Artifact;
+import org.apache.maven.mercury.artifact.Quality;
+import org.apache.maven.mercury.artifact.QualityEnum;
 import org.apache.maven.mercury.artifact.QualityRange;
+import org.codehaus.plexus.i18n.DefaultLanguage;
+import org.codehaus.plexus.i18n.Language;
 
 /**
  * Single range implementation, similar to OSGi specification:
@@ -18,6 +24,7 @@ import org.apache.maven.mercury.artifact.QualityRange;
 public class VersionRange
 {
   private static final DefaultArtifactVersion ZERO_VERSION = new DefaultArtifactVersion("0.0.0");
+  private static final Language _lang = new DefaultLanguage( VersionRange.class );
   
   QualityRange _toQualityRange = QualityRange.ALL;
   
@@ -26,6 +33,7 @@ public class VersionRange
   
   DefaultArtifactVersion _toVersion;
   boolean _toInclusive = false;
+  
   //--------------------------------------------------------------------------------------------
   public VersionRange( String range, QualityRange qRange )
   throws VersionException
@@ -34,11 +42,13 @@ public class VersionRange
     setToQualityRange( qRange );
   }
   //--------------------------------------------------------------------------------------------
-  public VersionRange( String range )
+  public VersionRange( final String rangeIn )
   throws VersionException
   {
+    String range = AttributeQuery.stripExpression( rangeIn );
+
     if( range == null || range.length() < 1 )
-      return;
+      return;    
     
     if( range.indexOf(',') > 0 )
     {
@@ -65,9 +75,13 @@ public class VersionRange
         if( sFromT != null && sFromT.length() > 0 )
         {
           checkForValidCharacters( sFromT );
-// TODO og: look for snapshots
-//        if( sFromT.indexOf( Artifact.SNAPSHOT_VERSION ) != -1 )
-//        throw new VersionException();
+          // TODO og: look for LATEST,RELEASE and SNAPSHOT
+          Quality vq = new Quality( sFromT );
+          if( vq.getQuality().equals( QualityEnum.snapshot )
+              || vq.getQuality().equals( QualityEnum.unknown )
+          )
+              throw new VersionException( _lang.getMessage( "bad.version.sn", sFromT ) );
+          
           _fromVersion = new DefaultArtifactVersion( sFromT );
         }
       }
@@ -162,6 +176,44 @@ public class VersionRange
       return _toInclusive;
     
     return false;
+  }
+  
+  //--------------------------------------------------------------------------------------------
+  /**
+   * helpful latest version calculator
+   * 
+   * @param versions
+   * @param noSnapshots
+   * @return
+   */
+  public static final String findLatest( final List<String> versions, final boolean noSnapshots )
+  {
+    DefaultArtifactVersion tempDav = null;
+    DefaultArtifactVersion tempDav2 = null;
+    String version = null;
+
+    // find latest
+    for( String vn : versions )
+    {
+      // RELEASE?
+      if( noSnapshots && vn.endsWith( Artifact.SNAPSHOT_VERSION ))
+        continue;
+      
+      if( version == null )
+      {
+        version = vn;
+        tempDav = new DefaultArtifactVersion( vn );
+        continue;
+      }
+      
+      tempDav2 = new DefaultArtifactVersion( vn );
+      if( tempDav2.compareTo( tempDav ) > 0 )
+      {
+        version = vn;
+        tempDav = tempDav2;
+      }
+    }
+    return version;
   }
   //--------------------------------------------------------------------------------------------
   //--------------------------------------------------------------------------------------------

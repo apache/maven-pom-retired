@@ -41,9 +41,9 @@ implements RemoteRepository
     }
     //----------------------------------------------------------------------------------
     public RepositoryWriter getWriter()
+    throws RepositoryException
     {
-      // TODO Auto-generated method stub
-      return null;
+      return new RemoteRepositoryWriterM2(this);
     }
     //----------------------------------------------------------------------------------
     public RepositoryWriter getWriter( String protocol )

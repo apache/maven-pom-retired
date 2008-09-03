@@ -9,7 +9,7 @@ import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessor;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessorException;
-import org.apache.maven.mercury.builder.api.MetadataProcessingException;
+import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 
@@ -223,7 +223,7 @@ implements MetadataReader
    * @see org.apache.maven.mercury.repository.api.MetadataReader#readMetadata(org.apache.maven.mercury.ArtifactBasicMetadata)
    */
   public byte[] readMetadata( ArtifactBasicMetadata bmd )
-      throws MetadataProcessingException
+      throws MetadataReaderException
   {
     return readRawData( bmd, "", "pom" );
   }
@@ -232,7 +232,7 @@ implements MetadataReader
    * @see org.apache.maven.mercury.repository.api.MetadataReader#readRawData(org.apache.maven.mercury.ArtifactBasicMetadata, java.lang.String)
    */
   public byte[] readRawData( ArtifactBasicMetadata bmd, String classifier, String type )
-  throws MetadataProcessingException
+  throws MetadataReaderException
   {
     if( bmd == null )
       throw new IllegalArgumentException("null bmd supplied");
@@ -243,7 +243,7 @@ implements MetadataReader
     }
     catch( RepositoryException e )
     {
-      throw new MetadataProcessingException(e);
+      throw new MetadataReaderException(e);
     }
     
     byte [] res = null;
