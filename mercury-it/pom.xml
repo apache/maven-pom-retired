@@ -50,6 +50,19 @@
       <testResource>
         <directory>src/test/resources</directory>
         <filtering>true</filtering>
+        <excludes>
+            <exclude>pgp/**</exclude>
+            <exclude>repo/**</exclude>
+        </excludes>
+      </testResource>
+
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>false</filtering>
+        <includes>
+            <include>pgp/**</include>
+            <include>repo/**</include>
+        </includes>
       </testResource>
  
       <testResource>
