@@ -1,9 +1,9 @@
 package org.apache.maven.mercury.repository.api;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
-import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
+import org.apache.maven.mercury.builder.api.MetadataReaderException;
 
 
 /**

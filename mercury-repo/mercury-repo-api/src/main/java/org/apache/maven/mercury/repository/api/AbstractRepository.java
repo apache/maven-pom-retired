@@ -3,10 +3,8 @@ package org.apache.maven.mercury.repository.api;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.maven.mercury.artifact.Quality;
-import org.apache.maven.mercury.artifact.QualityEnum;
 import org.apache.maven.mercury.artifact.QualityRange;
 import org.apache.maven.mercury.builder.api.MetadataProcessor;
 import org.apache.maven.mercury.transport.api.Server;

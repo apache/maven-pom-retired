@@ -1,7 +1,5 @@
 package org.apache.maven.mercury.artifact;
 
-import org.codehaus.plexus.i18n.DefaultLanguage;
-import org.codehaus.plexus.i18n.Language;
 
 /**
  *

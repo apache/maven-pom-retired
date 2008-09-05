@@ -1,8 +1,5 @@
 package org.apache.maven.mercury.repository.local.m2;
 
-import java.util.List;
-
-import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 

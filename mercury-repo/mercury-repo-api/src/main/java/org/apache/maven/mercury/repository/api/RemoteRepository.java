@@ -1,7 +1,5 @@
 package org.apache.maven.mercury.repository.api;
 
-import java.util.List;
-
 import org.apache.maven.mercury.transport.api.Server;
 
 

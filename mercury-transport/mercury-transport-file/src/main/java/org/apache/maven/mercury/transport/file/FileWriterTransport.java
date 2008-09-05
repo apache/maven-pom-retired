@@ -1,8 +1,5 @@
 package org.apache.maven.mercury.transport.file;
 
-import java.util.List;
-
-import org.apache.maven.mercury.crypto.api.StreamObserver;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.transport.api.TransportException;
 import org.apache.maven.mercury.transport.api.TransportTransaction;

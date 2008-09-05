@@ -1,8 +1,8 @@
 package org.apache.maven.mercury.artifact.version;
 
-import org.apache.maven.mercury.artifact.Quality;
-
 import junit.framework.TestCase;
+
+import org.apache.maven.mercury.artifact.Quality;
 
 /**
  *
