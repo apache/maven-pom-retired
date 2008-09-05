@@ -36,6 +36,7 @@
     <nexus-base-url>${nexus-application-protocol}://${nexus-application-host}:${nexus-application-port}/${nexus-application-name}/</nexus-base-url>
 
     <nexus-control-port>33002</nexus-control-port>
+
   </properties>
   
   <build>

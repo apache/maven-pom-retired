@@ -9,8 +9,16 @@
   	<artifactId>mercury-md</artifactId>
   	<version>1.0.0-alpha-1-SNAPSHOT</version>
   </parent>
-  <build>
 
+  <properties>
+    
+    <sat4j.version>2.0.0</sat4j.version>
+    <commons.digester.version>1.8</commons.digester.version>
+    <mercury.version>1.0.0-alpha-1-SNAPSHOT</mercury.version>
+
+  </properties>
+
+  <build>
   <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -33,47 +41,47 @@
     <dependency>
       <groupId>org.sat4j</groupId>
       <artifactId>org.sat4j.core</artifactId>
-      <version>2.0.0</version>
+      <version>${sat4j.version}</version>
     </dependency>        
     <dependency>
       <groupId>org.sat4j</groupId>
       <artifactId>org.sat4j.pb</artifactId>
-      <version>2.0.0</version>
+      <version>${sat4j.version}</version>
     </dependency>        
     <dependency>
       <groupId>commons-digester</groupId>
       <artifactId>commons-digester</artifactId>
-      <version>1.8</version>
+      <version>${commons.digester.version}</version>
       <scope>test</scope>
     </dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-md-shared</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>${mercury.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-repo-api</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>${mercury.version}</version>
   	</dependency>
 	<!--  test deps -->
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-repo-local-m2</artifactId>
-      <version>1.0.0-alpha-1-SNAPSHOT</version>
+      <version>${mercury.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-repo-local-m2</artifactId>
-      <version>1.0.0-alpha-1-SNAPSHOT</version>
+      <version>${mercury.version}</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-repo-remote-m2</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>${mercury.version}</version>
   		<scope>test</scope>
   	</dependency>
   </dependencies>
