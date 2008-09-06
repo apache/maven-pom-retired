@@ -74,17 +74,18 @@ public class DestinationRealmResolver implements RealmResolver
                //destination.isSecure && server.protocol == https || !destination.isSecure && server.protocol == http
                if (((dest.isSecure() && "https".equalsIgnoreCase(protocol)) || (!dest.isSecure() && "http".equalsIgnoreCase(protocol)))
                    &&
-                   (address.getPort() == port)
-                   &&
-                   (address.getHostName().equalsIgnoreCase(host)))
+                   (address.getPort() == port))
                {
-                   server = s;
-                   if (log.isDebugEnabled())
-                       log.debug("Matched server "+address.getHostName()+":"+address.getPort());
+                   if (address.getAddress().getHostAddress().equalsIgnoreCase(host) || address.getHostName().equalsIgnoreCase(host))
+                   {
+                       server = s;
+                       if (log.isDebugEnabled())
+                           log.debug("Matched server "+address.getHostName()+":"+address.getPort());
+                   }
                }
            }
        }
-       
+
        if (server == null || server.getServerCredentials() == null)
        {
            if (log.isDebugEnabled())
