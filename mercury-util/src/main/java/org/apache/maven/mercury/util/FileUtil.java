@@ -79,17 +79,20 @@ public class FileUtil
     }
     
     File [] kids = fromFile.listFiles();
-    for( File kid : kids )
+    if( kids != null )
     {
-      if( kid.isDirectory() )
+      for( File kid : kids )
       {
-        File newDir = new File( toFile, kid.getName());
-        newDir.mkdirs();
-        
-        copy( kid, newDir, false );
+        if( kid.isDirectory() )
+        {
+          File newDir = new File( toFile, kid.getName());
+          newDir.mkdirs();
+          
+          copy( kid, newDir, false );
+        }
+        else
+          copyFile( kid, toFile );
       }
-      else
-        copyFile( kid, toFile );
     }
    
   }

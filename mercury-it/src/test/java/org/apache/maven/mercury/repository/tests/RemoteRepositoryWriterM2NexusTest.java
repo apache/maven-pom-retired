@@ -27,17 +27,11 @@ import org.apache.maven.mercury.util.FileUtil;
 public class RemoteRepositoryWriterM2NexusTest
 extends AbstractRepositoryWriterM2Test
 {
-//  String nexusReleasesTestDir = "/app/nexus/storage/test";
-//  String nexusReleasesTestUrl = "http://127.0.0.1:8081/nexus/content/repositories/test";
-
   String nexusReleasesTestDir = "./target/nexus-webapp-1.0.0/runtime/work/storage/releases";
-  String nexusReleasesTestUrl = "http://127.0.0.1:8091/nexus/content/repositories/releases";
+  String nexusReleasesTestUrl = nexusTestUrl+"/content/repositories/releases";
 
   String nexusSnapshotsTestDir = "./target/nexus-webapp-1.0.0/runtime/work/storage/snapshots";
-  String nexusSnapshotsTestUrl = "http://127.0.0.1:8091/nexus/content/repositories/snapshots";
-
-  String nexusTestUser = "admin";
-  String nexusTestPass = "admin123";
+  String nexusSnapshotsTestUrl = nexusTestUrl+"/content/repositories/snapshots";
   //------------------------------------------------------------------------------
   @Override
   void setReleases()
@@ -61,6 +55,8 @@ extends AbstractRepositoryWriterM2Test
   protected void setUp()
   throws Exception
   {
+    needNexus = true;
+    
     super.setUp();
 
     mdProcessor = new MetadataProcessorMock();

@@ -3,8 +3,11 @@ package org.apache.maven.mercury.repository.tests;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import junit.framework.Assert;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
@@ -22,6 +25,9 @@ import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.PlexusTestCase;
 import org.sonatype.appbooter.ForkedAppBooter;
+import org.sonatype.nexus.client.NexusClient;
+import org.sonatype.nexus.client.rest.NexusRestClient;
+import org.sonatype.nexus.rest.model.RepositoryListResource;
 
 /**
  *
@@ -77,6 +83,12 @@ extends PlexusTestCase
   /** current test works with releases */
   abstract void setSnapshots() throws MalformedURLException;
   
+  protected boolean needNexus = false;
+
+  protected String nexusTestUrl  = "http://127.0.0.1:8091/nexus";
+  protected String nexusTestUser = "admin";
+  protected String nexusTestPass = "admin123";
+  
   
   @Override
   protected void setUp()
@@ -100,9 +112,19 @@ extends PlexusTestCase
     FileUtil.writeRawData( artifactBinary, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
 
     plexus = getContainer();
-    nexusForkedAppBooter = (ForkedAppBooter)plexus.lookup( TEST_NEXUS_ROLE, TEST_NEXUS_HINT  );
     
-    nexusForkedAppBooter.start();
+    if( needNexus )
+    {
+      nexusForkedAppBooter = (ForkedAppBooter)plexus.lookup( TEST_NEXUS_ROLE, TEST_NEXUS_HINT  );
+      nexusForkedAppBooter.start();
+      NexusClient client = new NexusRestClient();
+      client.connect( nexusTestUrl, nexusTestUser, nexusTestPass );
+      if( !client.isNexusStarted( true ) )
+      {
+        fail("Cannot start Nexus");
+      }
+      client.disconnect();
+    }
   }
   
   @Override
@@ -110,7 +132,11 @@ extends PlexusTestCase
   throws Exception
   {
     super.tearDown();
-    nexusForkedAppBooter.stop();
+    if( nexusForkedAppBooter != null )
+    {
+      nexusForkedAppBooter.stop();
+      nexusForkedAppBooter = null;
+    }
   }
 
   public void testWriteArtifact()

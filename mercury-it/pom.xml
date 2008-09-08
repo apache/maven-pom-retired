@@ -14,6 +14,8 @@
     <plexus.appbooter.version>1.4</plexus.appbooter.version>
     <plexus.container.version>1.0-alpha-47</plexus.container.version>
     <nexus.version>1.0.0</nexus.version>
+    <nexus.client.version>1.1.0-SNAPSHOT</nexus.client.version>
+    <jetty.version>7.0.0pre3</jetty.version>
 
     <nexus-security-enabled>false</nexus-security-enabled>
 
@@ -193,6 +195,28 @@
       <version>${plexus.appbooter.version}</version>
     </dependency>
     
+    <dependency>
+    	<groupId>org.sonatype.nexus</groupId>
+    	<artifactId>nexus-rest-client-java</artifactId>
+    	<version>${nexus.client.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-client</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-servlet</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-servlet-tester</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+
   </dependencies>
 
 </project>
