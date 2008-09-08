@@ -35,6 +35,9 @@ import org.mortbay.jetty.client.HttpExchange;
  */
 public abstract class FileExchange extends HttpExchange
 {
+
+   
+
     public static final String __BATCH_HEADER = "Jetty-Batch-Id";
     public static final String __BATCH_SUPPORTED_HEADER = "Jetty-Batch-Supported";
     public static final String __BATCH_COMMIT_HEADER = "Jetty-Batch-Commit";
@@ -95,4 +98,10 @@ public abstract class FileExchange extends HttpExchange
     {
         onFileError( _url, new Exception( "Timeout occurred" ) );
     }
+    
+    protected void onConnectionFailed(Throwable ex)
+    {
+        onFileError(_url, new Exception(ex));
+    }
+    
 }
