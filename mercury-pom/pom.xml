@@ -191,6 +191,34 @@
 </profiles>  
 
 <build>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <filtering>false</filtering>
+        <includes>
+            <include>**/Messages.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+
+    <testResources>
+      <testResource>
+        <directory>src/test/java</directory>
+        <filtering>false</filtering>
+        <includes>
+            <include>**/Messages.properties</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>false</filtering>
+      </testResource>
+    </testResources>
+
 <plugins>
 
       <plugin>
@@ -213,10 +241,6 @@
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
-          <includes>
-            <include>**/*.java</include>
-            <include>**/*.properties</include>
-          </includes>
         </configuration>
       </plugin>
       

@@ -35,7 +35,6 @@ public class PgpStreamVerifierTest
   PgpStreamVerifierFactory svf;
   
   PgpStreamVerifier sv;
-  
 
   protected void setUp()
       throws Exception

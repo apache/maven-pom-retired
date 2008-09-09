@@ -39,12 +39,6 @@ import org.sonatype.nexus.rest.model.RepositoryListResource;
 public abstract class AbstractRepositoryWriterM2Test
 extends PlexusTestCase
 {
-  public static final String TEST_NEXUS_ROLE = ForkedAppBooter.ROLE;
-  public static final String TEST_NEXUS_HINT = "NexusForkedAppBooter";
-  
-  PlexusContainer plexus;
-  ForkedAppBooter nexusForkedAppBooter;
-
   Repository repo;
   
   File targetDirectory; 
@@ -77,17 +71,14 @@ extends PlexusTestCase
   File f;
   
   File artifactBinary;
-  
-  /** current test works with snapshots */
-  abstract void setReleases() throws MalformedURLException;
-  /** current test works with releases */
-  abstract void setSnapshots() throws MalformedURLException;
-  
-  protected boolean needNexus = false;
 
-  protected String nexusTestUrl  = "http://127.0.0.1:8091/nexus";
-  protected String nexusTestUser = "admin";
-  protected String nexusTestPass = "admin123";
+  static PlexusContainer plexus;
+  
+  /** current test works with snapshots 
+   * @throws Exception */
+  abstract void setReleases() throws Exception;
+  /** current test works with releases */
+  abstract void setSnapshots() throws Exception;
   
   
   @Override
@@ -95,6 +86,9 @@ extends PlexusTestCase
   throws Exception
   {
     super.setUp();
+
+    if( plexus == null )
+      plexus = getContainer();
 
     pgpF = new PgpStreamVerifierFactory(
         new StreamVerifierAttributes( PgpStreamVerifierFactory.DEFAULT_EXTENSION, false, true )
@@ -110,33 +104,20 @@ extends PlexusTestCase
 
     artifactBinary = File.createTempFile( "test-repo-writer", "bin" );
     FileUtil.writeRawData( artifactBinary, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
-
-    plexus = getContainer();
     
-    if( needNexus )
-    {
-      nexusForkedAppBooter = (ForkedAppBooter)plexus.lookup( TEST_NEXUS_ROLE, TEST_NEXUS_HINT  );
-      nexusForkedAppBooter.start();
-      NexusClient client = new NexusRestClient();
-      client.connect( nexusTestUrl, nexusTestUser, nexusTestPass );
-      if( !client.isNexusStarted( true ) )
-      {
-        fail("Cannot start Nexus");
-      }
-      client.disconnect();
-    }
   }
+  
   
   @Override
   protected void tearDown()
   throws Exception
   {
     super.tearDown();
-    if( nexusForkedAppBooter != null )
-    {
-      nexusForkedAppBooter.stop();
-      nexusForkedAppBooter = null;
-    }
+//    if( nexusForkedAppBooter != null )
+//    {
+//      nexusForkedAppBooter.stop();
+//      nexusForkedAppBooter = null;
+//    }
   }
 
   public void testWriteArtifact()

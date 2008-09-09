@@ -16,6 +16,14 @@ import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
 import org.apache.maven.mercury.transport.api.Credentials;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileUtil;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.sonatype.appbooter.ForkedAppBooter;
+import org.sonatype.appbooter.ctl.AppBooterServiceException;
+import org.sonatype.nexus.client.NexusClient;
+import org.sonatype.nexus.client.NexusClientException;
+import org.sonatype.nexus.client.NexusConnectionException;
+import org.sonatype.nexus.client.rest.NexusRestClient;
 
 /**
  *
@@ -27,28 +35,35 @@ import org.apache.maven.mercury.util.FileUtil;
 public class RemoteRepositoryWriterM2NexusTest
 extends AbstractRepositoryWriterM2Test
 {
+  protected boolean needNexus = false;
+  
   String nexusReleasesTestDir = "./target/nexus-webapp-1.0.0/runtime/work/storage/releases";
-  String nexusReleasesTestUrl = nexusTestUrl+"/content/repositories/releases";
+  String nexusReleasesTestUrl = Nexus.nexusTestUrl+"/content/repositories/releases";
 
   String nexusSnapshotsTestDir = "./target/nexus-webapp-1.0.0/runtime/work/storage/snapshots";
-  String nexusSnapshotsTestUrl = nexusTestUrl+"/content/repositories/snapshots";
+  String nexusSnapshotsTestUrl = Nexus.nexusTestUrl+"/content/repositories/snapshots";
+
   //------------------------------------------------------------------------------
   @Override
   void setReleases()
-  throws MalformedURLException
+  throws Exception
   {
+    Nexus.stop();
     targetDirectory = new File(nexusReleasesTestDir);
     FileUtil.delete( new File( targetDirectory, "org" ) );
     server.setURL( new URL(nexusReleasesTestUrl) );
+    Nexus.start( plexus );
   }
   //------------------------------------------------------------------------------
   @Override
   void setSnapshots()
-  throws MalformedURLException
+  throws Exception
   {
+    Nexus.stop();
     targetDirectory = new File( nexusSnapshotsTestDir );
     FileUtil.delete( new File( targetDirectory, "org" ) );
     server.setURL( new URL( nexusSnapshotsTestUrl ) );
+    Nexus.start( plexus );
   }
   //------------------------------------------------------------------------------
   @Override
@@ -63,7 +78,7 @@ extends AbstractRepositoryWriterM2Test
 
     query = new ArrayList<ArtifactBasicMetadata>();
     
-    Credentials user = new Credentials( nexusTestUser, nexusTestPass );
+    Credentials user = new Credentials( Nexus.nexusTestUser, Nexus.nexusTestPass );
 
     server = new Server( "nexusTest", new URL(nexusSnapshotsTestUrl), false, false, user );
     
