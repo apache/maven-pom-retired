@@ -15,9 +15,9 @@
     <plexus.container.version>1.0-alpha-47</plexus.container.version>
     <nexus.version>1.0.0</nexus.version>
     <nexus.client.version>1.1.0-SNAPSHOT</nexus.client.version>
-    <jetty.version>7.0.0pre3</jetty.version>
+    <jetty.version>7.0-SNAPSHOT</jetty.version>
 
-    <nexus-security-enabled>false</nexus-security-enabled>
+    <nexus-security-enabled>true</nexus-security-enabled>
 
     <bundle-expanded-dir>target</bundle-expanded-dir>
     <config-expanded-dir>target/test-nexus-config</config-expanded-dir>
