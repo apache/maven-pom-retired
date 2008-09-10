@@ -2,6 +2,7 @@ package org.apache.maven.mercury.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.channels.FileLock;
 import java.util.HashSet;
 
 import junit.framework.TestCase;
@@ -145,6 +146,97 @@ public class FileUtilTest
     vFacs.clear();
     setPgp( false );
     FileUtil.verify( b, vFacs, false, true );
+  }
+  //----------------------------------------------------------------------------------------
+  public void testLock()
+  throws Exception
+  {
+    class TestThread1
+    extends Thread
+    {
+      boolean lock;
+      String dir;
+
+      public TestThread1( String dir )
+      {
+        this.dir = dir;
+      }
+      @Override
+      public void run()
+      {
+        try
+        {
+          lock = FileUtil.lockDir( dir, 1000L, 100L );
+          assertTrue( lock );
+          System.out.println("Thread1: lock "+dir+" obtained");
+          
+          try { sleep( 2000L ); } catch( InterruptedException e ) {}
+          System.out.println("Thread1: slept for 2s");
+          
+          FileUtil.unlockDir( dir );
+          System.out.println("Thread1: lock "+dir+" released");
+        }
+        catch( Exception e )
+        {
+          fail( e.getMessage() );
+        }
+      }
+      
+    }
+    
+    class TestThread2
+    extends Thread
+    {
+      boolean lock;
+      String dir;
+
+      public TestThread2( String dir )
+      {
+        this.dir = dir;
+      }
+      @Override
+      public void run()
+      {
+        try
+        {
+          lock = FileUtil.lockDir( dir, 10L, 10L );
+          assertFalse( lock );
+          System.out.println("Thread2: resource "+dir+" locked");
+          
+          lock = FileUtil.lockDir( dir, 5000L, 100L );
+          assertNotNull( lock );
+          
+          FileUtil.unlockDir( dir );
+          System.out.println("Thread2: lock "+dir+" released");
+        }
+        catch( Exception e )
+        {
+          fail( e.getMessage() );
+        }
+      }
+      
+    }
+    
+    File dir = File.createTempFile( "test-", "-dir" );
+    String dirName = dir.getAbsolutePath();
+    dir.delete();
+    dir = new File( dirName );
+    dir.mkdir();
+    dir.deleteOnExit();
+    
+    TestThread1 th1 = new TestThread1( dirName );
+    TestThread2 th2 = new TestThread2( dirName );
+    
+    th1.start();
+    th2.start();
+    
+    for(;;)
+      if( th1.isAlive() || th2.isAlive() )
+        Thread.sleep( 1000L );
+      else
+        break;
+    
+    System.out.println("Multi-threaded test finished successfully");
   }
   //----------------------------------------------------------------------------------------
 }

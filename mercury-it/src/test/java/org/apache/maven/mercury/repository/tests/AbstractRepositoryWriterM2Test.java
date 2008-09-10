@@ -104,7 +104,6 @@ extends PlexusTestCase
 
     artifactBinary = File.createTempFile( "test-repo-writer", "bin" );
     FileUtil.writeRawData( artifactBinary, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
-    
   }
   
   
@@ -113,11 +112,6 @@ extends PlexusTestCase
   throws Exception
   {
     super.tearDown();
-//    if( nexusForkedAppBooter != null )
-//    {
-//      nexusForkedAppBooter.stop();
-//      nexusForkedAppBooter = null;
-//    }
   }
 
   public void testWriteArtifact()
@@ -224,6 +218,12 @@ extends PlexusTestCase
     File ap = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-SNAPSHOT.pom");
     assertTrue( ap.exists() );
     assertEquals( 7785, ap.length() );  
+  }
+  
+  public void testWriteContention()
+  throws Exception
+  {
+    
   }
   
 }

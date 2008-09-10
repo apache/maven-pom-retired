@@ -5,11 +5,16 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.channels.OverlappingFileLockException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -44,6 +49,7 @@ import org.codehaus.plexus.i18n.Language;
  */
 public class FileUtil
 {
+  public static final String LOCK_FILE = ".lock";
   public static final String DEFAULT_CHARSET = "utf-8";
   public static final int    K = 1024;
   public static final int    DEFAULT_BUFFER_SIZE = 10 * K;
@@ -676,6 +682,58 @@ public class FileUtil
       else
         verify( f, vFacs, recurse, force );
     }
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  /**
+   * try to acquire lock on specfied directory for <code>millis<code> millis
+   * 
+   * @param dir directory to lock
+   * @param millis how long to wait for the lock before surrendering
+   * @param sleepFor how long to sleep between attempts
+   * 
+   * @return obtained FileLock or null
+   * @throws IOException if there were problems obtaining the lock
+   */
+  public static boolean lockDir( String dir, long millis, long sleepFor )
+  throws IOException
+  {
+    File df = new File(dir);
+    if( !df.isDirectory() )
+      throw new IOException( _lang.getMessage( "file.is.not.directory", dir ) );
+    
+    File lock = new File(dir,LOCK_FILE);
+    long start = System.currentTimeMillis();
+    
+    for(;;)
+      try
+      {
+        if( lock.exists() )
+          throw new OverlappingFileLockException();
+        FileOutputStream fos = new FileOutputStream( lock );
+        fos.write( 32 );
+        fos.flush();
+        fos.close();
+
+        return true;
+      }
+      catch( OverlappingFileLockException le )
+      {
+        try { Thread.sleep( sleepFor ); } catch( InterruptedException e ){}
+        if( System.currentTimeMillis() - start > millis )
+          return false;
+      }
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  public static void unlockDir( String dir )
+  throws IOException
+  {
+    File df = new File(dir);
+    if( !df.isDirectory() )
+      throw new IOException( _lang.getMessage( "file.is.not.directory", dir ) );
+    
+    File lock = new File(dir,LOCK_FILE);
+    if( lock.exists() )
+      lock.delete();
   }
   //---------------------------------------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------------------------------------
