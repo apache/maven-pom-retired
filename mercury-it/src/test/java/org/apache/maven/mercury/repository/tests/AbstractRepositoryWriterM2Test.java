@@ -1,6 +1,8 @@
 package org.apache.maven.mercury.repository.tests;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,6 +22,8 @@ import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
+import org.apache.maven.mercury.repository.metadata.Metadata;
+import org.apache.maven.mercury.repository.metadata.MetadataBuilder;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.PlexusContainer;
@@ -220,10 +224,175 @@ extends PlexusTestCase
     assertEquals( 7785, ap.length() );  
   }
   
-  public void testWriteContention()
+  public void testWriteContentionSingleArtifact()
   throws Exception
   {
+    setSnapshots();
     
+    Set<Artifact> set = new HashSet<Artifact>(40);
+
+    // prep. artifacts
+    for( int i=0; i<20; i++ )
+    {
+      String si = ""+i;
+      
+      DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0.9-20080805.215925-"+si) );
+      da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
+      File ab = File.createTempFile( "test-core-", "-bin" );
+      FileUtil.writeRawData( ab, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
+      da.setFile( ab );
+      set.add( da );
+    }
+    
+    assertEquals( 20, set.size() );
+    
+    long start = System.currentTimeMillis();
+    // write 'em
+    writer.writeArtifact( set );
+    
+    System.out.println("Took "+(System.currentTimeMillis()-start)+" millis to write "+set.size()+" artifacts");
+    System.out.flush();
+    
+    // check if the showed up in the repo
+    for( int i=0; i<20; i++ )
+    {
+      String si = ""+i;
+
+      String fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-20080805.215925-"+si+".jar";
+      File af = new File( fn );
+      assertTrue( fn+" does not exist", af.exists() );
+      assertEquals( 159630, af.length() );
+      
+      // is pom there also?
+      fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-20080805.215925-"+si+".pom";
+      File ap = new File( fn );
+      assertTrue( fn+" does not exist", ap.exists() );
+      assertEquals( 7785, ap.length() );
+    }
+    
+    // check GAV metadata has all versions
+    String mdFile = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-core/2.0.9-SNAPSHOT/"+repo.getMetadataName();
+    byte [] mdBytes = FileUtil.readRawData( new File(mdFile) );
+    Metadata md = MetadataBuilder.read( new ByteArrayInputStream(mdBytes) );
+    
+    assertNotNull( md );
+    assertNotNull( md.getVersioning() );
+    assertNotNull( md.getVersioning().getVersions() );
+    assertFalse( md.getVersioning().getVersions().isEmpty() );
+    
+    List<String> versions = md.getVersioning().getVersions();
+    System.out.println( versions.size()+" versions: " + versions );
+
+    assertEquals( 20, versions.size() );
+    
+    for( int i=0; i<20;i++ )
+    {
+      String v = "2.0.9-20080805.215925-"+i;
+      assertTrue( "Did not find "+v+" in GAV metadata "+mdFile+"\n"+new String(mdBytes), versions.contains( v ) );
+    }
+  }
+  
+  
+  public void testWriteContentionMultipleArtifacts()
+  throws Exception
+  {
+    setSnapshots();
+    
+    Set<Artifact> set = new HashSet<Artifact>(40);
+
+    // prep. artifacts
+    for( int i=0; i<20; i++ )
+    {
+      String si = ""+i;
+      
+      DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0."+si+"-SNAPSHOT") );
+      da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
+      File ab = File.createTempFile( "test-core-", "-bin" );
+      FileUtil.writeRawData( ab, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
+      da.setFile( ab );
+      set.add( da );
+
+      da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-mercury:2.0."+si+"-SNAPSHOT") );
+      da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
+      ab = File.createTempFile( "test-mercury-", "-bin" );
+      FileUtil.writeRawData( ab, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
+      da.setFile( ab );
+      set.add( da );
+    }
+    
+    assertEquals( 40, set.size() );
+    
+    long start = System.currentTimeMillis();
+    // write 'em
+    writer.writeArtifact( set );
+    
+    System.out.println("Took "+(System.currentTimeMillis()-start)+" millis to write "+set.size()+" artifacts");
+    System.out.flush();
+    
+    // check if the showed up in the repo
+    for( int i=0; i<20; i++ )
+    {
+      String si = ""+i;
+
+      String fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-core/2.0."+si+"-SNAPSHOT/maven-core-2.0."+si+"-SNAPSHOT.jar";
+      File af = new File( targetDirectory, "/org/apache/maven/maven-core/2.0."+si+"-SNAPSHOT/maven-core-2.0."+si+"-SNAPSHOT.jar" );
+      assertTrue( fn+" does not exist", af.exists() );
+      assertEquals( 159630, af.length() );
+      
+      fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-core/2.0."+si+"-SNAPSHOT/maven-core-2.0."+si+"-SNAPSHOT.pom";
+      File ap = new File( targetDirectory, "/org/apache/maven/maven-core/2.0."+si+"-SNAPSHOT/maven-core-2.0."+si+"-SNAPSHOT.pom");
+      assertTrue( fn+" does not exist", ap.exists() );
+      assertEquals( 7785, ap.length() );
+
+      fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-mercury/2.0."+si+"-SNAPSHOT/maven-mercury-2.0."+i+"-SNAPSHOT.jar";
+      af = new File( targetDirectory, "/org/apache/maven/maven-mercury/2.0."+si+"-SNAPSHOT/maven-mercury-2.0."+i+"-SNAPSHOT.jar");
+      assertTrue( fn+" does not xist", af.exists() );
+      assertEquals( 159630, af.length() );
+      
+      fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-mercury/2.0."+si+"-SNAPSHOT/maven-mercury-2.0."+i+"-SNAPSHOT.pom";
+      ap = new File( targetDirectory, "/org/apache/maven/maven-mercury/2.0."+si+"-SNAPSHOT/maven-mercury-2.0."+i+"-SNAPSHOT.pom");
+      assertTrue( ap.exists() );
+      assertEquals( 7785, ap.length() );
+    }
+    
+    // check GA metadata has all versions
+    String mdFile = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-mercury/"+repo.getMetadataName();
+    byte [] mdBytes = FileUtil.readRawData( new File(mdFile) );
+    Metadata md = MetadataBuilder.read( new ByteArrayInputStream(mdBytes) );
+    
+    assertNotNull( md );
+    assertNotNull( md.getVersioning() );
+    assertNotNull( md.getVersioning().getVersions() );
+    assertFalse( md.getVersioning().getVersions().isEmpty() );
+    
+    List<String> versions = md.getVersioning().getVersions();
+
+    assertEquals( 20, versions.size() );
+    
+    for( int i=0; i<20;i++ )
+    {
+      String v = "2.0."+i+"-SNAPSHOT";
+      assertTrue( "Did not find "+v+" in GA metadata "+mdFile+"\n"+new String(mdBytes), versions.contains( v ) );
+    }
+    
+    mdFile = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-core/"+repo.getMetadataName();
+    mdBytes = FileUtil.readRawData( new File(mdFile) );
+    md = MetadataBuilder.read( new ByteArrayInputStream(mdBytes) );
+    
+    assertNotNull( md );
+    assertNotNull( md.getVersioning() );
+    assertNotNull( md.getVersioning().getVersions() );
+    assertFalse( md.getVersioning().getVersions().isEmpty() );
+    
+    versions = md.getVersioning().getVersions();
+    
+    assertEquals( 20, versions.size() );
+
+    for( int i=0; i<20;i++ )
+    {
+      String v = "2.0."+i+"-SNAPSHOT";
+      assertTrue( "Did not find "+v+" in GA metadata "+mdFile+"\n"+new String(mdBytes), versions.contains( v ) );
+    }
   }
   
 }

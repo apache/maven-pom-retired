@@ -56,6 +56,8 @@ public class FileUtil
   //---------------------------------------------------------------------------------------------------------------
   private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( FileUtil.class ); 
   private static final Language _lang = new DefaultLanguage( FileUtil.class );
+  
+  private static final OverlappingFileLockException FILE_LOCKED = new OverlappingFileLockException();
   //---------------------------------------------------------------------------------------------------------------
   public static void delete( File f )
   {
@@ -133,8 +135,18 @@ public class FileUtil
     {
       fis = new FileInputStream( file );
       int len = (int)file.length();
+      if( len == 0 )
+      {
+        _log.info( _lang.getMessage( "reading.empty.file", file.getAbsolutePath() ) );
+        return null;
+      }
+      
       byte [] pom = new byte [ len ];
-      fis.read( pom );
+      while( fis.available() < 1 )
+        try { Thread.sleep( 8L ); } catch( InterruptedException e ){}
+        
+      fis.read( pom, 0, len );
+      
       return pom;
     }
     catch( IOException e )
@@ -281,12 +293,18 @@ public class FileUtil
     if( file.exists() )
       file.delete();
     
+    File parentDir = file.getParentFile();
+    
+    if( !parentDir.exists() )
+      parentDir.mkdirs();
+    
     FileOutputStream fos = null;
     
     try
     {
       fos = new FileOutputStream( file );
       fos.write( bytes );
+      fos.flush();
     }
     catch( IOException e )
     {
@@ -320,6 +338,7 @@ public class FileUtil
     try
     {
       File f = new File( fName );
+      
       f.getParentFile().mkdirs();
       
       fout = new FileOutputStream( f );
@@ -331,6 +350,10 @@ public class FileUtil
         
         fout.write( buf, 0, n );
       }
+      
+      fout.flush();
+      fout.close();
+      fout = null;
       
       for( StreamVerifier sv : vSet )
       {
@@ -685,7 +708,7 @@ public class FileUtil
   }
   //---------------------------------------------------------------------------------------------------------------
   /**
-   * try to acquire lock on specfied directory for <code>millis<code> millis
+   * try to acquire lock on specified directory for <code>millis<code> milliseconds
    * 
    * @param dir directory to lock
    * @param millis how long to wait for the lock before surrendering
@@ -694,46 +717,145 @@ public class FileUtil
    * @return obtained FileLock or null
    * @throws IOException if there were problems obtaining the lock
    */
-  public static boolean lockDir( String dir, long millis, long sleepFor )
+  public static FileLockBundle lockDir( String dir, long millis, long sleepFor )
   throws IOException
   {
     File df = new File(dir);
+    
+    boolean exists = df.exists(); 
+
+    for( int i=0; i<10 && !exists; i++ )
+    {
+      try{ Thread.sleep( 1l );} catch( InterruptedException e ){}
+      df.mkdirs();
+      exists = df.exists();
+      _log.info( _lang.getMessage( "had.to.create.directory", dir, exists+"" ) );
+    }
+
+    if( !exists )
+      throw new IOException( _lang.getMessage( "cannot.create.directory", dir ) );
+
     if( !df.isDirectory() )
-      throw new IOException( _lang.getMessage( "file.is.not.directory", dir ) );
+      throw new IOException( _lang.getMessage( "file.is.not.directory", dir, df.exists()+"", df.isDirectory()+"", df.isFile()+"" ) );
     
     File lock = new File(dir,LOCK_FILE);
     long start = System.currentTimeMillis();
+
+    byte [] lockId = (""+System.nanoTime()+""+Math.random()).getBytes();
+    int lockIdLen = lockId.length;
     
     for(;;)
       try
       {
         if( lock.exists() )
           throw new OverlappingFileLockException();
+
         FileOutputStream fos = new FileOutputStream( lock );
-        fos.write( 32 );
+        fos.write( lockId, 0, lockIdLen );
         fos.flush();
         fos.close();
+        
+        byte [] lockBytes = readRawData( lock );
+        int lockBytesLen = lockBytes.length;
+        
+        if( lockBytesLen != lockIdLen )
+          throw new OverlappingFileLockException();
+        
+        for( int i=0; i<lockIdLen; i++ )
+          if( lockBytes[i] != lockId[i] )
+            throw new OverlappingFileLockException();
+        
+        lock.deleteOnExit();
 
-        return true;
+        return new FileLockBundle(dir);
       }
       catch( OverlappingFileLockException le )
       {
         try { Thread.sleep( sleepFor ); } catch( InterruptedException e ){}
         if( System.currentTimeMillis() - start > millis )
-          return false;
+          return null;
+      }
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  /**
+   * try to acquire lock on specified directory for <code>millis<code> milliseconds
+   * 
+   * @param dir directory to lock
+   * @param millis how long to wait for the lock before surrendering
+   * @param sleepFor how long to sleep between attempts
+   * 
+   * @return obtained FileLock or null
+   * @throws IOException if there were problems obtaining the lock
+   */
+  public static FileLockBundle lockDirNio( String dir, long millis, long sleepFor )
+  throws IOException
+  {
+    File df = new File(dir);
+    
+    boolean exists = df.exists(); 
+
+    for( int i=0; i<10 && !exists; i++ )
+    {
+      try{ Thread.sleep( 1l );} catch( InterruptedException e ){}
+      df.mkdirs();
+      exists = df.exists();
+      _log.info( _lang.getMessage( "had.to.create.directory", dir, exists+"" ) );
+    }
+
+    if( !exists )
+      throw new IOException( _lang.getMessage( "cannot.create.directory", dir ) );
+
+    if( !df.isDirectory() )
+      throw new IOException( _lang.getMessage( "file.is.not.directory", dir, df.exists()+"", df.isDirectory()+"", df.isFile()+"" ) );
+    
+    File lockFile = new File(dir,LOCK_FILE);
+    if( !lockFile.exists() )
+      writeRawData( lockFile, "lock" );
+    lockFile.deleteOnExit();
+    
+    FileChannel ch = new RandomAccessFile( lockFile, "rw" ).getChannel();
+    FileLock lock = null;
+System.out.println("locking channel "+lockFile.getAbsolutePath()+", channel isOpen()="+ch.isOpen() );
+System.out.flush();
+    
+    long start = System.currentTimeMillis();
+
+    for(;;)
+      try
+      {
+        lock = ch.tryLock( 0L, 4L, false );
+
+        if( lock == null )
+          throw FILE_LOCKED;
+       
+        return new FileLockBundle( dir, ch, lock );
+      }
+      catch( OverlappingFileLockException oe )
+      {
+System.out.println("channel "+lockFile.getAbsolutePath()+" locked, waiting" );
+System.out.flush();
+        try { Thread.sleep( sleepFor ); } catch( InterruptedException e ){}
+        if( System.currentTimeMillis() - start > millis )
+          return null;
       }
   }
   //---------------------------------------------------------------------------------------------------------------
   public static void unlockDir( String dir )
-  throws IOException
   {
-    File df = new File(dir);
-    if( !df.isDirectory() )
-      throw new IOException( _lang.getMessage( "file.is.not.directory", dir ) );
-    
-    File lock = new File(dir,LOCK_FILE);
-    if( lock.exists() )
-      lock.delete();
+    try
+    {
+      File df = new File(dir);
+      if( !df.isDirectory() )
+        throw new IOException( _lang.getMessage( "file.is.not.directory", dir ) );
+      
+      File lock = new File(dir,LOCK_FILE);
+      if( lock.exists() )
+        lock.delete();
+    }
+    catch( IOException e )
+    {
+      _log.error( e.getMessage() );
+    }
   }
   //---------------------------------------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------------------------------------
