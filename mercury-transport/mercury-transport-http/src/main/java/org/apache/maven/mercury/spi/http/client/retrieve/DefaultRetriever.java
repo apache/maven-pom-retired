@@ -30,6 +30,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
+import org.apache.maven.mercury.crypto.api.StreamObserverException;
+import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.spi.http.client.DestinationRealmResolver;
@@ -309,13 +311,26 @@ public class DefaultRetriever implements Retriever
     }
     
     private Set<StreamObserver> createStreamObservers (Server server)
-    throws StreamVerifierException
+    throws StreamObserverException
     {
         HashSet<StreamObserver> observers = new HashSet<StreamObserver>();
-        if (server != null && server.hasReaderStreamVerifierFactories() )
+        
+        if( server == null )
+          return observers;
+        
+        if ( server.hasReaderStreamVerifierFactories() )
         {
             Set<StreamVerifierFactory> factories = server.getReaderStreamVerifierFactories();
             for( StreamVerifierFactory f:factories )
+            {
+                observers.add( f.newInstance() );
+            }
+        }
+
+        if ( server.hasReaderStreamObserverFactories() )
+        {
+            Set<StreamObserverFactory> factories = server.getReaderStreamObserverFactories();
+            for( StreamObserverFactory f:factories )
             {
                 observers.add( f.newInstance() );
             }

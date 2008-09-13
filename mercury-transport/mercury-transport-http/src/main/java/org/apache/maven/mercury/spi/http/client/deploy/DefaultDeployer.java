@@ -32,6 +32,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
+import org.apache.maven.mercury.crypto.api.StreamObserverException;
+import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.spi.http.client.DestinationRealmResolver;
@@ -329,13 +331,26 @@ public class DefaultDeployer implements Deployer
     }
     
     private Set<StreamObserver> createStreamObservers( Server server )
-    throws StreamVerifierException
+    throws StreamObserverException
     {
         HashSet<StreamObserver> observers = new HashSet<StreamObserver>();
-        if( server != null && server.hasWriterStreamVerifierFactories() )
+        
+        if( server == null )
+          return observers;
+        
+        if( server.hasWriterStreamVerifierFactories() )
         {
           Set<StreamVerifierFactory> factories = server.getWriterStreamVerifierFactories();
           for (StreamVerifierFactory f:factories)
+          {
+              observers.add( f.newInstance() );
+          }
+        }
+        
+        if( server.hasWriterStreamObserverFactories() )
+        {
+          Set<StreamObserverFactory> factories = server.getWriterStreamObserverFactories();
+          for (StreamObserverFactory f:factories)
           {
               observers.add( f.newInstance() );
           }

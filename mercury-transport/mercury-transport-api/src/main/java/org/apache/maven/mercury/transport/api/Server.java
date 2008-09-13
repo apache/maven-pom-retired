@@ -21,6 +21,7 @@ package org.apache.maven.mercury.transport.api;
 import java.net.URL;
 import java.util.Set;
 
+import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 
 public class Server
@@ -32,6 +33,9 @@ public class Server
   private Credentials                 proxyCredentials;
   private boolean                     requireEncryption = false;
   private boolean                     requireTrustedServer = false;
+
+  private Set<StreamObserverFactory>  writerStreamObserverFactories;
+  private Set<StreamObserverFactory>  readerStreamObserverFactories;
 
   private Set<StreamVerifierFactory>  writerStreamVerifierFactories;
   private Set<StreamVerifierFactory>  readerStreamVerifierFactories;
@@ -131,6 +135,36 @@ public class Server
   public void setReaderStreamVerifierFactories( Set<StreamVerifierFactory> factories )
   {
     readerStreamVerifierFactories = factories;
+  }
+
+  public boolean hasWriterStreamObserverFactories()
+  {
+    return writerStreamObserverFactories != null && writerStreamObserverFactories.size() > 0;
+  }
+
+  public Set<StreamObserverFactory> getWriterStreamObserverFactories()
+  {
+    return writerStreamObserverFactories;
+  }
+
+  public void setWriterStreamObserverFactories( Set<StreamObserverFactory> factories )
+  {
+    writerStreamObserverFactories = factories;
+  }
+
+  public boolean hasReaderStreamObserverFactories()
+  {
+    return readerStreamObserverFactories != null && readerStreamObserverFactories.size() > 0;
+  }
+
+  public Set<StreamObserverFactory> getReaderStreamObserverFactories()
+  {
+    return readerStreamObserverFactories;
+  }
+
+  public void setReaderStreamObserverFactories( Set<StreamObserverFactory> factories )
+  {
+    readerStreamObserverFactories = factories;
   }
 
   public boolean isRequireEncryption()
