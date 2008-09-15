@@ -2,7 +2,7 @@ package org.apache.maven.mercury.repository.local.m2;
 
 import java.io.File;
 
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
@@ -46,7 +46,7 @@ implements LocalRepository
         return directory;
     }
     //----------------------------------------------------------------------------------
-    public RepositoryReader getReader( MetadataProcessor processor ) 
+    public RepositoryReader getReader( DependencyProcessor processor ) 
     {
       if( reader == null )
         reader = new LocalRepositoryReaderM2( this, processor );
@@ -55,7 +55,7 @@ implements LocalRepository
     }
     //----------------------------------------------------------------------------------
     // TODO oleg: what happens in multi-threaded execution?? 
-    public RepositoryReader getReader( MetadataProcessor processor, String protocol )
+    public RepositoryReader getReader( DependencyProcessor processor, String protocol )
     {
        return getReader(processor);
     }

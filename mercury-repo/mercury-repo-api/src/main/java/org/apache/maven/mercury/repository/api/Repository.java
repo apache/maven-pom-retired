@@ -2,7 +2,7 @@ package org.apache.maven.mercury.repository.api;
 
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.QualityRange;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.transport.api.Server;
 
 
@@ -80,7 +80,7 @@ public interface Repository
      * @return default reader or null, if none exists
      * @throws RepositoryException 
      */
-    RepositoryReader getReader( MetadataProcessor processor )
+    RepositoryReader getReader( DependencyProcessor processor )
     throws RepositoryException;
     
     /**
@@ -89,7 +89,7 @@ public interface Repository
      * @return reader instance for the specified protocol
      * @throws NonExistentProtocolException if protocol not supported
      */
-    RepositoryReader getReader( MetadataProcessor processor, String protocol )
+    RepositoryReader getReader( DependencyProcessor processor, String protocol )
     throws RepositoryException;
 
     

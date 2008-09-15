@@ -1,6 +1,6 @@
 package org.apache.maven.mercury.repository.local.m2;
 
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.Repository;
@@ -21,7 +21,7 @@ implements RepositoryReaderFactory
     AbstractRepository.register( AbstractRepository.DEFAULT_REPOSITORY_TYPE, factory  );
   }
   
-  public RepositoryReader getReader( Repository repo, MetadataProcessor mdProcessor)
+  public RepositoryReader getReader( Repository repo, DependencyProcessor mdProcessor)
   throws RepositoryException
   {
     if( repo == null || !(repo instanceof LocalRepository) )

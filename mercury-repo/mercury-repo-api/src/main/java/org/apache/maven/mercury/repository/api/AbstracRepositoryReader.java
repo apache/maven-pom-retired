@@ -1,7 +1,7 @@
 package org.apache.maven.mercury.repository.api;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
 
@@ -16,14 +16,14 @@ import org.apache.maven.mercury.builder.api.MetadataReaderException;
 public abstract class AbstracRepositoryReader
 implements RepositoryReader, MetadataReader
 {
-  protected MetadataProcessor _mdProcessor;
+  protected DependencyProcessor _mdProcessor;
   
-  public void setMetadataProcessor( MetadataProcessor mdProcessor )
+  public void setMetadataProcessor( DependencyProcessor mdProcessor )
   {
     _mdProcessor = mdProcessor;
   }
   
-  public MetadataProcessor getMetadataProcessor()
+  public DependencyProcessor getMetadataProcessor()
   {
     return _mdProcessor;
   }

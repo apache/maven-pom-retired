@@ -14,7 +14,7 @@ import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 import org.apache.maven.mercury.artifact.version.VersionException;
 import org.apache.maven.mercury.artifact.version.VersionRange;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.crypto.api.StreamObserverException;
@@ -46,7 +46,7 @@ implements RepositoryReader, MetadataReader
   LocalRepository _repo;
   File _repoDir;
   //---------------------------------------------------------------------------------------------------------------
-  public LocalRepositoryReaderM2( LocalRepository repo, MetadataProcessor mdProcessor )
+  public LocalRepositoryReaderM2( LocalRepository repo, DependencyProcessor mdProcessor )
   {
     if( repo == null )
       throw new IllegalArgumentException("localRepo cannot be null");

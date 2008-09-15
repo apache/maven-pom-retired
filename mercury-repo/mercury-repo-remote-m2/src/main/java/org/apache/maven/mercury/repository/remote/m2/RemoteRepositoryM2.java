@@ -1,6 +1,6 @@
 package org.apache.maven.mercury.repository.remote.m2;
 
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
@@ -28,13 +28,13 @@ implements RemoteRepository
         return _server;
     }
     //----------------------------------------------------------------------------------
-    public RepositoryReader getReader( MetadataProcessor processor )
+    public RepositoryReader getReader( DependencyProcessor processor )
     throws RepositoryException
     {
       return new RemoteRepositoryReaderM2( this, processor );
     }
     //----------------------------------------------------------------------------------
-    public RepositoryReader getReader( MetadataProcessor processor, String protocol )
+    public RepositoryReader getReader( DependencyProcessor processor, String protocol )
     throws RepositoryException
     {
       return getReader(processor);

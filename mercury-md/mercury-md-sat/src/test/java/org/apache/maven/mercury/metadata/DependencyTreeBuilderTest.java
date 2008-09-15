@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
@@ -32,7 +32,7 @@ extends TestCase
   DependencyTreeBuilder mt;
   LocalRepositoryM2 localRepo;
   List<Repository> reps;
-  MetadataProcessor processor;
+  DependencyProcessor processor;
   
   //----------------------------------------------------------------------------------------------
   @Override

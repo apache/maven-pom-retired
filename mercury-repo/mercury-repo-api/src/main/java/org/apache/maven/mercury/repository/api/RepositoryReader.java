@@ -3,7 +3,7 @@ package org.apache.maven.mercury.repository.api;
 import java.util.List;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
 
@@ -64,8 +64,8 @@ extends RepositoryOperator, MetadataReader
   /**
    * Need if to trick circular dependency on maven-project, projectBuilder hides behind this processor
    */
-  public void setMetadataProcessor( MetadataProcessor mdProcessor );
-  public MetadataProcessor getMetadataProcessor();
+  public void setMetadataProcessor( DependencyProcessor mdProcessor );
+  public DependencyProcessor getMetadataProcessor();
   
   /**
    * read content pointed by relative path. It will return content bytes

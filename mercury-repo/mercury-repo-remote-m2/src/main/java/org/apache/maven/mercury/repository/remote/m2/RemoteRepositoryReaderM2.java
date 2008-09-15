@@ -17,7 +17,7 @@ import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 import org.apache.maven.mercury.artifact.version.VersionException;
 import org.apache.maven.mercury.artifact.version.VersionRange;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.repository.api.AbstracRepositoryReader;
@@ -72,13 +72,13 @@ implements RepositoryReader, MetadataReader
   List<LocalRepository> _localRepos;
   File _defaultRoot;
   //---------------------------------------------------------------------------------------------------------------
-  public RemoteRepositoryReaderM2( RemoteRepository repo, MetadataProcessor mdProcessor )
+  public RemoteRepositoryReaderM2( RemoteRepository repo, DependencyProcessor mdProcessor )
   throws RepositoryException
   {
     this( repo, mdProcessor, null );
   }
   //---------------------------------------------------------------------------------------------------------------
-  public RemoteRepositoryReaderM2( RemoteRepository repo, MetadataProcessor mdProcessor, List<LocalRepository> localRepos )
+  public RemoteRepositoryReaderM2( RemoteRepository repo, DependencyProcessor mdProcessor, List<LocalRepository> localRepos )
   throws RepositoryException
   {
     if( repo == null )

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.QualityRange;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.transport.api.Server;
 import org.codehaus.plexus.i18n.DefaultLanguage;
 import org.codehaus.plexus.i18n.Language;
@@ -161,7 +161,7 @@ implements Repository
     writerRegistry.remove( type );
   }
   //---------------------------------------------------------------------------
-  public static RepositoryReader getReader( String type, Repository repo, MetadataProcessor mdProcessor )
+  public static RepositoryReader getReader( String type, Repository repo, DependencyProcessor mdProcessor )
   throws IllegalArgumentException, RepositoryException
   {
     if( type == null || type.length() < 1 )

@@ -14,7 +14,7 @@ import junit.framework.Assert;
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.crypto.pgp.PgpStreamVerifierFactory;
@@ -47,7 +47,7 @@ extends PlexusTestCase
   
   File targetDirectory; 
   
-  MetadataProcessor mdProcessor;
+  DependencyProcessor mdProcessor;
   
   RepositoryReader reader;
   RepositoryWriter writer;

@@ -8,7 +8,7 @@ import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessor;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessorException;
-import org.apache.maven.mercury.builder.api.MetadataProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
 
@@ -30,7 +30,7 @@ implements MetadataReader
 
   private LocalRepository       _localRepository;
   
-  private MetadataProcessor     _processor;
+  private DependencyProcessor     _processor;
 
   private Map<String,ArtifactListProcessor>   _processors;
   
@@ -39,7 +39,7 @@ implements MetadataReader
   public VirtualRepositoryReader(
                   LocalRepository localRepository
                 , List<RemoteRepository> remoteRepositories
-                , MetadataProcessor processor
+                , DependencyProcessor processor
                           )
   throws RepositoryException
   {
@@ -58,7 +58,7 @@ implements MetadataReader
       this._repositories.addAll( remoteRepositories );
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  public VirtualRepositoryReader( List<Repository> repositories, MetadataProcessor processor  )
+  public VirtualRepositoryReader( List<Repository> repositories, DependencyProcessor processor  )
   throws RepositoryException
   {
     if( processor == null )
