@@ -83,6 +83,8 @@ extends Comparable<Artifact>
     
     byte [] getPomBlob();
     
+    void setPomBlob( byte [] pomBlob );
+    
     String getBaseName();
     
     String getBaseName( String classifier );
