@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -118,7 +117,7 @@ implements RepositoryWriter
     
     ArtifactQueue aq = new ArtifactQueue();
     LocalRepositoryWriterM2 [] workers = new LocalRepositoryWriterM2[ nWorkers ];
-      
+    
     for( int i=0; i<nWorkers; i++ )
     {
       workers[ i ] = new LocalRepositoryWriterM2( _repo, _repoDir, aq );

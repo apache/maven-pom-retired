@@ -42,8 +42,10 @@
               <artifactSet>
                 <excludes>
                   <exclude>org.codehaus.plexus:plexus-component-api</exclude>
+                  <exclude>org.bouncycastle:bcprov-jdk15</exclude>
+                  <exclude>org.bouncycastle:bcpg-jdk15</exclude>
                   <exclude>bouncycastle:bcprov-jdk15</exclude>
-                  <exclude>obouncycastle:bcpg-jdk15</exclude>
+                  <exclude>bouncycastle:bcpg-jdk15</exclude>
                 </excludes>
               </artifactSet>
               <filters>

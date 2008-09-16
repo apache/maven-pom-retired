@@ -12,6 +12,7 @@ public class StreamVerifierAttributes
   protected boolean isLenient = true;
   protected boolean isSufficient = false;
   protected String  extension = "none";
+  protected String  digestAlgorithm = "SHA-1";
   
   /**
    * 

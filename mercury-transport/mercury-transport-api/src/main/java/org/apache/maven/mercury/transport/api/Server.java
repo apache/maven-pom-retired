@@ -27,10 +27,13 @@ import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 public class Server
 {
   private String                      id;
+  
   private URL                         url;
   private Credentials                 serverCredentials;
+  
   private URL                         proxy;
   private Credentials                 proxyCredentials;
+  
   private boolean                     requireEncryption = false;
   private boolean                     requireTrustedServer = false;
 
@@ -92,6 +95,11 @@ public class Server
     return this.serverCredentials;
   }
 
+  public void setServerCredentials( Credentials cred )
+  {
+    this.serverCredentials = cred;
+  }
+
   public URL getProxy()
   {
     return this.proxy;
@@ -101,10 +109,20 @@ public class Server
   {
     return this.proxy != null;
   }
+  
+  public void setProxy( URL proxy )
+  {
+    this.proxy = proxy;
+  }
 
   public Credentials getProxyCredentials()
   {
     return this.proxyCredentials;
+  }
+
+  public void setProxyCredentials( Credentials user )
+  {
+    this.proxyCredentials = user;
   }
 
   public boolean hasWriterStreamVerifierFactories()
