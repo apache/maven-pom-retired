@@ -31,6 +31,7 @@ import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.maven.mercury.crypto.api.StreamObserverException;
+import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
 import org.apache.maven.mercury.crypto.api.StreamVerifier;
 import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
@@ -856,6 +857,34 @@ System.out.flush();
     {
       _log.error( e.getMessage() );
     }
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  public static final Set<StreamVerifierFactory> vSet( StreamVerifierFactory... facs )
+  {
+    if( facs == null || facs.length<1 )
+      return null;
+    
+    HashSet<StreamVerifierFactory> res = new HashSet<StreamVerifierFactory>( facs.length );
+    for( StreamVerifierFactory f : facs )
+    {
+      res.add( f );
+    }
+    
+    return res;
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  public static final Set<StreamObserverFactory> oSet( StreamObserverFactory... facs )
+  {
+    if( facs == null || facs.length<1 )
+      return null;
+    
+    HashSet<StreamObserverFactory> res = new HashSet<StreamObserverFactory>( facs.length );
+    for( StreamObserverFactory f : facs )
+    {
+      res.add( f );
+    }
+    
+    return res;
   }
   //---------------------------------------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------------------------------------
