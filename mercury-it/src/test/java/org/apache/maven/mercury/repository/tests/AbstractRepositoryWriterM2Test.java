@@ -2,14 +2,9 @@ package org.apache.maven.mercury.repository.tests;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.net.MalformedURLException;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import junit.framework.Assert;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
@@ -28,10 +23,6 @@ import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.PlexusTestCase;
-import org.sonatype.appbooter.ForkedAppBooter;
-import org.sonatype.nexus.client.NexusClient;
-import org.sonatype.nexus.client.rest.NexusRestClient;
-import org.sonatype.nexus.rest.model.RepositoryListResource;
 
 /**
  *
