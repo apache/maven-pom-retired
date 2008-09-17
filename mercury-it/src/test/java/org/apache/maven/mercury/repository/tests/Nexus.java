@@ -1,7 +1,5 @@
 package org.apache.maven.mercury.repository.tests;
 
-import java.net.ConnectException;
-
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.sonatype.appbooter.ForkedAppBooter;

@@ -79,7 +79,7 @@ extends AbstractRepositoryWriterM2Test
       throws Exception
   {
     if( skipLockTests )
-      System.out.println("Mutliple Artifacts contention test fails for local repo. Currently there is no way to synchronize those writes");
+      System.out.println("skipping");
     else
       super.testWriteContentionMultipleArtifacts();
   }
@@ -89,7 +89,7 @@ extends AbstractRepositoryWriterM2Test
       throws Exception
   {
     if( skipLockTests )
-      System.out.println("Single Artifacts contention test fails for remote repo. Currently there is no way to synchronize those writes");
+      System.out.println("skipping");
     else
       super.testWriteContentionSingleArtifact();
   }

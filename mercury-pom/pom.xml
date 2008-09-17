@@ -6,6 +6,10 @@
   <version>1-alpha-1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Mercury parent POM:                 ${project.version}</name>
+  <issueManagement>
+  	<system>jira</system>
+  	<url>http://jira.codehaus.org/browse/MERCURY</url>
+  </issueManagement>
   
   <developers>
     <developer>
