@@ -55,7 +55,14 @@ public class DestinationRealmResolver implements RealmResolver
     {
        InetSocketAddress address = dest.getAddress();
        boolean secure = dest.isSecure();
-       
+
+       if( log.isDebugEnabled() )
+       {
+         log.debug("Dest "+address.getHostName()+":"+address.getPort()+"(secure="+secure+")" );
+         log.debug("Server list: "+_servers );
+         
+       }
+
        //get a username and password appropriate for the destination. Usernames and passwords are
        //associated with Server Credential objects.
        Server server = null;
@@ -68,8 +75,16 @@ public class DestinationRealmResolver implements RealmResolver
                String protocol = s.getURL().getProtocol();
                String host = s.getURL().getHost();
                int port = s.getURL().getPort();
+               if( port == -1 )
+               {
+                 port = "https".equalsIgnoreCase( protocol ) ? 443 : 80;
+               }
 
-               if (((dest.isSecure() && "https".equalsIgnoreCase(protocol)) || (!dest.isSecure() && "http".equalsIgnoreCase(protocol)))
+               if( log.isDebugEnabled() )
+                 log.debug("Trying dest "+address.getHostName()+":"+address.getPort()+"(secure="+dest.isSecure()
+                     +") against server "+protocol+"://"+host+":"+port );
+
+               if (((secure && "https".equalsIgnoreCase(protocol)) || (!secure && "http".equalsIgnoreCase(protocol)))
                    &&
                    (address.getPort() == port))
                {
