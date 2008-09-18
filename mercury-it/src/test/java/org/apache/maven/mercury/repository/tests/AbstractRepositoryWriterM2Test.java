@@ -66,6 +66,11 @@ extends PlexusTestCase
   File f;
   
   File artifactBinary;
+  long binarySize = -1L;
+
+  File artifactPom;
+  long pomSize = -1L;
+  byte [] pomBytes;
 
   static PlexusContainer plexus;
   
@@ -99,6 +104,12 @@ extends PlexusTestCase
 
     artifactBinary = File.createTempFile( "test-repo-writer", "bin" );
     FileUtil.writeRawData( artifactBinary, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
+    binarySize = artifactBinary.length();
+
+    artifactPom = File.createTempFile( "test-repo-writer", "pom" );
+    FileUtil.writeRawData( artifactPom, getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) );
+    pomSize = artifactPom.length();
+    pomBytes = FileUtil.readRawData( artifactPom );
   }
   
   
@@ -136,7 +147,7 @@ extends PlexusTestCase
     Set<Artifact> artifacts = new HashSet<Artifact>(3);
     DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0.9") );
     
-    da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
+    da.setPomBlob( pomBytes );
     da.setFile( artifactBinary );
     artifacts.add( da );
     
@@ -157,14 +168,14 @@ extends PlexusTestCase
     FileUtil.verify( f, vFacSha1, false, true );
     
     assertTrue( af.exists() );
-    assertEquals( 159630, af.length() );
+    assertEquals( binarySize, af.length() );
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar.asc").exists() );
     FileUtil.verify( af, vFacPgp, false, true );
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar.sha1").exists() );
     FileUtil.verify( af, vFacSha1, false, true );
     
     assertTrue( ap.exists() );
-    assertEquals( 7785, ap.length() );  
+    assertEquals( pomSize, ap.length() );  
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.pom.asc").exists() );
     FileUtil.verify( ap, vFacPgp, false, true );
     assertTrue( new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.pom.sha1").exists() );
@@ -178,7 +189,7 @@ extends PlexusTestCase
     
     Set<Artifact> artifacts = new HashSet<Artifact>(3);
     DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0.9-20080805.215925-8") );
-    da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
+    da.setPomBlob( pomBytes );
     da.setFile( artifactBinary );
     artifacts.add( da );
     
@@ -186,11 +197,11 @@ extends PlexusTestCase
     
     File af = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-20080805.215925-8.jar");
     assertTrue( af.exists() );
-    assertEquals( 159630, af.length() );
+    assertEquals( binarySize, af.length() );
     
     File ap = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-20080805.215925-8.pom");
     assertTrue( ap.exists() );
-    assertEquals( 7785, ap.length() );  
+    assertEquals( pomSize, ap.length() );  
   }
   
   public void testWriteSnapshot()
@@ -200,7 +211,7 @@ extends PlexusTestCase
     
     Set<Artifact> set = new HashSet<Artifact>(3);
     DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0.9-SNAPSHOT") );
-    da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
+    da.setPomBlob( pomBytes );
     da.setFile( artifactBinary );
     set.add( da );
     
@@ -208,11 +219,11 @@ extends PlexusTestCase
     
     File af = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-SNAPSHOT.jar");
     assertTrue( af.exists() );
-    assertEquals( 159630, af.length() );
+    assertEquals( binarySize, af.length() );
     
     File ap = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-SNAPSHOT.pom");
     assertTrue( ap.exists() );
-    assertEquals( 7785, ap.length() );  
+    assertEquals( pomSize, ap.length() );  
   }
   
   public void testWriteContentionSingleArtifact()
@@ -228,7 +239,7 @@ extends PlexusTestCase
       String si = ""+i;
       
       DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0.9-20080805.215925-"+si) );
-      da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
+      da.setPomBlob( pomBytes );
       File ab = File.createTempFile( "test-core-", "-bin" );
       FileUtil.writeRawData( ab, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
       da.setFile( ab );
@@ -252,13 +263,13 @@ extends PlexusTestCase
       String fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-20080805.215925-"+si+".jar";
       File af = new File( fn );
       assertTrue( fn+" does not exist", af.exists() );
-      assertEquals( 159630, af.length() );
+      assertEquals( binarySize, af.length() );
       
       // is pom there also?
       fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-20080805.215925-"+si+".pom";
       File ap = new File( fn );
       assertTrue( fn+" does not exist", ap.exists() );
-      assertEquals( 7785, ap.length() );
+      assertEquals( pomSize, ap.length() );
     }
     
     // check GAV metadata has all versions
@@ -297,14 +308,14 @@ extends PlexusTestCase
       String si = ""+i;
       
       DefaultArtifact da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-core:2.0."+si+"-SNAPSHOT") );
-      da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
+      da.setPomBlob( pomBytes );
       File ab = File.createTempFile( "test-core-", "-bin" );
       FileUtil.writeRawData( ab, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
       da.setFile( ab );
       set.add( da );
 
       da = new DefaultArtifact( new ArtifactBasicMetadata("org.apache.maven:maven-mercury:2.0."+si+"-SNAPSHOT") );
-      da.setPomBlob( FileUtil.readRawData( getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) ) );
+      da.setPomBlob( pomBytes );
       ab = File.createTempFile( "test-mercury-", "-bin" );
       FileUtil.writeRawData( ab, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
       da.setFile( ab );
@@ -328,22 +339,22 @@ extends PlexusTestCase
       String fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-core/2.0."+si+"-SNAPSHOT/maven-core-2.0."+si+"-SNAPSHOT.jar";
       File af = new File( targetDirectory, "/org/apache/maven/maven-core/2.0."+si+"-SNAPSHOT/maven-core-2.0."+si+"-SNAPSHOT.jar" );
       assertTrue( fn+" does not exist", af.exists() );
-      assertEquals( 159630, af.length() );
+      assertEquals( binarySize, af.length() );
       
       fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-core/2.0."+si+"-SNAPSHOT/maven-core-2.0."+si+"-SNAPSHOT.pom";
       File ap = new File( targetDirectory, "/org/apache/maven/maven-core/2.0."+si+"-SNAPSHOT/maven-core-2.0."+si+"-SNAPSHOT.pom");
       assertTrue( fn+" does not exist", ap.exists() );
-      assertEquals( 7785, ap.length() );
+      assertEquals( pomSize, ap.length() );
 
       fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-mercury/2.0."+si+"-SNAPSHOT/maven-mercury-2.0."+i+"-SNAPSHOT.jar";
       af = new File( targetDirectory, "/org/apache/maven/maven-mercury/2.0."+si+"-SNAPSHOT/maven-mercury-2.0."+i+"-SNAPSHOT.jar");
       assertTrue( fn+" does not xist", af.exists() );
-      assertEquals( 159630, af.length() );
+      assertEquals( binarySize, af.length() );
       
       fn = targetDirectory.getAbsolutePath()+"/org/apache/maven/maven-mercury/2.0."+si+"-SNAPSHOT/maven-mercury-2.0."+i+"-SNAPSHOT.pom";
       ap = new File( targetDirectory, "/org/apache/maven/maven-mercury/2.0."+si+"-SNAPSHOT/maven-mercury-2.0."+i+"-SNAPSHOT.pom");
       assertTrue( ap.exists() );
-      assertEquals( 7785, ap.length() );
+      assertEquals( pomSize, ap.length() );
     }
     
     // check GA metadata has all versions

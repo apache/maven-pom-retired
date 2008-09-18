@@ -13,7 +13,7 @@
   <properties>
     <plexus.appbooter.version>1.4</plexus.appbooter.version>
     <plexus.container.version>1.0-alpha-47</plexus.container.version>
-    <nexus.version>1.0.0</nexus.version>
+    <nexus.version>1.0.1</nexus.version>
     <nexus.client.version>1.1.0-SNAPSHOT</nexus.client.version>
     <jetty.version>7.0-SNAPSHOT</jetty.version>
 
@@ -179,15 +179,6 @@
       <version>1.8</version>
       <scope>test</scope>
     </dependency>
- 
-    <dependency>
-      <groupId>org.sonatype.nexus</groupId>
-      <artifactId>nexus-webapp</artifactId>
-      <version>${nexus.version}</version>
-      <classifier>bundle</classifier>
-      <type>zip</type>
-      <scope>provided</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.sonatype.appbooter</groupId>
@@ -196,9 +187,24 @@
     </dependency>
     
     <dependency>
-    	<groupId>org.sonatype.nexus</groupId>
-    	<artifactId>nexus-rest-client-java</artifactId>
-    	<version>${nexus.client.version}</version>
+      <groupId>org.sonatype.nexus</groupId>
+      <artifactId>nexus-rest-api</artifactId>
+      <version>${nexus.client.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.sonatype.nexus</groupId>
+      <artifactId>nexus-rest-client-java</artifactId>
+      <version>${nexus.client.version}</version>
+    </dependency>
+ 
+    <dependency>
+      <groupId>org.sonatype.nexus</groupId>
+      <artifactId>nexus-webapp</artifactId>
+      <version>${nexus.version}</version>
+      <classifier>bundle</classifier>
+      <type>zip</type>
+      <scope>provided</scope>
     </dependency>
     
     <dependency>

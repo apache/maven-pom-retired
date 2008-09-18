@@ -28,10 +28,10 @@ extends AbstractRepositoryWriterM2Test
 {
   protected boolean needNexus = false;
   
-  String nexusReleasesTestDir = "./target/nexus-webapp-1.0.0/runtime/work/storage/releases";
+  String nexusReleasesTestDir = "./target/nexus-webapp-1.0.1/runtime/work/storage/releases";
   String nexusReleasesTestUrl = Nexus.nexusTestUrl+"/content/repositories/releases";
 
-  String nexusSnapshotsTestDir = "./target/nexus-webapp-1.0.0/runtime/work/storage/snapshots";
+  String nexusSnapshotsTestDir = "./target/nexus-webapp-1.0.1/runtime/work/storage/snapshots";
   String nexusSnapshotsTestUrl = Nexus.nexusTestUrl+"/content/repositories/snapshots";
 
   //------------------------------------------------------------------------------
