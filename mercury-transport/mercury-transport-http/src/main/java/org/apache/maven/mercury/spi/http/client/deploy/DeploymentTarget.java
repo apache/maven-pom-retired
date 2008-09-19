@@ -36,9 +36,12 @@ import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.jetty.client.HttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class DeploymentTarget
-{
+{    
+    private static final Logger log = LoggerFactory.getLogger(DeploymentTarget.class);
     protected Server _server;
     protected HttpClient _httpClient;
     protected String _batchId;
@@ -154,6 +157,8 @@ public abstract class DeploymentTarget
         }
         _targetState = new TargetState();
         _checksumState = new TargetState();
+        if (_verifiers.isEmpty())
+            _checksumState.ready();
     }
 
     public Binding getBinding()
@@ -169,6 +174,10 @@ public abstract class DeploymentTarget
     private synchronized void updateState( Throwable t )
     {
   
+        if (log.isDebugEnabled())
+        {
+            log.debug("updateState: exception="+t+" targetState="+_targetState.getState()+" checksumState="+_checksumState.getState()+" verifiers="+_verifiers.size()+" checksumsdeployed="+_checkSumFilesDeployed);
+        }
         if ( t != null && _exception == null )
         {
             _exception = ( t instanceof HttpClientException ? (HttpClientException) t : new HttpClientException( _binding, t ) );
@@ -190,7 +199,7 @@ public abstract class DeploymentTarget
             {
                 deployNextChecksumFile();
             }
-            else if ( _targetState.isReady() && _checksumState.isReady() )
+            else if ( _targetState.isReady() && (_checksumState.isReady()))
             {
                 onComplete();
             }

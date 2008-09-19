@@ -90,6 +90,10 @@ public abstract class FilePutExchange extends FileExchange
                 for (StreamObserver o: _observers)
                     o.setLength(_localFile.length());
             }
+
+            if (log.isDebugEnabled())
+                log.debug("PUT: "+getURI());
+            
             setRequestContentSource( getInputStream() );
             setRequestHeader( __BATCH_HEADER, _batchId );            
             super.send();
