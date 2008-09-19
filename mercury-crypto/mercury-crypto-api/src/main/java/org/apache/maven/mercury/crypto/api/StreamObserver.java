@@ -28,5 +28,8 @@ public interface StreamObserver
     
     void setLength(long length);
     long getLength();
+    
+    void setLastModified(String time);
+    String getLastModified();
 
 }

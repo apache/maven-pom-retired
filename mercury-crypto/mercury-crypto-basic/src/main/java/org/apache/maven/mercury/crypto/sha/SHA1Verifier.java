@@ -43,6 +43,7 @@ implements StreamVerifier
     private MessageDigest digest;
     private byte[] digestBytes;
     private long length  = -1;
+    private String lastModified;
     
     private String sig;
     
@@ -115,5 +116,15 @@ implements StreamVerifier
     public void setLength(long length)
     {
         this.length = length;
+    }
+
+    public String getLastModified()
+    {
+        return lastModified;
+    }
+
+    public void setLastModified(String time)
+    {
+        lastModified = time;
     }
 }

@@ -98,6 +98,12 @@ public abstract class FileGetExchange extends FileExchange
                 if (log.isDebugEnabled())
                     log.debug("GET of "+_contentLength +" bytes");
                 break;
+            case HttpHeaders.LAST_MODIFIED_ORDINAL:
+                for (StreamObserver o:_observers)
+                {
+                    o.setLastModified(BufferUtil.to8859_1_String(value));
+                }
+                break;
         }
     }
     
