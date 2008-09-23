@@ -124,5 +124,37 @@ extends TestCase
     
 System.out.println("local repo is in "+localRepoBase);
   }
+  
+  public void testOneArtifactWithClassifier()
+  throws IllegalArgumentException, RepositoryException
+  {
+    ArtifactBasicMetadata bm = new ArtifactBasicMetadata("a:a:4:sources");
+    query.add( bm );
+    
+    ArtifactResults res = reader.readArtifacts( query );
+    
+    assertTrue( res != null );
+    assertFalse( res.hasExceptions() );
+    assertTrue( res.hasResults() );
+    
+    Map< ArtifactBasicMetadata, List<Artifact>> resMap = res.getResults();
+    
+    assertNotNull( resMap );
+    assertFalse( resMap.isEmpty() );
+    
+    List<Artifact> al = resMap.get( bm );
+    
+    assertNotNull( al );
+    assertFalse( al.isEmpty() );
+    
+    Artifact a = al.get( 0 );
+    
+    writer.writeArtifact( al );
+    
+    File aBin = new File( localRepoBase, "a/a/4/a-4-sources.jar" );
+    assertTrue( aBin.exists() );
+    
+System.out.println("local repo is in "+localRepoBase);
+  }
 
 }
