@@ -24,8 +24,8 @@
   </build>
 
   <properties>
-  	<distMgmtSnapshotsName>CI Snapshot Repository</distMgmtSnapshotsName>
-  	<distMgmtSnapshotsUrl>http://localhost:8081/content/repositories/maven.snapshots</distMgmtSnapshotsUrl>
+  	<distMgmtSnapshotsName>Maven Snapshot Repository</distMgmtSnapshotsName>
+  	<distMgmtSnapshotsUrl>http://repository.sonatype.org/content/repositories/maven.snapshots</distMgmtSnapshotsUrl>
   </properties>
   
   <distributionManagement>
