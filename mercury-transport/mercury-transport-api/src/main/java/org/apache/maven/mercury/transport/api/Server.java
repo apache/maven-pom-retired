@@ -42,6 +42,8 @@ public class Server
 
   private Set<StreamVerifierFactory>  writerStreamVerifierFactories;
   private Set<StreamVerifierFactory>  readerStreamVerifierFactories;
+  
+  private String                      userAgent;
 
   public Server( String id, URL url )
   {
@@ -78,6 +80,21 @@ public class Server
   public String getId()
   {
     return id;
+  }
+
+  public boolean hasUserAgent()
+  {
+    return userAgent != null;
+  }
+
+  public String getUserAgent()
+  {
+    return userAgent;
+  }
+
+  public void setUserAgent( String userAgent )
+  {
+    this.userAgent = userAgent;
   }
 
   public void setURL( URL url )

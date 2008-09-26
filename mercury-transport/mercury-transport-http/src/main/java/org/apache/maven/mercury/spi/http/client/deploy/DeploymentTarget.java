@@ -35,6 +35,7 @@ import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
+import org.mortbay.jetty.HttpHeaders;
 import org.mortbay.jetty.client.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -226,7 +227,12 @@ public abstract class DeploymentTarget
                 updateState( e );
             }
         };
+
+        if( _server != null && _server.hasUserAgent() )
+          fileExchange.setRequestHeader( HttpHeaders.USER_AGENT, _server.getUserAgent() );
+
         _targetState.requested();
+        
         fileExchange.send();
     }
 
@@ -282,6 +288,10 @@ public abstract class DeploymentTarget
                 updateState( e );
             }
         };
+
+        if( _server != null && _server.hasUserAgent() )
+          checksumExchange.setRequestHeader( HttpHeaders.USER_AGENT, _server.getUserAgent() );
+
         _checksumState.requested();
         checksumExchange.send();
     }
