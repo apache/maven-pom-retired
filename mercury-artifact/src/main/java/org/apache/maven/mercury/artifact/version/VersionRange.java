@@ -6,8 +6,8 @@ import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.QualityEnum;
 import org.apache.maven.mercury.artifact.QualityRange;
-import org.codehaus.plexus.i18n.DefaultLanguage;
-import org.codehaus.plexus.i18n.Language;
+import org.codehaus.plexus.lang.DefaultLanguage;
+import org.codehaus.plexus.lang.Language;
 
 /**
  * Single range implementation, similar to OSGi specification:

@@ -1,7 +1,7 @@
 package org.apache.maven.mercury.repository.metadata;
 
-import org.codehaus.plexus.i18n.DefaultLanguage;
-import org.codehaus.plexus.i18n.Language;
+import org.codehaus.plexus.lang.DefaultLanguage;
+import org.codehaus.plexus.lang.Language;
 
 /**
  * adds new snapshot to metadata

@@ -9,8 +9,8 @@ import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.ReaderTransport;
 import org.apache.maven.mercury.transport.api.TransportException;
 import org.apache.maven.mercury.transport.api.TransportTransaction;
-import org.codehaus.plexus.i18n.DefaultLanguage;
-import org.codehaus.plexus.i18n.Language;
+import org.codehaus.plexus.lang.DefaultLanguage;
+import org.codehaus.plexus.lang.Language;
 
 /**
  * Jetty client adaptor to ReaderTransport APIs

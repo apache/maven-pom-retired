@@ -302,8 +302,8 @@
     </dependency>    
     <dependency>
     	<groupId>org.codehaus.plexus</groupId>
-    	<artifactId>plexus-i18n</artifactId>
-    	<version>1.0-beta-10</version>
+    	<artifactId>plexus-lang</artifactId>
+    	<version>1.0</version>
     </dependency>
 
     <dependency>

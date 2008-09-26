@@ -35,8 +35,8 @@ import org.apache.maven.mercury.repository.metadata.StringOperand;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileLockBundle;
 import org.apache.maven.mercury.util.FileUtil;
-import org.codehaus.plexus.i18n.DefaultLanguage;
-import org.codehaus.plexus.i18n.Language;
+import org.codehaus.plexus.lang.DefaultLanguage;
+import org.codehaus.plexus.lang.Language;
 
 public class LocalRepositoryWriterM2
 extends Thread
