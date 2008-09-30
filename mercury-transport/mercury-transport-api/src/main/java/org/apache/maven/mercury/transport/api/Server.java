@@ -18,6 +18,7 @@
  */
 package org.apache.maven.mercury.transport.api;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
 
@@ -44,10 +45,26 @@ public class Server
   private Set<StreamVerifierFactory>  readerStreamVerifierFactories;
   
   private String                      userAgent;
-
+  
   public Server( String id, URL url )
   {
-    this.url = url;
+    if( url == null )
+      throw new IllegalArgumentException( "URL: "+url );
+    
+    String ustr = url.toString();
+    
+    if( ustr.endsWith( "/" ) )
+      try
+      {
+        this.url = new URL( ustr.substring( 0, ustr.length()-1 ) );
+      }
+      catch( MalformedURLException e )
+      {
+        throw new IllegalArgumentException( e.getMessage() );
+      }
+    else
+      this.url = url;
+    
     this.id = id;
   }
 

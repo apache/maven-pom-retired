@@ -29,6 +29,8 @@ import org.mortbay.jetty.client.HttpClient;
 import org.mortbay.jetty.client.HttpDestination;
 import org.mortbay.jetty.client.HttpExchange;
 import org.mortbay.jetty.client.security.ProxyAuthorization;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * SecureSender
@@ -42,7 +44,9 @@ import org.mortbay.jetty.client.security.ProxyAuthorization;
  */
 public class SecureSender
 {
-    public static void send (Server server, HttpClient httpClient, HttpExchange exchange)
+  private static final Logger _log = LoggerFactory.getLogger( SecureSender.class );
+
+  public static void send (Server server, HttpClient httpClient, HttpExchange exchange)
     throws Exception
     {
         if (server != null && server.hasProxy() && (server.getProxy() != null))
@@ -61,10 +65,14 @@ public class SecureSender
             }
             InetSocketAddress proxyAddress = new InetSocketAddress(host,port);
             HttpDestination destination = httpClient.getDestination(exchange.getAddress(), ssl);  
-            
-            System.err.println("Matched destination "+destination);
+            if( _log.isDebugEnabled() )
+              _log.debug("Matched destination "+destination);
+
             destination.setProxy(proxyAddress);
-            System.err.println("Set proxy "+host+":"+port+" on destination");
+            if( _log.isDebugEnabled() )
+              _log.debug("Set proxy "+host+":"+port+" on destination");
+_log.info("Set proxy "+host+":"+port+" on destination");
+System.out.println("Set proxy "+host+":"+port+" on destination");
             
             //set up authentication for the proxy
             Credentials proxyCredentials = server.getProxyCredentials();
@@ -76,7 +84,8 @@ public class SecureSender
                 else
                 {
                     destination.setProxyAuthentication(new ProxyAuthorization (proxyCredentials.getUser(), proxyCredentials.getPass()));
-                    System.err.println("Set proxy authentication: "+proxyCredentials.getUser()+":"+proxyCredentials.getPass());
+                    if( _log.isDebugEnabled() )
+                      _log.debug( "Set proxy authentication: "+proxyCredentials.getUser()+":"+proxyCredentials.getPass());
                 }
             }
             destination.send(exchange); 
