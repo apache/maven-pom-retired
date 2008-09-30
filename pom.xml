@@ -24,16 +24,17 @@
   </build>
 
   <properties>
-  	<distMgmtSnapshotsName>Maven Snapshot Repository</distMgmtSnapshotsName>
-  	<distMgmtSnapshotsUrl>http://repository.sonatype.org/content/repositories/maven.snapshots</distMgmtSnapshotsUrl>
+    <distMgmtSnapshotsId>apache.snapshots</distMgmtSnapshotsId>
+    <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
+    <distMgmtSnapshotsUrl>scp://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</distMgmtSnapshotsUrl>
   </properties>
   
   <distributionManagement>
-	<snapshotRepository>
-		<id>apache.snapshots</id>
-		<name>${distMgmtSnapshotsName}</name>
-		<url>${distMgmtSnapshotsUrl}</url>
-	</snapshotRepository>
+    <snapshotRepository>
+      <id>${distMgmtSnapshotsId}</id>
+      <name>${distMgmtSnapshotsName}</name>
+      <url>${distMgmtSnapshotsUrl}</url>
+    </snapshotRepository>
   </distributionManagement>
   
 
