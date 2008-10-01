@@ -53,7 +53,7 @@ public class SimpleTestServer
         context = new Context( handlers, remotePathFragment );
         handlers.addHandler( new DefaultHandler() );
 
-        base = File.createTempFile( "simpleTestServer", null );
+        base = File.createTempFile( "simpleTestServer", "jetty" );
         base.delete();
         base.mkdir();
         base.deleteOnExit();
