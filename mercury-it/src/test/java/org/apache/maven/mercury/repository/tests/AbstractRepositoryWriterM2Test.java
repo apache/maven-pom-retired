@@ -19,10 +19,12 @@ import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
 import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.MetadataBuilder;
+import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryWriterM2;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.PlexusTestCase;
+import org.mortbay.log.Log;
 
 /**
  *
@@ -34,6 +36,8 @@ import org.codehaus.plexus.PlexusTestCase;
 public abstract class AbstractRepositoryWriterM2Test
 extends PlexusTestCase
 {
+  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( AbstractRepositoryWriterM2Test.class ); 
+  
   Repository repo;
   
   File targetDirectory; 
@@ -105,6 +109,8 @@ extends PlexusTestCase
     artifactBinary = File.createTempFile( "test-repo-writer", "bin" );
     FileUtil.writeRawData( artifactBinary, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
     binarySize = artifactBinary.length();
+
+_log.info( "Binary size is "+binarySize+" bytes" );
 
     artifactPom = File.createTempFile( "test-repo-writer", "pom" );
     FileUtil.writeRawData( artifactPom, getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) );
