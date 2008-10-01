@@ -110,7 +110,7 @@ extends PlexusTestCase
     FileUtil.writeRawData( artifactBinary, getClass().getResourceAsStream( "/maven-core-2.0.9.jar" ) );
     binarySize = artifactBinary.length();
 
-_log.info( "Binary size is "+binarySize+" bytes" );
+    _log.info( "Binary size is "+binarySize+" bytes" );
 
     artifactPom = File.createTempFile( "test-repo-writer", "pom" );
     FileUtil.writeRawData( artifactPom, getClass().getResourceAsStream( "/maven-core-2.0.9.pom" ) );

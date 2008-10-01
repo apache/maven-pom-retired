@@ -47,24 +47,28 @@
       <id>releases</id>
       <name>Releases</name>
       <allowWrite>true</allowWrite>
+      <indexable>false</indexable>
       <artifactMaxAge>-1</artifactMaxAge>
     </repository>
     <repository>
       <id>snapshots</id>
       <name>Snapshots</name>
       <allowWrite>true</allowWrite>
+      <indexable>false</indexable>
       <repositoryPolicy>snapshot</repositoryPolicy>
     </repository>
     <repository>
       <id>thirdparty</id>
       <name>3rd party</name>
       <allowWrite>true</allowWrite>
+      <indexable>false</indexable>
       <artifactMaxAge>-1</artifactMaxAge>
     </repository>
     <repository>
       <id>test</id>
       <name>test</name>
       <allowWrite>true</allowWrite>
+      <indexable>false</indexable>
       <checksumPolicy>ignore</checksumPolicy>
     </repository>
   </repositories>
