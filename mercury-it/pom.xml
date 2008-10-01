@@ -86,6 +86,15 @@
       </testResource>
  
       <testResource>
+        <directory>src/test/nexus</directory>
+        <filtering>false</filtering>
+        <includes>
+            <include>log4j.properties</include>
+        </includes>
+        <targetPath>../nexus-webapp-${nexus.version}/runtime/apps/nexus/conf</targetPath>
+      </testResource>
+ 
+      <testResource>
         <directory>src/test/nexus/conf</directory>
         <filtering>true</filtering>
         <targetPath>../nexus-webapp-${nexus.version}/conf</targetPath>
