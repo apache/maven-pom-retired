@@ -2,10 +2,22 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
-   <artifactId>mercury</artifactId>
+  <artifactId>mercury</artifactId>
   <packaging>pom</packaging>
   <name>Mercury Reactor:                ${project.version}</name>
   <version>1.0.0-alpha-1-SNAPSHOT</version>
+  
+  <properties>
+    
+    <distMgmtSnapshotsId>apache.snapshots</distMgmtSnapshotsId>
+    <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
+    <distMgmtSnapshotsUrl>scp://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</distMgmtSnapshotsUrl>
+
+    <distMgmtReleasesId>apache.staging</distMgmtReleasesId>
+    <distMgmtReleasesName>Apache Development Staging Repository</distMgmtReleasesName>
+    <distMgmtReleasesUrl>scp://people.apache.org/~/repos/staging</distMgmtReleasesUrl>
+    
+  </properties>
 
   <modules>
     <module>mercury-pom</module>
@@ -38,6 +50,11 @@
   </repositories>
   
   <distributionManagement>
+    <repository>
+      <id>${distMgmtReleasesId}</id>
+      <name>${distMgmtReleasesName}</name>
+      <url>${distMgmtReleasesUrl}</url>
+    </repository>
     <snapshotRepository>
       <id>${distMgmtSnapshotsId}</id>
       <name>${distMgmtSnapshotsName}</name>
