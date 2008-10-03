@@ -5,7 +5,7 @@
   <artifactId>mercury</artifactId>
   <packaging>pom</packaging>
   <name>Mercury Reactor:                ${project.version}</name>
-  <version>1.0.0-alpha-1</version>
+  <version>1.0.0-alpha-2-SNAPSHOT</version>
   
   <properties>
     
@@ -63,8 +63,8 @@
   </distributionManagement>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/sandbox/tags/mercury-1.0.0-alpha-1</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/tags/mercury-1.0.0-alpha-1</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</developerConnection>
   </scm>
   
 

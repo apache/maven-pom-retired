@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>wagon-mercury</artifactId>
   <name>Mercury Wagon provider:         ${project.version}</name>
-  <version>1.0.0-alpha-1</version>
+  <version>1.0.0-alpha-2-SNAPSHOT</version>
   
   <properties>
     <mercury.version>1.0.0-alpha-1</mercury.version>
@@ -283,10 +283,4 @@
     </dependency>
     
   </dependencies>
-
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/wagon/tags/mercury-1.0.0-alpha-1</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/wagon/tags/mercury-1.0.0-alpha-1</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/wagon/tags/mercury-1.0.0-alpha-1</url>
-  </scm>
 </project>

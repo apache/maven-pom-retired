@@ -7,13 +7,13 @@
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>
   	<artifactId>mercury-repo</artifactId>
-  	<version>1.0.0-alpha-1</version>
+  	<version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
   <dependencies>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-repo-api</artifactId>
-  		<version>1.0.0-alpha-1</version>
+  		<version>1.0.0-alpha-2-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>commons-digester</groupId>
@@ -24,17 +24,17 @@
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-md-shared</artifactId>
-  		<version>1.0.0-alpha-1</version>
+  		<version>1.0.0-alpha-2-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-util</artifactId>
-  		<version>1.0.0-alpha-1</version>
+  		<version>1.0.0-alpha-2-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-crypto-basic</artifactId>
-  		<version>1.0.0-alpha-1</version>
+  		<version>1.0.0-alpha-2-SNAPSHOT</version>
       <scope>test</scope>
   	</dependency>
   </dependencies>

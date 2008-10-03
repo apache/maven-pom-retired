@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.apache.maven.mercury</groupId>
     <artifactId>mercury-pom</artifactId>
-    <version>1-alpha-1</version>
+    <version>1-alpha-2-SNAPSHOT</version>
   </parent>
   <artifactId>mercury-repo</artifactId>
   <packaging>pom</packaging>
   <name>Mercury Repository Reactor:     ${project.version}</name>
-  <version>1.0.0-alpha-1</version>
+  <version>1.0.0-alpha-2-SNAPSHOT</version>
 
   <modules>
     <module>mercury-repo-api</module>

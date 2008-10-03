@@ -3,10 +3,10 @@
   <parent>
     <groupId>org.apache.maven.mercury</groupId>
     <artifactId>mercury-pom</artifactId>
-    <version>1-alpha-1</version>
+    <version>1-alpha-2-SNAPSHOT</version>
   </parent>
   <artifactId>mercury-util</artifactId>
-  <version>1.0.0-alpha-1</version>
+  <version>1.0.0-alpha-2-SNAPSHOT</version>
   <name>Mercury Shared Utilities:       ${project.version}</name>
 
   <build>
@@ -69,13 +69,13 @@
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-crypto-api</artifactId>
-      <version>1.0.0-alpha-1</version>
+      <version>1.0.0-alpha-2-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-crypto-basic</artifactId>
-      <version>1.0.0-alpha-1</version>
+      <version>1.0.0-alpha-2-SNAPSHOT</version>
     </dependency>
     <dependency>
     	<groupId>commons-cli</groupId>
