@@ -37,6 +37,11 @@
       <url>${distMgmtSnapshotsUrl}</url>
     </snapshotRepository>
   </distributionManagement>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</developerConnection>
+  </scm>
   
 
 </project>
