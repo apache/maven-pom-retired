@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.apache.maven.mercury</groupId>
+    <artifactId>mercury</artifactId>
+    <version>1.0.0-alpha-1-SNAPSHOT</version>
+  </parent>
+
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-pom</artifactId>
   <version>1-alpha-1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Mercury parent POM:                 ${project.version}</name>
+  
   <issueManagement>
   	<system>jira</system>
   	<url>http://jira.codehaus.org/browse/MERCURY</url>
@@ -28,34 +36,6 @@
       <name>Greg Wilkins</name>
     </developer>
   </developers>
-
-  <properties>
-    <distMgmtSnapshotsId>apache.snapshots</distMgmtSnapshotsId>
-    <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
-    <distMgmtSnapshotsUrl>scp://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</distMgmtSnapshotsUrl>
-
-    <mercury.version>1.0.0-alpha-1-SNAPSHOT</mercury.version>
-  	
-    <mercury.version.artifact>1.0.0-alpha-1-SNAPSHOT</mercury.version.artifact>
-    <mercury.version.crypto>1.0.0-alpha-1-SNAPSHOT</mercury.version.crypto>
-    <mercury.version.md>1.0.0-alpha-1-SNAPSHOT</mercury.version.md>
-    <mercury.version.repo>1.0.0-alpha-1-SNAPSHOT</mercury.version.repo>
-    <mercury.version.transport>1.0.0-alpha-1-SNAPSHOT</mercury.version.transport>
-
-  </properties>
-  
-  <distributionManagement>
-	<snapshotRepository>
-		<id>${distMgmtSnapshotsId}</id>
-		<name>${distMgmtSnapshotsName}</name>
-		<url>${distMgmtSnapshotsUrl}</url>
-	</snapshotRepository>
-  </distributionManagement>
-  
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</developerConnection>
-  </scm>
   
   <dependencyManagement>
     <dependencies>
