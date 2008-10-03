@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>wagon</artifactId>
     <groupId>org.apache.maven.wagon</groupId>
@@ -8,10 +7,10 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>wagon-mercury</artifactId>
   <name>Mercury Wagon provider:         ${project.version}</name>
-  <version>1.0.0-alpha-1-SNAPSHOT</version>
+  <version>1.0.0-alpha-1</version>
   
   <properties>
-    <mercury.version>1.0.0-alpha-1-SNAPSHOT</mercury.version>
+    <mercury.version>1.0.0-alpha-1</mercury.version>
     <plexus.appbooter.version>1.4</plexus.appbooter.version>
     <plexus.container.version>1.0-alpha-47</plexus.container.version>
     <plexus.utils.version>1.5.1</plexus.utils.version>
@@ -284,4 +283,10 @@
     </dependency>
     
   </dependencies>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/wagon/tags/mercury-1.0.0-alpha-1</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/wagon/tags/mercury-1.0.0-alpha-1</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/wagon/tags/mercury-1.0.0-alpha-1</url>
+  </scm>
 </project>

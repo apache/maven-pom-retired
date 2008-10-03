@@ -2,11 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>mercury-transport-http</artifactId>
   <name>Mercury Jetty HTTP Transport:   ${project.version}</name>
-  <description/>
+  <description />
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>
   	<artifactId>mercury-transport</artifactId>
-  	<version>1.0.0-alpha-1-SNAPSHOT</version>
+  	<version>1.0.0-alpha-1</version>
   </parent>
 
 <build>
@@ -52,12 +52,12 @@
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-transport-api</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-crypto-basic</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
   	</dependency>
   </dependencies>
 

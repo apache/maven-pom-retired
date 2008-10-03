@@ -7,23 +7,23 @@
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>
   	<artifactId>mercury-repo</artifactId>
-  	<version>1.0.0-alpha-1-SNAPSHOT</version>
+  	<version>1.0.0-alpha-1</version>
   </parent>
   <dependencies>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-artifact</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-transport-api</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-external</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
   	</dependency>
   </dependencies>
 </project>

@@ -3,17 +3,17 @@
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-repo-local-m2</artifactId>
   <name>Mercury Local M2 Repository:    ${project.version}</name>
-  <description/>
+  <description />
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>
   	<artifactId>mercury-repo</artifactId>
-  	<version>1.0.0-alpha-1-SNAPSHOT</version>
+  	<version>1.0.0-alpha-1</version>
   </parent>
   <dependencies>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-repo-api</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
   	</dependency>
   	<dependency>
   		<groupId>commons-digester</groupId>
@@ -24,17 +24,17 @@
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-md-shared</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-util</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-crypto-basic</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
       <scope>test</scope>
   	</dependency>
   </dependencies>

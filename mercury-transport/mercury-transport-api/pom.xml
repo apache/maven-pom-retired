@@ -6,13 +6,13 @@
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>
   	<artifactId>mercury-transport</artifactId>
-  	<version>1.0.0-alpha-1-SNAPSHOT</version>
+  	<version>1.0.0-alpha-1</version>
   </parent>
   <dependencies>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-crypto-api</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
   	</dependency>
   </dependencies>
 

@@ -3,18 +3,18 @@
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-md-sat</artifactId>
   <name>Mercury Dependency Builder:     ${project.version}</name>
-  <description/>
+  <description />
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>
   	<artifactId>mercury-md</artifactId>
-  	<version>1.0.0-alpha-1-SNAPSHOT</version>
+  	<version>1.0.0-alpha-1</version>
   </parent>
 
   <properties>
     
     <sat4j.version>2.0.0</sat4j.version>
     <commons.digester.version>1.8</commons.digester.version>
-    <mercury.version>1.0.0-alpha-1-SNAPSHOT</mercury.version>
+    <mercury.version>1.0.0-alpha-1</mercury.version>
 
   </properties>
 

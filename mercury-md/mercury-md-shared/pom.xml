@@ -3,12 +3,12 @@
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-md-shared</artifactId>
   <name>Mercury Shared Metadata:        ${project.version}</name>
-  <description/>
+  <description />
 
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>
   	<artifactId>mercury-md</artifactId>
-  	<version>1.0.0-alpha-1-SNAPSHOT</version>
+  	<version>1.0.0-alpha-1</version>
   </parent>
   
   <build>
@@ -58,18 +58,18 @@
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-artifact</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
   	</dependency>
     <!--  for some reason transitive does not work - have to copy deps from mercury-util -->
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-util</artifactId>
-  		<version>1.0.0-alpha-1-SNAPSHOT</version>
+  		<version>1.0.0-alpha-1</version>
   	</dependency>
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-crypto-api</artifactId>
-      <version>1.0.0-alpha-1-SNAPSHOT</version>
+      <version>1.0.0-alpha-1</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>

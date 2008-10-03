@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.apache.maven.mercury</groupId>
     <artifactId>mercury-crypto</artifactId>
-    <version>1.0.0-alpha-1-SNAPSHOT</version>
+    <version>1.0.0-alpha-1</version>
   </parent>
 
   <artifactId>mercury-crypto-api</artifactId>
