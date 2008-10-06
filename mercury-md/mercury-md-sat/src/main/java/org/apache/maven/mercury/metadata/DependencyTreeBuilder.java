@@ -139,7 +139,7 @@ public class DependencyTreeBuilder
       
         for( ArtifactBasicMetadata md : dependencies )
         {
-          List<ArtifactBasicMetadata> versions = expandedDeps.get(  md );
+          List<ArtifactBasicMetadata> versions = expandedDeps.get( md );
           if( versions == null || versions.size() < 1 )
           {
             if( md.isOptional() )
@@ -148,28 +148,38 @@ public class DependencyTreeBuilder
           }
           
           boolean noGoodVersions = true;
+          boolean noVersions = true;
           for( ArtifactBasicMetadata ver : versions )
           {
-            if( veto( ver, _filters) )
+            if( veto( ver, _filters) || vetoInclusionsExclusions(node, ver) )
+            {
+              // there were good versions, but this one is filtered out filtered out
+              noGoodVersions = false;
               continue;
-            
-            if( vetoInclusionsExclusions(node, ver) )
-              continue;
+            }
             
             MetadataTreeNode kid = createNode( ver, node, md );
             node.addChild( kid );
             
+            noVersions = false;
+            
             noGoodVersions = false;
           }
           
-          if( noGoodVersions )
+          
+          if( noVersions && !noGoodVersions )
+          {
+            // there were good versions, but they were all filtered out
+            continue;
+          }
+          else if( noGoodVersions )
           {
             if( md.isOptional() )
               continue;
             throw new MetadataTreeException( "did not find non-optional artifact for " + md );
           }
-          
-          node.addQuery(md);
+          else
+            node.addQuery(md);
       }
     
       return node;
@@ -228,7 +238,7 @@ public class DependencyTreeBuilder
   {
     for( MetadataTreeNode n = node; n != null; n = n.getParent() )
     {
-      ArtifactMetadata md = n.getMd();
+      ArtifactBasicMetadata md = n.getQuery();
       
       if( md.allowDependency( ver ) )
         return false;

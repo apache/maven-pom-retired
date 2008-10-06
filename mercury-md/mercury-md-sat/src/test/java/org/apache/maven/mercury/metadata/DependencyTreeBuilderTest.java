@@ -6,6 +6,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
@@ -119,6 +120,114 @@ extends TestCase
     
     assertTrue( "no a:a:4 in the result", assertHasArtifact( res, "a:a:4" ) );
     assertTrue( "no c:c:3 in the result", assertHasArtifact( res, "c:c:3" ) );
+    
+  }
+  //----------------------------------------------------------------------------------------------
+  public void testResolveScopedConflictsWithFiltering()
+  throws MetadataTreeException
+  {
+    String title = "testResolveScopedConflictsWithFiltering";
+    ArtifactMetadata md = new ArtifactMetadata( "a:a:4" );
+    
+    List<ArtifactBasicMetadata> exclusions = new ArrayList<ArtifactBasicMetadata>();
+    exclusions.add( new ArtifactBasicMetadata("c:c:3") );
+    md.setExclusions( exclusions );
+    
+    MetadataTreeNode root = mt.buildTree( md );
+    assertNotNull( "null tree built", root );
+    assertEquals( "wrong tree size", 3, root.countNodes() );
+
+    List<ArtifactMetadata> res = mt.resolveConflicts( ArtifactScopeEnum.compile );
+    assertNotNull( "null resolution", res );
+    assertEquals( "wrong tree size", 2, res.size() );
+
+    System.out.println( title+": " + res );
+    
+    assertTrue( assertHasArtifact( res, "a:a:4" ) );
+    assertFalse( assertHasArtifact( res, "c:c:3" ) );
+    
+  }
+  //----------------------------------------------------------------------------------------------
+  public void testResolveScopedConflictsWithFilteringOne()
+  throws MetadataTreeException
+  {
+    String title = "testResolveScopedConflictsWithFilteringOne";
+    ArtifactMetadata md = new ArtifactMetadata( "a:a:2" );
+    
+    List<ArtifactBasicMetadata> exclusions = new ArrayList<ArtifactBasicMetadata>();
+    exclusions.add( new ArtifactBasicMetadata("c:c:2") );
+    md.setExclusions( exclusions );
+    
+    MetadataTreeNode root = mt.buildTree( md );
+    assertNotNull( "null tree built", root );
+    assertEquals( "wrong tree size", 3, root.countNodes() );
+
+    List<ArtifactMetadata> res = mt.resolveConflicts( ArtifactScopeEnum.compile );
+    assertNotNull( "null resolution", res );
+    assertEquals( "wrong tree size", 2, res.size() );
+    
+    assertTrue( "no a:a:2 in the result", assertHasArtifact( res, "a:a:2" ) );
+    assertTrue( "no b:b:2 in the result", assertHasArtifact( res, "b:b:2" ) );
+    assertFalse( "no c:c:2 in the result", assertHasArtifact( res, "c:c:2" ) );
+    
+    System.out.println( title+": " + res );
+    
+  }
+  //----------------------------------------------------------------------------------------------
+  public void testResolveScopedConflictsWithFilteringTwo()
+  throws MetadataTreeException
+  {
+    String title = "testResolveScopedConflictsWithFilteringTwo";
+    ArtifactMetadata md = new ArtifactMetadata( "a:a:2" );
+    
+    List<ArtifactBasicMetadata> exclusions = new ArrayList<ArtifactBasicMetadata>();
+    exclusions.add( new ArtifactBasicMetadata("b:b:2") );
+    exclusions.add( new ArtifactBasicMetadata("c:c:2") );
+    md.setExclusions( exclusions );
+    
+    MetadataTreeNode root = mt.buildTree( md );
+    assertNotNull( "null tree built", root );
+    assertEquals( "wrong tree size", 2, root.countNodes() );
+
+    List<ArtifactMetadata> res = mt.resolveConflicts( ArtifactScopeEnum.compile );
+    assertNotNull( "null resolution", res );
+    assertEquals( "wrong tree size", 2, res.size() );
+    
+    assertTrue( "no a:a:2 in the result", assertHasArtifact( res, "a:a:2" ) );
+    assertTrue( "no b:b:2 in the result", assertHasArtifact( res, "b:b:1" ) );
+    assertFalse( "no b:b:2 in the result", assertHasArtifact( res, "b:b:2" ) );
+    assertFalse( "no c:c:2 in the result", assertHasArtifact( res, "c:c:2" ) );
+    
+    System.out.println( title+": " + res );
+    
+  }
+  //----------------------------------------------------------------------------------------------
+  public void testResolveScopedConflictsWithFilteringAll()
+  throws MetadataTreeException
+  {
+    String title = "testResolveScopedConflictsWithFilteringTwo";
+    ArtifactMetadata md = new ArtifactMetadata( "a:a:2" );
+    
+    List<ArtifactBasicMetadata> exclusions = new ArrayList<ArtifactBasicMetadata>();
+    exclusions.add( new ArtifactBasicMetadata("b:b:1") );
+    exclusions.add( new ArtifactBasicMetadata("b:b:2") );
+    exclusions.add( new ArtifactBasicMetadata("c:c:2") );
+    md.setExclusions( exclusions );
+    
+    MetadataTreeNode root = mt.buildTree( md );
+    assertNotNull( "null tree built", root );
+    assertEquals( "wrong tree size", 1, root.countNodes() );
+
+    List<ArtifactMetadata> res = mt.resolveConflicts( ArtifactScopeEnum.compile );
+    assertNotNull( "null resolution", res );
+    assertEquals( "wrong tree size", 1, res.size() );
+    
+    assertTrue( "no a:a:2 in the result", assertHasArtifact( res, "a:a:2" ) );
+    assertFalse( "no b:b:1 in the result", assertHasArtifact( res, "b:b:1" ) );
+    assertFalse( "no b:b:2 in the result", assertHasArtifact( res, "b:b:2" ) );
+    assertFalse( "no c:c:2 in the result", assertHasArtifact( res, "c:c:2" ) );
+    
+    System.out.println( title+": " + res );
     
   }
   //----------------------------------------------------------------------------------------------
