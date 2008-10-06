@@ -14,7 +14,7 @@
     
     <sat4j.version>2.0.0</sat4j.version>
     <commons.digester.version>1.8</commons.digester.version>
-    <mercury.version>1.0.0-alpha-1</mercury.version>
+    <mercury.version>1.0.0-alpha-2-SNAPSHOT</mercury.version>
 
   </properties>
 

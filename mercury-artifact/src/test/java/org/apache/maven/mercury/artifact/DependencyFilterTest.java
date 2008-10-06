@@ -52,38 +52,38 @@ public class DependencyFilterTest
   public void testNoFilter()
   throws VersionException
   {
-    assertTrue( a1.vetDependency( new ArtifactBasicMetadata("a:a:2.0.0") ) );
-    assertTrue( a1.vetDependency( new ArtifactBasicMetadata("b:b:1.0.0") ) );
-    assertTrue( a1.vetDependency( new ArtifactBasicMetadata("c:c:1.0.0") ) );
+    assertTrue( a1.allowDependency( new ArtifactBasicMetadata("a:a:2.0.0") ) );
+    assertTrue( a1.allowDependency( new ArtifactBasicMetadata("b:b:1.0.0") ) );
+    assertTrue( a1.allowDependency( new ArtifactBasicMetadata("c:c:1.0.0") ) );
   }
   
   public void testInclusionsFilter()
   throws VersionException
   {
-    assertTrue( a2.vetDependency( new ArtifactBasicMetadata("a:a:2.0.0") ) );
-    assertFalse( a2.vetDependency( new ArtifactBasicMetadata("b:b:1.0.0") ) );
-    assertTrue( a2.vetDependency( new ArtifactBasicMetadata("b:b:2.0.1") ) );
-    assertFalse( a2.vetDependency( new ArtifactBasicMetadata("c:c:1.0.0") ) );
+    assertTrue( a2.allowDependency( new ArtifactBasicMetadata("a:a:2.0.0") ) );
+    assertFalse( a2.allowDependency( new ArtifactBasicMetadata("b:b:1.0.0") ) );
+    assertTrue( a2.allowDependency( new ArtifactBasicMetadata("b:b:2.0.1") ) );
+    assertFalse( a2.allowDependency( new ArtifactBasicMetadata("c:c:1.0.0") ) );
   }
   
   public void testExclusionsFilter()
   throws VersionException
   {
-    assertTrue( a3.vetDependency( new ArtifactBasicMetadata("a:a:2.0.0") ) );
-    assertTrue( a3.vetDependency( new ArtifactBasicMetadata("b:b:1.0.0") ) );
-    assertFalse( a3.vetDependency( new ArtifactBasicMetadata("b:b:2.0.1") ) );
-    assertFalse( a3.vetDependency( new ArtifactBasicMetadata("c:c:1.0.0") ) );
+    assertTrue( a3.allowDependency( new ArtifactBasicMetadata("a:a:2.0.0") ) );
+    assertTrue( a3.allowDependency( new ArtifactBasicMetadata("b:b:1.0.0") ) );
+    assertFalse( a3.allowDependency( new ArtifactBasicMetadata("b:b:2.0.1") ) );
+    assertFalse( a3.allowDependency( new ArtifactBasicMetadata("c:c:1.0.0") ) );
   }
   
   public void testInclusionsExclusionsFilter()
   throws VersionException
   {
-    assertTrue( a4.vetDependency( new ArtifactBasicMetadata("a:a:2.0.0") ) );
-    assertFalse( a4.vetDependency( new ArtifactBasicMetadata("b:b:1.0.0") ) );
-    assertTrue( a4.vetDependency( new ArtifactBasicMetadata("b:b:2.0.0") ) );
-    assertFalse( a4.vetDependency( new ArtifactBasicMetadata("b:b:2.0.1") ) );
-    assertFalse( a4.vetDependency( new ArtifactBasicMetadata("b:b:3.0.1") ) );
-    assertFalse( a4.vetDependency( new ArtifactBasicMetadata("c:c:1.0.0") ) );
+    assertTrue( a4.allowDependency( new ArtifactBasicMetadata("a:a:2.0.0") ) );
+    assertFalse( a4.allowDependency( new ArtifactBasicMetadata("b:b:1.0.0") ) );
+    assertTrue( a4.allowDependency( new ArtifactBasicMetadata("b:b:2.0.0") ) );
+    assertFalse( a4.allowDependency( new ArtifactBasicMetadata("b:b:2.0.1") ) );
+    assertFalse( a4.allowDependency( new ArtifactBasicMetadata("b:b:3.0.1") ) );
+    assertFalse( a4.allowDependency( new ArtifactBasicMetadata("c:c:1.0.0") ) );
   }
 
 }

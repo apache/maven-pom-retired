@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.maven.mercury.artifact.version.VersionException;
+import org.apache.maven.mercury.artifact.version.VersionRange;
+
 
 /**
  * this is the most primitive metadata there is, usually used to query repository for "real" metadata.
@@ -112,7 +115,7 @@ public class ArtifactBasicMetadata
     return s;
   }
   //---------------------------------------------------------------------
-  public boolean sameGAV( ArtifactMetadata md )
+  public boolean sameGAV( ArtifactBasicMetadata md )
   {
     if( md == null )
       return false;
@@ -124,7 +127,7 @@ public class ArtifactBasicMetadata
     ;
   }
   //---------------------------------------------------------------------
-  public boolean sameGA( ArtifactMetadata md )
+  public boolean sameGA( ArtifactBasicMetadata md )
   {
     if( md == null )
       return false;
@@ -203,6 +206,10 @@ public class ArtifactBasicMetadata
   public String getVersion()
   {
     return version;
+  }
+  public boolean hasVersion()
+  {
+    return version != null && version.length() > 0;
   }
 
   public void setVersion( String version )
@@ -364,6 +371,54 @@ public class ArtifactBasicMetadata
   {
     this.exclusions = exclusions;
   }
+  
+  /**
+   * run dependency through inclusion/exclusion filters. Inclusion filter 
+   * is always a "hole"-filter, which is then enhanced by exclusion "cork"-filter
+   * 
+   * @param dep dependency to vet
+   * @return vet result
+   * @throws VersionException 
+   */
+  public boolean allowDependency( ArtifactBasicMetadata dep )
+  throws VersionException
+  {
+    boolean includeDependency = true;
+    if( hasInclusions() )
+      includeDependency = ! passesFilter( inclusions, dep );
+    
+    if( !includeDependency )
+      return false;
+    
+    if( !hasExclusions() )
+      return true;
+    
+    if( passesFilter( exclusions, dep ) )
+      return true;
+    
+    return false;
+    
+  }
+  
+  private boolean passesFilter( Collection<ArtifactBasicMetadata> filter, ArtifactBasicMetadata dep )
+  throws VersionException
+  {
+    for( ArtifactBasicMetadata filterMd : filter )
+    {
+      if( filterMd.sameGA( dep ) )
+      {
+        if( !filterMd.hasVersion() )
+          return false; // no version in the filter - catch by GA
+        VersionRange vr = new VersionRange( filterMd.getVersion() );
+        if( vr.includes( dep.getVersion() ))
+          return false; // catch by version query
+      }
+    }
+
+    return true;
+  }
+  
+  
   @Override
   public boolean equals( Object obj )
   {

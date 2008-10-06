@@ -10,6 +10,7 @@ import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessor;
+import org.apache.maven.mercury.artifact.version.VersionException;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.metadata.sat.DefaultSatSolver;
 import org.apache.maven.mercury.metadata.sat.SatException;
@@ -17,6 +18,8 @@ import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.VirtualRepositoryReader;
+import org.codehaus.plexus.lang.DefaultLanguage;
+import org.codehaus.plexus.lang.Language;
 
 /**
  * This is the new entry point into Artifact resolution process.
@@ -27,7 +30,7 @@ import org.apache.maven.mercury.repository.api.VirtualRepositoryReader;
  */
 public class DependencyTreeBuilder
 {
-//  private MetadataSource _mdSource;
+  Language _lang = new DefaultLanguage(DependencyTreeBuilder.class);
   
   private Set<MetadataTreeArtifactFilter> _filters;
   private List<Comparator<MetadataTreeNode>> _comparators;
@@ -119,7 +122,7 @@ public class DependencyTreeBuilder
         mr = _reader.readDependencies( nodeMD );
   
         if( mr == null )
-          throw new MetadataTreeException( "no result found for " + nodeMD );
+          throw new MetadataTreeException( _lang.getMessage( "artifact.md.not.found", nodeMD.toString() ) );
         
         MetadataTreeNode node = new MetadataTreeNode( mr, parent, nodeQuery );
     
@@ -150,6 +153,9 @@ public class DependencyTreeBuilder
             if( veto( ver, _filters) )
               continue;
             
+            if( vetoInclusionsExclusions(node, ver) )
+              continue;
+            
             MetadataTreeNode kid = createNode( ver, node, md );
             node.addChild( kid );
             
@@ -169,6 +175,10 @@ public class DependencyTreeBuilder
       return node;
     }
     catch (RepositoryException e)
+    {
+      throw new MetadataTreeException( e );
+    }
+    catch( VersionException e )
     {
       throw new MetadataTreeException( e );
     }
@@ -211,6 +221,19 @@ public class DependencyTreeBuilder
         if( filter.veto(md) )
           return true;
     return false;
+  }
+  //-----------------------------------------------------
+  private boolean vetoInclusionsExclusions( MetadataTreeNode node, ArtifactBasicMetadata ver )
+  throws VersionException
+  {
+    for( MetadataTreeNode n = node; n != null; n = n.getParent() )
+    {
+      ArtifactMetadata md = n.getMd();
+      
+      if( md.allowDependency( ver ) )
+        return false;
+    }
+    return true;
   }
   //-----------------------------------------------------
   public List<ArtifactMetadata> resolveConflicts( ArtifactScopeEnum scope )
