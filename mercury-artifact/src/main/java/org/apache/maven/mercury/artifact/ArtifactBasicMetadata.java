@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.artifact;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -43,6 +44,10 @@ public class ArtifactBasicMetadata
   protected String scope;
 
   protected boolean optional;
+  
+  protected Collection<ArtifactBasicMetadata> inclusions;
+  
+  protected Collection<ArtifactBasicMetadata> exclusions;
 
   /** transient helper objects, used by DependencyBuilder */
   transient Object tracker;
@@ -333,7 +338,32 @@ public class ArtifactBasicMetadata
   {
     return effectiveCoordinates == null ? version: effectiveCoordinates.getVersion();
   }
-
+  
+  public boolean hasInclusions()
+  {
+    return inclusions == null ? false : ! inclusions.isEmpty();
+  }
+  public Collection<ArtifactBasicMetadata> getInclusions()
+  {
+    return inclusions;
+  }
+  public void setInclusions( Collection<ArtifactBasicMetadata> inclusions )
+  {
+    this.inclusions = inclusions;
+  }
+  
+  public boolean hasExclusions()
+  {
+    return exclusions == null ? false : ! exclusions.isEmpty();
+  }
+  public Collection<ArtifactBasicMetadata> getExclusions()
+  {
+    return exclusions;
+  }
+  public void setExclusions( Collection<ArtifactBasicMetadata> exclusions )
+  {
+    this.exclusions = exclusions;
+  }
   @Override
   public boolean equals( Object obj )
   {

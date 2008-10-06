@@ -18,13 +18,13 @@
     <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
     <distMgmtSnapshotsUrl>scp://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</distMgmtSnapshotsUrl>
 
-    <mercury.version>1.0.0-alpha-1-SNAPSHOT</mercury.version>
+    <mercury.version>1.0.0-alpha-2-SNAPSHOT</mercury.version>
     
-    <mercury.version.artifact>1.0.0-alpha-1-SNAPSHOT</mercury.version.artifact>
-    <mercury.version.crypto>1.0.0-alpha-1-SNAPSHOT</mercury.version.crypto>
-    <mercury.version.md>1.0.0-alpha-1-SNAPSHOT</mercury.version.md>
-    <mercury.version.repo>1.0.0-alpha-1-SNAPSHOT</mercury.version.repo>
-    <mercury.version.transport>1.0.0-alpha-1-SNAPSHOT</mercury.version.transport>
+    <mercury.version.artifact>1.0.0-alpha-2-SNAPSHOT</mercury.version.artifact>
+    <mercury.version.crypto>1.0.0-alpha-2-SNAPSHOT</mercury.version.crypto>
+    <mercury.version.md>1.0.0-alpha-2-SNAPSHOT</mercury.version.md>
+    <mercury.version.repo>1.0.0-alpha-2-SNAPSHOT</mercury.version.repo>
+    <mercury.version.transport>1.0.0-alpha-2-SNAPSHOT</mercury.version.transport>
 
   </properties>
   

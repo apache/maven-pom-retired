@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.security.Security;
 import java.util.Iterator;
 
@@ -76,7 +77,8 @@ public class PgpHelper
   //---------------------------------------------------------------------------------
   public static long hexToId( String hexId )
   {
-    return Long.parseLong( hexId, 16 );
+    BigInteger bi = new BigInteger( hexId, 16 );
+    return bi.longValue();
   }
   //---------------------------------------------------------------------------------
   public static PGPSignature readSignature( InputStream inS )
