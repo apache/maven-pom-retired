@@ -269,7 +269,8 @@ public class FileUtilTest
     say("Multi-threaded test finished successfully");
   }
   //----------------------------------------------------------------------------------------
-  public void testLockNio()
+  // TODO: 2008-10-06 Oleg: enable if switching to NIO locking between processes
+  public void notestLockNio()
   throws Exception
   {
     Ok th1ok = new Ok();

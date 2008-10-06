@@ -721,6 +721,7 @@ public class FileUtil
   public static FileLockBundle lockDir( String dir, long millis, long sleepFor )
   throws IOException
   {
+    
     File df = new File(dir);
     
     boolean exists = df.exists(); 
@@ -735,47 +736,35 @@ public class FileUtil
 
     if( !exists )
       throw new IOException( _lang.getMessage( "cannot.create.directory", dir ) );
-
+    
     if( !df.isDirectory() )
       throw new IOException( _lang.getMessage( "file.is.not.directory", dir, df.exists()+"", df.isDirectory()+"", df.isFile()+"" ) );
     
-    File lock = new File(dir,LOCK_FILE);
+    File lockFile = new File(dir,LOCK_FILE);
+
     long start = System.currentTimeMillis();
 
-    byte [] lockId = (""+System.nanoTime()+""+Math.random()).getBytes();
-    int lockIdLen = lockId.length;
-    
-    for(;;)
+    for( long now = start; (now-start) < millis; now = System.currentTimeMillis() )
       try
       {
-        if( lock.exists() )
-          throw new OverlappingFileLockException();
+        synchronized( FileUtil.class )
+        {
+          if( !lockFile.exists() )
+          {
+            writeRawData( lockFile, "lock" );
+            lockFile.deleteOnExit();
+            return new FileLockBundle( dir );
+          }
+        }
+        Thread.sleep( sleepFor );
 
-        FileOutputStream fos = new FileOutputStream( lock );
-        fos.write( lockId, 0, lockIdLen );
-        fos.flush();
-        fos.close();
-        
-        byte [] lockBytes = readRawData( lock );
-        int lockBytesLen = lockBytes.length;
-        
-        if( lockBytesLen != lockIdLen )
-          throw new OverlappingFileLockException();
-        
-        for( int i=0; i<lockIdLen; i++ )
-          if( lockBytes[i] != lockId[i] )
-            throw new OverlappingFileLockException();
-        
-        lock.deleteOnExit();
-
-        return new FileLockBundle(dir);
       }
-      catch( OverlappingFileLockException le )
+      catch( InterruptedException ie )
       {
-        try { Thread.sleep( sleepFor ); } catch( InterruptedException e ){}
-        if( System.currentTimeMillis() - start > millis )
-          return null;
       }
+      
+      // too long a wait
+      return null;
   }
   //---------------------------------------------------------------------------------------------------------------
   /**
@@ -816,8 +805,6 @@ public class FileUtil
     
     FileChannel ch = new RandomAccessFile( lockFile, "rw" ).getChannel();
     FileLock lock = null;
-System.out.println("locking channel "+lockFile.getAbsolutePath()+", channel isOpen()="+ch.isOpen() );
-System.out.flush();
     
     long start = System.currentTimeMillis();
 
@@ -833,15 +820,14 @@ System.out.flush();
       }
       catch( OverlappingFileLockException oe )
       {
-System.out.println("channel "+lockFile.getAbsolutePath()+" locked, waiting" );
-System.out.flush();
         try { Thread.sleep( sleepFor ); } catch( InterruptedException e ){}
         if( System.currentTimeMillis() - start > millis )
           return null;
       }
+      
   }
   //---------------------------------------------------------------------------------------------------------------
-  public static void unlockDir( String dir )
+  public static synchronized void unlockDir( String dir )
   {
     try
     {
