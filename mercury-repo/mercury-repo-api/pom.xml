@@ -4,26 +4,33 @@
   <artifactId>mercury-repo-api</artifactId>
   <name>Mercury Repository APIs:        ${project.version}</name>
   <description>Repository APIs</description>
+  
   <parent>
   	<groupId>org.apache.maven.mercury</groupId>
   	<artifactId>mercury-repo</artifactId>
   	<version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
+  
   <dependencies>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-artifact</artifactId>
-  		<version>1.0.0-alpha-2-SNAPSHOT</version>
+  		<version>${project.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-transport-api</artifactId>
-  		<version>1.0.0-alpha-2-SNAPSHOT</version>
+  		<version>${project.version}</version>
   	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-external</artifactId>
-  		<version>1.0.0-alpha-2-SNAPSHOT</version>
-  	</dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-external</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-md-shared</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

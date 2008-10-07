@@ -12,22 +12,22 @@ import java.util.Collection;
 public class Util
 {
    @SuppressWarnings("unchecked")
-  public boolean isEmpty( Collection o )
+  public static boolean isEmpty( Collection o )
    {
      return o == null || o.isEmpty();
    }
    
-   public boolean isEmpty( String o )
+   public static boolean isEmpty( String o )
    {
      return o == null || o.length() < 1;
    }
 
-   public boolean isEmpty( Object [] o )
+   public static boolean isEmpty( Object [] o )
    {
      return o == null || o.length < 1;
    }
 
-   public boolean isEmpty( Object o )
+   public static boolean isEmpty( Object o )
    {
      return o == null;
    }

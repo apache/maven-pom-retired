@@ -23,6 +23,15 @@ public class TimeUtil
 
   /**
    * 
+   * @return current UTC timestamp by yyyyMMddHHmmss mask as a long int
+   */
+  public static long getUTCTimestampAsLong( )
+  {
+    return Long.parseLong( getUTCTimestamp( new Date() ) );
+  }
+
+  /**
+   * 
    * @param date
    * @return current date converted to UTC timestamp by yyyyMMddHHmmss mask
    */
