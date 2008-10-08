@@ -78,7 +78,7 @@ public class DependencyTreeBuilder
     if( processors != null )
       _processors = processors;
     
-    this._reader = new VirtualRepositoryReader( repositories, processor );
+    this._reader = new VirtualRepositoryReader( repositories, processor, null );
   }
   //------------------------------------------------------------------------
   /**

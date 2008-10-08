@@ -14,7 +14,6 @@
     
     <sat4j.version>2.0.0</sat4j.version>
     <commons.digester.version>1.8</commons.digester.version>
-    <mercury.version>1.0.0-alpha-2-SNAPSHOT</mercury.version>
 
   </properties>
 
@@ -57,31 +56,31 @@
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-md-shared</artifactId>
-  		<version>${mercury.version}</version>
+  		<version>${project.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-repo-api</artifactId>
-  		<version>${mercury.version}</version>
+  		<version>${project.version}</version>
   	</dependency>
 	<!--  test deps -->
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-repo-local-m2</artifactId>
-      <version>${mercury.version}</version>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-repo-local-m2</artifactId>
-      <version>${mercury.version}</version>
+      <version>${project.version}</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-repo-remote-m2</artifactId>
-  		<version>${mercury.version}</version>
+  		<version>${project.version}</version>
   		<scope>test</scope>
   	</dependency>
   </dependencies>

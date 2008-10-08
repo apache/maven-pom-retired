@@ -31,6 +31,8 @@ implements MetadataReader
   private LocalRepository       _localRepository;
   
   private DependencyProcessor     _processor;
+  
+  RepositoryMetadataCache         _mdCache;
 
   private Map<String,ArtifactListProcessor>   _processors;
   
@@ -40,6 +42,7 @@ implements MetadataReader
                   LocalRepository localRepository
                 , List<RemoteRepository> remoteRepositories
                 , DependencyProcessor processor
+                , RepositoryMetadataCache mdCache
                           )
   throws RepositoryException
   {
@@ -56,9 +59,11 @@ implements MetadataReader
     
     if( remoteRepositories != null && remoteRepositories.size() > 0 )
       this._repositories.addAll( remoteRepositories );
+    
+    this._mdCache = mdCache;
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  public VirtualRepositoryReader( List<Repository> repositories, DependencyProcessor processor  )
+  public VirtualRepositoryReader( List<Repository> repositories, DependencyProcessor processor, RepositoryMetadataCache mdCache  )
   throws RepositoryException
   {
     if( processor == null )
@@ -67,6 +72,8 @@ implements MetadataReader
 
     if( repositories != null && repositories.size() > 0 )
       this._repositories.addAll( repositories );
+    
+    this._mdCache = mdCache;
   }
   //----------------------------------------------------------------------------------------------------------------------------
   public VirtualRepositoryReader( Repository... repositories )

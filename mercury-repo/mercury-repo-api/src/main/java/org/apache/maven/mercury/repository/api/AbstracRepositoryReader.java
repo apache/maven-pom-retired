@@ -18,14 +18,31 @@ implements RepositoryReader, MetadataReader
 {
   protected DependencyProcessor _mdProcessor;
   
-  public void setMetadataProcessor( DependencyProcessor mdProcessor )
+  protected RepositoryMetadataCache _mdCache;
+  
+  public void setDependencyProcessor( DependencyProcessor mdProcessor )
   {
     _mdProcessor = mdProcessor;
   }
   
-  public DependencyProcessor getMetadataProcessor()
+  public DependencyProcessor getDependencyProcessor()
   {
     return _mdProcessor;
+  }
+  
+  public void setMetadataCache( RepositoryMetadataCache mdCache )
+  {
+    this._mdCache = mdCache;
+  }
+  
+  public RepositoryMetadataCache getMetadataCache()
+  {
+    return _mdCache;
+  }
+  
+  public boolean hasMetadataCache()
+  {
+    return _mdCache != null;
   }
   
   public byte[] readMetadata( ArtifactBasicMetadata bmd  )

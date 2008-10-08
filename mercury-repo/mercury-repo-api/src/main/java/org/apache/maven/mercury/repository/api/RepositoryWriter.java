@@ -26,4 +26,7 @@ extends RepositoryOperator
    */
   public void writeArtifact( Collection<Artifact> artifact )
   throws RepositoryException;
+  
+  public void setMetadataCache( RepositoryMetadataCache mdCache );
+  public RepositoryMetadataCache getMetadataCache();
 }

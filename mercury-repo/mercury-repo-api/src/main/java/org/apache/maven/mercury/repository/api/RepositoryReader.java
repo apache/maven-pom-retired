@@ -62,10 +62,17 @@ extends RepositoryOperator, MetadataReader
   public Repository getRepository();
 
   /**
-   * Need if to trick circular dependency on maven-project, projectBuilder hides behind this processor
+   * Abstracted POM reader. First projectBuilder, then any type of dependency reader
    */
-  public void setMetadataProcessor( DependencyProcessor mdProcessor );
-  public DependencyProcessor getMetadataProcessor();
+  public void setDependencyProcessor( DependencyProcessor mdProcessor );
+  public DependencyProcessor getDependencyProcessor();
+
+  /**
+   * Abstracted metadata cache is used to store/retrieve metadata faster. It usually implements 
+   * repository update policy
+   */
+  public void setMetadataCache( RepositoryMetadataCache mdCache );
+  public RepositoryMetadataCache getMetadataCache();
   
   /**
    * read content pointed by relative path. It will return content bytes

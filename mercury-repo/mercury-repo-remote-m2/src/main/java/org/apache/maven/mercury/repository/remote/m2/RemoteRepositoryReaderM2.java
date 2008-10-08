@@ -61,6 +61,7 @@ implements RepositoryReader, MetadataReader
 {
   private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( RemoteRepositoryReaderM2.class ); 
   private static final Language _lang = new DefaultLanguage( RemoteRepositoryReaderM2.class );
+
   // TODO - replace with known Transport's protocols. Should be similar to RepositoryReader/Writer registration
   private static final String [] _protocols = new String [] { "http", "https", "dav", "webdav" };
   
@@ -95,7 +96,7 @@ implements RepositoryReader, MetadataReader
     if( mdProcessor == null )
       throw new IllegalArgumentException("MetadataProcessor cannot be null ");
     
-    setMetadataProcessor(  mdProcessor );
+    setDependencyProcessor(  mdProcessor );
     
     try
     {
@@ -205,6 +206,7 @@ implements RepositoryReader, MetadataReader
     
     String mdPath = loc.getGavPath()+'/'+_repo.getMetadataName();
 
+    
     byte [] mdBytes = readRawData( mdPath );
     if( mdBytes == null )
     {

@@ -19,6 +19,7 @@ import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 import org.apache.maven.mercury.crypto.api.StreamObserverException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
+import org.apache.maven.mercury.repository.api.AbstractRepositoryWriter;
 import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
@@ -39,7 +40,7 @@ import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
 public class LocalRepositoryWriterM2
-extends Thread
+extends AbstractRepositoryWriter
 implements RepositoryWriter
 {
   public static final String SYSTEM_PROPERTY_PARALLEL_WORKERS = "mercury.local.repo.workers";
@@ -53,7 +54,7 @@ implements RepositoryWriter
   public static final long SLEEP_FOR_LOCK_TICK = 5l;
 
   private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( LocalRepositoryWriterM2.class ); 
-  private static final Language _lang = new DefaultLanguage( LocalRepositoryReaderM2.class );
+  private static final Language _lang = new DefaultLanguage( LocalRepositoryWriterM2.class );
   //---------------------------------------------------------------------------------------------------------------
   private static final String [] _protocols = new String [] { "file" };
   

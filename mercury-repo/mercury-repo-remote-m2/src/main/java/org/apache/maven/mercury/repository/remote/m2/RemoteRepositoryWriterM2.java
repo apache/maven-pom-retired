@@ -21,6 +21,7 @@ import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
+import org.apache.maven.mercury.repository.api.AbstractRepositoryWriter;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
@@ -45,12 +46,13 @@ import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
 public class RemoteRepositoryWriterM2
+extends AbstractRepositoryWriter
 implements RepositoryWriter
 {
   private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( RemoteRepositoryWriterM2.class ); 
   private static final Language _lang = new DefaultLanguage( RemoteRepositoryWriterM2.class );
   //---------------------------------------------------------------------------------------------------------------
-  private static final String [] _protocols = new String [] { "http", "dav", "webdav" };
+  private static final String [] _protocols = new String [] { "http", "https", "dav", "webdav" };
   
   RemoteRepository _repo;
   Server _server;

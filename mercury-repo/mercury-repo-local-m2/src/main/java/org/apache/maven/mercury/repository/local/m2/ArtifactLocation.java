@@ -3,6 +3,14 @@ package org.apache.maven.mercury.repository.local.m2;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 
+/**
+ * artifact relative location data object - used by repositories to hold on to intermediate path calculations 
+ *
+ *
+ * @author Oleg Gusakov
+ * @version $Id$
+ *
+ */
 public class ArtifactLocation
 {
   public static final String SEP = "/";

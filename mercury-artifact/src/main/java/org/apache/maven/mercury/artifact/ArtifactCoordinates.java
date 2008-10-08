@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.artifact;
 
+
 /**
  *
  *
@@ -9,7 +10,6 @@ package org.apache.maven.mercury.artifact;
  */
 public class ArtifactCoordinates
 {
-  
   /** 
    * standard glorified artifact coordinates
    */

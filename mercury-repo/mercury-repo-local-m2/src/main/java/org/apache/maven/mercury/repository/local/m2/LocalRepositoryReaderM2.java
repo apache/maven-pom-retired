@@ -63,7 +63,7 @@ implements RepositoryReader, MetadataReader
     if( mdProcessor == null )
       throw new IllegalArgumentException("MetadataProcessor cannot be null ");
     
-    setMetadataProcessor(  mdProcessor );
+    setDependencyProcessor(  mdProcessor );
   }
   //---------------------------------------------------------------------------------------------------------------
   public Repository getRepository()

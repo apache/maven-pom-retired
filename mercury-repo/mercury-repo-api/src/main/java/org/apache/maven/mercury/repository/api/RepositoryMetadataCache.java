@@ -26,9 +26,18 @@ public interface RepositoryMetadataCache
   public void init( Collection<RemoteRepository> repos );
   
   /**
+   * check if GA level metadata exists in this cache
    * 
-   * @param bmd
+   * @param bmd - bare GA coordinates of the requisted metadata
    * @return 
    */
-  public Metadata findGA( ArtifactBasicMetadata bmd );
+  public RepositoryGAMetadata findGA( ArtifactBasicMetadata bmd );
+  
+  /**
+   * check if GAV level metadata exists in this cache
+   * 
+   * @param bmd - bare GAV coordinates of the requisted metadata
+   * @return 
+   */
+  public RepositoryGAMetadata findGAV( ArtifactBasicMetadata bmd );
 }
