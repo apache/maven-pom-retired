@@ -60,10 +60,20 @@
       <url>${distMgmtSnapshotsUrl}</url>
     </snapshotRepository>
   </distributionManagement>
+  <url>http://docs.codehaus.org/display/MAVEN/Mercury</url>
+  <issueManagement>
+  	<system>jira</system>
+  	<url>http://jira.codehaus.org/browse/MERCURY</url>
+  </issueManagement>
+  <ciManagement>
+  	<system>hudson</system>
+  	<url>https://ci.sonatype.org/view/Maven%20Artifact/job/mercury/</url>
+  </ciManagement>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/trunk/mercury/</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/mercury/trunk/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/mercury/trunk/</developerConnection>
+    <url>http://svn.apache.org/repos/asf/maven/mercury/trunk/</url>
   </scm>
   
 
