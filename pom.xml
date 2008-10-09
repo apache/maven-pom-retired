@@ -28,7 +28,6 @@
     <module>mercury-external</module>
     <module>mercury-crypto</module>
     <module>mercury-util</module>
-    <module>mercury-it</module>
     <module>wagon-mercury</module>
   </modules>
 
