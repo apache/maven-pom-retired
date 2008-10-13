@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.apache.maven.mercury</groupId>
+  <artifactId>mercury-transport-http</artifactId>
+  <version>1.0.0-alpha-2-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <localCopy>true</localCopy>
+    </snapshot>
+    <lastUpdated>20081009213718</lastUpdated>
+     <versions>
+        <version>1.0.0-alpha-2-20081006.174832-2</version>
+        <version>1.0.0-alpha-2-20081006.174832-9</version>
+        <version>1.0.0-alpha-2-20081006.174840-10</version>
+        <version>1.0.0-alpha-2-20081006.174840-11</version>
+     </versions>
+  </versioning>
+</metadata>

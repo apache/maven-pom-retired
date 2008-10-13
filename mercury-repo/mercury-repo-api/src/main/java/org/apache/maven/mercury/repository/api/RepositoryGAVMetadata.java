@@ -26,16 +26,20 @@ public class RepositoryGAVMetadata
 {
   private static final Language _lang = new DefaultLanguage( RepositoryGAVMetadata.class );
   
-  ArtifactCoordinates gav;
+  protected ArtifactCoordinates gav;
   
   /** a list of last discovered snapshots, ordered descending */
-  protected TreeSet<String> snapshots;
+  protected TreeSet<String> snapshots = new TreeSet<String>( new VersionComparator() );
 
   /** a list of last discovered versions, ordered ascending */
   protected Collection<String> classifiers;
   
   /** GMT timestamp of the last metadata check */
   protected long lastCheck;
+  
+  protected RepositoryGAVMetadata()
+  {
+  }
 
   /**
    * initialization of md object from scratch
@@ -47,8 +51,6 @@ public class RepositoryGAVMetadata
   {
     this.gav = gav;
 
-    this.snapshots = new TreeSet<String>( new VersionComparator() );
-    
     if( !Util.isEmpty( snapshots ) )
       this.snapshots.addAll( snapshots );
     
@@ -72,8 +74,6 @@ public class RepositoryGAVMetadata
     
     this.gav = new ArtifactCoordinates( md.getGroupId(), md.getArtifactId(), md.getVersion() );
 
-    this.snapshots = new TreeSet<String>( new VersionComparator() );
-    
     List<String> versions = null;
     
     if( md.getVersioning() != null )

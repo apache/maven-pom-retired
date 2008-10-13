@@ -2,6 +2,7 @@ package org.apache.maven.mercury.repository.local.m2;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
+import org.apache.maven.mercury.util.FileUtil;
 
 /**
  * artifact relative location data object - used by repositories to hold on to intermediate path calculations 
@@ -13,10 +14,6 @@ import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
  */
 public class ArtifactLocation
 {
-  public static final String SEP = "/";
-  public static final char   SEP_CHAR = SEP.charAt( 0 );
-  public static final String DASH = "-";
-  public static final char   DASH_CHAR = DASH.charAt( 0 );
   public static final String POM_EXT = ".pom";
 
   private String prefix;
@@ -38,7 +35,7 @@ public class ArtifactLocation
     this.bmd = bmd;
 
     this.prefix     = prefix;
-    this.gaPath     = bmd.getGroupId().replace( '.', SEP_CHAR ) + SEP + bmd.getArtifactId();
+    this.gaPath     = bmd.getGroupId().replace( '.', FileUtil.SEP_CHAR ) + FileUtil.SEP + bmd.getArtifactId();
     this.version    = bmd.getVersion();
     this.baseName   = bmd.getArtifactId();
     this.versionDir = this.version;
@@ -48,12 +45,12 @@ public class ArtifactLocation
   
   public String getRelPath()
   {
-    return gaPath+SEP+versionDir+SEP+baseName+DASH+version+getDashedClassifier()+'.'+type;
+    return gaPath+FileUtil.SEP+versionDir+FileUtil.SEP+baseName+FileUtil.DASH+version+getDashedClassifier()+'.'+type;
   }
   
   public String getRelPomPath()
   {
-    return gaPath+SEP+versionDir+SEP+baseName+DASH+version+POM_EXT;
+    return gaPath+FileUtil.SEP+versionDir+FileUtil.SEP+baseName+FileUtil.DASH+version+POM_EXT;
   }
   
   public String getAbsPath()
@@ -74,7 +71,7 @@ public class ArtifactLocation
   
   public String getGavPath()
   {
-    return getGaPath()+SEP+versionDir;
+    return getGaPath()+FileUtil.SEP+versionDir;
   }
   
   public String getBaseVersion()
@@ -125,7 +122,7 @@ public class ArtifactLocation
   }
   public String getDashedClassifier()
   {
-    return (classifier == null||classifier.length()<1) ? "" : DASH+classifier;
+    return (classifier == null||classifier.length()<1) ? "" : FileUtil.DASH+classifier;
   }
   public void setClassifier( String classifier )
   {
@@ -148,7 +145,7 @@ public class ArtifactLocation
     if( prefix == null )
       return null;
 
-    return prefix+(prefix.endsWith( SEP ) ? "" : SEP);
+    return prefix+(prefix.endsWith( FileUtil.SEP ) ? "" : FileUtil.SEP);
   }
   public void setPrefix( String prefix )
   {

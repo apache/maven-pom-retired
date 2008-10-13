@@ -142,7 +142,7 @@ implements RepositoryReader, MetadataReader
   {
     ArtifactLocation loc = new ArtifactLocation( root, bmd );
 
-    byte [] mdBytes = readRawData( loc.getGaPath()+loc.SEP+ _repo.getMetadataName() );
+    byte [] mdBytes = readRawData( loc.getGaPath()+FileUtil.SEP+ _repo.getMetadataName() );
     if( mdBytes == null )
       throw new RepositoryException( _lang.getMessage( "no.group.md", _repo.getServer().getURL().toString(), loc.getGaPath() ) );
       
@@ -193,7 +193,7 @@ implements RepositoryReader, MetadataReader
     // time stamped snapshot requested
     else if( vq.equals( Quality.SNAPSHOT_TS_QUALITY ))
     {
-      loc.setVersionDir( loc.getBaseVersion()+loc.DASH+Artifact.SNAPSHOT_VERSION );
+      loc.setVersionDir( loc.getBaseVersion()+FileUtil.DASH+Artifact.SNAPSHOT_VERSION );
     }
     
     return loc;
@@ -380,7 +380,7 @@ implements RepositoryReader, MetadataReader
       byte[] mavenMetadata;
       try
       {
-        mavenMetadata = readRawData( loc.getGaPath()+loc.SEP+_repo.getMetadataName() );
+        mavenMetadata = readRawData( loc.getGaPath()+FileUtil.SEP+_repo.getMetadataName() );
       }
       catch( MetadataReaderException e )
       {
@@ -403,7 +403,7 @@ implements RepositoryReader, MetadataReader
 
       if( mmd == null || mmd.getVersioning() == null )
       {
-        _log.warn( _lang.getMessage( "maven.bad.metadata", loc.getGaPath()+loc.SEP+_repo.getMetadataName(), _repo.getId() ) );
+        _log.warn( _lang.getMessage( "maven.bad.metadata", loc.getGaPath()+FileUtil.SEP+_repo.getMetadataName(), _repo.getId() ) );
         continue;
       }
       
@@ -411,7 +411,7 @@ implements RepositoryReader, MetadataReader
 
       if( mmd == null || mmd.getVersioning() == null )
       {
-        _log.warn( _lang.getMessage( "maven.metadata.no.versions", loc.getGaPath()+loc.SEP+_repo.getMetadataName(), _repo.getId() ) );
+        _log.warn( _lang.getMessage( "maven.metadata.no.versions", loc.getGaPath()+FileUtil.SEP+_repo.getMetadataName(), _repo.getId() ) );
         continue;
       }
 

@@ -1,0 +1,12 @@
+<metadata>
+  <groupId>activemq</groupId>
+  <artifactId>activemq-jaas</artifactId>
+  <version>4.0-M1</version>
+  <versioning>
+    <versions>
+      <version>4.0-M1</version>
+      <version>4.0-M2</version>
+      <version>4.0-M3</version>
+    </versions>
+  </versioning>
+</metadata>

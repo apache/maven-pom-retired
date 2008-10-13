@@ -5,7 +5,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,8 +49,15 @@ import org.codehaus.plexus.lang.Language;
  */
 public class FileUtil
 {
+  public static final String SEP = "/";
+  public static final char   SEP_CHAR = SEP.charAt( 0 );
+
+  public static final String DASH = "-";
+  public static final char   DASH_CHAR = DASH.charAt( 0 );
+
   public static final String LOCK_FILE = ".lock";
   public static final String DEFAULT_CHARSET = "utf-8";
+  
   public static final int    K = 1024;
   public static final int    DEFAULT_BUFFER_SIZE = 10 * K;
   //---------------------------------------------------------------------------------------------------------------

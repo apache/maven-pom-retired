@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.maven.mercury</groupId>
+  <parent>
+  	<groupId>org.apache.maven.mercury</groupId>
+  	<artifactId>mercury-repo</artifactId>
+  	<version>1.0.0-alpha-2-SNAPSHOT</version>
+  </parent>
+  <artifactId>mercury-repo-cache-fs</artifactId>
+  <name>Mercury Repository FS Cahe:     ${project.version}</name>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-maven-plugin</artifactId>
+        <!--
+        <version>1.0-alpha-17</version>
+        -->
+        <configuration>
+          <version>1.0.0</version>
+          <model>src/main/mdo/cached-metadata.mdo</model>
+        </configuration>
+        <executions>
+          <execution>
+            <id>standard</id>
+            <goals>
+              <goal>java</goal>
+              <goal>xpp3-reader</goal>
+              <goal>xpp3-writer</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+  </plugins>
+  </build>
+  
+  <dependencies>
+  	<dependency>
+  		<groupId>org.apache.maven.mercury</groupId>
+  		<artifactId>mercury-repo-api</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>
+  </dependencies>
+</project>

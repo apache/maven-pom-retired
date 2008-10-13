@@ -26,13 +26,17 @@ public class RepositoryGAMetadata
 {
   private static final Language _lang = new DefaultLanguage( RepositoryGAVMetadata.class );
   
-  ArtifactCoordinates ga;
+  protected ArtifactCoordinates ga;
 
   /** a list of last discovered versions, ordered ascending */
-  protected TreeSet<String> versions;
+  protected TreeSet<String> versions = new TreeSet<String>( new VersionComparator() );
   
   /** GMT timestamp of the last metadata check */
   protected long lastCheck;
+
+  protected RepositoryGAMetadata()
+  {
+  }
 
   /**
    * @param versions
@@ -41,7 +45,6 @@ public class RepositoryGAMetadata
   public RepositoryGAMetadata( ArtifactCoordinates ga, Collection<String> versions )
   {
     this.ga = ga;
-    this.versions = new TreeSet<String>( new VersionComparator() );
     
     if( ! Util.isEmpty( versions ) )
       this.versions.addAll( versions );
@@ -64,8 +67,6 @@ public class RepositoryGAMetadata
     
     this.ga = new ArtifactCoordinates( md.getGroupId(), md.getArtifactId(), md.getVersion() );
 
-    this.versions = new TreeSet<String>( new VersionComparator() );
-    
     List<String> vers = null;
     
     if( md.getVersioning() != null )

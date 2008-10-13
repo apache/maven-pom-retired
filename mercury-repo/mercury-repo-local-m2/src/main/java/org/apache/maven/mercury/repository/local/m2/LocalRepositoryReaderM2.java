@@ -161,7 +161,7 @@ implements RepositoryReader, MetadataReader
     // time stamped snapshot requested
     else if( vq.equals( Quality.SNAPSHOT_TS_QUALITY ))
     {
-      loc.setVersionDir( loc.getBaseVersion()+loc.DASH+Artifact.SNAPSHOT_VERSION );
+      loc.setVersionDir( loc.getBaseVersion()+FileUtil.DASH+Artifact.SNAPSHOT_VERSION );
     }
     
     return loc;
