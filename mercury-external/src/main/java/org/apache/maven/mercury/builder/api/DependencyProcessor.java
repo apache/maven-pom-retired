@@ -7,6 +7,16 @@ import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 
 public interface DependencyProcessor
 {
-    List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Hashtable env )
-    throws MetadataReaderException;
+  
+  public static final DependencyProcessor NULL_PROCESSOR = 
+                        new DependencyProcessor() {
+                          public List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Hashtable env )
+                          throws MetadataReaderException
+                          {
+                            return null;
+                          }
+                        };
+
+  List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Hashtable env )
+  throws MetadataReaderException;
 }

@@ -8,23 +8,21 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.mercury.artifact.Artifact;
-import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
+import org.apache.maven.mercury.artifact.DefaultArtifact;
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
-import org.apache.maven.mercury.builder.api.MetadataReader;
-import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.AbstractRepositoryWriter;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
+import org.apache.maven.mercury.repository.api.RepositoryGAMetadata;
+import org.apache.maven.mercury.repository.api.RepositoryGAVMetadata;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
 import org.apache.maven.mercury.repository.metadata.AddVersionOperation;
@@ -76,16 +74,7 @@ implements RepositoryWriter
 
     _repo = repo;
     
-    _reader = _repo.getReader( 
-        new DependencyProcessor() {
-
-      public List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Hashtable env )
-      throws MetadataReaderException
-      {
-        return null;
-      }
-                                }
-                              );
+    _reader = _repo.getReader( DependencyProcessor.NULL_PROCESSOR );
 
     try
     {
@@ -236,6 +225,8 @@ implements RepositoryWriter
         mdOp = new AddVersionOperation( new StringOperand(artifact.getVersion()) ); 
       
       byte [] gaResBytes = MetadataBuilder.changeMetadata( md, mdOp );
+      Metadata gaMd = MetadataBuilder.getMetadata( gaResBytes );
+      
       bindings.add( new Binding(new URL(gaMdUrl), new ByteArrayInputStream(gaResBytes)) );
 
       // now - GAV metadata
@@ -250,6 +241,8 @@ implements RepositoryWriter
       }
       
       byte [] gavResBytes = MetadataBuilder.changeMetadata( md, mdOp );
+      Metadata gavMd = MetadataBuilder.getMetadata( gavResBytes );
+      
       bindings.add( new Binding( new URL(gavMdUrl), new ByteArrayInputStream(gavResBytes)) );
       
       if( !isPom && hasPomBlob )
@@ -265,6 +258,15 @@ implements RepositoryWriter
       
       if( response.hasExceptions() )
         throw new RepositoryException( response.getExceptions().toString() );
+      
+      if( _mdCache != null )
+      {
+        // cache metadata
+        _mdCache.updateGA( _repo.getId(), new RepositoryGAMetadata(gaMd) );
+        _mdCache.updateGAV( _repo.getId(), new RepositoryGAVMetadata(gavMd) );
+        if( hasPomBlob && DefaultArtifact.class.isAssignableFrom( artifact.getClass() ) )
+          _mdCache.saveRaw( (DefaultArtifact)artifact, pomBlob );
+      }
         
     }
     catch( Exception e )
