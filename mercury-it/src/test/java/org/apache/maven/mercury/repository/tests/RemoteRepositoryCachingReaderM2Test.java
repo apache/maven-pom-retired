@@ -12,8 +12,11 @@ import java.util.List;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
+import org.apache.maven.mercury.repository.api.RemoteRepository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
-import org.apache.maven.mercury.repository.cache.fs.MetadataCacheFs;
+import org.apache.maven.mercury.repository.api.RepositoryMetadataCache;
+import org.apache.maven.mercury.repository.api.RepositoryUpdateIntervalPolicy;
+import org.apache.maven.mercury.repository.api.RepositoryUpdatePolicy;
 import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
 import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Reader;
@@ -27,7 +30,7 @@ import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-public class RemoteRepositoryReaderM2Test
+public class RemoteRepositoryCachingReaderM2Test
 extends AbstractRepositoryReaderM2Test
 {
   MetadataXpp3Reader _reader;
@@ -36,19 +39,11 @@ extends AbstractRepositoryReaderM2Test
   public String _port;
   HttpTestServer _server;
   DefaultRetrievalRequest _request;
+
+  RepositoryMetadataCache _mdCache;
+  File _cacheBase;
+
   
-//  List<ArtifactBasicMetadata> query;
-//  MetadataProcessor mdProcessor;
-//  ArtifactBasicMetadata bmd;
-//
-//  Server server;
-//  RemoteRepositoryM2 repo;
-//  
-//  RepositoryReader reader;
-//  
-//  // setting this to true will add aonatype nexus tests
-//  String nexusUrl = System.getProperty( "mercury.nexus.url", null );
-//
 
   //-------------------------------------------------------------------------
   @Override
@@ -68,8 +63,23 @@ extends AbstractRepositoryReaderM2Test
     query = new ArrayList<ArtifactBasicMetadata>();
 
     server = new Server( "test", new URL("http://localhost:"+_port+"/repo") );
+    
+    RepositoryUpdatePolicy up = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.UPDATE_POLICY_DAILY );
+    
     repo = new RemoteRepositoryM2( "testRepo", server );
+    ((RemoteRepository)repo).setUpdatePolicy( up );
+    
+    
     reader = repo.getReader( new MetadataProcessorMock() );
+
+    _cacheBase = new File( _testBase, VirtualRepositoryReader.METADATA_CACHE_DIR );
+    _cacheBase.delete();
+    _cacheBase.mkdirs();
+    
+    _mdCache = VirtualRepositoryReader.getCache( _testBase );
+    
+    reader.setMetadataCache( _mdCache );
+    
   }
   //-------------------------------------------------------------------------
   @Override
@@ -102,29 +112,10 @@ extends AbstractRepositoryReaderM2Test
      Metadata mmd = _reader.read( fis );
      fis.close();
      validateMmd( mmd );
-  }
-  //-------------------------------------------------------------------------
-  public void testReadRemoteMdViaHttpClient()
-  throws FileNotFoundException, IOException, XmlPullParserException
-  {
-    File temp = File.createTempFile("maven", "metadata" );
-    HashSet<Binding> bindings = new HashSet<Binding>();
-    
-    Binding aaMdBinding = new Binding( new URL("http://localhost:"+_port+"/repo/a/a/maven-metadata.xml"), temp);
-    bindings.add( aaMdBinding );
-    
-    _request.setBindings(bindings);
-    
-    RetrievalResponse response = _retriever.retrieve(_request);
-    
-    if( response.hasExceptions() )
-      fail("retrieval exceptions: "+response.getExceptions()+"\nReading from "+aaMdBinding.getRemoteResource() );
-    
-    Metadata mmd = _reader.read( new FileInputStream( temp ) );
-    temp.delete();
-    
-    validateMmd( mmd );
-    
+     
+     File cachedMd = new File( _cacheBase, "a/a/"+"meta-ga-"+repo.getId()+".xml" );
+     
+     assertTrue( cachedMd.exists() );
   }
   //-------------------------------------------------------------------------
   public void testReadRemoteMdViaRepositoryReader()
@@ -141,6 +132,35 @@ extends AbstractRepositoryReaderM2Test
     bais.close();
     
     validateMmd( mmd );
+    
+    File cachedMd = new File( _cacheBase, "a/a/"+"meta-ga-"+repo.getId()+".xml" );
+    
+    assertTrue( cachedMd.exists() );
+  }
+  //-------------------------------------------------------------------------
+  @Override
+  public void testReadLatest()
+      throws IllegalArgumentException,
+      RepositoryException
+  {
+    super.testReadLatest();
+
+    File cachedMd = new File( _cacheBase, "a/a/"+"meta-ga-"+repo.getId()+".xml" );
+    
+    assertTrue( cachedMd.exists() );
+
+    File cachedVMd = new File( _cacheBase, "a/a/a-5-SNAPSHOT/"+"meta-gav-"+repo.getId()+".xml" );
+    
+    assertTrue( cachedVMd.exists() );
+  }
+  //-------------------------------------------------------------------------
+  @Override
+  public void testReadRelease()
+      throws IllegalArgumentException,
+      RepositoryException
+  {
+    // TODO Auto-generated method stub
+    super.testReadRelease();
   }
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------

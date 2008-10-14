@@ -37,6 +37,9 @@ public class RepositoryGAVMetadata
   /** GMT timestamp of the last metadata check */
   protected long lastCheck;
   
+  /** is set true by cache implementation when determined that it's time to refresh */
+  protected transient boolean expired = false;
+  
   protected RepositoryGAVMetadata()
   {
   }
@@ -57,20 +60,18 @@ public class RepositoryGAVMetadata
     this.classifiers = classifiers;
     this.lastCheck = TimeUtil.getUTCTimestampAsLong();
   }
+  
   /**
-   * initialization of md object from old metadata object bytes
+   * construct from maven 2.x maven-metadata.xml object
    * 
-   * @param versions
-   * @param lastCheck
+   * @param md
    * @throws MetadataException 
    */
-  public RepositoryGAVMetadata( byte [] mdBytes )
+  public RepositoryGAVMetadata( Metadata md )
   throws MetadataException
   {
-    if( Util.isEmpty( mdBytes ) )
+    if( md == null )
       throw new IllegalArgumentException( _lang.getMessage( "empty.mdbytes" ) );
-    
-    Metadata md = MetadataBuilder.getMetadata( mdBytes );
     
     this.gav = new ArtifactCoordinates( md.getGroupId(), md.getArtifactId(), md.getVersion() );
 
@@ -79,12 +80,29 @@ public class RepositoryGAVMetadata
     if( md.getVersioning() != null )
       versions = md.getVersioning().getVersions(); 
       
-    if( !Util.isEmpty( versions ) && md.getVersioning().getSnapshot() != null )
+    if( !Util.isEmpty( versions ) )
       this.snapshots.addAll( versions );
     
     this.lastCheck = TimeUtil.getUTCTimestampAsLong();
   }
 
+  /**
+   * copy constructor
+   * 
+   * @param md
+   * @throws MetadataException 
+   */
+  public RepositoryGAVMetadata( RepositoryGAVMetadata md )
+  throws MetadataException
+  {
+    this.gav = md.getGAV();
+
+    if( ! Util.isEmpty( md.getSnapshots() ) )
+      this.snapshots.addAll( md.getSnapshots() );
+    
+    this.lastCheck = TimeUtil.getUTCTimestampAsLong();
+  }
+  
   public TreeSet<String> getSnapshots()
   {
     return snapshots;
@@ -130,6 +148,16 @@ public class RepositoryGAVMetadata
   public ArtifactCoordinates getGAV()
   {
     return gav;
+  }
+
+  public boolean isExpired()
+  {
+    return expired;
+  }
+
+  public void setExpired( boolean expired )
+  {
+    this.expired = expired;
   }
 
 }

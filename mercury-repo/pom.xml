@@ -16,6 +16,7 @@
     <module>mercury-repo-local-m2</module>
     <module>mercury-repo-remote-m2</module>
     <module>mercury-repo-cache-fs</module>
+    <module>mercury-repo-virtual</module>
   </modules>
 
 </project>

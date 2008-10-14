@@ -31,4 +31,17 @@ extends Repository
    *  this is the Server with many useful fields to describe the home of this remote repo
    */
     Server getServer();
+    
+    /**
+     * get the update policy configured for this remote repository
+     * 
+     * @return the policy or null, if it does not exist
+     */
+    RepositoryUpdatePolicy getUpdatePolicy();
+
+    /**
+     * set the update policy configured for this remote repository
+     * 
+     */
+    void setUpdatePolicy( RepositoryUpdatePolicy updatePolicy );
 }

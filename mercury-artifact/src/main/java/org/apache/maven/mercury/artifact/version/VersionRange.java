@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.artifact.version;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.maven.mercury.artifact.Artifact;
@@ -186,7 +187,7 @@ public class VersionRange
    * @param noSnapshots
    * @return
    */
-  public static final String findLatest( final List<String> versions, final boolean noSnapshots )
+  public static final String findLatest( final Collection<String> versions, final boolean noSnapshots )
   {
     DefaultArtifactVersion tempDav = null;
     DefaultArtifactVersion tempDav2 = null;

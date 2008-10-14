@@ -39,10 +39,10 @@ extends RepositoryGAVMetadata
     fromXml();
   }
   
-  public CachedGAVMetadata( byte [] mdBytes )
+  public CachedGAVMetadata( RepositoryGAVMetadata gavm )
   throws MetadataException
   {
-    super( mdBytes );
+    super( gavm );
     
     cm = new CachedMetadata();
     

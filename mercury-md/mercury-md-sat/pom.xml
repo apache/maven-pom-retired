@@ -60,7 +60,7 @@
   	</dependency>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-repo-api</artifactId>
+  		<artifactId>mercury-repo-virtual</artifactId>
   		<version>${project.version}</version>
   	</dependency>
 	<!--  test deps -->

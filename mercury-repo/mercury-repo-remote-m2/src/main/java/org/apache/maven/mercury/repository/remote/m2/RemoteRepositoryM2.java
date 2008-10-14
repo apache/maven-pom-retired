@@ -7,6 +7,8 @@ import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
+import org.apache.maven.mercury.repository.api.RepositoryUpdateIntervalPolicy;
+import org.apache.maven.mercury.repository.api.RepositoryUpdatePolicy;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
 import org.apache.maven.mercury.transport.api.Server;
 
@@ -16,6 +18,10 @@ extends AbstractRepository
 implements RemoteRepository
 {
     private Server _server;
+    
+    /** default update policy */
+    private RepositoryUpdatePolicy _updatePolicy = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.DEFAULT_UPDATE_POLICY );
+    
     //----------------------------------------------------------------------------------
     public RemoteRepositoryM2( String id, Server server  )
     {
@@ -68,6 +74,17 @@ implements RemoteRepository
       return DEFAULT_REPOSITORY_TYPE;
     }
     //----------------------------------------------------------------------------------
+
+    public RepositoryUpdatePolicy getUpdatePolicy()
+    {
+      return _updatePolicy;
+    }
+
+    public void setUpdatePolicy( RepositoryUpdatePolicy updatePolicy )
+    {
+      this._updatePolicy = updatePolicy;
+    }
+    
     //----------------------------------------------------------------------------------
     /* (non-Javadoc)
      * @see org.apache.maven.mercury.repository.api.RemoteRepository#addLocalRepository(org.apache.maven.mercury.repository.api.LocalRepository)

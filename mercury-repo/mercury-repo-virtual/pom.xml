@@ -12,7 +12,7 @@
   <dependencies>
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-repo-api</artifactId>
+  		<artifactId>mercury-repo-cache-fs</artifactId>
   		<version>${project.version}</version>
   	</dependency>
   </dependencies>

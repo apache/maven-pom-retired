@@ -26,6 +26,8 @@ implements RepositoryUpdatePolicy
   public static final String UPDATE_POLICY_INTERVAL = "interval";
   private static final int UPDATE_POLICY_INTERVAL_LENGTH = UPDATE_POLICY_INTERVAL.length();
   
+  public static final String DEFAULT_UPDATE_POLICY = UPDATE_POLICY_DAILY;
+
   private static final long NEVER = -1L;
   
   private static final long DAYLY = 3600000L*24L;
@@ -65,7 +67,7 @@ implements RepositoryUpdatePolicy
        throw new IllegalArgumentException( _lang.getMessage( "bad.policy", policy ));
   }
 
-  public boolean timeToUpdate( long lastUpdate )
+  public boolean timestampExpired( long lastUpdate )
   {
     long now =System.currentTimeMillis();
     

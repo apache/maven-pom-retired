@@ -1,5 +1,7 @@
 package org.apache.maven.mercury.repository.virtual;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryMetadataCache;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
+import org.apache.maven.mercury.repository.cache.fs.MetadataCacheFs;
 
 /**
  * this helper class hides the necessity to talk to localRepo and a bunch of remoteRepos.
@@ -31,6 +34,8 @@ import org.apache.maven.mercury.repository.api.RepositoryReader;
 public class VirtualRepositoryReader
 implements MetadataReader
 {
+  public static final String METADATA_CACHE_DIR = ".cache";
+
   //----------------------------------------------------------------------------------------------------------------------------
   private List<Repository>       _repositories = new ArrayList<Repository>(8);
 
@@ -47,10 +52,9 @@ implements MetadataReader
   private boolean _initialized = false;
   //----------------------------------------------------------------------------------------------------------------------------
   public VirtualRepositoryReader(
-                  LocalRepository localRepository
+                  LocalRepository        localRepository
                 , List<RemoteRepository> remoteRepositories
-                , DependencyProcessor processor
-                , RepositoryMetadataCache mdCache
+                , DependencyProcessor    processor
                           )
   throws RepositoryException
   {
@@ -59,6 +63,7 @@ implements MetadataReader
     
     if( processor == null )
       throw new RepositoryException( "null metadata processor" );
+
     this._processor = processor;
     
     this._localRepository = localRepository;
@@ -67,11 +72,9 @@ implements MetadataReader
     
     if( remoteRepositories != null && remoteRepositories.size() > 0 )
       this._repositories.addAll( remoteRepositories );
-    
-    this._mdCache = mdCache;
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  public VirtualRepositoryReader( List<Repository> repositories, DependencyProcessor processor, RepositoryMetadataCache mdCache  )
+  public VirtualRepositoryReader( List<Repository> repositories, DependencyProcessor processor  )
   throws RepositoryException
   {
     if( processor == null )
@@ -80,8 +83,6 @@ implements MetadataReader
 
     if( repositories != null && repositories.size() > 0 )
       this._repositories.addAll( repositories );
-    
-    this._mdCache = mdCache;
   }
   //----------------------------------------------------------------------------------------------------------------------------
   public VirtualRepositoryReader( Repository... repositories )
@@ -90,6 +91,14 @@ implements MetadataReader
     if( repositories != null && repositories.length > 0 )
       for( Repository r : repositories )
         this._repositories.add( r );
+  }
+  //----------------------------------------------------------------------------------------------------------------------------
+  public static final RepositoryMetadataCache getCache( File localRepositoryRoot )
+  throws IOException
+  {
+    // TODO: 2008-10-13 og: man - I miss plexus! Badly want an IOC container. This 
+    // should be configured, not hardcoded
+    return MetadataCacheFs.getCache( new File(localRepositoryRoot, METADATA_CACHE_DIR) );
   }
   //----------------------------------------------------------------------------------------------------------------------------
   public void addRepository( Repository repo )
@@ -106,15 +115,16 @@ implements MetadataReader
     _processors = processors; 
   }
   //----------------------------------------------------------------------------------------------------------------------------
+  /**
+   * very important call - makes VRR sort out all the information it collected so far 
+   */
   public void init()
   throws RepositoryException
   {
     if( _initialized )
       return;
     
-    int repositoryCount = _repositories.size();
-    
-    _repositoryReaders = new RepositoryReader[ repositoryCount ];
+    _repositoryReaders = new RepositoryReader[ _repositories.size() ];
     
     // move local repo's upfront - they are faster!
     int i = 0;
@@ -125,36 +135,36 @@ implements MetadataReader
       
       _repositoryReaders[ i++ ] = r.getReader(_processor);
       if( ! r.isReadOnly() )
+      {
         _localRepository = (LocalRepository)r.getReader(_processor).getRepository();
+        if( _mdCache == null )
+        {
+          try
+          {
+            _mdCache = getCache( _localRepository.getDirectory() );
+          }
+          catch( IOException e )
+          {
+            throw new RepositoryException( e.getMessage() );
+          }
+        }
+      }
     }
     
-    // the rest
+    // remote ones
     for( Repository r : _repositories )
     {
       if( r.isLocal() )
         continue;
+      
+      RepositoryReader rr = r.getReader(_processor);
+      
+      if( _mdCache != null )
+        rr.setMetadataCache( _mdCache );
 
-      _repositoryReaders[ i++ ] = r.getReader(_processor);
+      _repositoryReaders[ i++ ] = rr;
     }
     _initialized = true;
-  }
-  //----------------------------------------------------------------------------------------------------------------------------
-  /**
-   * 
-   * 
-   * @param query
-   * @param reader
-   * @param res
-   * @return
-   */
-  private List<ArtifactBasicMetadata> applyScanPolicy(
-                                          List<ArtifactBasicMetadata> query
-                                        , RepositoryReader reader
-                                        , AbstractRepOpResult res 
-                                                    )
-  {
-    // TODO 2008-08-26 og: implement real policy
-    return query;
   }
   //----------------------------------------------------------------------------------------------------------------------------
   public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
@@ -170,9 +180,7 @@ implements MetadataReader
 
     for( RepositoryReader rr : _repositoryReaders )
     {
-      List<ArtifactBasicMetadata> leftOvers = applyScanPolicy( query, rr, res );
-
-      ArtifactBasicResults repoRes = rr.readVersions( leftOvers );
+      ArtifactBasicResults repoRes = rr.readVersions( query );
       
       if( repoRes != null && repoRes.hasResults() )
         for( ArtifactBasicMetadata key : repoRes.getResults().keySet() )

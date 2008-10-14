@@ -41,7 +41,7 @@ public class CachedGATest
     
     omd = MetadataBuilder.getMetadata( mdBytes );
     
-    gam = new CachedGAMetadata( mdBytes );
+    gam = new CachedGAMetadata( new RepositoryGAMetadata(omd) );
   }
   
   public void testData()

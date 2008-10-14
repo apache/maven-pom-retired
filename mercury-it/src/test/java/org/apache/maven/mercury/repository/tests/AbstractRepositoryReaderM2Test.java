@@ -2,6 +2,7 @@ package org.apache.maven.mercury.repository.tests;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.TestCase;
 
@@ -218,7 +219,15 @@ extends TestCase
     assertNotNull( ror );
     
     if( ror.hasExceptions() )
-      System.out.println( ror.getExceptions() );
+    {
+      Map<ArtifactBasicMetadata, Exception> exs = ror.getExceptions();
+      
+      for( ArtifactBasicMetadata bmd : exs.keySet() )
+      {
+        System.out.println( "\n==========> "+bmd.toString());
+        exs.get( bmd ).printStackTrace();
+      }
+    }
     
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );

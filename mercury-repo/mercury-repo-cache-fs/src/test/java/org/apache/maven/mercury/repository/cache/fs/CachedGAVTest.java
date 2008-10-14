@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.maven.mercury.artifact.ArtifactCoordinates;
 import org.apache.maven.mercury.repository.api.RepositoryGAMetadata;
+import org.apache.maven.mercury.repository.api.RepositoryGAVMetadata;
 import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.MetadataBuilder;
 import org.apache.maven.mercury.util.FileUtil;
@@ -41,7 +42,7 @@ public class CachedGAVTest
     
     omd = MetadataBuilder.getMetadata( mdBytes );
     
-    gam = new CachedGAVMetadata( mdBytes );
+    gam = new CachedGAVMetadata( new RepositoryGAVMetadata(omd) );
   }
   
   public void testData()

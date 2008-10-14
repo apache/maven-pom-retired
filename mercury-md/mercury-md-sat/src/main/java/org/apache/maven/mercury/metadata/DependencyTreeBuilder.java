@@ -17,7 +17,7 @@ import org.apache.maven.mercury.metadata.sat.SatException;
 import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
-import org.apache.maven.mercury.repository.api.VirtualRepositoryReader;
+import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
@@ -78,7 +78,7 @@ public class DependencyTreeBuilder
     if( processors != null )
       _processors = processors;
     
-    this._reader = new VirtualRepositoryReader( repositories, processor, null );
+    this._reader = new VirtualRepositoryReader( repositories, processor );
   }
   //------------------------------------------------------------------------
   /**

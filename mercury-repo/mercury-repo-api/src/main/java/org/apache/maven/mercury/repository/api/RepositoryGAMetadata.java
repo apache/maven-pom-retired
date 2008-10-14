@@ -33,6 +33,9 @@ public class RepositoryGAMetadata
   
   /** GMT timestamp of the last metadata check */
   protected long lastCheck;
+  
+  /** is set true by cache implementation when determined that it's time to refresh */
+  protected transient boolean expired = false;
 
   protected RepositoryGAMetadata()
   {
@@ -53,17 +56,16 @@ public class RepositoryGAMetadata
   }
 
   /**
-   * @param versions
-   * @param lastCheck
+   * construct from maven 2.x maven-metadata.xml object
+   * 
+   * @param md
    * @throws MetadataException 
    */
-  public RepositoryGAMetadata( byte [] mdBytes )
+  public RepositoryGAMetadata( Metadata md )
   throws MetadataException
   {
-    if( Util.isEmpty( mdBytes ) )
-      throw new IllegalArgumentException( _lang.getMessage( "empty.mdbytes" ) );
-    
-    Metadata md = MetadataBuilder.getMetadata( mdBytes );
+    if( md == null )
+      throw new IllegalArgumentException( _lang.getMessage( "empty.md" ) );
     
     this.ga = new ArtifactCoordinates( md.getGroupId(), md.getArtifactId(), md.getVersion() );
 
@@ -74,8 +76,26 @@ public class RepositoryGAMetadata
       vers = md.getVersioning().getVersions();
       this.versions.addAll( vers );
     }
-      
     
+    this.lastCheck = TimeUtil.getUTCTimestampAsLong();
+  }
+  
+  /**
+   * copy constructor
+   * 
+   * @param md
+   * @throws MetadataException 
+   */
+  public RepositoryGAMetadata( RepositoryGAMetadata md )
+  throws MetadataException
+  {    
+    this.ga = md.getGA();
+
+    if( !Util.isEmpty( md.getVersions() ) )
+    {
+      this.versions.addAll( md.getVersions() );
+    }
+
     this.lastCheck = TimeUtil.getUTCTimestampAsLong();
   }
 
@@ -98,6 +118,16 @@ public class RepositoryGAMetadata
   public ArtifactCoordinates getGA()
   {
     return ga;
+  }
+
+  public boolean isExpired()
+  {
+    return expired;
+  }
+
+  public void setExpired( boolean expired )
+  {
+    this.expired = expired;
   }
 
 }
