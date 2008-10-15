@@ -3,9 +3,12 @@ package org.apache.maven.mercury.repository.virtual;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessor;
@@ -13,15 +16,19 @@ import org.apache.maven.mercury.artifact.api.ArtifactListProcessorException;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
-import org.apache.maven.mercury.repository.api.AbstractRepOpResult;
 import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
+import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryMetadataCache;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
+import org.apache.maven.mercury.repository.api.RepositoryWriter;
 import org.apache.maven.mercury.repository.cache.fs.MetadataCacheFs;
+import org.apache.maven.mercury.util.Util;
+import org.codehaus.plexus.lang.DefaultLanguage;
+import org.codehaus.plexus.lang.Language;
 
 /**
  * this helper class hides the necessity to talk to localRepo and a bunch of remoteRepos.
@@ -34,7 +41,14 @@ import org.apache.maven.mercury.repository.cache.fs.MetadataCacheFs;
 public class VirtualRepositoryReader
 implements MetadataReader
 {
+  /** file system cache subfolder */
   public static final String METADATA_CACHE_DIR = ".cache";
+  
+  /** minimum # of queue elements to consider parallelization */
+  private static int MIN_PARALLEL = 5;
+  
+  private static final Language _lang = new DefaultLanguage( VirtualRepositoryReader.class );
+  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( VirtualRepositoryReader.class ); 
 
   //----------------------------------------------------------------------------------------------------------------------------
   private List<Repository>       _repositories = new ArrayList<Repository>(8);
@@ -42,6 +56,8 @@ implements MetadataReader
   private RepositoryReader[]     _repositoryReaders;
 
   private LocalRepository       _localRepository;
+  
+  private RepositoryWriter      _localRepositoryWriter;
   
   private DependencyProcessor     _processor;
   
@@ -51,9 +67,20 @@ implements MetadataReader
   
   private boolean _initialized = false;
   //----------------------------------------------------------------------------------------------------------------------------
-  public VirtualRepositoryReader(
+  public VirtualRepositoryReader( Collection<Repository> repositories, DependencyProcessor processor  )
+  throws RepositoryException
+  {
+    if( processor == null )
+      throw new RepositoryException( "null metadata processor" );
+    this._processor = processor;
+
+    if( repositories != null && repositories.size() > 0 )
+      this._repositories.addAll( repositories );
+  }
+  //----------------------------------------------------------------------------------------------------------------------------
+  private VirtualRepositoryReader(
                   LocalRepository        localRepository
-                , List<RemoteRepository> remoteRepositories
+                , Collection<RemoteRepository> remoteRepositories
                 , DependencyProcessor    processor
                           )
   throws RepositoryException
@@ -74,18 +101,7 @@ implements MetadataReader
       this._repositories.addAll( remoteRepositories );
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  public VirtualRepositoryReader( List<Repository> repositories, DependencyProcessor processor  )
-  throws RepositoryException
-  {
-    if( processor == null )
-      throw new RepositoryException( "null metadata processor" );
-    this._processor = processor;
-
-    if( repositories != null && repositories.size() > 0 )
-      this._repositories.addAll( repositories );
-  }
-  //----------------------------------------------------------------------------------------------------------------------------
-  public VirtualRepositoryReader( Repository... repositories )
+  private VirtualRepositoryReader( Repository... repositories )
   throws RepositoryException
   {
     if( repositories != null && repositories.length > 0 )
@@ -137,6 +153,8 @@ implements MetadataReader
       if( ! r.isReadOnly() )
       {
         _localRepository = (LocalRepository)r.getReader(_processor).getRepository();
+        _localRepositoryWriter = _localRepository.getWriter();
+        
         if( _mdCache == null )
         {
           try
@@ -174,6 +192,8 @@ implements MetadataReader
       throw new IllegalArgumentException("null bmd supplied");
     
     init();
+    
+    int qSize = query.size();
 
     ArtifactBasicResults res = null;
     ArtifactListProcessor tp = _processors == null ? null : _processors.get( ArtifactListProcessor.FUNCTION_TP );
@@ -227,8 +247,19 @@ implements MetadataReader
     List<ArtifactBasicMetadata> query = new ArrayList<ArtifactBasicMetadata>(1);
     query.add( bmd );
     
-    ArtifactMetadata md = new ArtifactMetadata( bmd ); 
-    for( RepositoryReader rr : _repositoryReaders )
+    ArtifactMetadata md = new ArtifactMetadata( bmd );
+    
+    RepositoryReader [] repos = _repositoryReaders;
+    
+    Object tracker =  bmd.getTracker();
+    
+    // do we know where this metadata came from ?
+    if( tracker != null && RepositoryReader.class.isAssignableFrom( tracker.getClass() ) )
+    {
+      repos = new RepositoryReader [] { (RepositoryReader)tracker };
+    }
+    
+    for( RepositoryReader rr : repos )
     {
       ArtifactBasicResults res = rr.readDependencies( query );
       
@@ -243,18 +274,147 @@ implements MetadataReader
     return md;
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  /* (non-Javadoc)
-   * @see org.apache.maven.mercury.repository.api.MetadataReader#readMetadata(org.apache.maven.mercury.ArtifactBasicMetadata)
+  /**
+   * split query into repository buckets
    */
+  private Map< RepositoryReader, List<ArtifactBasicMetadata> > sortByRepo( List<ArtifactBasicMetadata> query )
+  {
+    HashMap< RepositoryReader, List<ArtifactBasicMetadata> > res = null;
+    
+    List<ArtifactBasicMetadata> rejects = null;
+
+    for( ArtifactBasicMetadata bmd : query )
+    {
+      Object tracker =  bmd.getTracker();
+      
+      // do we know where this metadata came from ?
+      if( tracker != null && RepositoryReader.class.isAssignableFrom( tracker.getClass() ) )
+      {
+        RepositoryReader rr = (RepositoryReader)tracker;
+        
+        if( res == null )
+        {
+          res = new HashMap< RepositoryReader, List<ArtifactBasicMetadata> >();
+        }
+        
+        List<ArtifactBasicMetadata> rl = res.get( rr );
+        
+        if( rl == null )
+        {
+          rl = new ArrayList<ArtifactBasicMetadata>();
+          res.put( rr, rl );
+        }
+        
+        rl.add( bmd );
+          
+      }
+      else
+      {
+        if( rejects == null )
+          rejects = new ArrayList<ArtifactBasicMetadata>();
+        
+        rejects.add( bmd );
+      }
+    }
+
+    if( rejects != null )
+    {
+      if( res == null )
+        res = new HashMap< RepositoryReader, List<ArtifactBasicMetadata> >();
+
+      res.put( RepositoryReader.NULL_READER, rejects );
+    }
+    
+    return res;
+  }
+  //----------------------------------------------------------------------------------------------------------------------------
+  public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
+  throws RepositoryException
+  {
+    ArtifactResults res = null;
+    
+    if( Util.isEmpty( query ) )
+      return res;
+    
+    Map< RepositoryReader, List<ArtifactBasicMetadata> > buckets = sortByRepo( query );
+    
+    List<ArtifactBasicMetadata> rejects = buckets == null ? null : buckets.get( RepositoryReader.NULL_READER );
+
+    if( buckets == null )
+      throw new RepositoryException( _lang.getMessage( "internal.error.sorting.query", query.toString() ) ); 
+      
+    init();
+    
+    // first read repository-qualified Artifacts
+    for( RepositoryReader rr : buckets.keySet() )
+    {
+      if( RepositoryReader.NULL_READER.equals( rr ) )
+        continue;
+      
+      List<ArtifactBasicMetadata> rrQuery = buckets.get( rr );
+      
+      ArtifactResults rrRes = rr.readArtifacts( rrQuery );
+      
+      if( rrRes.hasExceptions() )
+        throw new RepositoryException( _lang.getMessage( "error.reading.existing.artifact", rrRes.getExceptions().toString(), rr.getRepository().getId() ) );
+      
+      if( rrRes.hasResults() )
+        for( ArtifactBasicMetadata bm : rrRes.getResults().keySet() )
+        {
+          List<Artifact> al = rrRes.getResults( bm ); 
+          
+          if( res == null )
+            res = new ArtifactResults();
+
+          res.addAll( bm, al );
+          
+          if( _localRepositoryWriter != null )
+            _localRepositoryWriter.writeArtifacts( al );
+        }
+    }
+    
+    // then search all repos for unqualified Artifacts
+    if( !Util.isEmpty( rejects ) )
+    {
+      for( RepositoryReader rr : _repositoryReaders )
+      {
+        if( rejects.isEmpty() )
+          break;
+        
+        ArtifactResults rrRes = rr.readArtifacts( rejects );
+        
+        if( rrRes.hasResults() )
+          for( ArtifactBasicMetadata bm : rrRes.getResults().keySet() )
+          {
+            List<Artifact> al = rrRes.getResults( bm ); 
+
+            if( res == null )
+              res = new ArtifactResults();
+            
+            res.addAll( bm, al );
+            
+            rejects.remove( bm );
+            
+            if( _localRepositoryWriter != null )
+              _localRepositoryWriter.writeArtifacts( al );
+
+          }
+      }
+    }
+    
+    return res;
+  }
+  //----------------------------------------------------------------------------------------------------------------------------
+  // MetadataReader implementation
+  //----------------------------------------------------------------------------------------------------------------------------
   public byte[] readMetadata( ArtifactBasicMetadata bmd )
-      throws MetadataReaderException
+  throws MetadataReaderException
   {
     return readRawData( bmd, "", "pom" );
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  /* (non-Javadoc)
-   * @see org.apache.maven.mercury.repository.api.MetadataReader#readRawData(org.apache.maven.mercury.ArtifactBasicMetadata, java.lang.String)
-   */
+  // MetadataReader implementation
+  //----------------------------------------------------------------------------------------------------------------------------
   public byte[] readRawData( ArtifactBasicMetadata bmd, String classifier, String type )
   throws MetadataReaderException
   {

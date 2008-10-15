@@ -106,7 +106,7 @@ implements RepositoryWriter
   {
   }
   //---------------------------------------------------------------------------------------------------------------
-  public void writeArtifact( Collection<Artifact> artifacts )
+  public void writeArtifacts( Collection<Artifact> artifacts )
       throws RepositoryException
   {
     if( artifacts == null || artifacts.size() < 1 )

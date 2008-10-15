@@ -24,7 +24,7 @@ extends RepositoryOperator
    * @param artifact to upload
    * @throws RepositoryException
    */
-  public void writeArtifact( Collection<Artifact> artifact )
+  public void writeArtifacts( Collection<Artifact> artifact )
   throws RepositoryException;
   
   public void setMetadataCache( RepositoryMetadataCache mdCache );

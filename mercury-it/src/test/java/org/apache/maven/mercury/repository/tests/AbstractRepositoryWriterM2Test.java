@@ -157,7 +157,7 @@ extends PlexusTestCase
     da.setFile( artifactBinary );
     artifacts.add( da );
     
-    writer.writeArtifact( artifacts );
+    writer.writeArtifacts( artifacts );
     
     f = new File( targetDirectory, "/org/apache/maven/maven-core/"+repo.getMetadataName());
     assertTrue( f.exists() );
@@ -199,7 +199,7 @@ extends PlexusTestCase
     da.setFile( artifactBinary );
     artifacts.add( da );
     
-    writer.writeArtifact( artifacts );
+    writer.writeArtifacts( artifacts );
     
     File af = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-20080805.215925-8.jar");
     assertTrue( af.exists() );
@@ -221,7 +221,7 @@ extends PlexusTestCase
     da.setFile( artifactBinary );
     set.add( da );
     
-    writer.writeArtifact( set );
+    writer.writeArtifacts( set );
     
     File af = new File( targetDirectory, "/org/apache/maven/maven-core/2.0.9-SNAPSHOT/maven-core-2.0.9-SNAPSHOT.jar");
     assertTrue( af.exists() );
@@ -256,7 +256,7 @@ extends PlexusTestCase
     
     long start = System.currentTimeMillis();
     // write 'em
-    writer.writeArtifact( set );
+    writer.writeArtifacts( set );
     
     System.out.println("Took "+(System.currentTimeMillis()-start)+" millis to write "+set.size()+" artifacts");
     System.out.flush();
@@ -332,7 +332,7 @@ extends PlexusTestCase
     
     long start = System.currentTimeMillis();
     // write 'em
-    writer.writeArtifact( set );
+    writer.writeArtifacts( set );
     
     System.out.println("Took "+(System.currentTimeMillis()-start)+" millis to write "+set.size()+" artifacts");
     System.out.flush();

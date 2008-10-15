@@ -52,7 +52,9 @@ public class ArtifactBasicMetadata
   
   protected Collection<ArtifactBasicMetadata> exclusions;
 
-  /** transient helper objects, used by DependencyBuilder */
+  /** 
+   * transient helper objects, used by DependencyBuilder.
+   */
   transient Object tracker;
   transient Boolean local = false;
     

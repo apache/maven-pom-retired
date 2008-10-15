@@ -77,6 +77,17 @@ under the License.
             <multiplicity>*</multiplicity>
           </association>
         </field>
+
+        <field>
+          <name>elements</name>
+          <version>1.0.0</version>
+          <description>group of metadata element elements</description>
+          <association>
+            <type>Element</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+
       </fields>
     </class>
 

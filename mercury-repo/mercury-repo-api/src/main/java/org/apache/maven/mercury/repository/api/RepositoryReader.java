@@ -31,7 +31,7 @@ extends RepositoryOperator, MetadataReader
    * @throws RepositoryException
    */
   public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
-  throws RepositoryException, IllegalArgumentException;
+  throws RepositoryException;
   
   /**
    * given basic coordinates query read dependencies as a GAV list
@@ -43,7 +43,7 @@ extends RepositoryOperator, MetadataReader
    * @throws RepositoryException
    */
   public ArtifactBasicResults readDependencies( List<ArtifactBasicMetadata> query )
-  throws RepositoryException, IllegalArgumentException;
+  throws RepositoryException;
 
   /**
    * Given basic coordinates query read Artifact objects
@@ -54,7 +54,7 @@ extends RepositoryOperator, MetadataReader
    * @throws RepositoryException
    */
   public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
-  throws RepositoryException, IllegalArgumentException;
+  throws RepositoryException;
 
   /**
    * Need if for explanation function - where and how(protocol) this artifact is found.
@@ -83,5 +83,83 @@ extends RepositoryOperator, MetadataReader
    */
   public byte [] readRawData( String path )
   throws MetadataReaderException;
+  
+  public static final RepositoryReader NULL_READER = 
+    new RepositoryReader()
+    {
+      public DependencyProcessor getDependencyProcessor()
+      {
+        return null;
+      }
+      public RepositoryMetadataCache getMetadataCache()
+      {
+        return null;
+      }
+      public Repository getRepository()
+      {
+        return null;
+      }
+      public ArtifactResults readArtifacts(
+          List<ArtifactBasicMetadata> query )
+          throws RepositoryException
+      {
+        return null;
+      }
+      public ArtifactBasicResults readDependencies(
+          List<ArtifactBasicMetadata> query )
+          throws RepositoryException
+      {
+        return null;
+      }
+      public byte[] readRawData( String path )
+          throws MetadataReaderException
+      {
+        return null;
+      }
+
+      public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
+          throws RepositoryException
+      {
+        return null;
+      }
+
+      public void setDependencyProcessor( DependencyProcessor mdProcessor )
+      {
+      }
+
+      public void setMetadataCache( RepositoryMetadataCache mdCache )
+      {
+      }
+
+      public boolean canHandle( String protocol )
+      {
+        return false;
+      }
+
+      public void close()
+      {
+      }
+
+      public String[] getProtocols()
+      {
+        return null;
+      }
+
+      public byte[] readMetadata( ArtifactBasicMetadata bmd )
+      throws MetadataReaderException
+      {
+        return null;
+      }
+
+      public byte[] readRawData(
+          ArtifactBasicMetadata bmd,
+          String classifier,
+          String type )
+          throws MetadataReaderException
+      {
+        return null;
+      }
+    
+    };
 
 }

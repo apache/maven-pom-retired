@@ -10,10 +10,25 @@
     <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
   <dependencies>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-repo-cache-fs</artifactId>
-  		<version>${project.version}</version>
-  	</dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-repo-cache-fs</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
+    <!-- Test deps -->
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-repo-local-m2</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-repo-remote-m2</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 </project>

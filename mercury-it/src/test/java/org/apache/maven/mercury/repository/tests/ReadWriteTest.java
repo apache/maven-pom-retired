@@ -113,7 +113,7 @@ extends TestCase
     
     Artifact a = al.get( 0 );
     
-    writer.writeArtifact( al );
+    writer.writeArtifacts( al );
     
     File aBin = new File( localRepoBase, "a/a/4/a-4.jar" );
     assertTrue( aBin.exists() );
@@ -150,7 +150,7 @@ extends TestCase
     
     Artifact a = al.get( 0 );
     
-    writer.writeArtifact( al );
+    writer.writeArtifacts( al );
     
     File aBin = new File( localRepoBase, "a/a/4/a-4-sources.jar" );
     assertTrue( aBin.exists() );

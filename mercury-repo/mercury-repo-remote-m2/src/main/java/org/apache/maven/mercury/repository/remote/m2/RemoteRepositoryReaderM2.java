@@ -303,8 +303,7 @@ implements RepositoryReader, MetadataReader
    * TODO og: parallelize as soon as code stabilizes
    */
   public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
-  throws RepositoryException,
-  IllegalArgumentException
+  throws RepositoryException
   {
     if( query == null || query.size() < 1 )
       return null;
