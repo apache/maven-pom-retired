@@ -220,7 +220,7 @@ implements MetadataReader
             }
           }
           
-          if( rorRes == null )
+          if( Util.isEmpty( rorRes ) )
             continue;
           
           for( ArtifactBasicMetadata bmd : rorRes )

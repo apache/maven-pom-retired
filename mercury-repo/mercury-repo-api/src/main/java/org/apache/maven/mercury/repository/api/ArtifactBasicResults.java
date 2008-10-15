@@ -83,10 +83,21 @@ extends AbstractRepOpResult
     return res;
   }
   
+  /**
+   * add results if they are not there yet
+   * 
+   * @param query
+   * @param result
+   */
   public void add( ArtifactBasicMetadata query, List<ArtifactBasicMetadata> result )
   {
     List<ArtifactBasicMetadata> res = getOrCreate( query );
-    res.addAll( result );
+    for( ArtifactBasicMetadata r : result )
+    {
+      if( res.contains( r ) )
+        continue;
+      res.add( r );
+    }
   }
   
   public void add( ArtifactBasicMetadata query, ArtifactBasicMetadata result )
