@@ -1,7 +1,6 @@
 package org.apache.maven.mercury.repository.cache.fs;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,16 +13,15 @@ import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 import org.apache.maven.mercury.repository.api.MetadataCacheException;
 import org.apache.maven.mercury.repository.api.MetadataCorruptionException;
-import org.apache.maven.mercury.repository.api.RemoteRepository;
 import org.apache.maven.mercury.repository.api.RepositoryGAMetadata;
 import org.apache.maven.mercury.repository.api.RepositoryGAVMetadata;
 import org.apache.maven.mercury.repository.api.RepositoryMetadataCache;
 import org.apache.maven.mercury.repository.api.RepositoryUpdatePolicy;
 import org.apache.maven.mercury.util.FileLockBundle;
 import org.apache.maven.mercury.util.FileUtil;
+import org.apache.maven.mercury.util.TimeUtil;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
  *
@@ -35,6 +33,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 public class MetadataCacheFs
 implements RepositoryMetadataCache
 {
+  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( MetadataCacheFs.class ); 
   private static final Language _lang = new DefaultLanguage( RepositoryGAVMetadata.class );
   
   static volatile Map<String, MetadataCacheFs> fsCaches = Collections.synchronizedMap( new HashMap<String, MetadataCacheFs>(2) ); 
@@ -95,8 +94,12 @@ implements RepositoryMetadataCache
       {
           md = new CachedGAMetadata( gamF );
           
-          if( up != null && up.timestampExpired( md.getLastCheck() ) )
+          long lastCheckMillis = md.getLastCheckMillis();
+          
+          if( up != null && up.timestampExpired( lastCheckMillis ) )
+          {
             md.setExpired( true );
+          }
       }
       
       return md;

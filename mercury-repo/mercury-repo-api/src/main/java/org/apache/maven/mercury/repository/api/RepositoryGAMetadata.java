@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.repository.api;
 
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
@@ -104,9 +105,15 @@ public class RepositoryGAMetadata
     return versions;
   }
 
-  public long getLastCheck()
+  public long getLastCheckTs()
   {
     return lastCheck;
+  }
+  
+  public long getLastCheckMillis()
+  throws ParseException
+  {
+    return TimeUtil.toMillis(  lastCheck );
   }
   
   public void update( Collection<String> versions )

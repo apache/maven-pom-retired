@@ -1,11 +1,12 @@
 package org.apache.maven.mercury.repository.virtual;
 
-import java.util.List;
-import java.util.Map;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import junit.framework.TestCase;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
@@ -19,8 +20,6 @@ import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileUtil;
-
-import junit.framework.TestCase;
 
 /**
  *
@@ -48,7 +47,7 @@ extends TestCase
   throws Exception
   {
     _testBase = new File( "./target/repo" );
-    _testBase.delete();
+    FileUtil.delete( _testBase );
     _testBase.mkdirs();
     
     if( !_testBase.exists() || !_testBase.isDirectory() )

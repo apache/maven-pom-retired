@@ -40,8 +40,7 @@ public class ArtifactCoordinates
     return groupId;
   }
 
-  public void setGroupId(
-      String groupId )
+  public void setGroupId( String groupId )
   {
     this.groupId = groupId;
   }
@@ -51,8 +50,7 @@ public class ArtifactCoordinates
     return artifactId;
   }
 
-  public void setArtifactId(
-      String artifactId )
+  public void setArtifactId( String artifactId )
   {
     this.artifactId = artifactId;
   }
@@ -62,9 +60,17 @@ public class ArtifactCoordinates
     return version;
   }
 
-  public void setVersion(
-      String version )
+  public void setVersion( String version )
   {
     this.version = version;
+  }
+  
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString()
+  {
+    return groupId+":"+artifactId+":"+version;
   }
 }

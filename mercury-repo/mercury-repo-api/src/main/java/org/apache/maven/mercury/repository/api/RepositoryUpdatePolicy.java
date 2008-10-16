@@ -19,8 +19,8 @@ public interface RepositoryUpdatePolicy
   /**
    * perform the calculation and decide if it's time to update
    * 
-   * @param timestamp - UTC-based timestamp
+   * @param timestamp - UTC-based timestamp as long milliseconds
    * @return
    */
-  boolean timestampExpired( long timestamp );
+  boolean timestampExpired( long timestampMillis );
 }

@@ -1,6 +1,8 @@
 package org.apache.maven.mercury.repository.api;
 
-import org.apache.maven.mercury.artifact.version.VersionComparator;
+import java.text.ParseException;
+
+import org.apache.maven.mercury.util.TimeUtil;
 import org.apache.maven.mercury.util.Util;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
@@ -43,6 +45,17 @@ implements RepositoryUpdatePolicy
   {
     init( policy );
   }
+  
+  /**
+   * used mostly for testing as it's too much waiting for a minute to test expiration
+   * 
+   * @param interval
+   */
+  public RepositoryUpdateIntervalPolicy setInterval( long interval )
+  {
+    this.interval = interval;
+    return this;
+  }
 
   public void init( String policy )
   {
@@ -67,13 +80,32 @@ implements RepositoryUpdatePolicy
        throw new IllegalArgumentException( _lang.getMessage( "bad.policy", policy ));
   }
 
-  public boolean timestampExpired( long lastUpdate )
+  public boolean timestampExpired( long lastUpdateMillis )
   {
-    long now =System.currentTimeMillis();
+    if( interval == NEVER )
+      return false;
     
-    boolean res = now - lastUpdate > interval; 
+    long now;
+    try
+    {
+      now = TimeUtil.toMillis( TimeUtil.getUTCTimestamp() );
+    }
+    catch( ParseException e )
+    {
+      throw new IllegalArgumentException( e );
+    }
+    
+    boolean res = ( (now - lastUpdateMillis) > interval); 
     
     return res;
+  }
+  
+  public static void main(
+      String[] args )
+  {
+    RepositoryUpdateIntervalPolicy up = new RepositoryUpdateIntervalPolicy("interval2");
+    
+    System.out.println("Interval is "+up.interval);
   }
 
 }

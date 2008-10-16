@@ -13,12 +13,10 @@ import java.util.List;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.repository.api.RepositoryException;
-import org.apache.maven.mercury.repository.cache.fs.MetadataCacheFs;
 import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
 import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
-import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetrievalRequest;
 import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetriever;
 import org.apache.maven.mercury.spi.http.client.retrieve.RetrievalResponse;
@@ -31,30 +29,18 @@ public class RemoteRepositoryReaderM2Test
 extends AbstractRepositoryReaderM2Test
 {
   MetadataXpp3Reader _reader;
-  File _testBase = new File("./target/test-classes/repo");
+  File _testBase;
   DefaultRetriever _retriever;
   public String _port;
   HttpTestServer _server;
   DefaultRetrievalRequest _request;
-  
-//  List<ArtifactBasicMetadata> query;
-//  MetadataProcessor mdProcessor;
-//  ArtifactBasicMetadata bmd;
-//
-//  Server server;
-//  RemoteRepositoryM2 repo;
-//  
-//  RepositoryReader reader;
-//  
-//  // setting this to true will add aonatype nexus tests
-//  String nexusUrl = System.getProperty( "mercury.nexus.url", null );
-//
 
   //-------------------------------------------------------------------------
   @Override
   protected void setUp()
   throws Exception
   {
+    _testBase = new File("./target/test-classes/repo");
     _retriever = new DefaultRetriever();
     _server = new HttpTestServer( _testBase, "/repo" );
     _server.start();

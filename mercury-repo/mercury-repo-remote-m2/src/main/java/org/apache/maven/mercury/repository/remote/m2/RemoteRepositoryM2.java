@@ -23,6 +23,11 @@ implements RemoteRepository
     private RepositoryUpdatePolicy _updatePolicy = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.DEFAULT_UPDATE_POLICY );
     
     //----------------------------------------------------------------------------------
+    public RemoteRepositoryM2( Server server  )
+    {
+      this( server.getId(), server );
+    }
+    //----------------------------------------------------------------------------------
     public RemoteRepositoryM2( String id, Server server  )
     {
         super( id, DEFAULT_REPOSITORY_TYPE );
