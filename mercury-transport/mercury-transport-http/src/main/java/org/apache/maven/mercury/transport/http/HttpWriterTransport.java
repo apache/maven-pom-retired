@@ -1,5 +1,6 @@
-package org.apache.maven.mercury.spi.http.client.deploy;
+package org.apache.maven.mercury.transport.http;
 
+import org.apache.maven.mercury.spi.http.client.deploy.DefaultDeployer;
 import org.apache.maven.mercury.transport.api.AbstractTransport;
 import org.apache.maven.mercury.transport.api.InitializationException;
 import org.apache.maven.mercury.transport.api.TransportException;

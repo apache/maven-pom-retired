@@ -1,5 +1,6 @@
-package org.apache.maven.mercury.spi.http.client.retrieve;
+package org.apache.maven.mercury.transport.http;
 
+import org.apache.maven.mercury.spi.http.client.retrieve.DefaultRetriever;
 import org.apache.maven.mercury.transport.api.AbstractTransport;
 import org.apache.maven.mercury.transport.api.InitializationException;
 import org.apache.maven.mercury.transport.api.ReaderTransport;
