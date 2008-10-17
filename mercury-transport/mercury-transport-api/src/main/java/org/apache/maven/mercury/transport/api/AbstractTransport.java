@@ -2,8 +2,7 @@ package org.apache.maven.mercury.transport.api;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 
 /**
  * Helper parent of transport implementations. Common for read and write transports
@@ -14,30 +13,17 @@ import java.util.Map;
  */
 public abstract class AbstractTransport
 {
-  private Map< String, Server > _servers = Collections.synchronizedMap( new HashMap< String, Server >(8) );
+  private Collection<Server> _servers = Collections.synchronizedSet( new HashSet< Server >() );
   
-  public void addServer( Server server )
+  public void setServers( Collection<Server> servers )
   {
-    if( server == null )
-      return;
-    
-    _servers.put( server.getId(), server );
+    _servers = servers;
   }
   
-  public void addServers( Collection<ServerContainer> containers )
+  public Collection<Server> getServers()
   {
-    for( ServerContainer c : containers )
-      addServer( c.getServer() );
+    return _servers;
   }
-
-  public Server findServer( String id )
-  {
-    return _servers.get( id );
-  }
-
-  public void dropServer( String id )
-  {
-    _servers.remove( id );
-  }
+  
 
 }

@@ -9,6 +9,7 @@ package org.apache.maven.mercury.transport.api;
  *
  */
 public interface WriterTransport
+extends Initializable
 {
   public TransportTransaction write( TransportTransaction trx )
   throws TransportException;
