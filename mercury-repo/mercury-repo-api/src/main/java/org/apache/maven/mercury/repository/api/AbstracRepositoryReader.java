@@ -16,7 +16,9 @@ import org.apache.maven.mercury.builder.api.MetadataReaderException;
 public abstract class AbstracRepositoryReader
 implements RepositoryReader, MetadataReader
 {
-  protected DependencyProcessor _mdProcessor;
+  protected DependencyProcessor    _mdProcessor;
+  
+  protected MetadataReader         _mdReader;
   
   protected RepositoryMetadataCache _mdCache;
   
@@ -28,6 +30,16 @@ implements RepositoryReader, MetadataReader
   public DependencyProcessor getDependencyProcessor()
   {
     return _mdProcessor;
+  }
+  
+  public void setMetadataReader( MetadataReader mdReader )
+  {
+    _mdReader = mdReader;
+  }
+  
+  public MetadataReader getMetadataReader()
+  {
+    return _mdReader;
   }
   
   public void setMetadataCache( RepositoryMetadataCache mdCache )

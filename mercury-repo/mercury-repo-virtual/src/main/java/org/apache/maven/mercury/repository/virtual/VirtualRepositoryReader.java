@@ -149,7 +149,12 @@ implements MetadataReader
       if( ! r.isLocal() )
         continue;
       
-      _repositoryReaders[ i++ ] = r.getReader(_processor);
+      RepositoryReader rr = r.getReader(_processor);
+      
+      rr.setMetadataReader( this );
+      
+      _repositoryReaders[ i++ ] = rr;
+      
       if( ! r.isReadOnly() )
       {
         _localRepository = (LocalRepository)r.getReader(_processor).getRepository();
@@ -179,13 +184,15 @@ implements MetadataReader
       
       if( _mdCache != null )
         rr.setMetadataCache( _mdCache );
+      
+      rr.setMetadataReader( this );
 
       _repositoryReaders[ i++ ] = rr;
     }
     _initialized = true;
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readVersions( Collection<ArtifactBasicMetadata> query )
   throws IllegalArgumentException, RepositoryException
   {
     if( query == null )
@@ -277,7 +284,7 @@ implements MetadataReader
   /**
    * split query into repository buckets
    */
-  private Map< RepositoryReader, List<ArtifactBasicMetadata> > sortByRepo( List<ArtifactBasicMetadata> query )
+  private Map< RepositoryReader, List<ArtifactBasicMetadata> > sortByRepo( Collection<ArtifactBasicMetadata> query )
   {
     HashMap< RepositoryReader, List<ArtifactBasicMetadata> > res = null;
     
@@ -328,7 +335,7 @@ implements MetadataReader
     return res;
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
+  public ArtifactResults readArtifacts( Collection<ArtifactBasicMetadata> query )
   throws RepositoryException
   {
     ArtifactResults res = null;

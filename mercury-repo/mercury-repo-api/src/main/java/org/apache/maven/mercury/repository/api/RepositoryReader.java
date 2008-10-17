@@ -1,6 +1,6 @@
 package org.apache.maven.mercury.repository.api;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
@@ -30,7 +30,7 @@ extends RepositoryOperator, MetadataReader
    * it with hasExceptions() 
    * @throws RepositoryException
    */
-  public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readVersions( Collection<ArtifactBasicMetadata> query )
   throws RepositoryException;
   
   /**
@@ -42,7 +42,7 @@ extends RepositoryOperator, MetadataReader
    * @return result as a map GAV -> [GAV1, GAV2, ... GAVn]
    * @throws RepositoryException
    */
-  public ArtifactBasicResults readDependencies( List<ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readDependencies( Collection<ArtifactBasicMetadata> query )
   throws RepositoryException;
 
   /**
@@ -53,7 +53,7 @@ extends RepositoryOperator, MetadataReader
    * @return array of results - lists of available matches. Order is the same as in query list. null means not found or worse
    * @throws RepositoryException
    */
-  public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
+  public ArtifactResults readArtifacts( Collection<ArtifactBasicMetadata> query )
   throws RepositoryException;
 
   /**
@@ -66,6 +66,13 @@ extends RepositoryOperator, MetadataReader
    */
   public void setDependencyProcessor( DependencyProcessor mdProcessor );
   public DependencyProcessor getDependencyProcessor();
+
+  /**
+   * MetadataReader field. Single repository uses itself, virtual reader injects itself 
+   * to be able to find metadata across repositories
+   */
+  public void setMetadataReader( MetadataReader mdReader );
+  public MetadataReader getMetadataReader();
 
   /**
    * Abstracted metadata cache is used to store/retrieve metadata faster. It usually implements 
@@ -100,13 +107,13 @@ extends RepositoryOperator, MetadataReader
         return null;
       }
       public ArtifactResults readArtifacts(
-          List<ArtifactBasicMetadata> query )
+          Collection<ArtifactBasicMetadata> query )
           throws RepositoryException
       {
         return null;
       }
       public ArtifactBasicResults readDependencies(
-          List<ArtifactBasicMetadata> query )
+          Collection<ArtifactBasicMetadata> query )
           throws RepositoryException
       {
         return null;
@@ -117,7 +124,7 @@ extends RepositoryOperator, MetadataReader
         return null;
       }
 
-      public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
+      public ArtifactBasicResults readVersions( Collection<ArtifactBasicMetadata> query )
           throws RepositoryException
       {
         return null;
@@ -158,6 +165,13 @@ extends RepositoryOperator, MetadataReader
           throws MetadataReaderException
       {
         return null;
+      }
+      public MetadataReader getMetadataReader()
+      {
+        return null;
+      }
+      public void setMetadataReader( MetadataReader mdReader )
+      {
       }
     
     };

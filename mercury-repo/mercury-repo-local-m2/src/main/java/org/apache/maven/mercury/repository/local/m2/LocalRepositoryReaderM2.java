@@ -3,6 +3,7 @@ package org.apache.maven.mercury.repository.local.m2;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -167,7 +168,7 @@ implements RepositoryReader, MetadataReader
     return loc;
   }
   //---------------------------------------------------------------------------------------------------------------
-  public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
+  public ArtifactResults readArtifacts( Collection<ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {
@@ -314,7 +315,7 @@ implements RepositoryReader, MetadataReader
   /**
    * 
    */
-  public ArtifactBasicResults readDependencies( List<ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readDependencies( Collection<ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {
@@ -344,7 +345,7 @@ implements RepositoryReader, MetadataReader
       // for testing purpose - I plug in my test processor
       try
       {
-        List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, this, System.getProperties() );
+        List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, _mdReader == null ? this : _mdReader, System.getProperties() );
         ror = ArtifactBasicResults.add( ror, bmd, deps );
       }
       catch( MetadataReaderException e )
@@ -414,7 +415,7 @@ implements RepositoryReader, MetadataReader
   /**
    * direct disk search, no redirects - I cannot process pom files :(
    */
-  public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readVersions( Collection<ArtifactBasicMetadata> query )
   throws RepositoryException, IllegalArgumentException
   {
     if( query == null || query.size() < 1 )

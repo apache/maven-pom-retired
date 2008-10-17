@@ -302,7 +302,7 @@ implements RepositoryReader, MetadataReader
   /**
    * TODO og: parallelize as soon as code stabilizes
    */
-  public ArtifactResults readArtifacts( List<ArtifactBasicMetadata> query )
+  public ArtifactResults readArtifacts( Collection<ArtifactBasicMetadata> query )
   throws RepositoryException
   {
     if( query == null || query.size() < 1 )
@@ -383,7 +383,7 @@ implements RepositoryReader, MetadataReader
   /**
    * 
    */
-  public ArtifactBasicResults readDependencies( List<ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readDependencies( Collection<ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {
@@ -396,7 +396,7 @@ implements RepositoryReader, MetadataReader
     {
       try
       {
-        List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, this, System.getProperties() );
+        List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, _mdReader == null ? this : _mdReader, System.getProperties() );
         ror.add( bmd, deps );
       }
       catch( MetadataReaderException e )
@@ -469,7 +469,7 @@ implements RepositoryReader, MetadataReader
   /**
    * direct disk search, no redirects, first attempt
    */
-  public ArtifactBasicResults readVersions( List<ArtifactBasicMetadata> query )
+  public ArtifactBasicResults readVersions( Collection<ArtifactBasicMetadata> query )
       throws RepositoryException,
       IllegalArgumentException
   {
