@@ -75,6 +75,12 @@ extends TestCase
     super.tearDown();
   }
   //----------------------------------------------------------------------------------------------
+  public void testDummy()
+  throws MetadataTreeException
+  {
+    
+  }
+  //----------------------------------------------------------------------------------------------
   public void ntestResolveConflicts()
   throws MetadataTreeException
   {

@@ -9,24 +9,8 @@
 
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-pom</artifactId>
-  <version>1-alpha-2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Mercury parent POM:                 ${project.version}</name>
-
-  <properties>
-    <distMgmtSnapshotsId>apache.snapshots</distMgmtSnapshotsId>
-    <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
-    <distMgmtSnapshotsUrl>scp://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</distMgmtSnapshotsUrl>
-
-    <mercury.version>1.0.0-alpha-2-SNAPSHOT</mercury.version>
-    
-    <mercury.version.artifact>1.0.0-alpha-2-SNAPSHOT</mercury.version.artifact>
-    <mercury.version.crypto>1.0.0-alpha-2-SNAPSHOT</mercury.version.crypto>
-    <mercury.version.md>1.0.0-alpha-2-SNAPSHOT</mercury.version.md>
-    <mercury.version.repo>1.0.0-alpha-2-SNAPSHOT</mercury.version.repo>
-    <mercury.version.transport>1.0.0-alpha-2-SNAPSHOT</mercury.version.transport>
-
-  </properties>
   
   <issueManagement>
   	<system>jira</system>
@@ -56,51 +40,51 @@
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-crypto-api</artifactId>
-      <version>1.0.0-alpha-2-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-crypto-basic</artifactId>
-      <version>1.0.0-alpha-2-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-transport-api</artifactId>
-      <version>1.0.0-alpha-2-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-transport-http</artifactId>
-      <version>1.0.0-alpha-2-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-md-api</artifactId>
-      <version>${mercury.version.md}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-md-sat</artifactId>
-      <version>1.0.0-alpha-2-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-repo-api</artifactId>
-      <version>1.0.0-alpha-2-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-repo-local-m2</artifactId>
-      <version>1.0.0-alpha-2-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-repo-remote-m2</artifactId>
-      <version>1.0.0-alpha-2-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
 
     </dependencies>

@@ -3,14 +3,15 @@
   <parent>
     <groupId>org.apache.maven.mercury</groupId>
     <artifactId>mercury-pom</artifactId>
-    <version>1-alpha-2-SNAPSHOT</version>
+    <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
   <artifactId>mercury-it</artifactId>
-  <version>1.0.0-alpha-2-SNAPSHOT</version>
   <name>Mercury Integration Tests:      ${project.version}</name>
   <description>Mercury Integration Tests</description>
 
   <properties>
+    <mercury.version>1.0.0-alpha-2-SNAPSHOT</mercury.version>
+    <maven.version>3.0-SNAPSHOT</maven.version>
     <plexus.appbooter.version>1.4</plexus.appbooter.version>
     <plexus.container.version>1.0-alpha-47</plexus.container.version>
     <nexus.version>1.0.1</nexus.version>
@@ -240,13 +241,13 @@
     <dependency>
     	<groupId>org.apache.maven</groupId>
     	<artifactId>maven-mercury</artifactId>
-    	<version>3.0-SNAPSHOT</version>
+    	<version>${maven.version}</version>
     	<scope>test</scope>
     </dependency>
     <dependency>
     	<groupId>org.apache.maven.mercury</groupId>
     	<artifactId>mercury-md-sat</artifactId>
-    	<version>1.0.0-alpha-2-SNAPSHOT</version>
+    	<version>${mercury.version}</version>
     </dependency>
 
   </dependencies>
