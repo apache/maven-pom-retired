@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class TransportTransaction
 {
   public static final int DEFAULT_SIZE = 32;
   
-  protected List<Binding> _bindings;
+  protected Collection<Binding> _bindings;
   
   //------------------------------------------------------------------------------------------------
   private void init()
@@ -91,7 +92,7 @@ public class TransportTransaction
   }
   //------------------------------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
-  public List<Binding> getBindings()
+  public Collection<Binding> getBindings()
   {
     return _bindings == null ? (List<Binding>)Collections.EMPTY_LIST : _bindings;
   }

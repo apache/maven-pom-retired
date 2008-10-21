@@ -90,7 +90,7 @@ public class DependencyTreeBuilder
    * @return the root of the tree built
    * @throws MetadataTreeException
    */
-  public MetadataTreeNode buildTree( ArtifactMetadata startMD )
+  public MetadataTreeNode buildTree( ArtifactBasicMetadata startMD )
   throws MetadataTreeException
   {
     if( startMD == null )
