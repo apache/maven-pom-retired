@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.digester.Digester;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
@@ -25,7 +26,7 @@ public class MetadataProcessorMock
 implements DependencyProcessor
 {
 
-  public List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Hashtable env )
+  public List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Map env, Map sysProps )
   throws MetadataReaderException
   {
     List<ArtifactBasicMetadata> deps = null;

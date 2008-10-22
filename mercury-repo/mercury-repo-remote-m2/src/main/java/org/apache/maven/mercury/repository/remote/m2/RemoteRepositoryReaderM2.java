@@ -396,7 +396,9 @@ implements RepositoryReader, MetadataReader
     {
       try
       {
-        List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, _mdReader == null ? this : _mdReader, System.getProperties() );
+        List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, _mdReader == null ? this : _mdReader
+                                                                        , System.getenv() , System.getProperties() 
+                                                                        );
         ror.add( bmd, deps );
       }
       catch( MetadataReaderException e )

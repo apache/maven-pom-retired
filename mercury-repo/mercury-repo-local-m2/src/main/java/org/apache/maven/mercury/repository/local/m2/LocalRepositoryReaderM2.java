@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.mercury.artifact.Artifact;
@@ -345,7 +346,10 @@ implements RepositoryReader, MetadataReader
       // for testing purpose - I plug in my test processor
       try
       {
-        List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, _mdReader == null ? this : _mdReader, System.getProperties() );
+        List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, _mdReader == null ? this : _mdReader
+                                                                       , System.getenv()
+                                                                       , System.getProperties()
+                                                                       );
         ror = ArtifactBasicResults.add( ror, bmd, deps );
       }
       catch( MetadataReaderException e )
