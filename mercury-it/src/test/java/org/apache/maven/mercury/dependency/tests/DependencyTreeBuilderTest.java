@@ -17,7 +17,6 @@ import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.metadata.DependencyBuilder;
 import org.apache.maven.mercury.metadata.DependencyBuilderFactory;
-import org.apache.maven.mercury.metadata.DependencyTreeBuilder;
 import org.apache.maven.mercury.metadata.MetadataTreeException;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 import org.apache.maven.mercury.repository.api.ArtifactResults;

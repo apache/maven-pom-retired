@@ -3,6 +3,7 @@ package org.apache.maven.mercury.metadata;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,12 +24,12 @@ import org.codehaus.plexus.lang.Language;
 
 /**
  * This is the new entry point into Artifact resolution process.
- * It implements 3-phase 
  * 
  * @author Oleg Gusakov
  * @version $Id: MetadataTree.java 681180 2008-07-30 19:34:16Z ogusakov $
  */
-public class DependencyTreeBuilder implements DependencyBuilder
+class DependencyTreeBuilder
+implements DependencyBuilder
 {
   Language _lang = new DefaultLanguage(DependencyTreeBuilder.class);
   
@@ -39,6 +40,8 @@ public class DependencyTreeBuilder implements DependencyBuilder
   private VirtualRepositoryReader _reader;
   
   MetadataTreeNode _root;
+  
+  Map< String, MetadataTreeNode > existingNodes;
   
   /**
    * creates an instance of MetadataTree. Use this instance to 
@@ -81,9 +84,6 @@ public class DependencyTreeBuilder implements DependencyBuilder
     this._reader = new VirtualRepositoryReader( repositories, processor );
   }
   //------------------------------------------------------------------------
-  /* (non-Javadoc)
-   * @see org.apache.maven.mercury.metadata.DependencyBuilder#buildTree(org.apache.maven.mercury.artifact.ArtifactBasicMetadata)
-   */
   public MetadataTreeNode buildTree( ArtifactBasicMetadata startMD )
   throws MetadataTreeException
   {
@@ -100,6 +100,8 @@ public class DependencyTreeBuilder implements DependencyBuilder
       throw new MetadataTreeException(e);
     }
     
+    existingNodes = new HashMap<String, MetadataTreeNode>(128);
+    
     _root = createNode( startMD, null, startMD );
     return _root;
   }
@@ -110,6 +112,11 @@ public class DependencyTreeBuilder implements DependencyBuilder
     checkForCircularDependency( nodeMD, parent );
 
     ArtifactMetadata mr;
+    
+    MetadataTreeNode existingNode = existingNodes.get( nodeQuery.toString() );
+    
+    if( existingNode != null )
+      return existingNode;
     
     try
     {
@@ -128,9 +135,6 @@ public class DependencyTreeBuilder implements DependencyBuilder
         ArtifactBasicResults res = _reader.readVersions( dependencies );
         Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> expandedDeps = res.getResults();
         
-//        if( expandedDeps == null )
-//          return node;
-      
         for( ArtifactBasicMetadata md : dependencies )
         {
           List<ArtifactBasicMetadata> versions = expandedDeps.get( md );
@@ -175,6 +179,8 @@ public class DependencyTreeBuilder implements DependencyBuilder
           else
             node.addQuery(md);
       }
+        
+      existingNodes.put( nodeQuery.toString(), node );
     
       return node;
     }
@@ -240,9 +246,6 @@ public class DependencyTreeBuilder implements DependencyBuilder
     return true;
   }
   //-----------------------------------------------------
-  /* (non-Javadoc)
-   * @see org.apache.maven.mercury.metadata.DependencyBuilder#resolveConflicts(org.apache.maven.mercury.artifact.ArtifactScopeEnum)
-   */
   public List<ArtifactMetadata> resolveConflicts( ArtifactScopeEnum scope )
   throws MetadataTreeException
   {
