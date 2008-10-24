@@ -3,15 +3,12 @@ package org.apache.maven.mercury.dependency.tests;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import junit.framework.TestCase;
 
-import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
@@ -19,15 +16,12 @@ import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.metadata.DependencyTreeBuilder;
-import org.apache.maven.mercury.metadata.MetadataTreeCircularDependencyException;
 import org.apache.maven.mercury.metadata.MetadataTreeException;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.Repository;
-import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
-import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
 import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;
 import org.apache.maven.mercury.transport.api.Server;
@@ -43,8 +37,8 @@ extends TestCase
 {
   private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( DependencyTreeBuilderTest.class ); 
   
-//  String repoUrl = "http://repository.sonatype.org/content/groups/public";
-  String repoUrl = "http://nexus:8081/nexus/content/groups/public";
+  String repoUrl = "http://repository.sonatype.org/content/groups/public";
+//  String repoUrl = "http://nexus:8081/nexus/content/groups/public";
 
   File repoDir;
   
@@ -103,7 +97,7 @@ extends TestCase
     
   }
   //----------------------------------------------------------------------------------------------
-  public void ntestResolveConflicts()
+  public void testResolveConflicts()
   throws Exception
   {
 //    String artifactId = "org.testng:testng:5.7";

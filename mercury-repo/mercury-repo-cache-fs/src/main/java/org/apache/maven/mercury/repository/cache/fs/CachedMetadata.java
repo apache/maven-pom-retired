@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.maven.mercury.repository.api.MetadataCorruptionException;
-import org.apache.maven.mercury.repository.api.RepositoryGAVMetadata;
 import org.apache.maven.mercury.repository.cache.md.Attribute;
 import org.apache.maven.mercury.repository.cache.md.CachedRawMetadata;
 import org.apache.maven.mercury.repository.cache.md.Element;

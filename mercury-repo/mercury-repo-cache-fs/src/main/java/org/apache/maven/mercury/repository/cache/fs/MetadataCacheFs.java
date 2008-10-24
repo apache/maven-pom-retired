@@ -19,7 +19,6 @@ import org.apache.maven.mercury.repository.api.RepositoryMetadataCache;
 import org.apache.maven.mercury.repository.api.RepositoryUpdatePolicy;
 import org.apache.maven.mercury.util.FileLockBundle;
 import org.apache.maven.mercury.util.FileUtil;
-import org.apache.maven.mercury.util.TimeUtil;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 

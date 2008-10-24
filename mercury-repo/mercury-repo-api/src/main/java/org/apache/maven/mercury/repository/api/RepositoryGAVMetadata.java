@@ -7,7 +7,6 @@ import java.util.TreeSet;
 import org.apache.maven.mercury.artifact.ArtifactCoordinates;
 import org.apache.maven.mercury.artifact.version.VersionComparator;
 import org.apache.maven.mercury.repository.metadata.Metadata;
-import org.apache.maven.mercury.repository.metadata.MetadataBuilder;
 import org.apache.maven.mercury.repository.metadata.MetadataException;
 import org.apache.maven.mercury.util.TimeUtil;
 import org.apache.maven.mercury.util.Util;

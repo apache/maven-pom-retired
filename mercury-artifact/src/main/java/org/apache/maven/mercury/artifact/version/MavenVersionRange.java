@@ -1,7 +1,6 @@
 package org.apache.maven.mercury.artifact.version;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.Quality;
@@ -23,6 +22,7 @@ import org.codehaus.plexus.lang.Language;
  * @version $Id$
  */
 public class MavenVersionRange
+implements VersionRange
 {
   private static final DefaultArtifactVersion ZERO_VERSION = new DefaultArtifactVersion("0.0.0");
   private static final Language _lang = new DefaultLanguage( MavenVersionRange.class );
@@ -36,14 +36,14 @@ public class MavenVersionRange
   boolean _toInclusive = false;
   
   //--------------------------------------------------------------------------------------------
-  public MavenVersionRange( String range, QualityRange qRange )
+  protected MavenVersionRange( final String range, final QualityRange qRange )
   throws VersionException
   {
     this( range );
     setToQualityRange( qRange );
   }
   //--------------------------------------------------------------------------------------------
-  public MavenVersionRange( final String rangeIn )
+  protected MavenVersionRange( final String rangeIn )
   throws VersionException
   {
     String range = AttributeQuery.stripExpression( rangeIn );
@@ -58,14 +58,14 @@ public class MavenVersionRange
       else if( range.startsWith("(") )
         _fromInclusive = false;
       else
-        throw new VersionException("invalid range \""+range+"\"");
+        throw new VersionException( _lang.getMessage( "invalid.maven.version.range", range ) );
 
       if( range.endsWith("]") )
         _toInclusive = true;
       else if( range.endsWith(")") )
         _toInclusive = false;
       else
-        throw new VersionException("invalid range \""+range+"\"");
+        throw new VersionException( _lang.getMessage( "invalid.maven.version.range", range ) );
       
       int ind = range.indexOf(',');
 
@@ -99,10 +99,10 @@ public class MavenVersionRange
       }
       
       if( _fromVersion == null && _fromInclusive )
-        throw new VersionException("invalid range \""+range+"\" - from ° cannot be inclusive");
+        throw new VersionException( _lang.getMessage( "invalid.maven.version.range.bad.from", range ) );
       
       if( _toVersion == null && _toInclusive )
-        throw new VersionException("invalid range \""+range+"\" - to ° cannot be inclusive");
+        throw new VersionException( _lang.getMessage( "invalid.maven.version.range.bad.to", range ) );
       
     }
     else
@@ -141,10 +141,13 @@ public class MavenVersionRange
       if( c == '-' || c == '_' )
         continue;
       
-      throw new VersionException( "invalid character '"+c+"' in version \""+v+"\"" );
+      throw new VersionException( _lang.getMessage( "invalid.character", ""+c, v ) );
     }
   }
   //--------------------------------------------------------------------------------------------
+  /* (non-Javadoc)
+   * @see org.apache.maven.mercury.artifact.version.VersionRange#includes(java.lang.String)
+   */
   public boolean includes( String version )
   {
     DefaultArtifactVersion ver = new DefaultArtifactVersion( version );

@@ -2,10 +2,6 @@ package org.apache.maven.mercury.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
-import java.nio.channels.OverlappingFileLockException;
 import java.util.HashSet;
 
 import junit.framework.TestCase;

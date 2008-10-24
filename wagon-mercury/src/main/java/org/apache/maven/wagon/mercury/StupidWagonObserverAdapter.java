@@ -2,9 +2,6 @@ package org.apache.maven.wagon.mercury;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
 import org.apache.maven.mercury.crypto.api.StreamObserverException;
-import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
-import org.apache.maven.mercury.crypto.api.StreamVerifierException;
-import org.apache.maven.mercury.crypto.sha.SHA1Verifier;
 import org.apache.maven.wagon.events.TransferEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,9 +2,9 @@ package org.apache.maven.mercury.artifact;
 
 import java.util.ArrayList;
 
-import org.apache.maven.mercury.artifact.version.VersionException;
-
 import junit.framework.TestCase;
+
+import org.apache.maven.mercury.artifact.version.VersionException;
 
 /**
  *

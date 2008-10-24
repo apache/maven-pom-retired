@@ -5,7 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.maven.mercury.artifact.version.VersionException;
-import org.apache.maven.mercury.artifact.version.MavenVersionRange;
+import org.apache.maven.mercury.artifact.version.VersionRange;
+import org.apache.maven.mercury.artifact.version.VersionRangeFactory;
 
 
 /**
@@ -411,7 +412,7 @@ public class ArtifactBasicMetadata
       {
         if( !filterMd.hasVersion() )
           return false; // no version in the filter - catch by GA
-        MavenVersionRange vr = new MavenVersionRange( filterMd.getVersion() );
+        VersionRange vr = VersionRangeFactory.create( filterMd.getVersion() );
         if( vr.includes( dep.getVersion() ))
           return false; // catch by version query
       }
@@ -426,9 +427,6 @@ public class ArtifactBasicMetadata
   {
     if( obj == null || !( obj instanceof ArtifactBasicMetadata ) )
       return false;
-    
-    String me = toString();
-    String him = obj.toString();
     
     return toString().equals( obj.toString() );
   }

@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.maven.mercury.artifact.ArtifactCoordinates;
 import org.apache.maven.mercury.repository.api.MetadataCorruptionException;
 import org.apache.maven.mercury.repository.api.RepositoryGAMetadata;
-import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.MetadataException;
 import org.apache.maven.mercury.util.Util;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;

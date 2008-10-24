@@ -34,7 +34,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.maven.mercury.crypto.api.StreamObserver;
 import org.apache.maven.mercury.crypto.api.StreamObserverException;
 import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
-import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.spi.http.client.DestinationRealmResolver;
 import org.apache.maven.mercury.spi.http.client.FileExchange;

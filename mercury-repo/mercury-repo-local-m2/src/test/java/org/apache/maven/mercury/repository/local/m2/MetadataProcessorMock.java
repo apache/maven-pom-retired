@@ -3,7 +3,6 @@ package org.apache.maven.mercury.repository.local.m2;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 

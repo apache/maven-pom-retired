@@ -1,18 +1,14 @@
 package org.apache.maven.mercury.repository.cache.fs;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.maven.mercury.artifact.ArtifactCoordinates;
+import junit.framework.TestCase;
+
 import org.apache.maven.mercury.repository.api.RepositoryGAMetadata;
 import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.MetadataBuilder;
 import org.apache.maven.mercury.util.FileUtil;
-
-import junit.framework.TestCase;
 
 /**
  *

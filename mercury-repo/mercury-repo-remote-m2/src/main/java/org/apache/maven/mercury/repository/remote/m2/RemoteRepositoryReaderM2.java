@@ -17,8 +17,10 @@ import org.apache.maven.mercury.artifact.ArtifactCoordinates;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
-import org.apache.maven.mercury.artifact.version.VersionException;
 import org.apache.maven.mercury.artifact.version.MavenVersionRange;
+import org.apache.maven.mercury.artifact.version.VersionException;
+import org.apache.maven.mercury.artifact.version.VersionRange;
+import org.apache.maven.mercury.artifact.version.VersionRangeFactory;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
@@ -501,10 +503,10 @@ implements RepositoryReader, MetadataReader
         continue;
       }
 
-      MavenVersionRange versionQuery;
+      VersionRange versionQuery;
       try
       {
-        versionQuery = new MavenVersionRange( bmd.getVersion(), _repo.getVersionRangeQualityRange() );
+        versionQuery = VersionRangeFactory.create( bmd.getVersion(), _repo.getVersionRangeQualityRange() );
       }
       catch( VersionException e )
       {

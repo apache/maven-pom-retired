@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.mercury.artifact.Artifact;
@@ -15,7 +14,8 @@ import org.apache.maven.mercury.artifact.DefaultArtifact;
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 import org.apache.maven.mercury.artifact.version.VersionException;
-import org.apache.maven.mercury.artifact.version.MavenVersionRange;
+import org.apache.maven.mercury.artifact.version.VersionRange;
+import org.apache.maven.mercury.artifact.version.VersionRangeFactory;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
@@ -436,10 +436,10 @@ implements RepositoryReader, MetadataReader
       
       File [] versionFiles = gaDir.listFiles();
       
-      MavenVersionRange versionQuery;
+      VersionRange versionQuery;
       try
       {
-        versionQuery = new MavenVersionRange( bmd.getVersion(), _repo.getVersionRangeQualityRange() );
+        versionQuery = VersionRangeFactory.create( bmd.getVersion(), _repo.getVersionRangeQualityRange() );
       }
       catch( VersionException e )
       {
