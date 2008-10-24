@@ -18,7 +18,7 @@ import org.apache.maven.mercury.artifact.DefaultArtifact;
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 import org.apache.maven.mercury.artifact.version.VersionException;
-import org.apache.maven.mercury.artifact.version.VersionRange;
+import org.apache.maven.mercury.artifact.version.MavenVersionRange;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
@@ -172,7 +172,7 @@ implements RepositoryReader, MetadataReader
       )
     {
       boolean noSnapshots = Artifact.RELEASE_VERSION.equals( loc.getVersion() );
-      String ver = VersionRange.findLatest( versions, noSnapshots );
+      String ver = MavenVersionRange.findLatest( versions, noSnapshots );
 
       if( ver == null )
       {
@@ -287,7 +287,7 @@ implements RepositoryReader, MetadataReader
     }
     
     // nothing to do, but find latest
-    String ver = VersionRange.findLatest( versions, true );
+    String ver = MavenVersionRange.findLatest( versions, true );
 
     if( ver == null )
     {
@@ -501,10 +501,10 @@ implements RepositoryReader, MetadataReader
         continue;
       }
 
-      VersionRange versionQuery;
+      MavenVersionRange versionQuery;
       try
       {
-        versionQuery = new VersionRange( bmd.getVersion(), _repo.getVersionRangeQualityRange() );
+        versionQuery = new MavenVersionRange( bmd.getVersion(), _repo.getVersionRangeQualityRange() );
       }
       catch( VersionException e )
       {

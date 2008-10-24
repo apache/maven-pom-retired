@@ -22,10 +22,10 @@ import org.codehaus.plexus.lang.Language;
  * @author Oleg Gusakov
  * @version $Id$
  */
-public class VersionRange
+public class MavenVersionRange
 {
   private static final DefaultArtifactVersion ZERO_VERSION = new DefaultArtifactVersion("0.0.0");
-  private static final Language _lang = new DefaultLanguage( VersionRange.class );
+  private static final Language _lang = new DefaultLanguage( MavenVersionRange.class );
   
   QualityRange _toQualityRange = QualityRange.ALL;
   
@@ -36,14 +36,14 @@ public class VersionRange
   boolean _toInclusive = false;
   
   //--------------------------------------------------------------------------------------------
-  public VersionRange( String range, QualityRange qRange )
+  public MavenVersionRange( String range, QualityRange qRange )
   throws VersionException
   {
     this( range );
     setToQualityRange( qRange );
   }
   //--------------------------------------------------------------------------------------------
-  public VersionRange( final String rangeIn )
+  public MavenVersionRange( final String rangeIn )
   throws VersionException
   {
     String range = AttributeQuery.stripExpression( rangeIn );
@@ -112,7 +112,7 @@ public class VersionRange
     }
   }
   //--------------------------------------------------------------------------------------------
-  public void setToQualityRange( QualityRange qRange )
+  protected void setToQualityRange( QualityRange qRange )
   {
     this._toQualityRange = qRange;
   }

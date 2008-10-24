@@ -10,16 +10,16 @@ import org.apache.maven.mercury.artifact.QualityRange;
  * @author Oleg Gusakov
  * @version $Id$
  */
-public class VersionRangeTest
+public class MavenVersionRangeTest
     extends TestCase
 {
-  VersionRange range;
+  MavenVersionRange range;
 
   public void testSimple()
   throws VersionException
   {
     String rangeS = "[ 1.2.3 , 2.0.0 )";
-    range = new VersionRange( rangeS );
+    range = new MavenVersionRange( rangeS );
 
     assertTrue(  "1.2.4 did not match the range "+rangeS, range.includes( "1.2.4" ) ); 
     assertTrue(  "1.3.1 did not match the range "+rangeS, range.includes( "1.3.1" ) ); 
@@ -33,7 +33,7 @@ public class VersionRangeTest
   throws VersionException
   {
     String rangeS = "[ 1.2.3 , )";
-    range = new VersionRange( rangeS );
+    range = new MavenVersionRange( rangeS );
 
     assertTrue(  "1.2.4 did not match the range "+rangeS, range.includes( "1.2.4" ) ); 
     assertTrue(  "1.3.1 did not match the range "+rangeS, range.includes( "1.3.1" ) ); 
@@ -47,7 +47,7 @@ public class VersionRangeTest
   throws VersionException
   {
     String rangeS = "[ 1.0.0.1.2.1 , )";
-    range = new VersionRange( rangeS );
+    range = new MavenVersionRange( rangeS );
 
     assertTrue(  "1.0.0.1.2.1 did not match the range "+rangeS, range.includes( "1.0.0.1.2.1" ) );
     assertTrue(  "1.0.0.1.2.2 did not match the range "+rangeS, range.includes( "1.0.0.1.2.2" ) );
@@ -61,7 +61,7 @@ public class VersionRangeTest
   throws VersionException
   {
     String rangeS = "[1.0.0.0.22,)";
-    range = new VersionRange( rangeS );
+    range = new MavenVersionRange( rangeS );
 
     assertFalse( "1.0.0.0.9 does match the range "+rangeS, range.includes( "1.0.0.0.9" ) );
   }
@@ -70,7 +70,7 @@ public class VersionRangeTest
   throws VersionException
   {
     String rangeS = "[1.0,2.0)";
-    range = new VersionRange( rangeS );
+    range = new MavenVersionRange( rangeS );
 
     assertFalse( range.includes( "1.0-SNAPSHOT" ) );
     assertTrue( range.includes( "1.1-SNAPSHOT" ) );
@@ -84,7 +84,7 @@ public class VersionRangeTest
   throws VersionException
   {
     String rangeS = "[1.0,2.0)";
-    range = new VersionRange( rangeS );
+    range = new MavenVersionRange( rangeS );
     range.setToQualityRange( new QualityRange( Quality.BETA_QUALITY, true, Quality.RELEASE_QUALITY, true  ) );
 
     assertFalse( range.includes( "1.0-SNAPSHOT" ) );
@@ -100,7 +100,7 @@ public class VersionRangeTest
   throws VersionException
   {
     String rangeS = "[1.0,2.0)";
-    range = new VersionRange( rangeS );
+    range = new MavenVersionRange( rangeS );
     range.setToQualityRange( new QualityRange( Quality.ALPHA_QUALITY, true, Quality.RELEASE_QUALITY, true  ) );
 
     assertFalse( range.includes( "1.0-SNAPSHOT" ) );
