@@ -359,8 +359,8 @@ implements RepositoryWriter
     
     mdOps.add( new AddVersionOperation( new StringOperand(artifact.getVersion()) ) ); 
  
-System.out.println("added "+artifact.getVersion());
-System.out.flush();
+//System.out.println("added "+artifact.getVersion());
+//System.out.flush();
     byte [] resBytes = MetadataBuilder.changeMetadata( md, mdOps );
     FileUtil.writeAndSign( mdFile.getAbsolutePath(), resBytes, vFacs );
   }

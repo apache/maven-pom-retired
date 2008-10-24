@@ -62,7 +62,8 @@ public class DependencyFilterTest
   {
     assertTrue( a2.allowDependency( new ArtifactBasicMetadata("a:a:2.0.0") ) );
     assertFalse( a2.allowDependency( new ArtifactBasicMetadata("b:b:1.0.0") ) );
-    assertTrue( a2.allowDependency( new ArtifactBasicMetadata("b:b:2.0.1") ) );
+    assertTrue( a2.allowDependency( new ArtifactBasicMetadata("b:b:2.0.0") ) );
+    assertFalse( a2.allowDependency( new ArtifactBasicMetadata("b:b:2.0.1") ) );
     assertFalse( a2.allowDependency( new ArtifactBasicMetadata("c:c:1.0.0") ) );
   }
   

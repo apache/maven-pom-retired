@@ -17,7 +17,6 @@ import org.apache.maven.mercury.artifact.ArtifactCoordinates;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
-import org.apache.maven.mercury.artifact.version.MavenVersionRange;
 import org.apache.maven.mercury.artifact.version.VersionException;
 import org.apache.maven.mercury.artifact.version.VersionRange;
 import org.apache.maven.mercury.artifact.version.VersionRangeFactory;
@@ -174,7 +173,7 @@ implements RepositoryReader, MetadataReader
       )
     {
       boolean noSnapshots = Artifact.RELEASE_VERSION.equals( loc.getVersion() );
-      String ver = MavenVersionRange.findLatest( versions, noSnapshots );
+      String ver = VersionRangeFactory.findLatest( versions, noSnapshots );
 
       if( ver == null )
       {
@@ -289,7 +288,7 @@ implements RepositoryReader, MetadataReader
     }
     
     // nothing to do, but find latest
-    String ver = MavenVersionRange.findLatest( versions, true );
+    String ver = VersionRangeFactory.findLatest( versions, true );
 
     if( ver == null )
     {
@@ -386,8 +385,7 @@ implements RepositoryReader, MetadataReader
    * 
    */
   public ArtifactBasicResults readDependencies( Collection<ArtifactBasicMetadata> query )
-      throws RepositoryException,
-      IllegalArgumentException
+  throws RepositoryException
   {
     if( query == null || query.size() < 1 )
       return null;
@@ -399,7 +397,7 @@ implements RepositoryReader, MetadataReader
       try
       {
         List<ArtifactBasicMetadata> deps = _mdProcessor.getDependencies( bmd, _mdReader == null ? this : _mdReader
-                                                                        , System.getenv() , System.getProperties() 
+                                                                        , System.getenv(), System.getProperties() 
                                                                         );
         ror.add( bmd, deps );
       }

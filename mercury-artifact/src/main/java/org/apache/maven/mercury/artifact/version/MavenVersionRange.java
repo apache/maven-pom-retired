@@ -16,14 +16,18 @@ import org.codehaus.plexus.lang.Language;
  * [1.2.3, 4.5.6] 1.2.3 <= x <= 4.5.6
  * (1.2.3, 4.5.6) 1.2.3 < x < 4.5.6
  * (1.2.3, 4.5.6] 1.2.3 < x <= 4.5.6
- * 1.2.3 1.2.3 <= x
+ * 1.2.3 1.2.3 <= x - this one is configurable
  * 
  * @author Oleg Gusakov
  * @version $Id$
  */
-public class MavenVersionRange
+class MavenVersionRange
 implements VersionRange
 {
+  public static final String SYSTEM_PARAMETER_OSGI_VERSION = "maven.mercury.osgi.version";
+  public static final String SYSTEM_PARAMETER_OSGI_VERSION_DEFAULT = "false";
+  private boolean _osgiVersion = Boolean.parseBoolean( System.getProperty( SYSTEM_PARAMETER_OSGI_VERSION, SYSTEM_PARAMETER_OSGI_VERSION_DEFAULT ) );
+
   private static final DefaultArtifactVersion ZERO_VERSION = new DefaultArtifactVersion("0.0.0");
   private static final Language _lang = new DefaultLanguage( MavenVersionRange.class );
   
@@ -109,6 +113,14 @@ implements VersionRange
     {
       checkForValidCharacters(range);
       _fromVersion = new DefaultArtifactVersion( range );
+      
+      // good old maven version interpretation
+      if( !_osgiVersion )
+      {
+        _toVersion = _fromVersion;
+        _fromInclusive = true;
+        _toInclusive   = true;
+      }
     }
   }
   //--------------------------------------------------------------------------------------------
@@ -181,44 +193,13 @@ implements VersionRange
     
     return false;
   }
-  
-  //--------------------------------------------------------------------------------------------
-  /**
-   * helpful latest version calculator
-   * 
-   * @param versions
-   * @param noSnapshots
-   * @return
-   */
-  public static final String findLatest( final Collection<String> versions, final boolean noSnapshots )
-  {
-    DefaultArtifactVersion tempDav = null;
-    DefaultArtifactVersion tempDav2 = null;
-    String version = null;
 
-    // find latest
-    for( String vn : versions )
-    {
-      // RELEASE?
-      if( noSnapshots && vn.endsWith( Artifact.SNAPSHOT_VERSION ))
-        continue;
-      
-      if( version == null )
-      {
-        version = vn;
-        tempDav = new DefaultArtifactVersion( vn );
-        continue;
-      }
-      
-      tempDav2 = new DefaultArtifactVersion( vn );
-      if( tempDav2.compareTo( tempDav ) > 0 )
-      {
-        version = vn;
-        tempDav = tempDav2;
-      }
-    }
-    return version;
+  public void setOption( String name, String val )
+  {
+    if( SYSTEM_PARAMETER_OSGI_VERSION.equals( name ) )
+      _osgiVersion = Boolean.parseBoolean( System.getProperty( val, SYSTEM_PARAMETER_OSGI_VERSION_DEFAULT ) );
   }
+  
   //--------------------------------------------------------------------------------------------
   //--------------------------------------------------------------------------------------------
 }

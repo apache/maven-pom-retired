@@ -10,7 +10,8 @@ public interface DependencyProcessor
   
   public static final DependencyProcessor NULL_PROCESSOR = 
                         new DependencyProcessor() {
-                          public List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd
+                          public List<ArtifactBasicMetadata> getDependencies( 
+                                                                              ArtifactBasicMetadata bmd
                                                                             , MetadataReader mdReader
                                                                             , Map env
                                                                             , Map sysProps
@@ -21,6 +22,6 @@ public interface DependencyProcessor
                           }
                         };
 
-  List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Map env, Map sysProps )
+  public List<ArtifactBasicMetadata> getDependencies( ArtifactBasicMetadata bmd, MetadataReader mdReader, Map env, Map sysProps )
   throws MetadataReaderException;
 }

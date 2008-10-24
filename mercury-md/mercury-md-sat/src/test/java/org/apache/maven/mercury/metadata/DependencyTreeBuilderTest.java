@@ -30,7 +30,7 @@ extends TestCase
 
   File repoDir = new File("./target/test-classes/controlledRepo");
   
-  DependencyTreeBuilder mt;
+  DependencyBuilder mt;
   LocalRepositoryM2 localRepo;
   List<Repository> reps;
   DependencyProcessor processor;

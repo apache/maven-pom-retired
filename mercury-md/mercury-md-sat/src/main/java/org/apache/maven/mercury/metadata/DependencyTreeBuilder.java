@@ -28,7 +28,7 @@ import org.codehaus.plexus.lang.Language;
  * @author Oleg Gusakov
  * @version $Id: MetadataTree.java 681180 2008-07-30 19:34:16Z ogusakov $
  */
-public class DependencyTreeBuilder
+public class DependencyTreeBuilder implements DependencyBuilder
 {
   Language _lang = new DefaultLanguage(DependencyTreeBuilder.class);
   
@@ -54,7 +54,7 @@ public class DependencyTreeBuilder
    * m2eclipse, for instance, insert a workspace repository
    * @throws RepositoryException
    */
-  public DependencyTreeBuilder(
+  protected DependencyTreeBuilder(
         Collection<MetadataTreeArtifactFilter> filters
       , List<Comparator<MetadataTreeNode>> comparators
       , Map<String,ArtifactListProcessor> processors
@@ -81,14 +81,8 @@ public class DependencyTreeBuilder
     this._reader = new VirtualRepositoryReader( repositories, processor );
   }
   //------------------------------------------------------------------------
-  /**
-   * build the tree, using the repositories specified in the
-   * constructor
-   * 
-   * @param startMD - root of the tree to build
-   * @param targetPlatform - limitations to use when retrieving metadata. Format is G:A=V, where V is Version Range
-   * @return the root of the tree built
-   * @throws MetadataTreeException
+  /* (non-Javadoc)
+   * @see org.apache.maven.mercury.metadata.DependencyBuilder#buildTree(org.apache.maven.mercury.artifact.ArtifactBasicMetadata)
    */
   public MetadataTreeNode buildTree( ArtifactBasicMetadata startMD )
   throws MetadataTreeException
@@ -246,6 +240,9 @@ public class DependencyTreeBuilder
     return true;
   }
   //-----------------------------------------------------
+  /* (non-Javadoc)
+   * @see org.apache.maven.mercury.metadata.DependencyBuilder#resolveConflicts(org.apache.maven.mercury.artifact.ArtifactScopeEnum)
+   */
   public List<ArtifactMetadata> resolveConflicts( ArtifactScopeEnum scope )
   throws MetadataTreeException
   {

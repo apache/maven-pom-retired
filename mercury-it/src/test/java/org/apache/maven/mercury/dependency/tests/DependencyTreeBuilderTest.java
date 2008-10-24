@@ -15,6 +15,8 @@ import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
+import org.apache.maven.mercury.metadata.DependencyBuilder;
+import org.apache.maven.mercury.metadata.DependencyBuilderFactory;
 import org.apache.maven.mercury.metadata.DependencyTreeBuilder;
 import org.apache.maven.mercury.metadata.MetadataTreeException;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
@@ -42,7 +44,7 @@ extends TestCase
 
   File repoDir;
   
-  DependencyTreeBuilder depBuilder;
+  DependencyBuilder depBuilder;
   LocalRepositoryM2 localRepo;
   RemoteRepositoryM2 remoteRepo;
   List<Repository> reps;
@@ -79,7 +81,7 @@ extends TestCase
 
     processor = new MavenDependencyProcessor();
 
-    depBuilder = new DependencyTreeBuilder( null, null, null, reps, processor );
+    depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, null, null, null, reps, processor );
     
     vReader = new VirtualRepositoryReader( reps, processor );
   }
@@ -94,9 +96,12 @@ extends TestCase
   public void testDummy()
   throws MetadataTreeException
   {
-    
   }
   //----------------------------------------------------------------------------------------------
+  /**
+   * this test relies on MavenVersionRange maven.mercury.osgi.version being set to false, it's default value.
+   * <strong>Do not</strong> run maven with -Dmaven.mercury.osgi.version=true   
+   */
   public void testResolveConflicts()
   throws Exception
   {
@@ -129,13 +134,12 @@ extends TestCase
     System.out.println("---------------------------------");    
 
     
-//    assertEquals( "wrong tree size", 3, res.size() );
+    assertEquals( 4, res.size() );
     
-//    assertTrue( "no a:a:2 in the result", assertHasArtifact( res, "a:a:2" ) );
-//    assertTrue( "no b:b:1 in the result", assertHasArtifact( res, "b:b:1" ) );
-//    assertTrue( "no c:c:2 in the result", assertHasArtifact( res, "c:c:2" ) );
-    
-    
+    assertTrue( assertHasArtifact( res, "asm:asm-xml:3.0" ) );
+    assertTrue( assertHasArtifact( res, "asm:asm-util:3.0" ) );
+    assertTrue( assertHasArtifact( res, "asm:asm-tree:3.0" ) );
+    assertTrue( assertHasArtifact( res, "asm:asm:3.0" ) );
     
     ArtifactResults aRes = vReader.readArtifacts( res );
     

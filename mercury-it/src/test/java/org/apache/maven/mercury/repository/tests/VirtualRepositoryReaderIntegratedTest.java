@@ -88,7 +88,7 @@ extends TestCase
   {
     try
     {
-    ArtifactBasicMetadata bmd = new ArtifactBasicMetadata("a:a:1");
+    ArtifactBasicMetadata bmd = new ArtifactBasicMetadata("a:a:[1,)");
     List<ArtifactBasicMetadata> q = THelper.toList( bmd );
     
     ArtifactBasicResults vres = _vr.readVersions( q );

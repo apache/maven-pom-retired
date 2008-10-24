@@ -76,7 +76,7 @@ extends TestCase
   {
     repo.setRepositoryQualityRange( QualityRange.RELEASES_ONLY );
   
-    bmd = new ArtifactBasicMetadata("a:a:3");
+    bmd = new ArtifactBasicMetadata("a:a:[3,)");
     query.add( bmd );
     
     ArtifactBasicResults res = reader.readVersions( query );
@@ -106,13 +106,15 @@ extends TestCase
     assertFalse( depRes.hasExceptions() );
     assertTrue( depRes.hasResults() );
     
-    assertTrue( depRes.hasResults( bmd ) );
+    ArtifactBasicMetadata a3 = new ArtifactBasicMetadata("a:a:3");
     
-    List<ArtifactBasicMetadata> deps = depRes.getResult( bmd );
+    assertTrue( depRes.hasResults( a3 ) );
+    
+    List<ArtifactBasicMetadata> deps = depRes.getResult( a3 );
     assertNotNull( deps );
     assertFalse( deps.isEmpty() );
 
-//    System.out.println(deps);
+    System.out.println(deps);
 
     assertTrue( deps.contains( new ArtifactBasicMetadata("b:b:2") ) );
     assertTrue( deps.contains( new ArtifactBasicMetadata("c:c:(1,)") ) );
