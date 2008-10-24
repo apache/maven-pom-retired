@@ -13,7 +13,7 @@ import org.codehaus.plexus.lang.Language;
  *
  */
 public class VersionComparator
-    implements Comparator<String>
+implements Comparator<String>
 {
   private static final Language _lang = new DefaultLanguage( VersionComparator.class );
   

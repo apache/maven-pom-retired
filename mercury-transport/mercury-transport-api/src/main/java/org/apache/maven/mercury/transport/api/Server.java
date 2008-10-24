@@ -229,4 +229,12 @@ public class Server
     return requireTrustedServer;
   }
 
+  @Override
+  public String toString()
+  {
+    return id+": "+url;
+  }
+  
+  
+
 }

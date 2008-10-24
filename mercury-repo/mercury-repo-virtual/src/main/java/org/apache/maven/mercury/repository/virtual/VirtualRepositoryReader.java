@@ -7,12 +7,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
+import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessor;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessorException;
+import org.apache.maven.mercury.artifact.version.MetadataVersionComparator;
+import org.apache.maven.mercury.artifact.version.VersionComparator;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
@@ -71,10 +76,11 @@ implements MetadataReader
   throws RepositoryException
   {
     if( processor == null )
-      throw new RepositoryException( "null metadata processor" );
-    this._processor = processor;
+      this._processor = DependencyProcessor.NULL_PROCESSOR;
+    else
+      this._processor = processor;
 
-    if( repositories != null && repositories.size() > 0 )
+    if( ! Util.isEmpty( repositories ) )
       this._repositories.addAll( repositories );
   }
   //----------------------------------------------------------------------------------------------------------------------------
@@ -284,7 +290,7 @@ implements MetadataReader
   /**
    * split query into repository buckets
    */
-  private Map< RepositoryReader, List<ArtifactBasicMetadata> > sortByRepo( Collection<ArtifactBasicMetadata> query )
+  private Map< RepositoryReader, List<ArtifactBasicMetadata> > sortByRepo( Collection<? extends ArtifactBasicMetadata> query )
   {
     HashMap< RepositoryReader, List<ArtifactBasicMetadata> > res = null;
     
@@ -335,7 +341,7 @@ implements MetadataReader
     return res;
   }
   //----------------------------------------------------------------------------------------------------------------------------
-  public ArtifactResults readArtifacts( Collection<ArtifactBasicMetadata> query )
+  public ArtifactResults readArtifacts( Collection<? extends ArtifactBasicMetadata> query )
   throws RepositoryException
   {
     ArtifactResults res = null;
@@ -417,6 +423,7 @@ implements MetadataReader
   public byte[] readMetadata( ArtifactBasicMetadata bmd )
   throws MetadataReaderException
   {
+System.err.println("Asking for pom: "+bmd);
     return readRawData( bmd, "", "pom" );
   }
   //----------------------------------------------------------------------------------------------------------------------------
@@ -425,8 +432,15 @@ implements MetadataReader
   public byte[] readRawData( ArtifactBasicMetadata bmd, String classifier, String type )
   throws MetadataReaderException
   {
+    
+    if( _log.isDebugEnabled() )
+      _log.debug( "request for "+bmd+", classifier="+classifier+", type="+type );
+System.err.println( "request for "+bmd+", classifier="+classifier+", type="+type );
+    
     if( bmd == null )
       throw new IllegalArgumentException("null bmd supplied");
+    
+    ArtifactBasicMetadata bmdQuery = bmd;
     
     try
     {
@@ -438,13 +452,70 @@ implements MetadataReader
     }
     
     byte [] res = null;
+    Quality vq = new Quality( bmd.getVersion() );
+    
+    if( _log.isDebugEnabled() )
+      _log.debug( "quality calculated as "+vq.getQuality() == null ? "null" :vq.getQuality().name() );
+System.err.println( "quality calculated as "+vq.getQuality() == null ? "null" :vq.getQuality().name() );
+    
+    if( Quality.SNAPSHOT_QUALITY.equals( vq ) )
+    {
+      List<ArtifactBasicMetadata> query = new ArrayList<ArtifactBasicMetadata>(1);
+      query.add( bmd );
+      
+      try
+      {
+        ArtifactBasicResults vRes = readVersions( query );
+        if( Util.isEmpty( vRes ) )
+        {
+          if( _log.isDebugEnabled() )
+            _log.debug( "no snapshots found - throw exception" );
+System.err.println( "no snapshots found - throw exception" );
+          
+          throw new MetadataReaderException( _lang.getMessage( "no.snapshots", bmd.toString(), classifier, type ) );
+        }
+          
+          
+        if( vRes.hasResults( bmd ) )
+        {
+          List<ArtifactBasicMetadata> versions = vRes.getResult( bmd );
+          
+          TreeSet<ArtifactBasicMetadata> snapshots = new TreeSet<ArtifactBasicMetadata>( new MetadataVersionComparator() );
+          snapshots.addAll( versions );
+          
+          bmdQuery = snapshots.last();
+        }
+        else
+        {
+          if( _log.isDebugEnabled() )
+            _log.debug( "no snapshots found - throw exception" );
+System.err.println("no snapshots found - throw exception" );
+          
+          throw new MetadataReaderException( _lang.getMessage( "no.snapshots", bmd.toString(), classifier, type ) );
+        }
+      }
+      catch( Exception e )
+      {
+        throw new MetadataReaderException(e);
+      }
+    }
     
     for( RepositoryReader rr : _repositoryReaders )
     {
-      res = rr.readRawData( bmd, classifier, type );
+      res = rr.readRawData( bmdQuery, classifier, type );
       if( res != null )
+      {
+        if( _log.isDebugEnabled() )
+          _log.debug( "data found in "+rr.getRepository().getServer()+", results shipped back" );
+System.err.println( "data found in "+rr.getRepository().getServer()+", results shipped back" );
+        
         return res;
+      }
     }
+    
+    if( _log.isDebugEnabled() )
+      _log.debug( "no data found, returning null" );
+System.err.println( "no data found, returning null" );
     
     return null;
   }

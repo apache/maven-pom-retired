@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.metadata;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class DependencyTreeBuilder
 {
   Language _lang = new DefaultLanguage(DependencyTreeBuilder.class);
   
-  private Set<MetadataTreeArtifactFilter> _filters;
+  private Collection<MetadataTreeArtifactFilter> _filters;
   private List<Comparator<MetadataTreeNode>> _comparators;
   private Map<String,ArtifactListProcessor> _processors;
   
@@ -55,7 +56,7 @@ public class DependencyTreeBuilder
    * @throws RepositoryException
    */
   public DependencyTreeBuilder(
-        Set<MetadataTreeArtifactFilter> filters
+        Collection<MetadataTreeArtifactFilter> filters
       , List<Comparator<MetadataTreeNode>> comparators
       , Map<String,ArtifactListProcessor> processors
       , List<Repository> repositories
@@ -224,7 +225,7 @@ public class DependencyTreeBuilder
     }
   }
   //-----------------------------------------------------
-  private boolean veto(ArtifactBasicMetadata md, Set<MetadataTreeArtifactFilter> filters )
+  private boolean veto(ArtifactBasicMetadata md, Collection<MetadataTreeArtifactFilter> filters )
   {
     if( filters != null && filters.size() > 1)
       for( MetadataTreeArtifactFilter filter : filters )

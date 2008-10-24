@@ -19,8 +19,12 @@ public class QualityTest
   public void testEquality()
   {
     q = new Quality("LATEST");
-    
     assertTrue( q.equals( Quality.FIXED_LATEST_QUALITY ) );
     
+    q = new Quality("RELEASE");
+    assertTrue( q.equals( Quality.FIXED_RELEASE_QUALITY ) );
+    
+    q = new Quality("1.1-SNAPSHOT");
+    assertTrue( q.equals( Quality.SNAPSHOT_QUALITY ) );
   }
 }
