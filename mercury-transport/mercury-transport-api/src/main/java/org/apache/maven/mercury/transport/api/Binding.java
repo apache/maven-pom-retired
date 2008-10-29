@@ -52,9 +52,7 @@ public class Binding
   {
   }
 
-  public Binding(
-      URL remoteUrl,
-      File localFile)
+  public Binding( URL remoteUrl, File localFile)
   {
     this.remoteResource = remoteUrl;
     this.localFile = localFile;
