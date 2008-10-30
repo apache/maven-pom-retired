@@ -118,7 +118,7 @@ extends TestCase
     
 //    assertTrue( "wrong tree size, expected gte 4", 4 <= root.countNodes() );
 
-    List<ArtifactMetadata> res = depBuilder.resolveConflicts( ArtifactScopeEnum.compile );
+    List<ArtifactMetadata> res = depBuilder.resolveConflicts( root, ArtifactScopeEnum.compile );
     
     assertNotNull( res );
     

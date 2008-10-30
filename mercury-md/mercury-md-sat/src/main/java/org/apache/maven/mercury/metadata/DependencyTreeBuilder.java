@@ -19,6 +19,7 @@ import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;
+import org.apache.maven.mercury.util.Util;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
@@ -38,8 +39,6 @@ implements DependencyBuilder
   private Map<String,ArtifactListProcessor> _processors;
   
   private VirtualRepositoryReader _reader;
-  
-  MetadataTreeNode _root;
   
   Map< String, MetadataTreeNode > existingNodes;
   
@@ -61,7 +60,7 @@ implements DependencyBuilder
         Collection<MetadataTreeArtifactFilter> filters
       , List<Comparator<MetadataTreeNode>> comparators
       , Map<String,ArtifactListProcessor> processors
-      , List<Repository> repositories
+      , Collection<Repository> repositories
       , DependencyProcessor processor
                      )
   throws RepositoryException
@@ -102,8 +101,9 @@ implements DependencyBuilder
     
     existingNodes = new HashMap<String, MetadataTreeNode>(128);
     
-    _root = createNode( startMD, null, startMD );
-    return _root;
+    MetadataTreeNode root = createNode( startMD, null, startMD );
+    
+    return root;
   }
   //-----------------------------------------------------
   private MetadataTreeNode createNode( ArtifactBasicMetadata nodeMD, MetadataTreeNode parent, ArtifactBasicMetadata nodeQuery )
@@ -246,27 +246,67 @@ implements DependencyBuilder
     return true;
   }
   //-----------------------------------------------------
-  public List<ArtifactMetadata> resolveConflicts( ArtifactScopeEnum scope )
+  public List<ArtifactMetadata> resolveConflicts( MetadataTreeNode root, ArtifactScopeEnum scope )
   throws MetadataTreeException
   {
-    if( _root == null )
-      throw new MetadataTreeException("null tree");
+    if( root == null )
+      throw new MetadataTreeException(_lang.getMessage( "empty.tree" ));
     
     try
     {
-      DefaultSatSolver solver = new DefaultSatSolver( _root, scope );
+      DefaultSatSolver solver = new DefaultSatSolver( root, scope );
       
-      if( _comparators == null )
-        _comparators = new ArrayList<Comparator<MetadataTreeNode>>(2);
-      
-      if( _comparators.size() < 1 )
-      {
-        _comparators.add( new ClassicDepthComparator() );
-        _comparators.add( new ClassicVersionComparator() );
-      }
-      solver.applyPolicies( _comparators );
+      solver.applyPolicies( getComparators() );
 
       List<ArtifactMetadata> res = solver.solve();
+      
+      return res;
+    }
+    catch (SatException e)
+    {
+      throw new MetadataTreeException(e);
+    }
+    
+  }
+  //-----------------------------------------------------
+  private List<Comparator<MetadataTreeNode>> getComparators()
+  {
+    if( Util.isEmpty( _comparators ) )
+      _comparators = new ArrayList<Comparator<MetadataTreeNode>>(2);
+    
+    if( _comparators.size() < 1 )
+    {
+      _comparators.add( new ClassicDepthComparator() );
+      _comparators.add( new ClassicVersionComparator() );
+    }
+    
+    return _comparators;
+  }
+  //-----------------------------------------------------
+  public List<ArtifactMetadata> resolveConflicts( List<ArtifactBasicMetadata>trees, ArtifactScopeEnum scope )
+  throws MetadataTreeException
+  {
+    if( Util.isEmpty( trees ) )
+      throw new MetadataTreeException(_lang.getMessage( "empty.tree.collection" ));
+    
+    String dummyGAV = "__fake:__fake:0.0.0";
+    
+    ArtifactBasicMetadata query = new ArtifactBasicMetadata( dummyGAV );
+    
+    ArtifactMetadata dummyMd = new ArtifactMetadata( query );
+    dummyMd.setDependencies( trees );
+    
+    MetadataTreeNode root = new MetadataTreeNode( dummyMd, null, query );
+    
+    try
+    {
+      DefaultSatSolver solver = new DefaultSatSolver( root, scope );
+      
+      solver.applyPolicies( getComparators() );
+
+      List<ArtifactMetadata> res = solver.solve();
+      
+      res.remove( dummyMd );
       
       return res;
     }

@@ -31,7 +31,7 @@ public class DependencyBuilderFactory
       , final Collection<MetadataTreeArtifactFilter> filters
       , final List<Comparator<MetadataTreeNode>> comparators
       , final Map<String,ArtifactListProcessor> processors
-      , final List<Repository> repositories
+      , final Collection<Repository> repositories
       , final DependencyProcessor processor
                      )
   throws RepositoryException

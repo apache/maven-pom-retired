@@ -15,7 +15,6 @@ import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
  */
 public interface DependencyBuilder
 {
-
   //------------------------------------------------------------------------
   /**
    * build the tree, using the repositories specified in the
@@ -26,14 +25,12 @@ public interface DependencyBuilder
    * @return the root of the tree built
    * @throws MetadataTreeException
    */
-  public abstract MetadataTreeNode buildTree(
-      ArtifactBasicMetadata startMD )
-      throws MetadataTreeException;
+  public abstract MetadataTreeNode buildTree( ArtifactBasicMetadata startMD )
+  throws MetadataTreeException;
 
   //-----------------------------------------------------
-  public abstract List<ArtifactMetadata> resolveConflicts(
-      ArtifactScopeEnum scope )
-      throws MetadataTreeException;
+  public abstract List<ArtifactMetadata> resolveConflicts( MetadataTreeNode root, ArtifactScopeEnum scope )
+  throws MetadataTreeException;
   //-----------------------------------------------------
   //-----------------------------------------------------
 
