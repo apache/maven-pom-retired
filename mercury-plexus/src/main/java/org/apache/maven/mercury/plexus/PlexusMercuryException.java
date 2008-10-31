@@ -1,7 +1,7 @@
-package org.codehaus.plexus.components.mercury;
+package org.apache.maven.mercury.plexus;
 
 public class PlexusMercuryException
-    extends Exception
+extends Exception
 {
 
   public PlexusMercuryException()
