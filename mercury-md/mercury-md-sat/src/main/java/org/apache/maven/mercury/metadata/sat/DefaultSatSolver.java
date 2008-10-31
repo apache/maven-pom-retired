@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
@@ -134,13 +135,14 @@ implements SatSolver
       // as the best fit is now last
       Collections.reverse( bucket );
 
-      // we don't need duplicate GAVs
+      // the best fit now first, and we don't need duplicate GAVs
       removeDuplicateGAVs( bucket );
- 
     }
   }
   //-----------------------------------------------------------------------
-  private static final void removeDuplicateGAVs(List<MetadataTreeNode> bucket)
+  // remove duplicates, preserving the order. The first one is the most fit,
+  // so need to delete from tail
+  protected static final void removeDuplicateGAVs( List<MetadataTreeNode> bucket )
   {
     if( bucket == null || bucket.size() < 2 )
       return;
@@ -152,9 +154,16 @@ implements SatSolver
     int cnt = 0;
     
     for( int i=1; i<len; i++ )
+    {
+      MetadataTreeNode ti = bucket.get(i);
+      
       for( int j=0; j<i; j++ )
-        if( gav.compare( bucket.get(i), bucket.get(j) ) == 0 )
+        if( gav.compare( ti, bucket.get(j) ) == 0 )
+        {
           dups[cnt++] = i;
+          break;
+        }
+    }
     
     if( cnt > 0 )
       for( int i=0; i<cnt; i++ )

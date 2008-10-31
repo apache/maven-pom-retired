@@ -10,6 +10,5 @@ import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
  */
 public interface MetadataTreeArtifactFilter
 {
-  public boolean veto( ArtifactBasicMetadata md )
-  ;
+  public boolean veto( ArtifactBasicMetadata md );
 }

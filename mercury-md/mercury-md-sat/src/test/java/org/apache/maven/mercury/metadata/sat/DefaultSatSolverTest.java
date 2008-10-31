@@ -192,12 +192,25 @@ public class DefaultSatSolverTest
     assert res.contains(a1) : "result does not contain "+a1;
   }
   //----------------------------------------------------------------------
-  public void ntestT()
+  public void testDedupe()
   {
-   for( int i=0; i<2; i++)
-     for( int j=0; j<2; j++)
-       System.out.println(i+", "+j+" -> "+f(i,j));
+    List<MetadataTreeNode> list = new ArrayList<MetadataTreeNode>();
+    
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("b:b:1"), null, null ) );
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("b:b:1"), null, null ) );
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
+    
+    DefaultSatSolver.removeDuplicateGAVs( list );
+    
+    System.out.println(list);
+    
+    assertEquals( 2, list.size() );
   }
+  
+  
   private int f( int a, int b )
   {
     return -a + b;
