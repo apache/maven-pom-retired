@@ -1,0 +1,287 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>wagon</artifactId>
+    <groupId>org.apache.maven.wagon</groupId>
+    <version>1.0-beta-4</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>wagon-mercury</artifactId>
+  <name>Mercury Wagon provider:         ${project.version}</name>
+  <version>1.0.0-SNAPSHOT</version>
+  
+  <properties>
+    <mercury.version>1.0.0-alpha-2-SNAPSHOT</mercury.version>
+    
+    <plexus.appbooter.version>1.4</plexus.appbooter.version>
+    <plexus.container.version>1.0-alpha-47</plexus.container.version>
+    <plexus.utils.version>1.5.1</plexus.utils.version>
+    <nexus.version>1.0.1</nexus.version>
+
+    <nexus-security-enabled>false</nexus-security-enabled>
+
+    <distMgmtSnapshotsId>apache.snapshots</distMgmtSnapshotsId>
+    <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
+    <distMgmtSnapshotsUrl>scp://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</distMgmtSnapshotsUrl>
+
+    <bundle-expanded-dir>target</bundle-expanded-dir>
+    <config-expanded-dir>target/test-nexus-config</config-expanded-dir>
+
+    <nexus-relative-basedir>${bundle-expanded-dir}/nexus-webapp-${nexus.version}</nexus-relative-basedir>
+    <nexus-abs-basedir>${project.build.directory}/nexus-webapp-${nexus.version}</nexus-abs-basedir>
+
+    <config-target-dir>${nexus-abs-basedir}/runtime/apps/nexus/conf</config-target-dir>
+    <work-target-dir>${nexus-abs-basedir}/runtime/work</work-target-dir>
+    <nexus-plexus-config-file>${nexus-abs-basedir}/conf/plexus.xml</nexus-plexus-config-file>
+
+    <nexus-application-protocol>http</nexus-application-protocol>
+    <nexus-application-host>localhost</nexus-application-host>
+    <nexus-application-name>nexus</nexus-application-name>
+    <nexus-application-port>8091</nexus-application-port>
+    <jetty-application-host>0.0.0.0</jetty-application-host>
+
+    <nexus-base-url>${nexus-application-protocol}://${nexus-application-host}:${nexus-application-port}/${nexus-application-name}/</nexus-base-url>
+
+    <nexus-control-port>33002</nexus-control-port>
+  </properties>
+
+  
+  <distributionManagement>
+    <snapshotRepository>
+      <id>${distMgmtSnapshotsId}</id>
+      <name>${distMgmtSnapshotsName}</name>
+      <url>${distMgmtSnapshotsUrl}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <build>
+
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <filtering>false</filtering>
+        <includes>
+            <include>**/*.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+    
+    <testResources>
+
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+ 
+      <testResource>
+        <directory>src/test/nexus</directory>
+        <filtering>false</filtering>
+        <excludes>
+            <exclude>work/conf/**</exclude>
+        </excludes>
+        <targetPath>../nexus-webapp-${nexus.version}/runtime</targetPath>
+      </testResource>
+ 
+      <testResource>
+        <directory>src/test/nexus</directory>
+        <filtering>true</filtering>
+        <includes>
+            <include>work/conf/**</include>
+        </includes>
+        <targetPath>../nexus-webapp-${nexus.version}/runtime</targetPath>
+      </testResource>
+ 
+      <testResource>
+        <directory>src/test/nexus/conf</directory>
+        <filtering>true</filtering>
+        <targetPath>../nexus-webapp-${nexus.version}/conf</targetPath>
+      </testResource>
+
+    </testResources>
+
+    <plugins>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
+        <version>1.3.5</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.0</version>
+        <executions>
+          <execution>
+            <id>unpack-bundle</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>nexus-webapp</includeArtifactIds>
+              <outputDirectory>${bundle-expanded-dir}</outputDirectory>
+              <excludes>**/conf/plexus.properties</excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+        <executions>
+
+          <execution>
+            <id>test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+<!--  
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>1.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <finalName>${project.artifactId}-${project.version}-uber</finalName>
+              <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
+              <createDependencyReducedPom>true</createDependencyReducedPom>
+              <artifactSet>
+                <includes>
+
+                  <include>org.apache.maven.mercury:mercury-crypto-api</include>
+                  <include>org.apache.maven.mercury:mercury-crypto-basic</include>
+                  <include>org.apache.maven.mercury:mercury-transport-api</include>
+                  <include>org.apache.maven.mercury:mercury-transport-http</include>
+                  <include>org.apache.maven.mercury:mercury-util</include>
+
+                  <include>org.mortbay.jetty:jetty</include>
+                  <include>org.mortbay.jetty:jetty-client</include>
+                  <include>org.mortbay.jetty:jetty-ssl</include>
+                  <include>org.mortbay.jetty:jetty-util</include>
+                  <include>org.mortbay.jetty:servlet-api</include>
+
+                  <include>org.codehaus.plexus:plexus-lang</include>
+
+                  <include>org.slf4j:slf4j-api</include>
+                  <include>org.slf4j:slf4j-jdk14</include>
+                  
+                </includes>
+                
+                <excludes>
+                  <exclude>org.codehaus.plexus:plexus-component-api</exclude>
+                  <exclude>org.bouncycastle:bcprov-jdk15</exclude>
+                  <exclude>org.bouncycastle:bcpg-jdk15</exclude>
+                  <exclude>bouncycastle:bcprov-jdk15</exclude>
+                  <exclude>bouncycastle:bcpg-jdk15</exclude>
+                </excludes>
+                
+              </artifactSet>
+
+              <filters>
+                <filter>
+                  <excludes>
+                    <exclude>/META-INF/BCKEY.DSA</exclude> 
+                    <exclude>/META-INF/BCKEY.SF</exclude> 
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+ -->      
+    </plugins>
+  </build>
+      
+  
+  <dependencies>
+    
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-provider-api</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-provider-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-transport-http</artifactId>
+      <version>${mercury.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-util</artifactId>
+      <version>${mercury.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <version>${plexus.container.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>${plexus.utils.version}</version>
+    </dependency>
+ 
+    <dependency>
+      <groupId>org.sonatype.nexus</groupId>
+      <artifactId>nexus-webapp</artifactId>
+      <version>${nexus.version}</version>
+      <classifier>bundle</classifier>
+      <type>zip</type>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonatype.appbooter</groupId>
+      <artifactId>plexus-forked-app-booter</artifactId>
+      <version>${plexus.appbooter.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
+  </dependencies>
+</project>

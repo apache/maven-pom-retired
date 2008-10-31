@@ -29,7 +29,7 @@
     <module>mercury-crypto</module>
     <module>mercury-util</module>
     <module>mercury-plexus</module>
-    <module>wagon-mercury</module>
+    <module>mercury-wagon</module>
   </modules>
 
   <build>
