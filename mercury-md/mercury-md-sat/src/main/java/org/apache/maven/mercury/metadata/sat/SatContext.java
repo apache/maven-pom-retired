@@ -13,6 +13,8 @@ import org.apache.maven.mercury.artifact.ArtifactMetadata;
   */
 class SatContext
 {
+  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( SatContext.class );
+
   List<SatVar> variables;
   int varCount = 0;
   //-----------------------------------------------------------------------
@@ -32,7 +34,8 @@ class SatContext
       {
         if( var._md.sameGAV(md) )
         {
-System.out.println(md+" -> x"+var._literal);
+if( _log.isDebugEnabled() )
+  _log.debug(md+" -> x"+var._literal);
           return var;
         }
       }
@@ -41,7 +44,9 @@ System.out.println(md+" -> x"+var._literal);
     SatVar var = new SatVar( md, ++varCount );
     variables.add( var );
     
-System.out.println(md+" -> x"+var._literal);
+if( _log.isDebugEnabled() )
+  _log.debug(md+" -> x"+var._literal);
+
     return var; 
   }
   //-----------------------------------------------------------------------

@@ -1,4 +1,4 @@
-package org.apache.maven.mercury.repository.local.m2;
+package org.apache.maven.mercury.repository.local.flat;
 
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
@@ -10,11 +10,11 @@ import org.apache.maven.mercury.repository.api.RepositoryReaderFactory;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
-public class LocalRepositoryReaderM2Factory
+public class LocalRepositoryReaderFlatFactory
 implements RepositoryReaderFactory
 {
-  private static final Language lang = new DefaultLanguage( LocalRepositoryReaderM2Factory.class );
-  private static final LocalRepositoryReaderM2Factory factory = new LocalRepositoryReaderM2Factory();
+  private static final Language lang = new DefaultLanguage( LocalRepositoryReaderFlatFactory.class );
+  private static final LocalRepositoryReaderFlatFactory factory = new LocalRepositoryReaderFlatFactory();
   
   static 
   {
@@ -27,7 +27,7 @@ implements RepositoryReaderFactory
     if( repo == null || !(repo instanceof LocalRepository) )
       throw new RepositoryException( lang.getMessage( "bad.repository.type", repo == null ? "null" : repo.getClass().getName() ) );
     
-    return new LocalRepositoryReaderM2( (LocalRepository)repo, mdProcessor );
+    return new LocalRepositoryReaderFlat( (LocalRepository)repo, mdProcessor );
   }
 
 }

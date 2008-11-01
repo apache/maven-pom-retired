@@ -1,4 +1,4 @@
-package org.apache.maven.mercury.repository.local.m2;
+package org.apache.maven.mercury.repository.local.flat;
 
 import java.io.File;
 
@@ -10,35 +10,21 @@ import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
 import org.apache.maven.mercury.transport.api.Server;
 
-public class LocalRepositoryM2
+public class LocalRepositoryFlat
 extends AbstractRepository
 implements LocalRepository
 {
+  public static final String FLAT_REPOSITORY_TYPE = "flat";
+  
     private File directory;
     
     private static final String METADATA_NAME = "maven-metadata-local.xml";
 
     //----------------------------------------------------------------------------------
-    public LocalRepositoryM2( Server server )
+    public LocalRepositoryFlat( String id, File directory )
     {
-        super( server.getId(), DEFAULT_REPOSITORY_TYPE );
-        this.directory = new File( server.getURL().getFile() );
-        this.server = server;
-        this.metadataName = METADATA_NAME;
-    }
-    //----------------------------------------------------------------------------------
-    public LocalRepositoryM2( String id, File directory )
-    {
-        super( id, DEFAULT_REPOSITORY_TYPE );
+        super( id, FLAT_REPOSITORY_TYPE );
         this.directory = directory;
-        this.metadataName = METADATA_NAME;
-    }
-    //----------------------------------------------------------------------------------
-    public LocalRepositoryM2( String id, File directory, String type )
-    {
-        super( id, type );
-        this.directory = directory;
-        this.metadataName = METADATA_NAME;
     }
     //----------------------------------------------------------------------------------
     public File getDirectory()
@@ -49,7 +35,7 @@ implements LocalRepository
     public RepositoryReader getReader( DependencyProcessor processor ) 
     {
       if( reader == null )
-        reader = new LocalRepositoryReaderM2( this, processor );
+        reader = new LocalRepositoryReaderFlat( this, processor );
 
       return reader;
     }
@@ -64,7 +50,7 @@ implements LocalRepository
     public RepositoryWriter getWriter()
     {
       if( writer == null )
-        writer = new LocalRepositoryWriterM2(this);
+        writer = new LocalRepositoryWriterFlat(this);
       
       return writer;
     }

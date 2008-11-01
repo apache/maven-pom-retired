@@ -60,6 +60,7 @@ implements Repository
   
   protected QualityRange       versionRangeQualityRange = QualityRange.ALL;
 
+  protected DependencyProcessor dependencyProcessor;
   protected RepositoryReader   reader;
   protected RepositoryWriter   writer;
   
@@ -223,6 +224,19 @@ implements Repository
   public String getMetadataName()
   {
     return metadataName;
+  }
+  //---------------------------------------------------------------------------
+  public boolean hasDependencyProcessor()
+  {
+    return dependencyProcessor == null;
+  }
+  public DependencyProcessor getDependencyProcessor()
+  {
+    return dependencyProcessor;
+  }
+  public void setDependencyProcessor( DependencyProcessor dependencyProcessor )
+  {
+    this.dependencyProcessor = dependencyProcessor;
   }
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------

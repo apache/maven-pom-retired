@@ -1,4 +1,4 @@
-package org.apache.maven.mercury.repository.local.m2;
+package org.apache.maven.mercury.repository.local.flat;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;

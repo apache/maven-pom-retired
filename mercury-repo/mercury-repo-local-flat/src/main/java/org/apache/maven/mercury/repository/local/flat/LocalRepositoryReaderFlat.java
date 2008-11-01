@@ -1,4 +1,4 @@
-package org.apache.maven.mercury.repository.local.m2;
+package org.apache.maven.mercury.repository.local.flat;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,19 +36,19 @@ import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
-public class LocalRepositoryReaderM2
+public class LocalRepositoryReaderFlat
 extends AbstracRepositoryReader
 implements RepositoryReader, MetadataReader
 {
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( LocalRepositoryReaderM2.class ); 
-  private static final Language _lang = new DefaultLanguage( LocalRepositoryReaderM2.class );
+  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( LocalRepositoryReaderFlat.class ); 
+  private static final Language _lang = new DefaultLanguage( LocalRepositoryReaderFlat.class );
   //---------------------------------------------------------------------------------------------------------------
   private static final String [] _protocols = new String [] { "file" };
   
   LocalRepository _repo;
   File _repoDir;
   //---------------------------------------------------------------------------------------------------------------
-  public LocalRepositoryReaderM2( LocalRepository repo, DependencyProcessor mdProcessor )
+  public LocalRepositoryReaderFlat( LocalRepository repo, DependencyProcessor mdProcessor )
   {
     if( repo == null )
       throw new IllegalArgumentException("localRepo cannot be null");

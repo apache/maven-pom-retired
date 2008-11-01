@@ -1,4 +1,4 @@
-package org.apache.maven.mercury.repository.local.m2;
+package org.apache.maven.mercury.repository.local.flat;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

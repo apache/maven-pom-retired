@@ -118,6 +118,15 @@ public interface Repository
      */
     boolean hasServer();
     Server getServer();
+    
+    /**
+     * DependencyProcessor used by this repo resides
+     * 
+     * @return server
+     */
+    boolean hasDependencyProcessor();
+    DependencyProcessor getDependencyProcessor();
+    void setDependencyProcessor( DependencyProcessor dependencyProcessor );
 
     /**
      * maven-metadata.xml file name for this repository. This is internal to repository and should never be used 

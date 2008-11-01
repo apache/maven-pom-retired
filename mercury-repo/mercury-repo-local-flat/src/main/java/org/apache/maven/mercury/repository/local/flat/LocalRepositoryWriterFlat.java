@@ -1,4 +1,4 @@
-package org.apache.maven.mercury.repository.local.m2;
+package org.apache.maven.mercury.repository.local.flat;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -39,7 +39,7 @@ import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
-public class LocalRepositoryWriterM2
+public class LocalRepositoryWriterFlat
 extends AbstractRepositoryWriter
 implements RepositoryWriter
 {
@@ -53,8 +53,8 @@ implements RepositoryWriter
   
   public static final long SLEEP_FOR_LOCK_TICK = 5l;
 
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( LocalRepositoryWriterM2.class ); 
-  private static final Language _lang = new DefaultLanguage( LocalRepositoryWriterM2.class );
+  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( LocalRepositoryWriterFlat.class ); 
+  private static final Language _lang = new DefaultLanguage( LocalRepositoryWriterFlat.class );
   //---------------------------------------------------------------------------------------------------------------
   private static final String [] _protocols = new String [] { "file" };
   
@@ -64,7 +64,7 @@ implements RepositoryWriter
 
   private static final ArifactWriteData LAST_ARTIFACT = new ArifactWriteData( null, null );
   //---------------------------------------------------------------------------------------------------------------
-  public LocalRepositoryWriterM2( LocalRepository repo )
+  public LocalRepositoryWriterFlat( LocalRepository repo )
   {
     if( repo == null )
       throw new IllegalArgumentException("localRepo cannot be null");
@@ -80,7 +80,7 @@ implements RepositoryWriter
     _aq = null;
   }
   //---------------------------------------------------------------------------------------------------------------
-  private LocalRepositoryWriterM2( LocalRepository repo, File repoDir, ArtifactQueue aq )
+  private LocalRepositoryWriterFlat( LocalRepository repo, File repoDir, ArtifactQueue aq )
   {
     _repo = repo;
     _repoDir = repoDir;
@@ -117,11 +117,11 @@ implements RepositoryWriter
       nWorkers = artifacts.size();
     
     ArtifactQueue aq = new ArtifactQueue();
-    LocalRepositoryWriterM2 [] workers = new LocalRepositoryWriterM2[ nWorkers ];
+    LocalRepositoryWriterFlat [] workers = new LocalRepositoryWriterFlat[ nWorkers ];
     
     for( int i=0; i<nWorkers; i++ )
     {
-      workers[ i ] = new LocalRepositoryWriterM2( _repo, _repoDir, aq );
+      workers[ i ] = new LocalRepositoryWriterFlat( _repo, _repoDir, aq );
       workers[ i ].start();
     }
     

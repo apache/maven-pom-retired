@@ -8,7 +8,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
@@ -16,6 +15,8 @@ import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 import org.apache.maven.mercury.metadata.MetadataTreeNodeGAComparator;
 import org.apache.maven.mercury.metadata.MetadataTreeNodeGAVComparator;
+import org.codehaus.plexus.lang.DefaultLanguage;
+import org.codehaus.plexus.lang.Language;
 import org.sat4j.core.Vec;
 import org.sat4j.core.VecInt;
 import org.sat4j.pb.IPBSolver;
@@ -35,7 +36,8 @@ import org.sat4j.specs.TimeoutException;
 public class DefaultSatSolver
 implements SatSolver
 {
-//  private static final Log _log = LogFactoryImpl.getLog( DefaultSatSolver.class );
+  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( DefaultSatSolver.class ); 
+  private static final Language _lang = new DefaultLanguage( DefaultSatSolver.class );
   
   protected SatContext _context;
   protected IPBSolver _solver = SolverFactory.newEclipseP2();
@@ -281,7 +283,9 @@ implements SatSolver
   {
     _solver.addPseudoBoolean( lits, coeff, ge, cardinality );
     
-    System.out.print("PB: ");
+if( _log.isDebugEnabled() )
+  _log.debug("PB: ");
+    
     for( int i=0; i<lits.size(); i++ )
     {
       int co = Integer.parseInt( ""+coeff.get(i) );
@@ -289,9 +293,11 @@ implements SatSolver
       int    val = Math.abs(co);
       String space = val == 1 ? "" : " ";
       
-      System.out.print( " " + sign + (val==1?"":val) + space  + "x"+lits.get(i) );
+if( _log.isDebugEnabled() )
+  _log.debug( " " + sign + (val==1?"":val) + space  + "x"+lits.get(i) );
     }
-    System.out.println(( ge ? " >= " : " < ")+" "+cardinality );
+if( _log.isDebugEnabled() )
+  _log.debug(( ge ? " >= " : " < ")+" "+cardinality );
   }
   //-----------------------------------------------------------------------
   private final Map<ArtifactBasicMetadata, List<MetadataTreeNode>> processChildren(
