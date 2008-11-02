@@ -350,10 +350,10 @@ implements RepositoryReader, MetadataReader
                                                                        , System.getenv()
                                                                        , System.getProperties()
                                                                        );
-for(ArtifactBasicMetadata d : deps )
-{
-  System.out.println("======> "+d.getScope() );
-}
+//for(ArtifactBasicMetadata d : deps )
+//{
+//  System.out.println("======> "+d.getScope() );
+//}
         ror = ArtifactBasicResults.add( ror, bmd, deps );
       }
       catch( MetadataReaderException e )
