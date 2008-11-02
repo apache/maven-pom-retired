@@ -55,7 +55,8 @@ extends AbstractRepositoryReaderM2Test
 
     server = new Server( "test", new URL("http://localhost:"+_port+"/repo") );
     repo = new RemoteRepositoryM2( "testRepo", server );
-    reader = repo.getReader( new MetadataProcessorMock() );
+    repo.setDependencyProcessor( mdProcessor );
+    reader = repo.getReader();
   }
   //-------------------------------------------------------------------------
   @Override

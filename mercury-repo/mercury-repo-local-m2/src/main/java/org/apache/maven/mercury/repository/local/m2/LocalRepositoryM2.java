@@ -2,7 +2,7 @@ package org.apache.maven.mercury.repository.local.m2;
 
 import java.io.File;
 
-import org.apache.maven.mercury.builder.api.DependencyProcessor;
+import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
@@ -36,6 +36,8 @@ implements LocalRepository
         setDirectory( new File( server.getURL().getFile() ) );
         this.server = server;
         this.metadataName = METADATA_NAME;
+        
+        setDependencyProcessor( new MavenDependencyProcessor() );
     }
     //----------------------------------------------------------------------------------
     public LocalRepositoryM2( String id, File directory )
@@ -43,6 +45,8 @@ implements LocalRepository
         super( id, DEFAULT_REPOSITORY_TYPE );
         setDirectory( directory );
         this.metadataName = METADATA_NAME;
+        
+        setDependencyProcessor( new MavenDependencyProcessor() );
     }
     //----------------------------------------------------------------------------------
     public LocalRepositoryM2( String id, File directory, String type )
@@ -50,6 +54,8 @@ implements LocalRepository
         super( id, type );
         setDirectory( directory );
         this.metadataName = METADATA_NAME;
+        
+        setDependencyProcessor( new MavenDependencyProcessor() );
     }
     //----------------------------------------------------------------------------------
     public File getDirectory()
@@ -57,18 +63,18 @@ implements LocalRepository
         return directory;
     }
     //----------------------------------------------------------------------------------
-    public RepositoryReader getReader( DependencyProcessor processor ) 
+    public RepositoryReader getReader() 
     {
       if( reader == null )
-        reader = new LocalRepositoryReaderM2( this, processor );
+        reader = new LocalRepositoryReaderM2( this, getDependencyProcessor() );
 
       return reader;
     }
     //----------------------------------------------------------------------------------
     // TODO oleg: what happens in multi-threaded execution?? 
-    public RepositoryReader getReader( DependencyProcessor processor, String protocol )
+    public RepositoryReader getReader( String protocol )
     {
-       return getReader(processor);
+       return getReader();
     }
     //----------------------------------------------------------------------------------
     // TODO oleg: what happens in multi-threaded execution?? 

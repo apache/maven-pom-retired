@@ -30,7 +30,8 @@ extends AbstractRepositoryReaderM2Test
     server = new Server( "test", new File("./target/test-classes/repo").toURL() );
       
     repo = new LocalRepositoryM2( server );
-    reader = repo.getReader( mdProcessor );
+    repo.setDependencyProcessor( mdProcessor );
+    reader = repo.getReader();
 
     super.setUp();
   }

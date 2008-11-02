@@ -169,7 +169,7 @@ extends TestCase
 
     ArtifactBasicMetadata bmd = new ArtifactBasicMetadata( artifactId );
     
-    List<ArtifactBasicMetadata> res = (List<ArtifactBasicMetadata>)pm.resolve( repos, new MavenDependencyProcessor(), ArtifactScopeEnum.compile, bmd );
+    List<ArtifactBasicMetadata> res = (List<ArtifactBasicMetadata>)pm.resolve( repos, ArtifactScopeEnum.compile, bmd );
     
     System.out.println("Resolved as "+res);
 

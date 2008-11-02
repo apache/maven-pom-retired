@@ -147,14 +147,12 @@ public interface PlexusMercury
    * @throws PlexusMercuryException
    */
   public List<? extends ArtifactBasicMetadata> resolve( List<Repository> repos
-                                        , DependencyProcessor dependencyProcessor
                                         , ArtifactScopeEnum   scope
                                         , ArtifactBasicMetadata... artifacts
                                       )
   throws RepositoryException;
   
   public List<? extends ArtifactBasicMetadata> resolve( List<Repository> repos
-                                      , DependencyProcessor dependencyProcessor
                                       , ArtifactScopeEnum   scope
                                       , List<ArtifactBasicMetadata> artifacts
                                       )

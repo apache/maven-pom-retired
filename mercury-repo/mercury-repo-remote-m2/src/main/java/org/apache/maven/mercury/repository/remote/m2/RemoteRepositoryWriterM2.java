@@ -74,7 +74,7 @@ implements RepositoryWriter
 
     _repo = repo;
     
-    _reader = _repo.getReader( DependencyProcessor.NULL_PROCESSOR );
+    _reader = _repo.getReader();
 
     try
     {

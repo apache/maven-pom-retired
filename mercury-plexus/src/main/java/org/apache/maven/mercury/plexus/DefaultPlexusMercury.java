@@ -159,7 +159,7 @@ implements PlexusMercury, Initializable
     if( Util.isEmpty( repos ) )
       throw new RepositoryException( _lang.getMessage( "null.repo" ) );
     
-    VirtualRepositoryReader vr = new VirtualRepositoryReader( repos, DependencyProcessor.NULL_PROCESSOR );
+    VirtualRepositoryReader vr = new VirtualRepositoryReader( repos );
     
     ArtifactResults ar = vr.readArtifacts( artifacts );
     if( ar.hasExceptions() )
@@ -213,7 +213,6 @@ implements PlexusMercury, Initializable
 
   public List<ArtifactMetadata> resolve(
                                         List<Repository> repos,
-                                        DependencyProcessor dependencyProcessor,
                                         ArtifactScopeEnum scope,
                                         List<ArtifactBasicMetadata> artifacts
                                                       )
@@ -227,7 +226,7 @@ implements PlexusMercury, Initializable
     
     try
     {
-      DependencyBuilder depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, null, null, null, repos, dependencyProcessor );
+      DependencyBuilder depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, null, null, null, repos );
       
       MetadataTreeNode root = depBuilder.buildTree( artifacts.get(0) );
       List<ArtifactMetadata> res = depBuilder.resolveConflicts( root, scope );
@@ -241,13 +240,12 @@ implements PlexusMercury, Initializable
   }
 
   public List<ArtifactMetadata> resolve( List<Repository> repos
-                                            , DependencyProcessor dependencyProcessor
                                             , ArtifactScopeEnum   scope
                                             , ArtifactBasicMetadata... artifacts
                                             )
   throws RepositoryException
   {
-    return resolve( repos, dependencyProcessor, scope, Arrays.asList( artifacts ) );
+    return resolve( repos, scope, Arrays.asList( artifacts ) );
   }
   //---------------------------------------------------------------
   //---------------------------------------------------------------

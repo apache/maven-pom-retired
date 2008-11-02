@@ -32,18 +32,18 @@ implements LocalRepository
         return directory;
     }
     //----------------------------------------------------------------------------------
-    public RepositoryReader getReader( DependencyProcessor processor ) 
+    public RepositoryReader getReader() 
     {
       if( reader == null )
-        reader = new LocalRepositoryReaderFlat( this, processor );
+        reader = new LocalRepositoryReaderFlat( this, getDependencyProcessor() );
 
       return reader;
     }
     //----------------------------------------------------------------------------------
     // TODO oleg: what happens in multi-threaded execution?? 
-    public RepositoryReader getReader( DependencyProcessor processor, String protocol )
+    public RepositoryReader getReader( String protocol )
     {
-       return getReader(processor);
+       return getReader();
     }
     //----------------------------------------------------------------------------------
     // TODO oleg: what happens in multi-threaded execution?? 

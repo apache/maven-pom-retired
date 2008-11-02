@@ -92,7 +92,8 @@ extends AbstractRepositoryWriterM2Test
     factories.add( new SHA1VerifierFactory(false,false) );
     server.setWriterStreamVerifierFactories(factories);
       
-    reader = repo.getReader( mdProcessor );
+    repo.setDependencyProcessor( mdProcessor );
+    reader = repo.getReader();
     writer = repo.getWriter();
     
     setSnapshots();

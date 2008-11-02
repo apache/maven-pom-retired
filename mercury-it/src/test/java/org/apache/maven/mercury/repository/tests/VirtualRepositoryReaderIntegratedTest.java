@@ -59,19 +59,21 @@ extends TestCase
 
     _query = new ArrayList<ArtifactBasicMetadata>();
 
+    DependencyProcessor mdProcessor = new MetadataProcessorMock();
+
     Server server = new Server( "testRemoteRepo", new URL("http://localhost:"+_port+"/repo") );
     _remoteRepo = new RemoteRepositoryM2( server );
     _remoteRepo.setUpdatePolicy( new RepositoryUpdateIntervalPolicy("interval2").setInterval( 2000L ) );
+    _remoteRepo.setDependencyProcessor( mdProcessor );
     
     _localRepo = new LocalRepositoryM2( "testLocalRepo", _localRepoBase );
+    _localRepo.setDependencyProcessor( mdProcessor );
     
     List<Repository> reps = new ArrayList<Repository>();
     reps.add( _remoteRepo );
     reps.add( _localRepo );
-    
-    DependencyProcessor mdProcessor = new MetadataProcessorMock();
 
-    _vr = new VirtualRepositoryReader( reps, mdProcessor );
+    _vr = new VirtualRepositoryReader( reps );
   }
   //-------------------------------------------------------------------------
   @Override

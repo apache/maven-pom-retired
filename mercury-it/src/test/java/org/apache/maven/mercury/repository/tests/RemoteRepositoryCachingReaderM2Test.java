@@ -66,8 +66,8 @@ extends AbstractRepositoryReaderM2Test
     repo = new RemoteRepositoryM2( "testRepo", server );
     ((RemoteRepository)repo).setUpdatePolicy( up );
     
-    
-    reader = repo.getReader( new MetadataProcessorMock() );
+    repo.setDependencyProcessor(  new MetadataProcessorMock() );
+    reader = repo.getReader();
 
     _cacheBase = new File( _testBase, VirtualRepositoryReader.METADATA_CACHE_DIR );
     _cacheBase.delete();

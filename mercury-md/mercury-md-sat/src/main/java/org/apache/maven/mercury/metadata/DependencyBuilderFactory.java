@@ -32,12 +32,11 @@ public class DependencyBuilderFactory
       , final List<Comparator<MetadataTreeNode>> comparators
       , final Map<String,ArtifactListProcessor> processors
       , final Collection<Repository> repositories
-      , final DependencyProcessor processor
                      )
   throws RepositoryException
   {
     if( JAVA_DEPENDENCY_MODEL.equals( dependencyModel ) )
-      return new DependencyTreeBuilder( filters,  comparators, processors, repositories, processor );
+      return new DependencyTreeBuilder( filters,  comparators, processors, repositories );
     
     throw new IllegalArgumentException( _lang.getMessage( "dependency.model.not.implemented", dependencyModel ) );
   }

@@ -39,8 +39,6 @@ extends AbstractRepositoryWriterM2Test
     FileUtil.copy( new File("./target/test-classes/repo"), targetDirectory, true );
     FileUtil.delete( new File(targetDirectory, "org") );
     
-    mdProcessor = new MetadataProcessorMock();
-    
     query = new ArrayList<ArtifactBasicMetadata>();
     
     server = new Server( "test", targetDirectory.toURL() );
@@ -58,7 +56,10 @@ extends AbstractRepositoryWriterM2Test
     server.setWriterStreamVerifierFactories(factories);
       
     repo = new LocalRepositoryM2( server );
-    reader = repo.getReader( mdProcessor );
+    mdProcessor = new MetadataProcessorMock();
+    repo.setDependencyProcessor( mdProcessor );
+    
+    reader = repo.getReader();
     writer = repo.getWriter();
   }
 

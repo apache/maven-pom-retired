@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.repository.remote.m2;
 
+import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.LocalRepository;
@@ -32,6 +33,7 @@ implements RemoteRepository
     {
         super( id, DEFAULT_REPOSITORY_TYPE );
         this._server = server;
+        setDependencyProcessor( new MavenDependencyProcessor() );
     }
     //----------------------------------------------------------------------------------
     public Server getServer()
@@ -39,16 +41,16 @@ implements RemoteRepository
         return _server;
     }
     //----------------------------------------------------------------------------------
-    public RepositoryReader getReader( DependencyProcessor processor )
+    public RepositoryReader getReader()
     throws RepositoryException
     {
-      return new RemoteRepositoryReaderM2( this, processor );
+      return new RemoteRepositoryReaderM2( this, getDependencyProcessor() );
     }
     //----------------------------------------------------------------------------------
-    public RepositoryReader getReader( DependencyProcessor processor, String protocol )
+    public RepositoryReader getReader( String protocol )
     throws RepositoryException
     {
-      return getReader(processor);
+      return getReader();
     }
     //----------------------------------------------------------------------------------
     public RepositoryWriter getWriter()

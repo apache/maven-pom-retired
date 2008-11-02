@@ -80,7 +80,7 @@ public interface Repository
      * @return default reader or null, if none exists
      * @throws RepositoryException 
      */
-    RepositoryReader getReader( DependencyProcessor processor )
+    RepositoryReader getReader()
     throws RepositoryException;
     
     /**
@@ -89,7 +89,7 @@ public interface Repository
      * @return reader instance for the specified protocol
      * @throws NonExistentProtocolException if protocol not supported
      */
-    RepositoryReader getReader( DependencyProcessor processor, String protocol )
+    RepositoryReader getReader( String protocol )
     throws RepositoryException;
 
     

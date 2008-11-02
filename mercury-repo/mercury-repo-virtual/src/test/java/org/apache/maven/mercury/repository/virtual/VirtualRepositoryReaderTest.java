@@ -63,7 +63,7 @@ extends TestCase
     rl.add( _localRepo );
     rl.add( _remoteRepo );
      
-    _vr = new VirtualRepositoryReader( rl, DependencyProcessor.NULL_PROCESSOR );
+    _vr = new VirtualRepositoryReader( rl );
   }
   
   public void testReadSnapshot()

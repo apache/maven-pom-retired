@@ -62,22 +62,15 @@ implements MetadataReader
   
   private RepositoryWriter      _localRepositoryWriter;
   
-  private DependencyProcessor     _processor;
-  
   RepositoryMetadataCache         _mdCache;
 
   private Map<String,ArtifactListProcessor>   _processors;
   
   private boolean _initialized = false;
   //----------------------------------------------------------------------------------------------------------------------------
-  public VirtualRepositoryReader( Collection<Repository> repositories, DependencyProcessor processor  )
+  public VirtualRepositoryReader( Collection<Repository> repositories )
   throws RepositoryException
   {
-    if( processor == null )
-      this._processor = DependencyProcessor.NULL_PROCESSOR;
-    else
-      this._processor = processor;
-
     if( ! Util.isEmpty( repositories ) )
       this._repositories.addAll( repositories );
   }
@@ -85,17 +78,11 @@ implements MetadataReader
   private VirtualRepositoryReader(
                   LocalRepository        localRepository
                 , Collection<RemoteRepository> remoteRepositories
-                , DependencyProcessor    processor
                           )
   throws RepositoryException
   {
     if( _localRepository == null )
       throw new RepositoryException( "null local repo" );
-    
-    if( processor == null )
-      throw new RepositoryException( "null metadata processor" );
-
-    this._processor = processor;
     
     this._localRepository = localRepository;
 
@@ -153,7 +140,7 @@ implements MetadataReader
       if( ! r.isLocal() )
         continue;
       
-      RepositoryReader rr = r.getReader(_processor);
+      RepositoryReader rr = r.getReader();
       
       rr.setMetadataReader( this );
       
@@ -161,7 +148,7 @@ implements MetadataReader
       
       if( ! r.isReadOnly() )
       {
-        _localRepository = (LocalRepository)r.getReader(_processor).getRepository();
+        _localRepository = (LocalRepository)r.getReader().getRepository();
         _localRepositoryWriter = _localRepository.getWriter();
         
         if( _mdCache == null )
@@ -184,7 +171,7 @@ implements MetadataReader
       if( r.isLocal() )
         continue;
       
-      RepositoryReader rr = r.getReader(_processor);
+      RepositoryReader rr = r.getReader();
       
       if( _mdCache != null )
         rr.setMetadataCache( _mdCache );

@@ -68,7 +68,8 @@ extends TestCase
     rr = new RemoteRepositoryM2( "testRepo", server );
 
     mdProcessor = new MetadataProcessorMock();
-    reader = rr.getReader( new MetadataProcessorMock() );
+    rr.setDependencyProcessor( mdProcessor );
+    reader = rr.getReader();
     
     localRepoBase = File.createTempFile( "local", "repo" );
     localRepoBase.delete();

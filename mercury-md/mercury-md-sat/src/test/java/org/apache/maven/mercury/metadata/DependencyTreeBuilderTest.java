@@ -42,11 +42,12 @@ extends TestCase
   {
     processor = new MetadataProcessorMock();
     localRepo = new LocalRepositoryM2( "local", repoDir );
+    localRepo.setDependencyProcessor( new MetadataProcessorMock() );
     
     reps = new ArrayList<Repository>(4);
     reps.add(  localRepo );
 
-    mt = new DependencyTreeBuilder( null, null, null, reps, processor );
+    mt = new DependencyTreeBuilder( null, null, null, reps );
   }
   //----------------------------------------------------------------------------------------------
   @Override

@@ -47,7 +47,6 @@ extends TestCase
   LocalRepositoryM2 localRepo;
   RemoteRepositoryM2 remoteRepo;
   List<Repository> reps;
-  DependencyProcessor processor;
   
   VirtualRepositoryReader vReader;
   
@@ -78,11 +77,9 @@ extends TestCase
 //    RemoteRepositoryM2 centralRepo = new RemoteRepositoryM2(central);
 //    reps.add(centralRepo);
 
-    processor = new MavenDependencyProcessor();
-
-    depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, null, null, null, reps, processor );
+    depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, null, null, null, reps );
     
-    vReader = new VirtualRepositoryReader( reps, processor );
+    vReader = new VirtualRepositoryReader( reps );
   }
   //----------------------------------------------------------------------------------------------
   @Override

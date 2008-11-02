@@ -9,7 +9,7 @@ package org.apache.maven.mercury.artifact;
  */
 public enum ArtifactScopeEnum
 {
-    compile( 1 ), test( 2 ), runtime( 3 ), provided( 4 ), system( 5 );
+    compile( 1 ), test( 2 ), runtime( 3 ), provided( 4 ), system( 5 ), none(-1);
 
     public static final ArtifactScopeEnum DEFAULT_SCOPE = compile;
 
@@ -60,6 +60,10 @@ public enum ArtifactScopeEnum
         else if ( id == 4 )
         {
             return Artifact.SCOPE_PROVIDED;
+        }
+        else if ( id == 5 )
+        {
+            return Artifact.SCOPE_SYSTEM;
         }
         else
         {

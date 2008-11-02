@@ -61,7 +61,6 @@ implements DependencyBuilder
       , List<Comparator<MetadataTreeNode>> comparators
       , Map<String,ArtifactListProcessor> processors
       , Collection<Repository> repositories
-      , DependencyProcessor processor
                      )
   throws RepositoryException
   {
@@ -80,7 +79,7 @@ implements DependencyBuilder
     if( processors != null )
       _processors = processors;
     
-    this._reader = new VirtualRepositoryReader( repositories, processor );
+    this._reader = new VirtualRepositoryReader( repositories );
   }
   //------------------------------------------------------------------------
   public MetadataTreeNode buildTree( ArtifactBasicMetadata startMD )
