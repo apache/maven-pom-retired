@@ -122,6 +122,17 @@ extends TestCase
     
     super.tearDown();
   }
+  //----------------------------------------------------------------------------------------------
+  private static boolean assertHasArtifact( List<ArtifactBasicMetadata> res, String gav )
+  {
+    ArtifactMetadata gavMd = new ArtifactMetadata(gav);
+    
+    for( ArtifactBasicMetadata md : res )
+      if( md.sameGAV( gavMd ) )
+        return true;
+    
+    return false;
+  }
   //-------------------------------------------------------------------------------------
   public void notestWrite()
   throws RepositoryException
@@ -180,16 +191,35 @@ extends TestCase
     assertTrue( assertHasArtifact( res, "asm:asm-tree:3.0" ) );
     assertTrue( assertHasArtifact( res, "asm:asm:3.0" ) );
   }
-  //----------------------------------------------------------------------------------------------
-  private static boolean assertHasArtifact( List<ArtifactBasicMetadata> res, String gav )
+  //-------------------------------------------------------------------------------------
+  @SuppressWarnings("unchecked")
+  public void testResolveWithExclusion()
+  throws Exception
   {
-    ArtifactMetadata gavMd = new ArtifactMetadata(gav);
+//    Server central = new Server( "central", new URL("http://repo1.maven.org/maven2") );
+    Server central = new Server( "central", new URL("http://repository.sonatype.org/content/groups/public") );
     
-    for( ArtifactBasicMetadata md : res )
-      if( md.sameGAV( gavMd ) )
-        return true;
+    repos.add( new RemoteRepositoryM2(central) );
+
+    String artifactId = "asm:asm-xml:3.0";
+
+    ArtifactBasicMetadata bmd = new ArtifactBasicMetadata( artifactId );
     
-    return false;
+    List<ArtifactBasicMetadata> exclusions = new ArrayList<ArtifactBasicMetadata>();
+    exclusions.add( new ArtifactBasicMetadata("asm:asm:3.0") );
+    
+    bmd.setExclusions( exclusions );
+    
+    List<ArtifactBasicMetadata> res = (List<ArtifactBasicMetadata>)pm.resolve( repos, ArtifactScopeEnum.compile, bmd );
+    
+    System.out.println("Resolved as "+res);
+
+    assertEquals( 3, res.size() );
+    
+    assertTrue( assertHasArtifact( res, "asm:asm-xml:3.0" ) );
+    assertTrue( assertHasArtifact( res, "asm:asm-util:3.0" ) );
+    assertTrue( assertHasArtifact( res, "asm:asm-tree:3.0" ) );
+    assertFalse( assertHasArtifact( res, "asm:asm:3.0" ) );
   }
   //-------------------------------------------------------------------------------------
   //-------------------------------------------------------------------------------------

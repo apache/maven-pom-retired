@@ -57,10 +57,10 @@ implements DependencyBuilder
    * @throws RepositoryException
    */
   protected DependencyTreeBuilder(
-        Collection<MetadataTreeArtifactFilter> filters
+        Collection<Repository> repositories
+      , Collection<MetadataTreeArtifactFilter> filters
       , List<Comparator<MetadataTreeNode>> comparators
       , Map<String,ArtifactListProcessor> processors
-      , Collection<Repository> repositories
                      )
   throws RepositoryException
   {
@@ -239,10 +239,10 @@ implements DependencyBuilder
     {
       ArtifactBasicMetadata md = n.getQuery();
       
-      if( md.allowDependency( ver ) )
-        return false;
+      if( !md.allowDependency( ver ) ) // veto it
+        return true;
     }
-    return true;
+    return false; // allow because all parents are OK with it
   }
   //-----------------------------------------------------
   public List<ArtifactMetadata> resolveConflicts( MetadataTreeNode root, ArtifactScopeEnum scope )
@@ -282,7 +282,7 @@ implements DependencyBuilder
     return _comparators;
   }
   //-----------------------------------------------------
-  public List<ArtifactMetadata> resolveConflicts( List<ArtifactBasicMetadata>trees, ArtifactScopeEnum scope )
+  private List<ArtifactMetadata> resolveConflicts( List<ArtifactBasicMetadata>trees, ArtifactScopeEnum scope )
   throws MetadataTreeException
   {
     if( Util.isEmpty( trees ) )

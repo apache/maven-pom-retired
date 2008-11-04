@@ -77,7 +77,7 @@ extends TestCase
 //    RemoteRepositoryM2 centralRepo = new RemoteRepositoryM2(central);
 //    reps.add(centralRepo);
 
-    depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, null, null, null, reps );
+    depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, reps, null, null, null );
     
     vReader = new VirtualRepositoryReader( reps );
   }

@@ -28,15 +28,15 @@ public class DependencyBuilderFactory
   
   public static final DependencyBuilder create(
         final String dependencyModel
+      , final Collection<Repository> repositories
       , final Collection<MetadataTreeArtifactFilter> filters
       , final List<Comparator<MetadataTreeNode>> comparators
       , final Map<String,ArtifactListProcessor> processors
-      , final Collection<Repository> repositories
                      )
   throws RepositoryException
   {
     if( JAVA_DEPENDENCY_MODEL.equals( dependencyModel ) )
-      return new DependencyTreeBuilder( filters,  comparators, processors, repositories );
+      return new DependencyTreeBuilder( repositories,  filters, comparators, processors );
     
     throw new IllegalArgumentException( _lang.getMessage( "dependency.model.not.implemented", dependencyModel ) );
   }
