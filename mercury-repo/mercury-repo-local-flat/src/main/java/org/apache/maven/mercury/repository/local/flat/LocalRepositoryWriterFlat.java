@@ -36,6 +36,7 @@ import org.apache.maven.mercury.repository.metadata.StringOperand;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileLockBundle;
 import org.apache.maven.mercury.util.FileUtil;
+import org.apache.maven.mercury.util.Util;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
@@ -63,6 +64,11 @@ implements RepositoryWriter
   private final ArtifactQueue _aq;
 
   private static final ArifactWriteData LAST_ARTIFACT = new ArifactWriteData( null, null );
+  
+  
+  private boolean _updateMetadata    = false;
+  private boolean _createPoms        = false;
+  private boolean _createGroupFolder = false;
   //---------------------------------------------------------------------------------------------------------------
   public LocalRepositoryWriterFlat( LocalRepository repo )
   {
@@ -107,7 +113,7 @@ implements RepositoryWriter
   }
   //---------------------------------------------------------------------------------------------------------------
   public void writeArtifacts( Collection<Artifact> artifacts )
-      throws RepositoryException
+  throws RepositoryException
   {
     if( artifacts == null || artifacts.size() < 1 )
       return;
@@ -209,13 +215,9 @@ implements RepositoryWriter
           throw new RepositoryException( e );
       }
     }
-    DefaultArtifactVersion dav = new DefaultArtifactVersion( artifact.getVersion() );
-    Quality aq = dav.getQuality();
-    boolean isSnapshot = aq.equals( Quality.SNAPSHOT_QUALITY ) || aq.equals( Quality.SNAPSHOT_TS_QUALITY );
 
-    String relGroupPath = artifact.getGroupId().replace( '.', '/' )+"/"+artifact.getArtifactId();
-    String versionDirName = isSnapshot ? (dav.getBase()+'-'+Artifact.SNAPSHOT_VERSION) : artifact.getVersion();
-    String relVersionPath = relGroupPath + '/' + versionDirName;
+    String relGroupPath = _createGroupFolder ? artifact.getGroupId() : "";
+    String versionPath = _repoDir.getAbsolutePath() + (Util.isEmpty( relGroupPath ) ? "" : "/"+relGroupPath);
     
     String lockDir = null;
     FileLockBundle fLock = null;
@@ -238,38 +240,27 @@ implements RepositoryWriter
       }
 
       // create folders
-      lockDir = _repoDir.getAbsolutePath()+'/'+relGroupPath;
+      lockDir = versionPath;
 
       File gav = new File( lockDir );
       gav.mkdirs();
 
-//    haveLock = FileUtil.lockDir( lockDir, SLEEP_FOR_LOCK, SLEEP_FOR_LOCK_TICK );
-//    if( !haveLock )
-//      throw new RepositoryException( _lang.getMessage( "cannot.lock.gav", lockDir, ""+SLEEP_FOR_LOCK ) );
       fLock = FileUtil.lockDir( lockDir, SLEEP_FOR_LOCK, SLEEP_FOR_LOCK_TICK );
       if( fLock == null )
         throw new RepositoryException( _lang.getMessage( "cannot.lock.gav", lockDir, ""+SLEEP_FOR_LOCK ) );
 
-      String fName = _repoDir.getAbsolutePath()+'/'+relVersionPath+'/'+artifact.getBaseName()+'.'+artifact.getType();
+      String fName = versionPath+'/'+artifact.getBaseName()+'.'+artifact.getType();
       
       if( !isPom ) // first - take care of the binary
         FileUtil.writeAndSign( fName, in, vFacs );
-
-      // GA metadata
-      File mdFile = new File( _repoDir, relGroupPath+'/'+_repo.getMetadataName() );
-      updateGAMetadata( mdFile, artifact, versionDirName, aq, vFacs );
-
-      // now - GAV metadata
-      mdFile = new File( _repoDir, relVersionPath+'/'+_repo.getMetadataName() );
-      updateGAVMetadata( mdFile, artifact, aq, vFacs );
 
       // if classier - nothing else to do :)
       if( artifact.hasClassifier() )
         return;
       
-      if( hasPomBlob )
+      if( _createPoms && hasPomBlob )
       {
-        FileUtil.writeAndSign( _repoDir.getAbsolutePath()+'/'+relVersionPath
+        FileUtil.writeAndSign( _repoDir.getAbsolutePath()+'/'+versionPath
                               +'/'+artifact.getArtifactId()+'-'+artifact.getVersion()+".pom", pomBlob, vFacs
                               );
       }
@@ -285,84 +276,6 @@ implements RepositoryWriter
         fLock.release();
     }
     
-  }
-  //---------------------------------------------------------------------------------------------------------------
-  private void updateGAMetadata(  final File mdFile
-                                , final Artifact artifact
-                                , final String version
-                                , final Quality aq
-                                , final Set<StreamVerifierFactory> vFacs
-                              )
-  throws MetadataException, IOException, StreamObserverException
-  {
-    Metadata md = null;
-    
-    if( mdFile.exists() )
-    {
-      try
-      {
-        byte [] mdBytes = FileUtil.readRawData( mdFile );
-        
-        if( mdBytes == null )
-          throw new MetadataException( _lang.getMessage( "file.is.empty", mdFile.getAbsolutePath() ));
-        
-        md = MetadataBuilder.read( new ByteArrayInputStream(mdBytes) );
-      }
-      catch( MetadataException e )
-      {
-        throw e;
-      }
-    }
-    else
-    {
-      md = new Metadata();
-      md.setGroupId( artifact.getGroupId() );
-      md.setArtifactId( artifact.getArtifactId() );
-    }
-    
-    MetadataOperation mdOp = new AddVersionOperation( new StringOperand( version ) ); 
-    
-    byte [] resBytes = MetadataBuilder.changeMetadata( md, mdOp );
-
-    FileUtil.writeAndSign( mdFile.getAbsolutePath(), resBytes, vFacs );
-  }
-  //---------------------------------------------------------------------------------------------------------------
-  private void updateGAVMetadata( final File mdFile
-                                , final Artifact artifact
-                                , final Quality aq
-                                , final Set<StreamVerifierFactory> vFacs
-                              )
-  throws MetadataException, IOException, StreamObserverException
-  {
-    Metadata md = null;
-    
-    if( mdFile.exists() )
-    {
-      byte [] mdBytes = FileUtil.readRawData( mdFile );
-      md = MetadataBuilder.read( new ByteArrayInputStream(mdBytes) );
-    }
-    else
-    {
-      md = new Metadata();
-      md.setGroupId( artifact.getGroupId() );
-      md.setArtifactId( artifact.getArtifactId() );
-      md.setVersion( artifact.getVersion() );
-    }
-    List<MetadataOperation> mdOps = new ArrayList<MetadataOperation>(2);
-    
-    if( aq.equals( Quality.SNAPSHOT_TS_QUALITY ) )
-    {
-      Snapshot sn = MetadataBuilder.createSnapshot( artifact.getVersion() );
-      sn.setLocalCopy( true );
-      mdOps.add( new SetSnapshotOperation( new SnapshotOperand(sn) ) );
-    }
-    
-    mdOps.add( new AddVersionOperation( new StringOperand(artifact.getVersion()) ) ); 
- 
-//System.out.println("added "+artifact.getVersion());
-//System.out.flush();
-    byte [] resBytes = MetadataBuilder.changeMetadata( md, mdOps );
-    FileUtil.writeAndSign( mdFile.getAbsolutePath(), resBytes, vFacs );
   }
   //---------------------------------------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------------------------------------

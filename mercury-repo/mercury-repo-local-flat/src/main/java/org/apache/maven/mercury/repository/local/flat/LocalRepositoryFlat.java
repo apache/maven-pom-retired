@@ -34,19 +34,14 @@ implements LocalRepository
     //----------------------------------------------------------------------------------
     public RepositoryReader getReader() 
     {
-      if( reader == null )
-        reader = new LocalRepositoryReaderFlat( this, getDependencyProcessor() );
-
-      return reader;
+      return RepositoryReader.NULL_READER;
     }
     //----------------------------------------------------------------------------------
-    // TODO oleg: what happens in multi-threaded execution?? 
     public RepositoryReader getReader( String protocol )
     {
-       return getReader();
+       return RepositoryReader.NULL_READER;
     }
     //----------------------------------------------------------------------------------
-    // TODO oleg: what happens in multi-threaded execution?? 
     public RepositoryWriter getWriter()
     {
       if( writer == null )
@@ -66,9 +61,14 @@ implements LocalRepository
       return true;
     }
     //----------------------------------------------------------------------------------
-    public boolean isReadOnly()
+    public boolean isReadable()
     {
       return false;
+    }
+    //----------------------------------------------------------------------------------
+    public boolean isWriteable()
+    {
+      return true;
     }
     //----------------------------------------------------------------------------------
     public String getType()
