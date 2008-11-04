@@ -9,12 +9,10 @@ import java.util.logging.Logger;
 
 import junit.framework.TestCase;
 
-import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
-import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.metadata.DependencyBuilder;
 import org.apache.maven.mercury.metadata.DependencyBuilderFactory;
 import org.apache.maven.mercury.metadata.MetadataTreeException;

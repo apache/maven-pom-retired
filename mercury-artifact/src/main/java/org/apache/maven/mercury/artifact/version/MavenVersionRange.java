@@ -1,8 +1,5 @@
 package org.apache.maven.mercury.artifact.version;
 
-import java.util.Collection;
-
-import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.QualityEnum;
 import org.apache.maven.mercury.artifact.QualityRange;

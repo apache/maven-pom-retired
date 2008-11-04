@@ -1,22 +1,15 @@
 package org.apache.maven.mercury.repository.local.flat;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.mercury.artifact.Artifact;
-import org.apache.maven.mercury.artifact.Quality;
-import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
-import org.apache.maven.mercury.crypto.api.StreamObserverException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.AbstractRepositoryWriter;
@@ -24,15 +17,6 @@ import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
-import org.apache.maven.mercury.repository.metadata.AddVersionOperation;
-import org.apache.maven.mercury.repository.metadata.Metadata;
-import org.apache.maven.mercury.repository.metadata.MetadataBuilder;
-import org.apache.maven.mercury.repository.metadata.MetadataException;
-import org.apache.maven.mercury.repository.metadata.MetadataOperation;
-import org.apache.maven.mercury.repository.metadata.SetSnapshotOperation;
-import org.apache.maven.mercury.repository.metadata.Snapshot;
-import org.apache.maven.mercury.repository.metadata.SnapshotOperand;
-import org.apache.maven.mercury.repository.metadata.StringOperand;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileLockBundle;
 import org.apache.maven.mercury.util.FileUtil;
