@@ -329,7 +329,7 @@ implements RepositoryReader, MetadataReader
   private File findLocalRoot( Quality vq )
   {
     for( LocalRepository lr : _localRepos )
-      if( !lr.isReadOnly() && lr.getVersionRangeQualityRange().isAcceptedQuality( vq ) )
+      if( !lr.isReadable() && lr.getVersionRangeQualityRange().isAcceptedQuality( vq ) )
         return lr.getDirectory();
 
     return _defaultRoot;

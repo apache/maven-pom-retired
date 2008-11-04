@@ -137,7 +137,7 @@ implements MetadataReader
     int i = 0;
     for( Repository r : _repositories )
     {
-      if( ! r.isLocal() )
+      if( ! r.isLocal() || ! r.isReadable() )
         continue;
       
       RepositoryReader rr = r.getReader();
@@ -146,7 +146,7 @@ implements MetadataReader
       
       _repositoryReaders[ i++ ] = rr;
       
-      if( ! r.isReadOnly() )
+      if( ! r.isReadable() )
       {
         _localRepository = (LocalRepository)r.getReader().getRepository();
         _localRepositoryWriter = _localRepository.getWriter();
@@ -168,7 +168,7 @@ implements MetadataReader
     // remote ones
     for( Repository r : _repositories )
     {
-      if( r.isLocal() )
+      if( r.isLocal() || ! r.isReadable() )
         continue;
       
       RepositoryReader rr = r.getReader();

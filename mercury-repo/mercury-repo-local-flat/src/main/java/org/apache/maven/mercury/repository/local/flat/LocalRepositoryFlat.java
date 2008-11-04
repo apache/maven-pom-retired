@@ -2,13 +2,11 @@ package org.apache.maven.mercury.repository.local.flat;
 
 import java.io.File;
 
-import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
-import org.apache.maven.mercury.transport.api.Server;
 
 public class LocalRepositoryFlat
 extends AbstractRepository
@@ -18,13 +16,16 @@ implements LocalRepository
   
     private File directory;
     
-    private static final String METADATA_NAME = "maven-metadata-local.xml";
+    private boolean createPoms         = false;
+    private boolean createGroupFolders = false;
 
     //----------------------------------------------------------------------------------
-    public LocalRepositoryFlat( String id, File directory )
+    public LocalRepositoryFlat( String id, File directory, boolean createGroupFolders, boolean createPoms )
     {
         super( id, FLAT_REPOSITORY_TYPE );
         this.directory = directory;
+        this.createGroupFolders = createGroupFolders;
+        this.createPoms = createPoms;
     }
     //----------------------------------------------------------------------------------
     public File getDirectory()
@@ -44,10 +45,7 @@ implements LocalRepository
     //----------------------------------------------------------------------------------
     public RepositoryWriter getWriter()
     {
-      if( writer == null )
-        writer = new LocalRepositoryWriterFlat(this);
-      
-      return writer;
+      return new LocalRepositoryWriterFlat(this);
     }
     //----------------------------------------------------------------------------------
     public RepositoryWriter getWriter( String protocol )
@@ -74,6 +72,23 @@ implements LocalRepository
     public String getType()
     {
       return DEFAULT_REPOSITORY_TYPE;
+    }
+    //----------------------------------------------------------------------------------
+    public boolean isCreatePoms()
+    {
+      return createPoms;
+    }
+    public void setCreatePoms( boolean createPoms )
+    {
+      this.createPoms = createPoms;
+    }
+    public boolean isCreateGroupFolders()
+    {
+      return createGroupFolders;
+    }
+    public void setCreateGroupFolders( boolean createGroupFolders )
+    {
+      this.createGroupFolders = createGroupFolders;
     }
     //----------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------

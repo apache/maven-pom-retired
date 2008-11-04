@@ -61,8 +61,6 @@ implements Repository
   protected QualityRange       versionRangeQualityRange = QualityRange.ALL;
 
   protected DependencyProcessor dependencyProcessor;
-  protected RepositoryReader   reader;
-  protected RepositoryWriter   writer;
   
   protected Server server;
   

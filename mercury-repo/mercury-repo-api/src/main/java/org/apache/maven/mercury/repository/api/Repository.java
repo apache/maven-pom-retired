@@ -45,10 +45,18 @@ public interface Repository
   public boolean isLocal();
 
   /**
-   * Indicates whether it's even possible to write to this Repository. If there are multiple localRepo's and Artifact
-   * needs to be downloaded - it will be "written" to all "local" repositories that are not "readOnly".
+   * Indicates whether it's possible to read from this Repository. 
    */
-  public boolean isReadOnly();
+  public boolean isReadable();
+
+  /**
+   * Indicates whether it's possible to write to this Repository. Good example is the flat repo, which is used to
+   * only collect dependencies for some 3rd party reasons, but not read them.
+   * 
+   * If there are multiple localRepo's and Artifact needs to be downloaded - it will be "written" to all 
+   * "local" repositories that are writeable.
+   */
+  public boolean isWriteable();
 
   /**
    * Indicates whether this repository contains releases

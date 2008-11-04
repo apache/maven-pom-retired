@@ -31,7 +31,7 @@ public class RepositoryManager
   {
     for( Repository r : _repoList )
     {
-      if( r.isLocal() && !r.isReadOnly() && r.isAcceptedQuality( aq ) )
+      if( r.isLocal() && !r.isReadable() && r.isAcceptedQuality( aq ) )
         return (LocalRepository)r;
     }
     return null;

@@ -65,10 +65,7 @@ implements LocalRepository
     //----------------------------------------------------------------------------------
     public RepositoryReader getReader() 
     {
-      if( reader == null )
-        reader = new LocalRepositoryReaderM2( this, getDependencyProcessor() );
-
-      return reader;
+      return new LocalRepositoryReaderM2( this, getDependencyProcessor() );
     }
     //----------------------------------------------------------------------------------
     // TODO oleg: what happens in multi-threaded execution?? 
@@ -80,10 +77,7 @@ implements LocalRepository
     // TODO oleg: what happens in multi-threaded execution?? 
     public RepositoryWriter getWriter()
     {
-      if( writer == null )
-        writer = new LocalRepositoryWriterM2(this);
-      
-      return writer;
+      return new LocalRepositoryWriterM2(this);
     }
     //----------------------------------------------------------------------------------
     public RepositoryWriter getWriter( String protocol )
@@ -97,9 +91,14 @@ implements LocalRepository
       return true;
     }
     //----------------------------------------------------------------------------------
-    public boolean isReadOnly()
+    public boolean isReadable()
     {
-      return false;
+      return true;
+    }
+    //----------------------------------------------------------------------------------
+    public boolean isWriteable()
+    {
+      return true;
     }
     //----------------------------------------------------------------------------------
     public String getType()

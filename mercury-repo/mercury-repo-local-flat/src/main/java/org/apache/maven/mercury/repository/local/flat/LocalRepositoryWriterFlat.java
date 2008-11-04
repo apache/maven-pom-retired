@@ -65,10 +65,6 @@ implements RepositoryWriter
 
   private static final ArifactWriteData LAST_ARTIFACT = new ArifactWriteData( null, null );
   
-  
-  private boolean _updateMetadata    = false;
-  private boolean _createPoms        = false;
-  private boolean _createGroupFolder = false;
   //---------------------------------------------------------------------------------------------------------------
   public LocalRepositoryWriterFlat( LocalRepository repo )
   {
@@ -216,7 +212,7 @@ implements RepositoryWriter
       }
     }
 
-    String relGroupPath = _createGroupFolder ? artifact.getGroupId() : "";
+    String relGroupPath = ((LocalRepositoryFlat)_repo).isCreateGroupFolders() ? artifact.getGroupId() : "";
     String versionPath = _repoDir.getAbsolutePath() + (Util.isEmpty( relGroupPath ) ? "" : "/"+relGroupPath);
     
     String lockDir = null;
@@ -258,9 +254,9 @@ implements RepositoryWriter
       if( artifact.hasClassifier() )
         return;
       
-      if( _createPoms && hasPomBlob )
+      if( ((LocalRepositoryFlat)_repo).isCreatePoms() && hasPomBlob )
       {
-        FileUtil.writeAndSign( _repoDir.getAbsolutePath()+'/'+versionPath
+        FileUtil.writeAndSign( versionPath
                               +'/'+artifact.getArtifactId()+'-'+artifact.getVersion()+".pom", pomBlob, vFacs
                               );
       }

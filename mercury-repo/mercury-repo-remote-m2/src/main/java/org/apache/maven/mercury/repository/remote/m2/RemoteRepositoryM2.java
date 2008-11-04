@@ -71,9 +71,14 @@ implements RemoteRepository
      return false;
     }
     //----------------------------------------------------------------------------------
-    public boolean isReadOnly()
+    public boolean isReadable()
     {
-      return false;
+      return true;
+    }
+    //----------------------------------------------------------------------------------
+    public boolean isWriteable()
+    {
+      return true;
     }
     //----------------------------------------------------------------------------------
     public String getType()
@@ -81,24 +86,14 @@ implements RemoteRepository
       return DEFAULT_REPOSITORY_TYPE;
     }
     //----------------------------------------------------------------------------------
-
     public RepositoryUpdatePolicy getUpdatePolicy()
     {
       return _updatePolicy;
     }
-
+    //----------------------------------------------------------------------------------
     public void setUpdatePolicy( RepositoryUpdatePolicy updatePolicy )
     {
       this._updatePolicy = updatePolicy;
     }
-    
     //----------------------------------------------------------------------------------
-    /* (non-Javadoc)
-     * @see org.apache.maven.mercury.repository.api.RemoteRepository#addLocalRepository(org.apache.maven.mercury.repository.api.LocalRepository)
-     */
-    public void addLocalRepository( LocalRepository localRepo )
-    {
-      // TODO Auto-generated method stub
-      
-    }
 }
