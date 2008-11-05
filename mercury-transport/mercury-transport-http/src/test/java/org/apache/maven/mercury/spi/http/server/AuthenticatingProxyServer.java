@@ -53,10 +53,11 @@ public class AuthenticatingProxyServer extends Server
             String proxyAuth = ((HttpServletRequest)request).getHeader("Proxy-Authorization");
             if (proxyAuth!=null)
             {
-
-                if (proxyAuth.startsWith("basic "))
+                String authType = proxyAuth.substring(0,6);
+                
+                if (authType.equalsIgnoreCase("basic "))
                     proxyAuth = proxyAuth.substring(6);
-             
+                         
                 proxyAuth = B64Code.decode(proxyAuth,StringUtil.__ISO_8859_1);
                 int sep = proxyAuth.indexOf(":");
                 String username = proxyAuth.substring(0,sep);

@@ -27,6 +27,7 @@ import java.util.Set;
 import org.apache.maven.mercury.logging.IMercuryLogger;
 import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.transport.api.Server;
+import org.mortbay.jetty.client.Address;
 import org.mortbay.jetty.client.HttpDestination;
 import org.mortbay.jetty.client.security.Realm;
 import org.mortbay.jetty.client.security.RealmResolver;
@@ -53,12 +54,12 @@ public class DestinationRealmResolver implements RealmResolver
     public Realm getRealm(String name, HttpDestination dest, String pathSpec)
             throws IOException
     {
-       InetSocketAddress address = dest.getAddress();
+       Address address = dest.getAddress();
        boolean secure = dest.isSecure();
 
        if( _log.isDebugEnabled() )
        {
-         _log.debug("Dest "+address.getHostName()+":"+address.getPort()+"(secure="+secure+")" );
+         _log.debug("Dest "+address.getHost()+":"+address.getPort()+"(secure="+secure+")" );
          _log.debug("Server list: "+_servers );
          
        }
@@ -81,18 +82,18 @@ public class DestinationRealmResolver implements RealmResolver
                }
 
                if( _log.isDebugEnabled() )
-                 _log.debug("Trying dest "+address.getHostName()+":"+address.getPort()+"(secure="+dest.isSecure()
+                 _log.debug("Trying dest "+address.getHost()+":"+address.getPort()+"(secure="+dest.isSecure()
                      +") against server "+protocol+"://"+host+":"+port );
 
                if (((secure && "https".equalsIgnoreCase(protocol)) || (!secure && "http".equalsIgnoreCase(protocol)))
                    &&
                    (address.getPort() == port))
                {
-                   if (address.getHostName().equalsIgnoreCase(host) || address.getAddress().getHostAddress().equalsIgnoreCase(host))
+                   if (address.getHost().equalsIgnoreCase(host) || address.getHost().equalsIgnoreCase(host))
                    {
                        server = s;
                        if (_log.isDebugEnabled())
-                           _log.debug("Matched server "+address.getHostName()+":"+address.getPort());
+                           _log.debug("Matched server "+address.getHost()+":"+address.getPort());
                    }
                }
            }
@@ -101,7 +102,7 @@ public class DestinationRealmResolver implements RealmResolver
        if (server == null || server.getServerCredentials() == null)
        {
            if (_log.isDebugEnabled())
-               _log.debug("No server matching "+address.getHostName()+":"+address.getPort()+" or no credentials");
+               _log.debug("No server matching "+address.getHost()+":"+address.getPort()+" or no credentials");
            return null;
        }
        
