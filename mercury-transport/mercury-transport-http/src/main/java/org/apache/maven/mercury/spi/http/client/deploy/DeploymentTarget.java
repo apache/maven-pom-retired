@@ -31,18 +31,18 @@ import java.util.Set;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
 import org.apache.maven.mercury.crypto.api.StreamVerifier;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.validate.Validator;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.jetty.HttpHeaders;
 import org.mortbay.jetty.client.HttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class DeploymentTarget
 {    
-    private static final Logger log = LoggerFactory.getLogger(DeploymentTarget.class);
+    private static final IMercuryLogger log = MercuryLoggerManager.getLogger(DeploymentTarget.class);
     protected Server _server;
     protected HttpClient _httpClient;
     protected String _batchId;

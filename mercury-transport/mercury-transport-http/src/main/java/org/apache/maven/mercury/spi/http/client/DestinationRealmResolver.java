@@ -24,12 +24,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.jetty.client.HttpDestination;
 import org.mortbay.jetty.client.security.Realm;
 import org.mortbay.jetty.client.security.RealmResolver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * DestinationRealmResolver
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DestinationRealmResolver implements RealmResolver
 {
-    private static final Logger log = LoggerFactory.getLogger(DestinationRealmResolver.class);
+    private static final IMercuryLogger _log = MercuryLoggerManager.getLogger(DestinationRealmResolver.class);
     
     protected Set<Server> _servers = new HashSet<Server>();
     
@@ -56,10 +56,10 @@ public class DestinationRealmResolver implements RealmResolver
        InetSocketAddress address = dest.getAddress();
        boolean secure = dest.isSecure();
 
-       if( log.isDebugEnabled() )
+       if( _log.isDebugEnabled() )
        {
-         log.debug("Dest "+address.getHostName()+":"+address.getPort()+"(secure="+secure+")" );
-         log.debug("Server list: "+_servers );
+         _log.debug("Dest "+address.getHostName()+":"+address.getPort()+"(secure="+secure+")" );
+         _log.debug("Server list: "+_servers );
          
        }
 
@@ -80,8 +80,8 @@ public class DestinationRealmResolver implements RealmResolver
                  port = "https".equalsIgnoreCase( protocol ) ? 443 : 80;
                }
 
-               if( log.isDebugEnabled() )
-                 log.debug("Trying dest "+address.getHostName()+":"+address.getPort()+"(secure="+dest.isSecure()
+               if( _log.isDebugEnabled() )
+                 _log.debug("Trying dest "+address.getHostName()+":"+address.getPort()+"(secure="+dest.isSecure()
                      +") against server "+protocol+"://"+host+":"+port );
 
                if (((secure && "https".equalsIgnoreCase(protocol)) || (!secure && "http".equalsIgnoreCase(protocol)))
@@ -91,8 +91,8 @@ public class DestinationRealmResolver implements RealmResolver
                    if (address.getHostName().equalsIgnoreCase(host) || address.getAddress().getHostAddress().equalsIgnoreCase(host))
                    {
                        server = s;
-                       if (log.isDebugEnabled())
-                           log.debug("Matched server "+address.getHostName()+":"+address.getPort());
+                       if (_log.isDebugEnabled())
+                           _log.debug("Matched server "+address.getHostName()+":"+address.getPort());
                    }
                }
            }
@@ -100,8 +100,8 @@ public class DestinationRealmResolver implements RealmResolver
 
        if (server == null || server.getServerCredentials() == null)
        {
-           if (log.isDebugEnabled())
-               log.debug("No server matching "+address.getHostName()+":"+address.getPort()+" or no credentials");
+           if (_log.isDebugEnabled())
+               _log.debug("No server matching "+address.getHostName()+":"+address.getPort()+" or no credentials");
            return null;
        }
        

@@ -18,6 +18,8 @@ import org.apache.maven.mercury.artifact.api.ArtifactListProcessorException;
 import org.apache.maven.mercury.artifact.version.MetadataVersionComparator;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
 import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.LocalRepository;
@@ -50,7 +52,7 @@ implements MetadataReader
   private static int MIN_PARALLEL = 5;
   
   private static final Language _lang = new DefaultLanguage( VirtualRepositoryReader.class );
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( VirtualRepositoryReader.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( VirtualRepositoryReader.class ); 
 
   //----------------------------------------------------------------------------------------------------------------------------
   private List<Repository>       _repositories = new ArrayList<Repository>(8);

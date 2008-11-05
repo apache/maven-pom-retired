@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 
  /**
   * This class hold all variables fed to the SAT solver. Because of the
@@ -13,7 +15,7 @@ import org.apache.maven.mercury.artifact.ArtifactMetadata;
   */
 class SatContext
 {
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( SatContext.class );
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( SatContext.class );
 
   List<SatVar> variables;
   int varCount = 0;

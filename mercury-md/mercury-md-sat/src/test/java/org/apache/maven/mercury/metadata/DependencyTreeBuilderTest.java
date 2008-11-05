@@ -10,6 +10,8 @@ import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
@@ -23,7 +25,7 @@ import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
 public class DependencyTreeBuilderTest
 extends TestCase
 {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger( DependencyTreeBuilderTest.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( DependencyTreeBuilderTest.class ); 
   
 //  ArtifactMetadata md = new ArtifactMetadata( "pmd:pmd:3.9" );
 //  File repo = new File("./target/test-classes/localRepo");

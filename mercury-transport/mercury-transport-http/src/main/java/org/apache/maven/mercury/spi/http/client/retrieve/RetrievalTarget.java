@@ -35,6 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.maven.mercury.crypto.api.StreamObserver;
 import org.apache.maven.mercury.crypto.api.StreamVerifier;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.client.SecureSender;
@@ -43,8 +45,6 @@ import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.jetty.HttpHeaders;
 import org.mortbay.jetty.client.HttpExchange;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 
@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class RetrievalTarget
 {
-    private static final Logger log = LoggerFactory.getLogger( RetrievalTarget.class );
+    private static final IMercuryLogger log = MercuryLoggerManager.getLogger( RetrievalTarget.class );
     public static final String __PREFIX = "JTY_";
     public static final String __TEMP_SUFFIX = ".tmp";
     public static final int __START_STATE = 1;

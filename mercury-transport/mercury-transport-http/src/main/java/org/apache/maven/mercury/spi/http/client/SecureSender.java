@@ -23,14 +23,14 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
 
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.transport.api.Credentials;
 import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.jetty.client.HttpClient;
 import org.mortbay.jetty.client.HttpDestination;
 import org.mortbay.jetty.client.HttpExchange;
 import org.mortbay.jetty.client.security.ProxyAuthorization;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * SecureSender
@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SecureSender
 {
-  private static final Logger _log = LoggerFactory.getLogger( SecureSender.class );
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( SecureSender.class );
 
   public static void send (Server server, HttpClient httpClient, HttpExchange exchange)
     throws Exception

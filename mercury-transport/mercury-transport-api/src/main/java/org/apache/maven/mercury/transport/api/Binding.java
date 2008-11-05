@@ -25,6 +25,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
+
 /**
  * Binding <p/> A Binding represents a remote uri whose contents are to be
  * downloaded and stored in a locally, or a local resource whose contents are to
@@ -32,7 +35,7 @@ import java.net.URL;
  */
 public class Binding
 {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger( Binding.class );
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( Binding.class );
   
   protected URL                 remoteResource;
   protected File                localFile;

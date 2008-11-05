@@ -10,6 +10,8 @@ import junit.framework.TestCase;
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
 import org.apache.maven.mercury.util.FileUtil;
 
@@ -23,7 +25,7 @@ import org.apache.maven.mercury.util.FileUtil;
 public class LocalRepositoryFlatTest
     extends TestCase
 {
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( LocalRepositoryFlatTest.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( LocalRepositoryFlatTest.class ); 
 
   File _dir;
   LocalRepositoryFlat _repo;

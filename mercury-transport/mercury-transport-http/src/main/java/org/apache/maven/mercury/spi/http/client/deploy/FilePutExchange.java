@@ -30,6 +30,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.client.ObservableInputStream;
@@ -38,8 +40,6 @@ import org.apache.maven.mercury.transport.api.Server;
 import org.mortbay.io.Buffer;
 import org.mortbay.jetty.HttpMethods;
 import org.mortbay.jetty.client.HttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
 public abstract class FilePutExchange extends FileExchange
 {
     private static final int __readLimit = 1024;
-    private static final Logger log = LoggerFactory.getLogger(FilePutExchange.class);
+    private static final IMercuryLogger log = MercuryLoggerManager.getLogger(FilePutExchange.class);
     private String _batchId;
     private InputStream _inputStream;
     private String _remoteRepoUrl;

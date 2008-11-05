@@ -31,6 +31,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.spi.http.client.FileExchange;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.client.ObservableOutputStream;
@@ -41,8 +43,6 @@ import org.mortbay.io.BufferUtil;
 import org.mortbay.jetty.HttpHeaders;
 import org.mortbay.jetty.HttpMethods;
 import org.mortbay.jetty.client.HttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -56,7 +56,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class FileGetExchange extends FileExchange
 {
-    private static final Logger log = LoggerFactory.getLogger(FileGetExchange.class);
+    private static final IMercuryLogger log = MercuryLoggerManager.getLogger(FileGetExchange.class);
     private OutputStream _outputStream;
     private Set<StreamObserver> _observers = new HashSet<StreamObserver>();
     int _contentLength = -1;

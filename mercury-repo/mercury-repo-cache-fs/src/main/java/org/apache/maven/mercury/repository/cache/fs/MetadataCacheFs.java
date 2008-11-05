@@ -11,6 +11,8 @@ import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactCoordinates;
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.repository.api.MetadataCacheException;
 import org.apache.maven.mercury.repository.api.MetadataCorruptionException;
 import org.apache.maven.mercury.repository.api.RepositoryGAMetadata;
@@ -32,7 +34,7 @@ import org.codehaus.plexus.lang.Language;
 public class MetadataCacheFs
 implements RepositoryMetadataCache
 {
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( MetadataCacheFs.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( MetadataCacheFs.class ); 
   private static final Language _lang = new DefaultLanguage( RepositoryGAVMetadata.class );
   
   static volatile Map<String, MetadataCacheFs> fsCaches = Collections.synchronizedMap( new HashMap<String, MetadataCacheFs>(2) ); 

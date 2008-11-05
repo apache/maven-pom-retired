@@ -37,6 +37,8 @@ import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.crypto.pgp.PgpStreamVerifierFactory;
 import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
@@ -61,7 +63,7 @@ public class FileUtil
   public static final int    K = 1024;
   public static final int    DEFAULT_BUFFER_SIZE = 10 * K;
   //---------------------------------------------------------------------------------------------------------------
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( FileUtil.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( FileUtil.class ); 
   private static final Language _lang = new DefaultLanguage( FileUtil.class );
   
   private static final OverlappingFileLockException FILE_LOCKED = new OverlappingFileLockException();

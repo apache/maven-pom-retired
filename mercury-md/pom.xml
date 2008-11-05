@@ -15,4 +15,14 @@
     <module>mercury-md-shared</module>
   </modules>
 
+  <dependencies>
+
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-logging</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+  </dependencies>
+
 </project>

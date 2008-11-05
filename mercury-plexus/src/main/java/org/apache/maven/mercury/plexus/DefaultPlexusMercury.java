@@ -20,6 +20,8 @@ import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.crypto.pgp.PgpStreamVerifierFactory;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.metadata.DependencyBuilder;
 import org.apache.maven.mercury.metadata.DependencyBuilderFactory;
 import org.apache.maven.mercury.metadata.MetadataTreeException;
@@ -50,7 +52,7 @@ public class DefaultPlexusMercury
 extends AbstractLogEnabled
 implements PlexusMercury, Initializable
 {
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( DefaultPlexusMercury.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( DefaultPlexusMercury.class ); 
   private static final Language _lang = new DefaultLanguage( DefaultPlexusMercury.class );
 
   //---------------------------------------------------------------

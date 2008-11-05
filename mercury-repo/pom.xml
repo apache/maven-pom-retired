@@ -18,5 +18,14 @@
     <module>mercury-repo-cache-fs</module>
     <module>mercury-repo-virtual</module>
   </modules>
+  <dependencies>
+
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-logging</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+  </dependencies>
 
 </project>

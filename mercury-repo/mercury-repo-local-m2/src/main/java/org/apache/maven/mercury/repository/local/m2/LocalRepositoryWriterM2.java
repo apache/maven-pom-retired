@@ -18,6 +18,8 @@ import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
 import org.apache.maven.mercury.crypto.api.StreamObserverException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.AbstractRepositoryWriter;
 import org.apache.maven.mercury.repository.api.LocalRepository;
@@ -53,7 +55,7 @@ implements RepositoryWriter
   
   public static final long SLEEP_FOR_LOCK_TICK = 5l;
 
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( LocalRepositoryWriterM2.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( LocalRepositoryWriterM2.class ); 
   private static final Language _lang = new DefaultLanguage( LocalRepositoryWriterM2.class );
   //---------------------------------------------------------------------------------------------------------------
   private static final String [] _protocols = new String [] { "file" };

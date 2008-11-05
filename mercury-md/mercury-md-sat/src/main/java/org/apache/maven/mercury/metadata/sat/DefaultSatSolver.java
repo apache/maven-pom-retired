@@ -12,6 +12,8 @@ import java.util.Map;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 import org.apache.maven.mercury.metadata.MetadataTreeNodeGAComparator;
 import org.apache.maven.mercury.metadata.MetadataTreeNodeGAVComparator;
@@ -36,7 +38,7 @@ import org.sat4j.specs.TimeoutException;
 public class DefaultSatSolver
 implements SatSolver
 {
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( DefaultSatSolver.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( DefaultSatSolver.class ); 
   private static final Language _lang = new DefaultLanguage( DefaultSatSolver.class );
   
   protected SatContext _context;

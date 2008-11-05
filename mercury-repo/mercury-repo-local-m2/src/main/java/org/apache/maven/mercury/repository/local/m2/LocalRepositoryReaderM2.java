@@ -23,6 +23,8 @@ import org.apache.maven.mercury.crypto.api.StreamObserverException;
 import org.apache.maven.mercury.crypto.api.StreamVerifier;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.repository.api.AbstracRepositoryReader;
 import org.apache.maven.mercury.repository.api.AbstractRepOpResult;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
@@ -40,7 +42,7 @@ public class LocalRepositoryReaderM2
 extends AbstracRepositoryReader
 implements RepositoryReader, MetadataReader
 {
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( LocalRepositoryReaderM2.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( LocalRepositoryReaderM2.class ); 
   private static final Language _lang = new DefaultLanguage( LocalRepositoryReaderM2.class );
   //---------------------------------------------------------------------------------------------------------------
   private static final String [] _protocols = new String [] { "file" };

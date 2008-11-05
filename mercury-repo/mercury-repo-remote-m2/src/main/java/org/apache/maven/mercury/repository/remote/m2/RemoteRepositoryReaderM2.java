@@ -23,6 +23,8 @@ import org.apache.maven.mercury.artifact.version.VersionRangeFactory;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.repository.api.AbstracRepositoryReader;
 import org.apache.maven.mercury.repository.api.AbstractRepOpResult;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
@@ -67,7 +69,7 @@ public class RemoteRepositoryReaderM2
 extends AbstracRepositoryReader
 implements RepositoryReader, MetadataReader
 {
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( RemoteRepositoryReaderM2.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( RemoteRepositoryReaderM2.class ); 
   private static final Language _lang = new DefaultLanguage( RemoteRepositoryReaderM2.class );
 
   // TODO - replace with known Transport's protocols. Should be similar to RepositoryReader/Writer registration
