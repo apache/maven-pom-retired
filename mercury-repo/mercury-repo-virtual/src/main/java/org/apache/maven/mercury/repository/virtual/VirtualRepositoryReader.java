@@ -490,7 +490,7 @@ implements MetadataReader
       if( res != null )
       {
         if( _log.isDebugEnabled() )
-          _log.debug( "data found in "+rr.getRepository().getServer()+", results shipped back" );
+          _log.debug( bmdQuery+" found in "+rr.getRepository().getServer() );
         
         return res;
       }

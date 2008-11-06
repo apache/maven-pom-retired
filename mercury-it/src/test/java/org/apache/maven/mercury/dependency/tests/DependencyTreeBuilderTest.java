@@ -20,6 +20,8 @@ import org.apache.maven.mercury.metadata.MetadataTreeNode;
 import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
+import org.apache.maven.mercury.repository.api.RepositoryUpdateIntervalPolicy;
+import org.apache.maven.mercury.repository.api.RepositoryUpdatePolicy;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
 import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;
@@ -87,6 +89,17 @@ extends TestCase
     super.tearDown();
   }
   //----------------------------------------------------------------------------------------------
+  private static boolean assertHasArtifact( List<ArtifactMetadata> res, String gav )
+  {
+    ArtifactMetadata gavMd = new ArtifactMetadata(gav);
+    
+    for( ArtifactMetadata md : res )
+      if( md.sameGAV( gavMd ) )
+        return true;
+    
+    return false;
+  }
+   //----------------------------------------------------------------------------------------------
   public void testDummy()
   throws MetadataTreeException
   {
@@ -107,13 +120,13 @@ extends TestCase
     
     ArtifactMetadata md = new ArtifactMetadata( artifactId );
 
-    MetadataTreeNode root = depBuilder.buildTree( md );
+    MetadataTreeNode root = depBuilder.buildTree( md, ArtifactScopeEnum.compile );
 
     assertNotNull( "null tree built", root );
     
 //    assertTrue( "wrong tree size, expected gte 4", 4 <= root.countNodes() );
 
-    List<ArtifactMetadata> res = depBuilder.resolveConflicts( root, ArtifactScopeEnum.compile );
+    List<ArtifactMetadata> res = depBuilder.resolveConflicts( root );
     
     assertNotNull( res );
     
@@ -154,16 +167,52 @@ extends TestCase
     
   }
   //----------------------------------------------------------------------------------------------
-  private static boolean assertHasArtifact( List<ArtifactMetadata> res, String gav )
+  /**
+   * this test relies on MavenVersionRange maven.mercury.osgi.version being set to false, it's default value.
+   * <strong>Do not</strong> run maven with -Dmaven.mercury.osgi.version=true   
+   */
+  public void testResolvePlugin()
+  throws Exception
   {
-    ArtifactMetadata gavMd = new ArtifactMetadata(gav);
+    String centralUrl = "http://repo1.maven.org/maven2";
+
+    String artifactId = "org.apache.maven.plugins:maven-clean-plugin:2.2";
     
-    for( ArtifactMetadata md : res )
-      if( md.sameGAV( gavMd ) )
-        return true;
+    reps.clear();
     
-    return false;
+    File pluginRepo = new File( "./target/repoPlugin" );
+    localRepo = new LocalRepositoryM2( "testLocalPluginRepo", pluginRepo );
+    reps.add(  localRepo );
+
+    Server server = new Server( "id", new URL(centralUrl) );
+    remoteRepo = new RemoteRepositoryM2(server);
+    remoteRepo.setUpdatePolicy( RepositoryUpdateIntervalPolicy.UPDATE_POLICY_NEVER );
+    reps.add( remoteRepo );
+    
+    depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, reps, null, null, null );
+    
+    ArtifactMetadata md = new ArtifactMetadata( artifactId );
+
+    MetadataTreeNode root = depBuilder.buildTree( md, ArtifactScopeEnum.compile );
+
+    assertNotNull( "null tree built", root );
+    
+//    assertTrue( "wrong tree size, expected gte 4", 4 <= root.countNodes() );
+
+    List<ArtifactMetadata> res = depBuilder.resolveConflicts( root );
+    
+    assertNotNull( res );
+    
+    assertTrue( res.size() > 1 );
+    
+    System.out.println("\n---------------------------------\nclasspath: "+res);    
+    System.out.println("---------------------------------");    
+    for( ArtifactMetadata amd : res )
+    {
+      System.out.println(amd + ( amd.getTracker() == null ? " [no tracker]" : " ["+((RepositoryReader)amd.getTracker()).getRepository().getServer().toString()+"]" ) );
+    }
+    System.out.println("---------------------------------");    
   }
-  //----------------------------------------------------------------------------------------------
+ //----------------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------------
 }

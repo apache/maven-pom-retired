@@ -39,26 +39,6 @@ public class DefaultSatSolverTest
     super.setUp();
   }
   //----------------------------------------------------------------------
-  public void testContext()
-  throws SatException
-  {
-    title = "context test";
-    System.out.println("\n\n==========================\n"+title+"\n");
-    
-    ss = (DefaultSatSolver) DefaultSatSolver.create(3);
-    ss._context.findOrAdd( b1 );
-    ss._context.findOrAdd( b2 );
-    
-    assert ss._context != null : "created solver has a null context";
-    assert ss._context.varCount == 2 : "expected 2 variables in the context, but found "+ss._context.varCount;
-
-    ss._context.findOrAdd( a1 );
-    assert ss._context.varCount == 3 : "expected 3 variables in the context, but found "+ss._context.varCount;
-
-    ss._context.findOrAdd( b1 );
-    assert ss._context.varCount == 3 : "expected 3 variables in the context, but found "+ss._context.varCount;
-  }
-  //----------------------------------------------------------------------
   public void testOptimization()
   throws SatException
   {
@@ -93,7 +73,7 @@ public class DefaultSatSolverTest
     cc1bb2 = new MetadataTreeNode( mdbb2, cc1, mdbb2 );
     cc1.addChild( cc1bb2 );
     
-    ss = (DefaultSatSolver) DefaultSatSolver.create( aa1, ArtifactScopeEnum.compile );
+    ss = (DefaultSatSolver) DefaultSatSolver.create( aa1 );
     
     List< Comparator<MetadataTreeNode>> comparators = new ArrayList<Comparator<MetadataTreeNode>>(2);
     comparators.add( new ClassicDepthComparator() );
@@ -168,7 +148,7 @@ public class DefaultSatSolverTest
       .addChild(nb3)
     ;
 
-    ss = (DefaultSatSolver) DefaultSatSolver.create(na1, ArtifactScopeEnum.compile);
+    ss = (DefaultSatSolver) DefaultSatSolver.create(na1);
 
     List<ArtifactMetadata> res = ss.solve();
     

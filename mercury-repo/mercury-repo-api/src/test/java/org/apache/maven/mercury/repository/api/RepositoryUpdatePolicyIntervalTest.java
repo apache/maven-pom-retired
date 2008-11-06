@@ -19,7 +19,7 @@ public class RepositoryUpdatePolicyIntervalTest
   protected void setUp()
       throws Exception
   {
-    in = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.UPDATE_POLICY_INTERVAL+"1" );
+    in = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.UPDATE_POLICY_NAME_INTERVAL+"1" );
     now = System.currentTimeMillis();
   }
 
@@ -31,7 +31,7 @@ public class RepositoryUpdatePolicyIntervalTest
 
   public void testDayly()
   {
-    in = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.UPDATE_POLICY_DAILY );
+    in = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.UPDATE_POLICY_NAME_DAILY );
 
     assertFalse( in.timestampExpired( now ) );
     assertFalse( in.timestampExpired( now-80000L ) );

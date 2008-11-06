@@ -25,11 +25,11 @@ public interface DependencyBuilder
    * @return the root of the tree built
    * @throws MetadataTreeException
    */
-  public abstract MetadataTreeNode buildTree( ArtifactBasicMetadata startMD )
+  public abstract MetadataTreeNode buildTree( ArtifactBasicMetadata startMD, ArtifactScopeEnum scope )
   throws MetadataTreeException;
 
   //-----------------------------------------------------
-  public abstract List<ArtifactMetadata> resolveConflicts( MetadataTreeNode root, ArtifactScopeEnum scope )
+  public abstract List<ArtifactMetadata> resolveConflicts( MetadataTreeNode root )
   throws MetadataTreeException;
   //-----------------------------------------------------
   //-----------------------------------------------------

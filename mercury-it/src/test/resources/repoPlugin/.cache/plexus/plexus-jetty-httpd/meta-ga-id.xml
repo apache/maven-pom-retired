@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><cachedRawMetadata>
+  <lastUpdated>20081106032500</lastUpdated>
+  <elements>
+    <element>
+      <name>coordinates</name>
+      <attributes>
+        <attribute>
+          <name>groupId</name>
+          <value>plexus</value>
+        </attribute>
+        <attribute>
+          <name>artifactId</name>
+          <value>plexus-jetty-httpd</value>
+        </attribute>
+      </attributes>
+    </element>
+    <element>
+      <name>versions</name>
+      <attributes>
+        <attribute>
+          <name>version</name>
+          <value>1.0-beta-1</value>
+        </attribute>
+      </attributes>
+    </element>
+  </elements>
+</cachedRawMetadata>

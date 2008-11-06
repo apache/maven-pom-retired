@@ -25,6 +25,7 @@ import org.sat4j.pb.IPBSolver;
 import org.sat4j.pb.ObjectiveFunction;
 import org.sat4j.pb.SolverFactory;
 import org.sat4j.specs.ContradictionException;
+import org.sat4j.specs.IConstr;
 import org.sat4j.specs.IVec;
 import org.sat4j.specs.IVecInt;
 import org.sat4j.specs.TimeoutException;
@@ -44,16 +45,15 @@ implements SatSolver
   protected SatContext _context;
   protected IPBSolver _solver = SolverFactory.newEclipseP2();
   protected MetadataTreeNode _root;
-  protected ArtifactScopeEnum _scope;
   protected static final Comparator<MetadataTreeNode> gaComparator = new MetadataTreeNodeGAComparator();
   //-----------------------------------------------------------------------
-  public static SatSolver create( MetadataTreeNode tree, ArtifactScopeEnum scope )
+  public static SatSolver create( MetadataTreeNode tree )
   throws SatException
   {
-    return new DefaultSatSolver( tree, scope );
+    return new DefaultSatSolver( tree );
   }
   //-----------------------------------------------------------------------
-  public DefaultSatSolver( MetadataTreeNode tree, ArtifactScopeEnum scope )
+  public DefaultSatSolver( MetadataTreeNode tree )
   throws SatException
   {
     if( tree == null)
@@ -65,7 +65,6 @@ _log.debug( "SatContext: # of variables: "+nNodes );
     _context = new SatContext( nNodes );
     _solver.newVar( _context.varCount );
     _root = tree;
-    _scope = scope == null ? ArtifactScopeEnum.DEFAULT_SCOPE : scope;
     
     try
     {
@@ -99,22 +98,69 @@ _log.debug( "SatContext: # of variables: "+nNodes );
     if( buckets == null || buckets.size() < 1 )
       return;
     
-    IVecInt vars = new VecInt( 128 );
+    IVecInt vars            = new VecInt( 128 );
     IVec<BigInteger> coeffs = new Vec<BigInteger>( 128 );
+    
+    int count = 0;
 
-    for( List<MetadataTreeNode> bucket : buckets.values() )
+    for( String key : buckets.keySet() )
     {
-      if( bucket.size() < 2 )
-        continue;
+      List<MetadataTreeNode> bucket = buckets.get( key );
+  
+// this is needed if optimization is "maximize"       
+//      Collections.reverse(  bucket );
       
-      for( int i=0; i<bucket.size(); i++ )
+      int bucketSize = bucket.size(); 
+      
+      boolean bigBucket = bucketSize > 1;
+
+if( _log.isDebugEnabled() )
+  _log.debug( "\n\nBucket "+key );
+
+      IVecInt bucketVars = new VecInt( bucketSize );
+      
+      for( int i=0; i<bucketSize; i++ )
       {
         MetadataTreeNode n  = bucket.get(i);
+if( _log.isDebugEnabled() )
+  _log.debug( n.toString() );
+
         ArtifactMetadata md = n.getMd();
-        SatVar var = _context.findOrAdd(md);
-        vars.push( var.getLiteral() );
-        coeffs.push( BigInteger.valueOf( (long)Math.pow( 2, i ) ) );
+        SatVar var = _context.findOrAdd(n);
+        int varLiteral = var.getLiteral(); 
+        
+        bucketVars.push( varLiteral );
+        
+        if( bigBucket )
+        {
+          vars.push( varLiteral );
+          
+          long cf = (long)Math.pow( 2, count++ );
+          
+          coeffs.push( BigInteger.valueOf( cf ) );
+
+          if( _log.isDebugEnabled() )
+            _log.debug( "    "+cf+" x"+var.getLiteral() );
+        }
+        
+
       }
+
+      try
+      {
+        if( bucketVars != null && !bucketVars.isEmpty() )
+        {
+          _solver.addAtMost( bucketVars, 1 );
+          _solver.addAtLeast( bucketVars, 1 );
+        }
+      }
+      catch( ContradictionException e )
+      {
+        throw new SatException(e);
+      }
+      
+if( _log.isDebugEnabled() )
+  _log.debug( "\n" );
     }
 
     if( vars.isEmpty() )
@@ -143,6 +189,7 @@ _log.debug( "SatContext: # of variables: "+nNodes );
 
       // the best fit now first, and we don't need duplicate GAVs
       removeDuplicateGAVs( bucket );
+
     }
   }
   //-----------------------------------------------------------------------
@@ -240,10 +287,10 @@ _log.debug( "SatContext: # of variables: "+nNodes );
   }
   //-----------------------------------------------------------------------
   private static final void reorder(
-      MetadataTreeNode[] work
-      , int wLen
-      , Comparator<MetadataTreeNode> comparator
-                     )
+                          MetadataTreeNode[] work
+                          , int wLen
+                          , Comparator<MetadataTreeNode> comparator
+                                   )
   {
     MetadataTreeNode[] temp = new MetadataTreeNode[ wLen ];
     
@@ -268,7 +315,7 @@ _log.debug( "SatContext: # of variables: "+nNodes );
     {
       // TODO og: assumption - around 32 GAVs per GA
       bucket = new ArrayList<MetadataTreeNode>( 32 );
-      buckets.put(ga, bucket );
+      buckets.put( ga, bucket );
     }
     
     bucket.add( node );
@@ -351,42 +398,30 @@ if( _log.isDebugEnabled() )
     if( node.getMd() == null )
       throw new SatException("found a node without metadata");
     
-    SatVar nodeLit = _context.findOrAdd( node.getMd() );
+    SatVar nodeLit = _context.findOrAdd( node );
 
+    // this one is a must :)
     if( node.getParent() == null )
-      {
-        addPB( SatHelper.getSmallOnes( nodeLit.getLiteral() )
-                              , SatHelper.getBigOnes(1,false)
-                              , true, BigInteger.valueOf(1)
-                              );
-      }
-      
-      if( ! node.hasChildren() )
-        return;
+      addPB( SatHelper.getSmallOnes( nodeLit.getLiteral() ), SatHelper.getBigOnes(1,false), true, BigInteger.ONE );
+    
+    if( ! node.hasChildren() )
+      return;
     
     Map<ArtifactBasicMetadata,List<MetadataTreeNode>> kids = processChildren( node.getQueries(), node.getChildren() );
     
-    // leaf node
+    // leaf node in this scope
     if( kids == null )
       return;
     
     for( Map.Entry<ArtifactBasicMetadata,List<MetadataTreeNode>> kid : kids.entrySet() )
     {
       ArtifactBasicMetadata query = kid.getKey();
-      if( ! _scope.encloses( query.getArtifactScope()) )
-        continue;
       
       List<MetadataTreeNode> range = kid.getValue();
 
       if( range.size() > 1 )
       {
-        int [] literals = addRange( range, query.isOptional() );
-        int litCount =  literals.length;
-        
-        addPB( SatHelper.getSmallOnes( SatHelper.toIntArray( nodeLit.getLiteral(), literals ) )
-                              , SatHelper.getBigOnes(-1,litCount,false)
-                              , true, BigInteger.ZERO
-                              );
+        addRange( nodeLit.getLiteral(), range, query.isOptional() );
         for( MetadataTreeNode tn : range )
         {
           addNode( tn );
@@ -395,19 +430,20 @@ if( _log.isDebugEnabled() )
       else
       {
         MetadataTreeNode child = range.get(0);
-        SatVar kidLit = _context.findOrAdd( child.getMd() );
+        SatVar kidLit = _context.findOrAdd( child );
         
         addPB( SatHelper.getSmallOnes( new int [] { nodeLit.getLiteral(), kidLit.getLiteral() } )
-                              , SatHelper.getBigOnes( -1, 1 )
-                              , true, BigInteger.ZERO
-                              );
+            , SatHelper.getBigOnes( 1, -1 )
+            , true, BigInteger.ZERO
+            );
+//        addRange( nodeLit.getLiteral(), range, query.isOptional() );
         addNode( child );
       }
 
     }
   }
   //-----------------------------------------------------------------------
-  private final int [] addRange( List<MetadataTreeNode> range, boolean optional )
+  private final int [] addRange( int parentLiteral, List<MetadataTreeNode> range, boolean optional )
   throws ContradictionException, SatException
   {
     SatVar literal;
@@ -418,49 +454,41 @@ if( _log.isDebugEnabled() )
     
     for( MetadataTreeNode tn : range )
     {
-      literal = _context.findOrAdd( tn.getMd() );
+      literal = _context.findOrAdd( tn );
       literals[count++] = literal.getLiteral();
-    }
-    
-    if( optional ) // Sxi >= 0
-    {
-      addPB( SatHelper.getSmallOnes( literals )
-          , SatHelper.getBigOnes( count, false )
+
+      // implication to parent
+      addPB( SatHelper.getSmallOnes( new int [] { parentLiteral, literal.getLiteral() } )
+          , SatHelper.getBigOnes( 1, -1 )
           , true, BigInteger.ZERO
           );
     }
+    
+    IVecInt rangeVector = SatHelper.getSmallOnes( literals );
+    
+    if( optional ) // Sxi >= 0
+    {
+if( _log.isDebugEnabled() )
+  _log.debug( "optional range: atMost 1: "+ SatHelper.vectorToString( rangeVector) );
+    
+      _solver.addAtMost( rangeVector, 1 );
+    }
     else // Sxi = 1
     {
-      addPB( 
-          SatHelper.getSmallOnes( literals )
-        , SatHelper.getBigOnes( count, false )
-        , true
-        , new BigInteger("1") 
-                    );
+if( _log.isDebugEnabled() )
+  _log.debug( "range: " + SatHelper.vectorToString( rangeVector) );
 
-      addPB( 
-            SatHelper.getSmallOnes( literals )
-          , SatHelper.getBigOnes( count, true )
-          , true
-          , new BigInteger("-1") 
-                    );
+    IConstr atLeast = _solver.addAtLeast( rangeVector, 1 );
+    if( _log.isDebugEnabled() )
+      _log.debug( "atLeast: " + SatHelper.vectorToString( atLeast) );
+
+    IConstr atMost  = _solver.addAtMost( rangeVector, 1 );
+    if( _log.isDebugEnabled() )
+      _log.debug( "atMost: " + SatHelper.vectorToString( atMost) );
+
     }
     
     return literals;
-  }
-  //-----------------------------------------------------------------------
-  // test only factory & constructor
-  protected final static SatSolver create( int nVars )
-  throws SatException
-  {
-    return new DefaultSatSolver( nVars );
-  }
-  
-  protected DefaultSatSolver( int nVars )
-  throws SatException
-  {
-    _context = new SatContext( nVars );
-    _solver.newVar( nVars );
   }
   //-----------------------------------------------------------------------
   public final List<ArtifactMetadata> solve()
@@ -475,6 +503,21 @@ if( _log.isDebugEnabled() )
         res = new ArrayList<ArtifactMetadata>( _context.varCount );
         
         int [] model = _solver.model();
+
+if( _log.isDebugEnabled() )
+  if( model != null )
+  {
+    StringBuilder sb = new StringBuilder();
+    String comma = "";
+    for( int m : model )
+    {
+      sb.append( comma+m );
+      comma = ", ";
+    }
+    _log.debug( '['+sb.toString()+']' );
+  }
+  else 
+    _log.debug( "model is null" );
 
         for( int i : model )
           if( i > 0 )

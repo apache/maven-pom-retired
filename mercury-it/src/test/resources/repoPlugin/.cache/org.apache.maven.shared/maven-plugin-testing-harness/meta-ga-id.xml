@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><cachedRawMetadata>
+  <lastUpdated>20081106032450</lastUpdated>
+  <elements>
+    <element>
+      <name>coordinates</name>
+      <attributes>
+        <attribute>
+          <name>groupId</name>
+          <value>org.apache.maven.shared</value>
+        </attribute>
+        <attribute>
+          <name>artifactId</name>
+          <value>maven-plugin-testing-harness</value>
+        </attribute>
+      </attributes>
+    </element>
+    <element>
+      <name>versions</name>
+      <attributes>
+        <attribute>
+          <name>version</name>
+          <value>1.0-beta-1</value>
+        </attribute>
+        <attribute>
+          <name>version</name>
+          <value>1.0</value>
+        </attribute>
+        <attribute>
+          <name>version</name>
+          <value>1.1</value>
+        </attribute>
+      </attributes>
+    </element>
+  </elements>
+</cachedRawMetadata>

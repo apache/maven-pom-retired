@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+  <groupId>org.apache.maven.wagon</groupId>
+  <artifactId>wagon-provider-api</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0-alpha-5</version>
+      <version>1.0-alpha-6</version>
+    </versions>
+    <lastUpdated>20081106032521</lastUpdated>
+  </versioning>
+</metadata>

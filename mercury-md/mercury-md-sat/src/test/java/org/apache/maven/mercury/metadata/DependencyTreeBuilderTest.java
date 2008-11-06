@@ -64,7 +64,7 @@ extends TestCase
     ArtifactMetadata circularMd = new ArtifactMetadata( "a:a:1" );
     try
     {
-      mt.buildTree( circularMd );
+      mt.buildTree( circularMd, null );
     }
     catch (MetadataTreeException e)
     {
@@ -81,7 +81,7 @@ extends TestCase
   {
     ArtifactMetadata md = new ArtifactMetadata( "a:a:2" );
     
-    MetadataTreeNode root = mt.buildTree( md );
+    MetadataTreeNode root = mt.buildTree( md, null );
     assertNotNull( "null tree built", root );
     assertEquals( "wrong tree size", 4, root.countNodes() );
   }
@@ -91,11 +91,11 @@ extends TestCase
   {
     ArtifactMetadata md = new ArtifactMetadata( "a:a:2" );
     
-    MetadataTreeNode root = mt.buildTree( md );
+    MetadataTreeNode root = mt.buildTree( md, ArtifactScopeEnum.compile );
     assertNotNull( "null tree built", root );
     assertEquals( "wrong tree size", 4, root.countNodes() );
 
-    List<ArtifactMetadata> res = mt.resolveConflicts( root, ArtifactScopeEnum.compile );
+    List<ArtifactMetadata> res = mt.resolveConflicts( root );
     assertNotNull( "null resolution", res );
     assertEquals( "wrong tree size", 3, res.size() );
     
@@ -111,11 +111,11 @@ extends TestCase
   {
     ArtifactMetadata md = new ArtifactMetadata( "a:a:4" );
     
-    MetadataTreeNode root = mt.buildTree( md );
+    MetadataTreeNode root = mt.buildTree( md, ArtifactScopeEnum.compile );
     assertNotNull( "null tree built", root );
-    assertEquals( "wrong tree size", 4, root.countNodes() );
+    assertEquals( "wrong tree size", 3, root.countNodes() );
 
-    List<ArtifactMetadata> res = mt.resolveConflicts( root, ArtifactScopeEnum.compile );
+    List<ArtifactMetadata> res = mt.resolveConflicts( root );
     assertNotNull( "null resolution", res );
     assertEquals( "wrong tree size", 2, res.size() );
 
@@ -136,11 +136,11 @@ extends TestCase
     exclusions.add( new ArtifactBasicMetadata("c:c:3") );
     md.setExclusions( exclusions );
     
-    MetadataTreeNode root = mt.buildTree( md );
+    MetadataTreeNode root = mt.buildTree( md, ArtifactScopeEnum.compile );
     assertNotNull( "null tree built", root );
-    assertEquals( "wrong tree size", 3, root.countNodes() );
+    assertEquals( "wrong tree size", 2, root.countNodes() );
 
-    List<ArtifactMetadata> res = mt.resolveConflicts( root, ArtifactScopeEnum.compile );
+    List<ArtifactMetadata> res = mt.resolveConflicts( root );
     assertNotNull( "null resolution", res );
     assertEquals( "wrong tree size", 2, res.size() );
 
@@ -161,11 +161,11 @@ extends TestCase
     exclusions.add( new ArtifactBasicMetadata("c:c:2") );
     md.setExclusions( exclusions );
     
-    MetadataTreeNode root = mt.buildTree( md );
+    MetadataTreeNode root = mt.buildTree( md, ArtifactScopeEnum.compile );
     assertNotNull( "null tree built", root );
     assertEquals( "wrong tree size", 3, root.countNodes() );
 
-    List<ArtifactMetadata> res = mt.resolveConflicts( root, ArtifactScopeEnum.compile );
+    List<ArtifactMetadata> res = mt.resolveConflicts( root );
     assertNotNull( "null resolution", res );
     assertEquals( "wrong tree size", 2, res.size() );
     
@@ -188,11 +188,11 @@ extends TestCase
     exclusions.add( new ArtifactBasicMetadata("c:c:2") );
     md.setExclusions( exclusions );
     
-    MetadataTreeNode root = mt.buildTree( md );
+    MetadataTreeNode root = mt.buildTree( md, ArtifactScopeEnum.compile );
     assertNotNull( "null tree built", root );
     assertEquals( "wrong tree size", 2, root.countNodes() );
 
-    List<ArtifactMetadata> res = mt.resolveConflicts( root, ArtifactScopeEnum.compile );
+    List<ArtifactMetadata> res = mt.resolveConflicts( root );
     assertNotNull( "null resolution", res );
     assertEquals( "wrong tree size", 2, res.size() );
     
@@ -217,11 +217,11 @@ extends TestCase
     exclusions.add( new ArtifactBasicMetadata("c:c:2") );
     md.setExclusions( exclusions );
     
-    MetadataTreeNode root = mt.buildTree( md );
+    MetadataTreeNode root = mt.buildTree( md, ArtifactScopeEnum.compile );
     assertNotNull( "null tree built", root );
     assertEquals( "wrong tree size", 1, root.countNodes() );
 
-    List<ArtifactMetadata> res = mt.resolveConflicts( root, ArtifactScopeEnum.compile );
+    List<ArtifactMetadata> res = mt.resolveConflicts( root );
     assertNotNull( "null resolution", res );
     assertEquals( "wrong tree size", 1, res.size() );
     
@@ -239,11 +239,11 @@ extends TestCase
   {
     ArtifactMetadata md = new ArtifactMetadata( "a:a:3" );
     
-    MetadataTreeNode root = mt.buildTree( md );
+    MetadataTreeNode root = mt.buildTree( md, ArtifactScopeEnum.compile );
     assertNotNull( "null tree built", root );
     assertTrue( "wrong tree size, expected gte 4", 4 <= root.countNodes() );
 
-    List<ArtifactMetadata> res = mt.resolveConflicts( root, ArtifactScopeEnum.compile );
+    List<ArtifactMetadata> res = mt.resolveConflicts( root );
     assertNotNull( "null resolution", res );
 
 System.out.println("BigRes: "+res);    

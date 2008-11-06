@@ -19,16 +19,19 @@ implements RepositoryUpdatePolicy
 {
   private static final Language _lang = new DefaultLanguage( RepositoryUpdateIntervalPolicy.class );
   
-  public static final String UPDATE_POLICY_NEVER = "never";
+  public static final String UPDATE_POLICY_NAME_NEVER = "never";
 
-  public static final String UPDATE_POLICY_ALWAYS = "always";
+  public static final String UPDATE_POLICY_NAME_ALWAYS = "always";
 
-  public static final String UPDATE_POLICY_DAILY = "daily";
+  public static final String UPDATE_POLICY_NAME_DAILY = "daily";
 
-  public static final String UPDATE_POLICY_INTERVAL = "interval";
-  private static final int UPDATE_POLICY_INTERVAL_LENGTH = UPDATE_POLICY_INTERVAL.length();
+  public static final String UPDATE_POLICY_NAME_INTERVAL = "interval";
+  private static final int UPDATE_POLICY_INTERVAL_LENGTH = UPDATE_POLICY_NAME_INTERVAL.length();
   
-  public static final String DEFAULT_UPDATE_POLICY = UPDATE_POLICY_DAILY;
+  public static final String DEFAULT_UPDATE_POLICY = UPDATE_POLICY_NAME_DAILY;
+  
+  public static final RepositoryUpdateIntervalPolicy UPDATE_POLICY_NEVER = new RepositoryUpdateIntervalPolicy(UPDATE_POLICY_NAME_NEVER);
+  public static final RepositoryUpdateIntervalPolicy UPDATE_POLICY_ALWAYS = new RepositoryUpdateIntervalPolicy(UPDATE_POLICY_NAME_ALWAYS);
 
   private static final long NEVER = -1L;
   
@@ -62,13 +65,13 @@ implements RepositoryUpdatePolicy
      if( Util.isEmpty( policy ) )
        throw new IllegalArgumentException( _lang.getMessage( "empty.policy", policy ));
      
-     if( policy.startsWith( UPDATE_POLICY_ALWAYS ) )
+     if( policy.startsWith( UPDATE_POLICY_NAME_ALWAYS ) )
        interval = 0L;
-     else if( policy.startsWith( UPDATE_POLICY_DAILY ) )
+     else if( policy.startsWith( UPDATE_POLICY_NAME_DAILY ) )
        interval = DAYLY;
-     else if( policy.startsWith( UPDATE_POLICY_NEVER ) )
+     else if( policy.startsWith( UPDATE_POLICY_NAME_NEVER ) )
        interval = NEVER;
-     else if( policy.startsWith( UPDATE_POLICY_INTERVAL ) )
+     else if( policy.startsWith( UPDATE_POLICY_NAME_INTERVAL ) )
      {
        int len = policy.length();
        if( len <= UPDATE_POLICY_INTERVAL_LENGTH )

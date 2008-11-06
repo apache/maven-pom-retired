@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><cachedRawMetadata>
+  <lastUpdated>20081106032502</lastUpdated>
+  <elements>
+    <element>
+      <name>coordinates</name>
+      <attributes>
+        <attribute>
+          <name>groupId</name>
+          <value>commons-lang</value>
+        </attribute>
+        <attribute>
+          <name>artifactId</name>
+          <value>commons-lang</value>
+        </attribute>
+      </attributes>
+    </element>
+    <element>
+      <name>versions</name>
+      <attributes>
+        <attribute>
+          <name>version</name>
+          <value>1.0</value>
+        </attribute>
+        <attribute>
+          <name>version</name>
+          <value>2.4</value>
+        </attribute>
+      </attributes>
+    </element>
+  </elements>
+</cachedRawMetadata>

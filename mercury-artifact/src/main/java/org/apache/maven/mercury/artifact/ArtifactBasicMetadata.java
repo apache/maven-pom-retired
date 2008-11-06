@@ -161,11 +161,16 @@ public class ArtifactBasicMetadata
   {
     return nvl(val,"");
   }
-  
+    
   @Override
   public String toString()
   {
       return nvl(groupId) + ":" + nvl(artifactId) + ":" + nvl(version) + ":" + nvl(classifier) + ":" + nvl(type,DEFAULT_ARTIFACT_TYPE);
+  }
+
+  public String toScopedString()
+  {
+      return toString()+"-scope:"+getArtifactScope();
   }
 
   public String toDomainString()

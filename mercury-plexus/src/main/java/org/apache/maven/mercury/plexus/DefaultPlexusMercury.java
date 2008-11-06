@@ -229,8 +229,8 @@ implements PlexusMercury, Initializable
     {
       DependencyBuilder depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, repos, null, null, null );
       
-      MetadataTreeNode root = depBuilder.buildTree( artifacts.get(0) );
-      List<ArtifactMetadata> res = depBuilder.resolveConflicts( root, scope );
+      MetadataTreeNode root = depBuilder.buildTree( artifacts.get(0), scope );
+      List<ArtifactMetadata> res = depBuilder.resolveConflicts( root );
     
       return res;
     }

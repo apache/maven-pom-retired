@@ -1,0 +1,7 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>easymock</groupId>
+  <artifactId>easymock</artifactId>
+  <name>EasyMock 1.2_Java1.3</name>
+  <version>1.2_Java1.3</version>
+</project>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+  <groupId>org.apache.maven</groupId>
+  <artifactId>maven-profile</artifactId>
+  <versioning>
+    <versions>
+      <version>2.0</version>
+    </versions>
+    <lastUpdated>20081106032521</lastUpdated>
+  </versioning>
+</metadata>

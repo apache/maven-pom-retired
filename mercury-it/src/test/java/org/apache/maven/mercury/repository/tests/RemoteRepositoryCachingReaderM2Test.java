@@ -61,7 +61,7 @@ extends AbstractRepositoryReaderM2Test
 
     server = new Server( "test", new URL("http://localhost:"+_port+"/repo") );
     
-    RepositoryUpdatePolicy up = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.UPDATE_POLICY_DAILY );
+    RepositoryUpdatePolicy up = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.UPDATE_POLICY_NAME_DAILY );
     
     repo = new RemoteRepositoryM2( "testRepo", server );
     ((RemoteRepository)repo).setUpdatePolicy( up );

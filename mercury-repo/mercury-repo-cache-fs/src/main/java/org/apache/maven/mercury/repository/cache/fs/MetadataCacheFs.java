@@ -34,7 +34,6 @@ import org.codehaus.plexus.lang.Language;
 public class MetadataCacheFs
 implements RepositoryMetadataCache
 {
-  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( MetadataCacheFs.class ); 
   private static final Language _lang = new DefaultLanguage( RepositoryGAVMetadata.class );
   
   static volatile Map<String, MetadataCacheFs> fsCaches = Collections.synchronizedMap( new HashMap<String, MetadataCacheFs>(2) ); 

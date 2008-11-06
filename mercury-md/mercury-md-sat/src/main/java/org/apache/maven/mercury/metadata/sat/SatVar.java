@@ -1,74 +1,54 @@
 package org.apache.maven.mercury.metadata.sat;
 
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
+import org.apache.maven.mercury.metadata.MetadataTreeNode;
 
 /**
  * @author <a href="oleg@codehaus.org">Oleg Gusakov</a>
  */
 class SatVar
-implements Comparable<ArtifactMetadata>
 {
-  ArtifactMetadata _md;
+  MetadataTreeNode _node;
   int _literal;
   boolean _optional;
   //---------------------------------------------------------------------
-  public SatVar( ArtifactMetadata md, int literal )
+  public SatVar( MetadataTreeNode n, int literal )
   throws SatException
   {
-    if( md == null
-        || md.getGroupId() == null
-        || md.getArtifactId() == null
-        || md.getVersion() == null
+    if( n == null
+        || n.getMd() == null
+    )
+      throw new SatException("Cannot create SatVar from a null MetadataTreeNode: "+n);
+    
+    ArtifactMetadata md = n.getMd();
+    if(    
+       md == null
+      || md.getGroupId() == null
+      || md.getArtifactId() == null
+      || md.getVersion() == null
     )
       throw new SatException("Cannot create SatVar from a null Metadata: "+md);
 
-    this._md = md;
+    this._node = n;
     this._literal = literal;
   }
   //---------------------------------------------------------------------
   public ArtifactMetadata getMd()
   {
-    return _md;
+    return _node.getMd();
   }
-  public void setMd(ArtifactMetadata md)
-  {
-    this._md = md;
-  }
+
   public int getLiteral()
   {
     return _literal;
   }
-  public void setNo(int var)
-  {
-    this._literal = var;
-  }
-
-  public boolean isWeak()
-  {
-    return this._optional;
-  }
   //---------------------------------------------------------------------
-  public int compareTo(ArtifactMetadata md)
+  @Override
+  public String toString()
   {
-    if( md == null
-        || md.getGroupId() == null
-        || md.getArtifactId() == null
-        || md.getVersion() == null
-    )
-      return -1;
-    
-    int g = this._md.getGroupId().compareTo( md.getGroupId() );
-    if( g == 0 )
-    {
-      int a = this._md.getArtifactId().compareTo( md.getArtifactId() );
-      if( a == 0 )
-        return this._md.getVersion().compareTo( md.getVersion() );
-      else
-        return a;
-    }
-
-    return g;
+    return _node.toString()+" -> X"+_literal;
   }
+  
   //---------------------------------------------------------------------
   //---------------------------------------------------------------------
 }

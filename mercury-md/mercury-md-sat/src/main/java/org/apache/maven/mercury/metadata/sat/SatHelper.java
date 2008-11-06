@@ -9,6 +9,7 @@ import org.sat4j.core.ReadOnlyVec;
 import org.sat4j.core.ReadOnlyVecInt;
 import org.sat4j.core.Vec;
 import org.sat4j.core.VecInt;
+import org.sat4j.specs.IConstr;
 import org.sat4j.specs.IVec;
 import org.sat4j.specs.IVecInt;
 
@@ -92,10 +93,36 @@ public class SatHelper
     return toVec(res);
   }
   //-----------------------------------------------------------------------
-  public static final void show( int... ones )
+  public static final String vectorToString( IVecInt vec )
   {
-    for( int i=0; i<ones.length; i++ )
-      System.out.print( " x"+ones[i] );
+    if( vec == null || vec.size() < 1 )
+      return "[]";
+    
+    StringBuilder sb = new StringBuilder();
+    String comma = "";
+    
+    for( int i=0; i<vec.size(); i++ )
+    {
+      sb.append( comma+"x"+vec.get( i ) );
+      comma = ", ";
+    }
+    return "["+sb.toString()+"]";
+  }
+  //-----------------------------------------------------------------------
+  public static final String vectorToString( IConstr vec )
+  {
+    if( vec == null || vec.size() < 1 )
+      return "[]";
+    
+    StringBuilder sb = new StringBuilder();
+    String comma = "";
+    
+    for( int i=0; i<vec.size(); i++ )
+    {
+      sb.append( comma+"x"+vec.get( i ) );
+      comma = ", ";
+    }
+    return "["+sb.toString()+"]";
   }
   //-----------------------------------------------------------------------
   //-----------------------------------------------------------------------

@@ -81,7 +81,7 @@ implements DependencyBuilder
     this._reader = new VirtualRepositoryReader( repositories );
   }
   //------------------------------------------------------------------------
-  public MetadataTreeNode buildTree( ArtifactBasicMetadata startMD )
+  public MetadataTreeNode buildTree( ArtifactBasicMetadata startMD, ArtifactScopeEnum treeScope )
   throws MetadataTreeException
   {
     if( startMD == null )
@@ -99,22 +99,23 @@ implements DependencyBuilder
     
     existingNodes = new HashMap<String, MetadataTreeNode>(128);
     
-    MetadataTreeNode root = createNode( startMD, null, startMD );
+    MetadataTreeNode root = createNode( startMD, null, startMD, treeScope );
     
     return root;
   }
   //-----------------------------------------------------
-  private MetadataTreeNode createNode( ArtifactBasicMetadata nodeMD, MetadataTreeNode parent, ArtifactBasicMetadata nodeQuery )
+  private MetadataTreeNode createNode( ArtifactBasicMetadata nodeMD, MetadataTreeNode parent, ArtifactBasicMetadata nodeQuery, ArtifactScopeEnum globalScope )
   throws MetadataTreeException
   {
     checkForCircularDependency( nodeMD, parent );
 
     ArtifactMetadata mr;
     
-    MetadataTreeNode existingNode = existingNodes.get( nodeQuery.toString() );
-    
-    if( existingNode != null )
-      return existingNode;
+// TODO: og - removed this optimization as it may break something
+//    MetadataTreeNode existingNode = existingNodes.get( nodeQuery.toString() );
+//    
+//    if( existingNode != null )
+//      return existingNode;
     
     try
     {
@@ -125,12 +126,27 @@ implements DependencyBuilder
         
         MetadataTreeNode node = new MetadataTreeNode( mr, parent, nodeQuery );
     
-        List<ArtifactBasicMetadata> dependencies = mr.getDependencies();
+        List<ArtifactBasicMetadata> allDependencies = mr.getDependencies();
         
-        if( dependencies == null || dependencies.size() < 1 )
+        if( allDependencies == null || allDependencies.size() < 1 )
           return node;
         
+        List<ArtifactBasicMetadata> dependencies = new ArrayList<ArtifactBasicMetadata>( allDependencies.size() );
+        if( globalScope != null )
+          for( ArtifactBasicMetadata md : allDependencies )
+          {
+            ArtifactScopeEnum mdScope = md.getArtifactScope(); 
+            if( globalScope.encloses( mdScope ) )
+              dependencies.add( md );
+          }
+        else
+          dependencies.addAll( allDependencies );
+        
+        if( Util.isEmpty( dependencies ) )
+          return node;
+
         ArtifactBasicResults res = _reader.readVersions( dependencies );
+
         Map<ArtifactBasicMetadata, List<ArtifactBasicMetadata>> expandedDeps = res.getResults();
         
         for( ArtifactBasicMetadata md : dependencies )
@@ -154,7 +170,7 @@ implements DependencyBuilder
               continue;
             }
             
-            MetadataTreeNode kid = createNode( ver, node, md );
+            MetadataTreeNode kid = createNode( ver, node, md, globalScope );
             node.addChild( kid );
             
             noVersions = false;
@@ -244,7 +260,7 @@ implements DependencyBuilder
     return false; // allow because all parents are OK with it
   }
   //-----------------------------------------------------
-  public List<ArtifactMetadata> resolveConflicts( MetadataTreeNode root, ArtifactScopeEnum scope )
+  public List<ArtifactMetadata> resolveConflicts( MetadataTreeNode root )
   throws MetadataTreeException
   {
     if( root == null )
@@ -252,7 +268,7 @@ implements DependencyBuilder
     
     try
     {
-      DefaultSatSolver solver = new DefaultSatSolver( root, scope );
+      DefaultSatSolver solver = new DefaultSatSolver( root );
       
       solver.applyPolicies( getComparators() );
 
@@ -281,7 +297,7 @@ implements DependencyBuilder
     return _comparators;
   }
   //-----------------------------------------------------
-  private List<ArtifactMetadata> resolveConflicts( List<ArtifactBasicMetadata>trees, ArtifactScopeEnum scope )
+  private List<ArtifactMetadata> resolveConflicts( List<ArtifactBasicMetadata>trees )
   throws MetadataTreeException
   {
     if( Util.isEmpty( trees ) )
@@ -298,7 +314,7 @@ implements DependencyBuilder
     
     try
     {
-      DefaultSatSolver solver = new DefaultSatSolver( root, scope );
+      DefaultSatSolver solver = new DefaultSatSolver( root );
       
       solver.applyPolicies( getComparators() );
 
