@@ -1,5 +1,7 @@
 package org.apache.maven.mercury.repository.remote.m2;
 
+import java.io.File;
+
 import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
@@ -9,6 +11,7 @@ import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryUpdateIntervalPolicy;
 import org.apache.maven.mercury.repository.api.RepositoryUpdatePolicy;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
+import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.transport.api.Server;
 
 

@@ -147,7 +147,7 @@ implements MetadataReader
       
       _repositoryReaders[ i++ ] = rr;
       
-      if( ! r.isReadable() )
+      if( r.isWriteable() )
       {
         _localRepository = (LocalRepository)r.getReader().getRepository();
         _localRepositoryWriter = _localRepository.getWriter();
@@ -409,7 +409,9 @@ implements MetadataReader
   public byte[] readMetadata( ArtifactBasicMetadata bmd )
   throws MetadataReaderException
   {
-System.err.println("Asking for pom: "+bmd);
+    if( _log.isDebugEnabled() )
+      _log.debug( "Asking for pom: "+bmd);
+
     return readRawData( bmd, "", "pom" );
   }
   //----------------------------------------------------------------------------------------------------------------------------
@@ -421,7 +423,6 @@ System.err.println("Asking for pom: "+bmd);
     
     if( _log.isDebugEnabled() )
       _log.debug( "request for "+bmd+", classifier="+classifier+", type="+type );
-System.err.println( "request for "+bmd+", classifier="+classifier+", type="+type );
     
     if( bmd == null )
       throw new IllegalArgumentException("null bmd supplied");
@@ -442,7 +443,6 @@ System.err.println( "request for "+bmd+", classifier="+classifier+", type="+type
     
     if( _log.isDebugEnabled() )
       _log.debug( "quality calculated as "+vq.getQuality() == null ? "null" :vq.getQuality().name() );
-System.err.println( "quality calculated as "+vq.getQuality() == null ? "null" :vq.getQuality().name() );
     
     if( Quality.SNAPSHOT_QUALITY.equals( vq ) )
     {
@@ -456,7 +456,6 @@ System.err.println( "quality calculated as "+vq.getQuality() == null ? "null" :v
         {
           if( _log.isDebugEnabled() )
             _log.debug( "no snapshots found - throw exception" );
-System.err.println( "no snapshots found - throw exception" );
           
           throw new MetadataReaderException( _lang.getMessage( "no.snapshots", bmd.toString(), classifier, type ) );
         }
@@ -475,7 +474,6 @@ System.err.println( "no snapshots found - throw exception" );
         {
           if( _log.isDebugEnabled() )
             _log.debug( "no snapshots found - throw exception" );
-System.err.println("no snapshots found - throw exception" );
           
           throw new MetadataReaderException( _lang.getMessage( "no.snapshots", bmd.toString(), classifier, type ) );
         }
@@ -493,7 +491,6 @@ System.err.println("no snapshots found - throw exception" );
       {
         if( _log.isDebugEnabled() )
           _log.debug( "data found in "+rr.getRepository().getServer()+", results shipped back" );
-System.err.println( "data found in "+rr.getRepository().getServer()+", results shipped back" );
         
         return res;
       }
@@ -501,7 +498,6 @@ System.err.println( "data found in "+rr.getRepository().getServer()+", results s
     
     if( _log.isDebugEnabled() )
       _log.debug( "no data found, returning null" );
-System.err.println( "no data found, returning null" );
     
     return null;
   }

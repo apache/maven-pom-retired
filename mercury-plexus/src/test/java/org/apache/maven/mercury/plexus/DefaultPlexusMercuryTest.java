@@ -187,6 +187,7 @@ extends TestCase
     assertTrue( assertHasArtifact( res, "asm:asm-util:3.0" ) );
     assertTrue( assertHasArtifact( res, "asm:asm-tree:3.0" ) );
     assertTrue( assertHasArtifact( res, "asm:asm:3.0" ) );
+    
   }
   //-------------------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
