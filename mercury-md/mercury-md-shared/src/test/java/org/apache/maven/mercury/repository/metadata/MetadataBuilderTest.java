@@ -90,6 +90,41 @@ public class MetadataBuilderTest
      assertEquals( 2, versions.size() );
   }
   //-------------------------------------------------------------------------
+  public void testAddPluginOperation()
+  throws FileNotFoundException, IOException, XmlPullParserException, MetadataException
+  {
+    File groupMd = new File( testBase, "group-maven-metadata.xml");
+    byte [] targetBytes = FileUtil.readRawData( groupMd );
+
+    Plugin plugin = new Plugin();
+    plugin.setArtifactId( "some-artifact-id" );
+    plugin.setName( "Some Plugin" );
+    plugin.setPrefix( "some" );
+
+    byte [] resBytes = MetadataBuilder.changeMetadata( targetBytes, new AddPluginOperation( new PluginOperand(plugin) ) );
+
+    File resFile = new File( testBase, "group-maven-metadata-write.xml");
+
+    FileUtil.writeRawData( resFile, resBytes );
+
+     Metadata mmd = MetadataBuilder.read( new FileInputStream(resFile) );
+
+     assertNotNull( mmd );
+     assertEquals(1, mmd.getPlugins().size() );
+     assertEquals("some-artifact-id", ((Plugin)mmd.getPlugins().get( 0 )).getArtifactId() );
+     assertEquals("Some Plugin", ((Plugin)mmd.getPlugins().get( 0 )).getName() );
+     assertEquals("some", ((Plugin)mmd.getPlugins().get( 0 )).getPrefix() );
+
+     // now let's drop plugin
+     targetBytes = FileUtil.readRawData( resFile );
+     resBytes = MetadataBuilder.changeMetadata( targetBytes, new RemovePluginOperation( new PluginOperand(plugin) ) );
+
+     Metadata mmd2 = MetadataBuilder.read( new ByteArrayInputStream(resBytes) );
+
+     assertNotNull( mmd2 );
+     assertEquals(0, mmd2.getPlugins().size() );
+  }
+  //-------------------------------------------------------------------------
   public void testMergeOperation()
   throws FileNotFoundException, IOException, XmlPullParserException, MetadataException
   {
