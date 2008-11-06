@@ -2,20 +2,28 @@ package org.apache.maven.mercury.metadata;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
+import org.apache.maven.mercury.metadata.sat.DefaultSatSolver;
+import org.codehaus.plexus.lang.DefaultLanguage;
+import org.codehaus.plexus.lang.Language;
 /**
  * metadata [dirty] Tree
  * 
  * @author <a href="oleg@codehaus.org">Oleg Gusakov</a>
  *
  */
-
 public class MetadataTreeNode
 {
   private static final int DEFAULT_CHILDREN_COUNT = 8;
+  
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( MetadataTreeNode.class ); 
+  private static final Language _lang = new DefaultLanguage( MetadataTreeNode.class );
   
   /**
    * this node's artifact MD
@@ -65,6 +73,32 @@ public class MetadataTreeNode
     }
     
     return res;
+  }
+  //------------------------------------------------------------------------
+  public int countDistinctNodes()
+  {
+    TreeSet<String> nodes = new TreeSet<String>();
+    
+    getDistinctNodes( this, nodes );
+if( _log.isDebugEnabled() )
+{
+  _log.debug( "tree distinct nodes count" );
+  _log.debug( nodes.toString() );
+}
+
+    return nodes.size();
+  }
+  //------------------------------------------------------------------------
+  public static void getDistinctNodes( MetadataTreeNode node, TreeSet<String> nodes )
+  {
+    if( node.getMd() == null )
+      throw new IllegalArgumentException( "tree node without metadata" );
+    
+    nodes.add( node.getMd().getGAV() );
+    
+    if( node.children != null && node.children.size() > 0)
+      for( MetadataTreeNode child : node.children )
+        getDistinctNodes( child, nodes );
   }
 	//------------------------------------------------------------------------
   public MetadataTreeNode()

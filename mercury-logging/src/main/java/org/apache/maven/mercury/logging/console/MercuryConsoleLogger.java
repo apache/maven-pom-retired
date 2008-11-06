@@ -44,14 +44,8 @@ implements IMercuryLogger
       say( MercuryLoggingLevelEnum.debug, message, throwable );
   }
 
-  /* (non-Javadoc)
-   * @see org.apache.maven.mercury.logging.MercuryLogger#error(java.lang.String)
-   */
-  public void error(
-      String message )
+  public void error( String message )
   {
-    // TODO Auto-generated method stub
-
   }
 
   /* (non-Javadoc)

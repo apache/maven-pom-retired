@@ -12,7 +12,7 @@
 
   <properties>
     
-    <sat4j.version>2.0.0</sat4j.version>
+    <sat4j.version>2.0.4</sat4j.version>
     <commons.digester.version>1.8</commons.digester.version>
 
   </properties>

@@ -31,5 +31,5 @@ public enum MercuryLoggingLevelEnum
   {
       return id;
   }
-
+  
 }

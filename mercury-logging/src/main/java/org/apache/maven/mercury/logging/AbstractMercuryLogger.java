@@ -9,12 +9,15 @@ package org.apache.maven.mercury.logging;
  */
 public abstract class AbstractMercuryLogger
 {
-  protected String className;
+  protected String _className;
+  
+  MercuryLoggingLevelEnum _threshold = MercuryLoggerManager.getThreshold();
+  
   
   @SuppressWarnings("unchecked")
   public AbstractMercuryLogger( Class clazz )
   {
-    className = clazz.getName();
+    _className = clazz.getName();
   }
   
   public boolean isDebugEnabled()

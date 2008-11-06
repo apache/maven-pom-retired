@@ -59,7 +59,9 @@ implements SatSolver
     if( tree == null)
       throw new SatException("cannot create a solver for an empty [null] tree");
     
-    int nNodes = tree.countNodes();
+    int nNodes = tree.countDistinctNodes();
+_log.debug( "SatContext: # of variables: "+nNodes );
+
     _context = new SatContext( nNodes );
     _solver.newVar( _context.varCount );
     _root = tree;
@@ -84,7 +86,7 @@ implements SatSolver
     if( _root == null )
       throw new SatException( "cannot apply policies to a null tree" );
     
-    // TODO og: assumption - around 128 GA's per tree
+    // TODO og: assumption - around 128 GA's per tree. If more - map reallocates - slow down.
     Map<String, List<MetadataTreeNode>> buckets = new HashMap<String, List<MetadataTreeNode>>(128);
     fillBuckets( buckets, _root );
     sortBuckets( buckets, comparators );
@@ -114,7 +116,7 @@ implements SatSolver
         coeffs.push( BigInteger.valueOf( (long)Math.pow( 2, i ) ) );
       }
     }
-    
+
     if( vars.isEmpty() )
       return;
     
@@ -471,12 +473,12 @@ if( _log.isDebugEnabled() )
       if( _solver.isSatisfiable() )
       {
         res = new ArrayList<ArtifactMetadata>( _context.varCount );
-        for( SatVar v : _context.variables )
-        {
-          boolean yes = _solver.model( v.getLiteral() );
-          if( yes )
-            res.add( v.getMd() );
-        }
+        
+        int [] model = _solver.model();
+
+        for( int i : model )
+          if( i > 0 )
+            res.add( _context.getMd( i ) );
       }
     }
     catch (TimeoutException e)

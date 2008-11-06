@@ -6,6 +6,6 @@
     <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
   <artifactId>mercury-logging</artifactId>
-  <name>Mercury Logging:          ${project.version}</name>
+  <name>Mercury Logging:                ${project.version}</name>
 
 </project>

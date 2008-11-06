@@ -52,6 +52,15 @@ if( _log.isDebugEnabled() )
     return var; 
   }
   //-----------------------------------------------------------------------
+  public ArtifactMetadata getMd( int literal )
+  {
+    for( SatVar v : variables )
+      if( v._literal == literal )
+        return v.getMd();
+    
+    return null;
+  }
+  //-----------------------------------------------------------------------
   @Override
   public String toString()
   {
