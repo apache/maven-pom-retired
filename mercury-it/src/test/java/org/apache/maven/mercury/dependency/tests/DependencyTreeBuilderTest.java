@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -167,6 +168,22 @@ extends TestCase
     
   }
   //----------------------------------------------------------------------------------------------
+  private static void showClasspath( List<ArtifactMetadata> cp )
+  {
+    TreeSet<String> scp = new TreeSet<String>();
+    
+    for( ArtifactMetadata m : cp )
+      scp.add( m.getArtifactId()+"-"+m.getVersion()+"."+m.getType() );
+    
+    System.out.println("\n========> Classpath: "+cp.size()+" elements");
+    for( String s : scp )
+    {
+      System.out.println(s);
+    }
+    System.out.println("<======== Classpath\n");
+    
+  }
+  //----------------------------------------------------------------------------------------------
   /**
    * this test relies on MavenVersionRange maven.mercury.osgi.version being set to false, it's default value.
    * <strong>Do not</strong> run maven with -Dmaven.mercury.osgi.version=true   
@@ -205,13 +222,14 @@ extends TestCase
     
     assertTrue( res.size() > 1 );
     
-    System.out.println("\n---------------------------------\nclasspath: "+res);    
-    System.out.println("---------------------------------");    
-    for( ArtifactMetadata amd : res )
-    {
-      System.out.println(amd + ( amd.getTracker() == null ? " [no tracker]" : " ["+((RepositoryReader)amd.getTracker()).getRepository().getServer().toString()+"]" ) );
-    }
-    System.out.println("---------------------------------");    
+    showClasspath( res );
+
+    artifactId = "org.apache.maven.plugins:maven-compiler-plugin:2.0.2";
+    md = new ArtifactMetadata( artifactId );
+    root = depBuilder.buildTree( md, ArtifactScopeEnum.compile );
+    assertNotNull( "null tree built", root );
+    res = depBuilder.resolveConflicts( root );
+    showClasspath( res );
   }
  //----------------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------------
