@@ -37,19 +37,6 @@
     <defaultGoal>install</defaultGoal>
   </build>
   
-  <repositories>
-  	<repository>
-  		<id>sona.staging</id>
-  		<url>http://repository.sonatype.org/content/repositories/staging</url>
-  	</repository>
-    <repository>
-        <id>sona.central</id>
-        <url>http://repository.sonatype.org/content/groups/public</url>
-        <snapshots><enabled>true</enabled></snapshots>
-        <releases><enabled>true</enabled></releases>
-    </repository>
-  </repositories>
-  
   <distributionManagement>
     <repository>
       <id>${distMgmtReleasesId}</id>
