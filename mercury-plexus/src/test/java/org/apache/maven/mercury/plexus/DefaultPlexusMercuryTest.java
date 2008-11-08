@@ -12,6 +12,7 @@ import junit.framework.TestCase;
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
+import org.apache.maven.mercury.artifact.ArtifactMetadataList;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
@@ -120,7 +121,7 @@ extends TestCase
     super.tearDown();
   }
   //----------------------------------------------------------------------------------------------
-  private static boolean assertHasArtifact( List<ArtifactBasicMetadata> res, String gav )
+  private static boolean assertHasArtifact( List<ArtifactMetadata> res, String gav )
   {
     ArtifactMetadata gavMd = new ArtifactMetadata(gav);
     
@@ -168,16 +169,14 @@ extends TestCase
   public void testResolve()
   throws Exception
   {
-//    Server central = new Server( "central", new URL("http://repo1.maven.org/maven2") );
-    Server central = new Server( "central", new URL("http://repository.sonatype.org/content/groups/public") );
+    Server central = new Server( "central", new URL("http://repo1.maven.org/maven2") );
+//    Server central = new Server( "central", new URL("http://repository.sonatype.org/content/groups/public") );
     
     repos.add( new RemoteRepositoryM2(central) );
 
     String artifactId = "asm:asm-xml:3.0";
 
-    ArtifactBasicMetadata bmd = new ArtifactBasicMetadata( artifactId );
-    
-    List<ArtifactBasicMetadata> res = (List<ArtifactBasicMetadata>)pm.resolve( repos, ArtifactScopeEnum.compile, bmd );
+    List<ArtifactMetadata> res = pm.resolve( repos, ArtifactScopeEnum.compile, new ArtifactMetadataList(artifactId), null, null );
     
     System.out.println("Resolved as "+res);
 
@@ -194,21 +193,19 @@ extends TestCase
   public void testResolveWithExclusion()
   throws Exception
   {
-//    Server central = new Server( "central", new URL("http://repo1.maven.org/maven2") );
-    Server central = new Server( "central", new URL("http://repository.sonatype.org/content/groups/public") );
+    Server central = new Server( "central", new URL("http://repo1.maven.org/maven2") );
+//    Server central = new Server( "central", new URL("http://repository.sonatype.org/content/groups/public") );
     
     repos.add( new RemoteRepositoryM2(central) );
 
     String artifactId = "asm:asm-xml:3.0";
 
-    ArtifactBasicMetadata bmd = new ArtifactBasicMetadata( artifactId );
-    
-    List<ArtifactBasicMetadata> exclusions = new ArrayList<ArtifactBasicMetadata>();
-    exclusions.add( new ArtifactBasicMetadata("asm:asm:3.0") );
-    
-    bmd.setExclusions( exclusions );
-    
-    List<ArtifactBasicMetadata> res = (List<ArtifactBasicMetadata>)pm.resolve( repos, ArtifactScopeEnum.compile, bmd );
+    List<ArtifactMetadata> res = pm.resolve( repos
+                                            , ArtifactScopeEnum.compile
+                                            , new ArtifactMetadataList(artifactId)
+                                            , null
+                                            , new ArtifactMetadataList("asm:asm:3.0")
+                                           );
     
     System.out.println("Resolved as "+res);
 

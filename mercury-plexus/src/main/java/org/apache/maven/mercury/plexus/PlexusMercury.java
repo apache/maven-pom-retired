@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
+import org.apache.maven.mercury.artifact.ArtifactMetadata;
+import org.apache.maven.mercury.artifact.ArtifactMetadataList;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
@@ -138,22 +140,21 @@ public interface PlexusMercury
   throws RepositoryException;
 
   /**
-   * resolve Artifact dependencies
+   * resolve Artifact dependencies. The inclusions and exclusions accept version ranges as parameters
    * 
    * @param repo repository instance to search
-   * @param artfifacts to read
+   * @param scope scope enumeration member indication the scope to resolve for
+   * @param artfifacts list of artifact metadatas to resolve
+   * @param inclusions list of artifact metadatas to include - only these will be in the resolved classpath
+   * @param exclusions list of artifact metadatas to exclude - is applied after the inclusion, if one is present
    * @return
    * @throws PlexusMercuryException
    */
-  public List<? extends ArtifactBasicMetadata> resolve( List<Repository> repos
-                                        , ArtifactScopeEnum   scope
-                                        , ArtifactBasicMetadata... artifacts
-                                      )
-  throws RepositoryException;
-  
-  public List<? extends ArtifactBasicMetadata> resolve( List<Repository> repos
+  public List<ArtifactMetadata> resolve( List<Repository> repos
                                       , ArtifactScopeEnum   scope
-                                      , List<ArtifactBasicMetadata> artifacts
+                                      , ArtifactMetadataList artifacts
+                                      , ArtifactMetadataList inclusions
+                                      , ArtifactMetadataList exclusions
                                       )
   throws RepositoryException;
 }

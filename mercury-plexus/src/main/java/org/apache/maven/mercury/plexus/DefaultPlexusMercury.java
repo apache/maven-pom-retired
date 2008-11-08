@@ -14,6 +14,7 @@ import java.util.Set;
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
+import org.apache.maven.mercury.artifact.ArtifactMetadataList;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
 import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
@@ -211,15 +212,15 @@ implements PlexusMercury, Initializable
                                       );
   }
   //---------------------------------------------------------------
-
-  public List<ArtifactMetadata> resolve(
-                          List<Repository> repos,
-                          ArtifactScopeEnum scope,
-                          List<ArtifactBasicMetadata> artifacts
+  public List<ArtifactMetadata> resolve( List<Repository> repos
+                                        , ArtifactScopeEnum   scope
+                                        , ArtifactMetadataList artifacts
+                                        , ArtifactMetadataList inclusions
+                                        , ArtifactMetadataList exclusions
                                         )
   throws RepositoryException
   {
-    if( Util.isEmpty( artifacts ) )
+    if( Util.isEmpty( artifacts ) || artifacts.isEmpty() )
       throw new IllegalArgumentException( _lang.getMessage( "no.artifacts" ) );
     
     if( artifacts.size() > 1 )
@@ -229,7 +230,16 @@ implements PlexusMercury, Initializable
     {
       DependencyBuilder depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, repos, null, null, null );
       
-      MetadataTreeNode root = depBuilder.buildTree( artifacts.get(0), scope );
+      ArtifactBasicMetadata a = artifacts.getMetadataList().get( 0 );
+
+      if( inclusions != null && ! inclusions.isEmpty() )
+        a.setInclusions( inclusions.getMetadataList() );
+
+      if( exclusions != null && ! exclusions.isEmpty() )
+        a.setExclusions( exclusions.getMetadataList() );
+      
+      MetadataTreeNode root = depBuilder.buildTree( a, scope );
+      
       List<ArtifactMetadata> res = depBuilder.resolveConflicts( root );
     
       return res;
@@ -238,15 +248,6 @@ implements PlexusMercury, Initializable
     {
       throw new RepositoryException( e );
     }
-  }
-
-  public List<ArtifactMetadata> resolve( List<Repository> repos
-                                            , ArtifactScopeEnum   scope
-                                            , ArtifactBasicMetadata... artifacts
-                                            )
-  throws RepositoryException
-  {
-    return resolve( repos, scope, Arrays.asList( artifacts ) );
   }
   //---------------------------------------------------------------
   //---------------------------------------------------------------
