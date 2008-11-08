@@ -2,6 +2,7 @@ package org.apache.maven.mercury.artifact;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -10,11 +11,11 @@ import java.util.Collection;
  * @version $Id$
  *
  */
-public class ArtifactMetadataSet
+public class ArtifactMetadataList
 {
-  Collection<ArtifactBasicMetadata> _artifacts = new ArrayList<ArtifactBasicMetadata>(8);
+  List<ArtifactBasicMetadata> _artifacts = new ArrayList<ArtifactBasicMetadata>(8);
 
-  public ArtifactMetadataSet( ArtifactBasicMetadata... md )
+  public ArtifactMetadataList( ArtifactBasicMetadata... md )
   {
     for( ArtifactBasicMetadata m : md )
       _artifacts.add( m );
@@ -30,7 +31,7 @@ public class ArtifactMetadataSet
     _artifacts.addAll( md );
   }
   
-  Collection<ArtifactBasicMetadata> getMetadatas()
+  List<ArtifactBasicMetadata> getMetadataList()
   {
     return _artifacts;
   }
