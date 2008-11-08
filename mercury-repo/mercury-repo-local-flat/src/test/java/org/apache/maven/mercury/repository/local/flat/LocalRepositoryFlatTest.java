@@ -30,7 +30,8 @@ public class LocalRepositoryFlatTest
   File _dir;
   LocalRepositoryFlat _repo;
   
-  String repoUrl = "http://repository.sonatype.org/content/groups/public";
+  String repoUrl = "http://repo1.sonatype.org";
+//  String repoUrl = "http://repository.sonatype.org/content/groups/public";
   
   Artifact a;
   Artifact b;
