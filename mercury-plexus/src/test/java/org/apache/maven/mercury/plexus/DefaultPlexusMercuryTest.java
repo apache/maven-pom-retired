@@ -11,8 +11,10 @@ import junit.framework.TestCase;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
+import org.apache.maven.mercury.artifact.ArtifactExclusionList;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadataList;
+import org.apache.maven.mercury.artifact.ArtifactQueryList;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
@@ -176,7 +178,7 @@ extends TestCase
 
     String artifactId = "asm:asm-xml:3.0";
 
-    List<ArtifactMetadata> res = pm.resolve( repos, ArtifactScopeEnum.compile, new ArtifactMetadataList(artifactId), null, null );
+    List<ArtifactMetadata> res = pm.resolve( repos, ArtifactScopeEnum.compile, new ArtifactQueryList(artifactId), null, null );
     
     System.out.println("Resolved as "+res);
 
@@ -202,9 +204,9 @@ extends TestCase
 
     List<ArtifactMetadata> res = pm.resolve( repos
                                             , ArtifactScopeEnum.compile
-                                            , new ArtifactMetadataList(artifactId)
+                                            , new ArtifactQueryList(artifactId)
                                             , null
-                                            , new ArtifactMetadataList("asm:asm:3.0")
+                                            , new ArtifactExclusionList("asm:asm:3.0")
                                            );
     
     System.out.println("Resolved as "+res);

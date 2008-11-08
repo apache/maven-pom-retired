@@ -11,7 +11,7 @@ import java.util.List;
  * @version $Id$
  *
  */
-public class ArtifactMetadataList
+public abstract class ArtifactMetadataList
 {
   List<ArtifactBasicMetadata> _artifacts = new ArrayList<ArtifactBasicMetadata>(8);
 

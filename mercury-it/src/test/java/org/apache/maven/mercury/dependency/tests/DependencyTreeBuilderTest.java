@@ -22,7 +22,6 @@ import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryUpdateIntervalPolicy;
-import org.apache.maven.mercury.repository.api.RepositoryUpdatePolicy;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
 import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;

@@ -9,8 +9,11 @@ import java.util.Set;
 
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
+import org.apache.maven.mercury.artifact.ArtifactExclusionList;
+import org.apache.maven.mercury.artifact.ArtifactInclusionList;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadataList;
+import org.apache.maven.mercury.artifact.ArtifactQueryList;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
@@ -152,9 +155,9 @@ public interface PlexusMercury
    */
   public List<ArtifactMetadata> resolve( List<Repository> repos
                                       , ArtifactScopeEnum   scope
-                                      , ArtifactMetadataList artifacts
-                                      , ArtifactMetadataList inclusions
-                                      , ArtifactMetadataList exclusions
+                                      , ArtifactQueryList artifacts
+                                      , ArtifactInclusionList inclusions
+                                      , ArtifactExclusionList exclusions
                                       )
   throws RepositoryException;
 }
