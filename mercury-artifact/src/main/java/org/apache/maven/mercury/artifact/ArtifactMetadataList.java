@@ -18,7 +18,18 @@ public class ArtifactMetadataList
   public ArtifactMetadataList( ArtifactBasicMetadata... md )
   {
     for( ArtifactBasicMetadata m : md )
-      _artifacts.add( m );
+      add( m );
+  }
+
+  public ArtifactMetadataList( Collection<ArtifactBasicMetadata> md )
+  {
+    add( md );
+  }
+
+  public ArtifactMetadataList( String... mds )
+  {
+    for( String m : mds )
+      add( new ArtifactBasicMetadata(m) );
   }
   
   public void add( ArtifactBasicMetadata md )
@@ -31,8 +42,34 @@ public class ArtifactMetadataList
     _artifacts.addAll( md );
   }
   
-  List<ArtifactBasicMetadata> getMetadataList()
+  public void addGav( String md )
+  {
+    _artifacts.add( new ArtifactBasicMetadata(md) );
+  }
+  
+  public void addByGav( Collection<String> mds )
+  {
+    for( String m : mds )
+      _artifacts.add( new ArtifactBasicMetadata(m) );
+  }
+  
+  public List<ArtifactBasicMetadata> getMetadataList()
   {
     return _artifacts;
+  }
+  
+  public int size()
+  {
+    return _artifacts.size();
+  }
+  
+  public boolean isEmpty()
+  {
+    return _artifacts.isEmpty();
+  }
+  
+  public void clear()
+  {
+    _artifacts.clear();
   }
 }
