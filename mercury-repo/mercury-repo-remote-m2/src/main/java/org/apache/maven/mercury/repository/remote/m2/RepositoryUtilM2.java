@@ -52,7 +52,7 @@ public class RepositoryUtilM2
     
   }
 
-  public static void flipLocalFolserToRemoteRepository( File repoDir )
+  public static void flipLocalFolderToRemoteRepository( File repoDir )
   {
     
     if( !repoDir.exists() || !repoDir.isDirectory() )

@@ -18,7 +18,7 @@ public class RemoteRepositoryUtilM2Test
   {
     File repo = new File("./target/test-classes/localTestRepo");
     
-    RepositoryUtilM2.flipLocalFolserToRemoteRepository( repo );
+    RepositoryUtilM2.flipLocalFolderToRemoteRepository( repo );
     
     File ga = new File( repo, "org/apache/maven/mercury/mercury-pom/maven-metadata.xml");
     
