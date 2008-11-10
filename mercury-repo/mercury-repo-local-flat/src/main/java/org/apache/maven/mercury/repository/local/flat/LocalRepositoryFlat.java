@@ -14,6 +14,8 @@ implements LocalRepository
 {
   public static final String FLAT_REPOSITORY_TYPE = "flat";
   
+  public static final String METADATA_FILE_NAME = "maven-metadata-local.xml";
+  
     private File directory;
     
     private boolean createPoms         = false;
@@ -89,6 +91,10 @@ implements LocalRepository
     public void setCreateGroupFolders( boolean createGroupFolders )
     {
       this.createGroupFolders = createGroupFolders;
+    }
+    public String getMetadataName()
+    {
+      return METADATA_FILE_NAME;
     }
     //----------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------

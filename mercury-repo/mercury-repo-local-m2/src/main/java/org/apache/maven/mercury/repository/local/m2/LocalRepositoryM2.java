@@ -16,7 +16,7 @@ implements LocalRepository
 {
     private File directory;
     
-    private static final String METADATA_NAME = "maven-metadata-local.xml";
+    public static final String METADATA_FILE_NAME = "maven-metadata-local.xml";
 
     //----------------------------------------------------------------------------------
     private void setDirectory( File directory )
@@ -35,7 +35,6 @@ implements LocalRepository
         super( server.getId(), DEFAULT_REPOSITORY_TYPE );
         setDirectory( new File( server.getURL().getFile() ) );
         this.server = server;
-        this.metadataName = METADATA_NAME;
         
         setDependencyProcessor( new MavenDependencyProcessor() );
     }
@@ -44,7 +43,6 @@ implements LocalRepository
     {
         super( id, DEFAULT_REPOSITORY_TYPE );
         setDirectory( directory );
-        this.metadataName = METADATA_NAME;
         
         setDependencyProcessor( new MavenDependencyProcessor() );
     }
@@ -53,7 +51,6 @@ implements LocalRepository
     {
         super( id, type );
         setDirectory( directory );
-        this.metadataName = METADATA_NAME;
         
         setDependencyProcessor( new MavenDependencyProcessor() );
     }
@@ -104,6 +101,11 @@ implements LocalRepository
     public String getType()
     {
       return DEFAULT_REPOSITORY_TYPE;
+    }
+    //----------------------------------------------------------------------------------
+    public String getMetadataName()
+    {
+      return METADATA_FILE_NAME;
     }
     //----------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------

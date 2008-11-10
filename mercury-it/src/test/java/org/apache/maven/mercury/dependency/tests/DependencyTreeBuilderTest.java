@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +39,8 @@ extends TestCase
 {
   private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( DependencyTreeBuilderTest.class ); 
   
-  String repoUrl = "http://repository.sonatype.org/content/groups/public";
+  String repoUrl = "http://repo1.maven.org/maven2";
+//  String repoUrl = "http://repository.sonatype.org/content/groups/public";
 //  String repoUrl = "http://nexus:8081/nexus/content/groups/public";
 
   File repoDir;
@@ -58,7 +60,8 @@ extends TestCase
     
     Logger.getLogger("").setLevel(Level.ALL);
 
-    repoDir = File.createTempFile( "local-repo-","-it");
+    repoDir = new File( "./target/local");
+//    repoDir = File.createTempFile( "local-repo-","-it");
     repoDir.delete();
     repoDir.mkdirs();
     
@@ -229,6 +232,22 @@ extends TestCase
     assertNotNull( "null tree built", root );
     res = depBuilder.resolveConflicts( root );
     showClasspath( res );
+    
+    ArtifactResults ar = vReader.readArtifacts( res );
+    
+    assertNotNull( ar );
+    
+    assertFalse( ar.hasExceptions() );
+
+    assertTrue( ar.hasResults() );
+    
+    Map<ArtifactBasicMetadata, List<Artifact>> arts = ar.getResults();
+    
+    for( List<Artifact> al : arts.values() )
+    {
+      for( Artifact a : al )
+        System.out.println( a.toString()+" -> "+a.getFile() );
+    }
   }
  //----------------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------------

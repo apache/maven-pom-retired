@@ -881,5 +881,51 @@ public class FileUtil
     return res;
   }
   //---------------------------------------------------------------------------------------------------------------
+  public static void renameFile( File dir, String from, String to )
+  {
+    if( dir == null )
+      return;
+    
+    File [] files = dir.listFiles();
+    
+    if( files == null || files.length < 1 )
+      return;
+    
+    for( File f : files )
+    {
+      if( f.isDirectory() )
+        renameFile( f, from, to );
+      else if( from.equals( f.getName() ))
+      {
+        f.renameTo( new File( f.getParent(), to ) );
+      }
+    }
+  }
+  //---------------------------------------------------------------------------------------------------------------
+  public static int depth( File file )
+  {
+    if( file == null || !file.exists() )
+      throw new IllegalArgumentException( _lang.getMessage( "file.not.exists.error", file == null ? "null" : file.getAbsolutePath() ));
+    
+    if( file.isFile() )
+      return 0;
+    
+    File [] files = file.listFiles();
+    
+    int max = 0;
+    
+    for( File f : files )
+    {
+      if( f.isDirectory() )
+      {
+        int res = depth( f );
+        if( res > max )
+          max = res;
+      }
+    }
+    
+    return max + 1;
+  }
+  //---------------------------------------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------------------------------------
 }

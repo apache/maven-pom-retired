@@ -1,7 +1,5 @@
 package org.apache.maven.mercury.repository.remote.m2;
 
-import java.io.File;
-
 import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
@@ -11,7 +9,6 @@ import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryUpdateIntervalPolicy;
 import org.apache.maven.mercury.repository.api.RepositoryUpdatePolicy;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
-import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.transport.api.Server;
 
 
@@ -19,7 +16,9 @@ public class RemoteRepositoryM2
 extends AbstractRepository
 implements RemoteRepository
 {
-    private Server _server;
+  public static final String METADATA_FILE_NAME = "maven-metadata.xml";
+
+  private Server _server;
     
     /** default update policy */
     private RepositoryUpdatePolicy _updatePolicy = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.DEFAULT_UPDATE_POLICY );
@@ -95,6 +94,11 @@ implements RemoteRepository
     public void setUpdatePolicy( RepositoryUpdatePolicy updatePolicy )
     {
       this._updatePolicy = updatePolicy;
+    }
+    //----------------------------------------------------------------------------------
+    public String getMetadataName()
+    {
+      return METADATA_FILE_NAME;
     }
     //----------------------------------------------------------------------------------
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+  <groupId>org.apache.maven.mercury</groupId>
+  <artifactId>mercury-pom</artifactId>
+  <version>1.0.0-alpha-2-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20081102.184718</timestamp>
+      <buildNumber>21</buildNumber>
+    </snapshot>
+    <lastUpdated>20081102184720</lastUpdated>
+  </versioning>
+</metadata>

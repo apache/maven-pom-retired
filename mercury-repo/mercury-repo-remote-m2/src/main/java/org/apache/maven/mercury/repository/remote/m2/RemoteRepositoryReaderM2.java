@@ -439,7 +439,7 @@ implements RepositoryReader, MetadataReader
       }
     }
 
-    // no cached data, or it expired - move on
+    // no cached data, or it has expired - read from repository
     byte[] mavenMetadata = readRawData( loc.getGaPath()+FileUtil.SEP+_repo.getMetadataName() );
     
     if( mavenMetadata == null )
@@ -471,7 +471,7 @@ implements RepositoryReader, MetadataReader
   }
   //---------------------------------------------------------------------------------------------------------------
   /**
-   * direct disk search, no redirects, first attempt
+   * direct metadata search, no redirects, first attempt
    */
   public ArtifactBasicResults readVersions( Collection<ArtifactBasicMetadata> query )
       throws RepositoryException,

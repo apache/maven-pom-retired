@@ -1,6 +1,9 @@
 package org.apache.maven.mercury.repository.remote.m2;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -8,8 +11,13 @@ import org.apache.maven.mercury.artifact.ArtifactCoordinates;
 import org.apache.maven.mercury.logging.IMercuryLogger;
 import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
+import org.apache.maven.mercury.repository.metadata.AddVersionOperation;
 import org.apache.maven.mercury.repository.metadata.Metadata;
 import org.apache.maven.mercury.repository.metadata.MetadataBuilder;
+import org.apache.maven.mercury.repository.metadata.MetadataException;
+import org.apache.maven.mercury.repository.metadata.MetadataOperation;
+import org.apache.maven.mercury.repository.metadata.StringOperand;
+import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
@@ -42,6 +50,62 @@ public class RepositoryUtilM2
       throw new IllegalArgumentException( _lang.getMessage( "dest.is.file", dest.toString() ) );
     
     
+  }
+
+  public static void flipLocalFolserToRemoteRepository( File repoDir )
+  {
+    
+    if( !repoDir.exists() || !repoDir.isDirectory() )
+      throw new IllegalArgumentException( _lang.getMessage( "lrepo.dir.not.exists", repoDir.toString() ) );
+
+    // temporary solution: just rename metadata, hoping it is correct
+    // ideally - will use metadata correction utility
+    FileUtil.renameFile( repoDir, LocalRepositoryM2.METADATA_FILE_NAME, RemoteRepositoryM2.METADATA_FILE_NAME );
+  }
+  
+  private static final void findGA( File dir )
+  throws MetadataException, IOException
+  {
+    if( dir.isFile() )
+      return;
+    
+    File [] files = dir.listFiles();
+    
+    if( files == null || files.length < 1 )
+      return;
+    
+    int dep = FileUtil.depth( dir );
+    
+    List<MetadataOperation> vo = null;
+    
+    if( dep <= 1 )
+      vo = new ArrayList<MetadataOperation>();
+    
+    for( File f : files )
+    {
+      if( f.isFile() )
+        return;
+      
+      if( dep == 1 )
+      {
+        vo.add( new AddVersionOperation( new StringOperand(f.getName()) ) );
+      }
+      else 
+        findGA( f );
+    }
+    
+    if( dep == 1 )
+    {
+      Metadata md = new Metadata();
+      
+      byte [] mdBytes = MetadataBuilder.changeMetadata( md, vo );
+      
+      FileUtil.writeRawData( new File( dir, RemoteRepositoryM2.METADATA_FILE_NAME ), mdBytes );
+    }
+    else if( dep == 0 )
+    {
+      
+    }
   }
   //----------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------

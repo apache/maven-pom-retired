@@ -63,8 +63,6 @@ implements Repository
   protected DependencyProcessor dependencyProcessor;
   
   protected Server server;
-  
-  protected String metadataName = "maven-metadata.xml";
   //---------------------------------------------------------------------------
   public AbstractRepository( String id, String type )
   {
@@ -217,11 +215,6 @@ implements Repository
   public Server getServer()
   {
     return server;
-  }
-  //---------------------------------------------------------------------------
-  public String getMetadataName()
-  {
-    return metadataName;
   }
   //---------------------------------------------------------------------------
   public boolean hasDependencyProcessor()

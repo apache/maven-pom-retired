@@ -20,10 +20,12 @@ import org.apache.maven.mercury.artifact.DefaultArtifact;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.crypto.pgp.PgpStreamVerifierFactory;
 import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
+import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
+import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileUtil;
 
@@ -70,6 +72,8 @@ extends TestCase
   SHA1VerifierFactory      sha1F;
   HashSet<StreamVerifierFactory> vFacSha1;
   
+  VirtualRepositoryReader vrr;
+  
   //-------------------------------------------------------------------------------------
   @Override
   protected void setUp()
@@ -101,7 +105,8 @@ extends TestCase
                         , null, FileUtil.vSet( pgpWF, sha1F )
                                         );
     
-    localRepoDir = File.createTempFile( "local-", "-repo" );
+//    localRepoDir = File.createTempFile( "local-", "-repo" );
+    localRepoDir = new File( "./target/local" );
     localRepoDir.delete();
     localRepoDir.mkdir();
     
@@ -110,6 +115,8 @@ extends TestCase
     repos = new ArrayList<Repository>();
     repos.add( localRepo );
     repos.add( remoteRepo );
+    
+    vrr = new VirtualRepositoryReader(repos);
     
   }
   //-------------------------------------------------------------------------------------
@@ -188,7 +195,6 @@ extends TestCase
     assertTrue( assertHasArtifact( res, "asm:asm-util:3.0" ) );
     assertTrue( assertHasArtifact( res, "asm:asm-tree:3.0" ) );
     assertTrue( assertHasArtifact( res, "asm:asm:3.0" ) );
-    
   }
   //-------------------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
