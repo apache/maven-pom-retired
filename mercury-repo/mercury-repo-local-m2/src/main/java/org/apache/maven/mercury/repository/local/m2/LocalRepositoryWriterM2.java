@@ -255,7 +255,10 @@ implements RepositoryWriter
       String fName = _repoDir.getAbsolutePath()+'/'+relVersionPath+'/'+artifact.getBaseName()+'.'+artifact.getType();
       
       if( !isPom ) // first - take care of the binary
+      {
         FileUtil.writeAndSign( fName, in, vFacs );
+        artifact.setFile( new File(fName) );
+      }
 
       // GA metadata
       File mdFile = new File( _repoDir, relGroupPath+'/'+_repo.getMetadataName() );
