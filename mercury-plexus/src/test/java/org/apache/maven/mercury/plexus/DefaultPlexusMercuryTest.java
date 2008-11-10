@@ -150,7 +150,7 @@ extends TestCase
   public void testRead()
   throws RepositoryException
   {
-    ArtifactBasicMetadata bmd = new ArtifactBasicMetadata(artifactCoord);
+    ArtifactMetadata bmd = new ArtifactMetadata(artifactCoord);
     
     Collection<Artifact> res = pm.read( repos, bmd );
     

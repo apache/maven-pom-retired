@@ -137,9 +137,9 @@ public interface PlexusMercury
    * @return
    * @throws PlexusMercuryException
    */
-  public List<Artifact> read( List<Repository> repo, List<ArtifactBasicMetadata> artifacts )
+  public List<Artifact> read( List<Repository> repo, List<ArtifactMetadata> artifacts )
   throws RepositoryException;
-  public List<Artifact> read( List<Repository> repo, ArtifactBasicMetadata... artifacts )
+  public List<Artifact> read( List<Repository> repo, ArtifactMetadata... artifacts )
   throws RepositoryException;
 
   /**
@@ -160,4 +160,8 @@ public interface PlexusMercury
                                       , ArtifactExclusionList exclusions
                                       )
   throws RepositoryException;
+  
+  public List<ArtifactMetadata> resolve( List<Repository> repos, ArtifactScopeEnum scope, ArtifactMetadata metadata )
+  throws RepositoryException;  
+  
 }

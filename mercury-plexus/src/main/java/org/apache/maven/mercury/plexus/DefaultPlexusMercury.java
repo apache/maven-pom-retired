@@ -158,7 +158,7 @@ implements PlexusMercury, Initializable
     
   }
   //---------------------------------------------------------------
-  public List<Artifact> read( List<Repository> repos, List<ArtifactBasicMetadata> artifacts )
+  public List<Artifact> read( List<Repository> repos, List<ArtifactMetadata> artifacts )
   throws RepositoryException
   {
     if( Util.isEmpty( repos ) )
@@ -182,7 +182,7 @@ implements PlexusMercury, Initializable
     return al;
     
   }
-  public List<Artifact> read( List<Repository> repo, ArtifactBasicMetadata... artifacts )
+  public List<Artifact> read( List<Repository> repo, ArtifactMetadata... artifacts )
       throws RepositoryException
   {
     return read( repo, Arrays.asList( artifacts ) );
@@ -214,6 +214,14 @@ implements PlexusMercury, Initializable
         , secRing , keyId, keyPass
                                       );
   }
+  
+  public List<ArtifactMetadata> resolve( List<Repository> repos, ArtifactScopeEnum scope, ArtifactMetadata metadata )
+      throws RepositoryException  
+  {
+    return resolve( repos, scope, new ArtifactQueryList( metadata ), null, null );
+      
+  }
+  
   //---------------------------------------------------------------
   public List<ArtifactMetadata> resolve( List<Repository> repos
                                         , ArtifactScopeEnum   scope
