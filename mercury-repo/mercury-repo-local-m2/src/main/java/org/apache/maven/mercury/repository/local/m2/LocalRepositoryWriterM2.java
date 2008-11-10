@@ -224,7 +224,7 @@ implements RepositoryWriter
 
     try
     {
-      
+
       if( isPom )
       {
         if( in == null && !hasPomBlob )

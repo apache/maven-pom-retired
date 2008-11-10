@@ -77,6 +77,7 @@ extends Comparable<Artifact>
 
     File getFile();
     
+    // in case binary is supplied as a Stream, not a File
     InputStream getStream();
 
     void setFile( File destination );

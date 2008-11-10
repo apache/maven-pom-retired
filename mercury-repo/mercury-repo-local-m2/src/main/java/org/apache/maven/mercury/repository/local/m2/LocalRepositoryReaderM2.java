@@ -206,7 +206,11 @@ implements RepositoryReader, MetadataReader
       try // reading pom if one exists
       {
         if( checkFile( binary, vFacs ) )
+        {
           da.setFile( binary );
+          da.setTracker( this._repo );
+        }
+        
 
         if( "pom".equals( bmd.getType() ) ) 
         {

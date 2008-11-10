@@ -149,6 +149,10 @@ implements MetadataReader
       
       if( r.isWriteable() )
       {
+        // we select the first writable repo in the list
+        if( _localRepository != null )
+          continue;
+        
         _localRepository = (LocalRepository)r.getReader().getRepository();
         _localRepositoryWriter = _localRepository.getWriter();
         
@@ -350,6 +354,8 @@ implements MetadataReader
       if( RepositoryReader.NULL_READER.equals( rr ) )
         continue;
       
+      String repoId = rr.getRepository().getId();
+      
       List<ArtifactBasicMetadata> rrQuery = buckets.get( rr );
       
       ArtifactResults rrRes = rr.readArtifacts( rrQuery );
@@ -367,6 +373,10 @@ implements MetadataReader
 
           res.addAll( bm, al );
           
+          // don't write local artifacts back to the same repo
+          if( _localRepository != null && repoId.equals( _localRepository.getId() ) )
+            continue;
+
           if( _localRepositoryWriter != null )
             _localRepositoryWriter.writeArtifacts( al );
         }
@@ -379,6 +389,8 @@ implements MetadataReader
       {
         if( rejects.isEmpty() )
           break;
+        
+        String repoId = rr.getRepository().getId();
         
         ArtifactResults rrRes = rr.readArtifacts( rejects );
         
@@ -394,6 +406,10 @@ implements MetadataReader
             
             rejects.remove( bm );
             
+            // don't write local artifacts back to the same repo
+            if( _localRepository != null && repoId.equals( _localRepository.getId() ) )
+              continue;
+
             if( _localRepositoryWriter != null )
               _localRepositoryWriter.writeArtifacts( al );
 
