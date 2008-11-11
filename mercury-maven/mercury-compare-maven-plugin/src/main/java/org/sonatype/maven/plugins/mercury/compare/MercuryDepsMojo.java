@@ -41,7 +41,6 @@ import org.mortbay.jetty.plugin.util.PluginLog;
 
 public class MercuryDepsMojo
 extends AbstractMojo
-implements Initializable
 {
   private static Log _log;
 	//----------------------------------------------------------------
@@ -71,6 +70,12 @@ implements Initializable
   * @component
   */
   private ArtifactMetadataSource metadataSource;
+  
+  /**
+  *
+  * @component
+  */
+  private MavenProjectBuilder projectBuilder;
   /**
    *
    * @parameter expression="${localRepository}"
@@ -81,22 +86,10 @@ implements Initializable
    * @parameter expression="${project.remoteArtifactRepositories}"
    */
   private List remoteRepositories;
-//
-//	/**
-//	  * @parameter expression="${project}"
-//	  */
-//	MavenProject _project;
-//
-//	/**
-//	  * @component
-//	  */
-//	Prompter _prompter;
   
   PlexusContainer plexus;
   
   RuntimeDependencyResolver resolver;
-  
-  MavenProjectBuilder projectBuilder;
   
   File target;
   
@@ -108,6 +101,20 @@ implements Initializable
     if( _session == null )
       throw new MojoExecutionException("session not injected");
 
+    if( projectBuilder == null )
+      throw new MojoExecutionException("project builder is null");
+    
+    _log = getLog();
+    
+    PluginLog.setLog( _log );
+
+    resolver = new RuntimeDependencyResolver( artifactFactory
+                                            , artifactResolver
+                                            , metadataSource
+                                            , localRepository
+                                            , remoteRepositories
+                                           );
+    
     if( targetDir == null )
       throw new MojoExecutionException("target dir not specified");
     
@@ -127,11 +134,11 @@ implements Initializable
       throw new MojoExecutionException("list file not specified");
     
     File list = new File( listFile );
-    
-    if( list.exists() )
-      throw new MojoExecutionException( "list file "+listFile+" does not exist" );
-
     try {
+      
+      if( !list.exists() )
+        throw new MojoExecutionException( "list file "+list.getCanonicalPath()+" does not exist" );
+
       BufferedReader r = new BufferedReader( new FileReader(list) );
       
       for( String line = r.readLine(); line != null; line = r.readLine() )
@@ -161,53 +168,21 @@ implements Initializable
 			throw new MojoExecutionException( e.getMessage() );
 		}
 	}
-	
-	//------------------------------------------------------------------------
-  public void initialize()
-  throws InitializationException
-  {
-    _log = getLog();
-    
-    PluginLog.setLog( _log );
-    
-    if( _session == null )
-      throw new InitializationException( "Maven session is not injected by the container ");
-    
-    plexus = _session.getContainer();
-    
-    resolver = new RuntimeDependencyResolver( artifactFactory
-                                            , artifactResolver
-                                            , metadataSource
-                                            , localRepository
-                                            , remoteRepositories
-                                           );
-    
-    try
-    {
-      projectBuilder = (MavenProjectBuilder)plexus.lookup( MavenProjectBuilder.ROLE );
-      
-      if( projectBuilder == null )
-        throw new Exception("project builder is null");
-    }
-    catch( Exception e )
-    {
-      throw new InitializationException(e.getMessage());
-    }
-  }
-  
+	//-----------------------------------------------------------------------------------------------------------------
   private void saveDependencies( String groupId, String artifactId, String version, String type )
   throws ArtifactResolutionException, ArtifactNotFoundException, ProjectBuildingException, InvalidDependencyVersionException, IOException
   {
+    
     Set<Artifact> deps = (Set<Artifact>)resolver.transitivelyResolvePomDependencies( projectBuilder , groupId, artifactId, version, false );
     
     File fout = new File( target, groupId+"-"+artifactId+"-"+version+"-"+type+".deps" );
+
+    _log.info( fout.getCanonicalPath() );
     
     BufferedWriter w = new BufferedWriter( new FileWriter(fout) );
     
     try
     {
-      w.write( groupId+":"+artifactId+":"+version+"::"+type );
-      
       if( deps == null || deps.isEmpty() )
         return;
     
@@ -218,7 +193,12 @@ implements Initializable
         if( cl == null  )
           cl = "";
         
-        w.write( a.getGroupId()+":"+a.getArtifactId()+":"+a.getVersion()+":"+cl+":"+a.getType() );
+        String sc = a.getScope();
+        
+        if( sc == null  )
+          sc = "compile";
+        
+        w.write( a.getGroupId()+":"+a.getArtifactId()+":"+a.getVersion()+":"+cl+":"+a.getType()+":"+sc+"\n" );
       }
     }
     finally
@@ -227,6 +207,6 @@ implements Initializable
         try { w.flush(); w.close(); } catch( Exception e ) { _log.error( e.getMessage() ); }
     }
   }
-	//----------------------------------------------------------------
-	//----------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------------------------
 }

@@ -36,6 +36,7 @@
   
   <properties>
     <mercury.version>1.0.0-alpha-2-SNAPSHOT</mercury.version>
+    <maven.version>2.0.9</maven.version>
   </properties>
 
   <dependencies>
@@ -43,13 +44,13 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
-      <version>2.0.9</version>
+      <version>${maven.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
-      <version>2.0.9</version>
+      <version>${maven.version}</version>
     </dependency>
 
     <dependency>
