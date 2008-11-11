@@ -1,13 +1,16 @@
 package org.sonatype.maven.plugins.mercury.compare;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -15,17 +18,6 @@ import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
-import org.apache.maven.mercury.artifact.ArtifactMetadata;
-import org.apache.maven.mercury.metadata.DependencyBuilder;
-import org.apache.maven.mercury.metadata.DependencyBuilderFactory;
-import org.apache.maven.mercury.metadata.MetadataTreeException;
-import org.apache.maven.mercury.metadata.MetadataTreeNode;
-import org.apache.maven.mercury.repository.api.Repository;
-import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
-import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
-import org.apache.maven.mercury.transport.api.Server;
-import org.apache.maven.mercury.util.Util;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -43,20 +35,20 @@ import org.mortbay.jetty.plugin.util.PluginLog;
  * 
  * @author Oleg Gusakov
  *
- *  @goal compare
+ *  @goal deps
  *  @requiresProject false
  */
 
-public class MercuryCompareMojo
+public class MercuryDepsMojo
 extends AbstractMojo
 implements Initializable
 {
   private static Log _log;
 	//----------------------------------------------------------------
   /**
-   * @parameter expression="${localRepoDir}"
+   * @parameter expression="${targetDir}"
    */
-  String localRepoDir;
+  String targetDir;
   /**
    * @parameter expression="${listFile}"
    */
@@ -65,30 +57,25 @@ implements Initializable
 	  * @parameter expression="${session}"
 	  */
 	MavenSession _session;
-
 	 /**
    * @component
    */
   private ArtifactResolver artifactResolver;
-  
-  /**
+    /**
    *
    * @component
    */
   private ArtifactFactory artifactFactory;
-
   /**
   *
   * @component
   */
   private ArtifactMetadataSource metadataSource;
-  
   /**
    *
    * @parameter expression="${localRepository}"
    */
   private ArtifactRepository localRepository;
-
   /**
    *
    * @parameter expression="${project.remoteArtifactRepositories}"
@@ -111,9 +98,7 @@ implements Initializable
   
   MavenProjectBuilder projectBuilder;
   
-  List<Repository> repos;
-  
-  DependencyBuilder depBuilder;
+  File target;
   
 	//----------------------------------------------------------------
 	public void execute()
@@ -123,22 +108,54 @@ implements Initializable
     if( _session == null )
       throw new MojoExecutionException("session not injected");
 
-    if( localRepoDir == null )
-      throw new MojoExecutionException("local repo dir not injected");
+    if( targetDir == null )
+      throw new MojoExecutionException("target dir not specified");
+    
+    target = new File( targetDir );
+    
+    if( !target.exists() )
+    {
+      target.mkdirs();
+    }
+    else
+    {
+      if( target.isFile() )
+        throw new MojoExecutionException("target directory turned to be a file, not a folder :" + targetDir );
+    }
+
+    if( listFile == null )
+      throw new MojoExecutionException("list file not specified");
+    
+    File list = new File( listFile );
+    
+    if( list.exists() )
+      throw new MojoExecutionException( "list file "+listFile+" does not exist" );
 
     try {
+      BufferedReader r = new BufferedReader( new FileReader(list) );
+      
+      for( String line = r.readLine(); line != null; line = r.readLine() )
+      {
+        StringTokenizer st = new StringTokenizer( line, " :" );
+        
+        int count = st.countTokens();
+        
+        if( count < 3 || count > 4 )
+        {
+          _log.info( "Cannot parse line: "+line );
+          continue;
+        }
+        
+        int i = 0;
+        
+        String [] gav = new String[4];
+        
+        while( st.hasMoreTokens() )
+          gav[i++ ] = st.nextToken();
+        
+        saveDependencies( gav[0], gav[1], gav[2], count == 4 ? gav[3] : "jar" );
+      }
 		  
-		  if( projectBuilder == null )
-		    throw new Exception("project builder is null");
-		  
-      ArtifactBasicMetadata query = new ArtifactBasicMetadata("asm:asm-xml:3.0::jar");
-      
-      Collection<ArtifactBasicMetadata> res1 = getMaven( query );
-      
-      Collection<ArtifactBasicMetadata> res2 = getMaven( query );
-      
-      compare( res1, res2 );
-
 		} catch( Exception e ) {
 		  _log.error( e.getMessage() );
 			throw new MojoExecutionException( e.getMessage() );
@@ -153,6 +170,9 @@ implements Initializable
     
     PluginLog.setLog( _log );
     
+    if( _session == null )
+      throw new InitializationException( "Maven session is not injected by the container ");
+    
     plexus = _session.getContainer();
     
     resolver = new RuntimeDependencyResolver( artifactFactory
@@ -166,22 +186,8 @@ implements Initializable
     {
       projectBuilder = (MavenProjectBuilder)plexus.lookup( MavenProjectBuilder.ROLE );
       
-      repos = new ArrayList<Repository>();
-      
-      LocalRepositoryM2 lRepo = new LocalRepositoryM2( "localMercury", new File(localRepoDir) );
-      repos.add( lRepo );
-      
-      for( ArtifactRepository ar : (List<ArtifactRepository>)remoteRepositories )
-      {
-        Server server = new Server( ar.getId(), new URL(ar.getUrl()) );
-        
-        RemoteRepositoryM2 rr = new RemoteRepositoryM2( server );
-        
-        repos.add( rr );
-      }
-      
-      depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, repos, null, null, null );
-      
+      if( projectBuilder == null )
+        throw new Exception("project builder is null");
     }
     catch( Exception e )
     {
@@ -189,51 +195,37 @@ implements Initializable
     }
   }
   
-  private Collection<ArtifactBasicMetadata> getMaven( ArtifactBasicMetadata bmd )
-  throws MalformedURLException, ArtifactResolutionException, ArtifactNotFoundException, ProjectBuildingException, InvalidDependencyVersionException
+  private void saveDependencies( String groupId, String artifactId, String version, String type )
+  throws ArtifactResolutionException, ArtifactNotFoundException, ProjectBuildingException, InvalidDependencyVersionException, IOException
   {
-    Set<org.apache.maven.artifact.Artifact> deps = resolver.transitivelyResolvePomDependencies( projectBuilder , "asm", "asm-xml", "3.0", false );
+    Set<Artifact> deps = (Set<Artifact>)resolver.transitivelyResolvePomDependencies( projectBuilder , groupId, artifactId, version, false );
     
-    if( deps == null || deps.isEmpty() )
-      return null;
+    File fout = new File( target, groupId+"-"+artifactId+"-"+version+"-"+type+".deps" );
     
-    ArrayList<ArtifactBasicMetadata> res = new ArrayList<ArtifactBasicMetadata>( deps.size() );
+    BufferedWriter w = new BufferedWriter( new FileWriter(fout) );
     
-    for( org.apache.maven.artifact.Artifact a : deps )
+    try
     {
-      res.add( 
-        new ArtifactBasicMetadata( 
-            a.getGroupId()+":"+a.getArtifactId()+":"+a.getVersion()
-            + ":"+Util.nvlS( a.getClassifier(), "" )
-            + ":"+Util.nvlS( a.getType(), ArtifactBasicMetadata.DEFAULT_ARTIFACT_TYPE )
-                                  ) 
-             );
+      w.write( groupId+":"+artifactId+":"+version+"::"+type );
+      
+      if( deps == null || deps.isEmpty() )
+        return;
+    
+      for( Artifact a : deps )
+      {
+        String cl = a.getClassifier();
+        
+        if( cl == null  )
+          cl = "";
+        
+        w.write( a.getGroupId()+":"+a.getArtifactId()+":"+a.getVersion()+":"+cl+":"+a.getType() );
+      }
     }
-
-    return res;
-  }
-
-  private Collection<? extends ArtifactBasicMetadata> getMercury( ArtifactBasicMetadata bmd )
-  throws MetadataTreeException
-  {
-    MetadataTreeNode root = depBuilder.buildTree( bmd, null );
-    
-    List<ArtifactMetadata> deps = depBuilder.resolveConflicts( root );
-    
-    return deps;
-  }
-	
-  private void compare( Collection<ArtifactBasicMetadata> r1, Collection<ArtifactBasicMetadata> r2 )
-  {
-
-    _log.info("\n-------------------------------> Maven Results:");
-    System.out.println( r1 );
-    _log.info("\n<-------------------------------");
-
-    _log.info("\n-------------------------------> Mercury Results:");
-    System.out.println( r2 );
-    _log.info("\n<-------------------------------");
-
+    finally
+    {
+      if( w != null )
+        try { w.flush(); w.close(); } catch( Exception e ) { _log.error( e.getMessage() ); }
+    }
   }
 	//----------------------------------------------------------------
 	//----------------------------------------------------------------
