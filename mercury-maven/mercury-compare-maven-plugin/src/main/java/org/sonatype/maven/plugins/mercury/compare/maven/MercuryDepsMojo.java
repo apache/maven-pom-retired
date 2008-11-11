@@ -1,4 +1,4 @@
-package org.sonatype.maven.plugins.mercury.compare;
+package org.sonatype.maven.plugins.mercury.compare.maven;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
