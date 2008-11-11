@@ -59,27 +59,27 @@ public class FileUtil
 
   public static final String LOCK_FILE = ".lock";
   public static final String DEFAULT_CHARSET = "utf-8";
-  
+
   public static final int    K = 1024;
   public static final int    DEFAULT_BUFFER_SIZE = 10 * K;
   //---------------------------------------------------------------------------------------------------------------
-  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( FileUtil.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( FileUtil.class );
   private static final Language _lang = new DefaultLanguage( FileUtil.class );
-  
+
   private static final OverlappingFileLockException FILE_LOCKED = new OverlappingFileLockException();
   //---------------------------------------------------------------------------------------------------------------
   public static void delete( File f )
   {
     if( ! f.exists()  )
       return;
-    
+
     if( f.isDirectory() )
     {
       File [] kids = f.listFiles();
       for( File kid : kids )
         delete( kid );
     }
-    
+
     f.delete();
   }
   //---------------------------------------------------------------------------------------------------------------
@@ -88,13 +88,13 @@ public class FileUtil
   {
     if( toFile.exists() && clean )
       delete( toFile );
-    
+
     if( fromFile.isFile() )
     {
       copyFile( fromFile, toFile );
       return;
     }
-    
+
     File [] kids = fromFile.listFiles();
     if( kids != null )
     {
@@ -102,16 +102,16 @@ public class FileUtil
       {
         if( kid.isDirectory() )
         {
-          File newDir = new File( toFile, kid.getName());
+          File newDir = new File( toFile, kid.getName() );
           newDir.mkdirs();
-          
+
           copy( kid, newDir, false );
         }
         else
           copyFile( kid, toFile );
       }
     }
-   
+
   }
   //---------------------------------------------------------------------------------------------------------------
   private static void copyFile( File f, File toFile )
@@ -126,6 +126,9 @@ public class FileUtil
     writeRawData( fOut, fis );
   }
   //---------------------------------------------------------------------------------------------------------------
+  /**
+   * Read the content of a file and converts it with UTF-8 encoding to a String.
+   */
   public static String readRawDataAsString( File file )
   throws IOException
   {
@@ -137,9 +140,9 @@ public class FileUtil
   {
     if( ! file.exists() )
       return null;
-    
+
     FileInputStream fis = null;
-    
+
     try
     {
       fis = new FileInputStream( file );
@@ -149,13 +152,13 @@ public class FileUtil
         _log.info( _lang.getMessage( "reading.empty.file", file.getAbsolutePath() ) );
         return null;
       }
-      
+
       byte [] pom = new byte [ len ];
       while( fis.available() < 1 )
         try { Thread.sleep( 8L ); } catch( InterruptedException e ){}
-        
+
       fis.read( pom, 0, len );
-      
+
       return pom;
     }
     catch( IOException e )
@@ -173,18 +176,18 @@ public class FileUtil
   {
     if( file == null || ! file.exists() )
       return null;
-    
+
     boolean verify = vFacs != null && vFacs.size() > 0;
-    
+
     String fileName = file.getAbsolutePath();
-    
+
     HashSet<StreamVerifier> vs = new HashSet<StreamVerifier>( verify ? vFacs.size() : 1 );
-    
+
     for( StreamVerifierFactory svf : vFacs )
     {
       StreamVerifier sv = svf.newInstance();
       String ext = sv.getAttributes().getExtension();
-      String sigFileName = fileName+(ext.startsWith( "." )?"":".")+ext;
+      String sigFileName = fileName + ( ext.startsWith( "." ) ? "" : "." ) + ext;
       File sigFile = new File( sigFileName );
       if( sigFile.exists() )
       {
@@ -204,7 +207,7 @@ public class FileUtil
       }
       // otherwise ignore absence of signature file, if verifier is lenient
     }
-    
+
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
     FileInputStream fin = null;
@@ -228,10 +231,10 @@ public class FileUtil
                 throw new FileUtilException(e);
             }
         }
-          
+
         baos.write( buf, 0, n );
       }
-      
+
       if( verify )
       {
         for( StreamVerifier sv : vs )
@@ -248,12 +251,12 @@ public class FileUtil
           }
         }
       }
-      
+
       return baos.toByteArray();
     }
     catch( IOException e )
     {
-      throw new FileUtilException(e);
+      throw new FileUtilException( e );
     }
     finally
     {
@@ -267,13 +270,16 @@ public class FileUtil
     byte [] bytes = new byte [ DEFAULT_BUFFER_SIZE ];
     int n = -1;
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    
-    while( (n = in.read( bytes )) != -1 )
+
+    while( ( n = in.read( bytes ) ) != -1 )
       baos.write( bytes, 0, n );
-    
+
     return baos.toByteArray();
   }
   //---------------------------------------------------------------------------------------------------------------
+  /**
+   * Write UTF-8 representation of a String to a File. 
+   */
   public static void writeRawData( File file, String sBytes )
   throws IOException
   {
@@ -288,8 +294,8 @@ public class FileUtil
     byte [] buf = new byte[ DEFAULT_BUFFER_SIZE ];
     int n;
 
-    while( (n = in.read(buf)) > 0 )
-        out.write(buf, 0, n);
+    while( (n = in.read( buf ) ) > 0 )
+        out.write( buf, 0, n );
 
     in.close();
     out.flush();
@@ -301,14 +307,14 @@ public class FileUtil
   {
     if( file.exists() )
       file.delete();
-    
+
     File parentDir = file.getParentFile();
-    
+
     if( !parentDir.exists() )
       parentDir.mkdirs();
-    
+
     FileOutputStream fos = null;
-    
+
     try
     {
       fos = new FileOutputStream( file );
@@ -338,55 +344,55 @@ public class FileUtil
     byte [] buf = new byte[ DEFAULT_BUFFER_SIZE ];
     int n = -1;
     HashSet<StreamVerifier> vSet = new HashSet<StreamVerifier>( vFacs.size() );
-    
+
     for( StreamVerifierFactory vf : vFacs )
       vSet.add( vf.newInstance() );
-    
+
     FileOutputStream fout = null;
-    
+
     try
     {
       File f = new File( fName );
-      
+
       f.getParentFile().mkdirs();
-      
+
       fout = new FileOutputStream( f );
-      
-      while( (n = in.read( buf )) != -1 )
+
+      while( ( n = in.read( buf ) ) != -1 )
       {
         for( StreamVerifier sv : vSet )
           sv.bytesReady( buf, 0, n );
-        
+
         fout.write( buf, 0, n );
       }
-      
+
       fout.flush();
       fout.close();
       fout = null;
-      
+
       for( StreamVerifier sv : vSet )
       {
         String sig = sv.getSignature();
-        FileUtil.writeRawData( new File( fName+sv.getAttributes().getExtension() ), sig );
+        FileUtil.writeRawData( new File( fName + sv.getAttributes().getExtension() ), sig );
       }
-      
+
     }
     finally
     {
       if( fout != null ) try { fout.close(); } catch( Exception any ) {}
     }
-    
+
   }
-  
+
   public List<String> dirToList( File dir, boolean includeDirs, boolean includeFiles )
   {
     if( ! dir.exists() )
       return null;
-    
+
     File [] files = dir.listFiles();
-    
+
     List<String> res = new ArrayList<String>( files.length );
-    
+
     for( File f : files )
       if( f.isDirectory() )
       {
@@ -396,10 +402,10 @@ public class FileUtil
       else
         if( includeFiles )
           res.add( f.getName() );
-    
+
     return res;
   }
-  
+
   /**
    * 
    * @param f
@@ -419,26 +425,26 @@ public class FileUtil
     {
       if( ! recurse )
         return;
-      
+
       File [] kids = f.listFiles();
       for( File kid : kids )
         sign( kid, vFacs, recurse, force );
       return;
     }
-    
+
     String fName = f.getAbsolutePath();
-    
+
     HashSet<StreamVerifier> vs = new HashSet<StreamVerifier>( vFacs.size() );
     for( StreamVerifierFactory vf : vFacs )
     {
       StreamVerifier sv = vf.newInstance();
       String ext = sv.getAttributes().getExtension();
-      
+
       // don't sign signature files
       if( fName.endsWith( ext ) )
         return;
 
-      File sf = new File( fName+ext );
+      File sf = new File( fName + ext );
       if( sf.exists() )
       {
         if( force )
@@ -448,27 +454,27 @@ public class FileUtil
       }
       vs.add( sv );
     }
-    
+
     byte [] buf = new byte[ DEFAULT_BUFFER_SIZE ];
     FileInputStream fis = null;
     try
     {
       fis = new FileInputStream( f );
       int n = -1;
-      
-      while( (n=fis.read( buf )) != -1 )
+
+      while( ( n = fis.read( buf ) ) != -1 )
       {
         for( StreamVerifier sv : vs )
         {
           sv.bytesReady( buf, 0, n );
         }
       }
-      
+
       for( StreamVerifier sv : vs )
       {
         String sig = sv.getSignature();
         String ext = sv.getAttributes().getExtension();
-        File sf = new File( fName+ext );
+        File sf = new File( fName + ext );
         writeRawData( sf, sig );
       }
     }
@@ -476,7 +482,7 @@ public class FileUtil
     {
       if( fis != null ) try { fis.close(); } catch( Exception any ) {}
     }
-    
+
   }
   //---------------------------------------------------------------------------------------------------------------
   public static void verify( File f, Set<StreamVerifierFactory> vFacs, boolean recurse, boolean force )
@@ -495,23 +501,23 @@ public class FileUtil
         verify( kid, vFacs, recurse, force );
       return;
     }
-    
-    String fName = f.getAbsolutePath();    
+
+    String fName = f.getAbsolutePath();
     HashSet<StreamVerifier> vs = new HashSet<StreamVerifier>( vFacs.size() );
     for( StreamVerifierFactory vf : vFacs )
     {
       StreamVerifier sv = vf.newInstance();
       String ext = sv.getAttributes().getExtension();
-      
+
       // don't verify signature files
       if( fName.endsWith( ext ) )
         return;
 
-      File sf = new File( fName+ext );
+      File sf = new File( fName + ext );
       if( !sf.exists() )
       {
         if( force )
-          throw new StreamVerifierException( _lang.getMessage( "no.mandatory.signature", f.getAbsolutePath(), sf.getAbsolutePath() ));
+          throw new StreamVerifierException( _lang.getMessage( "no.mandatory.signature", f.getAbsolutePath(), sf.getAbsolutePath() ) );
         else
           continue;
       }
@@ -522,37 +528,37 @@ public class FileUtil
       }
       vs.add( sv );
     }
-    
+
     byte [] buf = new byte[ DEFAULT_BUFFER_SIZE ];
     FileInputStream fis = null;
     try
     {
       fis = new FileInputStream( f );
       int n = -1;
-      
-      while( (n=fis.read( buf )) != -1 )
+
+      while( ( n=fis.read( buf ) ) != -1 )
       {
         for( StreamVerifier sv : vs )
         {
           sv.bytesReady( buf, 0, n );
         }
       }
-      
+
       List<String> fl = null;
       char comma = ' ';
-      
+
       for( StreamVerifier sv : vs )
       {
         if( sv.verifySignature() )
           continue;
-        
+
         if( fl == null )
-          fl = new ArrayList<String>(4);
-        
+          fl = new ArrayList<String>( 4 );
+
         fl.add( sv.getAttributes().getExtension().replace( '.', comma ) );
         comma = ',';
       }
-      
+
       if( fl != null )
       {
         throw new StreamVerifierException( _lang.getMessage( "file.failed.verification", f.getAbsolutePath(), fl.toString() ) );
@@ -562,7 +568,7 @@ public class FileUtil
     {
       if( fis != null ) try { fis.close(); } catch( Exception any ) {}
     }
-    
+
   }
   //---------------------------------------------------------------------------------------------------------------
   @SuppressWarnings("static-access")
@@ -574,7 +580,7 @@ public class FileUtil
     OptionGroup  cmd = new OptionGroup();
     cmd.addOption( sign );
     cmd.addOption( verify );
-    
+
     Option recurce   = new Option( "r", _lang.getMessage( "option.r" ) );
     Option force     = new Option( "force", _lang.getMessage( "option.force" ) );
 
@@ -583,7 +589,7 @@ public class FileUtil
     Option pgp       = new Option( "pgp", _lang.getMessage( "option.pgp" ) );
     sig.addOption( sha1 );
     sig.addOption( pgp );
-    
+
     Option keyring   = OptionBuilder.withArgName( "file" )
                                     .hasArg()
                                     .withType( java.io.File.class )
@@ -604,7 +610,7 @@ public class FileUtil
     Options options = new Options();
     options.addOptionGroup( cmd );
     options.addOptionGroup( sig );
-    
+
     options.addOption( recurce );
     options.addOption( force );
 
@@ -614,14 +620,14 @@ public class FileUtil
 
     CommandLine commandLine = null;
     CommandLineParser parser = new GnuParser();
-    
+
     if( args == null || args.length < 2 )
     {
       HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp( "mercury-util", options );
       return;
     }
-    
+
     try
     {
         commandLine = parser.parse( options, args );
@@ -631,16 +637,16 @@ public class FileUtil
         System.err.println( "Command line parsing eror: " + e.getMessage() );
         return;
     }
-    
-    Set<StreamVerifierFactory> vFacs = new HashSet<StreamVerifierFactory>(4);
-    
-    if( commandLine.hasOption("pgp") )
+
+    Set<StreamVerifierFactory> vFacs = new HashSet<StreamVerifierFactory>( 4 );
+
+    if( commandLine.hasOption( "pgp" ) )
     {
-      if( commandLine.hasOption( "sign" ) && commandLine.hasOption("keyring") && commandLine.hasOption("keyid") )
+      if( commandLine.hasOption( "sign" ) && commandLine.hasOption( "keyring" ) && commandLine.hasOption( "keyid" ) )
       {
-        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader r = new BufferedReader( new InputStreamReader( System.in ) );
         String pass = commandLine.hasOption( "keypass" ) ? commandLine.getOptionValue( "keypass" ) : r.readLine();
-        
+
         vFacs.add( 
             new PgpStreamVerifierFactory(
                     new StreamVerifierAttributes( PgpStreamVerifierFactory.DEFAULT_EXTENSION, false, true )
@@ -650,10 +656,10 @@ public class FileUtil
                                         )
                     );
       }
-      else if( commandLine.hasOption( "verify" ) && commandLine.hasOption("keyring") )
+      else if( commandLine.hasOption( "verify" ) && commandLine.hasOption( "keyring" ) )
       {
-        
-        vFacs.add( 
+
+        vFacs.add(
             new PgpStreamVerifierFactory(
                     new StreamVerifierAttributes( PgpStreamVerifierFactory.DEFAULT_EXTENSION, false, true )
                     , new FileInputStream( commandLine.getOptionValue( "keyring" ) )
@@ -669,20 +675,20 @@ public class FileUtil
 
     if( commandLine.hasOption("sha1") )
     {
-      vFacs.add( new SHA1VerifierFactory(true,false) );
+      vFacs.add( new SHA1VerifierFactory( true,false ) );
     }
-    
+
     try
     {
       signAll( commandLine.getArgList(), vFacs, commandLine.hasOption( "r" ), commandLine.hasOption( "force" ), commandLine.hasOption( "sign" ) );
     }
     catch( Exception e )
     {
-      System.err.println( "Bummer: "+e.getMessage() );
+      System.err.println( "Bummer: " + e.getMessage() );
       return;
     }
-    System.out.println("Done");
- 
+    System.out.println( "Done" );
+
   }
   //---------------------------------------------------------------------------------------------------------------
   private static void signAll( List<String> fileNames, Set<StreamVerifierFactory> vFacs, boolean recurse, boolean force, boolean sign )
@@ -690,23 +696,23 @@ public class FileUtil
   {
     if( vFacs == null || vFacs.size() < 1 )
     {
-      System.err.println("no.verifiers");
+      System.err.println( "no.verifiers" );
       return;
     }
 
     File f = null;
-    
+
     for( String fName : fileNames )
     {
       f = new File( fName );
       if( ! f.exists() )
       {
-        System.out.println( _lang.getMessage( "file.not.exists", fName ));
+        System.out.println( _lang.getMessage( "file.not.exists", fName ) );
         continue;
       }
       if( f.isDirectory() && ! recurse )
       {
-        System.out.println( _lang.getMessage( "file.is.directory", fName ));
+        System.out.println( _lang.getMessage( "file.is.directory", fName ) );
         continue;
       }
       if( sign )
@@ -729,30 +735,30 @@ public class FileUtil
   public static FileLockBundle lockDir( String dir, long millis, long sleepFor )
   throws IOException
   {
-    
-    File df = new File(dir);
-    
-    boolean exists = df.exists(); 
+
+    File df = new File( dir );
+
+    boolean exists = df.exists();
 
     for( int i=0; i<10 && !exists; i++ )
     {
-      try{ Thread.sleep( 1l );} catch( InterruptedException e ){}
+      try{ Thread.sleep( 1l ); } catch( InterruptedException e ){}
       df.mkdirs();
       exists = df.exists();
-      _log.info( _lang.getMessage( "had.to.create.directory", dir, exists+"" ) );
+      _log.info( _lang.getMessage( "had.to.create.directory", dir, exists + "" ) );
     }
 
     if( !exists )
       throw new IOException( _lang.getMessage( "cannot.create.directory", dir ) );
-    
+
     if( !df.isDirectory() )
-      throw new IOException( _lang.getMessage( "file.is.not.directory", dir, df.exists()+"", df.isDirectory()+"", df.isFile()+"" ) );
-    
-    File lockFile = new File(dir,LOCK_FILE);
+      throw new IOException( _lang.getMessage( "file.is.not.directory", dir, df.exists() + "", df.isDirectory() + "", df.isFile() + "" ) );
+
+    File lockFile = new File( dir,LOCK_FILE );
 
     long start = System.currentTimeMillis();
 
-    for( long now = start; (now-start) < millis; now = System.currentTimeMillis() )
+    for( long now = start; ( now - start ) < millis; now = System.currentTimeMillis() )
       try
       {
         synchronized( FileUtil.class )
@@ -770,7 +776,7 @@ public class FileUtil
       catch( InterruptedException ie )
       {
       }
-      
+
       // too long a wait
       return null;
   }
@@ -788,32 +794,32 @@ public class FileUtil
   public static FileLockBundle lockDirNio( String dir, long millis, long sleepFor )
   throws IOException
   {
-    File df = new File(dir);
-    
+    File df = new File( dir );
+
     boolean exists = df.exists(); 
 
-    for( int i=0; i<10 && !exists; i++ )
+    for( int i = 0; i < 10 && !exists; i++ )
     {
-      try{ Thread.sleep( 1l );} catch( InterruptedException e ){}
+      try{ Thread.sleep( 1l ); } catch( InterruptedException e ){}
       df.mkdirs();
       exists = df.exists();
-      _log.info( _lang.getMessage( "had.to.create.directory", dir, exists+"" ) );
+      _log.info( _lang.getMessage( "had.to.create.directory", dir, exists + "" ) );
     }
 
     if( !exists )
       throw new IOException( _lang.getMessage( "cannot.create.directory", dir ) );
 
     if( !df.isDirectory() )
-      throw new IOException( _lang.getMessage( "file.is.not.directory", dir, df.exists()+"", df.isDirectory()+"", df.isFile()+"" ) );
-    
-    File lockFile = new File(dir,LOCK_FILE);
+      throw new IOException( _lang.getMessage( "file.is.not.directory", dir, df.exists() + "", df.isDirectory() + "", df.isFile() + "" ) );
+
+    File lockFile = new File( dir,LOCK_FILE );
     if( !lockFile.exists() )
       writeRawData( lockFile, "lock" );
     lockFile.deleteOnExit();
-    
+
     FileChannel ch = new RandomAccessFile( lockFile, "rw" ).getChannel();
     FileLock lock = null;
-    
+
     long start = System.currentTimeMillis();
 
     for(;;)
@@ -823,7 +829,7 @@ public class FileUtil
 
         if( lock == null )
           throw FILE_LOCKED;
-       
+
         return new FileLockBundle( dir, ch, lock );
       }
       catch( OverlappingFileLockException oe )
@@ -832,18 +838,18 @@ public class FileUtil
         if( System.currentTimeMillis() - start > millis )
           return null;
       }
-      
+
   }
   //---------------------------------------------------------------------------------------------------------------
   public static synchronized void unlockDir( String dir )
   {
     try
     {
-      File df = new File(dir);
+      File df = new File( dir );
       if( !df.isDirectory() )
         throw new IOException( _lang.getMessage( "file.is.not.directory", dir ) );
-      
-      File lock = new File(dir,LOCK_FILE);
+
+      File lock = new File( dir,LOCK_FILE );
       if( lock.exists() )
         lock.delete();
     }
@@ -855,29 +861,29 @@ public class FileUtil
   //---------------------------------------------------------------------------------------------------------------
   public static final Set<StreamVerifierFactory> vSet( StreamVerifierFactory... facs )
   {
-    if( facs == null || facs.length<1 )
+    if( facs == null || facs.length < 1 )
       return null;
-    
+
     HashSet<StreamVerifierFactory> res = new HashSet<StreamVerifierFactory>( facs.length );
     for( StreamVerifierFactory f : facs )
     {
       res.add( f );
     }
-    
+
     return res;
   }
   //---------------------------------------------------------------------------------------------------------------
   public static final Set<StreamObserverFactory> oSet( StreamObserverFactory... facs )
   {
-    if( facs == null || facs.length<1 )
+    if( facs == null || facs.length < 1 )
       return null;
-    
+
     HashSet<StreamObserverFactory> res = new HashSet<StreamObserverFactory>( facs.length );
     for( StreamObserverFactory f : facs )
     {
       res.add( f );
     }
-    
+
     return res;
   }
   //---------------------------------------------------------------------------------------------------------------
@@ -885,17 +891,17 @@ public class FileUtil
   {
     if( dir == null )
       return;
-    
+
     File [] files = dir.listFiles();
-    
+
     if( files == null || files.length < 1 )
       return;
-    
+
     for( File f : files )
     {
       if( f.isDirectory() )
         renameFile( f, from, to );
-      else if( from.equals( f.getName() ))
+      else if( from.equals( f.getName() ) )
       {
         f.renameTo( new File( f.getParent(), to ) );
       }
@@ -905,15 +911,15 @@ public class FileUtil
   public static int depth( File file )
   {
     if( file == null || !file.exists() )
-      throw new IllegalArgumentException( _lang.getMessage( "file.not.exists.error", file == null ? "null" : file.getAbsolutePath() ));
-    
+      throw new IllegalArgumentException( _lang.getMessage( "file.not.exists.error", file == null ? "null" : file.getAbsolutePath() ) );
+
     if( file.isFile() )
       return 0;
-    
+
     File [] files = file.listFiles();
-    
+
     int max = 0;
-    
+
     for( File f : files )
     {
       if( f.isDirectory() )
@@ -923,7 +929,7 @@ public class FileUtil
           max = res;
       }
     }
-    
+
     return max + 1;
   }
   //---------------------------------------------------------------------------------------------------------------
