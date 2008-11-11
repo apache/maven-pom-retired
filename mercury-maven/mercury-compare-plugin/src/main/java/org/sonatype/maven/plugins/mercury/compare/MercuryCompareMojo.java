@@ -128,14 +128,9 @@ implements Initializable
 
     try {
 		  
-		  System.out.println("Got plexus as "+plexus);
-      System.out.println("Got resolver as "+resolver);
-		  
 		  if( projectBuilder == null )
 		    throw new Exception("project builder is null");
 		  
-      System.out.println("Got projectBuilder as "+projectBuilder);
-      
       ArtifactBasicMetadata query = new ArtifactBasicMetadata("asm:asm-xml:3.0::jar");
       
       Collection<ArtifactBasicMetadata> res1 = getMaven( query );
