@@ -54,6 +54,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-compare-mdo</artifactId>
+      <version>${mercury.version}</version>
+    </dependency>
+
+    <dependency>
     	<groupId>org.mortbay.jetty</groupId>
     	<artifactId>jetty-maven-plugin</artifactId>
     	<version>7.0.0.pre5</version>

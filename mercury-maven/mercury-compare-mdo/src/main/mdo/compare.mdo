@@ -1,0 +1,123 @@
+<model>
+  <id>dependencies-metadata</id>
+  
+  <name>Dependencies</name>
+  <description>comparisson dependencies</description>
+  
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.apache.maven.mercury.compare.mdo</value>
+    </default>
+  </defaults>
+  
+  <classes>
+
+    <class rootElement="true">
+      <name>Dependencies</name>
+      <version>1.0.0</version>
+      <fields>
+        
+        <field>
+          <name>groupId</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        
+        <field>
+          <name>artifactId</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        
+        <field>
+          <name>version</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        
+        <field>
+          <name>type</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        
+        <field>
+          <name>mavenMillis</name>
+          <version>1.0.0</version>
+          <type>long</type>
+        </field>
+        
+        <field>
+          <name>mercuryMillis</name>
+          <version>1.0.0</version>
+          <type>long</type>
+        </field>
+        
+        <field>
+          <name>maven</name>
+          <version>1.0.0</version>
+          <description>mercury generated dependencies</description>
+          <association>
+            <type>Dependency</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+
+        <field>
+          <name>mercury</name>
+          <version>1.0.0</version>
+          <description>mercury generated dependencies</description>
+          <association>
+            <type>Dependency</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        
+      </fields>
+     </class>
+
+
+    <class>
+
+      <name>Dependency</name>
+      <version>1.0.0</version>
+      <description>dependency</description>
+
+      <fields>
+        
+        <field>
+          <name>groupId</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        
+        <field>
+          <name>artifactId</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        
+        <field>
+          <name>version</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        
+        <field>
+          <name>type</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+        
+        <field>
+          <name>scope</name>
+          <version>1.0.0</version>
+          <type>String</type>
+        </field>
+
+      </fields>
+    </class>
+    
+  </classes>
+</model>

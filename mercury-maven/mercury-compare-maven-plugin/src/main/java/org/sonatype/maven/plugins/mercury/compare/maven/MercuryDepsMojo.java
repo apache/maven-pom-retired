@@ -1,33 +1,31 @@
 package org.sonatype.maven.plugins.mercury.compare.maven;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.apache.maven.artifact.repository.DefaultArtifactRepository;
+import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.mercury.artifact.ArtifactMetadata;
+import org.apache.maven.mercury.compare.DataBuilder;
+import org.apache.maven.mercury.compare.IDepResolver;
+import org.apache.maven.mercury.compare.mdo.Dependencies;
+import org.apache.maven.mercury.compare.mdo.Dependency;
+import org.apache.maven.mercury.util.Util;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProjectBuilder;
-import org.apache.maven.project.ProjectBuildingException;
-import org.apache.maven.project.artifact.InvalidDependencyVersionException;
 import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.mortbay.jetty.plugin.RuntimeDependencyResolver;
 import org.mortbay.jetty.plugin.util.PluginLog;
 
@@ -41,9 +39,14 @@ import org.mortbay.jetty.plugin.util.PluginLog;
 
 public class MercuryDepsMojo
 extends AbstractMojo
+implements IDepResolver
 {
   private static Log _log;
 	//----------------------------------------------------------------
+  /**
+   * @parameter expression="${localRepo}"
+   */
+  String localRepo;
   /**
    * @parameter expression="${targetDir}"
    */
@@ -129,83 +132,74 @@ extends AbstractMojo
       if( target.isFile() )
         throw new MojoExecutionException("target directory turned to be a file, not a folder :" + targetDir );
     }
+    
+    File lr = new File( localRepo );
+
+    localRepository = new DefaultArtifactRepository( "localRepo", lr.toURI().toString(), new DefaultRepositoryLayout() );
+    
+    _log.info( "local repo set to "+lr.getAbsolutePath() );
 
     if( listFile == null )
       throw new MojoExecutionException("list file not specified");
     
     File list = new File( listFile );
-    try {
-      
-      if( !list.exists() )
-        throw new MojoExecutionException( "list file "+list.getCanonicalPath()+" does not exist" );
 
-      BufferedReader r = new BufferedReader( new FileReader(list) );
-      
-      for( String line = r.readLine(); line != null; line = r.readLine() )
-      {
-        StringTokenizer st = new StringTokenizer( line, " :" );
-        
-        int count = st.countTokens();
-        
-        if( count < 3 || count > 4 )
-        {
-          _log.info( "Cannot parse line: "+line );
-          continue;
-        }
-        
-        int i = 0;
-        
-        String [] gav = new String[4];
-        
-        while( st.hasMoreTokens() )
-          gav[i++ ] = st.nextToken();
-        
-        saveDependencies( gav[0], gav[1], gav[2], count == 4 ? gav[3] : "jar" );
-      }
-		  
+    try {
+      DataBuilder.visitDeps( list, this );
 		} catch( Exception e ) {
 		  _log.error( e.getMessage() );
 			throw new MojoExecutionException( e.getMessage() );
 		}
+
 	}
 	//-----------------------------------------------------------------------------------------------------------------
-  private void saveDependencies( String groupId, String artifactId, String version, String type )
-  throws ArtifactResolutionException, ArtifactNotFoundException, ProjectBuildingException, InvalidDependencyVersionException, IOException
+  public void resolve( String groupId, String artifactId, String version, String type )
+  throws Exception
   {
     
-    Set<Artifact> deps = (Set<Artifact>)resolver.transitivelyResolvePomDependencies( projectBuilder , groupId, artifactId, version, false );
+    long start = System.currentTimeMillis();
     
-    File fout = new File( target, groupId+"-"+artifactId+"-"+version+"-"+type+".deps" );
+    Set<Artifact> dl = (Set<Artifact>)resolver.transitivelyResolvePomDependencies( projectBuilder , groupId, artifactId, version, false );
+    
+    File df = DataBuilder.getFile( target, groupId, artifactId, version, type );
+    
+    System.out.println( df.getCanonicalPath() );
+    
+    Dependencies deps = null;
+    
+    if( df.exists() )
+    {
+      deps = DataBuilder.read( df );
+      List l = deps.getMaven();
+      if( !Util.isEmpty( l ) )
+        l.clear();
+    }
+    else
+    {
+      deps = new Dependencies();
+    
+      deps.setGroupId( groupId );
+      deps.setArtifactId( artifactId );
+      deps.setVersion( version );
+      deps.setType( type );
+    }
+    
+    deps.setMavenMillis( System.currentTimeMillis() - start );
+    
+    for( Artifact am : dl )
+    {
+      Dependency dep = new Dependency();
+      dep.setGroupId( am.getGroupId() );
+      dep.setArtifactId( am.getArtifactId() );
+      dep.setVersion( am.getVersion() );
+      dep.setType( am.getType() );
+      dep.setScope( am.getScope() );
+      
+      deps.addMaven( dep );
+    }
+    
+    DataBuilder.write( deps, df );
 
-    _log.info( fout.getCanonicalPath() );
-    
-    BufferedWriter w = new BufferedWriter( new FileWriter(fout) );
-    
-    try
-    {
-      if( deps == null || deps.isEmpty() )
-        return;
-    
-      for( Artifact a : deps )
-      {
-        String cl = a.getClassifier();
-        
-        if( cl == null  )
-          cl = "";
-        
-        String sc = a.getScope();
-        
-        if( sc == null  )
-          sc = "compile";
-        
-        w.write( a.getGroupId()+":"+a.getArtifactId()+":"+a.getVersion()+":"+cl+":"+a.getType()+":"+sc+"\n" );
-      }
-    }
-    finally
-    {
-      if( w != null )
-        try { w.flush(); w.close(); } catch( Exception e ) { _log.error( e.getMessage() ); }
-    }
   }
   //-----------------------------------------------------------------------------------------------------------------
   //-----------------------------------------------------------------------------------------------------------------

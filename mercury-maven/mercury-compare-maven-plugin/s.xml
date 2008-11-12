@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings>
+
+  <localRepository>/app/src/asf/maven/mercury/trunk/mercury-maven/localRepoMaven</localRepository>
+
+<profiles>
+
+        <profile>
+            <id>standard</id>
+            <repositories>
+ 
+                <repository>
+                    <id>maven.central</id>
+                    <url>http://repo1.maven.org/maven2</url>
+                    <snapshots><enabled>false</enabled></snapshots>
+                    <releases><enabled>true</enabled></releases>
+                </repository>
+<!-- 
+                <repository>
+                    <id>sona.central</id>
+                    <url>http://repository.sonatype.org/content/groups/public</url>
+                    <snapshots><enabled>true</enabled></snapshots>
+                    <releases><enabled>true</enabled></releases>
+                </repository>
+                <repository>
+                    <id>codehaus.snapshots</id>
+                    <url>http://snapshots.repository.codehaus.org</url>
+                    <snapshots><enabled>true</enabled></snapshots>
+                    <releases><enabled>false</enabled></releases>
+                </repository>
+                <repository>
+                    <id>apache.snapshots</id>
+                    <url>http://people.apache.org/repo/m2-snapshot-repository</url>
+                    <snapshots><enabled>true</enabled></snapshots>
+                    <releases><enabled>false</enabled></releases>
+                </repository>
+                <repository>
+                    <id>codehaus.releases</id>
+                    <url>http://repository.codehaus.org</url>
+                    <snapshots><enabled>false</enabled></snapshots>
+                    <releases><enabled>true</enabled></releases>
+                </repository>
+  -->
+            </repositories>
+            
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>sona.central</id>
+		                <url>http://repository.sonatype.org/content/groups/public</url>
+                    <snapshots><enabled>true</enabled></snapshots>
+                    <releases><enabled>true</enabled></releases>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+  
+</profiles>
+  
+  <activeProfiles>
+	  <activeProfile>standard</activeProfile>
+  </activeProfiles>
+
+  <pluginGroups>
+    <pluginGroup>org.sid.maven.plugins</pluginGroup>
+    <pluginGroup>org.mortbay.jetty</pluginGroup>
+    <pluginGroup>org.codehaus.mojo</pluginGroup>
+    <pluginGroup>org.sonatype.maven.plugins</pluginGroup>
+  </pluginGroups>
+
+</settings>
