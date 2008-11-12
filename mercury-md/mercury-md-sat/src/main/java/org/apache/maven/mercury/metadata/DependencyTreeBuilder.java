@@ -12,6 +12,8 @@ import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessor;
 import org.apache.maven.mercury.artifact.version.VersionException;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.metadata.sat.DefaultSatSolver;
 import org.apache.maven.mercury.metadata.sat.SatException;
 import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
@@ -32,6 +34,7 @@ class DependencyTreeBuilder
 implements DependencyBuilder
 {
   Language _lang = new DefaultLanguage(DependencyTreeBuilder.class);
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( DependencyTreeBuilder.class ); 
   
   private Collection<MetadataTreeArtifactFilter> _filters;
   private List<Comparator<MetadataTreeNode>> _comparators;
@@ -104,6 +107,24 @@ implements DependencyBuilder
     return root;
   }
   //-----------------------------------------------------
+  private MetadataTreeNode deepCopy( MetadataTreeNode node, ArtifactScopeEnum scope )
+  {
+    MetadataTreeNode res = new MetadataTreeNode( node.getMd()
+                                                , node.getParent()
+                                                , node.getQuery()
+                                                , true
+                                                , scope
+                                                );
+    if( node.hasChildren() )
+      for( MetadataTreeNode kid : node.children )
+      {
+        MetadataTreeNode deepKid = deepCopy( kid, scope );
+        res.addChild( deepKid );
+      }
+    
+    return res;
+  }
+  //-----------------------------------------------------
   private MetadataTreeNode createNode( ArtifactBasicMetadata nodeMD, MetadataTreeNode parent, ArtifactBasicMetadata nodeQuery, ArtifactScopeEnum globalScope )
   throws MetadataTreeException
   {
@@ -112,10 +133,10 @@ implements DependencyBuilder
     ArtifactMetadata mr;
     
 // TODO: og - removed this optimization as it may break something
-//    MetadataTreeNode existingNode = existingNodes.get( nodeQuery.toString() );
-//    
-//    if( existingNode != null )
-//      return existingNode;
+    MetadataTreeNode existingNode = existingNodes.get( nodeQuery.toString() );
+    
+    if( existingNode != null )
+      return deepCopy( existingNode, globalScope );
     
     try
     {
@@ -151,6 +172,10 @@ implements DependencyBuilder
         
         for( ArtifactBasicMetadata md : dependencies )
         {
+
+if( _log.isDebugEnabled() )
+  _log.debug("node "+nodeQuery+", dep "+md );
+
           List<ArtifactBasicMetadata> versions = expandedDeps.get( md );
           if( versions == null || versions.size() < 1 )
           {
