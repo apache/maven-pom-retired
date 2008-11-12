@@ -578,6 +578,9 @@ implements RepositoryReader, MetadataReader
     byte [] res = null;
     ArtifactBasicMetadata mod = null;
     
+//if( _log.isDebugEnabled() )
+//  _log.debug( "reading "+bmd+" from " + _repo.getId() );
+    
     // only cache poms at the moment
     if( _mdCache != null && "pom".equals( type ) )
     {
@@ -592,7 +595,11 @@ implements RepositoryReader, MetadataReader
       {
         res = _mdCache.findRaw( mod );
         if( res != null )
+        {
+//if( _log.isDebugEnabled() )
+//  _log.debug( "found "+bmd+" in the cache" );
           return res;
+        }
       }
       catch( MetadataCacheException e )
       {
