@@ -122,10 +122,7 @@ implements RepositoryWriter
     LocalRepositoryWriterM2 [] workers = new LocalRepositoryWriterM2[ nWorkers ];
     
     for( int i=0; i<nWorkers; i++ )
-    {
       workers[ i ] = new LocalRepositoryWriterM2( _repo, _repoDir, aq );
-      workers[ i ].start();
-    }
     
     for( Artifact artifact : artifacts )
     {
@@ -140,6 +137,9 @@ implements RepositoryWriter
       aq.addArtifact( new ArifactWriteData( artifact, vFacs ) );
     }
     aq.addArtifact( LAST_ARTIFACT );
+    
+    for( int i=0; i<nWorkers; i++ )
+      workers[ i ].start();
     
     boolean alive = true;
     while( alive )
