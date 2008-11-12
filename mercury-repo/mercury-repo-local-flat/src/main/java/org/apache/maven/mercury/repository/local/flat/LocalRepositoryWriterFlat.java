@@ -108,10 +108,7 @@ implements RepositoryWriter
     LocalRepositoryWriterFlat [] workers = new LocalRepositoryWriterFlat[ nWorkers ];
     
     for( int i=0; i<nWorkers; i++ )
-    {
       workers[ i ] = new LocalRepositoryWriterFlat( _repo, _repoDir, aq );
-      workers[ i ].start();
-    }
     
     for( Artifact artifact : artifacts )
     {
@@ -126,6 +123,9 @@ implements RepositoryWriter
       aq.addArtifact( new ArifactWriteData( artifact, vFacs ) );
     }
     aq.addArtifact( LAST_ARTIFACT );
+
+    for( int i=0; i<nWorkers; i++ )
+      workers[ i ].start();
     
     boolean alive = true;
     while( alive )

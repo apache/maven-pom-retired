@@ -94,7 +94,7 @@ public class LocalRepositoryFlatTest
   public void testWriteFlatWithPom()
   throws Exception
   {
-    String test = "testWriteFlatWithGroup()";
+    String test = "testWriteFlatWithPom()";
     
     _repo.setCreatePoms( true );
     
@@ -154,7 +154,7 @@ public class LocalRepositoryFlatTest
   public void testWriteFlatWithGroupAndPom()
   throws Exception
   {
-    String test = "testWriteFlatWithGroup()";
+    String test = "testWriteFlatWithGroupAndPom()";
     
     _repo.setCreateGroupFolders( true );
     _repo.setCreatePoms( true );
