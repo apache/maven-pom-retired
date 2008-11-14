@@ -36,6 +36,8 @@ implements VersionRange
   DefaultArtifactVersion _toVersion;
   boolean _toInclusive = false;
   
+  boolean soft = false;
+  
   //--------------------------------------------------------------------------------------------
   protected MavenVersionRange( final String range, final QualityRange qRange )
   throws VersionException
@@ -108,8 +110,11 @@ implements VersionRange
     }
     else
     {
+      
       checkForValidCharacters(range);
       _fromVersion = new DefaultArtifactVersion( range );
+      
+      soft = true;
       
       // good old maven version interpretation
       if( !_osgiVersion )
@@ -195,6 +200,11 @@ implements VersionRange
   {
     if( SYSTEM_PARAMETER_OSGI_VERSION.equals( name ) )
       _osgiVersion = Boolean.parseBoolean( System.getProperty( val, SYSTEM_PARAMETER_OSGI_VERSION_DEFAULT ) );
+  }
+
+  public boolean isSoft()
+  {
+    return soft;
   }
   
   //--------------------------------------------------------------------------------------------

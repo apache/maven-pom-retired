@@ -19,4 +19,13 @@ extends Configurable
    * @return 
    */
   public boolean includes( String version );
+  /**
+   * returns true if the range is soft. i.e. 
+   *  1). is not "hard" [|(x,y)|]
+   *  2). allows (,) on the all possible versions in the current tree
+   * 
+   * @param version to test
+   * @return 
+   */
+  public boolean isSoft();
 }
