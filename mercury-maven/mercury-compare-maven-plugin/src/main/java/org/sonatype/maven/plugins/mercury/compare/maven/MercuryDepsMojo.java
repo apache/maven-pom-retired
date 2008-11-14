@@ -1,8 +1,6 @@
 package org.sonatype.maven.plugins.mercury.compare.maven;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.util.List;
 import java.util.Set;
 
@@ -14,7 +12,6 @@ import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.compare.DataBuilder;
 import org.apache.maven.mercury.compare.IDepResolver;
 import org.apache.maven.mercury.compare.mdo.Dependencies;
@@ -188,6 +185,11 @@ implements IDepResolver
     
     for( Artifact am : dl )
     {
+      String sc = am.getScope();
+      
+      if( "test".equals( sc ) || "provided".equals( sc ) )
+        continue;
+        
       Dependency dep = new Dependency();
       dep.setGroupId( am.getGroupId() );
       dep.setArtifactId( am.getArtifactId() );
@@ -203,4 +205,17 @@ implements IDepResolver
   }
   //-----------------------------------------------------------------------------------------------------------------
   //-----------------------------------------------------------------------------------------------------------------
+  /* (non-Javadoc)
+   * @see org.apache.maven.mercury.compare.IDepResolver#visit(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+   */
+  public void visit(
+      String groupI,
+      String artifactId,
+      String version,
+      String type )
+      throws Exception
+  {
+    // TODO Auto-generated method stub
+    
+  }
 }

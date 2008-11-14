@@ -7,21 +7,21 @@ package org.apache.maven.mercury.builder.api;
  * @version $Id$
  *
  */
-public class MetadataReaderException
-    extends Exception
+public class DependencyProcessorException
+extends Exception
 {
 
   /**
    * 
    */
-  public MetadataReaderException()
+  public DependencyProcessorException()
   {
   }
 
   /**
    * @param message
    */
-  public MetadataReaderException( String message )
+  public DependencyProcessorException( String message )
   {
     super( message );
   }
@@ -29,7 +29,7 @@ public class MetadataReaderException
   /**
    * @param cause
    */
-  public MetadataReaderException( Throwable cause )
+  public DependencyProcessorException( Throwable cause )
   {
     super( cause );
   }
@@ -38,7 +38,7 @@ public class MetadataReaderException
    * @param message
    * @param cause
    */
-  public MetadataReaderException( String message, Throwable cause )
+  public DependencyProcessorException( String message, Throwable cause )
   {
     super( message, cause );
   }

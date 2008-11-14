@@ -362,7 +362,7 @@ implements RepositoryReader, MetadataReader
 //}
         ror = ArtifactBasicResults.add( ror, bmd, deps );
       }
-      catch( MetadataReaderException e )
+      catch( Exception e )
       {
         _log.warn( "error reading "+bmd.toString()+" dependencies", e );
         continue;

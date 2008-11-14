@@ -38,8 +38,15 @@ implements RepositoryMetadataCache
   
   static volatile Map<String, MetadataCacheFs> fsCaches = Collections.synchronizedMap( new HashMap<String, MetadataCacheFs>(2) ); 
   
-  volatile HashMap<String, RepositoryGAMetadata> gaCache;
-  volatile HashMap<String, RepositoryGAVMetadata> gavCache;
+  // store resolved cached data in memory
+  private volatile Map<String, RepositoryGAMetadata> gaCache
+        = (Map<String, RepositoryGAMetadata>)Collections.synchronizedMap( new HashMap<String, RepositoryGAMetadata>(512) );
+  
+  private volatile Map<String, RepositoryGAVMetadata> gavCache
+  = (Map<String, RepositoryGAVMetadata>)Collections.synchronizedMap( new HashMap<String, RepositoryGAVMetadata>(1024) );
+  
+  private volatile Map<String, byte []> rawCache
+  = (Map<String, byte []>)Collections.synchronizedMap( new HashMap<String, byte []>(1024) );
   
   private File root;
   
@@ -84,6 +91,13 @@ implements RepositoryMetadataCache
   {
     try
     {
+      String gaKey = getGAKey(coord);
+      
+      RepositoryGAMetadata inMem = gaCache.get( gaKey );
+      
+      if( inMem != null )
+        return inMem;
+      
       File gaDir = getGADir(coord);
       
       File gamF = getGAFile( gaDir, repoGuid );
@@ -102,6 +116,8 @@ implements RepositoryMetadataCache
           }
       }
       
+      gaCache.put( gaKey, md );
+      
       return md;
     }
     catch( Exception e )
@@ -116,6 +132,13 @@ implements RepositoryMetadataCache
     FileLockBundle lock = null;
     try
     {
+      String gavKey = getGAVKey(coord);
+      
+      RepositoryGAVMetadata inMem = gavCache.get( gavKey );
+      
+      if( inMem != null )
+        return inMem;
+      
       File gavDir = getGAVDir( coord );
 
       lock = FileUtil.lockDir( gavDir.getCanonicalPath(), 500L, 5L );
@@ -131,6 +154,8 @@ implements RepositoryMetadataCache
           if( up != null && up.timestampExpired( md.getLastCheck() ) )
             md.setExpired( true );
       }
+      
+      gavCache.put(  gavKey, md );
       
       return md;
     }
@@ -150,6 +175,8 @@ implements RepositoryMetadataCache
     FileLockBundle lock = null;
     try
     {
+      String gaKey = getGAKey( gam.getGA() );
+      
       File gaDir = getGADir( gam.getGA() );
       
       lock = FileUtil.lockDir( gaDir.getCanonicalPath(), 500L, 5L );
@@ -159,6 +186,8 @@ implements RepositoryMetadataCache
       CachedGAMetadata md = new CachedGAMetadata( gam );
       
       md.cm.save( gamF );
+      
+      gaCache.put( gaKey, md );
     }
     catch( Exception e )
     {
@@ -178,6 +207,8 @@ implements RepositoryMetadataCache
   {
     try
     {
+      String gavKey = getGAKey( gavm.getGAV() );
+      
       File gavDir = getGAVDir( gavm.getGAV() );
       
       File gavmF = getGAVFile( gavDir, repoGuid );
@@ -185,6 +216,8 @@ implements RepositoryMetadataCache
       CachedGAVMetadata md = new CachedGAVMetadata( gavm );
       
       md.cm.save( gavmF );
+      
+      gavCache.put( gavKey, md );
     }
     catch( Exception e )
     {
@@ -197,6 +230,13 @@ implements RepositoryMetadataCache
   {
     try
     {
+      String rawKey = bmd.getGAV();
+      
+      byte [] res = rawCache.get( rawKey );
+      
+      if( res != null )
+        return res;
+      
       // locking is provided by underlying OS, don't waste the effort
       File f = new File( getGAVDir( bmd.getEffectiveCoordinates() )
           , bmd.getArtifactId()+FileUtil.DASH+bmd.getVersion()+"."+bmd.getType()
@@ -205,7 +245,11 @@ implements RepositoryMetadataCache
       if( ! f.exists() )
         return null;
       
-      return FileUtil.readRawData( f );
+      res = FileUtil.readRawData( f );
+      
+      rawCache.put( rawKey, res );
+      
+      return res; 
     }
     catch( IOException e )
     {
@@ -219,6 +263,10 @@ implements RepositoryMetadataCache
     // locking is provided by underlying OS, don't waste the effort
     try
     {
+      String rawKey = bmd.getGAV();
+      
+      rawCache.put( rawKey, rawBytes );
+      
       File f = new File( getGAVDir( bmd.getEffectiveCoordinates() )
           , bmd.getArtifactId()+FileUtil.DASH+bmd.getVersion()+"."+bmd.getType()
           );
@@ -230,7 +278,17 @@ implements RepositoryMetadataCache
       throw new MetadataCacheException( e.getMessage() );
     }
   }
+  //---------------------------------------------------------------------------------------
+  private String getGAKey( ArtifactCoordinates coord )
+  {
+    return coord.getGroupId()+":"+coord.getArtifactId();
+  }
 
+  private String getGAVKey( ArtifactCoordinates coord )
+  {
+    return coord.getGroupId()+":"+coord.getArtifactId()+":"+coord.getVersion();
+  }
+  
   private File getGADir( ArtifactCoordinates coord )
   {
     File dir = new File( root, coord.getGroupId()+FileUtil.SEP+coord.getArtifactId() );

@@ -100,7 +100,7 @@ implements DependencyBuilder
       throw new MetadataTreeException(e);
     }
     
-    existingNodes = new HashMap<String, MetadataTreeNode>(128);
+    existingNodes = new HashMap<String, MetadataTreeNode>(256);
     
     MetadataTreeNode root = createNode( startMD, null, startMD, treeScope );
     

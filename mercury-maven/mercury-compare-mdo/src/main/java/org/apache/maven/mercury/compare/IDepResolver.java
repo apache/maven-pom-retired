@@ -12,4 +12,7 @@ public interface IDepResolver
   void resolve( String groupI, String artifactId, String version, String type )
   throws Exception;
   
+  void visit( String groupI, String artifactId, String version, String type )
+  throws Exception;
+  
 }

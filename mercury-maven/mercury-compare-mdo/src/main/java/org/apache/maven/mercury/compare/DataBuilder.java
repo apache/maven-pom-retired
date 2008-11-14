@@ -148,4 +148,45 @@ public class DataBuilder
       }
     }
   }
+  
+  public static final void compareDeps( File deps, IDepResolver resolver )
+  throws Exception
+  {
+    if( !deps.exists() )
+      throw new Exception( "list file "+deps.getCanonicalPath()+" does not exist" );
+
+    BufferedReader r = new BufferedReader( new FileReader(deps) );
+    
+    for( String line = r.readLine(); line != null; line = r.readLine() )
+    {
+      if( line.charAt( 0 ) == '#' )
+        continue;
+      
+      StringTokenizer st = new StringTokenizer( line, " :" );
+      
+      int count = st.countTokens();
+      
+      if( count < 3 || count > 4 )
+      {
+        System.out.println( "Cannot parse line: "+line );
+        continue;
+      }
+      
+      int i = 0;
+      
+      String [] gav = new String[4];
+      
+      while( st.hasMoreTokens() )
+        gav[i++ ] = st.nextToken();
+      
+      try
+      {
+        resolver.visit( gav[0], gav[1], gav[2], count == 4 ? gav[3] : "jar" );
+      }
+      catch( Exception e )
+      {
+        e.printStackTrace();
+      }
+    }
+  }
 }

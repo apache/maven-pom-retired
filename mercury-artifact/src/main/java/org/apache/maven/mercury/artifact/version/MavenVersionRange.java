@@ -13,7 +13,7 @@ import org.codehaus.plexus.lang.Language;
  * [1.2.3, 4.5.6] 1.2.3 <= x <= 4.5.6
  * (1.2.3, 4.5.6) 1.2.3 < x < 4.5.6
  * (1.2.3, 4.5.6] 1.2.3 < x <= 4.5.6
- * 1.2.3 1.2.3 <= x - this one is configurable
+ * 1.2.3 1.2.3 <= x - this one is configurable nowadays
  * 
  * @author Oleg Gusakov
  * @version $Id$

@@ -403,7 +403,7 @@ implements RepositoryReader, MetadataReader
                                                                         );
         ror.add( bmd, deps );
       }
-      catch( MetadataReaderException e )
+      catch( Exception e )
       {
         _log.warn( "error reading "+bmd.toString()+" dependencies", e );
         continue;
@@ -438,6 +438,9 @@ implements RepositoryReader, MetadataReader
         _log.error( _lang.getMessage( "cached.data.problem", e.getMessage(), bmd.toString() ) );
       }
     }
+    
+    if( _log.isDebugEnabled() )
+      _log.debug( _repo.getId()+": did not find in the cache - go out for "+bmd );
 
     // no cached data, or it has expired - read from repository
     byte[] mavenMetadata = readRawData( loc.getGaPath()+FileUtil.SEP+_repo.getMetadataName() );
@@ -474,8 +477,7 @@ implements RepositoryReader, MetadataReader
    * direct metadata search, no redirects, first attempt
    */
   public ArtifactBasicResults readVersions( Collection<ArtifactBasicMetadata> query )
-      throws RepositoryException,
-      IllegalArgumentException
+  throws RepositoryException
   {
     if( query == null || query.size() < 1 )
       return null;

@@ -59,7 +59,7 @@ public interface RepositoryMetadataCache
 
   /**
    * find cached raw data. Raw data is different from metadata in a sense
-   * that it does not expire does not expire, so it's either found or not.
+   * that it does not expire, so it's either found or not.
    * This call is crafted for caching POMs and thus ignores classifier
    * 
    * @param bmd
@@ -71,7 +71,7 @@ public interface RepositoryMetadataCache
 
   /**
    * cache raw data. Raw data is different from metadata in a sense
-   * that it does not expire does not expire, so it's either found or not
+   * that it does not expire, so it's either found or not
    * This call is crafted for caching POMs and thus ignores classifier
    * 
    * @param bmd
