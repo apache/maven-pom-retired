@@ -39,6 +39,30 @@ public class DefaultSatSolverTest
     super.setUp();
   }
   //----------------------------------------------------------------------
+  public void testDedupe()
+  {
+    List<MetadataTreeNode> list = new ArrayList<MetadataTreeNode>();
+    
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("b:b:1"), null, null ) );
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("b:b:1"), null, null ) );
+    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
+    
+    DefaultSatSolver.removeDuplicateGAVs( list );
+    
+    System.out.println(list);
+    
+    assertEquals( 2, list.size() );
+  }
+  
+  
+  private int f( int a, int b )
+  {
+    return -a + b;
+  }
+  //----------------------------------------------------------------------
   public void testOptimization()
   throws SatException
   {
@@ -159,7 +183,7 @@ public class DefaultSatSolverTest
       System.out.print(" "+m[i]);
     System.out.println("");
 
-    assert res != null : "Failed to solve "+title;
+    assertNotNull( res );
     
     System.out.print("Result:");
     for( ArtifactMetadata md : res )
@@ -168,32 +192,86 @@ public class DefaultSatSolverTest
     }
     System.out.println("");
 
-    assert res.size() == 3 : "result contains "+res.size()+" artifacts instead of 3";
-    assert res.contains(a1) : "result does not contain "+a1;
+    assertEquals( 3, res.size() );
+    
+    assertTrue( res.contains( a1 ) );
+    assertTrue( res.contains( b2 ) );
+    assertTrue( res.contains( c2 ) );
   }
   //----------------------------------------------------------------------
-  public void testDedupe()
+  //       b:b:1 - c:c:2
+  //      / 
+  // a:a:1
+  //      \     
+  //       b:b:2 - c:c:1
+  //----------------------------------------------------------------------
+  public void testSingleVersionResolution()
+  throws SatException
   {
-    List<MetadataTreeNode> list = new ArrayList<MetadataTreeNode>();
+    title = "testSingleVersionResolution";
+    System.out.println("\n\n==========================\n"+title+"\n");
     
-    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
-    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
-    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
-    list.add(  new MetadataTreeNode( new ArtifactMetadata("b:b:1"), null, null ) );
-    list.add(  new MetadataTreeNode( new ArtifactMetadata("b:b:1"), null, null ) );
-    list.add(  new MetadataTreeNode( new ArtifactMetadata("a:a:1"), null, null ) );
+    MetadataTreeNode na1 = new MetadataTreeNode( a1, null, null )
+      .addQuery(b1)
+      .addQuery(b2)
+    ;
     
-    DefaultSatSolver.removeDuplicateGAVs( list );
+    MetadataTreeNode nb1 = new MetadataTreeNode( b1, na1, b1 )
+      .addQuery( c2 )
+    ;
+    MetadataTreeNode nb2 = new MetadataTreeNode( b2, na1, b2 )
+      .addQuery( c1 )
+    ;
     
-    System.out.println(list);
+    MetadataTreeNode nc2 = new MetadataTreeNode( c2, nb1, c2 );
+
+    MetadataTreeNode nc1 = new MetadataTreeNode( c1, nb2, c1 );
     
-    assertEquals( 2, list.size() );
-  }
-  
-  
-  private int f( int a, int b )
-  {
-    return -a + b;
+    na1
+      .addChild(nb1)
+      .addChild(nb2)
+    ;
+    
+    nb1
+      .addChild(nc2)
+    ;
+    
+    nb2
+      .addChild(nc1)
+    ;
+    
+    List<Comparator<MetadataTreeNode>> cl = new ArrayList<Comparator<MetadataTreeNode>>(2);
+    cl.add( new ClassicDepthComparator() );
+    cl.add( new ClassicVersionComparator() );
+
+    ss = (DefaultSatSolver) DefaultSatSolver.create(na1);
+    
+    ss.applyPolicies( cl );
+
+    List<ArtifactMetadata> res = ss.solve();
+    
+    int m[] = ss._solver.model();
+
+    System.out.print("model: " );
+
+    for( int i=0; i<m.length; i++ )
+      System.out.print(" "+m[i]);
+    System.out.println("");
+
+    assertNotNull( res );
+    
+    System.out.print("Result:");
+    for( ArtifactMetadata md : res )
+    {
+      System.out.print(" "+md);
+    }
+    System.out.println("");
+    
+    assertEquals( 3, res.size() );
+    
+    assertTrue( res.contains( a1 ) );
+    assertTrue( res.contains( b2 ) );
+    assertTrue( res.contains( c1 ) );
   }
   //----------------------------------------------------------------------
   //----------------------------------------------------------------------
