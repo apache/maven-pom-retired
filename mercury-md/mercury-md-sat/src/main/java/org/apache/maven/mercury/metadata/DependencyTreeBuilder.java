@@ -181,7 +181,8 @@ if( _log.isDebugEnabled() )
           {
             if( md.isOptional() )
               continue;
-            throw new MetadataTreeException( "did not find non-optional artifact for " + md );
+            
+            throw new MetadataTreeException( "did not find non-optional artifact for " + md + " <== " + showPath( node ) );
           }
           
           boolean noGoodVersions = true;
@@ -190,7 +191,7 @@ if( _log.isDebugEnabled() )
           {
             if( veto( ver, _filters) || vetoInclusionsExclusions(node, ver) )
             {
-              // there were good versions, but this one is filtered out filtered out
+              // there were good versions, but this one is filtered out
               noGoodVersions = false;
               continue;
             }
@@ -354,6 +355,27 @@ if( _log.isDebugEnabled() )
       throw new MetadataTreeException(e);
     }
     
+  }
+  //-----------------------------------------------------
+  private String showPath( MetadataTreeNode node )
+  throws MetadataTreeCircularDependencyException
+  {
+    StringBuilder sb = new StringBuilder( 256 );
+    
+    String comma = "";
+    
+    MetadataTreeNode p = node;
+
+    while( p != null )
+    {
+      sb.append( comma + p.getMd().toString() );
+      
+      comma = " <== ";
+      
+      p = p.parent;
+    }
+    
+    return sb.toString();
   }
   //-----------------------------------------------------
   //-----------------------------------------------------
