@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>mercury-crypto</artifactId>
-  <name>Mercury Crypto Reactor:         ${project.version}</name>
+  <name>Mercury Crypto</name>
   <packaging>pom</packaging>
 
   <modules>

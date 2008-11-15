@@ -6,7 +6,7 @@
     <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
   <artifactId>mercury-util</artifactId>
-  <name>Mercury Shared Utilities:       ${project.version}</name>
+  <name>Mercury Shared Utilities</name>
 
   <build>
     <plugins>

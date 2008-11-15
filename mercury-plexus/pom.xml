@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>mercury-plexus</artifactId>
-  <name>Mercury Plexus Component:       ${project.version}</name>
+  <name>Mercury Plexus Component</name>
 
   <build>
     <plugins>

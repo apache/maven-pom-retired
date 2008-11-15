@@ -2,50 +2,50 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-repo-local-m2</artifactId>
-  <name>Mercury Local M2 Repository:    ${project.version}</name>
+  <name>Mercury Local M2 Repository</name>
   <description />
   <parent>
-  	<groupId>org.apache.maven.mercury</groupId>
-  	<artifactId>mercury-repo</artifactId>
-  	<version>1.0.0-alpha-2-SNAPSHOT</version>
+    <groupId>org.apache.maven.mercury</groupId>
+    <artifactId>mercury-repo</artifactId>
+    <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
-  
+
   <properties>
     <maven.version>3.0-SNAPSHOT</maven.version>
   </properties>
-  
+
   <dependencies>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-repo-api</artifactId>
-  		<version>${project.version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>commons-digester</groupId>
-  		<artifactId>commons-digester</artifactId>
-  		<version>1.8</version>
-  		<scope>test</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-md-shared</artifactId>
-  		<version>${project.version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-util</artifactId>
-  		<version>${project.version}</version>
-  	</dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-repo-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-digester</groupId>
+      <artifactId>commons-digester</artifactId>
+      <version>1.8</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-md-shared</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-util</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-mercury</artifactId>
       <version>${maven.version}</version>
     </dependency>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-crypto-basic</artifactId>
-  		<version>${project.version}</version>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-crypto-basic</artifactId>
+      <version>${project.version}</version>
       <scope>test</scope>
-  	</dependency>
+    </dependency>
   </dependencies>
 </project>

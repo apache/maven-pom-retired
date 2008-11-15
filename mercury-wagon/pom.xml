@@ -6,12 +6,12 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>mercury-wagon</artifactId>
-  <name>Mercury Wagon provider:         ${project.version}</name>
+  <name>Mercury Wagon provider</name>
   <version>1.0.0-alpha-2-SNAPSHOT</version>
-  
+
   <properties>
     <mercury.version>${project.version}</mercury.version>
-    
+
     <plexus.appbooter.version>1.4</plexus.appbooter.version>
     <plexus.container.version>1.0-alpha-47</plexus.container.version>
     <plexus.utils.version>1.5.1</plexus.utils.version>
@@ -44,7 +44,7 @@
     <nexus-control-port>33002</nexus-control-port>
   </properties>
 
-  
+
   <distributionManagement>
     <snapshotRepository>
       <id>${distMgmtSnapshotsId}</id>
@@ -68,14 +68,14 @@
         <filtering>false</filtering>
       </resource>
     </resources>
-    
+
     <testResources>
 
       <testResource>
         <directory>src/test/resources</directory>
         <filtering>true</filtering>
       </testResource>
- 
+
       <testResource>
         <directory>src/test/nexus</directory>
         <filtering>false</filtering>
@@ -84,7 +84,7 @@
         </excludes>
         <targetPath>../nexus-webapp-${nexus.version}/runtime</targetPath>
       </testResource>
- 
+
       <testResource>
         <directory>src/test/nexus</directory>
         <filtering>true</filtering>
@@ -93,7 +93,7 @@
         </includes>
         <targetPath>../nexus-webapp-${nexus.version}/runtime</targetPath>
       </testResource>
- 
+
       <testResource>
         <directory>src/test/nexus/conf</directory>
         <filtering>true</filtering>
@@ -103,7 +103,7 @@
     </testResources>
 
     <plugins>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -112,7 +112,7 @@
           <target>1.5</target>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
@@ -125,7 +125,7 @@
           </execution>
         </executions>
       </plugin>
-      
+
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
         <version>2.0</version>
@@ -144,7 +144,7 @@
           </execution>
         </executions>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -167,7 +167,7 @@
         </executions>
       </plugin>
 
-<!--  
+<!--
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
         <version>1.1</version>
@@ -200,9 +200,9 @@
 
                   <include>org.slf4j:slf4j-api</include>
                   <include>org.slf4j:slf4j-jdk14</include>
-                  
+
                 </includes>
-                
+
                 <excludes>
                   <exclude>org.codehaus.plexus:plexus-component-api</exclude>
                   <exclude>org.bouncycastle:bcprov-jdk15</exclude>
@@ -210,14 +210,14 @@
                   <exclude>bouncycastle:bcprov-jdk15</exclude>
                   <exclude>bouncycastle:bcpg-jdk15</exclude>
                 </excludes>
-                
+
               </artifactSet>
 
               <filters>
                 <filter>
                   <excludes>
-                    <exclude>/META-INF/BCKEY.DSA</exclude> 
-                    <exclude>/META-INF/BCKEY.SF</exclude> 
+                    <exclude>/META-INF/BCKEY.DSA</exclude>
+                    <exclude>/META-INF/BCKEY.SF</exclude>
                   </excludes>
                 </filter>
               </filters>
@@ -225,18 +225,18 @@
           </execution>
         </executions>
       </plugin>
- -->      
+ -->
     </plugins>
   </build>
-      
-  
+
+
   <dependencies>
-    
+
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-provider-api</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-provider-test</artifactId>
@@ -266,7 +266,7 @@
       <artifactId>plexus-utils</artifactId>
       <version>${plexus.utils.version}</version>
     </dependency>
- 
+
     <dependency>
       <groupId>org.sonatype.nexus</groupId>
       <artifactId>nexus-webapp</artifactId>
@@ -282,6 +282,6 @@
       <version>${plexus.appbooter.version}</version>
       <scope>test</scope>
     </dependency>
-    
+
   </dependencies>
 </project>

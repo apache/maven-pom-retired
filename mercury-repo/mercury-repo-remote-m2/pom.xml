@@ -2,29 +2,29 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-repo-remote-m2</artifactId>
-  <name>Mercury Remote M2 Repository:   ${project.version}</name>
+  <name>Mercury Remote M2 Repository</name>
   <description />
   <parent>
-  	<groupId>org.apache.maven.mercury</groupId>
-  	<artifactId>mercury-repo</artifactId>
-  	<version>1.0.0-alpha-2-SNAPSHOT</version>
+    <groupId>org.apache.maven.mercury</groupId>
+    <artifactId>mercury-repo</artifactId>
+    <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
-  
+
   <properties>
     <maven.version>3.0-SNAPSHOT</maven.version>
   </properties>
-  
+
   <dependencies>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-repo-api</artifactId>
-  		<version>${project.version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-transport-http</artifactId>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-repo-api</artifactId>
       <version>${project.version}</version>
-  	</dependency>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-transport-http</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-md-shared</artifactId>
@@ -36,9 +36,9 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-    	<groupId>org.apache.maven</groupId>
-    	<artifactId>maven-mercury</artifactId>
-    	<version>${maven.version}</version>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-mercury</artifactId>
+      <version>${maven.version}</version>
     </dependency>
   </dependencies>
 </project>

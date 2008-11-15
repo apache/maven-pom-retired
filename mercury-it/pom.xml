@@ -6,7 +6,7 @@
     <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
   <artifactId>mercury-it</artifactId>
-  <name>Mercury Integration Tests:      ${project.version}</name>
+  <name>Mercury Integration Tests</name>
   <description>Mercury Integration Tests</description>
 
   <properties>

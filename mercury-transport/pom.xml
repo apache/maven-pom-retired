@@ -8,7 +8,7 @@
   </parent>
   <artifactId>mercury-transport</artifactId>
   <packaging>pom</packaging>
-  <name>Mercury Transport Reactor:      ${project.version}</name>
+  <name>Mercury Transport Reactor</name>
 
   <modules>
     <module>mercury-transport-api</module>

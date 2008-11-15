@@ -2,13 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
   <parent>
-  	<groupId>org.apache.maven.mercury</groupId>
-  	<artifactId>mercury-repo</artifactId>
-  	<version>1.0.0-alpha-2-SNAPSHOT</version>
+    <groupId>org.apache.maven.mercury</groupId>
+    <artifactId>mercury-repo</artifactId>
+    <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
   <artifactId>mercury-repo-cache-fs</artifactId>
-  <name>Mercury Repository FS Cahe:     ${project.version}</name>
-  
+  <name>Mercury Repository FS Cache</name>
+
   <build>
     <plugins>
       <plugin>
@@ -32,14 +32,14 @@
           </execution>
         </executions>
       </plugin>
-  </plugins>
+    </plugins>
   </build>
-  
+
   <dependencies>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-repo-api</artifactId>
-  		<version>${project.version}</version>
-  	</dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-repo-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

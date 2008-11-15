@@ -7,6 +7,6 @@
   </parent>
 
   <artifactId>mercury-crypto-api</artifactId>
-  <name>Mercury Crypto APIs:            ${project.version}</name>
+  <name>Mercury Crypto APIs</name>
 
 </project>

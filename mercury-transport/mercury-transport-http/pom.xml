@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>mercury-transport-http</artifactId>
-  <name>Mercury Jetty HTTP Transport:   ${project.version}</name>
+  <name>Mercury Jetty HTTP Transport</name>
   <description />
   <parent>
-  	<groupId>org.apache.maven.mercury</groupId>
-  	<artifactId>mercury-transport</artifactId>
-  	<version>1.0.0-alpha-2-SNAPSHOT</version>
+    <groupId>org.apache.maven.mercury</groupId>
+    <artifactId>mercury-transport</artifactId>
+    <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -14,24 +14,24 @@
   </properties>
 
   <build>
-  
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
-          	<id>package-tests</id>
+            <id>package-tests</id>
             <goals>
               <goal>test-jar</goal>
             </goals>
           </execution>
         </executions>
-      </plugin>      
+      </plugin>
     </plugins>
- 
+
   </build>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
@@ -51,16 +51,16 @@
       <scope>test</scope>
     </dependency>
     <!-- Mercury Dependencies -->
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-transport-api</artifactId>
-  		<version>${project.version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.maven.mercury</groupId>
-  		<artifactId>mercury-crypto-basic</artifactId>
-  		<version>${project.version}</version>
-  	</dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-transport-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-crypto-basic</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
 </project>

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
   <artifactId>mercury-external</artifactId>
-  <name>Mercury External Dependencies:  ${project.version}</name>
+  <name>Mercury External Dependencies</name>
   <description />
   <parent>
     <groupId>org.apache.maven.mercury</groupId>
