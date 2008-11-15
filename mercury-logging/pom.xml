@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.apache.maven.mercury</groupId>
-    <artifactId>mercury-pom</artifactId>
+    <artifactId>mercury</artifactId>
     <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
   <artifactId>mercury-logging</artifactId>

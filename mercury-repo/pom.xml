@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.apache.maven.mercury</groupId>
-    <artifactId>mercury-pom</artifactId>
+    <artifactId>mercury</artifactId>
     <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
   <artifactId>mercury-repo</artifactId>
@@ -18,6 +18,7 @@
     <module>mercury-repo-cache-fs</module>
     <module>mercury-repo-virtual</module>
   </modules>
+
   <dependencies>
 
     <dependency>
