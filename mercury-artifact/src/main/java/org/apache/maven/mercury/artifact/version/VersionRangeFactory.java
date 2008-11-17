@@ -15,13 +15,13 @@ import org.apache.maven.mercury.artifact.QualityRange;
 public class VersionRangeFactory
 {
   
-  public static VersionRange create( String version )
+  public static VersionRange create( final String version )
   throws VersionException
   {
     return new MavenVersionRange( version );
   }
   
-  public static VersionRange create( String version, final QualityRange qRange )
+  public static VersionRange create( final String version, final QualityRange qRange )
   throws VersionException
   {
     return new MavenVersionRange( version, qRange );

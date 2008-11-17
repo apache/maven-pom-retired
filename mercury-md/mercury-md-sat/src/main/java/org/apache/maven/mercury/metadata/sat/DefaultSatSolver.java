@@ -102,7 +102,7 @@ _log.debug( "SatContext: # of variables: "+nNodes );
     IVec<BigInteger> coeffs = new Vec<BigInteger>( 128 );
     
     int count = 0;
-
+    
     for( String key : buckets.keySet() )
     {
       List<MetadataTreeNode> bucket = buckets.get( key );

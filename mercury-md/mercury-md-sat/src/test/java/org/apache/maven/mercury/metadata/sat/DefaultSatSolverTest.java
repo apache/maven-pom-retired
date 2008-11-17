@@ -8,6 +8,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.metadata.ClassicDepthComparator;
@@ -31,6 +32,8 @@ public class DefaultSatSolverTest
   ArtifactMetadata b3 = new ArtifactMetadata("t:b:3");
   ArtifactMetadata c1 = new ArtifactMetadata("t:c:1");
   ArtifactMetadata c2 = new ArtifactMetadata("t:c:2");
+
+  ArtifactMetadata d1 = new ArtifactMetadata("t:d:1");
   
   //----------------------------------------------------------------------
   protected void setUp()
@@ -272,6 +275,161 @@ public class DefaultSatSolverTest
     assertTrue( res.contains( a1 ) );
     assertTrue( res.contains( b2 ) );
     assertTrue( res.contains( c1 ) );
+  }
+  //----------------------------------------------------------------------
+  //       b:b:1 - c:c:[2,4)
+  //      / 
+  // a:a:1
+  //      \     
+  //       b:b:2 - c:c:1
+  //----------------------------------------------------------------------
+  public void testStrictRangeResolution()
+  throws SatException
+  {
+    title = "testSingleVersionResolution";
+    System.out.println("\n\n==========================\n"+title+"\n");
+    
+    MetadataTreeNode na1 = new MetadataTreeNode( a1, null, null )
+      .addQuery(b1)
+      .addQuery(b2)
+    ;
+    
+    ArtifactBasicMetadata c2q = new ArtifactBasicMetadata("t:c:[2,4)");
+    
+    MetadataTreeNode nb1 = new MetadataTreeNode( b1, na1, b1 )
+      .addQuery( c2q )
+    ;
+    MetadataTreeNode nb2 = new MetadataTreeNode( b2, na1, b2 )
+      .addQuery( c1 )
+    ;
+    
+    MetadataTreeNode nc2 = new MetadataTreeNode( c2, nb1, c2q );
+
+    MetadataTreeNode nc1 = new MetadataTreeNode( c1, nb2, c1 );
+    
+    na1
+      .addChild(nb1)
+      .addChild(nb2)
+    ;
+    
+    nb1
+      .addChild(nc2)
+    ;
+    
+    nb2
+      .addChild(nc1)
+    ;
+    
+    List<Comparator<MetadataTreeNode>> cl = new ArrayList<Comparator<MetadataTreeNode>>(2);
+    cl.add( new ClassicDepthComparator() );
+    cl.add( new ClassicVersionComparator() );
+
+    ss = (DefaultSatSolver) DefaultSatSolver.create(na1);
+    
+    ss.applyPolicies( cl );
+
+    List<ArtifactMetadata> res = ss.solve();
+    
+    int m[] = ss._solver.model();
+
+    System.out.print("model: " );
+
+    for( int i=0; i<m.length; i++ )
+      System.out.print(" "+m[i]);
+    System.out.println("");
+
+    assertNotNull( res );
+    
+    System.out.print("Result:");
+    for( ArtifactMetadata md : res )
+    {
+      System.out.print(" "+md);
+    }
+    System.out.println("");
+    
+    assertEquals( 3, res.size() );
+    
+    assertTrue( res.contains( a1 ) );
+    assertTrue( res.contains( b2 ) );
+    assertTrue( res.contains( c1 ) );
+  }
+  //----------------------------------------------------------------------
+  //       d:d:1 - c:c:[2,4)
+  //      / 
+  // a:a:1
+  //      \     
+  //       b:b:2 - c:c:1
+  //----------------------------------------------------------------------
+  public void testStrictRangeResolution2()
+  throws SatException
+  {
+    title = "testSingleVersionResolution";
+    System.out.println("\n\n==========================\n"+title+"\n");
+    
+    MetadataTreeNode na1 = new MetadataTreeNode( a1, null, null )
+      .addQuery(d1)
+      .addQuery(b2)
+    ;
+    
+    ArtifactBasicMetadata c2q = new ArtifactBasicMetadata("t:c:[2,4)");
+    
+    MetadataTreeNode nd1 = new MetadataTreeNode( d1, na1, d1 )
+      .addQuery( c2q )
+    ;
+    MetadataTreeNode nb2 = new MetadataTreeNode( b2, na1, b2 )
+      .addQuery( c1 )
+    ;
+    
+    MetadataTreeNode nc2 = new MetadataTreeNode( c2, nd1, c2q );
+
+    MetadataTreeNode nc1 = new MetadataTreeNode( c1, nb2, c1 );
+    
+    na1
+      .addChild(nd1)
+      .addChild(nb2)
+    ;
+    
+    nd1
+      .addChild(nc2)
+    ;
+    
+    nb2
+      .addChild(nc1)
+    ;
+    
+    List<Comparator<MetadataTreeNode>> cl = new ArrayList<Comparator<MetadataTreeNode>>(2);
+    cl.add( new ClassicDepthComparator() );
+    cl.add( new ClassicVersionComparator() );
+
+    ss = (DefaultSatSolver) DefaultSatSolver.create(na1);
+    
+    ss.applyPolicies( cl );
+
+    List<ArtifactMetadata> res = ss.solve();
+    
+    int m[] = ss._solver.model();
+
+    System.out.print("model: " );
+
+    for( int i=0; i<m.length; i++ )
+      System.out.print(" "+m[i]);
+    System.out.println("");
+
+    assertNotNull( res );
+    
+    System.out.print("Result:");
+    for( ArtifactMetadata md : res )
+    {
+      System.out.print(" "+md);
+    }
+    System.out.println("");
+    
+    assertEquals( 4, res.size() );
+    
+    assertTrue( res.contains( a1 ) );
+    assertTrue( res.contains( d1 ) );
+    assertTrue( res.contains( b2 ) );
+    assertTrue( res.contains( c2 ) );
   }
   //----------------------------------------------------------------------
   //----------------------------------------------------------------------

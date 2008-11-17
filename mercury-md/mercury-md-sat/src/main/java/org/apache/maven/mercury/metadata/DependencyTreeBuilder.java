@@ -12,6 +12,8 @@ import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessor;
 import org.apache.maven.mercury.artifact.version.VersionException;
+import org.apache.maven.mercury.artifact.version.VersionRange;
+import org.apache.maven.mercury.artifact.version.VersionRangeFactory;
 import org.apache.maven.mercury.logging.IMercuryLogger;
 import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.metadata.sat.DefaultSatSolver;
@@ -104,7 +106,42 @@ implements DependencyBuilder
     
     MetadataTreeNode root = createNode( startMD, null, startMD, treeScope );
     
+//    adjustSoftRanges( root );
+    
     return root;
+  }
+  //-----------------------------------------------------
+  /**
+   * the tree is created, now fill in "soft" 
+   * ranges with additional versions from the tree
+   * @throws MetadataTreeException 
+   */
+  private void adjustSoftRanges( MetadataTreeNode node )
+  throws MetadataTreeException
+  {
+    ArtifactBasicMetadata q = node.getQuery();
+    if( q != null )
+    {
+      try
+      {
+        VersionRange vr = VersionRangeFactory.create( q.getVersion() );
+        
+        if( vr.isSoft() )
+        {
+          fillNode( node );
+        }
+      }
+      catch( VersionException e )
+      {
+        throw new MetadataTreeException(e);
+      }
+    }
+  }
+  
+  private void fillNode( MetadataTreeNode node )
+  throws MetadataTreeException
+  {
+    
   }
   //-----------------------------------------------------
   private MetadataTreeNode deepCopy( MetadataTreeNode node, ArtifactScopeEnum scope )

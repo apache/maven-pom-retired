@@ -24,7 +24,6 @@ extends Configurable
    *  1). is not "hard" [|(x,y)|]
    *  2). allows (,) on the all possible versions in the current tree
    * 
-   * @param version to test
    * @return 
    */
   public boolean isSoft();
