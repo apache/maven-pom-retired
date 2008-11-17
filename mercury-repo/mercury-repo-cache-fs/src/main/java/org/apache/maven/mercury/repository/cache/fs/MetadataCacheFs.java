@@ -96,7 +96,17 @@ implements RepositoryMetadataCache
       RepositoryGAMetadata inMem = gaCache.get( gaKey );
       
       if( inMem != null )
+      {
+        long lastCheckMillis = inMem.getLastCheckMillis();
+        
+        if( up.timestampExpired( lastCheckMillis ) )
+        {
+          inMem.setExpired( true );
+          gaCache.put( gaKey, inMem );
+        }
+        
         return inMem;
+      }
       
       File gaDir = getGADir(coord);
       
@@ -114,9 +124,9 @@ implements RepositoryMetadataCache
           {
             md.setExpired( true );
           }
+
+          gaCache.put( gaKey, md );
       }
-      
-      gaCache.put( gaKey, md );
       
       return md;
     }
@@ -137,7 +147,17 @@ implements RepositoryMetadataCache
       RepositoryGAVMetadata inMem = gavCache.get( gavKey );
       
       if( inMem != null )
+      {
+        long lastCheckMillis = inMem.getLastCheckMillis();
+        
+        if( up.timestampExpired( lastCheckMillis ) )
+        {
+          inMem.setExpired( true );
+          gavCache.put( gavKey, inMem );
+        }
+        
         return inMem;
+      }
       
       File gavDir = getGAVDir( coord );
 
@@ -153,9 +173,9 @@ implements RepositoryMetadataCache
           
           if( up != null && up.timestampExpired( md.getLastCheck() ) )
             md.setExpired( true );
+          
+          gavCache.put(  gavKey, md );
       }
-      
-      gavCache.put(  gavKey, md );
       
       return md;
     }

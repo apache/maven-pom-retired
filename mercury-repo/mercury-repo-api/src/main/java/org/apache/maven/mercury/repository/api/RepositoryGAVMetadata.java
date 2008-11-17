@@ -1,5 +1,6 @@
 package org.apache.maven.mercury.repository.api;
 
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
@@ -125,6 +126,12 @@ public class RepositoryGAVMetadata
   public long getLastCheck()
   {
     return lastCheck;
+  }
+  
+  public long getLastCheckMillis()
+  throws ParseException
+  {
+    return TimeUtil.toMillis(  lastCheck );
   }
 
   public void updateSnapshots( Collection<String> snapshots )

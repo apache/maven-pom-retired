@@ -134,7 +134,7 @@ extends TestCase
     
     assertEquals( 5, versions.size() );
 
-    Thread.sleep( 3000L );
+    Thread.sleep( 4000L );
     
     // repository policy is 2 sec, this should cause VR to re-read metadata
     // should now have 6 versions
@@ -157,6 +157,7 @@ extends TestCase
     }
     finally
     {
+      // restore back 5 versions
       File mdf = new File( _testBase, "a/a/maven-metadata.xml");
       InputStream in = VirtualRepositoryReaderIntegratedTest.class.getResourceAsStream( "/repoVr/a.a-maven-metadata.xml" );
       FileUtil.writeRawData( mdf, in );

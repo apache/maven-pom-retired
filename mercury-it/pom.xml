@@ -18,7 +18,7 @@
     <nexus.client.version>1.1-M1</nexus.client.version>
     <jetty.version>6.1.12.rc2</jetty.version>
 
-    <nexus-security-enabled>true</nexus-security-enabled>
+    <nexus-security-enabled>false</nexus-security-enabled>
 
     <bundle-expanded-dir>target</bundle-expanded-dir>
     <config-expanded-dir>target/test-nexus-config</config-expanded-dir>
