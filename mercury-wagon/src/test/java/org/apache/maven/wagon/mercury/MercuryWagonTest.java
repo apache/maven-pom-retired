@@ -15,7 +15,6 @@ import org.apache.maven.mercury.util.FileUtil;
 import org.apache.maven.wagon.Wagon;
 import org.apache.maven.wagon.WagonTestCase;
 import org.codehaus.plexus.PlexusContainer;
-import org.sonatype.appbooter.ForkedAppBooter;
 
 /**
  *
@@ -28,11 +27,7 @@ public class MercuryWagonTest
 extends WagonTestCase
 {
 
-  public static final String TEST_NEXUS_ROLE = ForkedAppBooter.ROLE;
-  public static final String TEST_NEXUS_HINT = "NexusForkedAppBooter";
-
   PlexusContainer plexus;
-  ForkedAppBooter nexusForkedAppBooter;
   
   String nexusReleasesTestDir = "./target/nexus-webapp-1.0.0/runtime/work/storage/releases";
   String nexusReleasesTestUrl = "http://127.0.0.1:8091/nexus/content/repositories/releases";
@@ -106,10 +101,6 @@ extends WagonTestCase
     plexus = getContainer();
 
     assertNotNull( plexus );
-    
-    nexusForkedAppBooter = (ForkedAppBooter)plexus.lookup( TEST_NEXUS_ROLE, TEST_NEXUS_HINT  );
-    
-    nexusForkedAppBooter.start();
 
   }
   
@@ -118,7 +109,6 @@ extends WagonTestCase
   throws Exception
   {
     super.tearDown();
-    nexusForkedAppBooter.stop();
   }
   
   @Override
