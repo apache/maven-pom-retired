@@ -70,7 +70,8 @@ public class ClasspathContainer
         for ( ArtifactMetadata md : classpath )
         {
           // TODO Oleg: is null for query good here ??
-            node = new MetadataTreeNode( md, parent, null, md.isResolved(), md.getArtifactScope() );
+            node = new MetadataTreeNode( md, parent, null, md.isResolved() );
+            
             if ( tree == null )
             {
                 tree = node;

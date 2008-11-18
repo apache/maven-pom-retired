@@ -1,5 +1,7 @@
 package org.apache.maven.mercury.metadata.sat;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,6 +15,8 @@ import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.metadata.ClassicDepthComparator;
 import org.apache.maven.mercury.metadata.ClassicVersionComparator;
+import org.apache.maven.mercury.metadata.DependencyBuilder;
+import org.apache.maven.mercury.metadata.DependencyBuilderFactory;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 
 /**
@@ -64,6 +68,57 @@ public class DefaultSatSolverTest
   private int f( int a, int b )
   {
     return -a + b;
+  }
+  //----------------------------------------------------------------------
+  //       d:d:1 - c:c:[2,4)
+  //      / 
+  // a:a:1
+  //      \     
+  //       b:b:2 - c:c:1
+  //----------------------------------------------------------------------
+  public void testReNumeration()
+  throws SatException, IOException
+  {
+    title = "testReNumeration";
+    System.out.println("\n\n==========================\n"+title+"\n");
+    
+    MetadataTreeNode na1 = new MetadataTreeNode( a1, null, null )
+      .addQuery(d1)
+      .addQuery(b2)
+    ;
+    
+    ArtifactBasicMetadata c2q = new ArtifactBasicMetadata("t:c:[2,4)");
+    
+    MetadataTreeNode nd1 = new MetadataTreeNode( d1, na1, d1 )
+      .addQuery( c2q )
+    ;
+    MetadataTreeNode nb2 = new MetadataTreeNode( b2, na1, b2 )
+      .addQuery( c1 )
+    ;
+    
+    MetadataTreeNode nc2 = new MetadataTreeNode( c2, nd1, c2q );
+
+    MetadataTreeNode nc1 = new MetadataTreeNode( c1, nb2, c1 );
+    
+    na1
+      .addChild(nd1)
+      .addChild(nb2)
+    ;
+    
+    nd1
+      .addChild(nc2)
+    ;
+    
+    nb2
+      .addChild(nc1)
+    ;
+    
+    MetadataTreeNode.reNumber( na1, 1 );
+    
+    assertEquals( 1, na1.getId() );
+    
+    assertEquals( 2, nd1.getId() );
+    
   }
   //----------------------------------------------------------------------
   public void testOptimization()
@@ -430,6 +485,68 @@ public class DefaultSatSolverTest
     assertTrue( res.contains( d1 ) );
     assertTrue( res.contains( b2 ) );
     assertTrue( res.contains( c2 ) );
+  }
+  
+  //----------------------------------------------------------------------
+  //       d:d:1 - c:c:[2,4)
+  //      / 
+  // a:a:1
+  //      \     
+  //       b:b:2 - c:c:1
+  //----------------------------------------------------------------------
+  public void testSolveAsTree()
+  throws SatException, IOException
+  {
+    title = "testSolveAsTree";
+    System.out.println("\n\n==========================\n"+title+"\n");
+    
+    MetadataTreeNode na1 = new MetadataTreeNode( a1, null, null )
+      .addQuery(d1)
+      .addQuery(b2)
+    ;
+    
+    ArtifactBasicMetadata c2q = new ArtifactBasicMetadata("t:c:[2,4)");
+    
+    MetadataTreeNode nd1 = new MetadataTreeNode( d1, na1, d1 )
+      .addQuery( c2q )
+    ;
+    MetadataTreeNode nb2 = new MetadataTreeNode( b2, na1, b2 )
+      .addQuery( c1 )
+    ;
+    
+    MetadataTreeNode nc2 = new MetadataTreeNode( c2, nd1, c2q );
+
+    MetadataTreeNode nc1 = new MetadataTreeNode( c1, nb2, c1 );
+    
+    na1
+      .addChild(nd1)
+      .addChild(nb2)
+    ;
+    
+    nd1
+      .addChild(nc2)
+    ;
+    
+    nb2
+      .addChild(nc1)
+    ;
+    
+    List<Comparator<MetadataTreeNode>> cl = new ArrayList<Comparator<MetadataTreeNode>>(2);
+    cl.add( new ClassicDepthComparator() );
+    cl.add( new ClassicVersionComparator() );
+
+    ss = (DefaultSatSolver) DefaultSatSolver.create(na1);
+    
+    ss.applyPolicies( cl );
+
+    MetadataTreeNode res = ss.solveAsTree();
+    
+    assertNotNull( res );
+    
+    MetadataTreeNode.showNode( res, 0 );
+    
+    assertEquals( 4, res.countNodes() );
+    
   }
   //----------------------------------------------------------------------
   //----------------------------------------------------------------------

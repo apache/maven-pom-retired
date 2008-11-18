@@ -12,7 +12,7 @@ class SatVar
   int _literal;
   boolean _optional;
   //---------------------------------------------------------------------
-  public SatVar( MetadataTreeNode n, int literal )
+  public SatVar( MetadataTreeNode n )
   throws SatException
   {
     if( n == null
@@ -30,7 +30,7 @@ class SatVar
       throw new SatException("Cannot create SatVar from a null Metadata: "+md);
 
     this._node = n;
-    this._literal = literal;
+    this._literal = n.getId();
   }
   //---------------------------------------------------------------------
   public ArtifactMetadata getMd()

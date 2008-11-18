@@ -35,7 +35,7 @@ import org.codehaus.plexus.lang.Language;
 class DependencyTreeBuilder
 implements DependencyBuilder
 {
-  Language _lang = new DefaultLanguage(DependencyTreeBuilder.class);
+  private static final Language _lang = new DefaultLanguage(DependencyTreeBuilder.class);
   private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( DependencyTreeBuilder.class ); 
   
   private Collection<MetadataTreeArtifactFilter> _filters;
@@ -106,7 +106,7 @@ implements DependencyBuilder
     
     MetadataTreeNode root = createNode( startMD, null, startMD, treeScope );
     
-//    adjustSoftRanges( root );
+    MetadataTreeNode.reNumber( root, 1 );
     
     return root;
   }
@@ -144,24 +144,6 @@ implements DependencyBuilder
     
   }
   //-----------------------------------------------------
-  private MetadataTreeNode deepCopy( MetadataTreeNode node, ArtifactScopeEnum scope )
-  {
-    MetadataTreeNode res = new MetadataTreeNode( node.getMd()
-                                                , node.getParent()
-                                                , node.getQuery()
-                                                , true
-                                                , scope
-                                                );
-    if( node.hasChildren() )
-      for( MetadataTreeNode kid : node.children )
-      {
-        MetadataTreeNode deepKid = deepCopy( kid, scope );
-        res.addChild( deepKid );
-      }
-    
-    return res;
-  }
-  //-----------------------------------------------------
   private MetadataTreeNode createNode( ArtifactBasicMetadata nodeMD, MetadataTreeNode parent, ArtifactBasicMetadata nodeQuery, ArtifactScopeEnum globalScope )
   throws MetadataTreeException
   {
@@ -169,11 +151,10 @@ implements DependencyBuilder
 
     ArtifactMetadata mr;
     
-// TODO: og - removed this optimization as it may break something
     MetadataTreeNode existingNode = existingNodes.get( nodeQuery.toString() );
     
     if( existingNode != null )
-      return deepCopy( existingNode, globalScope );
+      return MetadataTreeNode.deepCopy( existingNode );
     
     try
     {

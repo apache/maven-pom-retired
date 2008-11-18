@@ -19,6 +19,7 @@ import org.apache.maven.mercury.metadata.MetadataTreeNodeGAComparator;
 import org.apache.maven.mercury.metadata.MetadataTreeNodeGAVComparator;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
+import org.omg.stub.java.rmi._Remote_Stub;
 import org.sat4j.core.Vec;
 import org.sat4j.core.VecInt;
 import org.sat4j.pb.IPBSolver;
@@ -59,11 +60,14 @@ implements SatSolver
     if( tree == null)
       throw new SatException("cannot create a solver for an empty [null] tree");
     
+    if( tree.getId() == 0 )
+      MetadataTreeNode.reNumber( tree, 1 );
+    
     int nNodes = tree.countDistinctNodes();
 _log.debug( "SatContext: # of variables: "+nNodes );
 
     _context = new SatContext( nNodes );
-    _solver.newVar( _context.varCount );
+    _solver.newVar( tree.countNodes() );
     _root = tree;
     
     try
@@ -500,7 +504,7 @@ if( _log.isDebugEnabled() )
     {
       if( _solver.isSatisfiable() )
       {
-        res = new ArrayList<ArtifactMetadata>( _context.varCount );
+        res = new ArrayList<ArtifactMetadata>( _root.countNodes() );
         
         int [] model = _solver.model();
 
@@ -529,6 +533,41 @@ if( _log.isDebugEnabled() )
       throw new SatException( e );
     }
     return res;
+  }
+  //-----------------------------------------------------------------------
+  public final MetadataTreeNode solveAsTree()
+  throws SatException
+  {
+    try
+    {
+      if( _solver.isSatisfiable() )
+      {
+        int [] model = _solver.model();
+
+if( _log.isDebugEnabled() )
+  if( model != null )
+  {
+    StringBuilder sb = new StringBuilder();
+    String comma = "";
+    for( int m : model )
+    {
+      sb.append( comma+m );
+      comma = ", ";
+    }
+    _log.debug( '['+sb.toString()+']' );
+  }
+  else 
+    _log.debug( "model is null" );
+
+        return _context.getSolutionSubtree( _root, model );
+      }
+      return null;
+    }
+    catch (TimeoutException e)
+    {
+      throw new SatException( e );
+    }
+    
   }
   //-----------------------------------------------------------------------
   //-----------------------------------------------------------------------

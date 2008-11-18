@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,7 +141,7 @@ implements IDepResolver
     
     MetadataTreeNode root = depBuilder.buildTree( bmd, ArtifactScopeEnum.runtime );
     
-    showNode( root, 0 );
+    MetadataTreeNode.showNode( root, 0 );
     
     long ll = System.currentTimeMillis();
     System.out.println("BuildTree: " + (ll - start) );
@@ -270,20 +271,6 @@ implements IDepResolver
       }
     }
     return false;
-  }
-  //----------------------------------------------------------------
-  private static final void showNode( MetadataTreeNode n, int level )
-  {
-    for( int i=0; i<level; i++ )
-      System.out.print("  ");
-    
-    System.out.println( level+"."+n.getMd() );
-    
-    if( n.hasChildren() )
-    {
-      for( MetadataTreeNode kid : n.getChildren() )
-        showNode( kid, level+1 );
-    }
   }
   //----------------------------------------------------------------
 	//----------------------------------------------------------------

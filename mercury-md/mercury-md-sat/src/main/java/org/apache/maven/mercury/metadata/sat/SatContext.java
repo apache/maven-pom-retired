@@ -9,6 +9,8 @@ import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.logging.IMercuryLogger;
 import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
+import org.codehaus.plexus.lang.DefaultLanguage;
+import org.codehaus.plexus.lang.Language;
 
  /**
   * This class hold all variables fed to the SAT solver. Because of the
@@ -18,10 +20,10 @@ import org.apache.maven.mercury.metadata.MetadataTreeNode;
   */
 class SatContext
 {
+  private static final Language _lang = new DefaultLanguage(SatContext.class);
   private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( SatContext.class );
 
   Map<MetadataTreeNode,SatVar> variables;
-  int varCount = 0;
   //-----------------------------------------------------------------------
   public SatContext( int estimatedTreeSize )
   {
@@ -42,9 +44,8 @@ class SatContext
         _log.debug( var.toString() );
       return var;
     }
-
     
-    var = new SatVar( n, ++varCount );
+    var = new SatVar( n );
     variables.put( n, var );
     
   if( _log.isDebugEnabled() )
@@ -60,6 +61,65 @@ class SatContext
         return v.getMd();
     
     return null;
+  }
+  //-----------------------------------------------------------------------
+  private static final boolean isSolution( int m, int [] model )
+  {
+    for( int mm : model )
+      if( mm == m )
+        return true;
+    
+    return false;
+  }
+  //-----------------------------------------------------------------------
+  public MetadataTreeNode getSolutionSubtree( MetadataTreeNode tree, int [] model )
+  {
+    if( tree == null )
+      throw new IllegalArgumentException( _lang.getMessage( "null.tree" ) );
+    
+    if( tree.getMd() == null )
+      throw new IllegalArgumentException( _lang.getMessage( "null.tree.md" ) );
+    
+    if( model == null )
+      throw new IllegalArgumentException( _lang.getMessage( "null.model" ) );
+    
+    if( model.length < 1 )
+      throw new IllegalArgumentException( _lang.getMessage( "empty.model" ) );
+    
+    int sz = 0;
+    
+    for( int m : model )
+      if( m > 0 )
+        ++sz;
+      
+    if( sz == 0)
+      return null;
+    
+    MetadataTreeNode res = MetadataTreeNode.deepCopy( tree );
+    
+    cleanTree( res, model );
+    
+    return res;
+  }
+  //-----------------------------------------------------------------------
+  private static final void cleanTree( MetadataTreeNode tn, int [] model )
+  {
+    if( ! tn.hasChildren() )
+      return;
+    
+    List<MetadataTreeNode> badKids = new ArrayList<MetadataTreeNode>();
+    
+    for( MetadataTreeNode kid : tn.getChildren() )
+      if( ! isSolution( kid.getId(), model ) )
+        badKids.add( kid );
+      
+    tn.getChildren().removeAll( badKids );
+      
+    if( ! tn.hasChildren() )
+      return;
+      
+    for( MetadataTreeNode kid : tn.getChildren() )
+      cleanTree( kid, model );
   }
   //-----------------------------------------------------------------------
 //  @Override

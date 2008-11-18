@@ -1,5 +1,9 @@
 package org.apache.maven.mercury.metadata;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
@@ -39,6 +43,11 @@ public class MetadataTreeNode
    * parent node
    */
   MetadataTreeNode parent;
+  
+  /**
+   * node unique id, used to identify this node in external tree manipulations, such as  
+   */
+  int id;
   
   /**
    * query node - the one that originated this actual node
@@ -108,16 +117,15 @@ if( _log.isDebugEnabled() )
   /**
    * pointers to parent and query are a must. 
    */
-  public MetadataTreeNode(   ArtifactMetadata md,
-                             MetadataTreeNode parent,
-                             ArtifactBasicMetadata query,
-                             boolean resolved,
-                             ArtifactScopeEnum scope
+  public MetadataTreeNode( ArtifactMetadata md
+                           , MetadataTreeNode parent
+                           , ArtifactBasicMetadata query
+                           , boolean resolved
                          )
   {
         if ( md != null )
         {
-            md.setArtifactScope( ArtifactScopeEnum.checkScope(scope) );
+            md.setArtifactScope( ArtifactScopeEnum.checkScope(md.getArtifactScope()) );
             md.setResolved(resolved);
         }
 
@@ -128,7 +136,7 @@ if( _log.isDebugEnabled() )
   //------------------------------------------------------------------------
   public MetadataTreeNode( ArtifactMetadata md, MetadataTreeNode parent, ArtifactBasicMetadata query )
   {
-    this( md, parent, query, true, ArtifactScopeEnum.compile );
+    this( md, parent, query, true );
   }
   //------------------------------------------------------------------------
   /**
@@ -249,6 +257,91 @@ if( _log.isDebugEnabled() )
       return queries;
     }
     //------------------------------------------------------------------------
+    public static final MetadataTreeNode deepCopy( MetadataTreeNode node )
+    {
+      MetadataTreeNode res = new MetadataTreeNode( node.getMd()
+                                                  , node.getParent()
+                                                  , node.getQuery()
+                                                  , true
+                                                  );
+      res.setId( node.getId() );
+      
+      if( node.hasChildren() )
+        for( MetadataTreeNode kid : node.children )
+        {
+          MetadataTreeNode deepKid = deepCopy( kid );
+          res.addChild( deepKid );
+        }
+      
+      return res;
+    }
+    //----------------------------------------------------------------
+    /**
+     * helper method to print the tree into a Writer
+     */
+    public static final void showNode( MetadataTreeNode n, int level, Writer wr )
+    throws IOException
+    {
+      for( int i=0; i<level; i++ )
+        wr.write("  ");
+      
+      wr.write( level+"."+n.getMd()+"\n" );
+      
+      if( n.hasChildren() )
+      {
+        for( MetadataTreeNode kid : n.getChildren() )
+          showNode( kid, level+1, wr );
+      }
+    }
+    //----------------------------------------------------------------
+    /**
+     * helper method to print the tree into sysout
+     */
+    public static final void showNode( MetadataTreeNode n, int level )
+    throws IOException
+    {
+      StringWriter sw = new StringWriter();
+      MetadataTreeNode.showNode( n, 0, sw );
+      System.out.println( sw.toString() );
+    }
     //------------------------------------------------------------------------
+    public int getId()
+    {
+      return id;
+    }
+    public void setId( int id )
+    {
+      this.id = id;
+    }
+    //------------------------------------------------------------------------
+    public static void reNumber( MetadataTreeNode node, int startNum )
+    {
+      reNum( node, new Counter(startNum) );
+    }
+    //------------------------------------------------------------------------
+    private static void reNum( MetadataTreeNode node, Counter num )
+    {
+      node.setId( num.next() );
 
+      if( node.hasChildren() )
+        for( MetadataTreeNode kid : node.getChildren() )
+          reNum( kid, num );
+    }
+    //------------------------------------------------------------------------
+    //------------------------------------------------------------------------
+}
+//------------------------------------------------------------------------
+class Counter
+{
+  int n;
+  
+  public Counter( int n )
+  {
+    this.n = n;
+  }
+  
+  int next()
+  {
+    return n++;
+  }
 }
