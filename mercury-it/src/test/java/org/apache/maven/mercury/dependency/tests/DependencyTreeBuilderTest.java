@@ -27,6 +27,9 @@ import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
 import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;
 import org.apache.maven.mercury.transport.api.Server;
+import org.apache.maven.mercury.util.event.EventManager;
+import org.apache.maven.mercury.util.event.MercuryEvent;
+import org.apache.maven.mercury.util.event.MercuryEventListener;
 
 
 /**
@@ -36,6 +39,7 @@ import org.apache.maven.mercury.transport.api.Server;
  */
 public class DependencyTreeBuilderTest
 extends TestCase
+implements MercuryEventListener
 {
   private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( DependencyTreeBuilderTest.class ); 
   
@@ -81,6 +85,7 @@ extends TestCase
 //    reps.add(centralRepo);
 
     depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, reps, null, null, null );
+    depBuilder.register( this );
     
     vReader = new VirtualRepositoryReader( reps );
   }
@@ -139,7 +144,7 @@ extends TestCase
     System.out.println("---------------------------------");    
     for( ArtifactMetadata amd : res )
     {
-      System.out.println(amd + ( amd.getTracker() == null ? " [no tracker]" : " ["+((RepositoryReader)amd.getTracker()).getRepository().getServer().toString()+"]" ) );
+      System.out.println(amd + ( amd.getTracker() == null ? " [no tracker]" : " ["+((RepositoryReader)amd.getTracker()).getRepository().getId()+"]" ) );
     }
     System.out.println("---------------------------------");    
 
@@ -249,6 +254,11 @@ extends TestCase
         System.out.println( a.toString()+" -> "+a.getFile() );
     }
   }
- //----------------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------------
+  public void fire( MercuryEvent event )
+  {
+    System.out.println( "event: "+ EventManager.toString( event ) );
+  }
+  //----------------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------------
 }

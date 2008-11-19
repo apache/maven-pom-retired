@@ -31,10 +31,4 @@ public interface EventGenerator
    */
   void setEventManager( EventManager eventManager );
   
-  /**
-   * send this event to all listeners
-   * 
-   * @param event
-   */
-  void fireEvent( MercuryEvent event );
 }

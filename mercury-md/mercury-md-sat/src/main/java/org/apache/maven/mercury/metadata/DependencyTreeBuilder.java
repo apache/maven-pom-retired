@@ -99,6 +99,7 @@ implements DependencyBuilder
     
     try
     {
+      _reader.setEventManager( _eventManager );
       _reader.setProcessors( _processors );
       _reader.init();
     }

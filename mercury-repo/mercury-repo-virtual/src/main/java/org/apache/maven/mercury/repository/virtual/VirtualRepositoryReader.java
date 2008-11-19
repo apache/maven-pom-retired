@@ -31,6 +31,10 @@ import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
 import org.apache.maven.mercury.repository.cache.fs.MetadataCacheFs;
 import org.apache.maven.mercury.util.Util;
+import org.apache.maven.mercury.util.event.EventGenerator;
+import org.apache.maven.mercury.util.event.EventManager;
+import org.apache.maven.mercury.util.event.GenericEvent;
+import org.apache.maven.mercury.util.event.MercuryEventListener;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
@@ -43,8 +47,19 @@ import org.codehaus.plexus.lang.Language;
  *
  */
 public class VirtualRepositoryReader
-implements MetadataReader
+implements MetadataReader, EventGenerator
 {
+  public static final String EVENT_READ_ARTIFACTS = "vr.read.artifacts";
+  public static final String EVENT_READ_ARTIFACTS_FROM_REPO = "vr.read.artifacts.from.repo";
+  public static final String EVENT_READ_ARTIFACTS_FROM_REPO_QUALIFIED = "vr.read.artifacts.from.repo.qualified";
+  public static final String EVENT_READ_ARTIFACTS_FROM_REPO_UNQUALIFIED = "vr.read.artifacts.from.repo.unqualified";
+  
+  public static final String EVENT_READ_VERSIONS = "vr.read.versions";
+  public static final String EVENT_READ_VERSIONS_FROM_REPO = "vr.read.versions.from.repo";
+  
+  public static final String EVENT_READ_RAW = "vr.read.raw";
+  public static final String EVENT_READ_RAW_FROM_REPO = "vr.read.raw.from.repo";
+  
   /** file system cache subfolder */
   public static final String METADATA_CACHE_DIR = ".cache";
   
@@ -68,6 +83,8 @@ implements MetadataReader
   private Map<String,ArtifactListProcessor>   _processors;
   
   private boolean _initialized = false;
+  
+  private EventManager _eventManager;
   //----------------------------------------------------------------------------------------------------------------------------
   public VirtualRepositoryReader( Collection<Repository> repositories )
   throws RepositoryException
@@ -334,90 +351,138 @@ implements MetadataReader
   public ArtifactResults readArtifacts( Collection<? extends ArtifactBasicMetadata> query )
   throws RepositoryException
   {
-    ArtifactResults res = null;
+    GenericEvent event = null;
     
-    if( Util.isEmpty( query ) )
-      return res;
-    
-    Map< RepositoryReader, List<ArtifactBasicMetadata> > buckets = sortByRepo( query );
-    
-    List<ArtifactBasicMetadata> rejects = buckets == null ? null : buckets.get( RepositoryReader.NULL_READER );
-
-    if( buckets == null )
-      throw new RepositoryException( _lang.getMessage( "internal.error.sorting.query", query.toString() ) ); 
-      
-    init();
-    
-    // first read repository-qualified Artifacts
-    for( RepositoryReader rr : buckets.keySet() )
+    try
     {
-      if( RepositoryReader.NULL_READER.equals( rr ) )
-        continue;
-      
-      String repoId = rr.getRepository().getId();
-      
-      List<ArtifactBasicMetadata> rrQuery = buckets.get( rr );
-      
-      ArtifactResults rrRes = rr.readArtifacts( rrQuery );
-      
-      if( rrRes.hasExceptions() )
-        throw new RepositoryException( _lang.getMessage( "error.reading.existing.artifact", rrRes.getExceptions().toString(), rr.getRepository().getId() ) );
-      
-      if( rrRes.hasResults() )
-        for( ArtifactBasicMetadata bm : rrRes.getResults().keySet() )
-        {
-          List<Artifact> al = rrRes.getResults( bm ); 
-          
-          if( res == null )
-            res = new ArtifactResults();
+      ArtifactResults res = null;
 
-          res.addAll( bm, al );
-          
-          // don't write local artifacts back to the same repo
-          if( _localRepository != null && repoId.equals( _localRepository.getId() ) )
-            continue;
-
-          if( _localRepositoryWriter != null )
-            _localRepositoryWriter.writeArtifacts( al );
-        }
-    }
-    
-    // then search all repos for unqualified Artifacts
-    if( !Util.isEmpty( rejects ) )
-    {
-      for( RepositoryReader rr : _repositoryReaders )
+      if( _eventManager != null )
+        event = new GenericEvent( EVENT_READ_ARTIFACTS, "" );
+      
+      if( Util.isEmpty( query ) )
+        return res;
+      
+      Map< RepositoryReader, List<ArtifactBasicMetadata> > buckets = sortByRepo( query );
+      
+      List<ArtifactBasicMetadata> rejects = buckets == null ? null : buckets.get( RepositoryReader.NULL_READER );
+  
+      if( buckets == null )
+        throw new RepositoryException( _lang.getMessage( "internal.error.sorting.query", query.toString() ) ); 
+        
+      init();
+      
+      // first read repository-qualified Artifacts
+      for( RepositoryReader rr : buckets.keySet() )
       {
-        if( rejects.isEmpty() )
-          break;
+        if( RepositoryReader.NULL_READER.equals( rr ) )
+          continue;
         
         String repoId = rr.getRepository().getId();
         
-        ArtifactResults rrRes = rr.readArtifacts( rejects );
+        GenericEvent eventRead = null;
         
-        if( rrRes.hasResults() )
-          for( ArtifactBasicMetadata bm : rrRes.getResults().keySet() )
+        try
+        {
+          if( _eventManager != null )
+            eventRead = new GenericEvent( EVENT_READ_ARTIFACTS_FROM_REPO_QUALIFIED, repoId );
+          
+          List<ArtifactBasicMetadata> rrQuery = buckets.get( rr );
+          
+          ArtifactResults rrRes = rr.readArtifacts( rrQuery );
+          
+          if( rrRes.hasExceptions() )
+            throw new RepositoryException( _lang.getMessage( "error.reading.existing.artifact", rrRes.getExceptions().toString(), rr.getRepository().getId() ) );
+          
+          if( rrRes.hasResults() )
+            for( ArtifactBasicMetadata bm : rrRes.getResults().keySet() )
+            {
+              List<Artifact> al = rrRes.getResults( bm ); 
+              
+              if( res == null )
+                res = new ArtifactResults();
+    
+              res.addAll( bm, al );
+              
+              // don't write local artifacts back to the same repo
+              if( _localRepository != null && repoId.equals( _localRepository.getId() ) )
+                continue;
+    
+              if( _localRepositoryWriter != null )
+                _localRepositoryWriter.writeArtifacts( al );
+            }
+        }
+        finally
+        {
+          if( _eventManager != null )
           {
-            List<Artifact> al = rrRes.getResults( bm ); 
-
-            if( res == null )
-              res = new ArtifactResults();
-            
-            res.addAll( bm, al );
-            
-            rejects.remove( bm );
-            
-            // don't write local artifacts back to the same repo
-            if( _localRepository != null && repoId.equals( _localRepository.getId() ) )
-              continue;
-
-            if( _localRepositoryWriter != null )
-              _localRepositoryWriter.writeArtifacts( al );
-
+            eventRead.stop();
+            _eventManager.fireEvent( eventRead );
           }
+        }
+      }
+      
+      // then search all repos for unqualified Artifacts
+      if( !Util.isEmpty( rejects ) )
+      {
+        for( RepositoryReader rr : _repositoryReaders )
+        {
+          if( rejects.isEmpty() )
+            break;
+          
+          String repoId = rr.getRepository().getId();
+          
+          GenericEvent eventRead = null;
+          
+          try
+          {
+            if( _eventManager != null )
+              eventRead = new GenericEvent( EVENT_READ_ARTIFACTS_FROM_REPO_UNQUALIFIED, repoId );
+            
+            ArtifactResults rrRes = rr.readArtifacts( rejects );
+            
+            if( rrRes.hasResults() )
+              for( ArtifactBasicMetadata bm : rrRes.getResults().keySet() )
+              {
+                List<Artifact> al = rrRes.getResults( bm ); 
+    
+                if( res == null )
+                  res = new ArtifactResults();
+                
+                res.addAll( bm, al );
+                
+                rejects.remove( bm );
+                
+                // don't write local artifacts back to the same repo
+                if( _localRepository != null && repoId.equals( _localRepository.getId() ) )
+                  continue;
+    
+                if( _localRepositoryWriter != null )
+                  _localRepositoryWriter.writeArtifacts( al );
+  
+            }
+          }
+          finally
+          {
+            if( _eventManager != null )
+            {
+              eventRead.stop();
+              _eventManager.fireEvent( eventRead );
+            }
+          }
+        }
+      }
+      
+      return res;
+    }
+    finally
+    {
+      if( _eventManager != null )
+      {
+        event.stop();
+        _eventManager.fireEvent( event );
       }
     }
-    
-    return res;
   }
   //----------------------------------------------------------------------------------------------------------------------------
   // MetadataReader implementation
@@ -437,85 +502,135 @@ implements MetadataReader
   throws MetadataReaderException
   {
     
+    GenericEvent event = null;
+    
     if( _log.isDebugEnabled() )
       _log.debug( "request for "+bmd+", classifier="+classifier+", type="+type );
     
     if( bmd == null )
       throw new IllegalArgumentException("null bmd supplied");
     
-    ArtifactBasicMetadata bmdQuery = bmd;
-    
     try
     {
-      init();
-    }
-    catch( RepositoryException e )
-    {
-      throw new MetadataReaderException(e);
-    }
-    
-    byte [] res = null;
-    Quality vq = new Quality( bmd.getVersion() );
-    
-    if( _log.isDebugEnabled() )
-      _log.debug( "quality calculated as "+vq.getQuality() == null ? "null" :vq.getQuality().name() );
-    
-    if( Quality.SNAPSHOT_QUALITY.equals( vq ) )
-    {
-      List<ArtifactBasicMetadata> query = new ArrayList<ArtifactBasicMetadata>(1);
-      query.add( bmd );
+      event = new GenericEvent( EVENT_READ_RAW, "" );
+      
+      ArtifactBasicMetadata bmdQuery = bmd;
       
       try
       {
-        ArtifactBasicResults vRes = readVersions( query );
-        if( Util.isEmpty( vRes ) )
-        {
-          if( _log.isDebugEnabled() )
-            _log.debug( "no snapshots found - throw exception" );
-          
-          throw new MetadataReaderException( _lang.getMessage( "no.snapshots", bmd.toString(), classifier, type ) );
-        }
-          
-          
-        if( vRes.hasResults( bmd ) )
-        {
-          List<ArtifactBasicMetadata> versions = vRes.getResult( bmd );
-          
-          TreeSet<ArtifactBasicMetadata> snapshots = new TreeSet<ArtifactBasicMetadata>( new MetadataVersionComparator() );
-          snapshots.addAll( versions );
-          
-          bmdQuery = snapshots.last();
-        }
-        else
-        {
-          if( _log.isDebugEnabled() )
-            _log.debug( "no snapshots found - throw exception" );
-          
-          throw new MetadataReaderException( _lang.getMessage( "no.snapshots", bmd.toString(), classifier, type ) );
-        }
+        init();
       }
-      catch( Exception e )
+      catch( RepositoryException e )
       {
         throw new MetadataReaderException(e);
       }
-    }
-    
-    for( RepositoryReader rr : _repositoryReaders )
-    {
-      res = rr.readRawData( bmdQuery, classifier, type );
-      if( res != null )
+      
+      byte [] res = null;
+      Quality vq = new Quality( bmd.getVersion() );
+      
+      if( _log.isDebugEnabled() )
+        _log.debug( "quality calculated as "+vq.getQuality() == null ? "null" :vq.getQuality().name() );
+      
+      if( Quality.SNAPSHOT_QUALITY.equals( vq ) )
       {
-        if( _log.isDebugEnabled() )
-          _log.debug( bmdQuery+" found in "+rr.getRepository().getServer() );
+        List<ArtifactBasicMetadata> query = new ArrayList<ArtifactBasicMetadata>(1);
+        query.add( bmd );
         
-        return res;
+        try
+        {
+          ArtifactBasicResults vRes = readVersions( query );
+          if( Util.isEmpty( vRes ) )
+          {
+            if( _log.isDebugEnabled() )
+              _log.debug( "no snapshots found - throw exception" );
+            
+            throw new MetadataReaderException( _lang.getMessage( "no.snapshots", bmd.toString(), classifier, type ) );
+          }
+            
+            
+          if( vRes.hasResults( bmd ) )
+          {
+            List<ArtifactBasicMetadata> versions = vRes.getResult( bmd );
+            
+            TreeSet<ArtifactBasicMetadata> snapshots = new TreeSet<ArtifactBasicMetadata>( new MetadataVersionComparator() );
+            snapshots.addAll( versions );
+            
+            bmdQuery = snapshots.last();
+          }
+          else
+          {
+            if( _log.isDebugEnabled() )
+              _log.debug( "no snapshots found - throw exception" );
+            
+            throw new MetadataReaderException( _lang.getMessage( "no.snapshots", bmd.toString(), classifier, type ) );
+          }
+        }
+        catch( Exception e )
+        {
+          throw new MetadataReaderException(e);
+        }
+      }
+      
+      for( RepositoryReader rr : _repositoryReaders )
+      {
+        GenericEvent eventRead = null;
+        
+        try
+        {
+          if( _eventManager != null )
+            eventRead = new GenericEvent( EVENT_READ_RAW_FROM_REPO, rr.getRepository().getId() );
+          
+          res = rr.readRawData( bmdQuery, classifier, type );
+          if( res != null )
+          {
+            if( _log.isDebugEnabled() )
+              _log.debug( bmdQuery+" found in "+rr.getRepository().getServer() );
+            
+            return res;
+          }
+        }
+        finally
+        {
+          if( _eventManager != null )
+          {
+            eventRead.stop();
+            _eventManager.fireEvent( eventRead );
+          }
+        }
+      }
+      
+      if( _log.isDebugEnabled() )
+        _log.debug( "no data found, returning null" );
+      
+      return null;
+    }
+    finally
+    {
+      if( _eventManager != null )
+      {
+        event.stop();
+        _eventManager.fireEvent( event );
       }
     }
-    
-    if( _log.isDebugEnabled() )
-      _log.debug( "no data found, returning null" );
-    
-    return null;
+  }
+  //----------------------------------------------------------------------------------------------------------------------------
+  public void register( MercuryEventListener listener )
+  {
+    if( _eventManager == null )
+      _eventManager = new EventManager();
+
+    _eventManager.register( listener );
+  }
+
+  public void setEventManager( EventManager eventManager )
+  {
+    _eventManager = eventManager;
+  }
+
+  public void unRegister( MercuryEventListener listener )
+  {
+    if( _eventManager != null )
+      _eventManager.unRegister( listener );
   }
   //----------------------------------------------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------------------------------------------

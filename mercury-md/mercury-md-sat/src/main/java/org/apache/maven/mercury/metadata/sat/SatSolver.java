@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
+import org.apache.maven.mercury.util.event.EventGenerator;
 
 /**
  * @author <a href="oleg@codehaus.org">Oleg Gusakov</a>
  */
 public interface SatSolver
+extends EventGenerator
 {
   public static final int DEFAULT_TREE_SIZE = 128; //nodes
   

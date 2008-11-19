@@ -11,16 +11,16 @@ import java.util.Map;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
-import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.logging.IMercuryLogger;
 import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 import org.apache.maven.mercury.metadata.MetadataTreeNodeGAComparator;
 import org.apache.maven.mercury.metadata.MetadataTreeNodeGAVComparator;
 import org.apache.maven.mercury.util.event.EventManager;
+import org.apache.maven.mercury.util.event.GenericEvent;
+import org.apache.maven.mercury.util.event.MercuryEventListener;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
-import org.omg.stub.java.rmi._Remote_Stub;
 import org.sat4j.core.Vec;
 import org.sat4j.core.VecInt;
 import org.sat4j.pb.IPBSolver;
@@ -68,28 +68,43 @@ implements SatSolver
   throws SatException
   {
     this._eventManager = eventManager;
+    GenericEvent event = null;
     
     if( tree == null)
       throw new SatException("cannot create a solver for an empty [null] tree");
     
-    if( tree.getId() == 0 )
-      MetadataTreeNode.reNumber( tree, 1 );
-    
-    int nNodes = tree.countDistinctNodes();
-
-_log.debug( "SatContext: # of variables: "+nNodes );
-
-    _context = new SatContext( nNodes );
-    _solver.newVar( tree.countNodes() );
-    _root = tree;
-    
     try
     {
-      addNode( tree );
+      if( _eventManager != null )
+        event = new GenericEvent( "create.sat.solver", tree.toString() );
+        
+      if( tree.getId() == 0 )
+        MetadataTreeNode.reNumber( tree, 1 );
+      
+      int nNodes = tree.countDistinctNodes();
+  
+  _log.debug( "SatContext: # of variables: "+nNodes );
+  
+      _context = new SatContext( nNodes );
+      _solver.newVar( tree.countNodes() );
+      _root = tree;
+      
+      try
+      {
+        addNode( tree );
+      }
+      catch (ContradictionException e)
+      {
+        throw new SatException(e);
+      }
     }
-    catch (ContradictionException e)
+    finally
     {
-      throw new SatException(e);
+      if( _eventManager != null )
+      {
+        event.stop();
+        _eventManager.fireEvent( event );
+      }
     }
   }
   //-----------------------------------------------------------------------
@@ -145,10 +160,10 @@ if( _log.isDebugEnabled() )
       for( int i=0; i<bucketSize; i++ )
       {
         MetadataTreeNode n  = bucket.get(i);
+
 if( _log.isDebugEnabled() )
   _log.debug( n.toString() );
 
-        ArtifactMetadata md = n.getMd();
         SatVar var = _context.findOrAdd(n);
         int varLiteral = var.getLiteral(); 
         
@@ -165,7 +180,6 @@ if( _log.isDebugEnabled() )
           if( _log.isDebugEnabled() )
             _log.debug( "    "+cf+" x"+var.getLiteral() );
         }
-        
 
       }
 
@@ -518,9 +532,13 @@ if( _log.isDebugEnabled() )
   throws SatException
   {
     List<ArtifactMetadata> res = null;
+    GenericEvent event = null;
     
     try
     {
+      if( _eventManager != null )
+        event = new GenericEvent( "solve", _root.toString() );
+      
       if( _solver.isSatisfiable() )
       {
         res = new ArrayList<ArtifactMetadata>( _root.countNodes() );
@@ -550,6 +568,14 @@ if( _log.isDebugEnabled() )
     catch (TimeoutException e)
     {
       throw new SatException( e );
+    }
+    finally
+    {
+      if( _eventManager != null )
+      {
+        event.stop();
+        _eventManager.fireEvent( event );
+      }
     }
     return res;
   }
@@ -589,5 +615,23 @@ if( _log.isDebugEnabled() )
     
   }
   //-----------------------------------------------------------------------
+  public void register( MercuryEventListener listener )
+  {
+    if( _eventManager == null )
+      _eventManager = new EventManager();
+
+    _eventManager.register( listener );
+  }
+
+  public void setEventManager( EventManager eventManager )
+  {
+    _eventManager = eventManager;
+  }
+
+  public void unRegister( MercuryEventListener listener )
+  {
+    if( _eventManager != null )
+      _eventManager.unRegister( listener );
+  }
   //-----------------------------------------------------------------------
 }

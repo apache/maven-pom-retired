@@ -88,7 +88,4 @@ public interface MercuryEvent
    * @param value
    */
   void setPayload( String name, Object value );
-  
-  
-  
 }

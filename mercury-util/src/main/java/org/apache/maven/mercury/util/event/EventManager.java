@@ -1,6 +1,7 @@
 package org.apache.maven.mercury.util.event;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +29,11 @@ public class EventManager
   {
     for( MercuryEventListener listener : listeners )
       listener.fire( event );
+  }
+  
+  public static final String toString( MercuryEvent event )
+  {
+    return new Date( event.getStart() )+", dur: "+ event.getDuration()+" millis : ["+ event.getType()+"] "+event.getTag();
   }
 
 }
