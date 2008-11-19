@@ -327,6 +327,29 @@ if( _log.isDebugEnabled() )
     
   }
   //-----------------------------------------------------
+  public MetadataTreeNode resolveConflictsAsTree( MetadataTreeNode root )
+  throws MetadataTreeException
+  {
+    if( root == null )
+      throw new MetadataTreeException(_lang.getMessage( "empty.tree" ));
+    
+    try
+    {
+      DefaultSatSolver solver = new DefaultSatSolver( root );
+      
+      solver.applyPolicies( getComparators() );
+
+      MetadataTreeNode res = solver.solveAsTree();
+      
+      return res;
+    }
+    catch (SatException e)
+    {
+      throw new MetadataTreeException(e);
+    }
+    
+  }
+  //-----------------------------------------------------
   private List<Comparator<MetadataTreeNode>> getComparators()
   {
     if( Util.isEmpty( _comparators ) )
