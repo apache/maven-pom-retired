@@ -11,12 +11,36 @@ import java.util.Map;
  *
  */
 public abstract class AbstractMercuryEvent
-    implements MercuryEvent
+implements MercuryEvent
 {
+  String type;
+  
   String tag;
+  
+  String error;
+  
   long start;
+  
   long duration;
+  
   Map<String, Object> payload;
+  
+  public AbstractMercuryEvent()
+  {
+    start();
+  }
+  
+  public AbstractMercuryEvent( String type )
+  {
+    this();
+    this.type = type;
+  }
+  
+  public AbstractMercuryEvent( String type, String tag )
+  {
+    this( type );
+    this.tag = tag;
+  }
 
   public long getDuration()
   {
@@ -33,9 +57,29 @@ public abstract class AbstractMercuryEvent
     return start;
   }
 
+  public String getType()
+  {
+    return type;
+  }
+
   public String getTag()
   {
     return tag;
+  }
+
+  public String getError()
+  {
+    return error;
+  }
+
+  public void setError( String error )
+  {
+    this.error = error;
+  }
+
+  public boolean hasError()
+  {
+    return error != null;
   }
 
   public Object getPayload( String name )

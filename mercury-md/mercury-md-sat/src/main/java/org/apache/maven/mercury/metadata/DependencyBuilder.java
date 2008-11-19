@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
+import org.apache.maven.mercury.util.event.MercuryEventListener;
 
 /**
  *
@@ -15,6 +16,8 @@ import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
  */
 public interface DependencyBuilder
 {
+  public static final String TREE_BUILD_EVENT = "tree.build";
+  public static final String TREE_NODE_BUILD_EVENT = "tree.node.build";
   //------------------------------------------------------------------------
   /**
    * build the tree, using the repositories specified in the
@@ -48,6 +51,20 @@ public interface DependencyBuilder
    */
   public abstract MetadataTreeNode resolveConflictsAsTree( MetadataTreeNode root )
   throws MetadataTreeException;
+  
+  /**
+   * register a listener for dependency events 
+   * 
+   * @param listener
+   */
+  public abstract void register( MercuryEventListener listener );
+  
+  /**
+   * remove a listener 
+   * 
+   * @param listener
+   */
+  public abstract void unRegister( MercuryEventListener listener );
   //-----------------------------------------------------
   //-----------------------------------------------------
 

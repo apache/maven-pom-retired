@@ -17,6 +17,7 @@ import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 import org.apache.maven.mercury.metadata.MetadataTreeNodeGAComparator;
 import org.apache.maven.mercury.metadata.MetadataTreeNodeGAVComparator;
+import org.apache.maven.mercury.util.event.EventManager;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 import org.omg.stub.java.rmi._Remote_Stub;
@@ -46,6 +47,9 @@ implements SatSolver
   protected SatContext _context;
   protected IPBSolver _solver = SolverFactory.newEclipseP2();
   protected MetadataTreeNode _root;
+  
+  protected EventManager _eventManager;
+  
   protected static final Comparator<MetadataTreeNode> gaComparator = new MetadataTreeNodeGAComparator();
   //-----------------------------------------------------------------------
   public static SatSolver create( MetadataTreeNode tree )
@@ -54,9 +58,17 @@ implements SatSolver
     return new DefaultSatSolver( tree );
   }
   //-----------------------------------------------------------------------
-  public DefaultSatSolver( MetadataTreeNode tree )
+  public static SatSolver create( MetadataTreeNode tree, EventManager eventManager )
   throws SatException
   {
+    return new DefaultSatSolver( tree, eventManager );
+  }
+  //-----------------------------------------------------------------------
+  public DefaultSatSolver( MetadataTreeNode tree, EventManager eventManager )
+  throws SatException
+  {
+    this._eventManager = eventManager;
+    
     if( tree == null)
       throw new SatException("cannot create a solver for an empty [null] tree");
     
@@ -64,6 +76,7 @@ implements SatSolver
       MetadataTreeNode.reNumber( tree, 1 );
     
     int nNodes = tree.countDistinctNodes();
+
 _log.debug( "SatContext: # of variables: "+nNodes );
 
     _context = new SatContext( nNodes );
@@ -78,6 +91,12 @@ _log.debug( "SatContext: # of variables: "+nNodes );
     {
       throw new SatException(e);
     }
+  }
+  //-----------------------------------------------------------------------
+  public DefaultSatSolver( MetadataTreeNode tree )
+  throws SatException
+  {
+    this( tree, null );
   }
   //-----------------------------------------------------------------------
   public final void applyPolicies( List<Comparator<MetadataTreeNode>> comparators )

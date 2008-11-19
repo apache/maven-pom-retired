@@ -12,7 +12,14 @@ import java.util.Map;
 public interface MercuryEvent
 {
   /**
-   * aggregate tag of this event. Used to trace event propagation in the system 
+   * event type 
+   * 
+   * @return
+   */
+  String getType();
+
+  /**
+   * aggregation tag of this event. Used to trace event propagation in the system 
    * 
    * @return
    */
@@ -34,6 +41,18 @@ public interface MercuryEvent
    * stop the event and calculate the duration
    */
   void stop();
+  
+
+  /**
+   * error field
+   * 
+   * @return
+   */
+  public String getError();
+
+  public void setError( String error );
+
+  public boolean hasError();
   
   /**
    * duration of this event in millis
@@ -69,5 +88,7 @@ public interface MercuryEvent
    * @param value
    */
   void setPayload( String name, Object value );
+  
+  
   
 }

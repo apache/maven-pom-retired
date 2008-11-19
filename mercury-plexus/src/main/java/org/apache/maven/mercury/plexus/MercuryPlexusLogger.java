@@ -1,7 +1,6 @@
 package org.apache.maven.mercury.plexus;
 
 import org.apache.maven.mercury.logging.IMercuryLogger;
-import org.codehaus.plexus.logging.AbstractLogger;
 import org.codehaus.plexus.logging.Logger;
 
 /**

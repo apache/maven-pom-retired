@@ -1,8 +1,8 @@
 package org.apache.maven.mercury.logging.console;
 
 import org.apache.maven.mercury.logging.AbstractMercuryLogger;
-import org.apache.maven.mercury.logging.MercuryLoggingLevelEnum;
 import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggingLevelEnum;
 
 /**
  *

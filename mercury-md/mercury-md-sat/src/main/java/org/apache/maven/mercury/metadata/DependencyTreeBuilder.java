@@ -23,6 +23,9 @@ import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;
 import org.apache.maven.mercury.util.Util;
+import org.apache.maven.mercury.util.event.EventManager;
+import org.apache.maven.mercury.util.event.GenericEvent;
+import org.apache.maven.mercury.util.event.MercuryEventListener;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
@@ -44,7 +47,9 @@ implements DependencyBuilder
   
   private VirtualRepositoryReader _reader;
   
-  Map< String, MetadataTreeNode > existingNodes;
+  private Map< String, MetadataTreeNode > _existingNodes;
+  
+  private EventManager _eventManager; // = new EventManager();
   
   /**
    * creates an instance of MetadataTree. Use this instance to 
@@ -102,9 +107,16 @@ implements DependencyBuilder
       throw new MetadataTreeException(e);
     }
     
-    existingNodes = new HashMap<String, MetadataTreeNode>(256);
+    _existingNodes = new HashMap<String, MetadataTreeNode>(256);
+    
+    GenericEvent treeBuildEvent = new GenericEvent( TREE_BUILD_EVENT, startMD.getGAV() );
     
     MetadataTreeNode root = createNode( startMD, null, startMD, treeScope );
+    
+    treeBuildEvent.stop();
+    
+    if( _eventManager != null )
+      _eventManager.fireEvent( treeBuildEvent );
     
     MetadataTreeNode.reNumber( root, 1 );
     
@@ -147,17 +159,22 @@ implements DependencyBuilder
   private MetadataTreeNode createNode( ArtifactBasicMetadata nodeMD, MetadataTreeNode parent, ArtifactBasicMetadata nodeQuery, ArtifactScopeEnum globalScope )
   throws MetadataTreeException
   {
-    checkForCircularDependency( nodeMD, parent );
-
-    ArtifactMetadata mr;
+    GenericEvent nodeBuildEvent = null;
     
-    MetadataTreeNode existingNode = existingNodes.get( nodeQuery.toString() );
-    
-    if( existingNode != null )
-      return MetadataTreeNode.deepCopy( existingNode );
+    if( _eventManager != null )
+      nodeBuildEvent = new GenericEvent( TREE_NODE_BUILD_EVENT, nodeMD.getGAV() );
     
     try
     {
+      checkForCircularDependency( nodeMD, parent );
+  
+      ArtifactMetadata mr;
+      
+      MetadataTreeNode existingNode = _existingNodes.get( nodeQuery.toString() );
+      
+      if( existingNode != null )
+        return MetadataTreeNode.deepCopy( existingNode );
+    
         mr = _reader.readDependencies( nodeMD );
   
         if( mr == null )
@@ -238,17 +255,37 @@ if( _log.isDebugEnabled() )
             node.addQuery(md);
       }
         
-      existingNodes.put( nodeQuery.toString(), node );
+      _existingNodes.put( nodeQuery.toString(), node );
     
       return node;
     }
     catch (RepositoryException e)
     {
+      if( _eventManager != null )
+        nodeBuildEvent.setError( e.getMessage() );
+
       throw new MetadataTreeException( e );
     }
     catch( VersionException e )
     {
+      if( _eventManager != null )
+        nodeBuildEvent.setError( e.getMessage() );
+
       throw new MetadataTreeException( e );
+    }
+    catch( MetadataTreeException e )
+    {
+      if( _eventManager != null )
+        nodeBuildEvent.setError( e.getMessage() );
+      throw e;
+    }
+    finally
+    {
+      if( _eventManager != null )
+      {
+        nodeBuildEvent.stop();
+        _eventManager.fireEvent( nodeBuildEvent );
+      }
     }
   }
   //-----------------------------------------------------
@@ -312,7 +349,7 @@ if( _log.isDebugEnabled() )
     
     try
     {
-      DefaultSatSolver solver = new DefaultSatSolver( root );
+      DefaultSatSolver solver = new DefaultSatSolver( root, _eventManager );
       
       solver.applyPolicies( getComparators() );
 
@@ -335,7 +372,7 @@ if( _log.isDebugEnabled() )
     
     try
     {
-      DefaultSatSolver solver = new DefaultSatSolver( root );
+      DefaultSatSolver solver = new DefaultSatSolver( root, _eventManager );
       
       solver.applyPolicies( getComparators() );
 
@@ -381,7 +418,7 @@ if( _log.isDebugEnabled() )
     
     try
     {
-      DefaultSatSolver solver = new DefaultSatSolver( root );
+      DefaultSatSolver solver = new DefaultSatSolver( root, _eventManager );
       
       solver.applyPolicies( getComparators() );
 
@@ -418,6 +455,18 @@ if( _log.isDebugEnabled() )
     
     return sb.toString();
   }
-  //-----------------------------------------------------
-  //-----------------------------------------------------
+
+  public void register( MercuryEventListener listener )
+  {
+    if( _eventManager == null )
+      _eventManager = new EventManager();
+      
+    _eventManager.register( listener );
+  }
+
+  public void unRegister( MercuryEventListener listener )
+  {
+    if( _eventManager != null )
+      _eventManager.unRegister( listener );
+  }
 }
