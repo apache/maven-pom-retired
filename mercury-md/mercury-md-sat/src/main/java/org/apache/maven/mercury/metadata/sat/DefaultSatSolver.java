@@ -76,14 +76,14 @@ implements SatSolver
     try
     {
       if( _eventManager != null )
-        event = new GenericEvent( "create.sat.solver", tree.toString() );
+        event = new GenericEvent( EVENT_CREATE_SOLVER, tree.toString() );
         
       if( tree.getId() == 0 )
         MetadataTreeNode.reNumber( tree, 1 );
       
       int nNodes = tree.countDistinctNodes();
   
-  _log.debug( "SatContext: # of variables: "+nNodes );
+      _log.debug( "SatContext: # of variables: "+nNodes );
   
       _context = new SatContext( nNodes );
       _solver.newVar( tree.countNodes() );
@@ -537,7 +537,7 @@ if( _log.isDebugEnabled() )
     try
     {
       if( _eventManager != null )
-        event = new GenericEvent( "solve", _root.toString() );
+        event = new GenericEvent( EVENT_SOLVE, _root.toString() );
       
       if( _solver.isSatisfiable() )
       {

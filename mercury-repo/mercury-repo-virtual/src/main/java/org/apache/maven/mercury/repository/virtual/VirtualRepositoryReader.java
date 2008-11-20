@@ -57,6 +57,9 @@ implements MetadataReader, EventGenerator
   public static final String EVENT_READ_VERSIONS = "vr.read.versions";
   public static final String EVENT_READ_VERSIONS_FROM_REPO = "vr.read.versions.from.repo";
   
+  public static final String EVENT_READ_DEPENDENCIES = "vr.read.dependencies";
+  public static final String EVENT_READ_DEPENDENCIES_FROM_REPO = "vr.read.dependencies.from.repo";
+  
   public static final String EVENT_READ_RAW = "vr.read.raw";
   public static final String EVENT_READ_RAW_FROM_REPO = "vr.read.raw.from.repo";
   
@@ -213,47 +216,82 @@ implements MetadataReader, EventGenerator
     
     init();
     
-    int qSize = query.size();
-
-    ArtifactBasicResults res = null;
-    ArtifactListProcessor tp = _processors == null ? null : _processors.get( ArtifactListProcessor.FUNCTION_TP );
-
-    for( RepositoryReader rr : _repositoryReaders )
-    {
-      ArtifactBasicResults repoRes = rr.readVersions( query );
-      
-      if( repoRes != null && repoRes.hasResults() )
-        for( ArtifactBasicMetadata key : repoRes.getResults().keySet() )
-        {
-          List<ArtifactBasicMetadata> rorRes = repoRes.getResult(key);
-          
-          if( tp != null )
-          {
-            try
-            {
-              tp.configure( key );
-              rorRes = tp.process( rorRes );
-            }
-            catch( ArtifactListProcessorException e )
-            {
-              throw new RepositoryException(e);
-            }
-          }
-          
-          if( Util.isEmpty( rorRes ) )
-            continue;
-          
-          for( ArtifactBasicMetadata bmd : rorRes )
-            bmd.setTracker(  rr );
-          
-          if( res == null )
-            res = new ArtifactBasicResults( key, rorRes );
-          else
-            res.add( key, rorRes );
-        }
-    }
+    GenericEvent event = null;
     
-    return res;
+    try
+    {
+      
+      if( _eventManager != null )
+        event = new GenericEvent( EVENT_READ_VERSIONS );
+      
+      ArtifactBasicResults res = null;
+      ArtifactListProcessor tp = _processors == null ? null : _processors.get( ArtifactListProcessor.FUNCTION_TP );
+      
+      GenericEvent eventRead = null;
+  
+      for( RepositoryReader rr : _repositoryReaders )
+      try 
+      {
+        if( _eventManager!= null )
+          eventRead = new GenericEvent( EVENT_READ_VERSIONS_FROM_REPO, rr.getRepository().getId() );
+          
+        ArtifactBasicResults repoRes = rr.readVersions( query );
+        
+        if( repoRes != null && repoRes.hasResults() )
+          for( ArtifactBasicMetadata key : repoRes.getResults().keySet() )
+          {
+            List<ArtifactBasicMetadata> rorRes = repoRes.getResult(key);
+            
+            if( tp != null )
+            {
+              try
+              {
+                tp.configure( key );
+                rorRes = tp.process( rorRes );
+              }
+              catch( ArtifactListProcessorException e )
+              {
+                throw new RepositoryException(e);
+              }
+            }
+            
+            if( Util.isEmpty( rorRes ) )
+            {
+              eventRead.setError( "none found" );
+              continue;
+            }
+            
+            for( ArtifactBasicMetadata bmd : rorRes )
+              bmd.setTracker(  rr );
+            
+            if( res == null )
+              res = new ArtifactBasicResults( key, rorRes );
+            else
+              res.add( key, rorRes );
+            
+            if( _eventManager!= null )
+              eventRead.setTag( eventRead.getTag()+", found: "+rorRes.toString() );
+          }
+      }
+      finally
+      {
+        if( _eventManager != null )
+        {
+          eventRead.stop();
+          _eventManager.fireEvent( eventRead );
+        }
+      }
+      
+      return res;
+    }
+    finally
+    {
+      if( _eventManager != null )
+      {
+        event.stop();
+        _eventManager.fireEvent( event );
+      }
+    }
   }
   //----------------------------------------------------------------------------------------------------------------------------
   public ArtifactMetadata readDependencies( ArtifactBasicMetadata bmd )
@@ -262,36 +300,75 @@ implements MetadataReader, EventGenerator
     if( bmd == null )
       throw new IllegalArgumentException("null bmd supplied");
     
-    init();
+    GenericEvent event = null;
     
-    List<ArtifactBasicMetadata> query = new ArrayList<ArtifactBasicMetadata>(1);
-    query.add( bmd );
-    
-    ArtifactMetadata md = new ArtifactMetadata( bmd );
-    
-    RepositoryReader [] repos = _repositoryReaders;
-    
-    Object tracker =  bmd.getTracker();
-    
-    // do we know where this metadata came from ?
-    if( tracker != null && RepositoryReader.class.isAssignableFrom( tracker.getClass() ) )
+    try
     {
-      repos = new RepositoryReader [] { (RepositoryReader)tracker };
-    }
-    
-    for( RepositoryReader rr : repos )
-    {
-      ArtifactBasicResults res = rr.readDependencies( query );
       
-      if( res != null && res.hasResults( bmd ) )
+      if( _eventManager != null )
+        event = new GenericEvent(EVENT_READ_DEPENDENCIES, bmd.toString() );
+      
+      init();
+      
+      List<ArtifactBasicMetadata> query = new ArrayList<ArtifactBasicMetadata>(1);
+      query.add( bmd );
+      
+      ArtifactMetadata md = new ArtifactMetadata( bmd );
+      
+      RepositoryReader [] repos = _repositoryReaders;
+      
+      Object tracker =  bmd.getTracker();
+      
+      // do we know where this metadata came from ?
+      if( tracker != null && RepositoryReader.class.isAssignableFrom( tracker.getClass() ) )
       {
-        md.setDependencies( res.getResult( bmd ) );
-        md.setTracker( rr );
-        return md;
+        repos = new RepositoryReader [] { (RepositoryReader)tracker };
+      }
+      
+      GenericEvent eventRead = null;
+      
+      for( RepositoryReader rr : repos )
+      try 
+      {
+        
+        if( _eventManager != null )
+          eventRead = new GenericEvent( EVENT_READ_DEPENDENCIES_FROM_REPO, rr.getRepository().getId() );
+        
+        ArtifactBasicResults res = rr.readDependencies( query );
+        
+        if( res != null && res.hasResults( bmd ) )
+        {
+          md.setDependencies( res.getResult( bmd ) );
+          md.setTracker( rr );
+          
+          if( _eventManager != null )
+            eventRead.setTag( eventRead.getTag()+", found: "+md.getDependencies() );
+          
+          return md;
+        }
+      }
+      finally
+      {
+        if( _eventManager != null )
+        {
+          eventRead.stop();
+          _eventManager.fireEvent( eventRead );
+        }
+      }
+      
+      if( _eventManager != null )
+        event.setError( "not found" );
+      
+      return md;
+    }
+    finally
+    {
+      if( _eventManager != null )
+      {
+        event.stop();
+        _eventManager.fireEvent( event );
       }
     }
-    
-    return md;
   }
   //----------------------------------------------------------------------------------------------------------------------------
   /**
@@ -503,6 +580,7 @@ implements MetadataReader, EventGenerator
   {
     
     GenericEvent event = null;
+    String eventTag = null; 
     
     if( _log.isDebugEnabled() )
       _log.debug( "request for "+bmd+", classifier="+classifier+", type="+type );
@@ -512,7 +590,14 @@ implements MetadataReader, EventGenerator
     
     try
     {
-      event = new GenericEvent( EVENT_READ_RAW, "" );
+      if( _eventManager!= null )
+      {
+        eventTag = bmd.toString()
+                  + (Util.isEmpty( classifier )?"":", classifier="+classifier)
+                  + (Util.isEmpty( type )?"":", type="+type)
+                    ;
+        event = new GenericEvent( EVENT_READ_RAW, eventTag );
+      }
       
       ArtifactBasicMetadata bmdQuery = bmd;
       
@@ -578,16 +663,22 @@ implements MetadataReader, EventGenerator
         try
         {
           if( _eventManager != null )
-            eventRead = new GenericEvent( EVENT_READ_RAW_FROM_REPO, rr.getRepository().getId() );
+            eventRead = new GenericEvent( EVENT_READ_RAW_FROM_REPO, rr.getRepository().getId()+": "+eventTag );
           
           res = rr.readRawData( bmdQuery, classifier, type );
           if( res != null )
           {
             if( _log.isDebugEnabled() )
               _log.debug( bmdQuery+" found in "+rr.getRepository().getServer() );
+
+            if( _eventManager != null )
+              eventRead.setTag( eventRead.getTag() );
             
             return res;
           }
+          
+          if( _eventManager != null )
+            eventRead.setError( "not found" );
         }
         finally
         {

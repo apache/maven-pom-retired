@@ -1,7 +1,6 @@
 package org.apache.maven.mercury.metadata.sat;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,11 +11,8 @@ import junit.framework.TestCase;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
-import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.metadata.ClassicDepthComparator;
 import org.apache.maven.mercury.metadata.ClassicVersionComparator;
-import org.apache.maven.mercury.metadata.DependencyBuilder;
-import org.apache.maven.mercury.metadata.DependencyBuilderFactory;
 import org.apache.maven.mercury.metadata.MetadataTreeNode;
 
 /**

@@ -4,12 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.repository.api.ArtifactResults;
-import org.apache.maven.mercury.repository.api.RepositoryException;
-
-import junit.framework.TestCase;
 
 /**
  *

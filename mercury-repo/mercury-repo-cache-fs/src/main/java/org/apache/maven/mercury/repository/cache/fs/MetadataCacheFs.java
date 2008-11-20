@@ -11,8 +11,6 @@ import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactCoordinates;
 import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.version.DefaultArtifactVersion;
-import org.apache.maven.mercury.logging.IMercuryLogger;
-import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.repository.api.MetadataCacheException;
 import org.apache.maven.mercury.repository.api.MetadataCorruptionException;
 import org.apache.maven.mercury.repository.api.RepositoryGAMetadata;

@@ -19,7 +19,6 @@
 
 package org.apache.maven.mercury.spi.http.client;
 
-import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
 

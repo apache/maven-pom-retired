@@ -15,6 +15,9 @@ extends EventGenerator
 {
   public static final int DEFAULT_TREE_SIZE = 128; //nodes
   
+  public static final String EVENT_SOLVE = "solve";
+  public static final String EVENT_CREATE_SOLVER = "create.sat.solver";
+  
   /**
    * 
    * @param sorts - policies expressed as sorted list of node sorters - from most important to the least

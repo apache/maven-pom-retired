@@ -24,6 +24,7 @@ public interface MercuryEvent
    * @return
    */
   String getTag();
+  void setTag( String tag );
   
   /**
    * get the event start time as UTC timestapm
