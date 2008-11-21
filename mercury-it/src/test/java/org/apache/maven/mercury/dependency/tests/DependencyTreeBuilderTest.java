@@ -211,6 +211,7 @@ extends TestCase
     reps.add( remoteRepo );
     
     depBuilder = DependencyBuilderFactory.create( DependencyBuilderFactory.JAVA_DEPENDENCY_MODEL, reps, null, null, null );
+//    depBuilder.register( new DumbListener() );
     
     ArtifactMetadata md = new ArtifactMetadata( artifactId );
 
@@ -225,7 +226,7 @@ extends TestCase
     assertNotNull( res );
     
     assertTrue( res.size() > 1 );
-    
+
     showClasspath( res );
 
     artifactId = "org.apache.maven.plugins:maven-compiler-plugin:2.0.2";

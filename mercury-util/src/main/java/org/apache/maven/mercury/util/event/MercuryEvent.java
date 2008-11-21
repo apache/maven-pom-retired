@@ -1,9 +1,10 @@
 package org.apache.maven.mercury.util.event;
 
+import java.util.BitSet;
 import java.util.Map;
 
 /**
- *
+ * 
  *
  * @author Oleg Gusakov
  * @version $Id$
@@ -11,13 +12,60 @@ import java.util.Map;
  */
 public interface MercuryEvent
 {
+  enum EventTypeEnum
+  {
+      dependencyBuilder(0)
+    , satSolver(1)
+    
+    , virtualRepositoryReader(2)
+    
+    , localRepository(3)
+    , localRepositoryReader(4)
+    , localRepositoryWriter(5)
+    
+    , remoteRepository(6)
+    , remoteRepositoryReader(7)
+    , remoteRepositoryWriter(8)
+    
+    , cache(9)
+    , fsCache(10)
+    ;
+    
+    int bitNo;
+    
+    EventTypeEnum( int bitNo )
+    {
+      this.bitNo = bitNo;
+    }
+  }
+
+  @SuppressWarnings("serial")
+  class EventMask
+  extends BitSet
+  {
+    public EventMask( EventTypeEnum... bits )
+    {
+      super();
+      
+      for( EventTypeEnum bit : bits )
+        set( bit.bitNo );
+    }
+  }
+
   /**
    * event type 
    * 
+   * @return 
+   */
+  EventTypeEnum getType();
+
+  /**
+   * event name inside type 
+   * 
    * @return
    */
-  String getType();
-
+  String getName();
+  
   /**
    * aggregation tag of this event. Used to trace event propagation in the system 
    * 
@@ -45,15 +93,15 @@ public interface MercuryEvent
   
 
   /**
-   * error field
+   * result field
    * 
    * @return
    */
-  public String getError();
+  public String getResult();
 
-  public void setError( String error );
+  public void setResult( String result );
 
-  public boolean hasError();
+  public boolean hasResult();
   
   /**
    * duration of this event in millis

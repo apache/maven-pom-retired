@@ -23,8 +23,10 @@ import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryException;
 import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;
 import org.apache.maven.mercury.util.Util;
+import org.apache.maven.mercury.util.event.EventGenerator;
 import org.apache.maven.mercury.util.event.EventManager;
 import org.apache.maven.mercury.util.event.GenericEvent;
+import org.apache.maven.mercury.util.event.MercuryEvent;
 import org.apache.maven.mercury.util.event.MercuryEventListener;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
@@ -36,7 +38,7 @@ import org.codehaus.plexus.lang.Language;
  * @version $Id: MetadataTree.java 681180 2008-07-30 19:34:16Z ogusakov $
  */
 class DependencyTreeBuilder
-implements DependencyBuilder
+implements DependencyBuilder, EventGenerator
 {
   private static final Language _lang = new DefaultLanguage(DependencyTreeBuilder.class);
   private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( DependencyTreeBuilder.class ); 
@@ -49,7 +51,7 @@ implements DependencyBuilder
   
   private Map< String, MetadataTreeNode > _existingNodes;
   
-  private EventManager _eventManager; // = new EventManager();
+  private EventManager _eventManager;
   
   /**
    * creates an instance of MetadataTree. Use this instance to 
@@ -110,7 +112,7 @@ implements DependencyBuilder
     
     _existingNodes = new HashMap<String, MetadataTreeNode>(256);
     
-    GenericEvent treeBuildEvent = new GenericEvent( TREE_BUILD_EVENT, startMD.getGAV() );
+    GenericEvent treeBuildEvent = new GenericEvent( MercuryEvent.EventTypeEnum.dependencyBuilder, TREE_BUILD_EVENT, startMD.getGAV() );
     
     MetadataTreeNode root = createNode( startMD, null, startMD, treeScope );
     
@@ -163,7 +165,7 @@ implements DependencyBuilder
     GenericEvent nodeBuildEvent = null;
     
     if( _eventManager != null )
-      nodeBuildEvent = new GenericEvent( TREE_NODE_BUILD_EVENT, nodeMD.getGAV() );
+      nodeBuildEvent = new GenericEvent( MercuryEvent.EventTypeEnum.dependencyBuilder, TREE_NODE_BUILD_EVENT, nodeMD.getGAV() );
     
     try
     {
@@ -263,21 +265,21 @@ if( _log.isDebugEnabled() )
     catch (RepositoryException e)
     {
       if( _eventManager != null )
-        nodeBuildEvent.setError( e.getMessage() );
+        nodeBuildEvent.setResult( e.getMessage() );
 
       throw new MetadataTreeException( e );
     }
     catch( VersionException e )
     {
       if( _eventManager != null )
-        nodeBuildEvent.setError( e.getMessage() );
+        nodeBuildEvent.setResult( e.getMessage() );
 
       throw new MetadataTreeException( e );
     }
     catch( MetadataTreeException e )
     {
       if( _eventManager != null )
-        nodeBuildEvent.setError( e.getMessage() );
+        nodeBuildEvent.setResult( e.getMessage() );
       throw e;
     }
     finally
@@ -469,5 +471,14 @@ if( _log.isDebugEnabled() )
   {
     if( _eventManager != null )
       _eventManager.unRegister( listener );
+  }
+  
+  public void setEventManager( EventManager eventManager )
+  {
+    if( _eventManager == null )
+      _eventManager = eventManager;
+    else
+      _eventManager.getListeners().addAll( eventManager.getListeners() );
+      
   }
 }

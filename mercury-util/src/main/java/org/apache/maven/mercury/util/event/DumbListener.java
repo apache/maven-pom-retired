@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import org.apache.maven.mercury.util.event.MercuryEvent.EventMask;
+
 /**
  *
  *
@@ -39,6 +41,11 @@ implements MercuryEventListener
     {
       e.printStackTrace();
     }
+  }
+
+  public EventMask getMask()
+  {
+    return null;
   }
 
 }

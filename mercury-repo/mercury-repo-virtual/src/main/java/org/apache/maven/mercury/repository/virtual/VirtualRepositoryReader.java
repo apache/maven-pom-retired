@@ -34,6 +34,7 @@ import org.apache.maven.mercury.util.Util;
 import org.apache.maven.mercury.util.event.EventGenerator;
 import org.apache.maven.mercury.util.event.EventManager;
 import org.apache.maven.mercury.util.event.GenericEvent;
+import org.apache.maven.mercury.util.event.MercuryEvent;
 import org.apache.maven.mercury.util.event.MercuryEventListener;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
@@ -49,19 +50,19 @@ import org.codehaus.plexus.lang.Language;
 public class VirtualRepositoryReader
 implements MetadataReader, EventGenerator
 {
-  public static final String EVENT_READ_ARTIFACTS = "vr.read.artifacts";
-  public static final String EVENT_READ_ARTIFACTS_FROM_REPO = "vr.read.artifacts.from.repo";
-  public static final String EVENT_READ_ARTIFACTS_FROM_REPO_QUALIFIED = "vr.read.artifacts.from.repo.qualified";
-  public static final String EVENT_READ_ARTIFACTS_FROM_REPO_UNQUALIFIED = "vr.read.artifacts.from.repo.unqualified";
+  public static final String EVENT_READ_ARTIFACTS = "read.artifacts";
+  public static final String EVENT_READ_ARTIFACTS_FROM_REPO = "read.artifacts.from.repo";
+  public static final String EVENT_READ_ARTIFACTS_FROM_REPO_QUALIFIED = "read.artifacts.from.repo.qualified";
+  public static final String EVENT_READ_ARTIFACTS_FROM_REPO_UNQUALIFIED = "read.artifacts.from.repo.unqualified";
   
-  public static final String EVENT_READ_VERSIONS = "vr.read.versions";
-  public static final String EVENT_READ_VERSIONS_FROM_REPO = "vr.read.versions.from.repo";
+  public static final String EVENT_READ_VERSIONS = "read.versions";
+  public static final String EVENT_READ_VERSIONS_FROM_REPO = "read.versions.from.repo";
   
-  public static final String EVENT_READ_DEPENDENCIES = "vr.read.dependencies";
-  public static final String EVENT_READ_DEPENDENCIES_FROM_REPO = "vr.read.dependencies.from.repo";
+  public static final String EVENT_READ_DEPENDENCIES = "read.dependencies";
+  public static final String EVENT_READ_DEPENDENCIES_FROM_REPO = "read.dependencies.from.repo";
   
   public static final String EVENT_READ_RAW = "vr.read.raw";
-  public static final String EVENT_READ_RAW_FROM_REPO = "vr.read.raw.from.repo";
+  public static final String EVENT_READ_RAW_FROM_REPO = "read.raw.from.repo";
   
   /** file system cache subfolder */
   public static final String METADATA_CACHE_DIR = ".cache";
@@ -181,6 +182,9 @@ implements MetadataReader, EventGenerator
           try
           {
             _mdCache = getCache( _localRepository.getDirectory() );
+            
+            if( _eventManager != null )
+              _mdCache.setEventManager( _eventManager );
           }
           catch( IOException e )
           {
@@ -222,7 +226,7 @@ implements MetadataReader, EventGenerator
     {
       
       if( _eventManager != null )
-        event = new GenericEvent( EVENT_READ_VERSIONS );
+        event = new GenericEvent( MercuryEvent.EventTypeEnum.virtualRepositoryReader, EVENT_READ_VERSIONS );
       
       ArtifactBasicResults res = null;
       ArtifactListProcessor tp = _processors == null ? null : _processors.get( ArtifactListProcessor.FUNCTION_TP );
@@ -233,7 +237,7 @@ implements MetadataReader, EventGenerator
       try 
       {
         if( _eventManager!= null )
-          eventRead = new GenericEvent( EVENT_READ_VERSIONS_FROM_REPO, rr.getRepository().getId() );
+          eventRead = new GenericEvent( MercuryEvent.EventTypeEnum.virtualRepositoryReader, EVENT_READ_VERSIONS_FROM_REPO, rr.getRepository().getId() );
           
         ArtifactBasicResults repoRes = rr.readVersions( query );
         
@@ -257,7 +261,7 @@ implements MetadataReader, EventGenerator
             
             if( Util.isEmpty( rorRes ) )
             {
-              eventRead.setError( "none found" );
+              eventRead.setResult( "none found" );
               continue;
             }
             
@@ -306,7 +310,7 @@ implements MetadataReader, EventGenerator
     {
       
       if( _eventManager != null )
-        event = new GenericEvent(EVENT_READ_DEPENDENCIES, bmd.toString() );
+        event = new GenericEvent( MercuryEvent.EventTypeEnum.virtualRepositoryReader, EVENT_READ_DEPENDENCIES, bmd.toString() );
       
       init();
       
@@ -332,7 +336,7 @@ implements MetadataReader, EventGenerator
       {
         
         if( _eventManager != null )
-          eventRead = new GenericEvent( EVENT_READ_DEPENDENCIES_FROM_REPO, rr.getRepository().getId() );
+          eventRead = new GenericEvent( MercuryEvent.EventTypeEnum.virtualRepositoryReader, EVENT_READ_DEPENDENCIES_FROM_REPO, rr.getRepository().getId() );
         
         ArtifactBasicResults res = rr.readDependencies( query );
         
@@ -357,7 +361,7 @@ implements MetadataReader, EventGenerator
       }
       
       if( _eventManager != null )
-        event.setError( "not found" );
+        event.setResult( "not found" );
       
       return md;
     }
@@ -435,7 +439,7 @@ implements MetadataReader, EventGenerator
       ArtifactResults res = null;
 
       if( _eventManager != null )
-        event = new GenericEvent( EVENT_READ_ARTIFACTS, "" );
+        event = new GenericEvent( MercuryEvent.EventTypeEnum.virtualRepositoryReader, EVENT_READ_ARTIFACTS, "" );
       
       if( Util.isEmpty( query ) )
         return res;
@@ -462,7 +466,7 @@ implements MetadataReader, EventGenerator
         try
         {
           if( _eventManager != null )
-            eventRead = new GenericEvent( EVENT_READ_ARTIFACTS_FROM_REPO_QUALIFIED, repoId );
+            eventRead = new GenericEvent( MercuryEvent.EventTypeEnum.virtualRepositoryReader, EVENT_READ_ARTIFACTS_FROM_REPO_QUALIFIED, repoId );
           
           List<ArtifactBasicMetadata> rrQuery = buckets.get( rr );
           
@@ -514,7 +518,7 @@ implements MetadataReader, EventGenerator
           try
           {
             if( _eventManager != null )
-              eventRead = new GenericEvent( EVENT_READ_ARTIFACTS_FROM_REPO_UNQUALIFIED, repoId );
+              eventRead = new GenericEvent( MercuryEvent.EventTypeEnum.virtualRepositoryReader, EVENT_READ_ARTIFACTS_FROM_REPO_UNQUALIFIED, repoId );
             
             ArtifactResults rrRes = rr.readArtifacts( rejects );
             
@@ -596,7 +600,7 @@ implements MetadataReader, EventGenerator
                   + (Util.isEmpty( classifier )?"":", classifier="+classifier)
                   + (Util.isEmpty( type )?"":", type="+type)
                     ;
-        event = new GenericEvent( EVENT_READ_RAW, eventTag );
+        event = new GenericEvent( MercuryEvent.EventTypeEnum.virtualRepositoryReader, EVENT_READ_RAW, eventTag );
       }
       
       ArtifactBasicMetadata bmdQuery = bmd;
@@ -663,7 +667,7 @@ implements MetadataReader, EventGenerator
         try
         {
           if( _eventManager != null )
-            eventRead = new GenericEvent( EVENT_READ_RAW_FROM_REPO, rr.getRepository().getId()+": "+eventTag );
+            eventRead = new GenericEvent( MercuryEvent.EventTypeEnum.virtualRepositoryReader, EVENT_READ_RAW_FROM_REPO, rr.getRepository().getId()+": "+eventTag );
           
           res = rr.readRawData( bmdQuery, classifier, type );
           if( res != null )
@@ -678,7 +682,7 @@ implements MetadataReader, EventGenerator
           }
           
           if( _eventManager != null )
-            eventRead.setError( "not found" );
+            eventRead.setResult( "not found" );
         }
         finally
         {

@@ -11,14 +11,14 @@ public class GenericEvent
 extends AbstractMercuryEvent
 {
 
-  public GenericEvent( String type )
+  public GenericEvent( MercuryEvent.EventTypeEnum type, String name )
   {
-    super(type);
+    super(type, name);
   }
 
-  public GenericEvent( String type, String tag )
+  public GenericEvent( MercuryEvent.EventTypeEnum type, String name, String tag )
   {
-    super( type, tag );
+    super( type, name, tag );
   }
 
   public void setTag( String tag )

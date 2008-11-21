@@ -27,9 +27,9 @@ public class EventManager
   
   public static final int THREAD_COUNT = 4;
   
-  List<MercuryEventListener> listeners = new ArrayList<MercuryEventListener>(8);
+  final List<MercuryEventListener> _listeners = new ArrayList<MercuryEventListener>(8);
   
-  final LinkedBlockingQueue<UnitOfWork> queue = new LinkedBlockingQueue<UnitOfWork>( 512 );
+  final LinkedBlockingQueue<UnitOfWork> _queue = new LinkedBlockingQueue<UnitOfWork>( 512 );
   
   ExecutorService execService;
   
@@ -37,31 +37,36 @@ public class EventManager
   {
     execService = Executors.newFixedThreadPool( THREAD_COUNT );
     for( int i = 0; i < THREAD_COUNT; i++ )
-      execService.execute( new Runner( queue ) );
+      execService.execute( new Runner( _queue ) );
   }
   
   public void register( MercuryEventListener listener )
   {
-    listeners.add( listener );
+    _listeners.add( listener );
   }
   
   public void unRegister( MercuryEventListener listener )
   {
-    listeners.remove( listener );
+    _listeners.remove( listener );
+  }
+  
+  public List<MercuryEventListener> getListeners()
+  {
+    return _listeners;
   }
   
   public void fireEvent( MercuryEvent event )
   {
-    for( MercuryEventListener listener : listeners )
-      queue.add( new UnitOfWork( listener, event ) );
+    for( MercuryEventListener listener : _listeners )
+      _queue.add( new UnitOfWork( listener, event ) );
   }
 
   public static final String toString( MercuryEvent event )
   {
     return new Date( event.getStart() )+", dur: "+ event.getDuration()+" millis :"
-    		   + " ["+ event.getType()+"] "
+    		   + " ["+ event.getType()+":"+event.getName()+"] "
     		   + ( Util.isEmpty( event.getTag() ) ? "" : ", tag: "+event.getTag() )
-           + ( Util.isEmpty( event.getError() ) ? "" : ", error: "+event.getError() )
+           + ( Util.isEmpty( event.getResult() ) ? "" : ", result: "+event.getResult() )
     ;
   }
 

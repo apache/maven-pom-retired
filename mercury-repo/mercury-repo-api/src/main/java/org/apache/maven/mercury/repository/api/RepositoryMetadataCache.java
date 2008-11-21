@@ -2,6 +2,7 @@ package org.apache.maven.mercury.repository.api;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactCoordinates;
+import org.apache.maven.mercury.util.event.EventGenerator;
 
 /**
  * this object abstracts the existence of multiple repositories and repository
@@ -14,6 +15,7 @@ import org.apache.maven.mercury.artifact.ArtifactCoordinates;
  *
  */
 public interface RepositoryMetadataCache
+extends EventGenerator
 {
   /**
    * check if GA level metadata exists in this cache for the given repo. Read from repo, if does not exists

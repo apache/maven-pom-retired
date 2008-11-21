@@ -13,11 +13,13 @@ import java.util.Map;
 public abstract class AbstractMercuryEvent
 implements MercuryEvent
 {
-  String type;
+  MercuryEvent.EventTypeEnum type;
+  
+  String name;
   
   String tag;
   
-  String error;
+  String result;
   
   long start;
   
@@ -30,15 +32,16 @@ implements MercuryEvent
     start();
   }
   
-  public AbstractMercuryEvent( String type )
+  public AbstractMercuryEvent( MercuryEvent.EventTypeEnum type, String name )
   {
     this();
     this.type = type;
+    this.name = name;
   }
   
-  public AbstractMercuryEvent( String type, String tag )
+  public AbstractMercuryEvent( MercuryEvent.EventTypeEnum type, String name, String tag )
   {
-    this( type );
+    this( type, name );
     this.tag = tag;
   }
 
@@ -57,9 +60,14 @@ implements MercuryEvent
     return start;
   }
 
-  public String getType()
+  public MercuryEvent.EventTypeEnum getType()
   {
     return type;
+  }
+
+  public String getName()
+  {
+    return name;
   }
 
   public String getTag()
@@ -67,19 +75,19 @@ implements MercuryEvent
     return tag;
   }
 
-  public String getError()
+  public String getResult()
   {
-    return error;
+    return result;
   }
 
-  public void setError( String error )
+  public void setResult( String result )
   {
-    this.error = error;
+    this.result = result;
   }
 
-  public boolean hasError()
+  public boolean hasResult()
   {
-    return error != null;
+    return result != null;
   }
 
   public Object getPayload( String name )
