@@ -2,6 +2,7 @@ package org.apache.maven.mercury.util.event;
 
 import java.util.BitSet;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * 
@@ -49,6 +50,30 @@ public interface MercuryEvent
       
       for( EventTypeEnum bit : bits )
         set( bit.bitNo );
+    }
+
+    public EventMask( String bits )
+    {
+      super();
+      
+      setBits( bits );
+    }
+    
+    public final void setBits( String bits )
+    {
+      if( bits == null )
+        return;
+      
+      StringTokenizer st = new StringTokenizer( bits, ",");
+      
+      while( st.hasMoreTokens() )
+      {
+        String bit = st.nextToken();
+        
+        int bitNo = Integer.valueOf( bit );
+        
+        set( bitNo, true );
+      }
     }
   }
 

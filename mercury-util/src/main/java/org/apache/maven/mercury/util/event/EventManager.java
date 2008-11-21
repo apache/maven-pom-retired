@@ -22,27 +22,73 @@ import org.codehaus.plexus.lang.Language;
  */
 public class EventManager
 {
+  public static final int THREAD_COUNT = 4;
+
+  /**
+   * this property may contain comma separated list of bit numbers defined in MercuryEvent.EventTypeEnum. It supersedes 
+   * any bits set by the appropriate EventManager constructor by OR operation with those
+   */
+  public static final String SYSTEM_PROPERTY_EVENT_MASK = "maven.mercury.events";
+  public static final String systemPropertyEventMask = System.getProperty( SYSTEM_PROPERTY_EVENT_MASK, null );
+
   private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( EventManager.class );
   private static final Language _lang = new DefaultLanguage( EventManager.class );
-  
-  public static final int THREAD_COUNT = 4;
   
   final List<MercuryEventListener> _listeners = new ArrayList<MercuryEventListener>(8);
   
   final LinkedBlockingQueue<UnitOfWork> _queue = new LinkedBlockingQueue<UnitOfWork>( 512 );
   
-  ExecutorService execService;
+  private ExecutorService _execService;
   
+  private MercuryEvent.EventMask _eventMask;
+  
+  /**
+   * default initialization - create thread pool
+   */
   public EventManager()
   {
-    execService = Executors.newFixedThreadPool( THREAD_COUNT );
+    _execService = Executors.newFixedThreadPool( THREAD_COUNT );
+
     for( int i = 0; i < THREAD_COUNT; i++ )
-      execService.execute( new Runner( _queue ) );
+      _execService.execute( new Runner( _queue ) );
+    
+    processSystemOptions();
+  }
+
+  /**
+   * default initialization - create thread pool
+   */
+  public EventManager( MercuryEvent.EventMask eventMask )
+  {
+    this();
+    
+    this._eventMask = eventMask;
+    
+    processSystemOptions();
   }
   
+  private final void processSystemOptions()
+  {
+    if( systemPropertyEventMask == null )
+      return;
+    
+    if( _eventMask == null )
+      _eventMask = new MercuryEvent.EventMask( systemPropertyEventMask );
+    else
+      _eventMask.setBits( systemPropertyEventMask );
+  }
+  
+  /**
+   * add listener only if it meets the criteria
+   * 
+   * @param listener
+   */
   public void register( MercuryEventListener listener )
   {
-    _listeners.add( listener );
+    MercuryEvent.EventMask lMask = listener.getMask();
+    
+    if( lMask == null || _eventMask == null || _eventMask.intersects( lMask ) )
+      _listeners.add( listener );
   }
   
   public void unRegister( MercuryEventListener listener )
@@ -85,7 +131,19 @@ public class EventManager
     {
       try
       {
-        listener.fire( event );
+        MercuryEvent.EventMask lMask = listener.getMask();
+        
+        if( _eventMask != null )
+        {
+          if( lMask == null )
+            lMask = _eventMask;
+          else 
+            lMask.and( _eventMask );
+        }
+        
+        
+        if( lMask == null || lMask.get( event.getType().bitNo ) )
+          listener.fire( event );
       }
       catch( Throwable th )
       {
