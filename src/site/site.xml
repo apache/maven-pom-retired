@@ -27,24 +27,12 @@
     <src>http://maven.apache.org/images/apache-maven-project-2.png</src>
     <href>http://maven.apache.org/mercury/</href>
   </bannerLeft>
-  <bannerRight>
-    <src>http://maven.apache.org/images/maven-logo-2.gif</src>
-  </bannerRight>
-
-  <skin>
-    <groupId>org.apache.maven.skins</groupId>
-    <artifactId>maven-stylus-skin</artifactId>
-    <version>1.0.1</version>
-  </skin>
-
-  <publishDate format="d MMM yyyy" position="right" />
-  <version position="right" />
 
   <body>
     <breadcrumbs>
       <item name="Apache" href="http://www.apache.org/" />
       <item name="Maven" href="http://maven.apache.org/" />
-      <item name="Mercury" href="http://www.apache.org/mercury/" />
+      <item name="Mercury" href="http://maven.apache.org/mercury/" />
     </breadcrumbs>
 
     <links>
@@ -59,19 +47,6 @@
 
     <menu ref="modules"/>
 
-    <menu ref="reports" inherit="bottom" />
-
-    <menu name="Maven Projects" inherit="bottom">
-      <item name="Ant Tasks"         href="http://maven.apache.org/ant-tasks/index.html" />
-      <item name="Doxia"             href="http://maven.apache.org/doxia/index.html" />
-      <item name="JXR"               href="http://maven.apache.org/jxr/index.html" />
-      <item name="Maven 1.x"         href="http://maven.apache.org/maven-1.x/index.html" />
-      <item name="Maven 2"           href="http://maven.apache.org/index.html" />
-      <item name="Plugins"           href="http://maven.apache.org/plugins/index.html" />
-      <item name="SCM"               href="http://maven.apache.org/scm/index.html" />
-      <item name="Shared Components" href="http://maven.apache.org/shared/index.html" />
-      <item name="Surefire"          href="http://maven.apache.org/surefire/index.html" />
-      <item name="Wagon"             href="http://maven.apache.org/wagon/index.html" />
-    </menu>
   </body>
+
 </project>
