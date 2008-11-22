@@ -45,6 +45,10 @@
       <item name="Doxia" href="http://maven.apache.org/doxia"/>
     </links>
 
+    <menu name="Documentation">
+      <item name="Wiki" href="http://docs.codehaus.org/display/MAVEN/Mercury" />
+    </menu>
+
     <menu ref="modules"/>
 
   </body>

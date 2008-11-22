@@ -5,7 +5,7 @@
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
     <version>9</version>
-  </parent>    
+  </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.mercury</groupId>
@@ -13,6 +13,7 @@
   <packaging>pom</packaging>
   <name>Mercury</name>
   <version>1.0.0-alpha-2-SNAPSHOT</version>
+  <description>Maven Mercury is a replacement for the Maven Artifact subsystem, and a complete replacement for the HTTP and DAV portions of the existing transport.</description>
 
   <developers>
     <developer>
@@ -40,8 +41,6 @@
     <distMgmtReleasesId>apache.staging</distMgmtReleasesId>
     <distMgmtReleasesName>Apache Development Staging Repository</distMgmtReleasesName>
     <distMgmtReleasesUrl>scp://people.apache.org/~/repos/staging</distMgmtReleasesUrl>
-
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <modules>
@@ -306,7 +305,7 @@
       <url>${distMgmtSnapshotsUrl}</url>
     </snapshotRepository>
   </distributionManagement>
-  <url>http://docs.codehaus.org/display/MAVEN/Mercury</url>
+  <url>http://maven.apache.org/mercury/</url>
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/MERCURY</url>
