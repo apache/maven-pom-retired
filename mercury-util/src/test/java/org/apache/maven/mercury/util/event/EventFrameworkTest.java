@@ -33,93 +33,49 @@ extends TestCase
   {
     es = Executors.newFixedThreadPool( THREAD_COUNT );
   }
+  
   public void testListenAllEvents()
-  throws InterruptedException
+  throws Exception
   {
-    em = new EventManager();
-    
-    // testing this one - receive all events
-    listener = new Listener( null );
-    
-    em.register( listener );
-
-    for( int i=0; i<THREAD_COUNT; i++ )
-    {
-      es.execute( new Generator( em, MercuryEvent.EventTypeEnum.localRepository, ""+i ) );
-    }
-
-    for( int i=0; i<THREAD_COUNT; i++ )
-    {
-      es.execute( new Generator( em, MercuryEvent.EventTypeEnum.remoteRepository, ""+i ) );
-    }
-    
-    es.awaitTermination( 2, TimeUnit.SECONDS );
-    
-    assertEquals( THREAD_COUNT * EventFrameworkTest.EVENT_COUNT, listener.localRepoCount );
-    assertEquals( THREAD_COUNT * EventFrameworkTest.EVENT_COUNT, listener.remoteRepoCount );
+    runTest( null, null, THREAD_COUNT * EventFrameworkTest.EVENT_COUNT,  THREAD_COUNT * EventFrameworkTest.EVENT_COUNT );
   }
 
   public void testListenMaskedListenerEvents()
-  throws InterruptedException
+  throws Exception
   {
-    em = new EventManager();
-    
-    // test this - receive only local repo events
-    listener = new Listener( new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.localRepository) );
-    
-    em.register( listener );
-
-    for( int i=0; i<THREAD_COUNT; i++ )
-    {
-      es.execute( new Generator( em, MercuryEvent.EventTypeEnum.localRepository, ""+i ) );
-    }
-
-    for( int i=0; i<THREAD_COUNT; i++ )
-    {
-      es.execute( new Generator( em, MercuryEvent.EventTypeEnum.remoteRepository, ""+i ) );
-    }
-    
-    es.awaitTermination( 2, TimeUnit.SECONDS );
-    
-    assertEquals( THREAD_COUNT * EventFrameworkTest.EVENT_COUNT, listener.localRepoCount );
-    assertEquals( 0, listener.remoteRepoCount );
+    runTest(  null
+            , new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.localRepository)
+            , THREAD_COUNT * EventFrameworkTest.EVENT_COUNT
+            , 0
+           );
   }
 
   public void testListenMaskedManagerEvents()
-  throws InterruptedException
+  throws Exception
   {
-    // test this - propagate only remote repo events
-    em = new EventManager( new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.remoteRepository) );
-    
-    // listen to all
-    listener = new Listener( null );
-    
-    em.register( listener );
-
-    for( int i=0; i<THREAD_COUNT; i++ )
-    {
-      es.execute( new Generator( em, MercuryEvent.EventTypeEnum.localRepository, ""+i ) );
-    }
-
-    for( int i=0; i<THREAD_COUNT; i++ )
-    {
-      es.execute( new Generator( em, MercuryEvent.EventTypeEnum.remoteRepository, ""+i ) );
-    }
-    
-    es.awaitTermination( 2, TimeUnit.SECONDS );
-    
-    assertEquals( 0, listener.localRepoCount );
-    assertEquals( THREAD_COUNT * EventFrameworkTest.EVENT_COUNT, listener.remoteRepoCount );
+    runTest( new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.remoteRepository)
+            , null
+            , 0
+            , THREAD_COUNT * EventFrameworkTest.EVENT_COUNT
+       );
   }
 
   public void testListenMismatchedMaskEvents()
-  throws InterruptedException
+  throws Exception
   {
-    // test this - propagate only remote repo events
-    em = new EventManager( new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.remoteRepository) );
+    runTest( new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.remoteRepository)
+            , new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.localRepository)
+            , 0
+            , 0
+          );
+  }
+
+  private void runTest( MercuryEvent.EventMask emMask, MercuryEvent.EventMask listenerMask, int expectedLocal, int expectedRemote )
+  throws Exception
+  {
+    em = new EventManager( emMask );
     
-    // and this - listen only to local events
-    listener = new Listener( new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.localRepository) );
+    listener = new Listener( listenerMask  );
     
     em.register( listener );
 
@@ -135,8 +91,8 @@ extends TestCase
     
     es.awaitTermination( 2, TimeUnit.SECONDS );
     
-    assertEquals( 0, listener.localRepoCount );
-    assertEquals( 0, listener.remoteRepoCount );
+    assertEquals( expectedLocal, listener.localRepoCount );
+    assertEquals( expectedRemote, listener.remoteRepoCount );
   }
 }
 
