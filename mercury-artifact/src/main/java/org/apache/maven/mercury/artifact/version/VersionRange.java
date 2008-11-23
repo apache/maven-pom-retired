@@ -20,11 +20,7 @@ extends Configurable
    */
   public boolean includes( String version );
   /**
-   * returns true if the range is soft. i.e. 
-   *  1). is not "hard" [|(x,y)|]
-   *  2). allows (,) on the all possible versions in the current tree
-   * 
-   * @return 
+   * @return true if the range is good old single version, not a true range
    */
-  public boolean isSoft();
+  public boolean isSingleton();
 }

@@ -16,6 +16,9 @@ import org.apache.maven.mercury.artifact.Quality;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessor;
 import org.apache.maven.mercury.artifact.api.ArtifactListProcessorException;
 import org.apache.maven.mercury.artifact.version.MetadataVersionComparator;
+import org.apache.maven.mercury.artifact.version.VersionException;
+import org.apache.maven.mercury.artifact.version.VersionRange;
+import org.apache.maven.mercury.artifact.version.VersionRangeFactory;
 import org.apache.maven.mercury.builder.api.MetadataReader;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.logging.IMercuryLogger;
@@ -232,16 +235,24 @@ implements MetadataReader, EventGenerator
       ArtifactListProcessor tp = _processors == null ? null : _processors.get( ArtifactListProcessor.FUNCTION_TP );
       
       GenericEvent eventRead = null;
+      
+      List<ArtifactBasicMetadata> qList = new ArrayList<ArtifactBasicMetadata>( query.size() );
+      qList.addAll( query );
   
       for( RepositoryReader rr : _repositoryReaders )
       try 
       {
+        // all found
+        if( qList.isEmpty() )
+          break;
+
         if( _eventManager!= null )
           eventRead = new GenericEvent( MercuryEvent.EventTypeEnum.virtualRepositoryReader, EVENT_READ_VERSIONS_FROM_REPO, rr.getRepository().getId() );
           
-        ArtifactBasicResults repoRes = rr.readVersions( query );
+        ArtifactBasicResults repoRes = rr.readVersions( qList );
         
         if( repoRes != null && repoRes.hasResults() )
+        {
           for( ArtifactBasicMetadata key : repoRes.getResults().keySet() )
           {
             List<ArtifactBasicMetadata> rorRes = repoRes.getResult(key);
@@ -273,9 +284,29 @@ implements MetadataReader, EventGenerator
             else
               res.add( key, rorRes );
             
-            if( _eventManager!= null )
-              eventRead.setTag( eventRead.getTag()+", found: "+rorRes.toString() );
+            String keyVersion = key.getVersion();
+            VersionRange keyVersionRange = null;
+            try
+            {
+              keyVersionRange = VersionRangeFactory.create( key.getVersion() );
+            }
+            catch( VersionException e )
+            {
+              throw new RepositoryException( _lang.getMessage( "query.element.bad.version", key.toString(), e.getMessage() ) );
+            }
+            
+            if( keyVersionRange.isSingleton() )
+            {
+              Quality keyQuality = new Quality(keyVersion);
+              if( keyQuality.compareTo( Quality.RELEASE_QUALITY ) == 0 )
+                // fixed release is found - no more scanning
+                qList.remove( key );
+            }
           }
+        }
+        
+        if( _eventManager!= null )
+          eventRead.setResult( "repo done" );
       }
       finally
       {

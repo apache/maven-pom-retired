@@ -113,8 +113,8 @@ implements MercuryEventListener
 
   public void fire( MercuryEvent event )
   {
-    System.out.println( EventManager.toString( event ) );
-    System.out.flush();
+//    System.out.println( EventManager.toString( event ) );
+//    System.out.flush();
     
     if( event.getType().equals( MercuryEvent.EventTypeEnum.localRepository ) )
       ++localRepoCount;

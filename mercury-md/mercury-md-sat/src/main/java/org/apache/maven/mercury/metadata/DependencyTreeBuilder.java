@@ -126,39 +126,6 @@ implements DependencyBuilder, EventGenerator
     return root;
   }
   //-----------------------------------------------------
-  /**
-   * the tree is created, now fill in "soft" 
-   * ranges with additional versions from the tree
-   * @throws MetadataTreeException 
-   */
-  private void adjustSoftRanges( MetadataTreeNode node )
-  throws MetadataTreeException
-  {
-    ArtifactBasicMetadata q = node.getQuery();
-    if( q != null )
-    {
-      try
-      {
-        VersionRange vr = VersionRangeFactory.create( q.getVersion() );
-        
-        if( vr.isSoft() )
-        {
-          fillNode( node );
-        }
-      }
-      catch( VersionException e )
-      {
-        throw new MetadataTreeException(e);
-      }
-    }
-  }
-  
-  private void fillNode( MetadataTreeNode node )
-  throws MetadataTreeException
-  {
-    
-  }
-  //-----------------------------------------------------
   private MetadataTreeNode createNode( ArtifactBasicMetadata nodeMD, MetadataTreeNode parent, ArtifactBasicMetadata nodeQuery, ArtifactScopeEnum globalScope )
   throws MetadataTreeException
   {

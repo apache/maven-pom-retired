@@ -36,7 +36,7 @@ implements VersionRange
   DefaultArtifactVersion _toVersion;
   boolean _toInclusive = false;
   
-  boolean soft = false;
+  boolean _singleton = false;
   
   //--------------------------------------------------------------------------------------------
   protected MavenVersionRange( final String range, final QualityRange qRange )
@@ -114,7 +114,7 @@ implements VersionRange
       checkForValidCharacters(range);
       _fromVersion = new DefaultArtifactVersion( range );
       
-      soft = true;
+      _singleton = true;
       
       // good old maven version interpretation
       if( !_osgiVersion )
@@ -202,9 +202,9 @@ implements VersionRange
       _osgiVersion = Boolean.parseBoolean( System.getProperty( val, SYSTEM_PARAMETER_OSGI_VERSION_DEFAULT ) );
   }
 
-  public boolean isSoft()
+  public boolean isSingleton()
   {
-    return soft;
+    return _singleton;
   }
   
   //--------------------------------------------------------------------------------------------
