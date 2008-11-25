@@ -49,7 +49,7 @@ public class RemoteRepositoryCachingReaderM2Test
 extends AbstractRepositoryReaderM2Test
 {
   MetadataXpp3Reader _reader;
-  File _testBase = new File("./target/test-classes/repo");
+  File _testBase;
   DefaultRetriever _retriever;
   public String _port;
   HttpTestServer _server;
@@ -66,6 +66,8 @@ extends AbstractRepositoryReaderM2Test
   throws Exception
   {
     _retriever = new DefaultRetriever();
+    
+    _testBase = new File("./target/test-classes/repo");
     _server = new HttpTestServer( _testBase, "/repo" );
     _server.start();
     _port = String.valueOf( _server.getPort() );
