@@ -378,7 +378,7 @@ implements MetadataReader, EventGenerator
           md.setTracker( rr );
           
           if( _eventManager != null )
-            eventRead.setTag( eventRead.getTag()+", found: "+md.getDependencies() );
+            eventRead.setInfo( eventRead.getInfo()+", found: "+md.getDependencies() );
           
           return md;
         }
@@ -708,7 +708,7 @@ implements MetadataReader, EventGenerator
               _log.debug( bmdQuery+" found in "+rr.getRepository().getServer() );
 
             if( _eventManager != null )
-              eventRead.setTag( eventRead.getTag() );
+              eventRead.setInfo( eventRead.getInfo() );
             
             return res;
           }

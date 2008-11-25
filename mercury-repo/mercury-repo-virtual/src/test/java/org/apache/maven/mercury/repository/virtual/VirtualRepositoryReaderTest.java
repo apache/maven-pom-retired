@@ -174,7 +174,7 @@ extends TestCase
       
     public void fire( MercuryEvent event )
     {
-      String tag = event.getTag();
+      String tag = event.getInfo();
       
       if( _localRepoId.equals( tag ) )
         ++localEventCount;

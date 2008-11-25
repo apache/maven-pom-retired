@@ -74,6 +74,14 @@ public interface MercuryEvent
   void setTag( String tag );
   
   /**
+   * information for this event. Used to trace event propagation in the system 
+   * 
+   * @return
+   */
+  String getInfo();
+  void setInfo( String info );
+  
+  /**
    * get the event start time as UTC timestapm
    * 
    * @return start time as UTC timestamp

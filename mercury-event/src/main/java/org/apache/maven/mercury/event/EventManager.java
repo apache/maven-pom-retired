@@ -110,7 +110,8 @@ public class EventManager
   {
     return new Date( event.getStart() )+", dur: "+ event.getDuration()+" millis :"
     		   + " ["+ event.getType()+":"+event.getName()+"] "
-    		   + ( isEmpty( event.getTag() ) ? "" : ", tag: "+event.getTag() )
+           + ( isEmpty( event.getTag() ) ? "" : ", tag: "+event.getTag() )
+           + ( isEmpty( event.getInfo() ) ? "" : ", info: "+event.getInfo() )
            + ( isEmpty( event.getResult() ) ? "" : ", result: "+event.getResult() )
     ;
   }

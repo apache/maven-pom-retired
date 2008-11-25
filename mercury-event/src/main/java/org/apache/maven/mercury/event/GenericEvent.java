@@ -21,9 +21,4 @@ extends AbstractMercuryEvent
     super( type, name, tag );
   }
 
-  public void setTag( String tag )
-  {
-    this.tag = tag;
-  }
-
 }

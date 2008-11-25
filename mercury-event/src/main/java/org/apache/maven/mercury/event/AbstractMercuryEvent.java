@@ -13,19 +13,21 @@ import java.util.Map;
 public abstract class AbstractMercuryEvent
 implements MercuryEvent
 {
-  EventTypeEnum type;
+  EventTypeEnum _type;
   
-  String name;
+  String _name;
   
-  String tag;
+  String _tag;
   
-  String result;
+  String _info;
   
-  long start;
+  String _result;
   
-  long duration;
+  long _start;
   
-  Map<String, Object> payload;
+  long _duration;
+  
+  Map<String, Object> _payload;
   
   public AbstractMercuryEvent()
   {
@@ -35,19 +37,19 @@ implements MercuryEvent
   public AbstractMercuryEvent( EventTypeEnum type, String name )
   {
     this();
-    this.type = type;
-    this.name = name;
+    this._type = type;
+    this._name = name;
   }
   
-  public AbstractMercuryEvent( EventTypeEnum type, String name, String tag )
+  public AbstractMercuryEvent( EventTypeEnum type, String name, String info )
   {
     this( type, name );
-    this.tag = tag;
+    this._info = info;
   }
 
   public long getDuration()
   {
-    return duration;
+    return _duration;
   }
 
   public Map<String, Object> getPayload()
@@ -57,65 +59,80 @@ implements MercuryEvent
 
   public long getStart()
   {
-    return start;
+    return _start;
   }
 
   public EventTypeEnum getType()
   {
-    return type;
+    return _type;
   }
 
   public String getName()
   {
-    return name;
+    return _name;
+  }
+
+  public String getInfo()
+  {
+    return _info;
   }
 
   public String getTag()
   {
-    return tag;
+    return _tag;
   }
 
   public String getResult()
   {
-    return result;
+    return _result;
   }
 
   public void setResult( String result )
   {
-    this.result = result;
+    this._result = result;
+  }
+
+  public void setTag( String tag )
+  {
+    this._tag = tag;
+  }
+
+  public void setInfo( String info )
+  {
+    this._info = info;
   }
 
   public boolean hasResult()
   {
-    return result != null;
+    return _result != null;
   }
 
   public Object getPayload( String name )
   {
-    return payload == null ? null : payload.get( name );
+    return _payload == null ? null : _payload.get( name );
   }
 
   public void setPayload( Map<String, Object> payload )
   {
-    this.payload = payload;
+    this._payload = payload;
   }
 
   public void setPayload( String name, Object value )
   {
-    if( payload == null )
-      payload = new HashMap<String, Object>(4);
+    if( _payload == null )
+      _payload = new HashMap<String, Object>(4);
     
-    payload.put( name, value );
+    _payload.put( name, value );
   }
 
   public void start()
   {
-    this.start = System.currentTimeMillis();
+    this._start = System.currentTimeMillis();
   }
 
   public void stop()
   {
-    duration = System.currentTimeMillis() - start;
+    _duration = System.currentTimeMillis() - _start;
   }
 
 }
