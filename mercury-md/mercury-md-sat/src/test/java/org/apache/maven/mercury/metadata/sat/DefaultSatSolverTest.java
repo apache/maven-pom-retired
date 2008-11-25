@@ -337,7 +337,7 @@ public class DefaultSatSolverTest
   public void testStrictRangeResolution()
   throws SatException
   {
-    title = "testSingleVersionResolution";
+    title = "testStrictRangeResolution";
     System.out.println("\n\n==========================\n"+title+"\n");
     
     MetadataTreeNode na1 = new MetadataTreeNode( a1, null, null )
@@ -414,7 +414,7 @@ public class DefaultSatSolverTest
   public void testStrictRangeResolution2()
   throws SatException
   {
-    title = "testSingleVersionResolution";
+    title = "testStrictRangeResolution2";
     System.out.println("\n\n==========================\n"+title+"\n");
     
     MetadataTreeNode na1 = new MetadataTreeNode( a1, null, null )
