@@ -48,7 +48,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 public class RemoteRepositoryCachingReaderM2Test
 extends AbstractRepositoryReaderM2Test
 {
-  MetadataXpp3Reader _reader;
+  MetadataXpp3Reader _xpp3Reader;
   File _testBase;
   DefaultRetriever _retriever;
   public String _port;
@@ -72,7 +72,7 @@ extends AbstractRepositoryReaderM2Test
     _server.start();
     _port = String.valueOf( _server.getPort() );
 
-    _reader = new MetadataXpp3Reader();
+    _xpp3Reader = new MetadataXpp3Reader();
     _request = new DefaultRetrievalRequest();
 
     mdProcessor = new MetadataProcessorMock();
@@ -125,14 +125,10 @@ extends AbstractRepositoryReaderM2Test
   public void testReadMd()
   throws FileNotFoundException, IOException, XmlPullParserException
   {
-      FileInputStream fis = new FileInputStream( new File( _testBase, "a/a/maven-metadata.xml") );
-     Metadata mmd = _reader.read( fis );
+     FileInputStream fis = new FileInputStream( new File( _testBase, "a/a/maven-metadata.xml") );
+     Metadata mmd = _xpp3Reader.read( fis );
      fis.close();
      validateMmd( mmd );
-     
-     File cachedMd = new File( _cacheBase, "a/a/"+"meta-ga-"+repo.getId()+".xml" );
-     
-     assertTrue( cachedMd.exists() );
   }
   //-------------------------------------------------------------------------
   public void testReadRemoteMdViaRepositoryReader()
@@ -145,7 +141,7 @@ extends AbstractRepositoryReaderM2Test
     assertTrue( mmBuf.length > 1 );
     
     ByteArrayInputStream bais = new ByteArrayInputStream( mmBuf );
-    Metadata mmd = _reader.read( bais );
+    Metadata mmd = _xpp3Reader.read( bais );
     bais.close();
     
     validateMmd( mmd );
