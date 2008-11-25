@@ -36,7 +36,7 @@ import org.codehaus.plexus.lang.Language;
  * This is the new entry point into Artifact resolution process.
  * 
  * @author Oleg Gusakov
- * @version $Id: MetadataTree.java 681180 2008-07-30 19:34:16Z ogusakov $
+ * @version $Id$
  */
 class DependencyTreeBuilder
 implements DependencyBuilder, EventGenerator

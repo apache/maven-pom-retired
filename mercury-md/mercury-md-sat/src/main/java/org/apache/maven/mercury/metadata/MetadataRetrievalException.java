@@ -25,7 +25,7 @@ import org.apache.maven.mercury.artifact.ArtifactMetadata;
  * Error while retrieving repository metadata from the repository.
  *
  * @author Jason van Zyl
- * @version $Id: MetadataRetrievalException.java 680880 2008-07-29 23:31:21Z ogusakov $
+ * @version $Id$
  */
 public class MetadataRetrievalException
     extends Exception

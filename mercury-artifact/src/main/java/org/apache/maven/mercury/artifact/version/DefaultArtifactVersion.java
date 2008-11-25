@@ -25,7 +25,7 @@ import org.apache.maven.mercury.artifact.Quality;
  * 
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * 
- * @version $Id: DefaultArtifactVersion.java 660026 2008-05-25 20:21:53Z jvanzyl $
+ * @version $Id$
  */
 public class DefaultArtifactVersion
     implements ArtifactVersion

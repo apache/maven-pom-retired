@@ -38,7 +38,7 @@ import org.sat4j.specs.TimeoutException;
  * Default SAT4J implementation.
  * 
  * @author Oleg Gusakov
- * @version $Id: DefaultSatSolver.java 680880 2008-07-29 23:31:21Z ogusakov $
+ * @version $Id$
  */
 public class DefaultSatSolver
 implements SatSolver

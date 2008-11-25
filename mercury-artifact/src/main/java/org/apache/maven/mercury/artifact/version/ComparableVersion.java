@@ -31,7 +31,7 @@ import java.util.Stack;
  * 
  * @author <a href="mailto:hboutemy@apache.org">Herve Boutemy</a>
  * 
- * @version $Id: ComparableVersion.java 660026 2008-05-25 20:21:53Z jvanzyl $
+ * @version $Id$
  */
 public class ComparableVersion
     implements Comparable

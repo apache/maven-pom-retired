@@ -7,7 +7,7 @@ import java.util.Comparator;
  * be changed by appropriate constructor
  * 
  * @author Oleg Gusakov
- * @version $Id: ClassicDepthComparator.java 676808 2008-07-15 06:32:05Z ogusakov $
+ * @version $Id$
  */
 public class ClassicDepthComparator
 implements Comparator<MetadataTreeNode>

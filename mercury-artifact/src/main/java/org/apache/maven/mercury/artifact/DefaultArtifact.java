@@ -21,7 +21,7 @@ import java.io.InputStream;
 /**
  * @author Jason van Zyl
  * 
- * @version $Id: DefaultArtifact.java 680880 2008-07-29 23:31:21Z ogusakov $
+ * @version $Id$
  */
 public class DefaultArtifact
 extends ArtifactMetadata
