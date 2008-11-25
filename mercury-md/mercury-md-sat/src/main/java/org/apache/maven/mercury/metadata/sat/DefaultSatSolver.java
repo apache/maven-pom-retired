@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -143,7 +143,7 @@ implements SatSolver
       throw new SatException( "cannot apply policies to a null tree" );
     
     // TODO og: assumption - around 128 GA's per tree. If more - map reallocates - slow down.
-    Map<String, List<MetadataTreeNode>> buckets = new LinkedHashMap<String, List<MetadataTreeNode>>(128);
+    Map<String, List<MetadataTreeNode>> buckets = new HashMap<String, List<MetadataTreeNode>>(128);
     fillBuckets( buckets, _root );
     sortBuckets( buckets, comparators );
     useBuckets( buckets );
@@ -419,7 +419,7 @@ if( _log.isDebugEnabled() )
     if( children == null || children.size() < 1 )
       throw new SatException("there are queries, but not results. Queries: "+queries);
     
-    Map<ArtifactBasicMetadata, List<MetadataTreeNode>> res = new LinkedHashMap<ArtifactBasicMetadata, List<MetadataTreeNode>>( queries.size() );
+    Map<ArtifactBasicMetadata, List<MetadataTreeNode>> res = new HashMap<ArtifactBasicMetadata, List<MetadataTreeNode>>( queries.size() );
     for( ArtifactBasicMetadata q : queries )
     {
       List<MetadataTreeNode> bucket = new ArrayList<MetadataTreeNode>(4);
