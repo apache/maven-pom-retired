@@ -3,7 +3,7 @@ package org.apache.maven.mercury.metadata.sat;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -157,7 +157,7 @@ public class DefaultSatSolverTest
     comparators.add( new ClassicDepthComparator() );
     comparators.add( new ClassicVersionComparator() );
     
-    Map<String, List<MetadataTreeNode>> buckets = new HashMap<String, List<MetadataTreeNode>>(128);
+    Map<String, List<MetadataTreeNode>> buckets = new LinkedHashMap<String, List<MetadataTreeNode>>(128);
     DefaultSatSolver.fillBuckets( buckets, aa1 );
     DefaultSatSolver.sortBuckets( buckets, comparators );
 
@@ -187,7 +187,7 @@ public class DefaultSatSolverTest
   //    and ((c1 and b1) or (c2 and (b2 or b3))
   //
   //----------------------------------------------------------------------
-  public void testClassictResolution()
+  public void testClassicResolution()
   throws SatException
   {
     title = "simplest 3-node tree";
@@ -324,8 +324,8 @@ public class DefaultSatSolverTest
     assertEquals( 3, res.size() );
     
     assertTrue( res.contains( a1 ) );
-    assertTrue( res.contains( b2 ) );
-    assertTrue( res.contains( c1 ) );
+    assertTrue( res.contains( b1 ) );
+    assertTrue( res.contains( c2 ) );
   }
   //----------------------------------------------------------------------
   //       b:b:1 - c:c:[2,4)
@@ -401,8 +401,8 @@ public class DefaultSatSolverTest
     assertEquals( 3, res.size() );
     
     assertTrue( res.contains( a1 ) );
-    assertTrue( res.contains( b2 ) );
-    assertTrue( res.contains( c1 ) );
+    assertTrue( res.contains( b1 ) );
+    assertTrue( res.contains( c2 ) );
   }
   //----------------------------------------------------------------------
   //       d:d:1 - c:c:[2,4)
