@@ -146,9 +146,10 @@ extends AbstractRepositoryReaderM2Test
     
     validateMmd( mmd );
     
-    File cachedMd = new File( _cacheBase, "a/a/"+"meta-ga-"+repo.getId()+".xml" );
+    String mdFileName = "a/a/"+"meta-ga-"+repo.getId()+".xml";
+    File cachedMd = new File( _cacheBase, mdFileName );
     
-    assertTrue( cachedMd.exists() );
+    assertTrue( "cached metadata "+cachedMd.getCanonicalPath()+" does not exist", cachedMd.exists() );
   }
   //-------------------------------------------------------------------------
   @Override
