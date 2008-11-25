@@ -40,108 +40,89 @@ import org.codehaus.plexus.lang.Language;
  * @version $Id$
  *
  */
-public class RepositoryGAVMetadata
+public class RepositoryGAMetadata
 {
   private static final Language _lang = new DefaultLanguage( RepositoryGAVMetadata.class );
   
-  protected ArtifactCoordinates gav;
-  
-  /** a list of last discovered snapshots, ordered descending */
-  protected TreeSet<String> snapshots = new TreeSet<String>( new VersionComparator() );
+  protected ArtifactCoordinates ga;
 
   /** a list of last discovered versions, ordered ascending */
-  protected Collection<String> classifiers;
+  protected TreeSet<String> versions = new TreeSet<String>( new VersionComparator() );
   
   /** GMT timestamp of the last metadata check */
   protected long lastCheck;
   
   /** is set true by cache implementation when determined that it's time to refresh */
   protected transient boolean expired = false;
-  
-  protected RepositoryGAVMetadata()
+
+  protected RepositoryGAMetadata()
   {
   }
 
   /**
-   * initialization of md object from scratch
-   * 
    * @param versions
    * @param lastCheck
    */
-  public RepositoryGAVMetadata( ArtifactCoordinates gav, Collection<String> snapshots, Collection<String> classifiers )
+  public RepositoryGAMetadata( ArtifactCoordinates ga, Collection<String> versions )
   {
-    this.gav = gav;
-
-    if( !Util.isEmpty( snapshots ) )
-      this.snapshots.addAll( snapshots );
+    this.ga = ga;
     
-    this.classifiers = classifiers;
+    if( ! Util.isEmpty( versions ) )
+      this.versions.addAll( versions );
+    
     this.lastCheck = TimeUtil.getUTCTimestampAsLong();
   }
-  
+
   /**
    * construct from maven 2.x maven-metadata.xml object
    * 
    * @param md
    * @throws MetadataException 
    */
-  public RepositoryGAVMetadata( Metadata md )
+  public RepositoryGAMetadata( Metadata md )
   throws MetadataException
   {
     if( md == null )
-      throw new IllegalArgumentException( _lang.getMessage( "empty.mdbytes" ) );
+      throw new IllegalArgumentException( _lang.getMessage( "empty.md" ) );
     
-    this.gav = new ArtifactCoordinates( md.getGroupId(), md.getArtifactId(), md.getVersion() );
+    this.ga = new ArtifactCoordinates( md.getGroupId(), md.getArtifactId(), md.getVersion() );
 
-    List<String> versions = null;
+    List<String> vers = null;
     
     if( md.getVersioning() != null )
-      versions = md.getVersioning().getVersions(); 
-      
-    if( !Util.isEmpty( versions ) )
-      this.snapshots.addAll( versions );
+    {
+      vers = md.getVersioning().getVersions();
+      this.versions.addAll( vers );
+    }
     
     this.lastCheck = TimeUtil.getUTCTimestampAsLong();
   }
-
+  
   /**
    * copy constructor
    * 
    * @param md
    * @throws MetadataException 
    */
-  public RepositoryGAVMetadata( RepositoryGAVMetadata md )
+  public RepositoryGAMetadata( RepositoryGAMetadata md )
   throws MetadataException
-  {
-    this.gav = md.getGAV();
+  {    
+    this.ga = md.getGA();
 
-    if( ! Util.isEmpty( md.getSnapshots() ) )
-      this.snapshots.addAll( md.getSnapshots() );
-    
+    if( !Util.isEmpty( md.getVersions() ) )
+    {
+      this.versions.addAll( md.getVersions() );
+    }
+
     this.lastCheck = TimeUtil.getUTCTimestampAsLong();
   }
-  
-  public TreeSet<String> getSnapshots()
+
+  public TreeSet<String> getVersions()
   {
-    return snapshots;
+    return versions;
   }
 
-  public Collection<String> getClassifiers()
-  {
-    return classifiers;
-  }
-
-  /**
-   * find the most recent snapshot timestamp
-   * 
-   * @return
-   */
-  public String getSnapshot()
-  {
-    return snapshots.last();
-  }
-
-  public long getLastCheck()
+  public long getLastCheckTs()
   {
     return lastCheck;
   }
@@ -151,27 +132,16 @@ public class RepositoryGAVMetadata
   {
     return TimeUtil.toMillis(  lastCheck );
   }
-
-  public void updateSnapshots( Collection<String> snapshots )
+  
+  public void update( Collection<String> versions )
   {
-    this.snapshots.clear();
-
-    if( !Util.isEmpty( snapshots ) )
-      this.snapshots.addAll( snapshots );
-    
-    this.lastCheck = TimeUtil.getUTCTimestampAsLong();
-  }
-
-  public void updateClassifiers( Collection<String> classifiers )
-  {
-    this.classifiers = classifiers;
+    this.versions.addAll( versions );
     this.lastCheck = TimeUtil.getUTCTimestampAsLong();
   }
   
-  
-  public ArtifactCoordinates getGAV()
+  public ArtifactCoordinates getGA()
   {
-    return gav;
+    return ga;
   }
 
   public boolean isExpired()
