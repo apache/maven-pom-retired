@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
-import org.apache.maven.mercury.util.event.MercuryEventListener;
+import org.apache.maven.mercury.event.MercuryEventListener;
 
 /**
  *

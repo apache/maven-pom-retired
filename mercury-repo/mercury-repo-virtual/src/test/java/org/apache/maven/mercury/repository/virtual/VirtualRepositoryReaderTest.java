@@ -11,6 +11,9 @@ import junit.framework.TestCase;
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
+import org.apache.maven.mercury.event.MercuryEvent;
+import org.apache.maven.mercury.event.MercuryEventListener;
+import org.apache.maven.mercury.event.MercuryEvent.EventMask;
 import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
 import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.LocalRepository;
@@ -20,9 +23,6 @@ import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileUtil;
-import org.apache.maven.mercury.util.event.MercuryEvent;
-import org.apache.maven.mercury.util.event.MercuryEventListener;
-import org.apache.maven.mercury.util.event.MercuryEvent.EventMask;
 
 /**
  *

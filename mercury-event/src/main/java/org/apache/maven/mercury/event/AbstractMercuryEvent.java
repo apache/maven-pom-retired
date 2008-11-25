@@ -1,4 +1,4 @@
-package org.apache.maven.mercury.util.event;
+package org.apache.maven.mercury.event;
 
 import java.util.HashMap;
 import java.util.Map;

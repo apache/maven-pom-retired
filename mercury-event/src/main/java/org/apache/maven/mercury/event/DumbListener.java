@@ -1,11 +1,11 @@
-package org.apache.maven.mercury.util.event;
+package org.apache.maven.mercury.event;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import org.apache.maven.mercury.util.event.MercuryEvent.EventMask;
+import org.apache.maven.mercury.event.MercuryEvent.EventMask;
 
 /**
  *

@@ -1,4 +1,4 @@
-package org.apache.maven.mercury.util.event;
+package org.apache.maven.mercury.event;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,7 +9,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.maven.mercury.logging.IMercuryLogger;
 import org.apache.maven.mercury.logging.MercuryLoggerManager;
-import org.apache.maven.mercury.util.Util;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 
@@ -111,10 +110,16 @@ public class EventManager
   {
     return new Date( event.getStart() )+", dur: "+ event.getDuration()+" millis :"
     		   + " ["+ event.getType()+":"+event.getName()+"] "
-    		   + ( Util.isEmpty( event.getTag() ) ? "" : ", tag: "+event.getTag() )
-           + ( Util.isEmpty( event.getResult() ) ? "" : ", result: "+event.getResult() )
+    		   + ( isEmpty( event.getTag() ) ? "" : ", tag: "+event.getTag() )
+           + ( isEmpty( event.getResult() ) ? "" : ", result: "+event.getResult() )
     ;
   }
+  
+  public static final boolean isEmpty( String o )
+  {
+    return o == null || o.length() < 1;
+  }
+
 
   class UnitOfWork
   {

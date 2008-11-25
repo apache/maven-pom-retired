@@ -2,7 +2,7 @@ package org.apache.maven.mercury.repository.api;
 
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactCoordinates;
-import org.apache.maven.mercury.util.event.EventGenerator;
+import org.apache.maven.mercury.event.EventGenerator;
 
 /**
  * this object abstracts the existence of multiple repositories and repository

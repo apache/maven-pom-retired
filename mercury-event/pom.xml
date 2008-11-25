@@ -8,4 +8,14 @@
   <artifactId>mercury-event</artifactId>
   <name>Mercury Event Framework</name>
 
+  <dependencies>
+
+    <dependency>
+      <groupId>org.apache.maven.mercury</groupId>
+      <artifactId>mercury-logging</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+  </dependencies>
+
 </project>
