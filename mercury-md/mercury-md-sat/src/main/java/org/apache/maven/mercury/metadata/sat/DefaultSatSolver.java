@@ -17,6 +17,7 @@ import org.apache.maven.mercury.metadata.MetadataTreeNode;
 import org.apache.maven.mercury.metadata.MetadataTreeNodeGAComparator;
 import org.apache.maven.mercury.metadata.MetadataTreeNodeGAVComparator;
 import org.apache.maven.mercury.util.event.EventManager;
+import org.apache.maven.mercury.util.event.EventTypeEnum;
 import org.apache.maven.mercury.util.event.GenericEvent;
 import org.apache.maven.mercury.util.event.MercuryEvent;
 import org.apache.maven.mercury.util.event.MercuryEventListener;
@@ -77,7 +78,7 @@ implements SatSolver
     try
     {
       if( _eventManager != null )
-        event = new GenericEvent( MercuryEvent.EventTypeEnum.satSolver, EVENT_CREATE_SOLVER, tree.toString() );
+        event = new GenericEvent( EventTypeEnum.satSolver, EVENT_CREATE_SOLVER, tree.toString() );
         
       if( tree.getId() == 0 )
         MetadataTreeNode.reNumber( tree, 1 );
@@ -538,7 +539,7 @@ if( _log.isDebugEnabled() )
     try
     {
       if( _eventManager != null )
-        event = new GenericEvent( MercuryEvent.EventTypeEnum.satSolver, EVENT_SOLVE, _root.toString() );
+        event = new GenericEvent( EventTypeEnum.satSolver, EVENT_SOLVE, _root.toString() );
       
       if( _solver.isSatisfiable() )
       {

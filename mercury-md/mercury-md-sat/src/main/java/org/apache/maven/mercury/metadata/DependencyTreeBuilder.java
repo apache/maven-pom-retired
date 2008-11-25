@@ -25,6 +25,7 @@ import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;
 import org.apache.maven.mercury.util.Util;
 import org.apache.maven.mercury.util.event.EventGenerator;
 import org.apache.maven.mercury.util.event.EventManager;
+import org.apache.maven.mercury.util.event.EventTypeEnum;
 import org.apache.maven.mercury.util.event.GenericEvent;
 import org.apache.maven.mercury.util.event.MercuryEvent;
 import org.apache.maven.mercury.util.event.MercuryEventListener;
@@ -112,7 +113,7 @@ implements DependencyBuilder, EventGenerator
     
     _existingNodes = new HashMap<String, MetadataTreeNode>(256);
     
-    GenericEvent treeBuildEvent = new GenericEvent( MercuryEvent.EventTypeEnum.dependencyBuilder, TREE_BUILD_EVENT, startMD.getGAV() );
+    GenericEvent treeBuildEvent = new GenericEvent( EventTypeEnum.dependencyBuilder, TREE_BUILD_EVENT, startMD.getGAV() );
     
     MetadataTreeNode root = createNode( startMD, null, startMD, treeScope );
     
@@ -132,7 +133,7 @@ implements DependencyBuilder, EventGenerator
     GenericEvent nodeBuildEvent = null;
     
     if( _eventManager != null )
-      nodeBuildEvent = new GenericEvent( MercuryEvent.EventTypeEnum.dependencyBuilder, TREE_NODE_BUILD_EVENT, nodeMD.getGAV() );
+      nodeBuildEvent = new GenericEvent( EventTypeEnum.dependencyBuilder, TREE_NODE_BUILD_EVENT, nodeMD.getGAV() );
     
     try
     {

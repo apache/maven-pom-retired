@@ -141,10 +141,11 @@ public class DataBuilder
       {
         resolver.resolve( gav[0], gav[1], gav[2], count == 4 ? gav[3] : "jar" );
       }
-      catch( Exception e )
+      catch( Throwable e )
       {
         e.printStackTrace();
       }
+
     }
   }
   

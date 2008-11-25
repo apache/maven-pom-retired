@@ -13,7 +13,7 @@ import java.util.Map;
 public abstract class AbstractMercuryEvent
 implements MercuryEvent
 {
-  MercuryEvent.EventTypeEnum type;
+  EventTypeEnum type;
   
   String name;
   
@@ -32,14 +32,14 @@ implements MercuryEvent
     start();
   }
   
-  public AbstractMercuryEvent( MercuryEvent.EventTypeEnum type, String name )
+  public AbstractMercuryEvent( EventTypeEnum type, String name )
   {
     this();
     this.type = type;
     this.name = name;
   }
   
-  public AbstractMercuryEvent( MercuryEvent.EventTypeEnum type, String name, String tag )
+  public AbstractMercuryEvent( EventTypeEnum type, String name, String tag )
   {
     this( type, name );
     this.tag = tag;
@@ -60,7 +60,7 @@ implements MercuryEvent
     return start;
   }
 
-  public MercuryEvent.EventTypeEnum getType()
+  public EventTypeEnum getType()
   {
     return type;
   }

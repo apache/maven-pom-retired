@@ -144,6 +144,7 @@ implements IDepResolver
     try {
       DataBuilder.visitDeps( list, this );
 		} catch( Exception e ) {
+		  e.printStackTrace();
 		  _log.error( e.getMessage() );
 			throw new MojoExecutionException( e.getMessage() );
 		}

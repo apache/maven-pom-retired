@@ -44,7 +44,7 @@ extends TestCase
   throws Exception
   {
     runTest(  null
-            , new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.localRepository)
+            , new MercuryEvent.EventMask(EventTypeEnum.localRepository)
             , THREAD_COUNT * EventFrameworkTest.EVENT_COUNT
             , 0
            );
@@ -53,7 +53,7 @@ extends TestCase
   public void testListenMaskedManagerEvents()
   throws Exception
   {
-    runTest( new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.remoteRepository)
+    runTest( new MercuryEvent.EventMask(EventTypeEnum.remoteRepository)
             , null
             , 0
             , THREAD_COUNT * EventFrameworkTest.EVENT_COUNT
@@ -63,13 +63,13 @@ extends TestCase
   public void testListenMismatchedMaskEvents()
   throws Exception
   {
-    runTest( new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.remoteRepository)
-            , new MercuryEvent.EventMask(MercuryEvent.EventTypeEnum.localRepository)
+    runTest( new MercuryEvent.EventMask(EventTypeEnum.remoteRepository)
+            , new MercuryEvent.EventMask(EventTypeEnum.localRepository)
             , 0
             , 0
           );
   }
-
+  //-------------------------------------------------------------------------------------------------------------------------------
   private void runTest( MercuryEvent.EventMask emMask, MercuryEvent.EventMask listenerMask, int expectedLocal, int expectedRemote )
   throws Exception
   {
@@ -81,12 +81,12 @@ extends TestCase
 
     for( int i=0; i<THREAD_COUNT; i++ )
     {
-      es.execute( new Generator( em, MercuryEvent.EventTypeEnum.localRepository, ""+i ) );
+      es.execute( new Generator( em, EventTypeEnum.localRepository, ""+i ) );
     }
 
     for( int i=0; i<THREAD_COUNT; i++ )
     {
-      es.execute( new Generator( em, MercuryEvent.EventTypeEnum.remoteRepository, ""+i ) );
+      es.execute( new Generator( em, EventTypeEnum.remoteRepository, ""+i ) );
     }
     
     es.awaitTermination( 2, TimeUnit.SECONDS );
@@ -116,10 +116,10 @@ implements MercuryEventListener
 //    System.out.println( EventManager.toString( event ) );
 //    System.out.flush();
     
-    if( event.getType().equals( MercuryEvent.EventTypeEnum.localRepository ) )
+    if( event.getType().equals( EventTypeEnum.localRepository ) )
       ++localRepoCount;
     else
-      if( event.getType().equals( MercuryEvent.EventTypeEnum.remoteRepository ) )
+      if( event.getType().equals( EventTypeEnum.remoteRepository ) )
         ++remoteRepoCount;
   }
 
@@ -138,9 +138,9 @@ implements Runnable, EventGenerator
   
   String _msg;
   
-  MercuryEvent.EventTypeEnum _myType;
+  EventTypeEnum _myType;
   
-  public Generator( EventManager em, MercuryEvent.EventTypeEnum type, String msg  )
+  public Generator( EventManager em, EventTypeEnum type, String msg  )
   {
     _eventManager = em;
     _msg = msg;

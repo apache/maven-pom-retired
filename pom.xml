@@ -51,6 +51,7 @@
     <module>mercury-external</module>
     <module>mercury-crypto</module>
     <module>mercury-util</module>
+    <module>mercury-event</module>
     <module>mercury-logging</module>
     <module>mercury-plexus</module>
     <module>mercury-wagon</module>

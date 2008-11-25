@@ -20,7 +20,6 @@ import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileUtil;
-import org.apache.maven.mercury.util.event.EventManager;
 import org.apache.maven.mercury.util.event.MercuryEvent;
 import org.apache.maven.mercury.util.event.MercuryEventListener;
 import org.apache.maven.mercury.util.event.MercuryEvent.EventMask;
@@ -165,7 +164,7 @@ extends TestCase
     assertEquals( 0, l.remoteEventCount );
     
   }
-  
+  //========================================================================
   class Listener
   implements MercuryEventListener
   {
@@ -182,8 +181,8 @@ extends TestCase
       else if( _remoteRepoId.equals( tag ) )
         ++remoteEventCount;
       
-      System.out.println(EventManager.toString( event ));
-      System.out.flush();
+//      System.out.println(EventManager.toString( event ));
+//      System.out.flush();
     }
 
     public EventMask getMask()

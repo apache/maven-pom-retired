@@ -20,6 +20,7 @@ import org.apache.maven.mercury.repository.api.RepositoryUpdatePolicy;
 import org.apache.maven.mercury.util.FileLockBundle;
 import org.apache.maven.mercury.util.FileUtil;
 import org.apache.maven.mercury.util.event.EventManager;
+import org.apache.maven.mercury.util.event.EventTypeEnum;
 import org.apache.maven.mercury.util.event.GenericEvent;
 import org.apache.maven.mercury.util.event.MercuryEvent;
 import org.apache.maven.mercury.util.event.MercuryEventListener;
@@ -108,7 +109,7 @@ implements RepositoryMetadataCache
       String gaKey = getGAKey(coord);
       
       if( _eventManager != null )
-        event = new GenericEvent( MercuryEvent.EventTypeEnum.fsCache, EVENT_FIND_GA, gaKey );
+        event = new GenericEvent( EventTypeEnum.fsCache, EVENT_FIND_GA, gaKey );
       
       RepositoryGAMetadata inMem = gaCache.get( gaKey );
       
@@ -181,7 +182,7 @@ implements RepositoryMetadataCache
       String gavKey = getGAVKey(coord);
       
       if( _eventManager != null )
-        event = new GenericEvent( MercuryEvent.EventTypeEnum.fsCache, EVENT_FIND_GAV, gavKey );
+        event = new GenericEvent( EventTypeEnum.fsCache, EVENT_FIND_GAV, gavKey );
       
       RepositoryGAVMetadata inMem = gavCache.get( gavKey );
       
@@ -256,7 +257,7 @@ implements RepositoryMetadataCache
       String gaKey = getGAKey( gam.getGA() );
       
       if( _eventManager != null )
-        event = new GenericEvent( MercuryEvent.EventTypeEnum.fsCache, EVENT_UPDATE_GA, gaKey );
+        event = new GenericEvent( EventTypeEnum.fsCache, EVENT_UPDATE_GA, gaKey );
       
       File gaDir = getGADir( gam.getGA() );
       
@@ -298,7 +299,7 @@ implements RepositoryMetadataCache
       String gavKey = getGAKey( gavm.getGAV() );
 
       if( _eventManager != null )
-        event = new GenericEvent( MercuryEvent.EventTypeEnum.fsCache, EVENT_UPDATE_GA, gavKey );
+        event = new GenericEvent( EventTypeEnum.fsCache, EVENT_UPDATE_GA, gavKey );
       
       
       File gavDir = getGAVDir( gavm.getGAV() );
@@ -339,7 +340,7 @@ implements RepositoryMetadataCache
       String rawKey = bmd.getGAV();
       
       if( _eventManager != null )
-        event = new GenericEvent( MercuryEvent.EventTypeEnum.fsCache, EVENT_FIND_RAW, rawKey );
+        event = new GenericEvent( EventTypeEnum.fsCache, EVENT_FIND_RAW, rawKey );
       
       byte [] res = rawCache.get( rawKey );
       
@@ -393,7 +394,7 @@ implements RepositoryMetadataCache
       String rawKey = bmd.getGAV();
       
       if( _eventManager != null )
-        event = new GenericEvent( MercuryEvent.EventTypeEnum.fsCache, EVENT_SAVE_RAW, rawKey );
+        event = new GenericEvent( EventTypeEnum.fsCache, EVENT_SAVE_RAW, rawKey );
 
       rawCache.put( rawKey, rawBytes );
       

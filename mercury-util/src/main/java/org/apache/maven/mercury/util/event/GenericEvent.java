@@ -11,12 +11,12 @@ public class GenericEvent
 extends AbstractMercuryEvent
 {
 
-  public GenericEvent( MercuryEvent.EventTypeEnum type, String name )
+  public GenericEvent( EventTypeEnum type, String name )
   {
     super(type, name);
   }
 
-  public GenericEvent( MercuryEvent.EventTypeEnum type, String name, String tag )
+  public GenericEvent( EventTypeEnum type, String name, String tag )
   {
     super( type, name, tag );
   }
