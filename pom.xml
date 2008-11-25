@@ -146,14 +146,6 @@
         <artifactId>maven-site-plugin</artifactId>
       </plugin>
 
-      <plugin>
-        <groupId>com.google.code.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <configuration>
-          <header>src/licenses/apache.txt</header>
-        </configuration>
-      </plugin>
-
     </plugins>
 
   </build>
