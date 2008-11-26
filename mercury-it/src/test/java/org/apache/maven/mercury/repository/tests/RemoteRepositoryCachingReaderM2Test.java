@@ -66,6 +66,8 @@ extends AbstractRepositoryReaderM2Test
     _retriever = new DefaultRetriever();
     
     _testBase = new File("./target/test-classes/repo");
+    _testBase.mkdirs();
+    
     _server = new HttpTestServer( _testBase, "/repo" );
     _server.start();
     _port = String.valueOf( _server.getPort() );
@@ -87,11 +89,11 @@ extends AbstractRepositoryReaderM2Test
     repo.setDependencyProcessor(  new MetadataProcessorMock() );
     reader = repo.getReader();
 
-    _mdCache = VirtualRepositoryReader.getCache( _testBase );
-    
     _cacheBase = new File( _testBase, VirtualRepositoryReader.METADATA_CACHE_DIR );
-//    _cacheBase.delete();
-//    _cacheBase.mkdirs();
+    _cacheBase.delete();
+    _cacheBase.mkdirs();
+    
+    _mdCache = VirtualRepositoryReader.getCache( _testBase );
     
     reader.setMetadataCache( _mdCache );
     
@@ -138,7 +140,7 @@ extends AbstractRepositoryReaderM2Test
     byte [] mmBuf = reader.readRawData( "a/a/maven-metadata.xml" );
     
     // let grid VM catch up. 
-    try { Thread.sleep( 1000L ); } catch( Exception e ) {} 
+    try { Thread.sleep( 5000L ); } catch( Exception e ) {} 
     
     assertNotNull( mmBuf );
     assertTrue( mmBuf.length > 1 );
