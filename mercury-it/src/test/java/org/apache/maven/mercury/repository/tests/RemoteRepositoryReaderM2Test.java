@@ -41,6 +41,7 @@ import org.apache.maven.mercury.spi.http.client.retrieve.RetrievalResponse;
 import org.apache.maven.mercury.spi.http.server.HttpTestServer;
 import org.apache.maven.mercury.transport.api.Binding;
 import org.apache.maven.mercury.transport.api.Server;
+import org.apache.maven.mercury.util.FileUtil;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 public class RemoteRepositoryReaderM2Test
@@ -59,6 +60,8 @@ extends AbstractRepositoryReaderM2Test
   throws Exception
   {
     _testBase = new File("./target/test-classes/repo");
+    FileUtil.copy( new File("src/test/resources/repo"), _testBase, false );
+    
     _retriever = new DefaultRetriever();
     _server = new HttpTestServer( _testBase, "/repo" );
     _server.start();
