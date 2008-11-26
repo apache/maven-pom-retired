@@ -97,6 +97,8 @@ extends AbstractRepositoryReaderM2Test
     
     reader.setMetadataCache( _mdCache );
     
+    super.setUp();
+    
   }
   //-------------------------------------------------------------------------
   @Override

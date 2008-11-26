@@ -78,6 +78,8 @@ extends AbstractRepositoryReaderM2Test
     repo = new RemoteRepositoryM2( "testRepo", server );
     repo.setDependencyProcessor( mdProcessor );
     reader = repo.getReader();
+    
+    super.setUp();
   }
   //-------------------------------------------------------------------------
   @Override
