@@ -374,7 +374,7 @@ extends TestCase
     {
       System.out.println("===> unexpected Exceptions");
       for( Exception e : ror.getExceptions().values() )
-        System.out.println( e.getMessage() );
+        System.out.println( e.getClass().getName()+": "+e.getMessage() );
       System.out.println("<=== unexpected Exceptions");
     }
     
