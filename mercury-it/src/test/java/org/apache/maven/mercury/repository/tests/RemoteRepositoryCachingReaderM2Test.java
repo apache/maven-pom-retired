@@ -139,6 +139,9 @@ extends AbstractRepositoryReaderM2Test
     
     byte [] mmBuf = reader.readRawData( "a/a/maven-metadata.xml" );
     
+    // let grid VM save files 
+    try { Thread.sleep( 500L ); } catch( Exception e ) {} 
+    
     assertNotNull( mmBuf );
     assertTrue( mmBuf.length > 1 );
     
