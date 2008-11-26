@@ -58,8 +58,6 @@ extends AbstractRepositoryReaderM2Test
   RepositoryMetadataCache _mdCache;
   File _cacheBase;
 
-  
-
   //-------------------------------------------------------------------------
   @Override
   protected void setUp()
@@ -139,8 +137,8 @@ extends AbstractRepositoryReaderM2Test
     
     byte [] mmBuf = reader.readRawData( "a/a/maven-metadata.xml" );
     
-    // let grid VM save files 
-    try { Thread.sleep( 500L ); } catch( Exception e ) {} 
+    // let grid VM catch up. 
+    try { Thread.sleep( 1000L ); } catch( Exception e ) {} 
     
     assertNotNull( mmBuf );
     assertTrue( mmBuf.length > 1 );
@@ -160,11 +158,18 @@ extends AbstractRepositoryReaderM2Test
       File [] files = dir.listFiles();
       System.out.println("=====> Files in "+dir.getCanonicalPath() );
       System.out.flush();
-      for( File f : files )
+      if( files != null && files.length > 0)
+        for( File f : files )
+        {
+          System.out.println("found file: "+f.getCanonicalPath() );
+          System.out.flush();
+        }
+      else
       {
-        System.out.println("found file: "+f.getCanonicalPath() );
+        System.out.println("empty folder" );
         System.out.flush();
       }
+        
       System.out.println("<=====" );
       System.out.flush();
     }
