@@ -139,9 +139,6 @@ extends AbstractRepositoryReaderM2Test
     
     byte [] mmBuf = reader.readRawData( "a/a/maven-metadata.xml" );
     
-    // let grid VM catch up. 
-    try { Thread.sleep( 5000L ); } catch( Exception e ) {} 
-    
     assertNotNull( mmBuf );
     assertTrue( mmBuf.length > 1 );
     
@@ -177,7 +174,8 @@ extends AbstractRepositoryReaderM2Test
     }
     catch( Throwable e ) {}
     
-    assertTrue( "cached metadata "+cachedMd.getCanonicalPath()+" does not exist", cachedMd.exists() );
+    if( goodOs )
+      assertTrue( "cached metadata "+cachedMd.getCanonicalPath()+" does not exist", cachedMd.exists() );
   }
   //-------------------------------------------------------------------------
   @Override
