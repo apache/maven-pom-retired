@@ -103,7 +103,7 @@ extends AbstractRepositoryReaderM2Test
   public void testReadMd()
   throws FileNotFoundException, IOException, XmlPullParserException
   {
-      FileInputStream fis = new FileInputStream( new File( _testBase, "a/a/maven-metadata.xml") );
+     FileInputStream fis = new FileInputStream( new File( _testBase, "a/a/maven-metadata.xml") );
      Metadata mmd = _reader.read( fis );
      fis.close();
      validateMmd( mmd );
@@ -112,7 +112,7 @@ extends AbstractRepositoryReaderM2Test
   public void testReadRemoteMdViaHttpClient()
   throws FileNotFoundException, IOException, XmlPullParserException
   {
-    File temp = File.createTempFile("maven", "metadata" );
+    File temp = new File("./target/maven-metadata.temp" );
     HashSet<Binding> bindings = new HashSet<Binding>();
     
     Binding aaMdBinding = new Binding( new URL("http://localhost:"+_port+"/repo/a/a/maven-metadata.xml"), temp);

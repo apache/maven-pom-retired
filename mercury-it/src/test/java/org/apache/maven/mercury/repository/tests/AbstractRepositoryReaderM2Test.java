@@ -371,7 +371,12 @@ extends TestCase
     assertNotNull( ror );
     
     if( ror.hasExceptions() )
-      System.out.println( ror.getExceptions() );
+    {
+      System.out.println("===> unexpected Exceptions");
+      for( Exception e : ror.getExceptions().values() )
+        System.out.println( e.getMessage() );
+      System.out.println("<=== unexpected Exceptions");
+    }
     
     assertFalse( ror.hasExceptions() );
     assertTrue( ror.hasResults() );
