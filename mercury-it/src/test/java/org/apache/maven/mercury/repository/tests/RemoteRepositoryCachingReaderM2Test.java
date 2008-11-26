@@ -154,6 +154,17 @@ extends AbstractRepositoryReaderM2Test
     String mdFileName = "a/a/"+"meta-ga-"+repo.getId()+".xml";
     File cachedMd = new File( _cacheBase, mdFileName );
     
+    try
+    {
+      File dir = new File( _cacheBase, "a/a" );
+      File [] files = dir.listFiles();
+      System.out.println("=====> Files in "+dir.getCanonicalPath() );
+      for( File f : files )
+        System.out.println("found file: "+f.getCanonicalPath() );
+      System.out.println("<=====" );
+    }
+    catch( Throwable e ) {}
+    
     assertTrue( "cached metadata "+cachedMd.getCanonicalPath()+" does not exist", cachedMd.exists() );
   }
   //-------------------------------------------------------------------------
