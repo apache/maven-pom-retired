@@ -159,9 +159,14 @@ extends AbstractRepositoryReaderM2Test
       File dir = new File( _cacheBase, "a/a" );
       File [] files = dir.listFiles();
       System.out.println("=====> Files in "+dir.getCanonicalPath() );
+      System.out.flush();
       for( File f : files )
+      {
         System.out.println("found file: "+f.getCanonicalPath() );
+        System.out.flush();
+      }
       System.out.println("<=====" );
+      System.out.flush();
     }
     catch( Throwable e ) {}
     
