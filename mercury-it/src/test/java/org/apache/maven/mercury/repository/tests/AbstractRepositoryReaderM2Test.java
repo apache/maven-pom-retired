@@ -420,8 +420,7 @@ extends TestCase
                                     )
                   );
     
-    if( goodOs )
-      server.setReaderStreamVerifierFactories(factories);
+    server.setReaderStreamVerifierFactories(factories);
 
     bmd = new ArtifactBasicMetadata("a:a:3");
     query.add( bmd );
@@ -487,8 +486,11 @@ extends TestCase
                 , getClass().getResourceAsStream( publicKeyFile )
                                     )
                   );
-    factories.add( new SHA1VerifierFactory(true,false) );
-    server.setReaderStreamVerifierFactories(factories);
+    if( goodOs )
+    {
+      factories.add( new SHA1VerifierFactory(true,false) );
+      server.setReaderStreamVerifierFactories(factories);
+    }
 
     bmd = new ArtifactBasicMetadata("a:a:3");
     query.add( bmd );
