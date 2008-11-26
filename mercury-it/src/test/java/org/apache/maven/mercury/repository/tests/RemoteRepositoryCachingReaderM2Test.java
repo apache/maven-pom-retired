@@ -87,11 +87,11 @@ extends AbstractRepositoryReaderM2Test
     repo.setDependencyProcessor(  new MetadataProcessorMock() );
     reader = repo.getReader();
 
-    _cacheBase = new File( _testBase, VirtualRepositoryReader.METADATA_CACHE_DIR );
-    _cacheBase.delete();
-    _cacheBase.mkdirs();
-    
     _mdCache = VirtualRepositoryReader.getCache( _testBase );
+    
+    _cacheBase = new File( _testBase, VirtualRepositoryReader.METADATA_CACHE_DIR );
+//    _cacheBase.delete();
+//    _cacheBase.mkdirs();
     
     reader.setMetadataCache( _mdCache );
     
@@ -199,7 +199,6 @@ extends AbstractRepositoryReaderM2Test
       throws IllegalArgumentException,
       RepositoryException
   {
-    // TODO Auto-generated method stub
     super.testReadRelease();
   }
   //-------------------------------------------------------------------------
