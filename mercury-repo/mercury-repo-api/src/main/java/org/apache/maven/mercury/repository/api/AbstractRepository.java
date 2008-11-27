@@ -158,7 +158,7 @@ implements Repository
     writerRegistry.put(  type, writerFactory );
   }
   //---------------------------------------------------------------------------
-  public static void upregisterReader( String type )
+  public static void unregisterReader( String type )
   throws IllegalArgumentException
   {
     if( type == null || type.length() < 1 )
@@ -167,7 +167,7 @@ implements Repository
     readerRegistry.remove( type );
   }
   //---------------------------------------------------------------------------
-  public static void upregisterWriter( String type )
+  public static void unregisterWriter( String type )
   throws IllegalArgumentException
   {
     if( type == null || type.length() < 1 )
