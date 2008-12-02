@@ -41,7 +41,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
  *
  */
 public class MetadataBuilderTest
-    extends TestCase
+extends TestCase
 {
   MetadataBuilder mb;
   File testBase = new File("./target/test-classes/controlledRepo");

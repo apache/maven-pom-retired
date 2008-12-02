@@ -11,10 +11,11 @@
   </parent>
 
   <dependencies>
+  
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-artifact</artifactId>
-      <version>${project.version}</version>
     </dependency>
+    
   </dependencies>
 </project>

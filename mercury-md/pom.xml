@@ -20,13 +20,11 @@
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-logging</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-event</artifactId>
-      <version>${project.version}</version>
     </dependency>
     
   </dependencies>

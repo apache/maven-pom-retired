@@ -32,6 +32,8 @@ import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.crypto.pgp.PgpStreamVerifierFactory;
 import org.apache.maven.mercury.crypto.sha.SHA1VerifierFactory;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.api.RepositoryReader;
 import org.apache.maven.mercury.repository.api.RepositoryWriter;
@@ -52,7 +54,7 @@ import org.codehaus.plexus.PlexusTestCase;
 public abstract class AbstractRepositoryWriterM2Test
 extends PlexusTestCase
 {
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( AbstractRepositoryWriterM2Test.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( AbstractRepositoryWriterM2Test.class ); 
   
   Repository repo;
   

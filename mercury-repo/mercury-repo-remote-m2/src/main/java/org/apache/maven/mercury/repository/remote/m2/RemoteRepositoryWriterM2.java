@@ -75,7 +75,7 @@ implements RepositoryWriter
   Server _server;
   RepositoryReader _reader;
   
-  // TODO og: 2008-08-22 should be replaced with real transport
+  // TODO og: 2008-08-22 should be replaced with real transport implementation
   DefaultDeployer _transport;
   //---------------------------------------------------------------------------------------------------------------
   public RemoteRepositoryWriterM2( RemoteRepository repo )

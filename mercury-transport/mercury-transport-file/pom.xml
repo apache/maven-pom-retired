@@ -31,22 +31,23 @@
 
 
   <dependencies>
+
     <!-- Mercury Dependencies -->
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-transport-api</artifactId>
-      <version>${project.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-crypto-basic</artifactId>
-      <version>${project.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-util</artifactId>
-      <version>${project.version}</version>
     </dependency>
+
   </dependencies>
 
 </project>

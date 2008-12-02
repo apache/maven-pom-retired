@@ -35,6 +35,8 @@ import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
 import org.apache.maven.mercury.crypto.pgp.PgpStreamVerifierFactory;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.spi.http.client.HttpClientException;
 import org.apache.maven.mercury.spi.http.client.deploy.DefaultDeployRequest;
 import org.apache.maven.mercury.spi.http.client.deploy.DefaultDeployer;
@@ -57,8 +59,6 @@ import org.apache.maven.wagon.proxy.ProxyInfo;
 import org.apache.maven.wagon.resource.Resource;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *  plexus.component
@@ -74,6 +74,9 @@ public class MercuryWagon
 extends AbstractWagon
 implements Wagon
 {
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( MercuryWagon.class ); 
+  private static final Language _lang = new DefaultLanguage( MercuryWagon.class );
+
   public static final String SYSTEM_PARAMETER_DEBUG_TRANSFER = "maven.mercury.wagon.debug.transfer";
   private boolean debugTransfer = Boolean.parseBoolean( System.getProperty( SYSTEM_PARAMETER_DEBUG_TRANSFER, "false" ) );
 
@@ -92,9 +95,6 @@ implements Wagon
     , {"mttp:",      "http:"}
     , {"mttps:",     "https:"}
                                                                       };
-
-  private static final Logger _log = LoggerFactory.getLogger(MercuryWagon.class);
-  private static final Language _lang = new DefaultLanguage( MercuryWagon.class );
   
   private Server server;
   private DefaultRetriever retriever;

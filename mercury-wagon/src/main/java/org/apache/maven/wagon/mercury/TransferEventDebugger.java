@@ -18,10 +18,10 @@
  */
 package org.apache.maven.wagon.mercury;
 
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.wagon.events.TransferEvent;
 import org.apache.maven.wagon.events.TransferListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,7 +36,7 @@ implements TransferListener
   public static final String SYSTEM_PARAMETER_DEBUG_TRANSFER_BYTES = "maven.mercury.wagon.debug.transfer.bytes";
   private boolean debugTransferBytes = Boolean.parseBoolean( System.getProperty( SYSTEM_PARAMETER_DEBUG_TRANSFER_BYTES, "false" ) );
 
-  private static final Logger _log = LoggerFactory.getLogger(TransferEventDebugger.class);
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( TransferEventDebugger.class ); 
 
   public void debug( String message )
   {

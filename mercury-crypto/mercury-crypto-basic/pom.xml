@@ -10,21 +10,22 @@
   </parent>
 
   <dependencies>
+  
     <dependency>
       <groupId>bouncycastle</groupId>
       <artifactId>bcprov-jdk15</artifactId>
-      <version>140</version>
     </dependency>
+    
     <dependency>
       <groupId>bouncycastle</groupId>
       <artifactId>bcpg-jdk15</artifactId>
-      <version>140</version>
     </dependency>
+    
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-crypto-api</artifactId>
-      <version>${project.version}</version>
     </dependency>
+    
   </dependencies>
 
 </project>

@@ -34,6 +34,8 @@ import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
 import org.apache.maven.mercury.event.DumbListener;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.metadata.DependencyBuilder;
 import org.apache.maven.mercury.metadata.DependencyBuilderFactory;
 import org.apache.maven.mercury.metadata.MetadataTreeException;
@@ -56,7 +58,7 @@ import org.apache.maven.mercury.transport.api.Server;
 public class DependencyTreeBuilderTest
 extends TestCase
 {
-  private static final org.slf4j.Logger _log = org.slf4j.LoggerFactory.getLogger( DependencyTreeBuilderTest.class ); 
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( DependencyTreeBuilderTest.class ); 
   
   String repoUrl = "http://repo1.maven.org/maven2";
 //  String repoUrl = "http://repository.sonatype.org/content/groups/public";

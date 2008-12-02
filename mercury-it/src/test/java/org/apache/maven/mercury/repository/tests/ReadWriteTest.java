@@ -29,6 +29,8 @@ import junit.framework.TestCase;
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.mercury.repository.api.ArtifactResults;
 import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
@@ -38,6 +40,7 @@ import org.apache.maven.mercury.repository.api.RepositoryWriter;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
+import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryWriterM2;
 import org.apache.maven.mercury.spi.http.server.HttpTestServer;
 import org.apache.maven.mercury.transport.api.Server;
 
@@ -51,7 +54,7 @@ import org.apache.maven.mercury.transport.api.Server;
 public class ReadWriteTest
 extends TestCase
 {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger( ReadWriteTest.class ); 
+  private static final IMercuryLogger log = MercuryLoggerManager.getLogger( ReadWriteTest.class ); 
 
   File remoteRepoBase = new File("./target/test-classes/repo");
   public String port;

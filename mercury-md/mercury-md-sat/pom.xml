@@ -9,13 +9,6 @@
     <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
 
-  <properties>
-
-    <sat4j.version>2.0.4</sat4j.version>
-    <commons.digester.version>1.8</commons.digester.version>
-
-  </properties>
-
   <build>
     <plugins>
       <plugin>
@@ -39,48 +32,48 @@
     <dependency>
       <groupId>org.sat4j</groupId>
       <artifactId>org.sat4j.core</artifactId>
-      <version>${sat4j.version}</version>
     </dependency>
+    
     <dependency>
       <groupId>org.sat4j</groupId>
       <artifactId>org.sat4j.pb</artifactId>
-      <version>${sat4j.version}</version>
     </dependency>
+    
     <dependency>
       <groupId>commons-digester</groupId>
       <artifactId>commons-digester</artifactId>
-      <version>${commons.digester.version}</version>
       <scope>test</scope>
     </dependency>
+    
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-md-shared</artifactId>
-      <version>${project.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-repo-virtual</artifactId>
-      <version>${project.version}</version>
     </dependency>
+
   <!--  test deps -->
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-repo-local-m2</artifactId>
-      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-repo-local-m2</artifactId>
-      <version>${project.version}</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-repo-remote-m2</artifactId>
-      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
+    
   </dependencies>
 </project>

@@ -20,9 +20,9 @@ package org.apache.maven.wagon.mercury;
 
 import org.apache.maven.mercury.crypto.api.StreamObserver;
 import org.apache.maven.mercury.crypto.api.StreamObserverException;
+import org.apache.maven.mercury.logging.IMercuryLogger;
+import org.apache.maven.mercury.logging.MercuryLoggerManager;
 import org.apache.maven.wagon.events.TransferEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -34,7 +34,8 @@ import org.slf4j.LoggerFactory;
 public class StupidWagonObserverAdapter
 implements StreamObserver
 {
-  private static final Logger _log = LoggerFactory.getLogger(StupidWagonObserverAdapter.class);
+  private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( StupidWagonObserverAdapter.class ); 
+
   byte [] buf = new byte[2048];
 
   MercuryWagon wagon;
