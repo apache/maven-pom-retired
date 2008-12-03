@@ -26,6 +26,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Reader;
 import org.apache.maven.mercury.repository.metadata.io.xpp3.MetadataXpp3Writer;
 import org.apache.maven.mercury.util.TimeUtil;
@@ -246,7 +247,7 @@ public class MetadataBuilder
     String utc = TimeUtil.getUTCTimestamp();
     sn.setTimestamp( utc );
     
-    if( version.endsWith( "SNAPSHOT" ))
+    if( version.endsWith( Artifact.SNAPSHOT_VERSION ))
       return sn;
     
     String sbn = version.substring( version.lastIndexOf( '-' )+1 );

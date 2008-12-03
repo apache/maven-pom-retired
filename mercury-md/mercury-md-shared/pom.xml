@@ -57,12 +57,11 @@
 
   <dependencies>
   
-  <!-- 
     <dependency>
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-artifact</artifactId>
     </dependency>
- -->
+
     <!--  
      | for some reason transitive does not work - have to copy deps from mercury-util 
      | but it works fine under m2eclipse 

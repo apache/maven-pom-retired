@@ -39,21 +39,26 @@
             </goals>
           </execution>
         </executions>
+        
       </plugin>
 </plugins>
 </build>
   <dependencies>
+
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-lang</artifactId>
+    </dependency>
+
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-artifact</artifactId>
-  		<version>${project.version}</version>
   	</dependency>
     
     <!--  for some reason transitive does not work - have to copy deps from mercury-util --> 
   	<dependency>
   		<groupId>org.apache.maven.mercury</groupId>
   		<artifactId>mercury-util</artifactId>
-  		<version>${project.version}</version>
   	</dependency>
     
   </dependencies>
