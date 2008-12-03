@@ -126,7 +126,7 @@ extends TestCase
     localRepoDir.delete();
     localRepoDir.mkdir();
     
-    localRepo = new LocalRepositoryM2( "testLocalRepo", localRepoDir );
+    localRepo = new LocalRepositoryM2( "testLocalRepo", localRepoDir, pm.findDependencyProcessor() );
     
     repos = new ArrayList<Repository>();
     repos.add( localRepo );
@@ -197,7 +197,7 @@ extends TestCase
     Server central = new Server( "central", new URL("http://repo1.maven.org/maven2") );
 //    Server central = new Server( "central", new URL("http://repository.sonatype.org/content/groups/public") );
     
-    repos.add( new RemoteRepositoryM2(central) );
+    repos.add( new RemoteRepositoryM2(central, pm.findDependencyProcessor()) );
 
     String artifactId = "asm:asm-xml:3.0";
 
@@ -220,7 +220,7 @@ extends TestCase
     Server central = new Server( "central", new URL("http://repo1.maven.org/maven2") );
 //    Server central = new Server( "central", new URL("http://repository.sonatype.org/content/groups/public") );
     
-    repos.add( new RemoteRepositoryM2(central) );
+    repos.add( new RemoteRepositoryM2(central, pm.findDependencyProcessor()) );
 
     String artifactId = "asm:asm-xml:3.0";
 

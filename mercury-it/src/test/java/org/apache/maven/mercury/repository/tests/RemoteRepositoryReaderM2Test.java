@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.repository.api.RepositoryException;
@@ -75,7 +76,7 @@ extends AbstractRepositoryReaderM2Test
     query = new ArrayList<ArtifactBasicMetadata>();
 
     server = new Server( "test", new URL("http://localhost:"+_port+"/repo") );
-    repo = new RemoteRepositoryM2( "testRepo", server );
+    repo = new RemoteRepositoryM2( "testRepo", server, new MavenDependencyProcessor() );
     repo.setDependencyProcessor( mdProcessor );
     reader = repo.getReader();
     

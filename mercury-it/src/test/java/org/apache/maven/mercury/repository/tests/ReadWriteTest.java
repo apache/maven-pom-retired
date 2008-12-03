@@ -26,6 +26,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
@@ -86,7 +87,7 @@ extends TestCase
     port = String.valueOf( httpServer.getPort() );
 
     server = new Server( "test", new URL("http://localhost:"+port+"/repo") );
-    rr = new RemoteRepositoryM2( "testRepo", server );
+    rr = new RemoteRepositoryM2( "testRepo", server, new MavenDependencyProcessor() );
 
     mdProcessor = new MetadataProcessorMock();
     rr.setDependencyProcessor( mdProcessor );
@@ -97,7 +98,7 @@ extends TestCase
     localRepoBase.mkdir();
     log.info("local repo is in "+localRepoBase);
     
-    lr = new LocalRepositoryM2( "lr", localRepoBase );
+    lr = new LocalRepositoryM2( "lr", localRepoBase, new MavenDependencyProcessor() );
     writer = lr.getWriter(); 
 
     query = new ArrayList<ArtifactBasicMetadata>();

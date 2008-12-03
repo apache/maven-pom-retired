@@ -21,6 +21,7 @@ package org.apache.maven.mercury.repository.tests;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
 import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
@@ -47,7 +48,7 @@ extends AbstractRepositoryReaderM2Test
 
     server = new Server( "test", new File("./target/test-classes/repo").toURL() );
       
-    repo = new LocalRepositoryM2( server );
+    repo = new LocalRepositoryM2( server, new MavenDependencyProcessor() );
     repo.setDependencyProcessor( mdProcessor );
     reader = repo.getReader();
 

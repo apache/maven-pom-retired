@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
@@ -91,7 +92,7 @@ extends AbstractRepositoryWriterM2Test
 
     server = new Server( "nexusTest", new URL(nexusSnapshotsTestUrl), false, false, user );
     
-    repo = new RemoteRepositoryM2( "testNexusRepo", server );
+    repo = new RemoteRepositoryM2( "testNexusRepo", server, new MavenDependencyProcessor() );
     
     mdProcessor = new MetadataProcessorMock();
     

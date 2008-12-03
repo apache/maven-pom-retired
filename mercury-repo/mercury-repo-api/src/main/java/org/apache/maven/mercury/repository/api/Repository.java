@@ -92,6 +92,7 @@ public interface Repository
     throws RepositoryException;
     
     /**
+     * get protocol specific reader, if any
      * 
      * @param protocol
      * @return reader instance for the specified protocol
@@ -100,7 +101,6 @@ public interface Repository
     RepositoryReader getReader( String protocol )
     throws RepositoryException;
 
-    
     /**
      * get default writer, if any
      * 

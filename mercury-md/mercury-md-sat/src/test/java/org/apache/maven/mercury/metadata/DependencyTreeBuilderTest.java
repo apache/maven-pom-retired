@@ -61,8 +61,7 @@ extends TestCase
   throws Exception
   {
     processor = new MetadataProcessorMock();
-    localRepo = new LocalRepositoryM2( "local", repoDir );
-//    localRepo.setDependencyProcessor( new MetadataProcessorMock() );
+    localRepo = new LocalRepositoryM2( "local", repoDir, new MetadataProcessorMock() );
     
     reps = new ArrayList<Repository>(4);
     reps.add(  localRepo );

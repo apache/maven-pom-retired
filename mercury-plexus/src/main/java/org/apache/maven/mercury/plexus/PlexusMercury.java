@@ -31,6 +31,7 @@ import org.apache.maven.mercury.artifact.ArtifactInclusionList;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactQueryList;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
@@ -49,6 +50,27 @@ public interface PlexusMercury
 {
   public static String ROLE = PlexusMercury.class.getName();
 
+  /**
+   * lookup dependency processor in plexus and return the "default" implementation
+   * 
+   * @return the dependency processor
+   * @throws RepositoryException
+   */
+  public DependencyProcessor findDependencyProcessor()
+  throws RepositoryException
+  ;
+
+  /**
+   * lookup dependency processor in plexus and return the requested implementation
+   * 
+   * @param hint the plexus hint to lookup by
+   * @return the dependency processor
+   * @throws RepositoryException
+   */
+  public DependencyProcessor findDependencyProcessor( String hint )
+  throws RepositoryException
+  ;
+  
   /**
    * create PGP factory to configure into repository reader for signature verification
    * 

@@ -29,6 +29,7 @@ import junit.framework.TestCase;
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.DefaultArtifact;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.event.MercuryEvent;
 import org.apache.maven.mercury.event.MercuryEventListener;
 import org.apache.maven.mercury.event.MercuryEvent.EventMask;
@@ -38,6 +39,7 @@ import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
 import org.apache.maven.mercury.repository.api.Repository;
 import org.apache.maven.mercury.repository.local.m2.LocalRepositoryM2;
+import org.apache.maven.mercury.repository.local.m2.MetadataProcessorMock;
 import org.apache.maven.mercury.repository.remote.m2.RemoteRepositoryM2;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.FileUtil;
@@ -78,11 +80,11 @@ extends TestCase
     if( !_testBase.exists() || !_testBase.isDirectory() )
       throw new Exception( "cannot create clean folder " + _testBase.getAbsolutePath() );
     
-    _localRepo = new LocalRepositoryM2( _localRepoId, _testBase );
+    _localRepo = new LocalRepositoryM2( _localRepoId, _testBase, new MetadataProcessorMock() );
     
     _server = new Server( _remoteRepoId, new URL(_remoteUrl) );
     
-    _remoteRepo = new RemoteRepositoryM2( _server.getId(), _server );
+    _remoteRepo = new RemoteRepositoryM2( _server.getId(), _server, new MetadataProcessorMock() );
     
     List<Repository> rl = new ArrayList<Repository>();
     rl.add( _localRepo );

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
@@ -100,7 +101,7 @@ implements IDepResolver
     if( !targetDirFile.exists() )
       targetDirFile.mkdirs();
     
-    lRepo = new LocalRepositoryM2( "localMercury", new File(localRepoDir) );
+    lRepo = new LocalRepositoryM2( "localMercury", new File(localRepoDir), new MavenDependencyProcessor() );
     repos.add( lRepo );
 
     MercuryResolve mc = new MercuryResolve();
@@ -113,7 +114,7 @@ implements IDepResolver
       for( Object key : rep.keySet() )
       {
         Server server = new Server( (String)key, new URL(rep.getProperty( (String)key )) );
-        RemoteRepositoryM2 repo = new RemoteRepositoryM2( server );
+        RemoteRepositoryM2 repo = new RemoteRepositoryM2( server, new MavenDependencyProcessor() );
         repo.setUpdatePolicy( RepositoryUpdateIntervalPolicy.UPDATE_POLICY_NEVER );
         
         repos.add( repo );

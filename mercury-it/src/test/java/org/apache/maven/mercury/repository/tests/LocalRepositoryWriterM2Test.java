@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
 import org.apache.maven.mercury.crypto.api.StreamVerifierFactory;
@@ -73,7 +74,7 @@ extends AbstractRepositoryWriterM2Test
     factories.add( new SHA1VerifierFactory(false,false) );
     server.setWriterStreamVerifierFactories(factories);
       
-    repo = new LocalRepositoryM2( server );
+    repo = new LocalRepositoryM2( server, new MavenDependencyProcessor() );
     mdProcessor = new MetadataProcessorMock();
     repo.setDependencyProcessor( mdProcessor );
     

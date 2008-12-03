@@ -49,10 +49,16 @@ public class LocalRepositoryM2Test
   {
     dir = new File("./target/test-classes/repo");
     
-    repo = new LocalRepositoryM2( "test", dir );
+    repo = new LocalRepositoryM2( "test", dir, new MetadataProcessorMock() );
     
   }
   
+  
+  /**
+   * this does not fully test this use case, full test belongs to ITs. See http://jira.codehaus.org/browse/MERCURY-47
+   * 
+   * @throws Exception
+   */
   public void testReadTwice()
   throws Exception
   {

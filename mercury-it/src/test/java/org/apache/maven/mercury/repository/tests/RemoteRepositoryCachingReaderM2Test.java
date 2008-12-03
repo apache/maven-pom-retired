@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.builder.api.MetadataReaderException;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
@@ -83,7 +84,7 @@ extends AbstractRepositoryReaderM2Test
     
     RepositoryUpdatePolicy up = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.UPDATE_POLICY_NAME_DAILY );
     
-    repo = new RemoteRepositoryM2( "testRepo", server );
+    repo = new RemoteRepositoryM2( "testRepo", server, new MavenDependencyProcessor() );
     ((RemoteRepository)repo).setUpdatePolicy( up );
     
     repo.setDependencyProcessor(  new MetadataProcessorMock() );

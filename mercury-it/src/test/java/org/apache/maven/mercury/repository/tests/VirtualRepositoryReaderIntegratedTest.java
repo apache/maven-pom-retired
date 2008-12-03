@@ -26,6 +26,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.repository.api.ArtifactBasicResults;
@@ -80,11 +81,11 @@ extends TestCase
     DependencyProcessor mdProcessor = new MetadataProcessorMock();
 
     Server server = new Server( "testRemoteRepo", new URL("http://localhost:"+_port+"/repo") );
-    _remoteRepo = new RemoteRepositoryM2( server );
+    _remoteRepo = new RemoteRepositoryM2( server, new MavenDependencyProcessor() );
     _remoteRepo.setUpdatePolicy( new RepositoryUpdateIntervalPolicy("interval2").setInterval( 2000L ) );
     _remoteRepo.setDependencyProcessor( mdProcessor );
     
-    _localRepo = new LocalRepositoryM2( "testLocalRepo", _localRepoBase );
+    _localRepo = new LocalRepositoryM2( "testLocalRepo", _localRepoBase, new MavenDependencyProcessor() );
     _localRepo.setDependencyProcessor( mdProcessor );
     
     List<Repository> reps = new ArrayList<Repository>();

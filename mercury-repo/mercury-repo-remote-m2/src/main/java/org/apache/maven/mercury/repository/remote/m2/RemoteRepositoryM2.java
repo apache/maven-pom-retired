@@ -18,7 +18,7 @@
  */
 package org.apache.maven.mercury.repository.remote.m2;
 
-import org.apache.maven.mercury.MavenDependencyProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
 import org.apache.maven.mercury.repository.api.RemoteRepository;
@@ -42,16 +42,16 @@ implements RemoteRepository
     private RepositoryUpdatePolicy _updatePolicy = new RepositoryUpdateIntervalPolicy( RepositoryUpdateIntervalPolicy.DEFAULT_UPDATE_POLICY );
     
     //----------------------------------------------------------------------------------
-    public RemoteRepositoryM2( Server server  )
+    public RemoteRepositoryM2( Server server, DependencyProcessor dependencyProcessor  )
     {
-      this( server.getId(), server );
+      this( server.getId(), server, dependencyProcessor );
     }
     //----------------------------------------------------------------------------------
-    public RemoteRepositoryM2( String id, Server server  )
+    public RemoteRepositoryM2( String id, Server server, DependencyProcessor dependencyProcessor  )
     {
         super( id, DEFAULT_REPOSITORY_TYPE );
         this._server = server;
-        setDependencyProcessor( new MavenDependencyProcessor() );
+        setDependencyProcessor( dependencyProcessor );
     }
     //----------------------------------------------------------------------------------
     public Server getServer()

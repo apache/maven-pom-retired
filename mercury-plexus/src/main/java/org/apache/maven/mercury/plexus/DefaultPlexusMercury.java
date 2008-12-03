@@ -36,6 +36,7 @@ import org.apache.maven.mercury.artifact.ArtifactInclusionList;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
 import org.apache.maven.mercury.artifact.ArtifactQueryList;
 import org.apache.maven.mercury.artifact.ArtifactScopeEnum;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.crypto.api.StreamObserverFactory;
 import org.apache.maven.mercury.crypto.api.StreamVerifierAttributes;
 import org.apache.maven.mercury.crypto.api.StreamVerifierException;
@@ -57,6 +58,8 @@ import org.apache.maven.mercury.repository.virtual.VirtualRepositoryReader;
 import org.apache.maven.mercury.transport.api.Credentials;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.Util;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -75,13 +78,44 @@ implements PlexusMercury, Initializable
 {
   private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( DefaultPlexusMercury.class ); 
   private static final Language _lang = new DefaultLanguage( DefaultPlexusMercury.class );
+  
+  /**
+  *
+  * @component
+  */
+  PlexusContainer plexus;
 
   //---------------------------------------------------------------
   public void initialize()
   throws InitializationException
   {
   }
-
+  //---------------------------------------------------------------
+  public DependencyProcessor findDependencyProcessor( String hint )
+  throws RepositoryException
+  {
+    if( plexus == null )
+      throw new RepositoryException( _lang.getMessage( "no.plexus.injected" ) );
+    
+    DependencyProcessor dp = null;
+    
+    try
+    {
+      dp = plexus.lookup( DependencyProcessor.class, hint );
+      
+      return dp;
+    }
+    catch( ComponentLookupException e )
+    {
+      throw new RepositoryException( e.getMessage() );
+    }
+  }
+  //---------------------------------------------------------------
+  public DependencyProcessor findDependencyProcessor()
+  throws RepositoryException
+  {
+    return findDependencyProcessor( "default" );
+  }
   //---------------------------------------------------------------
   public RemoteRepositoryM2 constructRemoteRepositoryM2(
                         String id
@@ -117,12 +151,11 @@ implements PlexusMercury, Initializable
         server.setProxyCredentials( cred );
       }
     }
-
-    RemoteRepositoryM2 repo = new RemoteRepositoryM2( id, server );
+    
+    RemoteRepositoryM2 repo = new RemoteRepositoryM2( id, server, findDependencyProcessor() );
 
     return repo;
   }
-
   //---------------------------------------------------------------
   public LocalRepositoryM2 constructLocalRepositoryM2(
       String id,
@@ -149,7 +182,7 @@ implements PlexusMercury, Initializable
     server.setWriterStreamObserverFactories( writerStreamObservers );
     server.setWriterStreamVerifierFactories( writerStreamVerifiers );
 
-    LocalRepositoryM2 repo = new LocalRepositoryM2( server );
+    LocalRepositoryM2 repo = new LocalRepositoryM2( server, findDependencyProcessor() );
 
     return repo;
   }

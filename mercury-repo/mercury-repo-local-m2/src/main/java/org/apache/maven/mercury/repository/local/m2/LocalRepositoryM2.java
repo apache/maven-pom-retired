@@ -20,7 +20,7 @@ package org.apache.maven.mercury.repository.local.m2;
 
 import java.io.File;
 
-import org.apache.maven.mercury.MavenDependencyProcessor;
+import org.apache.maven.mercury.builder.api.DependencyProcessor;
 import org.apache.maven.mercury.repository.api.AbstractRepository;
 import org.apache.maven.mercury.repository.api.LocalRepository;
 import org.apache.maven.mercury.repository.api.NonExistentProtocolException;
@@ -48,29 +48,29 @@ implements LocalRepository
       this.directory = directory;
     }
     //----------------------------------------------------------------------------------
-    public LocalRepositoryM2( Server server )
+    public LocalRepositoryM2( Server server, DependencyProcessor dependencyProcessor )
     {
         super( server.getId(), DEFAULT_REPOSITORY_TYPE );
         setDirectory( new File( server.getURL().getFile() ) );
         this.server = server;
         
-        setDependencyProcessor( new MavenDependencyProcessor() );
+        setDependencyProcessor( dependencyProcessor );
     }
     //----------------------------------------------------------------------------------
-    public LocalRepositoryM2( String id, File directory )
+    public LocalRepositoryM2( String id, File directory, DependencyProcessor dependencyProcessor )
     {
         super( id, DEFAULT_REPOSITORY_TYPE );
         setDirectory( directory );
         
-        setDependencyProcessor( new MavenDependencyProcessor() );
+        setDependencyProcessor( dependencyProcessor );
     }
     //----------------------------------------------------------------------------------
-    public LocalRepositoryM2( String id, File directory, String type )
+    public LocalRepositoryM2( String id, File directory, String type, DependencyProcessor dependencyProcessor )
     {
         super( id, type );
         setDirectory( directory );
         
-        setDependencyProcessor( new MavenDependencyProcessor() );
+        setDependencyProcessor( dependencyProcessor );
     }
     //----------------------------------------------------------------------------------
     public File getDirectory()
@@ -83,13 +83,11 @@ implements LocalRepository
       return new LocalRepositoryReaderM2( this, getDependencyProcessor() );
     }
     //----------------------------------------------------------------------------------
-    // TODO oleg: what happens in multi-threaded execution?? 
     public RepositoryReader getReader( String protocol )
     {
        return getReader();
     }
     //----------------------------------------------------------------------------------
-    // TODO oleg: what happens in multi-threaded execution?? 
     public RepositoryWriter getWriter()
     {
       return new LocalRepositoryWriterM2(this);

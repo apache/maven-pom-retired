@@ -141,7 +141,7 @@ implements RepositoryReader, MetadataReader
     if( localRepos == null || localRepos.isEmpty() )
     {
       _localRepos = new ArrayList<LocalRepository>(1);
-      _localRepos.add( new LocalRepositoryM2("temp", _defaultRoot ) );
+      _localRepos.add( new LocalRepositoryM2("temp", _defaultRoot, getDependencyProcessor() ) );
     }
     else
       _localRepos = localRepos;

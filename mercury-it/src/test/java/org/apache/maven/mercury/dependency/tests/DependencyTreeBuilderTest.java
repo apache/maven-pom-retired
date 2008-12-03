@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.mercury.MavenDependencyProcessor;
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactMetadata;
@@ -90,11 +91,11 @@ extends TestCase
     
     reps = new ArrayList<Repository>();
     
-    localRepo = new LocalRepositoryM2( "testLocalRepo", repoDir );
+    localRepo = new LocalRepositoryM2( "testLocalRepo", repoDir, new MavenDependencyProcessor() );
     reps.add(  localRepo );
     
     Server server = new Server( "testRemoteRepo", new URL(repoUrl) );
-    remoteRepo = new RemoteRepositoryM2(server);
+    remoteRepo = new RemoteRepositoryM2(server, new MavenDependencyProcessor());
     reps.add( remoteRepo );
     
 //    Server central = new Server("central", new URL("http://repo1.maven.org/maven2") );
@@ -222,11 +223,11 @@ extends TestCase
     reps.clear();
     
     File pluginRepo = new File( "./target/repoPlugin" );
-    localRepo = new LocalRepositoryM2( "testLocalPluginRepo", pluginRepo );
+    localRepo = new LocalRepositoryM2( "testLocalPluginRepo", pluginRepo, new MavenDependencyProcessor() );
     reps.add(  localRepo );
 
     Server server = new Server( "id", new URL(centralUrl) );
-    remoteRepo = new RemoteRepositoryM2(server);
+    remoteRepo = new RemoteRepositoryM2(server, new MavenDependencyProcessor());
     remoteRepo.setUpdatePolicy( RepositoryUpdateIntervalPolicy.UPDATE_POLICY_NEVER );
     reps.add( remoteRepo );
     
