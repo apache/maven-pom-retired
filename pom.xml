@@ -49,8 +49,6 @@
 
   <properties>
 
-    <mercury.version>${project.version}</mercury.version>
-    
     <plexus.appbooter.version>1.4</plexus.appbooter.version>
     <plexus.container.version>1.0-beta-3.0.1</plexus.container.version>
     <plexus.component.annotations.version>1.0-beta-3.0.1</plexus.component.annotations.version>
@@ -69,7 +67,6 @@
     
     <!-- mercury-wagon -->
     <wagon.provider.api.version>1.0-beta-4</wagon.provider.api.version>
-
 
     <distMgmtReleasesId>apache.releases</distMgmtReleasesId>
     <distMgmtReleasesName>Apache Releases</distMgmtReleasesName>
@@ -181,117 +178,117 @@
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-artifact</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-external</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-event</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-util</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
   
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-logging</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-md-shared</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
   
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-crypto-api</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-crypto-basic</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
   
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-repo-api</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
   
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-repo-local-m2</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-repo-local-m2</artifactId>
         <classifier>tests</classifier>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-repo-remote-m2</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-repo-virtual</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-repo-cache-fs</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-md-sat</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
   
        <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-transport-api</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
   
        <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-transport-http</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
   
        <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-transport-http</artifactId>
         <classifier>tests</classifier>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
   
        <dependency>
         <groupId>org.apache.maven.mercury</groupId>
         <artifactId>mercury-plexus</artifactId>
-        <version>${mercury.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <!-- Maven dependencies -->
