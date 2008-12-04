@@ -84,7 +84,7 @@ implements PlexusMercury, Initializable
   * @component
   */
   PlexusContainer plexus;
-
+  
   //---------------------------------------------------------------
   public void initialize()
   throws InitializationException
@@ -107,7 +107,7 @@ implements PlexusMercury, Initializable
     }
     catch( ComponentLookupException e )
     {
-      throw new RepositoryException( e.getMessage() );
+      throw new RepositoryException( _lang.getMessage( "no.dep.processor.injected", hint, e.getMessage() ) );
     }
   }
   //---------------------------------------------------------------

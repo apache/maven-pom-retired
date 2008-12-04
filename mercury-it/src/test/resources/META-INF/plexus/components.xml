@@ -1,5 +1,6 @@
 <component-set>
   <components>
+      
     <component>
       <role>org.sonatype.appbooter.ForkedAppBooter</role>
       <role-hint>NexusForkedAppBooter</role-hint>

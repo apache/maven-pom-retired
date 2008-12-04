@@ -1,0 +1,13 @@
+<plexus>
+  <components>
+
+   <component>
+      <role>org.apache.maven.mercury.builder.api.DependencyProcessor</role>
+      <role-hint>default</role-hint>
+      <implementation>org.apache.maven.mercury.MavenDependencyProcessor</implementation>
+      <description />
+      <isolated-realm>false</isolated-realm>
+    </component>
+    
+  </components>
+</plexus>

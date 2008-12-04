@@ -16,7 +16,10 @@
   <description>Mercury Maven resolusion comparisson</description>
   <prerequisites />
   
-  <inceptionYear>2008</inceptionYear>
+
+  <properties>
+    <maven.version>3.0-SNAPSHOT</maven.version>
+  </properties>
 
 	<build>
 		<plugins>
@@ -47,6 +50,7 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-mercury</artifactId>
+      <version>${maven.version}</version>
     </dependency>
   
     <dependency>

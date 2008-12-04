@@ -12,7 +12,7 @@
     <version>1.0.0-alpha-2-SNAPSHOT</version>
   </parent>
   
-
+  
 <!-- had to move all tests to IT: http://jira.codehaus.org/browse/MERCURY-47 
   <build>
     <plugins>
