@@ -237,10 +237,11 @@
       <artifactId>nexus-rest-client-java</artifactId>
         <version>${nexus.client.version}</version>
     </dependency>
-
+  
     <dependency>
       <groupId>org.sonatype.nexus</groupId>
       <artifactId>nexus-webapp</artifactId>
+      <version>${nexus.version}</version>
       <classifier>bundle</classifier>
       <type>zip</type>
       <scope>provided</scope>
