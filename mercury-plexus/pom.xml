@@ -71,9 +71,15 @@
       <groupId>org.apache.maven.mercury</groupId>
       <artifactId>mercury-logging</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-component-annotations</artifactId>
     </dependency>
 
   </dependencies>

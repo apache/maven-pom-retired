@@ -59,41 +59,40 @@ import org.apache.maven.mercury.transport.api.Credentials;
 import org.apache.maven.mercury.transport.api.Server;
 import org.apache.maven.mercury.util.Util;
 import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.lang.DefaultLanguage;
 import org.codehaus.plexus.lang.Language;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
 /**
- * @plexus.component
+ * default implementation of Mercury plexus wrapper
  * 
  * @author Oleg Gusakov
- * 
  */
+
+@Component( role=PlexusMercury.class )
 public class DefaultPlexusMercury
 extends AbstractLogEnabled
-implements PlexusMercury, Initializable
+implements PlexusMercury
 {
   private static final IMercuryLogger _log = MercuryLoggerManager.getLogger( DefaultPlexusMercury.class ); 
   private static final Language _lang = new DefaultLanguage( DefaultPlexusMercury.class );
   
-  /**
-  *
-  * @component
-  */
+  @Requirement( hint="maven" )
+  DependencyProcessor dependencyProcessor;
+  
+  @Requirement
   PlexusContainer plexus;
   
-  //---------------------------------------------------------------
-  public void initialize()
-  throws InitializationException
-  {
-  }
   //---------------------------------------------------------------
   public DependencyProcessor findDependencyProcessor( String hint )
   throws RepositoryException
   {
+    if( dependencyProcessor != null )
+      return dependencyProcessor;
+    
     if( plexus == null )
       throw new RepositoryException( _lang.getMessage( "no.plexus.injected" ) );
     

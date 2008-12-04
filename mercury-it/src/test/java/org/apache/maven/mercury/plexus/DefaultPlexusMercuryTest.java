@@ -25,8 +25,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.apache.maven.mercury.artifact.Artifact;
 import org.apache.maven.mercury.artifact.ArtifactBasicMetadata;
 import org.apache.maven.mercury.artifact.ArtifactExclusionList;
@@ -96,7 +94,7 @@ extends PlexusTestCase
   
   //-------------------------------------------------------------------------------------
 //  @Override
-  protected void nsetUp()
+  protected void setUp()
   throws Exception
   {
     super.setUp();
@@ -111,7 +109,7 @@ extends PlexusTestCase
     a.setFile( artifactBinary );
     
     // prep Repository
-    pm = new DefaultPlexusMercury();
+    pm = getContainer().lookup( PlexusMercury.class );
     
     pgpRF = pm.createPgpReaderFactory( true, true, getClass().getResourceAsStream( publicKeyFile ) );
     pgpWF = pm.createPgpWriterFactory( true, true, getClass().getResourceAsStream( secretKeyFile ), keyId, secretKeyPass );
@@ -161,18 +159,22 @@ extends PlexusTestCase
     return false;
   }
   //-------------------------------------------------------------------------------------
-  public void notestWrite()
-  throws RepositoryException
-  {
-    pm.write( remoteRepo, a );
-  }
-  //-------------------------------------------------------------------------------------
   public void testDummy()
   {
     System.out.println("Have to disable plexus tests - need to fix maven-mercury first");
   }
   //-------------------------------------------------------------------------------------
-  public void ntestRead()
+  public void testWrite()
+  throws RepositoryException
+  {
+    pm.write( localRepo, a );
+    
+    File af = new File( localRepoDir, "org/apache/maven/mercury/mercury-core/2.0.9/mercury-core-2.0.9.jar" );
+    
+    assertTrue( af.exists() );
+  }
+  //-------------------------------------------------------------------------------------
+  public void testRead()
   throws RepositoryException
   {
     ArtifactMetadata bmd = new ArtifactMetadata(artifactCoord);
@@ -200,7 +202,7 @@ extends PlexusTestCase
     assertTrue( pomBytes.length > 10 );
   }
   //-------------------------------------------------------------------------------------
-  public void ntestResolve()
+  public void testResolve()
   throws Exception
   {
     Server central = new Server( "central", new URL("http://repo1.maven.org/maven2") );

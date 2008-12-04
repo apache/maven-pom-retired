@@ -53,13 +53,11 @@
     
     <plexus.appbooter.version>1.4</plexus.appbooter.version>
     <plexus.container.version>1.0-beta-3.0.1</plexus.container.version>
+    <plexus.component.annotations.version>1.0-beta-3.0.1</plexus.component.annotations.version>
     <classworlds.version>1.3</classworlds.version>
     <plexus.utils.version>1.5.5</plexus.utils.version>
     <plexus.lang.version>1.1</plexus.lang.version>
     <plexus.component.metadata.version>1.0-beta-3.0.1</plexus.component.metadata.version>
-    
-    <nexus.version>1.0.1</nexus.version>
-    <nexus.client.version>1.1-M1</nexus.client.version>
     
     <commons.digester.version>1.8</commons.digester.version>
     <commons.cli.version>1.1</commons.cli.version>
@@ -133,18 +131,6 @@
   
       <dependency>
         <groupId>org.sonatype.nexus</groupId>
-        <artifactId>nexus-rest-api</artifactId>
-        <version>${nexus.client.version}</version>
-      </dependency>
-  
-      <dependency>
-        <groupId>org.sonatype.nexus</groupId>
-        <artifactId>nexus-rest-client-java</artifactId>
-        <version>${nexus.client.version}</version>
-      </dependency>
-  
-      <dependency>
-        <groupId>org.sonatype.nexus</groupId>
         <artifactId>nexus-webapp</artifactId>
         <version>${nexus.version}</version>
         <classifier>bundle</classifier>
@@ -173,6 +159,12 @@
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-container-default</artifactId>
         <version>${plexus.container.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-component-annotations</artifactId>
+        <version>${plexus.component.annotations.version}</version>
       </dependency>
   
       <dependency>

@@ -13,6 +13,9 @@
 
   <properties>
     <maven.version>3.0-SNAPSHOT</maven.version>
+    
+    <nexus.version>1.0.1</nexus.version>
+    <nexus.client.version>1.1-M1</nexus.client.version>
 
     <nexus-security-enabled>false</nexus-security-enabled>
 
@@ -206,15 +209,21 @@
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
     </dependency>
+    
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-component-annotations</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.sonatype.appbooter</groupId>
       <artifactId>plexus-forked-app-booter</artifactId>
     </dependency>
-
+  
     <dependency>
       <groupId>org.sonatype.nexus</groupId>
       <artifactId>nexus-rest-api</artifactId>
+        <version>${nexus.client.version}</version>
       <exclusions>
         <exclusion>
           <groupId>org.codehaus.plexus</groupId>
@@ -226,6 +235,7 @@
     <dependency>
       <groupId>org.sonatype.nexus</groupId>
       <artifactId>nexus-rest-client-java</artifactId>
+        <version>${nexus.client.version}</version>
     </dependency>
 
     <dependency>
