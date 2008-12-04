@@ -12,7 +12,7 @@
   <artifactId>mercury</artifactId>
   <packaging>pom</packaging>
   <name>Mercury</name>
-  <version>1.0.0-alpha-2-SNAPSHOT</version>
+  <version>1.0.0-alpha-2</version>
   <description>Maven Mercury is a replacement for the Maven Artifact subsystem, and a complete replacement for the HTTP/HTTPS/DAV/DAVS portions of the existing transport.</description>
 
   <developers>
@@ -606,9 +606,9 @@
   </ciManagement>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/mercury/trunk/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/mercury/trunk/</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/mercury/trunk/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/pom/tags/mercury-1.0.0-alpha-2</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/pom/tags/mercury-1.0.0-alpha-2</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/pom/tags/mercury-1.0.0-alpha-2</url>
   </scm>
 
 </project>

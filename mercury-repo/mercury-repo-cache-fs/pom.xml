@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.apache.maven.mercury</groupId>
     <artifactId>mercury-repo</artifactId>
-    <version>1.0.0-alpha-2-SNAPSHOT</version>
+    <version>1.0.0-alpha-2</version>
   </parent>
   <artifactId>mercury-repo-cache-fs</artifactId>
   <name>Mercury Repository FS Cache</name>
