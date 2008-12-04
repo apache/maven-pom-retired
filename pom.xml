@@ -130,14 +130,6 @@
       </dependency>
   
       <dependency>
-        <groupId>org.sonatype.nexus</groupId>
-        <artifactId>nexus-webapp</artifactId>
-        <version>${nexus.version}</version>
-        <classifier>bundle</classifier>
-        <type>zip</type>
-      </dependency>
-  
-      <dependency>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>jetty-client</artifactId>
         <version>${jetty.version}</version>
