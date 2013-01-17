@@ -26,7 +26,7 @@ under the License.
   <parent>
     <groupId>org.apache</groupId>
     <artifactId>apache</artifactId>
-    <version>11</version>
+    <version>13</version>
     <relativePath>../asf/pom.xml</relativePath>
   </parent>
 
@@ -166,16 +166,6 @@ under the License.
         <role>PMC Member</role>
       </roles>
       <timezone>-5</timezone>
-    </developer>
-    <developer>
-      <id>kenney</id>
-      <name>Kenney Westerhof</name>
-      <email>kenney@apache.org</email>
-      <organization>Neonics</organization>
-      <roles>
-        <role>PMC Member</role>
-      </roles>
-      <timezone>+1</timezone>
     </developer>
     <developer>
       <id>krosenvold</id>
@@ -639,6 +629,16 @@ under the License.
         <role>Emeritus</role>
       </roles>
     </developer>
+    <developer>
+      <id>kenney</id>
+      <name>Kenney Westerhof</name>
+      <email>kenney@apache.org</email>
+      <organization>Neonics</organization>
+      <roles>
+        <role>Emeritus</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
   </developers>
 
   <mailingLists>
@@ -734,12 +734,13 @@ under the License.
   <distributionManagement>
     <site>
       <id>apache.website</id>
-      <url>scp://people.apache.org/www/maven.apache.org</url>
+      <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/maven/content</url>
     </site>
   </distributionManagement>
 
   <properties>
     <sonar.host.url>https://analysis.apache.org/</sonar.host.url>
+    <maven.site.cache>${user.home}/maven-sites</maven.site.cache>
   </properties>
 
   <dependencyManagement>
@@ -748,6 +749,12 @@ under the License.
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-component-annotations</artifactId>
         <version>1.5.5</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.plugin-tools</groupId>
+        <artifactId>maven-plugin-annotations</artifactId>
+        <version>3.2</version>
+        <scope>provided</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -770,6 +777,7 @@ under the License.
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.0</version>
           <configuration>
             <source>1.5</source>
             <target>1.5</target>
@@ -778,6 +786,7 @@ under the License.
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-plugin-plugin</artifactId>
+          <version>3.2</version>
           <configuration>
             <useJava5>true</useJava5>
           </configuration>
@@ -820,6 +829,41 @@ under the License.
       </plugins>
     </pluginManagement>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled><!-- waiting for MPIR-267 -->
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>index</report>
+              <report>summary</report>
+              <report>dependency-info</report>
+              <report>modules</report>
+              <report>license</report>
+              <report>project-team</report>
+              <report>scm</report>
+              <report>issue-tracking</report>
+              <report>mailing-list</report>
+              <report>dependency-management</report>
+              <report>dependencies</report>
+              <report>dependency-convergence</report>
+              <report>cim</report>
+              <report>plugin-management</report>
+              <report>plugins</report>
+              <report>distribution-management</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 
   <profiles>
     <profile>
@@ -895,29 +939,12 @@ under the License.
     </profile>
     <profile>
       <id>reporting</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>cobertura-maven-plugin</artifactId>
-            <version>2.5.1</version>
-            <executions>
-              <execution>
-                <phase>clean</phase>
-                <goals>
-                  <goal>clean</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
       <reporting>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>2.5.1</version>
+            <version>2.6</version>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -932,6 +959,14 @@ under the License.
               <configLocation>config/maven_checks.xml</configLocation>
               <headerLocation>config/maven-header.txt</headerLocation>
             </configuration>
+            <reportSets>
+              <reportSet>
+                <id>default</id>
+                <reports>
+                  <report>checkstyle</report>
+                </reports>
+              </reportSet>
+            </reportSets>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -949,14 +984,18 @@ under the License.
             </configuration>
           </plugin>
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>cobertura-maven-plugin</artifactId>
-            <version>2.5.1</version>
-          </plugin>
-          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jxr-plugin</artifactId>
             <version>2.3</version>
+            <reportSets>
+              <reportSet>
+                <id>default</id>
+                <reports>
+                  <report>jxr</report>
+                  <report>test-jxr</report>
+                </reports>
+              </reportSet>
+            </reportSets>
           </plugin>
           <!-- Taglist Plugin must be executed after JXR Plugin -->
           <plugin>
@@ -967,8 +1006,9 @@ under the License.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.8.1</version>
+            <version>2.9</version>
             <configuration>
+              <notimestamp>true</notimestamp>
               <links>
                 <link>http://commons.apache.org/collections/apidocs-COLLECTIONS_3_0/</link>
                 <link>http://junit.sourceforge.net/javadoc/</link>
@@ -980,7 +1020,7 @@ under the License.
                 <tagletArtifact>
                   <groupId>org.apache.maven.plugin-tools</groupId>
                   <artifactId>maven-plugin-tools-javadoc</artifactId>
-                  <version>3.1</version>
+                  <version>3.2</version>
                 </tagletArtifact>
                 <tagletArtifact>
                   <groupId>org.codehaus.plexus</groupId>
@@ -991,6 +1031,7 @@ under the License.
             </configuration>
             <reportSets>
               <reportSet>
+                <id>default</id>
                 <reports>
                   <report>javadoc</report>
                   <report>test-javadoc</report>
