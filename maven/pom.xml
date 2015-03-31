@@ -885,7 +885,7 @@ under the License.
           <artifactId>maven-release-plugin</artifactId>
           <version>2.5.1</version>
           <configuration>
-            <useReleaseProfiles>true</useReleaseProfiles>
+            <useReleaseProfile>true</useReleaseProfile>
             <releaseProfiles>apache-release</releaseProfiles>
             <goals>deploy</goals>
             <arguments>${arguments}</arguments>
