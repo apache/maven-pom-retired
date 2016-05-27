@@ -963,7 +963,7 @@ under the License.
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <configuration>
-            <useReleaseProfiles>true</useReleaseProfiles>
+            <useReleaseProfile>true</useReleaseProfile>
             <releaseProfiles>apache-release</releaseProfiles>
             <goals>deploy</goals>
             <arguments>${arguments}</arguments>
