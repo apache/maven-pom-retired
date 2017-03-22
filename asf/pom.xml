@@ -272,6 +272,11 @@ under the License.
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
           <version>0.12</version>
+          <configuration>
+            <excludes>
+              <exclude>.checkstyle</exclude>
+            </excludes>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
