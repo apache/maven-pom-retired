@@ -43,7 +43,7 @@ under the License.
   </scm>
   <issueManagement>
     <system>jira</system>
-    <url>https://issues.apache.org/jira/issues?jql=project%20%3D%20MPOM%20AND%20component%20%3D%20asf</url>
+    <url>https://issues.apache.org/jira/issues/?jql=project%20%3D%20MPOM%20AND%20component%20%3D%20asf</url>
   </issueManagement>
   <ciManagement>
     <system>Jenkins</system>
